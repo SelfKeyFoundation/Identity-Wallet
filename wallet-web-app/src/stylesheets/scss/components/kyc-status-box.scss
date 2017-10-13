@@ -1,0 +1,32 @@
+.kyc-status-box {
+    border: 1px solid $secondaryColor;
+    padding: 4px;
+    color: $secondaryColor;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.kyc-status-box.blue {
+    border: 1px solid $secondaryColor;
+    color: white;
+    background-color: #3DB4F8;
+}
+
+.kyc-status-box.white {
+    border: 1px solid $secondaryColor;
+    color: $secondaryColor;
+}
+
+.kyc-status-box.red {
+    border: 1px solid $secondaryColor;
+    color: red;
+}
+
+.kyc-status-box.green {
+    border: 1px solid $secondaryColor;
+    color: green;
+}
+
+.kyc-status-box.no-borders {
+    border: none;
+}

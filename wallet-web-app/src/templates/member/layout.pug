@@ -1,0 +1,44 @@
+.wrapper(layout="column", layout-fill)
+    .kyc-toolbar(layout-xs="column", layout="row", layout-align="center center")
+        .logo-container(flex="20", layout="row", layout-align-xs="space-around center", layout-align="center center")
+            img(src="assets/images/logos/logo.png", style="height: 35px;")
+
+            .profile-container(flex="20", layout="row", show-xs, hide-gt-xs)
+                kyc-profile-image(image-url="'/assets/images/temp/carlosbg.jpg'", mode='toolbar')
+                div(layout="column", layout-align="center start" style="font-size: 12px; margin-left: 8px;")
+                    span Welcome, Carlos
+                    span.link-secondary Logout &#x25B8;
+
+        .buttons-group(layout-xs="column", layout="row", layout-align-xs="start stretch", layout-align="center center", flex) 
+            .button(layout="column", text-align="center center", ui-sref="member.profile-individual.main", ui-sref-active="active")
+                i.material-icons person
+                span public profile
+            .button.sparkley(layout="column", text-align="center center", ng-click="openUrlInNewWindow('https://alpha.selfkey.org/marketplace/')", ui-sref-active="active")
+                i.material-icons card_travel
+                span marketplace
+            .button(layout="column", text-align="center center", ui-sref="member.identity.main", ui-sref-active="active")
+                i.material-icons perm_contact_calendar
+                span identity
+            //.button(layout="column", text-align="center center")
+                i.material-icons device_hub
+                span affiliations
+            .button(layout="column", text-align="center center", ui-sref="member.keychain.main", ui-sref-active="active")
+                i.material-icons vpn_key
+                span keychain
+            //.button(layout="column", text-align="center center")
+                i.material-icons history
+                span history
+            //.button(layout="column", text-align="center center")
+                i.material-icons settings_applications
+                span settings
+            //.button(layout="column", text-align="center center")
+                i.material-icons search
+                span search
+        div(layout="row", flex="20", hide-xs)
+            kyc-profile-image(image-url="'/assets/images/temp/carlosbg.jpg'", mode='toolbar')
+            div(layout="column", layout-align="center start" style="font-size: 12px; margin-left: 8px;")
+                span Welcome, Carlos
+                span.link-secondary Logout &#x25B8;
+    .md-padding(ng-include="'common/top-banner.html'")
+    .body-wrapper(layout="row", flex, ui-view="main")
+        .content.md-padding(ui-view="main", flex, layout="column")

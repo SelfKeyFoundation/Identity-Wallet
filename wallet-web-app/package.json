@@ -1,0 +1,20 @@
+{
+  "name": "wallet-webapp",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "serve ./src"
+  },
+  "dependencies": {
+    "@uirouter/angularjs": "1.0.6",
+    "angular": "1.5.8",
+    "angular-animate": "1.5.8",
+    "angular-aria": "1.5.8",
+    "angular-local-storage": "^0.7.1",
+    "angular-material": "1.1.4",
+    "electron": "1.7.5",
+    "jquery": "3.2.1"
+  },
+  "devDependencies": {
+    "gulp-json-transform": "0.4.2"
+  }
+}

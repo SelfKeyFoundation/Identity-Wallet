@@ -1,0 +1,11 @@
+'use strict';
+
+const AppConfigConstant = {
+    "APP_NAME": "<%APP_NAME%>",
+    "APP_TITLE": "<%APP_TITLE%>",
+    "API_ENDPOINT": "<%API_ENDPOINT%>",
+    "DEFAULT_LANGUAGE": "<%DEFAULT_LANGUAGE%>",
+    "DEBUG": "<%DEBUG%>"
+};
+
+export default AppConfigConstant;

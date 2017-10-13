@@ -1,0 +1,7 @@
+FROM node:6.11.3-alpine
+RUN apk update && apk add --no-cache git python g++ gcc linux-headers make libstdc++ libgcc bash
+COPY . /website
+WORKDIR /website
+VOLUME /website/wallet-web-app/dist
+RUN npm install -g gulp
+RUN npm install && cd wallet-web-app && npm install

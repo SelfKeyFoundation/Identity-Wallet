@@ -1,0 +1,63 @@
+.kyc-toolbar {
+    background-color: $primaryColor;
+    color: #fff;
+
+    .hexagon-1 {
+        width: 40px;
+        height: 45px;
+        background: $secondaryColor;
+    } 
+
+    & > .buttons-group {
+        .button {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 16px;
+            cursor: pointer;
+            text-align: center;
+            
+            .material-icons {
+                text-align: center;   
+            }
+        
+            span {
+                margin-top: 4px;
+            }
+        
+            &:hover{
+                background-color: $primaryColorHovered;
+                color: $secondaryColor;
+            }
+    
+            &.active {
+                background-color: $primaryColorHovered;
+                color: $secondaryColor;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .kyc-toolbar {
+        .logo-container {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            width: 100%;
+            max-width: 100%;
+
+            .profile-container {
+                width: auto !important;
+                max-width: fit-content !important;
+            }
+        }
+
+        .buttons-group {
+            width: 100%;
+    
+            .button {
+                text-align: center;
+            }
+        }
+    }
+}

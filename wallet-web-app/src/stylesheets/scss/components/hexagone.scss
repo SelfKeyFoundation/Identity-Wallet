@@ -1,0 +1,43 @@
+.hexagon-1 {
+    position: relative;
+    background: white;
+
+    -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+    &:before {
+        position: absolute;
+        content: '';
+
+        top: 2px;
+        left: 2px;
+        height: calc(100% - 4px);
+        width: calc(100% - 4px);
+        background: #6c6;
+
+        -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+}
+
+.hexagon-2 {
+    position: relative;
+    background: white;
+
+    -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+    &:before {
+        position: absolute;
+        content: '';
+
+        top: 6px;
+        left: 6px;
+        height: calc(100% - 12px);
+        width: calc(100% - 12px);
+        background: #6c6;
+
+        -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+}

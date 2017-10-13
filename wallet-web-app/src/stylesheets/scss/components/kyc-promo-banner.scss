@@ -1,0 +1,37 @@
+.kyc-promo-banner {
+    cursor: pointer;
+    background-color: #fff; 
+
+    padding: 32px;
+
+    font-size: 20px;
+    font-weight: 500;
+    color: $primaryColor;
+
+    i {
+        color: $primaryColor;
+        font-size: 26px;
+        width: 26px;
+        height: 26px;
+        margin-right: 8px;
+    }
+
+    &:hover {
+        color: $secondaryColor;
+        i {
+            color: $secondaryColor;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .kyc-promo-banner {
+        padding: 16px;
+        font-size: 15px;
+        text-align: center;
+
+        i {
+            display: none;
+        }
+    }
+}

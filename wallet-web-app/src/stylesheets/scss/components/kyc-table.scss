@@ -1,0 +1,41 @@
+.kyc-text-center {
+    text-align: center !important;
+}
+
+.kyc-text-left {
+    text-align: left !important;
+}
+
+.kyc-table {
+    border: 0;
+
+    border-collapse: separate;
+    border-spacing: 0 8px;
+
+    thead {
+        background-color: $primaryColor;
+        tr {
+            th {
+                text-align: center !important;
+                font-size: 14px;
+                text-transform: uppercase;
+                padding: 8px;
+                color: #fff;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                text-align: center !important;
+                font-size: 14px;
+                color: $primaryColor;
+                font-weight: 500;
+                text-align: left;
+                padding: 8px;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,13 @@
+# Ignore Mac DS_Store files
+.DS_Store
+
+**/package-lock.json
+**/node_modules/
+
+wallet-web-app/dist/
+wallet-web-app/src/app-bundle.js
+wallet-web-app/src/angular/app.templates.js
+wallet-web-app/src/stylesheets/css/**/*.css
+
+wallet-desktop-app/release-builds/
+wallet-desktop-app/dist/

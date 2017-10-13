@@ -1,0 +1,44 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.2
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle wallet@0.0.1~prestart: wallet@0.0.1
+6 silly lifecycle wallet@0.0.1~prestart: no script for prestart, continuing
+7 info lifecycle wallet@0.0.1~start: wallet@0.0.1
+8 verbose lifecycle wallet@0.0.1~start: unsafe-perm in lifecycle true
+9 verbose lifecycle wallet@0.0.1~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/giorgio/workspace/flagtheory/wallet/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/share/dotnet
+10 verbose lifecycle wallet@0.0.1~start: CWD: /Users/giorgio/workspace/flagtheory/wallet
+11 silly lifecycle wallet@0.0.1~start: Args: [ '-c', 'electron .' ]
+12 info lifecycle wallet@0.0.1~start: Failed to exec start script
+13 verbose stack Error: wallet@0.0.1 start: `electron .`
+13 verbose stack spawn ENOENT
+13 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:33:16)
+13 verbose stack     at emitTwo (events.js:106:13)
+13 verbose stack     at ChildProcess.emit (events.js:191:7)
+13 verbose stack     at maybeClose (internal/child_process.js:891:16)
+13 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+14 verbose pkgid wallet@0.0.1
+15 verbose cwd /Users/giorgio/workspace/flagtheory/wallet
+16 error Darwin 16.7.0
+17 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+18 error node v6.11.2
+19 error npm  v3.10.10
+20 error file sh
+21 error code ELIFECYCLE
+22 error errno ENOENT
+23 error syscall spawn
+24 error wallet@0.0.1 start: `electron .`
+24 error spawn ENOENT
+25 error Failed at the wallet@0.0.1 start script 'electron .'.
+25 error Make sure you have the latest version of node.js and npm installed.
+25 error If you do, this is most likely a problem with the wallet package,
+25 error not with npm itself.
+25 error Tell the author that this fails on your system:
+25 error     electron .
+25 error You can get information on how to open an issue for this project with:
+25 error     npm bugs wallet
+25 error Or if that isn't available, you can get their info via:
+25 error     npm owner ls wallet
+25 error There is likely additional logging output above.
+26 verbose exit [ 1, true ]

@@ -1,0 +1,157 @@
+/**
+ * MARGINS
+ */
+ .no-margins{
+     margin: 0 !important;
+ }
+
+// left
+.margin-left-1 {
+    margin-left: $margin-1;
+}
+
+.margin-left-2 {
+    margin-left: $margin-2;
+}
+
+.margin-left-3 {
+    margin-left: $margin-3;
+}
+
+// top
+.margin-top-1 {
+    margin-top: $margin-1;
+}
+
+.margin-top-2 {
+    margin-top: $margin-2;
+}
+
+.margin-top-3 {
+    margin-top: $margin-3;
+}
+
+.margin-top-4 {
+    margin-top: $margin-4;
+}
+
+// right
+.margin-right-1 {
+    margin-right: $margin-1;
+}
+
+.margin-right-2 {
+    margin-right: $margin-2;
+}
+
+.margin-right-3 {
+    margin-right: $margin-3;
+}
+
+/**
+ * TEXT ALIGNS
+ */
+ .text-align-left {
+     text-align: left !important;
+ }
+
+ .text-align-center {
+    text-align: center !important;
+}
+
+.text-align-right {
+    text-align: right !important;
+}
+
+.vertical-align-center {
+    display: flex;
+    align-items: center;
+}
+
+/**
+ * TEXTS
+ */
+.uppercase{
+    text-transform: uppercase;
+}
+
+.font-weight-500 {
+    font-weight: 500;
+}
+
+/**
+ * FONT-SIZES
+ */
+ .font-size-1 {
+     font-size: 14px;
+ }
+
+/**
+ * ICON-SIZES
+ */
+ // (Material Icons)
+ .material-icons.size-1{
+    font-size: 16px;
+ }
+
+ .material-icons.size-2{
+    font-size: 20px;
+ }
+
+ .material-icons.size-3{
+    font-size: 22px;
+ }
+
+ // Ionic Icons
+.icon.size-1 {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+
+/**
+ * COLORS
+ */
+.color-primary{
+    color: $primaryColor;
+}
+
+.color-secondary{
+    color: $secondaryColor;
+}
+
+.color-red {
+    color: red;
+}
+
+/**
+ * CURSORS
+ */
+ .cursor-pointer {
+     cursor: pointer !important;
+ }
+
+ /**
+  *
+  */
+.link-primary {
+    cursor: pointer;
+    color: $primaryColor;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+        color: $secondaryColor; 
+    }
+}
+
+.link-secondary {
+    cursor: pointer;
+    color: $secondaryColor;
+    font-weight: bold;
+
+    &:hover {
+        color: #fff; 
+    }
+}

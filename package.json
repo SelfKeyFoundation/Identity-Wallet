@@ -1,0 +1,33 @@
+{
+  "name": "wallet",
+  "version": "0.0.1",
+  "description": "KYC Chain Wallet",
+  "repository": "https://github.com/kyc-chain/wallet",
+  "main": "./wallet-desktop-app/src/main.js",
+  "scripts": {
+    "start": "./node_modules/.bin/electron .",
+    "build": "make build"
+  },
+  "dependencies": {
+    "jquery": "3.2.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "6.24.1",
+    "babelify": "7.3.0",
+    "browser-sync": "^2.18.13",
+    "browserify": "14.4.0",
+    "browserify-ngannotate": "2.0.0",
+    "electron-packager": "8.7.2",
+    "gulp": "3.9.1",
+    "gulp-angular-templatecache": "2.0.0",
+    "gulp-pug": "3.3.0",
+    "gulp-rename": "1.2.2",
+    "gulp-sass": "3.1.0",
+    "gulp-token-replace": "1.0.4",
+    "gulp-watch": "4.3.11",
+    "node-notifier": "5.1.2",
+    "require-reload": "^0.2.2",
+    "run-sequence": "2.1.0",
+    "vinyl-source-stream": "1.1.0"
+  }
+}

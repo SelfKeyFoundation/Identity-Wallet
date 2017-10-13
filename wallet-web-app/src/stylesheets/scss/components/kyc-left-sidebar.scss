@@ -1,0 +1,25 @@
+.kyc-left-sidebar {
+    position: relative;
+
+    &:after {
+        content: "";
+        position: absolute;
+        z-index: -1 !important;
+        -webkit-box-shadow: 0 0 40px rgba(75, 73, 73, 0.80);
+        box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        top: 100px;
+        right: 0;
+        width: 10%;
+        height: 50%; /*450px;*/
+        -moz-border-radius: 100%;
+        border-radius: 100%;
+    }
+}
+
+.hexagon-2.left-sidebar {
+    margin-top: 50px;
+    width: 145px;
+    height: 165px;
+    background: $primaryColor;
+}
+

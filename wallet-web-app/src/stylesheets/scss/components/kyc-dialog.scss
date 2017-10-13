@@ -1,0 +1,19 @@
+.kyc-dialog-container {
+    background-color: #ffffff;
+    padding: 16px;
+
+    > .header {
+        padding: 16px 0 16px 0;
+        > .title {
+            font-weight: 500;
+        }
+    }
+
+    > .body {
+        
+    }
+
+    > .actions {
+        padding: 16px 0 0 0;
+    }
+}
