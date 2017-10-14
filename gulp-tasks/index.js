@@ -6,13 +6,14 @@ module.exports = (gulp, runSequence, watch, path) => {
     const installerDEB = require('electron-installer-debian');
 
     const APP_NAME = "KYC Wallet";
-    const SRC_DIR = path.resolve(__dirname, '../');
-    const DIST_DIR = path.resolve(__dirname, "../release-builds");
+    const SRC_DIR = path.resolve(__dirname, '../wallet-desktop-app');
 
-    const OSX_ICON = path.resolve(__dirname, "../src/icons/mac/icon.icns");
-    const OSX_INSTALLER_BG = path.resolve(__dirname, "../src/icons/mac/mac-osx-installer-bg_3.jpg");
+    const BUILD_DIST_DIR = path.resolve(__dirname, "../release/builds");
+    const INSTALLER_DIST_DIR = path.resolve(__dirname, "../release/installers");
 
-    const WIN_ICON = path.resolve(__dirname, "../src/icons/selfkey.ico");
+    const OSX_ICON = path.resolve(__dirname, "../wallet-desktop-app/src/icons/mac/icon.icns");
+    const OSX_INSTALLER_BG = path.resolve(__dirname, "../wallet-desktop-app/src/icons/mac/mac-osx-installer-bg_3.jpg");
+    const WIN_ICON = path.resolve(__dirname, "../wallet-desktop-app/src/icons/selfkey.ico");
 
     gulp.task('build:desktop-app:osx64', function (done) {
         runSequence('build:webapp', 'move:webapp', function() {
@@ -23,7 +24,7 @@ module.exports = (gulp, runSequence, watch, path) => {
                 arch: "x64",
                 platform: "darwin",
                 overwrite: true,
-                out: DIST_DIR,
+                out: BUILD_DIST_DIR,
                 icon: OSX_ICON
             }, function (err, appPaths) {
                 // create DMG file
@@ -33,11 +34,11 @@ module.exports = (gulp, runSequence, watch, path) => {
                     appPath: appPaths[0], 
                     background: OSX_INSTALLER_BG,
                     contents: [
-                        { "x": 100, "y": 130, "type": "file", "path": DIST_DIR + '/' + APP_NAME + '-darwin-x64/' + APP_NAME + ".app" },
+                        { "x": 100, "y": 130, "type": "file", "path": BUILD_DIST_DIR + '/' + APP_NAME + '-darwin-x64/' + APP_NAME + ".app" },
                         { "x": 383, "y": 130, "type": "link", "path": "/Applications" }
                     ],
                     overwrite: true, 
-                    out: DIST_DIR
+                    out: INSTALLER_DIST_DIR
                 }
                 installerDMG(installerDMGConfigs, function (installerDMGError) { 
                     if(installerDMGError){
@@ -54,27 +55,49 @@ module.exports = (gulp, runSequence, watch, path) => {
         runSequence('build:webapp', 'move:webapp', function() {
             packager({
                 name: APP_NAME,
+                productName: APP_NAME,
+                win32metadata: {
+                    CompanyName: "KYC Chain",
+                    FileDescription: APP_NAME,
+                    OriginalFilename: APP_NAME,
+                    ProductName: APP_NAME,
+                    InternalName: APP_NAME
+                },
+                appVersion: "0.0.2",
                 dir: SRC_DIR,
                 prune: true,
                 arch: "ia32",
                 platform: "win32",
                 overwrite: true,
-                out: DIST_DIR,
-                icon: OSX_ICON
+                out: BUILD_DIST_DIR,
+                icon: WIN_ICON,
+                asar: true
             }, function (err, appPaths) {
+                console.log(appPaths)
+
                 installerEXE.createWindowsInstaller({
-                    title: "Selfkey Wallet",
+                    title: APP_NAME,
                     name: "SelfkeyWallet", //"org.selfkey.wallet",
+                    
                     appDirectory: appPaths[0],
-                    outputDirectory: DIST_DIR,
-                    description: "Selfkey",
-                    version: "0.0.1",
-                    authors: "Selfkey",
                     exe: APP_NAME + '.exe',
+
+                    authors: APP_NAME,
+                    description: APP_NAME,
+                    version: "0.0.1",
+
+                    outputDirectory: INSTALLER_DIST_DIR,
+                    
+                    //certificateFile: 'test-cert.p12',
+                    //certificatePassword: 'xxxxxxxx',
+                    
                     setupExe: APP_NAME + '.exe',
-                    setupMsi: APP_NAME + '.msi',
-                    iconUrl: 'http://www.iconeasy.com/icon/ico/Object/Nova/Settings.ico', // WIN_ICON, //
-                    setupIcon: WIN_ICON
+                    //setupMsi: APP_NAME + '.msi',
+                    //noMsi: false,
+
+                    iconUrl: 'http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico', // TEMP
+                    setupIcon: WIN_ICON,
+                    skipUpdateIcon: true,
                 }).then(function(error){
                     if(error){
                         console.log(error)
@@ -95,12 +118,12 @@ module.exports = (gulp, runSequence, watch, path) => {
                 arch: "x64",
                 platform: "linux",
                 overwrite: true,
-                out: DIST_DIR,
+                out: BUILD_DIST_DIR,
                 icon: OSX_ICON
             }, function (err, appPaths) {
                 installerDEB({
                     src: appPaths[0],
-                    dest: DIST_DIR,
+                    dest: INSTALLER_DIST_DIR,
                     arch: 'amd64',
                     description: "Test Description",
                     productDescription: "Test Product Description"
@@ -112,21 +135,6 @@ module.exports = (gulp, runSequence, watch, path) => {
                     }
                 });
             });
-        });
-    });
-
-    gulp.task('build:desktop-app:all', function (done) {
-        runSequence('build:webapp', 'move:webapp', function() {
-            packager({
-                name: APP_NAME,
-                dir: SRC_DIR,
-                all: true,
-                overwrite: true,
-                out: DIST_DIR,
-                icon: OSX_ICON
-            }, function done_callback (err, appPaths) {
-                done();
-            });	
         });
     });
 };

@@ -1,5 +1,6 @@
 if (require('electron-squirrel-startup')) return;
 // this should be placed at top of main.js to handle setup events quickly
+
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
@@ -21,8 +22,9 @@ function createWindow () {
         minWidth: 1000,
         minHeight: 800,
         webPreferences: {
-          devTools: true
-        }
+          devTools: false
+        },
+        icon: path.join(__dirname, 'icons/png/256x256.png')
     });
 
     win.loadURL(url.format({
@@ -67,7 +69,6 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
 function handleSquirrelEvent() {
   if (process.argv.length === 1) {
     return false;
@@ -79,7 +80,7 @@ function handleSquirrelEvent() {
   const appFolder = path.resolve(process.execPath, '..');
   const rootAtomFolder = path.resolve(appFolder, '..');
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-  const exeName = path.basename(process.execPath);
+  const exeName = "KYC Wallet.exe"; //path.basename(process.execPath);
 
   const spawn = function(command, args) {
     let spawnedProcess, error;

@@ -11,10 +11,11 @@ const browserSync = require('browser-sync').create();
  */
 const walletWebAppTasks = require('./wallet-web-app/gulp-tasks/index.js')(gulp, runSequence, watch, path);
 //http://ionicons.com/#cdn
+
 /**
  * wallet desktop app tasks
  */
-const walletDesktopAppTasks = require('./wallet-desktop-app/gulp-tasks/index.js')(gulp, runSequence, watch, path);
+const walletDesktopAppTasks = require('./gulp-tasks/index.js')(gulp, runSequence, watch, path);
 
 gulp.task('move:webapp', function (cb) {
 	gulp

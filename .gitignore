@@ -9,5 +9,5 @@ wallet-web-app/src/app-bundle.js
 wallet-web-app/src/angular/app.templates.js
 wallet-web-app/src/stylesheets/css/**/*.css
 
-wallet-desktop-app/release-builds/
+release
 wallet-desktop-app/dist/

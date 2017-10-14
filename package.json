@@ -1,7 +1,7 @@
 {
-  "name": "wallet",
+  "name": "identity-wallet",
   "version": "0.0.1",
-  "description": "KYC Chain Wallet",
+  "description": "Identity Wallet",
   "repository": "https://github.com/kyc-chain/wallet",
   "main": "./wallet-desktop-app/src/main.js",
   "scripts": {
@@ -17,7 +17,6 @@
     "browser-sync": "^2.18.13",
     "browserify": "14.4.0",
     "browserify-ngannotate": "2.0.0",
-    "electron-packager": "8.7.2",
     "gulp": "3.9.1",
     "gulp-angular-templatecache": "2.0.0",
     "gulp-pug": "3.3.0",
@@ -28,6 +27,10 @@
     "node-notifier": "5.1.2",
     "require-reload": "^0.2.2",
     "run-sequence": "2.1.0",
-    "vinyl-source-stream": "1.1.0"
+    "vinyl-source-stream": "1.1.0",
+    "electron-installer-debian": "0.6.0",
+    "electron-installer-dmg": "0.2.1",
+    "electron-packager": "8.7.2",
+    "electron-winstaller": "2.6.3"
   }
 }
