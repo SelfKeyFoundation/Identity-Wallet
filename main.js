@@ -24,11 +24,11 @@ function createWindow () {
         webPreferences: {
           devTools: false
         },
-        icon: path.join(__dirname, 'icons/png/256x256.png')
+        icon: path.join(__dirname, 'assets/icons/png/256x256.png')
     });
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, '../dist', 'index.html'),
+        pathname: path.join(__dirname, 'wallet-web-app/dist', 'index.html'),
         protocol: 'file:',
         slashes: true
     }));

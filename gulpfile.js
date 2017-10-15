@@ -17,13 +17,6 @@ const walletWebAppTasks = require('./wallet-web-app/gulp-tasks/index.js')(gulp, 
  */
 const walletDesktopAppTasks = require('./gulp-tasks/index.js')(gulp, runSequence, watch, path);
 
-gulp.task('move:webapp', function (cb) {
-	gulp
-		.src(['./wallet-web-app/dist/**/*'])
-		.pipe(gulp.dest('./wallet-desktop-app/dist'))
-		.on('end', () => { cb(); });
-});
-
 /**
  * browser sync - for development
  */

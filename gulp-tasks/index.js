@@ -6,26 +6,39 @@ module.exports = (gulp, runSequence, watch, path) => {
     const installerDEB = require('electron-installer-debian');
 
     const APP_NAME = "KYC Wallet";
-    const SRC_DIR = path.resolve(__dirname, '../wallet-desktop-app');
+    const SRC_DIR = path.resolve(__dirname, '../');
 
     const BUILD_DIST_DIR = path.resolve(__dirname, "../release/builds");
     const INSTALLER_DIST_DIR = path.resolve(__dirname, "../release/installers");
 
-    const OSX_ICON = path.resolve(__dirname, "../wallet-desktop-app/src/icons/mac/icon.icns");
-    const OSX_INSTALLER_BG = path.resolve(__dirname, "../wallet-desktop-app/src/icons/mac/mac-osx-installer-bg_3.jpg");
-    const WIN_ICON = path.resolve(__dirname, "../wallet-desktop-app/src/icons/selfkey.ico");
+    const OSX_ICON = path.resolve(__dirname, "../assets/icons/mac/selfkey.icns");
+    const OSX_INSTALLER_BG = path.resolve(__dirname, "../assets/backgrounds/mac/installer.jpg");
+    const WIN_ICON = path.resolve(__dirname, "../assets/icons/win/selfkey.ico");
 
     gulp.task('build:desktop-app:osx64', function (done) {
-        runSequence('build:webapp', 'move:webapp', function() {
+        runSequence('build:webapp', function() {
             packager({
                 name: APP_NAME,
                 dir: SRC_DIR,
-                prune: true,
                 arch: "x64",
                 platform: "darwin",
                 overwrite: true,
                 out: BUILD_DIST_DIR,
-                icon: OSX_ICON
+                icon: OSX_ICON,
+                ignore: [
+                    "gulp-tasks",
+                    "release",
+                    "wallet-desktop-app",
+                    "config.json",
+                    "config.template",
+                    "Dockerfile-builder",
+                    "gulpfile.js",
+                    "package-lock.json",
+                    "README.md",
+                    "wallet-web-app/Dockerfile",
+                    "wallet-web-app/node_modules",
+                    "wallet-web-app/src",
+                ]
             }, function (err, appPaths) {
                 // create DMG file
                 var installerDMGConfigs = {
@@ -52,7 +65,7 @@ module.exports = (gulp, runSequence, watch, path) => {
     });
 
     gulp.task('build:desktop-app:win32', function (done) {
-        runSequence('build:webapp', 'move:webapp', function() {
+        runSequence('build:webapp', function() {
             packager({
                 name: APP_NAME,
                 productName: APP_NAME,
@@ -71,7 +84,21 @@ module.exports = (gulp, runSequence, watch, path) => {
                 overwrite: true,
                 out: BUILD_DIST_DIR,
                 icon: WIN_ICON,
-                asar: true
+                asar: true,
+                ignore: [
+                    "gulp-tasks",
+                    "release",
+                    "wallet-desktop-app",
+                    "config.json",
+                    "config.template",
+                    "Dockerfile-builder",
+                    "gulpfile.js",
+                    "package-lock.json",
+                    "README.md",
+                    "wallet-web-app/Dockerfile",
+                    "wallet-web-app/node_modules",
+                    "wallet-web-app/src",
+                ]
             }, function (err, appPaths) {
                 console.log(appPaths)
 
@@ -110,7 +137,7 @@ module.exports = (gulp, runSequence, watch, path) => {
     });
 
     gulp.task('build:desktop-app:deb', function (done) {
-        runSequence('build:webapp', 'move:webapp', function() {
+        runSequence('build:webapp', function() {
             packager({
                 name: APP_NAME,
                 dir: SRC_DIR,
@@ -119,7 +146,21 @@ module.exports = (gulp, runSequence, watch, path) => {
                 platform: "linux",
                 overwrite: true,
                 out: BUILD_DIST_DIR,
-                icon: OSX_ICON
+                icon: OSX_ICON,
+                ignore: [
+                    "gulp-tasks",
+                    "release",
+                    "wallet-desktop-app",
+                    "config.json",
+                    "config.template",
+                    "Dockerfile-builder",
+                    "gulpfile.js",
+                    "package-lock.json",
+                    "README.md",
+                    "wallet-web-app/Dockerfile",
+                    "wallet-web-app/node_modules",
+                    "wallet-web-app/src",
+                ]
             }, function (err, appPaths) {
                 installerDEB({
                     src: appPaths[0],

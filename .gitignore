@@ -10,4 +10,3 @@ wallet-web-app/src/angular/app.templates.js
 wallet-web-app/src/stylesheets/css/**/*.css
 
 release
-wallet-desktop-app/dist/
