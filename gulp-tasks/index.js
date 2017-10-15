@@ -6,6 +6,8 @@ module.exports = (gulp, runSequence, watch, path) => {
     const installerDEB = require('electron-installer-debian');
 
     const APP_NAME = "KYC Wallet";
+    const APP_VERSION = "0.0.2";
+
     const SRC_DIR = path.resolve(__dirname, '../');
 
     const BUILD_DIST_DIR = path.resolve(__dirname, "../release/builds");
@@ -15,8 +17,23 @@ module.exports = (gulp, runSequence, watch, path) => {
     const OSX_INSTALLER_BG = path.resolve(__dirname, "../assets/backgrounds/mac/installer.jpg");
     const WIN_ICON = path.resolve(__dirname, "../assets/icons/win/selfkey.ico");
 
-    gulp.task('build:desktop-app:osx64', function (done) {
-        runSequence('build:webapp', function() {
+    const IGNORE_FILES = [
+        "gulp-tasks",
+        "release",
+        "wallet-desktop-app",
+        "config.json",
+        "config.template",
+        "Dockerfile-builder",
+        "gulpfile.js",
+        "package-lock.json",
+        "README.md",
+        "wallet-web-app/Dockerfile",
+        "wallet-web-app/node_modules",
+        "wallet-web-app/src",
+    ]
+
+    gulp.task('build:desktop-app:osx64', (done) => {
+        runSequence('build:webapp', () => {
             packager({
                 name: APP_NAME,
                 dir: SRC_DIR,
@@ -25,21 +42,8 @@ module.exports = (gulp, runSequence, watch, path) => {
                 overwrite: true,
                 out: BUILD_DIST_DIR,
                 icon: OSX_ICON,
-                ignore: [
-                    "gulp-tasks",
-                    "release",
-                    "wallet-desktop-app",
-                    "config.json",
-                    "config.template",
-                    "Dockerfile-builder",
-                    "gulpfile.js",
-                    "package-lock.json",
-                    "README.md",
-                    "wallet-web-app/Dockerfile",
-                    "wallet-web-app/node_modules",
-                    "wallet-web-app/src",
-                ]
-            }, function (err, appPaths) {
+                ignore: IGNORE_FILES
+            }, (err, appPaths) => {
                 // create DMG file
                 var installerDMGConfigs = {
                     icon: OSX_ICON,
@@ -53,7 +57,7 @@ module.exports = (gulp, runSequence, watch, path) => {
                     overwrite: true, 
                     out: INSTALLER_DIST_DIR
                 }
-                installerDMG(installerDMGConfigs, function (installerDMGError) { 
+                installerDMG(installerDMGConfigs, (installerDMGError) => { 
                     if(installerDMGError){
                         console.log(installerDMGError);
                     } else {
@@ -64,8 +68,8 @@ module.exports = (gulp, runSequence, watch, path) => {
         });
     });
 
-    gulp.task('build:desktop-app:win32', function (done) {
-        runSequence('build:webapp', function() {
+    gulp.task('build:desktop-app:win32', (done) => {
+        runSequence('build:webapp', () => {
             packager({
                 name: APP_NAME,
                 productName: APP_NAME,
@@ -76,7 +80,7 @@ module.exports = (gulp, runSequence, watch, path) => {
                     ProductName: APP_NAME,
                     InternalName: APP_NAME
                 },
-                appVersion: "0.0.2",
+                appVersion: APP_VERSION,
                 dir: SRC_DIR,
                 prune: true,
                 arch: "ia32",
@@ -85,21 +89,8 @@ module.exports = (gulp, runSequence, watch, path) => {
                 out: BUILD_DIST_DIR,
                 icon: WIN_ICON,
                 asar: true,
-                ignore: [
-                    "gulp-tasks",
-                    "release",
-                    "wallet-desktop-app",
-                    "config.json",
-                    "config.template",
-                    "Dockerfile-builder",
-                    "gulpfile.js",
-                    "package-lock.json",
-                    "README.md",
-                    "wallet-web-app/Dockerfile",
-                    "wallet-web-app/node_modules",
-                    "wallet-web-app/src",
-                ]
-            }, function (err, appPaths) {
+                ignore: IGNORE_FILES
+            }, (err, appPaths) => {
                 console.log(appPaths)
 
                 installerEXE.createWindowsInstaller({
@@ -111,7 +102,7 @@ module.exports = (gulp, runSequence, watch, path) => {
 
                     authors: APP_NAME,
                     description: APP_NAME,
-                    version: "0.0.1",
+                    version: APP_VERSION,
 
                     outputDirectory: INSTALLER_DIST_DIR,
                     
@@ -125,7 +116,7 @@ module.exports = (gulp, runSequence, watch, path) => {
                     iconUrl: 'http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico', // TEMP
                     setupIcon: WIN_ICON,
                     skipUpdateIcon: true,
-                }).then(function(error){
+                }).then((error) => {
                     if(error){
                         console.log(error)
                     }else{
@@ -136,8 +127,8 @@ module.exports = (gulp, runSequence, watch, path) => {
         });
     });
 
-    gulp.task('build:desktop-app:deb', function (done) {
-        runSequence('build:webapp', function() {
+    gulp.task('build:desktop-app:deb', (done) => {
+        runSequence('build:webapp', () => {
             packager({
                 name: APP_NAME,
                 dir: SRC_DIR,
@@ -147,20 +138,7 @@ module.exports = (gulp, runSequence, watch, path) => {
                 overwrite: true,
                 out: BUILD_DIST_DIR,
                 icon: OSX_ICON,
-                ignore: [
-                    "gulp-tasks",
-                    "release",
-                    "wallet-desktop-app",
-                    "config.json",
-                    "config.template",
-                    "Dockerfile-builder",
-                    "gulpfile.js",
-                    "package-lock.json",
-                    "README.md",
-                    "wallet-web-app/Dockerfile",
-                    "wallet-web-app/node_modules",
-                    "wallet-web-app/src",
-                ]
+                ignore: IGNORE_FILES
             }, function (err, appPaths) {
                 installerDEB({
                     src: appPaths[0],
