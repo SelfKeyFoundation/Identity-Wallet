@@ -1,23 +1,128 @@
 {
     "default": {
-        "APP_NAME": "selfkeyWallet",
-        "APP_TITLE": "Selfkey Wallet",
+        "app": {
+            "name": "IdentityWallet",
+            "title": "Identity Wallet",
+            "version": "0.0.2",
+            "description": "Selfkey Identity Wallet",
+            "companyName": "Selfkey",
+            "productName": "org.selfkey.wallet",
+            "authors": "Edmund Lowell"
+        },
+        "package": {
+            "ignoreFiles": [
+                "gulp-tasks",
+                "release",
+                "wallet-desktop-app",
+                "config.json",
+                "config.template",
+                "Dockerfile-builder",
+                "gulpfile.js",
+                "package-lock.json",
+                "README.md",
+                "wallet-web-app/Dockerfile",
+                "wallet-web-app/node_modules",
+                "wallet-web-app/src"
+            ]
+        },
+        "installer": {
+            "title": "Identity Wallet Installer",
+            "description": "Identity Wallet Installer",
+            "win": {
+                "name": "Identity Wallet Installer.exe",
+                "iconUrl": "http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico",
+                "skipUpdateIcon": true
+            },
+            "ubuntu": {
+                "name": "Identity Wallet Installer.deb"
+            }
+        },
         "API_ENDPOINT": "http://localhost:8080/api",
         "DEFAULT_LANGUAGE": "en",
         "DEBUG": true
     },
     "development": {
-        "APP_NAME": "selfkeyWallet",
-        "APP_TITLE": "Selfkey Wallet",
+        "app": {
+            "name": "IdentityWallet",
+            "title": "Identity Wallet",
+            "version": "0.0.2",
+            "description": "Selfkey Identity Wallet",
+            "companyName": "Selfkey",
+            "productName": "org.selfkey.wallet",
+            "authors": "Edmund Lowell"
+        },
+        "package": {
+            "ignoreFiles": [
+                "gulp-tasks",
+                "release",
+                "wallet-desktop-app",
+                "config.json",
+                "config.template",
+                "Dockerfile-builder",
+                "gulpfile.js",
+                "package-lock.json",
+                "README.md",
+                "wallet-web-app/Dockerfile",
+                "wallet-web-app/node_modules",
+                "wallet-web-app/src"
+            ]
+        },
+        "installer": {
+            "title": "Identity Wallet Installer",
+            "description": "Identity Wallet Installer",
+            "win": {
+                "name": "Identity Wallet Installer.exe",
+                "iconUrl": "http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico",
+                "skipUpdateIcon": true
+            },
+            "ubuntu": {
+                "name": "Identity Wallet Installer.deb"
+            }
+        },
         "API_ENDPOINT": "http://localhost:8080/api",
         "DEFAULT_LANGUAGE": "en",
         "DEBUG": true
     },
     "production": {
-        "APP_NAME": "selfkeyWallet",
-        "APP_TITLE": "Selfkey Wallet",
+        "app": {
+            "name": "IdentityWallet",
+            "title": "Identity Wallet",
+            "version": "0.0.2",
+            "description": "Selfkey Identity Wallet",
+            "companyName": "Selfkey",
+            "productName": "org.selfkey.wallet",
+            "authors": "Edmund Lowell"
+        },
+        "package": {
+            "ignoreFiles": [
+                "gulp-tasks",
+                "release",
+                "wallet-desktop-app",
+                "config.json",
+                "config.template",
+                "Dockerfile-builder",
+                "gulpfile.js",
+                "package-lock.json",
+                "README.md",
+                "wallet-web-app/Dockerfile",
+                "wallet-web-app/node_modules",
+                "wallet-web-app/src"
+            ]
+        },
+        "installer": {
+            "title": "Identity Wallet Installer",
+            "description": "Identity Wallet Installer",
+            "win": {
+                "name": "Identity Wallet Installer.exe",
+                "iconUrl": "http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico",
+                "skipUpdateIcon": true
+            },
+            "ubuntu": {
+                "name": "Identity Wallet Installer.deb"
+            }
+        },
         "API_ENDPOINT": "http://localhost:8080/api",
         "DEFAULT_LANGUAGE": "en",
-        "DEBUG": false
+        "DEBUG": true
     }
 }

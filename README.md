@@ -13,9 +13,12 @@ set **NODE_ENV** to
 
 **MacOSX**
 * ```brew install wine```
+* ```brew install rpm```
+* ```brew install rpmbuild```
 
 **Linux**
 * ```sudo apt-get install wine```
+* ```sudo apt-get install rpm```
 
 ## Build Web Application
 * ```gulp build:webapp```
