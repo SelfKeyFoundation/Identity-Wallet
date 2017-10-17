@@ -6,35 +6,68 @@ if (handleSquirrelEvent()) {
   return;
 }
 
-const {app, BrowserWindow} = require('electron');
+const { app, BrowserWindow, dialog, remote, ipcMain, ipcRenderer } = require('electron');
+const appConfig = require('./config.electron.js');
+
+const EVENTS = appConfig.constants.events;
+
 const path = require('path');
 const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let config;
 
-function createWindow () {
-    // Create the browser window.
-    win = new BrowserWindow({
-        width: 1000, 
-        height: 800,
-        minWidth: 1000,
-        minHeight: 800,
-        webPreferences: {
-          devTools: false
-        },
-        icon: path.join(__dirname, 'assets/icons/png/256x256.png')
-    });
+function createWindow() {
+  // Create the browser window.
+  win = new BrowserWindow({
+    width: 1000,
+    height: 800,
+    minWidth: 1000,
+    minHeight: 800,
+    webPreferences: {
+      devTools: false,
+      preload: __dirname + '/preload.js'
+    },
+    icon: path.join(__dirname, 'assets/icons/png/256x256.png')
+  });
 
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, 'wallet-web-app/dist', 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-  
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, 'wallet-web-app/dist', 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
   // Open the DevTools.
   //win.webContents.openDevTools()
+
+  ipcMain.on(EVENTS.ON_CONFIG_READY, (event, config) => {
+    console.log("ON_CONFIG_READY", config);
+    config = config
+  });
+
+  ipcMain.on(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST, (event) => {
+    console.log("ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST");
+
+    let dialogConfig = {
+      title: "Choose where to save documents",
+      message: "Choose where to save documents",
+      properties: ['openDirectory']
+    };
+
+    dialog.showOpenDialog(win, dialogConfig, (filePaths) => {
+      if (filePaths) {
+        win.webContents.send(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, filePaths[0]);
+      }
+    });
+  });
+
+  // Web Content Ready
+  win.webContents.on('did-finish-load', () => {
+    // register electron process in webapp
+    win.webContents.send(EVENTS.ON_ELECTRON_APP_READY);
+  });
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -82,17 +115,17 @@ function handleSquirrelEvent() {
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
   const exeName = "KYC Wallet.exe"; //path.basename(process.execPath);
 
-  const spawn = function(command, args) {
+  const spawn = function (command, args) {
     let spawnedProcess, error;
 
     try {
-      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
-    } catch (error) {}
+      spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
+    } catch (error) { }
 
     return spawnedProcess;
   };
 
-  const spawnUpdate = function(args) {
+  const spawnUpdate = function (args) {
     return spawn(updateDotExe, args);
   };
 

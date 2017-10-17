@@ -7,7 +7,19 @@
             "description": "Selfkey Identity Wallet",
             "companyName": "Selfkey",
             "productName": "org.selfkey.wallet",
-            "authors": "Edmund Lowell"
+            "authors": "Edmund Lowell",
+            "constants": {
+                "localStorageKeys": {
+                    "APP_OPEN_COUNT": "APP_OPEN_COUNT",
+                    "USER_DOCUMENTS_STORAGE_PATH": "USER_DOCUMENTS_STORAGE_PATH"
+                },
+                "events": {
+                    "ON_ELECTRON_APP_READY": "ON_ELECTRON_APP_READY",
+                    "ON_CONFIG_READY": "ON_CONFIG_READY",
+                    "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST": "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST",
+                    "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE": "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE"
+                }
+            }
         },
         "package": {
             "ignoreFiles": [
@@ -37,6 +49,7 @@
                 "name": "Identity Wallet Installer.deb"
             }
         },
+
         "API_ENDPOINT": "http://localhost:8080/api",
         "DEFAULT_LANGUAGE": "en",
         "DEBUG": true

@@ -9,8 +9,6 @@ import angularMaterial from 'angular-material';
 
 import LocalStorageModule from 'angular-local-storage';
 
-//https://github.com/gothinkster/angularjs-realworld-example-app/blob/master/src/js/app.js
-
 /**
  * Internal Modules
  */
@@ -24,6 +22,8 @@ import appConfigConstant from './constants/app.config.constant';
 import appTestFilter from './filters/app.test.filter';
 
 import AnimationService from './services/animation.service';
+import ElectronService from './services/electron.service';
+import ConfigStorageService from './services/config-storage.service';
 
 import CountdownDirective from './directives/countdown.directive';
 import KycProfileImageDirective from './directives/kyc-profile-image.directive';
@@ -55,6 +55,8 @@ angular.module('kyc-wallet').filter('testFilter', appTestFilter);
  * services
  */
 angular.module('kyc-wallet').service('AnimationService', AnimationService);
+angular.module('kyc-wallet').service('ElectronService', ElectronService);
+angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
 
 /**
  * directives
@@ -67,9 +69,11 @@ angular.module('kyc-wallet').directive('kycProfileImage', KycProfileImageDirecti
  */
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
 import MemberProfileMainController from './controllers/member/profile-controller.js';
+import UserDocumentsStoragePathDialog from './controllers/common/dialogs/user-documents-storage-path-controller.js';
 
 angular.module('kyc-wallet').controller('MemberIdentityMainController', MemberIdentityMainController);
 angular.module('kyc-wallet').controller('MemberProfileController', MemberProfileMainController);
+angular.module('kyc-wallet').controller('UserDocumentsStoragePathDialog', UserDocumentsStoragePathDialog);
 
 /**
  * config states

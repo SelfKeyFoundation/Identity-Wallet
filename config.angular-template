@@ -1,0 +1,23 @@
+'use strict';
+
+const AppConfigConstant = {
+    "APP_NAME": "<%app.name%>",
+    "APP_TITLE": "<%app.title%>",
+    "API_ENDPOINT": "<%API_ENDPOINT%>",
+    "DEFAULT_LANGUAGE": "<%DEFAULT_LANGUAGE%>",
+    "DEBUG": "<%DEBUG%>",
+    "constants": {
+        "localStorageKeys": {
+            "APP_OPEN_COUNT": "<%app.constants.localStorageKeys.APP_OPEN_COUNT%>",
+            "USER_DOCUMENTS_STORAGE_PATH": "<%app.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH%>"
+        },
+        "events": {
+            "ON_ELECTRON_APP_READY": "<%app.constants.events.ON_ELECTRON_APP_READY%>",
+            "ON_CONFIG_READY": "<%app.constants.events.ON_CONFIG_READY%>",
+            "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST": "<%app.constants.events.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST%>",
+            "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE": "<%app.constants.events.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE%>"
+        }
+    }
+};
+
+export default AppConfigConstant;

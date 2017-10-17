@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $window, $timeout, DICTIONARY, CONFIG, AnimationService, $http, localStorageService, $mdDialog) {
+function AppRun($rootScope, $window, $timeout, $http, $mdDialog, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
     'ngInject';
     
     AnimationService.init();
@@ -15,25 +15,41 @@ function AppRun($rootScope, $window, $timeout, DICTIONARY, CONFIG, AnimationServ
         window.open("http://token.selfkey.org/");
     }
 
+    $rootScope.test3 = function (event) {
+        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
+    }
+
     $timeout(function(){
       $(".sparkley:first").sparkleh();
     }, 2000);
 
-    let appOpenCount = localStorageService.get("appOpenCount");
+    
+    let appOpenCount = ConfigStorageService.getAppOpenCount();
+    let userDocumentsStoragePath = ConfigStorageService.getUserDocumentsStoragePath();
+
     if(!appOpenCount || appOpenCount === 0){
         $timeout(function(){
             $mdDialog.show({
                 templateUrl: 'common/dialogs/legal-tems-and-conditions.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
-                fullscreen: true
+                fullscreen: false
+            }).then(function(){
+                if (!userDocumentsStoragePath && ElectronService.ipcRenderer) {
+                    $mdDialog.show({
+                        templateUrl: 'common/dialogs/user-documents-storage-path.html',
+                        controller: 'UserDocumentsStoragePathDialog',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: true,
+                        fullscreen: false
+                    });
+                }
             });
         }, 1000);
     }
+
     appOpenCount++;
-    localStorageService.set("appOpenCount", appOpenCount);
-    
-    // localStorageService.get(key);
+    ConfigStorageService.setAppOpenCount(appOpenCount);
 }
 
 export default AppRun;

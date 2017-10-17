@@ -24,6 +24,7 @@ module.exports = (gulp, runSequence, watch, path) => {
             'transpile:webapp:templates', 
             'build:webapp:assets',
             'build:webapp:configs',
+            'build:electron:configs',
             'build:webapp:js',
             'build:webapp:index'
         , () => {

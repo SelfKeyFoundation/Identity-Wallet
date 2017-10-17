@@ -1,4 +1,4 @@
-function MemberLayoutController ($rootScope, $scope) {
+function MemberLayoutController ($rootScope, $scope, ElectronService) {
     'ngInject'
 };
 

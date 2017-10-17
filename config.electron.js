@@ -1,6 +1,6 @@
 'use strict';
 
-const AppConfigConstant = {
+module.exports = {
     "APP_NAME": "IdentityWallet",
     "APP_TITLE": "Identity Wallet",
     "API_ENDPOINT": "http://localhost:8080/api",
@@ -19,5 +19,3 @@ const AppConfigConstant = {
         }
     }
 };
-
-export default AppConfigConstant;
