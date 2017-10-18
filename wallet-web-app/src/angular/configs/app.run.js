@@ -31,8 +31,9 @@ function AppRun($rootScope, $window, $timeout, $http, $mdDialog, DICTIONARY, CON
         $timeout(function(){
             $mdDialog.show({
                 templateUrl: 'common/dialogs/legal-tems-and-conditions.html',
+                controller: "LegalTermsAndConditionsDialog",
                 parent: angular.element(document.body),
-                clickOutsideToClose: true,
+                clickOutsideToClose: false,
                 fullscreen: false
             }).then(function(){
                 if (!userDocumentsStoragePath && ElectronService.ipcRenderer) {
@@ -40,7 +41,7 @@ function AppRun($rootScope, $window, $timeout, $http, $mdDialog, DICTIONARY, CON
                         templateUrl: 'common/dialogs/user-documents-storage-path.html',
                         controller: 'UserDocumentsStoragePathDialog',
                         parent: angular.element(document.body),
-                        clickOutsideToClose: true,
+                        clickOutsideToClose: false,
                         fullscreen: false
                     });
                 }

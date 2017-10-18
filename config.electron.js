@@ -9,7 +9,8 @@ module.exports = {
     "constants": {
         "localStorageKeys": {
             "APP_OPEN_COUNT": "APP_OPEN_COUNT",
-            "USER_DOCUMENTS_STORAGE_PATH": "USER_DOCUMENTS_STORAGE_PATH"
+            "USER_DOCUMENTS_STORAGE_PATH": "USER_DOCUMENTS_STORAGE_PATH",
+            "LEGAL_TERMS_AND_CONDITIONS": "LEGAL_TERMS_AND_CONDITIONS"
         },
         "events": {
             "ON_ELECTRON_APP_READY": "ON_ELECTRON_APP_READY",

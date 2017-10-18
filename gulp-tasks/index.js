@@ -3,8 +3,6 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
 
     const installerDMG = require('electron-installer-dmg');
     const installerEXE = require('electron-winstaller');
-    const installerDEB = require('electron-installer-debian');
-    const installerRPM = require('electron-installer-redhat');
     
     const env = environment || 'default';
     const config = projConfig[env];
@@ -110,6 +108,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
             packagerCommonConfigs.arch = "x64";
             packagerCommonConfigs.asar = true;
             packager(packagerCommonConfigs, function (err, appPaths) {
+                const installerDEB = require('electron-installer-debian');
                 installerDEB({
                     src: appPaths[0],
                     dest: INSTALLER_DIST_DIR,
@@ -132,6 +131,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
             packagerCommonConfigs.platform = "linux";
             packagerCommonConfigs.arch = "x64";
             packager(packagerCommonConfigs, function (err, appPaths) {
+                const installerRPM = require('electron-installer-redhat');
                 installerDEB({
                     src: appPaths[0],
                     dest: INSTALLER_DIST_DIR,

@@ -23,5 +23,5 @@ md-dialog(aria-label="Legal temrs and conditions", style="min-width: 60%;")
                 | Legal terms and conditions Legal terms and conditions Legal terms and conditions 
                 | Legal terms and conditions Legal terms and conditions Legal terms and conditions 
             .actions(layout="row", layout-align="center center")
-                .kyc-button.primary(style="margin-right: 8px;") Agree
-                .kyc-button.primary(style="margin-left: 8px;") Disagree
+                .kyc-button.primary(style="margin-right: 8px;", ng-click="agree($event)") Agree
+                .kyc-button.primary(style="margin-left: 8px;", ng-click="disagree($event)") Disagree

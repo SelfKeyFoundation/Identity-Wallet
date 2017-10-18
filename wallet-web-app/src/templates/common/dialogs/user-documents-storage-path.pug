@@ -3,9 +3,10 @@ md-dialog(aria-label="Choose directory to store documents", style="min-width: 60
         .kyc-dialog-container(layout="column")
             .header
                 .title Choose directory to store documents
-            .body(style="max-height: 300px;")
+            .body(style="max-height: 300px;", layout="column", layout-align="center center")
+                b(ng-if="currentDirectory") {{currentDirectory}}
                 .kyc-button.primary(style="margin-right: 8px;", ng-click="chooseDirectory($event)") Choose Directory
 
             .actions(layout="row", layout-align="center center")
-                .kyc-button.primary(style="margin-right: 8px;") Save
-                .kyc-button.primary(style="margin-left: 8px;") Cancel
+                .kyc-button.primary(style="margin-right: 8px;", ng-click="cancel($event)") Save
+                .kyc-button.primary(style="margin-left: 8px;", ng-click="cancel($event)") Cancel

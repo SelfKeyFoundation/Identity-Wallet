@@ -21,10 +21,20 @@ function ConfigStorageService($rootScope, $log, CONFIG, localStorageService) {
      * User's documents storage path
      */
     this.getUserDocumentsStoragePath = function () {
-      return localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENT_STORAGE_PATH);
+      return localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
     }
     this.setUserDocumentsStoragePath = function (path) {
-      localStorageService.set(CONFIG.constants.localStorageKeys.USER_DOCUMENT_STORAGE_PATH, path);
+      localStorageService.set(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH, path);
+    }
+
+    /**
+     * Legal terms and conditions agreed
+     */
+    this.getLegalTermsAndConditionsAgreed = function () {
+      return localStorageService.get(CONFIG.constants.localStorageKeys.LEGAL_TERMS_AND_CONDITIONS);
+    }
+    this.setLegalTermsAndConditionsAgreed = function (agreed) {
+      localStorageService.set(CONFIG.constants.localStorageKeys.LEGAL_TERMS_AND_CONDITIONS, agreed);
     }
   }
 

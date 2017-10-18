@@ -9,10 +9,11 @@
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
     "angular-aria": "1.5.8",
-    "angular-local-storage": "^0.7.1",
+    "angular-local-storage": "0.7.1",
     "angular-material": "1.1.4",
     "electron": "1.7.5",
-    "jquery": "3.2.1"
+    "jquery": "3.2.1",
+    "node-sass": "4.5.3"
   },
   "devDependencies": {
     "gulp-json-transform": "0.4.2"

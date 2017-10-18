@@ -27,7 +27,7 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 800,
     webPreferences: {
-      devTools: false,
+      devTools: true,
       preload: __dirname + '/preload.js'
     },
     icon: path.join(__dirname, 'assets/icons/png/256x256.png')
@@ -40,7 +40,7 @@ function createWindow() {
   }));
 
   // Open the DevTools.
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   ipcMain.on(EVENTS.ON_CONFIG_READY, (event, config) => {
     console.log("ON_CONFIG_READY", config);

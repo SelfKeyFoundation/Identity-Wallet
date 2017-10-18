@@ -70,10 +70,12 @@ angular.module('kyc-wallet').directive('kycProfileImage', KycProfileImageDirecti
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
 import MemberProfileMainController from './controllers/member/profile-controller.js';
 import UserDocumentsStoragePathDialog from './controllers/common/dialogs/user-documents-storage-path-controller.js';
+import LegalTermsAndConditionsDialog from './controllers/common/dialogs/legal-terms-and-conditions-controller.js';
 
 angular.module('kyc-wallet').controller('MemberIdentityMainController', MemberIdentityMainController);
 angular.module('kyc-wallet').controller('MemberProfileController', MemberProfileMainController);
 angular.module('kyc-wallet').controller('UserDocumentsStoragePathDialog', UserDocumentsStoragePathDialog);
+angular.module('kyc-wallet').controller('LegalTermsAndConditionsDialog', LegalTermsAndConditionsDialog);
 
 /**
  * config states
