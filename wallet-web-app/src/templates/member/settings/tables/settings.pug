@@ -1,0 +1,35 @@
+h1.uppercase.color-primary Settings
+h3.uppercase.color-primary user's settings
+
+.md-whiteframe-3dp.margin-top-2(style="background-color: white;", layout="row", layout-align="center center")
+    .md-padding.font-weight-500 Selected private key:
+    span(flex)
+    .md-padding.link-primary {{settings['SELECTED_PRIVATE_KEY']}}
+    .md-padding(style="background-color: #F0EEEF;") 
+        .kyc-link(layout="row", layout-align="center center")
+            i.material-icons(style="font-size: 19px;") edit
+
+
+.md-whiteframe-3dp.margin-top-2(style="background-color: white;", layout="row", layout-align="center center")
+    .md-padding.font-weight-500 Selected language:
+    span(flex)
+    .md-padding {{settings['SELECTED_LANGUAGE'] ? settings['SELECTED_LANGUAGE'] : 'EN'}}
+    .md-padding(style="background-color: #F0EEEF;") 
+        .kyc-link(layout="row", layout-align="center center")
+            i.material-icons(style="font-size: 19px;") edit
+
+.md-whiteframe-3dp.margin-top-2(style="background-color: white;", layout="row", layout-align="center center", ng-if="settings['APP_OPEN_COUNT'] > 0")
+    .md-padding.font-weight-500 Application used:
+    span(flex)
+    .md-padding {{settings['APP_OPEN_COUNT']}} time{{settings['APP_OPEN_COUNT'] > 1 ? 's' : ''}}
+    .md-padding(style="background-color: #F0EEEF;") 
+        .kyc-link(layout="row", layout-align="center center")
+            i.material-icons(style="font-size: 19px;") refresh
+
+.md-whiteframe-3dp.margin-top-2(style="background-color: white;", layout="row", layout-align="center center", ng-if="settings['USER_DOCUMENTS_STORAGE_PATH']")
+    .md-padding.font-weight-500 Selected Document's directory:
+    span(flex)
+    .md-padding {{settings['USER_DOCUMENTS_STORAGE_PATH']}}
+    .md-padding(style="background-color: #F0EEEF;") 
+        .kyc-link(layout="row", layout-align="center center", ng-click="$root.test3($event)")
+            i.material-icons(style="font-size: 19px;") edit

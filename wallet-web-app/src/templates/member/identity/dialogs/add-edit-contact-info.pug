@@ -1,0 +1,24 @@
+md-dialog(aria-label="Add edit contact info", style="min-width: 60%;")
+    md-dialog-content
+        .kyc-dialog-container(layout="column")
+            .header
+                .title {{contactInfo.id ? 'Edit Contact': 'Create new contact'}}
+            .body(style="max-height: 300px;", layout="column", layout-align="center center")
+                form(name="contactForm", layout="column")
+                    select(name="type", ng-model="contactInfo.type")
+                        option Phone
+                        option Email
+                    input(type="text", name="value", ng-model="contactInfo.value")
+                    div(layout="row")
+                        input(type="radio", name="privacy", value="0", ng-model="contactInfo.privacy")
+                        span Public
+                    div(layout="row")
+                        input(type="radio", name="privacy", value="1", ng-model="contactInfo.privacy")
+                        span Private
+                    div(layout="row")
+                        input(type="checkbox", name="default", value="1", ng-model="contactInfo.isDefault")
+                        span Is Default
+
+            .actions(layout="row", layout-align="center center")
+                .kyc-button.primary(style="margin-right: 8px;", ng-click="save($event)") Save
+                .kyc-button.primary(style="margin-left: 8px;", ng-click="cancel($event)") Cancel

@@ -13,11 +13,11 @@ table.kyc-table(style="width: 85%;")
             td {{item.type}}
             td {{item.name}}
             td
-                .kyc-status-box.white.text-align-center(ng-if="item.attestation === 'verified'") Verified
-                .kyc-status-box.blue.cursor-pointer.text-align-center(ng-if="item.attestation === 'Request Attestation'") Request Attestation
+                .kyc-status-box.white.text-align-center(ng-if="item.attestations === 1") Verified
+                .kyc-status-box.blue.cursor-pointer.text-align-center(ng-if="item.attestations === 0") Request Attestation
             td
-                .kyc-status-box.green.no-borders(ng-if="item.privacy === 'public'") public
-                .kyc-status-box.red.no-borders(ng-if="item.privacy === 'private'") private
+                .kyc-status-box.green.no-borders(ng-if="item.privacy === 0") public
+                .kyc-status-box.red.no-borders(ng-if="item.privacy === 1") private
             td
                 .kyc-link(layout="row", layout-align="center center")
                     i.material-icons mode_edit
@@ -29,6 +29,6 @@ table.kyc-table(style="width: 85%;")
         tr
             td(colspan="6")
                 div(layout="row", layout-align="start start")
-                    .kyc-button.primary(layout="row", layout-align="center center") 
+                    .kyc-button.primary(layout="row", layout-align="center center", ng-click="addDocument($event)") 
                         span.margin-right-2 Add Document
                         i.material-icons add_circle

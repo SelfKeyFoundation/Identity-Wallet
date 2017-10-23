@@ -1,4 +1,4 @@
 style
     | .profile-image-{{randomClassSuffix}}:before { background-image: url({{imageUrl}}); background-size: cover; }
-.hexagon-2.left-sidebar(ng-class="profileImageClass", ng-if="mode === 'sidebar'")
-.hexagon-1(ng-class="profileImageClass", ng-if="mode === 'toolbar'")
+.hexagon-2.left-sidebar(ng-class="profileImageClass", ng-if="mode === 'sidebar'", ui-sref="member.settings.main")
+.hexagon-1(ng-class="profileImageClass", ng-if="mode === 'toolbar'", ui-sref="member.settings.main")

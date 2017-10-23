@@ -5,7 +5,7 @@ function UserDocumentsStoragePathDialog ($rootScope, $scope, $log, $mdDialog, CO
 
     const EVENTS = CONFIG.constants.events;
 
-    $scope.currentDirectory = ConfigStorageService.getUserDocumentsStoragePath();
+    $scope.currentDirectory = ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH;
 
     $scope.chooseDirectory = (event) => {
         ElectronService.openUsersDocumentDirectoryChangeDialog(event);

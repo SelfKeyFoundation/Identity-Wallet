@@ -21,7 +21,22 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/layout.html'
+                templateUrl: 'member/layout.html',
+                controller: 'MemberLayoutController'
+            }
+        },
+        resolve: {
+            indexedDB: ($rootScope, $q) => {
+                let defer = $q.defer();
+                
+                $rootScope.$on('indexed-db:ready', () => {
+                    defer.resolve();
+                });
+    
+                return defer.promise;
+            },
+            configStorage: ($rootScope, $q, ConfigStorageService) => {
+                return ConfigStorageService.load();
             }
         }
     })
@@ -128,6 +143,28 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         views: {
             main: {
                 templateUrl: 'member/keychain/main.html'
+            }
+        }
+    })
+
+    /**
+     * 
+     */
+    .state('member.settings', {
+        abstract: true,
+        views: {
+            main: {
+                templateUrl: 'member/settings/layout.html'
+            }
+        }
+    })
+
+    .state('member.settings.main', {
+        url: '/member/settings/main',
+        views: {
+            main: {
+                templateUrl: 'member/settings/main.html',
+                controller: "MemberSettingsMainController"
             }
         }
     })

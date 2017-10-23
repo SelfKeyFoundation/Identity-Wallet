@@ -6,18 +6,21 @@ if (handleSquirrelEvent()) {
   return;
 }
 
+const mv = require('mv');
+
 const { app, BrowserWindow, dialog, remote, ipcMain, ipcRenderer } = require('electron');
 const appConfig = require('./config.electron.js');
 
 const EVENTS = appConfig.constants.events;
 
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
-let config;
+var config;
 
 function createWindow() {
   // Create the browser window.
@@ -28,7 +31,7 @@ function createWindow() {
     minHeight: 800,
     webPreferences: {
       devTools: true,
-      preload: __dirname + '/preload.js'
+      preload: __dirname + '/desktop-app/preload.js'
     },
     icon: path.join(__dirname, 'assets/icons/png/256x256.png')
   });
@@ -42,14 +45,23 @@ function createWindow() {
   // Open the DevTools.
   win.webContents.openDevTools()
 
-  ipcMain.on(EVENTS.ON_CONFIG_READY, (event, config) => {
-    console.log("ON_CONFIG_READY", config);
-    config = config
+  /**
+   * Events
+   */
+  ipcMain.on(EVENTS.ON_CONFIG_READY, (event, conf) => {
+    console.log("ON_CONFIG_READY", conf);
+    config = conf
+  });
+
+  ipcMain.on("ON_CONFIG_CHANGE", (event, conf) => {
+    console.log("ON_CONFIG_CHANGE", conf);
+    config = conf;
   });
 
   ipcMain.on(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST, (event) => {
     console.log("ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST");
 
+    // TODO - take strings from DICTIONARY
     let dialogConfig = {
       title: "Choose where to save documents",
       message: "Choose where to save documents",
@@ -61,6 +73,40 @@ function createWindow() {
         win.webContents.send(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, filePaths[0]);
       }
     });
+  });
+
+  ipcMain.on('CHOOSE_FILE_PATH', (event) => {
+    // TODO - take strings from DICTIONARY
+    let dialogConfig = {
+      title: "Choose document",
+      message: "Choose document",
+      properties: ['openFile']
+    };
+
+    dialog.showOpenDialog(win, dialogConfig, (filePaths) => {
+      console.log("filePaths", filePaths);
+      if (filePaths) {
+        win.webContents.send('CHOOSE_FILE_PATH', filePaths[0]);  
+      } else {
+        win.webContents.send('CHOOSE_FILE_PATH', null);
+      }
+    });
+  });
+
+  ipcMain.on('MOVE_FILE', (event, args) => {
+    console.log(args.src, args.dest);
+    console.log(path.basename(args.src), "????")
+    args.dest += "/" + path.basename(args.src);
+
+    copyFile(args.src, args.dest, (err) => {
+      win.webContents.send('MOVE_FILE', err, args.dest);
+    });
+
+    /*
+    mv(args.src, args.dest, (err) => {
+      win.webContents.send('MOVE_FILE', err);  
+    });
+    */
   });
 
   // Web Content Ready
@@ -163,3 +209,27 @@ function handleSquirrelEvent() {
       return true;
   }
 };
+
+function copyFile(source, target, cb) {
+  var cbCalled = false;
+
+  var rd = fs.createReadStream(source);
+  rd.on("error", function(err) {
+    done(err);
+  });
+  var wr = fs.createWriteStream(target);
+  wr.on("error", function(err) {
+    done(err);
+  });
+  wr.on("close", function(ex) {
+    done();
+  });
+  rd.pipe(wr);
+
+  function done(err) {
+    if (!cbCalled) {
+      cb(err);
+      cbCalled = true;
+    }
+  }
+}

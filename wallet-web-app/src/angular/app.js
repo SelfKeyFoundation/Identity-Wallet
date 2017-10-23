@@ -9,6 +9,10 @@ import angularMaterial from 'angular-material';
 
 import LocalStorageModule from 'angular-local-storage';
 
+//import LocalForageModule from 'localforage';
+//import LocalForageModule from 'angular-localforage';
+
+
 /**
  * Internal Modules
  */
@@ -24,6 +28,7 @@ import appTestFilter from './filters/app.test.filter';
 import AnimationService from './services/animation.service';
 import ElectronService from './services/electron.service';
 import ConfigStorageService from './services/config-storage.service';
+import IndexedDBService from './services/indexed-db.service';
 
 import CountdownDirective from './directives/countdown.directive';
 import KycProfileImageDirective from './directives/kyc-profile-image.directive';
@@ -32,7 +37,8 @@ const requires = [
   'ngMaterial',
   'ui.router',
   'templates',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  //'LocalForageModule'
 ];
 
 /**
@@ -57,6 +63,7 @@ angular.module('kyc-wallet').filter('testFilter', appTestFilter);
 angular.module('kyc-wallet').service('AnimationService', AnimationService);
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
+angular.module('kyc-wallet').service('IndexedDBService', IndexedDBService);
 
 /**
  * directives
@@ -67,15 +74,29 @@ angular.module('kyc-wallet').directive('kycProfileImage', KycProfileImageDirecti
 /**
  * controllers
  */
+import MemberLayoutController from './controllers/member/layout-controller.js';
+
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
+import AddEditContactInfoDialog from './controllers/member/identity/dialogs/add-edit-contcat-info.js';
+import AddEditDocumentDialog from './controllers/member/identity/dialogs/add-edit-document.js';
+
 import MemberProfileMainController from './controllers/member/profile-controller.js';
+import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
+
 import UserDocumentsStoragePathDialog from './controllers/common/dialogs/user-documents-storage-path-controller.js';
 import LegalTermsAndConditionsDialog from './controllers/common/dialogs/legal-terms-and-conditions-controller.js';
 
+angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutController);
 angular.module('kyc-wallet').controller('MemberIdentityMainController', MemberIdentityMainController);
+angular.module('kyc-wallet').controller('AddEditContactInfoDialog', AddEditContactInfoDialog);
+angular.module('kyc-wallet').controller('AddEditDocumentDialog', AddEditDocumentDialog);
+
 angular.module('kyc-wallet').controller('MemberProfileController', MemberProfileMainController);
+angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
+
 angular.module('kyc-wallet').controller('UserDocumentsStoragePathDialog', UserDocumentsStoragePathDialog);
 angular.module('kyc-wallet').controller('LegalTermsAndConditionsDialog', LegalTermsAndConditionsDialog);
+
 
 /**
  * config states

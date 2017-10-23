@@ -1,0 +1,9 @@
+kyc-profile-image {
+    cursor: pointer;
+
+    &:hover {
+        .hexagon-1, .hexagon-2 {
+            background: #fff !important;
+        }
+    }
+}

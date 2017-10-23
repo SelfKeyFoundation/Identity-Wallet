@@ -15,6 +15,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
     const OSX_ICON = path.resolve(__dirname, "../assets/icons/mac/selfkey.icns");
     const OSX_INSTALLER_BG = path.resolve(__dirname, "../assets/backgrounds/mac/installer.jpg");
     const WIN_ICON = path.resolve(__dirname, "../assets/icons/win/selfkey.ico");
+    const UNIX_ICON = path.resolve(__dirname, "../assets/icons/png/256x256.png");
 
     let packagerCommonConfigs = {
         name: config.app.name,
@@ -102,12 +103,12 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
         });
     });
 
-    gulp.task('build:desktop-app:deb', (done) => {
+    gulp.task('build:desktop-app:ubuntu', (done) => {
         runSequence('build:webapp', () => {
             packagerCommonConfigs.platform = "linux";
             packagerCommonConfigs.arch = "x64";
             packagerCommonConfigs.asar = true;
-            packager(packagerCommonConfigs, function (err, appPaths) {
+            packager(packagerCommonConfigs, (err, appPaths) => {
                 const installerDEB = require('electron-installer-debian');
                 installerDEB({
                     src: appPaths[0],
@@ -126,17 +127,21 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
         });
     });
 
-    gulp.task('build:desktop-app:rpm', (done) => {
+    gulp.task('build:desktop-app:redhat', (done) => {
         runSequence('build:webapp', () => {
             packagerCommonConfigs.platform = "linux";
             packagerCommonConfigs.arch = "x64";
-            packager(packagerCommonConfigs, function (err, appPaths) {
+            packagerCommonConfigs.description = "x64";
+            packager(packagerCommonConfigs, (err, appPaths) => {
                 const installerRPM = require('electron-installer-redhat');
-                installerDEB({
+                installerRPM({
                     src: appPaths[0],
                     dest: INSTALLER_DIST_DIR,
                     arch: "x86_64",
-                    //icon: "../resources/Icon.png",
+                    description: "test desc",
+                    license: "test",
+                    group: "test",
+                    icon: UNIX_ICON,
                 }, function(error){
                     if(error){
                         console.log(error)
