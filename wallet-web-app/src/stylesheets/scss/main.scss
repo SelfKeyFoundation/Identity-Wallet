@@ -1,9 +1,9 @@
 @import 'variables.scss';
 @import 'helpers.scss';
 
-@import '../../../node_modules/angular-material/angular-material.scss';
-
 @import 'reset.scss';
+
+@import '../../../node_modules/angular-material/angular-material.scss';
 
 @import './components/hexagone.scss';
 @import './components/kyc-button.scss';

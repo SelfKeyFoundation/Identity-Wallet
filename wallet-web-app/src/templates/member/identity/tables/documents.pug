@@ -6,10 +6,11 @@ table.kyc-table(style="width: 85%;")
             th name
             th attestations
             th PRIVACY
+            th File Info
             th ACTIONS
             th 
     tbody
-        tr.md-whiteframe-3dp(style="background-color: white;", ng-repeat="item in documentItems")
+        tr.md-whiteframe-3dp(style="background-color: white;", ng-repeat="item in documentItems", ng-init="getFileInfo(item)")
             td {{item.type}}
             td {{item.name}}
             td
@@ -18,12 +19,18 @@ table.kyc-table(style="width: 85%;")
             td
                 .kyc-status-box.green.no-borders(ng-if="item.privacy === 0") public
                 .kyc-status-box.red.no-borders(ng-if="item.privacy === 1") private
+            td 
+                span(ng-if="item.fileInfoPromise.$$state.status === 0") ...
+                .kyc-link(layout="row", layout-align="center center", ng-if="item.fileInfoPromise.$$state.status !== 0")
+                    i.material-icons.color-blue(ng-if="item.fileInfoPromise.$$state.value") info
+                    i.material-icons.color-orange(ng-if="!item.fileInfoPromise.$$state.value") warning
+                    md-tooltip(ng-if="!item.fileInfoPromise.$$state.value") file is deleted
             td
-                .kyc-link(layout="row", layout-align="center center")
+                .kyc-link(layout="row", layout-align="center center", ng-click="editDocument($event, item)")
                     i.material-icons mode_edit
                     span.margin-left-1 edit
             td(style="background-color: #F0EEEF;") 
-                .kyc-link(layout="row", layout-align="center center")
+                .kyc-link(layout="row", layout-align="center center", ng-click="deleteDocument($event, item)")
                     i.material-icons delete
     tfoot
         tr

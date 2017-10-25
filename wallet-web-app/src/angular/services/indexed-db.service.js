@@ -40,9 +40,9 @@ function IndexedDBService($rootScope, $log, $q, CONFIG, localStorageService) {
 
     documentsStore.put({
       privateKey: "0x5abb838bbb2e566c236f4be6f283541bf8866b68", data: [
-        { id: generateId(), type: 'Passport', name: 'US Passport', attestations: 1, privacy: 1, filename: 'us_passport.pdf', isDefault: 1 },
-        { id: generateId(), type: 'Passport', name: 'Passatore Venezolano', attestations: 0, privacy: 1, filename: 'passatore_venezolano.pdf', isDefault: 0 },
-        { id: generateId(), type: 'Passport', name: 'Cedula De Identidad', attestations: 1, privacy: 0, filename: 'cedula_de_identidad.pdf', isDefault: 0 }
+        { id: generateId(), type: 'Passport', name: 'US Passport', attestations: 1, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 1 },
+        { id: generateId(), type: 'Passport', name: 'Passatore Venezolano', attestations: 0, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 },
+        { id: generateId(), type: 'Passport', name: 'Cedula De Identidad', attestations: 1, privacy: 0, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 }
       ]
     });
 

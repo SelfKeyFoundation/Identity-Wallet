@@ -4,7 +4,7 @@ md-dialog(aria-label="Add edit document", style="min-width: 60%;")
             .header
                 .title {{document.id ? 'Edit Document': 'Add document'}}
             .body(style="max-height: 300px;", layout="column", layout-align="center center")
-                form(name="documentForm", layout="column")
+                form(name="documentForm", layout="column", style="width: 100%;")
                     select(name="type", ng-model="document.type")
                         option Passport
                         option ID Card

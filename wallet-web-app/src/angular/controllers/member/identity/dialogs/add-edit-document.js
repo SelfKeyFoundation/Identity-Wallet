@@ -9,6 +9,8 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
 
     if (documentItem) {
         angular.extend($scope.document, documentItem);
+        $scope.filePath = angular.copy(documentItem.filePath);
+        delete $scope.document.fileInfoPromise;
     }
 
     $scope.filePath;
@@ -17,7 +19,7 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
             $scope.filePath = filePath;
         });
     }
-    
+
     $scope.cancel = (event) => {
         $mdDialog.cancel();
     }
@@ -46,17 +48,18 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
         }
 
         let moveFilePromise = ElectronService.sendMoveFileRequest(
-            $scope.filePath, 
+            $scope.filePath,
             ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH
         );
 
-        moveFilePromise.then((filePathToSave)=>{
+        moveFilePromise.then((filePathToSave) => {
             console.log("filePathToSave", filePathToSave);
+            $scope.document.filePath = filePathToSave;
             let savePromise = IndexedDBService.documents_save(documentRecord);
             savePromise.then((result) => {
                 $mdDialog.hide(documentRecord.data);
             });
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log("filePathToSave error", error);
         });
     }

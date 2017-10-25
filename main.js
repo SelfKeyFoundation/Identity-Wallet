@@ -1,150 +1,155 @@
 if (require('electron-squirrel-startup')) return;
-// this should be placed at top of main.js to handle setup events quickly
 
 if (handleSquirrelEvent()) {
-  // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
 }
 
-const mv = require('mv');
-
-const { app, BrowserWindow, dialog, remote, ipcMain, ipcRenderer } = require('electron');
-const appConfig = require('./config.electron.js');
-
-const EVENTS = appConfig.constants.events;
-
 const fs = require('fs');
-const path = require('path');
-const url = require('url');
+const camelCase = require('camelcase');
+const lodash = require('lodash');
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win;
-var config;
+/**
+ * often used modules list
+ */
+const modules = [
+  { 'electron': ['app', 'BrowserWindow', 'dialog', 'remote', 'ipcMain'] },
+  'mv',
+  'fs',
+  'path',
+  'url'
+];
 
-function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 1000,
-    height: 800,
-    minWidth: 1000,
-    minHeight: 800,
-    webPreferences: {
-      devTools: true,
-      preload: __dirname + '/desktop-app/preload.js'
-    },
-    icon: path.join(__dirname, 'assets/icons/png/256x256.png')
-  });
+/**
+ * initializers list
+ */
+const initializers = [
+  { name: 'electron', enabled: true },
+  { name: 'ipc-main-event-listeners', enabled: true }
+];
 
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'wallet-web-app/dist', 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
-
-  /**
-   * Events
-   */
-  ipcMain.on(EVENTS.ON_CONFIG_READY, (event, conf) => {
-    console.log("ON_CONFIG_READY", conf);
-    config = conf
-  });
-
-  ipcMain.on("ON_CONFIG_CHANGE", (event, conf) => {
-    console.log("ON_CONFIG_CHANGE", conf);
-    config = conf;
-  });
-
-  ipcMain.on(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST, (event) => {
-    console.log("ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST");
-
-    // TODO - take strings from DICTIONARY
-    let dialogConfig = {
-      title: "Choose where to save documents",
-      message: "Choose where to save documents",
-      properties: ['openDirectory']
-    };
-
-    dialog.showOpenDialog(win, dialogConfig, (filePaths) => {
-      if (filePaths) {
-        win.webContents.send(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, filePaths[0]);
-      }
-    });
-  });
-
-  ipcMain.on('CHOOSE_FILE_PATH', (event) => {
-    // TODO - take strings from DICTIONARY
-    let dialogConfig = {
-      title: "Choose document",
-      message: "Choose document",
-      properties: ['openFile']
-    };
-
-    dialog.showOpenDialog(win, dialogConfig, (filePaths) => {
-      console.log("filePaths", filePaths);
-      if (filePaths) {
-        win.webContents.send('CHOOSE_FILE_PATH', filePaths[0]);  
-      } else {
-        win.webContents.send('CHOOSE_FILE_PATH', null);
-      }
-    });
-  });
-
-  ipcMain.on('MOVE_FILE', (event, args) => {
-    console.log(args.src, args.dest);
-    console.log(path.basename(args.src), "????")
-    args.dest += "/" + path.basename(args.src);
-
-    copyFile(args.src, args.dest, (err) => {
-      win.webContents.send('MOVE_FILE', err, args.dest);
-    });
-
-    /*
-    mv(args.src, args.dest, (err) => {
-      win.webContents.send('MOVE_FILE', err);  
-    });
-    */
-  });
-
-  // Web Content Ready
-  win.webContents.on('did-finish-load', () => {
-    // register electron process in webapp
-    win.webContents.send(EVENTS.ON_ELECTRON_APP_READY);
-  });
-
-  // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null
-  })
+/**
+ * shared app instance
+ */
+let app = {
+  dir: {
+    root: __dirname,
+    desktopApp: __dirname + '/desktop-app'
+  },
+  config: {
+    app: require('./config.electron.js'),
+    user: null
+  },
+  modules: {},
+  controllers: {},
+  win: {}
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+/**
+ * starts app
+ */
+startApp();
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-});
+/**
+ * 
+ */
+function startApp() {
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow()
+  initializeModules();
+
+  buildModulesInFolder(app, app.controllers, app.dir.desktopApp + '/controllers/');
+
+  app.events = app.config.app.constants.events;
+
+  var modules = loadInitializers(initializers);
+
+  startInitializerChain(app, modules, function (error) {
+    if (error) {
+      console.log("==========!!!!===========");
+      console.log("          ERROR          ");
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log(error);
+      console.log("=========================");
+    } else {
+      console.log("=========================");
+      console.log("INITIALIZERS: FINISHED");
+      console.log("=========================");
+    }
+  });
+
+}
+
+function initializeModules() {
+  for (var i in modules) {
+    if (typeof modules[i] === 'object') {
+      for (var j in modules[i]) {
+        app.modules[j] = {};
+        for (let k in modules[i][j]) {
+          app.modules[j][modules[i][j][k]] = require(j)[modules[i][j][k]];
+        }
+      }
+    } else {
+      app.modules[modules[i]] = require(modules[i]);
+    }
   }
-});
+
+
+
+
+
+
+
+  //let test = require('./desktop-app/initializers/electron.js').run(app);
+
+  /*
+  app.modules.electron.app.on('ready', createWindow);
+  app.modules.electron.app.on('window-all-closed', windowAllClosed);
+  app.modules.electron.app.on('activate', activate);
+  */
+}
+
+function loadInitializers(initializers) {
+  var modules = [];
+
+  for (var i in initializers) {
+    if (initializers[i].enabled) {
+      var module = null;
+      var name = initializers[i].name;
+      var path = app.dir.desktopApp + '/initializers/';
+
+      module = require(path + name);
+      module.name = name;
+
+      modules.push(module);
+    }
+  }
+
+  return modules;
+};
+
+function startInitializerChain(app, initializers, cb) {
+  var index = 0;
+  startInitializer(app, initializers, index, cb);
+};
+
+function startInitializer (app, initializers, index, cb) {
+  var initializer = initializers[index];
+  if (!initializer) {
+    return cb();
+  }
+
+  console.log(initializer.name);
+
+  initializer.run(app, function (err) {
+    if (err) {
+      console.log(err);
+      process.exit(1);
+    }
+
+    index++;
+    startInitializer(app, initializers, index, cb);
+  });
+};
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
@@ -159,7 +164,7 @@ function handleSquirrelEvent() {
   const appFolder = path.resolve(process.execPath, '..');
   const rootAtomFolder = path.resolve(appFolder, '..');
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-  const exeName = "KYC Wallet.exe"; //path.basename(process.execPath);
+  const exeName = 'KYC Wallet.exe'; //path.basename(process.execPath);
 
   const spawn = function (command, args) {
     let spawnedProcess, error;
@@ -187,7 +192,7 @@ function handleSquirrelEvent() {
       // Install desktop and start menu shortcuts
       spawnUpdate(['--createShortcut', exeName]);
 
-      setTimeout(app.quit, 1000);
+      setTimeout(app.modules.electron.app.quit, 1000);
       return true;
 
     case '--squirrel-uninstall':
@@ -197,7 +202,7 @@ function handleSquirrelEvent() {
       // Remove desktop and start menu shortcuts
       spawnUpdate(['--removeShortcut', exeName]);
 
-      setTimeout(app.quit, 1000);
+      setTimeout(app.modules.electron.app.quit, 1000);
       return true;
 
     case '--squirrel-obsolete':
@@ -205,31 +210,41 @@ function handleSquirrelEvent() {
       // we update to the new version - it's the opposite of
       // --squirrel-updated
 
-      app.quit();
+      app.modules.electron.app.quit();
       return true;
   }
 };
 
-function copyFile(source, target, cb) {
-  var cbCalled = false;
 
-  var rd = fs.createReadStream(source);
-  rd.on("error", function(err) {
-    done(err);
-  });
-  var wr = fs.createWriteStream(target);
-  wr.on("error", function(err) {
-    done(err);
-  });
-  wr.on("close", function(ex) {
-    done();
-  });
-  rd.pipe(wr);
+/**
+ * Core Function - builds & instantiates js module
+ * @param {*} app 
+ * @param {*} namespace 
+ * @param {*} dir 
+ */
+function buildModulesInFolder(app, namespace, dir) {
+  console.log("%%%%%", dir);
+  if (fs.existsSync(dir)) {
+    var rootDir = fs.readdirSync(dir);
+console.log(rootDir, "&&&&&&&")
+    if (rootDir && rootDir.length > 0) {
+      rootDir.forEach(function (file) {
 
-  function done(err) {
-    if (!cbCalled) {
-      cb(err);
-      cbCalled = true;
+        var nameParts = file.split('/');
+        var name = camelCase(nameParts[(nameParts.length - 1)].split(".")[0]);
+        console.log(name, "#######");
+        var filePath = dir + file;
+
+        if (fs.lstatSync(filePath).isDirectory()) {
+          namespace[name] = {};
+          return buildModulesInFolder(app, namespace[name], filePath + '/');
+        } else {
+          if (fs.existsSync(filePath)) {
+            let module = require(filePath);
+            namespace[name] = new module(app);
+          }
+        }
+      });
     }
   }
 }

@@ -24,7 +24,7 @@ table.kyc-table(style="width: 85%;")
                     i.material-icons mode_edit
                     span.margin-left-1 edit
             td(style="background-color: #F0EEEF;") 
-                .kyc-link(layout="row", layout-align="center center")
+                .kyc-link(layout="row", layout-align="center center", ng-click="deleteContactInfo($event, item)")
                     i.material-icons delete
     tfoot
         tr

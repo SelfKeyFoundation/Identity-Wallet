@@ -5,9 +5,6 @@ function MemberSettingsMainController ($rootScope, $scope, $log, CONFIG, ConfigS
 
     $scope.settings = ConfigStorageService;
     
-
-    
-
     $log.debug("ConfigStorageService");
 };
 
