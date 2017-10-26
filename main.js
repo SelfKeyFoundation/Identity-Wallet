@@ -224,16 +224,14 @@ function handleSquirrelEvent() {
  * @param {*} dir 
  */
 function buildModulesInFolder(app, namespace, dir) {
-  console.log("%%%%%", dir);
   if (fs.existsSync(dir)) {
     var rootDir = fs.readdirSync(dir);
-console.log(rootDir, "&&&&&&&")
+
     if (rootDir && rootDir.length > 0) {
       rootDir.forEach(function (file) {
 
         var nameParts = file.split('/');
         var name = camelCase(nameParts[(nameParts.length - 1)].split(".")[0]);
-        console.log(name, "#######");
         var filePath = dir + file;
 
         if (fs.lstatSync(filePath).isDirectory()) {
