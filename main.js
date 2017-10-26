@@ -7,6 +7,7 @@ if (handleSquirrelEvent()) {
 const fs = require('fs');
 const camelCase = require('camelcase');
 const lodash = require('lodash');
+// const hummus = require('hummus'); // dito
 
 /**
  * often used modules list

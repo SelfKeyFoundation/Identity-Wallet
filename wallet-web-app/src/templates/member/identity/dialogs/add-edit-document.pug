@@ -1,25 +1,30 @@
 md-dialog(aria-label="Add edit document", style="min-width: 60%;")
     md-dialog-content
         .kyc-dialog-container(layout="column")
-            .header
+            .header(layout="row", layout-align="center center")
                 .title {{document.id ? 'Edit Document': 'Add document'}}
-            .body(style="max-height: 300px;", layout="column", layout-align="center center")
-                form(name="documentForm", layout="column", style="width: 100%;")
-                    select(name="type", ng-model="document.type")
-                        option Passport
-                        option ID Card
-                    input(type="text", name="name", ng-model="document.name")
-                    div(layout="row")
-                        input(type="radio", name="privacy", value="0", ng-model="document.privacy")
-                        span Public
-                    div(layout="row")
-                        input(type="radio", name="privacy", value="1", ng-model="document.privacy")
-                        span Private
-                    div(layout="row")
-                        input(type="checkbox", name="default", value="1", ng-model="document.isDefault")
-                        span Is Default
-                    .kyc-button.primary(style="margin-right: 8px;", ng-click="chooseFile($event)") Choose File
-                    span(ng-if="filePath") {{filePath}}
+            .body.md-padding(style="max-height: 300px;", layout="column", layout-align="center center")
+                form.full-width(name="documentForm", layout="column")
+                    md-input-container
+                        label Type
+                        md-select(name="type", ng-model="document.type")
+                            md-option(ng-value="'Passport'") Passport
+                            md-option(ng-value="'ID Card'") ID Card
+                            
+                    md-input-container
+                        label Name
+                        input(name="name", ng-model="document.name")
+                    
+                    md-switch(name="privacy", ng-model="document.privacy", aria-label="Privacy") {{document.privacy ? 'Private' : 'Public'}}
+
+                    md-checkbox(name="isDefault", ng-model="document.isDefault", aria-label="Is default") Is Default
+                    
+                    div(layout="row", layout-align="center center", ng-if="filePath")
+                        span {{filePath}}
+                        .kyc-link(layout="row", layout-align="center center", ng-click="chooseFile($event)")
+                            i.material-icons(style="font-size: 19px;") edit
+
+                    .kyc-button.primary(style="margin-right: 8px;", ng-click="chooseFile($event)", ng-if="!filePath") Choose File
 
             .actions(layout="row", layout-align="center center")
                 .kyc-button.primary(style="margin-right: 8px;", ng-click="save($event)") Save

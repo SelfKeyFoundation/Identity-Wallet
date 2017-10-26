@@ -14,11 +14,11 @@ table.kyc-table(style="width: 85%;")
             td {{item.type}}
             td {{item.name}}
             td
-                .kyc-status-box.white.text-align-center(ng-if="item.attestations === 1") Verified
-                .kyc-status-box.blue.cursor-pointer.text-align-center(ng-if="item.attestations === 0") Request Attestation
+                .kyc-status-box.white.text-align-center(ng-if="item.attestations") Verified
+                .kyc-status-box.blue.cursor-pointer.text-align-center(ng-if="!item.attestations") Request Attestation
             td
-                .kyc-status-box.green.no-borders(ng-if="item.privacy === 0") public
-                .kyc-status-box.red.no-borders(ng-if="item.privacy === 1") private
+                .kyc-status-box.green.no-borders(ng-if="!item.privacy") public
+                .kyc-status-box.red.no-borders(ng-if="item.privacy") private
             td 
                 span(ng-if="item.fileInfoPromise.$$state.status === 0") ...
                 .kyc-link(layout="row", layout-align="center center", ng-if="item.fileInfoPromise.$$state.status !== 0")

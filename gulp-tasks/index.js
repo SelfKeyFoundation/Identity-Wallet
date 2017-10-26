@@ -69,7 +69,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
             packagerCommonConfigs.platform = "win32";
             packagerCommonConfigs.arch = "ia32";
             packagerCommonConfigs.icon = WIN_ICON;
-            packagerCommonConfigs.asar = true;
+            packagerCommonConfigs.asar = false;
 
             packager(packagerCommonConfigs, (err, appPaths) => {
                 console.log(appPaths)

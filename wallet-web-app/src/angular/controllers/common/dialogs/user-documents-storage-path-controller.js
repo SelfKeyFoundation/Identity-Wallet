@@ -1,27 +1,28 @@
-function UserDocumentsStoragePathDialog ($rootScope, $scope, $log, $mdDialog, CONFIG, ElectronService, ConfigStorageService) {
+function UserDocumentsStoragePathDialog ($rootScope, $scope, $log, $mdDialog, CONFIG, ElectronService, ConfigStorageService, showCancelButton) {
     'ngInject'
 
-    $log.info('UserDocumentsStoragePathDialog');
+    $log.info('UserDocumentsStoragePathDialog', showCancelButton);
 
     const EVENTS = CONFIG.constants.events;
 
     $scope.currentDirectory = ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH;
+    $scope.showCancelButton = showCancelButton;
 
     $scope.chooseDirectory = (event) => {
-        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
+        let promise = ElectronService.openDirectorySelectDialog(event);
+        promise.then((filePath) => {
+            $scope.currentDirectory = filePath;
+        });
     };
+
+    $scope.save = function (event) {
+        ConfigStorageService.setUserDocumentsStoragePath($scope.currentDirectory);
+        $mdDialog.hide();
+    }
 
     $scope.cancel = function (event) {
         $mdDialog.cancel();
     }
-
-    ElectronService.ipcRenderer.on(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, (event, path) => {
-        $log.debug(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, path);
-        $scope.currentDirectory = path;
-        ConfigStorageService.setUserDocumentsStoragePath(path);
-        $scope.$apply();
-    });
-
 };
 
 export default UserDocumentsStoragePathDialog;

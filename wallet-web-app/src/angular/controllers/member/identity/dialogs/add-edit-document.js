@@ -28,10 +28,6 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
         $log.info('target document to save', $scope.document);
         $log.info('documentRecord', documentRecord);
 
-        if (typeof $scope.document.privacy === 'string') {
-            $scope.document.privacy = $scope.document.privacy === '1' ? 1 : 0;
-        }
-
         if (documentItem) {
             // edit
             for (let i in documentRecord.data) {
@@ -53,7 +49,6 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
         );
 
         moveFilePromise.then((filePathToSave) => {
-            console.log("filePathToSave", filePathToSave);
             $scope.document.filePath = filePathToSave;
             let savePromise = IndexedDBService.documents_save(documentRecord);
             savePromise.then((result) => {

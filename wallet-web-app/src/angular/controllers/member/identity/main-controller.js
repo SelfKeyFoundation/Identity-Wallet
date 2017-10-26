@@ -3,29 +3,12 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
 
     // TODO - take privateKey from config storage
     $scope.contactInfo;
-    $scope.contactInfoPromise = IndexedDBService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
-    $scope.contactInfoPromise.then((result) => {
-        $scope.contactInfo = angular.copy(result);
-        $log.info(result.data);
-        $scope.contactItems = result.data;
-    }).catch((error) => {
-        $log.error(error);
-    });
-
     $scope.document;
-    $scope.documentsPromise = IndexedDBService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
-    $scope.documentsPromise.then((result) => {
-        $scope.document = angular.copy(result);
-        $scope.documentItems = result.data;
 
-        for(let i in $scope.documentItems){
-            if($scope.documentItems[i].filePath){
-                $scope.documentItems[i].fileInfoPromise = ElectronService.checkFileStat($scope.documentItems[i].filePath);
-            }
-        }
-    }).catch((error) => {
-        $log.error(error);
-    });
+    
+    loadContactInfos ();
+    loadDocuments ();
+    
 
     $scope.addContactInfo = (event) => {
         let config = {
@@ -91,7 +74,9 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
             }
         };
         $mdDialog.show(config).then((result) => {
-            $scope.documentItems = result;
+            //$scope.documentItems = result;
+            $scope.documentItems = null;
+            loadDocuments ();
         });
     }
 
@@ -109,7 +94,9 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
             }
         };
         $mdDialog.show(config).then((result) => {
-            $scope.documentItems = result;
+            //$scope.documentItems = result;
+            $scope.documentItems = null;
+            loadDocuments ();
         });
     }
 
@@ -134,6 +121,33 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
         if(item.filePath){
             item.fileInfoPromise = ElectronService.checkFileStat(item.filePath);
         }
+    }
+
+    function loadContactInfos () {
+        $scope.contactInfoPromise = IndexedDBService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.contactInfoPromise.then((result) => {
+            $scope.contactInfo = angular.copy(result);
+            $log.info(result.data);
+            $scope.contactItems = result.data;
+        }).catch((error) => {
+            $log.error(error);
+        });
+    }
+
+    function loadDocuments (){
+        $scope.documentsPromise = IndexedDBService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.documentsPromise.then((result) => {
+            $scope.document = angular.copy(result);
+            $scope.documentItems = result.data;
+    
+            for(let i in $scope.documentItems){
+                if($scope.documentItems[i].filePath){
+                    $scope.documentItems[i].fileInfoPromise = ElectronService.checkFileStat($scope.documentItems[i].filePath);
+                }
+            }
+        }).catch((error) => {
+            $log.error(error);
+        });
     }
 };
 

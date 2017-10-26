@@ -14,11 +14,11 @@ table.kyc-table(style="width: 85%;")
             td {{item.type}}
             td {{item.value}}
             td
-                .kyc-status-box.blue.cursor-pointer(ng-if="item.status === 0") verify
-                .kyc-status-box.white(ng-if="item.status === 1") verified
+                .kyc-status-box.blue.cursor-pointer(ng-if="!item.status") verify
+                .kyc-status-box.white(ng-if="item.status") verified
             td
-                .kyc-status-box.green.no-borders(ng-if="item.privacy === 0") public
-                .kyc-status-box.red.no-borders(ng-if="item.privacy === 1") private
+                .kyc-status-box.green.no-borders(ng-if="!item.privacy") public
+                .kyc-status-box.red.no-borders(ng-if="item.privacy") private
             td
                 .kyc-link(layout="row", layout-align="center center", ng-click="editContactInfo($event, item)")
                     i.material-icons mode_edit

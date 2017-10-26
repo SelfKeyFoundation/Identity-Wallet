@@ -5,9 +5,12 @@ body, html {
 
 html {
     height: auto !important;
+    color: unset;
+    background-color: unset;
 }
 
 body {
-    min-height: 100%;
+    min-height: fit-content !important;
     background-attachment: fixed !important;
+    height: -webkit-fill-available !important;
 }

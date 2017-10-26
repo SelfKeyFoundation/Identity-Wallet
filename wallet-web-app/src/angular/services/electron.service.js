@@ -21,20 +21,18 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
     /**
      * Actions
      */
-    this.openUsersDocumentDirectoryChangeDialog = function (event) {
-      ipcRenderer.send(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST);
-    }
-
     this.sendConfigChange = function (config) {
       // TODO - "ON_CONFIG_CHANGE" - move to constants 
       ipcRenderer.send("ON_CONFIG_CHANGE", config);
     };
 
+    // TODO - !! CHANGE !!
     this.test = function (config) {
       // TODO - "ON_CONFIG_CHANGE" - move to constants 
       ipcRenderer.send("ON_CONFIG_READY", config);
     };
 
+    // TODO - !! CHANGE !!
     this.sendChooseFilePathRequest = function () {
       let defer = $q.defer();
 
@@ -49,6 +47,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       return defer.promise;
     }
 
+    // TODO - !! CHANGE !!
     this.sendMoveFileRequest = function (src, dest) {
       let defer = $q.defer();
 
@@ -67,6 +66,9 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       return defer.promise;
     }
 
+    /**
+     * 
+     */
     this.checkFileStat = function (filePath) {
       let defer = $q.defer();
       let id = IndexedDBService.generateId();
@@ -76,10 +78,25 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       }
 
       // TODO - "CHECK_FILE_STAT" - move to constants 
-      ipcRenderer.send("ON_ASYNC_REQUEST", id, 'CHECK_FILE_STAT', {src: filePath} );      
+      ipcRenderer.send("ON_ASYNC_REQUEST", id, 'CHECK_FILE_STAT', { src: filePath });
 
       return listeners[id].defer.promise;
     }
+
+    this.openDirectorySelectDialog = function (event) {
+      let defer = $q.defer();
+      let id = IndexedDBService.generateId();
+
+      listeners[id] = {
+        defer: $q.defer()
+      }
+
+      // TODO - "OPEN_DIRECTORY_SELECT_DIALOG" - move to constants 
+      ipcRenderer.send("ON_ASYNC_REQUEST", id, 'OPEN_DIRECTORY_SELECT_DIALOG', null);
+
+      return listeners[id].defer.promise;
+    }
+
 
     /**
      * Callback Events
@@ -93,15 +110,12 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
      */
     ipcRenderer.on(EVENTS.ON_ELECTRON_APP_READY, handshake);
     ipcRenderer.on(EVENTS.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE, onUsersDocumentsDirectoryChange);
-
   }
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
-    console.log("actionId", actionId);
-
     listeners[actionId].defer.resolve(data);
 
-    $timeout(()=>{
+    $timeout(() => {
       delete listeners[actionId];
     }, 1000);
   });

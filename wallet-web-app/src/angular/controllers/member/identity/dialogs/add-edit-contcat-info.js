@@ -19,9 +19,9 @@ function AddEditContactInfoDialog($rootScope, $scope, $log, $mdDialog, IndexedDB
         $log.info('target contactInfo to save', $scope.contactInfo);
         $log.info('contactInfoRecord', contactInfoRecord);
 
-        if (typeof $scope.contactInfo.privacy === 'string') {
-            $scope.contactInfo.privacy = $scope.contactInfo.privacy === '1' ? 1 : 0;
-        }
+        //if (typeof $scope.contactInfo.privacy === 'string') {
+        //    $scope.contactInfo.privacy = $scope.contactInfo.privacy === '1' ? 1 : 0;
+        //}
 
         if (contactItem) {
             // edit

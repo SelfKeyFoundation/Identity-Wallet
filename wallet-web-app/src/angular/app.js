@@ -9,9 +9,6 @@ import angularMaterial from 'angular-material';
 
 import LocalStorageModule from 'angular-local-storage';
 
-//import LocalForageModule from 'localforage';
-//import LocalForageModule from 'angular-localforage';
-
 
 /**
  * Internal Modules
@@ -29,6 +26,7 @@ import AnimationService from './services/animation.service';
 import ElectronService from './services/electron.service';
 import ConfigStorageService from './services/config-storage.service';
 import IndexedDBService from './services/indexed-db.service';
+import CommonService from './services/common.service';
 
 import CountdownDirective from './directives/countdown.directive';
 import KycProfileImageDirective from './directives/kyc-profile-image.directive';
@@ -37,8 +35,7 @@ const requires = [
   'ngMaterial',
   'ui.router',
   'templates',
-  'LocalStorageModule',
-  //'LocalForageModule'
+  'LocalStorageModule'
 ];
 
 /**
@@ -64,6 +61,7 @@ angular.module('kyc-wallet').service('AnimationService', AnimationService);
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
 angular.module('kyc-wallet').service('IndexedDBService', IndexedDBService);
+angular.module('kyc-wallet').service('CommonService', CommonService);
 
 /**
  * directives

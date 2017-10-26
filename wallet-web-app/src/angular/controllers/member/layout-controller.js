@@ -1,7 +1,7 @@
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigStorageService) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigStorageService, CommonService) {
     'ngInject'
 
-    $log.info('MemberLayoutController', ConfigStorageService, ElectronService);
+    $log.info('MemberLayoutController');
 
     /**
      * 
@@ -23,13 +23,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronSer
             fullscreen: false
         }).then(() => {
             if (!ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH && ElectronService.ipcRenderer) {
-                $mdDialog.show({
-                    templateUrl: 'common/dialogs/user-documents-storage-path.html',
-                    controller: 'UserDocumentsStoragePathDialog',
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false,
-                    fullscreen: false
-                });
+                CommonService.openChooseUserDirectoryDialog(false);
             }
         });
     }

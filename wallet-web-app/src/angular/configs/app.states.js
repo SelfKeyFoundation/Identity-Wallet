@@ -5,7 +5,9 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    $mdThemingProvider.generateThemesOnDemand(true);
+    //$mdThemingProvider.generateThemesOnDemand(true);
+
+    //$mdTheming.generateTheme('default');
 
     $stateProvider
     .state('guest', {

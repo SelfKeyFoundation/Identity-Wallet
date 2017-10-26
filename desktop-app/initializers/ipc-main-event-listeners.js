@@ -13,16 +13,21 @@ module.exports = {
         });
 
         app.modules.electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
-            console.log('ON_ASYNC_REQUEST', args);
+            console.log('ON_ASYNC_REQUEST', actionId, actionName);
             switch (actionName) {
                 case 'CHECK_FILE_STAT':
                     app.controllers.asyncRequestHandler.checkFileStat(event, actionId, actionName, args);
+                    break;
+                case 'OPEN_DIRECTORY_SELECT_DIALOG':
+                console.log("??????");
+                    app.controllers.asyncRequestHandler.openDirectorySelectDialog(event, actionId, actionName, args);
                     break;
                 default:
             }
         });
 
         // TODO - move into 'ON_ASYNC_REQUEST'
+        /*
         app.modules.electron.ipcMain.on(app.events.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST, (event) => {
             console.log('ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST');
 
@@ -39,6 +44,7 @@ module.exports = {
                 }
             });
         });
+        */
 
         // TODO - move into 'ON_ASYNC_REQUEST'
         app.modules.electron.ipcMain.on('MOVE_FILE', (event, args) => {

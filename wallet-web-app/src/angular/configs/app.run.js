@@ -2,9 +2,9 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $window, $timeout, $http, $mdDialog, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService, IndexedDBService) {
+function AppRun($rootScope, $window, $timeout, $http, $mdDialog, $mdTheming, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService, IndexedDBService) {
     'ngInject';
-    
+
     /**
      * 
      */
