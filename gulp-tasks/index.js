@@ -107,7 +107,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
         runSequence('build:webapp', () => {
             packagerCommonConfigs.platform = "linux";
             packagerCommonConfigs.arch = "x64";
-            packagerCommonConfigs.asar = true;
+            packagerCommonConfigs.asar = false;
             packager(packagerCommonConfigs, (err, appPaths) => {
                 const installerDEB = require('electron-installer-debian');
                 installerDEB({
@@ -115,7 +115,18 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
                     dest: INSTALLER_DIST_DIR,
                     arch: 'amd64',
                     description: config.app.description,
-                    productDescription: config.app.description
+                    productDescription: config.app.description,
+                    categories: [
+                        "Utility"
+                    ],
+                    options: {
+                        name: 'identity-wallet',
+                        productName: "Identity Wallet",
+                        genericName: "Identity Wallet",
+                        version: "0.0.1",
+                        section: "utils",
+                        bin: 'electron'
+                    }
                 }, function(error){
                     if(error){
                         console.log(error)

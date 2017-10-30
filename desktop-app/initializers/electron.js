@@ -6,7 +6,7 @@ function createWindow(app, next) {
             minWidth: 1000,
             minHeight: 800,
             webPreferences: {
-                devTools: false,
+                devTools: true,
                 preload: app.modules.path.join(app.dir.desktopApp, 'preload.js')
             },
             icon: app.modules.path.join(app.dir.root, 'assets/icons/png/256x256.png')
@@ -25,7 +25,7 @@ function createWindow(app, next) {
         });
 
         app.win.webContents.on('did-finish-load', () => {
-            app.win.webContents.send(app.events.ON_ELECTRON_APP_READY);
+            app.win.webContents.send('ON_READY');
         });
 
         next();

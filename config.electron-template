@@ -13,12 +13,6 @@ module.exports = {
             "LEGAL_TERMS_AND_CONDITIONS": "<%app.constants.localStorageKeys.LEGAL_TERMS_AND_CONDITIONS%>",
             "SELECTED_LANGUAGE": "<%app.constants.localStorageKeys.SELECTED_LANGUAGE%>",
             "SELECTED_PRIVATE_KEY": "<%app.constants.localStorageKeys.SELECTED_PRIVATE_KEY%>"
-        },
-        "events": {
-            "ON_ELECTRON_APP_READY": "<%app.constants.events.ON_ELECTRON_APP_READY%>",
-            "ON_CONFIG_READY": "<%app.constants.events.ON_CONFIG_READY%>",
-            "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST": "<%app.constants.events.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE_REQUEST%>",
-            "ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE": "<%app.constants.events.ON_USER_DOCUMENTS_STORAGE_PATH_CHANGE%>"
         }
     }
 };

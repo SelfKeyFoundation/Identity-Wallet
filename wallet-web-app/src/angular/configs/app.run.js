@@ -9,7 +9,6 @@ function AppRun($rootScope, $window, $timeout, $http, $mdDialog, $mdTheming, DIC
      * 
      */
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
-    $rootScope.EVENTS = CONFIG.constants.events;
 
 
 

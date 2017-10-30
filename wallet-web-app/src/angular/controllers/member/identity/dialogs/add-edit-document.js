@@ -15,7 +15,7 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
 
     $scope.filePath;
     $scope.chooseFile = (event) => {
-        ElectronService.sendChooseFilePathRequest().then((filePath) => {
+        ElectronService.openFileSelectDialog().then((filePath) => {
             $scope.filePath = filePath;
         });
     }
@@ -43,7 +43,7 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
             documentRecord.data.push($scope.document);
         }
 
-        let moveFilePromise = ElectronService.sendMoveFileRequest(
+        let moveFilePromise = ElectronService.moveFile(
             $scope.filePath,
             ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH
         );

@@ -26,11 +26,32 @@ module.exports = function (app) {
         }
     }
 
-/*
-  mv(args.src, args.dest, (err) => {
-    win.webContents.send('MOVE_FILE', err);  
-  });
-  */
+    // TODO
+    controller.moveFile = function (source, target, cb) {
+        /*
+        mv(args.src, args.dest, (err) => {
+            win.webContents.send('MOVE_FILE', err);
+        });
+        */
+    }
+
+    controller.getJavaVersion = function (callback) {
+        let spawn = require('child_process').spawn('java', ['-version']);
+
+        spawn.on('error', function(err){
+            callback(null);
+        });
+        
+        spawn.stderr.on('data', function(data) {
+            data = data.toString().split('\n')[0];
+            var javaVersion = new RegExp('java version').test(data) ? data.split(' ')[2].replace(/"/g, '') : false;
+            if (javaVersion != false) {
+                callback(javaVersion);
+            } else {
+                callback(null);
+            }
+        });
+    }
 
     return controller;
 }

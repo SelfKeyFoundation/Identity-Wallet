@@ -1,15 +1,29 @@
 function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, ElectronService, IndexedDBService) {
     'ngInject'
 
+    // TODO - TEST (REMOVE)
+    $scope.openPdfSignature = (event) => {
+        let config = {
+            templateUrl: 'member/identity/dialogs/test-signature.html',
+            controller: "TestSignatureDialog",
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: false
+        };
+        $mdDialog.show(config);
+    }
+
+    //$scope.openPdfSignature(null);
+    // TODO - TEST (REMOVE)
+
     // TODO - take privateKey from config storage
     $scope.contactInfo;
     $scope.document;
 
-    
     loadContactInfos ();
     loadDocuments ();
     
-
     $scope.addContactInfo = (event) => {
         let config = {
             templateUrl: 'member/identity/dialogs/add-edit-contact-info.html',

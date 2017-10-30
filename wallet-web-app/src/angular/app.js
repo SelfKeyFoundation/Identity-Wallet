@@ -77,6 +77,7 @@ import MemberLayoutController from './controllers/member/layout-controller.js';
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
 import AddEditContactInfoDialog from './controllers/member/identity/dialogs/add-edit-contcat-info.js';
 import AddEditDocumentDialog from './controllers/member/identity/dialogs/add-edit-document.js';
+import TestSignatureDialog from './controllers/member/identity/dialogs/test-signature.js'; // TEST
 
 import MemberProfileMainController from './controllers/member/profile-controller.js';
 import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
@@ -88,6 +89,7 @@ angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutCo
 angular.module('kyc-wallet').controller('MemberIdentityMainController', MemberIdentityMainController);
 angular.module('kyc-wallet').controller('AddEditContactInfoDialog', AddEditContactInfoDialog);
 angular.module('kyc-wallet').controller('AddEditDocumentDialog', AddEditDocumentDialog);
+angular.module('kyc-wallet').controller('TestSignatureDialog', TestSignatureDialog); // TEST
 
 angular.module('kyc-wallet').controller('MemberProfileController', MemberProfileMainController);
 angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);

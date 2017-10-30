@@ -59,8 +59,6 @@ function startApp() {
 
   buildModulesInFolder(app, app.controllers, app.dir.desktopApp + '/controllers/');
 
-  app.events = app.config.app.constants.events;
-
   var modules = loadInitializers(initializers);
 
   startInitializerChain(app, modules, function (error) {
@@ -76,7 +74,6 @@ function startApp() {
       console.log("=========================");
     }
   });
-
 }
 
 function initializeModules() {
@@ -92,20 +89,6 @@ function initializeModules() {
       app.modules[modules[i]] = require(modules[i]);
     }
   }
-
-
-
-
-
-
-
-  //let test = require('./desktop-app/initializers/electron.js').run(app);
-
-  /*
-  app.modules.electron.app.on('ready', createWindow);
-  app.modules.electron.app.on('window-all-closed', windowAllClosed);
-  app.modules.electron.app.on('activate', activate);
-  */
 }
 
 function loadInitializers(initializers) {
