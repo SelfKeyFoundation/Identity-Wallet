@@ -3,8 +3,6 @@ function UserDocumentsStoragePathDialog ($rootScope, $scope, $log, $mdDialog, CO
 
     $log.info('UserDocumentsStoragePathDialog', showCancelButton);
 
-    const EVENTS = CONFIG.constants.events;
-
     $scope.currentDirectory = ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH;
     $scope.showCancelButton = showCancelButton;
 

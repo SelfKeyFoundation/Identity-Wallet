@@ -3,7 +3,7 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
 
     const installerDMG = require('electron-installer-dmg');
     const installerEXE = require('electron-winstaller');
-    
+
     const env = environment || 'default';
     const config = projConfig[env];
 
@@ -35,25 +35,25 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
             packager(packagerCommonConfigs, (err, appPaths) => {
                 // create DMG file
                 let installerDMGConfigs = {
-                    name: config.app.name, 
-                    appPath: appPaths[0], 
+                    name: config.app.name,
+                    appPath: appPaths[0],
                     icon: OSX_ICON,
                     background: OSX_INSTALLER_BG,
                     contents: [
                         { "x": 100, "y": 130, "type": "file", "path": appPaths[0] + "/" + config.app.name + ".app" },
                         { "x": 383, "y": 130, "type": "link", "path": "/Applications" }
                     ],
-                    overwrite: true, 
+                    overwrite: true,
                     out: INSTALLER_DIST_DIR
                 }
-                installerDMG(installerDMGConfigs, (installerDMGError) => { 
-                    if(installerDMGError){
+                installerDMG(installerDMGConfigs, (installerDMGError) => {
+                    if (installerDMGError) {
                         console.log(installerDMGError);
                     } else {
-                        done();    
+                        done();
                     }
                 });
-            });	
+            });
         });
     });
 
@@ -85,17 +85,17 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
                     setupExe: config.installer.win.name,
                     appDirectory: appPaths[0],
                     outputDirectory: INSTALLER_DIST_DIR,
-                    
+
                     //certificateFile: 'test-cert.p12',
                     //certificatePassword: 'xxxxxxxx',
-                    
+
                     iconUrl: config.installer.win.iconUrl, // 'http://www.iconsdb.com/icons/download/orange/lock-multi-size.ico', // TEMP
                     setupIcon: WIN_ICON,
                     skipUpdateIcon: config.installer.win.skipUpdateIcon // true,
                 }).then((error) => {
-                    if(error){
+                    if (error) {
                         console.log(error)
-                    }else{
+                    } else {
                         done();
                     }
                 });
@@ -114,23 +114,22 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
                     src: appPaths[0],
                     dest: INSTALLER_DIST_DIR,
                     arch: 'amd64',
-                    description: config.app.description,
-                    productDescription: config.app.description,
+                    name: "identity-wallet",
+                    productName: "Identity Wallet",
+                    genericName: "Identity Wallet",
+                    icon: UNIX_ICON,
                     categories: [
                         "Utility"
                     ],
-                    options: {
-                        name: 'identity-wallet',
-                        productName: "Identity Wallet",
-                        genericName: "Identity Wallet",
-                        version: "0.0.1",
-                        section: "utils",
-                        bin: 'electron'
-                    }
-                }, function(error){
-                    if(error){
+                    description: config.app.description,
+                    productDescription: config.app.description,
+                    version: "0.0.1",
+                    revision: "1",
+                    section: "utils"
+                }, function (error) {
+                    if (error) {
                         console.log(error)
-                    }else{
+                    } else {
                         done();
                     }
                 });
@@ -153,10 +152,10 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
                     license: "test",
                     group: "test",
                     icon: UNIX_ICON,
-                }, function(error){
-                    if(error){
+                }, function (error) {
+                    if (error) {
                         console.log(error)
-                    }else{
+                    } else {
                         done();
                     }
                 });

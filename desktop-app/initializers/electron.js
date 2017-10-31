@@ -6,7 +6,7 @@ function createWindow(app, next) {
             minWidth: 1000,
             minHeight: 800,
             webPreferences: {
-                devTools: true,
+                devTools: app.config.app.debug,
                 preload: app.modules.path.join(app.dir.desktopApp, 'preload.js')
             },
             icon: app.modules.path.join(app.dir.root, 'assets/icons/png/256x256.png')
@@ -18,8 +18,10 @@ function createWindow(app, next) {
             slashes: true
         }));
 
-        app.win.webContents.openDevTools();
-
+        if(app.config.app.debug){
+            app.win.webContents.openDevTools();
+        }
+        
         app.win.on('closed', () => {
             app.win = null
         });
@@ -39,6 +41,7 @@ module.exports = {
                 app.modules.electron.app.quit()
             }
         });
+
         app.modules.electron.app.on('activate', () => {
             if (app.modules.electron.app.win === null) {
                 createWindow(next)

@@ -134,9 +134,6 @@ function startInitializer (app, initializers, index, cb) {
   });
 };
 
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 function handleSquirrelEvent() {
   if (process.argv.length === 1) {
     return false;
@@ -198,7 +195,6 @@ function handleSquirrelEvent() {
       return true;
   }
 };
-
 
 /**
  * Core Function - builds & instantiates js module

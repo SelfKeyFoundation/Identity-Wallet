@@ -5,7 +5,7 @@ module.exports = {
     "APP_TITLE": "Identity Wallet",
     "API_ENDPOINT": "http://localhost:8080/api",
     "DEFAULT_LANGUAGE": "en",
-    "DEBUG": "true",
+    "debug": "true",
     "constants": {
         "localStorageKeys": {
             "APP_OPEN_COUNT": "APP_OPEN_COUNT",

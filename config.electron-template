@@ -5,7 +5,7 @@ module.exports = {
     "APP_TITLE": "<%app.title%>",
     "API_ENDPOINT": "<%API_ENDPOINT%>",
     "DEFAULT_LANGUAGE": "<%DEFAULT_LANGUAGE%>",
-    "DEBUG": "<%DEBUG%>",
+    "debug": "<%debug%>",
     "constants": {
         "localStorageKeys": {
             "APP_OPEN_COUNT": "<%app.constants.localStorageKeys.APP_OPEN_COUNT%>",

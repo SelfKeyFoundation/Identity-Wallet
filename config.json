@@ -1,5 +1,6 @@
 {
     "default": {
+        "debug": true,
         "app": {
             "name": "IdentityWallet",
             "title": "Identity Wallet",
@@ -48,8 +49,7 @@
         },
 
         "API_ENDPOINT": "http://localhost:8080/api",
-        "DEFAULT_LANGUAGE": "en",
-        "DEBUG": true
+        "DEFAULT_LANGUAGE": "en"
     },
     "development": {
         "app": {

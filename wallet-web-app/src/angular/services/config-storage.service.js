@@ -26,7 +26,7 @@ function ConfigStorageService($rootScope, $log, $q, CONFIG, localStorageService)
    */
   ConfigStorageService.prototype.load = () => {
     let defer = $q.defer();
-    
+
     let data = {};
     data[CONFIG.constants.localStorageKeys.APP_OPEN_COUNT] = localStorageService.get(CONFIG.constants.localStorageKeys.APP_OPEN_COUNT);
     data[CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH] = localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
@@ -34,7 +34,7 @@ function ConfigStorageService($rootScope, $log, $q, CONFIG, localStorageService)
     data[CONFIG.constants.localStorageKeys.SELECTED_PRIVATE_KEY] = localStorageService.get(CONFIG.constants.localStorageKeys.SELECTED_PRIVATE_KEY);
 
     ConfigStorageService.prototype.setData(data);
-    
+
     defer.resolve(ConfigStorageService);
 
     return defer.promise;

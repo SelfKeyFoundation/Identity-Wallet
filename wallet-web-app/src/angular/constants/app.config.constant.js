@@ -5,7 +5,7 @@ const AppConfigConstant = {
     "APP_TITLE": "Identity Wallet",
     "API_ENDPOINT": "http://localhost:8080/api",
     "DEFAULT_LANGUAGE": "en",
-    "DEBUG": "true",
+    "DEBUG": "",
     "constants": {
         "localStorageKeys": {
             "APP_OPEN_COUNT": "APP_OPEN_COUNT",

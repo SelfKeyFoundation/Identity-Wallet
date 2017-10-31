@@ -134,7 +134,7 @@ function IndexedDBService($rootScope, $log, $q, CONFIG, localStorageService) {
     try {
       let db = getStore(STORE);
       let res = db.store.get(KEY);
-      console.log(db.store, "<<<<<<<<<<<")
+
       res.onsuccess = () => {
         defer.resolve(res.result);
       };
