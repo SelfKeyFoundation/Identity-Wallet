@@ -9,13 +9,13 @@ module.exports = (gulp, runSequence, watch, path, projConfig, environment) => {
 
     const SRC_DIR = path.resolve(__dirname, '../');
 
-    const BUILD_DIST_DIR = path.resolve(__dirname, "../release/builds");
-    const INSTALLER_DIST_DIR = path.resolve(__dirname, "../release/installers");
+    const BUILD_DIST_DIR = path.resolve(__dirname, '../release/builds');
+    const INSTALLER_DIST_DIR = path.resolve(__dirname, '../release/installers');
 
-    const OSX_ICON = path.resolve(__dirname, "../assets/icons/mac/selfkey.icns");
-    const OSX_INSTALLER_BG = path.resolve(__dirname, "../assets/backgrounds/mac/installer.jpg");
-    const WIN_ICON = path.resolve(__dirname, "../assets/icons/win/selfkey.ico");
-    const UNIX_ICON = path.resolve(__dirname, "../assets/icons/png/256x256.png");
+    const OSX_ICON = path.resolve(__dirname, '../assets/icons/mac/selfkey.icns');
+    const OSX_INSTALLER_BG = path.resolve(__dirname, '../assets/backgrounds/mac/installer.jpg');
+    const WIN_ICON = path.resolve(__dirname, '../assets/icons/win/selfkey.ico');
+    const UNIX_ICON = path.resolve(__dirname, '../assets/icons/png/256x256.png');
 
     let packagerCommonConfigs = {
         name: config.app.name,

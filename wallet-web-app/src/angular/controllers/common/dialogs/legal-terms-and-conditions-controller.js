@@ -1,7 +1,11 @@
-function LegalTermsAndConditionsDialog ($rootScope, $scope, $log, $mdDialog, CONFIG, ConfigStorageService) {
+function LegalTermsAndConditionsDialog ($scope, $log, $mdDialog, ConfigStorageService, showActionButtons) {
     'ngInject'
 
     $log.info('LegalTermsAndConditionsDialog');
+
+    $scope.cancel = (event) => {
+        $mdDialog.hide();
+    };
 
     $scope.agree = (event) => {
         ConfigStorageService.setLegalTermsAndConditionsAgreed(true);
@@ -9,6 +13,7 @@ function LegalTermsAndConditionsDialog ($rootScope, $scope, $log, $mdDialog, CON
     };
 
     $scope.disagree = (event) => {
+        ConfigStorageService.setLegalTermsAndConditionsAgreed(false);
         $mdDialog.cancel();
     };
 };

@@ -4,6 +4,7 @@ module.exports = function (app) {
     let dialog = app.modules.electron.dialog;
     let win = app.win;
     let path = app.modules.path;
+    let keythereum = app.modules.keythereum;
 
     controller.checkFileStat = function (event, actionId, actionName, args) {
         try {
@@ -100,6 +101,44 @@ module.exports = function (app) {
             // TODO
             app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'not implemented yet', null);
         }
+    }
+
+    controller.createEthereumAddress = function (event, actionId, actionName, args) {
+        const params = { keyBytes: 32, ivBytes: 16 };
+        var dk = keythereum.create(params);
+
+        // asynchronous
+        keythereum.create(params, function (dk) {
+            console.log(dk);
+
+            var options = {
+                kdf: "pbkdf2",
+                cipher: "aes-128-ctr",
+                kdfparams: {
+                    c: 262144,
+                    dklen: 32,
+                    prf: "hmac-sha256"
+                }
+            };
+
+            var keyObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
+            keythereum.exportToFile(keyObject, args.dest);
+
+            console.log("createEthereumAddress", keyObject);
+
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+        });
+    }
+
+    controller.importEthereumAddress = function (event, actionId, actionName, args) {
+        keythereum.importFromFile(args.address, args.dataDir, function (keyObject) {
+            console.log("importEthereumAddress", keyObject);
+
+            // TODO
+            var privateKey = keythereum.recover(password, keyObject);
+
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+        });
     }
 
     return controller;

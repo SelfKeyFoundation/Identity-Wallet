@@ -7,7 +7,6 @@ if (handleSquirrelEvent()) {
 const fs = require('fs');
 const camelCase = require('camelcase');
 const lodash = require('lodash');
-// const hummus = require('hummus'); // dito
 
 /**
  * often used modules list
@@ -17,7 +16,8 @@ const modules = [
   'mv',
   'fs',
   'path',
-  'url'
+  'url',
+  'keythereum'
 ];
 
 /**
@@ -210,7 +210,7 @@ function buildModulesInFolder(app, namespace, dir) {
       rootDir.forEach(function (file) {
 
         var nameParts = file.split('/');
-        var name = camelCase(nameParts[(nameParts.length - 1)].split(".")[0]);
+        var name = camelCase(nameParts[(nameParts.length - 1)].split('.')[0]);
         var filePath = dir + file;
 
         if (fs.lstatSync(filePath).isDirectory()) {

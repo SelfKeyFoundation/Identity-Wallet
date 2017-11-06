@@ -18,7 +18,7 @@ function ConfigStorageService($rootScope, $log, $q, CONFIG, localStorageService)
    */
   ConfigStorageService.prototype.setData = function (data) {
     angular.extend(this, data);
-    $rootScope.$broadcast('on-local-storage-change', data);
+    $rootScope.$broadcast('local-storage:change', data);
   }
 
   /**

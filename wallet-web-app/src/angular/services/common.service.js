@@ -25,6 +25,19 @@ function CommonService($rootScope, $log, $q, $mdDialog) {
     });
   }
 
+  CommonService.prototype.openUserAgreementDialog = (showActionButtons) => {
+    return $mdDialog.show({
+      templateUrl: 'common/dialogs/legal-tems-and-conditions.html',
+      controller: "LegalTermsAndConditionsDialog",
+      parent: angular.element(document.body),
+      clickOutsideToClose: false,
+      fullscreen: false,
+      locals: {
+        showActionButtons: showActionButtons || true
+      }
+    });
+  }
+
   return new CommonService();
 }
 

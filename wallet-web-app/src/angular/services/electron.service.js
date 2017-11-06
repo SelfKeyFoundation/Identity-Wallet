@@ -17,17 +17,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
     this.ipcRenderer = ipcRenderer;
 
     /**
-     * Actions
+     * 
      */
     this.sendConfigChange = function (config) {
-      // TODO - "ON_CONFIG_CHANGE" - move to constants 
       ipcRenderer.send("ON_CONFIG_CHANGE", config);
-    };
-
-    // TODO - !! CHANGE !!
-    this.test = function (config) {
-      // TODO - "ON_CONFIG_CHANGE" - move to constants 
-      ipcRenderer.send("ON_CONFIG_READY", config);
     };
 
     /**
@@ -56,6 +49,17 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
         certificate: certificate,
         password: password
       });
+    }
+
+    this.generateEthereumWallet = function (password, destDir) {
+      return makeCall('signPdf', {
+        password: password,
+        destDir: destDir
+      });
+    }
+
+    this.importEthereumWallet = function (password, walletSrc) {
+      // TODO
     }
 
     /**

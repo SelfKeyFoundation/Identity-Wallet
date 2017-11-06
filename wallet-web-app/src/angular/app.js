@@ -4,11 +4,8 @@
  * External Modules
  */
 import uiRouter from '@uirouter/angularjs';
-
 import angularMaterial from 'angular-material';
-
 import LocalStorageModule from 'angular-local-storage';
-
 
 /**
  * Internal Modules
