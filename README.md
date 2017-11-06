@@ -32,3 +32,9 @@ set **NODE_ENV** to
 
 ## watch / development
 * ```gulp watch:webapp```
+
+## Desktop app development
+Make sure the `config.electron.js` setting ***DEV*** is set to `true`
+* ```gulp watch:webapp```
+* ```npm run start``` at the project root folder
+Any changes in the wallet-web-app folder will be recompiled and immediately available in the electron app.
