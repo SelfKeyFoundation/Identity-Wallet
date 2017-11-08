@@ -6,7 +6,6 @@ module.exports = {
     "API_ENDPOINT": "http://localhost:8080/api",
     "DEFAULT_LANGUAGE": "en",
     "debug": "true",
-    "DEV": "true",
     "constants": {
         "localStorageKeys": {
             "APP_OPEN_COUNT": "APP_OPEN_COUNT",

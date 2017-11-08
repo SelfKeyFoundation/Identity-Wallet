@@ -1,4 +1,4 @@
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigStorageService, CommonService) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigStorageService, CommonService, EtherscanService, EtherUnitsService) {
     'ngInject'
 
     $log.info('MemberLayoutController');
@@ -14,6 +14,13 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronSer
 
     ConfigStorageService.APP_OPEN_COUNT++;
     ConfigStorageService.setAppOpenCount(ConfigStorageService.APP_OPEN_COUNT);
+
+    
+    let testPromise = EtherscanService.getBalance('0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb');
+    testPromise.then((response) => {
+        let a = EtherUnitsService.toEther(response.data.result, 'wei');
+        console.log(a);
+    });
 };
 
 export default MemberLayoutController;

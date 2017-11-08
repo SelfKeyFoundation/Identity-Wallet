@@ -61,19 +61,15 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
     this.importEthereumWallet = function (password, walletSrc) {
       // TODO
     }
-
-    /**
-     * Callback Events
-     */
-    this.callback = {
-      onHandshake: null
-    };
   }
 
   /**
-     * Incoming Events
-     */
-  ipcRenderer.on('ON_READY', handshake);
+   * Incoming Events
+   */
+  ipcRenderer.on('ON_READY', (event) => {
+    // send configs to electron app
+    ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
+  });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
     listeners[actionId].defer.resolve(data);
@@ -81,23 +77,6 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       delete listeners[actionId];
     }, 1000);
   });
-
-  /**
-   * 
-   */
-  function handshake(event) {
-    // send configs to electron app
-    ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
-  }
-
-  function onUsersDocumentsDirectoryChange(event, folderPath) {
-    if (folderPath) {
-      let promise = ConfigStorageService.setUserDocumentsStoragePath(folderPath);
-      promise.then((data) => {
-        ipcRenderer.send("ON_CONFIG_CHANGE", data);
-      });
-    }
-  }
 
   /**
    * 
