@@ -1,6 +1,6 @@
 'use strict';
 
-function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, ConfigStorageService, IndexedDBService) {
+function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, ConfigStorageService, ConfigFileStoreService) {
   'ngInject';
 
   if (!window.ipcRenderer) return;

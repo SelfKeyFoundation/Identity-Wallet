@@ -1,4 +1,4 @@
-function AddEditContactInfoDialog($rootScope, $scope, $log, $mdDialog, IndexedDBService, contactInfoRecord, contactItem) {
+function AddEditContactInfoDialog($rootScope, $scope, $log, $mdDialog, ConfigFileStoreService, contactInfoRecord, contactItem) {
     'ngInject'
 
     $log.info('AddEditContactInfoDialog');
@@ -25,22 +25,24 @@ function AddEditContactInfoDialog($rootScope, $scope, $log, $mdDialog, IndexedDB
 
         if (contactItem) {
             // edit
-            for (let i in contactInfoRecord.data) {
-                let item = contactInfoRecord.data[i];
+            for (let i in contactInfoRecord) {
+                let item = contactInfoRecord[i];
                 if (item.id === contactItem.id) {
-                    contactInfoRecord.data[i] = $scope.contactInfo;
+                    contactInfoRecord[i] = $scope.contactInfo;
                     break;
                 }
             }
         } else {
             // add
-            $scope.contactInfo.id = IndexedDBService.generateId();
-            contactInfoRecord.data.push($scope.contactInfo);
+            $scope.contactInfo.id = ConfigFileStoreService.generateId();
+            contactInfoRecord.push($scope.contactInfo);
         }
+        
+        // TODO: get active key
 
-        let promise = IndexedDBService.contactInfos_save(contactInfoRecord);
+        let promise = ConfigFileStoreService.contactInfos_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", contactInfoRecord);
         promise.then((result) => {
-            $mdDialog.hide(contactInfoRecord.data);
+            $mdDialog.hide(contactInfoRecord);
         });
     }
 };

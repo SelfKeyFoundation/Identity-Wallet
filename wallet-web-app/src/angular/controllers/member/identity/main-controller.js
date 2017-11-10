@@ -1,4 +1,4 @@
-function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, ElectronService, IndexedDBService) {
+function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileStoreService) {
     'ngInject'
 
     // TODO - TEST (REMOVE)
@@ -16,7 +16,6 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
 
     //$scope.openPdfSignature(null);
     // TODO - TEST (REMOVE)
-
     // TODO - take privateKey from config storage
     $scope.contactInfo;
     $scope.document;
@@ -61,16 +60,17 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
     }
 
     $scope.deleteContactInfo = (event, item) => {
-        for(let i = 0; i < $scope.contactInfo.data.length; i++){
-            if($scope.contactInfo.data[i].id === item.id){
-                $scope.contactInfo.data.splice(i, 1);
+        for(let i = 0; i < $scope.contactInfo.length; i++){
+            if($scope.contactInfo[i].id === item.id){
+                $scope.contactInfo.splice(i, 1);
                 break;
             }
         }
 
-        let promise = IndexedDBService.contactInfos_save($scope.contactInfo);
+        // TODO: get current active key
+        let promise = ConfigFileStoreService.contactInfos_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.contactInfo);
         promise.then((result) => {
-            $scope.contactItems = $scope.contactInfo.data;
+            $scope.contactItems = $scope.contactInfo;
         });
     }
 
@@ -115,16 +115,17 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
     }
 
     $scope.deleteDocument = (event, item) => {
-        for(let i = 0; i < $scope.document.data.length; i++){
-            if($scope.document.data[i].id === item.id){
-                $scope.document.data.splice(i, 1);
+        for(let i = 0; i < $scope.document.length; i++){
+            if($scope.document[i].id === item.id){
+                $scope.document.splice(i, 1);
                 break;
             }
         }
 
-        let promise = IndexedDBService.documents_save($scope.document);
+        // TODO: get active key
+        let promise = ConfigFileStoreService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.document);
         promise.then((result) => {
-            $scope.documentItems = $scope.document.data;
+            $scope.documentItems = $scope.document;
         });
     }
 
@@ -138,21 +139,20 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
     }
 
     function loadContactInfos () {
-        $scope.contactInfoPromise = IndexedDBService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.contactInfoPromise = ConfigFileStoreService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
         $scope.contactInfoPromise.then((result) => {
             $scope.contactInfo = angular.copy(result);
-            $log.info(result.data);
-            $scope.contactItems = result.data;
+            $scope.contactItems = result;
         }).catch((error) => {
             $log.error(error);
         });
     }
 
     function loadDocuments (){
-        $scope.documentsPromise = IndexedDBService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.documentsPromise = ConfigFileStoreService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
         $scope.documentsPromise.then((result) => {
             $scope.document = angular.copy(result);
-            $scope.documentItems = result.data;
+            $scope.documentItems = result;
     
             for(let i in $scope.documentItems){
                 if($scope.documentItems[i].filePath){

@@ -1,4 +1,4 @@
-function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronService, IndexedDBService, ConfigStorageService, documentRecord, documentItem) {
+function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileStoreService, ConfigStorageService, documentRecord, documentItem) {
     'ngInject'
 
     $log.info('AddEditDocumentDialog');
@@ -30,17 +30,17 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
 
         if (documentItem) {
             // edit
-            for (let i in documentRecord.data) {
-                let item = documentRecord.data[i];
+            for (let i in documentRecord) {
+                let item = documentRecord[i];
                 if (item.id === documentItem.id) {
-                    documentRecord.data[i] = $scope.document;
+                    documentRecord[i] = $scope.document;
                     break;
                 }
             }
         } else {
             // add
-            $scope.document.id = IndexedDBService.generateId();
-            documentRecord.data.push($scope.document);
+            $scope.document.id = ConfigFileStoreService.generateId();
+            documentRecord.push($scope.document);
         }
 
         let moveFilePromise = ElectronService.moveFile(
@@ -50,9 +50,10 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
 
         moveFilePromise.then((filePathToSave) => {
             $scope.document.filePath = filePathToSave;
-            let savePromise = IndexedDBService.documents_save(documentRecord);
+            // TODO: get current active key
+            let savePromise = ConfigFileStoreService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", documentRecord);
             savePromise.then((result) => {
-                $mdDialog.hide(documentRecord.data);
+                $mdDialog.hide(documentRecord);
             });
         }).catch((error) => {
             console.log("filePathToSave error", error);
