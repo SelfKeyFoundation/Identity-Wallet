@@ -40,6 +40,7 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
       console.log("Loading config file", data);
       if (Object.keys(data).length !== 0)
         memoryStore = data;
+      $rootScope.$broadcast('config-file-loaded');
     }).catch((error) => console.error(error) );
   }
   
@@ -57,7 +58,7 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
     contactInfos_get (privateKey) {
       return new Promise((resolve, reject) => {
         if (loading) {
-          setTimeout(_ => {
+          $rootScope.$on('config-file-loaded', function () {
             const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
             if (data) {
               resolve(data);
@@ -65,7 +66,7 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
             else {
               reject('Not found');
             }
-          }, 500);
+          });
         } 
         else {
           const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
@@ -98,12 +99,16 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
 
     documents_get (privateKey) {
       return new Promise((resolve, reject) => {
-        const data = memoryStore[DOCUMENTS_STORE][privateKey];
-        if (data) {
-          resolve(data);
-        }
-        else {
-          reject('Not found');
+        if (loading) {
+          $rootScope.$on('config-file-loaded', function () {
+            const data = memoryStore[DOCUMENTS_STORE][privateKey];
+            if (data) {
+              resolve(data);
+            }
+            else {
+              reject('Not found');
+            }
+          });
         }
       });
     }
