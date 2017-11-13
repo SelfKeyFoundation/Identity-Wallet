@@ -1,6 +1,6 @@
 'use strict';
 
-function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, ConfigStorageService, ConfigFileStoreService) {
+function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localStorageService) {
   'ngInject';
 
   if (!window.ipcRenderer) return;
@@ -15,6 +15,16 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   let ElectronService = function () {
     this.ipcRenderer = ipcRenderer;
+
+    this.readConfig = function() {
+        const filepath = localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
+        return makeCall('readConfig', { filepath: filepath });
+    }
+
+    this.saveConfig = function(data) {
+      const filepath = localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
+      return makeCall('saveConfig', { filepath: filepath, data: data });
+    }
 
     /**
      * 
@@ -68,7 +78,8 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   ipcRenderer.on('ON_READY', (event) => {
     // send configs to electron app
-    ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
+    console.log(event);
+    //ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
   });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
@@ -83,7 +94,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   function makeCall(actionName, data) {
     let defer = $q.defer();
-    let id = IndexedDBService.generateId();
+    let id = generateId();
 
     listeners[id] = {
       defer: $q.defer()
@@ -92,6 +103,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
     ipcRenderer.send("ON_ASYNC_REQUEST", id, actionName, data);
 
     return listeners[id].defer.promise;
+  }
+
+  function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
+    return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
   }
 
   return new ElectronService();

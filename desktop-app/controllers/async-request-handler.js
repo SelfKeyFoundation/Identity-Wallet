@@ -6,6 +6,25 @@ module.exports = function (app) {
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
 
+
+    controller.readConfig = function (event, actionId, actionName, args) {
+        const settings = require('electron-settings');
+        console.log(args);
+        // TODO: config name should be set somewhere
+        settings.setPath(args.filepath + '/idwallet.json');
+        const data = settings.getAll();
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data );
+    }
+
+    controller.saveConfig = function (event, actionId, actionName, args) {
+        const settings = require('electron-settings');
+        // TODO: config name should be set somewhere
+        settings.setPath(args.filepath + '/idwallet.json');
+        const data = settings.setAll(args.data);
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data );
+    }
+
+
     controller.checkFileStat = function (event, actionId, actionName, args) {
         try {
             app.modules.fs.stat(args.src, (err, stat) => {

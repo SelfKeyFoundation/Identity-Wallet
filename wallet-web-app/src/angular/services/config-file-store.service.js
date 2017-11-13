@@ -1,6 +1,6 @@
 'use strict';
 
-function ConfigFileStoreService($rootScope, $log, $q, CONFIG) {
+function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
   'ngInject';
 
   $log.debug('ConfigFileStoreService Initialized');
@@ -32,6 +32,17 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG) {
   };
 
   let memoryStore = defaultConfig;
+  let loading = true;
+
+  if (ElectronService) {
+    ElectronService.readConfig().then((data) => {
+      loading = false;
+      console.log("Loading config file", data);
+      if (Object.keys(data).length !== 0)
+        memoryStore = data;
+    }).catch((error) => console.error(error) );
+  }
+  
   
 
   function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
@@ -45,12 +56,25 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG) {
 
     contactInfos_get (privateKey) {
       return new Promise((resolve, reject) => {
-        const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
-        if (data) {
-          resolve(data);
-        }
+        if (loading) {
+          setTimeout(_ => {
+            const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
+            if (data) {
+              resolve(data);
+            }
+            else {
+              reject('Not found');
+            }
+          }, 500);
+        } 
         else {
-          reject('Not found');
+          const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
+          if (data) {
+            resolve(data);
+          }
+          else {
+            reject('Not found');
+          }
         }
       });
     }
@@ -61,6 +85,9 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG) {
 
         if (key) {
           memoryStore[CONTACT_INFOS_STORE][privateKey] = data;
+          ElectronService.saveConfig(memoryStore).then((data) => {
+            console.log("saved config file", data);
+          });
           resolve(memoryStore[CONTACT_INFOS_STORE][privateKey]);
         }
         else {
@@ -87,6 +114,9 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG) {
 
         if (key) {
           memoryStore[DOCUMENTS_STORE][privateKey] = data;
+          ElectronService.saveConfig(memoryStore).then((data) => {
+            console.log("saved config file", data);
+          });
           resolve(memoryStore[DOCUMENTS_STORE][privateKey]);
         }
         else {
