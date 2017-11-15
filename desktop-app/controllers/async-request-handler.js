@@ -5,6 +5,8 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+    let EthereumTx = app.modules['ethereumjs-tx'];
+
 
     controller.checkFileStat = function (event, actionId, actionName, args) {
         try {
@@ -103,15 +105,15 @@ module.exports = function (app) {
         }
     }
 
-    controller.createEthereumAddress = function (event, actionId, actionName, args) {
+    controller.generateEthereumWallet = function (event, actionId, actionName, args) {
         const params = { keyBytes: 32, ivBytes: 16 };
-        var dk = keythereum.create(params);
+        let dk = keythereum.create(params);
 
         // asynchronous
         keythereum.create(params, function (dk) {
             console.log(dk);
 
-            var options = {
+            let options = {
                 kdf: "pbkdf2",
                 cipher: "aes-128-ctr",
                 kdfparams: {
@@ -121,8 +123,8 @@ module.exports = function (app) {
                 }
             };
 
-            var keyObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
-            keythereum.exportToFile(keyObject, args.dest);
+            let keyObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
+            keythereum.exportToFile(keyObject, args.keyStoreSrc);
 
             console.log("createEthereumAddress", keyObject);
 
@@ -130,15 +132,64 @@ module.exports = function (app) {
         });
     }
 
-    controller.importEthereumAddress = function (event, actionId, actionName, args) {
-        keythereum.importFromFile(args.address, args.dataDir, function (keyObject) {
-            console.log("importEthereumAddress", keyObject);
+    controller.importEtherKeystoreFile = function (event, actionId, actionName, args) {
+        try {
+            keythereum.importFromFile(args.filePath, function (keyObject) {
+                console.log("importEtherKeystoreFile", keyObject);
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+            });
+        } catch (e) {
+            console.log(e.message);
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
+        }
+    };
 
-            // TODO
-            var privateKey = keythereum.recover(password, keyObject);
+    controller.unlockEtherKeystoreObject = function (event, actionId, actionName, args) {
+        console.log("unlockEtherKeystoreObject", args);
+        try {
+            let privateKey = keythereum.recover(args.password, args.keystoreObject);
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
+        } catch (e) {
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e, null);
+        }
+    }
 
-            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
-        });
+    // TODO remove
+    controller.unlockEthereumWallet = function (event, actionId, actionName, args) {
+        console.log("unlockEthereumWallet", args);
+        let privateKey = keythereum.recover(args.password, args.keyObject);
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
+    }
+
+    controller.testCustomNode = function (event, actionId, actionName, args) {
+        console.log("testCustomNode", args);
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });
+    }
+
+    controller.generateRawTransaction = function (event, actionId, actionName, args) {
+        console.log("generateRawTransaction", args);
+
+        const privateKey = Buffer.from(args.privateKey, 'hex') // f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1
+
+        const txParams = {
+            nonce: args.nonce, // 0
+            gasPrice: args.gasPrice, // 0
+            gasLimit: args.gasLimit, // 21000
+            to: args.to, //'0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb', 
+            value: args.value, // 10000000000000000
+            // EIP 155 chainId - mainnet: 1, ropsten: 3 
+            chainId: args.chainId || 1
+        }
+
+        console.log("TX Data", txParams);
+
+        const tx = new EthereumTx(txParams)
+        tx.sign(privateKey);
+
+        const serializedTx = tx.serialize().toString('hex');
+        console.log(serializedTx.toString('hex'));
+
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "serializedTx": serializedTx });
     }
 
     return controller;

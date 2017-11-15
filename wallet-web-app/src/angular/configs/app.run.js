@@ -2,13 +2,26 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
     'ngInject';
+
+    $log.debug('DICTIONARY', DICTIONARY);
 
     /**
      * 
      */
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
+
+    $rootScope.selectedLanguage = "en";
+
+    /**
+     * 
+     */
+    $rootScope.getTranslation = function (keyword) {
+        return DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
+    }
+
+    console.log($rootScope.getTranslation('holaaa'), "???????");
 
     /**
      * 
@@ -40,7 +53,6 @@ function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronSe
             ElectronService.sendConfigChange(data);
         }
     });
-
 }
 
 export default AppRun;

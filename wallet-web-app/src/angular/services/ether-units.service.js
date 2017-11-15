@@ -39,9 +39,7 @@ function EtherUnits($rootScope, $log, $http) {
    */
   class EtherUnits {
 
-    constructor() {
-
-    }
+    constructor() {}
 
     getValueOfUnit(unit) {
       unit = unit ? unit.toLowerCase() : 'ether';

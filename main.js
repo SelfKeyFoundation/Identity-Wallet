@@ -8,6 +8,10 @@ const fs = require('fs');
 const camelCase = require('camelcase');
 const lodash = require('lodash');
 
+const i18n = [
+  'en'
+]
+
 /**
  * often used modules list
  */
@@ -17,8 +21,13 @@ const modules = [
   'fs',
   'path',
   'url',
-  'keythereum'
+  'ethereumjs-tx'
 ];
+
+// TODO implement
+const extendedModules = [
+  'keythereum'
+]
 
 /**
  * initializers list
@@ -40,10 +49,17 @@ let app = {
     app: require('./config.electron.js'),
     user: null
   },
+  translations: {
+  },
   modules: {},
   controllers: {},
   win: {}
 };
+
+/**
+ * 
+ */
+loadTranslations(app);
 
 /**
  * starts app
@@ -56,6 +72,9 @@ startApp();
 function startApp() {
 
   initializeModules();
+
+  // TODO initialize extended custom modules
+  app.modules['keythereum'] = require('./extended_modules/keythereum/index.js');
 
   buildModulesInFolder(app, app.controllers, app.dir.desktopApp + '/controllers/');
 
@@ -133,6 +152,12 @@ function startInitializer (app, initializers, index, cb) {
     startInitializer(app, initializers, index, cb);
   });
 };
+
+function loadTranslations (app) {
+  for(let i in i18n){
+    app.translations[i18n[i]] = require('./i18n/' + i18n[i] + ".js");
+  }
+}
 
 function handleSquirrelEvent() {
   if (process.argv.length === 1) {

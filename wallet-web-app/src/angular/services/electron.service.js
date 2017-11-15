@@ -51,15 +51,58 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       });
     }
 
-    this.generateEthereumWallet = function (password, destDir) {
-      return makeCall('signPdf', {
+    this.generateEthereumWallet = function (password, keyStoreSrc) {
+      return makeCall('generateEthereumWallet', {
         password: password,
-        destDir: destDir
+        keyStoreSrc: keyStoreSrc
       });
     }
 
-    this.importEthereumWallet = function (password, walletSrc) {
-      // TODO
+    this.importEthereumWallet = function (address, password, keyStoreSrc) {
+      return makeCall('importEthereumWallet', {
+        address: address,
+        password: password,
+        keyStoreSrc: keyStoreSrc
+      });
+    }
+
+    this.importEtherKeystoreFile = function (filePath) {
+      return makeCall('importEtherKeystoreFile', {
+        filePath: filePath
+      });
+    }
+
+    this.unlockEtherKeystoreObject = function (keystoreObject, password) {
+      return makeCall('unlockEtherKeystoreObject', {
+        keystoreObject: keystoreObject,
+        password: password
+      });
+    }
+
+    // TODO remove
+    this.unlockEthereumWallet = function (keyObject, password) {
+      return makeCall('unlockEthereumWallet', {
+        keyObject: keyObject,
+        password: password
+      });
+    }
+
+    this.generateRawTransaction = function (nonce, gasPrice, gasLimit, to, value, data, privateKey, chainId) {
+      var args = {
+        nonce: nonce,
+        gasPrice: gasPrice,
+        gasLimit: gasLimit,
+        to: to,
+        value: value,
+        privateKey: privateKey,
+        chainId: chainId
+      }
+
+      if(data){
+        args.data = data;
+      }
+
+      return makeCall('generateRawTransaction', args);
     }
   }
 
@@ -72,7 +115,11 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
   });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
-    listeners[actionId].defer.resolve(data);
+    if(error){
+      listeners[actionId].defer.reject(error);
+    }else{
+      listeners[actionId].defer.resolve(data);
+    }
     $timeout(() => {
       delete listeners[actionId];
     }, 1000);
