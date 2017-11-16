@@ -11,6 +11,7 @@
   "dependencies": {
     "camelcase": "4.1.0",
     "electron": "1.7.5",
+    "electron-settings": "^3.1.4",
     "electron-squirrel-startup": "1.0.0",
     "keythereum": "1.0.2",
     "lodash": "4.17.4",
