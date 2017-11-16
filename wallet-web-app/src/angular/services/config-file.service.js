@@ -1,9 +1,9 @@
 'use strict';
 
-function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
+function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
   'ngInject';
 
-  $log.debug('ConfigFileStoreService Initialized');
+  $log.debug('ConfigFileService Initialized');
 
   const PRIVATE_KEYS_STORE = "PrivateKeysStore";
   const CONTACT_INFOS_STORE = "ContactInfosStore";
@@ -135,4 +135,4 @@ function ConfigFileStoreService($rootScope, $log, $q, CONFIG, ElectronService) {
   return new ConfigFileStore($log);
 }
 
-export default ConfigFileStoreService;
+export default ConfigFileService;

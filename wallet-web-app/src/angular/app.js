@@ -23,7 +23,7 @@ import AnimationService from './services/animation.service';
 import ElectronService from './services/electron.service';
 import ConfigStorageService from './services/config-storage.service';
 //import IndexedDBService from './services/indexed-db.service';
-import ConfigFileStoreService from './services/config-file-store.service';
+import ConfigFileService from './services/config-file.service';
 import CommonService from './services/common.service';
 import EtherscanService from './services/etherscan.service';
 import EtherUnitsService from './services/ether-units.service';

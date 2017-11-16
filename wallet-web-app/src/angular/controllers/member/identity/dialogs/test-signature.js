@@ -1,4 +1,4 @@
-function TestSignatureDialog($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileStoreService, ConfigStorageService) {
+function TestSignatureDialog($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileService, ConfigStorageService) {
     'ngInject'
 
     $log.info('TestSignatureDialog');

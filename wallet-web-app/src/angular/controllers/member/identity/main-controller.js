@@ -1,4 +1,4 @@
-function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileStoreService) {
+function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileService) {
     'ngInject'
 
     // TODO - TEST (REMOVE)
@@ -68,7 +68,7 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
         }
 
         // TODO: get current active key
-        let promise = ConfigFileStoreService.contactInfos_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.contactInfo);
+        let promise = ConfigFileService.contactInfos_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.contactInfo);
         promise.then((result) => {
             $scope.contactItems = $scope.contactInfo;
         });
@@ -123,7 +123,7 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
         }
 
         // TODO: get active key
-        let promise = ConfigFileStoreService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.document);
+        let promise = ConfigFileService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", $scope.document);
         promise.then((result) => {
             $scope.documentItems = $scope.document;
         });
@@ -139,7 +139,7 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
     }
 
     function loadContactInfos () {
-        $scope.contactInfoPromise = ConfigFileStoreService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.contactInfoPromise = ConfigFileService.contactInfos_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
         $scope.contactInfoPromise.then((result) => {
             $scope.contactInfo = angular.copy(result);
             $scope.contactItems = result;
@@ -149,7 +149,7 @@ function MemberIdentityMainController ($rootScope, $scope, $log, $mdDialog, Elec
     }
 
     function loadDocuments (){
-        $scope.documentsPromise = ConfigFileStoreService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
+        $scope.documentsPromise = ConfigFileService.documents_get("0x5abb838bbb2e566c236f4be6f283541bf8866b68");
         $scope.documentsPromise.then((result) => {
             $scope.document = angular.copy(result);
             $scope.documentItems = result;

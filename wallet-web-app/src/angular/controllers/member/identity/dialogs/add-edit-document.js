@@ -1,4 +1,4 @@
-function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileStoreService, ConfigStorageService, documentRecord, documentItem) {
+function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigFileService, ConfigStorageService, documentRecord, documentItem) {
     'ngInject'
 
     $log.info('AddEditDocumentDialog');
@@ -39,7 +39,7 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
             }
         } else {
             // add
-            $scope.document.id = ConfigFileStoreService.generateId();
+            $scope.document.id = ConfigFileService.generateId();
             documentRecord.push($scope.document);
         }
 
@@ -51,7 +51,7 @@ function AddEditDocumentDialog($rootScope, $scope, $log, $mdDialog, ElectronServ
         moveFilePromise.then((filePathToSave) => {
             $scope.document.filePath = filePathToSave;
             // TODO: get current active key
-            let savePromise = ConfigFileStoreService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", documentRecord);
+            let savePromise = ConfigFileService.documents_save("0x5abb838bbb2e566c236f4be6f283541bf8866b68", documentRecord);
             savePromise.then((result) => {
                 $mdDialog.hide(documentRecord);
             });
