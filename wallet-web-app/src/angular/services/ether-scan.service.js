@@ -2,15 +2,29 @@
 
 import Token from '../classes/token';
 
-function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, ElectronService) {
+function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService) {
   'ngInject';
 
   $log.info('EtherScanService Initialized');
 
+  // etehrscan
+  const DEFAULT_SERVER = "etehrscan";
+  // ropsten testnet
+  const DEFAULT_CHAIN_ID = 3;
+
   // TODO move this into constants & configs
-  //const SERVER_URL = "https://api.etherscan.io/api";
-  const SERVER_URL = "https://ropsten.etherscan.io/api";
-  const API_KEY = "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD";
+  const SERVER_CONFIG = {
+    etehrscan: {
+      1: { url: "https://api.etherscan.io/api", key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" },    // chainId : { "api url", key )
+      3: { url: "https://ropsten.etherscan.io/api", key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" } // chainId : { "api url", key )
+    }
+  }
+
+  let CHAIN_ID = null;
+  let SERVER_URL = null;
+  let API_KEY = null;
+
+  setChainId(DEFAULT_CHAIN_ID);
 
   const REQUEST_CONFIG = {
     headers: {
@@ -31,11 +45,21 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
     "type": "default"
   };
 
+  function setChainId(newChainId) {
+    CHAIN_ID = newChainId;
+    SERVER_URL = SERVER_CONFIG[DEFAULT_SERVER][newChainId].url;
+    API_KEY = SERVER_CONFIG[DEFAULT_SERVER][newChainId].key;
+  }
+
   /**
    * 
    */
   class EtherScanService {
-    constructor() { }
+    constructor() {
+      $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
+        setChainId(newChainId);
+      });
+    }
 
     getBalance(address) {
       let defer = $q.defer();
@@ -94,6 +118,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
       return $http.get(apiUrl);
     }
 
+    // TODO - remove after we implement custom node method
     getTransactionCount(address) {
       let defer = $q.defer();
       const apiUrl = SERVER_URL + "?module=proxy&action=eth_getTransactionCount&address=" + address + "&tag=latest&apikey=" + API_KEY
@@ -104,7 +129,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
           try {
             defer.resolve({
               hex: response.data.result,
-              num: Number(response.data.result)
+              dec: Number(response.data.result)
             });
           } catch (e) {
             // TODO - orginise error messages
@@ -118,7 +143,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
       return defer.promise;
     }
 
-    getEthCall (data) {
+    getEthCall(data) {
       let defer = $q.defer();
 
       const apiUrl = SERVER_URL + "?module=proxy&action=eth_call&to=" + data.to + "&data=" + data.data + "&tag=latest&apikey=" + API_KEY
@@ -139,14 +164,41 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
       });
 
       return defer.promise;
-  }
+    }
 
+    getGasPrice() {
+      let defer = $q.defer();
+
+      const apiUrl = SERVER_URL + "?module=proxy&action=eth_gasPrice&apikey=" + API_KEY
+
+      $http.get(apiUrl).then((response) => {
+        if (response.data.error || !response.data || !response.data.result) {
+          defer.reject({ "message": $rootScope.getTranslation(ERROR_CODES[response.data.error.code]), "error": response.data.error });
+        } else {
+          try {
+            defer.resolve({
+              hex: response.data.result,
+              dev: Number(response.data.result)
+            });
+          } catch (e) {
+            // TODO - orginise error messages
+            defer.reject({ "message": e })
+          }
+        }
+      }).catch((error) => {
+        defer.reject({ "message": $rootScope.getTranslation('http_connection_error') })
+      });
+
+      return defer.promise;
+    }
+
+    // TODO - remove
     generateRawTransaction(nonce, gasPrice, gasLimit, to, value, data, privateKey, chainId, sendMode) {
       if (sendMode && sendMode.type == 'token') {
         to = KEY_TOKEN_DATA.address;
         data = Token.generateContractData(KEY_TOKEN_DATA.address, value, KEY_TOKEN_DATA.decimal);
       }
-
+      
       return ElectronService.generateRawTransaction(
         nonce,
         gasPrice,

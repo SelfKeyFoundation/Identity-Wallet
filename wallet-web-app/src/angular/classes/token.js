@@ -4,10 +4,7 @@ import BigNumber from 'bignumber.js';
 import EthUtils from './eth-utils.js';
 import CommonUtils from './common-utils.js';
 
-const CONTRACTS_MAP = {};
-
 class Token {
-    static get CONTRACTS_MAP() { return CONTRACTS_MAP; }
 
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
@@ -21,17 +18,6 @@ class Token {
         this.balance = null;
         this.balanceDecimal = null;
         this.promise = null;
-    }
-
-    /**
-     * statics methods
-     */
-    static addContractToMap(key, token) {
-        Object.defineProperty(Token.CONTRACTS_MAP, key, {
-            enumerable: true,
-            value: token
-        });
-        return Token.CONTRACTS_MAP;
     }
 
     static generateContractData(toAdd, value, decimal) {

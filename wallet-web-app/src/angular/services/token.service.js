@@ -3,33 +3,42 @@
 import Token from '../classes/token.js';
 import EthUtils from '../classes/eth-utils.js';
 
-const tokensArray = require('../store/tokens/eth-tokens.json');
+const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
-function TokenService($rootScope, $log, $http, EtherScanService) {
+function TokenService($rootScope, $log, $http, EVENTS, EtherScanService) {
   'ngInject';
 
   $log.info('TokenService Initialized');
 
-  const TOKEN_MAP = {};
+  const TOKENS_MAP = {};
+
+  let totalInitialized = 0;
 
   class TokenService {
 
-    constructor() { }
+    constructor() {
+      
+    }
+
+    addTokenToMap(key, token) {
+      Object.defineProperty(TOKENS_MAP, token.symbol, {
+        enumerable: true,
+        value: token
+      });
+      $rootScope.$broadcast(EVENTS.NEW_TOKEN_ADDED, token);
+      return TOKENS_MAP;
+    }
 
     init(userAddress) {
-      for (let i in tokensArray) {
-        let t = tokensArray[i];
-        Token.addContractToMap(t.symbol, t);
+      for (let i in TOKENS_CONTRACT_ARRAY) {
+        let t = TOKENS_CONTRACT_ARRAY[i];
         let token = new Token(t.address, userAddress, t.symbol, t.decimal, t.type);
-        Object.defineProperty(TOKEN_MAP, t.symbol, {
-          enumerable: true,
-          value: token
-        });
+        this.addTokenToMap(t.symbol, token);
       }
     }
 
     loadBalanceBySymbol(symbol) {
-      let token = TOKEN_MAP[symbol];
+      let token = TOKENS_MAP[symbol];
       let data = token.generateBalanceData();
       token.promise = EtherScanService.getEthCall(data);
       token.promise.then((balanceHex) => {
@@ -39,16 +48,20 @@ function TokenService($rootScope, $log, $http, EtherScanService) {
     }
 
     loadAllbalance() {
-      for (let key in TOKEN_MAP) {
-        if (TOKEN_MAP.hasOwnProperty(key)) {
-          let t = TOKEN_MAP[key];
+      for (let key in TOKENS_MAP) {
+        if (TOKENS_MAP.hasOwnProperty(key)) {
+          let t = TOKENS_MAP[key];
           this.loadBalanceBySymbol(t.symbol)
         }
       }
     }
 
     getBySymbol(symbol) {
-      return TOKEN_MAP[symbol];
+      return TOKENS_MAP[symbol];
+    }
+
+    getAll() {
+      return TOKENS_MAP;
     }
   };
 

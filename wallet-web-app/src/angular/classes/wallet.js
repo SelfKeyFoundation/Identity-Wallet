@@ -21,6 +21,8 @@ class Wallet {
         return this.keystoreObject.address;
     }
 
+    
+
 }
 
 export default Wallet;

@@ -9,10 +9,19 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     // POLYGON FOR TESTING
 
+    const TEST_PRIVATE_KEY = "f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1";
+    const USER_TEST_PUBLIC_KEY = "0xD96969247B51187da3bf6418B3ED39304ae2006c"
+    const CROWDSALE_CONTRACT_ADDRESS = "0x9f5a27e6d2323196e195743f28fbe817988dfdef";
+
+
+    /*
     WalletService.importUsingKeystoreFileDialog().then((wallet)=>{
         console.log("wallet", wallet)
         WalletService.loadBalance();
     });
+    */
+
+    
 
     if (!ConfigStorageService.APP_OPEN_COUNT || ConfigStorageService.APP_OPEN_COUNT === 0) {
         var promise = CommonService.openUserAgreementDialog(true);
@@ -26,12 +35,28 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     ConfigStorageService.APP_OPEN_COUNT++;
     ConfigStorageService.setAppOpenCount(ConfigStorageService.APP_OPEN_COUNT);
 
-    /*
-    let prm = ElectronService.importEthereumWallet('603fc6daa3dbb1e052180ec91854a7d6af873fdb', 'asdASD123!', '/Users/giorgio/workspace/flagtheory/Identity-Wallet/release');
-    prm.then((resp) => {
-        console.log(resp, "********");
-    })
-    */
+    WalletService.loadGasPrice().then((data)=>{
+        console.log(">>>>>>", data);
+    });
+    
+    let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/test/UTC--2017-11-09T16:40:32.715Z--d96969247b51187da3bf6418b3ed39304ae2006c');
+    //let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/UTC--2017-11-02T08:26:36.621Z--603fc6daa3dbb1e052180ec91854a7d6af873fdb');
+    prm.then((wallet) => {
+        WalletService.loadTransactionCount().then((wallet)=>{
+            console.log(wallet);
+
+            /*
+            WalletService.generateRawTransaction(
+                CROWDSALE_CONTRACT_ADDRESS, 
+                1, 
+                gasPrice, 
+                210000, 
+                null
+            )
+            */
+        });
+    });
+    
 
     /*
     let testPromise1 = EtherScanService.getBalance('0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb');
@@ -83,22 +108,19 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     //console.log(Token.addContractToMap('key', {test: 1}), "TTTTTTTTTTT");
 
-    const TEST_PRIVATE_KEY = "f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1";
-    const USER_TEST_PUBLIC_KEY = "0xD96969247B51187da3bf6418B3ED39304ae2006c"
-    const CROWDSALE_CONTRACT_ADDRESS = "0x9f5a27e6d2323196e195743f28fbe817988dfdef";
-
-    TokenService.init(USER_TEST_PUBLIC_KEY);
+    
+    
 
     //$timeout(TokenService.loadAllbalance.bind(TokenService), 2000);
     //TokenService.loadAllbalance();
 
-    TokenService.loadBalanceBySymbol("KEY");
-    console.log("T O K E N", TokenService.getBySymbol("KEY"));
+    //TokenService.loadBalanceBySymbol("KEY");
+    //console.log("T O K E N", TokenService.getBySymbol("KEY"));
 
     
     //TokenService.loadBalanceBySymbol("ACC");
     
-
+return;
     EtherScanService.getTransactionCount(USER_TEST_PUBLIC_KEY).then((data) => {
         return;
         console.log("nonce", data);

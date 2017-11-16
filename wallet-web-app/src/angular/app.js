@@ -16,6 +16,7 @@ import appStates from './configs/app.states';
 
 import appDictionaryConstant from './constants/app.dictionary.constant';
 import appConfigConstant from './constants/app.config.constant';
+import appEventsConstant from './constants/app.events.constant';
 
 import appTestFilter from './filters/app.test.filter';
 
@@ -49,6 +50,7 @@ window.app = angular.module('kyc-wallet', requires);
  */
 angular.module('kyc-wallet').constant('CONFIG', appConfigConstant);
 angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);
+angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
 
 /**
  * filters
