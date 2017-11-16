@@ -33,15 +33,24 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
 
   let memoryStore = defaultConfig;
   let loading = true;
+  let electronAvailable = ElectronService.ipcRenderer;
 
-  if (ElectronService) {
+  if (electronAvailable) {
     ElectronService.readConfig().then((data) => {
       loading = false;
       console.log("Loading config file", data);
-      if (Object.keys(data).length !== 0)
+      
+      if (Object.keys(data).length !== 0) {
         memoryStore = data;
+      }
+
       $rootScope.$broadcast('config-file-loaded');
     }).catch((error) => console.error(error) );
+  }
+  else {
+    console.warn("ElectronService not available");
+    loading = false;
+    $rootScope.$broadcast('config-file-loaded');
   }
   
   
@@ -86,9 +95,11 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
 
         if (key) {
           memoryStore[CONTACT_INFOS_STORE][privateKey] = data;
-          ElectronService.saveConfig(memoryStore).then((data) => {
+
+          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
             console.log("saved config file", data);
           });
+
           resolve(memoryStore[CONTACT_INFOS_STORE][privateKey]);
         }
         else {
@@ -110,6 +121,15 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
             }
           });
         }
+        else {
+          const data = memoryStore[DOCUMENTS_STORE][privateKey];
+          if (data) {
+            resolve(data);
+          }
+          else {
+            reject('Not found');
+          }
+        }
       });
     }
 
@@ -119,9 +139,11 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
 
         if (key) {
           memoryStore[DOCUMENTS_STORE][privateKey] = data;
-          ElectronService.saveConfig(memoryStore).then((data) => {
+          
+          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
             console.log("saved config file", data);
           });
+          
           resolve(memoryStore[DOCUMENTS_STORE][privateKey]);
         }
         else {

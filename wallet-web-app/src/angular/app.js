@@ -61,7 +61,7 @@ angular.module('kyc-wallet').service('AnimationService', AnimationService);
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
 //angular.module('kyc-wallet').service('IndexedDBService', IndexedDBService);
-angular.module('kyc-wallet').service('ConfigFileStoreService', ConfigFileStoreService);
+angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
 angular.module('kyc-wallet').service('CommonService', CommonService);
 angular.module('kyc-wallet').service('EtherscanService', EtherscanService);
 angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
