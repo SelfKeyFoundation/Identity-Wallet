@@ -148,9 +148,14 @@ module.exports = function (app) {
         console.log("unlockEtherKeystoreObject", args);
         try {
             let privateKey = keythereum.recover(args.password, args.keystoreObject);
-            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
+            if(privateKey){
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
+            }else{
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, {message: "authentication code mismatch"}, null);
+            }
+            
         } catch (e) {
-            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e, null);
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, {message: "authentication code mismatch"}, null);
         }
     }
 
@@ -171,7 +176,7 @@ module.exports = function (app) {
 
         const privateKey = Buffer.from(args.privateKey, 'hex') // f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1
 
-        const txParams = {
+        let txParams = {
             nonce: args.nonce, // 0
             gasPrice: args.gasPrice, // 0
             gasLimit: args.gasLimit, // 21000
@@ -179,6 +184,10 @@ module.exports = function (app) {
             value: args.value, // 10000000000000000
             // EIP 155 chainId - mainnet: 1, ropsten: 3 
             chainId: args.chainId || 1
+        }
+
+        if(args.data){
+            txParams.data = args.data
         }
 
         console.log("TX Data", txParams);

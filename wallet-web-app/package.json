@@ -16,7 +16,7 @@
     "bignumber.js": "^4.1.0",
     "crypto": "^1.0.1",
     "electron": "1.7.5",
-    "ethereumjs-util": "^5.1.2",
+    "ethereumjs-util": "5.1.2",
     "gulp": "^3.9.1",
     "jquery": "3.2.1",
     "node-sass": "^4.6.1"

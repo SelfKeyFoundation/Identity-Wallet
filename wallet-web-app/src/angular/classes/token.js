@@ -24,10 +24,8 @@ class Token {
         try {
             if (!EthUtils.validateEtherAddress(toAdd)) return { error: 'invalid_address' };
             if (!CommonUtils.isNumeric(value) || parseFloat(value) < 0) return { error: 'invalid_value' };
-
             value = EthUtils.padLeft(new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16), 64);
             toAdd = EthUtils.padLeft(EthUtils.getNakedAddress(toAdd), 64);
-
             return Token.transferHex + toAdd + value;
         } catch (e) {
             console.log(e);

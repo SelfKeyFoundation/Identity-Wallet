@@ -2,7 +2,7 @@ import EthUnits from '../../classes/eth-units.js';
 import EthUtils from '../../classes/eth-utils.js';
 import Token from '../../classes/token.js';
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, $timeout,ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, $timeout, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService) {
     'ngInject'
 
     $log.info('MemberLayoutController');
@@ -13,15 +13,12 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     const USER_TEST_PUBLIC_KEY = "0xD96969247B51187da3bf6418B3ED39304ae2006c"
     const CROWDSALE_CONTRACT_ADDRESS = "0x9f5a27e6d2323196e195743f28fbe817988dfdef";
 
-
     /*
     WalletService.importUsingKeystoreFileDialog().then((wallet)=>{
         console.log("wallet", wallet)
         WalletService.loadBalance();
     });
     */
-
-    
 
     if (!ConfigStorageService.APP_OPEN_COUNT || ConfigStorageService.APP_OPEN_COUNT === 0) {
         var promise = CommonService.openUserAgreementDialog(true);
@@ -35,26 +32,52 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     ConfigStorageService.APP_OPEN_COUNT++;
     ConfigStorageService.setAppOpenCount(ConfigStorageService.APP_OPEN_COUNT);
 
+    /*
     WalletService.loadGasPrice().then((data)=>{
         console.log(">>>>>>", data);
     });
+    */
     
+    // for testin.. use your keystore file path or use importUsingKeystoreFileDialog() method
     let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/test/UTC--2017-11-09T16:40:32.715Z--d96969247b51187da3bf6418b3ed39304ae2006c');
     //let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/UTC--2017-11-02T08:26:36.621Z--603fc6daa3dbb1e052180ec91854a7d6af873fdb');
     prm.then((wallet) => {
-        WalletService.loadTransactionCount().then((wallet)=>{
-            console.log(wallet);
+        console.log("keysrore read");
+        // use your passphare instead of "passw"
+        WalletService.unlockKeystoreObject("passw").then((wallet)=>{
+            console.log("keysrore unlock");
+            // loaded - wallet.privateKey
+            
+            WalletService.loadTransactionCount().then((wallet)=>{
+                console.log("tx count load");
+                // loaded wallet.nonceHex
+                let tokenSignedTX = WalletService.generateTokenRawTransaction(
+                    "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens
+                    0,                                              // amount
+                    17000000000,                                    // gas price
+                    150000,                                         // gas limit
+                    "KEY"                                           // token symbol (you can find symbols in ./wallet-web-app/src/store/tokens/eth-tokens.json)
+                );
+                console.log("tokenSignedTX TX:", tokenSignedTX);
 
-            /*
-            WalletService.generateRawTransaction(
-                CROWDSALE_CONTRACT_ADDRESS, 
-                1, 
-                gasPrice, 
-                210000, 
-                null
-            )
-            */
+                
+                let ethSignedTXPromise = WalletService.generateEthRawTransaction(
+                    "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens // crowdsale: 0x9f5a27e6d2323196e195743f28fbe817988dfdef
+                    1,                                              // amount unit Eth
+                    17000000000,                                    // gas price
+                    210000,                                         // gas limit
+                    null                                            // data
+                );
+                console.log("ethSignedTXPromise", ethSignedTXPromise);
+                
+            }).catch((error)=>{
+                console.log("e", error);
+            });           
+        }).catch((error)=>{
+            console.log("111", error);
         });
+    }).catch((error)=>{
+        console.log(error);
     });
     
 
@@ -106,77 +129,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     });
     */
 
-    //console.log(Token.addContractToMap('key', {test: 1}), "TTTTTTTTTTT");
 
-    
-    
-
-    //$timeout(TokenService.loadAllbalance.bind(TokenService), 2000);
-    //TokenService.loadAllbalance();
-
-    //TokenService.loadBalanceBySymbol("KEY");
-    //console.log("T O K E N", TokenService.getBySymbol("KEY"));
-
-    
-    //TokenService.loadBalanceBySymbol("ACC");
-    
-return;
-    EtherScanService.getTransactionCount(USER_TEST_PUBLIC_KEY).then((data) => {
-        return;
-        console.log("nonce", data);
-
-        let value = EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.toWei(1)));
-        let nonce = EthUtils.sanitizeHex(EthUtils.decimalToHex(12));
-        let gasPrice = EthUtils.sanitizeHex(EthUtils.decimalToHex(100));
-        let gasLimit = EthUtils.sanitizeHex(EthUtils.decimalToHex(210000));
-
-        // gas price:  21000000000 WEI EthUtils('dec', 'wei', 21000000000)
-        // gas limit: 
-
-        console.log(">>>>>>>>>", value);
-        /*
-        let rawTxPromise = EtherScanService.generateRawTransaction(
-            data.num,               // nonce
-            100,                    // gasPrice
-            21000,                  // gasLimit
-            null,                   // toAddress
-            value,                  // value
-            null,                   // data
-            TEST_PRIVATE_KEY,       // Private Key
-            3,                      // chainId 1: mainnet, 3: ropsten
-            {type: 'token', token: 'KEY'}
-        );
-        */
-
-        let rawTxPromise = EtherScanService.generateRawTransaction(
-            nonce,                          // nonce
-            gasPrice,                       // gasPrice
-            gasLimit,                       // gasLimit
-            CROWDSALE_CONTRACT_ADDRESS,     // toAddress
-            value,                          // value
-            null,                           // data
-            TEST_PRIVATE_KEY,               // Private Key
-            3,                              // chainId 1: mainnet, 3: ropsten, 4: rinkeby
-            {type: 'ether', token: 'KEY'}
-        );
-        
-        rawTxPromise.then((data)=>{
-            console.log("rawTxPromise", data.serializedTx);
-            
-            /*
-            EtherScanService.sendRawTransaction(data.serializedTx).then((data) => {
-                console.log("data", data);
-            }).catch((error) => {
-                console.log("error", error);
-            });
-            */
-        });
-
-    }).catch((error) => {
-        console.log("error", error);
-    });
-
-    console.log(EthUnits.toWei(0.01), "?????????? HERE" ); // HERE!
     
 };
 
