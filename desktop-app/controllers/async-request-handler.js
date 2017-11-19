@@ -5,7 +5,6 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
-    let EthereumTx = app.modules['ethereumjs-tx'];
 
 
     controller.checkFileStat = function (event, actionId, actionName, args) {
@@ -159,46 +158,9 @@ module.exports = function (app) {
         }
     }
 
-    // TODO remove
-    controller.unlockEthereumWallet = function (event, actionId, actionName, args) {
-        console.log("unlockEthereumWallet", args);
-        let privateKey = keythereum.recover(args.password, args.keyObject);
-        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
-    }
-
     controller.testCustomNode = function (event, actionId, actionName, args) {
         console.log("testCustomNode", args);
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });
-    }
-
-    controller.generateRawTransaction = function (event, actionId, actionName, args) {
-        console.log("generateRawTransaction", args);
-
-        const privateKey = Buffer.from(args.privateKey, 'hex') // f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1
-
-        let txParams = {
-            nonce: args.nonce, // 0
-            gasPrice: args.gasPrice, // 0
-            gasLimit: args.gasLimit, // 21000
-            to: args.to, //'0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb', 
-            value: args.value, // 10000000000000000
-            // EIP 155 chainId - mainnet: 1, ropsten: 3 
-            chainId: args.chainId || 1
-        }
-
-        if(args.data){
-            txParams.data = args.data
-        }
-
-        console.log("TX Data", txParams);
-
-        const tx = new EthereumTx(txParams)
-        tx.sign(privateKey);
-
-        const serializedTx = tx.serialize().toString('hex');
-        console.log(serializedTx.toString('hex'));
-
-        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "serializedTx": serializedTx });
     }
 
     return controller;

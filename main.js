@@ -20,8 +20,7 @@ const modules = [
   'mv',
   'fs',
   'path',
-  'url',
-  'ethereumjs-tx'
+  'url'
 ];
 
 // TODO implement

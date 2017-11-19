@@ -78,32 +78,6 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
         password: password
       });
     }
-
-    // TODO remove
-    this.unlockEthereumWallet = function (keyObject, password) {
-      return makeCall('unlockEthereumWallet', {
-        keyObject: keyObject,
-        password: password
-      });
-    }
-
-    this.generateRawTransaction = function (nonce, gasPrice, gasLimit, to, value, data, privateKey, chainId) {
-      var args = {
-        nonce: nonce,
-        gasPrice: gasPrice,
-        gasLimit: gasLimit,
-        to: to,
-        value: value,
-        privateKey: privateKey,
-        chainId: chainId
-      }
-
-      if(data){
-        args.data = data;
-      }
-
-      return makeCall('generateRawTransaction', args);
-    }
   }
 
   /**
@@ -115,9 +89,9 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
   });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
-    if(error){
+    if (error) {
       listeners[actionId].defer.reject(error);
-    }else{
+    } else {
       listeners[actionId].defer.resolve(data);
     }
     $timeout(() => {

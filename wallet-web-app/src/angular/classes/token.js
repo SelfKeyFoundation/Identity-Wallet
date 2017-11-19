@@ -26,15 +26,19 @@ class Token {
             if (!CommonUtils.isNumeric(value) || parseFloat(value) < 0) return { error: 'invalid_value' };
             value = EthUtils.padLeft(new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16), 64);
             toAdd = EthUtils.padLeft(EthUtils.getNakedAddress(toAdd), 64);
-            return Token.transferHex + toAdd + value;
+            return {
+                error: null,
+                data: Token.transferHex + toAdd + value
+            }
         } catch (e) {
-            console.log(e);
-            return null;
+            return {
+                error: e,
+                data: null
+            };
         }
     }
 
-    // TODO rename generateBalanceData
-    static getBalanceData(userAddress, contractAddress) {
+    static generateBalanceData(userAddress, contractAddress) {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
@@ -46,7 +50,7 @@ class Token {
     }
 
     generateBalanceData() {
-        return Token.getBalanceData(this.userAddress, this.contractAddress);
+        return Token.generateBalanceData(this.userAddress, this.contractAddress);
     }
 }
 

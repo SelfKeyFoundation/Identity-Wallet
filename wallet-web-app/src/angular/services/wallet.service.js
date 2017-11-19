@@ -39,7 +39,7 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
         this.importUsingKeystoreFilePath(filePath).then((wallet) => {
           defer.resolve(wallet);
         }).catch((error) => {
-          defer.reject(error);
+          defer.reject($rootScope.buildErrorObject("ERR_IMPORTING_KEYSTORE_FILE", error));
         });
       });
 
@@ -59,7 +59,7 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
 
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject(error);
+        defer.reject($rootScope.buildErrorObject("ERR_IMPORT_KEYSTORE_FILE", error));
       });
 
       return defer.promise;
@@ -77,7 +77,7 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
 
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject(error);
+        defer.reject($rootScope.buildErrorObject("ERR_UNLOCK_KEYSTORE_FILE", error));
       });
 
       return defer.promise;
@@ -89,15 +89,14 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
       // TODO check wallet address
       let promise = EtherScanService.getBalance(wallet.getAddress());
       promise.then((balanceWei) => {
-        console.log(balanceWei);
+        $log.debug(balanceWei);
 
         wallet.balanceWei = balanceWei
         wallet.balanceEth = EthUnits.toEther(balanceWei, 'wei');
 
         defer.resolve(wallet);
       }).catch((error) => {
-        console.log(error);
-        defer.reject(error);
+        defer.reject($rootScope.buildErrorObject("ERR_BALANCE_LOAD", error));
       });
 
       return defer.promise;
@@ -122,8 +121,7 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
         wallet.nonceDec = data.dec;
         defer.resolve(wallet);
       }).catch((error) => {
-        console.log(error);
-        defer.reject(error);
+        defer.reject($rootScope.buildErrorObject("ERR_TX_COUNT_LOAD", error));
       });
       return defer.promise;
     }
@@ -133,11 +131,9 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
       // TODO check wallet address
       let promise = EtherScanService.getGasPrice();
       promise.then((data) => {
-        console.log("GAS PRICE", data);
         defer.resolve(wallet);
       }).catch((error) => {
-        console.log(error);
-        defer.reject(error);
+        defer.reject($rootScope.buildErrorObject("ERR_GAS_PRICE_LOAD", error));
       });
       return defer.promise;
     }
@@ -151,71 +147,71 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
      * @param {hex} data Contract data
      */
     generateEthRawTransaction(toAddress, value, gasPrice, gasLimit, data) {
-      // TODO check nonce.. 
-      
-      // TODO
-      // switch ElectronService.generateRawTransaction with 
-      // new Tx(rawTx).sign(new Buffer(wallet.privateKey, 'hex'));
+      let defer = $q.defer();
 
-      let rawTx = {
-        nonce: EthUtils.sanitizeHex(wallet.nonceHex), 
-        gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice)),
-        gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit)),
-        to: EthUtils.sanitizeHex(toAddress),
-        value: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.toWei(value))),
-        chainId: selectedChainId
-      }
+      let promise = this.loadTransactionCount();
+      promise.then((wallet) => {
+        //wallet.nonceHex
 
-      if(data){
-        rawTx.data = EthUtils.sanitizeHex(data);
-      }
+        let rawTx = {
+          nonce: EthUtils.sanitizeHex(wallet.nonceHex),
+          gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice)),
+          gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit)),
+          to: EthUtils.sanitizeHex(toAddress),
+          value: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.toWei(value))),
+          chainId: selectedChainId
+        }
 
-      console.log("generateEthRawTransaction before", rawTx);
-      let eTx = new Tx(rawTx);
-      
-      //new Buffer(wallet.privateKey, 'hex')
-      eTx.sign(wallet.privateKey);
+        if (data) {
+          rawTx.data = EthUtils.sanitizeHex(data);
+        }
 
-      return '0x' + eTx.serialize().toString('hex');
+        let eTx = new Tx(rawTx);
+        eTx.sign(wallet.privateKey);
 
-      /*
-      return ElectronService.generateRawTransaction(
-        EthUtils.sanitizeHex(wallet.nonceHex),
-        EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice)),
-        EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit)),
-        toAddress,
-        EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.toWei(value))),
-        data,
-        wallet.privateKey,
-        selectedChainId
-      );
-      */
+        defer.resolve('0x' + eTx.serialize().toString('hex'));
+      }).catch((error) => {
+        defer.reject($rootScope.buildErrorObject("ERR_GENERATE_ETH_RAW_TX", error));
+      });
+
+      return defer.promise;
     }
 
     generateTokenRawTransaction(toAddress, value, gasPrice, gasLimit, tokenSymbol) {
+      let defer = $q.defer();
+
       let token = TokenService.getBySymbol(tokenSymbol);
-      // TODO check token exists
-      // TODO check token balance
-
-      let data = token.generateContractData(toAddress, value);
-
-      let rawTx = {
-        nonce: EthUtils.sanitizeHex(wallet.nonceHex), 
-        gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice)),
-        gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit)),
-        to: EthUtils.sanitizeHex(token.contractAddress),
-        value: EthUtils.sanitizeHex(EthUtils.decimalToHex(value)),
-        data: EthUtils.sanitizeHex(data),
-        chainId: selectedChainId
+      if (!token) {
+        defer.reject($rootScope.buildErrorObject("ERR_TOKEN_NOT_FOUND"));
       }
 
-      console.log("generateTokenRawTransaction before", rawTx);
-      let eTx = new Tx(rawTx);
+      // TODO check token balance
 
-      //new Buffer(wallet.privateKey, 'hex')
-      eTx.sign(wallet.privateKey);
+      let promise = this.loadTransactionCount();
+      promise.then((wallet) => {
+        let genResult = token.generateContractData(toAddress, value);
+        if (genResult.error) {
+          defer.reject($rootScope.buildErrorObject("ERR_TX_DATA_GENERATION", genResult.error));
+        } else {
+          let rawTx = {
+            nonce: EthUtils.sanitizeHex(wallet.nonceHex),
+            gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice)),
+            gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit)),
+            to: EthUtils.sanitizeHex(token.contractAddress),
+            value: EthUtils.sanitizeHex(EthUtils.decimalToHex(value)),
+            data: EthUtils.sanitizeHex(genResult.data),
+            chainId: selectedChainId
+          }
 
-      return '0x' + eTx.serialize().toString('hex');
+          let eTx = new Tx(rawTx);
+          //new Buffer(wallet.privateKey, 'hex')
+          eTx.sign(wallet.privateKey);
+
+          defer.resolve('0x' + eTx.serialize().toString('hex'));
+        }
+      }).catch((error) => {
+        defer.reject($rootScope.buildErrorObject("ERR_GENERATE_TOKEN_RAW_TX", error));
+      });
     }
   };
 

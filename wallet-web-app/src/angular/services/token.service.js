@@ -52,6 +52,7 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
       let token = TOKENS_MAP[symbol];
       let data = token.generateBalanceData();
       //loadBalanceQueue.push({token: token, data: data});
+      
       /*
       token.promise = EtherScanService.getEthCall(data);
       token.promise.then((balanceHex) => {

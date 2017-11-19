@@ -20,9 +20,6 @@ class Wallet {
     getAddress () {
         return this.keystoreObject.address;
     }
-
-    
-
 }
 
 export default Wallet;

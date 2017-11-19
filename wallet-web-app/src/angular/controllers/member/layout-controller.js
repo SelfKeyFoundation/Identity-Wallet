@@ -15,7 +15,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     /*
     WalletService.importUsingKeystoreFileDialog().then((wallet)=>{
-        console.log("wallet", wallet)
+        $log.debug("wallet", wallet)
         WalletService.loadBalance();
     });
     */
@@ -34,7 +34,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     /*
     WalletService.loadGasPrice().then((data)=>{
-        console.log(">>>>>>", data);
+        $log.debug(">>>>>>", data);
     });
     */
     
@@ -42,14 +42,21 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/test/UTC--2017-11-09T16:40:32.715Z--d96969247b51187da3bf6418b3ed39304ae2006c');
     //let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/UTC--2017-11-02T08:26:36.621Z--603fc6daa3dbb1e052180ec91854a7d6af873fdb');
     prm.then((wallet) => {
-        console.log("keysrore read");
+        $log.debug("keysrore read");
+
+        EtherScanService.getBalance("0xD96969247B51187da3bf6418B3ED39304ae2006c").then((data)=>{
+            console.log(">>>>>>>>", data);
+        });
+
+        return;
+
         // use your passphare instead of "passw"
         WalletService.unlockKeystoreObject("passw").then((wallet)=>{
-            console.log("keysrore unlock");
+            $log.debug("keysrore unlock");
             // loaded - wallet.privateKey
             
             WalletService.loadTransactionCount().then((wallet)=>{
-                console.log("tx count load");
+                $log.debug("tx count load");
                 // loaded wallet.nonceHex
                 let tokenSignedTX = WalletService.generateTokenRawTransaction(
                     "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens
@@ -58,7 +65,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
                     150000,                                         // gas limit
                     "KEY"                                           // token symbol (you can find symbols in ./wallet-web-app/src/store/tokens/eth-tokens.json)
                 );
-                console.log("tokenSignedTX TX:", tokenSignedTX);
+                $log.debug("tokenSignedTX TX:", tokenSignedTX);
 
                 
                 let ethSignedTXPromise = WalletService.generateEthRawTransaction(
@@ -68,24 +75,30 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
                     210000,                                         // gas limit
                     null                                            // data
                 );
-                console.log("ethSignedTXPromise", ethSignedTXPromise);
+                $log.debug("ethSignedTXPromise", ethSignedTXPromise);
                 
             }).catch((error)=>{
-                console.log("e", error);
+                $log.debug("e", error);
             });           
         }).catch((error)=>{
-            console.log("111", error);
+            $log.debug("111", error);
         });
     }).catch((error)=>{
-        console.log(error);
+        $log.debug(error);
     });
     
+    /**
+     * 
+     */
+    let test = {
+        message: ""
+    }
 
     /*
     let testPromise1 = EtherScanService.getBalance('0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb');
     testPromise1.then((response) => {
         let a = EtherUnitsService.toEther(response.data.result, 'wei');
-        console.log(a);
+        $log.debug(a);
     });
     */
 
@@ -95,7 +108,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
         '/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/test'
     );
     testPromise2.then((result) => {
-        console.log('generateEthereumWallet', result);
+        $log.debug('generateEthereumWallet', result);
     });
     */
 
@@ -106,9 +119,9 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
         '/Users/giorgio/workspace/flagtheory/Identity-Wallet/release'
     );
     testPromise3.then((keyObject) => {
-        console.log('>>>>>', keyObject);
+        $log.debug('>>>>>', keyObject);
         ElectronService.unlockEthereumWallet(keyObject, 'asdASD123!').then((privateKey)=>{
-            console.log(">>>>>>", privateKey);
+            $log.debug(">>>>>>", privateKey);
             //7fa0a38e27d8f7bc90354a4fb4999aca2432376a41ab40e58d7ad843fe804b3e
             //51c394b440c103033af867598536300fbab06ac286dbe9ed37066d7e69e3f040
         });
@@ -117,15 +130,15 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     /*
     EtherScanService.sendRawTransaction('0xf86b048505b13073a482520994e4bd7ab5bb01a284d6372e2408dbecf52aaeb01087038d7ea4c680008026a0ddef762e8fe0df02883c3969632610254d81f0b5ee9a19a2924ca1459ea8149ca029d36c63369f1768959bb6f2b51e9c95cc89ae33321d20f3c1a991fe07d69aef').then((data) => {
-        console.log("data", data);
+        $log.debug("data", data);
     }).catch((error) => {
-        console.log("error", error);
+        $log.debug("error", error);
     });
 
     EtherScanService.getTransaction('0x4aeca8f6381caa7413df85978ad6e1e95f21a2d8f8edf3206994e715900bda56').then((data) => {
-        console.log("data", data);
+        $log.debug("data", data);
     }).catch((error) => {
-        console.log("error", error);
+        $log.debug("error", error);
     });
     */
 

@@ -17,11 +17,25 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
     /**
      * 
      */
-    $rootScope.getTranslation = function (keyword) {
-        return DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
+    $rootScope.getTranslation = function (keyword, args) {
+        let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
+        if (args) {
+            for (let i = 0; i < args.length; i++) {
+                template = template.replace(new RegExp("\\{" + i + "\\}", "g"), args[i]);
+            }
+        }
+        return template;
     }
 
-    console.log($rootScope.getTranslation('holaaa'), "???????");
+    $rootScope.buildErrorObject = (keyword, error) => {
+        return {
+            message: $rootScope.getTranslation(keyword),
+            causedBy: error
+        }
+    }
+
+    $log.debug($rootScope.getTranslation('holaaa'), "???????");
+    $log.debug($rootScope.getTranslation("test_template", ['giorgio', '10']));
 
     /**
      * 
@@ -40,8 +54,8 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
         ElectronService.openUsersDocumentDirectoryChangeDialog(event);
     }
 
-    $timeout(function(){
-      $(".sparkley:first").sparkleh();
+    $timeout(function () {
+        $(".sparkley:first").sparkleh();
     }, 2000);
 
     /**
