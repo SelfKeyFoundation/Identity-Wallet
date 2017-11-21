@@ -43,8 +43,8 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     //let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/UTC--2017-11-02T08:26:36.621Z--603fc6daa3dbb1e052180ec91854a7d6af873fdb');
     prm.then((wallet) => {
         $log.debug("keysrore read");
-
-        EtherScanService.getBalance("0xD96969247B51187da3bf6418B3ED39304ae2006c").then((data)=>{
+        
+        EtherScanService.getBalance(wallet.getAddress()).then((data)=>{
             console.log(">>>>>>>>", data);
         });
 
@@ -57,6 +57,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
             
             WalletService.loadTransactionCount().then((wallet)=>{
                 $log.debug("tx count load");
+                
                 // loaded wallet.nonceHex
                 let tokenSignedTX = WalletService.generateTokenRawTransaction(
                     "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens
