@@ -27,7 +27,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
             }
         },
         resolve: {
-            indexedDB: ($rootScope, $q) => {
+            /*indexedDB: ($rootScope, $q) => {
                 let defer = $q.defer();
                 
                 $rootScope.$on('indexed-db:ready', () => {
@@ -35,7 +35,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
                 });
     
                 return defer.promise;
-            },
+            },*/
             configStorage: ($rootScope, $q, ConfigStorageService) => {
                 return ConfigStorageService.load();
             }
