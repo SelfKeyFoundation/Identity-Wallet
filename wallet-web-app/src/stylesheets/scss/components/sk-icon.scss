@@ -1,0 +1,15 @@
+.sk-icon {
+    width: 36px;
+	height: 36px;
+	object-fit: contain;
+	opacity: 0.6;
+
+    &.help {
+        background-image: url('../../assets/images/icons/help.svg');
+    }
+
+    &.quit {
+        background-image: url('../../assets/images/icons/quit.svg');
+    }
+    
+}

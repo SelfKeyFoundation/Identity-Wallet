@@ -33,6 +33,7 @@ import TokenService from './services/token.service';
 
 import CountdownDirective from './directives/countdown.directive';
 import KycProfileImageDirective from './directives/kyc-profile-image.directive';
+import SkLoadingDirective from './directives/commons/sk-loading.directive';
 
 const requires = [
   'ngMaterial',
@@ -77,10 +78,22 @@ angular.module('kyc-wallet').service('TokenService', TokenService);
  */
 angular.module('kyc-wallet').directive('countdown', CountdownDirective);
 angular.module('kyc-wallet').directive('kycProfileImage', KycProfileImageDirective);
+angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
 /**
  * controllers
  */
+
+/**
+ * guest
+ */
+import GuestLayoutController from './controllers/guest/layout-controller.js';
+angular.module('kyc-wallet').controller('GuestLayoutController', GuestLayoutController);
+
+
+ /**
+  * member
+  */
 import MemberLayoutController from './controllers/member/layout-controller.js';
 
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';

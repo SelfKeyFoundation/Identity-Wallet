@@ -8,16 +8,62 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
     //$mdThemingProvider.generateThemesOnDemand(true);
     //$mdTheming.generateTheme('default');
 
+    /**
+     * Guest
+     */
     $stateProvider
+
     .state('guest', {
-        url: '/guest/welcome',
+        abstract: true,
         views: {
             main: {
-                templateUrl: 'guest/layout.html'
+                templateUrl: 'guest/layout.html',
+                controller: 'GuestLayoutController'
             }
         }
     })
+
+    .state('guest.welcome', {
+        url: '/guest/welcome',
+        views: {
+            main: {
+                templateUrl: 'guest/welcome.html' // Create Wallet | Import Wallet
+            }
+        }
+    })
+
+    // process layout
+    .state('guest.process', {
+        abstract: true,
+        views: {
+            main: {
+                templateUrl: 'guest/process/layout.html'
+            }
+        }
+    })
+
+    .state('guest.process.create-keystore', {
+        url: '/guest/process/create-keystore',
+        views: {
+            main: {
+                templateUrl: 'guest/process/create-keystore.html'
+            }
+        }
+    })
+
+    .state('guest.process.import-keystore', {
+        url: '/guest/process/import-keystore',
+        views: {
+            main: {
+                templateUrl: 'guest/process/import-keystore.html'
+            }
+        }
+    })
+
     
+    /**
+     * Member
+     */
     .state('member', {
         abstract: true,
         views: {
@@ -170,7 +216,11 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         }
     })
 
-    $urlRouterProvider.otherwise('/member/identity/main');
+
+    //$urlRouterProvider.otherwise('/member/identity/main');
+    $urlRouterProvider.otherwise('/guest/welcome');
+    //$urlRouterProvider.otherwise('/guest/process/create-keystore');
+    
 }
 
 export default appStates;

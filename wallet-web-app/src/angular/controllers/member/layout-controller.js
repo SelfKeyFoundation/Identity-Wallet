@@ -7,6 +7,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     $log.info('MemberLayoutController');
 
+    return;
     // POLYGON FOR TESTING
 
     const TEST_PRIVATE_KEY = "f48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1";

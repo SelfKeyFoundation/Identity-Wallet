@@ -5,6 +5,75 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
 
   $log.debug('ConfigFileService Initialized');
 
+  // publicKey : data
+  const store = {
+    settings: {
+      userDataFolder: ""
+    },
+    wallets: {
+      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": { 
+        name: "Giorgi's Public key",
+        idAttributes: {
+          documents: [],
+          contacts: []
+        }
+      }
+    }
+  };
+
+  /**
+   * Test Documents
+   */
+  store
+    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+    .idAttributes
+    .documents.push({
+      id: generateId(), 
+      type: { id: 1, name: 'Passport' }, 
+      name: 'US Passport', 
+      attestations: 1, 
+      privacy: 1, 
+      filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
+      isDefault: 1
+    });
+
+  store
+    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+    .idAttributes
+    .documents.push({
+      id: generateId(), 
+      type: { id: 2, name: 'ID Card' }, 
+      name: 'GE ID Card', 
+      attestations: 1, 
+      privacy: 1, 
+      filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
+      isDefault: 0
+    });
+
+  /**
+   * Test Contacts
+   */
+  store
+    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+    .idAttributes
+    .contacts.push({
+      id: generateId(), 
+      type: { id: 3, name: 'Phone' }, 
+      value: '+58 441 334 92 67', 
+      status: 1, 
+      privacy: 1, 
+      isDefault: 1
+    });
+
+
+
+
+
+
+
+
+    
+  // TODO - remove
   const PRIVATE_KEYS_STORE = "PrivateKeysStore";
   const CONTACT_INFOS_STORE = "ContactInfosStore";
   const DOCUMENTS_STORE = "DocumentsStore";

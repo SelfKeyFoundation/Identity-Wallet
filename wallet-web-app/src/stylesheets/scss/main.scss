@@ -17,6 +17,13 @@
 @import './components/kyc-dialog.scss';
 @import './components/kyc-profile-image.scss';
 
+@import './components/sk-icon.scss';
+@import './components/sk-loading.scss';
+@import './components/sk-box.scss';
+@import './components/sk-button.scss';
+@import './components/sk-icon-button.scss';
+@import './components/sk-vertical-devider.scss';
+
 .bg-gradient {
     background-image: -webkit-gradient(
         linear,
@@ -34,6 +41,14 @@
 
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5eaf1', endColorstr='#dfe3e2',GradientType=0 ); /* IE6-9 */
     background: linear-gradient(top, #d5eaf1 0%,#dfe3e2 100%); /* W3C */
+}
+
+.gradient-1 {
+    background-image: linear-gradient(121deg, #2b3540, #1e262e);
+}
+
+.gradient-3 {
+    background-image: linear-gradient(274deg, #08bccd, #2da1f8);
 }
 
 .marketplace-row {
@@ -75,5 +90,122 @@ $buttonColor: rgba(255,255,255,1);
     outline: none;
 }
     
+
+.guest-welcome-layout {
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/images/bgs/background.jpg');
+    object-fit: contain;
+    background-position: center center;
+
+    > .content {
+        > .logo {
+            background-image: url('../../assets/images/icons/selfkey.svg'); 
+            width: 57px; 
+            height: 65px;
+        }
+
+        > .header {
+            text-transform: uppercase;
+            margin-top: 24px; 
+            color: #fff; 
+            font-family: 'OrbitronMedium'; 
+            font-size: 26px; 
+            font-weight: 500; 
+            letter-spacing: 4px;
+        }
+
+        > .subheader {
+            text-transform: uppercase;
+            margin-top: 13px;
+            color: #0abbd0; 
+            font-family: 'ProximaNova'; 
+            font-size: 16px; 
+            font-weight: 500; 
+            letter-spacing: 3px;
+        }
+
+        > .create-button {
+            margin-top: 44px;
+            width: 350px;
+            height: 52px;
+        }
+
+        > .import-button {
+            margin-top: 36px; 
+            width: 350px; 
+            height: 52px;
+        }
+    }
+
+    > .footer {
+
+    }
+}
+
+
+
+
+
+.kycw-container {
+    position: relative;
+    width: 400px;
+    height: 500px;
+
+    .top-layer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+        background-color: #262f39;
+        border: solid 1px #303c49;
+        z-index: 2;
+    }
     
-    
+    .shadow {
+        position: absolute;
+        left: 30px;
+        top: 20px;
+        right: 30px;
+        bottom: -13px;
+        border-radius: 4px;
+        -webkit-filter: blur(20px);
+        filter: blur(20px);
+        background-color: #000000;
+        z-index: 1;
+    }
+}
+
+
+
+.kycw-container {
+    >.header {
+        height: 65px;
+        border-radius: 4px;
+        background-image: linear-gradient(to bottom, #27313b, #1e262e);
+        box-shadow: inset 0 -1px 0 0 #303c49;
+    }
+
+    position: relative;
+    display: inline-block;
+    width: 400px;
+	height: 539.1px;
+	border-radius: 4px;
+	background-color: #262f39;
+	border: solid 1px #303c49;
+
+    &:before {
+        position: absolute;
+        display: inline-block;
+        content: "";
+        z-index: -1 !important;
+        width: 90%;
+        height: 90%;
+        border-radius: 4px;
+        -webkit-filter: blur(20px);
+        filter: blur(20px);
+        background-color: #000000;
+        left: 5%;
+        top: 12%;
+    }
+}

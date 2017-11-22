@@ -1,0 +1,20 @@
+sk-loading(header="Loading...", sub-header="please wait for a while", ng-if="$root.loadingPromise.$$state.status === 0")
+
+.guest-welcome-layout(layout-fill, layout="column", ng-if="$root.loadingPromise.$$state.status !== 0")
+    .header
+    .content(flex, layout="column", layout-align="center center") 
+        .logo
+        .header selfkey
+        .subheader blockchain identity wallet
+        .sk-button.filled-blue.create-button
+            span.primary create new wallet
+        .sk-button.outline-blue.import-button
+            span.secondary import
+    .footer(layout="row", layout-align="center center")
+        .sk-icon-button(style="margin-right: 44px;")
+            .sk-icon.help
+            span Help
+        .sk-vertical-devider-1
+        .sk-icon-button(style="margin-left: 44px;")
+            .sk-icon.quit
+            span Quit
