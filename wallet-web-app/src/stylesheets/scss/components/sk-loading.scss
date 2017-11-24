@@ -3,7 +3,7 @@ $glowingColor: #000;
 .sk-loading {
     position: relative;
     margin: 0;
-
+    overflow: hidden;
     width: 100%;
     max-width: 100%;
     height: 100%;
@@ -35,7 +35,7 @@ $glowingColor: #000;
         background-position: center center;
         background-image: url('../../assets/images/icons/swirl.svg');
         background-repeat: no-repeat; 
-    
+        background-size: contain;
         object-fit: contain;
     
         animation-name: sk-loading-animation;
