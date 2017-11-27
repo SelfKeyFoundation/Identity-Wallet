@@ -1,25 +1,25 @@
 div(layout-fill, layout="column", layout-align="center center")
     img(src="assets/images/icons/selfkey.svg", alt="")
-    .sk-white-header-text(style="margin-top: 24px;") selfkey
-    .sk-blue-subheader-text(style="margin-top: 12px;") blockchain identitiy wallet
+    .sk-white-header-text(style="margin-top: 24px; user-select: none;") selfkey
+    .sk-blue-subheader-text(style="margin-top: 12px; user-select: none;") blockchain identitiy wallet
 
     #message-container(layout="column", layout-align="center center" style="width: 40%; height: 48px;")
 
     .sk-box.shadowed(style="width: 40%;")
-        .header 
-            span Create Basic Template
+        .header
+            span(style="user-select: none;") Create Basic Template
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
-            .sk-input-container(style="margin: 12px 0 12px 0;")
+            .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
                 label Full Name
                 input.sk-input(type="text", name="fullName", ng-model="basicInfo['full-name'].value")
-            .sk-input-container(style="margin: 12px 0 12px 0;")
+            .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
                 label Email
                 input.sk-input(type="text", name="email", ng-model="basicInfo['email'].value")
-            .sk-input-container(style="margin: 12px 0 12px 0;")
+            .sk-input-container(style="margin: 12px 0 12px 0 ;user-select: none;")
                 label Phone Number
                 input.sk-input(type="text", name="phoneNumber", ng-model="basicInfo['phone-number'].value")
-            
-            .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
-                span(style="color: #fff") Create Basic Template
 
-    .sk-hyperlink.sk-text(style="margin-top: 32px; color: #fff;") I'll do that later
+            .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
+                span(style="color: #fff; user-select: none;") Create Basic Template
+
+    .sk-hyperlink.sk-text(style="margin-top: 32px; color: #fff; user-select: none;") I'll do that later

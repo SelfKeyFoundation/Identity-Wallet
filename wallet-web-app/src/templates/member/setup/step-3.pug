@@ -1,6 +1,6 @@
 div(layout-fill, layout="column", layout-align="center center")
-    
-    .sk-text-header(style="width: 90%; font-family: ProximaNovaRegular; font-size: 24px; line-height: 1.5; text-align: left; color: #ffffff;") Verify your identity
+
+    .sk-text-header(style="width: 90%; font-family: ProximaNovaRegular; font-size: 24px; line-height: 1.5; text-align: left; color: #ffffff; user-select: none;") Verify your identity
 
     #message-container(layout="column", layout-align="center center" style="width: 90%; height: 28px;")
 
@@ -27,7 +27,7 @@ div(layout-fill, layout="column", layout-align="center center")
             div(layout="row", layout-align="start center", style="margin-top: 30px;")
                 .sk-button.outline-blue(ng-click="nextStep($event, basicInfoForm)", style="z-index: 1;")
                     span(style="color: #0dc7dd") Next Step
-                .sk-hyperlink.sk-text(style="color: #fff; text-align: center; margin-left: 12px;") I'm not ready
+                .sk-hyperlink.sk-text(style="color: #fff; user-select: none;text-align: center; margin-left: 12px;") I'm not ready
 
         .sk-box
             .content(name="basicInfoForm", layout="column", style="padding: 24px;")

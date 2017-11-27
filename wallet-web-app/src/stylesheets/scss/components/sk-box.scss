@@ -31,12 +31,14 @@
     >.content {
         >.header {
             font-size: 21px;
+            user-select: none;
         }
 
         >.sub-header {
             font-size: 16px;
             opacity: 0.8;
             color: #93b0c1;
+            user-select: none;
         }
     }
 
