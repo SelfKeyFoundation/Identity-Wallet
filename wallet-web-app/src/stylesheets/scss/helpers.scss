@@ -1,4 +1,18 @@
 /**
+ *
+ */
+ .transition-anim {
+    &.ng-enter {
+        transition: .5s;
+        opacity: 0;
+    }
+
+    &.ng-enter-active {
+        opacity: 1;
+    }
+}
+
+/**
  * MARGINS
  */
  .no-margins{
@@ -83,63 +97,36 @@
     font-weight: bold;
 }
 
-/**
- * FONT-SIZES
- */
- .font-size-1 {
-     font-size: 14px;
- }
+.sk-white-header-text {
+    font-family: OrbitronMedium;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: normal;
+}
 
-/**
- * ICON-SIZES
- */
- // (Material Icons)
- .material-icons.size-1{
-    font-size: 16px;
- }
+.sk-blue-header-text {
+	font-family: ProximaNovaRegular;
+	font-size: 36px;
+	color: #0dc7dd;
+}
 
- .material-icons.size-2{
-    font-size: 20px;
- }
-
- .material-icons.size-3{
-    font-size: 22px;
- }
-
- // Ionic Icons
-.icon.size-1 {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    text-align: center;
+.sk-blue-subheader-text {
+    font-family: ProximaNovaRegular;
+	font-size: 16px;
+	line-height: 1.5;
+	letter-spacing: 3px;
+    color: #0abbd0;
+    text-transform: uppercase;
+    letter-spacing: normal;
 }
 
 /**
  * COLORS
  */
-.color-primary{
-    color: $primaryColor;
-}
 
-.color-secondary{
-    color: $secondaryColor;
-}
-
-.color-red {
-    color: #F44336;
-}
-
-.color-orange {
-    color: #FF9800;
-}
-
-.color-green {
-    color: #4CAF50;
-}
-
-.color-blue {
-    color: #2196F3;
-}
 
 /**
  * CURSORS
@@ -155,29 +142,6 @@
      width: 100%;
  }
 
- /**
-  *
-  */
-.link-primary {
-    cursor: pointer;
-    color: $primaryColor;
-    font-weight: 500;
-    text-decoration: none;
-
-    &:hover {
-        color: $secondaryColor; 
-    }
-}
-
-.link-secondary {
-    cursor: pointer;
-    color: $secondaryColor;
-    font-weight: bold;
-
-    &:hover {
-        color: #fff; 
-    }
-}
 
 /**
  * Background Colors

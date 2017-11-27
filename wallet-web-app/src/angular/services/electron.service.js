@@ -16,14 +16,16 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
   let ElectronService = function () {
     this.ipcRenderer = ipcRenderer;
 
-    this.readConfig = function() {
-        const filepath = localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
-        return makeCall('readConfig', { filepath: filepath });
+    this.initDataStore = function () {
+      return makeCall('initDataStore');
     }
 
-    this.saveConfig = function(data) {
-      const filepath = localStorageService.get(CONFIG.constants.localStorageKeys.USER_DOCUMENTS_STORAGE_PATH);
-      return makeCall('saveConfig', { filepath: filepath, data: data });
+    this.readDataStore = function() {
+        return makeCall('readDataStore');
+    }
+
+    this.saveDataStore = function(data) {
+      return makeCall('saveDataStore', { data: data });
     }
 
     /**

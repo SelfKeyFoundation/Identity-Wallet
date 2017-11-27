@@ -58,6 +58,11 @@ class EthUtils {
     static decimalToHex (dec) {
         return new BigNumber(dec).toString(16);
     }
+
+    static bufferToHex (buffer) {
+        return ethUtil.bufferToHex(ethUtil.privateToAddress(buffer));
+    }
+
     static hexToDecimal (hex) {
         if(hex == '0x') return 0;
         return new BigNumber(EthUtils.sanitizeHex(hex)).toString();

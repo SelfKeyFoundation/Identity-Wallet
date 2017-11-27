@@ -1,18 +1,44 @@
 .sk-box {
+    position: relative;
+    display: inline-block;
+    //width: 400px;
+	//height: 539.1px;
+	border-radius: 4px;
+	background-color: #262f39;
+    border: solid 1px #303c49;
+    
     >.header {
         height: 65px;
         border-radius: 4px;
         background-image: linear-gradient(to bottom, #27313b, #1e262e);
         box-shadow: inset 0 -1px 0 0 #303c49;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+
+        > span {
+            opacity: 0.83;
+            font-family: ProximaNovaRegular;
+            font-size: 19px;
+            line-height: 1.26;
+            color: #ffffff;    
+        }
     }
 
-    position: relative;
-    display: inline-block;
-    width: 400px;
-	height: 539.1px;
-	border-radius: 4px;
-	background-color: #262f39;
-	border: solid 1px #303c49;
+    >.content {
+        >.header {
+            font-size: 21px;
+        }
+
+        >.sub-header {
+            font-size: 16px;
+            opacity: 0.8;
+            color: #93b0c1;
+        }
+    }
 
     &.shadowed {
         &:before {
@@ -30,4 +56,18 @@
             top: 12%;
         }
     }
+
+    &.center-divider {
+        &:before {
+            width: 1px;
+            height: 296px;
+            content: "";
+            background-image: linear-gradient(to bottom, #273142, #364357);
+            position: absolute;
+            left: 50%;
+            bottom: 0%;
+        }
+    }
 }
+
+

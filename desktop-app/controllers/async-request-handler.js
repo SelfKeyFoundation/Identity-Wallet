@@ -5,22 +5,74 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+    const settings = require('electron-settings');
+    const fs = require('fs');
 
-    controller.readConfig = function (event, actionId, actionName, args) {
-        const settings = require('electron-settings');
-        console.log(args);
-        // TODO: config name should be set somewhere
-        settings.setPath(args.filepath + '/idwallet.json');
+    const storeFileName = 'main-store.json';
+    const userDataDirectoryPath = app.modules.electron.app.getPath('userData'); 
+    const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+    const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
+
+    console.log(userDataDirectoryPath);
+
+    controller.readDataStore = function (event, actionId, actionName, args) {
+        let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+
+        settings.setPath(storeFilePath);
+
         const data = settings.getAll();
-        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data );
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
     }
 
-    controller.saveConfig = function (event, actionId, actionName, args) {
-        const settings = require('electron-settings');
-        // TODO: config name should be set somewhere
-        settings.setPath(args.filepath + '/idwallet.json');
+    controller.saveDataStore = function (event, actionId, actionName, args) {
+        let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+
+        settings.setPath(storeFilePath);
+
         const data = settings.setAll(args.data);
-        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data );
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
+    }
+
+    controller.initDataStore = function (event, actionId, actionName, args) {
+        let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+
+        settings.setPath(storeFilePath);
+
+        if (!fs.existsSync(walletsDirectoryPath)) {
+            fs.mkdir(walletsDirectoryPath);
+        }
+
+        if (!fs.existsSync(documentsDirectoryPath)) {
+            fs.mkdir(documentsDirectoryPath);
+        }
+
+        // check file exists
+        if (!fs.existsSync(storeFilePath)) {
+            // read content and return    
+            settings.setAll({
+                settings: {
+                    storeFilePath: storeFilePath,
+                    documentsDirectoryPath: documentsDirectoryPath
+                },
+                idAttributes: {
+                    documents: [],
+                    contacts: []
+                },
+                wallets: {}
+            });
+        }
+
+        const storeData = settings.getAll();
+
+        console.log("storeData", storeData);
+
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
+    }
+
+    // TODO - ??
+    controller.createDirectory = function (event, actionId, actionName, args) {
+        fs.mkdir(path.resolve(walletsDirectoryPath, args.publickKey));
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
     }
 
     controller.checkFileStat = function (event, actionId, actionName, args) {
@@ -105,6 +157,7 @@ module.exports = function (app) {
     }
 
     controller.moveFile = function (event, actionId, actionName, args) {
+        console.log(">>>>", args);
         args.dest += '/' + path.basename(args.src);
         if (args.copy) {
             app.controllers.helpers.copyFile(args.src, args.dest, (err) => {
@@ -139,7 +192,13 @@ module.exports = function (app) {
             };
 
             let keyObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
-            keythereum.exportToFile(keyObject, args.keyStoreSrc);
+
+            let keyStoreFilePath = path.resolve(walletsDirectoryPath, keyObject.address);
+            if (!fs.existsSync(keyStoreFilePath)) {
+                fs.mkdir(keyStoreFilePath);
+            }
+
+            keythereum.exportToFile(keyObject, keyStoreFilePath);
 
             console.log("createEthereumAddress", keyObject);
 
@@ -151,7 +210,39 @@ module.exports = function (app) {
         try {
             keythereum.importFromFile(args.filePath, function (keyObject) {
                 console.log("importEtherKeystoreFile", keyObject);
-                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+                let keyStoreFilePath = path.resolve(walletsDirectoryPath, keyObject.address);
+                if (!fs.existsSync(keyStoreFilePath)) {
+                    fs.mkdir(keyStoreFilePath);
+                }
+
+                let keystoreFileName = path.basename(args.filePath);
+                let keyStoreFileNewPath = path.resolve(keyStoreFilePath, keystoreFileName);
+
+                if (!fs.existsSync(keyStoreFileNewPath)) {
+                    app.controllers.helpers.copyFile(args.filePath, keyStoreFileNewPath, (err) => {
+                        if (!err) {
+                            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+                            settings.setPath(storeFilePath);
+    
+                            let storeData = settings.getAll();
+    
+                            if(!storeData.wallets[keyObject.address]){
+                                storeData.wallets[keyObject.address] = {
+                                    name: "Unnamed Wallet",
+                                    keystoreFilePath: keyStoreFileNewPath
+                                }
+                                settings.setAll(storeData);
+                            }
+    
+                            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+                        } else {
+                            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+                        }
+                    });
+
+                } else {
+                    app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+                }
             });
         } catch (e) {
             console.log(e.message);
@@ -163,14 +254,14 @@ module.exports = function (app) {
         console.log("unlockEtherKeystoreObject", args);
         try {
             let privateKey = keythereum.recover(args.password, args.keystoreObject);
-            if(privateKey){
+            if (privateKey) {
                 app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
-            }else{
-                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, {message: "authentication code mismatch"}, null);
+            } else {
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, { message: "authentication code mismatch" }, null);
             }
-            
+
         } catch (e) {
-            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, {message: "authentication code mismatch"}, null);
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, { message: "authentication code mismatch" }, null);
         }
     }
 

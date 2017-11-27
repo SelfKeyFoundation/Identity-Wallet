@@ -1,0 +1,48 @@
+.sk-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: flex-start;
+    max-width: 100%;
+    
+    label {
+        margin-bottom: 8px;
+        font-family: ProximaNovaSemibold;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 2.0;
+        letter-spacing: 1.5px;
+        color: #93b0c1;
+        text-transform: uppercase;
+        letter-spacing: normal;
+    }
+
+    .sk-input {
+        padding: 12px;
+    
+        font-family: Courier;
+        font-size: 18px;
+        line-height: 1.33;
+        letter-spacing: 0.3px;
+        text-align: center;
+        color: #ffffff;
+        
+        border-radius: 4px;
+        box-shadow: 0px 0px 5px 1px #0dc7dd;
+        
+        outline-width: 0;
+        border: none;
+    
+        background-color: #1e262e;
+    
+        > span {
+            font-family: Courier;
+            font-size: 18px;
+            line-height: 1.33;
+            letter-spacing: 0.3px;
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+}

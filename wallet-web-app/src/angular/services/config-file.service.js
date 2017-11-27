@@ -1,18 +1,19 @@
 'use strict';
 
-function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
+function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService) {
   'ngInject';
 
   $log.debug('ConfigFileService Initialized');
 
   // publicKey : data
-  const store = {
+  let store = {
     settings: {
       userDataFolder: ""
     },
     wallets: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": { 
+      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": {
         name: "Giorgi's Public key",
+        keystoreFilePath: "",
         idAttributes: {
           documents: [],
           contacts: []
@@ -21,209 +22,202 @@ function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
     }
   };
 
+  let isReady = false;
+
   /**
    * Test Documents
    */
-  store
-    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
-    .idAttributes
-    .documents.push({
-      id: generateId(), 
-      type: { id: 1, name: 'Passport' }, 
-      name: 'US Passport', 
-      attestations: 1, 
-      privacy: 1, 
-      filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
-      isDefault: 1
-    });
-
-  store
-    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
-    .idAttributes
-    .documents.push({
-      id: generateId(), 
-      type: { id: 2, name: 'ID Card' }, 
-      name: 'GE ID Card', 
-      attestations: 1, 
-      privacy: 1, 
-      filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
-      isDefault: 0
-    });
-
-  /**
-   * Test Contacts
-   */
-  store
-    .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
-    .idAttributes
-    .contacts.push({
-      id: generateId(), 
-      type: { id: 3, name: 'Phone' }, 
-      value: '+58 441 334 92 67', 
-      status: 1, 
-      privacy: 1, 
-      isDefault: 1
-    });
-
-
-
-
-
-
-
-
-    
-  // TODO - remove
-  const PRIVATE_KEYS_STORE = "PrivateKeysStore";
-  const CONTACT_INFOS_STORE = "ContactInfosStore";
-  const DOCUMENTS_STORE = "DocumentsStore";
-
-  // 1 Load file if exists
-  //   or create default config
-  const defaultConfig = {
-    PrivateKeysStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": { name: "Test Key 1" },
-      "0xd357905d32a29bc346df7d74962f2a5100053d61": { name: "Test Key 2" }
-    },
-    ContactInfosStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": [
-          { id: generateId(), type: 'Phone', value: '+58 441 334 92 67', status: 1, privacy: 1, isDefault: 1 },
-          { id: generateId(), type: 'Email', value: 'cbruguera@gmail.com', status: 1, privacy: 0, isDefault: 1 }
-        ]
-    },
-    DocumentsStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": [
-        { id: generateId(), type: 'Passport', name: 'US Passport', attestations: 1, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 1 },
-        { id: generateId(), type: 'Passport', name: 'Passatore Venezolano', attestations: 0, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 },
-        { id: generateId(), type: 'Passport', name: 'Cedula De Identidad', attestations: 1, privacy: 0, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 }
-      ]
-    }
-  };
-
-  let memoryStore = defaultConfig;
-  let loading = true;
-  let electronAvailable = ElectronService.ipcRenderer;
-
-  if (electronAvailable) {
-    ElectronService.readConfig().then((data) => {
-      loading = false;
-      console.log("Loading config file", data);
-      
-      if (Object.keys(data).length !== 0) {
-        memoryStore = data;
+  function populateTemp() {
+    store.wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"] = {
+      name: "Giorgi's Public key",
+      idAttributes: {
+        documents: [],
+        contacts: []
       }
+    }
 
-      $rootScope.$broadcast('config-file-loaded');
-    }).catch((error) => console.error(error) );
+    store
+      .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+      .idAttributes
+      .documents.push({
+        id: generateId(),
+        type: { id: 1, name: 'Passport' },
+        name: 'US Passport',
+        attestations: 1,
+        privacy: 1,
+        filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
+        isDefault: 1
+      });
+
+    store
+      .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+      .idAttributes
+      .documents.push({
+        id: generateId(),
+        type: { id: 2, name: 'ID Card' },
+        name: 'GE ID Card',
+        attestations: 1,
+        privacy: 1,
+        filePath: '5abb838bbb2e566c236f4be6f283541bf8866b68/documents/test-1.pdf',
+        isDefault: 0
+      });
+
+    /**
+     * Test Contacts
+     */
+    store
+      .wallets["0x5abb838bbb2e566c236f4be6f283541bf8866b68"]
+      .idAttributes
+      .contacts.push({
+        id: generateId(),
+        type: { id: 3, name: 'Phone' },
+        value: '+58 441 334 92 67',
+        status: 1,
+        privacy: 1,
+        isDefault: 1
+      });
   }
-  else {
-    console.warn("ElectronService not available");
-    loading = false;
-    $rootScope.$broadcast('config-file-loaded');
-  }
-  
-  
+
 
   function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
     return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
   }
 
   class ConfigFileStore {
-    constructor ($log) {
+    constructor() {
       this.generateId = generateId;
     }
 
-    contactInfos_get (privateKey) {
-      return new Promise((resolve, reject) => {
-        if (loading) {
-          $rootScope.$on('config-file-loaded', function () {
-            const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
-            if (data) {
-              resolve(data);
-            }
-            else {
-              reject('Not found');
-            }
-          });
-        } 
-        else {
-          const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
-          if (data) {
-            resolve(data);
-          }
-          else {
-            reject('Not found');
-          }
-        }
-      });
+    init() {
+      let defer = $q.defer();
+
+      if (ElectronService.ipcRenderer) {
+        ElectronService.initDataStore().then((data) => {
+          store = data;
+
+          // custom delay - to make visible loading
+          $timeout(() => {
+            defer.resolve(store);
+            $rootScope.$broadcast('config-file-loaded');
+            isReady = true;
+          }, 3000);
+
+        }).catch((error) => {
+          // TODO
+          defer.reject(error);
+        });
+      } else {
+        defer.reject({ message: 'electron not available' });
+      }
+      return defer.promise;
     }
 
-    contactInfos_save (privateKey, data) {
-      return new Promise((resolve, reject) => {
-        const key = memoryStore[CONTACT_INFOS_STORE][privateKey];
-
-        if (key) {
-          memoryStore[CONTACT_INFOS_STORE][privateKey] = data;
-
-          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
-            console.log("saved config file", data);
-          });
-
-          resolve(memoryStore[CONTACT_INFOS_STORE][privateKey]);
-        }
-        else {
-          reject('Not found');
-        }
-      });
+    save() {
+      return ElectronService.saveDataStore(store);
     }
 
-    documents_get (privateKey) {
-      return new Promise((resolve, reject) => {
-        if (loading) {
-          $rootScope.$on('config-file-loaded', function () {
-            const data = memoryStore[DOCUMENTS_STORE][privateKey];
-            if (data) {
-              resolve(data);
-            }
-            else {
-              reject('Not found');
-            }
-          });
-        }
-        else {
-          const data = memoryStore[DOCUMENTS_STORE][privateKey];
-          if (data) {
-            resolve(data);
-          }
-          else {
-            reject('Not found');
-          }
-        }
+    load() {
+      let defer = $q.defer();
+      ElectronService.readDataStore().then((data) => {
+        store = data;
+        defer.resolve(store);
+      }).catch((error) => {
+        // TODO
+        defer.reject(error);
       });
+      return defer.promise;
     }
 
-    documents_save (privateKey, data) {
-      return new Promise((resolve, reject) => {
-        const key = memoryStore[DOCUMENTS_STORE][privateKey];
-
-        if (key) {
-          memoryStore[DOCUMENTS_STORE][privateKey] = data;
-          
-          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
-            console.log("saved config file", data);
-          });
-          
-          resolve(memoryStore[DOCUMENTS_STORE][privateKey]);
-        }
-        else {
-          reject('Not found');
-        }
-      });
+    getStore() {
+      return store;
     }
-    
+
+    /**
+     * Important - Documet object structure is not defined yet.. 
+     * we don't know it yet
+     */
+
+    addContact(contact) {
+      if (contact._id) {
+        let cont = this.findContactById(contact._id);
+        cont.value = contact.value;
+      } else {
+        contact._id = this.generateId();
+        store.idAttributes.contacts.push(contact);
+      }
+    }
+
+    findContactsByType(type){
+      console.log(type, store.idAttributes.contacts);
+      let result = [];
+      for (let i in store.idAttributes.contacts) {
+        let item = store.idAttributes.contacts[i];
+        if (item.type === type) {
+          result.push(item);
+        }
+      }
+      return result;
+    }
+
+    findContactById(id) {
+      for (let i in store.idAttributes.contacts) {
+        let item = store.idAttributes.contacts[i];
+        if (item._id === id) {
+          return item;
+        }
+      }
+    }
+
+    addDocument(document) {
+      if (document._id) {
+        let doc = this.findDocumentById(document._id);
+        doc.filePath = document.filePath;
+      } else {
+        document._id = this.generateId();
+        store.idAttributes.documents.push(document);
+      }
+    }
+
+    findDocumentById(id) {
+      for (let i in store.idAttributes.documents) {
+        let doc = store.idAttributes.documents[i];
+        if (doc._id === id) {
+          return doc;
+        }
+      }
+    }
+
+    getDocumentsByType(type) {
+      let result = [];
+      for (let i in store.idAttributes.documents) {
+        let doc = store.idAttributes.documents[i];
+        if (doc.type === type) {
+          result.push(doc);
+        }
+      }
+      return result;
+    }
+
+    getWalletPublicKeys() {
+      return Object.keys(store.wallets);
+    }
+
+    getWalletsMetaData() {
+      let keys = this.getWalletPublicKeys();
+      let result = [];
+      for (let i in keys) {
+        let key = keys[i];
+        result.push({
+          name: store.wallets[key].name,
+          keystoreFilePath: store.wallets[key].keystoreFilePath,
+          publicKey: key
+        });
+      }
+      return result;
+    }
   }
 
-  return new ConfigFileStore($log);
+  return new ConfigFileStore();
 }
 
 export default ConfigFileService;

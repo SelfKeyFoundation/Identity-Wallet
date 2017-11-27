@@ -10,7 +10,7 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
 
   $log.info('TokenService Initialized');
 
-  const TOKENS_MAP = {};
+  let TOKENS_MAP = {};
 
   let totalInitialized = 0;
   let loadBalanceQueue = [];
@@ -18,6 +18,8 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
   class TokenService {
 
     constructor() {
+      this.isInitialized = false;
+
       $interval(()=>{
         if(loadBalanceQueue.length > 0){
           let token = loadBalanceQueue[0].token;
@@ -36,21 +38,26 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
         enumerable: true,
         value: token
       });
+      
+      //TOKENS_MAP[token.symbol] = token;
       $rootScope.$broadcast(EVENTS.NEW_TOKEN_ADDED, token);
       return TOKENS_MAP;
     }
 
-    init(userAddress) {
-      for (let i in TOKENS_CONTRACT_ARRAY) {
-        let t = TOKENS_CONTRACT_ARRAY[i];
-        let token = new Token(t.address, userAddress, t.symbol, Number(t.decimal), t.type);
-        this.addTokenToMap(t.symbol, token);
+    init() {
+      if(!this.isInitialized){
+        for (let i in TOKENS_CONTRACT_ARRAY) {
+          let t = TOKENS_CONTRACT_ARRAY[i];
+          let token = new Token(t.address, t.symbol, Number(t.decimal), t.type);
+          this.addTokenToMap(t.symbol, token);
+        }
+        this.isInitialized = true;
       }
     }
 
-    loadBalanceBySymbol(symbol) {
+    loadBalanceBySymbol(userAddress, symbol) {
       let token = TOKENS_MAP[symbol];
-      let data = token.generateBalanceData();
+      let data = token.generateBalanceData(userAddress);
       //loadBalanceQueue.push({token: token, data: data});
       
       /*
@@ -62,11 +69,11 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
       */
     }
 
-    loadAllbalance() {
+    loadAllbalance(userAddress) {
       for (let key in TOKENS_MAP) {
         if (TOKENS_MAP.hasOwnProperty(key)) {
           let t = TOKENS_MAP[key];
-          this.loadBalanceBySymbol(t.symbol)
+          this.loadBalanceBySymbol(userAddress, t.symbol)
         }
       }
     }

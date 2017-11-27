@@ -10,6 +10,13 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
     /**
      * 
      */
+    $rootScope.viewState = {
+        
+    }
+
+    /**
+     * 
+     */
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
 
     $rootScope.selectedLanguage = "en";

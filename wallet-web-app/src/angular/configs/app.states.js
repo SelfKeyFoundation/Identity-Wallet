@@ -23,6 +23,16 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         }
     })
 
+    .state('guest.loading', {
+        url: '/guest/loading',
+        views: {
+            main: {
+                templateUrl: 'guest/loading.html',
+                controller: 'GuestLoadingController'
+            }
+        }
+    })
+
     .state('guest.welcome', {
         url: '/guest/welcome',
         views: {
@@ -55,11 +65,31 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         url: '/guest/process/import-keystore',
         views: {
             main: {
-                templateUrl: 'guest/process/import-keystore.html'
+                templateUrl: 'guest/process/import-keystore.html',
+                controller: 'GuestImportKeystoreController'
             }
         }
     })
 
+    .state('guest.process.unlock-keystore', {
+        url: '/guest/process/unlock-keystore',
+        views: {
+            main: {
+                templateUrl: 'guest/process/unlock-keystore.html',
+                controller: 'GuestUnlockKeystoreController'
+            }
+        }
+    })
+
+    .state('guest.process.view-keystore', {
+        url: '/guest/process/view-keystore',
+        views: {
+            main: {
+                templateUrl: 'guest/process/view-keystore.html',
+                controller: 'GuestViewKeystoreController'
+            }
+        }
+    })
     
     /**
      * Member
@@ -68,7 +98,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/layout.html',
+                templateUrl: 'member/main-layout.html',
                 controller: 'MemberLayoutController'
             }
         },
@@ -84,6 +114,61 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
             },*/
             configStorage: ($rootScope, $q, ConfigStorageService) => {
                 return ConfigStorageService.load();
+            }
+        }
+    })
+
+    /**
+     * setup
+     */
+    .state('member.setup', {
+        abstract: true,
+        views: {
+            main: {
+                templateUrl: 'member/setup-layout.html'
+            }
+        }
+    })
+
+    .state('member.setup.view-keystore', {
+        url: '/member/setup/view-keystore',
+        views: {
+            main: {
+                templateUrl: 'member/setup/view-keystore.html',
+                controller: 'MemberSetupViewKeystoreController'
+            }
+        }
+    })
+
+    .state('member.setup.step-1', {
+        url: '/member/setup/step-1',
+        views: {
+            main: {
+                templateUrl: 'member/setup/step-1.html',
+                controller: 'MemberSetupStep1Controller'
+            },
+        },
+        params: {
+            skipStep2: false
+        }
+    })
+
+    .state('member.setup.step-2', {
+        url: '/member/setup/step-2',
+        views: {
+            main: {
+                templateUrl: 'member/setup/step-2.html',
+                controller: 'MemberSetupStep2Controller'
+            }
+        }
+    })
+
+    .state('member.setup.step-3', {
+        url: '/member/setup/step-3/:step',
+        views: {
+            main: {
+                templateUrl: 'member/setup/step-3.html',
+                controller: 'MemberSetupStep3Controller'
             }
         }
     })
@@ -218,7 +303,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
 
 
     //$urlRouterProvider.otherwise('/member/identity/main');
-    $urlRouterProvider.otherwise('/guest/welcome');
+    $urlRouterProvider.otherwise('/guest/loading');
     //$urlRouterProvider.otherwise('/guest/process/create-keystore');
     
 }

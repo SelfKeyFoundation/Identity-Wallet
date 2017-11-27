@@ -2,14 +2,21 @@
     width: 36px;
 	height: 36px;
 	object-fit: contain;
-	opacity: 0.6;
+    opacity: 0.6;
+    font-family: monospace !important;
 
-    &.help {
-        background-image: url('../../assets/images/icons/help.svg');
+    > img {
+        width: 36px;
+        height: 36px;
+
+        &.small {
+            width: 12px !important;
+            height: 12px !important;    
+        }
     }
 
-    &.quit {
-        background-image: url('../../assets/images/icons/quit.svg');
+    &.small {
+        width: 12px !important;
+        height: 12px !important;    
     }
-    
 }

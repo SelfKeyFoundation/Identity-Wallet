@@ -52,7 +52,7 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
       let promise = ElectronService.importEtherKeystoreFile(filePath);
       promise.then((keystoreObject) => {
         wallet = new Wallet(keystoreObject);
-        TokenService.init(wallet.getAddress());
+        TokenService.init();
 
         // Broadcast about changes
         $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
@@ -105,9 +105,9 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
     loadTokenBalance(symbol) {
       // TODO check Address
       if (symbol) {
-        TokenService.loadBalanceBySymbol(symbol);
+        TokenService.loadBalanceBySymbol(wallet.getAddress(), symbol);
       } else {
-        TokenService.loadAllbalance();
+        TokenService.loadAllbalance(wallet.getAddress());
       }
     }
 

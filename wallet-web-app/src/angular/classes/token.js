@@ -9,9 +9,8 @@ class Token {
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
 
-    constructor(contractAddress, userAddress, symbol, decimal, type) {
+    constructor(contractAddress, symbol, decimal, type) {
         this.contractAddress = contractAddress;
-        this.userAddress = userAddress;
         this.symbol = symbol;
         this.decimal = decimal;
         this.type = type;
@@ -49,8 +48,8 @@ class Token {
         return Token.generateContractData(toAddress, value, this.decimal);
     }
 
-    generateBalanceData() {
-        return Token.generateBalanceData(this.userAddress, this.contractAddress);
+    generateBalanceData(userAddress) {
+        return Token.generateBalanceData(userAddress, this.contractAddress);
     }
 }
 
