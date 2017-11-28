@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-list.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-list.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/partials/sk-documents-setup.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/partials/sk-documents-setup.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" />
-    </list>
+    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="" />
     <ignored path="Identity-Wallet.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +32,8 @@
       <file leaf-file-name="sk-box.scss" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="39" column="27" lean-forward="false" selection-start-line="39" selection-start-column="27" selection-end-line="39" selection-end-column="27" />
+            <state relative-caret-position="210">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -368,12 +356,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511804824232</updated>
-      <workItem from="1511805576430" duration="3342000" />
+      <workItem from="1511805576430" duration="4287000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3342000" />
+    <option name="totallyTimeSpent" value="4287000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -655,8 +643,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="39" column="27" lean-forward="false" selection-start-line="39" selection-start-column="27" selection-end-line="39" selection-end-column="27" />
+        <state relative-caret-position="210">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
