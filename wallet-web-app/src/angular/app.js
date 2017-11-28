@@ -106,6 +106,9 @@ angular.module('kyc-wallet').controller('GuestLayoutController', GuestLayoutCont
 import GuestLoadingController from './controllers/guest/loading-controller.js';
 angular.module('kyc-wallet').controller('GuestLoadingController', GuestLoadingController);
 
+import GuestCreateKeystoreController from './controllers/guest/process/create-keystore-controller.js';
+angular.module('kyc-wallet').controller('GuestCreateKeystoreController', GuestCreateKeystoreController);
+
 import GuestImportKeystoreController from './controllers/guest/process/import-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
 

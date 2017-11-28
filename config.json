@@ -1,7 +1,7 @@
 {
     "default": {
-        "debug": false,
-        "dev": false,
+        "debug": true,
+        "dev": true,
         "app": {
             "name": "IdentityWallet",
             "title": "Identity Wallet",
