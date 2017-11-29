@@ -93,6 +93,9 @@ angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
 import SkSelectIfDirective from './directives/commons/sk-select-if.directive';
 angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);
 
+import SkLinearProgressDirective from './directives/commons/sk-linear-progress.directive';
+angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
+
 /**
  * controllers
  */
