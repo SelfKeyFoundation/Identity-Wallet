@@ -44,7 +44,7 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
     $scope.selectFile = (event) => {
         let fileSelectPromise = ElectronService.openFileSelectDialog(event);
         fileSelectPromise.then((filePath) => {
-            if(!filePath) return;
+            if (!filePath) return;
 
             let store = ConfigFileService.getStore();
 
@@ -67,7 +67,6 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
                 ConfigFileService.addDocument(doc);
                 ConfigFileService.save().then(() => {
                     $rootScope.initialSetupProgress[$scope.currentStep] = true;
-                    $log.info($rootScope.initialSetupProgress);
                 });
             }).catch((error) => {
                 $log.info(error, "?????");
@@ -84,7 +83,8 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
                 $state.go('member.setup.step-3', { step: 'utility-bill' });
                 break;
             case 'utility-bill':
-                // TODO
+                // TODO - mark setup.status as 'done'
+                $state.go('member.dashboard.main');
                 break;
         }
 
