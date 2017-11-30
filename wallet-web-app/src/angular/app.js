@@ -173,29 +173,13 @@ angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetu
 
 import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
 
-<<<<<<<
-HEAD
 
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
-
-
-import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
-import AddEditContactInfoDialog from './controllers/member/identity/dialogs/add-edit-contcat-info.js';
-import AddEditDocumentDialog from './controllers/member/identity/dialogs/add-edit-document.js';
-import TestSignatureDialog from './controllers/member/identity/dialogs/test-signature.js'; // TEST
-
-import MemberProfileMainController from './controllers/member/profile-controller.js';
-
-======
-=
-    angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
 
 /**
  * settings
  */
->>>>>>>
-6
-d9d3566f4d34db149c5e43d61e823817126082e
+
 import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
 
 angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
