@@ -80,13 +80,11 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
         $timeout(() => {
             defer.resolve();
-        }, 5000);
+        }, 3000);
+
 
         return defer.promise;
     };
-
-
-
 
 
     $scope.nextStep = (event, form) => {

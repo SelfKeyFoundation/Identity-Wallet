@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-show-loading.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
     </list>
     <ignored path="Identity-Wallet.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,11 +24,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sk-show-loading.directive.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sk-show-loading.directive.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="16" lean-forward="false" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
+            <state relative-caret-position="180">
+              <caret line="12" column="41" lean-forward="false" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="unlock-keystore.pug" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" column="16" lean-forward="false" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="step-3-controller.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="215">
+              <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -39,18 +57,18 @@
       <file leaf-file-name="step-3.pug" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="24" column="74" lean-forward="false" selection-start-line="24" selection-start-column="74" selection-end-line="24" selection-end-column="74" />
+            <state relative-caret-position="318">
+              <caret line="27" column="74" lean-forward="false" selection-start-line="27" selection-start-column="66" selection-end-line="27" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sk-show-loading.scss" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sk-show-loading.scss" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-show-loading.scss">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
-              <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+              <caret line="15" column="5" lean-forward="false" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -117,7 +135,6 @@
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-list.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-hyperlink.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/partials/sk-documents-setup.scss" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" />
@@ -129,14 +146,15 @@
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-loading.directive.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-show-loading.scss" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
       </list>
     </option>
   </component>
@@ -481,12 +499,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511804824232</updated>
-      <workItem from="1511805576430" duration="36411000" />
+      <workItem from="1511805576430" duration="39188000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36411000" />
+    <option name="totallyTimeSpent" value="39188000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -502,7 +520,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -626,14 +644,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="16" lean-forward="false" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -846,22 +856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="16" lean-forward="false" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="84" column="29" lean-forward="false" selection-start-line="84" selection-start-column="29" selection-end-line="84" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -902,14 +896,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="24" column="74" lean-forward="false" selection-start-line="24" selection-start-column="74" selection-end-line="24" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-form-inputs.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-113">
@@ -937,7 +923,39 @@
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-show-loading.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <caret line="15" column="5" lean-forward="false" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="27" column="74" lean-forward="false" selection-start-line="27" selection-start-column="66" selection-end-line="27" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="16" lean-forward="false" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="41" lean-forward="false" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
           <folding />
         </state>
       </provider>
