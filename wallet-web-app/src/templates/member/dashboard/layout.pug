@@ -1,0 +1,11 @@
+.dashboard-layout.transition-anim(layout="column", layout-fill, style="height: 100vh; position: relative;")
+    .toolbar(layout="row", layout-align="center center")
+        .logo(style="margin-left: 50px;")
+            img(src="assets/images/icons/selfkey.svg", alt="", style="height: 44px;")
+        .middle(flex)
+            | middle
+        .right
+            .sk-vertical-devider-2(style="height: 40px;")
+            .main-menu
+                | menu
+    .content(layout="column", ui-view="main")

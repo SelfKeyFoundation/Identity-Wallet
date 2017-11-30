@@ -99,7 +99,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/main-layout.html',
+                templateUrl: 'member/layout.html',
                 controller: 'MemberLayoutController'
             }
         },
@@ -126,7 +126,7 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/setup-layout.html'
+                templateUrl: 'member/setup/layout.html'
             }
         }
     })
@@ -175,138 +175,31 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
     })
 
     /**
-     * Identity
+     * Dashboard
      */
-    .state('member.identity', {
+    .state('member.dashboard', {
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/identity/layout.html',
-                controller: 'MemberIdentityMainController'
+                templateUrl: 'member/dashboard/layout.html'
             }
         }
     })
 
-    .state('member.identity.main', {
-        url: '/member/identity/main',
+    .state('member.dashboard.main', {
+        url: '/member/dashboard/main',
         views: {
             main: {
-                templateUrl: 'member/identity/main.html'
+                templateUrl: 'member/dashboard/main.html'
             }
         }
     })
-
-    /**
-     * Profile Individual
-     */
-    .state('member.profile-individual', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/profile/individual-layout.html'
-            }
-        }
-    })
-
-    .state('member.profile-individual.main', {
-        url: '/member/profile/individual/main',
-        views: {
-            main: {
-                templateUrl: 'member/profile/individual/main.html'
-            }
-        }
-    })
-
-    /**
-     * Profile Company
-     */
-    .state('member.profile-company', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/profile/company-layout.html'
-            }
-        }
-    })
-
-    .state('member.profile-company.main', {
-        url: '/member/profile/company/main/:companyId',
-        views: {
-            main: {
-                templateUrl: 'member/profile/company/main.html'
-            }
-        }
-    })
-
-    /**
-     * marketplace
-     */
-    .state('member.marketplace', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/marketplace/layout.html'
-            }
-        }
-    })
-
-    .state('member.marketplace.main', {
-        url: '/member/marketplace/main',
-        views: {
-            main: {
-                templateUrl: 'member/marketplace/main.html'
-            }
-        }
-    })
-
-    /**
-     * keychain
-     */
-    .state('member.keychain', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/keychain/layout.html'
-            }
-        }
-    })
-
-    .state('member.keychain.main', {
-        url: '/member/keychain/main',
-        views: {
-            main: {
-                templateUrl: 'member/keychain/main.html'
-            }
-        }
-    })
-
-    /**
-     * 
-     */
-    .state('member.settings', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/settings/layout.html'
-            }
-        }
-    })
-
-    .state('member.settings.main', {
-        url: '/member/settings/main',
-        views: {
-            main: {
-                templateUrl: 'member/settings/main.html',
-                controller: "MemberSettingsMainController"
-            }
-        }
-    })
-
 
     //$urlRouterProvider.otherwise('/member/identity/main');
-    $urlRouterProvider.otherwise('/guest/loading');
+    //$urlRouterProvider.otherwise('/guest/loading');
     //$urlRouterProvider.otherwise('/guest/process/create-keystore');
     
+    $urlRouterProvider.otherwise('/member/dashboard/main');
 }
 
 export default appStates;
