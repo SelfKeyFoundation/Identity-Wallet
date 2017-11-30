@@ -3,14 +3,16 @@
     border-style: solid;
     border-width: 1px;
     border-radius: 4px;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+    outline: none;
 
     cursor: pointer;
 
-    &.filled-blue {    
+    &.filled-blue {
         background-image: linear-gradient(309deg, #08bccd, #2da1f8);
         box-shadow: 0 2px 2px 0 #15222e;
         border-image-source: linear-gradient(335deg, #15d4e6, #48aefa);
@@ -51,5 +53,35 @@
             letter-spacing: 0.6px;
             color: #0dc7dd;
         }
+    }
+
+    .loading span {
+        animation-name: blink;
+        animation-duration: 1.4s;
+        animation-iteration-count: infinite;
+        animation-fill-mode: both;
+    }
+
+    .loading span:nth-child(2) {
+        animation-delay: .2s;
+    }
+
+    .loading span:nth-child(3) {
+        animation-delay: .4s;
+    }
+
+}
+
+@keyframes blink {
+    0% {
+        opacity: .2;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: .2;
     }
 }

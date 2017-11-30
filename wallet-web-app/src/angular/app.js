@@ -35,10 +35,10 @@ import WalletService from './services/wallet.service';
 import TokenService from './services/token.service';
 
 const requires = [
-  'ngMaterial',
-  'ui.router',
-  'templates',
-  'LocalStorageModule'
+    'ngMaterial',
+    'ui.router',
+    'templates',
+    'LocalStorageModule'
 ];
 
 /**
@@ -76,22 +76,38 @@ angular.module('kyc-wallet').service('TokenService', TokenService);
  * directives
  */
 import CountdownDirective from './directives/countdown.directive';
+
 angular.module('kyc-wallet').directive('countdown', CountdownDirective);
 
+
 import KycProfileImageDirective from './directives/kyc-profile-image.directive';
+
 angular.module('kyc-wallet').directive('kycProfileImage', KycProfileImageDirective);
 
-import SkLoadingDirective from './directives/commons/sk-loading.directive';
-angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
+
+// import SkLoadingDirective from './directives/commons/sk-loading.directive';
+//
+// angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
+
 
 import SkIconDirective from './directives/commons/sk-icon.directive';
+
 angular.module('kyc-wallet').directive('skIcon', SkIconDirective);
 
+
 import SkMessageDirective from './directives/commons/sk-message.directive';
+
 angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
 
+
 import SkSelectIfDirective from './directives/commons/sk-select-if.directive';
+
 angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);
+
+
+import skShowLoading from './directives/commons/sk-show-loading.directive';
+
+angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 
 /**
  * controllers
@@ -101,42 +117,47 @@ angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);
  * guest
  */
 import GuestLayoutController from './controllers/guest/layout-controller.js';
+
 angular.module('kyc-wallet').controller('GuestLayoutController', GuestLayoutController);
 
 import GuestLoadingController from './controllers/guest/loading-controller.js';
+
 angular.module('kyc-wallet').controller('GuestLoadingController', GuestLoadingController);
 
 import GuestCreateKeystoreController from './controllers/guest/process/create-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestCreateKeystoreController', GuestCreateKeystoreController);
 
 import GuestImportKeystoreController from './controllers/guest/process/import-keystore-controller.js';
+
 angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
 
 import GuestUnlockKeystoreController from './controllers/guest/process/unlock-keystore-controller.js';
+
 angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUnlockKeystoreController);
 
- /**
-  * member
-  */
+/**
+ * member
+ */
 import MemberLayoutController from './controllers/member/layout-controller.js';
 
 /**
  * setup
  */
 import MemberSetupViewKeystoreController from './controllers/member/setup/view-keystore-controller.js';
+
 angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', MemberSetupViewKeystoreController);
 
 import MemberSetupStep1Controller from './controllers/member/setup/step-1-controller.js';
+
 angular.module('kyc-wallet').controller('MemberSetupStep1Controller', MemberSetupStep1Controller);
 
 import MemberSetupStep2Controller from './controllers/member/setup/step-2-controller.js';
+
 angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetupStep2Controller);
 
 import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
+
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
-
-
-
 
 
 import MemberIdentityMainController from './controllers/member/identity/main-controller.js';
