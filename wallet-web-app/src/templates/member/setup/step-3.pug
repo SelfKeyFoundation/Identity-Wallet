@@ -27,7 +27,7 @@ div(layout-fill, layout="column", layout-align="center center")
             div(layout="row", layout-align="start center", style="margin-top: 30px;")
                 .sk-button.outline-blue.sk-show-loading(ng-click="nextStep($event, basicInfoForm)", style="z-index: 1;", sk-show-loading="myTestPromise.$$state.status")
                     span(style="color: #0dc7dd") Next Step
-                .sk-hyperlink.sk-text(style="color: #fff; user-select: none;text-align: center; margin-left: 12px;") I'm not ready
+                .sk-hyperlink.sk-text(style="color: #fff; text-align: center; margin-left: 12px;", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
 
         .sk-box
             .content(name="basicInfoForm", layout="column", style="padding: 24px;")

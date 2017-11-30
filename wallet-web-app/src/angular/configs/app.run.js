@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -45,25 +45,12 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
     $log.debug($rootScope.getTranslation("test_template", ['giorgio', '10']));
 
     /**
-     * 
+     * global functions
      */
-    AnimationService.init();
-
-    $rootScope.openUrlInNewWindow = function (url) {
-        window.open(url)
+    $rootScope.skipInitialIdAttributesSetup = (event) => {
+        // TODO - mark setup.status as 'skipped'
+        $state.go('member.dashboard.main');
     }
-
-    $rootScope.test2 = function () {
-        window.open("http://token.selfkey.org/");
-    }
-
-    $rootScope.test3 = function (event) {
-        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
-    }
-
-    $timeout(function () {
-        $(".sparkley:first").sparkleh();
-    }, 2000);
 
     /**
      * 

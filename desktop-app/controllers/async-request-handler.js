@@ -48,8 +48,13 @@ module.exports = function (app) {
 
         // check file exists
         if (!fs.existsSync(storeFilePath)) {
-            // read content and return    
             settings.setAll({
+                setup: {
+                    status: 'in-progress' // in-progress | skipped | done
+                },
+                statistics: {
+                    appUsed: 0
+                },
                 settings: {
                     storeFilePath: storeFilePath,
                     documentsDirectoryPath: documentsDirectoryPath

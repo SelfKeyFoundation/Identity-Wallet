@@ -2,10 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-linear-progress.directive.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-linear-progress.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/layouts/dashboard-layout.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-linear-progress.pug" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/dashboard/layout.pug" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/dashboard/main.pug" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/common/dialogs/legal-terms-and-conditions-controller.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/common/dialogs/user-documents-storage-path-controller.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/identity/dialogs/add-edit-contcat-info.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/identity/dialogs/add-edit-document.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/identity/dialogs/test-signature.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/identity/main-controller.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/services/animation.service.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/common/dialogs/legal-tems-and-conditions.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/common/dialogs/user-documents-storage-path.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/affilation/layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/affilation/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/affilation/tables/processes.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/dashboard-layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/boxes/contacts.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/boxes/documents.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/dialogs/add-edit-contact-info.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/dialogs/add-edit-document.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/dialogs/test-signature.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/tables/contacts.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/tables/documents.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/keychain/boxes/my-keys.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/keychain/layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/keychain/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/keychain/tables/my-keys.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/profile/company-layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/profile/company/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/profile/individual-layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/profile/individual/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/settings/layout.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/settings/main.pug" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/settings/tables/settings.pug" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/main-layout.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/layout.pug" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup-layout.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/layout.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.electron.js" afterPath="$PROJECT_DIR$/config.electron.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.json" afterPath="$PROJECT_DIR$/config.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop-app/controllers/async-request-handler.js" afterPath="$PROJECT_DIR$/desktop-app/controllers/async-request-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.run.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.run.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.states.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.states.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
     </list>
     <ignored path="Identity-Wallet.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +76,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sk-show-loading.directive.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sk-show-loading.directive.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -47,8 +99,8 @@
       <file leaf-file-name="step-3-controller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+            <state relative-caret-position="200">
+              <caret line="84" column="29" lean-forward="false" selection-start-line="84" selection-start-column="29" selection-end-line="84" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -57,8 +109,18 @@
       <file leaf-file-name="step-3.pug" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="27" column="74" lean-forward="false" selection-start-line="27" selection-start-column="66" selection-end-line="27" selection-end-column="74" />
+            <state relative-caret-position="335">
+              <caret line="34" column="33" lean-forward="false" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="444">
+              <caret line="119" column="32" lean-forward="false" selection-start-line="119" selection-start-column="7" selection-end-line="119" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -86,7 +148,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>If you’re not ready</find>
       <find>Upload Your Passport</find>
       <find>sk-text-header</find>
       <find>hyper</find>
@@ -116,6 +177,7 @@
       <find>$scope.currentStep</find>
       <find>keyfram</find>
       <find>nextStep</find>
+      <find>HEAD</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -135,8 +197,6 @@
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-list.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-hyperlink.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/partials/sk-documents-setup.scss" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-message.pug" />
@@ -144,17 +204,19 @@
         <option value="$PROJECT_DIR$/config.json" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-button.directive.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-loading.directive.js" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-show-loading.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
       </list>
     </option>
   </component>
@@ -227,25 +289,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="angular" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Identity-Wallet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Identity-Wallet" type="462c0819:PsiDirectoryNode" />
-              <item name="wallet-web-app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="angular" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Identity-Wallet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Identity-Wallet" type="462c0819:PsiDirectoryNode" />
-              <item name="wallet-web-app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="angular" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="dialogs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Identity-Wallet" type="b2602c69:ProjectViewProjectNode" />
@@ -499,12 +542,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511804824232</updated>
-      <workItem from="1511805576430" duration="39188000" />
+      <workItem from="1511805576430" duration="39560000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39188000" />
+    <option name="totallyTimeSpent" value="39560000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -552,14 +595,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/main.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/identity/tables/documents.pug">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -760,34 +795,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="111" column="3" lean-forward="false" selection-start-line="111" selection-start-column="3" selection-end-line="111" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-message.pug">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="49" lean-forward="false" selection-start-line="1" selection-start-column="3" selection-end-line="1" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="64" lean-forward="false" selection-start-line="3" selection-start-column="58" selection-end-line="3" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="49" column="65" lean-forward="false" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="65" />
           <folding />
         </state>
       </provider>
@@ -856,14 +867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="30" lean-forward="false" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54720">
@@ -928,22 +931,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="27" column="74" lean-forward="false" selection-start-line="27" selection-start-column="66" selection-end-line="27" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -956,6 +943,62 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="41" lean-forward="false" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="38" column="21" lean-forward="true" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="84" column="29" lean-forward="false" selection-start-line="84" selection-start-column="29" selection-end-line="84" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="34" column="33" lean-forward="false" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="25" lean-forward="true" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-linear-progress.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/angular/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="119" column="32" lean-forward="false" selection-start-line="119" selection-start-column="7" selection-end-line="119" selection-end-column="32" />
           <folding />
         </state>
       </provider>

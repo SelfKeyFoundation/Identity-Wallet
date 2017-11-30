@@ -1,0 +1,36 @@
+.dashboard-layout {
+    
+    > .toolbar {
+        background-color: #262f39;
+        height: 76px;
+
+        border-bottom: 1px solid #303c49;
+
+        > .logo {
+            height: 44px;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            margin-left: 50px;
+        }
+
+        > .right {
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+
+            > .sk-vertical-devider-2 {
+                height: 55px;
+            }
+
+            > .main-menu {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                margin-right: 50px;
+                margin-left: 50px;
+            }
+        }
+
+    }
+
+}

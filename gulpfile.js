@@ -6,6 +6,7 @@ const runSequence = require('run-sequence');
 const watch = require('gulp-watch');
 const path = require('path');
 const browserSync = require('browser-sync').create();
+const electron = require('electron-connect').server.create();
 
 const env = process.env.NODE_ENV;
 const config = JSON.parse(fs.readFileSync('./config.json'));
@@ -37,4 +38,17 @@ gulp.task('default', ['watch:webapp'], function() {
 		  port: 5001
 		}
 	  });
+});
+
+
+// TODO
+gulp.task('dev:desktop-app',  ['build:webapp'], () => {
+	// Start browser process
+	electron.start();
+
+	// Restart browser process
+	gulp.watch('./wallet-desktop-app/**/*', electron.restart);
+
+	// Reload renderer process
+	gulp.watch(['./wallet-web-app/dist/**/*'], electron.reload);
 });
