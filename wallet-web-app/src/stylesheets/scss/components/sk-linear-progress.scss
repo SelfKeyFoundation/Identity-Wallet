@@ -1,12 +1,13 @@
 .sk-linear-progress {
+    $sk-linear-progress-height: 4px;
     width: 100%;
-    height: 4px;
+    height: $sk-linear-progress-height;
     border-radius: 2px;
     display: block;
     position: relative;
     background-color: #414f63;
     .fill {
-        height: 4px;
+        height: $sk-linear-progress-height;
         border-radius: 2px;
         background-image: linear-gradient(to left, #2bb415, #5ad946);
       }
