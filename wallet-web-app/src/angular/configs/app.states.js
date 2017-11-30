@@ -56,7 +56,8 @@ function appStates ($urlRouterProvider, $stateProvider, $mdThemingProvider, CONF
         url: '/guest/process/create-keystore',
         views: {
             main: {
-                templateUrl: 'guest/process/create-keystore.html'
+                templateUrl: 'guest/process/create-keystore.html',
+                controller: 'GuestCreateKeystoreController'
             }
         }
     })

@@ -30,6 +30,29 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
       });
     }
 
+    createKeystoreFile(password) {
+      let defer = $q.defer();
+
+      let promise = ElectronService.generateEthereumWallet(password);
+      promise.then((data) => {
+        if (data && data.keystore) {
+          wallet = new Wallet(data.keystore);
+          wallet.setPrivateKey(data.privateKey);
+          
+          TokenService.init();
+          // Broadcast about changes
+          $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
+          defer.resolve(wallet);
+        }
+      }).catch((error) => {
+        // TODO
+        defer.reject(error);
+      });
+
+      return defer.promise;
+    }
+
+
     importUsingKeystoreFileDialog() {
       let defer = $q.defer();
 

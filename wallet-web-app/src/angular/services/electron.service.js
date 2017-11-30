@@ -46,7 +46,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
       return makeCall('checkFileStat', { src: filePath });
     }
 
-    this.openDirectorySelectDialog = function (event) {
+    this.openDirectorySelectDialog = function () {
       return makeCall('openDirectorySelectDialog', null);
     }
 

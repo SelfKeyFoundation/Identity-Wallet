@@ -9,7 +9,7 @@ module.exports = function (app) {
     const fs = require('fs');
 
     const storeFileName = 'main-store.json';
-    const userDataDirectoryPath = app.modules.electron.app.getPath('userData'); 
+    const userDataDirectoryPath = app.modules.electron.app.getPath('userData');
     const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
     const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
@@ -191,18 +191,34 @@ module.exports = function (app) {
                 }
             };
 
-            let keyObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
+            let keystore = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
 
-            let keyStoreFilePath = path.resolve(walletsDirectoryPath, keyObject.address);
-            if (!fs.existsSync(keyStoreFilePath)) {
-                fs.mkdir(keyStoreFilePath);
+            let keystoreFilePath = path.resolve(walletsDirectoryPath, keystore.address);
+            if (!fs.existsSync(keystoreFilePath)) {
+                fs.mkdir(keystoreFilePath);
             }
 
-            keythereum.exportToFile(keyObject, keyStoreFilePath);
+            let outputPath = keythereum.exportToFile(keystore, keystoreFilePath);
+            let keystoreFileName = path.basename(outputPath);
 
-            console.log("createEthereumAddress", keyObject);
+            console.log("createEthereumAddress", keystore);
 
-            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+            settings.setPath(storeFilePath);
+
+            let storeData = settings.getAll();
+
+            if (!storeData.wallets[keystore.address]) {
+                storeData.wallets[keystore.address] = {
+                    name: "Unnamed Wallet",
+                    keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName)
+                }
+                settings.setAll(storeData);
+            }
+
+            let privateKey = keythereum.recover(args.password, keystore);
+
+            app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { keystore: keystore, privateKey: privateKey, keystoreFilePath: keystoreFilePath });
         });
     }
 
@@ -223,17 +239,17 @@ module.exports = function (app) {
                         if (!err) {
                             let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
                             settings.setPath(storeFilePath);
-    
+
                             let storeData = settings.getAll();
-    
-                            if(!storeData.wallets[keyObject.address]){
+
+                            if (!storeData.wallets[keyObject.address]) {
                                 storeData.wallets[keyObject.address] = {
                                     name: "Unnamed Wallet",
                                     keystoreFilePath: keyStoreFileNewPath
                                 }
                                 settings.setAll(storeData);
                             }
-    
+
                             app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
                         } else {
                             app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);

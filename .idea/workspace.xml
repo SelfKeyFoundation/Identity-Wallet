@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="" />
+    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/guest/process/create-keystore-controller.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/layouts/member-layout.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/dashboard-layout.pug" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop-app/controllers/async-request-handler.js" afterPath="$PROJECT_DIR$/desktop-app/controllers/async-request-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.states.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/configs/app.states.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/services/electron.service.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/services/electron.service.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/services/wallet.service.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/services/wallet.service.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-loading.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-loading.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
+    </list>
     <ignored path="Identity-Wallet.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,11 +51,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sk-button.scss" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sk-button.scss" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="52" column="34" lean-forward="true" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+              <caret line="52" column="34" lean-forward="false" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="create-keystore.pug" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="29" column="46" lean-forward="true" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -131,7 +153,6 @@
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-hyperlink.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/partials/sk-documents-setup.scss" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/unlock-keystore.pug" />
-        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" />
@@ -149,6 +170,7 @@
         <option value="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
         <option value="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
+        <option value="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug" />
       </list>
     </option>
   </component>
@@ -503,12 +525,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511804824232</updated>
-      <workItem from="1511805576430" duration="34382000" />
+      <workItem from="1511805576430" duration="34834000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34382000" />
+    <option name="totallyTimeSpent" value="34834000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -672,14 +694,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="20" column="26" lean-forward="false" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="46" lean-forward="true" selection-start-line="11" selection-start-column="46" selection-end-line="11" selection-end-column="46" />
           <folding />
         </state>
       </provider>
@@ -900,14 +914,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="150" column="4" lean-forward="false" selection-start-line="150" selection-start-column="4" selection-end-line="150" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -943,7 +949,23 @@
     <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="52" column="34" lean-forward="true" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+          <caret line="52" column="34" lean-forward="false" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/create-keystore.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="46" lean-forward="true" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
           <folding />
         </state>
       </provider>
