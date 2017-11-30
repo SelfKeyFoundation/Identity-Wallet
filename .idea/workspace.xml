@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-show-loading.directive.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-show-loading.pug" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/directives/commons/sk-loading.directive.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-loading.pug" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.electron.js" afterPath="$PROJECT_DIR$/config.electron.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.json" afterPath="$PROJECT_DIR$/config.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" afterPath="$PROJECT_DIR$/wallet-web-app/src/angular/controllers/member/setup/step-3-controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-box.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/components/sk-button.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/helpers.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" afterPath="$PROJECT_DIR$/wallet-web-app/src/stylesheets/scss/main.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-message.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/common/directives/sk-message.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/guest/process/import-keystore.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-1.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-2.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/step-3.pug" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" afterPath="$PROJECT_DIR$/wallet-web-app/src/templates/member/setup/view-keystore.pug" />
-    </list>
+    <list default="true" id="5825c001-af3d-4c8d-b6c3-9ddf700722fd" name="Default" comment="" />
     <ignored path="Identity-Wallet.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
