@@ -35,6 +35,10 @@
         border: none;
     
         background-color: #1e262e;
+
+        &:focus {
+            box-shadow: 0px 0px 6px 2px #0dc7dd;
+        }
     
         > span {
             font-family: Courier;

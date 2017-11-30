@@ -63,6 +63,7 @@ $buttonColor: rgba(255, 255, 255, 1);
   z-index: 1;
   user-select: none;
   cursor: default;
+  outline: none;
 
   &:hover {
     color: #2da1f8;
