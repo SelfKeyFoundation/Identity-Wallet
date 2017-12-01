@@ -33,7 +33,6 @@
     "electron-installer-redhat": "0.5.0",
     "electron-packager": "8.7.2",
     "electron-winstaller": "2.6.3",
-    "electron-connect": "0.6.2",
     "gulp": "3.9.1",
     "gulp-angular-templatecache": "2.0.0",
     "gulp-pug": "3.3.0",

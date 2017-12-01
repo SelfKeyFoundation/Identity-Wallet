@@ -131,21 +131,29 @@
 /**
  * CURSORS
  */
- .cursor-pointer {
-     cursor: pointer !important;
- }
+.cursor-pointer {
+    cursor: pointer !important;
+}
 
 /**
  *
  */
- .full-width {
-     width: 100%;
- }
+.full-width {
+    width: 100%;
+}
 
 
 /**
  * Background Colors
  */
- .bg-color-primary {
-     background-color: #29303A !important;
- }
+.bg-color-primary {
+    background-color: #29303A !important;
+}
+
+/**
+ * deviders
+ */
+.sk-horizontal-devider {
+    height: 1px;
+    background-color: #303c49;
+}

@@ -1,7 +1,10 @@
 .dashboard-layout {
     
     > .toolbar {
+        position: fixed;
         background-color: #262f39;
+        z-index: 100;
+        width: 100%;
         height: 76px;
 
         border-bottom: 1px solid #303c49;
@@ -30,7 +33,9 @@
                 margin-left: 50px;
             }
         }
-
     }
 
+    > .content {
+        margin-top: 76px;
+    }
 }
