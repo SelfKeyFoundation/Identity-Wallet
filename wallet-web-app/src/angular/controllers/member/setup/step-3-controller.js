@@ -34,11 +34,11 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
     $scope.goToStep = (step) => {
-        $state.go('member.setup.step-3', { step: step });
+        $state.go('member.setup.step-3', {step: step});
     }
 
     $scope.goToBaseStep = () => {
-        $state.go('member.setup.step-1', { skipStep2: true });
+        $state.go('member.setup.step-1', {skipStep2: true});
     }
 
     $scope.selectFile = (event) => {
@@ -74,13 +74,28 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
         });
     }
 
+    $scope.functionWithPromise = function () {
+        let defer = $q.defer();
+
+        $timeout(() => {
+            defer.resolve();
+        }, 3000);
+
+
+        return defer.promise;
+    };
+
+
     $scope.nextStep = (event, form) => {
+        $scope.myTestPromise = $scope.functionWithPromise();
+
+        return;
         switch ($scope.currentStep) {
             case 'passport':
-                $state.go('member.setup.step-3', { step: 'national-id' });
+                $state.go('member.setup.step-3', {step: 'national-id'});
                 break;
             case 'national-id':
-                $state.go('member.setup.step-3', { step: 'utility-bill' });
+                $state.go('member.setup.step-3', {step: 'utility-bill'});
                 break;
             case 'utility-bill':
                 // TODO - mark setup.status as 'done'
@@ -89,6 +104,7 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
         }
 
     }
+
 
 };
 
