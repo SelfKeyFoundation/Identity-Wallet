@@ -10,6 +10,7 @@
         font-weight: 600;
         color: #93b0c1;
         text-transform: uppercase;
+        user-select: none;
     }
 
     >.setup-subheader {
@@ -17,6 +18,7 @@
         font-size: 18px;
         color: #ffffff;
         margin-top: 4px;
+        user-select: none;
     }
 
     >.boxes {
@@ -36,6 +38,7 @@
                 font-weight: 600; 
                 color: #ffffff; 
                 margin-top: 32px;
+                user-select: none;
             }
 
             > .sub-header {
@@ -43,6 +46,7 @@
                 font-size: 12px; 
                 color: #93b0c1; 
                 margin-top: 6px;
+                user-select: none;
             }
 
             &.clickable {
