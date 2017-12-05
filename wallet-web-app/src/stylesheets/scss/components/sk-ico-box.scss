@@ -1,0 +1,32 @@
+.sk-ico-box {
+    padding: 0;
+
+    .sk-ico-box__header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        height: inherit;
+
+        padding: 16px 30px;
+
+        span {
+            font-family: ProximaNovaRegular; 
+            font-size: 20px; 
+            line-height: 1.8; 
+            color: #ffffff; 
+            margin-left: 16px;
+        }
+    }
+
+    .sk-ico-box__content {
+        padding: 30px;
+
+        table {
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            line-height: 2.25;
+            color: #ffffff;
+        }
+    }
+}

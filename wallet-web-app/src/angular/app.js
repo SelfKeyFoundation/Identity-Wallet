@@ -108,6 +108,9 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 import SkTasksBoxDirective from './directives/commons/sk-tasks-box.directive';
 angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 
+import SkIcoBoxDirective from './directives/commons/sk-ico-box.directive';
+angular.module('kyc-wallet').directive('skIcoBox', SkIcoBoxDirective);
+
 
 /**
  * controllers
