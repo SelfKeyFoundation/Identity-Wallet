@@ -1,8 +1,14 @@
-function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService, ElectronService) {
+function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
     $log.info('MemberSetupStep3Controller', $stateParams, $rootScope.initialSetupProgress);
     $scope.currentStep = $stateParams.step;
+
+    /*
+    EtherScanService.getBalance($rootScope.wallet.getAddress()).then((balance)=>{
+        console.log(">>>>", balance);
+    });
+    */
 
     $scope.texts = {
         "passport": {
@@ -87,9 +93,8 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
 
     $scope.nextStep = (event, form) => {
-        $scope.myTestPromise = $scope.functionWithPromise();
+        //$scope.myTestPromise = $scope.functionWithPromise();
 
-        return;
         switch ($scope.currentStep) {
             case 'passport':
                 $state.go('member.setup.step-3', {step: 'national-id'});

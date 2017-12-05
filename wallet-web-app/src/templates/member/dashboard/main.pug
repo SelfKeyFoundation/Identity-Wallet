@@ -1,42 +1,145 @@
-// Balances
-div(layout="row", layout-align="center center", style="margin-top: 80px;")
-    .sk-box(style="width: 360px; height: 236px; margin-left: 15px; margin-right: 15px;")
-        span test 1
-        .sk-horizontal-devider
-        span test 2
-    
-    .sk-box(style="width: 360px; height: 236px; margin-left: 15px; margin-right: 15px;")
-        span test 1
-        .sk-horizontal-devider
-        span test 2
+.dashboard-layout__content-wrappper(layout="column", layout-align="start center")
 
-    .sk-box(style="width: 360px; height: 236px; margin-left: 15px; margin-right: 15px;")
-        span test 1
-        .sk-horizontal-devider
-        span test 2
+    // header
+    .dashboard-layout__content-header-section(layout="row", layout-align="start center")
+        h2.proxima.white SelfKey Dashboard
 
-// My Crypto
-.sk-box(style="width: 1140px; height: 422px; margin-top: 30px; margin-left: 15px; margin-right: 15px;")
-    span Test
-    .sk-horizontal-devider
-    span test
+    // balances
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.ethBalance}}", value-in-usd="${{$root.ethUsdBalance}} USD", address="{{$root.wallet.getAddress()}}")
+        sk-token-box(name="Unknown", symbol="unk", value="852.62781", value-in-usd="$44951.44 USD", address="3CCCXfH874ronv1uGKkCMDgW2ffLBQScro")
+        sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7")
 
-// alerts
-.sk-box(style="width: 1140px; height: 150px; margin-top: 30px; margin-left: 15px; margin-right: 15px;")
-    span Test
-    .sk-horizontal-devider
-    span test
+    // my crypto
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        .sk-box.my-cryptos-box(style="width: 100%; height: 422px; padding: 20px;")
+            .my-cryptos-box__header(layout="row")
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") My Crypto
+                button.sk-icon-button
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            h2.proxima.white In Progress - Waiting for Tato
 
-// reminders
-.sk-box(style="width: 1140px; height: 150px; margin-top: 30px; margin-left: 15px; margin-right: 15px;")
-    span Test
-    .sk-horizontal-devider
-    span test
+    // alerts
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        .sk-box.alerts-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .alerts-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Alerts
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="warning", size-class="icon-size-33x36")
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #ff6c00; margin-left: 16px;") Action Required  Zilliqa Token Sale:
+                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="notification", size-class="icon-size-33x36")
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #43c4a7; margin-left: 16px;") Subscribed to Zilliqa Notifications:
+                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
 
-// Transactions
-.sk-box(style="width: 1140px; height: 150px; margin-top: 30px; margin-left: 15px; margin-right: 15px;")
-    span Test
-    .sk-horizontal-devider
-    span test
+    // reminders
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        .sk-box.reminders-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .reminders-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Reminders
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .reminders-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="reminder", size-class="icon-size-33x36")
+                span.reminders-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
+                span.reminders-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+
+    // transactions
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .transactions-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .transactions-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="reminder", size-class="icon-size-33x36")
+                span.transactions-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
+                span.transactions-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+
+    .dashboard-layout__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
+        h2.proxima.white Upcoming ICOs
+
+    .dashboard-layout__content-section(layout="row", layout-align="center center")
+        .sk-box.token-details-box(style="height: initial; width: 33%;")
+            .header(style="background-color: #2a3540 !important; padding: 16px 30px;", layout="row", layout-align="center start")
+                .icon-box(style="width: 44px; height: 44px; border-radius: 9px; background-image: linear-gradient(338deg, #00a386, #37b69f);")
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff; margin-left: 16px;") Finom (FIN)
+            .content(style="padding: 30px;")
+                table(style="font-family: ProximaNovaRegular; font-size: 16px; line-height: 2.25; color: #ffffff;")
+                    tr
+                        td Project&nbsp;Type:
+                        td Token
+                    tr
+                        td Platform: 
+                        td Ethereum
+                    tr
+                        td Website:
+                        td Open
+                    tr
+                        td Category:
+                        td Finance
+                    tr
+                        td Total Supply:
+                        td 425,000,000
+                    tr
+                        td Whitepaper:
+                        td View
+
+        .sk-box.token-details-box(style="height: initial; width: 33%;")
+            .header(style="background-color: #2a3540 !important; padding: 16px 30px;", layout="row", layout-align="center start")
+                .icon-box(style="width: 44px; height: 44px; border-radius: 9px; background-image: linear-gradient(338deg, #00a386, #37b69f);")
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff; margin-left: 16px;") Finom (FIN)
+            .content(style="padding: 30px;")
+                table(style="font-family: ProximaNovaRegular; font-size: 16px; line-height: 2.25; color: #ffffff;")
+                    tr
+                        td Project&nbsp;Type:
+                        td Token
+                    tr
+                        td Platform: 
+                        td Ethereum
+                    tr
+                        td Website:
+                        td Open
+                    tr
+                        td Category:
+                        td Finance
+                    tr
+                        td Total Supply:
+                        td 425,000,000
+                    tr
+                        td Whitepaper:
+                        td View
 
 
+        .sk-box.token-details-box(style="height: initial; width: 33%;")
+            .header(style="background-color: #2a3540 !important; padding: 16px 30px;", layout="row", layout-align="center start")
+                .icon-box(style="width: 44px; height: 44px; border-radius: 9px; background-image: linear-gradient(338deg, #00a386, #37b69f);")
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff; margin-left: 16px;") Finom (FIN)
+            .content(style="padding: 30px;")
+                table(style="font-family: ProximaNovaRegular; font-size: 16px; line-height: 2.25; color: #ffffff;")
+                    tr
+                        td Project&nbsp;Type:
+                        td Token
+                    tr
+                        td Platform: 
+                        td Ethereum
+                    tr
+                        td Website:
+                        td Open
+                    tr
+                        td Category:
+                        td Finance
+                    tr
+                        td Total Supply:
+                        td 425,000,000
+                    tr
+                        td Whitepaper:
+                        td View

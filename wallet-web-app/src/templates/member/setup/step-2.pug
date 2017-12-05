@@ -33,17 +33,20 @@ div(layout-fill, layout="column", layout-align="center center")
 
                 .item
                     .bullet
-                        span 4
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['passport']")
+                        span(ng-if="!$root.initialSetupProgress.passport") 4
                     span Passport
 
                 .item
                     .bullet
-                        span 5
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['national-id']")
+                        span(ng-if="!$root.initialSetupProgress['national-id']") 5
                     span National ID
 
                 .item
                     .bullet
-                        span 6
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['utility-bill']")
+                        span(ng-if="!$root.initialSetupProgress['utility-bill']") 6
                     span Utility Bill
 
         div(layout="row", layout-align="center center", style="margin: 0 24px 24px 24px;")

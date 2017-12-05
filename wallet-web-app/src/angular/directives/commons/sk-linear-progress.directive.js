@@ -6,14 +6,18 @@ function SkLinearProgressDirective() {
         restrict: 'E',
         scope: {
             maxValue: '@',
-            value: '@' 
+            value: '@',
+            completedPercent: "="
         },
         link: (scope, element) => {
             var progressPercent = null;
             scope.isLoop = scope.maxValue && scope.value
             if (scope.isLoop) {
-                scope.progressPercent = scope.value*100/scope.maxValue + '%';
-            } 
+                let perc = scope.value*100/scope.maxValue;
+                scope.progressPercent = perc + '%';
+                scope.completedPercent = Math.floor(perc);
+            }
+
         },
         replace: true,
         templateUrl: 'common/directives/sk-linear-progress.html'

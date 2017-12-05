@@ -1,0 +1,18 @@
+.sk-box.sk-token-box
+    .sk-token-box__header(layout="row", layout-align="center start")
+        sk-icon(icon="{{symbol}}", size-class="sk-token-box__token")
+        sk-double-header.sk-token-box__text(header="{{name}}", sub-header="{{symbol}}", flex)
+        button.sk-icon-button
+            sk-icon(icon="plus", size-class="sk-token-box__plus")
+
+    .sk-token-box__body
+        span {{value}}
+        span {{valueInUsd}}
+
+    .sk-token-box__footer
+        .sk-horizontal-devider
+        .sk-token-box__footer_address-box(layout="row")
+            span.sk-token-box__footer_address-box_public-key(ng-if="!isJustCopied", ng-click="copy($event, address)") {{address}}
+            span.sk-token-box__footer_address-box_public-key(ng-if="isJustCopied") copied
+            //button.sk-button.small 
+                span copy

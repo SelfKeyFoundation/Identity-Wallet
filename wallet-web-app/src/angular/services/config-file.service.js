@@ -13,11 +13,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     wallets: {
       "0x5abb838bbb2e566c236f4be6f283541bf8866b68": {
         name: "Giorgi's Public key",
-        keystoreFilePath: "",
-        idAttributes: {
-          documents: [],
-          contacts: []
-        }
+        keystoreFilePath: ""
       }
     }
   };
@@ -214,6 +210,10 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
         });
       }
       return result;
+    }
+
+    getWalletsMetaDataByPublicKey (publicKey) {
+      return store.wallets[publicKey];
     }
   }
 
