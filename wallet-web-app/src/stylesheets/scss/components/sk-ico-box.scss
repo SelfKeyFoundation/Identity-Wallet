@@ -29,4 +29,13 @@
             color: #ffffff;
         }
     }
+
+    .sk-ico-box__footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        padding: 0 30px 15px 30px
+    }
 }
