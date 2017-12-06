@@ -286,6 +286,10 @@ module.exports = function (app) {
         }
     }
 
+    controller.closeApp = function (event, actionId, actionName, args) {
+        app.modules.electron.app.quit();
+    }
+
     controller.testCustomNode = function (event, actionId, actionName, args) {
         console.log("testCustomNode", args);
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });

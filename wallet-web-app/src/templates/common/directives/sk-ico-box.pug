@@ -1,0 +1,30 @@
+.sk-box.sk-ico-box
+    .header.sk-ico-box__header
+        sk-icon(icon="{{icon}}", size-class="icon-size-44x44")
+        span {{title}}
+
+    .sk-ico-box__content
+        table
+            tr
+                td Project&nbsp;Type:
+                td {{icoData.projectType}}
+            tr
+                td Platform: 
+                td {{icoData.platform}}
+            tr
+                td Website:
+                td {{icoData.website}}
+            tr
+                td Category:
+                td {{icoData.category}}
+            tr
+                td Total Supply:
+                td {{icoData.totalSupply}}
+            tr
+                td Whitepaper:
+                td {{icoData.whitepaper}}
+
+    .sk-ico-box__footer
+        .sk-button.small
+            span view
+

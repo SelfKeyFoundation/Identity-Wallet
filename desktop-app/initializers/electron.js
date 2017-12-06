@@ -37,15 +37,24 @@ function createWindow(app, next) {
 
 module.exports = {
     run: function (app, next) {
+
+        /*
+        app.modules.electron.app.on('window-all-closed', app.modules.electron.app.quit);
+        app.modules.electron.app.on('before-quit', () => {
+            app.win.removeAllListeners('close');
+            app.win.close();
+        });
+        */
+        
         app.modules.electron.app.on('window-all-closed', () => {
-            if (process.platform !== 'darwin') {
+            //if (process.platform !== 'darwin') {
                 app.modules.electron.app.quit()
-            }
+            //}
         });
 
         app.modules.electron.app.on('activate', () => {
             if (app.modules.electron.app.win === null) {
-                createWindow(next)
+                createWindow(app, next)
             }
         });
         

@@ -52,6 +52,10 @@ function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, Electron
         $state.go('member.dashboard.main');
     }
 
+    $rootScope.closeApp = (event) => {
+        ElectronService.closeApp();
+    }
+
     /**
      * 
      */

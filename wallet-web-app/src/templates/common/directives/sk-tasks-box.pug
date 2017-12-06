@@ -1,0 +1,18 @@
+.sk-box.sk-tasks-box
+    .sk-tasks-box__header(layout="row")
+        span(flex) KYC&nbsp;Tasks 
+        span December 2017
+    .sk-tasks-box__item(layout="row")
+        span(flex) Completed
+        span {{completed}}
+    .sk-tasks-box__item(layout="row")
+        span(flex) Outstanding
+        span {{outstanding}}
+    .sk-tasks-box__item(layout="row")
+        span(flex) Upcoming
+        span {{upcoming}}
+    .sk-horizontal-devider
+    .sk-tasks-box__footer(layout="row", layout-align="space-between center")
+        span Progress
+        sk-linear-progress(max-value="{{total}}", value="{{completed}}", completed-percent="completedInPercent")
+        span {{percent}}%
