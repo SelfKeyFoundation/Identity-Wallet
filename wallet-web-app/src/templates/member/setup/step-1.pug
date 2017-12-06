@@ -7,6 +7,8 @@ div(layout-fill, layout="column", layout-align="center center")
 
     .sk-box.shadowed(style="width: 40%;")
         .header
+        sk-slider(min="0", max="10000", step="1000", value-min="search.amount_min", value-max="search.amount_max")
+
             span.none-select-text Create Basic Template
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
             .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")

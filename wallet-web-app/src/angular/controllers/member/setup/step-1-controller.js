@@ -21,6 +21,9 @@ function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
     $scope.basicInfo = {};
 
+    $scope.search = { price_min : '', price_max : '', amount_min : 1000, amount_max : 5000 };
+
+
     ConfigFileService.load().then(()=>{
         fullNames = ConfigFileService.findContactsByType('full-name');
         emails = ConfigFileService.findContactsByType('email');
