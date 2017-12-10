@@ -121,6 +121,12 @@ import SkLinearProgressDirective from './directives/commons/sk-linear-progress.d
 
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
+import SkDropdownMenuDirective from './directives/commons/sk-dropdown-menu.directive';
+
+angular.module('kyc-wallet').directive('skDropdownMenu', SkDropdownMenuDirective);
+
+
+
 
 /**
  * controllers
