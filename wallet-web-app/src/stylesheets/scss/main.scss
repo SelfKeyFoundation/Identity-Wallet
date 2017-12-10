@@ -2,6 +2,7 @@
 @import 'helpers.scss';
 @import 'reset.scss';
 @import '../../../node_modules/angular-material/angular-material.scss';
+
 @import './components/sk-icon.scss';
 @import './components/sk-loading.scss';
 @import './components/sk-box.scss';
@@ -13,8 +14,14 @@
 @import './components/sk-form-inputs.scss';
 @import './components/sk-list.scss';
 @import './components/sk-linear-progress.scss';
+@import './components/sk-double-header.scss';
+@import './components/sk-token-box.scss';
+@import './components/sk-tasks-box.scss';
+@import './components/sk-ico-box.scss';
+
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/dashboard-layout.scss';
+
 @import './partials/sk-documents-setup.scss';
 @import './components/sk-dropdown-menu.scss';
 
@@ -59,16 +66,15 @@ $buttonColor: rgba(255, 255, 255, 1);
 }
 
 .sk-hyperlink {
-  cursor: pointer;
+  cursor: pointer !important;
   color: #08bccd;
   text-decoration: none;
   z-index: 1;
   user-select: none;
-  cursor: default;
   outline: none;
 
   &:hover {
-    color: #2da1f8;
+    color: #5ba3d6 !important;
   }
 }
 

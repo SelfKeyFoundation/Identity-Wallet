@@ -90,6 +90,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
         password: password
       });
     }
+
+    this.closeApp = function () {
+      return makeCall('closeApp', {});
+    }
   }
 
   /**

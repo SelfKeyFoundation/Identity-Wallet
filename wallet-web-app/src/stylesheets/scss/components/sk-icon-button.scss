@@ -18,8 +18,12 @@
         color: #0dc7dd;
     }
 
+    background: none;
+    border: none;  
+    outline: none;
+    
     &:hover {
-        > .sk-icon {
+        .sk-icon {
             opacity: 1;
         }
         > span {

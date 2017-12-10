@@ -7,6 +7,24 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
 
     $log.info('MemberLayoutController');
 
+    $rootScope.ethBalanceLoadPromise = EtherScanService.getBalance($rootScope.wallet.getAddress());
+    $rootScope.ethBalanceLoadPromise.then((balance)=>{
+        $rootScope.ethBalance = EtherUnitsService.toEther(balance, 'wei');
+        $rootScope.ethUsdBalance = 0;
+        if(balance > 0){
+            $rootScope.ethBalance = parseFloat($rootScope.ethBalance).toFixed(8);
+            $rootScope.ethUsdBalance = ($rootScope.ethBalance * 495).toFixed(2);
+        }
+        
+    });
+
+
+
+
+
+
+
+
     return;
     // POLYGON FOR TESTING
 

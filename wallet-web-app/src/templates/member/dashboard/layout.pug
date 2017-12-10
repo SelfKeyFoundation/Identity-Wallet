@@ -1,11 +1,26 @@
-.dashboard-layout.transition-anim(layout="column", layout-fill, style="height: 100vh; position: relative;")
+.dashboard-layout.transition-anim(layout="column", layout-fill, style=" position: relative;")
     .toolbar(layout="row", layout-align="center center")
         .logo(style="margin-left: 50px;")
             img(src="assets/images/icons/selfkey.svg", alt="", style="height: 44px;")
         .middle(flex)
-            | middle
         .right
+            .crypto-price-box(style="margin-right: 10px;")
+                .row
+                    .currency KEY
+                    .value 20000
+            .crypto-price-box(style="margin-left: 10px;")
+                .row
+                    .currency ETH
+                    .value.main {{$root.ethBalance}}
+                .row(sk-show-loading="$root.ethBalanceLoadPromise.$$state.status")
+                    .currency USD
+                    .value ${{$root.ethUsdBalance}}
             .sk-vertical-devider-2(style="height: 40px;")
-            .main-menu
-                | menu
-    .content(layout="column", ui-view="main")
+            .button-box
+                button.sk-icon-button
+                    sk-icon(icon="plus", size-class="sk-token-box__plus")
+            .sk-vertical-devider-2(style="height: 40px;")
+            .button-box
+                button.sk-icon-button
+                    sk-icon(icon="menu-button", size-class="sk-token-box__plus")
+    .dashboard-layout__content(ui-view="main")

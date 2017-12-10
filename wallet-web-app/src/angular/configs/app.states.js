@@ -121,10 +121,10 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'member/layout.html',
                     controller: 'MemberLayoutController'
                 }
-            },
+            }/*,
             resolve: {
                 checkWallet: checkWallet
-            }
+            }*/
         })
 
         /**
@@ -135,6 +135,56 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             views: {
                 main: {
                     templateUrl: 'member/setup/layout.html'
+                }
+            },
+            resolve: {
+                checkSetupProgress: ($rootScope, $q, $state, ConfigFileService) => {
+                    let defer = $q.defer();
+
+                    $rootScope.initialSetupProgress = {
+                        "full-name": false,
+                        "email": false,
+                        "phone-number": false,
+                        "passport": false,
+                        "national-id": false,
+                        "utility-bill": false
+                    }
+                    
+                    ConfigFileService.load().then(()=>{
+                        let fullNames = ConfigFileService.findContactsByType('full-name');
+                        let emails = ConfigFileService.findContactsByType('email');
+                        let phoneNumbers = ConfigFileService.findContactsByType('phone-number');
+
+                        let passports = ConfigFileService.getDocumentsByType('passport');
+                        let nationalIds = ConfigFileService.getDocumentsByType('national-id');
+                        let utilityBills = ConfigFileService.getDocumentsByType('utility-bill');
+                        
+                        $rootScope.initialSetupProgress["full-name"] = fullNames.length > 0 ? true : false;
+                        $rootScope.initialSetupProgress["email"] = emails.length > 0 ? true : false;
+                        $rootScope.initialSetupProgress["phone-number"] = phoneNumbers.length > 0 ? true : false;
+                        $rootScope.initialSetupProgress["passport"] = passports.length > 0 ? true : false;
+                        $rootScope.initialSetupProgress["national-id"] = nationalIds.length > 0 ? true : false;
+                        $rootScope.initialSetupProgress["utility-bill"] = utilityBills.length > 0 ? true : false;
+
+                        let isMissing = false;
+                        for(let i in $rootScope.initialSetupProgress){
+                            console.log("???????", i, $rootScope.initialSetupProgress[i]);
+                            if(!$rootScope.initialSetupProgress[i]){
+                                isMissing = true;
+                                break;
+                            }
+                        }
+
+                        if(isMissing){
+                            defer.resolve();
+                        }else{
+                            $state.go('member.dashboard.main');
+                        }
+                    }).catch(()=>{
+                        defer.reject();
+                    });
+
+                    return defer.promise;
                 }
             }
         })

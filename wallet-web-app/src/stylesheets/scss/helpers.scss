@@ -1,5 +1,5 @@
 /**
- *
+ * animations
  */
 .transition-anim {
   &.ng-enter {
@@ -99,6 +99,44 @@
 /**
  * TEXTS
  */
+h1 {
+  user-select: none;
+  font-size: 36px;
+  margin: 0;
+
+  &.proxima {
+    font-family: ProximaNovaRegular;
+  }
+
+  &.white {  
+    color: #ffffff;
+  }
+
+  &.blue {  
+    color: #0dc7dd;
+  }
+}
+
+h2 {
+  user-select: none;
+  font-size: 26px;
+  line-height: 1.38;
+  font-weight: normal;
+  margin: 0;
+
+  &.proxima {
+    font-family: ProximaNovaRegular;
+  }
+
+  &.orbitron {
+    font-family: OrbitronMedium;
+  }
+
+  &.white {  
+    color: #ffffff;
+  }
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -165,6 +203,31 @@
  * Background Colors
  */
 .bg-color-primary {
-  background-color: #29303A !important;
+    background-color: #29303A !important;
 }
 
+/**
+ * deviders
+ */
+.sk-horizontal-devider {
+    height: 1px;
+    background-color: #303c49;
+}
+
+/**
+ *
+ */
+.icon-size-26x26 {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.icon-size-33x36 {
+  width: 33px !important;
+  height: 36px !important;
+}
+
+.icon-size-44x44 {
+  width: 44px !important;
+  height: 44px !important;
+}
