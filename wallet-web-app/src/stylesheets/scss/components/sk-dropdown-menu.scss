@@ -1,14 +1,20 @@
 .sk-dropdown-menu {
-  width: 100%;
   cursor: pointer;
   color: #93b0c1;
-  font-family: ProximaNova;
-  height: 36px;
-  border-radius: 4px;
-  background-color: #232b34;
-  border: solid 1px #3b4a5b;
-  .title {
+  > * {
+     font-family: ProximaNova;
+  }
+  .md-button {
+    text-transform: none;
+    padding: 0px;
+    margin: 0px;
+    height: 36px;
     width: 100%;
+    border-radius: 4px;
+    background-color: #232b34;
+    border: solid 1px #3b4a5b;
+  }
+  .title {
     margin-left: 10px;
     font-size: 14px;
     font-weight: 600;
@@ -30,4 +36,25 @@
       border-left: 0.5px solid #93b0c1;
       border-bottom: 0.5px solid #93b0c1;
   }
+
+}
+
+.sk-dropdown-menu-item {
+   * {
+    font-weight: bold;
+  }
+  color: #fefefe;
+  font-family: ProximaNova;  
+  background-color: #1e262e;
+  &:not(:last-child) {
+    border-bottom: solid 1px #3b4a5b
+  }
+}
+
+
+
+.sk-dropdown-menu-content {
+  background-color: #1e262e;
+  transition: all 0.3s #1e262e; 
+  padding: 0;
 }
