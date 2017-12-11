@@ -1,4 +1,4 @@
-function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, CommonService,$mdMenu) {
+function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, CommonService) {
     'ngInject'
 
     $log.info('GuestUnlockKeystoreController');
@@ -8,9 +8,7 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     $scope.keystorePassword = "";
     $scope.selectedPublicKey = $rootScope.wallet.getAddress();
     $scope.publicKeys = ConfigFileService.getWalletPublicKeys();
-    $scope.openMenu = function($mdMenu, ev) {
-        $mdMenu.open(ev);
-      };
+
     $scope.changeWallet = () => {
         $log.info($scope.selectedPublicKey);
         $scope.ready = false;
@@ -23,10 +21,7 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             $log.error(error)
         });
     }
-    $scope.tmpArr = [{title: 'TITLE 1',fn: function(){
-        console.log('TITLE ! IS INVOCED')}},
-        {title: 'TITLE 2',
-        fn: function(){console.log('TITLE 2 IS INVOCED')}}];
+
     $scope.unlock = (event) => {
         if(!$scope.ready) return;
 
