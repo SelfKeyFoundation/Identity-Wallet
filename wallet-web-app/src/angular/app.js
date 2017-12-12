@@ -113,6 +113,9 @@ angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 import SkLinearProgressDirective from './directives/commons/sk-linear-progress.directive';
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
+import skSlider from './directives/commons/sk-slider.directive';
+angular.module('kyc-wallet').directive('skSlider', skSlider);
+
 import SkDoubleHeaderDirective from './directives/commons/sk-double-header.directive';
 angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
@@ -130,6 +133,7 @@ angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
 
 import SkRightSidenavDirective from './directives/commons/sk-right-sidenav.directive';
 angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
+
 
 /**
  * controllers

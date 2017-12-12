@@ -13,6 +13,8 @@
 @import './components/sk-form-inputs.scss';
 @import './components/sk-list.scss';
 @import './components/sk-linear-progress.scss';
+@import './components/sk-form.scss';
+@import './components/sk-slider.scss';
 @import './components/sk-double-header.scss';
 @import './components/sk-token-box.scss';
 @import './components/sk-tasks-box.scss';
@@ -31,6 +33,7 @@
 
 @import './partials/sk-documents-setup.scss';
 @import './partials/sk-dashboard.scss';
+
 
 .bg-gradient {
   background-image: -webkit-gradient(
