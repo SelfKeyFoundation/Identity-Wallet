@@ -3,7 +3,6 @@
 @import 'reset.scss';
 @import '../../../node_modules/angular-material/angular-material.scss';
 
-@import './components/sk-icon.scss';
 @import './components/sk-loading.scss';
 @import './components/sk-box.scss';
 @import './components/sk-button.scss';
@@ -18,11 +17,20 @@
 @import './components/sk-token-box.scss';
 @import './components/sk-tasks-box.scss';
 @import './components/sk-ico-box.scss';
+@import './components/sk-right-sidenav.scss';
+
+@import './components/md-select.scss';
+@import './components/md-tooltip.scss';
+@import './components/md-sidenav.scss';
+
+@import './directives/sk-send-token.scss';
+@import './directives/sk-icon.scss';
 
 @import './layouts/guest-welcome-layout.scss';
-@import './layouts/dashboard-layout.scss';
+@import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
+@import './partials/sk-dashboard.scss';
 
 .bg-gradient {
   background-image: -webkit-gradient(

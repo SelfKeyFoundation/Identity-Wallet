@@ -6,6 +6,7 @@ class Wallet {
         this.keystoreObject = keystoreObject;
         this.privateKey = null;
         this.privateKeyHex = null;
+        
         this.balanceWei = 0;
         this.balanceEth = 0;
     }

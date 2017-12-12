@@ -31,6 +31,38 @@
         }
     }
 
+    &.medium {
+        padding: 14px 28px;
+        border-color: #3b4a5a;
+
+        border-radius: 4px;
+        background-image: linear-gradient(318deg, #343f4c, #2e3945);
+        box-shadow: 0 2px 2px 0 #15222e;
+    
+        > span {
+            opacity: 0.4;
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+            letter-spacing: 0.7px;
+            color: #ffffff;
+        }
+
+        &:hover {
+            background-image: linear-gradient(318deg, #08bccd, #2da1f8);
+            border-style: solid;
+            border-width: 1px;
+            border-image-source: linear-gradient(342deg, #15d4e6, #48aefa);
+            border-image-slice: 0;
+
+            > span {
+                opacity: 1;
+                color: #ffffff;
+            }
+        }
+    }
+
     &.filled-blue {
         background-image: linear-gradient(309deg, #08bccd, #2da1f8);
         box-shadow: 0 2px 2px 0 #15222e;

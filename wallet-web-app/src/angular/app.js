@@ -9,6 +9,10 @@ const APP_NAME = 'identity-wallet';
 import uiRouter from '@uirouter/angularjs';
 import angularMaterial from 'angular-material';
 import LocalStorageModule from 'angular-local-storage';
+import qrcode from 'qrcode-generator';
+import ngQrcode from 'angular-qrcode';
+
+window.qrcode = qrcode;
 
 /**
  * Internal Modules
@@ -23,7 +27,8 @@ const requires = [
   'ngMaterial',
   'ui.router',
   'templates',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'monospaced.qrcode'
 ];
 
 /**
@@ -66,6 +71,12 @@ angular.module('kyc-wallet').service('CommonService', CommonService);
 import EtherScanService from './services/ether-scan.service';
 angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
 
+import MEWService from './services/mew.service';
+angular.module('kyc-wallet').service('MEWService', MEWService);
+
+import Web3Service from './services/web3.service';
+angular.module('kyc-wallet').service('Web3Service', Web3Service);
+
 import EtherUnitsService from './services/ether-units.service';
 angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 
@@ -74,6 +85,9 @@ angular.module('kyc-wallet').service('WalletService', WalletService);
 
 import TokenService from './services/token.service';
 angular.module('kyc-wallet').service('TokenService', TokenService);
+
+import SelfkeyService from './services/selfkey.service';
+angular.module('kyc-wallet').service('selfkeyService', SelfkeyService);
 
 /**
  * directives
@@ -111,6 +125,11 @@ angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 import SkIcoBoxDirective from './directives/commons/sk-ico-box.directive';
 angular.module('kyc-wallet').directive('skIcoBox', SkIcoBoxDirective);
 
+import SkSendTokenDirective from './directives/commons/sk-send-token.directive';
+angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
+
+import SkRightSidenavDirective from './directives/commons/sk-right-sidenav.directive';
+angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
 
 /**
  * controllers
@@ -139,6 +158,9 @@ angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUn
  */
 import MemberLayoutController from './controllers/member/layout-controller.js';
 angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutController);
+
+import MemberRightSidenavController from './controllers/member/right-sidenav-controller.js';
+angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRightSidenavController);
 
 /**
  * setup
