@@ -52,6 +52,32 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
       }
     }
 
+    //
+    showSendTokenDialog(token) {
+      const startFragment = '<sk-send-token';
+      const endFragment = '></sk-send-token>';
+      let middleFrament = ' token="' + token + '"';
+
+      let html = startFragment + middleFrament + endFragment;
+      let el = angular.element(html);
+      let dir = $compile(el)($rootScope);
+
+      angular.element(document.body).append(dir);
+    }
+
+    generateId () {
+      let m = Math;
+      let d = Date;
+      let h = 16;
+      let s = s => m.floor(s).toString(h);
+
+      return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
+    }
+
+    numbersAfterComma(num, fixed) {
+      var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+      return num.toString().match(re)[0];
+    }
   }
 
   return new CommonService();

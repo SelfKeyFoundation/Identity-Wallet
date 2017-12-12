@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -54,6 +54,10 @@ function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, Electron
 
     $rootScope.closeApp = (event) => {
         ElectronService.closeApp();
+    }
+
+    $rootScope.openSendTokenDialog = (event, token) => {
+        CommonService.showSendTokenDialog(token);
     }
 
     /**
