@@ -12,7 +12,6 @@ function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
     $scope.basicInfo = {};
 
-    $scope.search = { price_min : '', price_max : '', amount_min : 1000, amount_max : 5000 };
 
     $scope.basicInfo["full-name"] = fullNames.length > 0 ? fullNames[0] : {value: '', type: 'full-name', status: 0, isDefault: true};
     $scope.basicInfo["email"] = emails.length > 0 ? emails[0] : {value: '', type: 'email', status: 0, isDefault: true};

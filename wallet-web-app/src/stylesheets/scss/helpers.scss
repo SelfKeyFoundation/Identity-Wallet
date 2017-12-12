@@ -217,6 +217,22 @@ h2 {
 /**
  *
  */
+.opacity-0 {
+  opacity: 0;
+}
+
+.display-none {
+  display: none !important; 
+}
+
+/**
+ *
+ */
+ .icon-size-16x16 {
+  width: 16px !important;
+  height: 16px !important;
+}
+
 .icon-size-26x26 {
   width: 26px !important;
   height: 26px !important;
@@ -227,8 +243,17 @@ h2 {
   height: 36px !important;
 }
 
+.icon-size-39x44 {
+  width: 39px !important;
+  height: 44px !important;
+}
+
 .icon-size-44x44 {
   width: 44px !important;
   height: 44px !important;
 }
 
+.icon-size-64x64 {
+  width: 64px !important;
+  height: 64px !important;
+}

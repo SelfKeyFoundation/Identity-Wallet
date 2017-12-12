@@ -2,23 +2,40 @@ import EthUnits from '../../classes/eth-units.js';
 import EthUtils from '../../classes/eth-utils.js';
 import Token from '../../classes/token.js';
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, $timeout, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
     'ngInject'
 
     $log.info('MemberLayoutController');
 
     $rootScope.ethBalanceLoadPromise = EtherScanService.getBalance($rootScope.wallet.getAddress());
-    $rootScope.ethBalanceLoadPromise.then((balance)=>{
+    $rootScope.ethBalanceLoadPromise.then((balance) => {
         $rootScope.ethBalance = EtherUnitsService.toEther(balance, 'wei');
         $rootScope.ethUsdBalance = 0;
-        if(balance > 0){
+        if (balance > 0) {
             $rootScope.ethBalance = parseFloat($rootScope.ethBalance).toFixed(8);
             $rootScope.ethUsdBalance = ($rootScope.ethBalance * 495).toFixed(2);
         }
-        
     });
 
+    $scope.openRightSidenav = () => {
+        $mdSidenav('right').toggle().then(() => {
+            $log.debug("toggle " + "right" + " is done");
+        });
+    }
 
+
+
+    /*
+    MEWService.getBalance($rootScope.wallet.getAddress()).then((resp)=>{
+        console.log(resp, "????????????");
+    }).catch((err)=>{
+        console.log(err, "????????????");
+    });
+
+    MEWService.getEstimateGas($rootScope.wallet.getAddress(), 'b5f61a128af89ce992e96d71242297ad392a4e9c', 0.5).then((resp)=>{
+        console.log("esitimated gas price", resp);
+    });
+    */
 
 
 
@@ -56,27 +73,27 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
         $log.debug(">>>>>>", data);
     });
     */
-    
+
     // for testin.. use your keystore file path or use importUsingKeystoreFileDialog() method
     let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/test/UTC--2017-11-09T16:40:32.715Z--d96969247b51187da3bf6418b3ed39304ae2006c');
     //let prm = WalletService.importUsingKeystoreFilePath('/Users/giorgio/workspace/flagtheory/Identity-Wallet/release/UTC--2017-11-02T08:26:36.621Z--603fc6daa3dbb1e052180ec91854a7d6af873fdb');
     prm.then((wallet) => {
         $log.debug("keysrore read");
-        
-        EtherScanService.getBalance(wallet.getAddress()).then((data)=>{
+
+        EtherScanService.getBalance(wallet.getAddress()).then((data) => {
             console.log(">>>>>>>>", data);
         });
 
         return;
 
         // use your passphare instead of "passw"
-        WalletService.unlockKeystoreObject("passw").then((wallet)=>{
+        WalletService.unlockKeystoreObject("passw").then((wallet) => {
             $log.debug("keysrore unlock");
             // loaded - wallet.privateKey
-            
-            WalletService.loadTransactionCount().then((wallet)=>{
+
+            WalletService.loadTransactionCount().then((wallet) => {
                 $log.debug("tx count load");
-                
+
                 // loaded wallet.nonceHex
                 let tokenSignedTX = WalletService.generateTokenRawTransaction(
                     "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens
@@ -87,7 +104,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
                 );
                 $log.debug("tokenSignedTX TX:", tokenSignedTX);
 
-                
+
                 let ethSignedTXPromise = WalletService.generateEthRawTransaction(
                     "0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb",   // address you want to send tokens // crowdsale: 0x9f5a27e6d2323196e195743f28fbe817988dfdef
                     1,                                              // amount unit Eth
@@ -96,17 +113,17 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
                     null                                            // data
                 );
                 $log.debug("ethSignedTXPromise", ethSignedTXPromise);
-                
-            }).catch((error)=>{
+
+            }).catch((error) => {
                 $log.debug("e", error);
-            });           
-        }).catch((error)=>{
+            });
+        }).catch((error) => {
             $log.debug("111", error);
         });
-    }).catch((error)=>{
+    }).catch((error) => {
         $log.debug(error);
     });
-    
+
     /**
      * 
      */
@@ -163,7 +180,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $interval, 
     */
 
 
-    
+
 };
 
 export default MemberLayoutController;
