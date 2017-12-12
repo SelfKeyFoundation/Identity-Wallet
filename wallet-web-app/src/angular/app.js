@@ -134,6 +134,10 @@ angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
 import SkRightSidenavDirective from './directives/commons/sk-right-sidenav.directive';
 angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
 
+import SkCirclePieChartDirective from './directives/commons/sk-circle-pie-chart.directive';
+angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
+
+
 
 /**
  * controllers
