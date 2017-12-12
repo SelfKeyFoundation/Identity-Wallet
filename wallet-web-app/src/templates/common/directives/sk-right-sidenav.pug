@@ -1,7 +1,5 @@
-.wrapper.transition-anim(layout="column", layout-fill, ui-view="main", style="height: 100vh;")
-
-md-sidenav.md-sidenav-right(md-component-id="right")
-    .sk-right-sidenav(ng-controller="MemberRightSidenavController")
+.sk-blur-background.sidenav-fade-in.sk-enter(ng-class="{'sk-enter-active': control.state === 'is-opening'}")
+    .sk-right-sidenav.sk-slide-in.sk-enter(ng-class="{'sk-enter-active': control.state === 'is-opening'}")
         .sk-right-sidenav__header
             sk-icon(icon="selfkey", size-class="icon-size-39x44")
             span(ng-click="close($event)") ✕

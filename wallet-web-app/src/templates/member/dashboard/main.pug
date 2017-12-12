@@ -1,17 +1,17 @@
-.dashboard-layout__content-wrappper(layout="column", layout-align="start center")
+.dashboard-content-wrappper(layout="column", layout-align="start center")
 
     // header
-    .dashboard-layout__content-header-section(layout="row", layout-align="start center")
+    .dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
         h2.proxima.white SelfKey Dashboard
 
     // balances
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
-        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.ethBalance}}", value-in-usd="${{$root.ethUsdBalance}} USD", address="{{$root.wallet.getAddress()}}")
-        sk-token-box(name="Unknown", symbol="unk", value="852.62781", value-in-usd="$44951.44 USD", address="3CCCXfH874ronv1uGKkCMDgW2ffLBQScro")
-        sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.wallet.balanceEth}}", value-in-usd="$1765.87 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
+        sk-token-box(name="Unknown", symbol="unk", value="852.62781", value-in-usd="$44951.44 USD", address="3CCCXfH874ronv1uGKkCMDgW2ffLBQScro", style="height: 216px;")
+        sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
 
     // my crypto
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         .sk-box.my-cryptos-box(style="width: 100%; height: 422px; padding: 20px;")
             .my-cryptos-box__header(layout="row")
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") My Crypto
@@ -21,7 +21,7 @@
             h2.proxima.white In Progress - Component is getting ready
 
     // alerts
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         .sk-box.alerts-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .alerts-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Alerts
@@ -41,7 +41,7 @@
                 span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
 
     // reminders
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         .sk-box.reminders-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .reminders-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Reminders
@@ -53,7 +53,7 @@
                 span.reminders-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
 
     // transactions
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
@@ -64,14 +64,19 @@
                 span.transactions-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
                 span.transactions-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
 
-    .dashboard-layout__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
+    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
         h2.proxima.white Upcoming ICOs
 
-    .dashboard-layout__content-section(layout="row", layout-align="center center")
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         sk-ico-box(style="height: initial; width: 33%;", title="Finom (FIN)", icon="eth", ico-data="{'projectType': 'Token', 'platform': 'Ethereum', 'website': 'Open', 'category': 'Finance', 'totalSupply': '425,000,000', 'whitepaper': 'View'}")
         sk-ico-box(style="height: initial; width: 33%;", title="Finom (FIN)", icon="eth", ico-data="{'projectType': 'Token', 'platform': 'Ethereum', 'website': 'Open', 'category': 'Finance', 'totalSupply': '425,000,000', 'whitepaper': 'View'}")
         sk-ico-box(style="height: initial; width: 33%;", title="Finom (FIN)", icon="eth", ico-data="{'projectType': 'Token', 'platform': 'Ethereum', 'website': 'Open', 'category': 'Finance', 'totalSupply': '425,000,000', 'whitepaper': 'View'}")
 
-    .dashboard-layout__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
+    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
         .sk-button.small
             span VIEW ALL ICOs
+
+
+
+
+

@@ -8,7 +8,8 @@ function skShowLoading($compile) {
         require: '?ngClick',
         priority: -100,
         scope: {
-            skShowLoading: '='
+            skShowLoading: '=',
+            skLoadingMessage: '@'
         },
         link: (scope, element, attr) => {
             let innerHTML = angular.copy(element.html());
@@ -25,9 +26,9 @@ function skShowLoading($compile) {
             });
 
             scope.$watch('skShowLoading', function (newVal, oldVal) {
-                if (newVal == 0) {
+                if (newVal === 0) {
                     isLoading = true;
-                    element.html('<div class="loading">Loading<span>.</span><span>.</span><span>.</span></div>');
+                    element.html('<div class="sk-show-loading">'+ (scope.skLoadingMessage || 'Loading') +'<span>.</span><span>.</span><span>.</span></div>');
                     element.css('color', '#0dc7dd');
                     element.prop('disabled', true);
                 } else {
@@ -37,8 +38,6 @@ function skShowLoading($compile) {
                     $compile(element.contents())(scope);
                 }
             }, true);
-
-
         }
     }
 }
