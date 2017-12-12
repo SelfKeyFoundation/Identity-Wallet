@@ -2,7 +2,7 @@
   cursor: pointer;
   color: #93b0c1;
   > * {
-     font-family: ProximaNova;
+    font-family: ProximaNovaRegular;
   }
   .md-button {
     text-transform: none;
@@ -44,7 +44,7 @@
     font-weight: bold;
   }
   color: #fefefe;
-  font-family: ProximaNova;  
+  font-family: ProximaNovaRegular;
   background-color: #1e262e;
   &:not(:last-child) {
     border-bottom: solid 1px #3b4a5b
