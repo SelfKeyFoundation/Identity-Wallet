@@ -253,11 +253,32 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-    //$urlRouterProvider.otherwise('/member/identity/main');
-    $urlRouterProvider.otherwise('/guest/loading');
-    //$urlRouterProvider.otherwise('/guest/process/create-keystore');
+        /**
+         * Wallet
+         */
+        .state('member.wallet', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/layout.html'
+                }
+            }
+        })
 
-    //$urlRouterProvider.otherwise('/member/dashboard/main');
+        .state('member.wallet.main', {
+            url: '/member/wallet/main',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/main.html'
+                }
+            }
+        })
+
+    
+    //$urlRouterProvider.otherwise('/guest/loading');
+    
+
+    $urlRouterProvider.otherwise('/member/wallet/main');
 }
 
 export default appStates;

@@ -27,12 +27,15 @@
 
 @import './directives/sk-send-token.scss';
 @import './directives/sk-icon.scss';
+@import './directives/sk-expandable-box.scss';
 
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
-@import './partials/sk-dashboard.scss';
+
+@import './views/dashboard/main.scss';
+@import './views/wallet/main.scss';
 
 
 .bg-gradient {
