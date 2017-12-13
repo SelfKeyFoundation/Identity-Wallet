@@ -12,6 +12,8 @@ import LocalStorageModule from 'angular-local-storage';
 import qrcode from 'qrcode-generator';
 import ngQrcode from 'angular-qrcode';
 
+
+
 window.qrcode = qrcode;
 
 /**
