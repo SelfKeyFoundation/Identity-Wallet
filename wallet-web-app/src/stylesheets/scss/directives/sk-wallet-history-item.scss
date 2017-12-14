@@ -12,6 +12,10 @@
         }
     }
     
+    &:hover {
+        background-color: #222a33;
+    }
+
     &.expended {
         background-color: #222a33;
 
@@ -47,6 +51,10 @@
             width: 100%;
             font-size: 16px;
             outline: none;
+
+            cursor: pointer;
+
+            
 
             .sk-expandable-box__item__header__date {
                 display: flex;

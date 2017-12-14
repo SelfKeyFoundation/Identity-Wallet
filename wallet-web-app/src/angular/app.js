@@ -137,8 +137,11 @@ angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective
 import SkWalletHistoryItemDirective from './directives/commons/sk-wallet-history-item.directive';
 angular.module('kyc-wallet').directive('skWalletHistoryItem', SkWalletHistoryItemDirective);
 
-import SkReminderBoxDirective from './directives/commons/sk-reminder-box.directive';
-angular.module('kyc-wallet').directive('skReminderBox', SkReminderBoxDirective);
+import SkRemindersBoxDirective from './directives/commons/sk-reminders-box.directive';
+angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
+
+import SkAlertsBoxDirective from './directives/commons/sk-alerts-box.directive';
+angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 
 
 /**

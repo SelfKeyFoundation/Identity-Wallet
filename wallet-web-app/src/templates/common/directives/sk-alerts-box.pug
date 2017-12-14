@@ -1,0 +1,11 @@
+.sk-box.sk-alerts-box(style="padding: 30px; width: 600px;")
+    .sk-alerts-box__title Alerts
+    .sk-alerts-box__item(ng-repeat="item in data")
+        .sk-alerts-box__item__header
+            .sk-alerts-box__item__header__date
+                span.fc-bluey-grey {{item.month}}
+                span.fc-bluey-grey {{item.day}}
+            sk-icon(icon="{{item.type}}", size-class="icon-size-36x36")
+            .sk-alerts-box__item__header__text(flex)
+                span(ng-class="{'fc-bright-orange': item.type === 'warning'}") {{item.text}}
+                span.fc-white {{item.action}}
