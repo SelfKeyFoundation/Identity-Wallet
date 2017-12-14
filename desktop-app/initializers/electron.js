@@ -2,9 +2,9 @@ function createWindow(app, next) {
     return function () {
         app.win = new app.modules.electron.BrowserWindow({
             width: 1000,
-            height: 800,
+            height: 768,
             minWidth: 1000,
-            minHeight: 800,
+            minHeight: 768,
             webPreferences: {
                 devTools: app.config.app.debug,
                 preload: app.modules.path.join(app.dir.desktopApp, 'preload.js')

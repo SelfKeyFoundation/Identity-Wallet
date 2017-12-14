@@ -20,6 +20,8 @@
 @import './components/sk-tasks-box.scss';
 @import './components/sk-ico-box.scss';
 @import './components/sk-right-sidenav.scss';
+@import './components/sk-table.scss';
+@import './components/sk-dropdown-menu.scss'; // TODO - change prefix of file to md (actually it is realod of md styles)
 
 @import './components/md-select.scss';
 @import './components/md-tooltip.scss';
@@ -28,13 +30,18 @@
 @import './directives/sk-send-token.scss';
 @import './directives/sk-icon.scss';
 @import './directives/sk-circle-pie-chart.scss';
+@import './directives/sk-wallet-history-item.scss';
+@import './directives/sk-reminder-box.scss';
 
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
-@import './partials/sk-dashboard.scss';
 
+@import './views/dashboard/main.scss';
+@import './views/wallet/main.scss';
+@import './views/marketplace/ico-list.scss';
+@import './views/marketplace/ico-list-item.scss';
 
 .bg-gradient {
   background-image: -webkit-gradient(

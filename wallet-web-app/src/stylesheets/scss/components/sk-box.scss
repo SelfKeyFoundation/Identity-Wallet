@@ -1,12 +1,16 @@
 .sk-box {
     position: relative;
     display: inline-block;
-    //width: 400px;
-	//height: 539.1px;
 	border-radius: 4px;
 	background-color: #262f39;
     border: solid 1px #303c49;
-    
+
+    >.sk-box__title {
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        color: #ffffff;
+    }
+
     >.header {
         height: 65px;
         border-radius: 4px;

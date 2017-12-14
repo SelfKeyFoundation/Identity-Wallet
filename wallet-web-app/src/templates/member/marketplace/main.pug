@@ -1,5 +1,48 @@
 .md-padding(layout="row", layout-align="center center")
-    h3 Marketplace coming soon
+    .main-content
+    .header-menu
+        .rangerr
+            p Min {{rating.min}}
+            p Max {{rating.max}}
+            sk-slider(min='1', max='5', value-min='rating.min', value-max='rating.max')
+
+        table.table.table-stripped
+            thead
+                tr
+                    th Country
+                    th Program
+                    th Type
+                    th Time to P.R
+                    th Time to Cit
+                    th best For
+                    th Inv.Type
+                    th Inv.Amount
+                    th Min.An.Income
+                    th Taxes
+            tbody
+                tr
+                    td
+                        | Andora
+                    td
+                        | Residency w/o gainful activity
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+                    td
+                        | text
+
+
 
     //.margin-top-3(layout="column")
         .marketplace-row(layout="row", layout-align="center center")

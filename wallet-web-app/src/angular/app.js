@@ -137,6 +137,11 @@ angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective
 import SkCirclePieChartDirective from './directives/commons/sk-circle-pie-chart.directive';
 angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
 
+import SkWalletHistoryItemDirective from './directives/commons/sk-wallet-history-item.directive';
+angular.module('kyc-wallet').directive('skWalletHistoryItem', SkWalletHistoryItemDirective);
+
+import SkReminderBoxDirective from './directives/commons/sk-reminder-box.directive';
+angular.module('kyc-wallet').directive('skReminderBox', SkReminderBoxDirective);
 
 
 /**
@@ -191,7 +196,11 @@ angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetu
 import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
 angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
 
-
+/**
+ * Marketplace
+ */
+import MemberMarketplaceMainController from './controllers/member/marketplace/main-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
 /**
  * config states
  */
