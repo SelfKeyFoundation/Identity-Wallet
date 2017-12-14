@@ -193,7 +193,11 @@ angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetu
 import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
 angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
 
-
+/**
+ * Marketplace
+ */
+import MemberMarketplaceMainController from './controllers/member/marketplace/main-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
 /**
  * config states
  */

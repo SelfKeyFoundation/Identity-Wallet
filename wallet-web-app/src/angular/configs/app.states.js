@@ -254,6 +254,45 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         /**
+         * Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.main', {
+            url: '/member/marketplace/main',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/main.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.ico-list', {
+            url: '/member/marketplace/ico-list',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico-list.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.ico-list-item', {
+            url: '/member/marketplace/ico-list-item/:id',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico-list-item.html'
+                }
+            }
+        })
+
+        /**
          * Wallet
          */
         .state('member.wallet', {
@@ -276,6 +315,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     
     $urlRouterProvider.otherwise('/guest/loading');
+
     //$urlRouterProvider.otherwise('/member/wallet/main');
 }
 
