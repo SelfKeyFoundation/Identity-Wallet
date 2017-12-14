@@ -1,94 +1,83 @@
 .sk-circle-pie-chart {
-    .Slice-1 {
-        width: 240px;
-        height: 240px;
-        background-color: rgba(0, 0, 0, 0);
-        border-style: solid;
-        border-width: 40px;
-        border-image-source: linear-gradient(207deg, #02ebf2, #01d3e0);
-        border-image-slice: 1;
-      }
-/*
-      #donutchart,
-      #chart {
-        width: 300px;
-        height: 300px;
-      }*/
-      
-
-      .chart-parent {
-        width: 400px;
-        height: 400px;
-      }
-      #donutchart {
-          position: relative;
-      }
-      
-      #labelOverlay {
-          position: absolute;
-          top: 233px;
-          left: 156px;
+  * {
+    font-family: ProximaNovaRegular;
+  }
+  .active {
+    border: 2px solid #303c49;
+  }
+  .chart-parent {
+    margin-right: 74px;
+    position: relative;
+  }
+  .chart-center-container {
+      position: absolute;
+      text-align: center;
+      cursor: default;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      .tolalPrice  {
+          font-size: 30px;
+          font-weight: 300;
           text-align: center;
-          cursor: default;
-      }
-
-      .item {
-        margin-bottom: 46px;
-        .logo {
-          margin-right: 12px;
-          width: 43px;
-          background: red;
-          height: 43px;
-        }
-        .title {
-          .titleFull {
-            font-family: ProximaNovaRegular;
-            font-size: 18px;
-            text-align: left;
-            color: #ffffff;
-          }
-          .titleSmall {
-            opacity: 0.7;
-            font-family: ProximaNovaRegular;
-            font-size: 14px;
-            letter-spacing: 1px;
-            text-align: left;
-            color: #ffffff;
-          }
-          
-        }
-        .value {
-          margin-left: 53px;
-          font-family: ProximaNovaRegular;
-          font-size: 18px;
-          text-align: left;
           color: #ffffff;
         }
-        
-      }
-   
-
-    
-    
-
-      .tolalPrice  {
-        font-family: ProximaNovaRegular; 
-        font-size: 30px;
-        font-weight: 300;
-        text-align: center;
-        color: #ffffff;
-      }
-     
-
       .totalPriceTitle {
-        font-family: ProximaNovaRegular;
         font-size: 14px;
         margin-top: 5px;
         text-align: center;
         color: #93b0c1;
+      }     
+  }
+
+  .details-container {
+    .value {
+      margin-left: 53px;
+      font-size: 18px;
+      text-align: left;
+      color: #ffffff;
+    }
+    table:not(:first-child) {
+      margin-left: 78px; 
+    }
+    table {
+      tr {
+        padding: 4px;
       }
-     
-      
-    
-      
+    }
+  }
+
+  .item {
+    * {
+      cursor: default;
+    }
+    td:nth-child(2) {
+      width: 50%;
+    }
+    td:first-child {
+      width: 50%;
+    }
+    &:not(:last-child) {
+      margin-bottom: 44px;
+    }
+    .sk-icon {
+      margin-right: 12px;
+    }
+    .title {
+      .titleFull {
+        font-size: 18px;
+        text-align: left;
+        color: #ffffff;
+      }
+      .titleSmall {
+        opacity: 0.7;
+        margin-top: 4px;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-align: left;
+        color: #ffffff;
+      }
+    }
+  }
 }

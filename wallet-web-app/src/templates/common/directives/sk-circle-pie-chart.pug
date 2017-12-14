@@ -1,25 +1,17 @@
 .sk-circle-pie-chart(layout="row")
     .chart-parent
         div(id="chart")
-        div(id="labelOverlay")
-            .tolalPrice 15454,45454.4
-            .totalPriceTitle Total Value USD
-    div
-        .item(layout="row")
-            .logo
-            .title 
-                .titleFull Basic Attrention
-                .titleSmall omg
-            .value 184.454
-        .item(layout="row")
-            .logo
-            .title 
-                .titleFull Basic Attrention
-                .titleSmall omg
-            .value 184.454
-        .item(layout="row")
-            .logo
-            .title 
-                .titleFull Basic Attrention
-                .titleSmall omg
-            .value 184.454
+        .chart-center-container
+            .tolalPrice {{data.total}}
+            .totalPriceTitle {{data.totalTitle}}
+    .details-container(layout="row")        
+        table(ng-repeat="chunk in chunkedItems" )
+            tr(class="item", name="{{item.uniqueIdentifier}}" layout="row" ng-repeat="item in chunk")
+                td
+                    div(layout="row")
+                        sk-icon(icon="information-button", size-class="icon-size-44x44")
+                        .title 
+                            .titleFull {{item.title}}
+                            .titleSmall {{item.subTitle}}
+                td
+                    .value {{item.value}}
