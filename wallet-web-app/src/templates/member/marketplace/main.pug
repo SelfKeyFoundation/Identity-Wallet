@@ -1,6 +1,10 @@
 .md-padding(layout="row", layout-align="center center")
     .main-content
     .header-menu
+        .rangerr
+            p Min {{rating.min}}
+            p Max {{rating.max}}
+            sk-slider(min='1', max='5', value-min='rating.min', value-max='rating.max')
 
         table.table.table-stripped
             thead
