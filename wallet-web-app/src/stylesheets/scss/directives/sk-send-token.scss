@@ -45,6 +45,7 @@
     }
 }
 
+// TODO - rename sk-send-token-box
 .sk-send-ether-box {
     padding: 90px 30px 40px 30px;
 
@@ -69,9 +70,19 @@
     }
 
     > .sk-icon {
-        position: absolute;
-        top: -32px;
-        left: calc(50% - 32px);
+
+        &:first-of-type {
+            position: absolute;
+            top: -32px;
+            left: calc(50% - 32px);
+        }
+        
+        &:last-of-type {
+            position: absolute;
+            right: -18px;
+            top: -18px;
+        }
+
     }
 
     .sk-send-ether-box__recipient-container {
@@ -228,12 +239,12 @@
         flex-direction: row;
         
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
 
         margin-top: 46px;
 
         .sk-button {
-            width: 232px;
+            width: 210px;
         }
     }
 }

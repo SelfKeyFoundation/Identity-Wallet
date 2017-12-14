@@ -253,11 +253,70 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-    //$urlRouterProvider.otherwise('/member/identity/main');
-    $urlRouterProvider.otherwise('/guest/loading');
-    //$urlRouterProvider.otherwise('/guest/process/create-keystore');
+        /**
+         * Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
+            }
+        })
 
-    //$urlRouterProvider.otherwise('/member/dashboard/main');
+        .state('member.marketplace.main', {
+            url: '/member/marketplace/main',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/main.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.ico-list', {
+            url: '/member/marketplace/ico-list',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico-list.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.ico-list-item', {
+            url: '/member/marketplace/ico-list-item/:id',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico-list-item.html'
+                }
+            }
+        })
+
+        /**
+         * Wallet
+         */
+        .state('member.wallet', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/layout.html'
+                }
+            }
+        })
+
+        .state('member.wallet.main', {
+            url: '/member/wallet/main',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/main.html'
+                }
+            }
+        })
+
+    
+    $urlRouterProvider.otherwise('/guest/loading');
+
+    //$urlRouterProvider.otherwise('/member/wallet/main');
 }
 
 export default appStates;

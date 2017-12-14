@@ -1,14 +1,17 @@
 #send-token-dialog.sk-blur-background
-    .sk-send-ether-box(style="width: 600px;", ng-if="step === 'prepare-transaction'")
+    form.sk-send-ether-box(name="sendEtherForm", style="width: 600px;", ng-if="step === 'prepare-transaction'")
         sk-icon(icon="{{token}}", size-class="icon-size-64x64")
+        
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="close($event)")
+
         .sk-send-ether-box__recipient-container
             qrcode(data="sendToAddress", size="40", background="#303c49", color="#66798f")
-            input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to Ethereum address", ng-model="data.sendToAddress")
+            input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to Ethereum address", ng-model="data.sendToAddress", name="sendToAddress", ng-required)
 
         .sk-send-ether-box__eth-amount-container
             .sk-button.small(ng-click="selectAll($event)")
                 span ALL
-            input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmountInEth")
+            input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmountInEth", ng-required)
             span ETH
 
         .sk-send-ether-box__usd-amount-container
@@ -35,7 +38,9 @@
                 span Premium
 
         .sk-send-ether-box__actions-container
-            .sk-button.medium(ng-click="send($event)", sk-show-loading="sendPromise.$$state.status")
+            //.sk-button.medium(ng-click="close($event)", ng-if="!sendPromise.$$state.status")
+                span cancel
+            .sk-button.medium(ng-click="send($event, sendEtherForm)", sk-show-loading="sendPromise.$$state.status")
                 span send
 
     .sk-send-ether-box(style="width: 600px; align-items: center;", ng-if="step === 'transaction-status'")
@@ -53,10 +58,10 @@
             div(style="display: flex; flex-direction: row; align-items: center; justify-content: center;")
                 .sk-button.small(ng-click="loadTransaction($event)", style="margin-top: 30px;")
                     span view transaction
-                .sk-button.small(ng-click="close($event)", style="margin-top: 30px; margin-left: 8px;")
+                //.sk-button.small(ng-click="close($event)", style="margin-top: 30px; margin-left: 8px;")
                     span close
 
     .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 36px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
         span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{totalBalanceInEth - scope.data.sendAmountInEth}} ETH  $1.255.37
-        span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: 0.0000063 ETH  $0.29
+        span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ gasLimit * gasPriceInGwei }} ETH  $0.29
 
