@@ -17,6 +17,18 @@
             color: #ffffff; 
             margin-left: 16px;
         }
+        .dot {
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            margin-left: auto;
+            &.active{
+                background-color: #1ed43b;
+            }
+            &.inactive{
+                background-color: #d9534f;
+            }
+        }
     }
 
     .sk-ico-box__content {
@@ -28,6 +40,18 @@
             line-height: 2.25;
             color: #ffffff;
         }
+
+        .description{
+            p{
+                font-weight: 400;
+                letter-spacing: 0.010em;
+                line-height: 1.6em;
+                margin: 0.8em 0 1.6em;
+            }
+        }
+      .price {
+        color: white;
+      }
     }
 
     .sk-ico-box__footer {
@@ -36,6 +60,14 @@
         align-items: center;
         justify-content: flex-start;
 
-        padding: 0 30px 15px 30px
+        padding: 0 30px 30px 30px;
+
+        .days{
+            font-family: ProximaNovaRegular;
+            font-size: 13px;
+            color: #93b0c1;
+            padding-top: 3px;
+        }
+
     }
 }

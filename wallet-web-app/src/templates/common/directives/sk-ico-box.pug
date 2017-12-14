@@ -1,30 +1,21 @@
 .sk-box.sk-ico-box
     .header.sk-ico-box__header
-        sk-icon(icon="{{icon}}", size-class="icon-size-44x44")
-        span {{title}}
+        sk-icon(icon="{{icoData.icon}}", size-class="icon-size-44x44")
+        span {{icoData.title}}
+        span(style="font-size: 15px; margin-left: 5px;") ({{icoData.category}})
+        span.dot(ng-class="{'active':icoData.status === 'active','inactive':icoData.status === 'inactive' }")
 
     .sk-ico-box__content
-        table
-            tr
-                td Project&nbsp;Type:
-                td {{icoData.projectType}}
-            tr
-                td Platform: 
-                td {{icoData.platform}}
-            tr
-                td Website:
-                td {{icoData.website}}
-            tr
-                td Category:
-                td {{icoData.category}}
-            tr
-                td Total Supply:
-                td {{icoData.totalSupply}}
-            tr
-                td Whitepaper:
-                td {{icoData.whitepaper}}
+        .description.fc-white
+            p {{icoData.description}}
+            .price.fc-white
+                span.fc-turquoise-blue {{icoData.partialSupply}}&nbsp;
+                |     of &nbsp;{{icoData.totalSupply}}
+
+
 
     .sk-ico-box__footer
         .sk-button.small
             span view
 
+        span.days &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{icoData.daysLeft}} Days Left

@@ -8,7 +8,7 @@ function SkIcoBoxDirective($log, $window, $timeout) {
         scope: {
             title: '@',
             icon: '@',
-            icoData: "="
+            icoData: "=",
         },
         link: (scope, element) => {
             
