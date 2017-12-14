@@ -18,6 +18,7 @@
     "crypto": "^1.0.1",
     "electron": "1.7.5",
     "ethereumjs-util": "5.1.2",
+    "google-charts": "^1.0.0",
     "gulp": "^3.9.1",
     "jquery": "3.2.1",
     "node-sass": "^4.6.1",

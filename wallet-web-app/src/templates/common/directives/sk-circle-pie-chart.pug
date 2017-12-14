@@ -9,7 +9,7 @@
             tr(class="item", name="{{item.uniqueIdentifier}}" layout="row" ng-repeat="item in chunk")
                 td
                     div(layout="row")
-                        sk-icon(icon="information-button", size-class="icon-size-44x44")
+                        sk-icon(icon="{{item.icon || 'information-button'}}", size-class="icon-size-44x44")
                         .title 
                             .titleFull {{item.title}}
                             .titleSmall {{item.subTitle}}

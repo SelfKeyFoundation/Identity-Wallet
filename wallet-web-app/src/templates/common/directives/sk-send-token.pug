@@ -46,6 +46,8 @@
     .sk-send-ether-box(style="width: 600px; align-items: center;", ng-if="step === 'transaction-status'")
         sk-icon(icon="{{token}}", size-class="icon-size-64x64")
 
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="close($event)")
+
         span.sk-send-ether-box__sent(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{getTransactionStatus()}}
 
         .sk-send-ether-box__amount-container(style="margin-top: 40px; ")
@@ -63,5 +65,5 @@
 
     .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 36px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
         span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{totalBalanceInEth - scope.data.sendAmountInEth}} ETH  $1.255.37
-        span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ gasLimit * gasPriceInGwei }} ETH  $0.29
+        span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: 0.00014 ETH  $0.29
 

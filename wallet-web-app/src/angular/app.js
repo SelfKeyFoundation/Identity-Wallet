@@ -11,8 +11,12 @@ import angularMaterial from 'angular-material';
 import LocalStorageModule from 'angular-local-storage';
 import qrcode from 'qrcode-generator';
 import ngQrcode from 'angular-qrcode';
+//import GoogleCharts from 'google-charts';
+
 
 window.qrcode = qrcode;
+//window.google = GoogleCharts;
+
 
 /**
  * Internal Modules
@@ -192,6 +196,13 @@ angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetu
 
 import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
+
+/**
+ * dashboard
+ */
+import MemberDashboardMainController from './controllers/member/dashboard/main-controller.js';
+angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
+
 
 /**
  * settings
