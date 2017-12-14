@@ -19,7 +19,8 @@
     "keythereum": "1.0.2",
     "lodash": "4.17.4",
     "mv": "2.1.1",
-    "node-json-rpc": "0.0.1"
+    "node-json-rpc": "0.0.1",
+    "wait.for": "^0.6.6"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",
