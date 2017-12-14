@@ -1,0 +1,83 @@
+.sk-circle-pie-chart {
+  * {
+    font-family: ProximaNovaRegular;
+  }
+  .active {
+    border: 2px solid #303c49;
+  }
+  .chart-parent {
+    margin-right: 74px;
+    position: relative;
+  }
+  .chart-center-container {
+      position: absolute;
+      text-align: center;
+      cursor: default;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      .tolalPrice  {
+          font-size: 30px;
+          font-weight: 300;
+          text-align: center;
+          color: #ffffff;
+        }
+      .totalPriceTitle {
+        font-size: 14px;
+        margin-top: 5px;
+        text-align: center;
+        color: #93b0c1;
+      }     
+  }
+
+  .details-container {
+    .value {
+      margin-left: 53px;
+      font-size: 18px;
+      text-align: left;
+      color: #ffffff;
+    }
+    table:not(:first-child) {
+      margin-left: 78px; 
+    }
+    table {
+      tr {
+        padding: 4px;
+      }
+    }
+  }
+
+  .item {
+    * {
+      cursor: default;
+    }
+    td:nth-child(2) {
+      width: 50%;
+    }
+    td:first-child {
+      width: 50%;
+    }
+    &:not(:last-child) {
+      margin-bottom: 44px;
+    }
+    .sk-icon {
+      margin-right: 12px;
+    }
+    .title {
+      .titleFull {
+        font-size: 18px;
+        text-align: left;
+        color: #ffffff;
+      }
+      .titleSmall {
+        opacity: 0.7;
+        margin-top: 4px;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-align: left;
+        color: #ffffff;
+      }
+    }
+  }
+}
