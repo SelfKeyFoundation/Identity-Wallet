@@ -1,0 +1,110 @@
+.sk-expandable-box {
+    border-radius: 4px;
+	background-color: #262f39;
+    border: solid 1px #303c49;
+    padding: 0 30px;
+
+    flex-direction: column;
+
+    &:first-of-type {
+        .sk-expandable-box__title {
+            display: block;
+        }
+    }
+    
+    &.expended {
+        background-color: #222a33;
+
+        .sk-expandable-box__item__header {
+            border-bottom: none !important;
+        }
+    }
+
+    .sk-expandable-box__title {
+        margin-top: 30px;
+        display: none;
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .sk-expandable-box__item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+
+        .sk-expandable-box__item__header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 36px;
+            //border-bottom: 1px solid #384047;
+            padding-bottom: 30px;
+            width: 100%;
+            font-size: 16px;
+            outline: none;
+
+            .sk-expandable-box__item__header__date {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sk-icon {
+                margin-left: 20px;
+            }
+
+            .sk-expandable-box__item__header__text {
+                margin-left: 10px;
+
+                span {
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .sk-expandable-box__item__content {
+            padding-bottom: 30px;
+
+            .sk-expandable-box__item__content__info-table {
+                margin-left: 106px;
+                
+                tr {
+                    td {
+                        &:first-of-type {
+                            font-family: ProximaNovaSemibold;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: #93b0c1;
+                            padding-top: 15px;
+                        }
+
+                        &:last-of-type {
+                            padding-top: 15px;
+                            padding-left: 20px;
+
+                            align-items: center;
+                            justify-content: flex-start;
+                            display: flex;
+                            flex-direction: row;
+
+                            span {
+                                margin-left: 12px;
+                                font-family: ProximaNovaSemibold;
+                                font-size: 16px;
+                                font-weight: 600;
+                                color: #ffffff;                            
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+}

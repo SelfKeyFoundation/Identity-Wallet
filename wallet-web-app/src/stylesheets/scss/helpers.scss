@@ -26,11 +26,18 @@
   }
 }
 
-/**
- * MARGINS
- */
+// margins
 .no-margins {
   margin: 0 !important;
+}
+
+// paddings
+.no-paddings {
+  padding: 0 !important;
+}
+
+.no-left-padding {
+  padding-left: 0 !important;
 }
 
 /**
@@ -225,6 +232,12 @@ h2 {
   width: 26px !important;
   height: 26px !important;
 }
+
+.icon-size-26x14 {
+  width: 26.4px !important;
+  height: 14.6px !important;
+}
+
 
 .icon-size-33x36 {
   width: 33px !important;

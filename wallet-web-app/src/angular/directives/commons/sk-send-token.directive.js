@@ -1,6 +1,7 @@
 'use strict';
 
 import EthUnits from '../../classes/eth-units';
+import EthUtils from '../../classes/eth-utils';
 
 function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService, Web3Service) {
     'ngInject';
@@ -17,6 +18,7 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
             
             scope.sendAmountInUSD = 0.00;
             scope.gasPriceInGwei = 50;
+            scope.gasLimit = 21000;
 
             scope.data = {
                 sendAmountInEth: null,
@@ -31,15 +33,20 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
             loadBalance();
 
             scope.selectAll = (event) => {
-                scope.sendAmountInEth = angular.copy(scope.totalBalanceInEth)
+                scope.data.sendAmountInEth = angular.copy(scope.totalBalanceInEth)
             }
 
             scope.sendPromise = null;
             scope.txHex = null;
-            scope.send = (event) => {
-                console.log(scope.data.sendAmountInEth, scope.data.sendToAddress, scope.gasPriceInGwei);
-                if(scope.data.sendAmountInEth > 0 && scope.data.sendToAddress && scope.gasPriceInGwei >= 1){
+            scope.send = (event, sendEtherForm) => {
+                console.log(">>>>", sendEtherForm);
+                if (scope.data.sendAmountInEth > 0 && scope.data.sendToAddress && scope.gasPriceInGwei >= 1) {
                     
+                    if(!EthUtils.validateEtherAddress(scope.data.sendToAddress)){
+                        console.log("bad eth address");
+                        return;
+                    }
+
                     if(scope.data.sendAmountInEth > scope.totalBalanceInEth){
                         scope.data.sendAmountInEth = angular.copy(scope.totalBalanceInEth);
                     }
@@ -50,7 +57,7 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
                         scope.data.sendToAddress,
                         EthUnits.unitToUnit(scope.data.sendAmountInEth, 'ether', 'wei'),
                         EthUnits.unitToUnit(scope.gasPriceInGwei, 'gwei', 'wei'),
-                        21000
+                        scope.gasLimit
                     );
     
                     txGenPromise.then((signedHex)=>{
@@ -65,10 +72,12 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
                             console.log(">>>", "error", error);
                         });
                     });
+                } else {
+
                 }
             }
 
-            scope.close = () => {
+            scope.close = (event) => {
                 element.remove();
                 scope.$destroy();
             }

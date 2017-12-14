@@ -1,0 +1,47 @@
+.sk-box.sk-expandable-box(style="width: 600px;", ng-class="{'expended': state === 'opened'}")
+    .sk-expandable-box__title ID Wallet History
+    
+    .sk-expandable-box__item
+        .sk-expandable-box__item__header(ng-click="toggle($event)")
+            .sk-expandable-box__item__header__date
+                span.fc-bluey-grey DEC
+                span.fc-bluey-grey 11
+            sk-icon(icon="reminder", size-class="icon-size-36x36")
+            .sk-expandable-box__item__header__text(flex)
+                span.fc-white Applied to Token Sale
+                span.fc-aqua-blue Atlas
+            sk-icon(icon="up-arrow", size-class="icon-size-26x14", ng-if="state === 'opened'")
+        .sk-expandable-box__item__content(ng-if="state === 'opened'")
+            table.sk-expandable-box__item__content__info-table
+                tr
+                    td.no-paddings(colspan="2", style="color: #fff;") Shared
+                tr
+                    td Residency:
+                    td
+                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                        span Valletta, Malta
+                tr
+                    td Email:
+                    td 
+                        sk-icon(icon="warning-box", size-class="icon-size-16x16")
+                        span andrew@thejones.com
+                tr
+                    td Mobile:
+                    td 
+                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                        span +356 345 5568
+                tr
+                    td Passport:
+                    td 
+                        sk-icon(icon="danger-box", size-class="icon-size-16x16")
+                        span Malta
+                tr
+                    td National ID:
+                    td 
+                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                        span Malta Driver’s License
+                tr
+                    td Utility Bill:
+                    td 
+                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                        span Action Required
