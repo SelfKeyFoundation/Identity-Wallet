@@ -29,8 +29,10 @@
 
 @import './directives/sk-send-token.scss';
 @import './directives/sk-icon.scss';
+@import './directives/sk-circle-pie-chart.scss';
 @import './directives/sk-wallet-history-item.scss';
-@import './directives/sk-reminder-box.scss';
+@import './directives/sk-reminders-box.scss';
+@import './directives/sk-alerts-box.scss';
 
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/member-layout.scss';

@@ -248,7 +248,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/dashboard/main',
             views: {
                 main: {
-                    templateUrl: 'member/dashboard/main.html'
+                    templateUrl: 'member/dashboard/main.html',
+                    controller: 'MemberDashboardMainController'
                 }
             }
         })

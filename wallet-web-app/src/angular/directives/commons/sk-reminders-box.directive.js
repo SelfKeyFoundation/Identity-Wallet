@@ -1,6 +1,6 @@
 'use strict';
 
-function SkReminderBoxDirective($log, $window) {
+function SkRemindersBoxDirective($log, $window) {
     'ngInject';
 
     return {
@@ -24,8 +24,8 @@ function SkReminderBoxDirective($log, $window) {
             }]
         },
         replace: true,
-        templateUrl: 'common/directives/sk-reminder-box.html'
+        templateUrl: 'common/directives/sk-reminders-box.html'
     }
 }
 
-export default SkReminderBoxDirective;
+export default SkRemindersBoxDirective;

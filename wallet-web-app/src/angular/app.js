@@ -11,8 +11,12 @@ import angularMaterial from 'angular-material';
 import LocalStorageModule from 'angular-local-storage';
 import qrcode from 'qrcode-generator';
 import ngQrcode from 'angular-qrcode';
+//import GoogleCharts from 'google-charts';
+
 
 window.qrcode = qrcode;
+//window.google = GoogleCharts;
+
 
 /**
  * Internal Modules
@@ -134,11 +138,17 @@ angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
 import SkRightSidenavDirective from './directives/commons/sk-right-sidenav.directive';
 angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
 
+import SkCirclePieChartDirective from './directives/commons/sk-circle-pie-chart.directive';
+angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
+
 import SkWalletHistoryItemDirective from './directives/commons/sk-wallet-history-item.directive';
 angular.module('kyc-wallet').directive('skWalletHistoryItem', SkWalletHistoryItemDirective);
 
-import SkReminderBoxDirective from './directives/commons/sk-reminder-box.directive';
-angular.module('kyc-wallet').directive('skReminderBox', SkReminderBoxDirective);
+import SkRemindersBoxDirective from './directives/commons/sk-reminders-box.directive';
+angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
+
+import SkAlertsBoxDirective from './directives/commons/sk-alerts-box.directive';
+angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 
 
 /**
@@ -186,6 +196,13 @@ angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetu
 
 import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
+
+/**
+ * dashboard
+ */
+import MemberDashboardMainController from './controllers/member/dashboard/main-controller.js';
+angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
+
 
 /**
  * settings
