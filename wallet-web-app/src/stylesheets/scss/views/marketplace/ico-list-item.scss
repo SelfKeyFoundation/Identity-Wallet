@@ -143,13 +143,9 @@
             letter-spacing: 0.7px;
             text-align: center;
             color: #ffffff;
-            border-radius: 4px;
-            background-image: linear-gradient(318deg, #08bccd, #2da1f8);
+            background-image: linear-gradient(318deg, #db9218, #f5a623);
             box-shadow: 0 2px 2px 0 #15222e;
-            border-style: solid;
-            border-width: 1px;
-            border-image-source: linear-gradient(342deg, #15d4e6, #48aefa);
-            border-image-slice: 1;
+            border: solid 1px #f5a623;
             border-color: transparent;
             height: 40px;
             outline: none;
@@ -219,7 +215,7 @@
 
     }
 
-    .KYC-requirements-content{
+    .KYC-requirements-content {
       padding: 30px;
 
       .KYC-requirements-text {
@@ -235,9 +231,10 @@
         color: #ffffff;
       }
 
-      .KYC-requirements-lists{
+      .KYC-requirements-lists {
 
-        .sk-list{
+        .sk-list {
+
           span {
             font-size: 14px;
           }
@@ -246,4 +243,8 @@
 
     }
   }
-}   
+}
+
+.background-color-squash {
+  background-color: #f5a623 !important;
+}
