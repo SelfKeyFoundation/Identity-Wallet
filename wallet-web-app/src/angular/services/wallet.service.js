@@ -7,7 +7,7 @@ import Token from '../classes/token.js';
 
 import Tx from 'ethereumjs-tx';
 
-function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService) {
   'ngInject';
 
   $log.info('WalletService Initialized');
@@ -27,6 +27,9 @@ function WalletService($rootScope, $log, $q, EVENTS, ElectronService, EtherScanS
 
       $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
         selectedChainId = newChainId;
+        if(this.wallet && this.wallet.getAddress()){
+          this.loadBalance();
+        }
       });
     }
 

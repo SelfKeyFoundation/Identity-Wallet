@@ -168,7 +168,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
                         let isMissing = false;
                         for(let i in $rootScope.initialSetupProgress){
-                            console.log("???????", i, $rootScope.initialSetupProgress[i]);
                             if(!$rootScope.initialSetupProgress[i]){
                                 isMissing = true;
                                 break;
@@ -248,7 +247,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/dashboard/main',
             views: {
                 main: {
-                    templateUrl: 'member/dashboard/main.html'
+                    templateUrl: 'member/dashboard/main.html',
+                    controller: 'MemberDashboardMainController'
                 }
             }
         })
@@ -275,19 +275,19 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         .state('member.marketplace.ico-list', {
-            url: '/member/marketplace/ico-list',
+            url: '/member/marketplace/ico/list',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico-list.html'
+                    templateUrl: 'member/marketplace/ico/list.html'
                 }
             }
         })
 
-        .state('member.marketplace.ico-list-item', {
-            url: '/member/marketplace/ico-list-item/:id',
+        .state('member.marketplace.ico-item', {
+            url: '/member/marketplace/ico/item/:id',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico-list-item.html'
+                    templateUrl: 'member/marketplace/ico/item.html'
                 }
             }
         })
@@ -316,7 +316,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     
     $urlRouterProvider.otherwise('/guest/loading');
 
-    //$urlRouterProvider.otherwise('/member/wallet/main');
+    //$urlRouterProvider.otherwise('/member/dashboard/main');
 }
 
 export default appStates;

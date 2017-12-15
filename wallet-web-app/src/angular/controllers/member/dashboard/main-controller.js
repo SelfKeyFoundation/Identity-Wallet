@@ -3,15 +3,28 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
 
     $log.info('MemberDashboardMainController');
 
-    EtherScanService.getBalance($rootScope.wallet.getAddress()).then((balance) => {
-        console.log(">>>>", balance);
-    });
-
-    $timeout(() => {
-        $mdSidenav('right').toggle().then(function () {
-            $log.debug("toggle " + navID + " is done");
-        });
-    }, 2000);
+    $scope.tmpData = {
+        total: '1547.445',
+        totalTitle: 'Tolal value USD',
+        items: [{
+            title: 'Ethereum',
+            subTitle: 'eth',
+            value: 852.56487,
+            color: '#4080ff',
+            icon: 'eth'
+        }, {
+            title: 'Geolem',
+            subTitle: 'gnt',
+            value: 852.56487,
+            color: '#39d9e4'
+        }, {
+            title: 'Augur',
+            subTitle: 'rep',
+            value: 852.56487,
+            color: '#9a4786',
+            icon: 'unk'
+        }]
+    }
 
 };
 
