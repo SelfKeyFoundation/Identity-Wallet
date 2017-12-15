@@ -150,6 +150,9 @@ angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective
 import SkAlertsBoxDirective from './directives/commons/sk-alerts-box.directive';
 angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 
+import SkWalletGeneralInfoBoxDirective from './directives/commons/sk-wallet-general-info-box.directive';
+angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneralInfoBoxDirective);
+
 
 /**
  * controllers
