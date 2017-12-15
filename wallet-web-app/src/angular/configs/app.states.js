@@ -275,19 +275,19 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         .state('member.marketplace.ico-list', {
-            url: '/member/marketplace/ico-list',
+            url: '/member/marketplace/ico/list',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico-list.html'
+                    templateUrl: 'member/marketplace/ico/list.html'
                 }
             }
         })
 
-        .state('member.marketplace.ico-list-item', {
-            url: '/member/marketplace/ico-list-item/:id',
+        .state('member.marketplace.ico-item', {
+            url: '/member/marketplace/ico/item/:id',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico-list-item.html'
+                    templateUrl: 'member/marketplace/ico/item.html'
                 }
             }
         })
