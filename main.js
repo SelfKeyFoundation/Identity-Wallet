@@ -16,7 +16,7 @@ const i18n = [
  * often used modules list
  */
 const modules = [
-  { 'electron': ['app', 'BrowserWindow', 'dialog', 'remote', 'ipcMain'] },
+  { 'electron': ['app', 'BrowserWindow', 'dialog', 'remote', 'ipcMain', 'autoUpdater'] },
   'mv',
   'fs',
   'path',
