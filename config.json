@@ -1,11 +1,11 @@
 {
     "default": {
-        "debug": false,
-        "dev": false,
+        "debug": true,
+        "dev": true,
         "app": {
             "name": "IdentityWallet",
             "title": "Identity Wallet",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "description": "Selfkey Identity Wallet",
             "companyName": "Selfkey",
             "productName": "org.selfkey.wallet",

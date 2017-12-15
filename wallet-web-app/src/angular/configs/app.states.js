@@ -168,7 +168,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
                         let isMissing = false;
                         for(let i in $rootScope.initialSetupProgress){
-                            console.log("???????", i, $rootScope.initialSetupProgress[i]);
                             if(!$rootScope.initialSetupProgress[i]){
                                 isMissing = true;
                                 break;
