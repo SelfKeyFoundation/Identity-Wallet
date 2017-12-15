@@ -3,7 +3,10 @@
     font-family: ProximaNovaRegular;
   }
   .active {
-    border: 2px solid #303c49;
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px 1px #0dc7dd;
+    outline-width: 0;
+    border: none;
   }
   .chart-parent {
     margin-right: 74px;
@@ -41,25 +44,23 @@
       margin-left: 78px; 
     }
     table {
+      border-spacing: 0 30px;
       tr {
         padding: 4px;
       }
     }
   }
-
+  
   .item {
     * {
       cursor: default;
     }
-    td:nth-child(2) {
-      width: 50%;
+
+    td {
+      padding: 7px;
+      vertical-align: top;
     }
-    td:first-child {
-      width: 50%;
-    }
-    &:not(:last-child) {
-      margin-bottom: 44px;
-    }
+   
     .sk-icon {
       margin-right: 12px;
     }
