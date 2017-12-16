@@ -24,7 +24,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             color: '#9a4786',
             icon: 'unk'
         },{
-            title: 'Augur1 a litle long',
+            title: 'Tmp a litle long',
             subTitle: 'rep2',
             value: 852.56487,
             color: 'red',

@@ -1,3 +1,5 @@
+import { setTimeout } from "timers";
+
 'use strict';
 
 function SkCirclePieChartDirective() {
@@ -21,8 +23,7 @@ function SkCirclePieChartDirective() {
                 return `${item.title + index}`;
             }
             scope.chunkedItems = chunk(scope.data.items, 3);
-            google.charts.load("visualization", "1", { packages: ["corechart"] });
-
+            google.charts.load("current", { packages: ["corechart"] });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
@@ -40,22 +41,27 @@ function SkCirclePieChartDirective() {
                     backgroundColor: 'transparent',
                     title: "",
                     chartArea: { left: 10, top: 10, bottom: 10, right: 10 },
-                    width: 280,
-                    height: 280,
                     pieHole: 0.7,
-                    pieSliceBorderColor: "none",
+                    pieSliceBorderColor: 'none',
                     colors: colors,
                     legend: {
-                        position: "none"
+                        position: 'none'
                     },
-                    pieSliceText: "none",
+                    pieSliceText: 'none',
                     tooltip: {
-                        trigger: "none"
+                        trigger: 'none'
+                    },
+                    animation: {
+                        duration: 4500,
+                        startup: true
                     }
                 };
 
-                let chart = new google.visualization
-                    .PieChart(document.getElementById('chart'));
+                let chart = new google.visualization.PieChart(document.getElementById('chart'));
+                scope.chartIsReady = false;    
+                google.visualization.events.addListener(chart, 'ready', function (chartItem) {
+                    scope.chartIsReady = true;
+                });
 
                 chart.draw(data, options);
 
@@ -68,10 +74,23 @@ function SkCirclePieChartDirective() {
                 };
 
                 google.visualization.events.addListener(chart, 'onmouseover', function (chartItem) {
+                    let sel = chart.getSelection();
+                    if (sel && sel.length && sel[0].row == chartItem.row) {
+                        addOrRemoveActive(chartItem, 'removeClass');
+                        setTimeout(() => {
+                            addOrRemoveActive(chartItem, 'addClass');
+                        }, 100);
+                        return;
+                    }
                     addOrRemoveActive(chartItem, 'addClass');
                 });
 
+
                 google.visualization.events.addListener(chart, 'onmouseout', function (chartItem) {
+                    let sel = chart.getSelection();
+                    if (sel && sel.length && sel[0].row == chartItem.row) {
+                        return;
+                    }
                     addOrRemoveActive(chartItem, 'removeClass');
                 });
             }
