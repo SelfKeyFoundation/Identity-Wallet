@@ -77,6 +77,12 @@
         .sk-button.small(ui-sref="member.marketplace.ico-list")
             span VIEW ALL ICOs
 
+    //For Test
+
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "requirements", "requirementsList": [{"title": "FullName", "status": 1}, {"title":"Email Address"}, {"title": "Phone Number"}, {"title": "Passport"}, {"title": "National ID"}, {"title": "Utility Bill"}]}')
+        sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "info", "ethAmount": "43,422.12", "bnxAmount": "42,252,331", "price": "0.001518 ETH/BNC", "minPurchase": "0.00001 ETH", "hardCap": "105,000 ETH", "total": "150,000,000 BNC"}')
+
 
 
 
