@@ -316,7 +316,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     
     $urlRouterProvider.otherwise('/guest/loading');
 
-    //$urlRouterProvider.otherwise('/member/dashboard/main');
+    //$urlRouterProvider.otherwise('/member/wallet/main');
 }
 
 export default appStates;

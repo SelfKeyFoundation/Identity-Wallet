@@ -18,10 +18,10 @@
 @import './components/sk-double-header.scss';
 @import './components/sk-token-box.scss';
 @import './components/sk-tasks-box.scss';
-@import './components/sk-ico-box.scss';
 @import './components/sk-right-sidenav.scss';
 @import './components/sk-table.scss';
 @import './components/sk-dropdown-menu.scss'; // TODO - change prefix of file to md (actually it is realod of md styles)
+@import './components/sk-scrollbar.scss';
 
 @import './components/md-select.scss';
 @import './components/md-tooltip.scss';
@@ -34,6 +34,10 @@
 @import './directives/sk-wallet-history-item.scss';
 @import './directives/sk-reminders-box.scss';
 @import './directives/sk-alerts-box.scss';
+@import './directives/sk-wallet-general-info-box.scss';
+@import './directives/sk-wallet-document-box.scss';
+@import './directives/sk-ico-item-box.scss';
+@import './directives/sk-ico-details-box.scss';
 
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/member-layout.scss';

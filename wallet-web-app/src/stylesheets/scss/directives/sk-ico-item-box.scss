@@ -1,7 +1,7 @@
-.sk-ico-box {
+.sk-ico-item-box {
     padding: 0;
 
-    .sk-ico-box__header {
+    .sk-ico-item-box__header {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -33,7 +33,7 @@
         }
     }
 
-    .sk-ico-box__content {
+    .sk-ico-item-box__content {
         padding: 30px;
 
         table {
@@ -56,7 +56,7 @@
       }
     }
 
-    .sk-ico-box__footer {
+    .sk-ico-item-box__footer {
         display: flex;
         flex-direction: row;
         align-items: center;
