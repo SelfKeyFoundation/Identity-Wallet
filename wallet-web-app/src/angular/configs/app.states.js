@@ -313,6 +313,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.wallet.manage-token', {
+            url: '/member/wallet/token/:id/manage',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/manage-token.html'
+                }
+            }
+        })
+
     
     $urlRouterProvider.otherwise('/guest/loading');
 
