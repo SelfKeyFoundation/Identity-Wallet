@@ -1,5 +1,3 @@
-import { setTimeout } from "timers";
-
 'use strict';
 
 function SkCirclePieChartDirective() {
