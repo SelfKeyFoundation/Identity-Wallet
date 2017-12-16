@@ -56,7 +56,7 @@ function SkCirclePieChartDirective() {
                 };
 
                 let chart = new google.visualization.PieChart(document.getElementById('chart'));
-                scope.chartIsReady = false;    
+                scope.chartIsReady = false;
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {
                     scope.chartIsReady = true;
                 });
@@ -94,12 +94,11 @@ function SkCirclePieChartDirective() {
 
                 google.visualization.events.addListener(chart, 'select', function (chartItem) {
                     let sel = chart.getSelection();
-                    scope.data.items.forEach((item,index)=>{
+                    scope.data.items.forEach((item, index) => {
                         if (index != sel[0].row) {
-                            addOrRemoveActive({row:index}, 'removeClass');
-                            
+                            addOrRemoveActive({ row: index }, 'removeClass');
                         }
-                    })
+                    });
                 });
             }
         },
