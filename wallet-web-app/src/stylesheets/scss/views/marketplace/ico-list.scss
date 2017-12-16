@@ -10,7 +10,8 @@
     /*padding-top: 80px;*/
     // TODO
     .ico-list-content {
-        .toolbar {
+
+        .ico-list-content__toolbar {
             position: fixed;
             z-index: 100;
             width: 100%;
@@ -41,8 +42,8 @@
                 }
 
             }
-
         }
+
         .ico-list-items{
             margin-top: 150px;
             display: flex;

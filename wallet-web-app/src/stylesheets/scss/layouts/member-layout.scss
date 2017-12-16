@@ -1,11 +1,11 @@
 .member-layout {
     
     > .toolbar {
-        position: fixed;
+        //position: fixed;
         background-color: #262f39;
-        z-index: 100;
+        //z-index: 100;
         width: 100%;
-        height: 76px;
+        min-height: 76px;
 
         border-bottom: 1px solid #303c49;
 
@@ -17,7 +17,7 @@
         }
 
         > .right {
-            height: 100%;
+            height: 76px;
             display: flex;
             align-items: flex-end;
 
@@ -75,7 +75,7 @@
     }
 
     > .member-layout__content {
-        margin-top: 76px;
+        //margin-top: 76px;
 
         > .member-layout__content-wrappper {
             > * {
