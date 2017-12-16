@@ -1,11 +1,11 @@
-.sk-box.sk-ico-box
-    .header.sk-ico-box__header
+.sk-box.sk-ico-item-box
+    .header.sk-ico-item-box__header
         sk-icon(icon="{{icoData.icon}}", size-class="icon-size-44x44")
         span {{icoData.title}}
         span(style="font-size: 15px; margin-left: 5px;") ({{icoData.category}})
         span.dot(ng-class="{'active':icoData.status === 'active','inactive':icoData.status === 'inactive' }")
 
-    .sk-ico-box__content
+    .sk-ico-item-box__content
         .description.fc-white
             p {{icoData.description}}
             .price.fc-white
@@ -14,7 +14,7 @@
 
 
     // TODO - change url later
-    .sk-ico-box__footer
+    .sk-ico-item-box__footer
         .sk-button.small(ui-sref="member.marketplace.ico-item({id: 1})")
             span view
 

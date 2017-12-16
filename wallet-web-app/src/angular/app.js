@@ -129,8 +129,11 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 import SkTasksBoxDirective from './directives/commons/sk-tasks-box.directive';
 angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 
-import SkIcoBoxDirective from './directives/commons/sk-ico-box.directive';
-angular.module('kyc-wallet').directive('skIcoBox', SkIcoBoxDirective);
+import SkIcoItemBoxDirective from './directives/commons/sk-ico-item-box.directive';
+angular.module('kyc-wallet').directive('skIcoItemBox', SkIcoItemBoxDirective);
+
+import SkIcoDetailsBoxDirective from './directives/commons/sk-ico-details-box.directive';
+angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
 import SkSendTokenDirective from './directives/commons/sk-send-token.directive';
 angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
@@ -152,6 +155,10 @@ angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 
 import SkWalletGeneralInfoBoxDirective from './directives/commons/sk-wallet-general-info-box.directive';
 angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneralInfoBoxDirective);
+
+import SkWalletDocumentBoxDirective from './directives/commons/sk-wallet-document-box.directive';
+angular.module('kyc-wallet').directive('skWalletDocumentBox', SkWalletDocumentBoxDirective);
+
 
 
 /**

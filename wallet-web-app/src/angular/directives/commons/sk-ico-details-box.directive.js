@@ -1,6 +1,6 @@
 'use strict';
 
-function SkWalletGeneralInfoBoxDirective($log, $window) {
+function SkIcoDetailsBoxDirective($log, $window, $timeout) {
     'ngInject';
 
     return {
@@ -12,8 +12,8 @@ function SkWalletGeneralInfoBoxDirective($log, $window) {
             
         },
         replace: true,
-        templateUrl: 'common/directives/sk-wallet-general-info-box.html'
+        templateUrl: 'common/directives/sk-ico-details-box.html'
     }
 }
 
-export default SkWalletGeneralInfoBoxDirective;
+export default SkIcoDetailsBoxDirective;

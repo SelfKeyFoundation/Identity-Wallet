@@ -1,6 +1,6 @@
 'use strict';
 
-function SkIcoBoxDirective($log, $window, $timeout) {
+function SkIcoItemBoxDirective($log, $window, $timeout) {
     'ngInject';
 
     return {
@@ -14,8 +14,8 @@ function SkIcoBoxDirective($log, $window, $timeout) {
             
         },
         replace: true,
-        templateUrl: 'common/directives/sk-ico-box.html'
+        templateUrl: 'common/directives/sk-ico-item-box.html'
     }
 }
 
-export default SkIcoBoxDirective;
+export default SkIcoItemBoxDirective;
