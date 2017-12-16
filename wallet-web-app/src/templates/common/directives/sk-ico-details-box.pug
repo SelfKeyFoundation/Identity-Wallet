@@ -1,2 +1,75 @@
 .sk-box.sk-ico-details-box
-    // TODO
+    .header.sk-ico-details-box__header
+        sk-icon(icon="{{data.icon}}", size-class="icon-size-44x44")
+        span {{data.title}}
+        span(style="font-size: 15px; margin-left: 5px;") ({{data.category}})
+        span.dot(ng-class="{'info':data.type === 'info','requirements':data.type === 'requirements' }")
+
+    .sk-ico-details-box__content(ng-if="data.type === 'requirements'")
+        .title
+            span Submit Necessary Information
+        .description.fc-white
+            p In order to join this token sale, you must submit all information required by those with this offering.
+        
+        hr
+
+        .title
+            span KYC requirements
+
+        div(layout="row" layout-align="space-between start")
+            div(flex)
+                table
+                    tr(ng-repeat="reqItem in requirementsFirstPart")
+                        td
+                            md-icon(md-svg-src="assets/images/icons/check-circle.svg" ng-class="{'icon-green' : reqItem.status, 'icon-grey': !reqItem.status}")
+                        td
+                            .description.fc-white.requiremet-label
+                                p.label {{reqItem.title}}
+            div(flex)
+                table
+                    tr(ng-repeat="reqItem in requirementsSecondPart") 
+                        td
+                            md-icon(md-svg-src="assets/images/icons/check-circle.svg" ng-class="{'icon-green' : reqItem.status, 'icon-grey': !reqItem.status}")
+                        td
+                            .description.fc-white.requiremet-label
+                                p.label {{reqItem.title}}
+
+    .sk-ico-details-box__content(ng-if="data.type === 'info'")
+        .description.fc-white
+            p Sales Data
+
+        table
+            tr
+                td
+                    span.amountValue {{data.ethAmount}}
+                    br
+                    span.label ETH Collected
+                td
+                    span.amountValue {{data.bnxAmount}}
+                    br
+                    span.label BNX Remaining
+            tr
+        
+        hr
+
+        table
+            tr
+                td
+                    span.label Price:  
+                    span  {{data.price}}
+                td
+                    span.label Min Purchase  
+                    span  {{data.minPurchase}}
+            tr
+                td
+                    span.label Hard cap: 
+                    span  {{data.hardCap}}
+                td
+                    span.label Total Supply 
+                    span  {{data.total}}
+
+
+
+
+        
+            
