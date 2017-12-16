@@ -2,8 +2,8 @@
     .header.sk-ico-box__header
         sk-icon(icon="{{icoData.icon}}", size-class="icon-size-44x44")
         span {{icoData.title}}
-        span(style="font-size: 15px; margin-left: 5px;") ({{icoData.category}})
-        span.dot(ng-class="{'active':icoData.status === 'active','inactive':icoData.status === 'inactive' }")
+        span(style="font-size: 15px; margin-left: 5px;", flex) ({{icoData.category}})
+        span.dot(ng-class="{'active':icoData.status === 'active','inactive':icoData.status === 'inactive','upcoming':icoData.status === 'upcoming' }")
 
     .sk-ico-box__content
         .description.fc-white

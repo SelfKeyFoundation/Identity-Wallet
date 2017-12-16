@@ -1,7 +1,4 @@
-.ico-list-layout-max-width {
-    width: 100%;
-    margin-left: 152px;
-}
+
 .ico-list-content-wrappper {
     display: flex;
     flex-direction: row;
@@ -35,7 +32,7 @@
                         }
                     }
                     .statusName {
-                        padding: 0 130px 0 0;
+                        /*padding: 0 130px 0 0;*/
                         font-size: 17px;
                     }
                 }
@@ -56,7 +53,8 @@
                 border-radius: 4px;
                 background-color: #262f39;
                 border: solid 1px #303c49;
-                width: 19.5rem;
+                /*width: 19.5rem;*/
+                width: 18.5rem;
                 margin: 1rem;
             }
         }
