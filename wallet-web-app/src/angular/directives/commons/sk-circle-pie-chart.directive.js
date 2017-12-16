@@ -91,6 +91,16 @@ function SkCirclePieChartDirective() {
                     }
                     addOrRemoveActive(chartItem, 'removeClass');
                 });
+
+                google.visualization.events.addListener(chart, 'select', function (chartItem) {
+                    let sel = chart.getSelection();
+                    scope.data.items.forEach((item,index)=>{
+                        if (index != sel[0].row) {
+                            addOrRemoveActive({row:index}, 'removeClass');
+                            
+                        }
+                    })
+                });
             }
         },
         replace: true,
