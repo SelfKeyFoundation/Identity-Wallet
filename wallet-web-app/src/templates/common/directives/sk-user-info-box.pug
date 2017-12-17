@@ -1,0 +1,49 @@
+.sk-box(style="margin-left: 30px; color: white; text-align: center; padding: 20px;")
+    .user-info-box(layout="column", layout-align="center center")
+        //.box-icon
+            sk-icon(icon="danger-box", size-class="icon-size-16x16")
+        .visual
+            .image
+                .pic(style='background-image: url(assets/images/temp/carlosbg.jpg);')
+            .name
+                sk-icon(icon="success-box", size-class="icon-size-16x16")
+                span {{userData.name}}
+        hr
+        .info
+            table
+                tr
+                    td.fc-bluey-grey Residency:
+                    td
+                        div
+                            sk-icon(icon="success-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.residency}}
+                tr
+                    td.fc-bluey-grey Email:
+                    td
+                        div
+                            sk-icon(icon="warning-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.email}}
+                tr
+                    td.fc-bluey-grey Mobile:
+                    td
+                        div
+                            sk-icon(icon="warning-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.mobile}}
+                tr
+                    td.fc-bluey-grey Passport:
+                    td
+                        div
+                            sk-icon(icon="success-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.passport}}
+                tr
+                    td.fc-bluey-grey National ID:
+                    td
+                        div
+                            sk-icon(icon="success-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.nationalId}}
+                tr
+                    td.fc-bluey-grey Utility Bill:
+                    td
+                        div
+                            sk-icon(icon="danger-box", size-class="icon-size-16x16")
+                            span.fc-white {{userData.utilityBill}}
