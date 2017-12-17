@@ -1,0 +1,89 @@
+.dashboard-content-wrappper(layout="column", layout-align="start center")
+
+    // header
+    .dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
+        h2.proxima.white SelfKey Dashboard
+
+    // balances
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.wallet.balanceEth}}", value-in-usd="$1765.87 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
+        sk-token-box(name="Unknown", symbol="unk", value="852.62781", value-in-usd="$44951.44 USD", address="3CCCXfH874ronv1uGKkCMDgW2ffLBQScro", style="height: 216px;")
+        sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
+
+    // my crypto
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.my-cryptos-box(style="width: 100%; height: 422px; padding: 20px;")
+            .my-cryptos-box__header(layout="row")
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") My Crypto
+                button.sk-icon-button
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            sk-circle-pie-chart(data="tmpData", style="padding-top: 30px;") 
+
+    // alerts
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.alerts-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .alerts-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Alerts
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="warning", size-class="icon-size-33x36")
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #ff6c00; margin-left: 16px;") Action Required  Zilliqa Token Sale:
+                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="notification", size-class="icon-size-33x36")
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #43c4a7; margin-left: 16px;") Subscribed to Zilliqa Notifications:
+                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+
+    // reminders
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.reminders-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .reminders-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Reminders
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .reminders-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="reminder", size-class="icon-size-33x36")
+                span.reminders-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
+                span.reminders-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+
+    // transactions
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .transactions-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            .transactions-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
+                button.sk-icon-button
+                    sk-icon(icon="reminder", size-class="icon-size-33x36")
+                span.transactions-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
+                span.transactions-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+
+    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
+        h2.proxima.white Upcoming ICOs
+
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+
+        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"active", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
+        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"active", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
+        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"inactive", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
+
+    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
+        .sk-button.small(ui-sref="member.marketplace.ico-list")
+            span VIEW ALL ICOs
+
+    //For Test
+
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "requirements", "requirementsList": [{"title": "FullName", "status": 1}, {"title":"Email Address"}, {"title": "Phone Number"}, {"title": "Passport"}, {"title": "National ID"}, {"title": "Utility Bill"}]}')
+        sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "info", "ethAmount": "43,422.12", "bnxAmount": "42,252,331", "price": "0.001518 ETH/BNC", "minPurchase": "0.00001 ETH", "hardCap": "105,000 ETH", "total": "150,000,000 BNC"}')
+
+
+
+
+

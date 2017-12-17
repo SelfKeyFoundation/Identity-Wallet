@@ -2,34 +2,63 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
+
+    $log.debug('DICTIONARY', DICTIONARY);
+
+    /**
+     * 
+     */
+    $rootScope.viewState = {
+        
+    }
 
     /**
      * 
      */
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
 
+    $rootScope.selectedLanguage = "en";
+
     /**
      * 
      */
-    AnimationService.init();
-
-    $rootScope.openUrlInNewWindow = function (url) {
-        window.open(url)
+    $rootScope.getTranslation = function (keyword, args) {
+        let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
+        if (args) {
+            for (let i = 0; i < args.length; i++) {
+                template = template.replace(new RegExp("\\{" + i + "\\}", "g"), args[i]);
+            }
+        }
+        return template;
     }
 
-    $rootScope.test2 = function () {
-        window.open("http://token.selfkey.org/");
+    $rootScope.buildErrorObject = (keyword, error) => {
+        return {
+            message: $rootScope.getTranslation(keyword),
+            causedBy: error
+        }
     }
 
-    $rootScope.test3 = function (event) {
-        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
+    $log.debug($rootScope.getTranslation('holaaa'), "???????");
+    $log.debug($rootScope.getTranslation("test_template", ['giorgio', '10']));
+
+    /**
+     * global functions
+     */
+    $rootScope.skipInitialIdAttributesSetup = (event) => {
+        // TODO - mark setup.status as 'skipped'
+        $state.go('member.dashboard.main');
     }
 
-    $timeout(function(){
-      $(".sparkley:first").sparkleh();
-    }, 2000);
+    $rootScope.closeApp = (event) => {
+        ElectronService.closeApp();
+    }
+
+    $rootScope.openSendTokenDialog = (event, token) => {
+        CommonService.showSendTokenDialog(token);
+    }
 
     /**
      * 
@@ -41,6 +70,12 @@ function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronSe
         }
     });
 
+    $timeout(() => {    
+        if($rootScope.wallet && $rootScope.wallet.getAddress()){
+          console.log("loadBalance");
+          WalletService.loadBalance();
+        }
+    }, 10000)
 }
 
 export default AppRun;

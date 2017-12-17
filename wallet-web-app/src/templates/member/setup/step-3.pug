@@ -1,0 +1,72 @@
+div(layout-fill, layout="column", layout-align="center center")
+
+    .sk-text-header(style="width: 90%; font-family: ProximaNovaRegular; font-size: 24px; line-height: 1.5; text-align: left; color: #ffffff; user-select: none;") Verify your identity
+
+    #message-container(layout="column", layout-align="center center" style="width: 90%; height: 28px;")
+
+    div(layout="row", style="width: 90%;")
+        div(layout="column", flex, style="margin-right: 30px;")
+            .sk-box.center-divider(style="height: 400px;")
+                .content.sk-documents-setup
+                    .setup-header {{texts[currentStep].text1}}
+                    .setup-subheader {{texts[currentStep].text2}}
+                    .boxes(layout="row", flex)
+                        .box(flex, layout="column", layout-align="center center")
+                            svg(xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44")
+                                g(fill="#FFF" fill-rule="evenodd")
+                                    path(d="M18.969 0L34 15.063V42a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2H18.969zM2 42h30V18H17.953C16.849 18 16 17.064 16 15.96V2H2v40zm29.995-26L18.09 2H18v14h13.995zM0 10v6h2v-6H0zm0 2h2v2H0v-2z")
+                                    path(d="M20.623 27.967a1.059 1.059 0 1 1-1.497 1.497l-1.067-1.066v5.76a1.057 1.057 0 0 1-1.06 1.06 1.059 1.059 0 0 1-1.058-1.059v-5.761l-1.067 1.067a1.06 1.06 0 0 1-1.498-1.498l2.875-2.875a1.06 1.06 0 0 1 1.498 0l2.874 2.875z")
+                            span.header {{texts[currentStep].text3}}
+                            span.sub-header (Minimal size 1600x900px)
+
+                        .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
+                            svg(xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44")
+                                path(fill="#FFF" fill-rule="nonzero" d="M6.765 0c-.842 0-1.512.58-1.65 1.403L.082 31.157A1.767 1.767 0 0 0 0 31.68v10.56C0 43.202.797 44 1.76 44h40.48c.962 0 1.76-.797 1.76-1.76V31.68c0-.261-.058-.52-.165-.742l-4.95-29.535A1.647 1.647 0 0 0 37.235 0H6.765zm.083 1.76h30.305l4.73 28.16H2.09L6.848 1.76zM22 6.16c-3.568 0-6.81 1.035-9.213 2.75-2.402 1.715-3.987 4.166-3.987 6.93 0 2.764 1.585 5.215 3.987 6.93 2.403 1.715 5.645 2.75 9.213 2.75 3.568 0 6.81-1.035 9.212-2.75 2.403-1.715 3.988-4.166 3.988-6.93 0-2.764-1.585-5.215-3.988-6.93C28.81 7.195 25.569 6.16 22 6.16zm0 1.76c3.228 0 6.136.949 8.195 2.42 2.06 1.471 3.245 3.403 3.245 5.5s-1.186 4.029-3.245 5.5c-2.06 1.471-4.967 2.42-8.195 2.42-3.228 0-6.136-.949-8.195-2.42-2.06-1.471-3.245-3.403-3.245-5.5s1.186-4.029 3.245-5.5c2.06-1.471 4.967-2.42 8.195-2.42zm0 5.28c-1.457 0-2.64.787-2.64 1.76s1.183 1.76 2.64 1.76 2.64-.787 2.64-1.76S23.457 13.2 22 13.2zM1.76 31.68h40.453a.41.41 0 0 0 .027.055V42.24H1.76V31.68zM35.2 35.2a1.759 1.759 0 1 0 0 3.52 1.759 1.759 0 1 0 0-3.52z")
+                            span.header  {{ $root.initialSetupProgress[currentStep] ? texts[currentStep].text6 : texts[currentStep].text4}}
+                            span.sub-header {{texts[currentStep].text5}}
+            div(layout="row", layout-align="start center", style="margin-top: 30px;")
+                .sk-button.outline-blue(ng-click="nextStep($event, basicInfoForm)", style="z-index: 1;")
+                    span(style="color: #0dc7dd") Next Step
+                .sk-hyperlink.sk-text(style="color: #fff; text-align: center; margin-left: 12px;", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
+
+        .sk-box
+            .content(name="basicInfoForm", layout="column", style="padding: 24px;")
+                .sk-text.header ID Wallet Checklist
+                .sk-text.sub-header If you’re not ready, you can do this later.
+
+                .sk-list(style="margin-top: 28px;")
+                    .item.clickable(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['full-name']")
+                            span(ng-if="!$root.initialSetupProgress['full-name']") 1
+                        span Full Name
+
+                    .item.clickable(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['email']")
+                            span(ng-if="!$root.initialSetupProgress['email']") 2
+                        span Email
+
+                    .item.clickable(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['phone-number']")
+                            span(ng-if="!$root.initialSetupProgress['phone-number']") 3
+                        span Phone Number
+
+                    .item.clickable(sk-select-if="currentStep === 'passport'", ng-click="goToStep('passport')")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['passport']")
+                            span(ng-if="!$root.initialSetupProgress.passport") 4
+                        span Passport
+
+                    .item.clickable(sk-select-if="currentStep === 'national-id'", ng-click="goToStep('national-id')")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['national-id']")
+                            span(ng-if="!$root.initialSetupProgress['national-id']") 5
+                        span National ID
+
+                    .item.clickable(sk-select-if="currentStep === 'utility-bill'", ng-click="goToStep('utility-bill')")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['utility-bill']")
+                            span(ng-if="!$root.initialSetupProgress['utility-bill']") 6
+                        span Utility Bill

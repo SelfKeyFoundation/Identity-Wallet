@@ -1,10 +1,11 @@
 {
     "default": {
         "debug": true,
+        "dev": true,
         "app": {
             "name": "IdentityWallet",
             "title": "Identity Wallet",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "description": "Selfkey Identity Wallet",
             "companyName": "Selfkey",
             "productName": "org.selfkey.wallet",
@@ -47,7 +48,6 @@
                 "name": "Identity Wallet Installer.deb"
             }
         },
-
         "API_ENDPOINT": "http://localhost:8080/api",
         "DEFAULT_LANGUAGE": "en"
     },

@@ -1,0 +1,21 @@
+.sk-box.sk-ico-item-box
+    .header.sk-ico-item-box__header
+        sk-icon(icon="{{icoData.icon}}", size-class="icon-size-44x44")
+        span {{icoData.title}}
+        span(style="font-size: 15px; margin-left: 5px;", flex) ({{icoData.category}})
+        span.dot(ng-class="{'active':icoData.status === 'active','inactive':icoData.status === 'inactive','upcoming':icoData.status === 'upcoming' }")
+
+    .sk-ico-item-box__content
+        .description.fc-white
+            p {{icoData.description}}
+            .price.fc-white
+                span.fc-turquoise-blue {{icoData.partialSupply}}&nbsp;
+                |     of &nbsp;{{icoData.totalSupply}}
+
+
+    // TODO - change url later
+    .sk-ico-item-box__footer
+        .sk-button.small(ui-sref="member.marketplace.ico-item({id: 1})")
+            span view
+
+        span.days &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{icoData.daysLeft}} Days Left

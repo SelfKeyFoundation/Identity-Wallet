@@ -1,0 +1,23 @@
+.sk-form {
+  input {
+
+    &.ng-untouched {
+      box-shadow: 0px 0px 5px 1px #0dc7dd;
+    }
+    &.ng-touched {
+      box-shadow: 0px 0px 5px 1px #0dc7dd;
+    }
+    &.ng-pristine {
+      box-shadow: 0px 0px 5px 1px #0dc7dd;
+    }
+    &.ng-dirty {
+      box-shadow: 0px 0px 5px 1px #dd2c00;
+    }
+    &.ng-valid {
+      box-shadow: 0px 0px 5px 1px #0dc7dd;
+    }
+    &.ng-invalid {
+      box-shadow: 0px 0px 5px 1px #dd2c00;
+    }
+  }
+}

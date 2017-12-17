@@ -29,7 +29,6 @@ set **NODE_ENV** to
 * ```gulp build:desktop-app:ubuntu``` LINUX Ubuntu .deb 32/64bit (**run this before  gulp build** ```npm install electron-installer-debian```)
 * ```gulp build:desktop-app:redhat``` LINUX Redhat .rpm 32/64bit (**run this before  gulp build** ```npm install electron-installer-redhat```)
 
-
 ## watch / development
 * ```gulp watch:webapp```
 

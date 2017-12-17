@@ -1,0 +1,64 @@
+.ico-list-content__toolbar {
+    /*position: fixed;*/
+    z-index: 100;
+    width: 100%;
+    border-radius: 4px;
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    background-image: linear-gradient(to bottom, #27313b, #1e262e);
+    box-shadow: inset 0 -1px 0 0 #303c49;
+    .contents{
+        height: 76px;
+        border-radius: 4px;
+        background-color: #262f39;
+        box-shadow: inset 0 -1px 0 0 #303c49;
+        .content {
+            height: 100%;
+            align-items: center;
+            .top {
+                height: 100%;
+                align-items: center;
+                .logo{
+                    display: inline-flex;
+                    vertical-align: middle;
+                    line-height: 44px;
+                }
+            }
+            .statusName {
+                margin-left:1rem;
+                margin-right:1rem;
+                width: 18.5rem;
+                font-size: 17px;
+            }
+        }
+
+    }
+}
+.ico-list-content-wrappper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    /*padding-top: 80px;*/
+    // TODO
+    .ico-list-content {
+
+        .ico-list-items{
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            flex-direction: row;
+            justify-content: center;
+            .sk-box{
+                position: relative;
+                display: inline-block;
+                border-radius: 4px;
+                background-color: #262f39;
+                border: solid 1px #303c49;
+                /*width: 19.5rem;*/
+                width: 18.5rem;
+                margin: 1rem;
+            }
+        }
+    }
+}   
