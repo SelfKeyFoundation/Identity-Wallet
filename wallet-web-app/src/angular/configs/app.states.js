@@ -1,5 +1,7 @@
 'use strict';
 
+import MemberWalletMainController from "../controllers/member/wallet/main-controller";
+
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
     'ngInject'
 
@@ -308,15 +310,16 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/wallet/main',
             views: {
                 main: {
-                    templateUrl: 'member/wallet/main.html'
+                    templateUrl: 'member/wallet/main.html',
+                    controller: 'MemberWalletMainController'
                 }
             }
         })
 
     
-    $urlRouterProvider.otherwise('/guest/loading');
+    //$urlRouterProvider.otherwise('/guest/loading');
 
-    //$urlRouterProvider.otherwise('/member/wallet/main');
+    $urlRouterProvider.otherwise('/member/wallet/main');
 }
 
 export default appStates;

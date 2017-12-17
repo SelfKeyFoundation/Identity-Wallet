@@ -23,6 +23,8 @@ function createWindow(app, next) {
             app.win.webContents.openDevTools();
         }
 
+        app.win.maximize(); //todo move to configs
+
         app.win.on('closed', () => {
             app.win = null
         });

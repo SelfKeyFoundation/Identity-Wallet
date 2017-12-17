@@ -1,3 +1,273 @@
-.sk-wallet-document-box {
-    
+.sk-box.sk-wallet-general-info-box {
+  $grayColor: #8898a3;
+  $dividerColor: #353d45;
+  $darkBgColor: #1e262f;
+
+
+  @mixin button-temp-name($color) {
+    cursor: pointer;
+    color: $color;
+    border: solid rgba($color, .5);
+    background: transparent;
+    transition: background-color linear .2s;
+    &:hover {
+      background-color: rgba($color, 0.1);
+    }
+  }
+
+  @mixin button-hover-darker($color) {
+    cursor: pointer;
+    color: white;
+    border: solid rgba($color, .5);
+    background: $color;
+    transition: background-color linear .2s;
+    &:hover {
+      //box-shadow: inset 0 0 25px 3px rgba(255, 255, 255, 0.3)
+      background: darken($color, 8%);
+    }
+  }
+
+
+  .sk-wallet-document-box {
+    color: white;
+    padding-top: 2em;
+    padding-bottom: 2em;
+
+    position: relative;
+    .plus-button {
+      position: absolute;
+      right: 2em;
+      top: 2em;
+      height: 2em;
+      width: 2em;
+      border-radius: 50%;
+      transition: background-color .2s linear;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+      }
+    }
+
+
+    .document-files {
+      display: flex;
+      align-items: center;
+      .document-file {
+        cursor: pointer;
+        position: relative;
+        //min-width: 20em;
+
+        >span {
+          line-height: 2em;
+          padding: .5em .5em .5em 1em;
+          &:nth-child(n+2){
+            color: $grayColor;
+            font-size: .8em;
+            padding-top: .6em;
+            padding-bottom: .6em;
+          }
+        }
+
+        &.deletable{
+          background: $darkBgColor;
+        }
+
+        &:hover{
+          background: $darkBgColor;
+        }
+
+        .delete-dialog{
+          min-width: 20em;
+          background-color: #1e262f;
+          border: 1px solid $grayColor;
+          border-radius: .2em;
+          width: 20em;
+          height: 10em;
+          position: absolute;
+          bottom: calc(100% + 7px);
+          margin: 0 auto;
+          padding: 1em 2em;
+          >*{
+            z-index: 1;
+          }
+
+          &:before{
+            border-bottom: 1px solid $grayColor;
+            border-right: 1px solid $grayColor;
+            background-color: #1e262f;
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            width: 10px;
+            height: 10px;
+            transform: rotate(45deg);
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            z-index: 0;
+          }
+
+          .header{
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 1em;
+
+          }
+          .message{
+            font-size: .8em;
+            color: $grayColor;
+            margin-bottom: 1em;
+          }
+          .buttons{
+            font-size: .9em;
+            display: flex;
+            justify-content: flex-start;
+            button{
+              border-radius: .2em;
+              margin: 0 .3em;
+              &:first-child{
+                margin-left: 0;
+              }
+              &:last-child{
+                margin-right: 0;
+              }
+              &.confirm{
+                @include button-hover-darker(#ec1d24);
+              }
+              &.cancel{
+                @include button-temp-name($grayColor);
+                }
+              padding: .2em .5em;
+            }
+          }
+        }
+
+      }
+    }
+
+    .general-title {
+      color: white;
+      font-size: 2em;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 1.3em;
+    }
+
+    .sk-icon {
+      float: left;
+      margin: 0 1em;
+    }
+
+    table {
+      border-collapse: collapse;
+      td {
+        padding: .5em 0;
+
+        border-bottom: 1px solid rgba($grayColor, .5);
+
+      }
+    }
+
+
+    .underlined-button {
+      @include button-temp-name($grayColor);
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom-width: 1px;
+      padding: .5em 1em;
+    }
+
+    .transp-button {
+      @include button-temp-name($grayColor);
+      border-width: 1px;
+      border-radius: .3em;
+      margin-left: .5em;
+      margin-right: .5em;
+    }
+  }
+
+  .sk-wallet-document-box-upload-form {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    .name-section {
+      input {
+        font-size: 1.3em;
+        border: 2px solid #0abbd0;
+        padding: .5em 1em;
+        //box-shadow: inset 0 0 5px 10px rgba(0, 0, 0, .3);
+        background-color: rgba(0, 0, 0, .3);
+        color: white;
+        border-radius: .2em;
+      }
+    }
+
+    .upload-section {
+      margin: 2em auto;
+      border: 1px solid rgba(54, 66, 84, 1);
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      align-items: stretch;
+
+      .gradient-divider {
+        width: 1px;
+        height: 12em;
+        background-image: linear-gradient(to top, rgba(54, 66, 84, 1) 0%, rgba(54, 66, 84, 0) 100%);
+      }
+
+      .section-title {
+        width: 100%;
+        color: white;
+        font-size: 1.3em;
+        padding: 2.5em;
+      }
+
+      .file-select {
+        text-align: center;
+        margin: auto;
+        flex: 1;
+      }
+
+      .progress {
+        text-align: center;
+        margin: auto;
+        flex: 1;
+      }
+
+      .selector-name {
+        color: white;
+      }
+
+      .selector-hint {
+        color: #8898a3;
+      }
+
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      button{
+        width: 25%;
+        font-size: 1.2em;
+        padding: .5em 0;
+        margin-left: .5em;
+        &.cancel {
+          @include button-temp-name($grayColor);
+        }
+        &.save {
+          color: white;
+          border: 1px transparent;
+          background-image: linear-gradient(to right, #2aa4f4, #05bdcf);
+          &:hover{
+            box-shadow: inset 0 0 25px 3px rgba(255, 255, 255, 0.3)
+          }
+        }
+      }
+    }
+  }
+
 }

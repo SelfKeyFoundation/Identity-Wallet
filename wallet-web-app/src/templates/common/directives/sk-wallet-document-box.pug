@@ -1,0 +1,64 @@
+.sk-box.sk-wallet-general-info-box
+    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px; margin-bottom: 20px")
+        div.plus-button(ng-click="changeMode(2)")
+            img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
+
+        .general-title {{data.name}}
+        .sk-wallet-general-info-box__content
+            table.sk-wallet-general-info-box__content__table(ng-if="data.acceptableDocuments")
+                tr
+                    td.fc-bluey-grey Acceptable documents
+                    td
+                        span.fc-white {{data.acceptableDocuments}}
+        div(ng-repeat="(docIndex, doc) in data.documents")
+            .sk-wallet-general-info-box__content
+                .section-title Document
+                .document-files
+                    sk-icon(icon="{{statuses[doc.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
+                    .document-file(ng-class="{deletable: doc.clicked}")
+                        span(ng-click="doc.clicked = !doc.clicked") {{doc.name}}
+                        span(ng-click="doc.clicked = !doc.clicked") {{getFileNames(doc.files)}}
+                        .delete-dialog(ng-if="doc.clicked", layout="column")
+                            .header Delete Attribute and History
+                            .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
+                            .buttons
+                                button.confirm(ng-click="deleteAttribute(docIndex)") Delete attribute
+                                button.cancel(ng-click="doc.clicked = false") Cancel Action
+
+            .sk-wallet-general-info-box__content
+                .section-title History
+                table(ng-init="doc.visibleRowCount = 2")
+                    tr(ng-repeat="(index, step) in doc.actionHistory", ng-show="index < doc.visibleRowCount")
+                        td.fc-bluey-grey {{step.date | date:'shortDate'}}
+                        td.fc-bluey-grey
+                            sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
+                        td
+                            span.fc-white {{statuses[step.status].name}} -
+                            span.fc-white {{step.note}}
+                            button.transp-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+
+                div
+                div(ng-if="doc.actionHistory.length", style="margin-top: .2em")
+                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") show all
+                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") show less
+
+
+
+    .sk-wallet-document-box-upload-form(ng-if="mode == 2", style="width: 600px; margin-bottom: 20px")
+        .name-section
+            input(type="text", ng-model="attrToAdd.name")
+        .upload-section
+            .section-title Upload your {{attrToAdd.name}}
+            .file-select
+                img(src="assets/images/icons/upload.svg")
+                .selector-name Your {{attrToAdd.name}}
+                .selector-hint (Minimal size 1600x900px)
+            .gradient-divider
+            .progress
+                img(src="assets/images/icons/hard-drive.svg")
+                .progress-bar
+                .selector-name Connecting your {{attrToAdd.name}}
+                .selector-hint (Minimal size 1600x900px)
+        .action-buttons
+            button.cancel(ng-click="changeMode(1)") Cancel
+            button.save(ng-click="changeMode(1, attrToAdd)") Save
