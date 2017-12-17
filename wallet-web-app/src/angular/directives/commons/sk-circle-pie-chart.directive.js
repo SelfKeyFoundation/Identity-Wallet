@@ -94,6 +94,9 @@ function SkCirclePieChartDirective() {
 
                 google.visualization.events.addListener(chart, 'select', function (chartItem) {
                     let sel = chart.getSelection();
+                    if (!sel || !sel[0]) {
+                        return;
+                    }
                     scope.data.items.forEach((item, index) => {
                         if (index != sel[0].row) {
                             addOrRemoveActive({ row: index }, 'removeClass');
