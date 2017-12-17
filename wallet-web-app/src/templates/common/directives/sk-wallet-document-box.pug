@@ -33,32 +33,32 @@
                         td.fc-bluey-grey
                             sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
                         td
-                            span.fc-white {{statuses[step.status].name}} -
+                            span.fc-white {{statuses[step.status].name}} - &nbsp;
                             span.fc-white {{step.note}}
                             button.transp-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
 
-                div
-                div(ng-if="doc.actionHistory.length", style="margin-top: .2em")
-                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") show all
-                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") show less
+                div(ng-if="doc.actionHistory.length", style="margin-top: .2em; font-size: 14px;")
+                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") Show All History
+                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") Show Less History
 
 
 
-    .sk-wallet-document-box-upload-form(ng-if="mode == 2", style="width: 600px; margin-bottom: 20px")
-        .name-section
-            input(type="text", ng-model="attrToAdd.name")
-        .upload-section
-            .section-title Upload your {{attrToAdd.name}}
-            .file-select
-                img(src="assets/images/icons/upload.svg")
-                .selector-name Your {{attrToAdd.name}}
-                .selector-hint (Minimal size 1600x900px)
-            .gradient-divider
-            .progress
-                img(src="assets/images/icons/hard-drive.svg")
-                .progress-bar
-                .selector-name Connecting your {{attrToAdd.name}}
-                .selector-hint (Minimal size 1600x900px)
-        .action-buttons
-            button.cancel(ng-click="changeMode(1)") Cancel
-            button.save(ng-click="changeMode(1, attrToAdd)") Save
+    .fullscreen-popup
+        .sk-wallet-document-box-upload-form(ng-if="mode == 2")
+            .name-section
+                input(type="text", ng-model="attrToAdd.name")
+            .upload-section
+                .section-title Upload your {{attrToAdd.name}}
+                .file-select
+                    img(src="assets/images/icons/upload.svg")
+                    .selector-name Your {{attrToAdd.name}}
+                    .selector-hint (Minimal size 1600x900px)
+                .gradient-divider
+                .progress
+                    img(src="assets/images/icons/hard-drive.svg")
+                    .progress-bar
+                    .selector-name Connecting your {{attrToAdd.name}}
+                    .selector-hint (Minimal size 1600x900px)
+            .action-buttons
+                button.cancel(ng-click="changeMode(1)") Cancel
+                button.save(ng-click="changeMode(1, attrToAdd)") Save

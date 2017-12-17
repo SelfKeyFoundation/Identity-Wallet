@@ -1,8 +1,8 @@
 .sk-box.sk-wallet-general-info-box {
-  $grayColor: #8898a3;
-  $dividerColor: #353d45;
-  $darkBgColor: #1e262f;
-
+  $grayColor: #93a4af;
+  $dividerColor: #384047;
+  $darkBgColor: #1e262e;
+  font-family: ProximaNovaRegular;
 
   @mixin button-temp-name($color) {
     cursor: pointer;
@@ -27,7 +27,6 @@
     }
   }
 
-
   .sk-wallet-document-box {
     color: white;
     padding-top: 2em;
@@ -48,7 +47,6 @@
       }
     }
 
-
     .document-files {
       display: flex;
       align-items: center;
@@ -57,10 +55,10 @@
         position: relative;
         //min-width: 20em;
 
-        >span {
+        > span {
           line-height: 2em;
           padding: .5em .5em .5em 1em;
-          &:nth-child(n+2){
+          &:nth-child(n+2) {
             color: $grayColor;
             font-size: .8em;
             padding-top: .6em;
@@ -68,30 +66,30 @@
           }
         }
 
-        &.deletable{
+        &.deletable {
           background: $darkBgColor;
         }
 
-        &:hover{
+        &:hover {
           background: $darkBgColor;
         }
 
-        .delete-dialog{
-          min-width: 20em;
+        .delete-dialog {
+          font-size: 13px;
+          min-width: 28em;
           background-color: #1e262f;
           border: 1px solid $grayColor;
           border-radius: .2em;
           width: 20em;
-          height: 10em;
           position: absolute;
           bottom: calc(100% + 7px);
           margin: 0 auto;
           padding: 1em 2em;
-          >*{
+          > * {
             z-index: 1;
           }
 
-          &:before{
+          &:before {
             border-bottom: 1px solid $grayColor;
             border-right: 1px solid $grayColor;
             background-color: #1e262f;
@@ -107,37 +105,39 @@
             z-index: 0;
           }
 
-          .header{
+          .header {
             color: white;
-            font-size: 1.2em;
+            font-size: 17px;
             margin-bottom: 1em;
-
           }
-          .message{
-            font-size: .8em;
+          .message {
             color: $grayColor;
             margin-bottom: 1em;
           }
-          .buttons{
-            font-size: .9em;
+          .buttons {
             display: flex;
             justify-content: flex-start;
-            button{
+            button {
               border-radius: .2em;
               margin: 0 .3em;
-              &:first-child{
+              height: 36px;
+              padding: 0 1.2em;
+              &:first-child {
                 margin-left: 0;
               }
-              &:last-child{
+              &:last-child {
                 margin-right: 0;
               }
-              &.confirm{
+              &.confirm {
                 @include button-hover-darker(#ec1d24);
               }
-              &.cancel{
+              &.cancel {
                 @include button-temp-name($grayColor);
+                &:not(:hover) {
+                  border-color: transparent;
+
                 }
-              padding: .2em .5em;
+              }
             }
           }
         }
@@ -147,12 +147,13 @@
 
     .general-title {
       color: white;
-      font-size: 2em;
+      font-size: 1.6em;
     }
 
     .section-title {
       color: white;
-      font-size: 1.3em;
+      font-size: 18px;
+      font-weight: 500;
     }
 
     .sk-icon {
@@ -161,7 +162,10 @@
     }
 
     table {
+      font-family: ProximaNovaSemibold, ProximaNovaRegular;
+      font-size: 14px;
       border-collapse: collapse;
+      width: 100%;
       td {
         padding: .5em 0;
 
@@ -169,7 +173,6 @@
 
       }
     }
-
 
     .underlined-button {
       @include button-temp-name($grayColor);
@@ -250,7 +253,7 @@
     .action-buttons {
       display: flex;
       justify-content: flex-end;
-      button{
+      button {
         width: 25%;
         font-size: 1.2em;
         padding: .5em 0;
@@ -262,12 +265,27 @@
           color: white;
           border: 1px transparent;
           background-image: linear-gradient(to right, #2aa4f4, #05bdcf);
-          &:hover{
+          &:hover {
             box-shadow: inset 0 0 25px 3px rgba(255, 255, 255, 0.3)
           }
         }
       }
     }
+  }
+
+  .fullscreen-popup{
+
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $darkBgColor;
+    z-index: 1;
+    padding: 0;
   }
 
 }
