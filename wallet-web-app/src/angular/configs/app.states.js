@@ -351,7 +351,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/wallet/main',
             views: {
                 main: {
-                    templateUrl: 'member/wallet/main.html'
+                    templateUrl: 'member/wallet/main.html',
+                    controller: 'MemberWalletMainController'
                 }
             }
         })
@@ -366,9 +367,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
     
-    $urlRouterProvider.otherwise('/guest/loading');
+    //$urlRouterProvider.otherwise('/guest/loading');
 
-    //$urlRouterProvider.otherwise('/member/wallet/main');
+    $urlRouterProvider.otherwise('/member/wallet/main');
 }
 
 export default appStates;

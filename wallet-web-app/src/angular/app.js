@@ -216,6 +216,12 @@ angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetu
 import MemberDashboardMainController from './controllers/member/dashboard/main-controller.js';
 angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
 
+/**
+ * wallet
+ */
+import MemberWalletMainController from './controllers/member/wallet/main-controller.js';
+angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWalletMainController);
+
 
 /**
  * settings
