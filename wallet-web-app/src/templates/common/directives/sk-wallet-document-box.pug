@@ -1,15 +1,16 @@
 .sk-box.sk-wallet-general-info-box
-    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px; margin-bottom: 20px")
-        div.plus-button(ng-click="changeMode(2)")
+    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px;")
+        .plus-button(ng-click="changeMode(2)")
             img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
 
         .general-title {{data.name}}
         .sk-wallet-general-info-box__content
             table.sk-wallet-general-info-box__content__table(ng-if="data.acceptableDocuments")
                 tr
-                    td.fc-bluey-grey Acceptable documents
+                    td.sub-title Acceptable documents
                     td
                         span.fc-white {{data.acceptableDocuments}}
+
         div(ng-repeat="(docIndex, doc) in data.documents")
             .sk-wallet-general-info-box__content
                 .section-title Document

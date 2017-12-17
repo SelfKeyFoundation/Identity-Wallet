@@ -147,12 +147,24 @@
 
     .general-title {
       color: white;
-      font-size: 2em;
+      font-size: 18px;
+      font-weight: 500;
+      font-family: ProximaNovaRegular;
     }
 
     .section-title {
       color: white;
-      font-size: 1.3em;
+      font-size: 18px;
+      font-weight: 500;
+      font-family: ProximaNovaRegular;
+    }
+
+    .sub-title {
+      font-family: ProximaNovaSemibold;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.36;
+      color: #93b0c1;
     }
 
     .sk-icon {
