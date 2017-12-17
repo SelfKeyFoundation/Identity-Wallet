@@ -24,7 +24,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         return defer.promise;
     }
 
-    function getAppData ($rootScope, $q, $state) {
+    function getAppData($rootScope, $q, $state) {
         let defer = $q.defer();
 
         // TODO
@@ -36,19 +36,182 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             new IdAttribute('Global Attribute', 'Public Key', 'Static Data', ['individual']),
             new IdAttribute('Global Attribute', 'Physical Address', 'Static Data', ['individual']),
             new IdAttribute('Identity Document', 'Passport', 'Document', ['individual']),
-            new IdAttribute('Proof of Wealth', 'Tax Certificate', 'Document', ['individual','company']),
+            new IdAttribute('Proof of Wealth', 'Tax Certificate', 'Document', ['individual', 'company']),
         ];
 
         // TODO - temporary icos
         let ico1 = new Ico();
         ico1.companyName = 'GATCOIN';
         ico1.status = 'active';
+        ico1.teamLoaction = 'Hong Kong';
+        ico1.video = 'https://www.youtube.com/watch?v=qq0_WVK8lMc';
+        ico1.shortDescription = '';
+        ico1.description = 'GATCOIN is an eCommerce platform which...';
+        ico1.category = 'Retail';
+        ico1.startDate = '15 Dec 2017';
+        ico1.endDate = '15 Jan 2018';
+        ico1.capital.total = '35,870,370 USD';
+        ico1.capital.raised = '1,000,000 USD';
+        ico1.capital.goal = '35,870,370 USD';
+        ico1.ticker = 'GAT';
+        ico1.token.total = '??';
+        ico1.token.totalForSale = '1,000,000,000';
+        ico1.token.price = '1 GAT = 0.20 USD';
+        ico1.token.issue = 'Ongoing';
+        ico1.preSale.sold = '1,000,000 USD';
+        ico1.preSale.bonus = '1 GAT = 0.167 USD';
+        ico1.whitelist = 'YES';
+        ico1.kyc.required = 'YES';
+        ico1.kyc.template = '';
+        ico1.accepts = ['BTC', 'ETH'];
+        ico1.restrictions = 'NA';
+        ico1.whitepaper = 'https://www.gatcoin.io/wp-content/uploads/2017/09/170919v2-Whitepaper-EN.pdf';
+        ico1.website = 'https://www.gatcoin.io/';
+
 
         let ico2 = new Ico();
+        ico1.companyName = 'Polymath';
+        ico1.status = 'Upcoming';
+        ico1.teamLoaction = 'Toronto';
+        ico1.video = 'https://player.vimeo.com/video/229056870';
+        ico1.shortDescription = '';
+        ico1.description = '';
+        ico1.category = 'Finance';
+        ico1.startDate = '';
+        ico1.endDate = '';
+        ico1.capital.total = '';
+        ico1.capital.raised = '';
+        ico1.capital.goal = '';
+        ico1.ticker = 'PLY';
+        ico1.token.total = '';
+        ico1.token.totalForSale = '';
+        ico1.token.price = '';
+        ico1.token.issue = '';
+        ico1.preSale.sold = '';
+        ico1.preSale.bonus = '';
+        ico1.whitelist = 'YES';
+        ico1.kyc.required = 'YES';
+        ico1.kyc.template = '';
+        ico1.accepts = ['TBA'];
+        ico1.restrictions = 'TBA';
+        ico1.whitepaper = 'https://drive.google.com/file/d/0B2pD5w-G5-sJVGc5YjdmZ0hsYVE/view';
+        ico1.website = 'https://polymath.network/';
+
+
         let ico3 = new Ico();
+        ico1.companyName = 'Aditus Network';
+        ico1.status = 'active';
+        ico1.teamLoaction = 'Singapore';
+        ico1.video = 'https://medium.com/aditusnetwork/forbes-cites-aditus-as-key-blockchain-player-9bb51481ac5b';
+        ico1.shortDescription = '';
+        ico1.description = '';
+        ico1.category = 'Luxury Goods';
+        ico1.startDate = '30 Nov 2017';
+        ico1.endDate = '13 December 2017';
+        ico1.capital.total = '11,000,000 USD';
+        ico1.capital.raised = '4717639 USD';
+        ico1.capital.goal = '11,000,000 USD';
+        ico1.ticker = 'ADI';
+        ico1.token.total = '450,000,000';
+        ico1.token.totalForSale = '1,000,000,000';
+        ico1.token.price = '1 ADI = 0.05 USD';
+        ico1.token.issue = '';
+        ico1.preSale.sold = '4,717,639 USD';
+        ico1.preSale.bonus = '3% until 6 December 2017 6pm SGT, 2% until 13 December 2017 10pm SGT';
+        ico1.whitelist = 'YES';
+        ico1.kyc.required = 'YES';
+        ico1.kyc.template = '';
+        ico1.accepts = ['BTC', 'ETH'];
+        ico1.restrictions = 'US Citizens, Chinese Citizens';
+        ico1.whitepaper = 'https://www.aditus.net/';
+        ico1.website = 'https://www.gatcoin.io/';
+
+
         let ico4 = new Ico();
+        ico1.companyName = 'AiX';
+        ico1.status = 'Upcoming';
+        ico1.teamLoaction = 'London';
+        ico1.video = 'https://aix.trade/wp-content/uploads/2017/11/AiX-Trading.-Transformed.mp4';
+        ico1.shortDescription = '';
+        ico1.description = '';
+        ico1.category = 'Finance';
+        ico1.startDate = 'TBA';
+        ico1.endDate = 'TBA';
+        ico1.capital.total = 'TBA';
+        ico1.capital.raised = 'TBA';
+        ico1.capital.goal = 'TBA';
+        ico1.ticker = 'AIX';
+        ico1.token.total = 'TBA';
+        ico1.token.totalForSale = 'TBA';
+        ico1.token.price = 'TBA';
+        ico1.token.issue = 'TBA';
+        ico1.preSale.sold = 'TBA';
+        ico1.preSale.bonus = 'TBA';
+        ico1.whitelist = 'YES';
+        ico1.kyc.required = 'YES';
+        ico1.kyc.template = '';
+        ico1.accepts = ['TBA'];
+        ico1.restrictions = 'TBA';
+        ico1.whitepaper = 'https://aix.trade/ai-x_whitepaper.pdf';
+        ico1.website = 'https://aix.trade/';
+
+
         let ico5 = new Ico();
+        ico1.companyName = 'HoToKeN';
+        ico1.status = 'Upcoming';
+        ico1.teamLoaction = 'Bangkok';
+        ico1.video = '';
+        ico1.shortDescription = '';
+        ico1.description = '';
+        ico1.category = '';
+        ico1.startDate = '';
+        ico1.endDate = '';
+        ico1.capital.total = '';
+        ico1.capital.raised = '';
+        ico1.capital.goal = '';
+        ico1.ticker = '';
+        ico1.token.total = '';
+        ico1.token.totalForSale = '';
+        ico1.token.price = '';
+        ico1.token.issue = '';
+        ico1.preSale.sold = '';
+        ico1.preSale.bonus = '';
+        ico1.whitelist = '';
+        ico1.kyc.required = '';
+        ico1.kyc.template = '';
+        ico1.accepts = ['TBA'];
+        ico1.restrictions = '';
+        ico1.whitepaper = '';
+        ico1.website = '';
+
+
         let ico6 = new Ico();
+        ico1.companyName = 'Kommerce';
+        ico1.status = 'Upcoming';
+        ico1.teamLoaction = 'Singapore';
+        ico1.video = '';
+        ico1.shortDescription = '';
+        ico1.description = '';
+        ico1.category = '';
+        ico1.startDate = '';
+        ico1.endDate = '';
+        ico1.capital.total = '';
+        ico1.capital.raised = '';
+        ico1.capital.goal = '';
+        ico1.ticker = '';
+        ico1.token.total = '';
+        ico1.token.totalForSale = '';
+        ico1.token.price = '';
+        ico1.token.issue = '';
+        ico1.preSale.sold = '';
+        ico1.preSale.bonus = '';
+        ico1.whitelist = '';
+        ico1.kyc.required = '';
+        ico1.kyc.template = '';
+        ico1.accepts = ['TBA'];
+        ico1.restrictions = '';
+        ico1.whitepaper = '';
+        ico1.website = '';
 
         $rootScope.icos = [
             ico1,
@@ -192,8 +355,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                         "national-id": false,
                         "utility-bill": false
                     }
-                    
-                    ConfigFileService.load().then(()=>{
+
+                    ConfigFileService.load().then(() => {
                         let fullNames = ConfigFileService.findContactsByType('full-name');
                         let emails = ConfigFileService.findContactsByType('email');
                         let phoneNumbers = ConfigFileService.findContactsByType('phone-number');
@@ -201,7 +364,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                         let passports = ConfigFileService.getDocumentsByType('passport');
                         let nationalIds = ConfigFileService.getDocumentsByType('national-id');
                         let utilityBills = ConfigFileService.getDocumentsByType('utility-bill');
-                        
+
                         $rootScope.initialSetupProgress["full-name"] = fullNames.length > 0 ? true : false;
                         $rootScope.initialSetupProgress["email"] = emails.length > 0 ? true : false;
                         $rootScope.initialSetupProgress["phone-number"] = phoneNumbers.length > 0 ? true : false;
@@ -210,19 +373,19 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                         $rootScope.initialSetupProgress["utility-bill"] = utilityBills.length > 0 ? true : false;
 
                         let isMissing = false;
-                        for(let i in $rootScope.initialSetupProgress){
-                            if(!$rootScope.initialSetupProgress[i]){
+                        for (let i in $rootScope.initialSetupProgress) {
+                            if (!$rootScope.initialSetupProgress[i]) {
                                 isMissing = true;
                                 break;
                             }
                         }
 
-                        if(isMissing){
+                        if (isMissing) {
                             defer.resolve();
-                        }else{
+                        } else {
                             $state.go('member.dashboard.main');
                         }
-                    }).catch(()=>{
+                    }).catch(() => {
                         defer.reject();
                     });
 
@@ -366,7 +529,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-    
+
     $urlRouterProvider.otherwise('/guest/loading');
 
     //$urlRouterProvider.otherwise('/member/wallet/main');
