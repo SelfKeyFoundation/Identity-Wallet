@@ -159,6 +159,9 @@ angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneral
 import SkWalletDocumentBoxDirective from './directives/commons/sk-wallet-document-box.directive';
 angular.module('kyc-wallet').directive('skWalletDocumentBox', SkWalletDocumentBoxDirective);
 
+import SkUserInfoBoxDirective from './directives/commons/sk-user-info-box.directive';
+angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
+
 
 
 /**
