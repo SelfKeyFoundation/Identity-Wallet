@@ -1,0 +1,236 @@
+.wallet-manage-token-wrappper {
+  display: block;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 80px;
+
+  .header-content {
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    padding: 30px;
+    border-radius: 4px;
+    width: 100%;
+
+    > hr {
+      color: #303c49;
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 1px solid #303c49;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .logo-section {
+
+      .logo-text {
+        color: #ffffff;
+        display: inline-grid;
+        margin-left: 15px;
+        margin-top: 8px;
+
+        .initial {
+          font-family: ProximaNova;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 1px;
+          text-align: left;
+          font-size: 12px;
+        }
+      }
+    }
+    .price-section {
+      margin-top: 20px;
+      display: inline-grid;
+
+      .main-price {
+        font-family: ProximaNova;
+        font-size: 32px;
+        font-weight: 300;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #ffffff;
+      }
+      .secondary-price {
+        font-family: ProximaNova;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #93b0c1;
+      }
+    }
+    .coin-address-section {
+      padding: 10px 0;
+
+      .your-address {
+        font-family: ProximaNova;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.25;
+        letter-spacing: normal;
+        text-align: left;
+        color: #ffffff;
+      }
+      .generated-address {
+
+        .address {
+          font-family: ProximaNova;
+          font-size: 12px;
+          font-weight: 500;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.43;
+          letter-spacing: normal;
+          text-align: left;
+          color: #93b0c1;
+        }
+        .copy-button {
+          border-radius: 4px;
+          border: solid 1px #3b4a5a;
+          font-family: ProximaNova;
+          font-size: 10px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          letter-spacing: normal;
+          text-align: left;
+          color: #93b0c1;
+          outline: none;
+          line-height: 11px;
+          margin-left: 10px;
+          padding: 2px 5px;
+          background-color: transparent;
+        }
+      }
+    }
+    .buttons-section {
+      margin-top: 20px;
+
+      .action-button {
+
+        border-radius: 4px;
+        box-shadow: 0 2px 2px 0 #15222e;
+        border-style: solid;
+        border-width: 1px;
+        border-image-slice: 1;
+        background-color: transparent;
+        border-color: #0dc7dd;
+        padding: 6px 20px;
+        outline: none;
+        width: 25%;
+
+        > span {
+          font-family: ProximaNova;
+          font-size: 14px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.5;
+          letter-spacing: 0.7px;
+          text-align: center;
+          color: #0dc7dd;
+          margin: 0 auto;
+        }
+
+      }
+    }
+
+  }
+
+  .body-content {
+
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    padding: 30px;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 20px;
+
+    .activity-text {
+
+      font-family: ProximaNova;
+      font-size: 18px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #ffffff;
+    }
+    .list {
+      margin-top: 20px;
+
+      .list-item {
+
+        padding: 6px 0;
+
+        > hr {
+          color: #303c49;
+          display: block;
+          height: 1px;
+          border: 0;
+          border-top: 1px solid #303c49;
+          width: 100%;
+          margin-top: 15px;
+        }
+
+        .item-container {
+
+          .date {
+            font-family: ProximaNova;
+            font-size: 12px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #93a4af;
+            display: inline-grid;
+            text-align: center;
+          }
+          .sent-receive {
+            font-family: ProximaNova;
+            font-size: 12px;
+            font-weight: 600;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 2em;
+            letter-spacing: normal;
+            text-align: left;
+            color: #ffffff;
+          }
+          .coin-change {
+            font-family: ProximaNova;
+            font-size: 12px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 2em;
+            letter-spacing: normal;
+            text-align: right;
+            color: #0dc7dd;
+
+          }
+        }
+      }
+    }
+  }
+}   
+
+

@@ -3,7 +3,14 @@
     font-family: ProximaNovaRegular;
   }
   .active {
-    border: 2px solid #303c49;
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px 1px #0dc7dd;
+    outline-width: 0;
+    border: none;
+  }
+  #chart {
+    width: 280px; 
+    height: 280px;
   }
   .chart-parent {
     margin-right: 74px;
@@ -38,28 +45,28 @@
       color: #ffffff;
     }
     table:not(:first-child) {
-      margin-left: 78px; 
+      margin-left: 76px; 
     }
     table {
+      padding-left: 2px;
+      padding-right: 2px;
+      border-spacing: 0 30px;
       tr {
         padding: 4px;
       }
     }
   }
-
+  
   .item {
     * {
       cursor: default;
     }
-    td:nth-child(2) {
-      width: 50%;
+
+    td {
+      padding: 7px;
+      vertical-align: top;
     }
-    td:first-child {
-      width: 50%;
-    }
-    &:not(:last-child) {
-      margin-bottom: 44px;
-    }
+   
     .sk-icon {
       margin-right: 12px;
     }
@@ -79,5 +86,69 @@
         color: #ffffff;
       }
     }
+    .animated {
+      -webkit-animation-duration: 10s;
+      animation-duration: 10s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+   }
+
+    @-webkit-keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+   }
+   
+   @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+   }
+   
+   .fadeIn {
+      -webkit-animation-name: fadeIn;
+      animation-name: fadeIn;
+   }
+     
+  }
+  
+ 
+  @media screen and (max-width: 1000px) {
+    details-container  {
+      margin-top: 18px;      
+    }
+    .chart-parent {
+      margin-right: 27px;
+    }
+    .details-container {
+      .value {
+        font-size:16px;
+        margin-left: 20px;
+       
+      }
+      table:not(:first-child) {
+        margin-left: 22px; 
+      }
+      table {
+        border-spacing: 0 18px;
+      }
+    }
+    .item {
+      td {
+        padding: 6px;
+      }
+      .sk-icon {
+        margin-right: 10px;
+      }
+      .title {
+        .titleFull {
+          font-size: 16px;
+        }
+        .titleSmall {
+          margin-top: 3px;
+          font-size: 12px;
+          letter-spacing: 1px;
+        }
+      }
+    }
+   
   }
 }
