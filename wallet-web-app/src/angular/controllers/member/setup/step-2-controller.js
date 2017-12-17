@@ -6,7 +6,7 @@ function MemberSetupStep2Controller($rootScope, $scope, $log, $q, $timeout, $sta
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
     $scope.nextStep = (event, form) => {
-        $state.go('member.setup.step-3', {step: 'passport'});
+        $state.go('member.setup.step-3', {step: 'Passport'});
     }
 
 };

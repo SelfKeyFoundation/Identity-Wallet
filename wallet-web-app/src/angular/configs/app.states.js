@@ -1,6 +1,5 @@
 'use strict';
 
-import IdAttribute from '../classes/id-attribute.js';
 import Ico from '../classes/ico.js';
 
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
@@ -20,46 +19,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         } else {
             defer.resolve();
         }
-
-        return defer.promise;
-    }
-
-    function getAppData ($rootScope, $q, $state) {
-        let defer = $q.defer();
-
-        // TODO
-        // load data at first
-
-        // TODO - temporary idAttributes
-        $rootScope.idAttributes = [
-            new IdAttribute('Global Attribute', 'Name', 'Static Data', ['individual']),
-            new IdAttribute('Global Attribute', 'Public Key', 'Static Data', ['individual']),
-            new IdAttribute('Global Attribute', 'Physical Address', 'Static Data', ['individual']),
-            new IdAttribute('Identity Document', 'Passport', 'Document', ['individual']),
-            new IdAttribute('Proof of Wealth', 'Tax Certificate', 'Document', ['individual','company']),
-        ];
-
-        // TODO - temporary icos
-        let ico1 = new Ico();
-        ico1.companyName = 'GATCOIN';
-        ico1.status = 'active';
-
-        let ico2 = new Ico();
-        let ico3 = new Ico();
-        let ico4 = new Ico();
-        let ico5 = new Ico();
-        let ico6 = new Ico();
-
-        $rootScope.icos = [
-            ico1,
-            ico2,
-            ico3,
-            ico4,
-            ico5,
-            ico6
-        ]
-
-        defer.resolve();
 
         return defer.promise;
     }
@@ -184,45 +143,25 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 checkSetupProgress: ($rootScope, $q, $state, ConfigFileService) => {
                     let defer = $q.defer();
 
-                    $rootScope.initialSetupProgress = {
-                        "full-name": false,
-                        "email": false,
-                        "phone-number": false,
-                        "passport": false,
-                        "national-id": false,
-                        "utility-bill": false
-                    }
-                    
-                    ConfigFileService.load().then(()=>{
-                        let fullNames = ConfigFileService.findContactsByType('full-name');
-                        let emails = ConfigFileService.findContactsByType('email');
-                        let phoneNumbers = ConfigFileService.findContactsByType('phone-number');
+                    $rootScope.initialSetupProgress = {};
+                    let isMissing = false;
 
-                        let passports = ConfigFileService.getDocumentsByType('passport');
-                        let nationalIds = ConfigFileService.getDocumentsByType('national-id');
-                        let utilityBills = ConfigFileService.getDocumentsByType('utility-bill');
-                        
-                        $rootScope.initialSetupProgress["full-name"] = fullNames.length > 0 ? true : false;
-                        $rootScope.initialSetupProgress["email"] = emails.length > 0 ? true : false;
-                        $rootScope.initialSetupProgress["phone-number"] = phoneNumbers.length > 0 ? true : false;
-                        $rootScope.initialSetupProgress["passport"] = passports.length > 0 ? true : false;
-                        $rootScope.initialSetupProgress["national-id"] = nationalIds.length > 0 ? true : false;
-                        $rootScope.initialSetupProgress["utility-bill"] = utilityBills.length > 0 ? true : false;
+                    ConfigFileService.load().then(() => {
+                        for (let i in $rootScope.INITIAL_ID_ATTRIBUTES) {
+                            let attr = $rootScope.INITIAL_ID_ATTRIBUTES[i];
+                            $rootScope.initialSetupProgress[attr] = ConfigFileService.getDefaultIdAttributeItem(attr);
 
-                        let isMissing = false;
-                        for(let i in $rootScope.initialSetupProgress){
-                            if(!$rootScope.initialSetupProgress[i]){
+                            if (!$rootScope.initialSetupProgress[attr] || (!$rootScope.initialSetupProgress[attr].value && !$rootScope.initialSetupProgress[attr].path)) {
                                 isMissing = true;
-                                break;
                             }
                         }
 
-                        if(isMissing){
+                        if (isMissing) {
                             defer.resolve();
-                        }else{
+                        } else {
                             $state.go('member.dashboard.main');
                         }
-                    }).catch(()=>{
+                    }).catch(() => {
                         defer.reject();
                     });
 
@@ -321,7 +260,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/marketplace/ico/list',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico/list.html'
+                    templateUrl: 'member/marketplace/ico/list.html',
+                    controller: 'MemberMarketplaceIcoListController'
                 }
             }
         })
@@ -330,7 +270,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/marketplace/ico/item/:id',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/ico/item.html'
+                    templateUrl: 'member/marketplace/ico/item.html',
+                    controller: 'MemberMarketplaceIcoItemController'
                 }
             }
         })
@@ -366,7 +307,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-    
+
     $urlRouterProvider.otherwise('/guest/loading');
 
     //$urlRouterProvider.otherwise('/member/wallet/main');

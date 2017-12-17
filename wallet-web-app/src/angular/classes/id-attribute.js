@@ -2,18 +2,21 @@
 
 class IdAttribute {
 
-    /**
-     * 
-     * @param {*} mainCategory 
-     * @param {*} subCategory 
-     * @param {*} type 
-     * @param {*} targetTypes 
-     */
-    constructor (mainCategory, subCategory, type, targetTypes) {
-        this.mainCategory = mainCategory;
-        this.subCategory = subCategory;
-        this.type = type;
-        this.targetTypes = targetTypes;
+    constructor () {
+        this.subcategory = null;
+        this.type = null;
+        this.category = null;    
+        this.defaultItemId = null;
+        this.items = {};
     }
 
+    addItem (item) {
+        this.items[item._id] = item;
+    }
+
+    removeItem (item) {
+        delete this.items[item._id];
+    }
 }
+
+export default IdAttribute;

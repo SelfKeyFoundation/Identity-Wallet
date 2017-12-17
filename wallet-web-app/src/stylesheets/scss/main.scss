@@ -18,7 +18,6 @@
 @import './components/sk-form.scss';
 @import './components/sk-slider.scss';
 @import './components/sk-double-header.scss';
-@import './components/sk-token-box.scss';
 @import './components/sk-tasks-box.scss';
 @import './components/sk-right-sidenav.scss';
 @import './components/sk-table.scss';
@@ -30,6 +29,7 @@
 @import './components/md-sidenav.scss';
 @import './components/md-content.scss';
 
+@import './directives/sk-token-box.scss';
 @import './directives/sk-send-token.scss';
 @import './directives/sk-icon.scss';
 @import './directives/sk-circle-pie-chart.scss';

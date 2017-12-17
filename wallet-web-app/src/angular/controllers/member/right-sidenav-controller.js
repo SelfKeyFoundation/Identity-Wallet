@@ -15,6 +15,11 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
         }
     }
 
+    $rootScope.navigate = ($event, state, params) => {
+        $state.go(state, params);
+        $scope.close();
+    }
+
 };
 
 export default MemberRightSidenavController;

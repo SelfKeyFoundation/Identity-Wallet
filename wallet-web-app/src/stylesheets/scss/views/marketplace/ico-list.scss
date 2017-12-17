@@ -39,23 +39,21 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-    /*padding-top: 80px;*/
-    // TODO
+    
     .ico-list-content {
 
-        .ico-list-items{
+        .ico-list-items {
             display: flex;
             flex-wrap: wrap;
             list-style: none;
             flex-direction: row;
             justify-content: center;
+
             .sk-box{
                 position: relative;
-                display: inline-block;
                 border-radius: 4px;
                 background-color: #262f39;
                 border: solid 1px #303c49;
-                /*width: 19.5rem;*/
                 width: 18.5rem;
                 margin: 1rem;
             }

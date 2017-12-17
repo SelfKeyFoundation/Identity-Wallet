@@ -4,14 +4,10 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
     $log.info('MemberSetupStep3Controller', $stateParams, $rootScope.initialSetupProgress);
     $scope.currentStep = $stateParams.step;
 
-    /*
-    EtherScanService.getBalance($rootScope.wallet.getAddress()).then((balance)=>{
-        console.log(">>>>", balance);
-    });
-    */
+   
 
     $scope.texts = {
-        "passport": {
+        "Passport": {
             text1: "step 4",
             text2: "Upload Your Passport",
             text3: "Your Passport",
@@ -19,7 +15,7 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
             text5: "This is stored locally.",
             text6: "uploaded"
         },
-        "national-id": {
+        "National ID Card": {
             text1: "step 5",
             text2: "Upload Your National ID",
             text3: "Your National ID",
@@ -27,7 +23,7 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
             text5: "This is stored locally.",
             text6: "uploaded"
         },
-        "utility-bill": {
+        "Utility Bill": {
             text1: "step 6",
             text2: "Upload Your Utility Bill",
             text3: "Your Utility Bill",
@@ -48,6 +44,8 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
     }
 
     $scope.selectFile = (event) => {
+        // $rootScope.initialSetupProgress - contains subcategory <-> item
+
         let fileSelectPromise = ElectronService.openFileSelectDialog(event);
         fileSelectPromise.then((filePath) => {
             if (!filePath) return;
@@ -56,23 +54,10 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
             let moveFilePrimise = ElectronService.moveFile(filePath, store.settings.documentsDirectoryPath);
             moveFilePrimise.then((filePath) => {
-                let doc = null;
-
-                let res = ConfigFileService.getDocumentsByType($scope.currentStep);
-                if (res.length > 0) {
-                    doc = res[0];
-                } else {
-                    doc = {
-                        type: $scope.currentStep,
-                        name: $scope.texts[$scope.currentStep].text3,
-                        filePath: filePath,
-                        isDefault: true
-                    }
-                }
-
-                ConfigFileService.addDocument(doc);
+                $rootScope.initialSetupProgress[$scope.currentStep].path = filePath;
+                // we need file metadata
                 ConfigFileService.save().then(() => {
-                    $rootScope.initialSetupProgress[$scope.currentStep] = true;
+                    // success
                 });
             }).catch((error) => {
                 $log.info(error, "?????");
@@ -96,13 +81,13 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
         //$scope.myTestPromise = $scope.functionWithPromise();
 
         switch ($scope.currentStep) {
-            case 'passport':
-                $state.go('member.setup.step-3', {step: 'national-id'});
+            case 'Passport':
+                $state.go('member.setup.step-3', {step: 'National ID Card'});
                 break;
-            case 'national-id':
-                $state.go('member.setup.step-3', {step: 'utility-bill'});
+            case 'National ID Card':
+                $state.go('member.setup.step-3', {step: 'Utility Bill'});
                 break;
-            case 'utility-bill':
+            case 'Utility Bill':
                 // TODO - mark setup.status as 'done'
                 $state.go('member.dashboard.main');
                 break;

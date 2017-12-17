@@ -67,11 +67,8 @@
     .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
         h2.proxima.white Upcoming ICOs
 
-    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-
-        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"active", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
-        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"active", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
-        sk-ico-item-box(flex-xs flex-gt-xs="50", ico-data='{"id":"123", "icon": "eth", "title":"BANKEX", "category":"Finance", "totalSupply": "$66,600,000(37%)", "partialSupply": "$24,413,670", "status":"inactive", "description": "BANKEX is building a new blockchain technology that allows to tokenize various types of assets.", "daysLeft": "29", "startDate": "01-01-2018"}')
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="start center")
+        sk-ico-item-box(ng-repeat="item in $root.icos.active", ico-data='item')
 
     .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
         .sk-button.small(ui-sref="member.marketplace.ico-list")
@@ -79,7 +76,7 @@
 
     //For Test
 
-    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+    //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "requirements", "requirementsList": [{"title": "FullName", "status": 1}, {"title":"Email Address"}, {"title": "Phone Number"}, {"title": "Passport"}, {"title": "National ID"}, {"title": "Utility Bill"}]}')
         sk-ico-details-box(flex data='{icon: "eth", "title": "BANKEX", "category": "Finance", "type": "info", "ethAmount": "43,422.12", "bnxAmount": "42,252,331", "price": "0.001518 ETH/BNC", "minPurchase": "0.00001 ETH", "hardCap": "105,000 ETH", "total": "150,000,000 BNC"}')
 

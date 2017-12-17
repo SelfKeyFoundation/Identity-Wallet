@@ -1,7 +1,7 @@
 .wallet-manage-token-wrappper(layout="column", layout-align="start center")
     .header-content
         .logo-section(layout="row")
-            sk-icon(icon="eth",size-class="icon-size-44x44",style="padding-top:4px")
+            sk-icon(icon="eth", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text
                 span(style="font-size:16px") Ethereum
                 span.initial ETH
@@ -17,10 +17,10 @@
         hr
         .buttons-section(layout="row")
             button.action-button(layout="row")
-                sk-icon(icon="upload",size-class="icon-size-16x16",style="padding-top:2px")
+                sk-icon(icon="upload", size-class="icon-size-16x16", style="padding-top:2px")
                 span RECEIVE
-            button.action-button(layout="row" style="margin-left:20px")
-                sk-icon(icon="upload",size-class="icon-size-16x16",style="padding-top:2px")
+            button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, 'eth')")
+                sk-icon(icon="upload", size-class="icon-size-16x16", style="padding-top:2px")
                 span SEND
     .body-content
         .activity-text Activity
@@ -29,7 +29,7 @@
                 .item-container(layout="row")
                     .date(flex="5") DEC
                         span 11
-                    sk-icon(icon="upload",size-class="icon-size-26x26",style="padding-top:2px; text-align:center" flex="10")
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
                     .sent-receive(flex="70") sent to Atlas Token Sale
                     .coin-change(flex="15") - 0.34283
                 hr
@@ -37,7 +37,7 @@
                 .item-container(layout="row")
                     .date(flex="5") DEC
                         span 11
-                    sk-icon(icon="upload",size-class="icon-size-26x26",style="padding-top:2px; text-align:center" flex="10")
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
                     .sent-receive(flex="70") sent to Atlas Token Sale
                     .coin-change(flex="15") - 0.34283
                 hr
@@ -45,7 +45,7 @@
                 .item-container(layout="row")
                     .date(flex="5") DEC
                         span 11
-                    sk-icon(icon="upload",size-class="icon-size-26x26",style="padding-top:2px; text-align:center" flex="10")
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
                     .sent-receive(flex="70") sent to Atlas Token Sale
                     .coin-change(flex="15") - 0.34283
                 hr
@@ -53,7 +53,7 @@
                 .item-container(layout="row")
                     .date(flex="5") DEC
                         span 11
-                    sk-icon(icon="upload",size-class="icon-size-26x26",style="padding-top:2px; text-align:center" flex="10")
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
                     .sent-receive(flex="70") sent to Atlas Token Sale
                     .coin-change(flex="15") - 0.34283
                 hr

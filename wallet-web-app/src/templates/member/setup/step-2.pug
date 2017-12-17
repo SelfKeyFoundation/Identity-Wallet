@@ -15,39 +15,39 @@ div(layout-fill, layout="column", layout-align="center center")
             .sk-list(style="margin-top: 28px;")
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['full-name']")
-                        span(ng-if="!$root.initialSetupProgress['full-name']") 1
-                    span Full Name
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value") 1
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_1}}
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['email']")
-                        span(ng-if="!$root.initialSetupProgress['email']") 2
-                    span Email
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value") 2
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_2}}
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['phone-number']")
-                        span(ng-if="!$root.initialSetupProgress['phone-number']") 3
-                    span Phone Number
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value") 3
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_3}}
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['passport']")
-                        span(ng-if="!$root.initialSetupProgress.passport") 4
-                    span Passport
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path") 4
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4}}
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['national-id']")
-                        span(ng-if="!$root.initialSetupProgress['national-id']") 5
-                    span National ID
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path") 5
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_5}}
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress['utility-bill']")
-                        span(ng-if="!$root.initialSetupProgress['utility-bill']") 6
-                    span Utility Bill
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path") 6
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_6}}
 
         div(layout="row", layout-align="center center", style="margin: 0 24px 24px 24px;")
             .sk-button.outline-blue(flex="70", ng-click="nextStep($event, basicInfoForm)")
