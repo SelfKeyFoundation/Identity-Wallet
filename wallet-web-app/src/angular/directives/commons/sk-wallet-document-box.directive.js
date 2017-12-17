@@ -43,6 +43,7 @@ function SkWalletDocumentBoxDirective($log, $window, $mdDialog) {
             };
 
             scope.getFileNames = function(files){
+                if(!files || !files.length) return '';
                 return files.map(file=>file.name).join(', ');
             };
 
