@@ -1,17 +1,18 @@
-.sk-box.sk-wallet-general-info-box
-    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px; margin-bottom: 20px")
-        div.plus-button(ng-click="changeMode(2)")
+.sk-box.sk-wallet-general-document-box
+    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px;")
+        .plus-button(ng-click="changeMode(2)")
             img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
 
         .general-title {{data.name}}
-        .sk-wallet-general-info-box__content
+        .sk-wallet-document-box__content
             table.sk-wallet-general-info-box__content__table(ng-if="data.acceptableDocuments")
                 tr
-                    td.fc-bluey-grey Acceptable documents
+                    td.sub-title Acceptable documents
                     td
                         span.fc-white {{data.acceptableDocuments}}
-        div(ng-repeat="(docIndex, doc) in data.documents")
-            .sk-wallet-general-info-box__content
+
+        div.doc-section(ng-repeat="(docIndex, doc) in data.documents")
+            .sk-wallet-document-box__content
                 .section-title Document
                 .document-files
                     sk-icon(icon="{{statuses[doc.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
@@ -25,9 +26,9 @@
                                 button.confirm(ng-click="deleteAttribute(docIndex)") Delete attribute
                                 button.cancel(ng-click="doc.clicked = false") Cancel Action
 
-            .sk-wallet-general-info-box__content
+            .sk-wallet-document-box__content
                 .section-title History
-                table(ng-init="doc.visibleRowCount = 2")
+                table.bottom-bordered(ng-init="doc.visibleRowCount = 2")
                     tr(ng-repeat="(index, step) in doc.actionHistory", ng-show="index < doc.visibleRowCount")
                         td.fc-bluey-grey {{step.date | date:'shortDate'}}
                         td.fc-bluey-grey
@@ -35,18 +36,18 @@
                         td
                             span.fc-white {{statuses[step.status].name}} - &nbsp;
                             span.fc-white {{step.note}}
-                            button.transp-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+                            button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
 
                 div(ng-if="doc.actionHistory.length", style="margin-top: .2em; font-size: 14px;")
-                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") Show All History
-                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") Show Less History
+                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") View All History
+                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") View Less History
 
 
 
-    .fullscreen-popup
-        .sk-wallet-document-box-upload-form(ng-if="mode == 2")
+    .fullscreen-popup(ng-if="mode == 2")
+        .sk-wallet-document-box-upload-form
             .name-section
-                input(type="text", ng-model="attrToAdd.name")
+                input(type="text", ng-model="attrToAdd.name", placeholder="Document name")
             .upload-section
                 .section-title Upload your {{attrToAdd.name}}
                 .file-select

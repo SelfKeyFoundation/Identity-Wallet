@@ -5,7 +5,7 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdS
     let now = new Date();
 
     $scope.docBoxData = {
-        name: "Person identification documents",
+        name: "National ID",
         acceptableDocuments: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
         documents: [
             {
