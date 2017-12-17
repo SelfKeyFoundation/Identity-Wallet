@@ -2,11 +2,6 @@
 
 class IdAttribute {
 
-    mainCategory = null;    //
-    subCategory = null;     //
-    type = null;            // document, static-data, etc
-    targetTypes = [];       // company, individual
-
     /**
      * 
      * @param {*} mainCategory 
