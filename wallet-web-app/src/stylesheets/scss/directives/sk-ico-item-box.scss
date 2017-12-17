@@ -21,12 +21,14 @@
             height: 14px;
             width: 14px;
             border-radius: 50%;
-            margin-left: auto;
             &.active{
                 background-color: #1ed43b;
             }
             &.inactive{
                 background-color: #d9534f;
+            }
+            &.upcoming{
+                background-color: #f0ad4e;
             }
         }
     }

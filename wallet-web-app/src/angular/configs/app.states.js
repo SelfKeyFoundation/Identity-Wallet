@@ -1,6 +1,7 @@
 'use strict';
 
-import MemberWalletMainController from "../controllers/member/wallet/main-controller";
+import IdAttribute from '../classes/id-attribute.js';
+import Ico from '../classes/ico.js';
 
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
     'ngInject'
@@ -19,6 +20,46 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         } else {
             defer.resolve();
         }
+
+        return defer.promise;
+    }
+
+    function getAppData ($rootScope, $q, $state) {
+        let defer = $q.defer();
+
+        // TODO
+        // load data at first
+
+        // TODO - temporary idAttributes
+        $rootScope.idAttributes = [
+            new IdAttribute('Global Attribute', 'Name', 'Static Data', ['individual']),
+            new IdAttribute('Global Attribute', 'Public Key', 'Static Data', ['individual']),
+            new IdAttribute('Global Attribute', 'Physical Address', 'Static Data', ['individual']),
+            new IdAttribute('Identity Document', 'Passport', 'Document', ['individual']),
+            new IdAttribute('Proof of Wealth', 'Tax Certificate', 'Document', ['individual','company']),
+        ];
+
+        // TODO - temporary icos
+        let ico1 = new Ico();
+        ico1.companyName = 'GATCOIN';
+        ico1.status = 'active';
+
+        let ico2 = new Ico();
+        let ico3 = new Ico();
+        let ico4 = new Ico();
+        let ico5 = new Ico();
+        let ico6 = new Ico();
+
+        $rootScope.icos = [
+            ico1,
+            ico2,
+            ico3,
+            ico4,
+            ico5,
+            ico6
+        ]
+
+        defer.resolve();
 
         return defer.promise;
     }
@@ -312,6 +353,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 main: {
                     templateUrl: 'member/wallet/main.html',
                     controller: 'MemberWalletMainController'
+                }
+            }
+        })
+
+        .state('member.wallet.manage-token', {
+            url: '/member/wallet/token/:id/manage',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/manage-token.html'
                 }
             }
         })

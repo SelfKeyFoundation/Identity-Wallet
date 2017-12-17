@@ -1,0 +1,40 @@
+@mixin reset($type){
+    $defaults: (
+        width: unset,
+        height: unset,
+    );
+
+    $resets: (
+        ul: (
+            display: block, 
+            list-style-type: disc,
+            margin-top: 1em,
+            margin-bottom: 1em,
+            margin-left: 0,
+            margin-right: 0,
+            padding-left: 40px,
+            li: (
+                display: list-item
+            )
+        ),
+        div: (
+            display: block    
+        )
+    );
+
+    @each $prop, $value in map-get($defaults) {
+        #{$prop}: $value;
+    }
+
+    @each $prop, $value in map-get($resets, $type) {
+        @if type-of($value) == 'map' {  
+            & > #{$prop} {
+                @each $sub-prop, $sub-value in $value {
+                    #{$sub-prop}: $sub-value;
+                }
+            }      
+        } @else {
+            #{$prop}: $value;
+        }
+    }
+}
