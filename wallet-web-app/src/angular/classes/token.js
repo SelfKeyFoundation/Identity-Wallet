@@ -6,9 +6,19 @@ import CommonUtils from './common-utils.js';
 
 class Token {
 
+    /**
+     * 
+     */
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
 
+    /**
+     * 
+     * @param {*} contractAddress 
+     * @param {*} symbol 
+     * @param {*} decimal 
+     * @param {*} type 
+     */
     constructor(contractAddress, symbol, decimal, type) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
