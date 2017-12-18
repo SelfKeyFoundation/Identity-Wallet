@@ -1,9 +1,9 @@
 function createWindow(app, next) {
     return function () {
         app.win = new app.modules.electron.BrowserWindow({
-            width: 1140,
+            width: 1160,
             height: 768,
-            minWidth: 1140,
+            minWidth: 1160,
             minHeight: 768,
             webPreferences: {
                 devTools: app.config.app.debug,
