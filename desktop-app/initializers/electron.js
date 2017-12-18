@@ -60,8 +60,10 @@ module.exports = {
             }
         });
 
-        // self updater
+        //
         
+
+        // self updater
         let autoUpdater = app.modules.electron['autoUpdater'];
         let dialog = app.modules.electron.dialog;
 

@@ -2,9 +2,11 @@ module.exports = function (app) {
     let controller = {};
 
     let dialog = app.modules.electron.dialog;
+    let Notification = app.modules.electron.Notification;
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+
     const settings = require('electron-settings');
     const fs = require('fs');
 
@@ -376,6 +378,23 @@ module.exports = function (app) {
     controller.testCustomNode = function (event, actionId, actionName, args) {
         console.log("testCustomNode", args);
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });
+    }
+
+    controller.showNotification = function (event, actionId, actionName, args) {
+        console.log(args)
+        let notification = new Notification({
+            title: args.title,
+            body: args.text
+        });
+        
+        notification.on('click', (event) => {
+            console.log('>>>>>>> Notification clicked', args.options);
+            app.win.webContents.send('ON_NOTIFICATION_CLICK', args.options);
+        });
+
+        notification.show();
+
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
     }
 
     return controller;

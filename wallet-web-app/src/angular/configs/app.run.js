@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -73,7 +73,7 @@ function AppRun($rootScope, $log, $timeout, $state, DICTIONARY, CONFIG, Electron
         }
     });
 
-    $timeout(() => {    
+    $interval(() => {    
         if($rootScope.wallet && $rootScope.wallet.getAddress()){
           WalletService.loadBalance();
         }
