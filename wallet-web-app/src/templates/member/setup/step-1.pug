@@ -10,14 +10,14 @@ div(layout-fill, layout="column", layout-align="center center")
             span.none-select-text Create Basic Template
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
             .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
-                label Full Name
-                input.sk-input(type="text", name="fullName", ng-model="basicInfo['full-name'].value")
+                label {{$root.INITIAL_ID_ATTRIBUTES.REQ_1}}
+                input.sk-input(type="text", name="fullName", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value")
             .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
-                label Email
-                input.sk-input(type="text", name="email", ng-model="basicInfo['email'].value")
+                label {{$root.INITIAL_ID_ATTRIBUTES.REQ_2}}
+                input.sk-input(type="text", name="email", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value")
             .sk-input-container(style="margin: 12px 0 12px 0 ;user-select: none;")
-                label Phone Number
-                input.sk-input(type="text", name="phoneNumber", ng-model="basicInfo['phone-number'].value")
+                label {{$root.INITIAL_ID_ATTRIBUTES.REQ_3}}
+                input.sk-input(type="text", name="phoneNumber", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value")
 
             .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
                 span(style="color: #fff; user-select: none;") Create Basic Template

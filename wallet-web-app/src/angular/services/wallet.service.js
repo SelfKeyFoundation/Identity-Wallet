@@ -15,6 +15,8 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
   let wallet = null;
   let selectedChainId = 3;
 
+  let isFirstLoad = true;
+
   /**
    * 
    */
@@ -118,12 +120,17 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       // TODO check wallet address
       let promise = Web3Service.getBalance("0x" + wallet.getAddress());
       promise.then((balanceWei) => {
-        wallet.balanceWei = balanceWei;
         wallet.balanceEth = EthUnits.toEther(balanceWei, 'wei');
-        
         wallet.balanceEth = Number(CommonService.numbersAfterComma(wallet.balanceEth, 8));
-        //wallet.balanceEth = parseFloat(wallet.balanceEth).toFixed(8);
 
+        if(wallet.balanceWei !== balanceWei && !isFirstLoad){
+          ElectronService.showNotification('Identity Wallet', 'ETH Balance Changed ' + wallet.balanceEth, {});
+        }
+        
+        wallet.balanceWei = balanceWei;
+
+        isFirstLoad = false;
+        
         defer.resolve(wallet);
       }).catch((error) => {
         defer.reject($rootScope.buildErrorObject("ERR_BALANCE_LOAD", error));

@@ -7,15 +7,15 @@ md-sidenav.md-sidenav-right(md-component-id="right")
             span(ng-click="close($event)") ✕
 
         .sk-right-sidenav__section.section-1
-            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ui-sref="member.dashboard.main") Dashboard
-            .sk-right-sidenav__section__item Marketplace
+            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')") Dashboard
+            //.sk-right-sidenav__section__item(ng-class="getSelectedClass('member.wallet')") Marketplace
 
         .sk-right-sidenav__h-divider
 
         .sk-right-sidenav__section
-            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.wallet')", ui-sref="member.wallet.main") Identity Wallet
+            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.wallet')", ng-click="$root.navigate($event, 'member.wallet.main')") Identity Wallet
             
         .sk-right-sidenav__h-divider
 
-        .sk-right-sidenav__section
+        //.sk-right-sidenav__section
             .sk-right-sidenav__section__item Preferences

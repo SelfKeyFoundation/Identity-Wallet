@@ -2,8 +2,8 @@
     .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
         .logo(layout="row")
             sk-icon(icon="eth",size-class="icon-size-44x44",style="padding-top:4px")
-            .logo-text Bankex
-                span (Finance)
+            .logo-text {{ico.companyName}}
+                span ({{ico.category}})
         .documents-needed(layout="row")  Documents Needed
             span
     .ico-list-item-content-wrappper__content-section
@@ -21,7 +21,8 @@
                     span OF
                     span $67,300,000 (38%)
                 .buttons-container
-                    button.join-button.no-outline  Complete Selfkey ID
+                    //join-button - lurji, join-ico-button - mwvane
+                    button.complete-button.no-outline  Complete Selfkey ID
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
@@ -71,37 +72,9 @@
         .KYC-requirements-content
             .KYC-requirements-text KYC Requirements
             .KYC-requirements-lists(layout="row")
-                .sk-list(style="margin-top: 20px;" flex="50")
-                    .item
-                        .bullet
+                .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections")
+                    .item(ng-repeat="item in section")
+                        .bullet(ng-class="{'background-color-squash': item === 'Name'}")
                             img(src='assets/images/icons/tick.svg')
-                        span Full Name
-
-                    .item
-                        .bullet
-                            img(src='assets/images/icons/tick.svg')
-                        span Email
-
-                    .item
-                        .bullet
-                            img(src='assets/images/icons/tick.svg')
-                        span Phone Number
-
-                .sk-list(flex="50", style="margin-top: 20px;")
-                    .item
-                        .bullet.background-color-squash
-                            span 4
-                        span Passport
-                        sk-icon(icon="upload",size-class="icon-size-16x16",style="margin-left:34px")
-
-                    .item
-                        .bullet.background-color-squash
-                            span 5
-                        span National ID
-                        sk-icon(icon="upload",size-class="icon-size-16x16",style="margin-left:20px")
-
-                    .item
-                        .bullet.background-color-squash
-                            span 6
-                        span Utility Bill
-                        sk-icon(icon="upload",size-class="icon-size-16x16",style="margin-left:32px")
+                        span {{item}}
+                        sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left:34px", ng-if="1===2")

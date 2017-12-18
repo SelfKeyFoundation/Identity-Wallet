@@ -1,5 +1,10 @@
 .sk-ico-item-box {
     padding: 0;
+    min-width: 360px;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 330px;
 
     .sk-ico-item-box__header {
         display: flex;
@@ -51,6 +56,7 @@
             }
         }
       .price {
+        font-size: 15px;
         color: white;
       }
     }
@@ -63,6 +69,7 @@
         padding: 0 20px 30px 20px;
 
         .days{
+            margin-left: 36px;
             font-family: ProximaNovaRegular;
             font-size: 13px;
             color: #93b0c1;

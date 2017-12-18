@@ -33,7 +33,7 @@
         margin-top: 8px;
 
         .initial {
-          font-family: ProximaNova;
+          font-family: ProximaNovaRegular;
           font-weight: normal;
           font-style: normal;
           font-stretch: normal;
@@ -49,7 +49,7 @@
       display: inline-grid;
 
       .main-price {
-        font-family: ProximaNova;
+        font-family: ProximaNovaRegular;
         font-size: 32px;
         font-weight: 300;
         font-style: normal;
@@ -60,7 +60,7 @@
         color: #ffffff;
       }
       .secondary-price {
-        font-family: ProximaNova;
+        font-family: ProximaNovaRegular;
         font-size: 12px;
         font-weight: normal;
         font-style: normal;
@@ -75,7 +75,7 @@
       padding: 10px 0;
 
       .your-address {
-        font-family: ProximaNova;
+        font-family: ProximaNovaRegular;
         font-size: 14px;
         font-weight: normal;
         font-style: normal;
@@ -88,7 +88,7 @@
       .generated-address {
 
         .address {
-          font-family: ProximaNova;
+          font-family: ProximaNovaRegular;
           font-size: 12px;
           font-weight: 500;
           font-style: normal;
@@ -101,7 +101,7 @@
         .copy-button {
           border-radius: 4px;
           border: solid 1px #3b4a5a;
-          font-family: ProximaNova;
+          font-family: ProximaNovaRegular;
           font-size: 10px;
           font-weight: normal;
           font-style: normal;
@@ -129,12 +129,12 @@
         border-image-slice: 1;
         background-color: transparent;
         border-color: #0dc7dd;
-        padding: 6px 20px;
+        padding: 13px 20px;
         outline: none;
         width: 25%;
 
         > span {
-          font-family: ProximaNova;
+          font-family: ProximaNovaRegular;
           font-size: 14px;
           font-weight: 600;
           font-style: normal;
@@ -162,7 +162,7 @@
 
     .activity-text {
 
-      font-family: ProximaNova;
+      font-family: ProximaNovaRegular;
       font-size: 18px;
       font-weight: 500;
       font-style: normal;
@@ -192,7 +192,7 @@
         .item-container {
 
           .date {
-            font-family: ProximaNova;
+            font-family: ProximaNovaRegular;
             font-size: 12px;
             font-weight: 500;
             font-style: normal;
@@ -205,7 +205,7 @@
             text-align: center;
           }
           .sent-receive {
-            font-family: ProximaNova;
+            font-family: ProximaNovaRegular;
             font-size: 12px;
             font-weight: 600;
             font-style: normal;
@@ -216,7 +216,7 @@
             color: #ffffff;
           }
           .coin-change {
-            font-family: ProximaNova;
+            font-family: ProximaNovaRegular;
             font-size: 12px;
             font-weight: 500;
             font-style: normal;
@@ -225,7 +225,6 @@
             letter-spacing: normal;
             text-align: right;
             color: #0dc7dd;
-
           }
         }
       }

@@ -1,6 +1,7 @@
 .dashboard-content-wrappper {
     > * {
-        width: 90%;
+        min-width: 1140px;
+        max-width: 1140px;
     }
 
     .dashboard-content-wrappper__header-section {

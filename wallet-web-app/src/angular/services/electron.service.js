@@ -84,6 +84,14 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
       });
     }
 
+    this.showNotification = function (title, text, options) {
+      return makeCall('showNotification', {
+        title: title,
+        text: text,
+        options: options
+      });
+    }
+
     this.unlockEtherKeystoreObject = function (keystoreObject, password) {
       return makeCall('unlockEtherKeystoreObject', {
         keystoreObject: keystoreObject,

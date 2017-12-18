@@ -6,8 +6,6 @@ function SkIcoItemBoxDirective($log, $window, $timeout) {
     return {
         restrict: 'E',
         scope: {
-            title: '@',
-            icon: '@',
             icoData: "=",
         },
         link: (scope, element) => {

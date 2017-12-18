@@ -1,5 +1,7 @@
 'use strict';
 
+import CommonUtils from '../classes/common-utils.js';
+
 function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
   'ngInject';
 
@@ -78,6 +80,11 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
       var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
       return num.toString().match(re)[0];
     }
+
+    chunkArray (myArray, chunkSize) {
+      return CommonUtils.chunkArray(myArray, chunkSize);
+    }
+    
   }
 
   return new CommonService();

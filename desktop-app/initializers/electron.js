@@ -1,9 +1,9 @@
 function createWindow(app, next) {
     return function () {
         app.win = new app.modules.electron.BrowserWindow({
-            width: 1000,
+            width: 1160,
             height: 768,
-            minWidth: 1000,
+            minWidth: 1160,
             minHeight: 768,
             webPreferences: {
                 devTools: app.config.app.debug,
@@ -22,6 +22,8 @@ function createWindow(app, next) {
         if (app.config.app.debug) {
             app.win.webContents.openDevTools();
         }
+
+        app.win.maximize(); //todo move to configs
 
         app.win.on('closed', () => {
             app.win = null
@@ -58,8 +60,10 @@ module.exports = {
             }
         });
 
-        // self updater
+        //
         
+
+        // self updater
         let autoUpdater = app.modules.electron['autoUpdater'];
         let dialog = app.modules.electron.dialog;
 

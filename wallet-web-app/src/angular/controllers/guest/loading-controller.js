@@ -3,11 +3,12 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
 
     $log.info('GuestLoadingController');
 
-    //
+    /*
     let txInfoPromise = Web3Service.getTransactionReceipt("0x34ede13d06b2b0b832e2c4463829c3f5614b7f09bf006faf93432850ee298ad1");
     txInfoPromise.then((txInfo)=>{
         console.log("txInfo", Number(txInfo.status));
     })
+    */
 
     /*
     $timeout(()=>{
@@ -29,8 +30,6 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
     })
     */
 
-
-    
 
 /*
     let test = Web3Service.getEstimateGas("0x603fc6daa3dbb1e052180ec91854a7d6af873fdb", "0xb5f61a128af89ce992e96d71242297ad392a4e9c", 0.5);

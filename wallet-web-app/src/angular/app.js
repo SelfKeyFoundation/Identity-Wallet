@@ -216,6 +216,12 @@ angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetu
 import MemberDashboardMainController from './controllers/member/dashboard/main-controller.js';
 angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
 
+/**
+ * wallet
+ */
+import MemberWalletMainController from './controllers/member/wallet/main-controller.js';
+angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWalletMainController);
+
 
 /**
  * settings
@@ -228,6 +234,13 @@ angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSe
  */
 import MemberMarketplaceMainController from './controllers/member/marketplace/main-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
+
+import MemberMarketplaceIcoListController from './controllers/member/marketplace/ico/list-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoListController', MemberMarketplaceIcoListController);
+
+import MemberMarketplaceIcoItemController from './controllers/member/marketplace/ico/item-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
+
 /**
  * config states
  */

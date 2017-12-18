@@ -2,9 +2,11 @@ module.exports = function (app) {
     let controller = {};
 
     let dialog = app.modules.electron.dialog;
+    let Notification = app.modules.electron.Notification;
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+
     const settings = require('electron-settings');
     const fs = require('fs');
 
@@ -60,8 +62,87 @@ module.exports = function (app) {
                     documentsDirectoryPath: documentsDirectoryPath
                 },
                 idAttributes: {
-                    documents: [],
-                    contacts: []
+                    "Name": {
+                        subcategory: "Name",
+                        type: "Static Data",
+                        category: "Global Attribute",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                value: ""
+                            }
+                        }
+                    },
+                    "Email": {
+                        subcategory: "Email",
+                        type: "Static Data",
+                        category: "Global Attribute",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                value: ""
+                            }
+                        }
+                    },
+                    "Telephone Number": {
+                        subcategory: "Telephone Number",
+                        type: "Static Data",
+                        category: "Global Attribute",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                value: ""
+                            }
+                        }
+                    },
+                    "Passport": {
+                        subcategory: "Passport",
+                        type: "Document",
+                        category: "Identity Document",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                contentType: "",
+                                size: "",
+                                name: "",
+                                path: ""
+                            }
+                        }
+                    },
+                    "National ID Card": {
+                        subcategory: "National ID Card",
+                        type: "Document",
+                        category: "Identity Document",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                contentType: "",
+                                size: "",
+                                name: "",
+                                path: ""
+                            }
+                        }
+                    },
+                    "Utility Bill": {
+                        subcategory: "Utility Bill",
+                        type: "Document",
+                        category: "Proof of Address",
+                        defaultItemId: "1",
+                        items: {
+                            "1": {
+                                _id: "1",
+                                contentType: "",
+                                size: "",
+                                name: "",
+                                path: ""
+                            }
+                        }
+                    }
                 },
                 wallets: {}
             });
@@ -121,6 +202,10 @@ module.exports = function (app) {
             };
             app.modules.electron.dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
                 if (filePaths) {
+
+                    //const stats = fs.statSync(filePaths[0]);
+                    //const fileSizeInBytes = stats.size
+                    
                     app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, filePaths[0]);
                 } else {
                     app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, null);
@@ -293,6 +378,23 @@ module.exports = function (app) {
     controller.testCustomNode = function (event, actionId, actionName, args) {
         console.log("testCustomNode", args);
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });
+    }
+
+    controller.showNotification = function (event, actionId, actionName, args) {
+        console.log(args)
+        let notification = new Notification({
+            title: args.title,
+            body: args.text
+        });
+        
+        notification.on('click', (event) => {
+            console.log('>>>>>>> Notification clicked', args.options);
+            app.win.webContents.send('ON_NOTIFICATION_CLICK', args.options);
+        });
+
+        notification.show();
+
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
     }
 
     return controller;
