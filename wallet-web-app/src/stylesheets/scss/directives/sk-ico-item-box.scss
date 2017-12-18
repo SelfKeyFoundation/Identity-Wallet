@@ -7,8 +7,7 @@
         align-items: center;
         justify-content: flex-start;
         height: inherit;
-
-        padding: 16px 30px;
+        padding: 16px 20px;
 
         span {
             font-family: ProximaNovaRegular; 
@@ -18,8 +17,8 @@
             margin-left: 16px;
         }
         .dot {
-            height: 14px;
-            width: 14px;
+            height: 12px;
+            width: 12px;
             border-radius: 50%;
             &.active{
                 background-color: #1ed43b;
@@ -34,7 +33,7 @@
     }
 
     .sk-ico-item-box__content {
-        padding: 30px;
+        padding: 20px;
 
         table {
             font-family: ProximaNovaRegular;
@@ -61,8 +60,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-
-        padding: 0 30px 30px 30px;
+        padding: 0 20px 30px 20px;
 
         .days{
             font-family: ProximaNovaRegular;

@@ -1,7 +1,5 @@
 .ico-list-content__toolbar {
-    /*position: fixed;*/
     z-index: 100;
-    width: 100%;
     border-radius: 4px;
     background-color: #262f39;
     border: solid 1px #303c49;
@@ -28,7 +26,8 @@
                 margin-left:1rem;
                 margin-right:1rem;
                 width: 18.5rem;
-                font-size: 17px;
+                font-family: ProximaNovaSemibold;
+                font-size: 18px;
             }
         }
 
@@ -39,10 +38,7 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-    /*padding-top: 80px;*/
-    // TODO
     .ico-list-content {
-
         .ico-list-items{
             display: flex;
             flex-wrap: wrap;
@@ -55,7 +51,6 @@
                 border-radius: 4px;
                 background-color: #262f39;
                 border: solid 1px #303c49;
-                /*width: 19.5rem;*/
                 width: 18.5rem;
                 margin: 1rem;
             }
