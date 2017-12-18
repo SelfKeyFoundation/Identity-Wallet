@@ -267,12 +267,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         .state('member.marketplace.ico-item', {
-            url: '/member/marketplace/ico/item/:id',
+            url: '/member/marketplace/ico/item',
             views: {
                 main: {
                     templateUrl: 'member/marketplace/ico/item.html',
                     controller: 'MemberMarketplaceIcoItemController'
                 }
+            },
+            params: {
+                selected: null
             }
         })
 

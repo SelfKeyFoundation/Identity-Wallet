@@ -4,8 +4,8 @@
 class Ico {
 
     constructor() {
-        this.id = null;      // symbol
-        this.status = "active";  // active, upcoming, ended
+        this.id = null;             // symbol
+        this.status = "active";     // active, upcoming, ended
 
         this.ticker = null;
 
@@ -55,7 +55,8 @@ class Ico {
 
         this.kyc = {
             required: true,
-            template: "apiEndpoint"
+            template: "apiEndpoint",
+            requirements: ['Name', 'Email', 'Telephone Number', 'Passport', 'National ID Card', 'Utility Bill']
         };
 
         this.contractInfo = {
