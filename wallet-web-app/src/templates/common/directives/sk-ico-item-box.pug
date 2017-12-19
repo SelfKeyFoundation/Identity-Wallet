@@ -2,7 +2,7 @@
     .header.sk-ico-item-box__header
         sk-icon(icon="eth", size-class="icon-size-44x44")
         span {{icoData.companyName}}
-        span(style="font-size: 15px; margin-left: 5px;", flex) ({{icoData.category}})
+        span(style="font-size: 15px; margin-left: 4px;", flex) ({{icoData.category}})
         span.dot(ng-class="{'active': icoData.status === 'active', 'inactive': icoData.status === 'finished', 'upcoming': icoData.status === 'upcoming' }")
 
     .sk-ico-item-box__content(flex)

@@ -22,7 +22,7 @@
         )
     );
 
-    @each $prop, $value in map-get($defaults) {
+    @each $prop, $value in $defaults {
         #{$prop}: $value;
     }
 

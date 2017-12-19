@@ -41,6 +41,7 @@
 @import './directives/sk-ico-item-box.scss';
 @import './directives/sk-ico-details-box.scss';
 @import './directives/sk-user-info-box.scss';
+@import './directives/sk-kyc-requirements-box.scss';
 
 @import './layouts/guest-welcome-layout.scss';
 @import './layouts/member-layout.scss';
@@ -50,8 +51,11 @@
 @import './views/dashboard/main.scss';
 @import './views/wallet/main.scss';
 @import './views/wallet/manage-token.scss';
+
 @import './views/marketplace/ico-list.scss';
 @import './views/marketplace/ico-list-item.scss';
+@import './views/marketplace/ico-manage-requirements.scss';
+@import './views/marketplace/ico-accept-terms.scss';
 
 .bg-gradient {
   background-image: -webkit-gradient(

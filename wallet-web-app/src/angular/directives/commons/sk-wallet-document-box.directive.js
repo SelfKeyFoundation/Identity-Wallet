@@ -19,11 +19,11 @@ function SkWalletDocumentBoxDirective($log, $window, $mdDialog) {
                         date: new Date(),
                         status: 1,
                         note: "File required",
-                        actions: [
+                        actions: [/*
                             {
                                 title: 'request verification',
                                 link: '/app/verify?docId=789'
-                            }
+                            }*/
                         ]
                     }];
                     scope.data.documents.splice(0, 0, clone);

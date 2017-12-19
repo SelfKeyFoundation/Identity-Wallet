@@ -10,7 +10,7 @@ module.exports = function (app) {
     const settings = require('electron-settings');
     const fs = require('fs');
 
-    const storeFileName = 'main-store.json';
+    const storeFileName = 'main-store.json'; // TODO
     const userDataDirectoryPath = app.modules.electron.app.getPath('userData');
     const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
     const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');

@@ -1,11 +1,11 @@
 .sk-box.sk-ico-details-box
     .header.sk-ico-details-box__header
-        sk-icon(icon="{{data.icon}}", size-class="icon-size-44x44")
-        span {{data.title}}
-        span(style="font-size: 15px; margin-left: 5px;") ({{data.category}})
-        span.dot(ng-class="{'info':data.type === 'info','requirements':data.type === 'requirements' }")
+        sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44")
+        span {{ico.companyName}}
+        span(style="font-size: 15px; margin-left: 5px;") ({{ico.category}})
+        span.dot(ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }")
 
-    .sk-ico-details-box__content(ng-if="data.type === 'requirements'")
+    .sk-ico-details-box__content(ng-if="type === 'requirements'")
         .title
             span Submit Necessary Information
         .description.fc-white
@@ -13,39 +13,20 @@
         
         hr
 
-        .title
-            span KYC requirements
+        sk-kyc-requirements-box(progress="progress", sections="sections")
 
-        div(layout="row" layout-align="space-between start")
-            div(flex)
-                table
-                    tr(ng-repeat="reqItem in requirementsFirstPart")
-                        td
-                            md-icon(md-svg-src="assets/images/icons/check-circle.svg" ng-class="{'icon-green' : reqItem.status, 'icon-grey': !reqItem.status}")
-                        td
-                            .description.fc-white.requiremet-label
-                                p.label {{reqItem.title}}
-            div(flex)
-                table
-                    tr(ng-repeat="reqItem in requirementsSecondPart") 
-                        td
-                            md-icon(md-svg-src="assets/images/icons/check-circle.svg" ng-class="{'icon-green' : reqItem.status, 'icon-grey': !reqItem.status}")
-                        td
-                            .description.fc-white.requiremet-label
-                                p.label {{reqItem.title}}
-
-    .sk-ico-details-box__content(ng-if="data.type === 'info'")
+    .sk-ico-details-box__content(ng-if="type === 'info'")
         .description.fc-white
             p Sales Data
 
         table
             tr
                 td
-                    span.amountValue {{data.ethAmount}}
+                    span.amountValue 43,422.12
                     br
                     span.label ETH Collected
                 td
-                    span.amountValue {{data.bnxAmount}}
+                    span.amountValue 41,252,331
                     br
                     span.label BNX Remaining
             tr
@@ -56,17 +37,17 @@
             tr
                 td
                     span.label Price:  
-                    span  {{data.price}}
+                    span 0.001518 ETH/ BNC
                 td
                     span.label Min Purchase  
-                    span  {{data.minPurchase}}
+                    span 0.0001 ETH
             tr
                 td
                     span.label Hard cap: 
-                    span  {{data.hardCap}}
+                    span 105,000 ETH
                 td
                     span.label Total Supply 
-                    span  {{data.total}}
+                    span 150,000,000 BNC
 
 
 

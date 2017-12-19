@@ -162,6 +162,8 @@ angular.module('kyc-wallet').directive('skWalletDocumentBox', SkWalletDocumentBo
 import SkUserInfoBoxDirective from './directives/commons/sk-user-info-box.directive';
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
+import SkKycRequirementsBoxDirective from './directives/commons/sk-kyc-requirements-box.directive';
+angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
 
 
 /**
@@ -240,6 +242,12 @@ angular.module('kyc-wallet').controller('MemberMarketplaceIcoListController', Me
 
 import MemberMarketplaceIcoItemController from './controllers/member/marketplace/ico/item-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
+
+import MemberMarketplaceIcoManageRequirementsController from './controllers/member/marketplace/ico/manage-requirements-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoManageRequirementsController', MemberMarketplaceIcoManageRequirementsController);
+
+import MemberMarketplaceIcoAcceptTermsController from './controllers/member/marketplace/ico/accept-terms-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoAcceptTermsController', MemberMarketplaceIcoAcceptTermsController);
 
 /**
  * config states

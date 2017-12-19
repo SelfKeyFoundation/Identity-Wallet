@@ -111,6 +111,10 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return idAttribute.items[idAttribute.defaultItemId];
     }
 
+    getIdAttribute(subcategory) {
+      return store.idAttributes[subcategory];
+    }
+
     getWalletPublicKeys() {
       return Object.keys(store.wallets);
     }
@@ -158,7 +162,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico1.companyName = 'GATCOIN';
     ico1.status = 'active';
     ico1.teamLoaction = 'Hong Kong';
-    ico1.video = 'https://www.youtube.com/watch?v=qq0_WVK8lMc';
+    ico1.video = 'https://www.youtube.com/embed/qq0_WVK8lMc';
     ico1.shortDescription = 'GATCOIN is an eCommerce platform which...';
     ico1.description = 'GATCOIN is an eCommerce platform which...';
     ico1.category = 'Retail';
@@ -168,6 +172,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico1.capital.raised = '$1,000,000';
     ico1.capital.goal = '$35,870,370';
     ico1.ticker = 'GAT';
+    ico1.symbol = 'eth';
     ico1.token.total = '??';
     ico1.token.totalForSale = '1,000,000,000';
     ico1.token.price = '1 GAT = 0.20 USD';
@@ -186,7 +191,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico3.companyName = 'Aditus Network';
     ico3.status = 'active';
     ico3.teamLoaction = 'Singapore';
-    ico3.video = 'https://medium.com/aditusnetwork/forbes-cites-aditus-as-key-blockchain-player-9bb51481ac5b';
+    ico3.video = 'https://www.youtube.com/embed/4u4V8jXprD0';
     ico3.shortDescription = 'Aditus is an eCommerce platform which...';
     ico3.description = 'Aditus is an eCommerce platform which...';
     ico3.category = 'Luxury';
@@ -196,6 +201,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico3.capital.raised = '$4717639';
     ico3.capital.goal = '$11,000,000';
     ico3.ticker = 'ADI';
+    ico3.symbol = 'eth';
     ico3.token.total = '450,000,000';
     ico3.token.totalForSale = '1,000,000,000';
     ico3.token.price = '1 ADI = 0.05 USD';
@@ -215,7 +221,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico4.companyName = 'AiX';
     ico4.status = 'upcoming';
     ico4.teamLoaction = 'London';
-    ico4.video = 'https://aix.trade/wp-content/uploads/2017/11/AiX-Trading.-Transformed.mp4';
+    ico4.video = 'https://www.youtube.com/embed/qmg1JYca0Oo';
     ico4.shortDescription = 'AiX is an eCommerce platform which...';
     ico4.description = 'AiX is an eCommerce platform which...';
     ico4.category = 'Finance';
@@ -225,6 +231,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     ico4.capital.raised = 'TBA';
     ico4.capital.goal = 'TBA';
     ico4.ticker = 'AIX';
+    ico4.symbol = 'eth';
     ico4.token.total = 'TBA';
     ico4.token.totalForSale = 'TBA';
     ico4.token.price = 'TBA';

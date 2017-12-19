@@ -1,6 +1,6 @@
 {
   "name": "identity-wallet",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Identity Wallet",
   "repository": "https://github.com/kyc-chain/wallet",
   "main": "main.js",

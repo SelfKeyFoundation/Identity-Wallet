@@ -7,6 +7,7 @@ class Ico {
         this.id = null;             // symbol
         this.status = "active";     // active, upcoming, ended
 
+        this.symbol = null;         // TODO
         this.ticker = null;
 
         this.companyName = null;
@@ -77,6 +78,17 @@ class Ico {
         }
     }
 
+    checkRequirements (ConfigFileService) {
+        let result = {}
+
+        for(let i in this.kyc.requirements){
+            let req = this.kyc.requirements[i];
+            let idAttribute = ConfigFileService.getDefaultIdAttributeItem(req);
+            result[req] = idAttribute && (idAttribute.value || idAttribute.path) ? idAttribute : null;
+        }
+
+        return result;
+    }
 }
 
 export default Ico;
