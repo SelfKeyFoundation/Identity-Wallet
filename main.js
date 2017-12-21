@@ -4,6 +4,8 @@ if (handleSquirrelEvent()) {
   return;
 }
 
+const pkg = require('./package.json');
+
 const fs = require('fs');
 const camelCase = require('camelcase');
 const lodash = require('lodash');
@@ -20,7 +22,8 @@ const modules = [
   'mv',
   'fs',
   'path',
-  'url'
+  'url',
+  'deskmetrics'
 ];
 
 // TODO implement
@@ -40,6 +43,7 @@ const initializers = [
  * shared app instance
  */
 let app = {
+  pkg: pkg,
   dir: {
     root: __dirname,
     desktopApp: __dirname + '/desktop-app'

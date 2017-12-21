@@ -1,35 +1,53 @@
 'use strict';
 
+// TODO - rename sk-id-attribute-box(data="", callbacks="")
 function SkWalletDocumentBoxDirective($log, $window, $mdDialog) {
     'ngInject';
 
     return {
         restrict: 'E',
         scope: {
-            data: '='
+            data: "="
         },
         link: (scope, element, attrs, tabsCtrl) => {
-            scope.mode = 1;
+            scope.config = { historyRowCount: 2 };
+
+            // item type
+            // scope.data.type = 'document' | 'static_data'
+            
+            // show only defaults or show all
+            // scope.data.mode = 'default' | 'all'
+
+            // view state: add/edit/delete
+            // TODO - rename to viewState
+            //scope.mode = 1; // 'default' | 'edit'
             scope.attrToAdd = {};
 
             scope.changeMode = function(mode, newItem){
+                
+                $mdDialog.show({
+                    templateUrl: 'common/directives/test.html',
+                    parent: angular.element(document.body),
+                    targetEvent: null,
+                    clickOutsideToClose: false,
+                    fullscreen: true
+                }).then((resp)=>{
+
+                })
+
+                /*
                 if(newItem){
                     let clone = angular.copy(newItem);
                     clone.actionHistory = [{
                         date: new Date(),
                         status: 1,
-                        note: "File required",
-                        actions: [/*
-                            {
-                                title: 'request verification',
-                                link: '/app/verify?docId=789'
-                            }*/
-                        ]
+                        note: "File required"
                     }];
                     scope.data.documents.splice(0, 0, clone);
                 }
                 scope.attrToAdd = {};
-                scope.mode = mode;
+                scope.data.viewState = mode;
+                */
             };
 
             scope.statuses = {

@@ -2,7 +2,7 @@
     .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
         .logo(layout="row")
             sk-icon(icon="eth",size-class="icon-size-44x44",style="padding-top:4px")
-            .logo-text {{ico.companyName}}
+            .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
         .documents-needed(layout="row") Documents Needed
             span
@@ -10,12 +10,12 @@
         .main-content(layout="row")
             .video-container(flex="65")
                 .video
-                    iframe(style="width:470px; height: 300px;" ng-src="{{trustSrc(ico.video)}}")
+                    iframe(style="width:470px; height: 300px;" ng-src="{{trustSrc(ico.videos.youtube)}}")
                 .video-text {{ico.description}}
             .token-sale-container(layout="column", flex="35")
                 .text-1
                     span Token Sale ends in
-                    span(style="font-weight: 600") 29 DAYS
+                    span(style="font-weight: 600") {{icoData.getDaysLeft()}} DAYS
                 .text-2
                     div(style="font-size:20px") $25,679,353
                     span OF

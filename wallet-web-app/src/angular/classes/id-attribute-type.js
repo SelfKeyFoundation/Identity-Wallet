@@ -1,14 +1,12 @@
 'use strict';
 
 class IdAttributeType {
-
-    constructor (subCategory, mainCategory, type, targetTypes) {
-        this.subCategory = subCategory;
-        this.mainCategory = mainCategory;
+    constructor (key, category, type, entity) {
+        this.key = key;
+        this.category = category;
         this.type = type;
-        this.targetTypes = targetTypes;
+        this.entity = entity;
     }
-
 }
 
 export default IdAttributeType;

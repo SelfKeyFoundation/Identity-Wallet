@@ -91,7 +91,7 @@ import TokenService from './services/token.service';
 angular.module('kyc-wallet').service('TokenService', TokenService);
 
 import SelfkeyService from './services/selfkey.service';
-angular.module('kyc-wallet').service('selfkeyService', SelfkeyService);
+angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
 /**
  * directives

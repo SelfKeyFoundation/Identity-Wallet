@@ -1,50 +1,54 @@
-.sk-box.sk-wallet-general-document-box
-    .sk-wallet-document-box(ng-if="mode == 1", style="width: 600px;")
-        .plus-button(ng-click="changeMode(2)")
-            img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
+.sk-box.sk-id-attribute-box
+    .default-wrapper(ng-if="data.viewState === 'default'")
+        .header
+            .title(flex) {{data.title}}
+            .plus-button(ng-click="changeMode('add-edit')")
+                img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
 
-        .general-title {{data.name}}
-        .sk-wallet-document-box__content
-            table.sk-wallet-general-info-box__content__table(ng-if="data.acceptableDocuments")
+        .description
+            table(ng-if="data.subtitle")
                 tr
-                    td.sub-title Acceptable documents
+                    td Acceptable documents
                     td
-                        span.fc-white {{data.acceptableDocuments}}
+                        span.fc-white {{data.subtitle}}
 
-        div.doc-section(ng-repeat="(docIndex, doc) in data.documents")
-            .sk-wallet-document-box__content
-                .section-title Document
-                .document-files
-                    sk-icon(icon="{{statuses[doc.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
-                    .document-file(ng-class="{deletable: doc.clicked}")
-                        span(ng-click="doc.clicked = !doc.clicked") {{doc.name}}
-                        span(ng-click="doc.clicked = !doc.clicked") {{getFileNames(doc.files)}}
-                        .delete-dialog(ng-if="doc.clicked", layout="column")
+        .h-divider
+
+        .section(ng-repeat="item in data.idAttributeItems")
+            .title {{ item.category }}
+            .items-container
+                .item
+                    sk-icon(icon="{{statuses[item.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
+                    .info-wrapper(ng-class="{deletable: item.clicked}")
+                        span(ng-click="item.clicked = !item.clicked") {{ item.items[item.defaultItemId].name }}
+                        .delete-dialog(ng-if="item.clicked", layout="column")
                             .header Delete Attribute and History
                             .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
                             .buttons
-                                button.confirm(ng-click="deleteAttribute(docIndex)") Delete attribute
-                                button.cancel(ng-click="doc.clicked = false") Cancel Action
+                                button.confirm(ng-click="deleteAttribute($index)") Delete attribute
+                                button.cancel(ng-click="item.clicked = false") Cancel Action
 
-            .sk-wallet-document-box__content
-                .section-title History
-                table.bottom-bordered(ng-init="doc.visibleRowCount = 2")
-                    tr(ng-repeat="(index, step) in doc.actionHistory", ng-show="index < doc.visibleRowCount")
-                        td.fc-bluey-grey {{step.date | date:'shortDate'}}
-                        td.fc-bluey-grey
-                            sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
-                        td
-                            span.fc-white {{statuses[step.status].name}} - &nbsp;
-                            span.fc-white {{step.note}}
-                            button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+            .h-divider
 
-                div(ng-if="doc.actionHistory.length", style="margin-top: .2em; font-size: 14px;")
-                    button.underlined-button(ng-if="doc.visibleRowCount < doc.actionHistory.length", ng-click="doc.visibleRowCount = doc.actionHistory.length") View All History
-                    button.underlined-button(ng-if="doc.visibleRowCount >= doc.actionHistory.length", ng-click="doc.visibleRowCount = 2") View Less History
+            .section(ng-if="data.showHistory")
+                .title History
+                .items-container
+                    table(ng-init="item.attached = { historyRowCount: config.historyRowCount }")
+                        tr(ng-repeat="(index, step) in item.actionHistory", ng-show="index < item.attached.historyRowCount") 
+                            td.fc-bluey-grey {{step.date | date:'shortDate'}}
+                            td.fc-bluey-grey
+                                sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
+                            td
+                                span.fc-white {{statuses[step.status].name}} 
+                                span.fc-white &nbsp; - &nbsp;
+                                span.fc-white {{step.note}}
+                                button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+
+                    .actions-container(ng-if="item.actionHistory.length > 0")
+                        button(ng-click="item.attached.historyRowCount = item.attached.historyRowCount < item.actionHistory.length ? item.actionHistory.length : config.historyRowCount") {{ item.attached.historyRowCount < item.actionHistory.length ? 'View All History' : 'View Less History '}}
 
 
-
-    .fullscreen-popup(ng-if="mode == 2")
+    .fullscreen-popup(ng-if="data.viewState === 'add-edit'")
         .sk-wallet-document-box-upload-form
             .name-section
                 input(type="text", ng-model="attrToAdd.name", placeholder="Document name")
@@ -61,5 +65,5 @@
                     .selector-name Connecting your {{attrToAdd.name}}
                     .selector-hint (Minimal size 1600x900px)
             .action-buttons
-                button.cancel(ng-click="changeMode(1)") Cancel
+                button.cancel(ng-click="changeMode('default')") Cancel
                 button.save(ng-click="changeMode(1, attrToAdd)") Save

@@ -6,18 +6,18 @@ class IdAttributeItem {
 
     constructor () {
         this._id = CommonUtils.generateId();
-        this.value = null;
-        this.meta = {
-            subcategory: null,
-            type: null,
+        this.value = null;  // string || object
+        this.idAttributeType = {
+            key: null,
             category: null,
-            for: {
-                company: true,
-                individual: true
-            }
-        };   
+            type: null,
+            entity: []
+        }
+        /**
+         * Item -> date, note, status(????)
+         */;
+        this.history = []
     }
-
 }
 
 export default IdAttributeItem;

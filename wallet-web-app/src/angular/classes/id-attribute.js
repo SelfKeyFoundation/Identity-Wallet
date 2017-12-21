@@ -3,9 +3,10 @@
 class IdAttribute {
 
     constructor () {
-        this.subcategory = null;
+        this.key = null;
+        this.category = null;
         this.type = null;
-        this.category = null;    
+        this.entity = [];
         this.defaultItemId = null;
         this.items = {};
     }

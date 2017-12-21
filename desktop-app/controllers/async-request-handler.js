@@ -6,6 +6,7 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+    let deskmetrics = app.modules.deskmetrics;
 
     const settings = require('electron-settings');
     const fs = require('fs');
@@ -62,10 +63,11 @@ module.exports = function (app) {
                     documentsDirectoryPath: documentsDirectoryPath
                 },
                 idAttributes: {
-                    "Name": {
-                        subcategory: "Name",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "name": {
+                        key: "name",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -74,10 +76,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Email": {
-                        subcategory: "Email",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "email": {
+                        key: "Email",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -86,10 +89,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Telephone Number": {
-                        subcategory: "Telephone Number",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "phonenumber": {
+                        subcategory: "phonenumber",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -98,10 +102,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Passport": {
-                        subcategory: "Passport",
-                        type: "Document",
-                        category: "Identity Document",
+                    "passport": {
+                        subcategory: "passport",
+                        category: "id_document",
+                        type: "document",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -113,10 +118,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "National ID Card": {
-                        subcategory: "National ID Card",
-                        type: "Document",
-                        category: "Identity Document",
+                    "national_id": {
+                        key: "national_id",
+                        category: "id_document",
+                        type: "document",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -128,10 +134,10 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Utility Bill": {
-                        subcategory: "Utility Bill",
-                        type: "Document",
-                        category: "Proof of Address",
+                    "utility_bill": {
+                        key: "utility_bill",
+                        category: "proof_of_address",
+                        type: "document",
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -396,6 +402,12 @@ module.exports = function (app) {
 
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
     }
+
+    controller.analytics = function (event, actionId, actionName, args) {
+        deskmetrics.send(args.event, args.data)
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+    }
+    
 
     return controller;
 }

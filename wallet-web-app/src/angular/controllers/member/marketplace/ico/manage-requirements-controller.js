@@ -3,6 +3,7 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
 
     $log.info('MemberMarketplaceIcoManageRequirementsController', $stateParams);
     
+
     /**
      * get ico data
      */
@@ -51,6 +52,105 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
 
         $scope.info.status = status ? $scope.infoStatuses.READY_TO_JOIN : $scope.infoStatuses.MISSING_REQUIREMENTS;
     }
+
+
+
+    let now = new Date().getTime();
+    // 1) find all missing idAttributeItems
+    // 2) orginise directive
+    // 3) todo ... ???
+
+    $scope.testData = {
+        title: "National ID", // here must be idAttributeItem.key
+        subtitle: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
+        type: 'document',// | 'static_data',
+        viewState: 'default',// | 'add-edit',
+        showAll: false,
+        showHistory: true,
+        idAttributeItems: {
+            passport: {
+                key: "passport",
+                type: "document",
+                category: "id_document",
+                defaultItemId: "1",
+                entity: [
+                    "individual",
+                    "company"
+                ],
+                items: {
+                    "1": {
+                        "_id": "1",
+                        "contentType": "",
+                        "name": "Test 1",
+                        "path": "",
+                        "size": ""
+                    }
+                },
+                actionHistory: [
+                    {
+                        date: new Date(now - 10000000),
+                        status: 1,
+                        note: "shared with bitDegree testing long text"
+                    },
+                    {
+                        date: new Date(now - 1000000),
+                        status: 2,
+                        note: "shared with blockChain"
+                    },
+                    {
+                        date: new Date(now - 1000000),
+                        status: 3,
+                        note: "shared with blockChain"
+                    }
+                ]
+            }
+        }
+    }
+
+    
+    $scope.docBoxData = {
+        name: "Identity Document",
+        acceptableDocuments: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
+        documents: [
+            {
+                name: 'Passport',
+                files: [{name: 'Robert_Plant_id.jpg'}],
+                actionHistory: [
+                    {
+                        date: new Date(now - 10000000),
+                        status: 1,
+                        note: "shared with bitDegree testing long text"
+                    },
+                    {
+                        date: new Date(now - 1000000),
+                        status: 2,
+                        note: "shared with blockChain"
+                    },
+                    {
+                        date: new Date(now - 1000000),
+                        status: 3,
+                        note: "shared with blockChain"
+                    }
+                ]
+            },
+            {
+                name: 'ID Card',
+                files: [{name: 'John_id.jpg'}],
+                actionHistory: [
+                    {
+                        date: new Date(now - 10000000),
+                        status: 1,
+                        note: "shared with bitDegree"
+                    },
+                    {
+                        date: new Date(now - 1000000),
+                        status: 2,
+                        note: "shared with blockChain"
+                    }
+                ]
+            },
+        ]
+    };
 
 };
 

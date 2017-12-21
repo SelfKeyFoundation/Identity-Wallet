@@ -1,4 +1,4 @@
-function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, Web3Service) {
+function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, Web3Service, SelfkeyService) {
     'ngInject'
 
     $log.info('GuestLoadingController');

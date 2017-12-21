@@ -27,7 +27,11 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFI
     /**
      * 
      */
-    $rootScope.getTranslation = function (keyword, args) {
+    $rootScope.getTranslation = function (prefix, keyword, args) {
+        if(prefix){
+            keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
+        }
+        
         let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
         if (args) {
             for (let i = 0; i < args.length; i++) {
@@ -44,8 +48,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFI
         }
     }
 
-    $log.debug($rootScope.getTranslation('holaaa'), "???????");
-    $log.debug($rootScope.getTranslation("test_template", ['giorgio', '10']));
+    $log.debug($rootScope.getTranslation(null, 'holaaa'), "???????");
+    $log.debug($rootScope.getTranslation(null, "test_template", ['giorgio', '10']));
 
     /**
      * global functions
@@ -77,7 +81,9 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFI
         if($rootScope.wallet && $rootScope.wallet.getAddress()){
           WalletService.loadBalance();
         }
-    }, 10000)
+    }, 10000);
+
+    ElectronService.analytics('app-start', new Date().toISOString());
 }
 
 export default AppRun;

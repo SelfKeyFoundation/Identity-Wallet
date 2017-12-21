@@ -1,0 +1,20 @@
+md-dialog.add-edit-id-attributes(aria-label="Add Edit Id Attributes")
+    .fullscreen-popup
+        .sk-wallet-document-box-upload-form
+            .name-section
+                input(type="text", ng-model="attrToAdd.name", placeholder="Document name")
+            .upload-section
+                .section-title Upload your {{attrToAdd.name}}
+                .file-select
+                    img(src="assets/images/icons/upload.svg")
+                    .selector-name Your {{attrToAdd.name}}
+                    .selector-hint (Minimal size 1600x900px)
+                .gradient-divider
+                .progress
+                    img(src="assets/images/icons/hard-drive.svg")
+                    .progress-bar
+                    .selector-name Connecting your {{attrToAdd.name}}
+                    .selector-hint (Minimal size 1600x900px)
+            .action-buttons
+                button.cancel(ng-click="changeMode('default')") Cancel
+                button.save(ng-click="changeMode(1, attrToAdd)") Save
