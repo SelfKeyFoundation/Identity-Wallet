@@ -47,12 +47,12 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
         // $rootScope.initialSetupProgress - contains subcategory <-> item
 
         let fileSelectPromise = ElectronService.openFileSelectDialog(event);
-        fileSelectPromise.then((filePath) => {
-            if (!filePath) return;
+        fileSelectPromise.then((resp) => {
+            if (!resp || !resp.path) return;
 
             let store = ConfigFileService.getStore();
 
-            let moveFilePrimise = ElectronService.moveFile(filePath, store.settings.documentsDirectoryPath);
+            let moveFilePrimise = ElectronService.moveFile(resp.path, store.settings.documentsDirectoryPath);
             moveFilePrimise.then((filePath) => {
                 $rootScope.initialSetupProgress[$scope.currentStep].path = filePath;
                 // we need file metadata

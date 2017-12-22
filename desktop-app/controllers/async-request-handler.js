@@ -6,7 +6,8 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
-    let deskmetrics = app.modules.deskmetrics;
+    const deskmetrics = app.modules.deskmetrics;
+    const mime = app.modules['mime-types'];
 
     const settings = require('electron-settings');
     const fs = require('fs');
@@ -208,11 +209,15 @@ module.exports = function (app) {
             };
             app.modules.electron.dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
                 if (filePaths) {
-
-                    //const stats = fs.statSync(filePaths[0]);
-                    //const fileSizeInBytes = stats.size
+                    try {
+                        const stats = fs.statSync(filePaths[0]);
+                        let mimeType = mime.lookup(filePaths[0]);
                     
-                    app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, filePaths[0]);
+                        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {mimeType: mimeType, path: filePaths[0], size: stats.size});
+                    } catch (e) {
+                        console.log(e);
+                        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
+                    }
                 } else {
                     app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, null);
                 }

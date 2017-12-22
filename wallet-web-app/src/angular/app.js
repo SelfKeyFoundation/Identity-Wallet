@@ -156,8 +156,8 @@ angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 import SkWalletGeneralInfoBoxDirective from './directives/commons/sk-wallet-general-info-box.directive';
 angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneralInfoBoxDirective);
 
-import SkWalletDocumentBoxDirective from './directives/commons/sk-wallet-document-box.directive';
-angular.module('kyc-wallet').directive('skWalletDocumentBox', SkWalletDocumentBoxDirective);
+import SkIdAttributeBoxDirective from './directives/commons/sk-id-attribute-box.directive';
+angular.module('kyc-wallet').directive('skIdAttributeBox', SkIdAttributeBoxDirective);
 
 import SkUserInfoBoxDirective from './directives/commons/sk-user-info-box.directive';
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);

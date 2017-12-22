@@ -21,6 +21,7 @@
     "fibers": "2.0.0",
     "keythereum": "1.0.2",
     "lodash": "4.17.4",
+    "mime-types": "^2.1.17",
     "mv": "2.1.1",
     "node-json-rpc": "0.0.1"
   },

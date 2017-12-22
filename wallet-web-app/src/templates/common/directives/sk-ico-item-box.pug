@@ -1,6 +1,6 @@
 .sk-box.sk-ico-item-box
     .header.sk-ico-item-box__header
-        sk-icon(icon="eth", size-class="icon-size-44x44")
+        sk-icon(icon="{{icoData.symbol}}", size-class="icon-size-44x44")
         span {{icoData.company}}
         span(style="font-size: 15px; margin-left: 4px;", flex) ({{icoData.category}})
         span.dot(ng-class="{'active': icoData.status === 'In Progress', 'inactive': icoData.status === 'Finished', 'upcoming': icoData.status === 'Upcoming' }")

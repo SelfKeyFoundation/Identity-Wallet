@@ -61,12 +61,12 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     // 3) todo ... ???
 
     $scope.testData = {
-        title: "National ID", // here must be idAttributeItem.key
+        title: "passport", // here must be idAttributeItem.key
         subtitle: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
         type: 'document',// | 'static_data',
-        viewState: 'default',// | 'add-edit',
-        showAll: false,
-        showHistory: true,
+        showAddItemButton: false,
+        showHistory: false,
+        isItemEditable: true,
         idAttributeItems: {
             passport: {
                 key: "passport",
@@ -81,8 +81,8 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
                     "1": {
                         "_id": "1",
                         "contentType": "",
-                        "name": "Test 1",
-                        "path": "",
+                        "name": "",
+                        "value": "",
                         "size": ""
                     }
                 },

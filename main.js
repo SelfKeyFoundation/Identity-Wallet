@@ -23,7 +23,8 @@ const modules = [
   'fs',
   'path',
   'url',
-  'deskmetrics'
+  'deskmetrics',
+  'mime-types'
 ];
 
 // TODO implement

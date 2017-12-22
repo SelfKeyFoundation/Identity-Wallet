@@ -1,0 +1,23 @@
+md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
+    
+    .document-wrapper(ng-if="config.type === 'document'")
+        .name-section
+            input(type="text", ng-model="item.name", placeholder="{{config.type}} name")
+        .upload-section
+            .title {{config.title}}
+            .content
+                .section
+                    // sk-icon(icon="upload", size-class="icon-size-34x44")
+                    img(src="assets/images/icons/upload.svg")
+                    .name Your {{config.key}}
+                    .hint (Minimal size 1600x900px)
+                .gradient-divider
+                .section(ng-click="selectFile($event)")
+                    // sk-icon(icon="hard-drive", size-class="icon-size-44x44")
+                    img(src="assets/images/icons/hard-drive.svg")
+                    .name {{ item.value ? item.value : 'Select file' }}
+                    .hint (Minimal size 1600x900px)
+
+        .action-buttons
+            button.cancel(ng-click="cancel($event)") Cancel
+            button.save(ng-click="save($event)") Save
