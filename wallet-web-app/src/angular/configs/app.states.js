@@ -57,6 +57,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+       
+
         // process layout
         .state('guest.process', {
             abstract: true,

@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -21,7 +21,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, DICTIONARY, CONFI
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
     
     $rootScope.selectedLanguage = "en";
-
 
 
     /**

@@ -171,6 +171,12 @@ angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirements
  */
 
 /**
+ * commons
+ */
+import TermsDialogController from './controllers/commons/dialogs/terms-controller.js';
+angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
+
+/**
  * guest
  */
 import GuestLayoutController from './controllers/guest/layout-controller.js';
