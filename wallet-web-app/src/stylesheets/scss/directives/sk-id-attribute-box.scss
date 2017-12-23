@@ -454,9 +454,9 @@ md-dialog {
       background-color: #262f39;
       border: solid 1px #303c49;
 
-      .dialog-form {
+      .static-data-form {
 
-        .dialog-form-content {
+        .static-data-form-content {
           padding: 30px;
 
           > span {
@@ -484,7 +484,7 @@ md-dialog {
           }
 
         }
-        .dialog-form-buttons {
+        .static-data-form-buttons {
           float: right;
           margin-top: 24px;
 
@@ -502,7 +502,7 @@ md-dialog {
             > span{
               width: 53px;
               height: 12px;
-              font-family: ProximaNova;
+              font-family: ProximaNovaRegular;
               font-size: 16px;
               font-weight: normal;
               font-style: normal;
@@ -525,7 +525,7 @@ md-dialog {
             > span {
               width: 42px;
               height: 12px;
-              font-family: ProximaNova;
+              font-family: ProximaNovaSemibold;
               font-size: 16px;
               font-weight: 600;
               font-style: normal;

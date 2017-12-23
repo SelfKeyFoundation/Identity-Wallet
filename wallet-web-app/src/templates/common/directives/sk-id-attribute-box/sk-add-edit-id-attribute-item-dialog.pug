@@ -23,12 +23,12 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
             button.save(ng-click="save($event)") Save
 
     .static-data-wrapper(ng-if="config.type === 'static_data'")
-        form.dialog-form
-            .dialog-form-content
+        form.static-data-form(name="static-data-form")
+            .static-data-form-content
                 span Tax ID Number
                 input
 
-            .dialog-form-buttons
+            .static-data-form-buttons
                 button.cancel-button
                     span Cancel
                 button.save-button
