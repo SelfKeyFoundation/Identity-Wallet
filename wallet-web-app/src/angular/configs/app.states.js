@@ -342,7 +342,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/wallet/token/:id/manage',
             views: {
                 main: {
-                    templateUrl: 'member/wallet/manage-token.html'
+                    templateUrl: 'member/wallet/manage-token.html',
+                    controller: 'ManageTokenController'
                 }
             }
         })

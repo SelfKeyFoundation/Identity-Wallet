@@ -239,6 +239,8 @@ angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberD
 import MemberWalletMainController from './controllers/member/wallet/main-controller.js';
 angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWalletMainController);
 
+import ManageTokenController from './controllers/member/wallet/manage-token-controller.js';
+angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
 
 /**
  * settings
