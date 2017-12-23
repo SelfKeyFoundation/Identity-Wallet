@@ -28,14 +28,14 @@ md-dialog {
       .receive-token-barcode {
         text-align: center;
         margin-top: 44px;
+        width: 100%;
 
-        qrcode {
-
-          > canvas {
-            background-color: #ffffff;
-            border: 8px solid #fff;
-            border-radius: 4px;
-          }
+        .barcode-container {
+          background-color: #ffffff;
+          width: 199px;
+          height: 199px;
+          padding-top: 7px;
+          border-radius: 3px;
         }
       }
 
@@ -76,7 +76,7 @@ md-dialog {
       .receive-token-icons {
         margin-top: 45px;
 
-         > .sk-icon {
+        > .sk-icon {
           margin-left: 30px !important;
         }
       }

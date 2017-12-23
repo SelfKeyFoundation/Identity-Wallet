@@ -1,13 +1,8 @@
-function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog) {
+function ReceiveTokenDialogController($rootScope, $scope, $log, $mdDialog) {
     'ngInject'
 
-    $log.info('ReceiveTokenDialogController');
 
-
-
-    $scope.cancel = (event) => {
-        $mdDialog.cancel();
-    }
+    $scope.publicKey = '0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'
 
 };
 
