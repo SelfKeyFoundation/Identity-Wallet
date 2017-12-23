@@ -9,6 +9,8 @@
 **/package-lock.json
 **/node_modules/
 
+**/*.log
+
 wallet-web-app/dist/
 wallet-web-app/src/app-bundle.js
 wallet-web-app/src/angular/app.templates.js
