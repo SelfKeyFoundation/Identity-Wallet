@@ -176,6 +176,15 @@ angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirements
 import TermsDialogController from './controllers/commons/dialogs/terms-controller.js';
 angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
+import StartupGuideDialogController from './controllers/commons/dialogs/startup-guide-controller.js';
+angular.module('kyc-wallet').controller('StartupGuideDialogController', StartupGuideDialogController);
+
+import ReceiveTokenDialogController from './controllers/commons/dialogs/receive-token-controller.js';
+angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
+
+import AddCustomTokenDialogController from './controllers/commons/dialogs/add-custom-token-controller.js';
+angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
+
 /**
  * guest
  */

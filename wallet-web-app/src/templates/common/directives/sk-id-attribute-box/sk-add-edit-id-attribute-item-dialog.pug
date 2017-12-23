@@ -21,3 +21,6 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
         .action-buttons
             button.cancel(ng-click="cancel($event)") Cancel
             button.save(ng-click="save($event)") Save
+
+    .static-data-wrapper(ng-if="config.type === 'static_data'")
+        h1 TODO
