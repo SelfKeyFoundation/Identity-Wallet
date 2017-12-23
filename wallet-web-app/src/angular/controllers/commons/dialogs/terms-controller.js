@@ -5,7 +5,15 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog) {
 
     $scope.cancel = (event) => {
         $mdDialog.cancel();
-    }
+    };
+
+    $scope.scrolledBottom = false;
+
+    var elem = angular.element(document.querySelector(".textual"));
+    elem.on("scroll", function (ev) {
+        $scope.scrolledBottom = true;
+    });
+
 
 };
 
