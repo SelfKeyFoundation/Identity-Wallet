@@ -51,13 +51,15 @@
 @import './views/dashboard/main.scss';
 @import './views/wallet/main.scss';
 @import './views/wallet/manage-token.scss';
+@import './views/setup/completed.scss';
 
 @import './dialogs/terms.scss';
+@import './dialogs/startup-guide.scss';
+@import './dialogs/receive-token.scss';
+@import './dialogs/add-custom-token.scss';
 
 @import './views/marketplace/ico-list.scss';
 @import './views/marketplace/ico-list-item.scss';
-@import './views/marketplace/ico-manage-requirements.scss';
-@import './views/marketplace/ico-accept-terms.scss';
 
 .bg-gradient {
   background-image: -webkit-gradient(

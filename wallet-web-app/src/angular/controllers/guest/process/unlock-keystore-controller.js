@@ -50,16 +50,17 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
     }
 
-    $timeout(()=>{
-        $mdDialog.show({
-            controller: 'TermsDialogController',
-            templateUrl: 'common/dialogs/terms.html',
-            parent: angular.element(document.body),
-            targetEvent: null,
-            clickOutsideToClose: false,
-            fullscreen: true,
-        })
-    }, 1000);
+
+    // $timeout(()=>{
+    //     $mdDialog.show({
+    //         controller: 'TermsDialogController',
+    //         templateUrl: 'common/dialogs/terms.html',
+    //         parent: angular.element(document.body),
+    //         targetEvent: null,
+    //         clickOutsideToClose: false,
+    //         fullscreen: true,
+    //     })
+    // }, 1000);
 
     //$scope.walletsMetaData = ConfigFileService.getWalletsMetaData();
 

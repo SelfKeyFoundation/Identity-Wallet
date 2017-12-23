@@ -5,8 +5,8 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog) {
 
     $scope.cancel = (event) => {
         $mdDialog.cancel();
+    }
 
-    };
 };
 
 export default TermsDialogController;

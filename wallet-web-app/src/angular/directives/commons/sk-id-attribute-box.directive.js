@@ -33,7 +33,7 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                     locals: {
                         config: {
                             title: "Upload your driver's License",
-                            type: "document",
+                            type: "static_data", // document, static_data
                             key: 'ID Card'
                         },
                         item: angular.copy(item.items[item.defaultItemId])

@@ -1,0 +1,13 @@
+md-dialog {
+    &.receive-token{
+        min-width: 100%;
+        min-height: 100%;
+        background-image: linear-gradient(121deg, #1e262e, #1e262e);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        
+    }
+}

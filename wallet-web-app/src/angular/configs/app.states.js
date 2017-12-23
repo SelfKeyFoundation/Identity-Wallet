@@ -215,6 +215,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.setup.completed', {
+            url: '/member/setup/completed',
+            views: {
+                main: {
+                    templateUrl: 'member/setup/completed.html'
+                }
+            }
+        })
+
         /**
          * Dashboard
          */
@@ -342,6 +351,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     $urlRouterProvider.otherwise('/guest/loading');
 
     //$urlRouterProvider.otherwise('/member/wallet/main');
+    //$urlRouterProvider.otherwise('/member/setup/completed');
 }
 
 export default appStates;
