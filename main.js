@@ -24,8 +24,7 @@ const modules = [
   'path',
   'url',
   'deskmetrics',
-  'mime-types',
-  'crypto2'
+  'mime-types'
 ];
 
 // TODO implement
