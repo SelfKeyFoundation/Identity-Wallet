@@ -2,27 +2,26 @@
     .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
         .logo(layout="row")
             sk-icon(icon="eth",size-class="icon-size-44x44",style="padding-top:4px")
-            .logo-text {{ico.companyName}}
-                span ({{ico.category}})
-        .documents-needed(layout="row")  Documents Needed
+            .logo-text {{ico.company}}
+                span(style="margin-left: 4px;") ({{ico.category}})
+        .documents-needed(layout="row") Documents Needed
             span
     .ico-list-item-content-wrappper__content-section
         .main-content(layout="row")
             .video-container(flex="65")
                 .video
-                    iframe(style="width:470px; height: 300px;" src="https://www.youtube.com/embed/sGlGbFrCCUg?autoplay=0")
-                .video-text BANKEX is building a new blockchain technology that allows to tokenize various types of assets.Such Smart Assets could be sold worldwide building a new generation of decentralized capital markets.
+                    iframe(style="width:470px; height: 300px;" ng-src="{{trustSrc(ico.videos.youtube)}}")
+                .video-text {{ico.description}}
             .token-sale-container(layout="column", flex="35")
                 .text-1
                     span Token Sale ends in
-                    span(style="font-weight: 600") 29 DAYS
+                    span(style="font-weight: 600") {{icoData.getDaysLeft()}} DAYS
                 .text-2
                     div(style="font-size:20px") $25,679,353
                     span OF
                     span $67,300,000 (38%)
                 .buttons-container
-                    //join-button - lurji, join-ico-button - mwvane
-                    button.complete-button.no-outline  Complete Selfkey ID
+                    button.no-outline(ng-if="info.status !== infoStatuses.UNKNOWN", ng-class="getActionButtonInfo().clazz", ng-click="action($event)")  {{getActionButtonInfo().title}}
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
@@ -68,13 +67,18 @@
                     li
                         span(style="color:#93b0c1; font-size:12px") Accepts:
                         span &nbsp; ETH, BTC, LTC, WAVES, SALT, TIME
+        
         hr(style="width:90%; color:#303c49")
-        .KYC-requirements-content
+        
+        sk-kyc-requirements-box(progress="requirementsProgress", sections="sections")
+
+        //.KYC-requirements-content
             .KYC-requirements-text KYC Requirements
             .KYC-requirements-lists(layout="row")
                 .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections")
                     .item(ng-repeat="item in section")
-                        .bullet(ng-class="{'background-color-squash': item === 'Name'}")
-                            img(src='assets/images/icons/tick.svg')
-                        span {{item}}
-                        sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left:34px", ng-if="1===2")
+                        .bullet(ng-class="{'background-color-squash': !requirementsProgress[item]}")
+                            img(src='assets/images/icons/tick.svg', ng-if="requirementsProgress[item]")
+                            span(ng-show="!requirementsProgress[item]") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
+                        span {{ item }}
+                        sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left: 34px", ng-if="1 === 2")

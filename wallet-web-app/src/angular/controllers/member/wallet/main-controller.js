@@ -17,10 +17,12 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdS
                         status: 1,
                         note: "shared with bitDegree testing long text",
                         actions: [
+                            /*
                             {
                                 title: 'request verification',
                                 link: '/app/verify?docId=789'
                             }
+                            */
                         ]
                     },
                     {

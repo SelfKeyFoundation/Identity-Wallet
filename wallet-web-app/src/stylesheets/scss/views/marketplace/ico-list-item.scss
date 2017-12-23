@@ -250,32 +250,8 @@
 
     }
 
-    .KYC-requirements-content {
+    > .sk-kyc-requirements-box {
       padding: 30px;
-
-      .KYC-requirements-text {
-
-        font-family: ProximaNovaRegular;
-        font-size: 18px;
-        font-weight: 600;
-        font-style: normal;
-        font-stretch: normal;
-        line-height: 1.8;
-        letter-spacing: normal;
-        text-align: left;
-        color: #ffffff;
-      }
-
-      .KYC-requirements-lists {
-
-        .sk-list {
-
-          span {
-            font-size: 14px;
-          }
-        }
-      }
-
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "identity-wallet",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Identity Wallet",
   "repository": "https://github.com/kyc-chain/wallet",
   "main": "main.js",
@@ -11,19 +11,19 @@
   "dependencies": {
     "bignumber.js": "4.1.0",
     "camelcase": "4.1.0",
+    "deskmetrics": "2.3.0-rc7",
     "electron": "1.7.9",
-    "electron-osx-sign": "^0.4.7",
+    "electron-osx-sign": "0.4.7",
     "electron-settings": "3.1.4",
     "electron-squirrel-startup": "1.0.0",
-    "electron-updater": "^2.17.6",
+    "electron-updater": "2.17.6",
     "ethereumjs-tx": "1.3.3",
     "fibers": "2.0.0",
-    "google-charts": "^1.0.0",
     "keythereum": "1.0.2",
     "lodash": "4.17.4",
+    "mime-types": "^2.1.17",
     "mv": "2.1.1",
-    "node-json-rpc": "0.0.1",
-    "wait.for": "^0.6.6"
+    "node-json-rpc": "0.0.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",

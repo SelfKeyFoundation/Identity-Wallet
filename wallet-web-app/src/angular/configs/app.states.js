@@ -57,6 +57,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+       
+
         // process layout
         .state('guest.process', {
             abstract: true,
@@ -279,6 +281,32 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.marketplace.ico-manage-requirements', {
+            url: '/member/marketplace/ico/ico-manage-requirements',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico/manage-requirements.html',
+                    controller: 'MemberMarketplaceIcoManageRequirementsController'
+                }
+            },
+            params: {
+                selected: null
+            }
+        })
+
+        .state('member.marketplace.ico-accept-terms', {
+            url: '/member/marketplace/ico/ico-accept-terms',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico/accept-terms.html',
+                    controller: 'MemberMarketplaceIcoAcceptTermsController'
+                }
+            },
+            params: {
+                selected: null
+            }
+        })
+        
         /**
          * Wallet
          */

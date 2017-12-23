@@ -7,5 +7,6 @@ module.exports = {
     "DEFAULT_LANGUAGE": "<%DEFAULT_LANGUAGE%>",
     "debug": <%debug%>,
     "dev": <%dev%>,
+    "deskmetricsAppId": "<%deskmetricsAppId%>",
     "constants": <%app.constants%>
 };

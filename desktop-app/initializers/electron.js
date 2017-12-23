@@ -33,6 +33,11 @@ function createWindow(app, next) {
             app.win.webContents.send('ON_READY');
         });
 
+        let deskmetrics = app.modules.deskmetrics;
+        deskmetrics.start({ appId: app.config.deskmetricsAppId }).then(function() {
+            deskmetrics.setProperty('version', app.pkg.version)
+        });
+        
         next();
     }
 }

@@ -91,7 +91,7 @@ import TokenService from './services/token.service';
 angular.module('kyc-wallet').service('TokenService', TokenService);
 
 import SelfkeyService from './services/selfkey.service';
-angular.module('kyc-wallet').service('selfkeyService', SelfkeyService);
+angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
 /**
  * directives
@@ -156,17 +156,25 @@ angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 import SkWalletGeneralInfoBoxDirective from './directives/commons/sk-wallet-general-info-box.directive';
 angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneralInfoBoxDirective);
 
-import SkWalletDocumentBoxDirective from './directives/commons/sk-wallet-document-box.directive';
-angular.module('kyc-wallet').directive('skWalletDocumentBox', SkWalletDocumentBoxDirective);
+import SkIdAttributeBoxDirective from './directives/commons/sk-id-attribute-box.directive';
+angular.module('kyc-wallet').directive('skIdAttributeBox', SkIdAttributeBoxDirective);
 
 import SkUserInfoBoxDirective from './directives/commons/sk-user-info-box.directive';
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
+import SkKycRequirementsBoxDirective from './directives/commons/sk-kyc-requirements-box.directive';
+angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
 
 
 /**
  * controllers
  */
+
+/**
+ * commons
+ */
+import TermsDialogController from './controllers/commons/dialogs/terms-controller.js';
+angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
 /**
  * guest
@@ -240,6 +248,12 @@ angular.module('kyc-wallet').controller('MemberMarketplaceIcoListController', Me
 
 import MemberMarketplaceIcoItemController from './controllers/member/marketplace/ico/item-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
+
+import MemberMarketplaceIcoManageRequirementsController from './controllers/member/marketplace/ico/manage-requirements-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoManageRequirementsController', MemberMarketplaceIcoManageRequirementsController);
+
+import MemberMarketplaceIcoAcceptTermsController from './controllers/member/marketplace/ico/accept-terms-controller.js';
+angular.module('kyc-wallet').controller('MemberMarketplaceIcoAcceptTermsController', MemberMarketplaceIcoAcceptTermsController);
 
 /**
  * config states

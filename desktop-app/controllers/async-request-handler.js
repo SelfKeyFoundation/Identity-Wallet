@@ -6,11 +6,13 @@ module.exports = function (app) {
     let win = app.win;
     let path = app.modules.path;
     let keythereum = app.modules.keythereum;
+    const deskmetrics = app.modules.deskmetrics;
+    const mime = app.modules['mime-types'];
 
     const settings = require('electron-settings');
     const fs = require('fs');
 
-    const storeFileName = 'main-store.json';
+    const storeFileName = 'main-store.json'; // TODO
     const userDataDirectoryPath = app.modules.electron.app.getPath('userData');
     const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
     const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
@@ -62,10 +64,11 @@ module.exports = function (app) {
                     documentsDirectoryPath: documentsDirectoryPath
                 },
                 idAttributes: {
-                    "Name": {
-                        subcategory: "Name",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "name": {
+                        key: "name",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -74,10 +77,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Email": {
-                        subcategory: "Email",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "email": {
+                        key: "Email",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -86,10 +90,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Telephone Number": {
-                        subcategory: "Telephone Number",
-                        type: "Static Data",
-                        category: "Global Attribute",
+                    "phonenumber": {
+                        subcategory: "phonenumber",
+                        category: "global_attribute",
+                        type: "static_data",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -98,10 +103,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Passport": {
-                        subcategory: "Passport",
-                        type: "Document",
-                        category: "Identity Document",
+                    "passport": {
+                        subcategory: "passport",
+                        category: "id_document",
+                        type: "document",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -113,10 +119,11 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "National ID Card": {
-                        subcategory: "National ID Card",
-                        type: "Document",
-                        category: "Identity Document",
+                    "national_id": {
+                        key: "national_id",
+                        category: "id_document",
+                        type: "document",
+                        entity: ['individual','company'],
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -128,10 +135,10 @@ module.exports = function (app) {
                             }
                         }
                     },
-                    "Utility Bill": {
-                        subcategory: "Utility Bill",
-                        type: "Document",
-                        category: "Proof of Address",
+                    "utility_bill": {
+                        key: "utility_bill",
+                        category: "proof_of_address",
+                        type: "document",
                         defaultItemId: "1",
                         items: {
                             "1": {
@@ -202,11 +209,15 @@ module.exports = function (app) {
             };
             app.modules.electron.dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
                 if (filePaths) {
-
-                    //const stats = fs.statSync(filePaths[0]);
-                    //const fileSizeInBytes = stats.size
+                    try {
+                        const stats = fs.statSync(filePaths[0]);
+                        let mimeType = mime.lookup(filePaths[0]);
                     
-                    app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, filePaths[0]);
+                        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {mimeType: mimeType, path: filePaths[0], size: stats.size});
+                    } catch (e) {
+                        console.log(e);
+                        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
+                    }
                 } else {
                     app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, null);
                 }
@@ -396,6 +407,12 @@ module.exports = function (app) {
 
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
     }
+
+    controller.analytics = function (event, actionId, actionName, args) {
+        deskmetrics.send(args.event, args.data)
+        app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+    }
+    
 
     return controller;
 }

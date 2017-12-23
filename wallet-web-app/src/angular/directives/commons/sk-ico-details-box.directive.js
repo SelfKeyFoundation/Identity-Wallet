@@ -6,15 +6,15 @@ function SkIcoDetailsBoxDirective($log, $window, $timeout) {
     return {
         restrict: 'E',
         scope: {
-            data: '='
+            type: "=",
+            progress: "=",
+            sections: "=",
+            ico: '='
         },
         link: (scope, element) => {
-            scope.requirementsFirstPart = [];
-            scope.requirementsSecondPart = [];
-            if (scope.data && scope.data.type === 'requirements' && scope.data.requirementsList) {
-                scope.requirementsFirstPart = scope.data.requirementsList.splice(0,  scope.data.requirementsList.length / 2);
-                scope.requirementsSecondPart = scope.data.requirementsList;
-            }
+            scope.type = scope.type || 'requirements';
+
+            console.log(">>>>>>", scope.type, "<<<<<<");
         },
         replace: true,
         templateUrl: 'common/directives/sk-ico-details-box.html'

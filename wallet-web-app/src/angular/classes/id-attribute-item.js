@@ -6,18 +6,16 @@ class IdAttributeItem {
 
     constructor () {
         this._id = CommonUtils.generateId();
+        this.name = null;
         this.value = null;
-        this.meta = {
-            subcategory: null,
-            type: null,
+        this.contentType = null;
+        this.idAttributeType = {
+            key: null,
             category: null,
-            for: {
-                company: true,
-                individual: true
-            }
-        };   
+            type: null,
+            entity: []
+        }
     }
-
 }
 
 export default IdAttributeItem;

@@ -43,7 +43,16 @@ const EN = {
     ERR_GAS_PRICE_LOAD: "ERR_GAS_PRICE_LOAD",
     ERR_GENERATE_ETH_RAW_TX: "ERR_GENERATE_ETH_RAW_TX",
     ERR_TX_DATA_GENERATION: "ERR_TX_DATA_GENERATION",
-    ERR_GENERATE_TOKEN_RAW_TX: "ERR_GENERATE_TOKEN_RAW_TX"
+    ERR_GENERATE_TOKEN_RAW_TX: "ERR_GENERATE_TOKEN_RAW_TX",
+
+    /**
+     * 
+     */
+    ID_ATTR_DOC_BOX_TITLE: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
+
+    ID_ATTR_NATIONAL_ID: "National ID",
+    ID_ATTR_PASSPORT: "Passport",
+    ID_ATTR_UTILITY_BILL: "Utility Bill",
 }
 
 module.exports = EN;

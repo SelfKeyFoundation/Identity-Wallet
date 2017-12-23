@@ -1,0 +1,55 @@
+.sk-box.sk-id-attribute-box
+    .default-wrapper
+        .header
+            .title(flex) {{data.title}}
+            .plus-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="data.showAddItemButton")
+                img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
+
+        .description
+            table(ng-if="data.subtitle")
+                tr
+                    td Acceptable documents
+                    td
+                        span.fc-white {{data.subtitle}}
+
+        .h-divider
+
+        .section(ng-repeat="item in data.idAttributeItems")
+            .title {{ item.category }}
+            .items-container
+                .item(ng-if="checkItemValue(item.items[item.defaultItemId])")
+                    sk-icon(icon="{{statuses[item.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
+                    .info-wrapper(ng-class="{selected: item.clicked}")
+                        span(ng-click="item.clicked = !item.clicked") {{ item.type === 'static_data' ? item.items[item.defaultItemId].value : item.items[item.defaultItemId].name }}
+                        .delete-dialog(ng-if="item.clicked", layout="column")
+                            .header Delete Attribute and History
+                            .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
+                            .buttons
+                                button.confirm(ng-click="deleteAttribute(item.defaultItemId, item)") Delete attribute
+                                button.cancel(ng-click="item.clicked = false") Cancel Action
+
+                .item(ng-if="!checkItemValue(item.items[item.defaultItemId])", style="margin-top: 30px;")
+                    sk-icon(icon="upload", size-class="icon-size-36x36")
+                    .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
+                        span {{ item.type }}
+                        span(style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
+
+            .h-divider
+
+            .section(ng-if="data.showHistory")
+                .title History
+                .items-container
+                    table(ng-init="item.attached = { historyRowCount: config.historyRowCount }")
+                        tr(ng-repeat="(index, step) in item.actionHistory", ng-show="index < item.attached.historyRowCount") 
+                            td.fc-bluey-grey {{step.date | date:'shortDate'}}
+                            td.fc-bluey-grey
+                                sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
+                            td
+                                span.fc-white {{statuses[step.status].name}} 
+                                span.fc-white &nbsp; - &nbsp;
+                                span.fc-white {{step.note}}
+                                button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+
+                    .actions-container(ng-if="item.actionHistory.length > 0")
+                        button(ng-click="item.attached.historyRowCount = item.attached.historyRowCount < item.actionHistory.length ? item.actionHistory.length : config.historyRowCount") {{ item.attached.historyRowCount < item.actionHistory.length ? 'View All History' : 'View Less History '}}
+

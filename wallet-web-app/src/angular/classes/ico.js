@@ -3,80 +3,138 @@
 
 class Ico {
 
-    constructor() {
-        this.id = null;             // symbol
-        this.status = "active";     // active, upcoming, ended
+    constructor(symbol, status, company, category) {
 
-        this.ticker = null;
+        this.symbol = symbol;               // symbol         
+        this.status = status;               // status - "In Progress", "Upcoming", "Finished"
+        this.company = company;             // company
+        this.category = category;           // category
 
-        this.companyName = null;
-        this.category = null;
-        this.description = null;
-        this.shortDescription = null;
-        this.teamLoaction = null;
+        this.description = null;            // description
+        this.shortDescription = null;       // short_description
 
-        this.ethAddress = null;
+        this.ethAddress = null;             // ethaddress
+        this.whitepaper = null;             //
+        this.website = null;                //
 
-        this.video = null;
-        this.whitepaper = null;
-        this.website = null;
+        this.whitelist = true;              //
+        this.accepts = [];                  //
 
-        this.startDate = null;
-        this.endDate = null;
-        this.daysLeft = null;
+        this.startDate = null;              // start_date
+        this.endDate = null;                // end_date
+        this.daysLeft = null;               // [calculated]
 
-        this.personalCap = null;
-        this.whitelist = true;
-        this.accepts = [];
+        this.videos = {
+            youtube: null,                  // youtube_video
+            vimeo: null                     // vimeo_video
+        }
 
-        this.restrictions = {
-            minContribution: null,
-            maxContribution: null,
-            other: null
-        };
-
-        this.capital = {
-            total: null,
-            raised: null,
-            goal: null
+        this.cap = {
+            total: null,                    // hard_cap_USD
+            raised: null                    // raised_USD
         }
 
         this.token = {
-            total: null,
-            totalForSale: null,
-            price: null,
-            issue: null
+            price: null,                    // token_price
+            total: null,                    // total_token_supply
+            soldOnPresale: null,            // presale_sold_usd
+            totalOnSale: null,              // tokens_available_for_sale
+            issuance: null                  // token_issuance
         }
 
-        this.preSale = {
-            sold: null,
-            bonus: null
-        }
-
-        this.kyc = {
-            required: true,
-            template: "apiEndpoint",
-            requirements: ['Name', 'Email', 'Telephone Number', 'Passport', 'National ID Card', 'Utility Bill']
+        this.restrictions = {
+            minContribution: null,          // min_contribution_usd
+            maxContribution: null,          // max_contribution_usd
+            other: null                     // restrictions
         };
 
-        this.contractInfo = {
-            address: null,
-            symbol: null,
-            decimal: null,
-            type: null,
-        }
+        this.kyc = {
+            required: true,                 // kyc
+            template: "apiEndpoint",        // kycc_template
+            requirements: [
+                'name',
+                'email',
+                'phonenumber',
+                'passport',
+                'national_id',
+                'utility_bill'
+            ]
+        };
+    }
+
+    setInfo (description, shortDescription, ethAddress, whitepaper, website, whitelist, accepts) {
+        this.description = description ? description : 'TBA';
+        this.shortDescription = shortDescription ? shortDescription : 'TBA';
+        this.ethAddress = ethAddress ? ethAddress : 'TBA';
+        this.whitepaper = whitepaper;
+        this.website = website;
+        this.whitelist = whitelist;
+        this.accepts = accepts;
+    }
+
+    setDate(startDate, endDate) {
+        if(!startDate || !endDate) return;
+        
+        this.startDate = new Date(startDate);
+        this.endDate = new Date(endDate);
+        this.daysLeft = this.getDaysLeft();
+    }
+
+    setTokenInfo(price, total, soldOnPresale, totalOnSale, issuance) {
+        this.token.price = price ? price : 'TBA';
+        this.token.total = total ? total : 'TBA';
+        this.token.soldOnPresale = soldOnPresale ? soldOnPresale : 'TBA';
+        this.token.totalOnSale = totalOnSale ? totalOnSale : 'TBA';
+        this.token.issuance = issuance ? issuance : 'TBA';
+    }
+
+    setCap(total, raised) {
+        this.cap.total = total;
+        this.cap.raised = raised;
+    }
+
+    setRestrictions(minContribution, maxContribution, other) {
+        this.restrictions.minContribution = minContribution ? minContribution : 'TBA';
+        this.restrictions.maxContribution = maxContribution ? maxContribution : 'TBA';
+        this.restrictions.other = other ? other : 'TBA';
+    }
+
+    setKyc (required, template) {
+        this.kyc.required = required && required === 'YES' ? true : false;
+        this.kyc.template = template;
+    }
+
+    setVideos(youtube, vimeo) {
+        this.videos.youtube = youtube;
+        this.videos.vimeo = vimeo;
     }
 
     getDaysLeft() {
-        let millis = this.endDate().getTime() - new Date().getTime();
+        if(!this.endDate) { return '' }
+        let millis = this.endDate.getTime() - new Date().getTime();
         let days = millis / (1000 * 60 * 60 * 24);
         if (days > 0) {
             return Math.round((days));
         } else {
-            return 0;
+            return -1;
         }
     }
 
+    getCapProgressPercent () {
+        return Math.round(this.cap.raised / this.cap.total * 100);
+    }
+
+    checkRequirements(ConfigFileService) {
+        let result = {}
+
+        for (let i in this.kyc.requirements) {
+            let req = this.kyc.requirements[i];
+            let idAttribute = ConfigFileService.getDefaultIdAttributeItem(req);
+            result[req] = idAttribute && (idAttribute.value || idAttribute.path) ? idAttribute : null;
+        }
+
+        return result;
+    }
 }
 
 export default Ico;

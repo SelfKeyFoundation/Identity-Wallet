@@ -25,7 +25,7 @@ function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $sta
             if (!shouldSkipStep2) {
                 $state.go('member.setup.step-2');
             } else {
-                $state.go('member.setup.step-3', { step: "Passport" });
+                $state.go('member.setup.step-3', { step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_4 });
             }
         });
     }
