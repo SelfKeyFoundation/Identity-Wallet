@@ -1,5 +1,5 @@
 md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
-    
+
     .document-wrapper(ng-if="config.type === 'document'")
         .name-section
             input(type="text", ng-model="item.name", placeholder="{{config.type}} name")
@@ -23,4 +23,13 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
             button.save(ng-click="save($event)") Save
 
     .static-data-wrapper(ng-if="config.type === 'static_data'")
-        h1 TODO
+        form.dialog-form
+            .dialog-form-content
+                span Tax ID Number
+                input
+
+            .dialog-form-buttons
+                button.cancel-button
+                    span Cancel
+                button.save-button
+                    span save
