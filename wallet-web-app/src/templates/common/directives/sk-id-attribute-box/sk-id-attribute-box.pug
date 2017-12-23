@@ -18,7 +18,7 @@
             .title {{ item.category }}
             .items-container
                 .item(ng-if="checkItemValue(item.items[item.defaultItemId])")
-                    sk-icon(icon="{{statuses[item.actionHistory[0].status].icon}}", size-class="icon-size-16x16")
+                    sk-icon(icon="success-box", size-class="icon-size-16x16")
                     .info-wrapper(ng-class="{selected: item.clicked}")
                         span(ng-click="item.clicked = !item.clicked") {{ item.type === 'static_data' ? item.items[item.defaultItemId].value : item.items[item.defaultItemId].name }}
                         .delete-dialog(ng-if="item.clicked", layout="column")
@@ -29,10 +29,10 @@
                                 button.cancel(ng-click="item.clicked = false") Cancel Action
 
                 .item(ng-if="!checkItemValue(item.items[item.defaultItemId])", style="margin-top: 30px;")
-                    sk-icon(icon="upload", size-class="icon-size-36x36")
+                    sk-icon(icon="{{item.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
                     .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
                         span {{ item.type }}
-                        span(style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
+                        span(ng-if="item.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
 
             .h-divider
 

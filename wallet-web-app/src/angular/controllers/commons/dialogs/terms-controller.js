@@ -1,14 +1,24 @@
-function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog) {
+function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, ElectronService, ConfigFileService) {
     'ngInject'
 
     $log.info('TermsDialogController');
+    $scope.storeSavePromise = null;
 
-    $scope.cancel = (event) => {
-        $mdDialog.cancel();
+    $scope.agree = (event) => {
+        let store = ConfigFileService.getStore();
+        store.setup.termsAccepted = true;
+        $scope.storeSavePromise = ConfigFileService.save();
+        $scope.storeSavePromise.then(() => {
+            $mdDialog.hide();
+        });
+    };
+
+    $scope.notAgree = (event) => {
+        $rootScope.closeApp();
     };
 
 
-
+    // Todo change with $timeout
     setTimeout(function () {
         $scope.scrolledBottom = true;
         var elem = angular.element(document.querySelector(".textual"));
@@ -17,7 +27,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog) {
         var wholeHeight = elemChild[0].scrollHeight;
         var visibleHeight = elem[0].offsetHeight;
         elem.on("scroll", function (ev) {
-            if(elem[0].scrollTop >= (wholeHeight - visibleHeight -50)){
+            if (elem[0].scrollTop >= (wholeHeight - visibleHeight - 50)) {
                 $scope.scrolledBottom = false;
             }
 

@@ -17,12 +17,12 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
             // item type
             // scope.data.type = 'document' | 'static_data'
 
-
             scope.checkItemValue = (item) => {
                 return (item && item.value);
             }
 
             scope.openAddEditDialog = function (event, actionType, item) {
+                $log.debug(">>>>>>", actionType, item);
                 $mdDialog.show({
                     controller: SkIdAttributeBoxDirectiveAddEditDialog,
                     templateUrl: 'common/directives/sk-id-attribute-box/sk-add-edit-id-attribute-item-dialog.html',
@@ -33,8 +33,8 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                     locals: {
                         config: {
                             title: "Upload your driver's License",
-                            type: "static_data", // document, static_data
-                            key: 'ID Card'
+                            type: item.type, // document, static_data
+                            key: item.key
                         },
                         item: angular.copy(item.items[item.defaultItemId])
                     }
@@ -42,23 +42,27 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                     item.items[item.defaultItemId] = respItem;
                     let store = ConfigFileService.getStore();
 
-                    if(actionType === 'edit'){
-                        if(item.type === 'document'){
-                            let itemToSave = store.idAttributes[item.key].items[respItem._id];
-                            
-                            /*
-                            if(!itemToSave){
-                                itemToSave = new IdAttributeItem();
-                            }
-                            */
+                    if (actionType === 'edit') {
+                        let itemToSave = store.idAttributes[item.key].items[respItem._id];
+                        itemToSave.name = respItem.name;
+                        itemToSave.value = respItem.value;
 
-                            itemToSave.name = respItem.name;
-                            itemToSave.value = respItem.value;
+                        if (item.type === 'document') {
                             itemToSave.size = respItem.size;
                             itemToSave.contentType = respItem.contentType;
                         }
+                    } else if (actionType === 'add') {
+                        let itemToSave = new IdAttributeItem();
+                        itemToSave.name = respItem.name;
+                        itemToSave.value = respItem.value;
+
+                        if (item.type === 'document') {    
+                            itemToSave.size = respItem.size;
+                            itemToSave.contentType = respItem.contentType;   
+                        }
+                        store.idAttributes[item.key].items[itemToSave._id];
                     }
-                    
+
                     $log.info('store to save:', store);
                     //ConfigFileService.save();
                 });
@@ -75,7 +79,7 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                 let store = ConfigFileService.getStore();
                 let item = scope.data.idAttributeItems[scope.data.title];
                 console.log(item);
-                if(id !== item.defaultItemId) {
+                if (id !== item.defaultItemId) {
                     delete item.items[id];
                     delete store.idAttributes[scope.data.title].items[id];
                 } else {
@@ -92,6 +96,8 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                 if (!files || !files.length) return '';
                 return files.map(file => file.name).join(', ');
             };
+
+
 
             console.log('passed data is:', scope.data);
         },
@@ -118,7 +124,7 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
         let promise = ElectronService.openFileSelectDialog(event);
         promise.then((resp) => {
             $log.info(resp);
-            if(resp && resp.path){
+            if (resp && resp.path) {
                 $scope.item.value = resp.path;
                 $scope.item.contentType = resp.mimeType;
                 $scope.item.size = resp.size;
@@ -127,7 +133,7 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 
     $scope.save = () => {
-        if(item.value){
+        if (item.value) {
             $mdDialog.hide(item);
         }
     }

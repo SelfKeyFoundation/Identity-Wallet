@@ -2,25 +2,27 @@
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
 
-function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService, SelfkeyService) {
+// Actually Local Storage Service
+function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
   'ngInject';
 
   $log.debug('ConfigFileService Initialized');
 
-  let store = null;
   let isReady = false;
 
+  // main store
+  let store = null;
+
+  // temporary stored datas
   let idAttributeTypes = {};
   let icos = {
-    active: [],
-    upcoming: [],
-    finished: []
+    
   };
 
   class ConfigFileStore {
 
     constructor() {
-      this.loadSelfkeyData();
+
     }
 
     init() {
@@ -45,32 +47,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
         defer.reject({ message: 'electron not available' });
       }
       return defer.promise;
-    }
-
-    loadSelfkeyData(reload) {
-      // 1: Load Id Attribute Types
-      SelfkeyService.dispatchIdAttributeTypes(reload).then((data) => {
-        idAttributeTypes = data;
-      });
-
-      // 2: Load ICOs
-      SelfkeyService.dispatchIcos(reload).then((data) => {
-        for (let i in data) {
-          switch (data[i].status) {
-            case 'In Progress':
-              icos.active.push(data[i]);
-              break;
-            case 'Upcoming':
-              icos.upcoming.push(data[i]);
-              break;
-            case 'Finished':
-              icos.finished.push(data[i]);
-              break;
-          }
-        }
-      });
-
-      $rootScope.icos = icos;
     }
 
     save() {
@@ -159,6 +135,10 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return idAttributeTypes[type];
     }
 
+    setIdAttributeTypes(data) {
+      idAttributeTypes = data;
+    }
+
     /**
      * 
      */
@@ -166,12 +146,17 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return icos;
     }
 
+    addIco(status, ico) {
+      if(!icos[status]) {
+        icos[status] = [];
+      }
+      icos[status].push(ico);
+    }
+
   }
 
   return new ConfigFileStore();
 }
-
-
 
 export default ConfigFileService;
 

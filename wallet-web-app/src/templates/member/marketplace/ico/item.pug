@@ -1,7 +1,7 @@
 .ico-list-item-content-wrappper
     .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
         .logo(layout="row")
-            sk-icon(icon="eth",size-class="icon-size-44x44",style="padding-top:4px")
+            sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
         .documents-needed(layout="row") Documents Needed
@@ -10,7 +10,7 @@
         .main-content(layout="row")
             .video-container(flex="65")
                 .video
-                    iframe(style="width:470px; height: 300px;" ng-src="{{trustSrc(ico.videos.youtube)}}")
+                    iframe(style="width:470px; height: 300px;", ng-src="{{trustSrc(ico.videos.youtube)}}")
                 .video-text {{ico.description}}
             .token-sale-container(layout="column", flex="35")
                 .text-1

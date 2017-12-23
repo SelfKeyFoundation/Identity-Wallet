@@ -3,7 +3,7 @@
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
 
-function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
+function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
   'ngInject';
 
   $log.info('SelfkeyService Initialized');
@@ -12,6 +12,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
+  const KYC_BASE_URL = 'http://192.168.157.21:8080/';
 
   /**
    * 
@@ -24,7 +25,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
   class SelfkeyService {
 
     constructor() {
-      this.dispatchIcos();
+      this.loadData();
     }
 
     retrieveTableData(table, reload) {
@@ -82,17 +83,17 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
 
         for (let i in icoDetailsArray) {
           let item = icoDetailsArray[i].data.fields;
-          if(!item.symbol) continue;
-          
+          if (!item.symbol) continue;
+
           let ico = new Ico(
-            item.symbol, 
-            item.status, 
-            item.company, 
+            item.symbol,
+            item.status,
+            item.company,
             item.category
           );
-          
+
           ico.setDate(item.start_date, item.end_date);
-          
+
           ico.setTokenInfo(
             item.token_price,
             item.total_token_supply,
@@ -107,12 +108,12 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
           ico.setVideos(item.youtube_video, null);
 
           ico.setInfo(
-            item.description, 
-            item.short_description, 
-            item.ethaddress, 
-            item.whitepaper, 
-            item.website, 
-            item.whitelist, 
+            item.description,
+            item.short_description,
+            item.ethaddress,
+            item.whitepaper,
+            item.website,
+            item.whitelist,
             item.accepts
           );
 
@@ -125,6 +126,58 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http) {
       return defer.promise;
     }
 
+    retrieveKycSessionToken(privateKeyHex, ethAddress, email, organizationId) {
+      let defer = $q.defer();
+
+      let store = ConfigFileService.getStore();
+      let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+      if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
+        defer.resolve(wallet.sessionsStore[organizationId]);
+      } else {
+        $http.post(KYC_BASE_URL + "organization/5a3e6c01d6dab14395fa711d/register", {
+          "ethAddress": ethAddress,
+          "email": email
+        }).finally(() => {
+          $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + ethAddress).then((resp) => {
+            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
+            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+              wallet.sessionsStore[organizationId] = resp.data.token;
+              ConfigFileService.save().then(() => {
+                defer.resolve(resp.data.token);
+              }).catch((error) => {
+                defer.reject()
+              })
+            }).catch((error) => {
+              defer.reject()
+            })
+          }).catch((error) => {
+            defer.reject()
+          });
+        });
+      }
+
+      return defer.promise;
+    }
+
+    initKycProcess(privateKeyHex, templateId, organizationId, ethAddress, email) {
+
+    }
+
+    loadData(reload) {
+      // 1: Load Id Attribute Types
+      this.dispatchIdAttributeTypes(reload).then((data) => {
+        ConfigFileService.setIdAttributeTypes(data);
+      });
+
+      // 2: Load ICOs
+      this.dispatchIcos(reload).then((data) => {
+        for (let i in data) {
+          ConfigFileService.addIco(data[i].status, data[i]);
+        }
+      });
+
+      $rootScope.icos = ConfigFileService.getIcos();
+    }
   };
 
   return new SelfkeyService();

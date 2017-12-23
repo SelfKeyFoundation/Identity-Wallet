@@ -24,6 +24,10 @@ class Wallet {
         return this.privateKeyHex;
     }
 
+    getPublicKeyHex () {
+        return this.keystoreObject.address;
+    }
+
     getAddress () {
         return this.keystoreObject.address;
     }

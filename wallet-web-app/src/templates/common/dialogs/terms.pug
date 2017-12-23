@@ -29,5 +29,5 @@ md-dialog.terms(aira-lable="Dialog Title")
                                 | c. Entire Agreement – Disclaimer of Reliance. This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior agreements or understandings between the Parties. Each Party expressly warrants and represents that: a) it has authority to enter this Agreement; and b) it is not relying upon any statements, understandings, representations, expectations or agreements other than those expressly set forth in this Agreement.
 
                     section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
-                        md-button.md-raised.agree(ng-disabled="scrolledBottom") I agree to the terms of service
-                        md-button.md-raised.disagree(ng-disabled="scrolledBottom") I don't agree
+                        md-button.md-raised.agree(ng-disabled="scrolledBottom || storeSavePromise.$$state.status", ng-click="agree()") I agree to the terms of service
+                        md-button.md-raised.disagree(ng-disabled="scrolledBottom || storeSavePromise.$$state.status", ng-click="notAgree()") I don't agree

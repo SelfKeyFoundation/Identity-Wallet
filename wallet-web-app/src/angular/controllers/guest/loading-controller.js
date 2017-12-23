@@ -82,6 +82,9 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
         $log.error("error", error);
     });
 
+    // TODO test
+    SelfkeyService.initKycProcess("0xf47863503959cdd0c8c457dcd218efb544f6870c", "g.maisuradze88@gmail.com");
+
     $log.info("loadingPromise", $rootScope.loadingPromise);
 };
 

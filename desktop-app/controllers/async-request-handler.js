@@ -412,7 +412,6 @@ module.exports = function (app) {
         deskmetrics.send(args.event, args.data)
         app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
     }
-    
 
     return controller;
 }

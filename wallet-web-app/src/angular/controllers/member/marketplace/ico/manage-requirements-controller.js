@@ -60,7 +60,38 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     // 2) orginise directive
     // 3) todo ... ???
 
-    $scope.testData = {
+    $scope.testData1 = {
+        title: "email",         // here must be idAttributeItem.key
+        subtitle: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
+        type: 'static_data',    // | 'static_data',
+        showAddItemButton: false,
+        showHistory: false,
+        isItemEditable: true,
+        idAttributeItems: {
+            email: {
+                key: "email",
+                type: "static_data",
+                category: "global_attribute",
+                defaultItemId: "1",
+                entity: [
+                    "individual",
+                    "company"
+                ],
+                items: {
+                    "1": {
+                        "_id": "1",
+                        "name": "",
+                        "value": "",
+                    }
+                },
+                actionHistory: [
+                    
+                ]
+            }
+        }
+    }
+
+    $scope.testData2 = {
         title: "passport", // here must be idAttributeItem.key
         subtitle: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
         type: 'document',// | 'static_data',
@@ -108,49 +139,7 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     }
 
     
-    $scope.docBoxData = {
-        name: "Identity Document",
-        acceptableDocuments: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
-        documents: [
-            {
-                name: 'Passport',
-                files: [{name: 'Robert_Plant_id.jpg'}],
-                actionHistory: [
-                    {
-                        date: new Date(now - 10000000),
-                        status: 1,
-                        note: "shared with bitDegree testing long text"
-                    },
-                    {
-                        date: new Date(now - 1000000),
-                        status: 2,
-                        note: "shared with blockChain"
-                    },
-                    {
-                        date: new Date(now - 1000000),
-                        status: 3,
-                        note: "shared with blockChain"
-                    }
-                ]
-            },
-            {
-                name: 'ID Card',
-                files: [{name: 'John_id.jpg'}],
-                actionHistory: [
-                    {
-                        date: new Date(now - 10000000),
-                        status: 1,
-                        note: "shared with bitDegree"
-                    },
-                    {
-                        date: new Date(now - 1000000),
-                        status: 2,
-                        note: "shared with blockChain"
-                    }
-                ]
-            },
-        ]
-    };
+    
 
 };
 

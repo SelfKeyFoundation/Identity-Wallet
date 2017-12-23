@@ -1,4 +1,4 @@
-function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $mdDialog, ConfigFileService, WalletService, CommonService) {
+function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $mdDialog, ConfigFileService, WalletService, CommonService, ElectronService) {
     'ngInject'
 
     $log.info('GuestUnlockKeystoreController');
@@ -50,19 +50,10 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
     }
 
-
-    // $timeout(()=>{
-    //     $mdDialog.show({
-    //         controller: 'TermsDialogController',
-    //         templateUrl: 'common/dialogs/terms.html',
-    //         parent: angular.element(document.body),
-    //         targetEvent: null,
-    //         clickOutsideToClose: false,
-    //         fullscreen: true,
-    //     })
-    // }, 1000);
-
-    //$scope.walletsMetaData = ConfigFileService.getWalletsMetaData();
+    /**
+     * 
+     */
+    $rootScope.checkTermsAndConditions();
 
 };
 

@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigStorageService, CommonService, WalletService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -11,7 +11,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      * 
      */
     $rootScope.viewState = {
-        
+
     }
 
     /**
@@ -19,7 +19,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      */
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
-    
+
     $rootScope.selectedLanguage = "en";
 
 
@@ -27,10 +27,10 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      * 
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
-        if(prefix){
+        if (prefix) {
             keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
         }
-        
+
         let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
         if (args) {
             for (let i = 0; i < args.length; i++) {
@@ -66,6 +66,22 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         CommonService.showSendTokenDialog(token);
     }
 
+    $rootScope.checkTermsAndConditions = () => {
+        let store = ConfigFileService.getStore();
+        if (!store.setup.termsAccepted) {
+            $timeout(() => {
+                $mdDialog.show({
+                    controller: 'TermsDialogController',
+                    templateUrl: 'common/dialogs/terms.html',
+                    parent: angular.element(document.body),
+                    targetEvent: null,
+                    clickOutsideToClose: false,
+                    fullscreen: true,
+                });
+            }, 300);
+        }   
+    }
+
     /**
      * 
      */
@@ -76,9 +92,9 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         }
     });
 
-    $interval(() => {    
-        if($rootScope.wallet && $rootScope.wallet.getAddress()){
-          WalletService.loadBalance();
+    $interval(() => {
+        if ($rootScope.wallet && $rootScope.wallet.getAddress()) {
+            WalletService.loadBalance();
         }
     }, 10000);
 
