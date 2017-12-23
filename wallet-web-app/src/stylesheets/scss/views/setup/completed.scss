@@ -1,3 +1,79 @@
 .setup-completed {
-    
+    .container {
+        margin: 0 auto;     
+        .right-side {
+            width: 350px;
+        }
+        .left-side-container {
+            width: 760px;
+            padding-right: 30px;
+            .item {
+                padding-bottom: 44px;
+                .title {
+                    font-family: ProximaNovaRegular;
+                    font-size: 36px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #ffffff;
+                    padding-bottom: 15px;
+                }
+                .description {
+                    opacity: 0.8;
+                    font-family: ProximaNovaRegular;
+                    font-size: 18px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.67;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #ffffff;
+                }
+                .border-bottom {
+                    padding-top: 44px;
+                    height: 2px;
+                    border-bottom: solid 1px #3b4654;
+                }
+            }
+            .btn {
+                margin-top: 36px;
+                cursor: pointer !important;
+                height: 50px;
+                border-radius: 4px;
+                background-color: #435160;
+                width: 203px;
+                font-family: ProximaNovaRegular;
+                font-size: 15px;
+                font-weight: 600;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: 1.6;
+                letter-spacing: 1px;
+                text-align: center;
+                color: #ffffff;
+                outline: none;
+                border: none;
+            }
+            .go-to {
+                .my-dash {
+                    font-family: ProximaNovaRegular;
+                    font-size: 15px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.6;
+                    letter-spacing: 1px;
+                    text-align: left;
+                    color: #ffffff;
+                    padding-bottom: 9px;
+                    cursor: pointer !important;
+                    border-bottom: dashed 2px #5b6c81;
+                }
+            }
+        }
+    }
 }   

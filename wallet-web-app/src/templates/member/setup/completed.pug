@@ -1,2 +1,19 @@
 .setup-completed(layout-fill, layout="column", layout-align="center center")
-    h1(ui-sref="member.dashboard.main") TODO
+    h1(ui-sref="member.dashboard.main")
+    .container(layout="row")
+        .left-side-container
+            .item 
+                .title SelfKey
+                .description SelfKey is a Blockchain based digital identity system that allows individuals and companies to tryly own,
+                    | control and manage thear digital identity, and instantly access out network. 
+                .border-bottom
+            .item 
+                .title Get Selfkey Tokens
+                .description SelfKey Tokens give you access to out marketplace, they allow you to "stake your identity" with SelfKey Tokens,
+                    | which speeds up the verifications process for things you apply to in the SelfKey network such as exchanges and token sales. 
+                button.btn Get KEY Tokens    
+                .border-bottom
+            .go-to 
+                span.my-dash Go to My Selfkey Dashboard
+        .right-side 
+            sk-user-info-box(user-data='{"name":"Andrew Jones","residency":"Valletta Malta","email":"andrew@joonas.com","mobile":"+ 356 345 345","passport":"Malta","nationalId":"Malta Drivers license","utilityBill":"Action Required" }')        
