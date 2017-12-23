@@ -1,13 +1,87 @@
 md-dialog {
-    &.receive-token{
-        min-width: 100%;
-        min-height: 100%;
-        background-image: linear-gradient(121deg, #1e262e, #1e262e);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
+  &.receive-token {
+    min-width: 100%;
+    min-height: 100%;
+    background-image: linear-gradient(121deg, #1e262e, #1e262e);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-        
+    .receive-token-wrapper {
+
+      width: 759px;
+      height: 546px;
+      border-radius: 4px;
+      background-color: #262f39;
+      border: solid 1px #303c49;
+      margin-top: 236px;
+
+      .receive-token-logo {
+        margin-top: -25px;
+
+        > .sk-icon {
+          margin: 0 auto;
+        }
+      }
+
+      .receive-token-barcode {
+        text-align: center;
+        margin-top: 44px;
+
+        qrcode {
+
+          > canvas {
+            background-color: #ffffff;
+            border: 8px solid #fff;
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .receive-token-address {
+        margin-top: 46px;
+
+        .address {
+          width: 245px;
+          height: 29px;
+          font-family: ProximaNovaLight;
+          font-size: 24px;
+          font-weight: 300;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: normal;
+          text-align: left;
+          color: #93b0c1;
+          margin: 0 auto;
+        }
+        .public-key {
+
+          width: 489px;
+          height: 24px;
+          font-family: ProximaNovaLight;
+          font-size: 20px;
+          font-weight: 300;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 1px;
+          text-align: left;
+          color: #ffffff;
+          margin: 0 auto;
+          padding-top: 22px;
+        }
+      }
+      .receive-token-icons {
+        margin-top: 45px;
+
+         > .sk-icon {
+          margin-left: 30px !important;
+        }
+      }
+
     }
+
+  }
 }

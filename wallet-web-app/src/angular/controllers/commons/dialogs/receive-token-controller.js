@@ -3,6 +3,8 @@ function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog) {
 
     $log.info('ReceiveTokenDialogController');
 
+
+
     $scope.cancel = (event) => {
         $mdDialog.cancel();
     }

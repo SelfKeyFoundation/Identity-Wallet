@@ -16,7 +16,7 @@
                 button.copy-button COPY
         hr
         .buttons-section(layout="row")
-            button.action-button(layout="row")
+            button.action-button(layout="row" ng-click="openReceiveDialog($event, 'receive')")
                 sk-icon(icon="upload", size-class="icon-size-16x16", style="padding-top:2px")
                 span RECEIVE
             button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, 'eth')")
