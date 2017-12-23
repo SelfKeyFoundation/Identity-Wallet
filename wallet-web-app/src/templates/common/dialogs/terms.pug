@@ -1,3 +1,33 @@
 md-dialog.terms(aira-lable="Dialog Title")
     .terms-wrapper
-        h1 Terms Test
+        div(layout='column', layout-align='center center', style="margin-bottom: 40px;")
+            img(src='assets/images/icons/selfkey.svg', width=57)
+            .title Selfkey
+
+        .main(layout='column', layout-align='center center')
+            md-toolbar
+                .md-toolbar-tools(layout='row', layout-align='center center')
+                    span Terms of Service Agreement
+            .content(flex='')
+                    .textual
+                        .text(style="padding-right:20px;")
+                            p
+                                | THIS TERMS OF SERVICE AGREEMENT ("Agreement") is made between Input Output HK Limited ("Company") and any person ("User") who completes the process to download, utilize, or operate any software, data processing service, application, communication service, or other content created or offered by Company, including, but not limited to, the Daedalus Cryptocurrency Wallet application ("Software"). Company and User are collectively referred to as the "Parties."
+                            p
+                                | BY CLICKING THE ACCEPTANCE BUTTON OR ACCESSING, USING OR INSTALLING ANY PART OF THE SOFTWARE, USER EXPRESSLY AGREES TO AND CONSENTS TO BE BOUND BY ALL OF THE TERMS OF THIS AGREEMENT. IF USER DOES NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, THE USER IS NOT AUTHORIZED TO ACCESS, USE OR INSTALL ANY PART OF THE SOFTWARE.
+                            p
+                                | 1. Service Terms and Limitations
+                                | a. Description. The Software functions as a free, open source, digital cryptocurrency wallet. The Software does not constitute an account by which the Company or any other third parties serve as financial intermediaries or custodians of User's SelfKey or any other cryptocurrency.
+                            p
+                                | While the Software has undergone beta testing and continues to be improved by feedback from the developers community, open-source contributors and beta-testers, the Company cannot guarantee there will not be bugs in the Software. User acknowledges that User's use of this Software is at User's risk, discretion and in compliance with all applicable laws. User is responsible for safekeeping User's passwords, PINs, private keys, redemption keys, shielded vending keys, backup recovery mnemonic phrases, SelfKey passcodes and any other codes User uses to access the Software or any information, SelfKey, voucher, or other cryptocurrency unit.
+                            p
+                                | 13. Miscellaneous
+                                | a. Amendment. Company shall have the right, at any time and without notice, to add to or modify the terms of this Agreement, simply by delivering such amended terms to User by electronic message through any medium to any address provided to Company by User. User's access to or use of the Software after the date such amended terms are delivered to User shall be deemed to constitute acceptance of such amended terms
+                            p
+                                | b. Severance. If any provision or part-provision of this Agreement is, or becomes invalid, illegal or unenforceable, it shall be deemed modified to the minimum extent necessary to make it valid, legal and enforceable. If such modification is not possible, the relevant provision or part-provision shall be deemed deleted. Any modification to or deletion of a provision or part-provision under this Article shall not affect the validity and enforceability of the rest of this Agreement.
+                            p
+                                | c. Entire Agreement – Disclaimer of Reliance. This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior agreements or understandings between the Parties. Each Party expressly warrants and represents that: a) it has authority to enter this Agreement; and b) it is not relying upon any statements, understandings, representations, expectations or agreements other than those expressly set forth in this Agreement.
+
+                    section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
+                        md-button.md-raised.agree(ng-disabled="scrolledBottom") I agree to the terms of service
+                        md-button.md-raised.disagree(ng-disabled="scrolledBottom") I don't agree
