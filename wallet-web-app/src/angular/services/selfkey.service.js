@@ -13,7 +13,8 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
-  const KYC_BASE_URL = 'http://172.25.255.65:8080/';
+  //const KYC_BASE_URL = 'http://172.25.255.65:8080/';
+  const KYC_BASE_URL = 'http://localhost:8080/';
 
   /**
    * 
@@ -106,7 +107,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
           ico.setCap(item.hard_cap_USD, item.raised_USD);
           ico.setRestrictions(item.min_contribution_usd, item.max_contribution_usd, item.restrictions);
-          ico.setKyc(item.kyc, item.kycc_template, item.organisation);
+          ico.setKyc(item.kyc, item.template, item.organisation);
           ico.setVideos(item.youtube_video, null);
 
           ico.setInfo(

@@ -4,7 +4,8 @@
             sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
-        .documents-needed(layout="row") Documents Needed
+        .status-container(ng-if="isSusbscribed && kycProgress", layout="row", ng-class="getDecorations().clazz") 
+            | {{getDecorations().title}}
             span
     .ico-list-item-content-wrappper__content-section
         .main-content(layout="row")
@@ -21,7 +22,7 @@
                     span OF
                     span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
-                    button.no-outline(ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
+                    button.no-outline(ng-if="kycProgress", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")

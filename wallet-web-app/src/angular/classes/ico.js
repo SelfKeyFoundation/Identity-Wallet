@@ -50,8 +50,8 @@ class Ico {
 
         this.kyc = {
             required: true,                 // kyc
-            template: "id",                 // template id
-            organisation: "id"             // organisation id
+            template: "",                 // template id
+            organisation: ""             // organisation id
         };
     }
 
@@ -95,7 +95,7 @@ class Ico {
     setKyc (required, template, organisation) {
         this.kyc.required = required && required === 'YES' ? true : false;
         this.kyc.template = template;
-        this.organisation = organisation;
+        this.kyc.organisation = organisation;
     }
 
     setVideos(youtube, vimeo) {

@@ -76,14 +76,34 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.kycInfo = {
-        organisation: "5a3f53da59cfda9e4639ba71", //$scope.ico.kyc.organisation,
-        template: "507f1f77bcf86cd799439013" //$scope.ico.kyc.template
+        organisation: "5a3f53da59cfda9e4639ba71",   //$scope.ico.kyc.organisation,
+        template: "507f1f77bcf86cd799439013"        //$scope.ico.kyc.template
     }
 
     $scope.kycRequirementsCallbacks = {
         onReady: (error, requirementsList, progress) => {
             $scope.kycProgress = progress;
             checkRequirementsProgress(progress);
+        }
+    }
+
+    $scope.getDecorations = () => {
+        if($scope.isSusbscribed){
+            switch ($scope.icoProcess.status) {
+                case $scope.icoStatuses.REQUIREMENTS_MISSING:
+                    return {clazz: 'orange', title: 'Missing Requirements'};
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_READY:
+                    return {clazz: 'green', title: 'Requirements Are Ready'};
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_APPROVED:
+                    return {clazz: 'green', title: 'Requirements Are Approved'};
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_REJECTED:
+                    return {clazz: 'red', title: 'Requirements Are Rejected'};
+                    break;
+                default:
+            }
         }
     }
 
