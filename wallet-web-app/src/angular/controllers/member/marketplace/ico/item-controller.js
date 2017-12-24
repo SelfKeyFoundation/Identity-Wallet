@@ -4,18 +4,49 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $log.info('MemberMarketplaceIcoItemController', $stateParams);
     
     /**
+     * not_participating
+     * requirements_missing
+     * requirements_ready
+     * requirements_submited
+     * ready_to_join
+     */
+    $scope.icoStatuses = {
+        REQUIREMENTS_MISSING: "requirements_missing",
+        REQUIREMENTS_READY: "requirements_ready",
+        REQUIREMENTS_SUBMITED: "requirements_submited",
+        REQUIREMENTS_APPROVED: "requirements_approved",
+        REQUIREMENTS_REJECTED: "requirements_rejected"
+    }
+
+    /**
      * 
      */
     $scope.view = {
         showKycRequirements: false,
-        showActionButton: false
+        showActionButton: true
+    }
+
+    $scope.trustSrc = (src) => {
+        return $sce.trustAsResourceUrl(src);
     }
 
     /**
      * get ico data
      */
     $scope.ico = $stateParams.selected;
-
+    $scope.isSusbscribed = false;
+    $scope.actionInProgress = false;
+    
+    let store = ConfigFileService.getStore();
+    
+    // check participation
+    for(let i in store.subscribtions){
+        let subs = store.subscribtions[i];
+        if(subs.type === 'ico' && subs.info.symbol === $scope.ico.symbol){
+            $scope.isSusbscribed = true;
+        }
+    }
+    
     $scope.kycInfo = {
         organisation: "5a3f53da59cfda9e4639ba71", //$scope.ico.kyc.organisation,
         template: "507f1f77bcf86cd799439013" //$scope.ico.kyc.template
@@ -24,49 +55,77 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $scope.kycRequirementsCallbacks = {
         onReady: (error, requirementsList, progress) => {
             console.log("onReady", error, requirementsList, progress);
+            checkRequirementsProgress(progress);
 
-
+            if($scope.isSusbscribed && $scope.icoStatus === $scope.icoStatuses.REQUIREMENTS_MISSING){
+                $scope.view.showActionButton = false;
+            }
         }
-    }
-
-    $scope.infoStatuses = {
-        UNKNOWN: 'unknown',
-        MISSING_REQUIREMENTS: 'missing-requirements',
-        READY_TO_JOIN: 'ready-to-join'
-    }
-
-    /**
-     * 
-     */
-    $scope.info = {
-        status: $scope.infoStatuses.UNKNOWN, // 'missing-requirements' | 'ready-to-join' | ''
-    }
-
-    $scope.trustSrc = (src) => {
-        return $sce.trustAsResourceUrl(src);
     }
 
     $scope.getActionButtonInfo = () => {
         // //complete-button, join-button, join-ico-button
-        switch ($scope.info.status) {
-            case $scope.infoStatuses.UNKNOWN:
-                break;
-            case $scope.infoStatuses.MISSING_REQUIREMENTS:
-                return { clazz: 'complete-button', title: 'Complete Selfkey ID' };
-                break;
-            case $scope.infoStatuses.READY_TO_JOIN:
-                return { clazz: 'join-button', title: 'Join Ico' };
-                break;
-            default:
+        if($scope.isSusbscribed){
+            switch ($scope.icoStatus) {
+                case $scope.icoStatuses.REQUIREMENTS_MISSING:
+                    return { clazz: 'complete-button', title: 'Complete Selfkey ID' };
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_READY:
+                    return { clazz: 'complete-button', title: 'Submit ID' };
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_APPROVED:
+                    return { clazz: 'join-button', title: 'Complete Selfkey ID' };
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_REJECTED:
+                    return { clazz: 'complete-button', title: 'Submit ID Again' };
+                    break;
+                default:
+            }
+        } else {
+            return { clazz: 'complete-button', title: 'Participate' };
         }
     }
 
     $scope.action = ($event) => {
-        // TODO
-        if($scope.info.status === $scope.infoStatuses.READY_TO_JOIN){
-            $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
+        $scope.actionInProgress = true;
+
+        if($scope.isSusbscribed){
+            switch ($scope.icoStatus) {
+                case $scope.icoStatuses.REQUIREMENTS_MISSING:
+                    $state.go('member.marketplace.ico-manage-requirements', {selected: $scope.ico});
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_READY:
+                    //return { clazz: 'complete-button', title: 'Submit ID' };
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_APPROVED:
+                    $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
+                    break;
+                case $scope.icoStatuses.REQUIREMENTS_REJECTED:
+                    //return { clazz: 'complete-button', title: 'Submit ID Again' };
+                    break;
+                default:
+            }
         }else{
-            $state.go('member.marketplace.ico-manage-requirements', {selected: $scope.ico});
+            store.subscribtions.push({
+                "_id": $scope.ico.symbol,
+                "type": "ico",
+                "createDate": new Date(),
+                "info": {
+                    "kycStatus": 0,
+                    "requirements": [],
+                    "startDate": $scope.ico.startDate,
+                    "symbol": $scope.ico.symbol
+                }
+            });
+
+            ConfigFileService.save().then((resp)=>{
+                $log.info(">>>>", resp);
+
+                // 
+
+            }).finally(()=>{
+                $scope.actionInProgress = false;
+            })
         }
     }
 
@@ -85,7 +144,6 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
      */
     function checkRequirementsProgress (progress) {
         let status = true;
-
         for(let i in progress) {
             let req = progress[i];
             if(!req || (!req.value && !req.path)){
@@ -94,7 +152,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
             }
         }
 
-        $scope.info.status = status ? $scope.infoStatuses.READY_TO_JOIN : $scope.infoStatuses.MISSING_REQUIREMENTS;
+        $scope.icoStatus = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.MISSING_REQUIREMENTS;
     }
 
 };
