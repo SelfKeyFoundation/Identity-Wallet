@@ -24,9 +24,9 @@
                     span OF
                     span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
-                    button.no-outline(ng-if="icoStatus !== icoStatuses.REQUIREMENTS_MISSING", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
-                    button.gray-button.no-outline(ng-click="OpenNewTab('web')")  Website
-                    button.gray-button.no-outline(ng-click="OpenNewTab('pdf')") Whitepaper
+                    button.no-outline(ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
+                    button.gray-button.no-outline  Website
+                    button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
         .token-sale-content
             .token-sale-text Token Sale: {{ico.startDate | date:'dd MMM'}} – {{ico.endDate | date:'dd MMM'}}
@@ -73,17 +73,4 @@
 
         hr(style="width:90%; color:#303c49")
 
-        //progress="requirementsProgress", sections="sections", 
         sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallbacks")
-
-
-        //.KYC-requirements-content
-            .KYC-requirements-text KYC Requirements
-            .KYC-requirements-lists(layout="row")
-                .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections")
-                    .item(ng-repeat="item in section")
-                        .bullet(ng-class="{'background-color-squash': !requirementsProgress[item]}")
-                            img(src='assets/images/icons/tick.svg', ng-if="requirementsProgress[item]")
-                            span(ng-show="!requirementsProgress[item]") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
-                        span {{ item }}
-                        sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left: 34px", ng-if="1 === 2")

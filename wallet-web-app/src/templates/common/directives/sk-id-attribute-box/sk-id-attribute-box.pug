@@ -1,46 +1,47 @@
 .sk-box.sk-id-attribute-box
     .default-wrapper
         .header
-            .title(flex) {{data.title}}
-            .plus-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="data.showAddItemButton")
+            .title(flex) {{data.key}}
+            .plus-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="config.showAddItemButton")
                 img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
 
         .description
-            table(ng-if="data.subtitle")
+            table
                 tr
                     td Acceptable documents
                     td
-                        span.fc-white {{data.subtitle}}
+                        span.fc-white You can upload documents which at least contain your personal number, first name, last name, birth date and photo
 
         .h-divider
 
-        .section(ng-repeat="item in data.idAttributeItems")
+        // (ng-repeat="item in data.items[data.defaultItemId]")
+        .section
             .title {{ item.category }}
             .items-container
-                .item(ng-if="checkItemValue(item.items[item.defaultItemId])")
+                .item(ng-if="checkItemValue(defaultItem)")
                     sk-icon(icon="success-box", size-class="icon-size-16x16")
-                    .info-wrapper(ng-class="{selected: item.clicked}")
-                        span(ng-click="item.clicked = !item.clicked") {{ item.type === 'static_data' ? item.items[item.defaultItemId].value : item.items[item.defaultItemId].name }}
-                        .delete-dialog(ng-if="item.clicked", layout="column")
+                    .info-wrapper(ng-class="{selected: defaultItem.clicked}")
+                        span(ng-click="defaultItem.clicked = !defaultItem.clicked") {{ data.type === 'static_data' ? defaultItem.value : defaultItem.name }}
+                        .delete-dialog(ng-if="defaultItem.clicked", layout="column")
                             .header Delete Attribute and History
                             .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
                             .buttons
-                                button.confirm(ng-click="deleteAttribute(item.defaultItemId, item)") Delete attribute
-                                button.cancel(ng-click="item.clicked = false") Cancel Action
+                                button.confirm(ng-click="deleteAttribute(data.defaultItemId, defaultItem)") Delete attribute
+                                button.cancel(ng-click="defaultItem.clicked = false") Cancel Action
 
-                .item(ng-if="!checkItemValue(item.items[item.defaultItemId])", style="margin-top: 30px;")
-                    sk-icon(icon="{{item.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
-                    .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
+                .item(ng-if="!checkItemValue(defaultItem)", style="margin-top: 30px;")
+                    sk-icon(icon="{{data.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
+                    .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', defaultItem)")
                         span {{ item.type }}
-                        span(ng-if="item.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
+                        span(ng-if="data.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
 
             .h-divider
 
-            .section(ng-if="data.showHistory")
+            .section(ng-if="config.showHistory")
                 .title History
                 .items-container
-                    table(ng-init="item.attached = { historyRowCount: config.historyRowCount }")
-                        tr(ng-repeat="(index, step) in item.actionHistory", ng-show="index < item.attached.historyRowCount") 
+                    table(ng-init="data.attached = { historyRowCount: config.historyRowCount }")
+                        tr(ng-repeat="(index, step) in data.actionHistory", ng-show="index < data.attached.historyRowCount") 
                             td.fc-bluey-grey {{step.date | date:'shortDate'}}
                             td.fc-bluey-grey
                                 sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
@@ -50,6 +51,6 @@
                                 span.fc-white {{step.note}}
                                 button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
 
-                    .actions-container(ng-if="item.actionHistory.length > 0")
-                        button(ng-click="item.attached.historyRowCount = item.attached.historyRowCount < item.actionHistory.length ? item.actionHistory.length : config.historyRowCount") {{ item.attached.historyRowCount < item.actionHistory.length ? 'View All History' : 'View Less History '}}
+                    .actions-container(ng-if="data.actionHistory.length > 0")
+                        button(ng-click="data.attached.historyRowCount = data.attached.historyRowCount < data.actionHistory.length ? data.actionHistory.length : config.historyRowCount") {{ data.attached.historyRowCount < data.actionHistory.length ? 'View All History' : 'View Less History '}}
 
