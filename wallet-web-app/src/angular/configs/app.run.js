@@ -67,19 +67,21 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     }
 
     $rootScope.checkTermsAndConditions = () => {
-        let store = ConfigFileService.getStore();
-        if (!store.setup.termsAccepted) {
+        //let store = ConfigFileService.getStore();
+        //if (!store.setup.termsAccepted) {
             $timeout(() => {
                 $mdDialog.show({
-                    controller: 'TermsDialogController',
-                    templateUrl: 'common/dialogs/terms.html',
+                    //controller: 'TermsDialogController',
+                    controller: 'StartupGuideDialogController',
+                    //templateUrl: 'common/dialogs/terms.html',
+                    templateUrl: 'common/dialogs/startup-guide.html',
                     parent: angular.element(document.body),
                     targetEvent: null,
                     clickOutsideToClose: false,
                     fullscreen: true,
                 });
             }, 300);
-        }   
+        //}
     }
 
     /**
