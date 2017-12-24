@@ -1,5 +1,3 @@
-import { setTimeout } from "timers";
-
 function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $mdDialog) {
     'ngInject'
 
@@ -27,9 +25,6 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $mdDialog)
             }
         }, 2000);
     }
-
-
-
 };
 
 export default AddCustomTokenDialogController;
