@@ -21,7 +21,7 @@
                     span OF
                     span $67,300,000 (38%)
                 .buttons-container
-                    button.no-outline(ng-if="icoStatus !== icoStatuses.REQUIREMENTS_MISSING", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
+                    button.no-outline(ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
