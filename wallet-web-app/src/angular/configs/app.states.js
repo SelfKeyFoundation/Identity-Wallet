@@ -219,7 +219,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/setup/completed',
             views: {
                 main: {
-                    templateUrl: 'member/setup/completed.html'
+                    templateUrl: 'member/setup/completed.html',
+                    controller: 'MemberSetupCompletedController'
                 }
             }
         })

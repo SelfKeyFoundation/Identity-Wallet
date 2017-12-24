@@ -27,6 +27,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      * 
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
+        return keyword;
+        
         if (prefix) {
             keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
         }
@@ -46,9 +48,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
             causedBy: error
         }
     }
-
-    $log.debug($rootScope.getTranslation(null, 'holaaa'), "???????");
-    $log.debug($rootScope.getTranslation(null, "test_template", ['giorgio', '10']));
 
     /**
      * global functions
@@ -77,8 +76,17 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                     targetEvent: null,
                     clickOutsideToClose: false,
                     fullscreen: true,
+                }).then(()=>{
+                    $mdDialog.show({
+                        controller: 'StartupGuideDialogController',
+                        templateUrl: 'common/dialogs/startup-guide.html',
+                        parent: angular.element(document.body),
+                        targetEvent: null,
+                        clickOutsideToClose: false,
+                        fullscreen: true,
+                    })
                 });
-            }, 300);
+            }, 600);
         }
     };
 

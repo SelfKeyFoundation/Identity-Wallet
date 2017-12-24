@@ -63,8 +63,8 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       let promise = ElectronService.openFileSelectDialog();
 
-      promise.then((filePath) => {
-        this.importUsingKeystoreFilePath(filePath).then((wallet) => {
+      promise.then((resp) => {
+        this.importUsingKeystoreFilePath(resp.path).then((wallet) => {
           defer.resolve(wallet);
         }).catch((error) => {
           defer.reject($rootScope.buildErrorObject("ERR_IMPORTING_KEYSTORE_FILE", error));

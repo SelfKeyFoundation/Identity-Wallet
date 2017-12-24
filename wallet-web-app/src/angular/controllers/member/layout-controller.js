@@ -2,7 +2,7 @@ import EthUnits from '../../classes/eth-units.js';
 import EthUtils from '../../classes/eth-utils.js';
 import Token from '../../classes/token.js';
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, ConfigFileService, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
     'ngInject'
 
     $log.info('MemberLayoutController');

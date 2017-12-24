@@ -1,36 +1,32 @@
-function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, $state, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController');
+    
+
+    $scope.tempEthUsd = CommonService.numbersAfterComma(($rootScope.wallet.balanceEth * 615), 2);
+    $scope.tempKeysNum = 20000;
+    $scope.tempKeyUsd = CommonService.numbersAfterComma(($scope.tempKeysNum * 0.015), 2);
 
     $scope.tmpData = {
-        total: '1547.445',
+        total: Number($scope.tempEthUsd) + Number($scope.tempKeyUsd),
         totalTitle: 'Tolal value USD',
         items: [{
             title: 'Ethereum',
             subTitle: 'eth',
-            value: 852.56487,
-            color: '#4080ff',
+            value: Number($scope.tempEthUsd),
+            color: '#9c27b0',
             icon: 'eth'
         }, {
-            title: 'Geolem',
-            subTitle: 'gnt',
-            value: 852.56487,
-            color: '#39d9e4'
-        }, {
-            title: 'Augur',
-            subTitle: 'rep',
-            value: 852.56487,
-            color: '#9a4786',
-            icon: 'unk'
-        },{
-            title: 'Tmp a litle long',
-            subTitle: 'rep2',
-            value: 852.56487,
-            color: 'red',
-            icon: 'unk'
+            title: 'Selfkey',
+            subTitle: 'key',
+            icon: 'key',
+            value: Number($scope.tempKeyUsd),
+            color: '#0dc7dd'
         }]
-    }
+    };
+
+    $log.info("pie chart data:", $scope.tmpData);
 
 };
 

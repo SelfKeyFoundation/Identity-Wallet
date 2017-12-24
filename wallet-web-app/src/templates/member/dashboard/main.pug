@@ -6,8 +6,8 @@
 
     // balances
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        sk-token-box(name="Selfkey", symbol="key", value="852.62781", value-in-usd="$44951.44 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
-        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.wallet.balanceEth}}", value-in-usd="$1765.87 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
+        sk-token-box(name="Selfkey", symbol="key", value="{{tempKeysNum}}", value-in-usd="{{tempKeyUsd}} USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
+        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.wallet.balanceEth}}", value-in-usd="{{tempEthUsd}} USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
         sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
 
     // my crypto
