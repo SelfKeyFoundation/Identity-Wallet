@@ -1,10 +1,13 @@
+.back-button-container
+    button
+        span Back
 .ico-list-item-content-wrappper
     .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
         .logo(layout="row")
             sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
-        .documents-needed(layout="row") Documents Needed
+        .documents-needed.docs-yellow(layout="row") Documents Needed
             span
     .ico-list-item-content-wrappper__content-section
         .main-content(layout="row")
