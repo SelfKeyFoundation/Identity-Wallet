@@ -12,7 +12,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
-  const KYC_BASE_URL = 'http://192.168.157.21:8080/';
+  const KYC_BASE_URL = 'http://172.25.255.65:8080/';
 
   /**
    * 

@@ -68,7 +68,7 @@
         h2.proxima.white Upcoming ICOs
 
     .dashboard-content-wrappper__content-section(layout="row", layout-align="start center")
-        sk-ico-item-box(ng-repeat="item in $root.icos.active", ico-data='item')
+        sk-ico-item-box(ng-repeat="item in $root.icos['In Progress']", ico-data='item')
 
     .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
         .sk-button.small(ui-sref="member.marketplace.ico-list")
