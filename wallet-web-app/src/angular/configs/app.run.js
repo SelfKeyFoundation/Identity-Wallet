@@ -79,8 +79,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                     fullscreen: true,
                 });
             }, 300);
-        }   
-    }
+        }
+    };
 
     /**
      * 
