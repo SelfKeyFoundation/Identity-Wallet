@@ -1,8 +1,7 @@
-function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, ConfigFileService, CommonService) {
+function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService) {
     'ngInject'
 
     $log.info('MemberMarketplaceIcoManageRequirementsController', $stateParams);
-    
 
     /**
      * get ico data
