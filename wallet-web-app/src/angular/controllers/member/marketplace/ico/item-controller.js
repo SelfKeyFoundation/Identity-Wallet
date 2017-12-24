@@ -1,12 +1,33 @@
-function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService) {
+function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService) {
     'ngInject'
 
     $log.info('MemberMarketplaceIcoItemController', $stateParams);
     
     /**
+     * 
+     */
+    $scope.view = {
+        showKycRequirements: false,
+        showActionButton: false
+    }
+
+    /**
      * get ico data
      */
     $scope.ico = $stateParams.selected;
+
+    $scope.kycInfo = {
+        organisation: "5a3f53da59cfda9e4639ba71", //$scope.ico.kyc.organisation,
+        template: "507f1f77bcf86cd799439013" //$scope.ico.kyc.template
+    }
+
+    $scope.kycRequirementsCallbacks = {
+        onReady: (error, requirementsList, progress) => {
+            console.log("onReady", error, requirementsList, progress);
+
+
+        }
+    }
 
     $scope.infoStatuses = {
         UNKNOWN: 'unknown',
@@ -60,27 +81,13 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     // 7: screen 40
 
     /**
-     * prepare requirements - check them against local documents
-     */
-    checkRequirementsProgress ();
-
-    /**
-     * prepare chunks - requirement (columns)
-     */
-    $scope.sections = CommonService.chunkArray($scope.ico.kyc.requirements, 3);
-
-    /**
      * 
      */
-    function checkRequirementsProgress () {
-        $scope.requirementsProgress = $scope.ico.checkRequirements(ConfigFileService);
-        $log.info("Requirements Progress", $scope.requirementsProgress);
-        
+    function checkRequirementsProgress (progress) {
         let status = true;
 
-        for(let i in $scope.requirementsProgress) {
-            console.log(i, $scope.requirementsProgress[i])
-            let req = $scope.requirementsProgress[i];
+        for(let i in progress) {
+            let req = progress[i];
             if(!req || (!req.value && !req.path)){
                 status = false;
                 break;

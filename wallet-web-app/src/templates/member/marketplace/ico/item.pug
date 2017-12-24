@@ -70,7 +70,9 @@
         
         hr(style="width:90%; color:#303c49")
         
-        sk-kyc-requirements-box(progress="requirementsProgress", sections="sections")
+        //progress="requirementsProgress", sections="sections", 
+        sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallbacks")
+        
 
         //.KYC-requirements-content
             .KYC-requirements-text KYC Requirements
