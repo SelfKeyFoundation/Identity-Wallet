@@ -227,6 +227,10 @@ angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetu
 import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
 
+import MemberSetupWalletSetupController from './controllers/member/setup/wallet-setup-controller.js';
+angular.module('kyc-wallet').controller('MemberSetupWalletSetupController', MemberSetupWalletSetupController);
+
+
 /**
  * dashboard
  */
