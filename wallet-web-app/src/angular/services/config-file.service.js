@@ -131,8 +131,8 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return idAttributeTypes;
     }
 
-    getIdAttributeType(type) {
-      return idAttributeTypes[type];
+    getIdAttributeType(key) {
+      return idAttributeTypes[key];
     }
 
     setIdAttributeTypes(data) {

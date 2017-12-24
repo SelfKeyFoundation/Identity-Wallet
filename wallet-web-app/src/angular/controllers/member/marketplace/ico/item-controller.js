@@ -1,6 +1,16 @@
 function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService, $window) {
     'ngInject'
 
+    // Token Details View 
+    // 1: Join Ico (if all requirements are ok)
+    // 2: Complete Selfkey ID (if missing any requirements)
+    // 3: Join Ico (after all documents get ready & submited)
+    
+    // 4: show missing documents - (Screen 35)
+    // 5: show message after all document get ready - (Screen 36)
+    // 6: after click (3: Join Token Sale) -> Screen 38
+    // 7: screen 40
+
     $log.info('MemberMarketplaceIcoItemController', $stateParams);
 
     /**
@@ -34,16 +44,26 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
      * get ico data
      */
     $scope.ico = $stateParams.selected;
-    if (typeof $scope.ico.token.totalOnSale === 'number') {
-        $scope.ico.tokenSalePercent = (($scope.ico.token.totalOnSale / $scope.ico.token.total) * 100).toFixed(2);
-    }
-    if ($scope.ico.cap.total && $scope.ico.cap.raised) {
-        $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
-    }
+    $scope.icoProcess = {
+        status: $scope.icoStatuses.REQUIREMENTS_MISSING
+    } 
 
     $scope.isSusbscribed = false;
     $scope.actionInProgress = false;
-
+    
+    $scope.kycProgress = null;
+  
+    normaliseIcoData();
+  
+    function normaliseIcoData(){
+      if (typeof $scope.ico.token.totalOnSale === 'number') {
+        $scope.ico.tokenSalePercent = (($scope.ico.token.totalOnSale / $scope.ico.token.total) * 100).toFixed(2);
+      }
+      if ($scope.ico.cap.total && $scope.ico.cap.raised) {
+          $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
+      }
+    }
+    
     let store = ConfigFileService.getStore();
 
     // check participation
@@ -51,6 +71,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         let subs = store.subscribtions[i];
         if (subs.type === 'ico' && subs.info.symbol === $scope.ico.symbol) {
             $scope.isSusbscribed = true;
+            break;
         }
     }
 
@@ -61,19 +82,15 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
     $scope.kycRequirementsCallbacks = {
         onReady: (error, requirementsList, progress) => {
-            console.log("onReady", error, requirementsList, progress);
+            $scope.kycProgress = progress;
             checkRequirementsProgress(progress);
-
-            if ($scope.isSusbscribed && $scope.icoStatus === $scope.icoStatuses.REQUIREMENTS_MISSING) {
-                $scope.view.showActionButton = false;
-            }
         }
     }
 
     $scope.getActionButtonInfo = () => {
         // //complete-button, join-button, join-ico-button
-        if ($scope.isSusbscribed) {
-            switch ($scope.icoStatus) {
+        if($scope.isSusbscribed){
+            switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
                     return {clazz: 'complete-button', title: 'Complete Selfkey ID'};
                     break;
@@ -96,10 +113,10 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $scope.action = ($event) => {
         $scope.actionInProgress = true;
 
-        if ($scope.isSusbscribed) {
-            switch ($scope.icoStatus) {
+        if($scope.isSusbscribed){
+            switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    $state.go('member.marketplace.ico-manage-requirements', {selected: $scope.ico});
+                    $state.go('member.marketplace.ico-manage-requirements', {selected: $scope.ico, kycProgress: $scope.kycProgress, kycInfo: $scope.kycInfo});
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
                     //return { clazz: 'complete-button', title: 'Submit ID' };
@@ -126,25 +143,12 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
             });
 
             ConfigFileService.save().then((resp) => {
-                $log.info(">>>>", resp);
-
-                // 
-
-            }).finally(() => {
+                $scope.isSusbscribed = true;
+            }).finally(()=>{
                 $scope.actionInProgress = false;
             })
         }
     }
-
-    // Token Details View 
-    // 1: Join Ico (if all requirements are ok)
-    // 2: Complete Selfkey ID (if missing any requirements)
-    // 3: Join Ico (after all documents get ready & submited)
-
-    // 4: show missing documents - (Screen 35)
-    // 5: show message after all document get ready - (Screen 36)
-    // 6: after click (3: Join Token Sale) -> Screen 38
-    // 7: screen 40
 
     /**
      *
@@ -159,7 +163,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
             }
         }
 
-        $scope.icoStatus = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.MISSING_REQUIREMENTS;
+        $scope.icoProcess.status = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.REQUIREMENTS_MISSING;
     }
 
 

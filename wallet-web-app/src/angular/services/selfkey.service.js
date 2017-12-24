@@ -33,20 +33,20 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let defer = $q.defer();
 
       const cache_data = CACHE.getItem(table);
-      if (cache_data && !reload) {
-        defer.resolve(JSON.parse(cache_data));
-      } else {
+      if(reload || !cache_data){
         const apiURL = BASE_URL + table;
-        let promise = $http.get(apiURL);
+        let promise = $http.get(apiURL, { headers: { 'Cache-Control' : 'no-cache' } });
         promise.then((response) => {
-          console.log(">>>>", response);
           CACHE.setItem(table, JSON.stringify(response.data));
           defer.resolve(response.data);
         }).catch((error) => {
           // TODO
           defer.reject(error);
         });
+      }else{
+        defer.resolve(JSON.parse(cache_data));
       }
+
       return defer.promise;
     }
 
@@ -81,7 +81,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let promise = this.retrieveTableData('icos', reload);
       promise.then((data) => {
         let icoDetailsArray = data.ICO_Details;
-        console.log(">>>>>>", data.ICO_Details);
+        console.log("ICO_Details", data.ICO_Details);
 
         for (let i in icoDetailsArray) {
           let item = icoDetailsArray[i].data.fields;

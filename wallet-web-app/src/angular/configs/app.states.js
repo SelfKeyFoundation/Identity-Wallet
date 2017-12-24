@@ -299,7 +299,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                selected: null
+                selected: null,
+                kycProgress: null,
+                kycInfo: null
             }
         })
 
