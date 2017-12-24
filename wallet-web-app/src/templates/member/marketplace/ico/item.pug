@@ -15,64 +15,64 @@
             .token-sale-container(layout="column", flex="35")
                 .text-1
                     span Token Sale ends in
-                    span(style="font-weight: 600") {{icoData.getDaysLeft()}} DAYS
+                    span(style="font-weight: 600") {{ico.daysLeft}} DAYS
                 .text-2
-                    div(style="font-size:20px") $25,679,353
+                    div(style="font-size:20px") {{ico.cap.raised | number}}
                     span OF
-                    span $67,300,000 (38%)
+                    span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
                     button.no-outline(ng-if="icoStatus !== icoStatuses.REQUIREMENTS_MISSING", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
-                    button.gray-button.no-outline  Website
-                    button.gray-button.no-outline  Whitepaper
+                    button.gray-button.no-outline(ng-click="OpenNewTab('web')")  Website
+                    button.gray-button.no-outline(ng-click="OpenNewTab('pdf')") Whitepaper
         hr(style="width:90%; color:#303c49")
         .token-sale-content
-            .token-sale-text Token Sale: 28 Nov – 28 Dec
+            .token-sale-text Token Sale: {{ico.startDate | date:'dd MMM'}} – {{ico.endDate | date:'dd MMM'}}
             .token-sale-lists(layout="row")
                 ul.list-1(flex="50")
                     li
                         span(style="color:#93b0c1; font-size:12px") Ticker:
-                        span &nbsp; Token type: ERC20 ICO
+                        span &nbsp; {{ico.symbol}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Token Price:
-                        span &nbsp; BKX = 0.96 USD (0.00200 ETH)
+                        span &nbsp; {{ico.token.price}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Fundraising Goal:
-                        span &nbsp; 67,300,000 USD (140,000 ETH)
+                        span &nbsp; {{ico.cap.total | number}} USD
                     li
                         span(style="color:#93b0c1; font-size:12px") Sold on pre-sale:
-                        span &nbsp; 20,000,000 USD (40,000 ETH)
+                        span &nbsp; {{ico.token.soldOnPresale | number}} USD
                     li
                         span(style="color:#93b0c1; font-size:12px") Total Tokens:
-                        span &nbsp; 400,000,000
+                        span &nbsp; {{ico.token.total | number}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Available for Token Sale:
-                        span &nbsp; 20%
+                        span &nbsp; {{ico.tokenSalePercent ? (ico.tokenSalePercent + '%') : ico.token.totalOnSale}}
 
                 ul.list-1(flex="50")
                     li
                         span(style="color:#93b0c1; font-size:12px") Whitelist:
-                        span &nbsp; YES (10 OCT – 23 NOV, JOIN )
+                        span &nbsp; {{ico.whitelist}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Know Your Customer (KYC):
-                        span &nbsp; YES
+                        span &nbsp; {{ico.kyc.required ? 'YES' : ''}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Bonus for the First:
                         span &nbsp; TBA
                     li
                         span(style="color:#93b0c1; font-size:12px") Min/Max Personal Cap:
-                        span &nbsp; 0.1 ETH / NO
+                        span &nbsp; {{ico.restrictions.minContribution + '/' + ico.restrictions.maxContribution}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Token Issue:
-                        span &nbsp; AFTER ICO
+                        span &nbsp; {{ico.token.issuance}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Accepts:
-                        span &nbsp; ETH, BTC, LTC, WAVES, SALT, TIME
-        
+                        span(ng-repeat='token in ico.accepts') &nbsp; {{token}}
+
         hr(style="width:90%; color:#303c49")
-        
+
         //progress="requirementsProgress", sections="sections", 
         sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallbacks")
-        
+
 
         //.KYC-requirements-content
             .KYC-requirements-text KYC Requirements
