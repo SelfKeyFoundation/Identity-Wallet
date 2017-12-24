@@ -2,7 +2,7 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 80px;
+  padding-top: 45px;
   margin: 0 auto;
   width: 75%;
   margin-bottom: 40px;
@@ -36,6 +36,22 @@
 
       }
     }
+
+    .docs-yellow {
+      color: #f5a623;
+
+      > span {
+        background-color: #f5a623;
+      }
+    }
+    .docs-green {
+      color: #7ed321;
+
+      > span {
+        background-color: #7ed321;
+      }
+    }
+
     .documents-needed {
       font-family: ProximaNovaRegular;
       font-size: 14px;
@@ -45,7 +61,6 @@
       line-height: 1.14;
       letter-spacing: normal;
       text-align: right;
-      color: #f5a623;
       padding: 20px 0;
 
       > span {
@@ -53,10 +68,8 @@
         width: 12px;
         height: 12px;
         border-radius: 100px;
-        background-color: #f5a623;
         margin-left: 10px;
       }
-
     }
   }
 
@@ -185,7 +198,6 @@
             border-radius: 4px;
           }
 
-
           .gray-button {
 
             border-radius: 4px;
@@ -253,6 +265,36 @@
     > .sk-kyc-requirements-box {
       padding: 30px;
     }
+  }
+}
+
+.back-button-container {
+
+  margin-left: 30px;
+  margin-top: 35px;
+
+  > button {
+    width: 112px;
+    height: 36px;
+    border-radius: 4px;
+    background-color: #232b34;
+    border: solid 1px #3b4a5b;
+    outline: none;
+
+    > span {
+      width: 31px;
+      height: 19px;
+      font-family: ProximaNovaSemibold;
+      font-size: 14px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.36;
+      letter-spacing: normal;
+      text-align: left;
+      color: #93b0c1;
+    }
+
   }
 }
 
