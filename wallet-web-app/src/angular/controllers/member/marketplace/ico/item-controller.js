@@ -1,4 +1,4 @@
-function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService) {
+function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService, $window) {
     'ngInject'
 
     // Token Details View 
@@ -12,7 +12,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     // 7: screen 40
 
     $log.info('MemberMarketplaceIcoItemController', $stateParams);
-    
+
     /**
      * not_participating
      * requirements_missing
@@ -29,7 +29,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     /**
-     * 
+     *
      */
     $scope.view = {
         showKycRequirements: false,
@@ -52,18 +52,29 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $scope.actionInProgress = false;
     
     $scope.kycProgress = null;
-
-    let store = ConfigFileService.getStore();
+  
+    normaliseIcoData();
+  
+    function normaliseIcoData(){
+      if (typeof $scope.ico.token.totalOnSale === 'number') {
+        $scope.ico.tokenSalePercent = (($scope.ico.token.totalOnSale / $scope.ico.token.total) * 100).toFixed(2);
+      }
+      if ($scope.ico.cap.total && $scope.ico.cap.raised) {
+          $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
+      }
+    }
     
+    let store = ConfigFileService.getStore();
+
     // check participation
-    for(let i in store.subscribtions){
+    for (let i in store.subscribtions) {
         let subs = store.subscribtions[i];
-        if(subs.type === 'ico' && subs.info.symbol === $scope.ico.symbol){
+        if (subs.type === 'ico' && subs.info.symbol === $scope.ico.symbol) {
             $scope.isSusbscribed = true;
             break;
         }
     }
-    
+
     $scope.kycInfo = {
         organisation: "5a3f53da59cfda9e4639ba71", //$scope.ico.kyc.organisation,
         template: "507f1f77bcf86cd799439013" //$scope.ico.kyc.template
@@ -71,7 +82,6 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
     $scope.kycRequirementsCallbacks = {
         onReady: (error, requirementsList, progress) => {
-            console.log("onReady", error, requirementsList, progress);
             $scope.kycProgress = progress;
             checkRequirementsProgress(progress);
         }
@@ -82,21 +92,21 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         if($scope.isSusbscribed){
             switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    return { clazz: 'complete-button', title: 'Complete Selfkey ID' };
+                    return {clazz: 'complete-button', title: 'Complete Selfkey ID'};
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
-                    return { clazz: 'complete-button', title: 'Submit ID' };
+                    return {clazz: 'complete-button', title: 'Submit ID'};
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_APPROVED:
-                    return { clazz: 'join-button', title: 'Complete Selfkey ID' };
+                    return {clazz: 'join-button', title: 'Complete Selfkey ID'};
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_REJECTED:
-                    return { clazz: 'complete-button', title: 'Submit ID Again' };
+                    return {clazz: 'complete-button', title: 'Submit ID Again'};
                     break;
                 default:
             }
         } else {
-            return { clazz: 'complete-button', title: 'Participate' };
+            return {clazz: 'complete-button', title: 'Participate'};
         }
     }
 
@@ -119,7 +129,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
                     break;
                 default:
             }
-        }else{
+        } else {
             store.subscribtions.push({
                 "_id": $scope.ico.symbol,
                 "type": "ico",
@@ -132,8 +142,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
                 }
             });
 
-            ConfigFileService.save().then((resp)=>{
-                $log.info(">>>>", resp);
+            ConfigFileService.save().then((resp) => {
                 $scope.isSusbscribed = true;
             }).finally(()=>{
                 $scope.actionInProgress = false;
@@ -142,13 +151,13 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     /**
-     * 
+     *
      */
-    function checkRequirementsProgress (progress) {
+    function checkRequirementsProgress(progress) {
         let status = true;
-        for(let i in progress) {
+        for (let i in progress) {
             let req = progress[i];
-            if(!req || (!req.value && !req.path)){
+            if (!req || (!req.value && !req.path)) {
                 status = false;
                 break;
             }
@@ -157,6 +166,14 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         $scope.icoProcess.status = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.REQUIREMENTS_MISSING;
     }
 
+
+    $scope.OpenNewTab = function (type) {
+        if (type == 'web') {
+            $window.open($scope.ico.website);
+        } else if (type == 'pdf') {
+            $window.open($scope.ico.whitepaper);
+        }
+    }
 };
 
 export default MemberMarketplaceIcoItemController;
