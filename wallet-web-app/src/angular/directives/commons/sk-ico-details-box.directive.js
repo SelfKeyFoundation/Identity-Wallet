@@ -12,10 +12,16 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
             config: "="
         },
         link: (scope, element) => {
-            scope.type = scope.type || 'requirements';
+            scope.type = scope.type || 'info';
 
             scope.config = {
                 showSubmit: true
+            }
+
+            if (scope.ico.cap.raised && scope.ico.cap.total) {
+                scope.ico.cap.remaining = scope.ico.cap.total - scope.ico.cap.raised;
+            } else {
+                scope.ico.cap.remaining = '';
             }
 
             scope.kycRequirementsCallback = {

@@ -28,11 +28,11 @@
         table
             tr
                 td
-                    span.amountValue 43,422.12
+                    span.amountValue {{ico.cap.raised}}
                     br
-                    span.label ETH Collected
+                    span.label USD raised
                 td
-                    span.amountValue 41,252,331
+                    span.amountValue {{ico.cap.remaining}}
                     br
                     span.label BNX Remaining
             tr
@@ -43,17 +43,17 @@
             tr
                 td
                     span.label Price:  
-                    span 0.001518 ETH/ BNC
+                    span {{ico.token.price}}
                 td
                     span.label Min Purchase  
-                    span 0.0001 ETH
+                    span {{ico.restrictions.minContribution}}
             tr
                 td
                     span.label Hard cap: 
-                    span 105,000 ETH
+                    span {{ico.cap.total}}
                 td
                     span.label Total Supply 
-                    span 150,000,000 BNC
+                    span {{ico.token.total}}
 
 
 
