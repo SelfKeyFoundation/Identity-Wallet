@@ -1,5 +1,5 @@
-import IdAttributeItem from '../../../../classes/id-attribute-item.js';
-import IdAttribute from '../../../../classes/id-attribute.js';
+import IdAttributeItem  from '../../../../classes/id-attribute-item.js';
+import IdAttribute      from '../../../../classes/id-attribute.js';
 
 function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService) {
     'ngInject'
@@ -15,16 +15,14 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     $scope.kycProgress = $stateParams.kycProgress;
     $scope.kycInfo = $stateParams.kycInfo;
     
-    $scope.config = { 
+    $scope.idAttrbuteBoxConfig = { 
         historyRowCount: 2,  
         showAddItemButton: false,
         showHistory: false,
         isItemEditable: true,
 
         callback: {
-            itemChanged: (data) => {
-
-            }
+            itemChanged: (data) => {}
         }
     };
 
@@ -57,13 +55,13 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     }
 
     $rootScope.$on('ico:requirements-ready', () => {
-        // show message
         CommonService.showMessage({
             container: messagesContainer,
             type: "info",
-            message: "Success! All Documents are ready - Join ICO"
+            message: "Success! All Documents are ready - Join ICO",
+            closeAfter: 3000
         });
-    })
+    });
 
 };
 

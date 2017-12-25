@@ -5,13 +5,18 @@ function MemberSetupCompletedController($rootScope, $scope, $log, $q, $timeout, 
 
     let store = ConfigFileService.getStore();
     
-    $rootScope.goToSelfkeyIco = (event) => {
+    $scope.goToSelfkeyIco = (event) => {
+        console.log("clicked")
         let ico = null;
         let icos = ConfigFileService.getIcos();
+
         for(let i in icos){
-            if(['key', 'KEY'].indexOf(icos[i].symbol) !== -1){
-                ico = icos[i];
-                break;
+            console.log(i, icos[i]);
+            for(let j in icos[i]){
+                if(['key', 'KEY'].indexOf(icos[i][j].symbol) !== -1){
+                    ico = icos[i][j];
+                    break;
+                }
             }
         }
         if(ico){

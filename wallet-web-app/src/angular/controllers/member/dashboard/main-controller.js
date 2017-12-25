@@ -2,7 +2,6 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
     'ngInject'
 
     $log.info('MemberDashboardMainController');
-    
 
     $scope.tempEthUsd = CommonService.numbersAfterComma(($rootScope.wallet.balanceEth * 615), 2);
     $scope.tempKeysNum = 20000;

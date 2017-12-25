@@ -1,4 +1,4 @@
-.setup-completed(layout-fill, layout="column", layout-align="center center")
+.setup-completed(layout-fill, layout="column", layout-align="center center", style="z-index: 100;")
     .container(layout="row")
         .left-side-container
             .item 
@@ -12,7 +12,7 @@
                 .description 
                     | SelfKey Tokens give you access to out marketplace, they allow you to "stake your identity" with SelfKey Tokens,
                     | which speeds up the verifications process for things you apply to in the SelfKey network such as exchanges and token sales. 
-                button.btn(ng-click="$root.goToSelfkeyIco($event)") Get KEY Tokens    
+                button.btn(ng-click="goToSelfkeyIco($event)") Get KEY Tokens    
                 .border-bottom
             .go-to(ui-sref="member.dashboard.main")
                 span.my-dash Go to My Selfkey Dashboard

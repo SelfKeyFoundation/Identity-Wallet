@@ -15,9 +15,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 
   // temporary stored datas
   let idAttributeTypes = {};
-  let icos = {
-    
-  };
+  let icos = {};
 
   class ConfigFileStore {
 

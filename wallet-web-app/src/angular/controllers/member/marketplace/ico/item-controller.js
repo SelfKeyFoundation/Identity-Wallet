@@ -5,7 +5,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     // 1: Join Ico (if all requirements are ok)
     // 2: Complete Selfkey ID (if missing any requirements)
     // 3: Join Ico (after all documents get ready & submited)
-    
+
     // 4: show missing documents - (Screen 35)
     // 5: show message after all document get ready - (Screen 36)
     // 6: after click (3: Join Token Sale) -> Screen 38
@@ -46,24 +46,17 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $scope.ico = $stateParams.selected;
     $scope.icoProcess = {
         status: $scope.icoStatuses.REQUIREMENTS_MISSING
-    } 
+    }
 
     $scope.isSusbscribed = false;
     $scope.actionInProgress = false;
-    
+
     $scope.kycProgress = null;
-  
+
     normaliseIcoData();
-  
-    function normaliseIcoData(){
-      if (typeof $scope.ico.token.totalOnSale === 'number') {
-        $scope.ico.tokenSalePercent = (($scope.ico.token.totalOnSale / $scope.ico.token.total) * 100).toFixed(2);
-      }
-      if ($scope.ico.cap.total && $scope.ico.cap.raised) {
-          $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
-      }
-    }
-    
+
+
+
     let store = ConfigFileService.getStore();
 
     // check participation
@@ -88,19 +81,19 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.getDecorations = () => {
-        if($scope.isSusbscribed){
+        if ($scope.isSusbscribed) {
             switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    return {clazz: 'orange', title: 'Missing Requirements'};
+                    return { clazz: 'orange', title: 'Missing Requirements' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
-                    return {clazz: 'green', title: 'Requirements Are Ready'};
+                    return { clazz: 'green', title: 'Requirements Are Ready' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_APPROVED:
-                    return {clazz: 'green', title: 'Requirements Are Approved'};
+                    return { clazz: 'green', title: 'Requirements Are Approved' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_REJECTED:
-                    return {clazz: 'red', title: 'Requirements Are Rejected'};
+                    return { clazz: 'red', title: 'Requirements Are Rejected' };
                     break;
                 default:
             }
@@ -109,40 +102,40 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
     $scope.getActionButtonInfo = () => {
         // //complete-button, join-button, join-ico-button
-        if($scope.isSusbscribed){
+        if ($scope.isSusbscribed) {
             switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    return {clazz: 'complete-button', title: 'Complete Selfkey ID'};
+                    return { clazz: 'complete-button', title: 'Complete Selfkey ID' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
-                    return {clazz: 'complete-button', title: 'Submit ID'};
+                    return { clazz: 'complete-button', title: 'Submit ID' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_APPROVED:
-                    return {clazz: 'join-button', title: 'Complete Selfkey ID'};
+                    return { clazz: 'join-button', title: 'Complete Selfkey ID' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_REJECTED:
-                    return {clazz: 'complete-button', title: 'Submit ID Again'};
+                    return { clazz: 'complete-button', title: 'Submit ID Again' };
                     break;
                 default:
             }
         } else {
-            return {clazz: 'complete-button', title: 'Participate'};
+            return { clazz: 'complete-button', title: 'Participate' };
         }
     }
 
     $scope.action = ($event) => {
         $scope.actionInProgress = true;
 
-        if($scope.isSusbscribed){
+        if ($scope.isSusbscribed) {
             switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    $state.go('member.marketplace.ico-manage-requirements', {selected: $scope.ico, kycProgress: $scope.kycProgress, kycInfo: $scope.kycInfo});
+                    $state.go('member.marketplace.ico-manage-requirements', { selected: $scope.ico, kycProgress: $scope.kycProgress, kycInfo: $scope.kycInfo });
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
                     //return { clazz: 'complete-button', title: 'Submit ID' };
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_APPROVED:
-                    $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
+                    $state.go('member.marketplace.ico-accept-terms', { selected: $scope.ico });
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_REJECTED:
                     //return { clazz: 'complete-button', title: 'Submit ID Again' };
@@ -164,7 +157,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
             ConfigFileService.save().then((resp) => {
                 $scope.isSusbscribed = true;
-            }).finally(()=>{
+            }).finally(() => {
                 $scope.actionInProgress = false;
             })
         }
@@ -186,6 +179,14 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         $scope.icoProcess.status = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.REQUIREMENTS_MISSING;
     }
 
+    function normaliseIcoData() {
+        if (typeof $scope.ico.token.totalOnSale === 'number') {
+            $scope.ico.tokenSalePercent = (($scope.ico.token.totalOnSale / $scope.ico.token.total) * 100).toFixed(2);
+        }
+        if ($scope.ico.cap.total && $scope.ico.cap.raised) {
+            $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
+        }
+    }
 
     $scope.OpenNewTab = function (type) {
         if (type == 'web') {

@@ -75,21 +75,31 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
             };
 
             scope.deleteAttribute = (id, clickedItem) => {
+                let store = ConfigFileService.getStore();
                 console.log(id, clickedItem);
 
                 clickedItem.name = null;
                 clickedItem.value = null;
 
+                store.idAttributes[scope.data.key].items[id].name = null;
+                store.idAttributes[scope.data.key].items[id].value = null;
+
                 if(clickedItem.idAttributeType === 'document'){
                     clickedItem.contentType = null;
                     clickedItem.size = null;
+
+                    store.idAttributes[scope.data.key].items[id].contentType = null;
+                    store.idAttributes[scope.data.key].items[id].size = null;
                 }
 
                 delete clickedItem.clicked;
 
                 $log.info('store to save:', store);
 
+                $rootScope.$broadcast('id-attributes-changed', scope.data);
+                
                 return;
+                /*
                 let store = ConfigFileService.getStore();
                 let item = scope.data.idAttributeItems[scope.data.title];
                 console.log(item);
@@ -103,6 +113,7 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                 clickedItem.clicked = false;
                 $log.info('store to save:', store);
+                */
                 // TODO save
             };
 
