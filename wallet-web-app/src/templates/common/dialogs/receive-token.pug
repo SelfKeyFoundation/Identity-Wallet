@@ -2,18 +2,18 @@ md-dialog.receive-token(aira-lable="Receive Dialog")
 
     .receive-token-wrapper
         .receive-token-logo
-            sk-icon(icon="eth",size-class="icon-size-64x64")
+            sk-icon(icon="{{symbol}}",size-class="icon-size-64x64")
         .receive-token-barcode(layout="column", layout-align="center center")
             .barcode-container
-                qrcode(data="0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8", size="185", background="#fff")
+                qrcode(data="{{publicKeyHex}}", size="185", background="#fff")
         .receive-token-address(layout="column")
             .address Your Ethereum Address
-            .public-key {{publicKey}}
+            .public-key {{publicKeyHex}}
         .receive-token-icons(layout="row", layout-align="center center")
-             sk-icon(icon="upload", size-class="icon-size-36x36")
-             sk-icon(icon="upload", size-class="icon-size-36x36")
-             sk-icon(icon="upload", size-class="icon-size-36x36")
-             sk-icon(icon="upload", size-class="icon-size-36x36")
+             sk-icon(icon="copy", size-class="icon-size-36x36")
+             sk-icon(icon="gmail", size-class="icon-size-36x36")
+             sk-icon(icon="print", size-class="icon-size-36x36")
+             sk-icon(icon="share", size-class="icon-size-36x36")
 
 
 
