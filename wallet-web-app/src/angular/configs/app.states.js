@@ -224,6 +224,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.setup.wallet-setup', {
+            url: '/member/setup/wallet-setup',
+            views: {
+                main: {
+                    templateUrl: 'member/setup/wallet-setup.html'
+                }
+            }
+        })
+
         /**
          * Dashboard
          */
