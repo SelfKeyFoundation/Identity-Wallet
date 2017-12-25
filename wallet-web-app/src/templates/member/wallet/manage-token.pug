@@ -1,0 +1,59 @@
+.wallet-manage-token-wrappper(layout="column", layout-align="start center")
+    .header-content
+        .logo-section(layout="row")
+            sk-icon(icon="eth", size-class="icon-size-44x44", style="padding-top:4px")
+            .logo-text
+                span(style="font-size:16px") Ethereum
+                span.initial ETH
+        .price-section
+            span.main-price 2.6789
+            span.secondary-price $951.44 USD
+        hr
+        .coin-address-section
+            span.your-address Your Ethereum Address:
+            .generated-address(layout="row")
+                .address 0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8
+                button.copy-button COPY
+        hr
+        .buttons-section(layout="row")
+            button.action-button(layout="row", ng-click="openReceiveDialog($event, 'receive')")
+                sk-icon(icon="upload", size-class="icon-size-16x16", style="padding-top:2px")
+                span RECEIVE
+            button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, 'eth')")
+                sk-icon(icon="upload", size-class="icon-size-16x16", style="padding-top:2px")
+                span SEND
+    .body-content
+        .activity-text Activity
+        .list
+            .list-item
+                .item-container(layout="row")
+                    .date(flex="5") DEC
+                        span 11
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
+                    .sent-receive(flex="70") sent to Atlas Token Sale
+                    .coin-change(flex="15") - 0.34283
+                hr
+            .list-item
+                .item-container(layout="row")
+                    .date(flex="5") DEC
+                        span 11
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
+                    .sent-receive(flex="70") sent to Atlas Token Sale
+                    .coin-change(flex="15") - 0.34283
+                hr
+            .list-item
+                .item-container(layout="row")
+                    .date(flex="5") DEC
+                        span 11
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
+                    .sent-receive(flex="70") sent to Atlas Token Sale
+                    .coin-change(flex="15") - 0.34283
+                hr
+            .list-item
+                .item-container(layout="row")
+                    .date(flex="5") DEC
+                        span 11
+                    sk-icon(icon="upload", size-class="icon-size-26x26", style="padding-top:2px; text-align:center", flex="10")
+                    .sent-receive(flex="70") sent to Atlas Token Sale
+                    .coin-change(flex="15") - 0.34283
+                hr

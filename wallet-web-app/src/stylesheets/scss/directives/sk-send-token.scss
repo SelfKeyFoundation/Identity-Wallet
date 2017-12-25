@@ -1,0 +1,266 @@
+.sk-blur-background {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    z-index: 100; 
+    
+    //ackground-image: linear-gradient(131deg, #2b3540, #1e262e);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &:before{
+        content:'';
+        opacity: 0.98; 
+        background-image: linear-gradient(131deg, #2b3540, #1e262e);
+
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+    }
+}
+
+.md-track-container {
+    height: 6px !important;
+
+    .md-track {
+        background-color: #232b34 !important;
+        border-radius: 6px;
+    }
+}
+
+.md-thumb-container {
+    .md-thumb {
+        &:after {
+            border-color: #0dc7dd !important;
+            background-color: #0dc7dd !important;
+            box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2);
+        }
+    }
+}
+
+// TODO - rename sk-send-token-box
+.sk-send-ether-box {
+    padding: 90px 30px 40px 30px;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 4px;
+	background-color: #262f39;
+	border: solid 1px #303c49;
+
+    box-shadow: 0 0 16px 1px #15222e;
+
+    input {
+        &::-webkit-input-placeholder {
+            font-family: ProximaNovaRegular;
+            font-size: 40px;
+            font-weight: 300;
+            color: #ffffff
+        }
+    }
+
+    > .sk-icon {
+
+        &:first-of-type {
+            position: absolute;
+            top: -32px;
+            left: calc(50% - 32px);
+        }
+        
+        &:last-of-type {
+            position: absolute;
+            right: -18px;
+            top: -18px;
+        }
+
+    }
+
+    .sk-send-ether-box__recipient-container {
+        display: flex;
+        flex-direction: row;
+
+        .sk-send-ether-box__recipient-container__input {
+            outline-width: 0;
+            background-color: #262f39;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+
+            margin-left: 16px;
+            width: 100%;
+
+            border: none;
+            border-bottom: 2px solid #93b0c1;
+
+            font-family: ProximaNovaRegular;
+            font-size: 20px;
+            color: #a9c5d6;
+
+            &::-webkit-input-placeholder {
+                font-size: 20px;
+                color: #a9c5d6
+            }
+            
+        }
+    }
+
+    .sk-send-ether-box__eth-amount-container {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+
+        margin-top: 50px;
+
+        .sk-button {
+            height: 24px;
+            margin-bottom: 25px;
+        }
+
+        .sk-send-ether-box__eth-amount-container__input {
+            outline-width: 0;
+            background-color: #262f39;
+
+            padding-bottom: 16px;
+            margin-left: 16px;
+
+            width: 100%;
+
+            border: none;
+            border-bottom: 2px solid #93b0c1;
+
+            font-family: ProximaNovaRegular;
+            font-size: 40px;
+            font-weight: 300;
+            color: #ffffff;
+
+            
+        }
+
+        > span {
+            position: absolute;
+            right: 0;
+            bottom: 20px;
+
+            font-family: ProximaNovaRegular;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: left;
+            color: #ffffff;
+            height: 20px;
+        }
+    }
+
+    .sk-send-ether-box__usd-amount-container {
+        display: flex;
+        flex-direction: row;
+
+        margin-top: 16px;
+
+        span {
+            &:first-of-type {
+                font-family: ProximaNovaRegular;
+                font-size: 40px;
+                font-weight: 300;
+                color: #ffffff;
+                margin-left: 58px;
+            }
+
+            &:last-of-type {
+                font-family: ProximaNovaRegular;
+                font-size: 20px;
+                font-weight: 600;
+                text-align: left;
+                color: #ffffff;
+                height: 20px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    .sk-send-ether-box__gas-price-container {
+        .sk-send-ether-box__gas-price-container__header {
+            display: flex;
+            flex-direction: row;
+            margin-top: 50px;
+
+            span {
+                &:nth-of-type(1) {
+                    font-family: ProximaNovaRegular;
+                    font-size: 16px;
+                    color: #93b0c1;
+                    text-transform: uppercase;
+                }
+
+                &:nth-of-type(2) {
+                    font-family: ProximaNovaRegular;
+                    font-size: 18px;
+                    margin-left: 10px;
+                    color: #C5D0DE;
+                }
+            }
+
+            .sk-icon {
+                margin-left: 10px;
+                cursor: pointer;
+            }
+        }
+
+        md-slider {
+            margin: 0;
+        }
+
+        .sk-send-ether-box__gas-price-container__labels {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            span {
+                font-family: ProximaNovaRegular;
+                font-size: 18px;
+                font-weight: 300;
+                color: #93b0c1;
+            }
+        }
+    }
+
+    .sk-send-ether-box__actions-container {
+        display: flex;
+        flex-direction: row;
+        
+        align-items: center;
+        justify-content: space-around;
+
+        margin-top: 46px;
+
+        .sk-button {
+            width: 210px;
+        }
+    }
+}
+
+// TODO
+.tooltip-multiline {
+    height: auto;
+    border-radius: 4px !important;
+	background-color: #262f39 !important;
+    border: solid 1px #303c49 !important;
+    opacity: 1 !important;
+
+    font-family: ProximaNovaRegular !important;
+    font-size: 14px !important;
+	font-weight: 600 !important;
+    line-height: 1.36 !important;
+    
+    padding: 16px !important;
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, ConfigStorageService, IndexedDBService) {
+function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localStorageService) {
   'ngInject';
 
   if (!window.ipcRenderer) return;
@@ -15,6 +15,18 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   let ElectronService = function () {
     this.ipcRenderer = ipcRenderer;
+
+    this.initDataStore = function () {
+      return makeCall('initDataStore');
+    }
+
+    this.readDataStore = function() {
+        return makeCall('readDataStore');
+    }
+
+    this.saveDataStore = function(data) {
+      return makeCall('saveDataStore', { data: data });
+    }
 
     /**
      * 
@@ -34,7 +46,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       return makeCall('checkFileStat', { src: filePath });
     }
 
-    this.openDirectorySelectDialog = function (event) {
+    this.openDirectorySelectDialog = function () {
       return makeCall('openDirectorySelectDialog', null);
     }
 
@@ -51,15 +63,51 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
       });
     }
 
-    this.generateEthereumWallet = function (password, destDir) {
-      return makeCall('signPdf', {
+    this.generateEthereumWallet = function (password, keyStoreSrc) {
+      return makeCall('generateEthereumWallet', {
         password: password,
-        destDir: destDir
+        keyStoreSrc: keyStoreSrc
       });
     }
 
-    this.importEthereumWallet = function (password, walletSrc) {
-      // TODO
+    this.importEthereumWallet = function (address, password, keyStoreSrc) {
+      return makeCall('importEthereumWallet', {
+        address: address,
+        password: password,
+        keyStoreSrc: keyStoreSrc
+      });
+    }
+
+    this.importEtherKeystoreFile = function (filePath) {
+      return makeCall('importEtherKeystoreFile', {
+        filePath: filePath
+      });
+    }
+
+    this.showNotification = function (title, text, options) {
+      return makeCall('showNotification', {
+        title: title,
+        text: text,
+        options: options
+      });
+    }
+
+    this.analytics = function (event, data) {
+      return makeCall('analytics', {
+        event: event,
+        data: data
+      });
+    }
+
+    this.unlockEtherKeystoreObject = function (keystoreObject, password) {
+      return makeCall('unlockEtherKeystoreObject', {
+        keystoreObject: keystoreObject,
+        password: password
+      });
+    }
+
+    this.closeApp = function () {
+      return makeCall('closeApp', {});
     }
   }
 
@@ -68,11 +116,16 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   ipcRenderer.on('ON_READY', (event) => {
     // send configs to electron app
-    ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
+    console.log(event);
+    //ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
   });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
-    listeners[actionId].defer.resolve(data);
+    if (error) {
+      listeners[actionId].defer.reject(error);
+    } else {
+      listeners[actionId].defer.resolve(data);
+    }
     $timeout(() => {
       delete listeners[actionId];
     }, 1000);
@@ -83,7 +136,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
    */
   function makeCall(actionName, data) {
     let defer = $q.defer();
-    let id = IndexedDBService.generateId();
+    let id = generateId();
 
     listeners[id] = {
       defer: $q.defer()
@@ -92,6 +145,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, Config
     ipcRenderer.send("ON_ASYNC_REQUEST", id, actionName, data);
 
     return listeners[id].defer.promise;
+  }
+
+  function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
+    return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
   }
 
   return new ElectronService();

@@ -4,8 +4,56 @@ $primaryColorHovered: #323A44;
 $secondaryColor: #3DB4F8;
 $bgColor: #EFF6F6;
 
+
+$white: #ffffff;
+$grey: #93b0c1;
+
+
 // margins
 $margin-1: 4px;
 $margin-2: 8px;
 $margin-3: 16px;
 $margin-4: 32px;
+
+// fonts
+@font-face {
+    font-family: "OrbitronMedium";
+    src: url("../../assets/fonts/orbitron-medium/orbitron-medium.eot?") format("eot"),
+         url("../../assets/fonts/orbitron-medium/orbitron-medium.woff") format("woff"),
+         url("../../assets/fonts/orbitron-medium/orbitron-medium.ttf")  format("truetype"),
+         url("../../assets/fonts/orbitron-medium/orbitron-medium.svg#Orbitron-Medium") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'ProximaNovaLight';
+	src: url('../../assets/fonts/proxima-nova-light/ProximaNovaLight.eot');
+    src: local('ProximaNovaLight'), 
+        url('../../assets/fonts/proxima-nova-light/ProximaNovaLight.woff') format('woff'), 
+        url('../../assets/fonts/proxima-nova-light/ProximaNovaLight.ttf') format('truetype'),
+        url("../../assets/fonts/proxima-nova-light/ProximaNovaLight.svg") format("svg");
+}
+
+@font-face {
+	font-family: 'ProximaNovaRegular';
+	src: url('../../assets/fonts/proxima-nova-regular/ProximaNovaRegular.eot');
+    src: local('ProximaNovaRegular'), 
+        url('../../assets/fonts/proxima-nova-regular/ProximaNovaRegular.woff') format('woff'), 
+        url('../../assets/fonts/proxima-nova-regular/ProximaNovaRegular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: "ProximaNovaSemibold";
+    src: url("../../assets/fonts/proxima-nova-semibold/proximanova-semibold-webfont.eot?") format("eot"),
+         url("../../assets/fonts/proxima-nova-semibold/proximanova-semibold-webfont.woff") format("woff"),
+         url("../../assets/fonts/proxima-nova-semibold/proximanova-semibold-webfont.ttf")  format("truetype"),
+         url("../../assets/fonts/proxima-nova-semibold/proximanova-semibold-webfont.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'ProximaNovaMedium';
+	src: url('../../assets/fonts/proxima-nova-medium/ProximaNovaRegular.otf');
+}

@@ -1,0 +1,33 @@
+.sk-icon-button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+    > span {
+        text-transform: uppercase;
+        margin-top: 16px;
+        opacity: 0.8;
+        font-family: ProximaNovaRegular;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 0.86;
+        letter-spacing: 0.6px;
+        color: #0dc7dd;
+    }
+
+    background: none;
+    border: none;  
+    outline: none;
+    
+    &:hover {
+        .sk-icon {
+            opacity: 1;
+        }
+        > span {
+            opacity: 1;
+        }
+    }
+}

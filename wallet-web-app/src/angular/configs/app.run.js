@@ -2,34 +2,93 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
 
+    $log.debug('DICTIONARY', DICTIONARY);
+
     /**
      * 
      */
+    $rootScope.viewState = {
+
+    }
+
+    /**
+     * 
+     */
+    $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
 
+    $rootScope.selectedLanguage = "en";
+
+
     /**
      * 
      */
-    AnimationService.init();
+    $rootScope.getTranslation = function (prefix, keyword, args) {
+        return keyword;
+        
+        if (prefix) {
+            keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
+        }
 
-    $rootScope.openUrlInNewWindow = function (url) {
-        window.open(url)
+        let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
+        if (args) {
+            for (let i = 0; i < args.length; i++) {
+                template = template.replace(new RegExp("\\{" + i + "\\}", "g"), args[i]);
+            }
+        }
+        return template;
     }
 
-    $rootScope.test2 = function () {
-        window.open("http://token.selfkey.org/");
+    $rootScope.buildErrorObject = (keyword, error) => {
+        return {
+            message: $rootScope.getTranslation(keyword),
+            causedBy: error
+        }
     }
 
-    $rootScope.test3 = function (event) {
-        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
+    /**
+     * global functions
+     */
+    $rootScope.skipInitialIdAttributesSetup = (event) => {
+        // TODO - mark setup.status as 'skipped'
+        $state.go('member.dashboard.main');
     }
 
-    $timeout(function(){
-      $(".sparkley:first").sparkleh();
-    }, 2000);
+    $rootScope.closeApp = (event) => {
+        ElectronService.closeApp();
+    }
+
+    $rootScope.openSendTokenDialog = (event, token) => {
+        CommonService.showSendTokenDialog(token);
+    }
+
+    $rootScope.checkTermsAndConditions = () => {
+        let store = ConfigFileService.getStore();
+        if (!store.setup.termsAccepted) {
+            $timeout(() => {
+                $mdDialog.show({
+                    controller: 'TermsDialogController',
+                    templateUrl: 'common/dialogs/terms.html',
+                    parent: angular.element(document.body),
+                    targetEvent: null,
+                    clickOutsideToClose: false,
+                    fullscreen: true,
+                }).then(()=>{
+                    $mdDialog.show({
+                        controller: 'StartupGuideDialogController',
+                        templateUrl: 'common/dialogs/startup-guide.html',
+                        parent: angular.element(document.body),
+                        targetEvent: null,
+                        clickOutsideToClose: false,
+                        fullscreen: true,
+                    })
+                });
+            }, 600);
+        }
+    };
 
     /**
      * 
@@ -41,6 +100,13 @@ function AppRun($rootScope, $log, $timeout, CONFIG, AnimationService, ElectronSe
         }
     });
 
+    $interval(() => {
+        if ($rootScope.wallet && $rootScope.wallet.getAddress()) {
+            WalletService.loadBalance();
+        }
+    }, 10000);
+
+    ElectronService.analytics('app-start', new Date().toISOString());
 }
 
 export default AppRun;
