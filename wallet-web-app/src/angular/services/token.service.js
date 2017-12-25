@@ -5,7 +5,7 @@ import EthUtils from '../classes/eth-utils.js';
 
 const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
-function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanService) {
+function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service) {
   'ngInject';
 
   $log.info('TokenService Initialized');
@@ -19,18 +19,8 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
 
     constructor() {
       this.isInitialized = false;
-
-      $interval(()=>{
-        if(loadBalanceQueue.length > 0){
-          let token = loadBalanceQueue[0].token;
-          token.promise = EtherScanService.getEthCall(loadBalanceQueue[0].data);
-          token.promise.then((balanceHex)=>{
-            token.balance = balanceHex;
-            token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
-          });
-          loadBalanceQueue.splice(0, 1);
-        }
-      }, 10);
+      Token.Web3Service = Web3Service;
+      Token.$q = $q;
     }
 
     addTokenToMap(key, token) {
@@ -67,6 +57,22 @@ function TokenService($rootScope, $log, $http, $interval, EVENTS, EtherScanServi
         token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
       });
       */
+    }
+
+    getBalanceBySymbol(userAddress, symbol) {
+      let defer = $q.defer();
+
+      let token = TOKENS_MAP[symbol];
+      let data = token.generateBalanceData(userAddress);
+      
+      token.promise = EtherScanService.getEthCall(data);
+      token.promise.then((balanceHex) => {
+        token.balance = balanceHex;
+        token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
+        defer.resolve(token);
+      });
+
+      return defer.promise;
     }
 
     loadAllbalance(userAddress) {

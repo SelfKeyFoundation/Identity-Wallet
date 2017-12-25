@@ -22,6 +22,11 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     $rootScope.selectedLanguage = "en";
 
+    /**
+     * 
+     */
+    $rootScope.ethUsdPrice = 795;
+    $rootScope.keyUsdPrice = 0.015;
 
     /**
      * 
@@ -63,6 +68,20 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     $rootScope.openSendTokenDialog = (event, token) => {
         CommonService.showSendTokenDialog(token);
+    }
+
+    $rootScope.openReceiveTokenDialog = (event, args) => {
+        return $mdDialog.show({
+            controller: 'ReceiveTokenDialogController',
+            templateUrl: 'common/dialogs/receive-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                args: args
+            }
+        });
     }
 
     $rootScope.checkTermsAndConditions = () => {
