@@ -16,7 +16,7 @@
                 button.copy-button COPY
         hr
         .buttons-section(layout="row")
-            button.action-button(layout="row", ng-click="$root.openReceiveTokenDialog($event, {selectedToken: selectedToken, publicKeyHex: publicKeyHex})")
+            button.action-button(layout="row", ng-click="$root.openReceiveTokenDialog($event, {symbol: symbol, publicKeyHex: publicKeyHex})")
                 sk-icon(icon="coins", size-class="icon-size-16x16", style="padding-top:2px")
                 span RECEIVE
             button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, symbol)")
