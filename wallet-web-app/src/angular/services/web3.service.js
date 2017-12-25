@@ -86,6 +86,15 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
       return defer.promise;
     }
 
+    getTokenBalanceByData(userAddress, data) {
+      let defer = $q.defer();
+
+      // wei
+      Web3Service.waitForTicket(defer, 'call', [{ to: userAddress, data: data }]);
+
+      return defer.promise;
+    }
+
     getEstimateGas(fromAddressHex, toAddressHex, amountHex) {
       let defer = $q.defer();
 

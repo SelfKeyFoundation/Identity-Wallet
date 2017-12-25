@@ -2,13 +2,18 @@
 
 class IdAttribute {
 
-    constructor () {
-        this.key = null;
-        this.category = null;
-        this.type = null;
-        this.entity = [];
+    constructor (key, idAttributeType) {
+        this.key = key;
+        this.category = idAttributeType.category;
+        this.type = idAttributeType.type;
+        this.entity = idAttributeType.entity;
         this.defaultItemId = null;
         this.items = {};
+    }
+
+    setDefaultItem (item) {
+        this.defaultItemId = item._id;
+        this.items[item._id] = item;
     }
 
     addItem (item) {

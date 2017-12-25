@@ -16,6 +16,13 @@ class IdAttributeItem {
             entity: []
         }
     }
+
+    setType(type) {
+        this.idAttributeType.key = type.key;
+        this.idAttributeType.category = type.category;
+        this.idAttributeType.type = type.type;
+        this.idAttributeType.entity = type.entity;
+    }
 }
 
 export default IdAttributeItem;

@@ -13,6 +13,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
+  //const KYC_BASE_URL = 'http://172.25.255.65:8080/';
   const KYC_BASE_URL = 'http://localhost:8080/';
 
   /**
@@ -33,20 +34,20 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let defer = $q.defer();
 
       const cache_data = CACHE.getItem(table);
-      if (cache_data && !reload) {
-        defer.resolve(JSON.parse(cache_data));
-      } else {
+      if(reload || !cache_data){
         const apiURL = BASE_URL + table;
-        let promise = $http.get(apiURL);
+        let promise = $http.get(apiURL, { headers: { 'Cache-Control' : 'no-cache' } });
         promise.then((response) => {
-          console.log(">>>>", response);
           CACHE.setItem(table, JSON.stringify(response.data));
           defer.resolve(response.data);
         }).catch((error) => {
           // TODO
           defer.reject(error);
         });
+      }else{
+        defer.resolve(JSON.parse(cache_data));
       }
+
       return defer.promise;
     }
 
@@ -81,7 +82,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let promise = this.retrieveTableData('icos', reload);
       promise.then((data) => {
         let icoDetailsArray = data.ICO_Details;
-        console.log(">>>>>>", data.ICO_Details);
+        console.log("ICO_Details", data.ICO_Details);
 
         for (let i in icoDetailsArray) {
           let item = icoDetailsArray[i].data.fields;
@@ -106,7 +107,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
           ico.setCap(item.hard_cap_USD, item.raised_USD);
           ico.setRestrictions(item.min_contribution_usd, item.max_contribution_usd, item.restrictions);
-          ico.setKyc(item.kyc, item.kycc_template, item.organisation);
+          ico.setKyc(item.kyc, item.template, item.organisation);
           ico.setVideos(item.youtube_video, null);
 
           ico.setInfo(

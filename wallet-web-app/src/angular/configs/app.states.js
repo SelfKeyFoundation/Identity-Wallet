@@ -7,13 +7,12 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    //$mdThemingProvider.generateThemesOnDemand(true);
-    //$mdTheming.generateTheme('default');
-
-    function checkWallet($rootScope, $q, $state) {
+    function checkWallet($rootScope, $q, $state, TokenService) {
         let defer = $q.defer();
 
         if (!$rootScope.wallet) {
+            TokenService.init();
+
             $state.go('guest.loading');
             defer.reject();
         } else {
@@ -219,7 +218,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/setup/completed',
             views: {
                 main: {
-                    templateUrl: 'member/setup/completed.html'
+                    templateUrl: 'member/setup/completed.html',
+                    controller: 'MemberSetupCompletedController'
                 }
             }
         })
@@ -308,7 +308,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                selected: null
+                selected: null,
+                kycProgress: null,
+                kycInfo: null
             }
         })
 

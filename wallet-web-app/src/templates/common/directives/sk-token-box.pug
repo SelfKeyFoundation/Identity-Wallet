@@ -2,7 +2,7 @@
     .sk-token-box__header(layout="row", layout-align="center start")
         sk-icon(icon="{{symbol}}", size-class="sk-token-box__token")
         sk-double-header.sk-token-box__text(header="{{name}}", sub-header="{{symbol}}", flex)
-        button.sk-icon-button(ui-sref="member.wallet.manage-token({id: 'eth'})")
+        button.sk-icon-button(ui-sref="member.wallet.manage-token({id: symbol})")
             sk-icon(icon="plus", size-class="sk-token-box__plus")
 
     .sk-token-box__body

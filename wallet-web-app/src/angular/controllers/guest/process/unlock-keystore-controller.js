@@ -28,18 +28,6 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         $scope.unlockPromise = WalletService.unlockKeystoreObject($scope.keystorePassword);
         $scope.unlockPromise.then((wallet) => {
             if (wallet.privateKeyHex) {
-
-                /*
-                console.log(SelfkeyService.retrieveKycSessionToken(
-                    wallet.privateKeyHex,
-                    wallet.getPublicKeyHex(),
-                    "g.maisuradze88@gmail.com",
-                    "5a3f53da59cfda9e4639ba71"
-                ).then((resp)=>{
-                    console.log(">>>>>>", resp)
-                }));
-                */
-
                 // go to private key details page
                 $state.go('member.setup.view-keystore');
             }else{
@@ -61,11 +49,6 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             });
         });
     }
-
-    /**
-     * 
-     */
-    $rootScope.checkTermsAndConditions();
 
 };
 

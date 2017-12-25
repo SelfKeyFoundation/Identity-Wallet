@@ -54,7 +54,11 @@ module.exports = function (app) {
         if (!fs.existsSync(storeFilePath)) {
             settings.setAll({
                 setup: {
-                    status: 'in-progress' // in-progress | skipped | done
+                    status: 'in-progress', // in-progress | skipped | done (TODO remove)
+                    guideShown: false,
+                    initialIdAttributesSetup: "in-progress", // in-progress | skipped | done
+                    termsAccepted: false,
+                    icoAdsShown: false
                 },
                 statistics: {
                     appUsed: 0
@@ -73,7 +77,15 @@ module.exports = function (app) {
                         items: {
                             "1": {
                                 _id: "1",
-                                value: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "name",
+                                    "type": "static_data"
+                                }
                             }
                         }
                     },
@@ -86,7 +98,16 @@ module.exports = function (app) {
                         items: {
                             "1": {
                                 _id: "1",
-                                value: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual",
+                                        "company"
+                                    ],
+                                    "key": "email",
+                                    "type": "static_data"
+                                }
                             }
                         }
                     },
@@ -99,7 +120,15 @@ module.exports = function (app) {
                         items: {
                             "1": {
                                 _id: "1",
-                                value: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "phonenumber",
+                                    "type": "static_data"
+                                }
                             }
                         }
                     },
@@ -115,7 +144,15 @@ module.exports = function (app) {
                                 contentType: "",
                                 size: "",
                                 name: "",
-                                path: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "id_document",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "passport",
+                                    "type": "document"
+                                },
                             }
                         }
                     },
@@ -131,7 +168,15 @@ module.exports = function (app) {
                                 contentType: "",
                                 size: "",
                                 name: "",
-                                path: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "id_document",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "national_id",
+                                    "type": "document"
+                                }
                             }
                         }
                     },
@@ -146,11 +191,28 @@ module.exports = function (app) {
                                 contentType: "",
                                 size: "",
                                 name: "",
-                                path: ""
+                                value: "",
+                                "idAttributeType": {
+                                    "category": "proof_of_address",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "utility_bill",
+                                    "type": "document"
+                                }
                             }
                         }
                     }
                 },
+                subscribtions: [],
+                alerts: [
+                    {
+                        createDate: new Date(),
+                        subscribtionId: "0",
+                        text: "Success! Created Basic SelfKey Identity",
+                        type: "notification"
+                    }
+                ],
                 wallets: {}
             });
         }

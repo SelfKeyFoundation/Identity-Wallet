@@ -88,8 +88,16 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
                 $state.go('member.setup.step-3', { step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_6 });
                 break;
             case $rootScope.INITIAL_ID_ATTRIBUTES.REQ_6:
-                // TODO - mark setup.status as 'done'
-                $state.go('member.dashboard.main');
+                
+
+                let store = ConfigFileService.getStore();
+                if(!store.setup.icoAdsShown){
+                    $state.go('member.setup.completed');
+                }else{
+                    // TODO - mark setup.status as 'done'
+                    $state.go('member.dashboard.main');
+                }
+
                 break;
         }
 

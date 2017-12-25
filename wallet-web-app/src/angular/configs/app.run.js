@@ -22,11 +22,18 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     $rootScope.selectedLanguage = "en";
 
+    /**
+     * 
+     */
+    $rootScope.ethUsdPrice = 795;
+    $rootScope.keyUsdPrice = 0.015;
 
     /**
      * 
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
+        return keyword;
+        
         if (prefix) {
             keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
         }
@@ -47,9 +54,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         }
     }
 
-    $log.debug($rootScope.getTranslation(null, 'holaaa'), "???????");
-    $log.debug($rootScope.getTranslation(null, "test_template", ['giorgio', '10']));
-
     /**
      * global functions
      */
@@ -66,6 +70,20 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         CommonService.showSendTokenDialog(token);
     }
 
+    $rootScope.openReceiveTokenDialog = (event, args) => {
+        return $mdDialog.show({
+            controller: 'ReceiveTokenDialogController',
+            templateUrl: 'common/dialogs/receive-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                args: args
+            }
+        });
+    }
+
     $rootScope.checkTermsAndConditions = () => {
         let store = ConfigFileService.getStore();
         if (!store.setup.termsAccepted) {
@@ -77,10 +95,19 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                     targetEvent: null,
                     clickOutsideToClose: false,
                     fullscreen: true,
+                }).then(()=>{
+                    $mdDialog.show({
+                        controller: 'StartupGuideDialogController',
+                        templateUrl: 'common/dialogs/startup-guide.html',
+                        parent: angular.element(document.body),
+                        targetEvent: null,
+                        clickOutsideToClose: false,
+                        fullscreen: true,
+                    })
                 });
-            }, 300);
-        }   
-    }
+            }, 600);
+        }
+    };
 
     /**
      * 

@@ -8,10 +8,10 @@
                     span(ng-show="!progress[item.key]") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
                 span {{ item.key }}
                 sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left: 34px", ng-if="1 === 2")
-        .sk-show-loading(style="color: #0dc7dd;", ng-if="!requirementsListPromise.$$state.status === 0")
-            | Loading
+        .sk-show-loading(style="color: #0dc7dd; margin-top: 20px;", ng-if="requirementsListPromise.$$state.status === 0")
+            | Retrieving data
             span .
             span .
             span .
         
-        span(ng-if="requirementsListPromise.$$state.status === 2") Error while loading kyc requirements
+        span(style="color: red; margin-top: 20px;", ng-if="requirementsListPromise.$$state.status === 2") can't retrieve kyc requirements

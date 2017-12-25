@@ -72,12 +72,16 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
                 // go to unlock state
                 $state.go('guest.process.unlock-keystore');
             }).catch((error)=>{
-                console.log(">>>>>>>>", error);
+                // TODO
             });
         } else {
             $state.go('guest.welcome');
         }
 
+        /**
+         * 
+         */
+        $rootScope.checkTermsAndConditions();
     }).catch((error) => {
         $log.error("error", error);
     });
