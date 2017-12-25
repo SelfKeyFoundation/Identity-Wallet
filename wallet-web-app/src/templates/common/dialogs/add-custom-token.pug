@@ -2,7 +2,7 @@ md-dialog.terms(aira-lable="Dialog Title")
     sk-icon.close-btn(icon="close-button", size-class="icon-size-20x20", ng-click="cancel($event)")
     .add-custom-token
         div(layout-fill, layout="column", layout-align="center center")
-            sk-icon(icon="selfkey", size-class="icon-size-57x65")
+            sk-icon(icon="currency", size-class="icon-size-57x65")
             .header-text Add Custom Token
             .sub-header-text Add ERC20 tokens to your SelfKey Wallet. you will need the token address (smart contract), symbol and decimal value.  
 
@@ -13,7 +13,7 @@ md-dialog.terms(aira-lable="Dialog Title")
                     .sk-input-container()
                         label Address
                             span.addres-info-container() 
-                                sk-icon.info-icon(icon="info-icon", size-class="icon-size-15x15",ng-mouseleave="setShowTooltip(false)",ng-mouseover="setShowTooltip(true)") 
+                                sk-icon.info-icon(icon="info-italic", size-class="icon-size-15x15",ng-mouseleave="setShowTooltip(false)",ng-mouseover="setShowTooltip(true)") 
                                 md-tooltip.sk-tooltip.address-tooltip(md-direction="top",md-visible="showTooltip") 
                                     | <div style="text-align:center;"> You can find the <br />
                                     | address of your token <br /> 
