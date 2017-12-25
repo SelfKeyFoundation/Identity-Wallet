@@ -8,21 +8,26 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
         scope: {
             type: "=",
             ico: '=',
-            kycInfo: "="
+            kycInfo: "=",
+            config: "="
         },
         link: (scope, element) => {
             scope.type = scope.type || 'requirements';
 
+            scope.config = {
+                showSubmit: true
+            }
+
             scope.kycRequirementsCallback = {
                 onReady: (error, requirementsList, progress) => {
                     let missing = false;
-                    for(let i in progress){
-                        if(!progress[i] || !progress[i].value){
+                    for (let i in progress) {
+                        if (!progress[i] || !progress[i].value) {
                             missing = true;
                             break;
                         }
                     }
-                    if(!missing){
+                    if (!missing) {
                         $rootScope.$broadcast('ico:requirements-ready', scope.ico, scope.kycInfo);
                     }
                 }

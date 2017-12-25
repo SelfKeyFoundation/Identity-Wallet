@@ -3,14 +3,20 @@
         sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44")
         span {{ico.company}}
         span(style="font-size: 15px; margin-left: 5px;") ({{ico.category}})
-        span.dot(ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }")
+        button(ng-if="config.showSubmit")
+            span Submit
+        .status-container(ng-if="!config.showSubmit", layout="row", ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }") Requirements Missing
+            span
+
+
+
 
     .sk-ico-details-box__content(ng-if="type === 'requirements'")
         .title
             span Submit Necessary Information
         .description.fc-white
             p In order to join this token sale, you must submit all information required by those with this offering.
-        
+
         hr
 
         sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallback")
@@ -30,7 +36,7 @@
                     br
                     span.label BNX Remaining
             tr
-        
+
         hr
 
         table
