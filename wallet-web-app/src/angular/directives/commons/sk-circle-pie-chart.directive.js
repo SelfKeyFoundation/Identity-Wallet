@@ -97,11 +97,18 @@ function SkCirclePieChartDirective() {
                     if (!sel || !sel[0]) {
                         return;
                     }
+
                     scope.data.items.forEach((item, index) => {
                         if (index != sel[0].row) {
                             addOrRemoveActive({ row: index }, 'removeClass');
+                        }else{
+                            if(scope.data.callback && scope.data.callback.onItemClick){
+                                scope.data.callback.onItemClick(item);
+                            }
                         }
                     });
+
+
                 });
             }
         },

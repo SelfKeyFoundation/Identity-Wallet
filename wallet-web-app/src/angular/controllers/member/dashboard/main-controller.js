@@ -7,7 +7,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
     $scope.tempKeysNum = 20000;
     $scope.tempKeyUsd = CommonService.numbersAfterComma(($scope.tempKeysNum * 0.015), 2);
 
-    $scope.tmpData = {
+    $scope.pieChartData = {
         total: Number($scope.tempEthUsd) + Number($scope.tempKeyUsd),
         totalTitle: 'Tolal value USD',
         items: [{
@@ -22,10 +22,15 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             icon: 'key',
             value: Number($scope.tempKeyUsd),
             color: '#0dc7dd'
-        }]
+        }],
+        callback: {
+            onItemClick: (item) => {
+                console.log("clicked", item);
+            }
+        }
     };
 
-    $log.info("pie chart data:", $scope.tmpData);
+    $log.info("pie chart data:", $scope.pieChartData);
 
 };
 

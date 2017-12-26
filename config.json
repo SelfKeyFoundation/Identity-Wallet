@@ -1,12 +1,12 @@
 {
     "default": {
-        "debug": true,
-        "dev": true,
+        "debug": false,
+        "dev": false,
         "deskmetricsAppId": "b70b7e71f1",
         "app": {
             "name": "IdentityWallet",
             "title": "Identity Wallet",
-            "version": "0.0.3",
+            "version": "0.0.4",
             "description": "Selfkey Identity Wallet",
             "companyName": "Selfkey",
             "productName": "org.selfkey.wallet",
@@ -22,10 +22,8 @@
                 "initialIdAttributes": {
                     "REQ_1": "name",
                     "REQ_2": "email",
-                    "REQ_3": "phonenumber",
-                    "REQ_4": "passport",
-                    "REQ_5": "national_id",
-                    "REQ_6": "utility_bill"
+                    "REQ_3": "proof_of_residence",
+                    "REQ_4": "national_id"
                 }
             }
         },

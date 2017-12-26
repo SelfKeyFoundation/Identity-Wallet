@@ -66,6 +66,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
+    // TODO - change send dialog with new one
     $rootScope.openSendTokenDialog = (event, token) => {
         CommonService.showSendTokenDialog(token);
     }

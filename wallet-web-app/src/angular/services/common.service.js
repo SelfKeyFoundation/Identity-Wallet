@@ -56,6 +56,10 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
 
     //
     showSendTokenDialog(token) {
+      // temporary
+      console.log(token);
+      if(token !== "ETH") return;
+
       const startFragment = '<sk-send-token';
       const endFragment = '></sk-send-token>';
       let middleFrament = ' token="' + token + '"';

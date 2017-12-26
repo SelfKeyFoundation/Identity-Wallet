@@ -68,37 +68,16 @@ module.exports = function (app) {
                     documentsDirectoryPath: documentsDirectoryPath
                 },
                 idAttributes: {
-                    "name": {
-                        key: "name",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual'],
-                        defaultItemId: "1",
-                        items: {
-                            "1": {
-                                _id: "1",
-                                value: "",
-                                "idAttributeType": {
-                                    "category": "global_attribute",
-                                    "entity": [
-                                        "individual"
-                                    ],
-                                    "key": "name",
-                                    "type": "static_data"
-                                }
-                            }
-                        }
-                    },
                     "email": {
-                        key: "Email",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual",
+                            "company"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                value: "",
+                                "_id": "1",
                                 "idAttributeType": {
                                     "category": "global_attribute",
                                     "entity": [
@@ -107,68 +86,46 @@ module.exports = function (app) {
                                     ],
                                     "key": "email",
                                     "type": "static_data"
-                                }
+                                },
+                                "value": ""
                             }
-                        }
+                        },
+                        "key": "email",
+                        "type": "static_data"
                     },
-                    "phonenumber": {
-                        subcategory: "phonenumber",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                    "name": {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                value: "",
+                                "_id": "1",
                                 "idAttributeType": {
                                     "category": "global_attribute",
                                     "entity": [
                                         "individual"
                                     ],
-                                    "key": "phonenumber",
+                                    "key": "name",
                                     "type": "static_data"
-                                }
-                            }
-                        }
-                    },
-                    "passport": {
-                        subcategory: "passport",
-                        category: "id_document",
-                        type: "document",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
-                            "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                value: "",
-                                "idAttributeType": {
-                                    "category": "id_document",
-                                    "entity": [
-                                        "individual"
-                                    ],
-                                    "key": "passport",
-                                    "type": "document"
                                 },
+                                "value": ""
                             }
-                        }
+                        },
+                        "key": "name",
+                        "type": "static_data"
                     },
                     "national_id": {
-                        key: "national_id",
-                        category: "id_document",
-                        type: "document",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                        "category": "id_document",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                value: "",
+                                "_id": "1",
+                                "contentType": "",
                                 "idAttributeType": {
                                     "category": "id_document",
                                     "entity": [
@@ -176,32 +133,46 @@ module.exports = function (app) {
                                     ],
                                     "key": "national_id",
                                     "type": "document"
-                                }
+                                },
+                                "name": "",
+                                "size": null,
+                                "value": ""
                             }
+                        },
+                        "key": "national_id",
+                        "type": "document",
+                        "additional": {
+                            "selfie": true, 
+                            "signature": false, 
+                            "notary": false, 
+                            "certified_true_copy": false
                         }
                     },
-                    "utility_bill": {
-                        key: "utility_bill",
-                        category: "proof_of_address",
-                        type: "document",
-                        defaultItemId: "1",
-                        items: {
+                    "proof_of_residence": {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                value: "",
+                                "_id": "1",
+                                "contentType": "",
                                 "idAttributeType": {
-                                    "category": "proof_of_address",
+                                    "category": "global_attribute",
                                     "entity": [
                                         "individual"
                                     ],
-                                    "key": "utility_bill",
-                                    "type": "document"
-                                }
+                                    "key": "proof_of_residence",
+                                    "type": "static_data"
+                                },
+                                "name": "",
+                                "size": "",
+                                "value": ""
                             }
-                        }
+                        },
+                        "key": "proof_of_residence",
+                        "type": "static_data"
                     }
                 },
                 subscribtions: [],
