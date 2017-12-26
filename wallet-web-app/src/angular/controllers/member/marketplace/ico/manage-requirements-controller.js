@@ -14,7 +14,9 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     $scope.ico = $stateParams.selected;
     $scope.kycProgress = $stateParams.kycProgress;
     $scope.kycInfo = $stateParams.kycInfo;
-    
+
+    $scope.foundUnknownRequirement = false;
+
     $scope.idAttrbuteBoxConfig = { 
         historyRowCount: 2,  
         showAddItemButton: false,
@@ -41,6 +43,11 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
             let idAttribute = store.idAttributes[i];
             if(!idAttribute){
                 let idAttributeType = ConfigFileService.getIdAttributeType(i);
+                
+                if(!idAttributeType){
+                    $scope.foundUnknownRequirement = true;
+                    continue;
+                }
 
                 let idAttributeItem = new IdAttributeItem();
                 idAttributeItem.setType(idAttributeType);

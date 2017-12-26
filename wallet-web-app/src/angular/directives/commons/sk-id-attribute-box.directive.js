@@ -105,24 +105,6 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
                     }
                     $rootScope.$broadcast('id-attributes-changed', scope.data);
                 });
-                
-                return;
-                /*
-                let store = ConfigFileService.getStore();
-                let item = scope.data.idAttributeItems[scope.data.title];
-                console.log(item);
-                if (id !== item.defaultItemId) {
-                    delete item.items[id];
-                    delete store.idAttributes[scope.data.title].items[id];
-                } else {
-                    item.items[id] = { _id: id };
-                    store.idAttributes[scope.data.title].items[id] = { _id: id };
-                }
-
-                clickedItem.clicked = false;
-                $log.info('store to save:', store);
-                */
-                // TODO save
             };
 
             scope.getFileNames = function (files) {
@@ -175,30 +157,3 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
 }
 
 export default SkIdAttributeBoxDirective;
-
-
-/*
-
-
-"subscribtions": [
-        {
-            "_id": "",
-            "createDate": "12-18-2017",
-            "type": "ico",
-            "info": {
-                "symbol": "key",
-                "startDate": "12-30-2017"
-            }
-        }
-    ],
-    "alerts": [
-        {
-            "subscribtionId": "",
-            "createDate": "",
-            "type": "",
-            "text": ""
-        }
-    ],
-
-
-*/

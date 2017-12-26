@@ -15,3 +15,5 @@
             span .
         
         span(style="color: red; margin-top: 20px;", ng-if="requirementsListPromise.$$state.status === 2") can't retrieve kyc requirements
+        span(style="color: red; margin-top: 20px;", ng-if="foundUnknownRequirement") found unknown requirement
+        

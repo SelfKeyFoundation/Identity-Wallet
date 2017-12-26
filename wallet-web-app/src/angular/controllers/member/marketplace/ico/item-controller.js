@@ -75,8 +75,10 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
     $scope.kycRequirementsCallbacks = {
         onReady: (error, requirementsList, progress) => {
-            $scope.kycProgress = progress;
-            checkRequirementsProgress(progress);
+            if(!error){
+                $scope.kycProgress = progress;
+                checkRequirementsProgress(progress);
+            }
         }
     }
 
@@ -129,7 +131,11 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         if ($scope.isSusbscribed) {
             switch ($scope.icoProcess.status) {
                 case $scope.icoStatuses.REQUIREMENTS_MISSING:
-                    $state.go('member.marketplace.ico-manage-requirements', { selected: $scope.ico, kycProgress: $scope.kycProgress, kycInfo: $scope.kycInfo });
+                    $state.go('member.marketplace.ico-manage-requirements', { 
+                        selected: $scope.ico, 
+                        kycProgress: $scope.kycProgress, 
+                        kycInfo: $scope.kycInfo 
+                    });
                     break;
                 case $scope.icoStatuses.REQUIREMENTS_READY:
                     //return { clazz: 'complete-button', title: 'Submit ID' };

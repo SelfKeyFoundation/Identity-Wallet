@@ -124,10 +124,10 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'member/layout.html',
                     controller: 'MemberLayoutController'
                 }
-            }/*,
+            },
             resolve: {
                 checkWallet: checkWallet
-            }*/
+            }
         })
 
         /**
