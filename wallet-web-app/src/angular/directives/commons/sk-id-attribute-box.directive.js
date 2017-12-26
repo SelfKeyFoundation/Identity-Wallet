@@ -53,18 +53,18 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
                     }
 
                     $log.info('store to save:', store);
-                    $rootScope.$broadcast('id-attributes-changed', scope.data);
+                    //$rootScope.$broadcast('id-attributes-changed', scope.data);
                     
-                    /*
+                    
                     ConfigFileService.save().then((resp)=>{
                         // show message
                         if(scope.config.callback && scope.config.callback.itemChanged){
                             scope.config.callback.itemChanged(scope.data);
                         }
 
-                        $rootScope.$broadcast('id-attributes-changed', data);
+                        $rootScope.$broadcast('id-attributes-changed', scope.data);
                     });
-                    */
+                    
                 });
             };
 
@@ -96,7 +96,15 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                 $log.info('store to save:', store);
 
-                $rootScope.$broadcast('id-attributes-changed', scope.data);
+                //$rootScope.$broadcast('id-attributes-changed', scope.data);
+
+                ConfigFileService.save().then((resp)=>{
+                    // show message
+                    if(scope.config.callback && scope.config.callback.itemChanged){
+                        scope.config.callback.itemChanged(scope.data);
+                    }
+                    $rootScope.$broadcast('id-attributes-changed', scope.data);
+                });
                 
                 return;
                 /*
@@ -156,7 +164,7 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 
     $scope.save = () => {
-        if (item.value) {
+        if (item.value && item.name) {
             $mdDialog.hide(item);
         }
     }

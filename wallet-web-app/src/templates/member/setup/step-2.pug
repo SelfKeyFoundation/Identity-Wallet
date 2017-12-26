@@ -37,18 +37,6 @@ div(layout-fill, layout="column", layout-align="center center")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path") 4
                     span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4}}
 
-                .item
-                    .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path")
-                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path") 5
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_5}}
-
-                .item
-                    .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path")
-                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path") 6
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_6}}
-
         div(layout="row", layout-align="center center", style="margin: 0 24px 24px 24px;")
             .sk-button.outline-blue(flex="70", ng-click="nextStep($event, basicInfoForm)")
                 span(style="color: #0dc7dd") Add More Details

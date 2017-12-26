@@ -69,8 +69,8 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.kycInfo = {
-        organisation: "5a3f53da59cfda9e4639ba71",   //$scope.ico.kyc.organisation,
-        template: "507f1f77bcf86cd799439013"        //$scope.ico.kyc.template
+        organisation: $scope.ico.kyc.organisation,
+        template: $scope.ico.kyc.template
     }
 
     $scope.kycRequirementsCallbacks = {
