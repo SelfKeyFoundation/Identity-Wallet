@@ -1,6 +1,7 @@
 'use strict';
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
+import ActionLogItem from '../classes/action-log-item.js';
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
@@ -20,7 +21,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
   class ConfigFileStore {
 
     constructor() {
-
+      ActionLogItem.ConfigFileService = this;
     }
 
     init() {
@@ -145,7 +146,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     }
 
     addIco(status, ico) {
-      if(!icos[status]) {
+      if (!icos[status]) {
         icos[status] = [];
       }
       icos[status].push(ico);

@@ -32,8 +32,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      * 
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
-        return keyword;
-        
         if (prefix) {
             keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
         }

@@ -5,7 +5,7 @@ import EthUtils from '../classes/eth-utils.js';
 
 const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
-function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service) {
+function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service, ConfigFileService) {
   'ngInject';
 
   $log.info('TokenService Initialized');
@@ -19,8 +19,8 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
 
     constructor() {
       this.isInitialized = false;
-      Token.Web3Service = Web3Service;
-      Token.$q = $q;
+
+      $rootScope.TOKEN_MAP = TOKENS_MAP;
     }
 
     addTokenToMap(key, token) {
@@ -36,10 +36,27 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
 
     init() {
       if(!this.isInitialized){
+        /**
+         * default tokens from json data store
+         */
         for (let i in TOKENS_CONTRACT_ARRAY) {
           let t = TOKENS_CONTRACT_ARRAY[i];
           let token = new Token(t.address, t.symbol, Number(t.decimal), t.type);
           this.addTokenToMap(t.symbol, token);
+        }
+
+        /**
+         * custom tokens from - from store
+         */
+        let store = ConfigFileService.getStore();
+        console.log("0000000", store);
+        for(let i in store.tokens){
+          if(store.tokens[i].type === 'custom'){
+            console.log("1111111")
+            let td = store.tokens[i];
+            let token = new Token(td.contract.address, td.contract.symbol, Number(td.contract.decimal), td.contract.type);
+            this.addTokenToMap(i, token);
+          }
         }
         this.isInitialized = true;
       }

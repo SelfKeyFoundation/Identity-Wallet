@@ -74,16 +74,23 @@ class Token {
      * 
      */
     loadBalanceFor(userAddress) {
+        console.log(">>>> loadBalanceFor >>", userAddress)
         let defer = $q.defer();
-        let data = this.generateBalanceData(userAddress);
-        let promise = Web3Service.getTokenBalanceByData(userAddress, this.contractAddress);
 
+        let data = this.generateBalanceData(userAddress);
+        console.log("token balance contract data:", data)
+        
+        
+        let promise = Web3Service.getTokenBalanceByData(data);
+ 
         promise.then((balanceHex) => {
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
+            console.log(this);
             defer.resolve(this);
-        }).catch(() => {
-            defer.reject();
+        }).catch((error) => {
+            console.log(error);
+            defer.reject(error);
         });
 
         return defer.promise;

@@ -57,7 +57,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       return defer.promise;
     }
 
-
     importUsingKeystoreFileDialog() {
       let defer = $q.defer();
 

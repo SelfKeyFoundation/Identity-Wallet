@@ -5,6 +5,7 @@ function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams
 
     let temporaryMap = {
         "key": "Selfkey",
+        "qey": "Selfkey",
         "eth": "Ethereum"
     }
 

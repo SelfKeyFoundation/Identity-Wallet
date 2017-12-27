@@ -16,7 +16,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   //const KYC_BASE_URL = 'http://172.25.255.65:8080/';
   //const KYC_BASE_URL = 'http://localhost:8080/';
   const KYC_BASE_URL = 'https://wallet-demo-api-test.selfkey.org/';
-  
+
 
   /**
    * 
@@ -36,9 +36,9 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let defer = $q.defer();
 
       const cache_data = CACHE.getItem(table);
-      if(reload || !cache_data){
+      if (reload || !cache_data) {
         const apiURL = BASE_URL + table;
-        let promise = $http.get(apiURL, { headers: { 'Cache-Control' : 'no-cache' } });
+        let promise = $http.get(apiURL, { headers: { 'Cache-Control': 'no-cache' } });
         promise.then((response) => {
           CACHE.setItem(table, JSON.stringify(response.data));
           defer.resolve(response.data);
@@ -46,7 +46,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
           // TODO
           defer.reject(error);
         });
-      }else{
+      } else {
         defer.resolve(JSON.parse(cache_data));
       }
 
@@ -131,13 +131,13 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
-    retrieveKycTemplate (organizationId, templateId) {
+    retrieveKycTemplate(organizationId, templateId) {
       let defer = $q.defer();
 
       let promise = $http.get(KYC_BASE_URL + "organization/" + organizationId + "/template/marketplace/" + templateId);
-      promise.then((resp)=>{
+      promise.then((resp) => {
         defer.resolve(resp.data);
-      }).catch((error)=>{
+      }).catch((error) => {
         defer.reject(error);
       });
 
@@ -157,6 +157,10 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
           "email": email
         }).finally(() => {
           $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
+
+            // TODO !!!! check challenge to not be a contract hex !!!!
+            
+
             let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
             $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
               wallet.sessionsStore[organizationId] = resp.data.token;

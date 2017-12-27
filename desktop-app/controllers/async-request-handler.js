@@ -136,17 +136,17 @@ module.exports = function (app) {
                                 },
                                 "name": "",
                                 "size": null,
-                                "value": ""
+                                "value": "",
+                                "addition": {
+                                    "selfie": true, 
+                                    "signature": false, 
+                                    "notary": false, 
+                                    "certified_true_copy": false
+                                }
                             }
                         },
                         "key": "national_id",
-                        "type": "document",
-                        "additional": {
-                            "selfie": true, 
-                            "signature": false, 
-                            "notary": false, 
-                            "certified_true_copy": false
-                        }
+                        "type": "document"
                     },
                     "proof_of_residence": {
                         "category": "global_attribute",
@@ -176,7 +176,7 @@ module.exports = function (app) {
                     }
                 },
                 subscribtions: [],
-                alerts: [
+                actionLogs: [
                     {
                         createDate: new Date(),
                         subscribtionId: "0",
@@ -184,6 +184,22 @@ module.exports = function (app) {
                         type: "notification"
                     }
                 ],
+                tokens: {
+                    eth: {
+                        type: 'default',
+                        lastBalance: 0
+                    },
+                    qei: {
+                        type: 'custom',
+                        lastBalance: 0,
+                        contract: {
+                            address: "0x3e6f45f183492a644db9d3e1fc3fb8d48ea99421",
+                            symbol: "QEY",
+                            decimal: 18,
+                            type: "default"
+                        }
+                    }
+                },
                 wallets: {}
             });
         }
