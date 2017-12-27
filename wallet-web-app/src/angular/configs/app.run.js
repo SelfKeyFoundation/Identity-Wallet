@@ -87,7 +87,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     $rootScope.checkTermsAndConditions = () => {
         let store = ConfigFileService.getStore();
-        if (!store.setup.termsAccepted) {
+        let termsAccepted = store.setup ? store.setup.termsAccepted : false;
+        if (!termsAccepted) {
             $timeout(() => {
                 $mdDialog.show({
                     controller: 'TermsDialogController',

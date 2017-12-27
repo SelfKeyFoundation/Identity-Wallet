@@ -6,6 +6,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
 
     $scope.agree = (event) => {
         let store = ConfigFileService.getStore();
+        store.setup = store.setup || {};
         store.setup.termsAccepted = true;
         $scope.storeSavePromise = ConfigFileService.save();
         $scope.storeSavePromise.then(() => {
