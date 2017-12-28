@@ -25,6 +25,32 @@ class EthUtils {
             return EthUtils.isChecksumAddress(address);
     }
 
+    static signChallenge(challenge, privateKeyHex) {
+        console.log("signChallenge", challenge, privateKeyHex)
+        const hash = ethUtil.sha256(Buffer.from(challenge, 'hex'));
+        let msgHash = ethUtil.hashPersonalMessage(Buffer.from(hash, 'hex'));
+        let signature = ethUtil.ecsign(msgHash, Buffer.from(privateKeyHex, 'hex'));
+
+        return {
+            sig: '0x' + signature.r.toString('hex') + signature.s.toString('hex') + signature.v.toString(),
+            msg: '0x' + msgHash.toString('hex')
+        };
+
+        /*
+        const hash = ethUtil.sha256(Buffer.from(message, 'hex'));
+        
+        //signature = ethUtil.ecsign(msgHash, Buffer.from('56ac03d5164ddd66f50d83b63b6c66261ea94285e81d5e0e2ffdb9f6a439f46f', 'hex'));
+        //signature = '0x' + signature.r.toString('hex') + signature.s.toString('hex') + signature.v.toString();
+
+        let msg         = ethUtil.hashPersonalMessage(Buffer.from(hash, 'hex'));
+        let signed      = ethUtil.ecsign(msg, privateKey);
+        let combined    = Buffer.concat([Buffer.from(signed.r), Buffer.from(signed.s), Buffer.from([signed.v])]);
+        let combinedHex = combined.toString('hex');
+
+        return { hex: '0x' + combinedHex, buffer: combined };
+        */
+    }
+
     static validateHexString (str) {
         if (str == "") return true;
         str = str.substring(0, 2) == '0x' ? str.substring(2).toUpperCase() : str.toUpperCase();
@@ -58,6 +84,11 @@ class EthUtils {
     static decimalToHex (dec) {
         return new BigNumber(dec).toString(16);
     }
+
+    static bufferToHex (buffer) {
+        return ethUtil.bufferToHex(ethUtil.privateToAddress(buffer));
+    }
+
     static hexToDecimal (hex) {
         if(hex == '0x') return 0;
         return new BigNumber(EthUtils.sanitizeHex(hex)).toString();

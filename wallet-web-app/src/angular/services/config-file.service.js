@@ -1,160 +1,222 @@
 'use strict';
+import IdAttributeType from '../classes/id-attribute-type.js';
+import Ico from '../classes/ico.js';
+import ActionLogItem from '../classes/action-log-item.js';
 
-function ConfigFileService($rootScope, $log, $q, CONFIG, ElectronService) {
+// Actually Local Storage Service
+function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
   'ngInject';
 
   $log.debug('ConfigFileService Initialized');
 
-  const PRIVATE_KEYS_STORE = "PrivateKeysStore";
-  const CONTACT_INFOS_STORE = "ContactInfosStore";
-  const DOCUMENTS_STORE = "DocumentsStore";
+  let isReady = false;
 
-  // 1 Load file if exists
-  //   or create default config
-  const defaultConfig = {
-    PrivateKeysStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": { name: "Test Key 1" },
-      "0xd357905d32a29bc346df7d74962f2a5100053d61": { name: "Test Key 2" }
-    },
-    ContactInfosStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": [
-          { id: generateId(), type: 'Phone', value: '+58 441 334 92 67', status: 1, privacy: 1, isDefault: 1 },
-          { id: generateId(), type: 'Email', value: 'cbruguera@gmail.com', status: 1, privacy: 0, isDefault: 1 }
-        ]
-    },
-    DocumentsStore: {
-      "0x5abb838bbb2e566c236f4be6f283541bf8866b68": [
-        { id: generateId(), type: 'Passport', name: 'US Passport', attestations: 1, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 1 },
-        { id: generateId(), type: 'Passport', name: 'Passatore Venezolano', attestations: 0, privacy: 1, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 },
-        { id: generateId(), type: 'Passport', name: 'Cedula De Identidad', attestations: 1, privacy: 0, filePath: '/Users/giorgio/workspace/assets/VamekhBasharuliCV.pdf', isDefault: 0 }
-      ]
-    }
-  };
+  // main store
+  let store = null;
 
-  let memoryStore = defaultConfig;
-  let loading = true;
-  let electronAvailable = ElectronService.ipcRenderer;
-
-  if (electronAvailable) {
-    ElectronService.readConfig().then((data) => {
-      loading = false;
-      console.log("Loading config file", data);
-      
-      if (Object.keys(data).length !== 0) {
-        memoryStore = data;
-      }
-
-      $rootScope.$broadcast('config-file-loaded');
-    }).catch((error) => console.error(error) );
-  }
-  else {
-    console.warn("ElectronService not available");
-    loading = false;
-    $rootScope.$broadcast('config-file-loaded');
-  }
-  
-  
-
-  function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
-    return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
-  }
+  // temporary stored datas
+  let idAttributeTypes = {};
+  let icos = {};
 
   class ConfigFileStore {
-    constructor ($log) {
-      this.generateId = generateId;
+
+    constructor() {
+      ActionLogItem.ConfigFileService = this;
     }
 
-    contactInfos_get (privateKey) {
-      return new Promise((resolve, reject) => {
-        if (loading) {
-          $rootScope.$on('config-file-loaded', function () {
-            const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
-            if (data) {
-              resolve(data);
-            }
-            else {
-              reject('Not found');
-            }
-          });
-        } 
-        else {
-          const data = memoryStore[CONTACT_INFOS_STORE][privateKey];
-          if (data) {
-            resolve(data);
-          }
-          else {
-            reject('Not found');
-          }
-        }
+    init() {
+      let defer = $q.defer();
+
+      if (ElectronService.ipcRenderer) {
+        ElectronService.initDataStore().then((data) => {
+          store = data;
+
+          // custom delay - to make visible loading
+          $timeout(() => {
+            defer.resolve(store);
+            $rootScope.$broadcast('config-file-loaded');
+            isReady = true;
+          }, 3000);
+
+        }).catch((error) => {
+          // TODO
+          defer.reject(error);
+        });
+      } else {
+        defer.reject({ message: 'electron not available' });
+      }
+      return defer.promise;
+    }
+
+    save() {
+      return ElectronService.saveDataStore(store);
+    }
+
+    load() {
+      let defer = $q.defer();
+      ElectronService.readDataStore().then((data) => {
+        store = data;
+        defer.resolve(store);
+      }).catch((error) => {
+        // TODO
+        defer.reject(error);
       });
+      return defer.promise;
     }
 
-    contactInfos_save (privateKey, data) {
-      return new Promise((resolve, reject) => {
-        const key = memoryStore[CONTACT_INFOS_STORE][privateKey];
-
-        if (key) {
-          memoryStore[CONTACT_INFOS_STORE][privateKey] = data;
-
-          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
-            console.log("saved config file", data);
-          });
-
-          resolve(memoryStore[CONTACT_INFOS_STORE][privateKey]);
-        }
-        else {
-          reject('Not found');
-        }
-      });
+    getStore() {
+      return store;
     }
 
-    documents_get (privateKey) {
-      return new Promise((resolve, reject) => {
-        if (loading) {
-          $rootScope.$on('config-file-loaded', function () {
-            const data = memoryStore[DOCUMENTS_STORE][privateKey];
-            if (data) {
-              resolve(data);
-            }
-            else {
-              reject('Not found');
-            }
-          });
-        }
-        else {
-          const data = memoryStore[DOCUMENTS_STORE][privateKey];
-          if (data) {
-            resolve(data);
-          }
-          else {
-            reject('Not found');
-          }
-        }
-      });
+    addIdAttribute(idAttribute) {
+      store.idAttributes[idAttribute.subcategory] = idAttribute;
     }
 
-    documents_save (privateKey, data) {
-      return new Promise((resolve, reject) => {
-        const key = memoryStore[DOCUMENTS_STORE][privateKey];
-
-        if (key) {
-          memoryStore[DOCUMENTS_STORE][privateKey] = data;
-          
-          electronAvailable && ElectronService.saveConfig(memoryStore).then((data) => {
-            console.log("saved config file", data);
-          });
-          
-          resolve(memoryStore[DOCUMENTS_STORE][privateKey]);
-        }
-        else {
-          reject('Not found');
-        }
-      });
+    addItemToIdAttribute(subcategory, item) {
+      if (store.idAttributes[subcategory]) {
+        item._id = CommonService.generateId();
+        store.idAttributes[subcategory][item._id] = item;
+      } else {
+        // throw error
+      }
     }
-    
+
+    findIdAttributeItemById(subcategory, id) {
+      if (store.idAttributes[subcategory]) {
+        return store.idAttributes[subcategory][id];
+      }
+      return null;
+    }
+
+    getDefaultIdAttributeItem(subcategory) {
+      if (!store.idAttributes[subcategory]) {
+        return null;
+      }
+
+      let idAttribute = store.idAttributes[subcategory];
+      return idAttribute.items[idAttribute.defaultItemId];
+    }
+
+    getIdAttribute(subcategory) {
+      return store.idAttributes[subcategory];
+    }
+
+    getWalletPublicKeys() {
+      return Object.keys(store.wallets);
+    }
+
+    getWalletsMetaData() {
+      let keys = this.getWalletPublicKeys();
+      let result = [];
+      for (let i in keys) {
+        let key = keys[i];
+        result.push({
+          name: store.wallets[key].name,
+          keystoreFilePath: store.wallets[key].keystoreFilePath,
+          publicKey: key
+        });
+      }
+      return result;
+    }
+
+    getWalletsMetaDataByPublicKey(publicKey) {
+      return store.wallets[publicKey];
+    }
+
+    /**
+     * 
+     */
+    getIdAttributeTypes() {
+      return idAttributeTypes;
+    }
+
+    getIdAttributeType(key) {
+      return idAttributeTypes[key];
+    }
+
+    setIdAttributeTypes(data) {
+      idAttributeTypes = data;
+    }
+
+    /**
+     * 
+     */
+    getIcos() {
+      return icos;
+    }
+
+    addIco(status, ico) {
+      if (!icos[status]) {
+        icos[status] = [];
+      }
+      icos[status].push(ico);
+    }
+
   }
 
-  return new ConfigFileStore($log);
+  return new ConfigFileStore();
 }
 
 export default ConfigFileService;
+
+
+
+
+//
+
+
+
+
+
+let idAttributes = {
+  "__subcategory": {
+    subcategory: "Telephone Number",
+    type: "Static Data",
+    category: "Global Attribute",
+    defaultItemId: "___id",
+    items: {
+      "___id": {
+        _id: "",
+        value: "+995 551 949414",
+        meta: {
+          subcategory: "Telephone Number",
+          type: "Static Data",
+          category: "Global Attribute"
+        }
+      }
+    }
+  }
+}
+
+let a = {
+  type: "Static Data",
+  category: "Global Attribute",
+  subcategory: "Telephone Number",
+
+  defaultId: "___id",
+
+  items: {
+    "___id": {
+      _id: "",
+      value: "+995 551 949414"
+    }
+  }
+}
+
+let b = {
+  type: "Static Data",
+  category: "Global Attribute",
+  subcategory: "Document",
+
+  defaultId: "",
+
+  items: {
+    "___id": {
+      _id: "",
+      contentType: "",
+      size: "",
+      name: "",
+      path: "+995 551 949414"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "identity-wallet",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Identity Wallet",
   "repository": "https://github.com/kyc-chain/wallet",
   "main": "main.js",
@@ -9,18 +9,21 @@
     "build": "make build"
   },
   "dependencies": {
-    "bignumber.js": "^4.1.0",
+    "bignumber.js": "4.1.0",
     "camelcase": "4.1.0",
-    "electron": "1.7.5",
-    "electron-settings": "^3.1.4",
+    "deskmetrics": "2.3.0-rc7",
+    "electron": "1.7.9",
+    "electron-osx-sign": "0.4.7",
+    "electron-settings": "3.1.4",
     "electron-squirrel-startup": "1.0.0",
-    "ethereumjs-tx": "^1.3.3",
-    "fibers": "^2.0.0",
+    "electron-updater": "2.17.6",
+    "ethereumjs-tx": "1.3.3",
+    "fibers": "2.0.0",
     "keythereum": "1.0.2",
     "lodash": "4.17.4",
+    "mime-types": "^2.1.17",
     "mv": "2.1.1",
-    "node-json-rpc": "0.0.1",
-    "wait.for": "^0.6.6"
+    "node-json-rpc": "0.0.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",
@@ -28,8 +31,8 @@
     "browser-sync": "2.18.13",
     "browserify": "14.4.0",
     "browserify-ngannotate": "2.0.0",
-    "electron-installer-dmg": "0.2.1",
     "electron-installer-debian": "0.6.0",
+    "electron-installer-dmg": "0.2.1",
     "electron-installer-redhat": "0.5.0",
     "electron-packager": "8.7.2",
     "electron-winstaller": "2.6.3",

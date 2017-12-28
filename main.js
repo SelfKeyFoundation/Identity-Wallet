@@ -4,6 +4,8 @@ if (handleSquirrelEvent()) {
   return;
 }
 
+const pkg = require('./package.json');
+
 const fs = require('fs');
 const camelCase = require('camelcase');
 const lodash = require('lodash');
@@ -16,11 +18,13 @@ const i18n = [
  * often used modules list
  */
 const modules = [
-  { 'electron': ['app', 'BrowserWindow', 'dialog', 'remote', 'ipcMain'] },
+  { 'electron': ['app', 'BrowserWindow', 'dialog', 'remote', 'ipcMain', 'autoUpdater', 'Notification'] },
   'mv',
   'fs',
   'path',
-  'url'
+  'url',
+  'deskmetrics',
+  'mime-types'
 ];
 
 // TODO implement
@@ -40,6 +44,7 @@ const initializers = [
  * shared app instance
  */
 let app = {
+  pkg: pkg,
   dir: {
     root: __dirname,
     desktopApp: __dirname + '/desktop-app'

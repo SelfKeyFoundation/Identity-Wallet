@@ -1,0 +1,17 @@
+.sk-circle-pie-chart(layout="row")
+    .chart-parent
+        #chart.animated.fadeIn
+        .chart-center-container.animated.fadeIn(ng-show="chartIsReady")
+            .tolalPrice {{data.total}}
+            .totalPriceTitle {{data.totalTitle}}
+    .details-container.animated.fadeIn(layout="row",ng-show="chartIsReady")        
+        table(ng-repeat="chunk in chunkedItems" )
+            tr(class="item", name="{{item.uniqueIdentifier}}" ng-repeat="item in chunk")
+                td
+                    div(layout="raw")
+                        sk-icon(icon="{{item.icon || 'information-button'}}", size-class="icon-size-44x44")
+                        .title 
+                            .titleFull {{item.title}}
+                            .titleSmall {{item.subTitle}}
+                td
+                    .value {{item.value}}

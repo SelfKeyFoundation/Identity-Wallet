@@ -4,19 +4,39 @@ import BigNumber from 'bignumber.js';
 import EthUtils from './eth-utils.js';
 import CommonUtils from './common-utils.js';
 
+let Web3Service;
+let $q;
+
 class Token {
 
+    /**
+     * 
+     */
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
 
-    constructor(contractAddress, userAddress, symbol, decimal, type) {
+    static set Web3Service(value) { Web3Service = value; }
+    static set $q(value) { $q = value; }
+
+    /**
+     * 
+     * @param {*} contractAddress 
+     * @param {*} symbol 
+     * @param {*} decimal 
+     * @param {*} type 
+     */
+    constructor(contractAddress, symbol, decimal, type) {
         this.contractAddress = contractAddress;
-        this.userAddress = userAddress;
         this.symbol = symbol;
         this.decimal = decimal;
         this.type = type;
-        this.balance = null;
+
+        this.balanceHex = null;
         this.balanceDecimal = null;
+        
+        this.balanceInUsd = null;
+        this.usdPerUnit = null;
+
         this.promise = null;
     }
 
@@ -45,12 +65,50 @@ class Token {
     /**
      * 
      */
+    getBalanceDecimal() {
+        return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
+    }
+
     generateContractData(toAddress, value) {
         return Token.generateContractData(toAddress, value, this.decimal);
     }
 
-    generateBalanceData() {
-        return Token.generateBalanceData(this.userAddress, this.contractAddress);
+    generateBalanceData(userAddress) {
+        return Token.generateBalanceData(userAddress, this.contractAddress);
+    }
+
+    /**
+     * 
+     */
+    loadBalanceFor(userAddress) {
+        console.log(">>>> loadBalanceFor >>", userAddress)
+        let defer = $q.defer();
+
+        let data = this.generateBalanceData(userAddress);
+        console.log("token balance contract data:", data)
+        
+        
+        let promise = Web3Service.getTokenBalanceByData(data);
+ 
+        promise.then((balanceHex) => {
+            this.balanceHex = balanceHex;
+            this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
+            console.log(this);
+            defer.resolve(this);
+        }).catch((error) => {
+            console.log(error);
+            defer.reject(error);
+        });
+
+        return defer.promise;
+    }
+
+    /**
+     * 
+     */
+    updatePriceInUsd(usdPerUnit){
+        this.usdPerUnit = usdPerUnit;
+        this.balanceInUsd = (Number(this.balanceDecimal) * Number(usdPerUnit));
     }
 }
 

@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService, ElectronService, ConfigStorageService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);
@@ -10,14 +10,33 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
     /**
      * 
      */
+    $rootScope.viewState = {
+
+    }
+
+    /**
+     * 
+     */
+    $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
+    $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
 
     $rootScope.selectedLanguage = "en";
 
     /**
      * 
      */
-    $rootScope.getTranslation = function (keyword, args) {
+    $rootScope.ethUsdPrice = 795;
+    $rootScope.keyUsdPrice = 0.015;
+
+    /**
+     * 
+     */
+    $rootScope.getTranslation = function (prefix, keyword, args) {
+        if (prefix) {
+            keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
+        }
+
         let template = DICTIONARY[$rootScope.selectedLanguage][keyword] || 'translation not found';
         if (args) {
             for (let i = 0; i < args.length; i++) {
@@ -34,29 +53,62 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
         }
     }
 
-    $log.debug($rootScope.getTranslation('holaaa'), "???????");
-    $log.debug($rootScope.getTranslation("test_template", ['giorgio', '10']));
-
     /**
-     * 
+     * global functions
      */
-    AnimationService.init();
-
-    $rootScope.openUrlInNewWindow = function (url) {
-        window.open(url)
+    $rootScope.skipInitialIdAttributesSetup = (event) => {
+        // TODO - mark setup.status as 'skipped'
+        $state.go('member.dashboard.main');
     }
 
-    $rootScope.test2 = function () {
-        window.open("http://token.selfkey.org/");
+    $rootScope.closeApp = (event) => {
+        ElectronService.closeApp();
     }
 
-    $rootScope.test3 = function (event) {
-        ElectronService.openUsersDocumentDirectoryChangeDialog(event);
+    // TODO - change send dialog with new one
+    $rootScope.openSendTokenDialog = (event, token) => {
+        CommonService.showSendTokenDialog(token);
     }
 
-    $timeout(function () {
-        $(".sparkley:first").sparkleh();
-    }, 2000);
+    $rootScope.openReceiveTokenDialog = (event, args) => {
+        return $mdDialog.show({
+            controller: 'ReceiveTokenDialogController',
+            templateUrl: 'common/dialogs/receive-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                args: args
+            }
+        });
+    }
+
+    $rootScope.checkTermsAndConditions = () => {
+        let store = ConfigFileService.getStore();
+        let termsAccepted = store.setup ? store.setup.termsAccepted : false;
+        if (!termsAccepted) {
+            $timeout(() => {
+                $mdDialog.show({
+                    controller: 'TermsDialogController',
+                    templateUrl: 'common/dialogs/terms.html',
+                    parent: angular.element(document.body),
+                    targetEvent: null,
+                    clickOutsideToClose: false,
+                    fullscreen: true,
+                }).then(()=>{
+                    $mdDialog.show({
+                        controller: 'StartupGuideDialogController',
+                        templateUrl: 'common/dialogs/startup-guide.html',
+                        parent: angular.element(document.body),
+                        targetEvent: null,
+                        clickOutsideToClose: false,
+                        fullscreen: true,
+                    })
+                });
+            }, 600);
+        }
+    };
 
     /**
      * 
@@ -67,6 +119,14 @@ function AppRun($rootScope, $log, $timeout, DICTIONARY, CONFIG, AnimationService
             ElectronService.sendConfigChange(data);
         }
     });
+
+    $interval(() => {
+        if ($rootScope.wallet && $rootScope.wallet.getAddress()) {
+            WalletService.loadBalance();
+        }
+    }, 10000);
+
+    ElectronService.analytics('app-start', new Date().toISOString());
 }
 
 export default AppRun;
