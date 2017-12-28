@@ -37,6 +37,8 @@ class Token {
         this.balanceInUsd = null;
         this.usdPerUnit = null;
 
+        this.currentOwnerPublicKeyHex = null;
+
         this.promise = null;
     }
 
@@ -62,6 +64,10 @@ class Token {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
+    setOwner (publicKeyHex) {
+        this.currentOwnerPublicKeyHex = publicKeyHex
+    }
+
     /**
      * 
      */
@@ -81,26 +87,29 @@ class Token {
      * 
      */
     loadBalanceFor(userAddress) {
-        console.log(">>>> loadBalanceFor >>", userAddress)
         let defer = $q.defer();
 
         let data = this.generateBalanceData(userAddress);
-        console.log("token balance contract data:", data)
-        
-        
         let promise = Web3Service.getTokenBalanceByData(data);
- 
+
         promise.then((balanceHex) => {
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
-            console.log(this);
+
+            if(this.usdPerUnit){
+                this.updatePriceInUsd(this.usdPerUnit);
+            }
+
             defer.resolve(this);
         }).catch((error) => {
-            console.log(error);
             defer.reject(error);
         });
 
         return defer.promise;
+    }
+
+    loadBalance() {
+        return this.loadBalanceFor(this.currentOwnerPublicKeyHex);
     }
 
     /**
@@ -108,7 +117,7 @@ class Token {
      */
     updatePriceInUsd(usdPerUnit){
         this.usdPerUnit = usdPerUnit;
-        this.balanceInUsd = (Number(this.balanceDecimal) * Number(usdPerUnit));
+        this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
     }
 }
 

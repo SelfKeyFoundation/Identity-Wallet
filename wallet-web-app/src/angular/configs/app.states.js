@@ -7,14 +7,47 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    function checkWallet($rootScope, $q, $state, TokenService) {
+    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService) {
         let defer = $q.defer();
-        
+
         if (!$rootScope.wallet) {
             $state.go('guest.loading');
             defer.reject();
         } else {
-            defer.resolve();
+            /**
+             * 
+             */
+            TokenService.init($rootScope.wallet.getPublicKeyHex());
+            $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
+
+            // 1) TODO - get prices
+
+            // set token prices
+            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice;
+            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice;
+
+            // update balances
+            let ethBalancePromise = $rootScope.wallet.loadBalance();
+            let keyBalancePromise = $rootScope.primaryToken.loadBalance();
+
+            /**
+             * 
+             */
+            $interval(() => {
+                if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
+                    //$rootScope.wallet.loadBalance();
+                }
+            }, 10000); // TODO - take interval from config
+
+            /**
+             * 
+             */
+            $q.all([ethBalancePromise, keyBalancePromise]).then(() => {
+                defer.resolve();
+            }).catch(() => {
+                $state.go('guest.error.offline');
+                defer.reject();
+            });
         }
 
         return defer.promise;
@@ -54,7 +87,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-       
+
 
         // process layout
         .state('guest.process', {
@@ -324,7 +357,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 selected: null
             }
         })
-        
+
         /**
          * Wallet
          */

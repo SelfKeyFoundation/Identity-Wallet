@@ -1,26 +1,24 @@
-function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, $state, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
-    $log.info('MemberDashboardMainController');
+    $log.info('MemberDashboardMainController', $rootScope.wallet.balanceInUsd, $rootScope.primaryToken.balanceInUsd, $rootScope.wallet, $rootScope.primaryToken);
 
-    $scope.tempEthUsd = CommonService.numbersAfterComma(($rootScope.wallet.balanceEth * 615), 2);
-    $scope.tempKeysNum = 20000;
-    $scope.tempKeyUsd = CommonService.numbersAfterComma(($scope.tempKeysNum * 0.015), 2);
+    $scope.totalBalanceInUsd = Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
 
     $scope.pieChartData = {
-        total: Number($scope.tempEthUsd) + Number($scope.tempKeyUsd),
+        total: $filter('number')($scope.totalBalanceInUsd),
         totalTitle: 'Tolal value USD',
         items: [{
             title: 'Ethereum',
             subTitle: 'eth',
-            value: Number($scope.tempEthUsd),
+            value: Number($rootScope.wallet.balanceEth),
             color: '#9c27b0',
             icon: 'eth'
         }, {
             title: 'Selfkey',
             subTitle: 'key',
             icon: 'key',
-            value: Number($scope.tempKeyUsd),
+            value: Number($rootScope.primaryToken.getBalanceDecimal()),
             color: '#0dc7dd'
         }],
         callback: {
@@ -31,7 +29,6 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
     };
 
     $log.info("pie chart data:", $scope.pieChartData);
-
 };
 
 export default MemberDashboardMainController;

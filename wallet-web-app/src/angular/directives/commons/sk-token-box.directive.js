@@ -24,16 +24,16 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
-            if(scope.symbol !== 'eth'){
-                console.log($rootScope.TOKEN_MAP, "<<<<")
+            if (scope.symbol !== 'eth') {
                 scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
-                let promise = scope.token.loadBalanceFor(scope.publicKeyHex);
+                let promise = scope.token.loadBalance();
                 promise.then((token) => {
                     scope.balance = token.getBalanceDecimal();
-                    scope.balanceInUsd = calculateBalanceInUsd(scope.balance, tempPricePerUnit[scope.symbol]);
+                    scope.balanceInUsd = token.balanceInUsd;
+                    console.log("??????", scope.balanceInUsd);
                 });
 
-                
+
                 // test --- generating good tx
                 /*
                 let a = WalletService.generateTokenRawTransaction(
@@ -45,18 +45,21 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 )
                 console.log(a, "<<<<<<<<");
                 */
-                
-                
-            }else{
+
+
+            } else {
                 scope.balance = $rootScope.wallet.balanceEth;
-                scope.balanceInUsd = calculateBalanceInUsd(scope.balance, tempPricePerUnit[scope.symbol]);
+                let promise = $rootScope.wallet.loadBalance();
+                promise.then(() => {
+                    scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
+                });
             }
-            
+
             scope.isJustCopied = false;
 
             scope.copy = (event) => {
                 let el = angular.element(event.target);
-                let selection = $window.getSelection();        
+                let selection = $window.getSelection();
                 let range = document.createRange();
                 range.selectNodeContents(el[0]);
                 selection.removeAllRanges();
@@ -65,10 +68,10 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 let successful = document.execCommand('copy');
                 selection.removeAllRanges();
 
-                if(successful){
+                if (successful) {
                     scope.isJustCopied = true;
 
-                    $timeout(()=>{
+                    $timeout(() => {
                         scope.isJustCopied = false;
                     }, 1000);
                 }
@@ -81,17 +84,6 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
              * 4: update global common map with new value
              * 5: watch on value 
              */
-            
-            
-
-            function calculateBalanceInUsd (balance, pricePerUnit) {
-                balance = (Number(balance) * Number(pricePerUnit));
-                if(balance > 0){
-                    return CommonService.numbersAfterComma(balance, 2);                
-                } else {
-                    return 0;
-                }
-            }
 
         },
         replace: true,

@@ -120,12 +120,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         }
     });
 
-    $interval(() => {
-        if ($rootScope.wallet && $rootScope.wallet.getAddress()) {
-            WalletService.loadBalance();
-        }
-    }, 10000);
-
     ElectronService.analytics('app-start', new Date().toISOString());
 }
 

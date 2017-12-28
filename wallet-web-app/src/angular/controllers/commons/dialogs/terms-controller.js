@@ -31,7 +31,6 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
             if (elem[0].scrollTop >= (wholeHeight - visibleHeight - 50)) {
                 $scope.scrolledBottom = false;
             }
-
         });
     }, 1000)
 };
