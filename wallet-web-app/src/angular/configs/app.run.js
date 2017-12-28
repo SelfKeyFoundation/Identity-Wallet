@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService, TokenService) {
     'ngInject';
 
     $log.debug('DICTIONARY', DICTIONARY);

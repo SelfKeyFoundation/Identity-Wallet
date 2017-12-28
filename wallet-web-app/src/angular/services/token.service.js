@@ -49,10 +49,8 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
          * custom tokens from - from store
          */
         let store = ConfigFileService.getStore();
-        console.log("0000000", store);
         for(let i in store.tokens){
           if(store.tokens[i].type === 'custom'){
-            console.log("1111111")
             let td = store.tokens[i];
             let token = new Token(td.contract.address, td.contract.symbol, Number(td.contract.decimal), td.contract.type);
             this.addTokenToMap(i, token);

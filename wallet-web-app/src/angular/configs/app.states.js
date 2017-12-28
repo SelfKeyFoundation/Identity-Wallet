@@ -9,10 +9,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     function checkWallet($rootScope, $q, $state, TokenService) {
         let defer = $q.defer();
-
+        
         if (!$rootScope.wallet) {
-            TokenService.init();
-
             $state.go('guest.loading');
             defer.reject();
         } else {

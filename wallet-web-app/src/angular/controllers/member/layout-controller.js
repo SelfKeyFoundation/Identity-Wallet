@@ -8,6 +8,11 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
     $log.info('MemberLayoutController');
 
     /**
+     * 
+     */
+    TokenService.init();
+
+    /**
      * selfkey token
      */
     $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
