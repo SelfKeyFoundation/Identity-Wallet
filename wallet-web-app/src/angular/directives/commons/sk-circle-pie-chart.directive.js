@@ -29,8 +29,10 @@ function SkCirclePieChartDirective() {
                 let colors = [];
                 scope.data.items.forEach((item, index) => {
                     item.uniqueIdentifier = getUniqueIdentifier(item, index);
-                    dataItems.push([item.title, item.value]);
-                    colors.push(item.color);
+                    if (item.valueUSD && item.color) {
+                        dataItems.push([item.title, item.valueUSD]);
+                        colors.push(item.color);
+                    }
                 });
                 let processedData = [['Content', 'percents']].concat(dataItems);
                 let data = google.visualization.arrayToDataTable(processedData);
@@ -38,7 +40,7 @@ function SkCirclePieChartDirective() {
                 let options = {
                     backgroundColor: 'transparent',
                     title: "",
-                    chartArea: { left: 10, top: 10, bottom: 10, right: 10 },
+                    chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
                     pieHole: 0.7,
                     pieSliceBorderColor: 'none',
                     colors: colors,

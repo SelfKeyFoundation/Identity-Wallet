@@ -14,6 +14,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             title: 'Ethereum',
             subTitle: 'eth',
             value: Number($scope.tempEthUsd),
+            valueUSD: Number(5),
             color: '#9c27b0',
             icon: 'eth'
         }, {
@@ -21,6 +22,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             subTitle: 'key',
             icon: 'key',
             value: Number($scope.tempKeyUsd),
+            valueUSD: Number(18),
             color: '#0dc7dd'
         }],
         callback: {
