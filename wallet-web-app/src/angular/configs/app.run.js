@@ -19,6 +19,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      */
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
+    $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
 
     $rootScope.selectedLanguage = "en";
 

@@ -5,14 +5,14 @@
     .crypto-price-box(style="margin-right: 10px;")
         .row
             .currency KEY
-            .value 20000
+            .value {{$root.primaryToken.getBalanceDecimal()}}
     .crypto-price-box(style="margin-left: 10px;")
         .row
             .currency ETH
             .value.main {{$root.wallet.balanceEth}}
         .row
             .currency USD
-            .value $1765.87
+            .value ${{ $root.wallet.balanceInUsd | number }}
     .sk-vertical-devider-2(style="height: 40px;")
     .button-box
         button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, 'eth')")

@@ -189,7 +189,7 @@ module.exports = function (app) {
                         type: 'default',
                         lastBalance: 0
                     },
-                    qei: {
+                    qey: {
                         type: 'custom',
                         lastBalance: 0,
                         contract: {

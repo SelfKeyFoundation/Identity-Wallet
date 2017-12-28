@@ -30,7 +30,8 @@
                     "signature": "addition_with_signature",
                     "notary": "addition_with_notary",
                     "certified_true_copy": "addition_with_certified_true_copy"
-                }
+                },
+                "primaryToken": "qey"
             }
         },
         "package": {

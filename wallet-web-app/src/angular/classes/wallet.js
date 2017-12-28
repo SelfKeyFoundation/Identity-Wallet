@@ -9,6 +9,9 @@ class Wallet {
         
         this.balanceWei = 0;
         this.balanceEth = 0;
+
+        this.balanceInUsd = null;
+        this.usdPerUnit = null;
     }
 
     setPrivateKey (privateKey) {
@@ -30,6 +33,14 @@ class Wallet {
 
     getAddress () {
         return this.keystoreObject.address;
+    }
+
+    /**
+     * 
+     */
+    updatePriceInUsd(usdPerUnit){
+        this.usdPerUnit = usdPerUnit;
+        this.balanceInUsd = (Number(this.balanceEth) * Number(usdPerUnit));
     }
 }
 

@@ -33,6 +33,9 @@ class Token {
 
         this.balanceHex = null;
         this.balanceDecimal = null;
+        
+        this.balanceInUsd = null;
+        this.usdPerUnit = null;
 
         this.promise = null;
     }
@@ -62,6 +65,10 @@ class Token {
     /**
      * 
      */
+    getBalanceDecimal() {
+        return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
+    }
+
     generateContractData(toAddress, value) {
         return Token.generateContractData(toAddress, value, this.decimal);
     }
@@ -94,6 +101,14 @@ class Token {
         });
 
         return defer.promise;
+    }
+
+    /**
+     * 
+     */
+    updatePriceInUsd(usdPerUnit){
+        this.usdPerUnit = usdPerUnit;
+        this.balanceInUsd = (Number(this.balanceDecimal) * Number(usdPerUnit));
     }
 }
 

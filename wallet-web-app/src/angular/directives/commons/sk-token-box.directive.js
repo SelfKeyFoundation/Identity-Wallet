@@ -29,22 +29,24 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
                 let promise = scope.token.loadBalanceFor(scope.publicKeyHex);
                 promise.then((token) => {
-                    scope.balance = new BigNumber(token.balanceDecimal).div(new BigNumber(10).pow(scope.token.decimal)).toString();
+                    scope.balance = token.getBalanceDecimal();
                     scope.balanceInUsd = calculateBalanceInUsd(scope.balance, tempPricePerUnit[scope.symbol]);
                 });
 
+                
+                // test --- generating good tx
                 /*
-                // test
                 let a = WalletService.generateTokenRawTransaction(
                     "0x4e7776ce0510778f44e8d43fa2d4d13b5d3930d5",
                     10000,
                     35000000000,
-                    250000,
-                    "qey"
+                    150000,
+                    "QEY"
                 )
-
                 console.log(a, "<<<<<<<<");
                 */
+                
+                
             }else{
                 scope.balance = $rootScope.wallet.balanceEth;
                 scope.balanceInUsd = calculateBalanceInUsd(scope.balance, tempPricePerUnit[scope.symbol]);
