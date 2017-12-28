@@ -12,6 +12,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             title: 'Ethereum',
             subTitle: 'eth',
             value: Number($rootScope.wallet.balanceEth),
+            valueUSD: Number($rootScope.wallet.balanceInUsd),
             color: '#9c27b0',
             icon: 'eth'
         }, {
@@ -19,6 +20,7 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             subTitle: 'key',
             icon: 'key',
             value: Number($rootScope.primaryToken.getBalanceDecimal()),
+            valueUSD: Number($rootScope.primaryToken.balanceInUsd),
             color: '#0dc7dd'
         }],
         callback: {
