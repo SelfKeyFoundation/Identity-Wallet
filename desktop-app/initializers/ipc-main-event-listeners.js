@@ -9,6 +9,7 @@ module.exports = {
 
         app.modules.electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
             console.log('ON_ASYNC_REQUEST', actionId, actionName);
+            // TODO - check method exists
             app.controllers.asyncRequestHandler[actionName](event, actionId, actionName, args);
         });
 

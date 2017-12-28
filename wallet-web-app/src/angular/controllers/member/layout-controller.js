@@ -1,26 +1,46 @@
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, ElectronService, ConfigStorageService, CommonService, EtherscanService, EtherUnitsService) {
+import EthUnits from '../../classes/eth-units.js';
+import EthUtils from '../../classes/eth-utils.js';
+import Token from '../../classes/token.js';
+
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, ConfigFileService, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
     'ngInject'
 
     $log.info('MemberLayoutController');
 
-    if (!ConfigStorageService.APP_OPEN_COUNT || ConfigStorageService.APP_OPEN_COUNT === 0) {
-        var promise = CommonService.openUserAgreementDialog(true);
-        promise.then(() => {
-            if (!ConfigStorageService.USER_DOCUMENTS_STORAGE_PATH && ElectronService.ipcRenderer) {
-                CommonService.openChooseUserDirectoryDialog(false);
-            }
+    /**
+     * selfkey token
+     */
+    $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
+    $rootScope.primaryToken.loadBalanceFor($rootScope.wallet.getPublicKeyHex());
+    $rootScope.primaryToken.updatePriceInUsd($rootScope.keyUsdPrice);
+
+    /**
+     * Eth
+     */
+    $rootScope.wallet.updatePriceInUsd($rootScope.ethUsdPrice);
+
+    $scope.openRightSidenav = () => {
+        $mdSidenav('right').toggle().then(() => {
+            $log.debug("toggle " + "right" + " is done");
         });
     }
 
-    ConfigStorageService.APP_OPEN_COUNT++;
-    ConfigStorageService.setAppOpenCount(ConfigStorageService.APP_OPEN_COUNT);
+    $rootScope.goToSelfkeyIco = (event) => {
+        let ico = null;
+        let icos = ConfigFileService.getIcos();
+        for(let i in icos){
+            for(let j in icos[i]){
+                if(['key', 'KEY'].indexOf(icos[i][j].symbol) !== -1){
+                    ico = icos[i][j];
+                    break;
+                }
+            }
+        }
+        if(ico){
+            $state.go('member.marketplace.ico-item', {selected: ico})
+        }
+    }
 
-    
-    let testPromise = EtherscanService.getBalance('0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb');
-    testPromise.then((response) => {
-        let a = EtherUnitsService.toEther(response.data.result, 'wei');
-        console.log(a);
-    });
 };
 
 export default MemberLayoutController;

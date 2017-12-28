@@ -1,0 +1,44 @@
+div(layout-fill, layout="column", layout-align="center center")
+
+    div(layout="column", layout-align="center start", style="width: 45%;")
+        .sk-blue-header-text Welcome to SelfKey
+        .sk-text We’ll need some basic information from you to get setup.
+        .sk-text Please have these items ready.
+
+    #message-container(layout="column", layout-align="center center" style="width: 45%; height: 48px;")
+
+    .sk-box.shadowed(style="width: 45%;")
+        .content(name="basicInfoForm", layout="column", style="padding: 24px;")
+            .sk-text.header ID Wallet Checklist
+            .sk-text.sub-header If you’re not ready, you can do this later.
+
+            .sk-list(style="margin-top: 28px;")
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value") 1
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_1}}
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value") 2
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_2}}
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value") 3
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_3}}
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path")
+                        span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path") 4
+                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4}}
+
+        div(layout="row", layout-align="center center", style="margin: 0 24px 24px 24px;")
+            .sk-button.outline-blue(flex="70", ng-click="nextStep($event, basicInfoForm)")
+                span(style="color: #0dc7dd") Add More Details
+            .sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
+

@@ -1,16 +1,8 @@
 'use strict';
 
 const AppDictionaryConstant = {
-    buttons: {
-        login: {
-            en: "login",
-            ge: "შესვლა"
-        },
-        logout: {
-            en: "logout",
-            ge: "გამოსვლა"
-        }
-    }
+    en: require('../../../../i18n/en.js'),
+    ge: require('../../../../i18n/ge.js'),
 };
 
 export default AppDictionaryConstant;
