@@ -28,7 +28,7 @@ module.exports = (gulp, path, watch, runSequence) => {
             .src(configElectronTemplateSrc)
             .pipe(rename('config.electron.js'))
             .pipe(replace({global: configFileData[env], prefix: '<%', suffix: '%>'}))
-            .pipe(gulp.dest(path.resolve(__dirname, '../../../')))
+            .pipe(gulp.dest(path.resolve(__dirname, '../../../desktop-app/')))
             .on('end', () => { cb(); });
     });
     

@@ -1,6 +1,9 @@
+'use strict';
+
+const fs = require('fs');
+
 module.exports = function (app) {
     let controller = {};
-    let fs = app.modules.fs;
 
     controller.copyFile = function (source, target, cb) {
         var cbCalled = false;
@@ -54,4 +57,4 @@ module.exports = function (app) {
     }
 
     return controller;
-}
+};
