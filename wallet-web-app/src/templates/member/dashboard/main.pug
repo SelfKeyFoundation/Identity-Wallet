@@ -19,7 +19,7 @@
                     span(style="margin: 0 12px 0 0; color: #93b0c1;") Get KEY
                     sk-icon(icon="plus", size-class="icon-size-26x26")
             .sk-horizontal-devider(style="margin-top: 20px;")
-            sk-circle-pie-chart(data="pieChartData", style="padding-top: 30px;")
+            sk-circle-pie-chart(data="pieChartData", actions="pieChartActions" style="padding-top: 30px;", ng-hide="totalBalanceInUsd <= 0")
 
     // alerts
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")

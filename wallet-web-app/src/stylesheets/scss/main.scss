@@ -35,7 +35,7 @@
 @import './directives/sk-circle-pie-chart.scss';
 @import './directives/sk-wallet-history-item.scss';
 @import './directives/sk-reminders-box.scss';
-@import './directives/sk-alerts-box.scss';
+@import './directives/sk-action-logs-box.scss';
 @import './directives/sk-wallet-general-info-box.scss';
 @import './directives/sk-id-attribute-box.scss';
 @import './directives/sk-ico-item-box.scss';
@@ -56,6 +56,7 @@
 @import './dialogs/terms.scss';
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
+@import './dialogs/send-token.scss';
 @import './dialogs/add-custom-token.scss';
 
 @import './views/setup/step-1.scss';

@@ -1,4 +1,4 @@
-.sk-alerts-box {
+.sk-action-logs-box {
     border-radius: 4px;
 	background-color: #262f39;
     border: solid 1px #303c49;
@@ -6,21 +6,21 @@
 
     flex-direction: column;
     
-    .sk-alerts-box__title {
+    .title {
         font-family: ProximaNovaRegular;
         font-size: 18px;
         font-weight: 600;
         color: #ffffff;
     }
 
-    .sk-alerts-box__item {
+    .item {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         font-family: ProximaNovaRegular;
         font-size: 18px;
 
-        .sk-alerts-box__item__header {
+        .header {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -32,7 +32,7 @@
             font-size: 16px;
             outline: none;
 
-            .sk-alerts-box__item__header__date {
+            .date {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -42,7 +42,7 @@
                 margin-left: 20px;
             }
 
-            .sk-alerts-box__item__header__text {
+            .text {
                 margin-left: 10px;
 
                 span {

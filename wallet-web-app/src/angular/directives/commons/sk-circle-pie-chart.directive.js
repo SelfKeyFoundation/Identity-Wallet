@@ -5,7 +5,8 @@ function SkCirclePieChartDirective() {
     return {
         restrict: 'E',
         scope: {
-            data: '='
+            data: '=',
+            actions: "="
         },
         link: (scope, element) => {
             let chunk = function (arr, chunk) {
@@ -64,6 +65,11 @@ function SkCirclePieChartDirective() {
                 });
 
                 chart.draw(data, options);
+
+
+                scope.actions.reDraw = () => {
+                    chart.draw(data, options);
+                }
 
                 let addOrRemoveActive = (chartItem, fn) => {
                     let index = chartItem.row;

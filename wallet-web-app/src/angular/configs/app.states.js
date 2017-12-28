@@ -35,7 +35,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
              */
             $interval(() => {
                 if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
-                    //$rootScope.wallet.loadBalance();
+                    $rootScope.wallet.loadBalance();
                 }
             }, 10000); // TODO - take interval from config
 

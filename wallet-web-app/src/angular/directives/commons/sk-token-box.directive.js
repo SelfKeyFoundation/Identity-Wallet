@@ -30,23 +30,7 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 promise.then((token) => {
                     scope.balance = token.getBalanceDecimal();
                     scope.balanceInUsd = token.balanceInUsd;
-                    console.log("??????", scope.balanceInUsd);
                 });
-
-
-                // test --- generating good tx
-                /*
-                let a = WalletService.generateTokenRawTransaction(
-                    "0x4e7776ce0510778f44e8d43fa2d4d13b5d3930d5",
-                    10000,
-                    35000000000,
-                    150000,
-                    "QEY"
-                )
-                console.log(a, "<<<<<<<<");
-                */
-
-
             } else {
                 scope.balance = $rootScope.wallet.balanceEth;
                 let promise = $rootScope.wallet.loadBalance();
@@ -85,6 +69,11 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
              * 5: watch on value 
              */
 
+             /*
+             $interval(()=>{
+                $rootScope.primaryToken.loadBalance();
+             }, 10000)
+             */
         },
         replace: true,
         templateUrl: 'common/directives/sk-token-box.html'

@@ -67,7 +67,21 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     // TODO - change send dialog with new one
     $rootScope.openSendTokenDialog = (event, token) => {
-        CommonService.showSendTokenDialog(token);
+        //CommonService.showSendTokenDialog(token);
+        return $mdDialog.show({
+            controller: 'SendTokenDialogController',
+            templateUrl: 'common/dialogs/send-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                args: {
+                    token: token,
+                    publicKeyHex: $rootScope.wallet.getPublicKeyHex()
+                }
+            }
+        });
     }
 
     $rootScope.openReceiveTokenDialog = (event, args) => {

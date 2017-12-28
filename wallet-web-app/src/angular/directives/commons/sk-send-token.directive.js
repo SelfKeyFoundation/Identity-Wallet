@@ -13,7 +13,6 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
         },
         link: (scope, element) => {
             scope.step = 'prepare-transaction';
-
             scope.token = scope.token || 'eth';
             
             scope.sendAmountInUSD = 0.00;

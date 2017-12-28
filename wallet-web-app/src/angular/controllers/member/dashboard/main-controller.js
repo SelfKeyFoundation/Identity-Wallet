@@ -1,4 +1,4 @@
-function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController', $rootScope.wallet.balanceInUsd, $rootScope.primaryToken.balanceInUsd, $rootScope.wallet, $rootScope.primaryToken);
@@ -29,6 +29,14 @@ function MemberDashboardMainController($rootScope, $scope, $log, $q, $timeout, $
             }
         }
     };
+
+    $scope.pieChartActions = {};
+
+
+    $interval(()=>{
+        $scope.pieChartActions.reDraw();
+    }, 10000);
+    
 
     $log.info("pie chart data:", $scope.pieChartData);
 };
