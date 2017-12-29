@@ -1,4 +1,5 @@
 'use strict';
+const remote = require('electron').remote;
 
 /* global angular */
 
@@ -47,8 +48,21 @@ window.app = angular.module('kyc-wallet', requires);
 /**
  * constants
  */
-import appConfigConstant from './angular/constants/app.config.constant';
-angular.module('kyc-wallet').constant('CONFIG', appConfigConstant);
+const AppConfigConstant = require('../config');
+
+let devModeStarted = false;
+if(process.argv.length > 2) {
+	if(process.argv[2] === 'dev') {
+		devModeStarted = true;
+	}
+}
+let extraConfig = AppConfigConstant.production;
+if(devModeStarted) {
+	extraConfig = AppConfigConstant.default;
+}
+const config = Object.assign(AppConfigConstant.common, extraConfig);
+
+angular.module('kyc-wallet').constant('CONFIG', config);
 
 import appDictionaryConstant from './angular/constants/app.dictionary.constant';
 angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);

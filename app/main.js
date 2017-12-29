@@ -12,6 +12,20 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   electron.app.quit();
 }
 
+let devModeStarted = false;
+if(process.argv.length > 2) {
+	if(process.argv[2] === 'dev') {
+		devModeStarted = true;
+	}
+}
+
+
+const parsedConfig = require('./config');
+let extraConfig = parsedConfig.production;
+if(devModeStarted) {
+	extraConfig = parsedConfig.default;
+}
+const config = Object.assign(parsedConfig.common, extraConfig);
 
 const app = {
 	dir: {
@@ -19,7 +33,7 @@ const app = {
 		desktopApp: __dirname + '/../app'
 	},
 	config: {
-		app: require('./config.electron.js'),
+		app: config,
 		user: null
 	},
 	translations: {
