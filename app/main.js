@@ -16,7 +16,7 @@ const deskmetrics = require('deskmetrics');
 const app = {
 	dir: {
 		root:  __dirname + '/../',
-		desktopApp: __dirname + '/../desktop-app'
+		desktopApp: __dirname + '/../app'
 	},
 	config: {
 		app: require('./config.electron.js'),
@@ -52,9 +52,9 @@ function createWindow(app) {
 		});
 
 		// If DEV loads electron source files from 'src' folder instead of 'dist' folder
-		let webAppPath = path.join(app.dir.root, 'wallet-web-app/dist', 'index.html');
+		let webAppPath = path.join(app.dir.root, '/web-dist', 'index.html');
 		if (app.config.app.dev) {
-			webAppPath = path.join(app.dir.root, 'wallet-web-app/src', 'index.html');
+			webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
 		}
 		app.win.loadURL(url.format({
 			pathname: webAppPath,
@@ -116,7 +116,7 @@ function createWindow(app) {
 		});
 
 		// TODO
-		//autoUpdater.checkForUpdatesAndNotify();
+		autoUpdater.checkForUpdatesAndNotify();
 
 		app.asyncRequestHandler = new AsyncRequestHandler();
 

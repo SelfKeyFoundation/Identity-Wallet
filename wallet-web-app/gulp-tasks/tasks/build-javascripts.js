@@ -1,6 +1,6 @@
 module.exports = (gulp, path, watch, runSequence) => {
 
-    const browserify = require('browserify');
+    //const browserify = require('browserify');
     const babelify = require('babelify');
     const ngAnnotate = require('browserify-ngannotate');
     const source = require('vinyl-source-stream');
@@ -14,7 +14,7 @@ module.exports = (gulp, path, watch, runSequence) => {
     const watchSrc = path.resolve(__dirname, '../../src/angular/**/*.js');
 
     gulp.task('transpile:webapp:js', (cb) => {
-        return browserify(src)
+        return gulp.src(src)
             .transform(babelify, {presets: ["es2015"]})
             .transform(ngAnnotate)
             .bundle()
@@ -31,7 +31,7 @@ module.exports = (gulp, path, watch, runSequence) => {
     });
 
     gulp.task('build:webapp:js', (cb) => {
-        return browserify(src)
+        return gulp.src(src)
             .transform(babelify, {presets: ["es2015"]})
             .transform(ngAnnotate)
             .bundle()

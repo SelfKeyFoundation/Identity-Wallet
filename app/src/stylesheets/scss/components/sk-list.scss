@@ -1,0 +1,86 @@
+.sk-list {
+
+  > .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: default;
+    outline: none;
+    user-select: none;
+
+    &.clickable {
+      cursor: pointer;
+
+      &:hover {
+        > .bullet {
+          background-color: #00c0d9;
+
+          > span {
+            color: #fff;
+          }
+        }
+
+        > span {
+          color: #fff;
+        }
+      }
+    }
+
+    &.selected {
+      > .bullet {
+        background-color: #00c0d9;
+
+        > span {
+          color: #fff;
+        }
+
+        .icon-path {
+          svg {
+            path {
+              fill: #fff;
+            }
+          }
+        }
+      }
+
+      > span {
+        color: #fff;
+      }
+
+    }
+
+    > .bullet {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      width: 30px;
+      height: 28px;
+      border-radius: 18px;
+      background-color: #3b4b59;
+      border: solid 1px #495b70;
+
+      > img {
+
+      }
+
+      > span {
+        font-family: ProximaNovaRegular;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+    }
+
+    > span {
+      margin-left: 12px;
+      font-family: ProximaNovaRegular;
+      font-size: 16px;
+      font-weight: 600;
+      color: #93b0c1;
+    }
+  }
+
+}

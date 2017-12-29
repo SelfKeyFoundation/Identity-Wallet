@@ -1,0 +1,78 @@
+.sk-wallet-general-info-box {
+    border-radius: 4px;
+	background-color: #262f39;
+    border: solid 1px #303c49;
+    padding: 0 30px;
+
+    flex-direction: column;
+
+
+    .sk-wallet-general-info-box__title {
+        margin-top: 30px;
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .sk-wallet-general-info-box__content {
+        padding-bottom: 30px;
+
+        .sk-wallet-general-info-box__content__table {
+            width: 100%;
+            margin-top: 40px;
+            border-collapse: collapse;
+            
+
+            tr {
+                border-bottom: 1px solid #384047;
+
+                td {
+                    &:first-of-type {
+                        width: 130px;
+
+                        div {
+                            display: flex;
+                            flex-direction: column;
+    
+                            align-items: flex-start;
+                            justify-content: center;
+    
+                            span {
+                                font-family: ProximaNovaSemibold;
+                                font-size: 14px;
+                                font-weight: 600;
+                            }
+                        }
+                        
+                        padding-top: 30px;
+                        padding-bottom: 30px;
+                    }
+
+                    &:last-of-type {
+                        div {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: flex-start;
+                            
+                            span {
+                                margin-left: 12px;
+                                font-family: ProximaNovaSemibold;
+                                font-size: 16px;
+                                font-weight: 600;
+                                color: #ffffff;                            
+                            }
+                        }                        
+                    }
+                    img {
+                        -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                        width: 73px;
+                        height: 84px;
+                    }
+                }
+            }
+        }
+    }
+}

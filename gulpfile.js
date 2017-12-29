@@ -17,11 +17,6 @@ const walletWebAppTasks = require('./wallet-web-app/gulp-tasks/index.js')(gulp, 
 //http://ionicons.com/#cdn
 
 /**
- * wallet desktop app tasks
- */
-const walletDesktopAppTasks = require('./gulp-tasks/index.js')(gulp, runSequence, watch, path, config, env);
-
-/**
  * browser sync - for development
  */
 gulp.task('default', ['watch:webapp'], function() {

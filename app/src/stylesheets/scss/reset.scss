@@ -1,0 +1,16 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: auto !important;
+    color: unset;
+    background-color: unset;
+}
+
+body {
+    min-height: fit-content !important;
+    background-attachment: fixed !important;
+    height: -webkit-fill-available !important;
+}

@@ -1,0 +1,56 @@
+.sk-box.sk-ico-details-box
+    .header.sk-ico-details-box__header
+        sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44")
+        span {{ico.company}}
+        span(style="font-size: 15px; margin-left: 5px;") ({{ico.category}})
+        span.dot(ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }")
+
+    .sk-ico-details-box__content(ng-if="type === 'requirements'")
+        .title
+            span Submit Necessary Information
+        .description.fc-white
+            p In order to join this token sale, you must submit all information required by those with this offering.
+        
+        hr
+
+        sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallback")
+
+    .sk-ico-details-box__content(ng-if="type === 'info'")
+        .description.fc-white
+            p Sales Data
+
+        table
+            tr
+                td
+                    span.amountValue 43,422.12
+                    br
+                    span.label ETH Collected
+                td
+                    span.amountValue 41,252,331
+                    br
+                    span.label BNX Remaining
+            tr
+        
+        hr
+
+        table
+            tr
+                td
+                    span.label Price:  
+                    span 0.001518 ETH/ BNC
+                td
+                    span.label Min Purchase  
+                    span 0.0001 ETH
+            tr
+                td
+                    span.label Hard cap: 
+                    span 105,000 ETH
+                td
+                    span.label Total Supply 
+                    span 150,000,000 BNC
+
+
+
+
+        
+            
