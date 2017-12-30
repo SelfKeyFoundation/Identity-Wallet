@@ -4,7 +4,7 @@ md-dialog.terms(aira-lable="Dialog Title")
             img(src='assets/images/icons/selfkey.svg', width=57)
             .title Selfkey
 
-        .main(layout='column', layout-align='center center')
+        .main(layout='column', layout-align='center center', ng-if="step === 'main'")
             md-toolbar
                 .md-toolbar-tools(layout='row', layout-align='center center')
                     span Terms of Service Agreement
@@ -28,6 +28,18 @@ md-dialog.terms(aira-lable="Dialog Title")
                             p
                                 | c. Entire Agreement – Disclaimer of Reliance. This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior agreements or understandings between the Parties. Each Party expressly warrants and represents that: a) it has authority to enter this Agreement; and b) it is not relying upon any statements, understandings, representations, expectations or agreements other than those expressly set forth in this Agreement.
 
-                    section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
+                    section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='', style="z-index: 100;")
                         md-button.md-raised.agree(ng-disabled="scrolledBottom || storeSavePromise.$$state.status", ng-click="agree()") I agree to the terms of service
-                        md-button.md-raised.disagree(ng-disabled="scrolledBottom || storeSavePromise.$$state.status", ng-click="notAgree()") I don't agree
+                        md-button.md-raised.disagree(ng-click="changeStep('before-disagree')") I don't agree
+        .main(layout='column', layout-align='center center', ng-if="step === 'before-disagree'")
+            md-toolbar
+                .md-toolbar-tools(layout='row', layout-align='center center')
+                    sk-icon(icon="high-priority", size-class="icon-size-35x35")
+                    span Need to Accept Terms
+            .content(flex='')
+                .textual(style="height: unset;")
+                    .text(style="padding-right:20px;")
+                        p Unfortunately, you will need to accept the Terms of Service Agreement in order to use the SelfKey Application or you will be unable to proceed. Return to the TOS agreement below or exit and close the application.
+                section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
+                    md-button.md-raised.agree(ng-disabled="storeSavePromise.$$state.status", ng-click="changeStep('main')") Return to TOS
+                    md-button.md-raised.disagree(ng-disabled="storeSavePromise.$$state.status", ng-click="notAgree()") Exit and Close
