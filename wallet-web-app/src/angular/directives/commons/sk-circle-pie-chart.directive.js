@@ -32,10 +32,9 @@ function SkCirclePieChartDirective() {
                 let colors = [];
                 scope.data.items.forEach((item, index) => {
                     item.uniqueIdentifier = getUniqueIdentifier(item, index);
-                    if (item.valueUSD && item.color) {
-                        dataItems.push([item.title, item.valueUSD]);
-                        colors.push(item.color);
-                    }
+                    dataItems.push([item.title, item.valueUSD]);
+                    colors.push(item.color);
+                
                 });
                 let processedData = [['Content', 'percents']].concat(dataItems);
                 let data = google.visualization.arrayToDataTable(processedData);
