@@ -56,7 +56,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         $scope.pieChart.items[1].value = Number($rootScope.primaryToken.getBalanceDecimal());
         $scope.pieChart.items[1].valueUSD = Number($rootScope.primaryToken.balanceInUsd);
 
-        $scope.$apply();
         $scope.pieChart.draw();
     }
 

@@ -121,8 +121,10 @@ function SkCirclePieChartDirective() {
             }
 
             scope.data.draw = () => {
-                scope.chunkedItems = chunk(scope.data.items, 3);
-                drawChart();
+                setTimeout(()=>{
+                    scope.chunkedItems = chunk(scope.data.items, 3);
+                    drawChart();
+                },300);
             }
 
         },
