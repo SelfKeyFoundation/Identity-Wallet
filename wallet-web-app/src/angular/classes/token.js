@@ -4,8 +4,7 @@ import BigNumber from 'bignumber.js';
 import EthUtils from './eth-utils.js';
 import CommonUtils from './common-utils.js';
 
-let Web3Service;
-let $q;
+let $rootScope, $q, Web3Service;
 
 class Token {
 
@@ -17,6 +16,7 @@ class Token {
 
     static set Web3Service(value) { Web3Service = value; }
     static set $q(value) { $q = value; }
+    static set $rootScope(value) { $rootScope = value; }
 
     /**
      * 
@@ -33,7 +33,7 @@ class Token {
 
         this.balanceHex = null;
         this.balanceDecimal = null;
-        
+
         this.balanceInUsd = null;
         this.usdPerUnit = null;
 
@@ -64,7 +64,7 @@ class Token {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
-    setOwner (publicKeyHex) {
+    setOwner(publicKeyHex) {
         this.currentOwnerPublicKeyHex = publicKeyHex
     }
 
@@ -96,7 +96,7 @@ class Token {
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
 
-            if(this.usdPerUnit){
+            if (this.usdPerUnit) {
                 this.updatePriceInUsd(this.usdPerUnit);
             }
 
@@ -115,9 +115,10 @@ class Token {
     /**
      * 
      */
-    updatePriceInUsd(usdPerUnit){
+    updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
+        $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
     }
 }
 

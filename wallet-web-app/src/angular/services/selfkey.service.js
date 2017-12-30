@@ -1,8 +1,8 @@
 'use strict';
 
-import IdAttributeType from '../classes/id-attribute-type.js';
-import Ico from '../classes/ico.js';
-import EthUtils from '../classes/eth-utils.js';
+import EthUtils from '../classes/eth-utils';
+import IdAttributeType from '../classes/id-attribute-type';
+import Ico from '../classes/ico';
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
   'ngInject';
@@ -159,7 +159,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
           $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
 
             // TODO !!!! check challenge to not be a contract hex !!!!
-            
+            //web3.utils.isHex(hex)
 
             let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
             $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {

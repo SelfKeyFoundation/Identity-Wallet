@@ -11,51 +11,43 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             symbol: '@'
         },
         link: (scope, element) => {
-
-            let tempPricePerUnit = {
-                'eth': 875,
-                'qey': 0.015,
-                'key': 0.015
-            }
+            scope.isJustCopied = false;
 
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;
+
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
-            if (scope.symbol !== 'eth') {
-                scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
-                let promise = scope.token.loadBalance();
-                promise.then((token) => {
-                    scope.balance = token.getBalanceDecimal();
-                    scope.balanceInUsd = token.balanceInUsd;
-                    console.log("??????", scope.balanceInUsd);
-                });
+            loadBalance();
 
-
-                // test --- generating good tx
-                /*
-                let a = WalletService.generateTokenRawTransaction(
-                    "0x4e7776ce0510778f44e8d43fa2d4d13b5d3930d5",
-                    10000,
-                    35000000000,
-                    150000,
-                    "QEY"
-                )
-                console.log(a, "<<<<<<<<");
-                */
-
-
-            } else {
-                scope.balance = $rootScope.wallet.balanceEth;
-                let promise = $rootScope.wallet.loadBalance();
-                promise.then(() => {
-                    scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
-                });
+            function loadBalance() {
+                if (scope.symbol !== 'eth') {
+                    scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
+                    let promise = scope.token.loadBalance();
+                    promise.then((token) => {
+                        scope.balance = scope.token.getBalanceDecimal();
+                        scope.balanceInUsd = scope.token.balanceInUsd;
+                    });
+                } else {
+                    let promise = $rootScope.wallet.loadBalance();
+                    promise.then(() => {
+                        scope.balance = $rootScope.wallet.balanceEth;
+                        scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
+                    });
+                }
             }
 
-            scope.isJustCopied = false;
+            function updateBalanceInfo() {
+                if (scope.symbol !== 'eth') {
+                    scope.balance = scope.token.getBalanceDecimal();
+                    scope.balanceInUsd = scope.token.balanceInUsd;
+                } else {
+                    scope.balance = $rootScope.wallet.balanceEth;
+                    scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
+                }
+            }
 
             scope.copy = (event) => {
                 let el = angular.element(event.target);
@@ -77,14 +69,9 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 }
             }
 
-            /**
-             * 1: get & translate name
-             * 2: load balance
-             * 3: load value in usd
-             * 4: update global common map with new value
-             * 5: watch on value 
-             */
-
+            $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+                updateBalanceInfo();
+            });
         },
         replace: true,
         templateUrl: 'common/directives/sk-token-box.html'

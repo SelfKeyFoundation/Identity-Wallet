@@ -2,7 +2,7 @@
 
 import ActionLogItem from '../../classes/action-log-item.js';
 
-function SkRemindersBoxDirective($log, $window, ConfigFileService) {
+function SkActionLogsBoxDirective($log, $window, ConfigFileService) {
     'ngInject';
 
     return {
@@ -48,8 +48,8 @@ function SkRemindersBoxDirective($log, $window, ConfigFileService) {
             }
         },
         replace: true,
-        templateUrl: 'common/directives/sk-reminders-box.html'
+        templateUrl: 'common/directives/sk-action-logs-box.html'
     }
 }
 
-export default SkRemindersBoxDirective;
+export default SkActionLogsBoxDirective;

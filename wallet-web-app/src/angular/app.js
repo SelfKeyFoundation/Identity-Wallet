@@ -165,6 +165,9 @@ angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 import SkKycRequirementsBoxDirective from './directives/commons/sk-kyc-requirements-box.directive';
 angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
 
+import SkActionLogsBoxDirective from './directives/commons/sk-action-logs-box.directive';
+angular.module('kyc-wallet').directive('skActionLogsBox', SkActionLogsBoxDirective);
+
 
 /**
  * controllers
@@ -184,6 +187,9 @@ angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveT
 
 import AddCustomTokenDialogController from './controllers/commons/dialogs/add-custom-token-controller.js';
 angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
+
+import SendTokenDialogController from './controllers/commons/dialogs/send-token-controller.js';
+angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
 
 /**
  * guest

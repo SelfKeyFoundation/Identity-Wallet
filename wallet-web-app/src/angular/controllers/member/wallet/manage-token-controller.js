@@ -21,9 +21,9 @@ function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams
     if ($scope.symbol === 'ETH') {
         $scope.balance = $rootScope.wallet.balanceEth;
     } else {
-        let promise = $scope.selectedToken.loadBalanceFor($scope.publicKeyHex);
+        let promise = $scope.selectedToken.loadBalance();
         promise.then((token) => {
-            $scope.balance = token.balanceDecimal;
+            $scope.balance = token.getBalanceDecimal();
         });
     }
 
