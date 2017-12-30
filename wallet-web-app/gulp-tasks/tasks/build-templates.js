@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (gulp, path, watch, runSequence) => {
 	const pug = require('gulp-pug');
     const templateCache = require('gulp-angular-templatecache');
@@ -28,5 +30,5 @@ module.exports = (gulp, path, watch, runSequence) => {
 			runSequence('transpile:webapp:templates', 'transpile:webapp:js');
 		})
 	});
-}
+};
 

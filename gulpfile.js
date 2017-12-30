@@ -1,35 +1,36 @@
 'use strict';
 
-const fs = require('fs');
 const gulp = require('gulp');
 const runSequence = require('run-sequence');
 const watch = require('gulp-watch');
+const pug = require('gulp-pug');
+const templateCache = require('gulp-angular-templatecache');
 const path = require('path');
-const browserSync = require('browser-sync').create();
 
-const env = process.env.NODE_ENV;
-const config = JSON.parse(fs.readFileSync('./config.json'));
+const src = path.resolve(__dirname, './app/src/templates/**/*.pug');
+const dest = path.resolve(__dirname, './app/src/');
 
-/**
- * wallet webapp tasks
- */
-const walletWebAppTasks = require('./wallet-web-app/gulp-tasks/index.js')(gulp, runSequence, watch, path, env);
-//http://ionicons.com/#cdn
 
-/**
- * browser sync - for development
- */
-gulp.task('default', ['watch:webapp'], function() {
-	  browserSync.init([
-		  './wallet-web-app/src/index.html', 
-		  './wallet-web-app/src/assets/css/main.css', 
-		  './wallet-web-app/src/app-bundle.js'
-		], {
-		server: "./wallet-web-app/src",
-		port: 5000,
-		notify: true,
-		ui: {
-		  port: 5001
-		}
-	  });
+gulp.task('default', (cb) => {
+	gulp.src(src)
+		.pipe(pug({client: false}))
+		.on('error', function(error) {
+			console.log(error);
+			this.emit("end");
+		})
+		.pipe(templateCache({standalone: true, filename: "app.templates.js"}))
+		.on('error', function(error) {
+			console.log(error);
+			this.emit("end");
+		})
+		.pipe(gulp.dest(dest))
+		.on('end', () => {
+			cb();
+		});
+});
+
+gulp.task('watch', (cb) => {
+	watch([src], () => {
+		runSequence('default');
+	});
 });
