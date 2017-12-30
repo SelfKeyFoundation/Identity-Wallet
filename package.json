@@ -97,8 +97,20 @@
 					"wallet-web-app"
 				]
 			},
+			"electronInstallerDMG": {
+				"name": "Selfkey-Identity-Wallet",
+				"icon": "./assets/icons/mac/selfkey.icns",
+				"background": "./assets/backgrounds/mac/installer.jpg",
+				"overwrite": true
+			},
 			"electronWinstallerConfig": {
-				"name": "identity_wallet"
+				"name": "Identity Wallet",
+				"title": "Identity Wallet",
+				"exe": "Identity-Wallet.exe",
+				"description": "Selfkey Identity Wallet",
+				"version": "0.0.4",
+				"setupExe": "Identity-Wallet-Installer.exe",
+				"skipUpdateIcon": true
 			},
 			"electronInstallerDebian": {},
 			"electronInstallerRedhat": {},
