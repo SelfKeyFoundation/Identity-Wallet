@@ -5,8 +5,11 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
-    let pieChartUpdateQueue = [];
 
+    function getTotalBalanceInUsd() {
+        return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
+    }
+   
     /**
      * init pie chart
      */
@@ -32,9 +35,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             onReady: () => {
                 // TODO set listenere on balance change here
                 pieChartIsReady = true;
-                if (pieChartUpdateQueue.length > 0) {
+                if (getTotalBalanceInUsd() > 0) {
                     updatePieChart();
-                    pieChartUpdateQueue = [];
                 }
             },
             onItemClick: (item) => {
@@ -45,8 +47,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     };
 
     function updatePieChart() {
-        $rootScope.totalBalanceInUsd = Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
-
+        $rootScope.totalBalanceInUsd = getTotalBalanceInUsd();
         $scope.pieChart.total = $filter('number')($rootScope.totalBalanceInUsd);
 
         $scope.pieChart.items[0].value = Number($rootScope.wallet.balanceEth);
@@ -55,6 +56,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         $scope.pieChart.items[1].value = Number($rootScope.primaryToken.getBalanceDecimal());
         $scope.pieChart.items[1].valueUSD = Number($rootScope.primaryToken.balanceInUsd);
 
+        $scope.$apply();
         $scope.pieChart.draw();
     }
 
@@ -62,12 +64,10 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
      * update pie chart on balance change
      */
     $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-        if (!pieChartIsReady) {
-            pieChartUpdateQueue.push(new Date().getTime());
-        } else {
+        if (pieChartIsReady) {
             updatePieChart();
-        }
-        $scope.$$apply();
+        } 
+       
     });
 
     $log.info("pie chart data:", $scope.pieChart);
