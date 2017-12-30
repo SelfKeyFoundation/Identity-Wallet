@@ -121,7 +121,6 @@ function SkCirclePieChartDirective() {
             }
 
             scope.data.draw = () => {
-                // in order to initialize height for drow    
                 scope.chunkedItems = chunk(scope.data.items, 3);
                 drawChart();
             }
