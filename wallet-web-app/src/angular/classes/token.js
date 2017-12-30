@@ -93,11 +93,17 @@ class Token {
         let promise = Web3Service.getTokenBalanceByData(data);
 
         promise.then((balanceHex) => {
+            let oldBalanceHex = angular.copy(this.balanceHex);
+
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
 
             if (this.usdPerUnit) {
                 this.updatePriceInUsd(this.usdPerUnit);
+            }
+
+            if(balanceHex !== oldBalanceHex){
+                $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
             }
 
             defer.resolve(this);
@@ -118,7 +124,6 @@ class Token {
     updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
-        $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
     }
 }
 
