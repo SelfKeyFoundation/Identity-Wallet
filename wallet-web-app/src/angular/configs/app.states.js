@@ -10,7 +10,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service) {
         let defer = $q.defer();
 
-        if (!$rootScope.wallet && !$rootScope.wallet.getPublicKeyHex()) {
+        if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {
             $state.go('guest.loading');
             defer.reject();
         } else {
