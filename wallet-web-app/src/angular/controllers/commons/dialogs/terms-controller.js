@@ -3,6 +3,11 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
 
     $log.info('TermsDialogController');
     $scope.storeSavePromise = null;
+    $scope.step = 'main'
+
+    $scope.changeStep = (step) => {
+        $scope.step = step;
+    }
 
     $scope.agree = (event) => {
         let store = ConfigFileService.getStore();

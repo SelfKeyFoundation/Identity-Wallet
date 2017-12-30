@@ -3,6 +3,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $log.info('MemberDashboardMainController');
 
+    $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
     let pieChartUpdateQueue = [];
 
@@ -66,6 +67,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         } else {
             updatePieChart();
         }
+        $scope.$$apply();
     });
 
     $log.info("pie chart data:", $scope.pieChart);
