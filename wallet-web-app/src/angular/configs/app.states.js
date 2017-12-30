@@ -7,10 +7,10 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService) {
+    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service) {
         let defer = $q.defer();
 
-        if (!$rootScope.wallet) {
+        if (!$rootScope.wallet && !$rootScope.wallet.getPublicKeyHex()) {
             $state.go('guest.loading');
             defer.reject();
         } else {
@@ -33,16 +33,16 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             /**
              * 
              */
-            $interval(() => {
-                if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
-                    $rootScope.wallet.loadBalance();
-                }
-            }, 10000); // TODO - take interval from config
-
-            /**
-             * 
-             */
             $q.all([ethBalancePromise, keyBalancePromise]).then(() => {
+                /**
+                 * 
+                 */
+                $rootScope.balanceWatcherPromise = $interval(() => {
+                    if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
+                        $rootScope.wallet.loadBalance();
+                        $rootScope.primaryToken.loadBalance();
+                    }
+                }, 10000); // TODO - take interval from config
                 defer.resolve();
             }).catch(() => {
                 $state.go('guest.error.offline');

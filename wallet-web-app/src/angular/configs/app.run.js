@@ -2,17 +2,15 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService, TokenService) {
+import Wallet from '../classes/wallet';
+import Token from '../classes/token';
+
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
     'ngInject';
 
+    $rootScope.selectedLanguage = "en";
+    
     $log.debug('DICTIONARY', DICTIONARY);
-
-    /**
-     * 
-     */
-    $rootScope.viewState = {
-
-    }
 
     /**
      * 
@@ -20,14 +18,19 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
     $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
-
-    $rootScope.selectedLanguage = "en";
+    $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage]; 
 
     /**
      * 
      */
     $rootScope.ethUsdPrice = 795;
     $rootScope.keyUsdPrice = 0.015;
+
+    /**
+     * 
+     */
+    Wallet.$rootScope = $rootScope;
+    Token.$rootScope = $rootScope;
 
     /**
      * 
@@ -67,7 +70,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     // TODO - change send dialog with new one
     $rootScope.openSendTokenDialog = (event, token) => {
-        //CommonService.showSendTokenDialog(token);
         return $mdDialog.show({
             controller: 'SendTokenDialogController',
             templateUrl: 'common/dialogs/send-token.html',

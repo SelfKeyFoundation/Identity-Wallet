@@ -1,7 +1,7 @@
 {
     "default": {
-        "debug": false,
-        "dev": false,
+        "debug": true,
+        "dev": true,
         "deskmetricsAppId": "b70b7e71f1",
         "app": {
             "name": "IdentityWallet",
