@@ -3,9 +3,15 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
 
     $log.info('TermsDialogController');
     $scope.storeSavePromise = null;
+    $scope.step = 'main'
+
+    $scope.changeStep = (step) => {
+        $scope.step = step;
+    }
 
     $scope.agree = (event) => {
         let store = ConfigFileService.getStore();
+        store.setup = store.setup || {};
         store.setup.termsAccepted = true;
         $scope.storeSavePromise = ConfigFileService.save();
         $scope.storeSavePromise.then(() => {
@@ -30,7 +36,6 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
             if (elem[0].scrollTop >= (wholeHeight - visibleHeight - 50)) {
                 $scope.scrolledBottom = false;
             }
-
         });
     }, 1000)
 };

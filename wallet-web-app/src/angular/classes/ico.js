@@ -50,15 +50,8 @@ class Ico {
 
         this.kyc = {
             required: true,                 // kyc
-            template: "apiEndpoint",        // kycc_template
-            requirements: [
-                'name',
-                'email',
-                'phonenumber',
-                'passport',
-                'national_id',
-                'utility_bill'
-            ]
+            template: "",                 // template id
+            organisation: ""             // organisation id
         };
     }
 
@@ -99,9 +92,10 @@ class Ico {
         this.restrictions.other = other ? other : 'TBA';
     }
 
-    setKyc (required, template) {
+    setKyc (required, template, organisation) {
         this.kyc.required = required && required === 'YES' ? true : false;
         this.kyc.template = template;
+        this.kyc.organisation = organisation;
     }
 
     setVideos(youtube, vimeo) {
@@ -122,18 +116,6 @@ class Ico {
 
     getCapProgressPercent () {
         return Math.round(this.cap.raised / this.cap.total * 100);
-    }
-
-    checkRequirements(ConfigFileService) {
-        let result = {}
-
-        for (let i in this.kyc.requirements) {
-            let req = this.kyc.requirements[i];
-            let idAttribute = ConfigFileService.getDefaultIdAttributeItem(req);
-            result[req] = idAttribute && (idAttribute.value || idAttribute.path) ? idAttribute : null;
-        }
-
-        return result;
     }
 }
 

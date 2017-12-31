@@ -28,6 +28,7 @@
 @import './components/md-tooltip.scss';
 @import './components/md-sidenav.scss';
 @import './components/md-content.scss';
+@import './components/md-input.scss';
 
 @import './directives/sk-token-box.scss';
 @import './directives/sk-send-token.scss';
@@ -35,7 +36,7 @@
 @import './directives/sk-circle-pie-chart.scss';
 @import './directives/sk-wallet-history-item.scss';
 @import './directives/sk-reminders-box.scss';
-@import './directives/sk-alerts-box.scss';
+@import './directives/sk-action-logs-box.scss';
 @import './directives/sk-wallet-general-info-box.scss';
 @import './directives/sk-id-attribute-box.scss';
 @import './directives/sk-ico-item-box.scss';
@@ -47,6 +48,7 @@
 @import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
+@import './partials/sk-my-cryptos-box.scss';
 
 @import './views/dashboard/main.scss';
 @import './views/wallet/main.scss';
@@ -56,9 +58,11 @@
 @import './dialogs/terms.scss';
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
+@import './dialogs/send-token.scss';
 @import './dialogs/add-custom-token.scss';
 
 @import './views/setup/step-1.scss';
+@import './views/setup/wallet-setup.scss';
 
 @import './views/marketplace/ico-list.scss';
 @import './views/marketplace/ico-list-item.scss';

@@ -26,7 +26,7 @@ div(layout-fill, layout="column", layout-align="center center")
                             span.sub-header {{texts[currentStep].text5}}
             div(layout="row", layout-align="start center", style="margin-top: 30px;")
                 .sk-button.outline-blue(ng-click="nextStep($event, basicInfoForm)", style="z-index: 1;")
-                    span(style="color: #0dc7dd") Next Step
+                    span(style="color: #0dc7dd") Complete
                 .sk-hyperlink.sk-text(style="color: #fff; text-align: center; margin-left: 12px;", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
 
         .sk-box
@@ -58,15 +58,3 @@ div(layout-fill, layout="column", layout-align="center center")
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4].path") 4
                         span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4}}
-
-                    .item.clickable(sk-select-if="currentStep === $root.INITIAL_ID_ATTRIBUTES.REQ_5", ng-click="goToStep($root.INITIAL_ID_ATTRIBUTES.REQ_5)")
-                        .bullet
-                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path")
-                            span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5].path") 5
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_5}}
-
-                    .item.clickable(sk-select-if="currentStep === $root.INITIAL_ID_ATTRIBUTES.REQ_6", ng-click="goToStep($root.INITIAL_ID_ATTRIBUTES.REQ_6)")
-                        .bullet
-                            img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path")
-                            span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_6].path") 6
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_6}}

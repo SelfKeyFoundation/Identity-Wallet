@@ -1,6 +1,7 @@
 'use strict';
 
-import CommonUtils from '../classes/common-utils.js';
+import Wallet from '../classes/wallet';
+import CommonUtils from '../classes/common-utils';
 
 function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
   'ngInject';
@@ -8,13 +9,16 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
   $log.debug('CommonService Initialized');
 
   class CommonService {
-    constructor() { }
+    constructor() {
+      Wallet.CommonService = this;
+      Wallet.$q = $q;
+    }
 
     // targetContainer, type, message, closeAfterMillis, clazz, style
     showMessage(config) {
       let children = [];
 
-      if(config.container){
+      if (config.container) {
         children = config.container.children();
       }
 
@@ -56,6 +60,10 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
 
     //
     showSendTokenDialog(token) {
+      // temporary
+      console.log(token);
+      if (token !== "ETH") return;
+
       const startFragment = '<sk-send-token';
       const endFragment = '></sk-send-token>';
       let middleFrament = ' token="' + token + '"';
@@ -67,7 +75,7 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
       angular.element(document.body).append(dir);
     }
 
-    generateId () {
+    generateId() {
       let m = Math;
       let d = Date;
       let h = 16;
@@ -81,10 +89,10 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
       return num.toString().match(re)[0];
     }
 
-    chunkArray (myArray, chunkSize) {
+    chunkArray(myArray, chunkSize) {
       return CommonUtils.chunkArray(myArray, chunkSize);
     }
-    
+
   }
 
   return new CommonService();

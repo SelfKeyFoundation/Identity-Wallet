@@ -1,7 +1,8 @@
 'use strict';
 
-import IdAttributeType from '../classes/id-attribute-type.js';
-import Ico from '../classes/ico.js';
+import EthUtils from '../classes/eth-utils';
+import IdAttributeType from '../classes/id-attribute-type';
+import Ico from '../classes/ico';
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
   'ngInject';
@@ -12,7 +13,10 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
-  const KYC_BASE_URL = 'http://192.168.157.21:8080/';
+  //const KYC_BASE_URL = 'http://172.25.255.65:8080/';
+  //const KYC_BASE_URL = 'http://localhost:8080/';
+  const KYC_BASE_URL = 'https://wallet-demo-api-test.selfkey.org/';
+
 
   /**
    * 
@@ -25,18 +29,16 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   class SelfkeyService {
 
     constructor() {
-      this.loadData();
+      this.loadData(true);
     }
 
     retrieveTableData(table, reload) {
       let defer = $q.defer();
 
       const cache_data = CACHE.getItem(table);
-      if (cache_data && !reload) {
-        defer.resolve(JSON.parse(cache_data));
-      } else {
+      if (reload || !cache_data) {
         const apiURL = BASE_URL + table;
-        let promise = $http.get(apiURL);
+        let promise = $http.get(apiURL, { headers: { 'Cache-Control': 'no-cache' } });
         promise.then((response) => {
           CACHE.setItem(table, JSON.stringify(response.data));
           defer.resolve(response.data);
@@ -44,15 +46,18 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
           // TODO
           defer.reject(error);
         });
+      } else {
+        defer.resolve(JSON.parse(cache_data));
       }
+
       return defer.promise;
     }
 
-    dispatchIdAttributeTypes() {
+    dispatchIdAttributeTypes(reload) {
       let defer = $q.defer();
 
       let idAttributeTypes = {};
-      let promise = this.retrieveTableData('id-attributes');
+      let promise = this.retrieveTableData('id-attributes', reload);
       promise.then((data) => {
         let idAttributesArray = data.ID_Attributes;
 
@@ -72,14 +77,14 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
-    dispatchIcos() {
+    dispatchIcos(reload) {
       let defer = $q.defer();
 
       let icos = [];
-      let promise = this.retrieveTableData('icos');
+      let promise = this.retrieveTableData('icos', reload);
       promise.then((data) => {
         let icoDetailsArray = data.ICO_Details;
-        console.log(">>>>>>", data.ICO_Details);
+        console.log("ICO_Details", data.ICO_Details);
 
         for (let i in icoDetailsArray) {
           let item = icoDetailsArray[i].data.fields;
@@ -104,7 +109,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
           ico.setCap(item.hard_cap_USD, item.raised_USD);
           ico.setRestrictions(item.min_contribution_usd, item.max_contribution_usd, item.restrictions);
-          ico.setKyc(item.kyc, item.kycc_template);
+          ico.setKyc(item.kyc, item.template, item.organisation);
           ico.setVideos(item.youtube_video, null);
 
           ico.setInfo(
@@ -126,6 +131,19 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
+    retrieveKycTemplate(organizationId, templateId) {
+      let defer = $q.defer();
+
+      let promise = $http.get(KYC_BASE_URL + "organization/" + organizationId + "/template/marketplace/" + templateId);
+      promise.then((resp) => {
+        defer.resolve(resp.data);
+      }).catch((error) => {
+        defer.reject(error);
+      });
+
+      return defer.promise;
+    }
+
     retrieveKycSessionToken(privateKeyHex, ethAddress, email, organizationId) {
       let defer = $q.defer();
 
@@ -134,24 +152,28 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
-        $http.post(KYC_BASE_URL + "organization/5a3e6c01d6dab14395fa711d/register", {
+        $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
           "ethAddress": ethAddress,
           "email": email
         }).finally(() => {
-          $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + ethAddress).then((resp) => {
+          $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
+
+            // TODO !!!! check challenge to not be a contract hex !!!!
+            //web3.utils.isHex(hex)
+
             let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
             $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
               wallet.sessionsStore[organizationId] = resp.data.token;
               ConfigFileService.save().then(() => {
                 defer.resolve(resp.data.token);
               }).catch((error) => {
-                defer.reject()
+                defer.reject(error)
               })
             }).catch((error) => {
-              defer.reject()
+              defer.reject(error)
             })
           }).catch((error) => {
-            defer.reject()
+            defer.reject(error)
           });
         });
       }

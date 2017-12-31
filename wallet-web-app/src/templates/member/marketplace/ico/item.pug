@@ -4,7 +4,8 @@
             sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
-        .documents-needed(layout="row") Documents Needed
+        .status-container(ng-if="isSusbscribed && kycProgress", layout="row", ng-class="getDecorations().clazz") 
+            | {{getDecorations().title}}
             span
     .ico-list-item-content-wrappper__content-section
         .main-content(layout="row")
@@ -15,70 +16,59 @@
             .token-sale-container(layout="column", flex="35")
                 .text-1
                     span Token Sale ends in
-                    span(style="font-weight: 600") {{icoData.getDaysLeft()}} DAYS
+                    span(style="font-weight: 600") {{ico.daysLeft}} DAYS
                 .text-2
-                    div(style="font-size:20px") $25,679,353
+                    div(style="font-size:20px") {{ico.cap.raised | number}}
                     span OF
-                    span $67,300,000 (38%)
+                    span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
-                    button.no-outline(ng-if="info.status !== infoStatuses.UNKNOWN", ng-class="getActionButtonInfo().clazz", ng-click="action($event)")  {{getActionButtonInfo().title}}
+                    button.no-outline(ng-if="kycProgress", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
         .token-sale-content
-            .token-sale-text Token Sale: 28 Nov – 28 Dec
+            .token-sale-text Token Sale: {{ico.startDate | date:'dd MMM'}} – {{ico.endDate | date:'dd MMM'}}
             .token-sale-lists(layout="row")
                 ul.list-1(flex="50")
                     li
                         span(style="color:#93b0c1; font-size:12px") Ticker:
-                        span &nbsp; Token type: ERC20 ICO
+                        span &nbsp; {{ico.symbol}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Token Price:
-                        span &nbsp; BKX = 0.96 USD (0.00200 ETH)
+                        span &nbsp; {{ico.token.price}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Fundraising Goal:
-                        span &nbsp; 67,300,000 USD (140,000 ETH)
+                        span &nbsp; {{ico.cap.total | number}} USD
                     li
                         span(style="color:#93b0c1; font-size:12px") Sold on pre-sale:
-                        span &nbsp; 20,000,000 USD (40,000 ETH)
+                        span &nbsp; {{ico.token.soldOnPresale | number}} USD
                     li
                         span(style="color:#93b0c1; font-size:12px") Total Tokens:
-                        span &nbsp; 400,000,000
+                        span &nbsp; {{ico.token.total | number}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Available for Token Sale:
-                        span &nbsp; 20%
+                        span &nbsp; {{ico.tokenSalePercent ? (ico.tokenSalePercent + '%') : ico.token.totalOnSale}}
 
                 ul.list-1(flex="50")
                     li
                         span(style="color:#93b0c1; font-size:12px") Whitelist:
-                        span &nbsp; YES (10 OCT – 23 NOV, JOIN )
+                        span &nbsp; {{ico.whitelist}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Know Your Customer (KYC):
-                        span &nbsp; YES
+                        span &nbsp; {{ico.kyc.required ? 'YES' : ''}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Bonus for the First:
                         span &nbsp; TBA
                     li
                         span(style="color:#93b0c1; font-size:12px") Min/Max Personal Cap:
-                        span &nbsp; 0.1 ETH / NO
+                        span &nbsp; {{ico.restrictions.minContribution + '/' + ico.restrictions.maxContribution}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Token Issue:
-                        span &nbsp; AFTER ICO
+                        span &nbsp; {{ico.token.issuance}}
                     li
                         span(style="color:#93b0c1; font-size:12px") Accepts:
-                        span &nbsp; ETH, BTC, LTC, WAVES, SALT, TIME
-        
-        hr(style="width:90%; color:#303c49")
-        
-        sk-kyc-requirements-box(progress="requirementsProgress", sections="sections")
+                        span(ng-repeat='token in ico.accepts') &nbsp; {{token}}
 
-        //.KYC-requirements-content
-            .KYC-requirements-text KYC Requirements
-            .KYC-requirements-lists(layout="row")
-                .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections")
-                    .item(ng-repeat="item in section")
-                        .bullet(ng-class="{'background-color-squash': !requirementsProgress[item]}")
-                            img(src='assets/images/icons/tick.svg', ng-if="requirementsProgress[item]")
-                            span(ng-show="!requirementsProgress[item]") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
-                        span {{ item }}
-                        sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left: 34px", ng-if="1 === 2")
+        hr(style="width:90%; color:#303c49")
+
+        sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallbacks")

@@ -7,17 +7,47 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    //$mdThemingProvider.generateThemesOnDemand(true);
-    //$mdTheming.generateTheme('default');
-
-    function checkWallet($rootScope, $q, $state) {
+    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service) {
         let defer = $q.defer();
 
-        if (!$rootScope.wallet) {
+        if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {
             $state.go('guest.loading');
             defer.reject();
         } else {
-            defer.resolve();
+            /**
+             * 
+             */
+            TokenService.init($rootScope.wallet.getPublicKeyHex());
+            $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
+
+            // 1) TODO - get prices
+
+            // set token prices
+            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice;
+            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice;
+
+            // update balances
+            let ethBalancePromise = $rootScope.wallet.loadBalance();
+            let keyBalancePromise = $rootScope.primaryToken.loadBalance();
+
+            /**
+             * 
+             */
+            $q.all([ethBalancePromise, keyBalancePromise]).then(() => {
+                /**
+                 * 
+                 */
+                $rootScope.balanceWatcherPromise = $interval(() => {
+                    if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
+                        $rootScope.wallet.loadBalance();
+                        $rootScope.primaryToken.loadBalance();
+                    }
+                }, 10000); // TODO - take interval from config
+                defer.resolve();
+            }).catch(() => {
+                $state.go('guest.error.offline');
+                defer.reject();
+            });
         }
 
         return defer.promise;
@@ -57,7 +87,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-       
+
 
         // process layout
         .state('guest.process', {
@@ -125,10 +155,10 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'member/layout.html',
                     controller: 'MemberLayoutController'
                 }
-            }/*,
+            },
             resolve: {
                 checkWallet: checkWallet
-            }*/
+            }
         })
 
         /**
@@ -219,7 +249,17 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/member/setup/completed',
             views: {
                 main: {
-                    templateUrl: 'member/setup/completed.html'
+                    templateUrl: 'member/setup/completed.html',
+                    controller: 'MemberSetupCompletedController'
+                }
+            }
+        })
+
+        .state('member.setup.wallet-setup', {
+            url: '/member/setup/wallet-setup',
+            views: {
+                main: {
+                    templateUrl: 'member/setup/wallet-setup.html'
                 }
             }
         })
@@ -299,7 +339,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                selected: null
+                selected: null,
+                kycProgress: null,
+                kycInfo: null
             }
         })
 
@@ -315,7 +357,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 selected: null
             }
         })
-        
+
         /**
          * Wallet
          */

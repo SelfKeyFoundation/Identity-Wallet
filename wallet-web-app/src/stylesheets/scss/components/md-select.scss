@@ -1,27 +1,32 @@
 md-input-container {
-    padding: 12px;
-    font-family: Courier;
-    font-size: 18px;
-    line-height: 1.33;
-    letter-spacing: 0.3px;
-    text-align: center;
-    color: #ffffff;
-    border-radius: 4px;
-    box-shadow: 0px 0px 5px 1px #0dc7dd;
-    outline-width: 0;
-    border: none;
-    background-color: #1e262e;
 
-    > md-select {
+    &.sk-select-box {
+        padding: 12px;
+        font-family: Courier;
+        font-size: 18px;
+        line-height: 1.33;
+        letter-spacing: 0.3px;
+        text-align: center;
+        color: #ffffff;
+        border-radius: 4px;
+        box-shadow: 0px 0px 5px 1px #0dc7dd;
+        outline-width: 0;
+        border: none;
+        background-color: #1e262e;
 
-        > md-select-value {
-            color: #fff !important;
-            border: none !important;
-            > .md-select-icon {
+        > md-select {
+
+            > md-select-value {
                 color: #fff !important;
+                border: none !important;
+                > .md-select-icon {
+                    color: #fff !important;
+                }
             }
         }
     }
+
+
 }
 
 .md-select-menu-container {

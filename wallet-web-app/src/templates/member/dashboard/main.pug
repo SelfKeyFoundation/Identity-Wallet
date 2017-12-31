@@ -6,19 +6,23 @@
 
     // balances
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        sk-token-box(name="Selfkey", symbol="key", value="852.62781", value-in-usd="$44951.44 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
-        sk-token-box(name="Ethereum", symbol="eth", value="{{$root.wallet.balanceEth}}", value-in-usd="$1765.87 USD", address="{{$root.wallet.getAddress()}}", style="height: 216px;")
+        sk-token-box(symbol="qey", style="height: 216px;")
+        sk-token-box(symbol="eth", style="height: 216px;")
         sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
 
     // my crypto
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        .sk-box.my-cryptos-box(style="width: 100%; height: 422px; padding: 20px;")
-            .my-cryptos-box__header(layout="row")
-                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") My Crypto
-                button.sk-icon-button
+        .sk-box.sk-my-cryptos-box
+            .header(layout="row")
+                span(flex) My Crypto
+                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-hide="$root.totalBalanceInUsd <= 0")
+                    span Get KEY
                     sk-icon(icon="plus", size-class="icon-size-26x26")
-            .sk-horizontal-devider(style="margin-top: 20px;")
-            sk-circle-pie-chart(data="tmpData", style="padding-top: 30px;") 
+            .sk-horizontal-devider
+            sk-circle-pie-chart(data="pieChart", ng-hide="$root.totalBalanceInUsd <= 0")
+            .get-key(ng-show="$root.totalBalanceInUsd <= 0", ng-click="$root.goToSelfkeyIco($event)")
+                sk-icon(icon="empty-plus", size-class="icon-size-20x20")
+                span Get KEY
 
     // alerts
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
@@ -28,17 +32,17 @@
             .sk-horizontal-devider(style="margin-top: 20px;")
             .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
                 button.sk-icon-button
-                    sk-icon(icon="warning", size-class="icon-size-33x36")
-                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #ff6c00; margin-left: 16px;") Action Required  Zilliqa Token Sale:
-                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
-                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
-            .sk-horizontal-devider(style="margin-top: 20px;")
+                    sk-icon(icon="wallet", size-class="icon-size-33x36")
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Success! Created Basic SelfKey Identity
+                //span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 12/26/2017
+            //.sk-horizontal-devider(style="margin-top: 20px;")
             .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
                 button.sk-icon-button
                     sk-icon(icon="notification", size-class="icon-size-33x36")
-                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #43c4a7; margin-left: 16px;") Subscribed to Zilliqa Notifications:
-                span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
-                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #43c4a7; margin-left: 16px;") Subscribed to Selfkey Notifications:
+                //span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
+                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 12/26/2017
 
     // reminders
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
@@ -58,18 +62,5 @@
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
             .sk-horizontal-devider(style="margin-top: 20px;")
-            .transactions-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
-                button.sk-icon-button
-                    sk-icon(icon="reminder", size-class="icon-size-33x36")
-                span.transactions-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
-                span.transactions-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
 
-    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 50px;")
-        h2.proxima.white Upcoming ICOs
-
-    .dashboard-content-wrappper__content-section(layout="row", layout-align="start center")
-        sk-ico-item-box(ng-repeat="item in $root.icos.active", ico-data='item')
-
-    .dashboard-content-wrappper__content-icos-header-section(layout="row", layout-align="start center", style="margin-top: 30px; margin-bottom: 30px;")
-        .sk-button.small(ui-sref="member.marketplace.ico-list")
-            span VIEW ALL ICOs
+            span(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 300; color: #93b0c1; margin-top: 30px;") No transactions yet.

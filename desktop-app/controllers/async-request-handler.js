@@ -54,7 +54,11 @@ module.exports = function (app) {
         if (!fs.existsSync(storeFilePath)) {
             settings.setAll({
                 setup: {
-                    status: 'in-progress' // in-progress | skipped | done
+                    status: 'in-progress', // in-progress | skipped | done (TODO remove)
+                    guideShown: false,
+                    initialIdAttributesSetup: "in-progress", // in-progress | skipped | done
+                    termsAccepted: false,
+                    icoAdsShown: false
                 },
                 statistics: {
                     appUsed: 0
@@ -64,90 +68,135 @@ module.exports = function (app) {
                     documentsDirectoryPath: documentsDirectoryPath
                 },
                 idAttributes: {
-                    "name": {
-                        key: "name",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual'],
-                        defaultItemId: "1",
-                        items: {
-                            "1": {
-                                _id: "1",
-                                value: ""
-                            }
-                        }
-                    },
                     "email": {
-                        key: "Email",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual",
+                            "company"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                value: ""
+                                "_id": "1",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual",
+                                        "company"
+                                    ],
+                                    "key": "email",
+                                    "type": "static_data"
+                                },
+                                "value": ""
                             }
-                        }
+                        },
+                        "key": "email",
+                        "type": "static_data"
                     },
-                    "phonenumber": {
-                        subcategory: "phonenumber",
-                        category: "global_attribute",
-                        type: "static_data",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                    "name": {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                value: ""
+                                "_id": "1",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "name",
+                                    "type": "static_data"
+                                },
+                                "value": ""
                             }
-                        }
-                    },
-                    "passport": {
-                        subcategory: "passport",
-                        category: "id_document",
-                        type: "document",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
-                            "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                path: ""
-                            }
-                        }
+                        },
+                        "key": "name",
+                        "type": "static_data"
                     },
                     "national_id": {
-                        key: "national_id",
-                        category: "id_document",
-                        type: "document",
-                        entity: ['individual','company'],
-                        defaultItemId: "1",
-                        items: {
+                        "category": "id_document",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                path: ""
+                                "_id": "1",
+                                "contentType": "",
+                                "idAttributeType": {
+                                    "category": "id_document",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "national_id",
+                                    "type": "document"
+                                },
+                                "name": "",
+                                "size": null,
+                                "value": "",
+                                "addition": {
+                                    "selfie": true, 
+                                    "signature": false, 
+                                    "notary": false, 
+                                    "certified_true_copy": false
+                                }
                             }
-                        }
+                        },
+                        "key": "national_id",
+                        "type": "document"
                     },
-                    "utility_bill": {
-                        key: "utility_bill",
-                        category: "proof_of_address",
-                        type: "document",
-                        defaultItemId: "1",
-                        items: {
+                    "proof_of_residence": {
+                        "category": "global_attribute",
+                        "defaultItemId": "1",
+                        "entity": [
+                            "individual"
+                        ],
+                        "items": {
                             "1": {
-                                _id: "1",
-                                contentType: "",
-                                size: "",
-                                name: "",
-                                path: ""
+                                "_id": "1",
+                                "contentType": "",
+                                "idAttributeType": {
+                                    "category": "global_attribute",
+                                    "entity": [
+                                        "individual"
+                                    ],
+                                    "key": "proof_of_residence",
+                                    "type": "static_data"
+                                },
+                                "name": "",
+                                "size": "",
+                                "value": ""
                             }
+                        },
+                        "key": "proof_of_residence",
+                        "type": "static_data"
+                    }
+                },
+                subscribtions: [],
+                actionLogs: [
+                    {
+                        createDate: new Date(),
+                        subscribtionId: "0",
+                        text: "Success! Created Basic SelfKey Identity",
+                        type: "notification"
+                    }
+                ],
+                tokens: {
+                    eth: {
+                        type: 'default',
+                        lastBalance: 0
+                    },
+                    qey: {
+                        type: 'custom',
+                        lastBalance: 0,
+                        contract: {
+                            address: "0x3e6f45f183492a644db9d3e1fc3fb8d48ea99421",
+                            symbol: "QEY",
+                            decimal: 18,
+                            type: "default"
                         }
                     }
                 },

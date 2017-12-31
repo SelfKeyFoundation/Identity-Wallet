@@ -1,28 +1,27 @@
 'use strict';
 
 import IdAttributeItem from '../../classes/id-attribute-item.js';
+import IdAttribute from '../../classes/id-attribute-item.js';
 
 // TODO - rename sk-id-attribute-box(data="", callbacks="")
-function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) {
+function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigFileService) {
     'ngInject';
 
     return {
         restrict: 'E',
         scope: {
-            data: "="
+            data: "=",
+            config: "="
         },
         link: (scope, element, attrs, tabsCtrl) => {
-            scope.config = { historyRowCount: 2 };
-
-            // item type
-            // scope.data.type = 'document' | 'static_data'
+            scope.defaultItem = scope.data.items[scope.data.defaultItemId];
 
             scope.checkItemValue = (item) => {
                 return (item && item.value);
             }
 
             scope.openAddEditDialog = function (event, actionType, item) {
-                $log.debug(">>>>>>", actionType, item);
+                let store = ConfigFileService.getStore();
                 $mdDialog.show({
                     controller: SkIdAttributeBoxDirectiveAddEditDialog,
                     templateUrl: 'common/directives/sk-id-attribute-box/sk-add-edit-id-attribute-item-dialog.html',
@@ -32,39 +31,40 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
                     fullscreen: true,
                     locals: {
                         config: {
-                            title: "Upload your driver's License",
-                            type: item.type, // document, static_data
-                            key: item.key
+                            title: "Upload your driver's License",      // todo
+                            type: item.idAttributeType.type,            // document, static_data
+                            key: item.idAttributeType.key
                         },
-                        item: angular.copy(item.items[item.defaultItemId])
+                        item: angular.copy(item)
                     }
                 }).then((respItem) => {
-                    item.items[item.defaultItemId] = respItem;
-                    let store = ConfigFileService.getStore();
+                    
+                    if(!store.idAttributes[item.idAttributeType.key]){
+                        store.idAttributes[item.idAttributeType.key] = scope.data;
+                    }
 
-                    if (actionType === 'edit') {
-                        let itemToSave = store.idAttributes[item.key].items[respItem._id];
-                        itemToSave.name = respItem.name;
-                        itemToSave.value = respItem.value;
-
-                        if (item.type === 'document') {
-                            itemToSave.size = respItem.size;
-                            itemToSave.contentType = respItem.contentType;
-                        }
-                    } else if (actionType === 'add') {
-                        let itemToSave = new IdAttributeItem();
-                        itemToSave.name = respItem.name;
-                        itemToSave.value = respItem.value;
-
-                        if (item.type === 'document') {    
-                            itemToSave.size = respItem.size;
-                            itemToSave.contentType = respItem.contentType;   
-                        }
-                        store.idAttributes[item.key].items[itemToSave._id];
+                    let itemToSave = store.idAttributes[item.idAttributeType.key].items[respItem._id];
+                    
+                    itemToSave.name = respItem.name;
+                    itemToSave.value = respItem.value;
+                    if (scope.data.type === 'document') {
+                        itemToSave.size = respItem.size;
+                        itemToSave.contentType = respItem.contentType;
                     }
 
                     $log.info('store to save:', store);
-                    //ConfigFileService.save();
+                    //$rootScope.$broadcast('id-attributes-changed', scope.data);
+                    
+                    
+                    ConfigFileService.save().then((resp)=>{
+                        // show message
+                        if(scope.config.callback && scope.config.callback.itemChanged){
+                            scope.config.callback.itemChanged(scope.data);
+                        }
+
+                        $rootScope.$broadcast('id-attributes-changed', scope.data);
+                    });
+                    
                 });
             };
 
@@ -75,29 +75,42 @@ function SkIdAttributeBoxDirective($log, $window, $mdDialog, ConfigFileService) 
             };
 
             scope.deleteAttribute = (id, clickedItem) => {
-                console.log(id);
                 let store = ConfigFileService.getStore();
-                let item = scope.data.idAttributeItems[scope.data.title];
-                console.log(item);
-                if (id !== item.defaultItemId) {
-                    delete item.items[id];
-                    delete store.idAttributes[scope.data.title].items[id];
-                } else {
-                    item.items[id] = { _id: id };
-                    store.idAttributes[scope.data.title].items[id] = { _id: id };
+                console.log(id, clickedItem);
+
+                clickedItem.name = null;
+                clickedItem.value = null;
+
+                store.idAttributes[scope.data.key].items[id].name = null;
+                store.idAttributes[scope.data.key].items[id].value = null;
+
+                if(clickedItem.idAttributeType === 'document'){
+                    clickedItem.contentType = null;
+                    clickedItem.size = null;
+
+                    store.idAttributes[scope.data.key].items[id].contentType = null;
+                    store.idAttributes[scope.data.key].items[id].size = null;
                 }
 
-                clickedItem.clicked = false;
+                delete clickedItem.clicked;
+
                 $log.info('store to save:', store);
-                // TODO save
+
+                //$rootScope.$broadcast('id-attributes-changed', scope.data);
+
+                ConfigFileService.save().then((resp)=>{
+                    // show message
+                    if(scope.config.callback && scope.config.callback.itemChanged){
+                        scope.config.callback.itemChanged(scope.data);
+                    }
+                    $rootScope.$broadcast('id-attributes-changed', scope.data);
+                });
             };
 
             scope.getFileNames = function (files) {
                 if (!files || !files.length) return '';
                 return files.map(file => file.name).join(', ');
             };
-
-
 
             console.log('passed data is:', scope.data);
         },
@@ -133,7 +146,7 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 
     $scope.save = () => {
-        if (item.value) {
+        if (item.value && item.name) {
             $mdDialog.hide(item);
         }
     }
@@ -144,30 +157,3 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
 }
 
 export default SkIdAttributeBoxDirective;
-
-
-/*
-
-
-"subscribtions": [
-        {
-            "_id": "",
-            "createDate": "12-18-2017",
-            "type": "ico",
-            "info": {
-                "symbol": "key",
-                "startDate": "12-30-2017"
-            }
-        }
-    ],
-    "alerts": [
-        {
-            "subscribtionId": "",
-            "createDate": "",
-            "type": "",
-            "text": ""
-        }
-    ],
-
-
-*/

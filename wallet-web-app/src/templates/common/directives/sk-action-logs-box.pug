@@ -1,0 +1,11 @@
+.sk-box.sk-action-logs-box(style="padding: 30px; width: 600px;")
+    .title Alerts
+    .item(ng-repeat="item in data")
+        .header
+            .date
+                span.fc-bluey-grey {{item.month}}
+                span.fc-bluey-grey {{item.day}}
+            sk-icon(icon="{{item.type}}", size-class="icon-size-36x36")
+            .text(flex)
+                span(ng-class="{'fc-bright-orange': item.type === 'warning'}") {{item.text}}
+                span.fc-white {{item.action}}

@@ -1,11 +1,11 @@
 'use strict';
 
+import Wallet from '../classes/wallet';
 import Token from '../classes/token';
 import EthUtils from '../classes/eth-utils';
 import EthUnits from '../classes/eth-units';
 
 import Web3 from 'web3';
-//const Web3 = require('web3') ;
 
 function dec2hexString(dec) {
   return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
@@ -74,7 +74,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         setChainId(DEFAULT_NODE, newChainId);
       });
 
-      console.log(Web3Service.web3.eth);
+      Token.Web3Service = this;
+      Token.$q = $q;
+
+      Wallet.Web3Service = this;
     }
 
     getBalance(addressHex) {
@@ -82,6 +85,15 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
       // wei
       Web3Service.waitForTicket(defer, 'getBalance', [addressHex]);
+
+      return defer.promise;
+    }
+
+    getTokenBalanceByData(data) {
+      let defer = $q.defer();
+
+      // wei
+      Web3Service.waitForTicket(defer, 'call', [data]);
 
       return defer.promise;
     }
