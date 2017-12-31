@@ -131,10 +131,10 @@ if (!handleSquirrelEvent()) {
 			});
 
 			// If DEV loads electron source files from 'src' folder instead of 'dist' folder
-			let webAppPath = path.join(app.dir.root, '/web-dist', 'index.html');
-			if (app.config.app.dev) {
-				webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
-			}
+			//let webAppPath = path.join(app.dir.root, '/web-dist', 'index.html');
+			//if (app.config.app.dev) {
+			let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
+			//}
 			app.win.loadURL(url.format({
 				pathname: webAppPath,
 				protocol: 'file:',
