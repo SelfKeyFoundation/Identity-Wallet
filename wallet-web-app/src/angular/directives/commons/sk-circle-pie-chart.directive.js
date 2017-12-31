@@ -25,7 +25,11 @@ function SkCirclePieChartDirective() {
             scope.chunkedItems = chunk(scope.data.items, 3);
 
             google.charts.load("current", { packages: ["corechart"] });
-            google.charts.setOnLoadCallback(drawChart);
+            google.charts.setOnLoadCallback(()=>{
+                if (scope.data.callback && scope.data.callback.onReady) {
+                    scope.data.callback.onReady();
+                }
+            });
 
             function drawChart() {
                 let dataItems = [];
@@ -64,6 +68,7 @@ function SkCirclePieChartDirective() {
                 scope.chartIsReady = false;
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {
                     scope.chartIsReady = true;
+                    scope.$apply();
                 });
 
                 chart.draw(data, options);
@@ -113,15 +118,13 @@ function SkCirclePieChartDirective() {
                         }
                     });
                 });
-
-                if (scope.data.callback && scope.data.callback.onReady) {
-                    scope.data.callback.onReady();
-                }
             }
 
             scope.data.draw = () => {
-                scope.chunkedItems = chunk(scope.data.items, 3);
-                drawChart();
+                setTimeout(()=>{
+                    scope.chunkedItems = chunk(scope.data.items, 3);
+                    drawChart();
+                },300);
             }
 
         },
