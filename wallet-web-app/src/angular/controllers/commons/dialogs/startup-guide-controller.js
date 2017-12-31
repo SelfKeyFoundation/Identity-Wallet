@@ -16,7 +16,6 @@ function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $
             $mdDialog.hide();
         });
     }
-
 };
 
 export default StartupGuideDialogController;

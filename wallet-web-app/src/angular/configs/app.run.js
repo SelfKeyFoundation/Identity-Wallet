@@ -2,25 +2,23 @@
 
 import $ from 'jquery';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, ConfigStorageService, CommonService, WalletService) {
+import Wallet from '../classes/wallet';
+import Token from '../classes/token';
+
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
     'ngInject';
 
+    $rootScope.selectedLanguage = "en";
+    
     $log.debug('DICTIONARY', DICTIONARY);
-
-    /**
-     * 
-     */
-    $rootScope.viewState = {
-
-    }
 
     /**
      * 
      */
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
-
-    $rootScope.selectedLanguage = "en";
+    $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
+    $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage]; 
 
     /**
      * 
@@ -31,9 +29,13 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     /**
      * 
      */
+    Wallet.$rootScope = $rootScope;
+    Token.$rootScope = $rootScope;
+
+    /**
+     * 
+     */
     $rootScope.getTranslation = function (prefix, keyword, args) {
-        return keyword;
-        
         if (prefix) {
             keyword = prefix.toUpperCase() + "_" + keyword.toUpperCase();
         }
@@ -68,7 +70,20 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     // TODO - change send dialog with new one
     $rootScope.openSendTokenDialog = (event, token) => {
-        CommonService.showSendTokenDialog(token);
+        return $mdDialog.show({
+            controller: 'SendTokenDialogController',
+            templateUrl: 'common/dialogs/send-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                args: {
+                    token: token,
+                    publicKeyHex: $rootScope.wallet.getPublicKeyHex()
+                }
+            }
+        });
     }
 
     $rootScope.openReceiveTokenDialog = (event, args) => {
@@ -87,7 +102,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     $rootScope.checkTermsAndConditions = () => {
         let store = ConfigFileService.getStore();
-        if (!store.setup.termsAccepted) {
+        let termsAccepted = store.setup ? store.setup.termsAccepted : false;
+        if (!termsAccepted) {
             $timeout(() => {
                 $mdDialog.show({
                     controller: 'TermsDialogController',
@@ -119,12 +135,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
             ElectronService.sendConfigChange(data);
         }
     });
-
-    $interval(() => {
-        if ($rootScope.wallet && $rootScope.wallet.getAddress()) {
-            WalletService.loadBalance();
-        }
-    }, 10000);
 
     ElectronService.analytics('app-start', new Date().toISOString());
 }

@@ -53,6 +53,14 @@ const EN = {
     ID_ATTR_NATIONAL_ID: "National ID",
     ID_ATTR_PASSPORT: "Passport",
     ID_ATTR_UTILITY_BILL: "Utility Bill",
+
+
+    /**
+     * 
+     */
+    TOKEN_ETH: "Ethereum",
+    TOKEN_KEY: "Selfkey",
+    TOKEN_QEY: "Selfkey",   // testnet
 }
 
 module.exports = EN;

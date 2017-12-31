@@ -57,7 +57,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       return defer.promise;
     }
 
-
     importUsingKeystoreFileDialog() {
       let defer = $q.defer();
 
@@ -67,7 +66,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         this.importUsingKeystoreFilePath(resp.path).then((wallet) => {
           defer.resolve(wallet);
         }).catch((error) => {
-          defer.reject($rootScope.buildErrorObject("ERR_IMPORTING_KEYSTORE_FILE", error));
+          defer.reject("ERR_IMPORTING_KEYSTORE_FILE");
         });
       });
 
@@ -89,7 +88,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_IMPORT_KEYSTORE_FILE", error));
+        defer.reject("ERR_IMPORT_KEYSTORE_FILE");
       });
 
       return defer.promise;
@@ -108,7 +107,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_UNLOCK_KEYSTORE_FILE", error));
+        defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
       });
 
       return defer.promise;
@@ -133,7 +132,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_BALANCE_LOAD", error));
+        defer.reject(error);
       });
 
       return defer.promise;
@@ -155,7 +154,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       promise.then((nonce) => {  
         defer.resolve(nonce);
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_TX_COUNT_LOAD", error));
+        defer.reject(error);
       });
       return defer.promise;
     }
@@ -167,7 +166,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       promise.then((data) => {
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_GAS_PRICE_LOAD", error));
+        defer.reject(error);
       });
       return defer.promise;
     }
@@ -207,7 +206,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
         defer.resolve('0x' + eTx.serialize().toString('hex'));
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_GENERATE_ETH_RAW_TX", error));
+        defer.reject(error);
       });
 
       return defer.promise;
@@ -218,7 +217,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       let token = TokenService.getBySymbol(tokenSymbol);
       if (!token) {
-        defer.reject($rootScope.buildErrorObject("ERR_TOKEN_NOT_FOUND"));
+        defer.reject("ERR_TOKEN_NOT_FOUND");
       }
 
       // TODO check token balance
@@ -227,14 +226,14 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       promise.then((nonce) => {
         let genResult = token.generateContractData(toAddressHex, valueWei);
         if (genResult.error) {
-          defer.reject($rootScope.buildErrorObject("ERR_TX_DATA_GENERATION", genResult.error));
+          defer.reject(genResult.error);
         } else {
           let rawTx = {
             nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
             gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
             gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
             to: EthUtils.sanitizeHex(token.contractAddress),
-            value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
+            value: "0x00",
             data: EthUtils.sanitizeHex(genResult.data),
             chainId: selectedChainId
           }
@@ -246,8 +245,11 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
           defer.resolve('0x' + eTx.serialize().toString('hex'));
         }
       }).catch((error) => {
-        defer.reject($rootScope.buildErrorObject("ERR_GENERATE_TOKEN_RAW_TX", error));
+        console.log(error);
+        defer.reject(error);
       });
+
+      return defer.promise; 
     }
   };
 

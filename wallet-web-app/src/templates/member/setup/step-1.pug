@@ -9,15 +9,15 @@
         .header
             span.none-select-text Identity Wallet Details
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
-            .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
+            md-input-container.sk-input-box
                 label {{$root.INITIAL_ID_ATTRIBUTES.REQ_1}}
-                input.sk-input(type="text", name="fullName", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value")
-            .sk-input-container(style="margin: 12px 0 12px 0; user-select: none;")
+                input(required type="text", name="fullName", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1].value")
+            md-input-container.sk-input-box
                 label {{$root.INITIAL_ID_ATTRIBUTES.REQ_2}}
-                input.sk-input(type="text", name="email", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value")
-            .sk-input-container(style="margin: 12px 0 12px 0 ;user-select: none;")
+                input(type="text", name="email", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2].value")
+            md-input-container.sk-input-box
                 label {{$root.INITIAL_ID_ATTRIBUTES.REQ_3}}
-                input.sk-input(type="text", name="residence", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value")
+                input(type="text", name="residence", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3].value")
 
             .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
                 span(style="color: #fff; user-select: none;") Create SelfKey Basic ID

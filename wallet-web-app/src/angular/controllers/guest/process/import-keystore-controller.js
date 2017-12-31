@@ -6,8 +6,8 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
     $scope.selectKystoreJsonFile = (event) => {
         // TODO
-        WalletService.importUsingKeystoreFileDialog().then((wallet)=>{
-            ConfigFileService.load().then((storeData)=>{
+        WalletService.importUsingKeystoreFileDialog().then((wallet) => {
+            ConfigFileService.load().then((storeData) => {
                 $log.info("storeData", storeData);
                 $rootScope.wallet = wallet;
                 $log.info(wallet);
