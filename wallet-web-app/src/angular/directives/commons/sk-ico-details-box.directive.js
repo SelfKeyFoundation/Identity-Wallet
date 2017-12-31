@@ -12,7 +12,7 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
             config: "="
         },
         link: (scope, element) => {
-            scope.type = scope.type || 'info';
+            scope.type = scope.type || 'requirements';
 
             scope.config = {
                 showSubmit: true
