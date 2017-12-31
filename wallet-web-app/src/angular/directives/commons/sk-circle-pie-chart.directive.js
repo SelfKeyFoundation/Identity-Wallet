@@ -8,6 +8,7 @@ function SkCirclePieChartDirective() {
             data: '='
         },
         link: (scope, element) => {
+
             let chunk = function (arr, chunk) {
                 let result = [];
                 let i, j;
@@ -20,7 +21,9 @@ function SkCirclePieChartDirective() {
             let getUniqueIdentifier = (item, index) => {
                 return `${item.title + index}`;
             }
+
             scope.chunkedItems = chunk(scope.data.items, 3);
+
             google.charts.load("current", { packages: ["corechart"] });
             google.charts.setOnLoadCallback(drawChart);
 
@@ -29,8 +32,9 @@ function SkCirclePieChartDirective() {
                 let colors = [];
                 scope.data.items.forEach((item, index) => {
                     item.uniqueIdentifier = getUniqueIdentifier(item, index);
-                    dataItems.push([item.title, item.value]);
+                    dataItems.push([item.title, item.valueUSD]);
                     colors.push(item.color);
+                
                 });
                 let processedData = [['Content', 'percents']].concat(dataItems);
                 let data = google.visualization.arrayToDataTable(processedData);
@@ -38,7 +42,7 @@ function SkCirclePieChartDirective() {
                 let options = {
                     backgroundColor: 'transparent',
                     title: "",
-                    chartArea: { left: 10, top: 10, bottom: 10, right: 10 },
+                    chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
                     pieHole: 0.7,
                     pieSliceBorderColor: 'none',
                     colors: colors,
@@ -56,6 +60,7 @@ function SkCirclePieChartDirective() {
                 };
 
                 let chart = new google.visualization.PieChart(document.getElementById('chart'));
+
                 scope.chartIsReady = false;
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {
                     scope.chartIsReady = true;
@@ -101,16 +106,24 @@ function SkCirclePieChartDirective() {
                     scope.data.items.forEach((item, index) => {
                         if (index != sel[0].row) {
                             addOrRemoveActive({ row: index }, 'removeClass');
-                        }else{
-                            if(scope.data.callback && scope.data.callback.onItemClick){
+                        } else {
+                            if (scope.data.callback && scope.data.callback.onItemClick) {
                                 scope.data.callback.onItemClick(item);
                             }
                         }
                     });
-
-
                 });
+
+                if (scope.data.callback && scope.data.callback.onReady) {
+                    scope.data.callback.onReady();
+                }
             }
+
+            scope.data.draw = () => {
+                scope.chunkedItems = chunk(scope.data.items, 3);
+                drawChart();
+            }
+
         },
         replace: true,
         templateUrl: 'common/directives/sk-circle-pie-chart.html'

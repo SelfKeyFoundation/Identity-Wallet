@@ -1,5 +1,6 @@
 'use strict';
 
+import Wallet from '../classes/wallet';
 import Token from '../classes/token';
 import EthUtils from '../classes/eth-utils';
 import EthUnits from '../classes/eth-units';
@@ -75,6 +76,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
       Token.Web3Service = this;
       Token.$q = $q;
+
+      Wallet.Web3Service = this;
     }
 
     getBalance(addressHex) {

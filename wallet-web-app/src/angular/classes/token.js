@@ -4,8 +4,7 @@ import BigNumber from 'bignumber.js';
 import EthUtils from './eth-utils.js';
 import CommonUtils from './common-utils.js';
 
-let Web3Service;
-let $q;
+let $rootScope, $q, Web3Service;
 
 class Token {
 
@@ -17,6 +16,7 @@ class Token {
 
     static set Web3Service(value) { Web3Service = value; }
     static set $q(value) { $q = value; }
+    static set $rootScope(value) { $rootScope = value; }
 
     /**
      * 
@@ -33,9 +33,11 @@ class Token {
 
         this.balanceHex = null;
         this.balanceDecimal = null;
-        
+
         this.balanceInUsd = null;
         this.usdPerUnit = null;
+
+        this.currentOwnerPublicKeyHex = null;
 
         this.promise = null;
     }
@@ -62,6 +64,10 @@ class Token {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
+    setOwner(publicKeyHex) {
+        this.currentOwnerPublicKeyHex = publicKeyHex
+    }
+
     /**
      * 
      */
@@ -81,34 +87,43 @@ class Token {
      * 
      */
     loadBalanceFor(userAddress) {
-        console.log(">>>> loadBalanceFor >>", userAddress)
         let defer = $q.defer();
 
         let data = this.generateBalanceData(userAddress);
-        console.log("token balance contract data:", data)
-        
-        
         let promise = Web3Service.getTokenBalanceByData(data);
- 
+
         promise.then((balanceHex) => {
+            let oldBalanceHex = angular.copy(this.balanceHex);
+
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
-            console.log(this);
+
+            if (this.usdPerUnit) {
+                this.updatePriceInUsd(this.usdPerUnit);
+            }
+
+            if(balanceHex !== oldBalanceHex){
+                $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
+            }
+
             defer.resolve(this);
         }).catch((error) => {
-            console.log(error);
             defer.reject(error);
         });
 
         return defer.promise;
     }
 
+    loadBalance() {
+        return this.loadBalanceFor(this.currentOwnerPublicKeyHex);
+    }
+
     /**
      * 
      */
-    updatePriceInUsd(usdPerUnit){
+    updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
-        this.balanceInUsd = (Number(this.balanceDecimal) * Number(usdPerUnit));
+        this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
     }
 }
 

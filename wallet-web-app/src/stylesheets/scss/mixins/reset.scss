@@ -18,7 +18,10 @@
             )
         ),
         div: (
-            display: block    
+            display: block,
+            background-image: unset,
+            box-shadow: unset,
+            border-radius: 0
         )
     );
 
