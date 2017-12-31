@@ -10,9 +10,10 @@
   .header-content {
     background-color: #262f39;
     border: solid 1px #303c49;
-    padding: 30px;
     border-radius: 4px;
-    width: 100%;
+    width: 759px;
+    height: 412px;
+    padding: 30px;
 
     > hr {
       color: #303c49;
@@ -21,7 +22,7 @@
       border: 0;
       border-top: 1px solid #303c49;
       width: 100%;
-      margin-top: 15px;
+      margin-top: 24px;
     }
 
     .logo-section {
@@ -29,8 +30,17 @@
       .logo-text {
         color: #ffffff;
         display: inline-grid;
-        margin-left: 15px;
+        margin-left: 12px;
         margin-top: 8px;
+
+        .text {
+          width: 77px;
+          height: 22px;
+          font-size: 18px;
+          align: left;
+          color: #ffffff;
+          font-family: ProximaNovaRegular;
+        }
 
         .initial {
           font-family: ProximaNovaRegular;
@@ -40,7 +50,11 @@
           line-height: normal;
           letter-spacing: 1px;
           text-align: left;
-          font-size: 12px;
+          font-size: 14px;
+          width: 28px;
+          height: 17px;
+          opacity: 0.7;
+
         }
       }
     }
@@ -49,8 +63,8 @@
       display: inline-grid;
 
       .main-price {
-        font-family: ProximaNovaRegular;
-        font-size: 32px;
+        font-family: ProximaNovaLight;
+        font-size: 40px;
         font-weight: 300;
         font-style: normal;
         font-stretch: normal;
@@ -58,10 +72,13 @@
         letter-spacing: normal;
         text-align: left;
         color: #ffffff;
+        width: 121px;
+        height: 48px;
+
       }
       .secondary-price {
         font-family: ProximaNovaRegular;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
@@ -69,14 +86,17 @@
         letter-spacing: normal;
         text-align: left;
         color: #93b0c1;
+        margin-top: 7px;
+        width: 80px;
+        height: 17px;
       }
     }
     .coin-address-section {
-      padding: 10px 0;
+      margin-top: 30px;
 
       .your-address {
         font-family: ProximaNovaRegular;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
@@ -84,12 +104,15 @@
         letter-spacing: normal;
         text-align: left;
         color: #ffffff;
+        width: 328px;
+        height: 20px;
       }
       .generated-address {
+        margin-top: 2px;
 
         .address {
-          font-family: ProximaNovaRegular;
-          font-size: 12px;
+          font-family: ProximaNovaMedium;
+          font-size: 14px;
           font-weight: 500;
           font-style: normal;
           font-stretch: normal;
@@ -97,45 +120,50 @@
           letter-spacing: normal;
           text-align: left;
           color: #93b0c1;
+          width: 328px;
+          height: 20px;
         }
         .copy-button {
           border-radius: 4px;
           border: solid 1px #3b4a5a;
-          font-family: ProximaNovaRegular;
-          font-size: 10px;
-          font-weight: normal;
-          font-style: normal;
-          font-stretch: normal;
-          letter-spacing: normal;
-          text-align: left;
-          color: #93b0c1;
           outline: none;
-          line-height: 11px;
-          margin-left: 10px;
-          padding: 2px 5px;
+          width: 50px;
+          height: 24px;
           background-color: transparent;
+
+          > span {
+            font-family: ProximaNovaRegular;
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #93b0c1;
+            line-height: 11px;
+            width: 32px;
+            height: 14px;
+            vertical-align: middle;
+          }
         }
       }
     }
     .buttons-section {
-      margin-top: 20px;
+      margin-top: 36px;
 
       .action-button {
-
+        width: 190px;
+        height: 50px;
         border-radius: 4px;
         box-shadow: 0 2px 2px 0 #15222e;
-        border-style: solid;
-        border-width: 1px;
+        border: 1px solid #0dc7dd;
         border-image-slice: 1;
         background-color: transparent;
-        border-color: #0dc7dd;
-        padding: 13px 20px;
         outline: none;
-        width: 25%;
 
-        > span {
-          font-family: ProximaNovaRegular;
-          font-size: 14px;
+        .receive {
+          font-family: ProximaNovaSemibold;
+          font-size: 16px;
           font-weight: 600;
           font-style: normal;
           font-stretch: normal;
@@ -143,7 +171,25 @@
           letter-spacing: 0.7px;
           text-align: center;
           color: #0dc7dd;
-          margin: 0 auto;
+          width: 69px;
+          height: 24px;
+          margin-top: 10px;
+
+        }
+
+        .send {
+          width: 45px;
+          height: 24px;
+          font-family: ProximaNovaSemibold;
+          font-size: 16px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.5;
+          letter-spacing: 0.7px;
+          text-align: center;
+          color: #0dc7dd;
+          margin-top: 10px;
         }
 
       }
@@ -157,8 +203,9 @@
     border: solid 1px #303c49;
     padding: 30px;
     border-radius: 4px;
-    width: 100%;
+    width: 759px;
     margin-top: 20px;
+    margin-bottom: 20px;
 
     .activity-text {
 
@@ -171,6 +218,8 @@
       letter-spacing: normal;
       text-align: left;
       color: #ffffff;
+      width: 59px;
+      height: 22px;
     }
     .list {
       margin-top: 20px;
@@ -186,14 +235,15 @@
           border: 0;
           border-top: 1px solid #303c49;
           width: 100%;
-          margin-top: 15px;
+          margin: 36px 0;
         }
 
         .item-container {
+          position: relative;
 
           .date {
             font-family: ProximaNovaRegular;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 500;
             font-style: normal;
             font-stretch: normal;
@@ -203,10 +253,23 @@
             color: #93a4af;
             display: inline-grid;
             text-align: center;
+
+            > span {
+              font-size: 18px;
+              font-family: ProximaNovaRegular;
+              font-size: 18px;
+              font-weight: normal;
+              font-style: normal;
+              font-stretch: normal;
+              line-height: normal;
+              letter-spacing: normal;
+              text-align: center;
+              width: 100%;
+            }
           }
           .sent-receive {
             font-family: ProximaNovaRegular;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 600;
             font-style: normal;
             font-stretch: normal;
@@ -214,17 +277,53 @@
             letter-spacing: normal;
             text-align: left;
             color: #ffffff;
+            margin-left: 20px;
+          }
+          .sent-receive-text {
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            margin-left: 9px;
+            color: #ffffff;
+            line-height: 2em;
+            max-width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &.aqua-blue {
+              color: #0dc7dd;
+            }
+            &.squash {
+              color: #f5a623;
+            }
+
           }
           .coin-change {
             font-family: ProximaNovaRegular;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 500;
             font-style: normal;
             font-stretch: normal;
             line-height: 2em;
             letter-spacing: normal;
             text-align: right;
-            color: #0dc7dd;
+            color: #ffffff;
+            position: absolute;
+            right: 0;
+
+            &.aqua-blue {
+              color: #0dc7dd;
+            }
+            &.squash {
+              color: #f5a623;
+            }
+
           }
         }
       }
