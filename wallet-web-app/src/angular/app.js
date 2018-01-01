@@ -168,6 +168,9 @@ angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirements
 import SkActionLogsBoxDirective from './directives/commons/sk-action-logs-box.directive';
 angular.module('kyc-wallet').directive('skActionLogsBox', SkActionLogsBoxDirective);
 
+import ScrollToEndDirective from './directives/commons/scroll-to-end.directive';
+angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
+
 
 /**
  * controllers
