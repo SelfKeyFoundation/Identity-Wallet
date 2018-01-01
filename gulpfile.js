@@ -6,31 +6,48 @@ const watch = require('gulp-watch');
 const pug = require('gulp-pug');
 const templateCache = require('gulp-angular-templatecache');
 const path = require('path');
+const sass = require('gulp-sass');
 
-const src = path.resolve(__dirname, './app/src/templates/**/*.pug');
-const dest = path.resolve(__dirname, './app/src/');
+const tmplSrc = path.resolve(__dirname, './app/src/templates/**/*.pug');
+const tmplDest = path.resolve(__dirname, './app/src/');
+
+const scssSrc = path.resolve(__dirname, './app/src/stylesheets/scss/main.scss');
+const scssDest = path.resolve(__dirname, './app/src/stylesheets/css');
 
 
-gulp.task('default', (cb) => {
-	gulp.src(src)
+gulp.task('templates', (cb) => {
+	gulp.src(tmplSrc)
 		.pipe(pug({client: false}))
 		.on('error', function(error) {
 			console.log(error);
-			this.emit("end");
+			this.emit('end');
 		})
-		.pipe(templateCache({standalone: true, filename: "app.templates.js"}))
+		.pipe(templateCache({standalone: true, filename: 'app.templates.js'}))
 		.on('error', function(error) {
 			console.log(error);
-			this.emit("end");
+			this.emit('end');
 		})
-		.pipe(gulp.dest(dest))
+		.pipe(gulp.dest(tmplDest))
+		.on('end', () => {
+			cb();
+		});
+});
+
+gulp.task('stylesheets', (cb) => {
+	gulp.src(scssSrc)
+		.pipe(sass({outputStyle: 'nested'}).on('error', sass.logError))
+		.pipe(gulp.dest(scssDest))
 		.on('end', () => {
 			cb();
 		});
 });
 
 gulp.task('watch', (cb) => {
-	watch([src], () => {
-		runSequence('default');
+	watch([scssSrc, tmplSrc], () => {
+		runSequence(['templates', 'stylesheets'], cb);
 	});
+});
+
+gulp.task('default', (cb) => {
+	runSequence(['templates', 'stylesheets'], cb);
 });

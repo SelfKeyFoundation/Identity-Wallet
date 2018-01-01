@@ -7,8 +7,8 @@
 	"main": "./app/main.js",
 	"scripts": {
 		"start": "electron-forge start",
-		"package": "electron-forge package",
-		"make": "electron-forge make"
+		"package": "gulp && electron-forge package",
+		"make": "gulp && electron-forge make"
 	},
 	"dependencies": {
 		"bignumber.js": "^4.1.0",
