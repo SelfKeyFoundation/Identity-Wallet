@@ -3,14 +3,20 @@
         sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44")
         span {{ico.company}}
         span(style="font-size: 15px; margin-left: 5px;") ({{ico.category}})
-        span.dot(ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }")
+        button(ng-if="config.showSubmit")
+            span Submit
+        .status-container(ng-if="!config.showSubmit", layout="row", ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }") Requirements Missing
+            span
+
+
+
 
     .sk-ico-details-box__content(ng-if="type === 'requirements'")
         .title
             span Submit Necessary Information
         .description.fc-white
             p In order to join this token sale, you must submit all information required by those with this offering.
-        
+
         hr
 
         sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallback")
@@ -22,32 +28,32 @@
         table
             tr
                 td
-                    span.amountValue 43,422.12
+                    span.amountValue {{ico.cap.raised}}
                     br
-                    span.label ETH Collected
+                    span.label USD raised
                 td
-                    span.amountValue 41,252,331
+                    span.amountValue {{ico.cap.remaining}}
                     br
                     span.label BNX Remaining
             tr
-        
+
         hr
 
         table
             tr
                 td
                     span.label Price:  
-                    span 0.001518 ETH/ BNC
+                    span {{ico.token.price}}
                 td
                     span.label Min Purchase  
-                    span 0.0001 ETH
+                    span {{ico.restrictions.minContribution}}
             tr
                 td
                     span.label Hard cap: 
-                    span 105,000 ETH
+                    span {{ico.cap.total}}
                 td
                     span.label Total Supply 
-                    span 150,000,000 BNC
+                    span {{ico.token.total}}
 
 
 

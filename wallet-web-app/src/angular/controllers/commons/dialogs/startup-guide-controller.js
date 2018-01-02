@@ -12,7 +12,7 @@ function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $
         store.setup.guideShown = true;
         $scope.storeSavePromise = ConfigFileService.save();
         $scope.storeSavePromise.then(() => {
-            $state.go('guest.process.create-keystore');
+            $state.go('guest.welcome');
             $mdDialog.hide();
         });
     }

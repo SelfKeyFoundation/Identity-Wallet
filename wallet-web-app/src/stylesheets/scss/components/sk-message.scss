@@ -20,6 +20,10 @@
         background-image: linear-gradient(274deg, #08bccd, #2da1f8);
     }
 
+    &.error {
+        background-color: #ed1c24;
+    }
+
     &.fade-out {
         transition: .5s;
         opacity: 0;
