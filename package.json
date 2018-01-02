@@ -6,7 +6,7 @@
 	"repository": "https://github.com/kyc-chain/wallet",
 	"main": "./app/main.js",
 	"scripts": {
-		"start": "electron-forge start",
+		"start": "gulp && electron-forge start",
 		"package": "gulp && electron-forge package",
 		"make": "gulp && electron-forge make"
 	},
@@ -42,9 +42,7 @@
 		"electron": "1.7.5",
 		"ethereumjs-util": "5.1.2",
 		"google-charts": "^1.0.0",
-		"gulp": "^3.9.1",
 		"jquery": "3.2.1",
-		"node-sass": "^4.6.1",
 		"web3": "^1.0.0-beta.26"
 	},
 	"devDependencies": {
@@ -66,6 +64,7 @@
 		"gulp-token-replace": "1.0.4",
 		"gulp-watch": "4.3.11",
 		"node-notifier": "5.1.2",
+		"node-sass": "^4.6.1",
 		"require-reload": "0.2.2",
 		"run-sequence": "2.1.0",
 		"vinyl-source-stream": "1.1.0"

@@ -21,11 +21,12 @@ window.qrcode = qrcode;
 /**
  * Internal Modules
  */
-import appTemplates from './app.templates';
-import appRun from './configs/app.run';
-import appStates from './configs/app.states';
+//import appTemplates from './app.templates';
+require('./angular/app.templates');
+import appRun from './angular/configs/app.run';
+import appStates from './angular/configs/app.states';
 
-import appTestFilter from './filters/app.test.filter';
+import appTestFilter from './angular/filters/app.test.filter';
 
 const requires = [
   'ngMaterial',
@@ -43,13 +44,25 @@ window.app = angular.module('kyc-wallet', requires);
 /**
  * constants
  */
-import appConfigConstant from './constants/app.config.constant';
-angular.module('kyc-wallet').constant('CONFIG', appConfigConstant);
+const AppConfigConstant = require('./config');
 
-import appDictionaryConstant from './constants/app.dictionary.constant';
+let devModeStarted = false;
+if(process.argv.length > 2) {
+	if(process.argv[2] === 'dev') {
+		devModeStarted = true;
+	}
+}
+let extraConfig = AppConfigConstant.production;
+if(devModeStarted) {
+	extraConfig = AppConfigConstant.default;
+}
+const config = Object.assign(AppConfigConstant.common, extraConfig);
+angular.module('kyc-wallet').constant('CONFIG', config);
+
+import appDictionaryConstant from './angular/constants/app.dictionary.constant';
 angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);
 
-import appEventsConstant from './constants/app.events.constant';
+import appEventsConstant from './angular/constants/app.events.constant';
 angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
 
 /**
@@ -60,115 +73,115 @@ angular.module('kyc-wallet').filter('testFilter', appTestFilter);
 /**
  * services
  */
-import ElectronService from './services/electron.service';
+import ElectronService from './angular/services/electron.service';
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 
-import ConfigStorageService from './services/config-storage.service';
+import ConfigStorageService from './angular/services/config-storage.service';
 angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
 
-import ConfigFileService from './services/config-file.service';
+import ConfigFileService from './angular/services/config-file.service';
 angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
 
-import CommonService from './services/common.service';
+import CommonService from './angular/services/common.service';
 angular.module('kyc-wallet').service('CommonService', CommonService);
 
-import EtherScanService from './services/ether-scan.service';
+import EtherScanService from './angular/services/ether-scan.service';
 angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
 
-import MEWService from './services/mew.service';
+import MEWService from './angular/services/mew.service';
 angular.module('kyc-wallet').service('MEWService', MEWService);
 
-import Web3Service from './services/web3.service';
+import Web3Service from './angular/services/web3.service';
 angular.module('kyc-wallet').service('Web3Service', Web3Service);
 
-import EtherUnitsService from './services/ether-units.service';
+import EtherUnitsService from './angular/services/ether-units.service';
 angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 
-import WalletService from './services/wallet.service';
+import WalletService from './angular/services/wallet.service';
 angular.module('kyc-wallet').service('WalletService', WalletService);
 
-import TokenService from './services/token.service';
+import TokenService from './angular/services/token.service';
 angular.module('kyc-wallet').service('TokenService', TokenService);
 
-import SelfkeyService from './services/selfkey.service';
+import SelfkeyService from './angular/services/selfkey.service';
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
 /**
  * directives
  */
-import CountdownDirective from './directives/countdown.directive';
+import CountdownDirective from './angular/directives/countdown.directive';
 angular.module('kyc-wallet').directive('countdown', CountdownDirective);
 
-import SkLoadingDirective from './directives/commons/sk-loading.directive';
+import SkLoadingDirective from './angular/directives/commons/sk-loading.directive';
 angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
-import SkIconDirective from './directives/commons/sk-icon.directive';
+import SkIconDirective from './angular/directives/commons/sk-icon.directive';
 angular.module('kyc-wallet').directive('skIcon', SkIconDirective);
 
-import SkMessageDirective from './directives/commons/sk-message.directive';
+import SkMessageDirective from './angular/directives/commons/sk-message.directive';
 angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
 
-import SkSelectIfDirective from './directives/commons/sk-select-if.directive';
+import SkSelectIfDirective from './angular/directives/commons/sk-select-if.directive';
 angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);
 
-import skShowLoading from './directives/commons/sk-show-loading.directive';
+import skShowLoading from './angular/directives/commons/sk-show-loading.directive';
 angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 
-import SkLinearProgressDirective from './directives/commons/sk-linear-progress.directive';
+import SkLinearProgressDirective from './angular/directives/commons/sk-linear-progress.directive';
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
-import skSlider from './directives/commons/sk-slider.directive';
+import skSlider from './angular/directives/commons/sk-slider.directive';
 angular.module('kyc-wallet').directive('skSlider', skSlider);
 
-import SkDoubleHeaderDirective from './directives/commons/sk-double-header.directive';
+import SkDoubleHeaderDirective from './angular/directives/commons/sk-double-header.directive';
 angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
-import SkTokenBoxDirective from './directives/commons/sk-token-box.directive';
+import SkTokenBoxDirective from './angular/directives/commons/sk-token-box.directive';
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
-import SkTasksBoxDirective from './directives/commons/sk-tasks-box.directive';
+import SkTasksBoxDirective from './angular/directives/commons/sk-tasks-box.directive';
 angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 
-import SkIcoItemBoxDirective from './directives/commons/sk-ico-item-box.directive';
+import SkIcoItemBoxDirective from './angular/directives/commons/sk-ico-item-box.directive';
 angular.module('kyc-wallet').directive('skIcoItemBox', SkIcoItemBoxDirective);
 
-import SkIcoDetailsBoxDirective from './directives/commons/sk-ico-details-box.directive';
+import SkIcoDetailsBoxDirective from './angular/directives/commons/sk-ico-details-box.directive';
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
-import SkSendTokenDirective from './directives/commons/sk-send-token.directive';
+import SkSendTokenDirective from './angular/directives/commons/sk-send-token.directive';
 angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
 
-import SkRightSidenavDirective from './directives/commons/sk-right-sidenav.directive';
+import SkRightSidenavDirective from './angular/directives/commons/sk-right-sidenav.directive';
 angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
 
-import SkCirclePieChartDirective from './directives/commons/sk-circle-pie-chart.directive';
+import SkCirclePieChartDirective from './angular/directives/commons/sk-circle-pie-chart.directive';
 angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
 
-import SkWalletHistoryItemDirective from './directives/commons/sk-wallet-history-item.directive';
+import SkWalletHistoryItemDirective from './angular/directives/commons/sk-wallet-history-item.directive';
 angular.module('kyc-wallet').directive('skWalletHistoryItem', SkWalletHistoryItemDirective);
 
-import SkRemindersBoxDirective from './directives/commons/sk-reminders-box.directive';
+import SkRemindersBoxDirective from './angular/directives/commons/sk-reminders-box.directive';
 angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
 
-import SkAlertsBoxDirective from './directives/commons/sk-alerts-box.directive';
+import SkAlertsBoxDirective from './angular/directives/commons/sk-alerts-box.directive';
 angular.module('kyc-wallet').directive('skAlertsBox', SkAlertsBoxDirective);
 
-import SkWalletGeneralInfoBoxDirective from './directives/commons/sk-wallet-general-info-box.directive';
+import SkWalletGeneralInfoBoxDirective from './angular/directives/commons/sk-wallet-general-info-box.directive';
 angular.module('kyc-wallet').directive('skWalletGeneralInfoBox', SkWalletGeneralInfoBoxDirective);
 
-import SkIdAttributeBoxDirective from './directives/commons/sk-id-attribute-box.directive';
+import SkIdAttributeBoxDirective from './angular/directives/commons/sk-id-attribute-box.directive';
 angular.module('kyc-wallet').directive('skIdAttributeBox', SkIdAttributeBoxDirective);
 
-import SkUserInfoBoxDirective from './directives/commons/sk-user-info-box.directive';
+import SkUserInfoBoxDirective from './angular/directives/commons/sk-user-info-box.directive';
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
-import SkKycRequirementsBoxDirective from './directives/commons/sk-kyc-requirements-box.directive';
+import SkKycRequirementsBoxDirective from './angular/directives/commons/sk-kyc-requirements-box.directive';
 angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
 
-import SkActionLogsBoxDirective from './directives/commons/sk-action-logs-box.directive';
+import SkActionLogsBoxDirective from './angular/directives/commons/sk-action-logs-box.directive';
 angular.module('kyc-wallet').directive('skActionLogsBox', SkActionLogsBoxDirective);
 
-import ScrollToEndDirective from './directives/commons/scroll-to-end.directive';
+import ScrollToEndDirective from './angular/directives/commons/scroll-to-end.directive';
 angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 
 
@@ -179,49 +192,49 @@ angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 /**
  * commons
  */
-import TermsDialogController from './controllers/commons/dialogs/terms-controller.js';
+import TermsDialogController from './angular/controllers/commons/dialogs/terms-controller.js';
 angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
-import StartupGuideDialogController from './controllers/commons/dialogs/startup-guide-controller.js';
+import StartupGuideDialogController from './angular/controllers/commons/dialogs/startup-guide-controller.js';
 angular.module('kyc-wallet').controller('StartupGuideDialogController', StartupGuideDialogController);
 
-import ReceiveTokenDialogController from './controllers/commons/dialogs/receive-token-controller.js';
+import ReceiveTokenDialogController from './angular/controllers/commons/dialogs/receive-token-controller.js';
 angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
 
-import AddCustomTokenDialogController from './controllers/commons/dialogs/add-custom-token-controller.js';
+import AddCustomTokenDialogController from './angular/controllers/commons/dialogs/add-custom-token-controller.js';
 angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
 
-import SendTokenDialogController from './controllers/commons/dialogs/send-token-controller.js';
+import SendTokenDialogController from './angular/controllers/commons/dialogs/send-token-controller.js';
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
 
 /**
  * guest
  */
-import GuestLayoutController from './controllers/guest/layout-controller.js';
+import GuestLayoutController from './angular/controllers/guest/layout-controller.js';
 angular.module('kyc-wallet').controller('GuestLayoutController', GuestLayoutController);
 
-import GuestLoadingController from './controllers/guest/loading-controller.js';
+import GuestLoadingController from './angular/controllers/guest/loading-controller.js';
 angular.module('kyc-wallet').controller('GuestLoadingController', GuestLoadingController);
 
-import GuestCreateKeystoreController from './controllers/guest/process/create-keystore-controller.js';
+import GuestCreateKeystoreController from './angular/controllers/guest/process/create-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestCreateKeystoreController', GuestCreateKeystoreController);
 
-import GuestImportKeystoreController from './controllers/guest/process/import-keystore-controller.js';
+import GuestImportKeystoreController from './angular/controllers/guest/process/import-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
 
-import GuestUnlockKeystoreController from './controllers/guest/process/unlock-keystore-controller.js';
+import GuestUnlockKeystoreController from './angular/controllers/guest/process/unlock-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUnlockKeystoreController);
 
-import GuestKeystoreCreateStep1Controller from './controllers/guest/keystore/create/step-1-controller.js';
+import GuestKeystoreCreateStep1Controller from './angular/controllers/guest/keystore/create/step-1-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
-import GuestKeystoreCreateStep2Controller from './controllers/guest/keystore/create/step-2-controller.js';
+import GuestKeystoreCreateStep2Controller from './angular/controllers/guest/keystore/create/step-2-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
-import GuestKeystoreCreateStep3Controller from './controllers/guest/keystore/create/step-3-controller.js';
+import GuestKeystoreCreateStep3Controller from './angular/controllers/guest/keystore/create/step-3-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
-import GuestKeystoreCreateStep4Controller from './controllers/guest/keystore/create/step-4-controller.js';
+import GuestKeystoreCreateStep4Controller from './angular/controllers/guest/keystore/create/step-4-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
 
@@ -229,70 +242,70 @@ angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', Gu
 /**
  * member
  */
-import MemberLayoutController from './controllers/member/layout-controller.js';
+import MemberLayoutController from './angular/controllers/member/layout-controller.js';
 angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutController);
 
-import MemberRightSidenavController from './controllers/member/right-sidenav-controller.js';
+import MemberRightSidenavController from './angular/controllers/member/right-sidenav-controller.js';
 angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRightSidenavController);
 
 /**
  * setup
  */
-import MemberSetupViewKeystoreController from './controllers/member/setup/view-keystore-controller.js';
+import MemberSetupViewKeystoreController from './angular/controllers/member/setup/view-keystore-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', MemberSetupViewKeystoreController);
 
-import MemberSetupStep1Controller from './controllers/member/setup/step-1-controller.js';
+import MemberSetupStep1Controller from './angular/controllers/member/setup/step-1-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep1Controller', MemberSetupStep1Controller);
 
-import MemberSetupStep2Controller from './controllers/member/setup/step-2-controller.js';
+import MemberSetupStep2Controller from './angular/controllers/member/setup/step-2-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetupStep2Controller);
 
-import MemberSetupStep3Controller from './controllers/member/setup/step-3-controller.js';
+import MemberSetupStep3Controller from './angular/controllers/member/setup/step-3-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
 
-import MemberSetupWalletSetupController from './controllers/member/setup/wallet-setup-controller.js';
+import MemberSetupWalletSetupController from './angular/controllers/member/setup/wallet-setup-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupWalletSetupController', MemberSetupWalletSetupController);
 
-import MemberSetupCompletedController from './controllers/member/setup/completed-controller.js';
+import MemberSetupCompletedController from './angular/controllers/member/setup/completed-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupCompletedController', MemberSetupCompletedController);
 
 /**
  * dashboard
  */
-import MemberDashboardMainController from './controllers/member/dashboard/main-controller.js';
+import MemberDashboardMainController from './angular/controllers/member/dashboard/main-controller.js';
 angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
 
 /**
  * wallet
  */
-import MemberWalletMainController from './controllers/member/wallet/main-controller.js';
+import MemberWalletMainController from './angular/controllers/member/wallet/main-controller.js';
 angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWalletMainController);
 
-import ManageTokenController from './controllers/member/wallet/manage-token-controller.js';
+import ManageTokenController from './angular/controllers/member/wallet/manage-token-controller.js';
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
 
 /**
  * settings
  */
-import MemberSettingsMainController from './controllers/member/settings/main-controller.js';
+import MemberSettingsMainController from './angular/controllers/member/settings/main-controller.js';
 angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
 
 /**
  * Marketplace
  */
-import MemberMarketplaceMainController from './controllers/member/marketplace/main-controller.js';
+import MemberMarketplaceMainController from './angular/controllers/member/marketplace/main-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
 
-import MemberMarketplaceIcoListController from './controllers/member/marketplace/ico/list-controller.js';
+import MemberMarketplaceIcoListController from './angular/controllers/member/marketplace/ico/list-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoListController', MemberMarketplaceIcoListController);
 
-import MemberMarketplaceIcoItemController from './controllers/member/marketplace/ico/item-controller.js';
+import MemberMarketplaceIcoItemController from './angular/controllers/member/marketplace/ico/item-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
 
-import MemberMarketplaceIcoManageRequirementsController from './controllers/member/marketplace/ico/manage-requirements-controller.js';
+import MemberMarketplaceIcoManageRequirementsController from './angular/controllers/member/marketplace/ico/manage-requirements-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoManageRequirementsController', MemberMarketplaceIcoManageRequirementsController);
 
-import MemberMarketplaceIcoAcceptTermsController from './controllers/member/marketplace/ico/accept-terms-controller.js';
+import MemberMarketplaceIcoAcceptTermsController from './angular/controllers/member/marketplace/ico/accept-terms-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoAcceptTermsController', MemberMarketplaceIcoAcceptTermsController);
 
 /**

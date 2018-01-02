@@ -9,7 +9,7 @@ const path = require('path');
 const sass = require('gulp-sass');
 
 const tmplSrc = path.resolve(__dirname, './app/src/templates/**/*.pug');
-const tmplDest = path.resolve(__dirname, './app/src/');
+const tmplDest = path.resolve(__dirname, './app/src/angular/');
 
 const scssSrc = path.resolve(__dirname, './app/src/stylesheets/scss/main.scss');
 const scssDest = path.resolve(__dirname, './app/src/stylesheets/css');
