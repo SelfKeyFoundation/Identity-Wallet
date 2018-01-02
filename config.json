@@ -22,8 +22,9 @@
                 "initialIdAttributes": {
                     "REQ_1": "name",
                     "REQ_2": "email",
-                    "REQ_3": "proof_of_residence",
-                    "REQ_4": "national_id"
+                    "REQ_3": "physical_address",
+                    "REQ_4": "national_id",
+                    "REQ_5": "national_id_with_selfie"
                 },
                 "idAttributeTypeAdditions": {
                     "selfie": "addition_with_selfie",

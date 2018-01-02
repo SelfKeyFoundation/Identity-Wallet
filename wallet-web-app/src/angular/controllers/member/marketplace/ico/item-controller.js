@@ -69,6 +69,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.kycInfo = {
+        apiEndpoint: $scope.ico.kyc.apiEndpoint,
         organisation: $scope.ico.kyc.organisation,
         template: $scope.ico.kyc.template
     }

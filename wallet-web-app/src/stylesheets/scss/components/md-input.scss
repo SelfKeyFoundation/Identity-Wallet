@@ -28,7 +28,7 @@
     }
     &.md-input-has-value {
         >label {
-            color: #ffffff !important;
+            color: #93b0c1 !important;
             margin-bottom: 10px;
             font-size: 12px !important;
             opacity: 1 !important;;
@@ -36,6 +36,7 @@
             font-family: ProximaNovaSemibold;
             text-transform: uppercase;
             top: -24px;
+            font-weight: 600;
         }
 
         >input {

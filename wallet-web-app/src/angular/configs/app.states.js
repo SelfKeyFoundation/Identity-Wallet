@@ -75,6 +75,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/loading.html',
                     controller: 'GuestLoadingController'
                 }
+            },
+            params: {
+                redirectTo: null
             }
         })
 
