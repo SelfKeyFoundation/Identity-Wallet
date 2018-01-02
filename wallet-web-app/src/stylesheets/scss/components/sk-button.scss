@@ -84,6 +84,14 @@
         }
     }
 
+    &.orange-blue {
+        border: 1px solid #db7400;
+
+        &:hover {
+            border: 1px solid #b44000;
+        }
+    }
+
     > span {
         font-family: ProximaNovaRegular;
         text-transform: uppercase;

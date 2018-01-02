@@ -52,3 +52,24 @@
 
     }
 }
+
+
+@media print { 
+    .keystore-layout-wrapper {
+        .header {
+            display: none;
+        }
+
+        .sk-button {
+            display: none;
+        }
+
+        .sk-text {
+            display: none;
+        }
+
+        .sk-button {
+            display: none;
+        }
+    }
+}

@@ -212,6 +212,20 @@ angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestIm
 import GuestUnlockKeystoreController from './controllers/guest/process/unlock-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUnlockKeystoreController);
 
+import GuestKeystoreCreateStep1Controller from './controllers/guest/keystore/create/step-1-controller.js';
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
+
+import GuestKeystoreCreateStep2Controller from './controllers/guest/keystore/create/step-2-controller.js';
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
+
+import GuestKeystoreCreateStep3Controller from './controllers/guest/keystore/create/step-3-controller.js';
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
+
+import GuestKeystoreCreateStep4Controller from './controllers/guest/keystore/create/step-4-controller.js';
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
+
+
+
 /**
  * member
  */

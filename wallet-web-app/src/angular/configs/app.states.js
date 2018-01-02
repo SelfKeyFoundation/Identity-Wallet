@@ -99,12 +99,56 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('guest.process.create-keystore', {
-            url: '/guest/process/create-keystore',
+        // keystore
+        .state('guest.keystore', {
+            abstract: true,
             views: {
                 main: {
-                    templateUrl: 'guest/process/create-keystore.html',
-                    controller: 'GuestCreateKeystoreController'
+                    templateUrl: 'guest/keystore/layout.html'
+                }
+            }
+        })
+
+        // keystore create
+        .state('guest.keystore.create-step-1', {
+            url: '/guest/keystore/create-step-1',
+            views: {
+                main: {
+                    templateUrl: 'guest/keystore/create/step-1.html',
+                    controller: 'GuestKeystoreCreateStep1Controller'
+                }
+            }
+        })
+
+        .state('guest.keystore.create-step-2', {
+            url: '/guest/keystore/create-step-2',
+            views: {
+                main: {
+                    templateUrl: 'guest/keystore/create/step-2.html',
+                    controller: 'GuestKeystoreCreateStep2Controller'
+                }
+            },
+            params: {
+                thePassword: null
+            }
+        })
+
+        .state('guest.keystore.create-step-3', {
+            url: '/guest/keystore/create-step-3',
+            views: {
+                main: {
+                    templateUrl: 'guest/keystore/create/step-3.html',
+                    controller: 'GuestKeystoreCreateStep3Controller'
+                }
+            }
+        })
+
+        .state('guest.keystore.create-step-4', {
+            url: '/guest/keystore/create-step-4',
+            views: {
+                main: {
+                    templateUrl: 'guest/keystore/create/step-4.html',
+                    controller: 'GuestKeystoreCreateStep4Controller'
                 }
             }
         })

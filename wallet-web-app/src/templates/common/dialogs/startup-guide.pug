@@ -8,7 +8,7 @@ md-dialog.startup-guide(aira-lable="Dialog Title")
             md-toolbar
                 .md-toolbar-tools(layout='row', layout-align='center center')
                     span How It Works
-            .content(flex='')
+            .content(flex)
                 .textual
                     .text(style="padding-right:20px;")
                         p
@@ -40,6 +40,5 @@ md-dialog.startup-guide(aira-lable="Dialog Title")
                             li
                                 | If you have any questions, please email our team hello@selfkey.org
 
-
                 section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
-                    md-button.md-raised(ng-click="goToWalletSetup($event)") Set up my Selfkey Token Wallet
+                    md-button.md-raised.highlighted(ui-sref="guest.keystore.create-step-1") Set up my Selfkey Token Wallet
