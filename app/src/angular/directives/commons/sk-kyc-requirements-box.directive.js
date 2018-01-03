@@ -1,7 +1,7 @@
 'use strict';
 
-import IdAttributeItem  from '../../classes/id-attribute-item';
-import IdAttribute      from '../../classes/id-attribute';
+import IdAttributeItem from '../../classes/id-attribute-item';
+import IdAttribute from '../../classes/id-attribute';
 
 function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService, ConfigFileService, CommonService) {
     'ngInject';
@@ -14,8 +14,8 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
         },
         link: (scope, element) => {
             scope.foundUnknownRequirement = false;
-            
-            loadRequirements ();
+
+            loadRequirements();
 
 
             /**
@@ -80,7 +80,7 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
             /**
              * get kyc requirements
              */
-            function loadRequirements () {
+            function loadRequirements() {
                 scope.foundUnknownRequirement = false;
 
                 scope.requirementsListPromise = SelfkeyService.retrieveKycTemplate(
@@ -88,72 +88,76 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
                     scope.kycInfo.organisation,
                     scope.kycInfo.template
                 );
-    
-                scope.requirementsListPromise.then((data)=>{
+
+                scope.requirementsListPromise.then((data) => {
                     $log.info("requirementsListPromise data:", data);
-                    
+
                     let requirementsList = [];
                     let requirements = data.requirements;
-    
+
                     let questions = requirements.questions;
                     let uploads = requirements.uploads;
-    
-                    for(let i in questions){
+
+                    for (let i in questions) {
                         let req = questions[i];
                         let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
-                        if(!idAttributeType){
+                        if (!idAttributeType) {
                             scope.foundUnknownRequirement = true;
                             continue;
                         }
-                        requirementsList.push({key: req.attributeType, idAttributeType: idAttributeType, req: req});
+                        requirementsList.push({ key: req.attributeType, idAttributeType: idAttributeType, req: req });
                     }
-    
-                    for(let i in uploads){
+
+                    for (let i in uploads) {
                         let req = uploads[i];
 
                         let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
-                        if(!idAttributeType){
+                        if (!idAttributeType) {
                             scope.foundUnknownRequirement = true;
                             continue;
                         }
-                        
-                        requirementsList.push({key: req.attributeType, idAttributeType: idAttributeType, req: req});
+
+                        requirementsList.push({ key: req.attributeType, idAttributeType: idAttributeType, req: req });
                     }
-    
+
                     scope.sections = CommonService.chunkArray(requirementsList, 3);
                     scope.missingRequirements = compareRequestedRequirementsWithLocalDocuments(requirementsList);
-                    
-                    if(scope.callback && scope.callback.onReady){
+                    scope.allRequirements = buildAllRequirements(requirementsList);
+
+                    if (scope.callback && scope.callback.onReady) {
                         let error = null;
-                        if(scope.foundUnknownRequirement){
+                        if (scope.foundUnknownRequirement) {
                             error = "unknown_requirement_found";
                         }
-                        scope.callback.onReady(error, requirementsList, scope.missingRequirements);
+                        scope.callback.onReady(error, requirementsList, scope.missingRequirements, scope.allRequirements);
+                        $rootScope.$broadcast('kyc:requirements-updated', requirementsList, scope.missingRequirements, scope.allRequirements);
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     // hide join button
                     // hide error on requirements box
                     $log.error("requirementsListPromise data:", error);
                 });
             }
-            
+
             scope.checkIfIdAttributeItemIsready = (item) => {
                 let store = ConfigFileService.getStore();
                 let idAttributes = store.idAttributes;
                 let idAttributeItem = idAttributes[item.key];
 
-                if(item.req.selfie){
-                    for(let j in idAttributeItem.items){
+                if (!idAttributeItem) return null;
+
+                if (item.req.selfie) {
+                    for (let j in idAttributeItem.items) {
 
                         let it = idAttributeItem.items[j];
-                        if(it.addition && it.addition.selfie && (it.value || it.path)){
+                        if (it.addition && it.addition.selfie && (it.value || it.path)) {
                             return it;
                         }
                     }
-                }else{
-                    for(let j in idAttributeItem.items){
+                } else {
+                    for (let j in idAttributeItem.items) {
                         let it = idAttributeItem.items[j];
-                        if((!it.addition || !it.addition.selfie) && (it.value || it.path)){
+                        if ((!it.addition || !it.addition.selfie) && (it.value || it.path)) {
                             return it;
                         }
                     }
@@ -163,7 +167,7 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
             }
 
             function compareRequestedRequirementsWithLocalDocuments(list) {
-                let result = []
+                let result = {}
 
                 let store = ConfigFileService.getStore();
                 let idAttributes = store.idAttributes;
@@ -172,51 +176,149 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
                     let item = list[i];
 
                     let isReady = scope.checkIfIdAttributeItemIsready(item);
-                    
-                    if(!isReady){
+
+                    // es nishnavs rom key da selfie - is kombinaica ver vipovet
+                    if (!isReady) {
                         // item.key
                         // item.req.selfie
                         // item.idAttributeType
 
                         let idAttribute = angular.copy(idAttributes[item.key]);
-                        if(!idAttribute){
+
+                        // es nishnavs rom key it chanatseri saertod ar gvaqvs
+                        if (!idAttribute) {
                             idAttribute = new IdAttribute(item.key, item.idAttributeType);
                             idAttributes[item.key] = idAttribute;
 
                             let idAttributeItem = new IdAttributeItem();
                             idAttributeItem.setType(item.idAttributeType);
                             idAttributeItem.name = "";
-                            
+
                             idAttributeItem.setAddition(item.req.selfie);
 
                             idAttribute.addItem(idAttributeItem);
-                        }else{
-                            let idAttributeItem = new IdAttributeItem();
-                            idAttributeItem.setType(item.idAttributeType);
-                            idAttributeItem.name = "";
+                        } else {
+                            // es nishnavs rom gvaqvs chanatseri.. da gvaklia id attribute AN GVAKLIA VALUE
 
-                            if(!idAttributeItem.addition) {
-                                idAttributeItem.addition = {};
+                            let found = false;
+                            for (let j in idAttribute.items) {
+                                if (item.req.selfie) {
+                                    if (idAttribute.items[j].addition && idAttribute.items[j].addition.selfie) {
+                                        found = true;
+                                    }
+                                } else {
+                                    if (!idAttribute.items[j].addition || !idAttribute.items[j].addition.selfie) {
+                                        found = true;
+                                    }
+                                }
                             }
-                            idAttributeItem.addition.selfie = item.req.selfie;
 
-                            idAttribute.items[idAttributeItem._id] = idAttributeItem;
+                            if (!found) {
+                                let idAttributeItem = new IdAttributeItem();
+                                idAttributeItem.setType(item.idAttributeType);
+                                idAttributeItem.name = "";
+
+                                if (!idAttributeItem.addition) {
+                                    idAttributeItem.addition = {};
+                                }
+                                idAttributeItem.addition.selfie = item.req.selfie;
+
+                                idAttribute.items[idAttributeItem._id] = idAttributeItem;
+                            }
+
                         }
 
                         // if not found create requirement box (id attribute box record)
                         // package - 
 
-                        result.push(idAttribute); //idAttribute && idAttribute.value ? idAttribute : null;
+                        result[item.key] = idAttribute; //idAttribute && idAttribute.value ? idAttribute : null;
                     }
                 }
-        
+
+                console.log(">>>>>>>> >>>>>>>>>>", result);
+
+                return result;
+            }
+
+            function buildAllRequirements(list) {
+                let result = {}
+
+                let store = ConfigFileService.getStore();
+                let idAttributes = store.idAttributes;
+
+                for (let i in list) {
+                    let item = list[i];
+
+                    let isReady = scope.checkIfIdAttributeItemIsready(item);
+
+                    // es nishnavs rom key da selfie - is kombinaica ver vipovet
+                    if (!isReady) {
+                        // item.key
+                        // item.req.selfie
+                        // item.idAttributeType
+
+                        let idAttribute = angular.copy(idAttributes[item.key]);
+
+                        // es nishnavs rom key it chanatseri saertod ar gvaqvs
+                        if (!idAttribute) {
+                            idAttribute = new IdAttribute(item.key, item.idAttributeType);
+                            idAttributes[item.key] = idAttribute;
+
+                            let idAttributeItem = new IdAttributeItem();
+                            idAttributeItem.setType(item.idAttributeType);
+                            idAttributeItem.name = "";
+
+                            idAttributeItem.setAddition(item.req.selfie);
+
+                            idAttribute.addItem(idAttributeItem);
+                        } else {
+                            // es nishnavs rom gvaqvs chanatseri.. da gvaklia id attribute AN GVAKLIA VALUE
+
+                            let found = false;
+                            for (let j in idAttribute.items) {
+                                if (item.req.selfie) {
+                                    if (idAttribute.items[j].addition && idAttribute.items[j].addition.selfie) {
+                                        found = true;
+                                    }
+                                } else {
+                                    if (!idAttribute.items[j].addition || !idAttribute.items[j].addition.selfie) {
+                                        found = true;
+                                    }
+                                }
+                            }
+
+                            if (!found) {
+                                let idAttributeItem = new IdAttributeItem();
+                                idAttributeItem.setType(item.idAttributeType);
+                                idAttributeItem.name = "";
+
+                                if (!idAttributeItem.addition) {
+                                    idAttributeItem.addition = {};
+                                }
+                                idAttributeItem.addition.selfie = item.req.selfie;
+
+                                idAttribute.items[idAttributeItem._id] = idAttributeItem;
+                            }
+
+                        }
+
+                        // if not found create requirement box (id attribute box record)
+                        // package - 
+
+                        result[item.key] = idAttribute; //idAttribute && idAttribute.value ? idAttribute : null;
+                    } else {
+                        let idAttribute = angular.copy(idAttributes[item.key]);
+                        result[idAttribute.key] = idAttribute;
+                    }
+                }
+
                 console.log(">>>>>>>> >>>>>>>>>>", result);
 
                 return result;
             }
 
             $rootScope.$on('id-attributes-changed', (event) => {
-                loadRequirements ();
+                loadRequirements();
             });
         },
         replace: true,

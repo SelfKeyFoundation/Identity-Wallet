@@ -51,11 +51,11 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     $scope.isSusbscribed = false;
     $scope.actionInProgress = false;
 
+    // todo rename
     $scope.kycProgress = null;
+    $scope.allIdAttributes = null;
 
     normaliseIcoData();
-
-
 
     let store = ConfigFileService.getStore();
 
@@ -75,13 +75,14 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.kycRequirementsCallbacks = {
-        onReady: (error, requirementsList, progress) => {
+        onReady: (error, requirementsList, missingIdAttributes, allIdAttributes) => {
             if(!error){
-                $scope.kycProgress = progress;
+                $scope.kycProgress = missingIdAttributes;
+                $scope.allIdAttributes = allIdAttributes;
 
                 console.log(">>>> MISSING REQS", $scope.kycProgress);
 
-                //checkRequirementsProgress(progress);
+                checkRequirementsProgress(missingIdAttributes);
             }
         }
     }
@@ -138,6 +139,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
                     $state.go('member.marketplace.ico-manage-requirements', { 
                         selected: $scope.ico, 
                         kycProgress: $scope.kycProgress, 
+                        allIdAttributes: $scope.allIdAttributes, 
                         kycInfo: $scope.kycInfo 
                     });
                     break;
@@ -165,6 +167,13 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
                 }
             });
 
+            store.actionLogs.push({
+                "createDate": new Date(),
+                "subscribtionId": $scope.ico.symbol,
+                "text": "Joined SelfKey ICO",
+                "type": "notification"
+            });
+
             ConfigFileService.save().then((resp) => {
                 $scope.isSusbscribed = true;
             }).finally(() => {
@@ -177,15 +186,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
      *
      */
     function checkRequirementsProgress(progress) {
-        let status = true;
-        for (let i in progress) {
-            let req = progress[i];
-            if (!req || (!req.value && !req.path)) {
-                status = false;
-                break;
-            }
-        }
-
+        let status = Object.keys(progress).length <= 0;
         $scope.icoProcess.status = status ? $scope.icoStatuses.REQUIREMENTS_READY : $scope.icoStatuses.REQUIREMENTS_MISSING;
     }
 

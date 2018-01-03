@@ -14,10 +14,9 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
             config: "="
         },
         link: (scope, element, attrs, tabsCtrl) => {
-            scope.defaultItem = scope.data.items[scope.data.defaultItemId];
 
             scope.checkItemValue = (item) => {
-                return (item && item.value);
+                return (item && (item.value || item.path));
             }
 
             scope.openAddEditDialog = function (event, actionType, item) {
@@ -31,20 +30,25 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
                     fullscreen: true,
                     locals: {
                         config: {
-                            title: "Upload your driver's License",      // todo
-                            type: item.idAttributeType.type,            // document, static_data
+                            title: "Upload your " + item.idAttributeType.key,       // todo
+                            type: item.idAttributeType.type,                        // document, static_data
                             key: item.idAttributeType.key
                         },
                         item: angular.copy(item)
                     }
                 }).then((respItem) => {
-                    
-                    if(!store.idAttributes[item.idAttributeType.key]){
+                    item.name = item.name;
+                    item.value = item.value;
+                    item.path = item.path;
+                    item.size = item.size;
+                    item.contentType = item.contentType;
+
+                    if (!store.idAttributes[item.idAttributeType.key]) {
                         store.idAttributes[item.idAttributeType.key] = scope.data;
                     }
 
                     let itemToSave = store.idAttributes[item.idAttributeType.key].items[respItem._id];
-                    
+
                     itemToSave.name = respItem.name;
                     itemToSave.value = respItem.value;
                     if (scope.data.type === 'document') {
@@ -54,17 +58,16 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                     $log.info('store to save:', store);
                     //$rootScope.$broadcast('id-attributes-changed', scope.data);
-                    
-                    
-                    ConfigFileService.save().then((resp)=>{
+
+
+                    ConfigFileService.save().then((resp) => {
                         // show message
-                        if(scope.config.callback && scope.config.callback.itemChanged){
+                        if (scope.config.callback && scope.config.callback.itemChanged) {
                             scope.config.callback.itemChanged(scope.data);
                         }
 
                         $rootScope.$broadcast('id-attributes-changed', scope.data);
                     });
-                    
                 });
             };
 
@@ -84,7 +87,7 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
                 store.idAttributes[scope.data.key].items[id].name = null;
                 store.idAttributes[scope.data.key].items[id].value = null;
 
-                if(clickedItem.idAttributeType === 'document'){
+                if (clickedItem.idAttributeType === 'document') {
                     clickedItem.contentType = null;
                     clickedItem.size = null;
 
@@ -98,9 +101,9 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                 //$rootScope.$broadcast('id-attributes-changed', scope.data);
 
-                ConfigFileService.save().then((resp)=>{
+                ConfigFileService.save().then((resp) => {
                     // show message
-                    if(scope.config.callback && scope.config.callback.itemChanged){
+                    if (scope.config.callback && scope.config.callback.itemChanged) {
                         scope.config.callback.itemChanged(scope.data);
                     }
                     $rootScope.$broadcast('id-attributes-changed', scope.data);
@@ -129,6 +132,12 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     'ngInject';
 
     $log.info('SkIdAttributeBoxDirectiveAddEditDialog', config, item);
+
+    if (item.idAttributeType.key === 'national_id' && item.addition.selfie) {
+        item.name = "national_id_with_selfie";
+    } else {
+        item.name = item.idAttributeType.key;
+    }
 
     $scope.config = config;
     $scope.item = item;

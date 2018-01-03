@@ -1,8 +1,8 @@
 md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
 
     .document-wrapper(ng-if="config.type === 'document'")
-        .name-section
-            input(type="text", ng-model="item.name", placeholder="{{config.type}} name")
+        //.name-section
+            input(type="text", ng-model="item.name", placeholder="{{config.type}} name", disabled)
         .upload-section
             .title {{config.title}}
             .content
