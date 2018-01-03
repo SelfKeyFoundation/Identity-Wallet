@@ -4,7 +4,7 @@
 
     .section(layout="row")
         .left(layout="column")
-            sk-ico-details-box(kyc-info="kycInfo", ico="ico", type="'requirements'", config="config")
+            sk-ico-details-box(kyc-info="kycInfo", ico="ico", type="'requirements'", config="icoDetailsBoxConfig")
 
             sk-id-attribute-box(ng-repeat="item in missingRequirementsList", data="item", config="idAttrbuteBoxConfig" style="margin-top: 40px;")
             

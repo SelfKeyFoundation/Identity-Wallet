@@ -14285,6 +14285,8 @@ md-toolbar {
     color: #ffffff; }
   .sk-message.info {
     background-image: linear-gradient(274deg, #08bccd, #2da1f8); }
+  .sk-message.warning {
+    background-color: #f7981c; }
   .sk-message.error {
     background-color: #ed1c24; }
   .sk-message.fade-out {

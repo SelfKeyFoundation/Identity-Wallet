@@ -399,6 +399,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             params: {
                 selected: null,
                 kycProgress: null,
+                allIdAttributes: null,
                 kycInfo: null
             }
         })

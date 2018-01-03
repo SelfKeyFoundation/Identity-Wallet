@@ -1,5 +1,5 @@
-import IdAttributeItem  from '../../../../classes/id-attribute-item.js';
-import IdAttribute      from '../../../../classes/id-attribute.js';
+import IdAttributeItem from '../../../../classes/id-attribute-item.js';
+import IdAttribute from '../../../../classes/id-attribute.js';
 
 function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService) {
     'ngInject'
@@ -13,54 +13,34 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
      */
     $scope.ico = $stateParams.selected;
     $scope.kycProgress = $stateParams.kycProgress;
+    $scope.allIdAttributes = $stateParams.allIdAttributes;
     $scope.kycInfo = $stateParams.kycInfo;
+
+    $scope.icoDetailsBoxConfig = {
+        showSubmit: false
+    }
 
     $scope.foundUnknownRequirement = false;
 
-    $scope.idAttrbuteBoxConfig = { 
-        historyRowCount: 2,  
+    $scope.idAttrbuteBoxConfig = {
+        historyRowCount: 2,
         showAddItemButton: false,
         showHistory: false,
         isItemEditable: true,
 
         callback: {
-            itemChanged: (data) => {}
+            itemChanged: (data) => { }
         }
     };
 
     $scope.missingRequirementsList = [];
 
-    buildMissingRequirementsList ();
+    buildMissingRequirementsList();
 
-    function buildMissingRequirementsList () {
-        let store = ConfigFileService.getStore();
-
-        console.log(">>>>>>>>>> kycProgress >>>>>>>>", $scope.kycProgress);
-
-
-        for(let i in $scope.kycProgress){
-            let req = $scope.kycProgress[i];
-
-            if(req) continue;
-
-            let idAttribute = store.idAttributes[i];
-            if(!idAttribute){
-                let idAttributeType = ConfigFileService.getIdAttributeType(i);
-                
-                if(!idAttributeType){
-                    $scope.foundUnknownRequirement = true;
-                    continue;
-                }
-
-                let idAttributeItem = new IdAttributeItem();
-                idAttributeItem.setType(idAttributeType);
-                idAttributeItem.name = i;
-
-                idAttribute = new IdAttribute(i, idAttributeType);
-                idAttribute.setDefaultItem(idAttributeItem)
-            }
-
-            $scope.missingRequirementsList.push(idAttribute);
+    function buildMissingRequirementsList() {
+        for (let i in $scope.allIdAttributes) {
+            let req = $scope.allIdAttributes[i];
+            $scope.missingRequirementsList.push(req);
         }
     }
 
@@ -69,8 +49,36 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
             container: messagesContainer,
             type: "info",
             message: "Success! All Documents are ready - Join ICO",
+            replace: true,
             closeAfter: 3000
         });
+
+        $scope.icoDetailsBoxConfig.showSubmit = true;
+    });
+
+    $rootScope.$on('id-attributes-changed', (event, data) => {
+        console.log('id-attributes-changed', data);
+    });
+
+    $rootScope.$on('kyc:requirements-updated', (event, requirementsList, missingRequirements, allIdAttributes) => {
+        $scope.kycProgress = missingRequirements;
+        $scope.allIdAttributes = allIdAttributes;
+
+        if (Object.keys(missingRequirements).length <= 0) {
+            $scope.icoDetailsBoxConfig.showSubmit = true;
+        }else{
+            $scope.icoDetailsBoxConfig.showSubmit = false;
+            CommonService.showMessage({
+                container: messagesContainer,
+                type: "warning",
+                message: "Missing required ID Attributes",
+                replace: true,
+                closeAfter: 3000
+            });
+        }
+
+        $scope.missingRequirementsList = [];
+        buildMissingRequirementsList();
     });
 
 };

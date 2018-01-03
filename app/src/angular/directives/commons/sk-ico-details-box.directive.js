@@ -14,10 +14,6 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
         link: (scope, element) => {
             scope.type = scope.type || 'requirements';
 
-            scope.config = {
-                showSubmit: true
-            }
-
             if (scope.ico.cap.raised && scope.ico.cap.total) {
                 scope.ico.cap.remaining = scope.ico.cap.total - scope.ico.cap.raised;
             } else {
@@ -25,15 +21,8 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
             }
 
             scope.kycRequirementsCallback = {
-                onReady: (error, requirementsList, progress) => {
-                    let missing = false;
-                    for (let i in progress) {
-                        if (!progress[i] || !progress[i].value) {
-                            missing = true;
-                            break;
-                        }
-                    }
-                    if (!missing) {
+                onReady: (error, requirementsList, missingIdAttributes, allIdAttributes) => {
+                    if (Object.keys(missingIdAttributes).length <= 0) {
                         $rootScope.$broadcast('ico:requirements-ready', scope.ico, scope.kycInfo);
                     }
                 }
