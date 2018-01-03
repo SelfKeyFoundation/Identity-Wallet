@@ -81,14 +81,16 @@ function ScrollToEndDirective($log, $window) {
                     scrollY = domElement.scrollTop;
                 }
 
+                scrollY = Math.ceil(scrollY);
+                scrollX = Math.ceil(scrollX);
+
                 var scrollWasInXDirection = oldScrollX !== scrollX;
                 var scrollWasInYDirection = oldScrollY !== scrollY;
                 oldScrollX = scrollX;
                 oldScrollY = scrollY;
-
-                if (scrollWasInYDirection && scrollY === 0) {
+                if (scrollWasInYDirection && scrollY <= 0) {
                     callback('top');
-                } else if (scrollWasInYDirection && scrollY === contentHeight - viewportHeight) {
+                } else if (scrollWasInYDirection && scrollY >= (contentHeight - viewportHeight)) {
                     callback('bottom');
                 } else if (scrollWasInXDirection && scrollX === 0) {
                     callback('left');
