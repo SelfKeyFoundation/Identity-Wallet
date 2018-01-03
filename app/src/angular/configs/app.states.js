@@ -228,10 +228,18 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     ConfigFileService.load().then(() => {
                         for (let i in $rootScope.INITIAL_ID_ATTRIBUTES) {
                             let attr = $rootScope.INITIAL_ID_ATTRIBUTES[i];
-                            $rootScope.initialSetupProgress[attr] = ConfigFileService.getDefaultIdAttributeItem(attr);
 
-                            if (!$rootScope.initialSetupProgress[attr] || (!$rootScope.initialSetupProgress[attr].value && !$rootScope.initialSetupProgress[attr].path)) {
+                            let item = ConfigFileService.findIdAttributeItemByKeyAndId(attr.attributeType, attr.id);
+
+                            if (!item.value && !item.path) {
                                 isMissing = true;
+                            }
+
+                            if (item && !$rootScope.initialSetupProgress[attr.attributeType]) {
+                                $rootScope.initialSetupProgress[attr.attributeType] = {};
+                                $rootScope.initialSetupProgress[attr.attributeType][attr.id] = item;
+                            } else if (item) {
+                                $rootScope.initialSetupProgress[attr.attributeType][attr.id] = item;
                             }
                         }
 
@@ -283,12 +291,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         .state('member.setup.step-3', {
-            url: '/member/setup/step-3/:step',
+            url: '/member/setup/step-3',
             views: {
                 main: {
                     templateUrl: 'member/setup/step-3.html',
                     controller: 'MemberSetupStep3Controller'
                 }
+            },
+            params: {
+                step: null
             }
         })
 

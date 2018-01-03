@@ -13,7 +13,6 @@ import qrcode from 'qrcode-generator';
 import ngQrcode from 'angular-qrcode';
 //import GoogleCharts from 'google-charts';
 
-
 window.qrcode = qrcode;
 //window.google = GoogleCharts;
 
@@ -262,6 +261,9 @@ angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetu
 
 import MemberSetupStep3Controller from './angular/controllers/member/setup/step-3-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
+
+import MemberSetupStep4Controller from './angular/controllers/member/setup/step-4-controller.js';
+angular.module('kyc-wallet').controller('MemberSetupStep4Controller', MemberSetupStep4Controller);
 
 import MemberSetupWalletSetupController from './angular/controllers/member/setup/wallet-setup-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupWalletSetupController', MemberSetupWalletSetupController);

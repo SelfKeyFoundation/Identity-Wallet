@@ -1,31 +1,35 @@
-function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberSetupStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
-    $log.info('MemberSetupStep3Controller', $stateParams, $rootScope.initialSetupProgress);
+    $log.info('MemberSetupStep4Controller', $stateParams, $rootScope.initialSetupProgress);
     $scope.currentStep = $stateParams.step;
-console.log($scope.currentStep, "????? <<<<")
+
     $scope.texts = {};
 
-    // TODO replace texts with translations
-    $scope.texts[$rootScope.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType] = {
-        "1": {
-            text1: "step 2",
-            text2: "Upload Your National ID",
-            text3: "Your National ID",
-            text4: "Select National ID",
-            text5: "This is stored locally.",
-            text6: "uploaded"
-        },
-        "2": {
-            text1: "step 3",
-            text2: "Upload Your National ID with selfie",
-            text3: "Your National ID with selfie",
-            text4: "Select National ID",
-            text5: "This is stored locally.",
-            text6: "uploaded"
-        }
+    $scope.texts[$rootScope.INITIAL_ID_ATTRIBUTES.REQ_4] = {
+        text1: "step 2",
+        text2: "Upload Your National ID with selfie",
+        text3: "Your National ID",
+        text4: "Select National ID",
+        text5: "This is stored locally.",
+        text6: "uploaded"
     };
 
+    $scope.getTextForStep = () => {
+        
+    }
+
+
+    /*
+    "initialIdAttributes": {
+                    "REQ_1": {"attributeType": "name"},
+                    "REQ_2": {"attributeType": "email"},
+                    "REQ_3": {"attributeType": "physical_address"},
+                    "REQ_4": {"attributeType": "national_id"},
+                    "REQ_5": {"attributeType": "national_id", "selfie": true}
+                },
+
+    */
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
     $scope.goToStep = (step) => {
@@ -37,7 +41,8 @@ console.log($scope.currentStep, "????? <<<<")
     }
 
     $scope.selectFile = (event) => {
-        
+        // $rootScope.initialSetupProgress - contains subcategory <-> item
+
         let fileSelectPromise = ElectronService.openFileSelectDialog(event);
         fileSelectPromise.then((resp) => {
             if (!resp || !resp.path) return;
@@ -46,7 +51,7 @@ console.log($scope.currentStep, "????? <<<<")
 
             let moveFilePrimise = ElectronService.moveFile(resp.path, store.settings.documentsDirectoryPath);
             moveFilePrimise.then((filePath) => {
-                $rootScope.initialSetupProgress[$scope.currentStep.attributeType][$scope.currentStep.id].path = filePath;
+                $rootScope.initialSetupProgress[$scope.currentStep].path = filePath;
                 // we need file metadata
                 ConfigFileService.save().then(() => {
                     // success
@@ -57,14 +62,23 @@ console.log($scope.currentStep, "????? <<<<")
         });
     }
 
+    $scope.functionWithPromise = function () {
+        let defer = $q.defer();
+
+        $timeout(() => {
+            defer.resolve();
+        }, 3000);
+
+
+        return defer.promise;
+    };
+
+
     $scope.nextStep = (event, form) => {
         //$scope.myTestPromise = $scope.functionWithPromise();
 
         switch ($scope.currentStep) {
             case $rootScope.INITIAL_ID_ATTRIBUTES.REQ_4:
-                $state.go('member.setup.step-3', {step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5});
-                break;
-            case $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5:
                 let store = ConfigFileService.getStore();
                 if(!store.setup.icoAdsShown){
                     $state.go('member.setup.completed');
@@ -80,4 +94,4 @@ console.log($scope.currentStep, "????? <<<<")
 
 };
 
-export default MemberSetupStep3Controller;
+export default MemberSetupStep4Controller;

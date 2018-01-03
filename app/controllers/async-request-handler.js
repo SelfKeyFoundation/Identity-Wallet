@@ -141,6 +141,27 @@ module.exports = function (app) {
 								"size": null,
 								"value": "",
 								"addition": {
+									"selfie": false, 
+									"signature": false, 
+									"notary": false, 
+									"certified_true_copy": false
+								}
+							},
+							"2": {
+								"_id": "2",
+								"contentType": "",
+								"idAttributeType": {
+									"category": "id_document",
+									"entity": [
+										"individual"
+									],
+									"key": "national_id",
+									"type": "document"
+								},
+								"name": "",
+								"size": null,
+								"value": "",
+								"addition": {
 									"selfie": true, 
 									"signature": false, 
 									"notary": false, 
@@ -151,7 +172,7 @@ module.exports = function (app) {
 						"key": "national_id",
 						"type": "document"
 					},
-					"proof_of_residence": {
+					"country_of_residency": {
 						"category": "global_attribute",
 						"defaultItemId": "1",
 						"entity": [
@@ -166,7 +187,7 @@ module.exports = function (app) {
 									"entity": [
 										"individual"
 									],
-									"key": "proof_of_residence",
+									"key": "country_of_residency",
 									"type": "static_data"
 								},
 								"name": "",
@@ -174,7 +195,7 @@ module.exports = function (app) {
 								"value": ""
 							}
 						},
-						"key": "proof_of_residence",
+						"key": "country_of_residency",
 						"type": "static_data"
 					}
 				},

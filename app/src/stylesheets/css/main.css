@@ -14795,14 +14795,15 @@ md-content {
   padding-left: 24px; }
 
 .sk-input-box.md-input-has-value > label {
-  color: #ffffff !important;
+  color: #93b0c1 !important;
   margin-bottom: 10px;
   font-size: 12px !important;
   opacity: 1 !important;
   margin-left: 0;
   font-family: ProximaNovaSemibold;
   text-transform: uppercase;
-  top: -24px; }
+  top: -24px;
+  font-weight: 600; }
 
 .sk-input-box.md-input-has-value > input {
   color: #ffffff !important; }
@@ -17089,7 +17090,7 @@ md-dialog .sub-header-text {
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
-  line-height: 1.72;
+  line-height: 1.42;
   letter-spacing: normal;
   text-align: center;
   color: #93b0c1; }
@@ -17120,21 +17121,12 @@ md-dialog .input-form {
   padding-right: 40px;
   padding-bottom: 36px; }
 
-md-dialog label {
-  margin: 0 !important;
-  line-height: 2 !important;
-  letter-spacing: 1.5px !important;
-  padding-bottom: 15px !important; }
-
-md-dialog .sk-input-container {
-  padding-bottom: 36px !important; }
-
 md-dialog .add-custom-token-btn {
   outline: none;
   border: none;
   padding: 0;
   text-transform: uppercase;
-  height: 58px;
+  height: 48px;
   border-radius: 4px;
   background-image: linear-gradient(282deg, #08bccd, #2da1f8);
   font-family: ProximaNovaRegular;

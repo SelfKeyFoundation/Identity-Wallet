@@ -20,10 +20,11 @@ const AppConfigConstant = {
 				"SELECTED_PRIVATE_KEY": "SELECTED_PRIVATE_KEY"
 			},
 			"initialIdAttributes": {
-				"REQ_1": "name",
-				"REQ_2": "email",
-				"REQ_3": "proof_of_residence",
-				"REQ_4": "national_id"
+				"REQ_1": {"id": "1", "attributeType": "name"},
+				"REQ_2": {"id": "1", "attributeType": "email"},
+				"REQ_3": {"id": "1", "attributeType": "country_of_residency"},
+				"REQ_4": {"id": "1", "attributeType": "national_id"},
+				"REQ_5": {"id": "2", "attributeType": "national_id", "selfie": true}
 			},
 			"idAttributeTypeAdditions": {
 				"selfie": "addition_with_selfie",

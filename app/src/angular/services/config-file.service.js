@@ -97,6 +97,38 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return idAttribute.items[idAttribute.defaultItemId];
     }
 
+    findIdAttributeItemByKeyAndAdditions(key, additions) {
+      if(!store.idAttributes[key]) { return null; }
+      
+      let result = [];
+
+      let idAttribute = store.idAttributes[key];
+      let items = idAttribute.items;
+
+      for(let i in items){
+        let shouldAdd = true;
+        let item = items[i];
+
+        for(let j in additions){
+          if(!item.addition[j] || item.addition[j] !== additions[j]){
+            shouldAdd = false;
+            break;
+          }
+        }
+
+        if(shouldAdd){
+          result.push(item);
+        }
+      }
+
+      return result;
+    }
+
+    findIdAttributeItemByKeyAndId(key, id) {
+      if(!store.idAttributes[key] || !store.idAttributes[key].items[id]) { return null; }
+      return store.idAttributes[key].items[id];
+    }
+
     getIdAttribute(subcategory) {
       return store.idAttributes[subcategory];
     }
