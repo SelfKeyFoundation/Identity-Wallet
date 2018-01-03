@@ -19,7 +19,7 @@ class IdAttributeItem {
         }
 
         this.addition = {
-            selfie: true, 
+            selfie: false, 
             signature: false, 
             notary: false, 
             certified_true_copy: false

@@ -78,7 +78,10 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         onReady: (error, requirementsList, progress) => {
             if(!error){
                 $scope.kycProgress = progress;
-                checkRequirementsProgress(progress);
+
+                console.log(">>>> MISSING REQS", $scope.kycProgress);
+
+                //checkRequirementsProgress(progress);
             }
         }
     }

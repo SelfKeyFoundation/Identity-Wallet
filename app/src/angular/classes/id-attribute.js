@@ -17,7 +17,11 @@ class IdAttribute {
     }
 
     addItem (item) {
-        this.items[item._id] = item;
+        if(Object.keys(this.items).length === 0){
+            this.setDefaultItem(item);
+        }else{
+            this.items[item._id] = item;
+        }
     }
 
     removeItem (item) {

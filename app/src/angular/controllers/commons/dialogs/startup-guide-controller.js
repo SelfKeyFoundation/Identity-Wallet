@@ -14,6 +14,8 @@ function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $
         $scope.storeSavePromise.then(() => {
             $state.go('guest.welcome');
             $mdDialog.hide();
+        }).catch((error)=>{
+            console.log(error)
         });
     }
 };

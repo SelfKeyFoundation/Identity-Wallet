@@ -10,8 +10,6 @@ const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs');
 
-
-
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
 	const controller = function() {};

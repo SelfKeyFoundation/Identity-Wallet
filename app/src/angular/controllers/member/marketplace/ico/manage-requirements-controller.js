@@ -35,6 +35,9 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
     function buildMissingRequirementsList () {
         let store = ConfigFileService.getStore();
 
+        console.log(">>>>>>>>>> kycProgress >>>>>>>>", $scope.kycProgress);
+
+
         for(let i in $scope.kycProgress){
             let req = $scope.kycProgress[i];
 
