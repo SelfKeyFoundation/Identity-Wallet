@@ -22,7 +22,7 @@
                 "initialIdAttributes": {
                     "REQ_1": "name",
                     "REQ_2": "email",
-                    "REQ_3": "physical_address",
+                    "REQ_3": "country_of_residency",
                     "REQ_4": "national_id",
                     "REQ_5": "national_id_with_selfie"
                 },
