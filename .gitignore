@@ -17,7 +17,7 @@ wallet-web-app/src/angular/app.templates.js
 wallet-web-app/src/stylesheets/css/**/*.css
 
 desktop-app/config.electron.js
-./app/src/angular/app.templates.js
+app/src/angular/app.templates.js
 ./app/src/stylesheets/css
 
 release
