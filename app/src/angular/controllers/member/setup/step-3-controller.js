@@ -3,7 +3,7 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
 
     $log.info('MemberSetupStep3Controller', $stateParams, $rootScope.initialSetupProgress);
     $scope.currentStep = $stateParams.step;
-console.log($scope.currentStep, "????? <<<<")
+    console.log($scope.currentStep, "????? <<<<")
     $scope.texts = {};
 
     // TODO replace texts with translations
@@ -37,7 +37,7 @@ console.log($scope.currentStep, "????? <<<<")
     }
 
     $scope.selectFile = (event) => {
-        
+
         let fileSelectPromise = ElectronService.openFileSelectDialog(event);
         fileSelectPromise.then((resp) => {
             if (!resp || !resp.path) return;
@@ -60,21 +60,34 @@ console.log($scope.currentStep, "????? <<<<")
     $scope.nextStep = (event, form) => {
         //$scope.myTestPromise = $scope.functionWithPromise();
 
+        if ($scope.currentStep.attributeType === 'national_id' && $scope.currentStep.selfie) {
+            let store = ConfigFileService.getStore();
+            if (!store.setup.icoAdsShown) {
+                $state.go('member.setup.completed');
+            } else {
+                // TODO - mark setup.status as 'done'
+                $state.go('member.dashboard.main');
+            }
+        } else {
+            $state.go('member.setup.step-3', { step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5 });
+        }
+
+        /*
         switch ($scope.currentStep) {
             case $rootScope.INITIAL_ID_ATTRIBUTES.REQ_4:
-                $state.go('member.setup.step-3', {step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5});
+                $state.go('member.setup.step-3', { step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5 });
                 break;
             case $rootScope.INITIAL_ID_ATTRIBUTES.REQ_5:
                 let store = ConfigFileService.getStore();
-                if(!store.setup.icoAdsShown){
+                if (!store.setup.icoAdsShown) {
                     $state.go('member.setup.completed');
-                }else{
+                } else {
                     // TODO - mark setup.status as 'done'
                     $state.go('member.dashboard.main');
                 }
                 break;
         }
-
+        */
     }
 
 

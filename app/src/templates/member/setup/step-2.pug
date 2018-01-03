@@ -17,31 +17,31 @@ div(layout-fill, layout="column", layout-align="center center")
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value") 1
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}
+                    span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType]}}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value") 2
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType}}
+                    span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType]}}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value") 3
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType}}
+                    span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType]}}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_4.id].path")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_4.id].path") 4
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType}}
+                    span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType]}}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_5.id].path")
                         span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_5.id].path") 5
-                    span {{$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType}}
+                    span Selfie with ID Document
 
         div(layout="row", layout-align="center center", style="margin: 0 24px 24px 24px;")
             .sk-button.outline-blue(flex="70", ng-click="nextStep($event, basicInfoForm)")

@@ -206,6 +206,9 @@ angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCus
 import SendTokenDialogController from './angular/controllers/commons/dialogs/send-token-controller.js';
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
 
+import AddIdAttributeDialog from './angular/controllers/commons/dialogs/add-id-attribute-controller.js';
+angular.module('kyc-wallet').controller('AddIdAttributeDialog', AddIdAttributeDialog);
+
 /**
  * guest
  */

@@ -26,7 +26,7 @@ div(layout-fill, layout="column", layout-align="center center")
                             span.sub-header {{texts[currentStep.attributeType][currentStep.id].text5}}
             div(layout="row", layout-align="start center", style="margin-top: 30px;")
                 .sk-button.outline-blue(ng-click="nextStep($event, basicInfoForm)", style="z-index: 1;")
-                    span(style="color: #0dc7dd") Complete
+                    span(style="color: #0dc7dd") {{ currentStep.id === '2' ? "Complete" : 'Next Step'}}
                 .sk-hyperlink.sk-text(style="color: #fff; text-align: center; margin-left: 12px;", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
 
         .sk-box
@@ -39,28 +39,28 @@ div(layout-fill, layout="column", layout-align="center center")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value") 1
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}
+                        span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType]}}
 
                     .item.clickable(ng-click="goToBaseStep()")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value") 2
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType}}
+                        span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType]}}
 
                     .item.clickable(ng-click="goToBaseStep()")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value") 3
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType}}
+                        span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType]}}
 
                     .item.clickable(sk-select-if="currentStep.attributeType === $root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType && currentStep.id === $root.INITIAL_ID_ATTRIBUTES.REQ_4.id", ng-click="goToStep($root.INITIAL_ID_ATTRIBUTES.REQ_4)")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_4.id].path")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_4.id].path") 4
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType}}
+                        span {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_4.attributeType]}}
 
                     .item.clickable(sk-select-if="currentStep.attributeType === $root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType && currentStep.id === $root.INITIAL_ID_ATTRIBUTES.REQ_5.id", ng-click="goToStep($root.INITIAL_ID_ATTRIBUTES.REQ_5)")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_5.id].path")
                             span(ng-if="!$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_5.id].path") 5
-                        span {{$root.INITIAL_ID_ATTRIBUTES.REQ_5.attributeType}}
+                        span Selfie with ID Document

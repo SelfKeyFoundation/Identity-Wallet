@@ -1,7 +1,7 @@
 .sk-box.sk-id-attribute-box
     .default-wrapper
         .header
-            .title(flex) {{data.key}}
+            .title(flex) {{ $root.DICTIONARY[data.key] }}
             .plus-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="config.showAddItemButton")
                 img(src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
 
@@ -15,7 +15,7 @@
         .h-divider
 
         .section
-            .title {{ data.category }}
+            .title {{ $root.DICTIONARY[data.category] }}
             .items-container
                 .item(ng-if="checkItemValue(item)", ng-repeat="(key, item) in data.items")
                     sk-icon(icon="success-box", size-class="icon-size-16x16")

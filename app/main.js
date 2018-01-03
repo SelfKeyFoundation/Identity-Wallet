@@ -3,7 +3,7 @@
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
-const {autoUpdater} = require('electron-updater');
+//const {autoUpdater} = require('electron-updater');
 const {dialog} = require('electron');
 const deskmetrics = require('deskmetrics');
 
@@ -160,6 +160,7 @@ if (!handleSquirrelEvent()) {
 			});
 
 			// self updater
+			/*
 			if (!app.config.app.dev) {
 				autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 					console.log('update-downloaded');
@@ -194,6 +195,7 @@ if (!handleSquirrelEvent()) {
 
 				autoUpdater.checkForUpdatesAndNotify();
 			}
+			*/
 
 			app.asyncRequestHandler = new AsyncRequestHandler();
 
