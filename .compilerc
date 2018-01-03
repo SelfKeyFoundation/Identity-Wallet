@@ -23,6 +23,9 @@
     },
     "production": {
       "application/javascript": {
+        "ignore": [
+           "app/src/assets/libs/*.js"
+        ],
         "presets": [
           [
             "env",

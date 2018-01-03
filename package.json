@@ -6,9 +6,9 @@
 	"repository": "https://github.com/kyc-chain/wallet",
 	"main": "./app/main.js",
 	"scripts": {
-		"start": "gulp && electron-forge start",
-		"package": "gulp && electron-forge package",
-		"make": "gulp && electron-forge make"
+		"start": "gulp && ./node_modules/.bin/electron-forge start -- dev",
+		"package": "gulp && ./node_modules/.bin/electron-forge package",
+		"make": "gulp && ./node_modules/.bin/electron-forge make"
 	},
 	"dependencies": {
 		"bignumber.js": "4.1.0",
@@ -41,7 +41,7 @@
 		"crypto": "1.0.1",
 		"electron": "1.7.5",
 		"ethereumjs-util": "5.1.2",
-		"google-charts": "^1.0.0",
+		"google-charts": "1.0.0",
 		"jquery": "3.2.1",
 		"web3": "1.0.0-beta.26"
 	},
@@ -49,11 +49,6 @@
 		"babel-plugin-transform-async-to-generator": "6.24.1",
 		"babel-preset-env": "1.6.1",
 		"babel-preset-es2015": "6.24.1",
-		"babel-preset-react": "6.24.1",
-		"babelify": "7.3.0",
-		"browser-sync": "2.18.13",
-		"browserify": "14.4.0",
-		"browserify-ngannotate": "2.0.0",
 		"electron-forge": "4.1.7",
 		"electron-prebuilt-compile": "1.7.9",
 		"gulp": "3.9.1",
@@ -79,7 +74,7 @@
 					"squirrel"
 				],
 				"darwin": [
-					"zip"
+					"dmg"
 				],
 				"linux": [
 					"zip"
