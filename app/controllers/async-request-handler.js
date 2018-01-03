@@ -10,9 +10,10 @@ const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs');
 
-const helpers = require('./helpers');
+
 
 module.exports = function (app) {
+	const helpers = require('./helpers')(app);
 	const controller = function() {};
 
 	const storeFileName = 'main-store.json'; // TODO
