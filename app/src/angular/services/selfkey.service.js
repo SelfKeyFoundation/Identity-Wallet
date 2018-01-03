@@ -35,6 +35,9 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
     retrieveTableData(table, reload) {
       let defer = $q.defer();
 
+      // temporary
+      reload = true;
+
       const cache_data = CACHE.getItem(table);
       if (reload || !cache_data) {
         const apiURL = BASE_URL + table;

@@ -9,7 +9,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     'ngInject';
 
     $rootScope.selectedLanguage = "en";
-    
+
     $log.debug('DICTIONARY', DICTIONARY);
 
     /**
@@ -18,7 +18,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
     $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
-    $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage]; 
+    $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
 
     /**
      * 
@@ -61,7 +61,12 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
      */
     $rootScope.skipInitialIdAttributesSetup = (event) => {
         // TODO - mark setup.status as 'skipped'
-        $state.go('member.dashboard.main');
+        let store = ConfigFileService.getStore();
+        if (store.setup.icoAdsShown) {
+            $state.go('member.dashboard.main');
+        } else {
+            $state.go('member.setup.completed');
+        }
     }
 
     $rootScope.closeApp = (event) => {
@@ -112,7 +117,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                     clickOutsideToClose: false,
                     escapeToClose: false,
                     fullscreen: true,
-                }).then(()=>{
+                }).then(() => {
                     $mdDialog.show({
                         controller: 'StartupGuideDialogController',
                         templateUrl: 'common/dialogs/startup-guide.html',

@@ -120,9 +120,9 @@ if (!handleSquirrelEvent()) {
 		return function () {
 			app.win = new electron.BrowserWindow({
 				width: 1160,
-				height: 768,
+				height: 800,
 				minWidth: 1160,
-				minHeight: 768,
+				minHeight: 800,
 				webPreferences: {
 					devTools: app.config.app.debug,
 					preload: path.join(app.dir.desktopApp, 'preload.js')
@@ -145,7 +145,7 @@ if (!handleSquirrelEvent()) {
 				app.win.webContents.openDevTools();
 			}
 
-			app.win.maximize(); //todo move to configs
+			//app.win.maximize(); //todo move to configs
 
 			app.win.on('closed', () => {
 				app.win = null;
