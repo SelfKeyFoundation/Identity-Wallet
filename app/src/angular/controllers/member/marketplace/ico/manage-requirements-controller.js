@@ -66,7 +66,7 @@ function MemberMarketplaceIcoManageRequirementsController($rootScope, $scope, $l
 
         if (Object.keys(missingRequirements).length <= 0) {
             $scope.icoDetailsBoxConfig.showSubmit = true;
-        }else{
+        } else {
             $scope.icoDetailsBoxConfig.showSubmit = false;
             CommonService.showMessage({
                 container: messagesContainer,

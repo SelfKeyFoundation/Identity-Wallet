@@ -167,6 +167,13 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
                 }
             });
 
+            store.actionLogs.push({
+                "createDate": new Date(),
+                "subscribtionId": $scope.ico.symbol,
+                "text": "Joined SelfKey ICO",
+                "type": "notification"
+            });
+
             ConfigFileService.save().then((resp) => {
                 $scope.isSusbscribed = true;
             }).finally(() => {
