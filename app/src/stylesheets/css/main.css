@@ -16319,24 +16319,20 @@ md-dialog.add-edit-id-attributes {
 
 .wallet-content-wrappper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  padding-top: 80px; }
+  justify-content: center; }
 
 .wallet-manage-token-wrappper {
-  display: block;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  width: 60%;
-  margin: 0 auto;
-  padding-top: 80px; }
+  justify-content: center; }
   .wallet-manage-token-wrappper .header-content {
     background-color: #262f39;
     border: solid 1px #303c49;
     border-radius: 4px;
-    width: 759px;
+    width: 760px;
     height: 412px;
     padding: 30px; }
     .wallet-manage-token-wrappper .header-content > hr {
@@ -16489,7 +16485,7 @@ md-dialog.add-edit-id-attributes {
     border: solid 1px #303c49;
     padding: 30px;
     border-radius: 4px;
-    width: 759px;
+    width: 760px;
     margin-top: 20px;
     margin-bottom: 20px; }
     .wallet-manage-token-wrappper .body-content .activity-text {

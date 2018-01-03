@@ -30,8 +30,8 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
                     fullscreen: true,
                     locals: {
                         config: {
-                            title: "Upload your " + item.idAttributeType.key,       // todo
-                            type: item.idAttributeType.type,                        // document, static_data
+                            title: "Upload your " + $rootScope.DICTIONARY["ID_ATTR_" + item.idAttributeType.key.toUpperCase()],       // todo
+                            type: item.idAttributeType.type,                                                                          // document, static_data
                             key: item.idAttributeType.key
                         },
                         item: angular.copy(item)
@@ -62,7 +62,7 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                     ConfigFileService.save().then((resp) => {
                         // show message
-                        if (scope.config.callback && scope.config.callback.itemChanged) {
+                        if (scope.config && scope.config.callback && scope.config.callback.itemChanged) {
                             scope.config.callback.itemChanged(scope.data);
                         }
 
@@ -103,7 +103,7 @@ function SkIdAttributeBoxDirective($rootScope, $log, $window, $mdDialog, ConfigF
 
                 ConfigFileService.save().then((resp) => {
                     // show message
-                    if (scope.config.callback && scope.config.callback.itemChanged) {
+                    if (scope.config && scope.config.callback && scope.config.callback.itemChanged) {
                         scope.config.callback.itemChanged(scope.data);
                     }
                     $rootScope.$broadcast('id-attributes-changed', scope.data);
@@ -134,9 +134,9 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     $log.info('SkIdAttributeBoxDirectiveAddEditDialog', config, item);
 
     if (item.idAttributeType.key === 'national_id' && item.addition.selfie) {
-        item.name = "national_id_with_selfie";
+        item.name = $rootScope.DICTIONARY["ID_ATTR_NATIONAL_ID_WITH_SELFIE"];
     } else {
-        item.name = item.idAttributeType.key;
+        item.name = $rootScope.DICTIONARY["ID_ATTR_" + item.idAttributeType.key.toUpperCase()];
     }
 
     $scope.config = config;

@@ -50,9 +50,23 @@ const EN = {
      */
     ID_ATTR_DOC_BOX_TITLE: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
 
+    ID_ATTR_NAME: "Full Legal Name",
+    ID_ATTR_EMAIL: "Email Address",
+    ID_ATTR_COUNTRY_OF_RESIDENCY: "Country of Residence",
     ID_ATTR_NATIONAL_ID: "National ID",
+    ID_ATTR_NATIONAL_ID_WITH_SELFIE: "Selfie with ID Document",
     ID_ATTR_PASSPORT: "Passport",
     ID_ATTR_UTILITY_BILL: "Utility Bill",
+
+    global_attribute: "Global Attribute",
+    id_document: "ID Document",
+
+    name: "Name",
+    email: "Email Address",
+    country_of_residency: "Country Of Residency",
+    national_id: "National ID",
+    
+
 
 
     /**

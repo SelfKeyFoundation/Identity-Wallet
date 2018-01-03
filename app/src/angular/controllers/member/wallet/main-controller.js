@@ -1,4 +1,4 @@
-function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdSidenav, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $mdSidenav, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
     $log.info('MemberWalletMainController');
@@ -106,6 +106,74 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdS
             },
         ],
     };
+
+    $scope.addIdAttribute = (event) => {
+        /*
+        $mdDialog.show({
+            controller: AddIdAttributeDialog,
+            templateUrl: 'common/dialogs/add-id-attribute.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                config: {
+                    title: "Upload your " + item.idAttributeType.key,       // todo
+                    type: item.idAttributeType.type,                        // document, static_data
+                    key: item.idAttributeType.key
+                },
+                item: angular.copy(item)
+            }
+        }).then((respItem) => {
+            item.name = item.name;
+            item.value = item.value;
+            item.path = item.path;
+            item.size = item.size;
+            item.contentType = item.contentType;
+
+            if (!store.idAttributes[item.idAttributeType.key]) {
+                store.idAttributes[item.idAttributeType.key] = scope.data;
+            }
+
+            let itemToSave = store.idAttributes[item.idAttributeType.key].items[respItem._id];
+
+            itemToSave.name = respItem.name;
+            itemToSave.value = respItem.value;
+            if (scope.data.type === 'document') {
+                itemToSave.size = respItem.size;
+                itemToSave.contentType = respItem.contentType;
+            }
+
+            $log.info('store to save:', store);
+            //$rootScope.$broadcast('id-attributes-changed', scope.data);
+
+
+            ConfigFileService.save().then((resp) => {
+                // show message
+                if (scope.config.callback && scope.config.callback.itemChanged) {
+                    scope.config.callback.itemChanged(scope.data);
+                }
+
+                $rootScope.$broadcast('id-attributes-changed', scope.data);
+            });
+        });
+        */
+    }
+
+
+    loadIdAttributes ();
+
+    function loadIdAttributes () {
+        let store = ConfigFileService.getStore();
+        let idAttributes = store.idAttributes;
+
+        $scope.allIdAttributesList = idAttributes;
+    }
+
+    $rootScope.$on('id-attributes-changed', (event) => {
+        let store = ConfigFileService.getStore();
+        $scope.allIdAttributesList = store.idAttributes;
+    });
 };
 
 export default MemberWalletMainController;
