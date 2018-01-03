@@ -110,6 +110,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                     parent: angular.element(document.body),
                     targetEvent: null,
                     clickOutsideToClose: false,
+                    escapeToClose: false,
                     fullscreen: true,
                 }).then(()=>{
                     $mdDialog.show({
@@ -118,6 +119,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
                         parent: angular.element(document.body),
                         targetEvent: null,
                         clickOutsideToClose: false,
+                        escapeToClose: false,
                         fullscreen: true,
                     })
                 });
