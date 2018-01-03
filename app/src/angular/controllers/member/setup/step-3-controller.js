@@ -14,6 +14,16 @@ function MemberSetupStep3Controller($rootScope, $scope, $log, $q, $timeout, $sta
         text6: "uploaded"
     };
 
+    /*
+    "initialIdAttributes": {
+                    "REQ_1": {"attributeType": "name"},
+                    "REQ_2": {"attributeType": "email"},
+                    "REQ_3": {"attributeType": "physical_address"},
+                    "REQ_4": {"attributeType": "national_id"},
+                    "REQ_5": {"attributeType": "national_id", "selfie": true}
+                },
+
+    */
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
     $scope.goToStep = (step) => {

@@ -109,7 +109,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
           ico.setCap(item.hard_cap_USD, item.raised_USD);
           ico.setRestrictions(item.min_contribution_usd, item.max_contribution_usd, item.restrictions);
-          ico.setKyc(item.kyc, item.template, item.organisation);
+          ico.setKyc(item.kyc_api_endpoint, item.kyc, item.template, item.organisation);
           ico.setVideos(item.youtube_video, null);
 
           ico.setInfo(
@@ -131,10 +131,10 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
-    retrieveKycTemplate(organizationId, templateId) {
+    retrieveKycTemplate(kycBaseUrl, organizationId, templateId) {
       let defer = $q.defer();
 
-      let promise = $http.get(KYC_BASE_URL + "organization/" + organizationId + "/template/marketplace/" + templateId);
+      let promise = $http.get(kycBaseUrl + "/organization/" + organizationId + "/template/marketplace/" + templateId);
       promise.then((resp) => {
         defer.resolve(resp.data);
       }).catch((error) => {

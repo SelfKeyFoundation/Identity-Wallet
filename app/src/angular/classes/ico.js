@@ -50,8 +50,9 @@ class Ico {
 
         this.kyc = {
             required: true,                 // kyc
-            template: "",                 // template id
-            organisation: ""             // organisation id
+            apiEndpoint: "",                // kyc
+            template: "",                   // template id
+            organisation: ""                // organisation id
         };
     }
 
@@ -92,8 +93,9 @@ class Ico {
         this.restrictions.other = other ? other : 'TBA';
     }
 
-    setKyc (required, template, organisation) {
+    setKyc (apiEndpoint, required, template, organisation) {
         this.kyc.required = required && required === 'YES' ? true : false;
+        this.kyc.apiEndpoint = apiEndpoint;
         this.kyc.template = template;
         this.kyc.organisation = organisation;
     }

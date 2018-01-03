@@ -68,7 +68,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
-    // TODO - change send dialog with new one
     $rootScope.openSendTokenDialog = (event, token) => {
         return $mdDialog.show({
             controller: 'SendTokenDialogController',
@@ -125,6 +124,17 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
             }, 600);
         }
     };
+
+    $rootScope.openAddCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'AddCustomTokenDialogController',
+            templateUrl: 'common/dialogs/add-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    }
 
     /**
      * 

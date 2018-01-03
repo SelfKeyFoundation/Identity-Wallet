@@ -20,6 +20,7 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
             function loadRequirements () {
                 scope.foundUnknownRequirement = false;
                 scope.requirementsListPromise = SelfkeyService.retrieveKycTemplate(
+                    scope.kycInfo.apiEndpoint,
                     scope.kycInfo.organisation,
                     scope.kycInfo.template
                 );
@@ -35,24 +36,24 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
     
                     for(let i in questions){
                         let req = questions[i];
-                        let idAttributeType = ConfigFileService.getIdAttributeType(i);
+                        let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
                         if(!idAttributeType){
                             scope.foundUnknownRequirement = true;
                             continue;
                         }
-                        requirementsList.push({id: req._id, key: req.type, idAttributeType: idAttributeType});
+                        requirementsList.push({id: req._id, key: req.attributeType, idAttributeType: idAttributeType});
                     }
     
                     for(let i in uploads){
                         let req = uploads[i];
 
-                        let idAttributeType = ConfigFileService.getIdAttributeType(i);
+                        let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
                         if(!idAttributeType){
                             scope.foundUnknownRequirement = true;
                             continue;
                         }
 
-                        requirementsList.push({id: req._id, key: req.type, idAttributeType: idAttributeType});
+                        requirementsList.push({id: req._id, key: req.attributeType, idAttributeType: idAttributeType});
                     }
     
                     scope.sections = CommonService.chunkArray(requirementsList, 3);
