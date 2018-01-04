@@ -55,6 +55,21 @@ module.exports = function (app) {
 		// check file exists
 		if (!fs.existsSync(storeFilePath)) {
 			settings.setAll({
+				profile: {
+					picture: {
+						path: "",
+						fileSize: null,
+						imageSize: {
+							width: "",
+							height: ""
+						},
+						position: {
+							x: "",
+							y: ""
+						},
+						backgroundColor: ""
+					}
+				},
 				setup: {
 					status: 'in-progress', // in-progress | skipped | done (TODO remove)
 					guideShown: false,

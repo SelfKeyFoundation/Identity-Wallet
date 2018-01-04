@@ -1,6 +1,6 @@
 'use strict';
 
-function SkWalletGeneralInfoBoxDirective($log, $window) {
+function SkWalletGeneralInfoBoxDirective($log, $window, ConfigFileService) {
     'ngInject';
 
     return {
@@ -9,6 +9,7 @@ function SkWalletGeneralInfoBoxDirective($log, $window) {
             data: '='
         },
         link: (scope, element) => {
+            let store = ConfigFileService.getStore();
             
         },
         replace: true,
