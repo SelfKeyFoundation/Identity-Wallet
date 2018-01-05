@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "OrbitronMedium";
   src: url("../../assets/fonts/orbitron-medium/orbitron-medium.eot?") format("eot"), url("../../assets/fonts/orbitron-medium/orbitron-medium.woff") format("woff"), url("../../assets/fonts/orbitron-medium/orbitron-medium.ttf") format("truetype"), url("../../assets/fonts/orbitron-medium/orbitron-medium.svg#Orbitron-Medium") format("svg");
@@ -16322,6 +16323,25 @@ md-dialog.add-edit-id-attributes {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center; }
+  .wallet-content-wrappper > .header {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    cursor: pointer; }
+    .wallet-content-wrappper > .header > span {
+      font-family: ProximaNovaRegular;
+      font-size: 24px;
+      line-height: 1.5;
+      color: #ffffff; }
+    .wallet-content-wrappper > .header > md-icon {
+      margin-left: 20px;
+      width: 26px;
+      height: 26px; }
+    .wallet-content-wrappper > .header:hover > md-icon svg path {
+      fill: #ffffff; }
 
 .wallet-manage-token-wrappper {
   display: flex;
@@ -17143,6 +17163,91 @@ md-dialog .address-tooltip {
 
 md-dialog .addres-info-container {
   position: relative; }
+
+md-dialog.add-id-attribute {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.add-id-attribute .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 780px; }
+    md-dialog.add-id-attribute .content-wrapper .header-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; }
+      md-dialog.add-id-attribute .content-wrapper .header-section md-icon {
+        width: 70px;
+        height: 70px; }
+      md-dialog.add-id-attribute .content-wrapper .header-section .title {
+        margin-top: 24px;
+        font-family: ProximaNovaRegular;
+        font-size: 24px;
+        line-height: 1.5;
+        color: #ffffff; }
+      md-dialog.add-id-attribute .content-wrapper .header-section .subtitle {
+        margin-top: 24px;
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        line-height: 1.72;
+        text-align: center;
+        color: #93b0c1; }
+  md-dialog.add-id-attribute .sk-box {
+    margin-top: 48px; }
+
+.sk-select {
+  border: solid 1px #384656;
+  border-radius: 4px;
+  background-color: #1e262e;
+  height: 44px; }
+  .sk-select .md-text {
+    padding-left: 8px;
+    color: #fff; }
+  .sk-select md-select-value {
+    border: 0 !important;
+    padding: 0 !important; }
+    .sk-select md-select-value .md-select-icon:after {
+      content: '❮';
+      color: rgba(147, 176, 193, 0.5);
+      font-size: 20px;
+      transform: scaleY(0.8) scaleX(1) rotate(-90deg);
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: row; }
+
+.md-select-menu-container md-select-menu md-content {
+  background-color: #262f39 !important;
+  border: solid 1px #303c49;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+  .md-select-menu-container md-select-menu md-content md-option {
+    color: #fff !important;
+    font-family: ProximaNovaSemibold;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 2.36;
+    text-align: left;
+    height: 28px;
+    margin: 0 6px;
+    padding: 0 10px; }
+    .md-select-menu-container md-select-menu md-content md-option:hover {
+      border-radius: 4px; }
+  .md-select-menu-container md-select-menu md-content md-select-header {
+    box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2);
+    border-bottom: solid 1px #384656;
+    width: calc(100% - 20px);
+    height: 1px;
+    display: block;
+    margin: 10px; }
+    .md-select-menu-container md-select-menu md-content md-select-header span {
+      display: none; }
 
 .wallet-setup {
   height: 100%; }
