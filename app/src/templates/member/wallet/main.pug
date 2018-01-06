@@ -21,7 +21,7 @@
                 sk-wallet-general-info-box(style="width: 760px !important;")
             
             div(layout="column", style="margin-top: 20px;")
-                sk-id-attribute-box(ng-repeat="item in allIdAttributesList", data="item", config="idAttrbuteBoxConfig" style="width: 760px; margin-top: 40px;")
+                sk-id-attribute-box(ng-repeat="item in allIdAttributesList", id="{{item.key}}" data="item", config="idAttrbuteBoxConfig" style="width: 760px; margin-top: 40px;")
                 
         sk-user-info-box(style="width: 350px !important; margin-left: 30px;")
 

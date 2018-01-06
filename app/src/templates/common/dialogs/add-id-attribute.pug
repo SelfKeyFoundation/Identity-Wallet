@@ -9,30 +9,30 @@ md-dialog.add-id-attribute(aria-label="Add ID Attribute")
             .header
                 span.none-select-text Add Attribute
             form.content
-                md-input-container(style="width: calc(100% - 80px); margin: 44px 40px;")
-                    md-select.sk-select(ng-model="someModel")
-                        md-option(value="opt 1") Name
-                        md-option(value="opt 2") Public Key
-                        md-option(value="opt 3") Physical Address
-                        md-option(value="opt 4") Work Place
-                        md-option(value="opt 5") Date Of Birth
-                        md-option(value="opt 6") Nationality
-                        md-option(value="opt 7") Tax Identification Number
+                md-input-container
+                    md-select.sk-select(ng-model="selectedKey")
+                        // global_attribute
+                        md-option(ng-value="key", ng-repeat="(key, item) in globalAttributes") {{$root.DICTIONARY[key]}}
+                        
                         md-select-header
                             span
-                        md-option(value="opt 8") Passport
-                        md-option(value="opt 9") Driver's License
-                        md-option(value="opt 6") National ID Card
-                        md-option(value="opt 6") Utility Bill
-                        md-option(value="opt 6") Bank Statement
-                        md-option(value="opt 6") Tax Certificate
+
+                        // id_document
+                        md-option(ng-value="key", ng-repeat="(key, item) in idDocuments") {{$root.DICTIONARY[key]}}
+                        
                         md-select-header
                             span
-                        md-option(value="opt 4") Telephone Number - Country Code
-                        md-option(value="opt 5") Telephone Number
-                        md-option(value="opt 6") Selfie
+
+                        // proof_of_address
+                        md-option(ng-value="key", ng-repeat="(key, item) in proofOfAddresses") {{$root.DICTIONARY[key]}}
+                        
                         md-select-header
                             span
-                        md-option(value="opt 4") Facebook Account
-                        md-option(value="opt 5") Twitter Account
-                        md-option(value="opt 6") Github Account
+
+                        // online_identity_attribute
+                        md-option(ng-value="key", ng-repeat="(key, item) in onlineIdentityAttributes") {{$root.DICTIONARY[key]}}
+            .actions
+                md-button.sk-button(ng-click="cancel($event)")
+                    span Cancel
+                md-button.sk-button(ng-click="save($event)")
+                    span Save

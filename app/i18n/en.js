@@ -62,10 +62,38 @@ const EN = {
     id_document: "ID Document",
 
     name: "Name",
+    public_key: "Public Key",
+    physical_address: "Physical Address",
+    work_place: "Work Place",
+    birthdate: "Birth Date",
+    nationality: "Nationality",
+    tax_id_number: "Tax id number",
+    passport: "Passport",
+    drivers_license: "Driver's License",
+    national_id: "National ID",
+    utility_bill: "Utility Bill",
+    bank_statement: "Bank Statement",
+    tax_certificate: "Tax Certificate",
+    phonenumber_countrycode: "Phone Number",
+    phonenumber: "Phone Number",
+    selfie: "Selfie",
+    fingerprint: "Fingerprint",
+    voiceid: "voiceid",
+    facebook: "facebook",
+    twitter: "twitter",
+    linkedin: "linkedin",
+    github: "github",
+    instagram: "instagram",
+    id_selfie: "id_selfie",
     email: "Email Address",
     country_of_residency: "Country Of Residency",
-    national_id: "National ID",
     
+    
+    
+    
+    
+    
+
 
 
 

@@ -17197,8 +17197,42 @@ md-dialog.add-id-attribute {
         line-height: 1.72;
         text-align: center;
         color: #93b0c1; }
-  md-dialog.add-id-attribute .sk-box {
-    margin-top: 48px; }
+    md-dialog.add-id-attribute .content-wrapper .sk-box {
+      margin-top: 48px; }
+      md-dialog.add-id-attribute .content-wrapper .sk-box .content md-input-container {
+        width: calc(100% - 80px);
+        margin: 44px 40px 0 40px; }
+      md-dialog.add-id-attribute .content-wrapper .sk-box .actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 20px 40px 20px 40px; }
+        md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:first-of-type {
+          border-radius: 4px;
+          border: solid 1px #93b0c1;
+          width: 144px;
+          height: 44px; }
+          md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:first-of-type span {
+            color: #93b0c1;
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            line-height: 0.75;
+            letter-spacing: 0.7px; }
+        md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:last-of-type {
+          background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+          border-radius: 4px;
+          border: none;
+          margin-right: 0px;
+          width: 144px;
+          height: 44px; }
+          md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:last-of-type span {
+            font-family: ProximaNovaSemibold;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 0.75;
+            letter-spacing: 0.7px;
+            color: #ffffff; }
 
 .sk-select {
   border: solid 1px #384656;

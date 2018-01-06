@@ -20,7 +20,7 @@
                 .item(ng-if="checkItemValue(item)", ng-repeat="(key, item) in data.items")
                     sk-icon(icon="success-box", size-class="icon-size-16x16")
                     .info-wrapper(ng-class="{selected: item.clicked}")
-                        span(ng-click="item.clicked = !item.clicked") {{ data.type === 'static_data' ? item.value : item.name }}
+                        span(ng-click="item.clicked = !item.clicked") {{ data.type === 'static_data' ? item.value : $root.DICTIONARY[item.idAttributeType.key] }}
                         
                         //span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") &nbsp;-&nbsp;National Id with selfie
                         //span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") &nbsp;-&nbsp;{{ item.idAttributeType.key }}

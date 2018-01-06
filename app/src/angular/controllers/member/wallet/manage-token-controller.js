@@ -20,12 +20,15 @@ function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams
 
     if ($scope.symbol === 'ETH') {
         $scope.balance = $rootScope.wallet.balanceEth;
+        // ETHER
     } else {
+        // TOKEN
         let promise = $scope.selectedToken.loadBalance();
         promise.then((token) => {
             $scope.balance = token.getBalanceDecimal();
         });
     }
+
 
     $scope.balanceUsd = CommonService.numbersAfterComma(($scope.balance * $rootScope.ethUsdPrice), 2);
 

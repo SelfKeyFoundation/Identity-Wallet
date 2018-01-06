@@ -1,3 +1,8 @@
+'use strict';
+
+import IdAttributeItem from '../../../classes/id-attribute-item';
+import IdAttribute from '../../../classes/id-attribute';
+
 function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $mdSidenav, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
@@ -115,18 +120,30 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdD
             targetEvent: event,
             clickOutsideToClose: false,
             fullscreen: true
-        }).then((respItem) => {
+        }).then((selectedIdAttributeType) => {
             let store = ConfigFileService.getStore();
 
-            if (!store.idAttributes[respItem.idAttributeType.key]) {
-                store.idAttributes[respItem.idAttributeType.key] = respItem;
+            if (!store.idAttributes[selectedIdAttributeType.key]) {
+                //store.idAttributes[selectedIdAttributeType.key] = respItem;
+
+                let idAttribute = new IdAttribute(selectedIdAttributeType.key, selectedIdAttributeType);
+
+                let idAttributeItem = new IdAttributeItem();
+                idAttributeItem.setType(selectedIdAttributeType);
+                
+                idAttribute.addItem(idAttributeItem);
+
+                
+                store.idAttributes[selectedIdAttributeType.key] = idAttribute;
+
+                console.log(">>>>> STORE TO SAVE >>>>>", store);
             }
 
-            $log.info('store to save:', store);
+            $log.info('selected id attribute type:', selectedIdAttributeType);
 
-            ConfigFileService.save().then((resp) => {
-                $rootScope.$broadcast('id-attributes-changed', respItem);
-            });
+            //ConfigFileService.save().then((resp) => {
+            //    $rootScope.$broadcast('id-attributes-changed', respItem);
+            //});
         });
     }
 
