@@ -216,8 +216,7 @@ module.exports = function (app) {
 				subscribtions: [],
 				actionLogs: [
 					{
-						createDate: new Date(),
-						subscribtionId: "0",
+						date: new Date(),
 						text: "Success! Created Basic SelfKey Identity",
 						type: "notification"
 					}

@@ -28,24 +28,7 @@
 
     // alerts
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        .sk-box.alerts-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
-            .alerts-box__header
-                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Alerts
-            .sk-horizontal-devider(style="margin-top: 20px;")
-            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
-                button.sk-icon-button
-                    sk-icon(icon="wallet", size-class="icon-size-33x36")
-                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Success! Created Basic SelfKey Identity
-                //span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
-                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 12/26/2017
-            //.sk-horizontal-devider(style="margin-top: 20px;")
-            .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
-                button.sk-icon-button
-                    sk-icon(icon="notification", size-class="icon-size-33x36")
-                span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #43c4a7; margin-left: 16px;") Subscribed to Selfkey Notifications:
-                //span.alerts-box__text(style="font-family: ProximaNovaRegular; font-size: 18px; color: #ffffff; margin-left: 16px;") Proof of Address Required!
-                span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 12/26/2017
-
+        sk-action-logs-box(title="alerts", maxnotifications="5")
     // reminders
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         .sk-box.reminders-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")

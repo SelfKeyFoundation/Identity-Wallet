@@ -1,7 +1,10 @@
 'use strict';
+import * as async from "async";
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
 import ActionLogItem from '../classes/action-log-item.js';
+import { setTimeout } from "timers";
+
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
@@ -17,20 +20,35 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
   // temporary stored datas
   let idAttributeTypes = {};
   let icos = {};
-
+  
   class ConfigFileStore {
-
+    
     constructor() {
       ActionLogItem.ConfigFileService = this;
+      this.q = async.queue((data, callback) => {
+
+        let newStore = JSON.parse(data.store);
+        
+        ElectronService.saveDataStore(newStore).then(() => {
+          callback(null, newStore);  
+        }).catch((err) => {
+          callback(err);  
+        });  
+      
+      }, 1);
+
+
     }
 
     init() {
+      const me = this;
+      
       let defer = $q.defer();
 
       if (ElectronService.ipcRenderer) {
         ElectronService.initDataStore().then((data) => {
           store = data;
-
+            
           // custom delay - to make visible loading
           $timeout(() => {
             defer.resolve(store);
@@ -45,6 +63,20 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       } else {
         defer.reject({ message: 'electron not available' });
       }
+      return defer.promise;
+    }
+
+
+    saveStore(){
+      const me = this;
+      const defer = $q.defer();
+      const jsonConfig = JSON.stringify(store); 
+      me.q.push({store : jsonConfig}, (err, conf) => {
+        if(err){
+          return defer.reject(err);
+        }
+        defer.resolve(conf);        
+      })
       return defer.promise;
     }
 
@@ -252,3 +284,4 @@ let b = {
     }
   }
 }
+

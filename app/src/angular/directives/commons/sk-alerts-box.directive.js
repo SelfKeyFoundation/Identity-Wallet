@@ -6,21 +6,23 @@ function SkAlertsBoxDirective($log, $window) {
     return {
         restrict: 'E',
         scope: {
-            
+            title: '@'
         },
         link: (scope, element) => {
             // TODO type
-            scope.data = [{
+            scope.data = [{ 
+                icon: "notification",
                 month: "DEC",
-                day: "11",
-                text: "Action Required  Zilliqa Token Sale:",
+                date: "11.10.15",
+                text: "sometexx t1111",
                 type: "warning",
                 action: "Proof of Address Required!"
             },
             {
+                icon: "wallet",
                 month: "DEC",
-                day: "11",
-                text: "Action Required  Zilliqa Token Sale:",
+                date: "11.01.18",
+                text: "some text22222",
                 type: "warning",
                 action: "Proof of Address Required!"
             }]

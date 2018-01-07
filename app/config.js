@@ -33,8 +33,21 @@ const AppConfigConstant = {
 				"certified_true_copy": "addition_with_certified_true_copy"
 			},
 			"primaryToken": "qey"
+		},
+		notificationTypes : {
+			wallet : {
+				icon : "wallet",
+				title: "the wallet title",
+				color: "red"
+			},
+			notification : {
+				icon : "notification",
+				title: "you got a notifixation",
+				color: "yellow"
+			}
 		}
 	},
+	
 	"default": {
 		"debug": true,
 		"dev": true,
