@@ -24,10 +24,13 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
 
     .static-data-wrapper(ng-if="config.type === 'static_data'")
         form.static-data-form(name="static-data-form")
-            md-input-container.sk-input-box
+            md-input-container.sk-input-box(ng-if="item.idAttributeType.key !== 'country_of_residency'")
                 label {{$root.DICTIONARY[item.idAttributeType.type]}}
                 input(type="text", name="value", ng-model="item.value")
-
+            md-input-container.sk-input-box(ng-if="item.idAttributeType.key == 'country_of_residency'")
+                label {{$root.DICTIONARY[item.idAttributeType.type]}}
+                md-select.sk-select(name="value", ng-model="item.value")
+                    md-option(ng-value="val.name", ng-repeat="(key, val) in countries") {{val.name}}
             .static-data-form-buttons
                 button.cancel-button(ng-click="cancel($event)")
                     span Cancel
