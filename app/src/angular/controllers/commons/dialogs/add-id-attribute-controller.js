@@ -1,36 +1,47 @@
-function AddIdAttributeDialog($rootScope, $scope, $log, $mdDialog, ElectronService, config, item) {
+'use strict';
+
+function AddIdAttributeDialog($rootScope, $scope, $log, $mdDialog, ElectronService, SelfkeyService) {
     'ngInject';
 
-    $log.info('AddIdAttributeDialog', config, item);
+    $log.info("AddIdAttributeDialog");
 
-    if (item.idAttributeType.key === 'national_id' && item.addition.selfie) {
-        item.name = "national_id_with_selfie";
-    } else {
-        item.name = item.idAttributeType.key;
-    }
+    $scope.globalAttributes = {};
+    $scope.idDocuments = {};
+    $scope.proofOfAddresses = {};
+    $scope.onlineIdentityAttributes = {};
 
-    $scope.config = config;
-    $scope.item = item;
-
-    $scope.selectFile = (event) => {
-        let promise = ElectronService.openFileSelectDialog(event);
-        promise.then((resp) => {
-            $log.info(resp);
-            if (resp && resp.path) {
-                $scope.item.value = resp.path;
-                $scope.item.contentType = resp.mimeType;
-                $scope.item.size = resp.size;
+    let idAttributes = null;
+    SelfkeyService.dispatchIdAttributeTypes(true).then((data)=>{
+        idAttributes = data;
+        for(let i in data){
+            switch (data[i].category) {
+                case "global_attribute":
+                    $scope.globalAttributes[i] = data[i];
+                    break;
+                case "id_document":
+                    $scope.idDocuments[i] = data[i];
+                    break;
+                case "proof_of_address":
+                    $scope.proofOfAddresses[i] = data[i];
+                    break;
+                case "online_identity_attribute":
+                    $scope.onlineIdentityAttributes[i] = data[i];
+                    break;
             }
-        });
-    }
+        }
+    }).catch((error)=>{
+        console.log(error, "??????")
+    });
 
-    $scope.save = () => {
-        if (item.value && item.name) {
-            $mdDialog.hide(item);
+    $scope.item = {};
+
+    $scope.save = (event) => {
+        if ($scope.selectedKey) {
+            $mdDialog.hide(idAttributes[$scope.selectedKey]);
         }
     }
 
-    $scope.cancel = () => {
+    $scope.cancel = (event) => {
         $mdDialog.cancel();
     }
 }

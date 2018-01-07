@@ -64,6 +64,9 @@ angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);
 import appEventsConstant from './angular/constants/app.events.constant';
 angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
 
+import countriesConstant from './angular/constants/countries';
+angular.module('kyc-wallet').constant('countries', countriesConstant);
+
 /**
  * filters
  */

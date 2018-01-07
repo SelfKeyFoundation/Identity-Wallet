@@ -32,19 +32,20 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
 
 
 
+            //this is how you add a notificaiton
+            //store.actionLogs = [];
+            // store.actionLogs.push({
+            //         date : new Date(),
+            //         type : 'notification',
+            //         text : 'other something'
+            // }); 
 
+            //this is how you save the store
+            //   ConfigFileService.saveStore().then((s) => {
+                  
+            //       console.log("response - " + s.asd);
+            //   })
             
-            //  ConfigFileService.saveStore().then((s) => {
-            //      console.log("response - " + s.asd);
-            //  })
-            
-            setInterval(function(){
-                store.actionLogs.push({
-                    date : new Date(),
-                    type : 'wallet',
-                    text : 'other something'
-                }); 
-            }, 2000)
             
             
 

@@ -1,35 +1,38 @@
-md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
+md-dialog.add-id-attribute(aria-label="Add ID Attribute")
 
-    .document-wrapper(ng-if="config.type === 'document'")
-        //.name-section
-            input(type="text", ng-model="item.name", placeholder="{{config.type}} name", disabled)
-        .upload-section
-            .title {{config.title}}
-            .content
-                .section
-                    // sk-icon(icon="upload", size-class="icon-size-34x44")
-                    img(src="assets/images/icons/upload.svg")
-                    .name Your {{config.key}}
-                    .hint (Minimal size 1600x900px)
-                .gradient-divider
-                .section(ng-click="selectFile($event)")
-                    // sk-icon(icon="hard-drive", size-class="icon-size-44x44")
-                    img(src="assets/images/icons/hard-drive.svg")
-                    .name {{ item.value ? item.value : 'Select file' }}
-                    .hint (Minimal size 1600x900px)
+    .content-wrapper
+        .header-section
+            md-icon(md-svg-src="assets/images/icons/add-property.svg")
+            span.title Add ID Attribute
+            span.subtitle Select the type of attribute you would like to add to your identity wallet. 
+        .sk-box.shadowed
+            .header
+                span.none-select-text Add Attribute
+            form.content
+                md-input-container
+                    md-select.sk-select(ng-model="selectedKey")
+                        // global_attribute
+                        md-option(ng-value="key", ng-repeat="(key, item) in globalAttributes") {{$root.DICTIONARY[key]}}
+                        
+                        md-select-header
+                            span
 
-        .action-buttons
-            button.cancel(ng-click="cancel($event)") Cancel
-            button.save(ng-click="save($event)") Save
+                        // id_document
+                        md-option(ng-value="key", ng-repeat="(key, item) in idDocuments") {{$root.DICTIONARY[key]}}
+                        
+                        md-select-header
+                            span
 
-    .static-data-wrapper(ng-if="config.type === 'static_data'")
-        form.static-data-form(name="static-data-form")
-            .static-data-form-content
-                span {{config.type}}
-                input(type="text", ng-model="item.value", placeholder="{{config.type}}")
+                        // proof_of_address
+                        md-option(ng-value="key", ng-repeat="(key, item) in proofOfAddresses") {{$root.DICTIONARY[key]}}
+                        
+                        md-select-header
+                            span
 
-            .static-data-form-buttons
-                button.cancel-button(ng-click="cancel($event)")
+                        // online_identity_attribute
+                        md-option(ng-value="key", ng-repeat="(key, item) in onlineIdentityAttributes") {{$root.DICTIONARY[key]}}
+            .actions
+                md-button.sk-button(ng-click="cancel($event)")
                     span Cancel
-                button.save-button(ng-click="save($event)")
-                    span save
+                md-button.sk-button(ng-click="save($event)")
+                    span Save

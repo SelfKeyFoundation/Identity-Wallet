@@ -1,7 +1,9 @@
-function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService) {
+function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, CommonService, countries) {
     'ngInject'
 
     $log.info('MemberSetupStep1Controller');
+
+    $scope.countries = countries.countryList;
 
     let messagesContainer = angular.element(document.getElementById("message-container"));
     let shouldSkipStep2 = $stateParams.skipStep2;
@@ -15,7 +17,7 @@ function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $sta
      */
 
     $scope.nextStep = (event, form) => {
-        ConfigFileService.save().then(()=>{
+        ConfigFileService.save().then(() => {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "info",
@@ -26,7 +28,7 @@ function MemberSetupStep1Controller($rootScope, $scope, $log, $q, $timeout, $sta
             if (!shouldSkipStep2) {
                 $state.go('member.setup.step-2');
             } else {
-                $state.go('member.setup.step-3', { step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_4 });
+                $state.go('member.setup.step-3', {step: $rootScope.INITIAL_ID_ATTRIBUTES.REQ_4});
             }
         });
     }

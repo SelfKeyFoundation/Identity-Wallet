@@ -1,3 +1,8 @@
+'use strict';
+
+import IdAttributeItem from '../../../classes/id-attribute-item';
+import IdAttribute from '../../../classes/id-attribute';
+
 function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $mdSidenav, ConfigFileService, CommonService, ElectronService, EtherScanService) {
     'ngInject'
 
@@ -107,59 +112,47 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdD
         ],
     };
 
-    $scope.addIdAttribute = (event) => {
-        /*
+    $scope.addIdAttribute = (event) => {   
         $mdDialog.show({
-            controller: AddIdAttributeDialog,
-            templateUrl: 'common/dialogs/add-id-attribute.html',
+            controller: "AddIdAttributeDialog",
+            templateUrl: "common/dialogs/add-id-attribute.html",
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,
-            fullscreen: true,
-            locals: {
-                config: {
-                    title: "Upload your " + item.idAttributeType.key,       // todo
-                    type: item.idAttributeType.type,                        // document, static_data
-                    key: item.idAttributeType.key
-                },
-                item: angular.copy(item)
-            }
-        }).then((respItem) => {
-            item.name = item.name;
-            item.value = item.value;
-            item.path = item.path;
-            item.size = item.size;
-            item.contentType = item.contentType;
+            fullscreen: true
+        }).then((selectedIdAttributeType) => {
+            let store = ConfigFileService.getStore();
 
-            if (!store.idAttributes[item.idAttributeType.key]) {
-                store.idAttributes[item.idAttributeType.key] = scope.data;
-            }
+            if (!store.idAttributes[selectedIdAttributeType.key]) {
+                //store.idAttributes[selectedIdAttributeType.key] = respItem;
 
-            let itemToSave = store.idAttributes[item.idAttributeType.key].items[respItem._id];
+                let idAttribute = new IdAttribute(selectedIdAttributeType.key, selectedIdAttributeType);
 
-            itemToSave.name = respItem.name;
-            itemToSave.value = respItem.value;
-            if (scope.data.type === 'document') {
-                itemToSave.size = respItem.size;
-                itemToSave.contentType = respItem.contentType;
+                let idAttributeItem = new IdAttributeItem();
+                idAttributeItem.setType(selectedIdAttributeType);
+                
+                idAttribute.addItem(idAttributeItem);
+
+                
+                store.idAttributes[selectedIdAttributeType.key] = idAttribute;
+
+                console.log(">>>>> STORE TO SAVE >>>>>", store);
+            }else{
+                let idAttribute = store.idAttributes[selectedIdAttributeType.key];
+
+                let idAttributeItem = new IdAttributeItem();
+                idAttributeItem.setType(selectedIdAttributeType);
+
+                idAttribute.addItem(idAttributeItem);
             }
 
-            $log.info('store to save:', store);
-            //$rootScope.$broadcast('id-attributes-changed', scope.data);
+            $log.info('selected id attribute type:', selectedIdAttributeType);
 
-
-            ConfigFileService.save().then((resp) => {
-                // show message
-                if (scope.config.callback && scope.config.callback.itemChanged) {
-                    scope.config.callback.itemChanged(scope.data);
-                }
-
-                $rootScope.$broadcast('id-attributes-changed', scope.data);
-            });
+            //ConfigFileService.save().then((resp) => {
+            //    $rootScope.$broadcast('id-attributes-changed', respItem);
+            //});
         });
-        */
     }
-
 
     loadIdAttributes ();
 

@@ -11,14 +11,14 @@
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
             md-input-container.sk-input-box
                 label {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType]}}
-                input(required type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
+                input(type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
             md-input-container.sk-input-box
                 label {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType]}}
                 input(type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value")
             md-input-container.sk-input-box
                 label {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType]}}
-                input(type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value")
-
+                md-select.sk-select(name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_3.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_3.id].value")
+                    md-option(ng-value="item.name", ng-repeat="(key, item) in countries") {{item.name}}
             .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
                 span(style="color: #fff; user-select: none;") Create SelfKey Basic ID
     .sk-hyperlink.sk-text(style="margin-top: 32px; color: #fff;", ng-click="$root.skipInitialIdAttributesSetup($event)") I'll do that later

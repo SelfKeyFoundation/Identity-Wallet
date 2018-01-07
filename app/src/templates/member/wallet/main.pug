@@ -1,7 +1,8 @@
 .wallet-content-wrappper(layout="column", layout-align="start center", style="width: 1140px;")
-    div(layout="row", layout-align="center start", ng-click="addIdAttribute($event)", style="margin-top: 40px;")
-        span(style="font-family: ProximaNovaRegular; font-size: 24px; line-height: 1.5;  color: #ffffff;") SelfKey Identity Wallet
-        sk-icon(icon="plus", size-class="icon-size-26x26", style="margin-left: 20px; cursor: pointer;")
+
+    .header(ng-click="addIdAttribute($event)")
+        span SelfKey Identity Wallet
+        md-icon(md-svg-src="assets/images/icons/plus.svg")
 
     div(layout="row", layout-align="start start", style="margin-top: 40px;")
         div(layout="column") 
@@ -20,7 +21,7 @@
                 sk-wallet-general-info-box(style="width: 760px !important;")
             
             div(layout="column", style="margin-top: 20px;")
-                sk-id-attribute-box(ng-repeat="item in allIdAttributesList", data="item", config="idAttrbuteBoxConfig" style="width: 760px; margin-top: 40px;")
+                sk-id-attribute-box(ng-repeat="item in allIdAttributesList", id="{{item.key}}" data="item", config="idAttrbuteBoxConfig" style="width: 760px; margin-top: 40px;")
                 
         sk-user-info-box(style="width: 350px !important; margin-left: 30px;")
 

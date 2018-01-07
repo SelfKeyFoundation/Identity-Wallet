@@ -58,14 +58,47 @@ const EN = {
     ID_ATTR_PASSPORT: "Passport",
     ID_ATTR_UTILITY_BILL: "Utility Bill",
 
+    kyc_requirements: "KYC Requirements",
+
     global_attribute: "Global Attribute",
     id_document: "ID Document",
 
+    document: "Document",
+    static_data: "Static Data",
+
     name: "Name",
+    public_key: "Public Key",
+    physical_address: "Physical Address",
+    work_place: "Work Place",
+    birthdate: "Birth Date",
+    nationality: "Nationality",
+    tax_id_number: "Tax id number",
+    passport: "Passport",
+    drivers_license: "Driver's License",
+    national_id: "National ID",
+    utility_bill: "Utility Bill",
+    bank_statement: "Bank Statement",
+    tax_certificate: "Tax Certificate",
+    phonenumber_countrycode: "Phone Number",
+    phonenumber: "Phone Number",
+    selfie: "Selfie",
+    fingerprint: "Fingerprint",
+    voiceid: "voiceid",
+    facebook: "facebook",
+    twitter: "twitter",
+    linkedin: "linkedin",
+    github: "github",
+    instagram: "instagram",
+    id_selfie: "id_selfie",
     email: "Email Address",
     country_of_residency: "Country Of Residency",
-    national_id: "National ID",
     
+    selfie_with_id_document: "Selfie with ID Document",
+    
+    
+    
+    
+
 
 
 

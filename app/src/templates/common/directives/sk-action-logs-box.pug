@@ -4,7 +4,7 @@
     .sk-horizontal-devider(style="margin-top: 20px;")
     .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;", ng-repeat="(key, value) in actionLogList")
         button.sk-icon-button
-            sk-icon(icon="{{value.icon}}", size-class="icon-size-33x36")
+            md-icon.sk-token-box__token(md-svg-src="assets/images/icons/{{value.icon}}.svg", style="color:{{value.color}}", aria-label="{{value.type}}", size-class="icon-size-33x36")
         span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: {{value.color}}; margin-left: 16px;") {{value.title}}
         |
         |

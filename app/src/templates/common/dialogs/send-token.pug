@@ -8,12 +8,12 @@ md-dialog.send-token(aira-lable="Send Dialog")
 
             .sk-send-ether-box__recipient-container
                 qrcode(data="sendToAddress", size="40", background="#303c49", color="#66798f")
-                input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to address", ng-model="data.sendToAddress", name="sendToAddress", ng-required)
+                input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to address", ng-model="data.sendToAddress", ng-readonly="!editModeOfAddress" name="sendToAddress", ng-required)
 
             .sk-send-ether-box__eth-amount-container
                 .sk-button.small(ng-click="selectAll($event)")
                     span ALL
-                input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmount", ng-required)
+                input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmount", ng-readonly="!editModeOfPrice" ng-required)
                 span {{symbol}}
 
             .sk-send-ether-box__usd-amount-container
@@ -60,8 +60,6 @@ md-dialog.send-token(aira-lable="Send Dialog")
                 div(style="display: flex; flex-direction: row; align-items: center; justify-content: center;")
                     .sk-button.small(ng-click="loadTransaction($event)", style="margin-top: 30px;")
                         span view transaction
-                    //.sk-button.small(ng-click="close($event)", style="margin-top: 30px; margin-left: 8px;")
-                        span close
 
         .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
             span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{totalBalanceInEth - scope.data.sendAmount}} ETH  $1.255.37

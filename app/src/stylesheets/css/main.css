@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "OrbitronMedium";
   src: url("../../assets/fonts/orbitron-medium/orbitron-medium.eot?") format("eot"), url("../../assets/fonts/orbitron-medium/orbitron-medium.woff") format("woff"), url("../../assets/fonts/orbitron-medium/orbitron-medium.ttf") format("truetype"), url("../../assets/fonts/orbitron-medium/orbitron-medium.svg#Orbitron-Medium") format("svg");
@@ -14744,6 +14745,57 @@ md-input-container.sk-select-box {
     .md-select-menu-container md-content md-option:focus {
       background-color: #2f4458 !important; }
 
+.sk-select {
+  border: solid 1px #384656;
+  border-radius: 4px;
+  background-color: #1e262e;
+  height: 44px; }
+  .sk-select .md-text {
+    padding-left: 8px;
+    color: #fff; }
+  .sk-select .md-select-value.md-select-placeholder > span {
+    display: none !important; }
+  .sk-select md-select-value {
+    border: 0 !important;
+    padding: 0 !important; }
+    .sk-select md-select-value .md-select-icon:after {
+      content: '❮';
+      color: rgba(147, 176, 193, 0.5);
+      font-size: 20px;
+      transform: scaleY(0.8) scaleX(1) rotate(-90deg);
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: row; }
+
+.md-select-menu-container md-select-menu md-content {
+  background-color: #262f39 !important;
+  border: solid 1px #303c49;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+  .md-select-menu-container md-select-menu md-content md-option {
+    color: #fff !important;
+    font-family: ProximaNovaSemibold;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 2.36;
+    text-align: left;
+    height: 28px;
+    margin: 0 6px;
+    padding: 0 10px; }
+    .md-select-menu-container md-select-menu md-content md-option:hover {
+      border-radius: 4px; }
+  .md-select-menu-container md-select-menu md-content md-select-header {
+    box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2);
+    border-bottom: solid 1px #384656;
+    width: calc(100% - 20px);
+    height: 1px;
+    display: block;
+    margin: 10px; }
+    .md-select-menu-container md-select-menu md-content md-select-header span {
+      display: none; }
+
 .sk-tooltip {
   height: auto;
   border-radius: 4px !important;
@@ -14850,6 +14902,8 @@ md-content {
   .sk-token-box .sk-token-box__header .sk-token-box__token {
     width: 44px !important;
     height: 44px !important; }
+    .sk-token-box .sk-token-box__header .sk-token-box__token svg {
+      fill: inherit; }
   .sk-token-box .sk-token-box__header .sk-token-box__text {
     margin-left: 12px; }
   .sk-token-box .sk-token-box__header .sk-token-box__plus {
@@ -15758,77 +15812,59 @@ md-dialog.add-edit-id-attributes {
           md-dialog.add-edit-id-attributes .document-wrapper .action-buttons button.save:hover {
             box-shadow: inset 0 0 25px 3px rgba(255, 255, 255, 0.3); }
   md-dialog.add-edit-id-attributes .static-data-wrapper {
-    width: 759px;
-    height: 162px;
+    width: 760px;
     border-radius: 4px;
     background-color: #262f39;
     border: solid 1px #303c49; }
-    md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-content {
-      padding: 30px; }
-      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-content > span {
-        width: 118px;
-        height: 22px;
-        font-family: ProximaNovaMedium;
-        font-size: 18px;
-        font-weight: 500;
-        font-style: normal;
-        font-stretch: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: left;
-        color: #ffffff; }
-      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-content > input {
-        width: 700px;
-        height: 56px;
-        border-radius: 4px;
-        background-color: #1e262e;
-        border: solid 1px #0dc7dd;
-        outline: none;
-        margin-top: 24px;
-        color: #ffffff; }
-    md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons {
-      float: right;
-      margin-top: 24px; }
-      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button {
-        width: 144px;
-        height: 44px;
-        border-radius: 4px;
-        border: solid 1px rgba(147, 176, 193, 0.3);
-        outline: none;
-        background-color: transparent;
-        margin-right: 16px; }
-        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button > span {
-          width: 53px;
-          height: 12px;
-          font-family: ProximaNovaRegular;
-          font-size: 16px;
-          font-weight: normal;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 0.75;
-          letter-spacing: 0.7px;
-          text-align: center;
-          color: #93b0c1; }
-      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button {
-        width: 144px;
-        height: 44px;
-        border-radius: 4px;
-        background-image: linear-gradient(309deg, #08bccd, #2da1f8);
-        border-color: transparent;
-        outline: none; }
-        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button > span {
-          width: 42px;
-          height: 12px;
-          font-family: ProximaNovaSemibold;
-          font-size: 16px;
-          font-weight: 600;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 0.75;
-          letter-spacing: 0.7px;
-          text-align: center;
-          color: #ffffff;
-          text-transform: uppercase; }
+    md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form {
+      display: flex;
+      flex-direction: column;
+      padding: 20px; }
+      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-end; }
+        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button {
+          width: 144px;
+          height: 44px;
+          border-radius: 4px;
+          border: solid 1px rgba(147, 176, 193, 0.3);
+          outline: none;
+          background-color: transparent;
+          margin-right: 16px; }
+          md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button > span {
+            width: 53px;
+            height: 12px;
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 0.75;
+            letter-spacing: 0.7px;
+            text-align: center;
+            color: #93b0c1; }
+        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button {
+          width: 144px;
+          height: 44px;
+          border-radius: 4px;
+          background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+          border-color: transparent;
+          outline: none; }
+          md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button > span {
+            width: 42px;
+            height: 12px;
+            font-family: ProximaNovaSemibold;
+            font-size: 16px;
+            font-weight: 600;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 0.75;
+            letter-spacing: 0.7px;
+            text-align: center;
+            color: #ffffff;
+            text-transform: uppercase; }
 
 .sk-ico-item-box {
   padding: 0;
@@ -16322,6 +16358,25 @@ md-dialog.add-edit-id-attributes {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center; }
+  .wallet-content-wrappper > .header {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    cursor: pointer; }
+    .wallet-content-wrappper > .header > span {
+      font-family: ProximaNovaRegular;
+      font-size: 24px;
+      line-height: 1.5;
+      color: #ffffff; }
+    .wallet-content-wrappper > .header > md-icon {
+      margin-left: 20px;
+      width: 26px;
+      height: 26px; }
+    .wallet-content-wrappper > .header:hover > md-icon svg path {
+      fill: #ffffff; }
 
 .wallet-manage-token-wrappper {
   display: flex;
@@ -17143,6 +17198,76 @@ md-dialog .address-tooltip {
 
 md-dialog .addres-info-container {
   position: relative; }
+
+md-dialog.add-id-attribute {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.add-id-attribute .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 780px; }
+    md-dialog.add-id-attribute .content-wrapper .header-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; }
+      md-dialog.add-id-attribute .content-wrapper .header-section md-icon {
+        width: 70px;
+        height: 70px; }
+      md-dialog.add-id-attribute .content-wrapper .header-section .title {
+        margin-top: 24px;
+        font-family: ProximaNovaRegular;
+        font-size: 24px;
+        line-height: 1.5;
+        color: #ffffff; }
+      md-dialog.add-id-attribute .content-wrapper .header-section .subtitle {
+        margin-top: 24px;
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        line-height: 1.72;
+        text-align: center;
+        color: #93b0c1; }
+    md-dialog.add-id-attribute .content-wrapper .sk-box {
+      margin-top: 48px; }
+      md-dialog.add-id-attribute .content-wrapper .sk-box .content md-input-container {
+        width: calc(100% - 80px);
+        margin: 44px 40px 0 40px; }
+      md-dialog.add-id-attribute .content-wrapper .sk-box .actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 20px 40px 20px 40px; }
+        md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:first-of-type {
+          border-radius: 4px;
+          border: solid 1px #93b0c1;
+          width: 144px;
+          height: 44px; }
+          md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:first-of-type span {
+            color: #93b0c1;
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            line-height: 0.75;
+            letter-spacing: 0.7px; }
+        md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:last-of-type {
+          background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+          border-radius: 4px;
+          border: none;
+          margin-right: 0px;
+          width: 144px;
+          height: 44px; }
+          md-dialog.add-id-attribute .content-wrapper .sk-box .actions .md-button:last-of-type span {
+            font-family: ProximaNovaSemibold;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 0.75;
+            letter-spacing: 0.7px;
+            color: #ffffff; }
 
 .wallet-setup {
   height: 100%; }

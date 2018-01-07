@@ -15,13 +15,15 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     $scope.sendAmountInUSD = 0.00;
     $scope.gasPriceInGwei = 50;
-    $scope.gasLimit = 210000;
+    $scope.gasLimit = args.gasLimit || 210000;
 
     $scope.data = {
-        sendAmount: null,
-        sendToAddress: '',
+        sendAmount: args.sendAmount || null,
+        sendToAddress: args.sendToAddress || '',
         txStatus: null
     }
+    $scope.editModeOfAddress = args.editModeOfAddress || true;
+    $scope.editModeOfPrice = args.editModeOfPrice || true;
 
     $scope.itemPriceInUSD = 0; //["eth", "ETH"].indexOf($scope.symbol) !== -1 ? $rootScope.wallet.usdPerUnit : token.userPerUnit;
 

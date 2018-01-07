@@ -128,16 +128,18 @@ function DocumentProcessStatus(status, name, icon) {
     this.icon = icon;
 }
 
-function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDialog, ElectronService, config, item) {
+function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDialog, ElectronService, config, item,countries) {
     'ngInject';
 
     $log.info('SkIdAttributeBoxDirectiveAddEditDialog', config, item);
+    $scope.countries = countries.countryList;
 
     if (item.idAttributeType.key === 'national_id' && item.addition.selfie) {
         item.name = $rootScope.DICTIONARY["ID_ATTR_NATIONAL_ID_WITH_SELFIE"];
     } else {
-        item.name = $rootScope.DICTIONARY["ID_ATTR_" + item.idAttributeType.key.toUpperCase()];
+        item.name = $rootScope.DICTIONARY[item.idAttributeType.key];
     }
+
 
     $scope.config = config;
     $scope.item = item;
@@ -145,7 +147,6 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     $scope.selectFile = (event) => {
         let promise = ElectronService.openFileSelectDialog(event);
         promise.then((resp) => {
-            $log.info(resp);
             if (resp && resp.path) {
                 $scope.item.value = resp.path;
                 $scope.item.contentType = resp.mimeType;
@@ -155,8 +156,9 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 
     $scope.save = () => {
-        if (item.value && item.name) {
-            $mdDialog.hide(item);
+        console.log($scope.item, item, "<<<<<<");
+        if ($scope.item.value && $scope.item.name) {
+            $mdDialog.hide($scope.item);
         }
     }
 

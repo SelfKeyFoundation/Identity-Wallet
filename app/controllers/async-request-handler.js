@@ -86,6 +86,7 @@ module.exports = function (app) {
 				},
 				idAttributes: {
 					"email": {
+						"isInitial": true,
 						"category": "global_attribute",
 						"defaultItemId": "1",
 						"entity": [
@@ -111,6 +112,7 @@ module.exports = function (app) {
 						"type": "static_data"
 					},
 					"name": {
+						"isInitial": true,
 						"category": "global_attribute",
 						"defaultItemId": "1",
 						"entity": [
@@ -134,6 +136,7 @@ module.exports = function (app) {
 						"type": "static_data"
 					},
 					"national_id": {
+						"isInitial": true,
 						"category": "id_document",
 						"defaultItemId": "1",
 						"entity": [
@@ -187,6 +190,7 @@ module.exports = function (app) {
 						"type": "document"
 					},
 					"country_of_residency": {
+						"isInitial": true,
 						"category": "global_attribute",
 						"defaultItemId": "1",
 						"entity": [
@@ -216,9 +220,17 @@ module.exports = function (app) {
 				subscribtions: [],
 				actionLogs: [
 					{
-						date: new Date(),
-						text: "Success! Created Basic SelfKey Identity",
-						type: "notification"
+						date : new Date(),
+                   		type : 'notification',
+                    	text : 'something'
+					},{
+						date : new Date(),
+                   		type : 'wallet',
+                    	text : 'other something'
+					},{
+						date : new Date(),
+                   		type : 'notification',
+                    	text : 'third something'
 					}
 				],
 				tokens: {

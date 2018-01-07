@@ -6,6 +6,7 @@ const electron = require('electron');
 //const {autoUpdater} = require('electron-updater');
 const {dialog} = require('electron');
 const deskmetrics = require('deskmetrics');
+const {Menu} = require("electron");
 
 // windows installer
 function handleSquirrelEvent() {
@@ -158,6 +159,25 @@ if (!handleSquirrelEvent()) {
 			deskmetrics.start({ appId: app.config.deskmetricsAppId }).then(function() {
 				deskmetrics.setProperty('version', electron.app.getVersion());
 			});
+
+			/**
+			 * Create the Application's main menu
+			 */
+			var template = [{
+				label: "Edit",
+				submenu: [
+					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+					{ type: "separator" },
+					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+				]}
+			];
+		
+			Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+
 
 			// self updater
 			/*

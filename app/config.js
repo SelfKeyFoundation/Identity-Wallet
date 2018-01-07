@@ -36,12 +36,12 @@ const AppConfigConstant = {
 		},
 		notificationTypes : {
 			wallet : {
-				icon : "wallet",
+				icon : "wallet-without-color",
 				title: "the wallet title",
-				color: "red"
+				color: "green"
 			},
 			notification : {
-				icon : "notification",
+				icon : "appointment-reminders-without-color",
 				title: "you got a notifixation",
 				color: "yellow"
 			}
