@@ -14745,6 +14745,57 @@ md-input-container.sk-select-box {
     .md-select-menu-container md-content md-option:focus {
       background-color: #2f4458 !important; }
 
+.sk-select {
+  border: solid 1px #384656;
+  border-radius: 4px;
+  background-color: #1e262e;
+  height: 44px; }
+  .sk-select .md-text {
+    padding-left: 8px;
+    color: #fff; }
+  .sk-select .md-select-value.md-select-placeholder > span {
+    display: none !important; }
+  .sk-select md-select-value {
+    border: 0 !important;
+    padding: 0 !important; }
+    .sk-select md-select-value .md-select-icon:after {
+      content: '❮';
+      color: rgba(147, 176, 193, 0.5);
+      font-size: 20px;
+      transform: scaleY(0.8) scaleX(1) rotate(-90deg);
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: row; }
+
+.md-select-menu-container md-select-menu md-content {
+  background-color: #262f39 !important;
+  border: solid 1px #303c49;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+  .md-select-menu-container md-select-menu md-content md-option {
+    color: #fff !important;
+    font-family: ProximaNovaSemibold;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 2.36;
+    text-align: left;
+    height: 28px;
+    margin: 0 6px;
+    padding: 0 10px; }
+    .md-select-menu-container md-select-menu md-content md-option:hover {
+      border-radius: 4px; }
+  .md-select-menu-container md-select-menu md-content md-select-header {
+    box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2);
+    border-bottom: solid 1px #384656;
+    width: calc(100% - 20px);
+    height: 1px;
+    display: block;
+    margin: 10px; }
+    .md-select-menu-container md-select-menu md-content md-select-header span {
+      display: none; }
+
 .sk-tooltip {
   height: auto;
   border-radius: 4px !important;
@@ -17215,55 +17266,6 @@ md-dialog.add-id-attribute {
             line-height: 0.75;
             letter-spacing: 0.7px;
             color: #ffffff; }
-
-.sk-select {
-  border: solid 1px #384656;
-  border-radius: 4px;
-  background-color: #1e262e;
-  height: 44px; }
-  .sk-select .md-text {
-    padding-left: 8px;
-    color: #fff; }
-  .sk-select md-select-value {
-    border: 0 !important;
-    padding: 0 !important; }
-    .sk-select md-select-value .md-select-icon:after {
-      content: '❮';
-      color: rgba(147, 176, 193, 0.5);
-      font-size: 20px;
-      transform: scaleY(0.8) scaleX(1) rotate(-90deg);
-      align-items: center;
-      justify-content: center;
-      display: flex;
-      flex-direction: row; }
-
-.md-select-menu-container md-select-menu md-content {
-  background-color: #262f39 !important;
-  border: solid 1px #303c49;
-  border-radius: 4px;
-  padding-top: 10px;
-  padding-bottom: 10px; }
-  .md-select-menu-container md-select-menu md-content md-option {
-    color: #fff !important;
-    font-family: ProximaNovaSemibold;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 2.36;
-    text-align: left;
-    height: 28px;
-    margin: 0 6px;
-    padding: 0 10px; }
-    .md-select-menu-container md-select-menu md-content md-option:hover {
-      border-radius: 4px; }
-  .md-select-menu-container md-select-menu md-content md-select-header {
-    box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2);
-    border-bottom: solid 1px #384656;
-    width: calc(100% - 20px);
-    height: 1px;
-    display: block;
-    margin: 10px; }
-    .md-select-menu-container md-select-menu md-content md-select-header span {
-      display: none; }
 
 .wallet-setup {
   height: 100%; }
