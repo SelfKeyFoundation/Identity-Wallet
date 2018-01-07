@@ -36,7 +36,7 @@
                     sk-icon(icon="{{data.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
                     .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
                         span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") National Id with selfie
-                        span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") {{ item.idAttributeType.key }}
+                        span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") {{ $root.DICTIONARY[item.idAttributeType.key] }}
                         //span(ng-if="data.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
 
             .h-divider

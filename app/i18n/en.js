@@ -58,6 +58,8 @@ const EN = {
     ID_ATTR_PASSPORT: "Passport",
     ID_ATTR_UTILITY_BILL: "Utility Bill",
 
+    kyc_requirements: "KYC Requirements",
+
     global_attribute: "Global Attribute",
     id_document: "ID Document",
 
@@ -91,7 +93,7 @@ const EN = {
     email: "Email Address",
     country_of_residency: "Country Of Residency",
     
-    
+    selfie_with_id_document: "Selfie with ID Document",
     
     
     

@@ -1,5 +1,5 @@
 .sk-kyc-requirements-box
-    .title KYC Requirements
+    .title {{$root.DICTIONARY["kyc_requirements"]}}
     .content(layout="row")
         .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections", ng-if="requirementsListPromise.$$state.status === 1")
             .item(ng-repeat="item in section")
@@ -7,7 +7,7 @@
                     img(src='assets/images/icons/tick.svg', ng-if="checkIfIdAttributeItemIsready(item)")
                     span(ng-show="!checkIfIdAttributeItemIsready(item)") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
                 // TODO - needs rework later ... exception for now - for id attribute with selfie
-                span {{ item.req.selfie ? 'Selfie with ID Document' : item.key }}
+                span {{ item.req.selfie ? $root.DICTIONARY['selfie_with_id_document'] : $root.DICTIONARY[item.key] }}
                 sk-icon(icon="upload", size-class="icon-size-16x16", style="margin-left: 20px", ng-if="item.idAttributeType.type === 'document'")
         .sk-show-loading(style="color: #0dc7dd; margin-top: 20px;", ng-if="requirementsListPromise.$$state.status === 0")
             | Retrieving data
