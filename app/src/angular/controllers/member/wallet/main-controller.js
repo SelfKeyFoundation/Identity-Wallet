@@ -137,6 +137,13 @@ function MemberWalletMainController($rootScope, $scope, $log, $q, $timeout, $mdD
                 store.idAttributes[selectedIdAttributeType.key] = idAttribute;
 
                 console.log(">>>>> STORE TO SAVE >>>>>", store);
+            }else{
+                let idAttribute = store.idAttributes[selectedIdAttributeType.key];
+
+                let idAttributeItem = new IdAttributeItem();
+                idAttributeItem.setType(selectedIdAttributeType);
+
+                idAttribute.addItem(idAttributeItem);
             }
 
             $log.info('selected id attribute type:', selectedIdAttributeType);

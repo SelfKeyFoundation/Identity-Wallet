@@ -2,6 +2,7 @@
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
 import ActionLogItem from '../classes/action-log-item.js';
+import IdAttribute from '../classes/id-attribute';
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
@@ -56,6 +57,15 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       let defer = $q.defer();
       ElectronService.readDataStore().then((data) => {
         store = data;
+
+        for(let i in store.idAttributes){
+          let idAttribute = new IdAttribute()
+          idAttribute.setData(store.idAttributes[i]);
+          store.idAttributes[i] = idAttribute;
+        }
+
+        console.log(">>>>> STORE LOADED >>>>", store);
+
         defer.resolve(store);
       }).catch((error) => {
         // TODO

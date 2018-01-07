@@ -22,8 +22,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         sendToAddress: args.sendToAddress || '',
         txStatus: null
     }
-    $scope.editModeOfAddress = args.editModeOfAddress;
-    $scope.editModeOfPrice = args.editModeOfPrice;
+    $scope.editModeOfAddress = args.editModeOfAddress || true;
+    $scope.editModeOfPrice = args.editModeOfPrice || true;
 
     $scope.itemPriceInUSD = 0; //["eth", "ETH"].indexOf($scope.symbol) !== -1 ? $rootScope.wallet.usdPerUnit : token.userPerUnit;
 

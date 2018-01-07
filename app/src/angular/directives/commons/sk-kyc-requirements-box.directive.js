@@ -194,7 +194,7 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
                             idAttributeItem.setType(item.idAttributeType);
                             idAttributeItem.name = "";
 
-                            idAttributeItem.setAddition(item.req.selfie);
+                            idAttributeItem.setAddition({ selfie: item.req.selfie });
 
                             idAttribute.addItem(idAttributeItem);
                         } else {
@@ -268,7 +268,7 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
                             idAttributeItem.setType(item.idAttributeType);
                             idAttributeItem.name = "";
 
-                            idAttributeItem.setAddition(item.req.selfie);
+                            idAttributeItem.setAddition({ selfie: item.req.selfie });
 
                             idAttribute.addItem(idAttributeItem);
                         } else {
