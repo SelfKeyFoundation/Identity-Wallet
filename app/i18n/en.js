@@ -61,6 +61,9 @@ const EN = {
     global_attribute: "Global Attribute",
     id_document: "ID Document",
 
+    document: "Document",
+    static_data: "Static Data",
+
     name: "Name",
     public_key: "Public Key",
     physical_address: "Physical Address",

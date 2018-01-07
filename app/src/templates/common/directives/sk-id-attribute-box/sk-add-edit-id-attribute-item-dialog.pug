@@ -10,13 +10,13 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
                     // sk-icon(icon="upload", size-class="icon-size-34x44")
                     img(src="assets/images/icons/upload.svg")
                     .name Your {{config.key}}
-                    .hint (Minimal size 1600x900px)
+                    .hint (Document)
                 .gradient-divider
                 .section(ng-click="selectFile($event)")
                     // sk-icon(icon="hard-drive", size-class="icon-size-44x44")
                     img(src="assets/images/icons/hard-drive.svg")
                     .name {{ item.value ? item.value : 'Select file' }}
-                    .hint (Minimal size 1600x900px)
+                    .hint (allowed types: pdf, jpg, png)
 
         .action-buttons
             button.cancel(ng-click="cancel($event)") Cancel
@@ -24,9 +24,9 @@ md-dialog.add-edit-id-attributes(aria-label="{{config.title}}")
 
     .static-data-wrapper(ng-if="config.type === 'static_data'")
         form.static-data-form(name="static-data-form")
-            .static-data-form-content
-                span {{config.type}}
-                input(type="text", ng-model="item.value", placeholder="{{config.type}}")
+            md-input-container.sk-input-box
+                label {{$root.DICTIONARY[item.idAttributeType.type]}}
+                input(type="text", name="value", ng-model="item.value")
 
             .static-data-form-buttons
                 button.cancel-button(ng-click="cancel($event)")

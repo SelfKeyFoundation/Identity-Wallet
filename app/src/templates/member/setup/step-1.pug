@@ -11,7 +11,7 @@
         form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
             md-input-container.sk-input-box
                 label {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType]}}
-                input(required type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
+                input(type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_1.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_1.id].value")
             md-input-container.sk-input-box
                 label {{$root.DICTIONARY[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType]}}
                 input(type="text", name="{{$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType}}", ng-model="$root.initialSetupProgress[$root.INITIAL_ID_ATTRIBUTES.REQ_2.attributeType][$root.INITIAL_ID_ATTRIBUTES.REQ_2.id].value")
