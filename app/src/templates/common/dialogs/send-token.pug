@@ -8,12 +8,12 @@ md-dialog.send-token(aira-lable="Send Dialog")
 
             .sk-send-ether-box__recipient-container
                 qrcode(data="sendToAddress", size="40", background="#303c49", color="#66798f")
-                input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to address", ng-model="data.sendToAddress", name="sendToAddress", ng-required)
+                input.sk-send-ether-box__recipient-container__input(type="text", placeholder="Send to address", ng-model="data.sendToAddress", ng-readonly="!editModeOfAddress" name="sendToAddress", ng-required)
 
             .sk-send-ether-box__eth-amount-container
                 .sk-button.small(ng-click="selectAll($event)")
                     span ALL
-                input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmount", ng-required)
+                input.sk-send-ether-box__eth-amount-container__input(type="text", placeholder="0.00", ng-model="data.sendAmount", ng-readonly="!editModeOfPrice" ng-required)
                 span {{symbol}}
 
             .sk-send-ether-box__usd-amount-container
