@@ -8,6 +8,10 @@
         .sk-token-box__token {
             width: 44px !important;
             height: 44px !important;
+
+            svg {
+                fill: inherit;
+            }
         }
 
         .sk-token-box__text {

@@ -14902,6 +14902,8 @@ md-content {
   .sk-token-box .sk-token-box__header .sk-token-box__token {
     width: 44px !important;
     height: 44px !important; }
+    .sk-token-box .sk-token-box__header .sk-token-box__token svg {
+      fill: inherit; }
   .sk-token-box .sk-token-box__header .sk-token-box__text {
     margin-left: 12px; }
   .sk-token-box .sk-token-box__header .sk-token-box__plus {

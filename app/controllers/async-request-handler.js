@@ -220,10 +220,17 @@ module.exports = function (app) {
 				subscribtions: [],
 				actionLogs: [
 					{
-						createDate: new Date(),
-						subscribtionId: "0",
-						text: "Success! Created Basic SelfKey Identity",
-						type: "notification"
+						date : new Date(),
+                   		type : 'notification',
+                    	text : 'something'
+					},{
+						date : new Date(),
+                   		type : 'wallet',
+                    	text : 'other something'
+					},{
+						date : new Date(),
+                   		type : 'notification',
+                    	text : 'third something'
 					}
 				],
 				tokens: {
