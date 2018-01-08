@@ -236,6 +236,14 @@ module.exports = function (app) {
                     	text : 'third something'
 					}
 				],
+				alerts: [
+					{
+						alertDate : new Date(new Date().getTime() + (60 * 60 * 1000)),
+						date : new Date(),
+                   		type : 'regular',
+                    	text : 'something'
+					}
+				],
 				tokens: {
 					eth: {
 						type: 'default',

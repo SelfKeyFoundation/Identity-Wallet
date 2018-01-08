@@ -32,15 +32,7 @@
         
     // reminders
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        .sk-box.reminders-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
-            .reminders-box__header
-                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Reminders
-            .sk-horizontal-devider(style="margin-top: 20px;")
-            .reminders-box__item(layout="row", layout-align="start center", style="margin-top: 20px;")
-                button.sk-icon-button
-                    sk-icon(icon="reminder", size-class="icon-size-33x36")
-                span.reminders-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: #00adc6; margin-left: 16px;") Zilliqa Sale Starts Tomorrow
-                span.reminders-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") 11/24/2017
+        sk-action-logs-box(title="reminders")
 
     // transactions
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
