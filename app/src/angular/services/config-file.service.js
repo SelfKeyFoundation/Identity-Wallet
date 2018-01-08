@@ -20,35 +20,32 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
   // temporary stored datas
   let idAttributeTypes = {};
   let icos = {};
-  
+
   class ConfigFileStore {
-    
+
     constructor() {
       ActionLogItem.ConfigFileService = this;
+
       this.q = async.queue((data, callback) => {
-
         let newStore = JSON.parse(data.store);
-        
+
         ElectronService.saveDataStore(newStore).then(() => {
-          callback(null, newStore);  
+          callback(null, newStore);
         }).catch((err) => {
-          callback(err);  
-        });  
-      
+          callback(err);
+        });
       }, 1);
-
-
     }
 
     init() {
       const me = this;
-      
+
       let defer = $q.defer();
 
       if (ElectronService.ipcRenderer) {
         ElectronService.initDataStore().then((data) => {
           store = data;
-            
+
           // custom delay - to make visible loading
           $timeout(() => {
             defer.resolve(store);
@@ -67,15 +64,15 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     }
 
 
-    saveStore(){
+    saveStore() {
       const me = this;
       const defer = $q.defer();
-      const jsonConfig = JSON.stringify(store); 
-      me.q.push({store : jsonConfig}, (err, conf) => {
-        if(err){
+      const jsonConfig = JSON.stringify(store);
+      me.q.push({ store: jsonConfig }, (err, conf) => {
+        if (err) {
           return defer.reject(err);
         }
-        defer.resolve(conf);        
+        defer.resolve(conf);
       })
       return defer.promise;
     }
@@ -89,7 +86,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       ElectronService.readDataStore().then((data) => {
         store = data;
 
-        for(let i in store.idAttributes){
+        for (let i in store.idAttributes) {
           let idAttribute = new IdAttribute()
           idAttribute.setData(store.idAttributes[i]);
           store.idAttributes[i] = idAttribute;
@@ -139,25 +136,25 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     }
 
     findIdAttributeItemByKeyAndAdditions(key, additions) {
-      if(!store.idAttributes[key]) { return null; }
-      
+      if (!store.idAttributes[key]) { return null; }
+
       let result = [];
 
       let idAttribute = store.idAttributes[key];
       let items = idAttribute.items;
 
-      for(let i in items){
+      for (let i in items) {
         let shouldAdd = true;
         let item = items[i];
 
-        for(let j in additions){
-          if(!item.addition[j] || item.addition[j] !== additions[j]){
+        for (let j in additions) {
+          if (!item.addition[j] || item.addition[j] !== additions[j]) {
             shouldAdd = false;
             break;
           }
         }
 
-        if(shouldAdd){
+        if (shouldAdd) {
           result.push(item);
         }
       }
@@ -166,7 +163,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     }
 
     findIdAttributeItemByKeyAndId(key, id) {
-      if(!store.idAttributes[key] || !store.idAttributes[key].items[id]) { return null; }
+      if (!store.idAttributes[key] || !store.idAttributes[key].items[id]) { return null; }
       return store.idAttributes[key].items[id];
     }
 

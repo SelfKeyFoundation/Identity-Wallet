@@ -5,7 +5,7 @@ import $ from 'jquery';
 import Wallet from '../classes/wallet';
 import Token from '../classes/token';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
+function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, Web3Service) {
     'ngInject';
 
     $rootScope.selectedLanguage = "en";
@@ -154,6 +154,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     });
 
     ElectronService.analytics('app-start', new Date().toISOString());
+
+    window.Web3Service = Web3Service;
 }
 
 export default AppRun;

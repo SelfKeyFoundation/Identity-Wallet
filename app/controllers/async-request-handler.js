@@ -82,7 +82,10 @@ module.exports = function (app) {
 				},
 				settings: {
 					storeFilePath: storeFilePath,
-					documentsDirectoryPath: documentsDirectoryPath
+					documentsDirectoryPath: documentsDirectoryPath,
+					reminder: {
+						notifyBeforeTimeLeft: 60 * 1000 * 1000
+					}
 				},
 				idAttributes: {
 					"email": {

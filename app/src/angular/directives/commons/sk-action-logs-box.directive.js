@@ -9,7 +9,7 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
         restrict: 'E',
         scope: {
             title : "@",
-            maxnotifications : "@",
+            maxNotifications : "@",
             callbacks: "="
         },
         link: (scope, element) => {
@@ -70,13 +70,13 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
                     return false;
                 })
                 
-                if(scope.maxnotifications){
-                    //remove unnececary notifications that are more the maxnotifications
+                if(scope.maxNotifications){
+                    //remove unnececary notifications that are more the maxNotifications
                     orderedNotifications = orderedNotifications.filter(function(el, index){
                         if(!el.date){
                             return false;
                         }
-                        return (index < parseInt(scope.maxnotifications));
+                        return (index < parseInt(scope.maxNotifications));
                     }) 
                 }   
 
