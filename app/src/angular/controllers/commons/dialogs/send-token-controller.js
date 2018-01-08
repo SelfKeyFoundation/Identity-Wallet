@@ -14,7 +14,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.step = 'prepare-transaction';
 
     $scope.sendAmountInUSD = 0.00;
-    $scope.gasPriceInGwei = 50;
+    $scope.gasPriceInGwei = args.gasPrice || 50;
     $scope.gasLimit = args.gasLimit || 210000;
 
     $scope.data = {
@@ -22,8 +22,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         sendToAddress: args.sendToAddress || '',
         txStatus: null
     }
-    $scope.editModeOfAddress = args.editModeOfAddress || true;
-    $scope.editModeOfPrice = args.editModeOfPrice || true;
+    $scope.disableAddress = args.disableAddress; //default is false
+    $scope.disableGasPrice = args.disableGasPrice; //default is false
 
     $scope.itemPriceInUSD = 0; //["eth", "ETH"].indexOf($scope.symbol) !== -1 ? $rootScope.wallet.usdPerUnit : token.userPerUnit;
 
