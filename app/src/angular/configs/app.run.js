@@ -73,7 +73,7 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
-    $rootScope.openSendTokenDialog = (event, token) => {
+    $rootScope.openSendTokenDialog = (event, symbol) => {
         return $mdDialog.show({
             controller: 'SendTokenDialogController',
             templateUrl: 'common/dialogs/send-token.html',
@@ -81,10 +81,10 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
             targetEvent: event,
             clickOutsideToClose: false,
             fullscreen: true,
+            escapeToClose: false,
             locals: {
                 args: {
-                    token: token,
-                    publicKeyHex: $rootScope.wallet.getPublicKeyHex()
+                    symbol: symbol
                 }
             }
         });

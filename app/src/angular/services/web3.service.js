@@ -114,12 +114,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     getEstimateGas(fromAddressHex, toAddressHex, amountHex) {
       let defer = $q.defer();
 
-      //let amountHex = dec2hexString(amount); //"0x429d069189e0000";
-
       let args = {
         "from": fromAddressHex,
         "to": toAddressHex,
-        "value": "0x429d069189e0000"
+        "value": amountHex
       }
 
       // wei

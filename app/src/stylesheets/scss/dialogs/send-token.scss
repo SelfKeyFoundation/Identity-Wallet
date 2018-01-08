@@ -57,6 +57,10 @@ md-dialog {
                             font-size: 20px;
                             color: #a9c5d6
                         }
+
+                        &.has-error {
+                            border-bottom: 2px solid #d33131;
+                        }
                     }
                 }
                 .sk-send-ether-box__eth-amount-container {
@@ -81,6 +85,10 @@ md-dialog {
                         font-size: 40px;
                         font-weight: 300;
                         color: #ffffff;
+
+                        &.has-error {
+                            border-bottom: 2px solid #d33131;
+                        }
                     }
                     >span {
                         position: absolute;
@@ -161,8 +169,9 @@ md-dialog {
                     display: flex;
                     flex-direction: row;
                     align-items: center;
-                    justify-content: space-around;
+                    justify-content: center;
                     margin-top: 46px;
+
                     .sk-button {
                         width: 210px;
                     }

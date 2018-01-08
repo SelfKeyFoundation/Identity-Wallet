@@ -3,7 +3,6 @@ import * as async from "async";
 import IdAttributeType from '../classes/id-attribute-type.js';
 import Ico from '../classes/ico.js';
 import ActionLogItem from '../classes/action-log-item.js';
-import { setTimeout } from "timers";
 import IdAttribute from '../classes/id-attribute';
 
 // Actually Local Storage Service
@@ -73,7 +72,8 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
           return defer.reject(err);
         }
         defer.resolve(conf);
-      })
+      });
+      
       return defer.promise;
     }
 
@@ -228,66 +228,3 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 }
 
 export default ConfigFileService;
-
-
-
-
-//
-
-
-
-
-
-let idAttributes = {
-  "__subcategory": {
-    subcategory: "Telephone Number",
-    type: "Static Data",
-    category: "Global Attribute",
-    defaultItemId: "___id",
-    items: {
-      "___id": {
-        _id: "",
-        value: "+995 551 949414",
-        meta: {
-          subcategory: "Telephone Number",
-          type: "Static Data",
-          category: "Global Attribute"
-        }
-      }
-    }
-  }
-}
-
-let a = {
-  type: "Static Data",
-  category: "Global Attribute",
-  subcategory: "Telephone Number",
-
-  defaultId: "___id",
-
-  items: {
-    "___id": {
-      _id: "",
-      value: "+995 551 949414"
-    }
-  }
-}
-
-let b = {
-  type: "Static Data",
-  category: "Global Attribute",
-  subcategory: "Document",
-
-  defaultId: "",
-
-  items: {
-    "___id": {
-      _id: "",
-      contentType: "",
-      size: "",
-      name: "",
-      path: "+995 551 949414"
-    }
-  }
-}
-

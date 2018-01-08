@@ -1,5 +1,7 @@
 'use strict';
 
+import Wallet from '../classes/wallet';
+
 function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localStorageService) {
   'ngInject';
 
@@ -14,6 +16,9 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
    * 
    */
   let ElectronService = function () {
+
+    Wallet.ElectronService = this;
+
     this.ipcRenderer = ipcRenderer;
 
     this.initDataStore = function () {

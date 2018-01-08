@@ -2,7 +2,9 @@
 
 import EthUnits from './eth-units';
 
-let $rootScope, $q, Web3Service, CommonService;
+let $rootScope, $q, Web3Service, CommonService, ElectronService;
+
+let readyToShowNotification = false;
 
 class Wallet {
 
@@ -10,6 +12,7 @@ class Wallet {
     static set CommonService(value) { CommonService = value; }
     static set $q(value) { $q = value; }
     static set $rootScope(value) { $rootScope = value; }
+    static set ElectronService(value) { ElectronService = value; }
 
     constructor(keystoreObject) {
         this.keystoreObject = keystoreObject;
@@ -51,23 +54,28 @@ class Wallet {
     loadBalance() {
         let defer = $q.defer();
         let promise = Web3Service.getBalance("0x" + this.getPublicKeyHex());
-        
+
         promise.then((balanceWei) => {
             let oldBalanceInWei = angular.copy(this.balanceWei);
 
             this.balanceEth = EthUnits.toEther(balanceWei, 'wei');
             this.balanceEth = Number(CommonService.numbersAfterComma(this.balanceEth, 8));
             this.balanceWei = balanceWei;
-            
+
             this.updatePriceInUsd(this.usdPerUnit);
 
-            if(balanceWei !== oldBalanceInWei){
+            if (balanceWei !== oldBalanceInWei) {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
+                if (readyToShowNotification) {
+                    console.log("SHOULD SHOW NOTIFICATION");
+                    ElectronService.showNotification('ETH Balance Changed', 'New Balance: ' + this.balanceEth)
+                }
             }
+
+            readyToShowNotification = true;
 
             defer.resolve(this);
         }).catch((error) => {
-            console.log(error)
             defer.reject(error);
         });
 

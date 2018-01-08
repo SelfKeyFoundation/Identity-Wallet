@@ -1,0 +1,63 @@
+.md-button {
+    border-radius: 4px;
+    height: 44px;
+    margin: 0;
+
+    span {
+        font-size: 16px;
+        line-height: 0.75;
+        letter-spacing: 0.7px;
+    }
+
+    &.gray {
+        border: solid 1px #93b0c1;
+
+        span {
+            color: #93b0c1;
+            font-family: ProximaNovaRegular;
+        }
+    }
+
+    &.blue {
+        background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+        border: none;
+
+        span {
+            font-family: ProximaNovaSemibold;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        &:disabled {
+            background-image: none;
+            border: solid 1px #93b0c1;
+
+            span {
+                font-family: ProximaNovaRegular;
+                color: #93b0c1;
+            }
+        }
+    }
+
+    &.green {
+        background-image: linear-gradient(to bottom, #b4ec51, #429321);
+        box-shadow: 0 2px 2px 0 #15222e;
+        border: solid 1px #417505;
+        
+        span {
+            font-family: ProximaNovaSemibold;
+	        font-weight: 600;
+	        color: #ffffff;
+        }
+
+        &:disabled {
+            background-image: none;
+            border: solid 1px #93b0c1;
+
+            span {
+                font-family: ProximaNovaRegular;
+                color: #93b0c1;
+            }
+        }
+    }
+}

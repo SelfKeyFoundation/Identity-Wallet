@@ -14896,6 +14896,47 @@ md-content {
 .sk-input-box:hover > input {
   border: solid 1px #53677c !important; }
 
+.md-button {
+  border-radius: 4px;
+  height: 44px;
+  margin: 0; }
+  .md-button span {
+    font-size: 16px;
+    line-height: 0.75;
+    letter-spacing: 0.7px; }
+  .md-button.gray {
+    border: solid 1px #93b0c1; }
+    .md-button.gray span {
+      color: #93b0c1;
+      font-family: ProximaNovaRegular; }
+  .md-button.blue {
+    background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+    border: none; }
+    .md-button.blue span {
+      font-family: ProximaNovaSemibold;
+      font-weight: 600;
+      color: #ffffff; }
+    .md-button.blue:disabled {
+      background-image: none;
+      border: solid 1px #93b0c1; }
+      .md-button.blue:disabled span {
+        font-family: ProximaNovaRegular;
+        color: #93b0c1; }
+  .md-button.green {
+    background-image: linear-gradient(to bottom, #b4ec51, #429321);
+    box-shadow: 0 2px 2px 0 #15222e;
+    border: solid 1px #417505; }
+    .md-button.green span {
+      font-family: ProximaNovaSemibold;
+      font-weight: 600;
+      color: #ffffff; }
+    .md-button.green:disabled {
+      background-image: none;
+      border: solid 1px #93b0c1; }
+      .md-button.green:disabled span {
+        font-family: ProximaNovaRegular;
+        color: #93b0c1; }
+
 .sk-token-box {
   min-width: 360px;
   padding: 20px 20px 8px 20px; }
@@ -17004,6 +17045,8 @@ md-dialog.send-token {
         md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__recipient-container .sk-send-ether-box__recipient-container__input::-webkit-input-placeholder {
           font-size: 20px;
           color: #a9c5d6; }
+        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__recipient-container .sk-send-ether-box__recipient-container__input.has-error {
+          border-bottom: 2px solid #d33131; }
     md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__eth-amount-container {
       position: relative;
       display: flex;
@@ -17025,6 +17068,8 @@ md-dialog.send-token {
         font-size: 40px;
         font-weight: 300;
         color: #ffffff; }
+        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__eth-amount-container .sk-send-ether-box__eth-amount-container__input.has-error {
+          border-bottom: 2px solid #d33131; }
       md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__eth-amount-container > span {
         position: absolute;
         right: 0;
@@ -17086,7 +17131,7 @@ md-dialog.send-token {
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-around;
+      justify-content: center;
       margin-top: 46px; }
       md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__actions-container .sk-button {
         width: 210px; }
