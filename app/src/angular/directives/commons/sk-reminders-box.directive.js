@@ -1,6 +1,8 @@
+import { setInterval } from "timers";
+
 'use strict';
 
-function SkRemindersBoxDirective($log, $window) {
+function SkRemindersBoxDirective($log, $window, ConfigFileService, CONFIG) {
     'ngInject';
 
     return {
@@ -27,59 +29,44 @@ function SkRemindersBoxDirective($log, $window) {
             }
 
             let store = ConfigFileService.getStore();
+           
 
-
-
-            //this is how you add a notificaiton
-            //store.actionLogs = [];
-            // store.actionLogs.push({
-            //         date : new Date(),
-            //         type : 'notification',
-            //         text : 'other something'
-            // }); 
-
-            //this is how you save the store
-            //   ConfigFileService.saveStore().then((s) => {
-                  
-            //       console.log("response - " + s.asd);
-            //   })
-            
-            
-            
-
-            const filterNotifications = function(){
+            const filterReminders = function(){
                 
-                let orderedNotifications = JSON.parse(JSON.stringify(store.actionLogs));
-
+                let orderedReminders = JSON.parse(JSON.stringify(store.reminders));
                 
-                //change string date to date
-                orderedNotifications = orderedNotifications.map(function(obj){
-                    if(typeof obj.alertDate == "string"){
-                        obj.alertDate = new Date(obj.alertDate);
+                
+                //change string reminderDate to date
+                orderedReminders = orderedReminders.map(function(obj){
+                    if(typeof obj.reminderDate == "string"){
+                        obj.reminderDate = new Date(obj.reminderDate);
                     }
                     return obj;
                 })
-                //order by date asc
-                orderedNotifications = orderedNotifications.sort(function(a,b){
+                //order by reminderDate asc
+                orderedReminders = orderedReminders.sort(function(a,b){
                     
-                    if(a.alertDate && b.alertDate){
-                        return a.date.getTime() < b.date.getTime();
+                    if(a.reminderDate && b.reminderDate){
+                        return a.reminderDate.getTime() < b.reminderDate.getTime();
                     }
                     return false;
                 })
                 
-                    //remove unnececary notifications that are more the maxnotifications
-                    orderedNotifications = orderedNotifications.filter(function(el, index){
-                        let now = new Date();
-                        let threshhold = new Date(now + )
-                        if(el.alertDate <){
-                            return false;
-                        }
-                    }) 
+                //remove unnececary reminders that are not in the threshhold
+                orderedReminders = orderedReminders.filter(function(el, index){
+                    let now = new Date();
+                    let threshhold = new Date(now.getTime() + store.settings.reminder.notifyBeforeTimeLeft);
+                    if(el.reminderDate < now || el.reminderDate > threshhold){
+                    
+                        return false;
+                    }
+                    return true;
+                }) 
+
                 
-                //add icon title and color to the notifications of the specific type
-                orderedNotifications = orderedNotifications.map(function(obj){
-                    let conf = CONFIG.notificationTypes[obj.type];
+                //add icon title and color to the reminders of the specific type
+                orderedReminders = orderedReminders.map(function(obj){
+                    let conf = CONFIG.reminderTypes[obj.type];
                     if(!conf){
                         return obj;
                     }
@@ -90,16 +77,16 @@ function SkRemindersBoxDirective($log, $window) {
                 })
                 
                 
-                scope.actionLogList = orderedNotifications;
+                scope.reminderList = orderedReminders;
             }
 
 
 
-            filterNotifications();
+            filterReminders();
 
-            scope.$watch(function(){return store.actionLogs.length}, function() {
-                filterNotifications();
-            });
+            setInterval( function() {
+                filterReminders();
+            }, 10000);
 
         },
         replace: true,
