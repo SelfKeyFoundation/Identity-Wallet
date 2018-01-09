@@ -17872,7 +17872,6 @@ md-dialog.add-id-attribute {
   /* Opera11.10+ */
   background: -ms-linear-gradient(top, #d5eaf1 0%, #dfe3e2 100%);
   /* IE10+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d5eaf1', endColorstr='#dfe3e2', GradientType=0);
   /* IE6-9 */
   background: linear-gradient(top, #d5eaf1 0%, #dfe3e2 100%);
   /* W3C */ }
@@ -17913,7 +17912,8 @@ md-dialog.add-id-attribute {
     height: 100%; }
 
 md-radio-group md-radio-button {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  outline: 0; }
   md-radio-group md-radio-button.md-checked .md-container .md-off {
     background-color: unset !important; }
   md-radio-group md-radio-button .md-container {

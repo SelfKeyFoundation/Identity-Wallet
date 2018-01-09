@@ -14,7 +14,7 @@
                     span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
                     div(style="margin-top: 30px;")
                         md-radio-group(md-no-ink, ng-model="selectedOption")
-                            md-radio-button(md-no-ink, value="keystore") Keystore / JSON File
-                            md-radio-button(md-no-ink, value="privateKey") Private Key
+                            md-radio-button(md-no-ink, value="keystore" ng-click="selectView('keystore')")  Keystore / JSON File
+                            md-radio-button(md-no-ink, value="private-key" ng-click="selectView('private-key')") Private Key
 
                 .right(flex, ui-view="main")
