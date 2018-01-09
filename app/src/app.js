@@ -221,6 +221,9 @@ angular.module('kyc-wallet').controller('GuestLoadingController', GuestLoadingCo
 /**
  * import wallet
  */
+import GuestImportWalletController from './angular/controllers/guest/import/import-controller.js';
+angular.module('kyc-wallet').controller('GuestImportWalletController', GuestImportWalletController);
+
 import GuestImportKeystoreController from './angular/controllers/guest/import/keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
 

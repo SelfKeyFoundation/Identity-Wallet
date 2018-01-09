@@ -29,7 +29,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
         selectedChainId = newChainId;
-        if(this.wallet && this.wallet.getAddress()){
+        if (this.wallet && this.wallet.getPublicKeyHex()) {
           this.loadBalance();
         }
       });
@@ -40,17 +40,19 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       let promise = ElectronService.generateEthereumWallet(password);
       promise.then((data) => {
-        if (data && data.keystore) {
-          wallet = new Wallet(data.keystore);
-          wallet.setPrivateKey(data.privateKey);
-          
+        if (data && data.privateKey && data.publicKey) {
+          wallet = new Wallet(data.privateKey, data.publicKey);
+
           TokenService.init();
+
           // Broadcast about changes
           $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
+
           defer.resolve(wallet);
+        }else{
+          defer.reject("no data in resp");
         }
       }).catch((error) => {
-        // TODO
         defer.reject(error);
       });
 
@@ -77,8 +79,9 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       let defer = $q.defer();
 
       let promise = ElectronService.importEtherKeystoreFile(filePath);
-      promise.then((keystoreObject) => {
-        wallet = new Wallet(keystoreObject);
+      promise.then((data) => {
+        wallet = new Wallet(data.privateKey, data.publicKey);
+        
         TokenService.init();
 
         $rootScope.wallet = wallet;
@@ -88,7 +91,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
         defer.resolve(wallet);
       }).catch((error) => {
-        defer.reject("ERR_IMPORT_KEYSTORE_FILE");
+        defer.reject(error);
       });
 
       return defer.promise;
@@ -117,19 +120,19 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       let defer = $q.defer();
 
       // TODO check wallet address
-      let promise = Web3Service.getBalance("0x" + wallet.getAddress());
+      let promise = Web3Service.getBalance("0x" + wallet.getPublicKeyHex());
       promise.then((balanceWei) => {
         wallet.balanceEth = EthUnits.toEther(balanceWei, 'wei');
         wallet.balanceEth = Number(CommonService.numbersAfterComma(wallet.balanceEth, 8));
 
-        if(wallet.balanceWei !== balanceWei && !isFirstLoad){
+        if (wallet.balanceWei !== balanceWei && !isFirstLoad) {
           ElectronService.showNotification('Identity Wallet', 'ETH Balance Changed ' + wallet.balanceEth, {});
         }
-        
+
         wallet.balanceWei = balanceWei;
 
         isFirstLoad = false;
-        
+
         defer.resolve(wallet);
       }).catch((error) => {
         defer.reject(error);
@@ -141,17 +144,17 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
     loadTokenBalance(symbol) {
       // TODO check Address
       if (symbol) {
-        TokenService.loadBalanceBySymbol(wallet.getAddress(), symbol);
+        TokenService.loadBalanceBySymbol(wallet.getPublicKeyHex(), symbol);
       } else {
-        TokenService.loadAllbalance(wallet.getAddress());
+        TokenService.loadAllbalance(wallet.getPublicKeyHex());
       }
     }
 
     getTransactionCount() {
       let defer = $q.defer();
       // TODO check wallet address
-      let promise = Web3Service.getTransactionCount(wallet.getAddress());
-      promise.then((nonce) => {  
+      let promise = Web3Service.getTransactionCount(wallet.getPublicKeyHex());
+      promise.then((nonce) => {
         defer.resolve(nonce);
       }).catch((error) => {
         defer.reject(error);
@@ -249,7 +252,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         defer.reject(error);
       });
 
-      return defer.promise; 
+      return defer.promise;
     }
   };
 

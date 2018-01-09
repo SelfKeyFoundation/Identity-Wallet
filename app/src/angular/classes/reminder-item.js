@@ -4,15 +4,16 @@ import CommonUtils from './common-utils';
 
 let ConfigFileService;
 
-class ActionLogItem {
+class ReminderItem {
 
     static set ConfigFileService(value) { ConfigFileService = value; }
 
-    constructor (id, type, text, subscribtionId) {
+    constructor (id, type, text, reminderDate) {
         this._id = id || CommonUtils.generateId();
         this.date = new Date();
-        this.type = type;
-        this.text = text;
+        this.reminderDate = reminderDate || new Date(new Date().getTime() + (60 * 60 * 1000))
+        this.type = 'regular';
+        this.text = 'something'
     }
 
     save () {
@@ -21,4 +22,4 @@ class ActionLogItem {
 
 }
 
-export default ActionLogItem;
+export default ReminderItem;

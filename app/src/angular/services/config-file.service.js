@@ -53,7 +53,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
           }, 3000);
 
         }).catch((error) => {
-          // TODO
           defer.reject(error);
         });
       } else {
@@ -63,7 +62,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
     }
 
 
-    saveStore() {
+    save() {
       const me = this;
       const defer = $q.defer();
       const jsonConfig = JSON.stringify(store);
@@ -73,12 +72,8 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
         }
         defer.resolve(conf);
       });
-      
-      return defer.promise;
-    }
 
-    save() {
-      return ElectronService.saveDataStore(store);
+      return defer.promise;
     }
 
     load() {
@@ -92,8 +87,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
           store.idAttributes[i] = idAttribute;
         }
 
-        console.log(">>>>> STORE LOADED >>>>", store);
-
         defer.resolve(store);
       }).catch((error) => {
         // TODO
@@ -104,71 +97,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 
     getStore() {
       return store;
-    }
-
-    addIdAttribute(idAttribute) {
-      store.idAttributes[idAttribute.subcategory] = idAttribute;
-    }
-
-    addItemToIdAttribute(subcategory, item) {
-      if (store.idAttributes[subcategory]) {
-        item._id = CommonService.generateId();
-        store.idAttributes[subcategory][item._id] = item;
-      } else {
-        // throw error
-      }
-    }
-
-    findIdAttributeItemById(subcategory, id) {
-      if (store.idAttributes[subcategory]) {
-        return store.idAttributes[subcategory][id];
-      }
-      return null;
-    }
-
-    getDefaultIdAttributeItem(subcategory) {
-      if (!store.idAttributes[subcategory]) {
-        return null;
-      }
-
-      let idAttribute = store.idAttributes[subcategory];
-      return idAttribute.items[idAttribute.defaultItemId];
-    }
-
-    findIdAttributeItemByKeyAndAdditions(key, additions) {
-      if (!store.idAttributes[key]) { return null; }
-
-      let result = [];
-
-      let idAttribute = store.idAttributes[key];
-      let items = idAttribute.items;
-
-      for (let i in items) {
-        let shouldAdd = true;
-        let item = items[i];
-
-        for (let j in additions) {
-          if (!item.addition[j] || item.addition[j] !== additions[j]) {
-            shouldAdd = false;
-            break;
-          }
-        }
-
-        if (shouldAdd) {
-          result.push(item);
-        }
-      }
-
-      return result;
-    }
-
-    findIdAttributeItemByKeyAndId(key, id) {
-      if (!store.idAttributes[key] || !store.idAttributes[key].items[id]) { return null; }
-      return store.idAttributes[key].items[id];
-    }
-
-    getIdAttribute(subcategory) {
-      return store.idAttributes[subcategory];
     }
 
     getWalletPublicKeys() {

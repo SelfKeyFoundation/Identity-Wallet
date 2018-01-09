@@ -150,13 +150,14 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             abstract: true,
             views: {
                 main: {
-                    templateUrl: 'guest/import/layout.html'
+                    templateUrl: 'guest/import/layout.html',
+                    controller: 'GuestImportWalletController'
                 }
             }
         })
 
         .state('guest.import.keystore', {
-            url: '/guest/import/keystore',
+            url: '/guest/import/keystore/:type',
             views: {
                 main: {
                     templateUrl: 'guest/import/keystore/main.html',
@@ -259,43 +260,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             views: {
                 main: {
                     templateUrl: 'member/setup/layout.html'
-                }
-            },
-            resolve: {
-                checkSetupProgress: ($rootScope, $q, $state, ConfigFileService) => {
-                    let defer = $q.defer();
-
-                    $rootScope.initialSetupProgress = {};
-                    let isMissing = false;
-
-                    ConfigFileService.load().then(() => {
-                        for (let i in $rootScope.INITIAL_ID_ATTRIBUTES) {
-                            let attr = $rootScope.INITIAL_ID_ATTRIBUTES[i];
-
-                            let item = ConfigFileService.findIdAttributeItemByKeyAndId(attr.attributeType, attr.id);
-
-                            if (!item.value && !item.path) {
-                                isMissing = true;
-                            }
-
-                            if (item && !$rootScope.initialSetupProgress[attr.attributeType]) {
-                                $rootScope.initialSetupProgress[attr.attributeType] = {};
-                                $rootScope.initialSetupProgress[attr.attributeType][attr.id] = item;
-                            } else if (item) {
-                                $rootScope.initialSetupProgress[attr.attributeType][attr.id] = item;
-                            }
-                        }
-
-                        if (isMissing) {
-                            defer.resolve();
-                        } else {
-                            $state.go('member.dashboard.main');
-                        }
-                    }).catch(() => {
-                        defer.reject();
-                    });
-
-                    return defer.promise;
                 }
             }
         })

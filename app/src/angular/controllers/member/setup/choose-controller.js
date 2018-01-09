@@ -1,7 +1,7 @@
 function MemberSetupChooseController($rootScope, $scope, $log) {
     'ngInject'
 
-    $log.info('MemberSetupChooseController');
+    $log.info('MemberSetupChooseController', $rootScope.wallet);
 
 };
 

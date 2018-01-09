@@ -20,6 +20,28 @@ module.exports = function (app) {
 	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
+	const initialStoreDataStructure = {
+		profile: {
+			picture: {
+				path: "",
+				fileSize: null,
+				imageSize: {
+					width: "",
+					height: ""
+				},
+				position: {
+					x: "",
+					y: ""
+				},
+				backgroundColor: ""
+			}
+		},
+		idAttributes: {},
+		subscribtions: [],
+		actionLogs: [],
+		reminders: []
+	};
+
 	console.log(userDataDirectoryPath);
 
 	controller.prototype.readDataStore = function (event, actionId, actionName, args) {
@@ -56,30 +78,10 @@ module.exports = function (app) {
 		// check file exists
 		if (!fs.existsSync(storeFilePath)) {
 			settings.setAll({
-				profile: {
-					picture: {
-						path: "",
-						fileSize: null,
-						imageSize: {
-							width: "",
-							height: ""
-						},
-						position: {
-							x: "",
-							y: ""
-						},
-						backgroundColor: ""
-					}
-				},
 				setup: {
-					status: 'in-progress', // in-progress | skipped | done (TODO remove)
 					guideShown: false,
-					initialIdAttributesSetup: "in-progress", // in-progress | skipped | done
 					termsAccepted: false,
 					icoAdsShown: false
-				},
-				statistics: {
-					appUsed: 0
 				},
 				settings: {
 					storeFilePath: storeFilePath,
@@ -88,175 +90,6 @@ module.exports = function (app) {
 						notifyBeforeTimeLeft: 60 * 60 * 1000
 					}
 				},
-				idAttributes: {
-					"email": {
-						"isInitial": true,
-						"category": "global_attribute",
-						"defaultItemId": "1",
-						"entity": [
-							"individual",
-							"company"
-						],
-						"items": {
-							"1": {
-								"_id": "1",
-								"idAttributeType": {
-									"category": "global_attribute",
-									"entity": [
-										"individual",
-										"company"
-									],
-									"key": "email",
-									"type": "static_data"
-								},
-								"value": ""
-							}
-						},
-						"key": "email",
-						"type": "static_data"
-					},
-					"name": {
-						"isInitial": true,
-						"category": "global_attribute",
-						"defaultItemId": "1",
-						"entity": [
-							"individual"
-						],
-						"items": {
-							"1": {
-								"_id": "1",
-								"idAttributeType": {
-									"category": "global_attribute",
-									"entity": [
-										"individual"
-									],
-									"key": "name",
-									"type": "static_data"
-								},
-								"value": ""
-							}
-						},
-						"key": "name",
-						"type": "static_data"
-					},
-					"national_id": {
-						"isInitial": true,
-						"category": "id_document",
-						"defaultItemId": "1",
-						"entity": [
-							"individual"
-						],
-						"items": {
-							"1": {
-								"_id": "1",
-								"contentType": "",
-								"idAttributeType": {
-									"category": "id_document",
-									"entity": [
-										"individual"
-									],
-									"key": "national_id",
-									"type": "document"
-								},
-								"name": "",
-								"size": null,
-								"value": "",
-								"addition": {
-									"selfie": false, 
-									"signature": false, 
-									"notary": false, 
-									"certified_true_copy": false
-								}
-							},
-							"2": {
-								"_id": "2",
-								"contentType": "",
-								"idAttributeType": {
-									"category": "id_document",
-									"entity": [
-										"individual"
-									],
-									"key": "national_id",
-									"type": "document"
-								},
-								"name": "",
-								"size": null,
-								"value": "",
-								"addition": {
-									"selfie": true, 
-									"signature": false, 
-									"notary": false, 
-									"certified_true_copy": false
-								}
-							}
-						},
-						"key": "national_id",
-						"type": "document"
-					},
-					"country_of_residency": {
-						"isInitial": true,
-						"category": "global_attribute",
-						"defaultItemId": "1",
-						"entity": [
-							"individual"
-						],
-						"items": {
-							"1": {
-								"_id": "1",
-								"contentType": "",
-								"idAttributeType": {
-									"category": "global_attribute",
-									"entity": [
-										"individual"
-									],
-									"key": "country_of_residency",
-									"type": "static_data"
-								},
-								"name": "",
-								"size": "",
-								"value": ""
-							}
-						},
-						"key": "country_of_residency",
-						"type": "static_data"
-					}
-				},
-				subscribtions: [],
-				actionLogs: [
-					{
-						date : new Date(),
-                   		type : 'notification',
-                    	text : 'something'
-					},{
-						date : new Date(),
-                   		type : 'wallet',
-                    	text : 'other something'
-					},{
-						date : new Date(),
-                   		type : 'notification',
-                    	text : 'third something'
-					}
-				],
-				reminders: [
-					{
-						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000)),
-						date : new Date(),
-                   		type : 'regular',
-                    	text : 'something'
-					},
-					{
-						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000 * 0.5)),
-						date : new Date(),
-                   		type : 'regular',
-                    	text : 'something'
-					},
-					{
-						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000 * 3)),
-						date : new Date(),
-                   		type : 'regular',
-                    	text : 'something'
-					}
-				],
 				tokens: {
 					eth: {
 						type: 'default',
@@ -393,8 +226,6 @@ module.exports = function (app) {
 
 		// asynchronous
 		keythereum.create(params, function (dk) {
-			console.log(dk);
-
 			let options = {
 				kdf: "pbkdf2",
 				cipher: "aes-128-ctr",
@@ -405,42 +236,42 @@ module.exports = function (app) {
 				}
 			};
 
-			let keystore = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
+			let keystoreObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
 
-			let keystoreFilePath = path.resolve(walletsDirectoryPath, keystore.address);
+			let keystoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
 			if (!fs.existsSync(keystoreFilePath)) {
 				fs.mkdir(keystoreFilePath);
 			}
 
-			let outputPath = keythereum.exportToFile(keystore, keystoreFilePath);
+			let outputPath = keythereum.exportToFile(keystoreObject, keystoreFilePath);
 			let keystoreFileName = path.basename(outputPath);
-
-			console.log("createEthereumAddress", keystore);
 
 			let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 			settings.setPath(storeFilePath);
 
 			let storeData = settings.getAll();
 
-			if (!storeData.wallets[keystore.address]) {
-				storeData.wallets[keystore.address] = {
+			if (!storeData.wallets[keystoreObject.address]) {
+				storeData.wallets[keystoreObject.address] = {
+					type: 'ks',
 					name: "Unnamed Wallet",
-					keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName)
+					keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName),
+					data: initialStoreDataStructure
 				}
 				settings.setAll(storeData);
 			}
 
-			let privateKey = keythereum.recover(args.password, keystore);
-
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { keystore: keystore, privateKey: privateKey, keystoreFilePath: keystoreFilePath });
+			let privateKey = keythereum.recover(args.password, keystoreObject);
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, privateKey: privateKey });
 		});
 	}
 
 	controller.prototype.importEtherKeystoreFile = function (event, actionId, actionName, args) {
+		console.log(actionName, args);
 		try {
-			keythereum.importFromFile(args.filePath, function (keyObject) {
-				console.log("importEtherKeystoreFile", keyObject);
-				let keyStoreFilePath = path.resolve(walletsDirectoryPath, keyObject.address);
+			keythereum.importFromFile(args.filePath, function (keystoreObject) {
+				let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
+
 				if (!fs.existsSync(keyStoreFilePath)) {
 					fs.mkdir(keyStoreFilePath);
 				}
@@ -456,22 +287,23 @@ module.exports = function (app) {
 
 							let storeData = settings.getAll();
 
-							if (!storeData.wallets[keyObject.address]) {
-								storeData.wallets[keyObject.address] = {
+							if (!storeData.wallets[keystoreObject.address]) {
+								storeData.wallets[keystoreObject.address] = {
+									type: 'ks',
 									name: "Unnamed Wallet",
-									keystoreFilePath: keyStoreFileNewPath
+									keystoreFilePath: keyStoreFileNewPath,
+									data: initialStoreDataStructure
 								}
 								settings.setAll(storeData);
 							}
 
-							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, privateKey: privateKey, keystoreObject: keystoreObject });
 						} else {
 							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
 						}
 					});
-
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, keyObject);
+					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {publicKey: keystoreObject.address});
 				}
 			});
 		} catch (e) {
@@ -481,17 +313,16 @@ module.exports = function (app) {
 	};
 
 	controller.prototype.unlockEtherKeystoreObject = function (event, actionId, actionName, args) {
-		console.log("unlockEtherKeystoreObject", args);
 		try {
 			let privateKey = keythereum.recover(args.password, args.keystoreObject);
 			if (privateKey) {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, privateKey);
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {privateKey: privateKey, publicKey: args.keystoreObject.publicKey, keystoreObject: args.keystoreObject});
 			} else {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, { message: "authentication code mismatch" }, null);
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
 			}
 
 		} catch (e) {
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, { message: "authentication code mismatch" }, null);
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
 		}
 	}
 
@@ -507,9 +338,10 @@ module.exports = function (app) {
 
 			if (!storeData.wallets[publicKey]) {
 				storeData.wallets[publicKey] = {
-					type: "privateKey",
+					type: "pk",
 					name: "Unnamed Wallet",
-					privateKey: args.privateKey
+					privateKey: args.privateKey,
+					data: initialStoreDataStructure
 				}
 				settings.setAll(storeData);
 			}
@@ -525,11 +357,6 @@ module.exports = function (app) {
 
 	controller.prototype.closeApp = function (event, actionId, actionName, args) {
 		electron.app.quit();
-	}
-
-	controller.prototype.testCustomNode = function (event, actionId, actionName, args) {
-		console.log("testCustomNode", args);
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { "test": "test" });
 	}
 
 	controller.prototype.showNotification = function (event, actionId, actionName, args) {

@@ -1,16 +1,23 @@
-function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService) {
+function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService) {
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
     $rootScope.wallet = null;
 
-    $scope.selectKystoreJsonFile = (event) => {
-        // TODO
+    $scope.type = $stateParams.type;
+
+
+    $scope.publicKeyList = ConfigFileService.getWalletPublicKeys();
+
+    $scope.userInput = {
+        selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
+        password: null
+    }
+
+    $scope.selectKystoreFile = (event) => {
         WalletService.importUsingKeystoreFileDialog().then((wallet) => {
             ConfigFileService.load().then((storeData) => {
-                $log.info("storeData", storeData);
                 $rootScope.wallet = wallet;
-                $log.info(wallet);
             });
         });
     }

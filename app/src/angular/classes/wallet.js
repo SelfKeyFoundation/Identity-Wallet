@@ -14,22 +14,21 @@ class Wallet {
     static set $rootScope(value) { $rootScope = value; }
     static set ElectronService(value) { ElectronService = value; }
 
-    constructor(keystoreObject) {
-        this.keystoreObject = keystoreObject;
+    constructor(privateKey, publicKey) {
+        console.log("privateKey", privateKey);
+        console.log("publicKey", publicKey);
 
-        this.privateKey = null;
-        this.privateKeyHex = null;
+        this.privateKey = privateKey;
+        this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
+
+        this.publicKey = publicKey;
+        this.publicKeyHex = publicKey ? publicKey.toString('hex') : null;
 
         this.balanceWei = 0;
         this.balanceEth = 0;
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
-    }
-
-    setPrivateKey(privateKey) {
-        this.privateKey = privateKey;
-        this.privateKeyHex = privateKey.toString('hex');
     }
 
     getPrivateKey() {
@@ -40,12 +39,12 @@ class Wallet {
         return this.privateKeyHex;
     }
 
-    getPublicKeyHex() {
-        return this.keystoreObject.address;
+    getPublicKey() {
+        return this.publicKey;
     }
 
-    getAddress() {
-        return this.keystoreObject.address;
+    getPublicKeyHex() {
+        return this.publicKeyHex;
     }
 
     /**

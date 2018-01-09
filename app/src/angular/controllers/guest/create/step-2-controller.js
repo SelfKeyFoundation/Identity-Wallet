@@ -43,6 +43,8 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             ConfigFileService.load().then((storeData) => {
                 $state.go('guest.create.step-3')
             });
+        }).catch((error)=>{
+            $log.error(error);
         });
     }
 

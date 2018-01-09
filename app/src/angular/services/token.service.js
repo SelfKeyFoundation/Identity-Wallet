@@ -55,15 +55,6 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
     loadBalanceBySymbol(userAddress, symbol) {
       let token = TOKENS_MAP[symbol];
       let data = token.generateBalanceData(userAddress);
-      //loadBalanceQueue.push({token: token, data: data});
-
-      /*
-      token.promise = EtherScanService.getEthCall(data);
-      token.promise.then((balanceHex) => {
-        token.balance = balanceHex;
-        token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
-      });
-      */
     }
 
     getBalanceBySymbol(userAddress, symbol) {

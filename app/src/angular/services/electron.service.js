@@ -132,11 +132,13 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
   });
 
   ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
+    console.log(error, data)
     if (error) {
       listeners[actionId].defer.reject(error);
     } else {
       listeners[actionId].defer.resolve(data);
     }
+
     $timeout(() => {
       delete listeners[actionId];
     }, 1000);

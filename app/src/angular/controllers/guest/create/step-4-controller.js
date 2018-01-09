@@ -1,7 +1,7 @@
 function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, ConfigFileService, WalletService, ElectronService, CommonService) {
     'ngInject'
 
-    $log.info('GuestKeystoreCreateStep4Controller');
+    $log.info("GuestKeystoreCreateStep4Controller", $rootScope.wallet);
 
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
