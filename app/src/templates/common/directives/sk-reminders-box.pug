@@ -1,10 +1,14 @@
-.sk-box.sk-reminders-box(style="padding: 30px; width: 600px;")
-    .sk-reminders-box__title Reminders
-    .sk-reminders-box__item(ng-repeat="item in data")
-        .sk-reminders-box__item__header
-            .sk-reminders-box__item__header__date
-                span.fc-bluey-grey {{item.month}}
-                span.fc-bluey-grey {{item.day}}
-            sk-icon(icon="{{item.type}}", size-class="icon-size-36x36")
-            .sk-reminders-box__item__header__text(flex)
-                span(ng-class="{'fc-turquoise-blue': item.type === 'reminder', 'fc-greeny-blue': item.type === 'notification'}") {{item.text}}
+.sk-box.alerts-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+    .alerts-box__header
+        span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") {{title}}
+    .sk-horizontal-devider(style="margin-top: 20px;")
+    .alerts-box__item(layout="row", layout-align="start center", style="margin-top: 20px;", ng-repeat="(key, value) in reminderList")
+        button.sk-icon-button
+            md-icon.sk-token-box__token(md-svg-src="assets/images/icons/{{value.icon}}.svg", style="color:{{value.color}}", aria-label="{{value.type}}", size-class="icon-size-33x36")
+        span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 500; color: {{value.color}}; margin-left: 16px;") {{value.title}}
+        |
+        |
+        span.alerts-box__warning-text(style="font-family: ProximaNovaRegular; font-size: 18px;  color: white; font-weight: 500;  margin-left: 16px;") {{value.text}}
+        |
+        |
+        span.alerts-box__date(style="font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1; margin-left: 16px;") {{value.reminderDate | date:'dd-MM-yyyy HH:mm:ss'}}

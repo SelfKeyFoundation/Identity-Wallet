@@ -29,23 +29,6 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
             }
 
             let store = ConfigFileService.getStore();
-
-
-
-            //this is how you add a notificaiton
-            //store.actionLogs = [];
-            // store.actionLogs.push({
-            //         date : new Date(),
-            //         type : 'notification',
-            //         text : 'other something'
-            // }); 
-
-            //this is how you save the store
-            //   ConfigFileService.saveStore().then((s) => {
-                  
-            //       console.log("response - " + s.asd);
-            //   })
-            
             
             
 
