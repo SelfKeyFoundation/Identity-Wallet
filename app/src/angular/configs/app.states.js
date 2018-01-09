@@ -93,7 +93,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
         // create wallet
         .state('guest.create', {
-            url: '/guest/create',
+            abstract: true,
             views: {
                 main: {
                     templateUrl: 'guest/create/layout.html'
@@ -145,9 +145,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        // import
+        // import wallet
         .state('guest.import', {
-            url: '/guest/import',
+            abstract: true,
             views: {
                 main: {
                     templateUrl: 'guest/import/layout.html'
@@ -159,7 +159,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/guest/import/keystore',
             views: {
                 main: {
-                    templateUrl: 'guest/import/keystore/main.html'
+                    templateUrl: 'guest/import/keystore/main.html',
+                    controller: 'GuestImportKeystoreController'
                 }
             }
         })
@@ -168,7 +169,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             url: '/guest/import/private-key',
             views: {
                 main: {
-                    templateUrl: 'guest/import/private-key/main.html'
+                    templateUrl: 'guest/import/private-key/main.html',
+                    controller: 'GuestImportPrivateKeyController'
                 }
             }
         })
@@ -371,25 +373,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('member.marketplace.main', {
-            url: '/member/marketplace/main',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/main.html'
-                }
-            }
-        })
-
-        .state('member.marketplace.ico-list', {
-            url: '/member/marketplace/ico/list',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/list.html',
-                    controller: 'MemberMarketplaceIcoListController'
-                }
-            }
-        })
-
         .state('member.marketplace.ico-item', {
             url: '/member/marketplace/ico/item',
             views: {
@@ -400,22 +383,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             },
             params: {
                 selected: null
-            }
-        })
-
-        .state('member.marketplace.ico-manage-requirements', {
-            url: '/member/marketplace/ico/ico-manage-requirements',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/manage-requirements.html',
-                    controller: 'MemberMarketplaceIcoManageRequirementsController'
-                }
-            },
-            params: {
-                selected: null,
-                kycProgress: null,
-                allIdAttributes: null,
-                kycInfo: null
             }
         })
 
@@ -463,7 +430,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             }
         })
-
 
     $urlRouterProvider.otherwise('/guest/loading');
 

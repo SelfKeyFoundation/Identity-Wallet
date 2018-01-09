@@ -25,7 +25,8 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
                 WalletService.importUsingKeystoreFilePath(wmd.keystoreFilePath).then((wallet) => {
                     $rootScope.wallet = wallet;
                     // go to unlock state
-                    $state.go('guest.process.unlock-keystore');
+                    //$state.go('guest.process.unlock-keystore');
+                    $state.go('guest.welcome');
                 }).catch((error)=>{
                     // TODO
                 });

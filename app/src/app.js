@@ -218,14 +218,14 @@ angular.module('kyc-wallet').controller('GuestLayoutController', GuestLayoutCont
 import GuestLoadingController from './angular/controllers/guest/loading-controller.js';
 angular.module('kyc-wallet').controller('GuestLoadingController', GuestLoadingController);
 
-import GuestCreateKeystoreController from './angular/controllers/guest/process/create-keystore-controller.js';
-angular.module('kyc-wallet').controller('GuestCreateKeystoreController', GuestCreateKeystoreController);
-
-import GuestImportKeystoreController from './angular/controllers/guest/process/import-keystore-controller.js';
+/**
+ * import wallet
+ */
+import GuestImportKeystoreController from './angular/controllers/guest/import/keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
 
-import GuestUnlockKeystoreController from './angular/controllers/guest/process/unlock-keystore-controller.js';
-angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUnlockKeystoreController);
+import GuestImportPrivateKeyController from './angular/controllers/guest/import/private-key-controller.js';
+angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
 
 /**
  * create wallet
@@ -289,14 +289,8 @@ angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenCont
 import MemberMarketplaceMainController from './angular/controllers/member/marketplace/main-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
 
-import MemberMarketplaceIcoListController from './angular/controllers/member/marketplace/ico/list-controller.js';
-angular.module('kyc-wallet').controller('MemberMarketplaceIcoListController', MemberMarketplaceIcoListController);
-
 import MemberMarketplaceIcoItemController from './angular/controllers/member/marketplace/ico/item-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
-
-import MemberMarketplaceIcoManageRequirementsController from './angular/controllers/member/marketplace/ico/manage-requirements-controller.js';
-angular.module('kyc-wallet').controller('MemberMarketplaceIcoManageRequirementsController', MemberMarketplaceIcoManageRequirementsController);
 
 import MemberMarketplaceIcoAcceptTermsController from './angular/controllers/member/marketplace/ico/accept-terms-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoAcceptTermsController', MemberMarketplaceIcoAcceptTermsController);
