@@ -80,7 +80,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
      */
     $scope.errors = {
         sendToAddressHex: false,
-        sendAmount: false
+        sendAmount: false,
+        sendFailed: false
     }
 
     /**
@@ -108,16 +109,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     $scope.confirmSend = (event, confirm) => {
         if(!confirm) {
-            $scope.viewStates.showConfirmButtons = false
+            setViewState('before-send');
         }else{
-            // TODO call send
-            $scope.inputStates.isAddressLocked = true;
-            $scope.inputStates.isAmountLocked = true;
-            $scope.inputStates.isGasPriceLocked = true;
-            $scope.backgroundProcessStatuses.txInProgress = true;
-
-
-            $scope.backgroundProcessStatuses.checkingTransaction = true;
+            setViewState('sending');
             if ($scope.symbol.toLowerCase() === 'eth') {
                 sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
             } else {
@@ -160,7 +154,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.getTxFee = () => {
-        let wei = Number($scope.infoData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
+        let wei = Number($scope.formData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
+        //console.log(wei, EthUnits.toEther(wei, 'wei'));
         return EthUnits.toEther(wei, 'wei');
     };
 
@@ -222,8 +217,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     startTxCheck();
                     $scope.viewStates.step = 'transaction-status';
                 }).catch((error) => {
-                    console.log(">>>", "error", error);
+                    $scope.errors.sendFailed = error.toString();
+                    // reset view state
+                    setViewState();
                 });
+            }).catch((error)=>{
+                $scope.errors.sendFailed = error.toString();
+                // reset view state
+                setViewState();
             });
         }
     }
@@ -235,11 +236,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 return;
             }
 
+            console.log("generateTokenRawTransaction", sendToAddress, sendAmount, EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'))
+
             let txGenPromise = WalletService.generateTokenRawTransaction(
                 sendToAddress,
                 sendAmount,
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
-                $scope.infoData.gasLimit,
+                150000, //$scope.infoData.gasLimit,
                 $scope.symbol.toUpperCase()
             )
 
@@ -253,8 +256,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     startTxCheck();
                     $scope.viewStates.step = 'transaction-status';
                 }).catch((error) => {
-                    console.log(">>>", "error", error);
+                    $scope.errors.sendFailed = error.toString();
+                    // reset view state
+                    setViewState();
                 });
+            }).catch((error)=>{
+                $scope.errors.sendFailed = error.toString();
+                // reset view state
+                setViewState();
             });
         }
     }
@@ -262,8 +271,41 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     function isNumeric(num){
         num = "" + num; //coerce num to be a string
         return !isNaN(num) && !isNaN(parseFloat(num));
-      }
+    }
 
+    function setViewState (state) {
+        switch (state) {
+            case 'sending':
+                $scope.inputStates.isAddressLocked = true;
+                $scope.inputStates.isAmountLocked = true;
+                $scope.inputStates.isGasPriceLocked = true;
+                $scope.backgroundProcessStatuses.txInProgress = true;
+                $scope.backgroundProcessStatuses.checkingTransaction = true;
+                $scope.errors.sendFailed = false;
+            break;
+            case 'before-send':
+                $scope.viewStates.showConfirmButtons = false
+                $scope.inputStates.isAddressLocked = true;
+                $scope.inputStates.isAmountLocked = true;
+                $scope.inputStates.isGasPriceLocked = true;
+            break;
+            default:
+                $scope.inputStates.isAddressLocked = false;
+                $scope.inputStates.isAmountLocked = false;
+                $scope.inputStates.isGasPriceLocked = false;
+                $scope.backgroundProcessStatuses.txInProgress = false;
+                $scope.backgroundProcessStatuses.checkingTransaction = false;
+                $scope.viewStates.showConfirmButtons = false;
+        }
+
+    }
+
+    function getBalanceInUsd(balance) {
+        console.log(balance, $scope.infoData.usdPerUnit);
+        return (Number(balance) * Number($scope.infoData.usdPerUnit));
+    }
+    
+    
     /**
      * 
      */
@@ -314,6 +356,24 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             $scope.errors.sendAmount = true;
         } else {
             $scope.errors.sendAmount = false;
+        }
+
+        if (newVal.sendAmount && isNumeric(newVal.sendAmount)){
+            // remining balance
+            $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
+
+            // remining balance in USD
+            $scope.infoData.reminingBalanceInUsd = Number($scope.infoData.reminingBalance) * Number($scope.infoData.usdPerUnit);
+
+            // send amount in USD
+            $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
+
+            // tx fee in eth
+            let wei = Number($scope.formData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
+            $scope.infoData.txFeeInEth = EthUnits.toEther(wei, 'wei');
+
+            // tx fee in USD
+            $scope.infoData.txFeeInUsd = Number($scope.infoData.txFeeInEth) * Number($scope.infoData.usdPerUnit);
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount) && newVal.sendToAddressHex && web3Utils.isHex(newVal.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex))) {

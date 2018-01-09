@@ -24,7 +24,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   /**
    * 
    */
-  const REQUEST_INTERVAL_DELAY = 1000;
+  const REQUEST_INTERVAL_DELAY = 500;
 
   /**
    * 
@@ -174,7 +174,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         defer.resolve(response)
       }).catch((error) => {
         $log.error("error", error);
-        defer.reject($rootScope.buildErrorObject("ERR_HTTP_CONNECTION", error));
+        defer.reject(error);
       });
     }
 
