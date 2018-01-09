@@ -289,6 +289,10 @@ h2 {
   width: 39px !important;
   height: 44px !important; }
 
+.icon-size-43x35 {
+  width: 43px !important;
+  height: 35px !important; }
+
 .icon-size-44x44 {
   width: 44px !important;
   height: 44px !important; }
@@ -17330,6 +17334,7 @@ md-dialog.add-id-attribute {
       font-size: 36px;
       line-height: 1; }
     .wallet-setup .headline .text {
+      margin-top: 18px;
       opacity: 0.8;
       font-size: 18px;
       line-height: 1.67;
@@ -17358,6 +17363,7 @@ md-dialog.add-id-attribute {
             text-align: left;
             color: #ffffff; }
           .wallet-setup .main .content .container .textual .text {
+            margin-top: 10px;
             width: 491px;
             opacity: 0.8;
             font-family: ProximaNovaRegular;

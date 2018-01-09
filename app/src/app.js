@@ -227,16 +227,19 @@ angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestIm
 import GuestUnlockKeystoreController from './angular/controllers/guest/process/unlock-keystore-controller.js';
 angular.module('kyc-wallet').controller('GuestUnlockKeystoreController', GuestUnlockKeystoreController);
 
-import GuestKeystoreCreateStep1Controller from './angular/controllers/guest/keystore/create/step-1-controller.js';
+/**
+ * create wallet
+ */
+import GuestKeystoreCreateStep1Controller from './angular/controllers/guest/create/step-1-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
-import GuestKeystoreCreateStep2Controller from './angular/controllers/guest/keystore/create/step-2-controller.js';
+import GuestKeystoreCreateStep2Controller from './angular/controllers/guest/create/step-2-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
-import GuestKeystoreCreateStep3Controller from './angular/controllers/guest/keystore/create/step-3-controller.js';
+import GuestKeystoreCreateStep3Controller from './angular/controllers/guest/create/step-3-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
-import GuestKeystoreCreateStep4Controller from './angular/controllers/guest/keystore/create/step-4-controller.js';
+import GuestKeystoreCreateStep4Controller from './angular/controllers/guest/create/step-4-controller.js';
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
 
@@ -256,14 +259,8 @@ angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRi
 import MemberSetupViewKeystoreController from './angular/controllers/member/setup/view-keystore-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', MemberSetupViewKeystoreController);
 
-import MemberSetupStep1Controller from './angular/controllers/member/setup/step-1-controller.js';
-angular.module('kyc-wallet').controller('MemberSetupStep1Controller', MemberSetupStep1Controller);
-
-import MemberSetupStep2Controller from './angular/controllers/member/setup/step-2-controller.js';
-angular.module('kyc-wallet').controller('MemberSetupStep2Controller', MemberSetupStep2Controller);
-
-import MemberSetupStep3Controller from './angular/controllers/member/setup/step-3-controller.js';
-angular.module('kyc-wallet').controller('MemberSetupStep3Controller', MemberSetupStep3Controller);
+import MemberSetupChooseController from './angular/controllers/member/setup/choose-controller.js';
+angular.module('kyc-wallet').controller('MemberSetupChooseController', MemberSetupChooseController);
 
 import MemberSetupWalletSetupController from './angular/controllers/member/setup/wallet-setup-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupWalletSetupController', MemberSetupWalletSetupController);
@@ -285,12 +282,6 @@ angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWall
 
 import ManageTokenController from './angular/controllers/member/wallet/manage-token-controller.js';
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
-
-/**
- * settings
- */
-import MemberSettingsMainController from './angular/controllers/member/settings/main-controller.js';
-angular.module('kyc-wallet').controller('MemberSettingsMainController', MemberSettingsMainController);
 
 /**
  * Marketplace

@@ -44,7 +44,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
             return;
         }
        
-        $state.go('guest.keystore.create-step-2', {thePassword: $scope.userInput.password});
+        $state.go('guest.create.step-2', {thePassword: $scope.userInput.password});
     }
 
    

@@ -41,7 +41,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             
             // reload store
             ConfigFileService.load().then((storeData) => {
-                $state.go('guest.keystore.create-step-3')
+                $state.go('guest.create.step-3')
             });
         });
     }

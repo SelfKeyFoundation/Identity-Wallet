@@ -1,96 +1,94 @@
-.wallet-setup{
-  height: 100%;
-  .headline {
-    margin-bottom: 30px;
-    font-family: ProximaNovaRegular;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #ffffff;
-    width: 600px;
-    .title {
-      font-size: 36px;
-      line-height: 1;
-    }
-    .text {
-      opacity: 0.8;
-      font-size: 18px;
-      line-height: 1.67;
-      color: #ffffff;
-    }
-  }
-  .main {
-    width: 600px;
-    display: table;
-    border-radius: 4px;
-    background-color: #262f39;
-    border: solid 1px #303c49;
-
-    .content {
-      margin: 40px 0 40px 0;
-      .container {
-        align-items: flex-start;
-        .textual {
-          margin-left: 20px;
-          .title {
-            opacity: 0.83;
-            font-family:SFNSDisplay;
-            font-size: 21px;
-            font-weight: normal;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 1.14;
-            letter-spacing: normal;
-            text-align: left;
-            color: #ffffff;
-          }
-          .text {
-            width: 491px;
-            opacity: 0.8;
-            font-family: ProximaNovaRegular;
-            font-size: 16px;
-            font-weight: normal;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 1.63;
-            letter-spacing: normal;
-            text-align: left;
-            color: #ffffff;
-          }
-          button {
-            font-family: ProximaNovaSemibold;
-            font-size: 15px;
-            font-weight: 600;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 0.8;
-            letter-spacing: 0.6px;
-            text-align: center;
-            color: #ffffff;
-            text-transform: initial;
-            &.md-raised{
-              width: 320px;
-              height: 50px;
-              border-radius: 4px;
-              background-color: #435160;
-              margin-top: 30px;
-
-            }
-          }
+.wallet-setup {
+    height: 100%;
+    .headline {
+        margin-bottom: 30px;
+        font-family: ProximaNovaRegular;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #ffffff;
+        width: 600px;
+        .title {
+            font-size: 36px;
+            line-height: 1;
         }
-      }
+        .text {
+            margin-top: 18px;
+            opacity: 0.8;
+            font-size: 18px;
+            line-height: 1.67;
+            color: #ffffff;
+        }
     }
-
-  }
-
-  hr {
-    color: #303c49;
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #303c49;
-    width: 90%;
-  }
+    .main {
+        width: 600px;
+        display: table;
+        border-radius: 4px;
+        background-color: #262f39;
+        border: solid 1px #303c49;
+        .content {
+            margin: 40px 0 40px 0;
+            .container {
+                align-items: flex-start;
+                .textual {
+                    margin-left: 20px;
+                    .title {
+                        opacity: 0.83;
+                        font-family: SFNSDisplay;
+                        font-size: 21px;
+                        font-weight: normal;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 1.14;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: #ffffff;
+                    }
+                    .text {
+                        margin-top: 10px;
+                        width: 491px;
+                        opacity: 0.8;
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        font-weight: normal;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 1.63;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: #ffffff;
+                    }
+                    button {
+                        font-family: ProximaNovaSemibold;
+                        font-size: 15px;
+                        font-weight: 600;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 0.8;
+                        letter-spacing: 0.6px;
+                        text-align: center;
+                        color: #ffffff;
+                        text-transform: initial;
+                        &.md-raised {
+                            width: 320px;
+                            height: 50px;
+                            border-radius: 4px;
+                            background-color: #435160;
+                            margin-top: 30px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    hr {
+        color: #303c49;
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #303c49;
+        width: 90%;
+    }
 }

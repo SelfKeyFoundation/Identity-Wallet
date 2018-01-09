@@ -101,8 +101,49 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        // TODO
+        // keystore create
+        .state('guest.create.step-1', {
+            url: '/guest/create/step-1',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-1.html',
+                    controller: 'GuestKeystoreCreateStep1Controller'
+                }
+            }
+        })
 
+        .state('guest.create.step-2', {
+            url: '/guest/create/step-2',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-2.html',
+                    controller: 'GuestKeystoreCreateStep2Controller'
+                }
+            },
+            params: {
+                thePassword: null
+            }
+        })
+
+        .state('guest.create.step-3', {
+            url: '/guest/create/step-3',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-3.html',
+                    controller: 'GuestKeystoreCreateStep3Controller'
+                }
+            }
+        })
+
+        .state('guest.create.step-4', {
+            url: '/guest/create/step-4',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-4.html',
+                    controller: 'GuestKeystoreCreateStep4Controller'
+                }
+            }
+        })
 
         // import
         .state('guest.import', {
@@ -154,49 +195,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        // keystore create
-        .state('guest.keystore.create-step-1', {
-            url: '/guest/keystore/create-step-1',
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/create/step-1.html',
-                    controller: 'GuestKeystoreCreateStep1Controller'
-                }
-            }
-        })
-
-        .state('guest.keystore.create-step-2', {
-            url: '/guest/keystore/create-step-2',
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/create/step-2.html',
-                    controller: 'GuestKeystoreCreateStep2Controller'
-                }
-            },
-            params: {
-                thePassword: null
-            }
-        })
-
-        .state('guest.keystore.create-step-3', {
-            url: '/guest/keystore/create-step-3',
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/create/step-3.html',
-                    controller: 'GuestKeystoreCreateStep3Controller'
-                }
-            }
-        })
-
-        .state('guest.keystore.create-step-4', {
-            url: '/guest/keystore/create-step-4',
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/create/step-4.html',
-                    controller: 'GuestKeystoreCreateStep4Controller'
-                }
-            }
-        })
+        
 
         .state('guest.process.import-keystore', {
             url: '/guest/process/import-keystore',
@@ -309,39 +308,13 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('member.setup.step-1', {
-            url: '/member/setup/step-1',
+        .state('member.setup.choose', {
+            url: '/member/setup/choose',
             views: {
                 main: {
-                    templateUrl: 'member/setup/step-1.html',
-                    controller: 'MemberSetupStep1Controller'
-                },
-            },
-            params: {
-                skipStep2: false
-            }
-        })
-
-        .state('member.setup.step-2', {
-            url: '/member/setup/step-2',
-            views: {
-                main: {
-                    templateUrl: 'member/setup/step-2.html',
-                    controller: 'MemberSetupStep2Controller'
+                    templateUrl: 'member/setup/choose.html',
+                    controller: 'MemberSetupChooseController'
                 }
-            }
-        })
-
-        .state('member.setup.step-3', {
-            url: '/member/setup/step-3',
-            views: {
-                main: {
-                    templateUrl: 'member/setup/step-3.html',
-                    controller: 'MemberSetupStep3Controller'
-                }
-            },
-            params: {
-                step: null
             }
         })
 
