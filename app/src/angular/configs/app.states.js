@@ -91,6 +91,48 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
 
+        // create wallet
+        .state('guest.create', {
+            url: '/guest/create',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/layout.html'
+                }
+            }
+        })
+
+        // TODO
+
+
+        // import
+        .state('guest.import', {
+            url: '/guest/import',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/layout.html'
+                }
+            }
+        })
+
+        .state('guest.import.keystore', {
+            url: '/guest/import/keystore',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/keystore/main.html'
+                }
+            }
+        })
+
+        .state('guest.import.private-key', {
+            url: '/guest/import/private-key',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/private-key/main.html'
+                }
+            }
+        })
+
+
 
         // process layout
         .state('guest.process', {
