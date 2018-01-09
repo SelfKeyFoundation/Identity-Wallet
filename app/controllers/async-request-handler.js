@@ -85,7 +85,7 @@ module.exports = function (app) {
 					storeFilePath: storeFilePath,
 					documentsDirectoryPath: documentsDirectoryPath,
 					reminder: {
-						notifyBeforeTimeLeft: 60 * 1000 * 1000
+						notifyBeforeTimeLeft: 60 * 60 * 1000
 					}
 				},
 				idAttributes: {
@@ -235,6 +235,26 @@ module.exports = function (app) {
 						date : new Date(),
                    		type : 'notification',
                     	text : 'third something'
+					}
+				],
+				reminders: [
+					{
+						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000)),
+						date : new Date(),
+                   		type : 'regular',
+                    	text : 'something'
+					},
+					{
+						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000 * 0.5)),
+						date : new Date(),
+                   		type : 'regular',
+                    	text : 'something'
+					},
+					{
+						reminderDate : new Date(new Date().getTime() + (60 * 60 * 1000 * 3)),
+						date : new Date(),
+                   		type : 'regular',
+                    	text : 'something'
 					}
 				],
 				tokens: {

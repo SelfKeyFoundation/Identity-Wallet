@@ -45,6 +45,13 @@ const AppConfigConstant = {
 				title: "you got a notifixation",
 				color: "yellow"
 			}
+		},
+		reminderTypes : {
+			regular : {
+				icon : "appointment-reminders-without-color",
+				title: "you got a reminder",
+				color: "blue"
+			}
 		}
 	},
 	
