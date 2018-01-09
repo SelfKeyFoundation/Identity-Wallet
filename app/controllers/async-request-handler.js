@@ -9,6 +9,7 @@ const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs');
+const ethereumjsUtil = require('ethereumjs-util');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
@@ -347,19 +348,10 @@ module.exports = function (app) {
 				let data = stdout.toString().split('\n')[0];
 				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
 			}
-			/*
-		console.log('stdout: ' + stdout);
-		console.log('stderr: ' + stderr);
-		if (error !== null) {
-			console.log('exec error: ' + error);
-		}
-		callback(error, stdout)
-		*/
 		});
 	}
 
 	controller.prototype.moveFile = function (event, actionId, actionName, args) {
-		console.log(">>>>", args);
 		args.dest += '/' + path.basename(args.src);
 		if (args.copy) {
 			helpers.copyFile(args.src, args.dest, (err) => {
@@ -482,6 +474,34 @@ module.exports = function (app) {
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, { message: "authentication code mismatch" }, null);
 		}
 	}
+
+	controller.prototype.importEtherPrivateKey = function (event, actionId, actionName, args) {
+		try {
+			let publicKey = ethereumjsUtil.privateToPublic(args.privateKey);
+			publicKey = publicKey.toString('hex');
+			
+			let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+			settings.setPath(storeFilePath);
+
+			let storeData = settings.getAll();
+
+			if (!storeData.wallets[publicKey]) {
+				storeData.wallets[publicKey] = {
+					type: "privateKey",
+					name: "Unnamed Wallet",
+					privateKey: args.privateKey
+				}
+				settings.setAll(storeData);
+			}
+
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+				privateKey: args.privateKey, 
+				publicKey: publicKey
+			});
+		} catch (e) {
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
+		}
+	};
 
 	controller.prototype.closeApp = function (event, actionId, actionName, args) {
 		electron.app.quit();

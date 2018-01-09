@@ -155,6 +155,9 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
 
     ElectronService.analytics('app-start', new Date().toISOString());
 
+    // test account
+    //ElectronService.importEtherPrivateKey('0xf48194b05b5f927d392d6bd95da255f71ad486a6e5738c50fba472ad16b77fe1');
+
     window.Web3Service = Web3Service;
 }
 

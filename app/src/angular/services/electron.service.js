@@ -111,6 +111,12 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
       });
     }
 
+    this.importEtherPrivateKey = function (privateKey) {
+      return makeCall('importEtherPrivateKey', {
+        privateKey: privateKey
+      });
+    }
+
     this.closeApp = function () {
       return makeCall('closeApp', {});
     }
