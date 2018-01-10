@@ -319,13 +319,13 @@ module.exports = function (app) {
 								settings.setAll(storeData);
 							}
 
-							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, privateKey: privateKey, keystoreObject: keystoreObject });
+							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, keystoreObject: keystoreObject });
 						} else {
 							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
 						}
 					});
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {publicKey: keystoreObject.address});
+					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {publicKey: keystoreObject.address, keystoreObject: keystoreObject});
 				}
 			});
 		} catch (e) {
@@ -338,21 +338,22 @@ module.exports = function (app) {
 		try {
 			let privateKey = keythereum.recover(args.password, args.keystoreObject);
 			if (privateKey) {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {privateKey: privateKey, publicKey: args.keystoreObject.publicKey, keystoreObject: args.keystoreObject});
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {privateKey: privateKey, publicKey: args.keystoreObject.address, keystoreObject: args.keystoreObject});
 			} else {
 				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
 			}
 
 		} catch (e) {
+			console.log(">>>>>>>", e);
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
 		}
 	}
 
 	controller.prototype.importEtherPrivateKey = function (event, actionId, actionName, args) {
 		try {
-			let publicKey = ethereumjsUtil.privateToPublic(args.privateKey);
+			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
 			publicKey = publicKey.toString('hex');
-			
+
 			let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 			settings.setPath(storeFilePath);
 
@@ -362,7 +363,7 @@ module.exports = function (app) {
 				storeData.wallets[publicKey] = {
 					type: "pk",
 					name: "Unnamed Wallet",
-					privateKey: args.privateKey,
+					//privateKey: args.privateKey,
 					data: initialStoreDataStructure
 				}
 				settings.setAll(storeData);

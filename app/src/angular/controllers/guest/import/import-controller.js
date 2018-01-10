@@ -5,7 +5,7 @@ function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $st
     
     $scope.selectedOption = "keystoreSelect";
 
-    $scope.publicKeyList = ConfigFileService.getWalletPublicKeys();
+    $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
 
     if($scope.publicKeyList.length <= 0) {
         $scope.selectedOption = "keystoreImport";

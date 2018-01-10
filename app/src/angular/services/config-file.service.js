@@ -103,6 +103,20 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       return Object.keys(store.wallets);
     }
 
+    getPublicKeys(type) {
+      if(!type){
+        return Object.keys(store.wallets);
+      }else{
+        let keys = [];
+        for(let i in store.wallets){
+          if(store.wallets[i].type === type){
+            keys.push(i);
+          }
+        }
+        return keys;
+      }
+    }
+
     getWalletsMetaData() {
       let keys = this.getWalletPublicKeys();
       let result = [];
