@@ -17,12 +17,13 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
         $rootScope.loadingPromise.then((storeData) => {
             $log.info("storeData", storeData);
     
-            let walletsMetaData = ConfigFileService.getWalletsMetaData();
-            $log.info("keys", ConfigFileService.getWalletsMetaData());
-    
-            if (walletsMetaData.length > 0) {
-                let wmd = walletsMetaData[0];
-                WalletService.importUsingKeystoreFilePath(wmd.keystoreFilePath).then((wallet) => {
+            let publicKeys = ConfigFileService.getPublicKeys('ks');
+
+            if (publicKeys.length > 0) {
+
+                let w = storeData.wallets[publicKeys[0]];
+                
+                WalletService.importUsingKeystoreFilePath(w.keystoreFilePath).then((wallet) => {
                     $rootScope.wallet = wallet;
                     // go to unlock state
                     //$state.go('guest.process.unlock-keystore');

@@ -11,7 +11,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
     $scope.type = $stateParams.type;
 
-    $scope.publicKeyList = ConfigFileService.getWalletPublicKeys();
+    $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
 
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
@@ -19,20 +19,22 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         password: null
     }
 
-    $scope.selectKystoreFile = (event) => {
+    $scope.selectKystoreFile = (event, theForm) => {
         let promise = ElectronService.openFileSelectDialog();
         promise.then((data) => {
             $scope.userInput.selectedFilePath = data.path;
 
             ConfigFileService.load().then(()=>{
-                $scope.publicKeyList = ConfigFileService.getWalletPublicKeys();
+                $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
             });
         }).catch((error) => {
-            // todo
+            
         });
     }
 
-    $scope.unlock = (event) => {
+    $scope.unlock = (event, theForm) => {
+        if(!theForm.$valid) return;
+
         let selectedFilePath = $scope.userInput.selectedFilePath;
 
         if($scope.type === 'select'){
@@ -50,7 +52,11 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             //$state.go('member.setup.main');
         }).catch((error)=>{
             $log.error(error);
+
             $scope.isUnlocking = false;
+
+            theForm.password.$setValidity("badKeystore", false);
+            theForm.password.$setValidity("required", false);
         });
     }
 
