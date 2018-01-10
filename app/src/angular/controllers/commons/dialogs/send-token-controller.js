@@ -34,6 +34,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
      * informational data
      */
     $scope.infoData = {
+        isReady: false,
         usdPerUnit: 0,
 
         sendAmountInUSD: 0.00,
@@ -155,7 +156,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     $scope.getTxFee = () => {
         let wei = Number($scope.formData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
-        //console.log(wei, EthUnits.toEther(wei, 'wei'));
         return EthUnits.toEther(wei, 'wei');
     };
 
@@ -235,8 +235,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 // todo show message
                 return;
             }
-
-            console.log("generateTokenRawTransaction", sendToAddress, sendAmount, EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'))
 
             let txGenPromise = WalletService.generateTokenRawTransaction(
                 sendToAddress,
@@ -326,13 +324,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             promise.then((gasLimit) => {
                 console.log("getEstimateGas gasLimit", gasLimit);
-                $scope.infoData.gasLimit = gasLimit;
 
+                $scope.infoData.gasLimit = gasLimit;
                 $scope.infoData.isReady = true;
             }).catch((error) => {
                 console.log("getEstimateGas", error);
             }).finally(() => {
-                console.log(">???????")
                 $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = false;
             });
 
@@ -377,8 +374,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount) && newVal.sendToAddressHex && web3Utils.isHex(newVal.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex))) {
-            estimatedGasNeedsCheck = true;
-
+            if(!args.gasLimit) {
+                estimatedGasNeedsCheck = true;
+            }else{
+                $scope.infoData.isReady = true;
+            }
+            
             $scope.errors.sendAmount = false;
             $scope.errors.sendToAddressHex = false;
         }
@@ -391,7 +392,3 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 };
 
 export default SendTokenDialogController;
-
-
-
-

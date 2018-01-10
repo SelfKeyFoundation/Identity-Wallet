@@ -16561,7 +16561,8 @@ md-dialog.send-token {
         font-weight: 600;
         text-align: left;
         color: #ffffff;
-        height: 20px; }
+        height: 20px;
+        text-transform: uppercase; }
     md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__usd-amount-container {
       display: flex;
       flex-direction: row;
