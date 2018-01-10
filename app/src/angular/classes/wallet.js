@@ -15,9 +15,6 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; }
 
     constructor(privateKey, publicKey) {
-        console.log("privateKey", privateKey);
-        console.log("publicKey", publicKey);
-
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
 
@@ -29,6 +26,8 @@ class Wallet {
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
+
+        console.log(">>>>>>", this);
     }
 
     getPrivateKey() {

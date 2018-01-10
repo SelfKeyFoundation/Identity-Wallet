@@ -149,7 +149,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       let importPromise = ElectronService.importEtherPrivateKey(privateKey);
       importPromise.then((data) => {
-        wallet = new Wallet(data.privateKey, data.publicKey);
+        wallet = new Wallet(data.privateKeyBuffer, data.publicKey);
         $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
         this.loadBalance();
 

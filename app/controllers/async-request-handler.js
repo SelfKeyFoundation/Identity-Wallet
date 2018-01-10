@@ -332,6 +332,8 @@ module.exports = function (app) {
 			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
 			publicKey = publicKey.toString('hex');
 
+			let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
+
 			let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 			settings.setPath(storeFilePath);
 
@@ -349,6 +351,7 @@ module.exports = function (app) {
 
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
 				privateKey: args.privateKey, 
+				privateKeyBuffer: privateKeyBuffer,
 				publicKey: publicKey
 			});
 		} catch (e) {
