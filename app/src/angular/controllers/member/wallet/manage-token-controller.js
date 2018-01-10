@@ -11,7 +11,7 @@ function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams
 
     $scope.selectedToken = TokenService.getBySymbol($stateParams.id.toUpperCase());
 
-    $scope.publicKeyHex = $rootScope.wallet.getAddress();
+    $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();
     $scope.name = temporaryMap[$scope.symbol];
     

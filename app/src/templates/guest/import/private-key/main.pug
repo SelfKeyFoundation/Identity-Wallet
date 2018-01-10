@@ -2,7 +2,7 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
     
     md-input-container.sk-input-box(style="width: 100%;")
         label Enter your private key
-        input(type="text", name="privateKey", ng-model="userInput.privateKey", ng-required="true")
+        textarea(name="privateKey", ng-model="userInput.privateKey", rows="3", md-select-on-focus, ng-required="true")
         div(ng-messages="theForm.privateKey.$error")
             div(ng-message="theForm.privateKey.$error.required") {{ theForm.privateKey.$error.badPrivateKey ? 'Incorrect private key' : 'Required!' }}
             

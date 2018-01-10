@@ -14,11 +14,22 @@
 
     table {
         width: 100%;
+
+        tr {
+            td {
+                &.one {
+                    line-height: 1.25;
+                }
+            }
+        }
+        
     }
 
     .amountValue {
-        font-size: 18px;
-        color: white;
+        font-family: ProximaNovaLight;
+        font-size: 40px;
+        font-weight: 300;
+        color: #ffffff;
     }
 
     .label {

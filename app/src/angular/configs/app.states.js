@@ -198,8 +198,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        
-
         .state('guest.process.import-keystore', {
             url: '/guest/process/import-keystore',
             views: {

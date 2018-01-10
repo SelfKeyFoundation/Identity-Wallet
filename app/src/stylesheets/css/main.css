@@ -14625,7 +14625,8 @@ md-toolbar {
       font-weight: 500;
       line-height: 2.0;
       color: #ffffff;
-      cursor: pointer; }
+      cursor: pointer;
+      outline: none; }
       .sk-right-sidenav .sk-right-sidenav__section > .sk-right-sidenav__section__item:hover {
         background-image: linear-gradient(175deg, #3a4754, #1b222a); }
       .sk-right-sidenav .sk-right-sidenav__section > .sk-right-sidenav__section__item.sk-right-sidenav__section__item__selected {
@@ -14840,6 +14841,18 @@ md-content {
   top: -10px;
   height: 18px; }
 
+.sk-input-box > .md-resize-wrapper {
+  border-radius: 4px;
+  color: #fff;
+  background-color: #1e262e;
+  border: solid 1px #384656;
+  font-family: ProximaNovaSemibold;
+  font-size: 14px;
+  padding: 14px; }
+  .sk-input-box > .md-resize-wrapper textarea {
+    border: none;
+    color: #fff; }
+
 .sk-input-box > input {
   height: 44px;
   border-radius: 4px;
@@ -14850,7 +14863,8 @@ md-content {
   font-family: ProximaNovaSemibold;
   font-size: 14px;
   width: 100%;
-  padding-left: 24px; }
+  padding-left: 24px;
+  padding-right: 24px; }
 
 .sk-input-box.md-input-has-value > label {
   color: #93b0c1 !important;
@@ -15292,78 +15306,6 @@ md-content {
     font-size: 12px;
     letter-spacing: 1px; } }
 
-.sk-expandable-box {
-  border-radius: 4px;
-  background-color: #262f39;
-  border: solid 1px #303c49;
-  padding: 0 30px;
-  flex-direction: column; }
-  .sk-expandable-box:first-of-type .sk-expandable-box__title {
-    display: block; }
-  .sk-expandable-box:hover {
-    background-color: #222a33; }
-  .sk-expandable-box.expended {
-    background-color: #222a33; }
-    .sk-expandable-box.expended .sk-expandable-box__item__header {
-      border-bottom: none !important; }
-  .sk-expandable-box .sk-expandable-box__title {
-    margin-top: 30px;
-    display: none;
-    font-family: ProximaNovaRegular;
-    font-size: 18px;
-    font-weight: 600;
-    color: #ffffff; }
-  .sk-expandable-box .sk-expandable-box__item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-family: ProximaNovaRegular;
-    font-size: 18px; }
-    .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__header {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      margin-top: 36px;
-      padding-bottom: 30px;
-      width: 100%;
-      font-size: 16px;
-      outline: none;
-      cursor: pointer; }
-      .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__header .sk-expandable-box__item__header__date {
-        display: flex;
-        flex-direction: column;
-        align-items: center; }
-      .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__header .sk-icon {
-        margin-left: 20px; }
-      .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__header .sk-expandable-box__item__header__text {
-        margin-left: 10px; }
-        .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__header .sk-expandable-box__item__header__text span {
-          margin-left: 10px; }
-    .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__content {
-      padding-bottom: 30px; }
-      .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__content .sk-expandable-box__item__content__info-table {
-        margin-left: 106px; }
-        .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__content .sk-expandable-box__item__content__info-table tr td:first-of-type {
-          font-family: ProximaNovaSemibold;
-          font-size: 16px;
-          font-weight: 600;
-          color: #93b0c1;
-          padding-top: 15px; }
-        .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__content .sk-expandable-box__item__content__info-table tr td:last-of-type {
-          padding-top: 15px;
-          padding-left: 20px;
-          align-items: center;
-          justify-content: flex-start;
-          display: flex;
-          flex-direction: row; }
-          .sk-expandable-box .sk-expandable-box__item .sk-expandable-box__item__content .sk-expandable-box__item__content__info-table tr td:last-of-type span {
-            margin-left: 12px;
-            font-family: ProximaNovaSemibold;
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff; }
-
 .sk-reminders-box {
   border-radius: 4px;
   background-color: #262f39;
@@ -15442,475 +15384,6 @@ md-content {
         .sk-action-logs-box .item .header .text span {
           margin-left: 10px; }
 
-.sk-wallet-general-info-box {
-  border-radius: 4px;
-  background-color: #262f39;
-  border: solid 1px #303c49;
-  padding: 0 30px;
-  flex-direction: column; }
-  .sk-wallet-general-info-box .sk-wallet-general-info-box__title {
-    margin-top: 30px;
-    font-family: ProximaNovaRegular;
-    font-size: 18px;
-    font-weight: 600;
-    color: #ffffff; }
-  .sk-wallet-general-info-box .sk-wallet-general-info-box__content {
-    padding-bottom: 30px; }
-    .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table {
-      width: 100%;
-      margin-top: 40px;
-      border-collapse: collapse; }
-      .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr {
-        border-bottom: 1px solid #384047; }
-        .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td:first-of-type {
-          width: 130px;
-          padding-top: 30px;
-          padding-bottom: 30px; }
-          .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td:first-of-type div {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center; }
-            .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td:first-of-type div span {
-              font-family: ProximaNovaSemibold;
-              font-size: 14px;
-              font-weight: 600; }
-        .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td:last-of-type div {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-start; }
-          .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td:last-of-type div span {
-            margin-left: 12px;
-            font-family: ProximaNovaSemibold;
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff; }
-        .sk-wallet-general-info-box .sk-wallet-general-info-box__content .sk-wallet-general-info-box__content__table tr td img {
-          -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-          clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-          width: 73px;
-          height: 84px; }
-
-.sk-id-attribute-box {
-  font-family: ProximaNovaRegular;
-  padding: 30px; }
-  .sk-id-attribute-box .default-wrapper {
-    position: relative;
-    color: white;
-    display: flex;
-    flex-direction: column; }
-    .sk-id-attribute-box .default-wrapper > .header {
-      display: flex;
-      flex-direction: row;
-      height: 22px;
-      margin-bottom: 30px; }
-      .sk-id-attribute-box .default-wrapper > .header > .title {
-        color: white;
-        font-size: 18px;
-        font-weight: 500;
-        font-family: ProximaNovaRegular;
-        margin-bottom: 2.5em; }
-      .sk-id-attribute-box .default-wrapper > .header > .plus-button {
-        height: 26px;
-        width: 26px;
-        border-radius: 50%;
-        transition: background-color .2s linear; }
-        .sk-id-attribute-box .default-wrapper > .header > .plus-button:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          cursor: pointer; }
-    .sk-id-attribute-box .default-wrapper .description {
-      margin-bottom: 40px; }
-      .sk-id-attribute-box .default-wrapper .description table {
-        border: 0; }
-        .sk-id-attribute-box .default-wrapper .description table tr td {
-          font-family: ProximaNovaRegular;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 1.36;
-          color: #ffffff; }
-          .sk-id-attribute-box .default-wrapper .description table tr td:first-of-type {
-            width: 80px;
-            font-weight: 600;
-            color: #93b0c1; }
-          .sk-id-attribute-box .default-wrapper .description table tr td:last-of-type {
-            padding-left: 30px;
-            padding-right: 30px; }
-    .sk-id-attribute-box .default-wrapper .h-divider {
-      width: 100%;
-      border-top: 1px solid #384047;
-      margin-bottom: 24px; }
-    .sk-id-attribute-box .default-wrapper .section {
-      display: flex;
-      flex-direction: column; }
-      .sk-id-attribute-box .default-wrapper .section > .title {
-        font-family: ProximaNovaRegular;
-        font-size: 18px;
-        font-weight: 500;
-        color: #ffffff; }
-      .sk-id-attribute-box .default-wrapper .section .items-container {
-        display: flex;
-        flex-direction: column;
-        margin-top: 14px;
-        margin-bottom: 24px; }
-        .sk-id-attribute-box .default-wrapper .section .items-container > .item {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          height: 36px;
-          position: relative; }
-          .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper {
-            display: flex;
-            flex-direction: row;
-            margin-left: 4px;
-            padding: 8px; }
-            .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper.missing {
-              flex-direction: column; }
-            .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper:hover {
-              border-radius: 4px;
-              background-color: #1e262e; }
-            .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper.selected {
-              border-radius: 4px;
-              background-color: #1e262e; }
-            .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog {
-              font-size: 13px;
-              min-width: 28em;
-              background-color: #1e262f;
-              border: 1px solid #93a4af;
-              border-radius: .2em;
-              width: 20em;
-              position: absolute;
-              bottom: calc(100% + 7px);
-              margin: 0 auto;
-              padding: 1em 2em; }
-              .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog > * {
-                z-index: 1; }
-              .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog:before {
-                border-bottom: 1px solid #93a4af;
-                border-right: 1px solid #93a4af;
-                background-color: #1e262f;
-                content: '';
-                position: absolute;
-                bottom: -6px;
-                width: 10px;
-                height: 10px;
-                transform: rotate(45deg);
-                margin: 0 auto;
-                left: 0;
-                right: 0;
-                z-index: 0; }
-              .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .header {
-                color: white;
-                font-size: 17px;
-                margin-bottom: 1em; }
-              .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .message {
-                color: #93a4af;
-                margin-bottom: 1em;
-                line-height: 1.3em; }
-              .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons {
-                display: flex;
-                justify-content: flex-start; }
-                .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button {
-                  border-radius: .2em;
-                  margin: 0 .3em;
-                  height: 36px;
-                  padding: 0 1.2em; }
-                  .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button:first-child {
-                    margin-left: 0; }
-                  .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button:last-child {
-                    margin-right: 0; }
-                  .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button.confirm {
-                    cursor: pointer;
-                    color: white;
-                    border: solid rgba(236, 29, 36, 0.5);
-                    background: #ec1d24;
-                    transition: background-color linear .2s; }
-                    .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button.confirm:hover {
-                      background: #cf1118; }
-                  .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button.cancel {
-                    cursor: pointer;
-                    color: #93a4af;
-                    border: solid rgba(147, 164, 175, 0.5);
-                    background: transparent;
-                    transition: background-color linear .2s; }
-                    .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button.cancel:hover {
-                      background-color: rgba(147, 164, 175, 0.1); }
-                    .sk-id-attribute-box .default-wrapper .section .items-container > .item .info-wrapper .delete-dialog .buttons button.cancel:not(:hover) {
-                      border-color: transparent; }
-        .sk-id-attribute-box .default-wrapper .section .items-container table {
-          font-family: ProximaNovaSemibold, ProximaNovaRegular;
-          font-size: 14px;
-          border-collapse: collapse;
-          width: 100%; }
-          .sk-id-attribute-box .default-wrapper .section .items-container table .sk-icon {
-            float: left;
-            margin: 0 1em; }
-          .sk-id-attribute-box .default-wrapper .section .items-container table td {
-            padding: 1.1em 0;
-            font-weight: 600;
-            border-bottom: 1px solid #384047; }
-      .sk-id-attribute-box .default-wrapper .section .actions-container {
-        margin-top: 24px; }
-        .sk-id-attribute-box .default-wrapper .section .actions-container button {
-          cursor: pointer;
-          color: #93a4af;
-          border-top: none;
-          border-left: none;
-          border-right: none;
-          border-bottom: 1px solid #384047;
-          padding: .5em 1em;
-          background: transparent;
-          transition: background-color linear .2s;
-          outline: none; }
-          .sk-id-attribute-box .default-wrapper .section .actions-container button:hover {
-            background-color: rgba(147, 164, 175, 0.1); }
-    .sk-id-attribute-box .default-wrapper .document-files {
-      display: flex;
-      align-items: center; }
-      .sk-id-attribute-box .default-wrapper .document-files .document-file {
-        margin-left: 1em;
-        cursor: pointer;
-        position: relative; }
-        .sk-id-attribute-box .default-wrapper .document-files .document-file > span {
-          line-height: 2em;
-          padding: .5em .5em .5em 1em; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file > span:nth-child(n+2) {
-            color: #93a4af;
-            font-size: .8em;
-            padding-top: .6em;
-            padding-bottom: .6em; }
-        .sk-id-attribute-box .default-wrapper .document-files .document-file.deletable {
-          background: #1e262e; }
-        .sk-id-attribute-box .default-wrapper .document-files .document-file:hover {
-          background: #1e262e; }
-        .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog {
-          font-size: 13px;
-          min-width: 28em;
-          background-color: #1e262f;
-          border: 1px solid #93a4af;
-          border-radius: .2em;
-          width: 20em;
-          position: absolute;
-          bottom: calc(100% + 7px);
-          margin: 0 auto;
-          padding: 1em 2em; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog > * {
-            z-index: 1; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog:before {
-            border-bottom: 1px solid #93a4af;
-            border-right: 1px solid #93a4af;
-            background-color: #1e262f;
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            width: 10px;
-            height: 10px;
-            transform: rotate(45deg);
-            margin: 0 auto;
-            left: 0;
-            right: 0;
-            z-index: 0; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .header {
-            color: white;
-            font-size: 17px;
-            margin-bottom: 1em; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .message {
-            color: #93a4af;
-            margin-bottom: 1em;
-            line-height: 1.3em; }
-          .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons {
-            display: flex;
-            justify-content: flex-start; }
-            .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button {
-              border-radius: .2em;
-              margin: 0 .3em;
-              height: 36px;
-              padding: 0 1.2em; }
-              .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button:first-child {
-                margin-left: 0; }
-              .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button:last-child {
-                margin-right: 0; }
-              .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button.confirm {
-                cursor: pointer;
-                color: white;
-                border: solid rgba(236, 29, 36, 0.5);
-                background: #ec1d24;
-                transition: background-color linear .2s; }
-                .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button.confirm:hover {
-                  background: #cf1118; }
-              .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button.cancel {
-                cursor: pointer;
-                color: #93a4af;
-                border: solid rgba(147, 164, 175, 0.5);
-                background: transparent;
-                transition: background-color linear .2s; }
-                .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button.cancel:hover {
-                  background-color: rgba(147, 164, 175, 0.1); }
-                .sk-id-attribute-box .default-wrapper .document-files .document-file .delete-dialog .buttons button.cancel:not(:hover) {
-                  border-color: transparent; }
-    .sk-id-attribute-box .default-wrapper .section-title {
-      color: white;
-      font-weight: 500;
-      font-size: 18px;
-      font-family: ProximaNovaRegular;
-      margin: 1em 0; }
-    .sk-id-attribute-box .default-wrapper .sub-title {
-      font-family: ProximaNovaSemibold, ProximaNovaRegular;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.36;
-      color: #93b0c1; }
-    .sk-id-attribute-box .default-wrapper .transp-button {
-      cursor: pointer;
-      color: #93a4af;
-      border: solid rgba(147, 164, 175, 0.5);
-      background: transparent;
-      transition: background-color linear .2s;
-      border-width: 1px;
-      border-radius: .3em;
-      margin-left: .5em;
-      margin-right: .5em; }
-      .sk-id-attribute-box .default-wrapper .transp-button:hover {
-        background-color: rgba(147, 164, 175, 0.1); }
-
-md-dialog.add-edit-id-attributes {
-  min-width: 100%;
-  min-height: 100%;
-  background-image: linear-gradient(121deg, #1e262e, #1e262e);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center; }
-  md-dialog.add-edit-id-attributes .document-wrapper {
-    width: 760px;
-    height: 400px; }
-    md-dialog.add-edit-id-attributes .document-wrapper .name-section input {
-      border-radius: 4px;
-      background-color: #1e262e;
-      border: solid 1px #0dc7dd;
-      font-family: ProximaNovaRegular;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 2.0;
-      text-align: left;
-      color: #ffffff;
-      padding: 10px;
-      outline: none; }
-    md-dialog.add-edit-id-attributes .document-wrapper .upload-section {
-      border-radius: 4px;
-      background-color: #262f39;
-      border: solid 1px #303c49;
-      width: 100%;
-      margin-top: 20px;
-      height: 400px;
-      display: flex;
-      flex-direction: column; }
-      md-dialog.add-edit-id-attributes .document-wrapper .upload-section .title {
-        width: 100%;
-        color: white;
-        font-size: 18px;
-        padding: 40px 30px; }
-      md-dialog.add-edit-id-attributes .document-wrapper .upload-section .content {
-        display: flex;
-        flex-direction: row;
-        flex: 1; }
-        md-dialog.add-edit-id-attributes .document-wrapper .upload-section .content .section {
-          flex: 1;
-          text-align: center;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-          outline: none; }
-          md-dialog.add-edit-id-attributes .document-wrapper .upload-section .content .section .name {
-            margin-top: 46px;
-            color: white; }
-          md-dialog.add-edit-id-attributes .document-wrapper .upload-section .content .section .hint {
-            margin-top: 6px;
-            color: #8898a3; }
-        md-dialog.add-edit-id-attributes .document-wrapper .upload-section .content .gradient-divider {
-          width: 1px;
-          background-image: linear-gradient(to top, #364254 0%, rgba(54, 66, 84, 0) 100%); }
-    md-dialog.add-edit-id-attributes .document-wrapper .action-buttons {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 24px; }
-      md-dialog.add-edit-id-attributes .document-wrapper .action-buttons button {
-        width: 25%;
-        font-family: ProximaNovaRegular;
-        font-size: 16px;
-        line-height: 0.75;
-        letter-spacing: 0.7px;
-        text-align: center;
-        padding: 20px;
-        outline: none;
-        border-radius: 4px; }
-        md-dialog.add-edit-id-attributes .document-wrapper .action-buttons button.cancel {
-          border: solid 1px #93b0c1;
-          background-color: transparent;
-          color: #93b0c1; }
-        md-dialog.add-edit-id-attributes .document-wrapper .action-buttons button.save {
-          margin-left: 16px;
-          background-image: linear-gradient(to right, #2aa4f4, #05bdcf);
-          border-width: 0 !important;
-          color: white; }
-          md-dialog.add-edit-id-attributes .document-wrapper .action-buttons button.save:hover {
-            box-shadow: inset 0 0 25px 3px rgba(255, 255, 255, 0.3); }
-  md-dialog.add-edit-id-attributes .static-data-wrapper {
-    width: 760px;
-    border-radius: 4px;
-    background-color: #262f39;
-    border: solid 1px #303c49; }
-    md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form {
-      display: flex;
-      flex-direction: column;
-      padding: 20px; }
-      md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: flex-end; }
-        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button {
-          width: 144px;
-          height: 44px;
-          border-radius: 4px;
-          border: solid 1px rgba(147, 176, 193, 0.3);
-          outline: none;
-          background-color: transparent;
-          margin-right: 16px; }
-          md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .cancel-button > span {
-            width: 53px;
-            height: 12px;
-            font-family: ProximaNovaRegular;
-            font-size: 16px;
-            font-weight: normal;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 0.75;
-            letter-spacing: 0.7px;
-            text-align: center;
-            color: #93b0c1; }
-        md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button {
-          width: 144px;
-          height: 44px;
-          border-radius: 4px;
-          background-image: linear-gradient(309deg, #08bccd, #2da1f8);
-          border-color: transparent;
-          outline: none; }
-          md-dialog.add-edit-id-attributes .static-data-wrapper .static-data-form .static-data-form-buttons .save-button > span {
-            width: 42px;
-            height: 12px;
-            font-family: ProximaNovaSemibold;
-            font-size: 16px;
-            font-weight: 600;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 0.75;
-            letter-spacing: 0.7px;
-            text-align: center;
-            color: #ffffff;
-            text-transform: uppercase; }
-
 .sk-ico-item-box {
   padding: 0;
   min-width: 360px;
@@ -15980,9 +15453,13 @@ md-dialog.add-edit-id-attributes {
     padding: 0; }
   .sk-ico-details-box table {
     width: 100%; }
+    .sk-ico-details-box table tr td.one {
+      line-height: 1.25; }
   .sk-ico-details-box .amountValue {
-    font-size: 18px;
-    color: white; }
+    font-family: ProximaNovaLight;
+    font-size: 40px;
+    font-weight: 300;
+    color: #ffffff; }
   .sk-ico-details-box .label {
     font-size: 14px;
     color: #93b0c1; }
@@ -16128,6 +15605,7 @@ md-dialog.add-edit-id-attributes {
     border-top: 1px solid #303c49;
     width: 90%; }
   .user-info-box .info {
+    width: 100%;
     padding-left: 30px;
     padding-right: 30px; }
     .user-info-box .info tr td {
@@ -17806,6 +17284,7 @@ md-dialog.add-id-attribute {
       .ico-accept-terms-content-wrappper > .section > .left > .contribute md-checkbox {
         margin-bottom: 24px; }
         .ico-accept-terms-content-wrappper > .section > .left > .contribute md-checkbox .md-label {
+          padding-left: 8px;
           font-family: ProximaNovaRegular;
           font-size: 16px;
           line-height: 1.75; }

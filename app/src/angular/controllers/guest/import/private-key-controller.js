@@ -22,7 +22,9 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         
         WalletService.unlockByPrivateKey(privateKey).then((wallet) => {
             ConfigFileService.load().then((storeData) => {
-                $state.go('member.setup.view-keystore');
+                //$state.go('member.setup.view-keystore');
+                $state.go('member.dashboard.main');
+                
             });
         }).catch((error)=>{
             $log.error(error);

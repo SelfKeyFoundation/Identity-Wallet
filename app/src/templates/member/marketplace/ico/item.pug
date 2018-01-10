@@ -4,8 +4,8 @@
             sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
-        .status-container(ng-if="isSusbscribed && kycProgress", layout="row", ng-class="getDecorations().clazz") 
-            | {{getDecorations().title}}
+        .status-container(ng-if="isSusbscribed && kycProgress", layout="row", ng-class="green") 
+            | Requirements Are Approved
             span
     .ico-list-item-content-wrappper__content-section
         .main-content(layout="row")
@@ -22,7 +22,8 @@
                     span OF
                     span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
-                    button.no-outline(ng-if="kycProgress", ng-class="getActionButtonInfo().clazz", ng-click="action($event)", ng-disabled="actionInProgress")  {{getActionButtonInfo().title}}
+                    md-button.green(ng-click="gotToTokenSale($event)")
+                        span Join Token Sale
                     button.gray-button.no-outline  Website
                     button.gray-button.no-outline  Whitepaper
         hr(style="width:90%; color:#303c49")
@@ -71,4 +72,4 @@
 
         hr(style="width:90%; color:#303c49")
 
-        sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallbacks")
+        sk-kyc-requirements-box(kyc-info="kycInfo")
