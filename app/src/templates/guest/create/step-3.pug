@@ -1,0 +1,17 @@
+.header
+    span.none-select-text Save Your Keystore File
+form.content(layout="column", style="padding: 24px;")
+    
+    md-input-container.sk-input-box.no-error-spacer
+        label Your Public Key
+        input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
+
+    .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="backupKeystore($event)")
+        span(style="color: #fff") Backup your keystore file (UTC / JSON)
+
+    span.sk-text Do not lose it! It cannot be recovered if you lose it.
+    span.sk-text Do not share it! Your funds will be stolen if you use this file on a malicious/phishing site.
+    span.sk-text Make a backup! Secure it like the millions of dollars it may one day be worth.
+
+    .sk-button.orange-blue(style="margin: 24px 0 12px 0;", ui-sref="guest.create.step-4")
+        span(style="color: #fff") I understand, continue

@@ -1,0 +1,44 @@
+.dashboard-content-wrappper(layout="column", layout-align="start center")
+
+    // header
+    .dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
+        h2.proxima.white SelfKey Dashboard
+
+    // balances
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-token-box(symbol="qey", style="height: 216px;")
+        sk-token-box(symbol="eth", style="height: 216px;")
+        sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
+
+    // my crypto
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.sk-my-cryptos-box
+            .header(layout="row")
+                span(flex) My Crypto
+                //button.sk-icon-button(ng-click="$root.openAddCustomTokenDialog($event)")
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-hide="$root.totalBalanceInUsd <= 0")
+                    span Get KEY
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+            .sk-horizontal-devider
+            sk-circle-pie-chart(data="pieChart", ng-hide="$root.totalBalanceInUsd <= 0")
+            .get-key(ng-show="$root.totalBalanceInUsd <= 0", ng-click="$root.goToSelfkeyIco($event)")
+                sk-icon(icon="empty-plus", size-class="icon-size-20x20")
+                span Get KEY
+
+    // alerts
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-action-logs-box(title="alerts", max-notifications="5")
+        
+    // reminders
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-reminders-box(title="reminders")
+
+    // transactions
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .transactions-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+            .sk-horizontal-devider(style="margin-top: 20px;")
+
+            span(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 300; color: #93b0c1; margin-top: 30px;") No transactions yet.

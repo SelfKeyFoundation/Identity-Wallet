@@ -1,0 +1,299 @@
+.wallet-manage-token-wrappper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    
+    .header-content {
+        background-color: #262f39;
+        border: solid 1px #303c49;
+        border-radius: 4px;
+        width: 760px;
+        height: 412px;
+        padding: 30px;
+        >hr {
+            color: #303c49;
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #303c49;
+            width: 100%;
+            margin-top: 24px;
+        }
+        .logo-section {
+            .logo-text {
+                color: #ffffff;
+                display: inline-grid;
+                margin-left: 12px;
+                margin-top: 8px;
+                .text {
+                    width: 77px;
+                    height: 22px;
+                    font-size: 18px;
+                    align: left;
+                    color: #ffffff;
+                    font-family: ProximaNovaRegular;
+                }
+                .initial {
+                    font-family: ProximaNovaRegular;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 1px;
+                    text-align: left;
+                    font-size: 14px;
+                    width: 28px;
+                    height: 17px;
+                    opacity: 0.7;
+                }
+            }
+        }
+        .price-section {
+            margin-top: 20px;
+            display: inline-grid;
+            .main-price {
+                font-family: ProximaNovaLight;
+                font-size: 40px;
+                font-weight: 300;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #ffffff;
+                width: 121px;
+                height: 48px;
+            }
+            .secondary-price {
+                font-family: ProximaNovaRegular;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #93b0c1;
+                margin-top: 7px;
+                width: 80px;
+                height: 17px;
+            }
+        }
+        .coin-address-section {
+            margin-top: 30px;
+            .your-address {
+                font-family: ProximaNovaRegular;
+                font-size: 16px;
+                font-weight: normal;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: 1.25;
+                letter-spacing: normal;
+                text-align: left;
+                color: #ffffff;
+                width: 328px;
+                height: 20px;
+            }
+            .generated-address {
+                margin-top: 2px;
+                .address {
+                    font-family: ProximaNovaMedium;
+                    font-size: 14px;
+                    font-weight: 500;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #93b0c1;
+                    width: 328px;
+                    height: 20px;
+                }
+                .copy-button {
+                    border-radius: 4px;
+                    border: solid 1px #3b4a5a;
+                    outline: none;
+                    width: 50px;
+                    height: 24px;
+                    background-color: transparent;
+                    >span {
+                        font-family: ProximaNovaRegular;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-style: normal;
+                        font-stretch: normal;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: #93b0c1;
+                        line-height: 11px;
+                        width: 32px;
+                        height: 14px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+        .buttons-section {
+            margin-top: 36px;
+            .action-button {
+                width: 190px;
+                height: 50px;
+                border-radius: 4px;
+                box-shadow: 0 2px 2px 0 #15222e;
+                border: 1px solid #0dc7dd;
+                border-image-slice: 1;
+                background-color: transparent;
+                outline: none;
+                .receive {
+                    font-family: ProximaNovaSemibold;
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.5;
+                    letter-spacing: 0.7px;
+                    text-align: center;
+                    color: #0dc7dd;
+                    width: 69px;
+                    height: 24px;
+                    margin-top: 10px;
+                }
+                .send {
+                    width: 45px;
+                    height: 24px;
+                    font-family: ProximaNovaSemibold;
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.5;
+                    letter-spacing: 0.7px;
+                    text-align: center;
+                    color: #0dc7dd;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+    
+    .body-content {
+        background-color: #262f39;
+        border: solid 1px #303c49;
+        padding: 30px;
+        border-radius: 4px;
+        width: 760px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .activity-text {
+            font-family: ProximaNovaRegular;
+            font-size: 18px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #ffffff;
+            width: 59px;
+            height: 22px;
+        }
+        .list {
+            margin-top: 20px;
+            .list-item {
+                padding: 6px 0;
+                >hr {
+                    color: #303c49;
+                    display: block;
+                    height: 1px;
+                    border: 0;
+                    border-top: 1px solid #303c49;
+                    width: 100%;
+                    margin: 36px 0;
+                }
+                .item-container {
+                    position: relative;
+                    .date {
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        font-weight: 500;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: normal;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: #93a4af;
+                        display: inline-grid;
+                        text-align: center;
+                        >span {
+                            font-size: 18px;
+                            font-family: ProximaNovaRegular;
+                            font-size: 18px;
+                            font-weight: normal;
+                            font-style: normal;
+                            font-stretch: normal;
+                            line-height: normal;
+                            letter-spacing: normal;
+                            text-align: center;
+                            width: 100%;
+                        }
+                    }
+                    .sent-receive {
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        font-weight: 600;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 2em;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: #ffffff;
+                        margin-left: 20px;
+                    }
+                    .sent-receive-text {
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        font-weight: 500;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: normal;
+                        letter-spacing: normal;
+                        text-align: left;
+                        margin-left: 9px;
+                        color: #ffffff;
+                        line-height: 2em;
+                        max-width: 60%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        &.aqua-blue {
+                            color: #0dc7dd;
+                        }
+                        &.squash {
+                            color: #f5a623;
+                        }
+                    }
+                    .coin-change {
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        font-weight: 500;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 2em;
+                        letter-spacing: normal;
+                        text-align: right;
+                        color: #ffffff;
+                        position: absolute;
+                        right: 0;
+                        &.aqua-blue {
+                            color: #0dc7dd;
+                        }
+                        &.squash {
+                            color: #f5a623;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

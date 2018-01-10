@@ -1,0 +1,88 @@
+.sk-input-box {
+    &.no-error-spacer {
+        .md-errors-spacer {
+            display: none;
+        }
+    }
+    >label {
+        color: #ffffff;
+        opacity: 0.5;
+        margin-left: 21px;
+        padding-left: 0;
+        line-height: 12px;
+        font-family: ProximaNovaSemibold;
+        top: -10px;
+        height: 18px;
+    }
+    >input {
+        height: 44px;
+        border-radius: 4px;
+        width: 320px;
+        color: #fff;
+        background-color: #1e262e;
+        border: solid 1px #384656;
+        font-family: ProximaNovaSemibold;
+        font-size: 14px;
+        width: 100%;
+        padding-left: 24px;
+    }
+    &.md-input-has-value {
+        >label {
+            color: #93b0c1 !important;
+            margin-bottom: 10px;
+            font-size: 12px !important;
+            opacity: 1 !important;;
+            margin-left: 0;
+            font-family: ProximaNovaSemibold;
+            text-transform: uppercase;
+            top: -24px;
+            font-weight: 600;
+        }
+
+        >input {
+          color: #ffffff !important;
+        }
+    }
+    &.md-input-invalid {
+        &:after {
+            content: 'x';
+            top: 12px;
+            right: 20px;
+            color: #ed1c24;
+            clear: none;
+            position: absolute;
+        }
+        >input {
+            border: solid 1px #ed1c24 !important;
+            box-shadow: none;
+        }
+    }
+    &.md-input-invalid.md-input-focused {
+        &:after {
+            content: '';
+        }
+    }
+    &.md-input-focused {
+        >label {
+            margin-left: 0;
+            color: #ffffff !important;
+            text-transform: uppercase;
+            font-size: 12px;
+            opacity: 1 !important;
+            top: -24px;
+        }
+        >input {
+            border-color: transparent !important;
+            box-shadow: 0px 0px 5px 1px #0dc7dd !important;
+        }
+    }
+    &:hover {
+        >label {
+            color: #ffffff !important;
+            opacity: 0.5;
+        }
+        >input {
+            border: solid 1px #53677c !important;
+        }
+    }
+}

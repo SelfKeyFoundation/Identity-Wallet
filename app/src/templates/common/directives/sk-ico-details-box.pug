@@ -1,0 +1,59 @@
+.sk-box.sk-ico-details-box
+    .header.sk-ico-details-box__header
+        sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44")
+        span {{ico.company}}
+        span(style="font-size: 15px; margin-left: 5px;") ({{ico.category}})
+        button(ng-if="config.showSubmit")
+            span Submit
+        .status-container(ng-if="!config.showSubmit", layout="row", ng-class="{'info': type === 'info', 'requirements': type === 'requirements' }") Requirements Missing
+            span
+
+    .sk-ico-details-box__content(ng-if="type === 'requirements'")
+        .title
+            span Submit Necessary Information
+        .description.fc-white
+            p In order to join this token sale, you must submit all information required by those with this offering.
+
+        hr
+
+        sk-kyc-requirements-box(kyc-info="kycInfo", callback="kycRequirementsCallback")
+
+    .sk-ico-details-box__content(ng-if="type === 'info'")
+        .description.fc-white
+            p Sales Data
+
+        table
+            tr
+                td
+                    span.amountValue {{ico.cap.raised}}
+                    br
+                    span.label USD raised
+                td
+                    span.amountValue {{ico.cap.remaining}}
+                    br
+                    span.label BNX Remaining
+            tr
+
+        hr
+
+        table
+            tr
+                td
+                    span.label Price:  
+                    span {{ico.token.price}}
+                td
+                    span.label Min Purchase  
+                    span {{ico.restrictions.minContribution}}
+            tr
+                td
+                    span.label Hard cap: 
+                    span {{ico.cap.total}}
+                td
+                    span.label Total Supply 
+                    span {{ico.token.total}}
+
+
+
+
+        
+            
