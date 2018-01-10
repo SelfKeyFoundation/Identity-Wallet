@@ -24,6 +24,7 @@
 		"bignumber.js": "4.1.0",
 		"camelcase": "4.1.0",
 		"crypto": "1.0.1",
+		"decompress": "4.2.0",
 		"deskmetrics": "2.3.0-rc7",
 		"electron": "1.7.5",
 		"electron-compile": "6.4.2",

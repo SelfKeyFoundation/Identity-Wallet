@@ -1,5 +1,8 @@
 'use strict';
 
+//wallets[publicKey].data.idAttributes
+//userDataDirectory/documents
+
 const path = require('path');
 const url = require('url');
 const electron = require('electron');

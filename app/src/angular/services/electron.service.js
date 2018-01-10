@@ -33,6 +33,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
       return makeCall('saveDataStore', { data: data });
     }
 
+    this.importKYCIdentity = function(file) {
+      return makeCall('importKYCIdentity', { file : file});
+    }
+
     /**
      * 
      */

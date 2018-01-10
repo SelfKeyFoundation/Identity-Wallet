@@ -1,7 +1,19 @@
-function MemberSetupChooseController($rootScope, $scope, $log) {
+function MemberSetupChooseController($rootScope, $scope, $log, ElectronService) {
     'ngInject'
 
-    $log.info('MemberSetupChooseController', $rootScope.wallet);
+
+
+    $scope.importIdentity = () => {
+
+        let promise = ElectronService.openFileSelectDialog();
+        promise.then((file) => {
+            console.log(file);
+            ElectronService.importKYCIdentity(file).then(function(resp){
+                console.log(resp)
+            })
+        });
+    }
+
 
 };
 

@@ -10,6 +10,8 @@ const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
+const decompress = require('decompress');
+const os = require('os');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
@@ -116,6 +118,26 @@ module.exports = function (app) {
 
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
 	}
+
+	controller.prototype.importKYCIdentity = function(event, actionId, actionName, args){
+		console.log(event, actionId, actionName, args)
+		decompress(args.file.path, os.tmpdir()).then(files => {
+			const documents = files.filter(function(file){
+				if(file.path=="kycprocess.json"){
+					return false;
+				}
+				return true;
+			})
+
+			
+		}).catch(function(err){
+			console.log(1111111111111111111)
+			console.log( err)
+			console.log(1111111111111111111)
+		});
+
+	}
+
 
 	// TODO - ??
 	controller.prototype.createDirectory = function (event, actionId, actionName, args) {
