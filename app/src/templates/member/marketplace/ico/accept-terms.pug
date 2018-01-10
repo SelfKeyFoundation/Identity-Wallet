@@ -16,7 +16,7 @@
                             md-checkbox(flex, ng-model="terms['1']") Check here to indicate that you have read the Whitepaper.
                             md-checkbox(flex, ng-model="terms['2']") Check here to indicate that you have read,understand and agree to the Terms &  Contitions for token Sale. By checking box, you agree that you are legally bound by such Terms and Coonditions
                             md-checkbox(flex, ng-model="terms['3']") Check here to indicate you agree to sending all your  SelfKey Identity Wallet Attributes listed here to ICO
-                        md-button.blue(ng-click="sendEth($event)", style="width: 230px;", ng-disabled="!terms['1'] || terms['2'] || terms['3']")
+                        md-button.blue(ng-click="sendEth($event)", style="width: 230px;", ng-disabled="!terms['1'] || !terms['2'] || !terms['3']")
                             span Send Eth
 
         .right
