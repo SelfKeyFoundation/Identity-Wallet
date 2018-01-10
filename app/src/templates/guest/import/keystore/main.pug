@@ -4,12 +4,12 @@ div(style="height: 100%; padding-left: 40px;", layout="column", layout-align="ce
         md-select.sk-select(ng-model="userInput.selectedPublicKey")
             md-option(ng-value="key", ng-repeat="key in publicKeyList") {{key}}
 
-    md-button.gray(style="width: 100%;", ng-click="selectKystoreFile($event)", ng-if="type === 'import'")
-        span Import Keystore File
+    md-button.gray(style="width: 100%; margin: 18px 0;", ng-click="selectKystoreFile($event)", ng-if="type === 'import'")
+        span {{ userInput.selectedFilePath ? 'Keystore is selected' : 'Select Keystore File' }}
 
     md-input-container.sk-input-box(style="width: 100%;")
         label Decrypt wallet using password
-        input(type="text", name="password", ng-model="userInput.password")
+        input(type="password", name="password", ng-model="userInput.password")
     
-    md-button.blue(style="width: 100%;", ng-click="unlockWallet($event)")
-        span unlock
+    md-button.blue(style="width: 100%;", ng-click="unlock($event)", ng-disabled="isUnlocking")
+        span {{ isUnlocking ? 'Please wait...' : 'unlock' }}

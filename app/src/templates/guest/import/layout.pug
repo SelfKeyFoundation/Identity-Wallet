@@ -12,7 +12,7 @@
             .content-wrapper(layout="row", style="margin-top: 50px;")
                 .left(style="width: 340px;")
                     span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
-                    div(style="margin-top: 30px;")
+                    div(style="margin-top: 30px; width: 200px;")
                         md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
                             md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
                             md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select

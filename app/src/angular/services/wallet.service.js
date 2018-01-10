@@ -49,7 +49,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
           $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
 
           defer.resolve(wallet);
-        }else{
+        } else {
           defer.reject("no data in resp");
         }
       }).catch((error) => {
@@ -81,7 +81,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
       let promise = ElectronService.importEtherKeystoreFile(filePath);
       promise.then((data) => {
         wallet = new Wallet(data.privateKey, data.publicKey);
-        
+
         TokenService.init();
 
         $rootScope.wallet = wallet;
@@ -111,6 +111,53 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         defer.resolve(wallet);
       }).catch((error) => {
         defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+      });
+
+      return defer.promise;
+    }
+
+    unlockByFilePath(filePath, password) {
+      let defer = $q.defer();
+
+      let importPromise = ElectronService.importEtherKeystoreFile(filePath);
+      importPromise.then((response) => {
+
+        console.log("????? >>>>>>>>", response);
+
+        let promise = ElectronService.unlockEtherKeystoreObject(response.keystoreObject, password);
+        promise.then((data) => {
+          wallet = new Wallet(data.privateKey, data.publicKey);
+
+          $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
+          this.loadBalance();
+
+          $rootScope.wallet = wallet;
+
+          defer.resolve(wallet);
+        }).catch((error) => {
+          defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+        });
+      }).catch((error) => {
+        defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+      });
+
+      return defer.promise;
+    }
+
+    unlockByPrivateKey(privateKey) {
+      let defer = $q.defer();
+
+      let importPromise = ElectronService.importEtherPrivateKey(privateKey);
+      importPromise.then((data) => {
+        wallet = new Wallet(data.privateKey, data.publicKey);
+        $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
+        this.loadBalance();
+
+        $rootScope.wallet = wallet;
+
+        defer.resolve(wallet);
+      }).catch((error) => {
+        defer.reject("ERR_UNLOCK_PRIVATE_KEY");
       });
 
       return defer.promise;

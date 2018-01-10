@@ -4,14 +4,22 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
     $log.info('GuestImportPrivateKeyController');
     $rootScope.wallet = null;
 
-    $scope.selectKystoreJsonFile = (event) => {
-        // TODO
-        WalletService.importUsingKeystoreFileDialog().then((wallet) => {
+    $scope.userInput = {
+        privateKey: null
+    }
+
+    $scope.unlock = (event, theForm) => {
+        if(!theForm.$valid) return;
+
+        let privateKey = "0x" + $scope.userInput.privateKey;
+        WalletService.unlockByPrivateKey(privateKey).then((wallet) => {
             ConfigFileService.load().then((storeData) => {
-                $log.info("storeData", storeData);
-                $rootScope.wallet = wallet;
-                $log.info(wallet);
+                $state.go('member.setup.view-keystore');
             });
+        }).catch((error)=>{
+            $log.error(error);
+            theForm.privateKey.$setValidity("required", true);
+            theForm.privateKey.$setValidity("badPrivateKey", false);
         });
     }
 

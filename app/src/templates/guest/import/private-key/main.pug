@@ -1,1 +1,10 @@
-h1 Private Key
+form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column", layout-align="center center")
+    
+    md-input-container.sk-input-box(style="width: 100%;")
+        label Enter your private key
+        input(type="text", name="privateKey", ng-model="userInput.privateKey", ng-required="true")
+        div(ng-messages="theForm.privateKey.$error")
+            div(ng-message="theForm.privateKey.$error.required") {{ theForm.privateKey.$error.badPrivateKey ? 'Incorrect private key' : 'Required!' }}
+            
+    md-button.blue(style="width: 100%;", ng-click="unlock($event, theForm)", ng-disabled="isUnlocking")
+        span {{ isUnlocking ? 'Please wait...' : 'unlock' }}
