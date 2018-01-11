@@ -15175,7 +15175,8 @@ md-content {
   width: 36px;
   height: 36px;
   object-fit: contain;
-  font-family: monospace !important; }
+  font-family: monospace !important;
+  outline: none; }
   .sk-icon > img {
     width: 36px;
     height: 36px; }
@@ -16431,7 +16432,8 @@ md-dialog.receive-token {
     height: 546px;
     border-radius: 4px;
     background-color: #262f39;
-    border: solid 1px #303c49; }
+    border: solid 1px #303c49;
+    position: relative; }
     md-dialog.receive-token .receive-token-wrapper .receive-token-logo {
       margin-top: -25px; }
       md-dialog.receive-token .receive-token-wrapper .receive-token-logo > .sk-icon {
