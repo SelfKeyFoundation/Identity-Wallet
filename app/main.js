@@ -73,7 +73,9 @@ function handleSquirrelEvent() {
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  electron.app.quit();
+    // app.quit() is the source of all our problems,
+    // cf. https://github.com/itchio/itch/issues/202
+    process.exit(0)
 }
 
 if (!handleSquirrelEvent()) {
