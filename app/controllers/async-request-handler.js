@@ -8,7 +8,7 @@ const keythereum = require('../extended_modules/keythereum');
 const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
-const fs = require('fs');
+const fs = require('fs-extra');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
@@ -120,20 +120,140 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.importKYCIdentity = function(event, actionId, actionName, args){
-		console.log(event, actionId, actionName, args)
 		decompress(args.file.path, os.tmpdir()).then(files => {
-			const documents = files.filter(function(file){
+			let documentFiles = {};
+
+			//searching for documents
+			files.forEach(function(file){
 				if(file.path=="kycprocess.json"){
 					return false;
 				}
-				return true;
+				documentFiles[file.path] = file;
+			});
+			
+			
+			//searching for the json file
+			const jsonFile = files.find(function(file){
+				if(file.path=="kycprocess.json"){
+					return true;
+				}
+				return false;
+			});
+
+
+			const json = JSON.parse(jsonFile.data.toString('utf8'));
+			let requirementQuestions = {};
+			let requirementDocuments = {};
+			let ethAddressRequirementId = "";
+
+			//get all required uploads
+			json.requirements.uploads.forEach(function(upload){
+				requirementDocuments[upload._id] = upload;
 			})
 
+			//get all required questions
+			json.requirements.questions.forEach(function(question){
+				//if the question is ethereum address then save it into the selarate variable
+				if(question.tokenSale.ethAddress){
+					ethAddressRequirementId = question._id;
+				}else{
+					requirementQuestions[question._id] = question;
+				}
+				
+			})
+
+			let etherAddress = "";
+			let attributes = {};
 			
+			//check for answers on the quesitons
+			json.escrow.answers.forEach(function(answer){	
+				//if re requirement is the ether address then save answer to the separate variable
+				if(answer.requirementId==ethAddressRequirementId){					
+					etherAddress = answer.answer[0];
+				}else if(requirementQuestions[answer.requirementId]){
+					let questionRequirement = requirementQuestions[answer.requirementId];
+					let idAttribute = questionRequirement.attributeType;
+					if(!idAttribute){
+						return;
+					}
+					
+					if(!attributes[idAttribute]){
+						attributes[idAttribute] = [];
+					}
+					let obj = {
+						isDoc: false,
+						value : answer.answer[0]
+						
+					};
+					attributes[idAttribute].push(obj);
+				}
+			})
+			let fileDir = userDataDirectoryPath + "/documents/" + etherAddress + "/";
+			
+
+			//loop through the uploaded documents
+			json.escrow.documents.forEach(function(document){
+				let uploadRequirements = requirementDocuments[document.requirementId];
+				let idAttribute = uploadRequirements.attributeType;
+				//if doc is removed or does not have idAttribute do nothing
+				if(document.doc.removed || !idAttribute){
+					return;
+				}
+
+				if(!attributes[idAttribute]){
+					attributes[idAttribute] = [];
+				}
+
+
+				if(requirementDocuments[document.requirementId]){
+					document.doc.files.forEach(function(file){
+						let filePath = fileDir + file.fileName;
+						let obj = {
+							isDoc: true,
+							name : file.fileName,
+							contentType : file.contentType,
+							value : filePath,
+							addition : {
+								selfie : uploadRequirements.selfie,
+								ifEidIsSkipped : uploadRequirements.ifEidIsSkipped,
+								signature : uploadRequirements.signature,
+								optional : uploadRequirements.optional
+							}
+						};
+						//ensure the directory exists and save the file
+						fs.ensureDirSync(fileDir);
+						fs.writeFileSync(filePath, documentFiles[file.fileName].data);
+						attributes[idAttribute].push(obj);
+					});
+				}
+			})
+
+
+			attributes.email = [{
+				isDoc: false,
+				value : json.user.email
+			}];
+
+			if(json.user.middleName){
+				attributes.name = [{
+					isDoc: false,
+					value : json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
+				}]
+			}else{
+				attributes.name = [{
+					isDoc: false,
+					value : json.user.firstName + " " + json.user.lastName
+				}]
+			}
+
+			attributes.public_key = [{
+				isDoc: false,
+				value : etherAddress
+			}];
+
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, attributes);
 		}).catch(function(err){
-			console.log(1111111111111111111)
-			console.log( err)
-			console.log(1111111111111111111)
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, {});
 		});
 
 	}
