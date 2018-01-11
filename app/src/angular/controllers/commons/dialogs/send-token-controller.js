@@ -3,7 +3,7 @@
 import EthUnits from '../../../classes/eth-units';
 import EthUtils from '../../../classes/eth-utils';
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, args, Web3Service, WalletService, TokenService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, args, Web3Service, WalletService, TokenService) {
     'ngInject'
 
     $log.info("SendTokenDialogController", args);
@@ -159,6 +159,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         return EthUnits.toEther(wei, 'wei');
     };
 
+    $scope.checkTransaction = (event) => {
+        if (!$scope.txHex) return;
+
+        $log.info($scope.txHex);
+        $window.open("https://ropsten.etherscan.io/tx/" + $scope.txHex);
+        // https://ropsten.etherscan.io/tx/0xc49235af0c0431f0d6177a7d087f93fa6d1b0603d13c05877d2b65c5bfa966d8
+    }
+
     /**
      * 
      */
@@ -245,11 +253,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             )
 
             txGenPromise.then((signedHex) => {
-                console.log(">>>> signedHex >>>>>", signedHex);
-
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {
-                    console.log(">>>> sendPromise >>>>>", resp);
                     $scope.txHex = resp.transactionHash;
                     startTxCheck();
                     $scope.viewStates.step = 'transaction-status';
@@ -295,14 +300,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 $scope.backgroundProcessStatuses.checkingTransaction = false;
                 $scope.viewStates.showConfirmButtons = false;
         }
-
     }
 
     function getBalanceInUsd(balance) {
         console.log(balance, $scope.infoData.usdPerUnit);
         return (Number(balance) * Number($scope.infoData.usdPerUnit));
     }
-    
     
     /**
      * 
