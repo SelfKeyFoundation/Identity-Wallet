@@ -32,6 +32,9 @@ function SkCirclePieChartDirective() {
             });
 
             function drawChart() {
+                let container = document.getElementById('chart');
+                if(!container) return;
+
                 let dataItems = [];
                 let colors = [];
                 scope.data.items.forEach((item, index) => {
@@ -63,7 +66,7 @@ function SkCirclePieChartDirective() {
                     }
                 };
 
-                let chart = new google.visualization.PieChart(document.getElementById('chart'));
+                let chart = new google.visualization.PieChart(container);
 
                 scope.chartIsReady = false;
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {

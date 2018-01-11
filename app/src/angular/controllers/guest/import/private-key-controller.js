@@ -8,6 +8,10 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         privateKey: null
     }
 
+    $scope.$watch('userInput.privateKey', (newVal, oldVal) => {
+        $scope.theForm.privateKey.$setValidity("badPrivateKey", true);
+    });
+
     $scope.isUnlocking = false;
 
     $scope.unlock = (event, theForm) => {
@@ -27,9 +31,7 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
             });
         }).catch((error)=>{
             $log.error(error);
-            theForm.privateKey.$setValidity("required", true);
             theForm.privateKey.$setValidity("badPrivateKey", false);
-
             $scope.isUnlocking = false;
         });
     }

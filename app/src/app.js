@@ -121,9 +121,6 @@ angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 /**
  * directives
  */
-import CountdownDirective from './angular/directives/countdown.directive';
-angular.module('kyc-wallet').directive('countdown', CountdownDirective);
-
 import SkLoadingDirective from './angular/directives/commons/sk-loading.directive';
 angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
@@ -247,7 +244,6 @@ import GuestKeystoreCreateStep4Controller from './angular/controllers/guest/crea
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
 
-
 /**
  * member
  */
@@ -281,9 +277,6 @@ angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberD
 /**
  * wallet
  */
-import MemberWalletMainController from './angular/controllers/member/wallet/main-controller.js';
-angular.module('kyc-wallet').controller('MemberWalletMainController', MemberWalletMainController);
-
 import ManageTokenController from './angular/controllers/member/wallet/manage-token-controller.js';
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
 
