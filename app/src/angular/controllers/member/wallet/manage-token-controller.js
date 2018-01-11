@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService) {
+function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -32,6 +32,9 @@ function ManageTokenController($rootScope, $scope, $log, $mdDialog, $stateParams
 
     $scope.balanceUsd = CommonService.numbersAfterComma(($scope.balance * $rootScope.ethUsdPrice), 2);
 
+    $scope.goToDashboard = () => {
+        $state.go('member.dashboard.main');
+    }
 };
 
 export default ManageTokenController;
