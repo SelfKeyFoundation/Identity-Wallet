@@ -94,7 +94,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
 
     syncWalletActivity() {
-
       let store = ConfigFileService.getStore();
       let walletKeys = Object.keys(store.wallets);
       let wallets = store.wallets;
@@ -200,10 +199,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                         value: transaction.value / valueDivider 
                       });
                     }
-
                   });
-
-
                 });
               }
             }
