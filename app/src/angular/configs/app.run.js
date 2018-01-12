@@ -73,10 +73,6 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
-    $rootScope.closeApp = (event) => {
-        ElectronService.closeApp();
-    }
-
     $rootScope.openInBrowser = function (url) {
         ElectronService.openBrowserWindow(url)
     }
