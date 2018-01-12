@@ -66,6 +66,20 @@ md-dialog {
                     text-align: left;
                     color: #ffffff;
                     margin-bottom: 30px;
+
+                    p{
+                        margin: 0 !important;
+                        padding-bottom: 36px;
+                    }
+                    ul{
+                        margin: 0;
+                        padding-bottom: 36px;
+                        padding-left: 16px;
+
+                        li {
+                            padding-bottom: 36px;
+                        }
+                    }
                 }
                 section {
                     .md-button {
