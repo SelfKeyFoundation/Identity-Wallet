@@ -1,4 +1,4 @@
-function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService, $window) {
+function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $sce, ConfigFileService, CommonService, SelfkeyService, $window, ElectronService) {
     'ngInject'
 
     $log.info('MemberMarketplaceIcoItemController', $stateParams);
@@ -13,7 +13,7 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
      * get ico data
      */
     $scope.ico = $stateParams.selected;
-   
+
     normaliseIcoData();
 
     $scope.kycInfo = {
@@ -24,12 +24,12 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
 
     $scope.gotToTokenSale = ($event) => {
-        $state.go('member.marketplace.ico-accept-terms', { selected: $scope.ico });
+        $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
     }
 
     $scope.OpenNewTab = function (type) {
         if (type == 'web') {
-            $window.open($scope.ico.website);
+            ElectronService.openBrowserWindow($scope.ico.website)
         } else if (type == 'pdf') {
             $window.open($scope.ico.whitepaper);
         }
