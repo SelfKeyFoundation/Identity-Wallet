@@ -104,6 +104,7 @@ class Token {
 
             if(balanceHex !== oldBalanceHex){
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
+                // TODO - scan transactions
             }
 
             defer.resolve(this);

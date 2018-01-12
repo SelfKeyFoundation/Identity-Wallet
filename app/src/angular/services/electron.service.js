@@ -3,172 +3,176 @@
 import Wallet from '../classes/wallet';
 
 function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localStorageService) {
-  'ngInject';
+	'ngInject';
 
-  if (!window.ipcRenderer) return;
+	if (!window.ipcRenderer) return;
 
-  $log.debug('ElectronService Initialized', window.ipcRenderer);
-  let ipcRenderer = window.ipcRenderer
+	$log.debug('ElectronService Initialized', window.ipcRenderer);
+	let ipcRenderer = window.ipcRenderer
 
-  let listeners = {};
+	let listeners = {};
 
-  /**
-   * 
-   */
-  let ElectronService = function () {
+	/**
+	 *
+	 */
+	let ElectronService = function () {
 
-    Wallet.ElectronService = this;
+		Wallet.ElectronService = this;
 
-    this.ipcRenderer = ipcRenderer;
+		this.ipcRenderer = ipcRenderer;
 
-    this.initDataStore = function () {
-      return makeCall('initDataStore');
-    }
+		this.openBrowserWindow = function (url) {
+			return makeCall('openBrowserWindow', {url: url});
+		}
 
-    this.readDataStore = function() {
-        return makeCall('readDataStore');
-    }
+		this.initDataStore = function () {
+			return makeCall('initDataStore');
+		}
 
-    this.saveDataStore = function(data) {
-      return makeCall('saveDataStore', { data: data });
-    }
+		this.readDataStore = function () {
+			return makeCall('readDataStore');
+		}
 
-    this.importKYCIdentity = function(file) {
-      return makeCall('importKYCIdentity', { file : file});
-    }
+		this.saveDataStore = function (data) {
+			return makeCall('saveDataStore', {data: data});
+		}
 
-    /**
-     * 
-     */
-    this.sendConfigChange = function (config) {
-      ipcRenderer.send("ON_CONFIG_CHANGE", config);
-    };
+		this.importKYCIdentity = function (file) {
+			return makeCall('importKYCIdentity', {file: file});
+		}
 
-    /**
-     * 
-     */
-    this.moveFile = function (src, dest) {
-      return makeCall('moveFile', { src: src, dest: dest, copy: true });
-    }
+		/**
+		 *
+		 */
+		this.sendConfigChange = function (config) {
+			ipcRenderer.send("ON_CONFIG_CHANGE", config);
+		};
 
-    this.checkFileStat = function (filePath) {
-      return makeCall('checkFileStat', { src: filePath });
-    }
+		/**
+		 *
+		 */
+		this.moveFile = function (src, dest) {
+			return makeCall('moveFile', {src: src, dest: dest, copy: true});
+		}
 
-    this.openDirectorySelectDialog = function () {
-      return makeCall('openDirectorySelectDialog', null);
-    }
+		this.checkFileStat = function (filePath) {
+			return makeCall('checkFileStat', {src: filePath});
+		}
 
-    this.openFileSelectDialog = function (config) {
-      return makeCall('openFileSelectDialog', config);
-    }
+		this.openDirectorySelectDialog = function () {
+			return makeCall('openDirectorySelectDialog', null);
+		}
 
-    this.signPdf = function (input, output, certificate, password) {
-      return makeCall('signPdf', {
-        input: input,
-        output: output,
-        certificate: certificate,
-        password: password
-      });
-    }
+		this.openFileSelectDialog = function (params) {
+			return makeCall('openFileSelectDialog', params);
+		}
 
-    this.generateEthereumWallet = function (password, keyStoreSrc) {
-      return makeCall('generateEthereumWallet', {
-        password: password,
-        keyStoreSrc: keyStoreSrc
-      });
-    }
+		this.signPdf = function (input, output, certificate, password) {
+			return makeCall('signPdf', {
+				input: input,
+				output: output,
+				certificate: certificate,
+				password: password
+			});
+		}
 
-    this.importEthereumWallet = function (address, password, keyStoreSrc) {
-      return makeCall('importEthereumWallet', {
-        address: address,
-        password: password,
-        keyStoreSrc: keyStoreSrc
-      });
-    }
+		this.generateEthereumWallet = function (password, keyStoreSrc) {
+			return makeCall('generateEthereumWallet', {
+				password: password,
+				keyStoreSrc: keyStoreSrc
+			});
+		}
 
-    this.importEtherKeystoreFile = function (filePath) {
-      return makeCall('importEtherKeystoreFile', {
-        filePath: filePath
-      });
-    }
+		this.importEthereumWallet = function (address, password, keyStoreSrc) {
+			return makeCall('importEthereumWallet', {
+				address: address,
+				password: password,
+				keyStoreSrc: keyStoreSrc
+			});
+		}
 
-    this.showNotification = function (title, text, options) {
-      return makeCall('showNotification', {
-        title: title,
-        text: text,
-        options: options
-      });
-    }
+		this.importEtherKeystoreFile = function (filePath) {
+			return makeCall('importEtherKeystoreFile', {
+				filePath: filePath
+			});
+		}
 
-    this.analytics = function (event, data) {
-      return makeCall('analytics', {
-        event: event,
-        data: data
-      });
-    }
+		this.showNotification = function (title, text, options) {
+			return makeCall('showNotification', {
+				title: title,
+				text: text,
+				options: options
+			});
+		}
 
-    this.unlockEtherKeystoreObject = function (keystoreObject, password) {
-      return makeCall('unlockEtherKeystoreObject', {
-        keystoreObject: keystoreObject,
-        password: password
-      });
-    }
+		this.analytics = function (event, data) {
+			return makeCall('analytics', {
+				event: event,
+				data: data
+			});
+		}
 
-    this.importEtherPrivateKey = function (privateKey) {
-      return makeCall('importEtherPrivateKey', {
-        privateKey: privateKey
-      });
-    }
+		this.unlockEtherKeystoreObject = function (keystoreObject, password) {
+			return makeCall('unlockEtherKeystoreObject', {
+				keystoreObject: keystoreObject,
+				password: password
+			});
+		}
 
-    this.closeApp = function () {
-      return makeCall('closeApp', {});
-    }
-  }
+		this.importEtherPrivateKey = function (privateKey) {
+			return makeCall('importEtherPrivateKey', {
+				privateKey: privateKey
+			});
+		}
 
-  /**
-   * Incoming Events
-   */
-  ipcRenderer.on('ON_READY', (event) => {
-    // send configs to electron app
-    console.log(event);
-    //ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
-  });
+		this.closeApp = function () {
+			return makeCall('closeApp', {});
+		}
+	}
 
-  ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
-    console.log(error, data)
-    if (error) {
-      listeners[actionId].defer.reject(error);
-    } else {
-      listeners[actionId].defer.resolve(data);
-    }
+	/**
+	 * Incoming Events
+	 */
+	ipcRenderer.on('ON_READY', (event) => {
+		// send configs to electron app
+		console.log(event);
+		//ipcRenderer.send('ON_CONFIG_CHANGE', ConfigStorageService);
+	});
 
-    $timeout(() => {
-      delete listeners[actionId];
-    }, 1000);
-  });
+	ipcRenderer.on("ON_ASYNC_REQUEST", (event, actionId, actionName, error, data) => {
+		console.log(error, data)
+		if (error) {
+			listeners[actionId].defer.reject(error);
+		} else {
+			listeners[actionId].defer.resolve(data);
+		}
 
-  /**
-   * 
-   */
-  function makeCall(actionName, data) {
-    let defer = $q.defer();
-    let id = generateId();
+		$timeout(() => {
+			delete listeners[actionId];
+		}, 1000);
+	});
 
-    listeners[id] = {
-      defer: $q.defer()
-    }
+	/**
+	 *
+	 */
+	function makeCall(actionName, data) {
+		let defer = $q.defer();
+		let id = generateId();
 
-    ipcRenderer.send("ON_ASYNC_REQUEST", id, actionName, data);
+		listeners[id] = {
+			defer: $q.defer()
+		}
 
-    return listeners[id].defer.promise;
-  }
+		ipcRenderer.send("ON_ASYNC_REQUEST", id, actionName, data);
 
-  function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
-    return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
-  }
+		return listeners[id].defer.promise;
+	}
 
-  return new ElectronService();
+	function generateId(m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) {
+		return s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
+	}
+
+	return new ElectronService();
 }
 
 export default ElectronService;

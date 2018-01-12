@@ -1,7 +1,7 @@
 {
 	"name": "Selfkey-Identity-Wallet",
 	"productName": "Selfkey-Identity-Wallet",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"description": "Identity Wallet",
 	"repository": "https://github.com/kyc-chain/wallet",
 	"main": "./app/main.js",
@@ -10,7 +10,6 @@
 		"package": "gulp && ./node_modules/.bin/electron-forge package",
 		"make": "gulp && ./node_modules/.bin/electron-forge make",
 		"startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev"
-
 	},
 	"dependencies": {
 		"@uirouter/angularjs": "1.0.6",

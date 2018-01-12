@@ -20,7 +20,6 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
              ]
         });
         promise.then((file) => {
-            console.log(file)
             if(!file){
                 return;
             }

@@ -24,8 +24,8 @@
                 .buttons-container
                     md-button.green(ng-click="gotToTokenSale($event)")
                         span Join Token Sale
-                    button.gray-button.no-outline(ng-click="OpenNewTab('web')") Website
-                    button.gray-button.no-outline(ng-click="OpenNewTab('pdf')") Whitepaper
+                    button.gray-button.no-outline(ng-click="$root.openInBrowser(ico.website)") Website
+                    button.gray-button.no-outline(ng-click="$root.openInBrowser(ico.whitepaper)") Whitepaper
         hr(style="width:90%; color:#303c49")
         .token-sale-content
             .token-sale-text Token Sale: {{ico.startDate | date:'dd MMM'}} – {{ico.endDate | date:'dd MMM'}}
