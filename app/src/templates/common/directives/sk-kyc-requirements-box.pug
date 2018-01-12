@@ -3,7 +3,7 @@
     .content(layout="row")
         .sk-list(flex="33", style="margin-top: 20px;", ng-repeat="section in sections", ng-if="requirementsListPromise.$$state.status === 1")
             .item(ng-repeat="item in section")
-                .bullet(ng-class="{'background-color-squash': !checkIfIdAttributeItemIsready(item)}")
+                .bullet
                     img(src='assets/images/icons/tick.svg', ng-if="checkIfIdAttributeItemIsready(item)")
                     span(ng-show="!checkIfIdAttributeItemIsready(item)") {{ ($parent.$index + 1) + $index + ($parent.$index * 2) }}
                 // TODO - needs rework later ... exception for now - for id attribute with selfie

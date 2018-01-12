@@ -10,14 +10,14 @@
     }
     to {
         transform-origin: center;
-        transform: rotate3d(0, 0, 1, 180deg);
+        transform: rotate3d(0, 0, 1, 90deg);
     }
 }
 
 @keyframes rotateIn {
     from {
         transform-origin: center;
-        transform: rotate3d(0, 0, 1, 180deg);
+        transform: rotate3d(0, 0, 1, 90deg);
     }
     to {
         transform-origin: center;
