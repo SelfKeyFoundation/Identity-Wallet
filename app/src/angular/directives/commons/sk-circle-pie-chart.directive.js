@@ -127,7 +127,7 @@ function SkCirclePieChartDirective() {
                 setTimeout(()=>{
                     scope.chunkedItems = chunk(scope.data.items, 3);
                     drawChart();
-                },300);
+                },400);
             }
 
         },

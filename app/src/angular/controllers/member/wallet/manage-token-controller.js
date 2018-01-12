@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService) {
+function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService, ConfigFileService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -18,6 +18,14 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     $scope.balance = 0;
     $scope.balanceUsd = 0;
 
+    $scope.walletActivity = [];
+    $scope.setWalletActivity = () => {
+        let store = ConfigFileService.getStore();
+        let data = store.wallets[$scope.publicKeyHex].data;
+        if (data.activities) {
+            $scope.walletActivity = data.activities.transactions || [];
+        }
+    }
     if ($scope.symbol === 'ETH') {
         // ETHER
         $scope.balance = Number($rootScope.wallet.balanceEth);

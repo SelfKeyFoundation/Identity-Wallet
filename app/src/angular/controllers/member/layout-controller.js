@@ -15,6 +15,8 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             $log.debug("toggle " + "right" + " is done");
         });
     }
+    
+    Web3Service.syncWalletActivity();
 
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;
