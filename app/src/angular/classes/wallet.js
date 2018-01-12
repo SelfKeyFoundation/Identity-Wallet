@@ -26,8 +26,6 @@ class Wallet {
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
-
-        console.log(">>>>>>", this);
     }
 
     getPrivateKey() {

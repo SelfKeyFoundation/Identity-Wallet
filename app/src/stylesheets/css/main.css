@@ -15694,6 +15694,26 @@ md-content {
   .keystore-layout-wrapper .sk-button {
     display: none; } }
 
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both; }
+
+@keyframes rotateOut {
+  from {
+    transform-origin: center;
+    transform: none; }
+  to {
+    transform-origin: center;
+    transform: rotate3d(0, 0, 1, 180deg); } }
+
+@keyframes rotateIn {
+  from {
+    transform-origin: center;
+    transform: rotate3d(0, 0, 1, 180deg); }
+  to {
+    transform-origin: center;
+    transform: none; } }
+
 .member-layout > .toolbar {
   background-color: #262f39;
   width: 100%;
@@ -15703,7 +15723,10 @@ md-content {
     height: 44px;
     margin-top: 16px;
     margin-bottom: 16px;
-    margin-left: 50px; }
+    margin-left: 50px;
+    cursor: pointer; }
+    .member-layout > .toolbar > .logo:hover {
+      animation-name: rotateOut; }
   .member-layout > .toolbar > .right {
     height: 76px;
     display: flex;

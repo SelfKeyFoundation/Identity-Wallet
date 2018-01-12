@@ -34,7 +34,6 @@ class IdAttribute {
     }
 
     addItem (item) {
-        console.log(">>>>", item instanceof IdAttributeItem);
         if(Object.keys(this.items).length === 0){
             this.setDefaultItem(item);
         }else{

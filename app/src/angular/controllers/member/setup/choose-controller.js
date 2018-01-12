@@ -2,38 +2,44 @@ import IdAttributeType from '../../../classes/id-attribute-type';
 import IdAttributeItem from '../../../classes/id-attribute-item';
 import IdAttribute from '../../../classes/id-attribute';
 
-function MemberSetupChooseController($rootScope, $scope, $log, ElectronService, ConfigFileService) {
+function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService) {
     'ngInject'
 
+    $scope.error = null;
 
+    let store = ConfigFileService.getStore();
 
-    $scope.importIdentity = () => {
+    checkStatus ();
+
+    $scope.importIdentity = (event) => {
+        $scope.error = null;
 
         let promise = ElectronService.openFileSelectDialog();
         promise.then((file) => {
+            let publicAddress = "0x" + $rootScope.wallet.getPublicKeyHex();
 
-            let publicAddress = $rootScope.wallet.getPublicKeyHex();
-            
             ElectronService.importKYCIdentity(file).then((resp) => {
-                console.log(resp.public_key[0].value);
-                if(publicAddress!=resp.public_key[0].value){
-                    //handle address incorrect!
+
+                publicAddress = Web3Service.constructor.web3.utils.toChecksumAddress(publicAddress);
+
+                if (publicAddress != resp.public_key[0].value) {
+                    return $scope.error = 'Incorrect ETH Address'
                 }
 
-                let store = ConfigFileService.getStore();
                 let idAttributes = {};
-                store.wallets[publicAddress] = {
-                    data : {
+
+                store.wallets[$rootScope.wallet.getPublicKeyHex()] = {
+                    data: {
                         idAttributes: idAttributes
                     }
                 }
-                
-                for(let i in resp){
+
+                for (let i in resp) {
                     let idAttributeType = ConfigFileService.getIdAttributeType(i);
                     let idAttribute = new IdAttribute(i, idAttributeType);
                     resp[i].forEach((attr) => {
                         let idAttributeItem = new IdAttributeItem();
-                        if(attr.isDoc){
+                        if (attr.isDoc) {
                             idAttributeItem.setAddition(attr.addition);
                             idAttributeItem.name = attr.name
                             idAttributeItem.contentType = attr.contentType;
@@ -42,27 +48,42 @@ function MemberSetupChooseController($rootScope, $scope, $log, ElectronService, 
                         idAttributeItem.value = attr.value;
                         idAttribute.addItem(idAttributeItem);
                     });
-                    
+
                     idAttributes[i] = idAttribute;
                 }
-                ConfigFileService.save().then((savedData)=>{
-                    console.log(savedData)
-                    //handle save store
+
+                ConfigFileService.save().then((savedData) => {
+                    goToNextStep();
                 }).catch(() => {
-                    //handle save store error
-                })
-                
-                
-
-
-
-
+                    $scope.error = "Store cannot be saved";
+                });
             }).catch(() => {
-                //handle import identity error
+                $scope.error = "Error during import KYC";
             })
         });
     }
 
+    /**
+     * 
+     */
+    function checkStatus () {
+        /**
+         * 
+         */
+        let walletStore = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+
+        if (walletStore.data && walletStore.data.idAttributes && Object.keys(walletStore.data.idAttributes).length > 0) {
+            goToNextStep();
+        } 
+    }
+
+    function goToNextStep() {
+        if (store.setup.icoAdsShown) {
+            $state.go('member.dashboard.main');
+        } else {
+            $state.go('member.setup.completed');
+        }
+    }
 
 };
 

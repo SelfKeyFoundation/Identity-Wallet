@@ -14,8 +14,9 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();
     $scope.name = temporaryMap[$scope.symbol];
-
+    
     $scope.balance = 0;
+    $scope.balanceUsd = 0;
 
     $scope.walletActivity = [];
     $scope.setWalletActivity = () => {
@@ -26,18 +27,17 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
         }
     }
     if ($scope.symbol === 'ETH') {
-        $scope.balance = $rootScope.wallet.balanceEth;
         // ETHER
+        $scope.balance = Number($rootScope.wallet.balanceEth);
+        $scope.balanceUsd = CommonService.numbersAfterComma(($scope.balance * $rootScope.wallet.usdPerUnit), 2);
     } else {
         // TOKEN
         let promise = $scope.selectedToken.loadBalance();
         promise.then((token) => {
-            $scope.balance = token.getBalanceDecimal();
+            $scope.balance = Number(token.getBalanceDecimal());
+            $scope.balanceUsd = CommonService.numbersAfterComma(($scope.balance * token.usdPerUnit), 2);
         });
     }
-
-
-    $scope.balanceUsd = CommonService.numbersAfterComma(($scope.balance * $rootScope.ethUsdPrice), 2);
 
     $scope.goToDashboard = () => {
         $state.go('member.dashboard.main');
