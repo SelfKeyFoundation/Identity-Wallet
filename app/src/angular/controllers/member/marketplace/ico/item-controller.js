@@ -27,14 +27,6 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
     }
 
-    $scope.OpenNewTab = function (type) {
-        if (type == 'web') {
-            ElectronService.openBrowserWindow($scope.ico.website)
-        } else if (type == 'pdf') {
-            $window.open($scope.ico.whitepaper);
-        }
-    }
-
 
     /**
      *

@@ -77,8 +77,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
-    $rootScope.openHelpInBrowser = function () {
-        ElectronService.openBrowserWindow('http://help.selfkey.org/')
+    $rootScope.openInBrowser = function (url) {
+        ElectronService.openBrowserWindow(url)
     }
 
     $rootScope.openSendTokenDialog = (event, symbol) => {

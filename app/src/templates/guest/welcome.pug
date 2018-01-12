@@ -9,7 +9,7 @@
         .sk-button.outline-blue.import-button(ui-sref="guest.import.keystore({type: 'select'})")
             span.secondary RESTORE  WALLET
     .footer(layout="row", layout-align="center center")
-        .sk-icon-button(style="margin-right: 44px;" ng-click="openHelpInBrowser()")
+        .sk-icon-button(style="margin-right: 44px;" ng-click="$root.openInBrowser('http://help.selfkey.org/')")
             sk-icon(icon="help")
             span Help
         .sk-vertical-devider-1
