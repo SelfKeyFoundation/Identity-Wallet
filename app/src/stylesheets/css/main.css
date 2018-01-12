@@ -16314,6 +16314,17 @@ md-dialog.terms {
         text-align: left;
         color: #ffffff;
         margin-bottom: 30px; }
+        md-dialog.terms .main .content .textual .sub-title {
+          padding-bottom: 36px; }
+        md-dialog.terms .main .content .textual p {
+          margin: 0 !important;
+          padding-bottom: 36px; }
+        md-dialog.terms .main .content .textual ul {
+          margin: 0;
+          padding-bottom: 36px;
+          padding-left: 16px; }
+          md-dialog.terms .main .content .textual ul li {
+            padding-bottom: 36px; }
       md-dialog.terms .main .content section button {
         font-family: ProximaNovaSemibold;
         font-size: 15px;
@@ -16406,6 +16417,15 @@ md-dialog.startup-guide {
         text-align: left;
         color: #ffffff;
         margin-bottom: 30px; }
+        md-dialog.startup-guide .main .content .textual p {
+          margin: 0 !important;
+          padding-bottom: 36px; }
+        md-dialog.startup-guide .main .content .textual ul {
+          margin: 0;
+          padding-bottom: 36px;
+          padding-left: 16px; }
+          md-dialog.startup-guide .main .content .textual ul li {
+            padding-bottom: 36px; }
       md-dialog.startup-guide .main .content section .md-button {
         font-family: ProximaNovaSemibold;
         font-size: 15px;
