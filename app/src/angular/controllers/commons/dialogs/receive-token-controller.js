@@ -1,4 +1,4 @@
-function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, args, $document) {
+function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, args, $document, $window) {
     'ngInject'
 
     $scope.symbol = args.symbol;                            // key
@@ -14,6 +14,10 @@ function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, a
         copyText.select();
         document.execCommand("Copy");
         alert("Copied the text: " + copyText.value);
+    }
+
+    $scope.firePrintEvent = () =>{
+        $window.print();
     }
 };
 
