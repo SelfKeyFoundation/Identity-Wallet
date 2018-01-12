@@ -1,0 +1,22 @@
+md-dialog.add-custom-token(aira-lable="Add Custom Token")
+    sk-icon.close-btn(icon="close-button", size-class="icon-size-20x20", ng-click="cancel($event)")
+    .add-custom-token-wrapper
+        div(layout-fill, layout="column", layout-align="center center")
+            sk-icon(icon="currency", size-class="icon-size-57x65")
+            .header-text Add Custom Token
+            .sub-header-text Add ERC20 tokens to your SelfKey Wallet. you will need the token address (smart contract), symbol and decimal value.  
+
+            .sk-box.shadowed.form-container
+                .header
+                    span.none-select-text Add Token
+                form.content.input-form(name="tokenForm", layout="column")
+                    md-input-container.sk-input-box.no-error-spacer
+                        input(name="address", ng-model="userInput.address", type="text", placeholder="Contract Address", ng-required="true")
+
+                    md-input-container.sk-input-box.no-error-spacer
+                        input(name="symbol", ng-model="userInput.symbol", type="text", placeholder="Symbol", ng-required="true")
+                    
+                    md-input-container.sk-input-box.no-error-spacer
+                        input(name="decimal", ng-model="userInput.decimal", type="number", placeholder="Decimal", ng-required="true")
+                    
+                    .sk-button.add-custom-token-btn(ng-click="save($event, tokenForm)") Add custom token

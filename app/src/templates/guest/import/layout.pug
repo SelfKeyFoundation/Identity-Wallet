@@ -1,0 +1,21 @@
+.keystore-layout-wrapper(layout-fill, layout="column", layout-align="center center")
+    img(src="assets/images/icons/important.svg", alt="")
+    
+    #message-container(layout="column", layout-align="center center" style="width: 780px; height: 48px;")
+
+    .sk-box.shadowed(style="width: 780px;")
+        .header
+            span Unlock your wallet to see your address
+        .content(layout="column", style="padding: 40px;")
+            .description-wrapper
+                span(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.89; color: #ffffff;") Your Address can also be known as you Account # or your Public Key. It is what you share with people so they can send you Ether or Tokens. Find the colorful address icon. Make sure it matches your paper wallet & whenever you enter your address somewhere.
+            .content-wrapper(layout="row", style="margin-top: 50px;")
+                .left(style="width: 340px;")
+                    span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
+                    div(style="margin-top: 30px; width: 200px;")
+                        md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
+                            md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
+                            md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select
+                            md-radio-button(md-no-ink, value="privateKey") Private Key
+
+                .right(flex, ui-view="main")

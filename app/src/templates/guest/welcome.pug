@@ -1,0 +1,18 @@
+.guest-welcome-layout(layout-fill, layout="column")
+    .header
+    .content(flex, layout="column", layout-align="center center") 
+        .logo
+        .header selfkey
+        .subheader blockchain identity wallet
+        .sk-button.filled-blue.create-button(ui-sref="guest.create.step-1")
+            span.primary create new wallet
+        .sk-button.outline-blue.import-button(ui-sref="guest.import.keystore({type: 'select'})")
+            span.secondary RESTORE  WALLET
+    .footer(layout="row", layout-align="center center")
+        .sk-icon-button(style="margin-right: 44px;")
+            sk-icon(icon="help")
+            span Help
+        .sk-vertical-devider-1
+        .sk-icon-button(style="margin-left: 44px;", ng-click="closeApp($event)")
+            sk-icon(icon="quit")
+            span Quit

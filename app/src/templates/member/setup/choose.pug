@@ -1,0 +1,21 @@
+.wallet-setup(layout='column', layout-align='center center')
+    .headline(layout='column', layout-align='start start')
+        .title Setup Identity Wallet
+        .text
+            | You will need to either setup a Basic ID for your Identity Wallet or if you completed the KYC on the SelfKey.org website to
+            | join the token sale, simply upload the file we provided.
+
+    .main(layout='column', layout-align='center center')
+        .content
+            .container(layout='row', layout-align='center center')
+                sk-icon(icon='upload-1', size-class="icon-size-43x35")
+                .textual
+                    .title Upload KYC File
+                    .text
+                        | If you completed KYC on the SelfKey.org website, you were
+                        | provided with a file, which you can upload here. This file
+                        | allows you to skip the Basic ID process.
+                    .actions
+                        md-button.md-raised(ng-click="importIdentity($event)") Upload KYC File
+                    .errors(ng-if="error", style="margin-top: 16px;")
+                        span(style="color: #ed1c24; font-family: ProximaNovaRegular;") {{error}}

@@ -1,0 +1,17 @@
+.wrapper.transition-anim(layout="column", layout-fill, ui-view="main", style="height: 100vh;")
+
+md-sidenav.md-sidenav-right(md-component-id="right")
+    .sk-right-sidenav(ng-controller="MemberRightSidenavController")
+        .sk-right-sidenav__header
+            sk-icon(icon="selfkey", size-class="icon-size-39x44")
+            span(ng-click="close($event)") ✕
+
+        .sk-right-sidenav__section.section-1
+            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')") Dashboard
+
+        .sk-right-sidenav__h-divider
+
+        .sk-right-sidenav__section
+            .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.settings')", ng-click="$root.navigate($event, 'member.settings.main')") Settings
+            
+        .sk-right-sidenav__h-divider
