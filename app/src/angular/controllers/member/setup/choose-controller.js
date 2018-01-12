@@ -14,8 +14,15 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
     $scope.importIdentity = (event) => {
         $scope.error = null;
 
-        let promise = ElectronService.openFileSelectDialog();
+        let promise = ElectronService.openFileSelectDialog({
+            filters: [
+                {name: 'zip package', extensions: ['zip']}
+             ]
+        });
         promise.then((file) => {
+            if(!file){
+                return;
+            }
             let publicAddress = "0x" + $rootScope.wallet.getPublicKeyHex();
 
             ElectronService.importKYCIdentity(file).then((resp) => {
