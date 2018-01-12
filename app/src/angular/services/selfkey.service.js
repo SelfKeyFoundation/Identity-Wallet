@@ -13,9 +13,9 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
    * 
    */
   const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
-  //const KYC_BASE_URL = 'http://172.25.255.65:8080/';
-  //const KYC_BASE_URL = 'http://localhost:8080/';
-  const KYC_BASE_URL = 'https://wallet-demo-api-test.selfkey.org/';
+  //const KYC_BASE_URL = 'https://wallet-demo-api-test.selfkey.org/';
+  const KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com/';
+
 
 
   /**
@@ -161,20 +161,21 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         }).finally(() => {
           $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
 
-            // TODO !!!! check challenge to not be a contract hex !!!!
-            //web3.utils.isHex(hex)
-
-            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
-            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
-              wallet.sessionsStore[organizationId] = resp.data.token;
-              ConfigFileService.save().then(() => {
-                defer.resolve(resp.data.token);
+            if (Web3Service.constructor.web3.utils.isHex(resp.data.challenge)) {
+              defer.reject("danger_challenge_provided");
+            } else {
+              let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
+              $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+                wallet.sessionsStore[organizationId] = resp.data.token;
+                ConfigFileService.save().then(() => {
+                  defer.resolve(resp.data.token);
+                }).catch((error) => {
+                  defer.reject(error)
+                })
               }).catch((error) => {
                 defer.reject(error)
               })
-            }).catch((error) => {
-              defer.reject(error)
-            })
+            }
           }).catch((error) => {
             defer.reject(error)
           });

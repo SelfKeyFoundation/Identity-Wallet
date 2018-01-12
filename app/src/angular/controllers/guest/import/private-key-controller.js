@@ -8,6 +8,10 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         privateKey: null
     }
 
+    $scope.$watch('userInput.privateKey', (newVal, oldVal) => {
+        $scope.theForm.privateKey.$setValidity("badPrivateKey", true);
+    });
+
     $scope.isUnlocking = false;
 
     $scope.unlock = (event, theForm) => {
@@ -22,15 +26,12 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         
         WalletService.unlockByPrivateKey(privateKey).then((wallet) => {
             ConfigFileService.load().then((storeData) => {
-                //$state.go('member.setup.view-keystore');
-                $state.go('member.dashboard.main');
+                $state.go('member.setup.view-keystore');
                 
             });
         }).catch((error)=>{
             $log.error(error);
-            theForm.privateKey.$setValidity("required", true);
             theForm.privateKey.$setValidity("badPrivateKey", false);
-
             $scope.isUnlocking = false;
         });
     }

@@ -26,8 +26,6 @@ class Wallet {
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
-
-        console.log(">>>>>>", this);
     }
 
     getPrivateKey() {
@@ -65,8 +63,8 @@ class Wallet {
             if (balanceWei !== oldBalanceInWei) {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
                 if (readyToShowNotification) {
-                    console.log("SHOULD SHOW NOTIFICATION");
-                    ElectronService.showNotification('ETH Balance Changed', 'New Balance: ' + this.balanceEth)
+                    ElectronService.showNotification('ETH Balance Changed', 'New Balance: ' + this.balanceEth);
+                    // TODO - scan transactions
                 }
             }
 

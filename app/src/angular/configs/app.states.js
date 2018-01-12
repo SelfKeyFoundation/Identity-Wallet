@@ -43,11 +43,35 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                         $rootScope.primaryToken.loadBalance();
                     }
                 }, 10000); // TODO - take interval from config
+
                 defer.resolve();
             }).catch(() => {
                 $state.go('guest.error.offline');
                 defer.reject();
             });
+        }
+
+        return defer.promise;
+    }
+
+    function checkKyc($rootScope, $q, $state, ConfigFileService, TokenService, Web3Service, checkWallet) {
+        let defer = $q.defer();
+
+        let store = ConfigFileService.getStore();
+
+        /**
+         * 
+         */
+        let walletStore = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+
+        /**
+         * check kyc status
+         */
+        if (!walletStore.data || !walletStore.data.idAttributes || Object.keys(walletStore.data.idAttributes).length <= 0) {
+            $state.go('member.setup.choose');
+            defer.resolve();
+        } else {
+            defer.resolve();
         }
 
         return defer.promise;
@@ -91,7 +115,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
 
-        // create wallet
+        /**
+         * create
+         */
         .state('guest.create', {
             abstract: true,
             views: {
@@ -101,7 +127,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        // keystore create
         .state('guest.create.step-1', {
             url: '/guest/create/step-1',
             views: {
@@ -145,7 +170,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        // import wallet
+        /**
+         * import
+         */
         .state('guest.import', {
             abstract: true,
             views: {
@@ -176,19 +203,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-
-
-        // process layout
-        .state('guest.process', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'guest/process/layout.html'
-                }
-            }
-        })
-
-        // keystore
+        /**
+         * keystore
+         */
         .state('guest.keystore', {
             abstract: true,
             views: {
@@ -198,26 +215,16 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('guest.process.import-keystore', {
-            url: '/guest/process/import-keystore',
-            views: {
-                main: {
-                    templateUrl: 'guest/process/import-keystore.html',
-                    controller: 'GuestImportKeystoreController'
-                }
-            }
-        })
 
-        .state('guest.process.unlock-keystore', {
-            url: '/guest/process/unlock-keystore',
+        /**
+         * 
+         */
+        .state('guest.process', {
+            abstract: true,
             views: {
                 main: {
-                    templateUrl: 'guest/process/unlock-keystore.html',
-                    controller: 'GuestUnlockKeystoreController'
+                    templateUrl: 'guest/process/layout.html'
                 }
-            },
-            resolve: {
-                checkWallet: checkWallet
             }
         })
 
@@ -228,9 +235,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/process/view-keystore.html',
                     controller: 'GuestViewKeystoreController'
                 }
-            },
-            resolve: {
-                checkWallet: checkWallet
             }
         })
 
@@ -246,7 +250,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             resolve: {
-                checkWallet: checkWallet
+                checkWallet: checkWallet,
+                checkKyc: checkKyc
             }
         })
 
@@ -288,15 +293,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 main: {
                     templateUrl: 'member/setup/completed.html',
                     controller: 'MemberSetupCompletedController'
-                }
-            }
-        })
-
-        .state('member.setup.wallet-setup', {
-            url: '/member/setup/wallet-setup',
-            views: {
-                main: {
-                    templateUrl: 'member/setup/wallet-setup.html'
                 }
             }
         })
@@ -373,16 +369,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('member.wallet.main', {
-            url: '/member/wallet/main',
-            views: {
-                main: {
-                    templateUrl: 'member/wallet/main.html',
-                    controller: 'MemberWalletMainController'
-                }
-            }
-        })
-
         .state('member.wallet.manage-token', {
             url: '/member/wallet/token/:id/manage',
             views: {
@@ -394,9 +380,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
     $urlRouterProvider.otherwise('/guest/loading');
-
-    //$urlRouterProvider.otherwise('/member/wallet/main');
-    //$urlRouterProvider.otherwise('/member/setup/completed');
 }
 
 export default appStates;

@@ -17,14 +17,14 @@
                 td
                     div
                         sk-icon(icon="{{ userData.country_of_residency ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ userData.country_of_residency ? userData.country_of_residency : 'missing' }}
+                        span.fc-white {{ userData.country_of_residency }}
 
             tr
                 td.fc-bluey-grey Email:
                 td
                     div
                         sk-icon(icon="{{ userData.email ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ userData.email ? userData.email : 'missing' }}
+                        span.fc-white {{ userData.email }}
 
             tr(ng-if="userData.mobile")
                 td.fc-bluey-grey Mobile:
@@ -38,7 +38,7 @@
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        span.fc-white {{userData.passport}}
+                        //span.fc-white {{userData.passport}}
 
             tr(ng-if="userData.nationalId")
                 td.fc-bluey-grey National ID:

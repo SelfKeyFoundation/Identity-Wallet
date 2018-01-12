@@ -15,7 +15,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
             }
 
             let store = ConfigFileService.getStore();
-            let idAttributes = store.idAttributes;
+            let idAttributes = store.wallets[$rootScope.wallet.getPublicKeyHex()].data.idAttributes;
 
             reloadData ();
 
@@ -25,10 +25,6 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
                     scope.userData[i] = item.items[item.defaultItemId].value;
                 }    
             }
-            
-            $rootScope.$on('id-attributes-changed', (event) => {
-                reloadData();
-            });
         },
         replace: true,
         templateUrl: 'common/directives/sk-user-info-box.html'
