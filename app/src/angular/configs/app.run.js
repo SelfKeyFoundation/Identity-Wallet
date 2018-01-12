@@ -73,6 +73,10 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
+    $rootScope.openInBrowser = function (url) {
+        ElectronService.openBrowserWindow(url)
+    }
+
     $rootScope.openSendTokenDialog = (event, symbol) => {
         return $mdDialog.show({
             controller: 'SendTokenDialogController',

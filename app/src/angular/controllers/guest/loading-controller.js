@@ -16,13 +16,13 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
         $rootScope.loadingPromise = ConfigFileService.init();
         $rootScope.loadingPromise.then((storeData) => {
             $log.info("storeData", storeData);
-    
+
             let publicKeys = ConfigFileService.getPublicKeys('ks');
 
             if (publicKeys.length > 0) {
 
                 let w = storeData.wallets[publicKeys[0]];
-                
+
                 WalletService.importUsingKeystoreFilePath(w.keystoreFilePath).then((wallet) => {
                     $rootScope.wallet = wallet;
                     // go to unlock state
@@ -34,9 +34,9 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
             } else {
                 $state.go('guest.welcome');
             }
-    
+
             /**
-             * 
+             *
              */
             $rootScope.checkTermsAndConditions();
         }).catch((error) => {
