@@ -9,11 +9,13 @@ md-dialog.receive-token(aira-lable="Receive Dialog")
                 qrcode(data="{{publicKeyHex}}", size="185", background="#fff")
         .receive-token-address(layout="column")
             .address Your Ethereum Address
-            .public-key {{publicKeyHex}}
+            .public-key(id="eth-wallet-public-key") {{publicKeyHex}}
         .receive-token-icons(layout="row", layout-align="center center")
-             sk-icon(icon="copy", size-class="icon-size-36x36")
-             sk-icon(icon="gmail", size-class="icon-size-36x36")
-             sk-icon(icon="print", size-class="icon-size-36x36")
+             div(copy-to-clipboard="publicKeyHex")
+                sk-icon(icon="copy", size-class="icon-size-36x36")
+             a(href="mailto:?Subject=Rtherium%20address&body={{publicKeyHex}}", target="_top")
+                sk-icon(icon="gmail", size-class="icon-size-36x36")
+             sk-icon(icon="print", size-class="icon-size-36x36", ng-click="window.print();")
              sk-icon(icon="share", size-class="icon-size-36x36")
 
 

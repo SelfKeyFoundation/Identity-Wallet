@@ -1,0 +1,34 @@
+.copy-to-clipboard {
+  &.selection {
+    position: fixed;
+    top: -100%;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    border: none;
+  }
+}
+
+.copy-to-clipboard-msg {
+  position: absolute;
+  margin: 0 auto;
+  left: 50%;
+  bottom: 100%;
+  animation: fade-up .3s;
+  color: white;
+  overflow: visible;
+  text-align: center;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+@keyframes fade-up {
+  0% {
+    top: -1.2em;
+    opacity: 1;
+  }
+  100% {
+    top: -3em;
+    opacity: 0;
+  }
+}

@@ -1,4 +1,4 @@
-function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, args) {
+function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, args, $document) {
     'ngInject'
 
     $scope.symbol = args.symbol;                            // key
@@ -6,6 +6,14 @@ function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, a
 
     $scope.cancel = (event) => {
         $mdDialog.cancel();
+    };
+
+    $scope.copyEthAddress = () => {
+        let copyText = $document.find("#eth-wallet-public-key");
+        console.log(copyText);
+        copyText.select();
+        document.execCommand("Copy");
+        alert("Copied the text: " + copyText.value);
     }
 };
 
