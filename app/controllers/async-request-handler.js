@@ -15,8 +15,7 @@ const os = require('os');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
-	const controller = function () {
-	};
+	const controller = function() {};
 
 	const storeFileName = 'main-store.json'; // TODO
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -120,13 +119,13 @@ module.exports = function (app) {
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
 	}
 
-	controller.prototype.importKYCIdentity = function (event, actionId, actionName, args) {
+	controller.prototype.importKYCIdentity = function(event, actionId, actionName, args){
 		decompress(args.file.path, os.tmpdir()).then(files => {
 			let documentFiles = {};
 
 			//searching for documents
-			files.forEach(function (file) {
-				if (file.path == "kycprocess.json") {
+			files.forEach(function(file){
+				if(file.path=="kycprocess.json"){
 					return false;
 				}
 				documentFiles[file.path] = file;
@@ -134,8 +133,8 @@ module.exports = function (app) {
 
 
 			//searching for the json file
-			const jsonFile = files.find(function (file) {
-				if (file.path == "kycprocess.json") {
+			const jsonFile = files.find(function(file){
+				if(file.path=="kycprocess.json"){
 					return true;
 				}
 				return false;
@@ -148,16 +147,16 @@ module.exports = function (app) {
 			let ethAddressRequirementId = "";
 
 			//get all required uploads
-			json.requirements.uploads.forEach(function (upload) {
+			json.requirements.uploads.forEach(function(upload){
 				requirementDocuments[upload._id] = upload;
 			})
 
 			//get all required questions
-			json.requirements.questions.forEach(function (question) {
+			json.requirements.questions.forEach(function(question){
 				//if the question is ethereum address then save it into the selarate variable
-				if (question.tokenSale.ethAddress) {
+				if(question.tokenSale.ethAddress){
 					ethAddressRequirementId = question._id;
-				} else {
+				}else{
 					requirementQuestions[question._id] = question;
 				}
 
@@ -167,23 +166,23 @@ module.exports = function (app) {
 			let attributes = {};
 
 			//check for answers on the quesitons
-			json.escrow.answers.forEach(function (answer) {
+			json.escrow.answers.forEach(function(answer){
 				//if re requirement is the ether address then save answer to the separate variable
-				if (answer.requirementId == ethAddressRequirementId) {
+				if(answer.requirementId==ethAddressRequirementId){
 					etherAddress = answer.answer[0];
-				} else if (requirementQuestions[answer.requirementId]) {
+				}else if(requirementQuestions[answer.requirementId]){
 					let questionRequirement = requirementQuestions[answer.requirementId];
 					let idAttribute = questionRequirement.attributeType;
-					if (!idAttribute) {
+					if(!idAttribute){
 						return;
 					}
 
-					if (!attributes[idAttribute]) {
+					if(!attributes[idAttribute]){
 						attributes[idAttribute] = [];
 					}
 					let obj = {
 						isDoc: false,
-						value: answer.answer[0]
+						value : answer.answer[0]
 
 					};
 					attributes[idAttribute].push(obj);
@@ -193,32 +192,32 @@ module.exports = function (app) {
 
 
 			//loop through the uploaded documents
-			json.escrow.documents.forEach(function (document) {
+			json.escrow.documents.forEach(function(document){
 				let uploadRequirements = requirementDocuments[document.requirementId];
 				let idAttribute = uploadRequirements.attributeType;
 				//if doc is removed or does not have idAttribute do nothing
-				if (document.doc.removed || !idAttribute) {
+				if(document.doc.removed || !idAttribute){
 					return;
 				}
 
-				if (!attributes[idAttribute]) {
+				if(!attributes[idAttribute]){
 					attributes[idAttribute] = [];
 				}
 
 
-				if (requirementDocuments[document.requirementId]) {
-					document.doc.files.forEach(function (file) {
+				if(requirementDocuments[document.requirementId]){
+					document.doc.files.forEach(function(file){
 						let filePath = fileDir + file.fileName;
 						let obj = {
 							isDoc: true,
-							name: file.fileName,
-							contentType: file.contentType,
-							value: filePath,
-							addition: {
-								selfie: uploadRequirements.selfie,
-								ifEidIsSkipped: uploadRequirements.ifEidIsSkipped,
-								signature: uploadRequirements.signature,
-								optional: uploadRequirements.optional
+							name : file.fileName,
+							contentType : file.contentType,
+							value : filePath,
+							addition : {
+								selfie : uploadRequirements.selfie,
+								ifEidIsSkipped : uploadRequirements.ifEidIsSkipped,
+								signature : uploadRequirements.signature,
+								optional : uploadRequirements.optional
 							}
 						};
 						//ensure the directory exists and save the file
@@ -232,28 +231,28 @@ module.exports = function (app) {
 
 			attributes.email = [{
 				isDoc: false,
-				value: json.user.email
+				value : json.user.email
 			}];
 
-			if (json.user.middleName) {
+			if(json.user.middleName){
 				attributes.name = [{
 					isDoc: false,
-					value: json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
+					value : json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
 				}]
-			} else {
+			}else{
 				attributes.name = [{
 					isDoc: false,
-					value: json.user.firstName + " " + json.user.lastName
+					value : json.user.firstName + " " + json.user.lastName
 				}]
 			}
 
 			attributes.public_key = [{
 				isDoc: false,
-				value: etherAddress
+				value : etherAddress
 			}];
 
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, attributes);
-		}).catch(function (err) {
+		}).catch(function(err){
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, {});
 		});
 
@@ -304,22 +303,14 @@ module.exports = function (app) {
 				title: 'Choose file',
 				message: 'Choose file',
 				properties: ['openFile']
-
 			};
-			if (args) {
-				Object.assign(dialogConfig, args);
-			}
 			dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
 				if (filePaths) {
 					try {
 						const stats = fs.statSync(filePaths[0]);
 						let mimeType = mime.lookup(filePaths[0]);
 
-						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-							mimeType: mimeType,
-							path: filePaths[0],
-							size: stats.size
-						});
+						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {mimeType: mimeType, path: filePaths[0], size: stats.size});
 					} catch (e) {
 						console.log(e);
 						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
@@ -372,7 +363,7 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.generateEthereumWallet = function (event, actionId, actionName, args) {
-		const params = {keyBytes: 32, ivBytes: 16};
+		const params = { keyBytes: 32, ivBytes: 16 };
 		let dk = keythereum.create(params);
 
 		// asynchronous
@@ -413,10 +404,7 @@ module.exports = function (app) {
 			}
 
 			let privateKey = keythereum.recover(args.password, keystoreObject);
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-				publicKey: keystoreObject.address,
-				privateKey: privateKey
-			});
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, privateKey: privateKey });
 		});
 	}
 
@@ -451,19 +439,13 @@ module.exports = function (app) {
 								settings.setAll(storeData);
 							}
 
-							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-								publicKey: keystoreObject.address,
-								keystoreObject: keystoreObject
-							});
+							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, { publicKey: keystoreObject.address, keystoreObject: keystoreObject });
 						} else {
 							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
 						}
 					});
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-						publicKey: keystoreObject.address,
-						keystoreObject: keystoreObject
-					});
+					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {publicKey: keystoreObject.address, keystoreObject: keystoreObject});
 				}
 			});
 		} catch (e) {
@@ -476,11 +458,7 @@ module.exports = function (app) {
 		try {
 			let privateKey = keythereum.recover(args.password, args.keystoreObject);
 			if (privateKey) {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-					privateKey: privateKey,
-					publicKey: args.keystoreObject.address,
-					keystoreObject: args.keystoreObject
-				});
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {privateKey: privateKey, publicKey: args.keystoreObject.address, keystoreObject: args.keystoreObject});
 			} else {
 				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
 			}
