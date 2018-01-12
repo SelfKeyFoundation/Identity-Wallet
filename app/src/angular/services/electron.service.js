@@ -59,8 +59,8 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
       return makeCall('openDirectorySelectDialog', null);
     }
 
-    this.openFileSelectDialog = function (event) {
-      return makeCall('openFileSelectDialog', null);
+    this.openFileSelectDialog = function (config) {
+      return makeCall('openFileSelectDialog', config);
     }
 
     this.signPdf = function (input, output, certificate, password) {
