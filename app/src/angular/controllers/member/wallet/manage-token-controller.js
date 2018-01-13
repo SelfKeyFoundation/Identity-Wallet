@@ -26,10 +26,6 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
         if ($scope.symbol === 'ETH' && activities && activities.eth) {
             $scope.walletActivity = activities.eth.transactions || [];
         }
-
-        if (data.activities) {
-            
-        }
     }
     if ($scope.symbol === 'ETH') {
         // ETHER
