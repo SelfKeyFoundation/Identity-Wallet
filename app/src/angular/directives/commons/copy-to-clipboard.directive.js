@@ -1,6 +1,6 @@
 'use strict';
 
-function CopyToClipboardDirective($document) {
+function CopyToClipboardDirective($document,$timeout) {
     'ngInject';
     var animationDuration = 800;
 
@@ -18,7 +18,7 @@ function CopyToClipboardDirective($document) {
                 let fadeUp = angular.element('<div class="copy-to-clipboard-msg">Copied</div>');
                 $document[0].body.append(messageElement[0]);
                 element[0].append(fadeUp[0]);
-                setTimeout(() => {
+                $timeout(() => {
                     messageElement[0].remove();
                     fadeUp[0].remove();
                 }, animationDuration);
