@@ -27,6 +27,10 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
         $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
     }
 
+    $scope.goToDashboard = () => {
+        $state.go('member.dashboard.main');
+    }
+    
     /**
      *
      */
