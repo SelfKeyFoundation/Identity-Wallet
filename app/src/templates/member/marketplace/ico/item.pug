@@ -1,9 +1,10 @@
 .ico-list-item-content-wrappper
-    .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start")
+    .ico-list-item-content-wrappper__header-section(layout="row", layout-align="space-between start", style="position:relative")
         .logo(layout="row")
             sk-icon(icon="{{ico.symbol}}", size-class="icon-size-44x44", style="padding-top:4px")
             .logo-text {{ico.company}}
                 span(style="margin-left: 4px;") ({{ico.category}})
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="goToDashboard()")
         .status-container(ng-if="isSusbscribed && kycProgress", layout="row", ng-class="green") 
             | Requirements Are Approved
             span
