@@ -4,6 +4,7 @@ import Wallet from '../classes/wallet';
 import Token from '../classes/token';
 import EthUtils from '../classes/eth-utils';
 import EthUnits from '../classes/eth-units';
+import BigNumber from 'bignumber.js';
 
 import * as async from "async";
 import { setTimeout } from "timers";
@@ -94,9 +95,16 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
 
     syncWalletActivity() {
+      this.syncWalletETHActivity();
+    }
+
+    syncWalletETHActivity() {
       let store = ConfigFileService.getStore();
       let walletKeys = Object.keys(store.wallets);
       let wallets = store.wallets;
+      if (!store.tokens || !store.tokens.eth) {
+        return;
+      } 
       if (!walletKeys.length) {
         return;
       }
@@ -110,35 +118,41 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         let data = wallet.data = wallet.data || {};
         let activities = data.activities = data.activities || {};
 
+        activities.eth = activities.eth || {}; 
         //reset transactions we will calculate from saved blocks
-        activities.transactions = [];
-        activities.blocks = activities.blocks || {};
+        activities.eth.transactions = [];
+        activities.eth.blocks = activities.eth.blocks || {};
 
         //remove last block we are processing again 
-        if (activities.lastBlockNumber) {
-          delete activities.blocks[activities.lastBlockNumber];
+        if (activities.eth.lastBlockNumber) {
+          delete activities.eth.blocks[activities.eth.lastBlockNumber];
         }
       });
 
       let anyWallet = wallets[walletKeys[0]];
-      let previousLastBlockNumber = anyWallet.data.activities.lastBlockNumber;
+      let previousLastBlockNumber = anyWallet.data.activities.eth.lastBlockNumber;
 
       let updateLastBlockNumber = (lastBlockNumber) => {
         walletKeys.forEach((key) => {
           let wallet = wallets[key];
-          wallet.data.activities.lastBlockNumber = lastBlockNumber;
+          wallet.data.activities.eth.lastBlockNumber = lastBlockNumber;
         });
       };
 
       let addNewTransaction = (blockNumber, key, transaction) => {
+        let prefix = '0x';
+        let from = transaction.from ? transaction.from.toLowerCase() : null;
+        let to = transaction.to ? transaction.to.toLowerCase() : null;
 
         let wallet = wallets[key];
-        let blocks = wallet.data.activities.blocks;
+        let blocks = wallet.data.activities.eth.blocks;
+        let fullAddressHex = (prefix + key).toLowerCase();
 
-        if (key == transaction.to) {
+    
+        if (fullAddressHex == to) {
           delete transaction.to;
         }
-        if (key == transaction.from) {
+        if (fullAddressHex == from) {
           delete transaction.from;
         }
 
@@ -159,8 +173,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
           if (blockNumbersToProcess.length === 0) {
             walletKeys.forEach((key) => {
               let wallet = wallets[key];
-              let blocks = wallet.data.activities.blocks;
-              let transactions = wallet.data.activities.transactions;
+              let blocks = wallet.data.activities.eth.blocks;
+              let transactions = wallet.data.activities.eth.transactions;
 
               let blockKeys = Object.keys(blocks);
               blockKeys.forEach(blockKey => {
@@ -170,6 +184,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                   transactions.push(transaction);
                 });
               });
+
+              transactions.sort((a,b) => {
+                return b.timestamp - a.timestamp;
+              })
             });
 
             ConfigFileService.save().then((store) => {
@@ -191,12 +209,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                     let fullAddressHex = (prefix + walletKey).toLowerCase();
 
                     if (from == fullAddressHex || to == fullAddressHex) {
+                      let value = new BigNumber(new BigNumber(transaction.value).div(new BigNumber(valueDivider))).toString();
                       addNewTransaction(currentBlockNumber, walletKey, {
                         to: transaction.to,
                         from: transaction.from,
                         timestamp: blockData.timestamp, 
                         hash: transaction.hash,
-                        value: transaction.value / valueDivider 
+                        value: value  
                       });
                     }
                   });

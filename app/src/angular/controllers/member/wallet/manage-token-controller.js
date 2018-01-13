@@ -22,8 +22,13 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     $scope.setWalletActivity = () => {
         let store = ConfigFileService.getStore();
         let data = store.wallets[$scope.publicKeyHex].data;
+        let activities = data.activities;
+        if ($scope.symbol === 'ETH' && activities && activities.eth) {
+            $scope.walletActivity = activities.eth.transactions || [];
+        }
+
         if (data.activities) {
-            $scope.walletActivity = data.activities.transactions || [];
+            
         }
     }
     if ($scope.symbol === 'ETH') {

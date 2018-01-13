@@ -28,7 +28,7 @@
         .activity-text Activity
         sk-linear-progress(ng-if="!$root.walletActivityIsSynced",style="margin-top:10px;")
         div(ng-if="$root.walletActivityIsSynced", ng-init="setWalletActivity()")
-            .list(ng-repeat="activity in walletActivity")
+            .list(ng-repeat="activity in walletActivity track by $index")
                 .list-item
                     .item-container(layout="row")
                         .date {{ activity.timestamp | date:'MMM'}}
