@@ -9,27 +9,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     function getTotalBalanceInUsd() {
         return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
     }
-   
-    /*
-
-    {
-        title: 'Ethereum',
-        subTitle: 'eth',
-        value: Number($rootScope.wallet.balanceEth),
-        valueUSD: Number($rootScope.wallet.balanceInUsd),
-        color: '#9c27b0',
-        icon: 'eth'
-    }, {
-        title: 'Selfkey',
-        subTitle: 'key',
-        icon: 'key',
-        value: Number($rootScope.primaryToken.getBalanceDecimal()),
-        valueUSD: Number($rootScope.primaryToken.balanceInUsd),
-        color: '#0dc7dd'
-    }
-
-    */
-
 
     /**
      * init pie chart
@@ -61,7 +40,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
                 }
             },
             onItemClick: (item) => {
-                console.log("clicked", item);
+                $log.info("clicked", item);
             }
         },
         actions: {}
@@ -78,16 +57,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         $scope.pieChart.items[1].valueUSD = Number($rootScope.primaryToken.balanceInUsd);
 
         $scope.pieChart.draw();
-    }
-
-    function updateTokenBalance (token) {
-        for(let i in $scope.pieChart.items){
-            let item = $scope.pieChart.items[i];
-
-            if(item.subTitle === token){
-                
-            }
-        }
     }
 
     /**
