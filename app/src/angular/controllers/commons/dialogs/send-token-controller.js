@@ -146,14 +146,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $mdDialog.cancel();
     }
 
-    $scope.getReminingBalance = () => {
-        if($scope.formData.sendAmount) {
-           return Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
-        }else{
-            return $scope.infoData.totalBalance
-        }
-    }
-
     $scope.getTxFee = () => {
         let wei = Number($scope.formData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
         return EthUnits.toEther(wei, 'wei');
@@ -161,10 +153,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     $scope.checkTransaction = (event) => {
         if (!$scope.txHex) return;
-
-        $log.info($scope.txHex);
+        // TODO
         $window.open("https://ropsten.etherscan.io/tx/" + $scope.txHex);
-        // https://ropsten.etherscan.io/tx/0xc49235af0c0431f0d6177a7d087f93fa6d1b0603d13c05877d2b65c5bfa966d8
     }
 
     /**
@@ -345,19 +335,29 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
      */
     $scope.$watch('formData', (newVal, oldVal) => {
         $log.info("formData", newVal);
-        
+
+        if(newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
+            $scope.errors.sendAmount = true;
+        } else {
+            $scope.errors.sendAmount = false;
+            
+            newVal.sendAmount = Number(newVal.sendAmount);
+
+            if(Number(newVal.sendAmount) > $scope.infoData.totalBalance){
+                $scope.formData.sendAmount = $scope.infoData.totalBalance;
+            }
+
+            if(Number(newVal.sendAmount) < 0){
+                $scope.formData.sendAmount = 0;
+            }
+        }
+
         if(newVal.sendToAddressHex && (!web3Utils.isHex(newVal.sendToAddressHex) || !web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex)))){
             $scope.errors.sendToAddressHex = true;
         } else {
             $scope.errors.sendToAddressHex = false;
         }
         
-        if(newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
-            $scope.errors.sendAmount = true;
-        } else {
-            $scope.errors.sendAmount = false;
-        }
-
         if (newVal.sendAmount && isNumeric(newVal.sendAmount)){
             // remining balance
             $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
@@ -374,6 +374,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             // tx fee in USD
             $scope.infoData.txFeeInUsd = Number($scope.infoData.txFeeInEth) * Number($scope.infoData.usdPerUnit);
+            console.log(">>>>>>>>>>>>>>>", $scope.infoData.txFeeInUsd);
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount) && newVal.sendToAddressHex && web3Utils.isHex(newVal.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex))) {
