@@ -2,7 +2,7 @@
 
 function CopyToClipboardDirective($document) {
     'ngInject';
-    var animationDuration = 400;
+    var animationDuration = 800;
 
     return {
         restrict: 'A',

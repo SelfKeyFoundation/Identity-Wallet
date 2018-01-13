@@ -11,7 +11,8 @@ md-dialog.receive-token(aira-lable="Receive Dialog")
             .address Your Ethereum Address
             .public-key {{publicKeyHex}}
         .receive-token-icons(layout="row", layout-align="center center")
-             sk-icon(icon="copy", size-class="icon-size-36x36")
+             div(copy-to-clipboard="publicKeyHex")
+                sk-icon(icon="copy", size-class="icon-size-36x36" style='cursor:pointer')
              sk-icon(icon="gmail", size-class="icon-size-36x36")
              sk-icon(icon="print", size-class="icon-size-36x36")
              sk-icon(icon="share", size-class="icon-size-36x36")

@@ -15,7 +15,7 @@
             .generated-address(layout="row")
                 .address {{publicKeyHex}}
                 button.copy-button
-                    span COPY
+                    span(copy-to-clipboard="publicKeyHex") COPY
         hr(style="margin-top:32px")
         .buttons-section(layout="row")
             button.action-button(layout="row", ng-click="$root.openReceiveTokenDialog($event, {symbol: symbol, publicKeyHex: publicKeyHex})")
