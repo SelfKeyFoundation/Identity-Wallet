@@ -181,6 +181,9 @@ angular.module('kyc-wallet').directive('skActionLogsBox', SkActionLogsBoxDirecti
 import ScrollToEndDirective from './angular/directives/commons/scroll-to-end.directive';
 angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 
+import CopyToClipboardDirective from './angular/directives/commons/copy-to-clipboard.directive';
+angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
+
 
 /**
  * controllers
