@@ -58,23 +58,6 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
       }
     }
 
-    //
-    showSendTokenDialog(token) {
-      // temporary
-      console.log(token);
-      if (token !== "ETH") return;
-
-      const startFragment = '<sk-send-token';
-      const endFragment = '></sk-send-token>';
-      let middleFrament = ' token="' + token + '"';
-
-      let html = startFragment + middleFrament + endFragment;
-      let el = angular.element(html);
-      let dir = $compile(el)($rootScope);
-
-      angular.element(document.body).append(dir);
-    }
-
     generateId() {
       let m = Math;
       let d = Date;

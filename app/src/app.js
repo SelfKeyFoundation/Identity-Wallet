@@ -56,14 +56,14 @@ window.app = angular.module('kyc-wallet', requires);
 const AppConfigConstant = require('../config');
 
 let devModeStarted = false;
-if(process.argv.length > 2) {
-	if(process.argv[2] === 'dev') {
-		devModeStarted = true;
-	}
+if (process.argv.length > 2) {
+  if (process.argv[2] === 'dev') {
+    devModeStarted = true;
+  }
 }
 let extraConfig = AppConfigConstant.production;
-if(devModeStarted) {
-	extraConfig = AppConfigConstant.default;
+if (devModeStarted) {
+  extraConfig = AppConfigConstant.default;
 }
 const config = Object.assign(AppConfigConstant.common, extraConfig);
 angular.module('kyc-wallet').constant('CONFIG', config);

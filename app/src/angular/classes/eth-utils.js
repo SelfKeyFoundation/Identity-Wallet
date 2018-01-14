@@ -8,7 +8,6 @@ import EthUnits from './eth-units.js';
 ethUtil.crypto = crypto;
 
 class EthUtils {
-    static gasAdjustment () { return 21; }
 
     constructor() {
     }
@@ -26,7 +25,6 @@ class EthUtils {
     }
 
     static signChallenge(challenge, privateKeyHex) {
-        console.log("signChallenge", challenge, privateKeyHex)
         const hash = ethUtil.sha256(Buffer.from(challenge, 'hex'));
         let msgHash = ethUtil.hashPersonalMessage(Buffer.from(hash, 'hex'));
         let signature = ethUtil.ecsign(msgHash, Buffer.from(privateKeyHex, 'hex'));
@@ -74,11 +72,6 @@ class EthUtils {
         hex = EthUtils.sanitizeHex(hex);
         hex = hex.substring(2).replace(/^0+/, '');
         return '0x' + hex;
-    }
-
-    static addTinyMoreToGas (hex) {
-        hex = EthUtils.sanitizeHex(hex);
-        return new BigNumber(EthUtils.gasAdjustment * EthUnits.getValueOfUnit('gwei')).toString(16);
     }
 
     static decimalToHex (dec) {
