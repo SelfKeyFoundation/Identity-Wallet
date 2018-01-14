@@ -15389,6 +15389,63 @@ md-content {
         .sk-action-logs-box .item .header .text span {
           margin-left: 10px; }
 
+.sk-ico-item-box {
+  padding: 0;
+  min-width: 360px;
+  display: flex;
+  flex-direction: column;
+  min-height: 330px; }
+  .sk-ico-item-box .sk-ico-item-box__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: inherit;
+    padding: 16px 30px; }
+    .sk-ico-item-box .sk-ico-item-box__header span {
+      font-family: ProximaNovaRegular;
+      font-size: 20px;
+      line-height: 1.8;
+      color: #ffffff;
+      margin-left: 16px; }
+    .sk-ico-item-box .sk-ico-item-box__header .dot {
+      height: 14px;
+      width: 14px;
+      border-radius: 50%; }
+      .sk-ico-item-box .sk-ico-item-box__header .dot.active {
+        background-color: #1ed43b; }
+      .sk-ico-item-box .sk-ico-item-box__header .dot.inactive {
+        background-color: #d9534f; }
+      .sk-ico-item-box .sk-ico-item-box__header .dot.upcoming {
+        background-color: #f0ad4e; }
+  .sk-ico-item-box .sk-ico-item-box__content {
+    padding: 30px; }
+    .sk-ico-item-box .sk-ico-item-box__content table {
+      font-family: ProximaNovaRegular;
+      font-size: 16px;
+      line-height: 2.25;
+      color: #ffffff; }
+    .sk-ico-item-box .sk-ico-item-box__content .description p {
+      font-weight: 400;
+      letter-spacing: 0.010em;
+      line-height: 1.6em;
+      margin: 0.8em 0 1.6em; }
+    .sk-ico-item-box .sk-ico-item-box__content .price {
+      font-size: 15px;
+      color: white; }
+  .sk-ico-item-box .sk-ico-item-box__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 30px 30px 30px; }
+    .sk-ico-item-box .sk-ico-item-box__footer .days {
+      margin-left: 36px;
+      font-family: ProximaNovaRegular;
+      font-size: 13px;
+      color: #93b0c1;
+      padding-top: 3px; }
+
 .sk-ico-details-box {
   padding: 0;
   font-family: ProximaNovaRegular; }
