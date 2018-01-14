@@ -151,8 +151,8 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 import SkTasksBoxDirective from './angular/directives/commons/sk-tasks-box.directive';
 angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 
-import SkIcoItemBoxDirective from './angular/directives/commons/sk-ico-item-box.directive';
-angular.module('kyc-wallet').directive('skIcoItemBox', SkIcoItemBoxDirective);
+//import SkIcoItemBoxDirective from './angular/directives/commons/sk-ico-item-box.directive';
+//angular.module('kyc-wallet').directive('skIcoItemBox', SkIcoItemBoxDirective);
 
 import SkIcoDetailsBoxDirective from './angular/directives/commons/sk-ico-details-box.directive';
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
@@ -184,7 +184,6 @@ angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 import CopyToClipboardDirective from './angular/directives/commons/copy-to-clipboard.directive';
 angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
 
-
 /**
  * controllers
  */
@@ -201,14 +200,8 @@ angular.module('kyc-wallet').controller('StartupGuideDialogController', StartupG
 import ReceiveTokenDialogController from './angular/controllers/commons/dialogs/receive-token-controller.js';
 angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
 
-import AddCustomTokenDialogController from './angular/controllers/commons/dialogs/add-custom-token-controller.js';
-angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
-
 import SendTokenDialogController from './angular/controllers/commons/dialogs/send-token-controller.js';
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
-
-import AddIdAttributeDialog from './angular/controllers/commons/dialogs/add-id-attribute-controller.js';
-angular.module('kyc-wallet').controller('AddIdAttributeDialog', AddIdAttributeDialog);
 
 /**
  * guest
@@ -265,9 +258,6 @@ angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', Mem
 import MemberSetupChooseController from './angular/controllers/member/setup/choose-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupChooseController', MemberSetupChooseController);
 
-import MemberSetupWalletSetupController from './angular/controllers/member/setup/wallet-setup-controller.js';
-angular.module('kyc-wallet').controller('MemberSetupWalletSetupController', MemberSetupWalletSetupController);
-
 import MemberSetupCompletedController from './angular/controllers/member/setup/completed-controller.js';
 angular.module('kyc-wallet').controller('MemberSetupCompletedController', MemberSetupCompletedController);
 
@@ -286,9 +276,6 @@ angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenCont
 /**
  * Marketplace
  */
-import MemberMarketplaceMainController from './angular/controllers/member/marketplace/main-controller.js';
-angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
-
 import MemberMarketplaceIcoItemController from './angular/controllers/member/marketplace/ico/item-controller.js';
 angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
 

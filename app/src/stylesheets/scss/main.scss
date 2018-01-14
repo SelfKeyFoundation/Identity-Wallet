@@ -22,7 +22,6 @@
 @import './components/sk-right-sidenav.scss';
 @import './components/sk-table.scss';
 @import './components/sk-dropdown-menu.scss'; // TODO - change prefix of file to md (actually it is realod of md styles)
-@import './components/sk-scrollbar.scss';
 
 @import './components/md-select.scss';
 @import './components/md-tooltip.scss';
@@ -37,7 +36,7 @@
 @import './directives/sk-circle-pie-chart.scss';
 @import './directives/sk-reminders-box.scss';
 @import './directives/sk-action-logs-box.scss';
-@import './directives/sk-ico-item-box.scss';
+//@import './directives/sk-ico-item-box.scss';
 @import './directives/sk-ico-details-box.scss';
 @import './directives/sk-user-info-box.scss';
 @import './directives/sk-kyc-requirements-box.scss';
@@ -47,10 +46,10 @@
 @import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
-@import './partials/sk-my-cryptos-box.scss';
+@import './partials/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/dashboard/main.scss';
-@import './views/wallet/main.scss';
+//@import './views/wallet/main.scss';
 @import './views/wallet/manage-token.scss';
 @import './views/setup/completed.scss';
 
@@ -58,13 +57,13 @@
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
 @import './dialogs/send-token.scss';
-@import './dialogs/add-custom-token.scss';
-@import './dialogs/add-id-attribute.scss';
+//@import './dialogs/add-custom-token.scss';
+//@import './dialogs/add-id-attribute.scss';
 
 @import './views/setup/completed.scss';
 @import './views/setup/wallet-setup.scss';
 
-@import './views/marketplace/ico-list.scss';
+//@import './views/marketplace/ico-list.scss';
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';
 @import './views/marketplace/ico-accept-terms.scss';

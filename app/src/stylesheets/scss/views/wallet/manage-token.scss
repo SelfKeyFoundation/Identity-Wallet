@@ -111,25 +111,16 @@
                     height: 20px;
                 }
                 .copy-button {
-                    border-radius: 4px;
-                    border: solid 1px #3b4a5a;
-                    outline: none;
+                    padding: 0;
                     width: 50px;
                     height: 24px;
-                    background-color: transparent;
                     >span {
-                        font-family: ProximaNovaRegular;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-style: normal;
-                        font-stretch: normal;
-                        letter-spacing: normal;
-                        text-align: left;
-                        color: #93b0c1;
-                        line-height: 11px;
-                        width: 32px;
-                        height: 14px;
-                        vertical-align: middle;
+                        width: 50px;
+                        height: 24px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
             }

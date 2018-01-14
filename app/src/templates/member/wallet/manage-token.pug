@@ -12,9 +12,9 @@
         hr
         .coin-address-section
             span.your-address Your {{name}} Address:
-            .generated-address(layout="row")
+            .generated-address(layout="row", layout-align="start center")
                 .address {{publicKeyHex}}
-                button.copy-button
+                md-button.smallest.gray.copy
                     span(copy-to-clipboard="publicKeyHex") COPY
         hr(style="margin-top:32px")
         .buttons-section(layout="row")

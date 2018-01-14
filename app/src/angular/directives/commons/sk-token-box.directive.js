@@ -11,8 +11,6 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             symbol: '@'
         },
         link: (scope, element) => {
-            scope.isJustCopied = false;
-
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;
@@ -46,26 +44,6 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
                 } else {
                     scope.balance = $rootScope.wallet.balanceEth;
                     scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
-                }
-            }
-
-            scope.copy = (event) => {
-                let el = angular.element(event.target);
-                let selection = $window.getSelection();
-                let range = document.createRange();
-                range.selectNodeContents(el[0]);
-                selection.removeAllRanges();
-                selection.addRange(range);
-
-                let successful = document.execCommand('copy');
-                selection.removeAllRanges();
-
-                if (successful) {
-                    scope.isJustCopied = true;
-
-                    $timeout(() => {
-                        scope.isJustCopied = false;
-                    }, 1000);
                 }
             }
 
