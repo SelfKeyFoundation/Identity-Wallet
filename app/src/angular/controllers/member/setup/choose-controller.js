@@ -30,7 +30,7 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 publicAddress = Web3Service.constructor.web3.utils.toChecksumAddress(publicAddress);
 
                 if (publicAddress != resp.public_key[0].value) {
-                    return $scope.error = 'Incorrect ETH Address'
+                    return $scope.error = 'kyc_import'
                 }
 
                 let idAttributes = {};
@@ -62,10 +62,10 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 ConfigFileService.save().then((savedData) => {
                     goToNextStep();
                 }).catch(() => {
-                    $scope.error = "Store cannot be saved";
+                    $scope.error = "store_save";
                 });
             }).catch(() => {
-                $scope.error = "Error during import KYC";
+                $scope.error = "kyc_import";
             })
         });
     }
