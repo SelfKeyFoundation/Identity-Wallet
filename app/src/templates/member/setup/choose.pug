@@ -1,4 +1,4 @@
-.wallet-setup(layout='column', layout-align='center center')
+.wallet-setup(layout='column', layout-align='center center', style="z-index: 100;")
     .headline(layout='column', layout-align='start start')
         .title Setup Identity Wallet
         .text
@@ -17,5 +17,9 @@
                         | allows you to skip the Basic ID process.
                     .actions
                         md-button.md-raised(ng-click="importIdentity($event)") Upload KYC File
-                    .errors(ng-if="error", style="margin-top: 16px;")
-                        span(style="color: #ed1c24; font-family: ProximaNovaRegular;") {{error}}
+                    .errors(ng-if="error === 'kyc_import'", style="margin-top: 16px; width: 491px; font-size: 14px; line-height: 18px;")
+                        span(style="color: #ed1c24; font-family: ProximaNovaRegular;") Error: ETH address in the KYC file does not match this wallet. Please restart and import the wallet you used in KYC. Visit&nbsp;
+                        span(style="color: #0dc7dd; font-family: ProximaNovaRegular; cursor: pointer", ng-click="$root.openInBrowser('https://help.selfkey.org')") https://help.selfkey.org 
+                        span(style="color: #ed1c24; font-family: ProximaNovaRegular;") &nbsp;for more info.
+                    .errors(ng-if="error === 'store_save'", style="margin-top: 16px; width: 491px; font-size: 14px; line-height: 18px;")
+                        span(style="color: #ed1c24; font-family: ProximaNovaRegular;") Error: while saving data

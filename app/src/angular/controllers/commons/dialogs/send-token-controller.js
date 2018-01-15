@@ -374,7 +374,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             // tx fee in USD
             $scope.infoData.txFeeInUsd = Number($scope.infoData.txFeeInEth) * Number($scope.infoData.usdPerUnit);
-            console.log(">>>>>>>>>>>>>>>", $scope.infoData.txFeeInUsd);
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount) && newVal.sendToAddressHex && web3Utils.isHex(newVal.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex))) {
