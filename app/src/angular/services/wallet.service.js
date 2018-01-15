@@ -121,9 +121,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
       let importPromise = ElectronService.importEtherKeystoreFile(filePath);
       importPromise.then((response) => {
-
-        console.log("????? >>>>>>>>", response);
-
         let promise = ElectronService.unlockEtherKeystoreObject(response.keystoreObject, password);
         promise.then((data) => {
           wallet = new Wallet(data.privateKey, data.publicKey);
@@ -248,8 +245,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         if (contractDataHex) {
           rawTx.data = EthUtils.sanitizeHex(contractDataHex);
         }
-
-        console.log("????????", rawTx, "<<<<<")
 
         let eTx = new Tx(rawTx);
         eTx.sign(wallet.privateKey);
