@@ -49,7 +49,6 @@
 @import './partials/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/dashboard/main.scss';
-//@import './views/wallet/main.scss';
 @import './views/wallet/manage-token.scss';
 @import './views/setup/completed.scss';
 
@@ -57,13 +56,11 @@
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
 @import './dialogs/send-token.scss';
-//@import './dialogs/add-custom-token.scss';
-//@import './dialogs/add-id-attribute.scss';
+
 
 @import './views/setup/completed.scss';
 @import './views/setup/wallet-setup.scss';
 
-//@import './views/marketplace/ico-list.scss';
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';
 @import './views/marketplace/ico-accept-terms.scss';
