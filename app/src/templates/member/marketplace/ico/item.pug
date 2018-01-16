@@ -17,14 +17,15 @@
             .token-sale-container(layout="column", flex="35")
                 .text-1
                     span Token Sale ends in
-                    span(style="font-weight: 600") {{ico.daysLeft}} DAYS
+                    span(style="font-weight: 600") 0 DAYS
+                    //{{ico.daysLeft}} DAYS
                 .text-2
                     div(style="font-size:20px") {{ico.cap.raised | number}}
                     span OF
                     span {{(ico.cap.total | number) + ' ' + '(' + ico.cap.capPercent + '%' + ')'}}
                 .buttons-container
-                    md-button.green(ng-click="gotToTokenSale($event)")
-                        span Join Token Sale
+                    md-button.green(ng-click="$root.openInBrowser('https://blog.selfkey.org/')")
+                        span Token Sale Complete
                     button.gray-button.no-outline(ng-click="$root.openInBrowser(ico.website)") Website
                     button.gray-button.no-outline(ng-click="$root.openInBrowser(ico.whitepaper)") Whitepaper
         hr(style="width:90%; color:#303c49")
