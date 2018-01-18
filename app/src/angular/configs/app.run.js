@@ -26,6 +26,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     $rootScope.ethUsdPrice = 1195;
     $rootScope.keyUsdPrice = 0.015;
 
+    $rootScope.PRICES = {};
+
     /**
      * 
      */

@@ -64,6 +64,9 @@ class Token {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
+    /**
+     * 
+     */
     setOwner(publicKeyHex) {
         this.currentOwnerPublicKeyHex = publicKeyHex
     }
