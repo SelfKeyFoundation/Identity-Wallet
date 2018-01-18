@@ -7,7 +7,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
 
-    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service) {
+    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service, SelfkeyService) {
         let defer = $q.defer();
 
         if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {
@@ -30,15 +30,36 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             let ethBalancePromise = $rootScope.wallet.loadBalance();
             let keyBalancePromise = $rootScope.primaryToken.loadBalance();
 
+            let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
+
             /**
              * 
              */
-            $q.all([ethBalancePromise, keyBalancePromise]).then(() => {
+            $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
+
+                if($rootScope.PRICES["ETH"]){
+                    $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
+                }
+
+                if($rootScope.PRICES["KEY"]){
+                    $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
+                }
+                
                 /**
                  * 
                  */
                 $rootScope.balanceWatcherPromise = $interval(() => {
+                    console.log(">>>>>", $rootScope.PRICES);
                     if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
+                        SelfkeyService.getPrices(["ETH", "KEY"]).then((resp)=>{
+                            if($rootScope.PRICES["ETH"]){
+                                $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
+                            }
+            
+                            if($rootScope.PRICES["KEY"]){
+                                $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
+                            }
+                        });
                         $rootScope.wallet.loadBalance();
                         $rootScope.primaryToken.loadBalance();
                     }

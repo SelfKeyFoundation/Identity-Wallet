@@ -26,6 +26,11 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   /**
    * 
    */
+  const PRICES = {};
+
+  /**
+   * 
+   */
   class SelfkeyService {
 
     constructor() {
@@ -186,7 +191,28 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
     }
 
     initKycProcess(privateKeyHex, templateId, organizationId, ethAddress, email) {
+    }
 
+    getPrices(tokens) {
+      let defer = $q.defer();
+
+      // ["KEY", "ETH"]
+      let promise = $http.post("https://token-sale-demo-api.kyc-chain.com/rate/tokens/symbol", { "tokens": tokens });
+      
+      promise.then((resp)=>{
+        for(let i in resp.data.items){
+          let item = resp.data.items[i];
+          if(item){
+            PRICES[item.symbol] = item;
+          }
+        }
+        $rootScope.PRICES = PRICES;
+        defer.resolve($rootScope.PRICES);
+      }).catch((error)=>{
+        defer.reject("CANT_GET_PRICE");
+      });
+
+      return defer.promise;
     }
 
     loadData(reload) {
