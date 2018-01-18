@@ -49,7 +49,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                  * 
                  */
                 $rootScope.balanceWatcherPromise = $interval(() => {
-                    console.log(">>>>>", $rootScope.PRICES);
                     if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
                         SelfkeyService.getPrices(["ETH", "KEY"]).then((resp)=>{
                             if($rootScope.PRICES["ETH"]){
