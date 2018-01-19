@@ -2,9 +2,9 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
-    
+
     $scope.isUnlocking = false;
-    
+
     $rootScope.wallet = null;
 
     let store = ConfigFileService.getStore();
@@ -24,33 +24,33 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         promise.then((data) => {
             $scope.userInput.selectedFilePath = data.path;
 
-            ConfigFileService.load().then(()=>{
+            ConfigFileService.load().then(() => {
                 $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
             });
         }).catch((error) => {
-            
+
         });
     }
 
     $scope.unlock = (event, theForm) => {
-        if(!theForm.$valid) return;
+        if (!theForm.$valid) return;
 
         let selectedFilePath = $scope.userInput.selectedFilePath;
 
-        if($scope.type === 'select'){
-            if(store.wallets[$scope.userInput.selectedPublicKey].type === 'ks'){
+        if ($scope.type === 'select') {
+            if (store.wallets[$scope.userInput.selectedPublicKey].type === 'ks') {
                 selectedFilePath = store.wallets[$scope.userInput.selectedPublicKey].keystoreFilePath;
-            }   
+            }
         }
 
-        if(!selectedFilePath || !$scope.userInput.password) return;
+        if (!selectedFilePath || !$scope.userInput.password) return;
 
         $scope.isUnlocking = true;
         let promise = WalletService.unlockByFilePath(selectedFilePath, $scope.userInput.password);
-        promise.then((wallet)=>{
+        promise.then((wallet) => {
             $state.go('member.setup.view-keystore');
             //$state.go('member.setup.main');
-        }).catch((error)=>{
+        }).catch((error) => {
             $log.error(error);
 
             $scope.isUnlocking = false;

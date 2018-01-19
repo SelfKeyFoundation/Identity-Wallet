@@ -15,21 +15,21 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
     $scope.isUnlocking = false;
 
     $scope.unlock = (event, theForm) => {
-        if(!theForm.$valid) return;
+        if (!theForm.$valid) return;
 
         $scope.isUnlocking = true;
 
         let privateKey = $scope.userInput.privateKey;
-        if(!$scope.userInput.privateKey.startsWith("0x")){
+        if (!$scope.userInput.privateKey.startsWith("0x")) {
             privateKey = "0x" + $scope.userInput.privateKey;
         }
-        
+
         WalletService.unlockByPrivateKey(privateKey).then((wallet) => {
             ConfigFileService.load().then((storeData) => {
                 $state.go('member.setup.view-keystore');
-                
+
             });
-        }).catch((error)=>{
+        }).catch((error) => {
             $log.error(error);
             theForm.privateKey.$setValidity("badPrivateKey", false);
             $scope.isUnlocking = false;
