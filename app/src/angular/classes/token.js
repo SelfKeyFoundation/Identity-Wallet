@@ -107,6 +107,12 @@ class Token {
 
             if(balanceHex !== oldBalanceHex){
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
+                if (this.symbol.toUpperCase() == 'ETH') {
+                    setTimeout(()=>{
+                        Web3Service.syncWalletETHActivity();
+                    },1200);
+                    
+                }
                 // TODO - scan transactions
             }
 
