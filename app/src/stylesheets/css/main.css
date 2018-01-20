@@ -14390,6 +14390,22 @@ md-toolbar {
       font-size: 14px;
       font-weight: 600;
       color: #ffffff; }
+  .sk-list > .item > .bullet-green {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 28px;
+    border-radius: 18px;
+    background-image: linear-gradient(to bottom, #b4ec51, #429321);
+    box-shadow: 0 2px 2px 0 #15222e;
+    border: solid 1px #417505; }
+    .sk-list > .item > .bullet-green > span {
+      font-family: ProximaNovaRegular;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff; }
   .sk-list > .item > span {
     margin-left: 12px;
     font-family: ProximaNovaRegular;
