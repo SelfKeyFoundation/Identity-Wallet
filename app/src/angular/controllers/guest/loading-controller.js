@@ -3,16 +3,16 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
 
     $log.info('GuestLoadingController');
 
-    switch($stateParams.redirectTo){
+    switch ($stateParams.redirectTo) {
         case 'member.setup.view-keystore':
             $state.go($stateParams.redirectTo);
             $scope.subHeader = "Getting Ready"
-        break;
+            break;
         default:
-            init ();
+            init();
     }
 
-    function init () {
+    function init() {
         $rootScope.loadingPromise = ConfigFileService.init();
         $rootScope.loadingPromise.then((storeData) => {
             $log.info("storeData", storeData);
@@ -28,7 +28,7 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
                     // go to unlock state
                     //$state.go('guest.process.unlock-keystore');
                     $state.go('guest.welcome');
-                }).catch((error)=>{
+                }).catch((error) => {
                     $log.error("error", error);
                 });
             } else {
