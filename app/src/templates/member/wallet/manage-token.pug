@@ -34,9 +34,9 @@
                     .date {{ activity.timestamp | date:'MMM'}}
                         span {{activity.timestamp | date:'dd'}} 
                     sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
-                    .sent-receive {{activity.to ? 'Sent to' : 'Received'}}
-                    span.sent-receive-text  {{activity.to || activity.from}}
-                    .coin-change {{activity.to ? '- ' : '+ '}} {{activity.value}}
+                    .sent-receive {{ activity.sentOrReceive }}
+                    span.sent-receive-text.aqua-blue  {{activity.nameOfTo}}
+                    .coin-change(ng-class="{'aqua-blue': !!activity.nameOfTo}") {{activity.to ? '- ' : '+ '}} {{activity.value}}
                 
                 //hr
                 //.item-container(layout="row")

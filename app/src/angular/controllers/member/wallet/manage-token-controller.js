@@ -45,15 +45,52 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
         }
     }
 
+    const selectedChainId = Web3Service.getSelectedChainId();
+    const walletNamesMap = {
+        '1': {},
+        '3': {
+            qey: {
+                address: '0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb',
+                name: 'SelfKey Token Sale'
+            }
+        }
+    };
+
+    function getWalletName(symbol,address) {
+        let chainValue = walletNamesMap[selectedChainId] || {};
+        let symbolValue = chainValue[symbol];
+        if (symbolValue && symbolValue.address == address) {
+            return symbolValue.name;
+        }
+
+        return '';
+    }
+  
     /**
      * 
      */
     $scope.setTokenActivity = () => {
         let store = ConfigFileService.getStore();
+       
+      
+        
         let data = store.wallets[$scope.publicKeyHex].data;
         if (data.activities) {
             let activity = data.activities[$scope.originalSymbol];
-            $scope.tokenActivity = activity ? activity.transactions : [];
+            let transactions = activity ? activity.transactions : [];
+            
+
+            transactions.forEach(transaction => {
+                if (transaction.to) {
+                    transaction.nameOfTo = getWalletName($scope.originalSymbol,transaction.to);
+                }
+
+                let sendText = transaction.nameOfTo ?  'Sent to' : 'Sent';
+                transaction.sentOrReceive =  transaction.to ? sendText : 'Received';                
+            });
+
+            debugger;
+            $scope.tokenActivity = transactions;
         }
     }
 

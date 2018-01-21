@@ -97,6 +97,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
     }
 
+    getSelectedChainId() {
+      return SELECTED_CHAIN_ID;
+    }
+
     syncWalletActivityByContract(key, address) {
 
 
@@ -210,7 +214,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                   });
 
                   ConfigFileService.save().then((store) => {
-                    debugger;
                     $rootScope.walletActivityStatuses[contractInfo.key] = true;
                   }).catch((error) => {
                   });
@@ -224,7 +227,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                   next();
                 } else {
                   Web3Service.getBlock(transaction.blockNumber, true).then((blockData) => {
-                    debugger;
                     transaction.timestamp = blockData.timestamp;
                     activity.transactions.push(transaction);
                     next();
@@ -303,10 +305,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         let from = transaction.from ? transaction.from.toLowerCase() : null;
         let to = transaction.to ? transaction.to.toLowerCase() : null;
         key = (prefix + key).toLowerCase();
-        if (key == transaction.to) {
+        if (key == to) {
           delete transaction.to;
         }
-        if (key == transaction.from) {
+        if (key == from) {
           delete transaction.from;
         }
 
