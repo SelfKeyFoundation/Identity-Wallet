@@ -13,13 +13,14 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
 
     $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();
+    $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
     
     $scope.balance = 0;
     $scope.balanceUsd = 0;
-
-    $scope.walletActivity = [];
-   
+    
+    $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
+    
 
     /**
      * 
@@ -47,13 +48,16 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     /**
      * 
      */
-    $scope.setWalletActivity = () => {
+    $scope.setTokenActivity = () => {
         let store = ConfigFileService.getStore();
         let data = store.wallets[$scope.publicKeyHex].data;
         if (data.activities) {
-            $scope.walletActivity = data.activities.transactions || [];
+            let activity = data.activities[$scope.originalSymbol];
+            $scope.tokenActivity = activity ? activity.transactions : [];
         }
     }
+
+    $scope.setTokenActivity();
 
     $scope.goToDashboard = () => {
         $state.go('member.dashboard.main');

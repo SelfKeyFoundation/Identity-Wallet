@@ -15,8 +15,16 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             $log.debug("toggle " + "right" + " is done");
         });
     }
-    
-    Web3Service.syncWalletActivity();
+    /*
+    let store = ConfigFileService.getStore();
+    Object.keys(store.wallets).forEach(key =>{
+        let storedWallet = store.wallets[key];
+        let storedWalletData = storedWallet.data || {};
+        delete storedWalletData.activities; 
+    });*/
+
+    Web3Service.syncWalletActivityByContract();
+    Web3Service.syncWalletActivityByETH();
 
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;
