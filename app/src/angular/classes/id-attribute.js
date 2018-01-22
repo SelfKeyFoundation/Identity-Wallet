@@ -4,45 +4,42 @@ import IdAttributeItem from './id-attribute-item';
 
 class IdAttribute {
 
-    constructor (key, idAttributeType) {
+    constructor(key) {
         this.key = key;
-        this.category = idAttributeType ? idAttributeType.category : '';
-        this.type = idAttributeType ? idAttributeType.type : '';
-        this.entity = idAttributeType ? idAttributeType.entity : '';
         this.defaultItemId = null;
         this.items = {};
     }
 
-    setData(data) {
-        this.key = data.key;
-        this.category = data.category;
-        this.type = data.type;
-        this.entity = data.entity;
-        this.defaultItemId = data.defaultItemId;
+    init(IdAttribute) {
+        this.key = IdAttribute.key;
+        this.defaultItemId = IdAttribute.defaultItemId;
 
+        for (let value of IdAttribute.items) {
+            value
+        }
         this.items = {};
-        for(let i in data.items){
-            let item = new IdAttributeItem();
-            item.setData(data.items[i]);
+    }
+
+    addItem(itemToAdd) {
+        if(!itemToAdd) return;
+
+        if (Object.keys(this.items).length === 0) {
+            this.defaultItemId = itemToAdd._id;
+        }
+
+        if (itemToAdd instanceof IdAttributeItem) {
+            this.items[itemToAdd._id] = itemToAdd;
+        } else {
+            let item = new IdAttributeItem(itemToAdd);
             this.items[item._id] = item;
         }
     }
 
-    setDefaultItem (item) {
-        this.defaultItemId = item._id;
-        this.items[item._id] = item;
-    }
-
-    addItem (item) {
-        if(Object.keys(this.items).length === 0){
-            this.setDefaultItem(item);
-        }else{
-            this.items[item._id] = item;
+    removeItem(item) {
+        if(!item || !item._id) return;
+        if(this.items[item._id]){
+            delete this.items[item._id];
         }
-    }
-
-    removeItem (item) {
-        delete this.items[item._id];
     }
 }
 

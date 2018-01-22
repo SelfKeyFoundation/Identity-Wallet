@@ -157,6 +157,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
       let store = ConfigFileService.getStore();
       let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+      
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
