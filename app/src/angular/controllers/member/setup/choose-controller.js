@@ -24,6 +24,7 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 return;
             }
             let publicAddress = "0x" + $rootScope.wallet.getPublicKeyHex();
+            let idAttributes = {};
 
             ElectronService.importKYCIdentity(file).then((resp) => {
 
@@ -33,8 +34,6 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                     return $scope.error = 'kyc_import'
                 }
 
-                let idAttributes = {};
-
                 store.wallets[$rootScope.wallet.getPublicKeyHex()] = {
                     data: {
                         idAttributes: idAttributes
@@ -42,17 +41,35 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 }
 
                 for (let i in resp) {
-                    let idAttributeType = ConfigFileService.getIdAttributeType(i);
-                    let idAttribute = new IdAttribute(i, idAttributeType);
+                    if(!resp.hasOwnProperty(i)) continue;
+
+                    // TODO - check >> i << if it is known id attribute type
+                    //let idAttributeType = ConfigFileService.getIdAttributeType(i);
+
+                    let idAttribute = new IdAttribute(i);
+
                     resp[i].forEach((attr) => {
-                        let idAttributeItem = new IdAttributeItem();
+                        
+                        let item = {};
+
                         if (attr.isDoc) {
-                            idAttributeItem.setAddition(attr.addition);
-                            idAttributeItem.name = attr.name
-                            idAttributeItem.contentType = attr.contentType;
+                            item.values = [{
+                                name: attr.name,
+                                contentType: attr.contentType,
+                                size: attr.size,
+                                path: attr.value
+                            }];
+                            item.fileInfo = {
+                                ifEidIsSkipped: attr.addition.ifEidIsSkipped,
+                                optional: attr.addition.optional,
+                                selfie: attr.addition.selfie,
+                                signature: attr.addition.signature,
+                            };
+                        }else{
+                            item.values = [attr.value]
                         }
-                        idAttributeItem.setType(idAttributeType);
-                        idAttributeItem.value = attr.value;
+                        
+                        let idAttributeItem = new IdAttributeItem(item);
                         idAttribute.addItem(idAttributeItem);
                     });
 
@@ -61,6 +78,21 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
                 ConfigFileService.save().then((savedData) => {
                     goToNextStep();
+                    
+                    /*
+                    let sessionPromise = SelfkeyService.retrieveKycSessionToken(
+                        $rootScope.wallet.privateKeyHex,
+                        $rootScope.wallet.publicKeyHex,
+                        idAttributes["email"].items[idAttributes["email"].defaultItemId].values[0],     // TODO check email
+                        "5a50a2a87e4de3001ea161d2"                                                      // TODO Take from config
+                    );
+                    sessionPromise.then((resp) => {
+                        console.log(">>>>>resp>>>>>>>>", resp);
+                    }).catch((error)=>{
+                        console.log(">>>>error>>>>>>>>>", error);
+                    });
+                    */
+                    
                     /*
                     SelfkeyService.authWithKYC($rootScope.wallet.privateKeyHex, $rootScope.wallet.privateKeyHex.publicKeyHex, "5a50a2a87e4de3001ea161d2").then((resp)=>{
                         console.log(">>>>", resp, "<<<<<<")
