@@ -107,10 +107,6 @@ class Token {
 
             if(balanceHex !== oldBalanceHex){
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
-                
-                setTimeout(()=> {
-                    Web3Service.syncWalletActivityByContract();
-                },2000);
             }
 
             defer.resolve(this);

@@ -94,7 +94,15 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }, REQUEST_INTERVAL_DELAY);
 
       }, 1);
-
+      
+      $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+        let self = this;
+        let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
+        
+        $timeout(() => {
+          fn.call(self);
+        },3000)
+    });
     }
 
     getSelectedChainId() {
@@ -102,7 +110,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
 
     syncWalletActivityByContract(key, address) {
-
 
       let currentWallet = $rootScope.wallet;
       if (!currentWallet || !currentWallet.getPublicKeyHex()) {
@@ -136,7 +143,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
       }
 
       $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
-
 
       let publicKeyHex = $rootScope.wallet.getPublicKeyHex();
       let walletAddressHex = '0x' + publicKeyHex;
@@ -209,7 +215,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
               (function next() {
                 if (!transactions.length) {
                   activity.transactions.sort((a, b) => {
-                    return b.timestamp - a.timestamp;
+                    return Number(b.timestamp) - Number(a.timestamp);
                   });
 
                   ConfigFileService.save().then((store) => {
@@ -226,7 +232,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                   next();
                 } else {
                   Web3Service.getBlock(transaction.blockNumber, true).then((blockData) => {
-                    transaction.timestamp = blockData.timestamp;
+                    transaction.timestamp = blockData.timestamp + '000';
                     activity.transactions.push(transaction);
                     next();
                   });
@@ -342,7 +348,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 });
               });
               transactions.sort((a, b) => {
-                return b.timestamp - a.timestamp;
+                return Number(b.timestamp) - Number(a.timestamp);
               });
             });
 
@@ -363,15 +369,18 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
                   walletKeys.forEach((walletKey) => {
                     let fullAddressHex = (prefix + walletKey).toLowerCase();
-
-                    if (transaction.value && ( from == fullAddressHex || to == fullAddressHex )) {
-                      addNewTransaction(currentBlockNumber, walletKey, {
-                        to: transaction.to,
-                        from: transaction.from,
-                        timestamp: blockData.timestamp,
-                        hash: transaction.hash,
-                        value: new BigNumber(transaction.value).div(valueDivider).toString()
-                      });
+                    let value = transaction.value;
+                    if ((value && value != 0) && ( from == fullAddressHex || to == fullAddressHex )) {
+                      let value = new BigNumber(transaction.value).div(valueDivider).toString();
+                      if (value && value != 0) {
+                        addNewTransaction(currentBlockNumber, walletKey, {
+                          to: transaction.to,
+                          from: transaction.from,
+                          timestamp: blockData.timestamp + '000',
+                          hash: transaction.hash,
+                          value: value
+                        });
+                      }
                     }
                   });
                 });

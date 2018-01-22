@@ -94,8 +94,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             });
          
             allTransactions.sort((a,b) =>{
-                return b.timesTamp - a.timesTamp;
-            })
+                return Number(b.timestamp) - Number(a.timestamp);
+            });
 
             $scope.allTransactions = allTransactions;
         }
