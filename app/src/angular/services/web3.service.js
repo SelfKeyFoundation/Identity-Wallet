@@ -365,7 +365,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                   walletKeys.forEach((walletKey) => {
                     let fullAddressHex = (prefix + walletKey).toLowerCase();
 
-                    if (from == fullAddressHex || to == fullAddressHex) {
+                    if (transaction.value && ( from == fullAddressHex || to == fullAddressHex )) {
                       addNewTransaction(currentBlockNumber, walletKey, {
                         to: transaction.to,
                         from: transaction.from,

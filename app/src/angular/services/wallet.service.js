@@ -17,6 +17,17 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
   let isFirstLoad = true;
 
+  // TODO moving to config
+  const walletNamesMap = {
+      '1': {},
+      '3': {
+          qey: {
+              address: '0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb',
+              name: 'SelfKey Token Sale'
+          }
+      }
+  };
+
   /**
    * 
    */
@@ -33,6 +44,18 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
           this.loadBalance();
         }
       });
+    }
+
+   
+
+    getWalletName(symbol, address) {
+        let chainValue = walletNamesMap[selectedChainId] || {};
+        let symbolValue = chainValue[symbol];
+        if (symbolValue && symbolValue.address == address) {
+            return symbolValue.name;
+        }
+
+        return '';
     }
 
     createKeystoreFile(password) {
