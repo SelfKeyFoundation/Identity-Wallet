@@ -9,18 +9,18 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
     let store = ConfigFileService.getStore();
 
-    checkStatus ();
+    checkStatus();
 
     $scope.importIdentity = (event) => {
         $scope.error = null;
 
         let promise = ElectronService.openFileSelectDialog({
             filters: [
-                {name: 'zip package', extensions: ['zip']}
-             ]
+                { name: 'zip package', extensions: ['zip'] }
+            ]
         });
         promise.then((file) => {
-            if(!file){
+            if (!file) {
                 return;
             }
             let publicAddress = "0x" + $rootScope.wallet.getPublicKeyHex();
@@ -68,12 +68,12 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 $scope.error = "kyc_import";
             })
         });
-    }
+    };
 
     /**
      * 
      */
-    function checkStatus () {
+    function checkStatus() {
         /**
          * 
          */
@@ -81,7 +81,7 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
         if (walletStore.data && walletStore.data.idAttributes && Object.keys(walletStore.data.idAttributes).length > 0) {
             goToNextStep();
-        } 
+        }
     }
 
     function goToNextStep() {
@@ -95,4 +95,3 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 };
 
 export default MemberSetupChooseController;
-

@@ -23,3 +23,7 @@
                         span(style="color: #ed1c24; font-family: ProximaNovaRegular;") &nbsp;for more info.
                     .errors(ng-if="error === 'store_save'", style="margin-top: 16px; width: 491px; font-size: 14px; line-height: 18px;")
                         span(style="color: #ed1c24; font-family: ProximaNovaRegular;") Error: while saving data
+    .div(layout='column', layout-align='center center' style="width: 600px; display: table;")
+        .sk-button.outline-blue(style="margin: 12px 0 48px 0;", ui-sref="guest.import.keystore({type: 'select'})")
+            span(style="color: #fff") Back
+            
