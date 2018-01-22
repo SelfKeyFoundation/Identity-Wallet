@@ -2,7 +2,7 @@ import IdAttributeType from '../../../classes/id-attribute-type';
 import IdAttributeItem from '../../../classes/id-attribute-item';
 import IdAttribute from '../../../classes/id-attribute';
 
-function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService) {
+function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService, SelfkeyService) {
     'ngInject'
 
     $scope.error = null;
@@ -61,6 +61,14 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
                 ConfigFileService.save().then((savedData) => {
                     goToNextStep();
+                    /*
+                    SelfkeyService.authWithKYC($rootScope.wallet.privateKeyHex, $rootScope.wallet.privateKeyHex.publicKeyHex, "5a50a2a87e4de3001ea161d2").then((resp)=>{
+                        console.log(">>>>", resp, "<<<<<<")
+                        //goToNextStep();
+                    }).catch((error)=>{
+                        console.log(">>>>>>>>", error);
+                    })
+                    */                    
                 }).catch(() => {
                     $scope.error = "store_save";
                 });

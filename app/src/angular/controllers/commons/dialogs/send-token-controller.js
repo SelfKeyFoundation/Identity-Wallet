@@ -341,7 +341,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         } else {
             $scope.errors.sendAmount = false;
             
-            newVal.sendAmount = Number(newVal.sendAmount);
+            // allow only decimals for non eth items
+            if($scope.symbol.toLowerCase() !== 'eth'){
+                newVal.sendAmount = Number(newVal.sendAmount);
+            }
 
             if(Number(newVal.sendAmount) > $scope.infoData.totalBalance){
                 $scope.formData.sendAmount = $scope.infoData.totalBalance;

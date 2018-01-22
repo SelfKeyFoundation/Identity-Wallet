@@ -1,11 +1,11 @@
 'use strict';
 
-import $ from 'jquery';
+//import $ from 'jquery';
 
 import Wallet from '../classes/wallet';
 import Token from '../classes/token';
 
-function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, Web3Service) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, Web3Service) {
     'ngInject';
 
     $rootScope.selectedLanguage = "en";
@@ -21,10 +21,10 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
 
     /**
-     * 
+     * TODO - remove
      */
-    $rootScope.ethUsdPrice = 1195;
-    $rootScope.keyUsdPrice = 0.015;
+    //$rootScope.ethUsdPrice = 1195;
+    //$rootScope.keyUsdPrice = 0.015;
 
     $rootScope.PRICES = {};
 
@@ -62,8 +62,8 @@ function AppRun($rootScope, $log, $timeout, $interval, $state, $mdDialog, DICTIO
         ElectronService.closeApp();
     }
 
-    $rootScope.openInBrowser = function (url) {
-        ElectronService.openBrowserWindow(url)
+    $rootScope.openInBrowser = function (url, useInAppBrowser) {
+        useInAppBrowser ? $window.open(url) : ElectronService.openBrowserWindow(url);
     }
 
     $rootScope.openSendTokenDialog = (event, symbol) => {

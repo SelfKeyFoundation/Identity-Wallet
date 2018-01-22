@@ -190,6 +190,45 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
+    authWithKYC(privateKeyHex, ethAddress, organizationId) {
+      let defer = $q.defer();
+
+      let store = ConfigFileService.getStore();
+      let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+
+      if(!wallet.sessionsStore) {
+        wallet.sessionsStore = {};
+      }
+
+      if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
+        defer.resolve(wallet.sessionsStore[organizationId]);
+      } else {
+        
+        $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
+          if (Web3Service.constructor.web3.utils.isHex(resp.data.challenge)) {
+            defer.reject("danger_challenge_provided");
+          } else {
+            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
+            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+              wallet.sessionsStore[organizationId] = resp.data.token;
+              ConfigFileService.save().then(() => {
+                defer.resolve(resp.data.token);
+              }).catch((error) => {
+                defer.reject(error)
+              })
+            }).catch((error) => {
+              defer.reject(error)
+            })
+          }
+        }).catch((error) => {
+          defer.reject(error)
+        });
+
+      }
+
+      return defer.promise;
+    }
+
     initKycProcess(privateKeyHex, templateId, organizationId, ethAddress, email) {
     }
 
