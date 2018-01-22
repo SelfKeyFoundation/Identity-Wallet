@@ -208,7 +208,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
               activity.transactions = [];
               (function next() {
                 if (!transactions.length) {
-                  console.log(activities);
                   activity.transactions.sort((a, b) => {
                     return b.timestamp - a.timestamp;
                   });
