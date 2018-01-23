@@ -1,6 +1,6 @@
 'use strict';
 
-import Ico from '../classes/ico.js';
+const CommonUtils = requireAppModule('angular/classes/common-utils');
 
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
     'ngInject'
@@ -402,4 +402,4 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     $urlRouterProvider.otherwise('/guest/loading');
 }
 
-export default appStates;
+module.exports = appStates;

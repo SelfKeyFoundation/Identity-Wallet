@@ -1,11 +1,6 @@
 'use strict';
 
-import BigNumber from 'bignumber.js';
-import ethUtil from 'ethereumjs-util';
-import crypto from 'crypto';
-import EthUnits from './eth-units.js';
-
-ethUtil.crypto = crypto;
+const EthUnits = requireAppModule('angular/classes/eth-units');
 
 class EthUtils {
 
@@ -127,4 +122,4 @@ class EthUtils {
 
 }
 
-export default EthUtils;
+module.exports = EthUtils;

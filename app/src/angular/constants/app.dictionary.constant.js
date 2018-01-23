@@ -5,4 +5,4 @@ const AppDictionaryConstant = {
     ge: require('../../../i18n/ge.js'),
 };
 
-export default AppDictionaryConstant;
+module.exports = AppDictionaryConstant;

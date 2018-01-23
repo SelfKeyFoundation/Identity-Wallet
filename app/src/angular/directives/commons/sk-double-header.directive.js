@@ -17,4 +17,4 @@ function SkDoubleHeaderDirective($log) {
     }
 }
 
-export default SkDoubleHeaderDirective;
+module.exports = SkDoubleHeaderDirective;

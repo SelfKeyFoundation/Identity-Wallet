@@ -45,4 +45,4 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
 };
 
-export default MemberMarketplaceIcoItemController;
+module.exports = MemberMarketplaceIcoItemController;

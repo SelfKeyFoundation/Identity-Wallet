@@ -1,14 +1,9 @@
 'use strict';
 
-import Wallet from '../classes/wallet';
-import Token from '../classes/token';
-import EthUtils from '../classes/eth-utils';
-import EthUnits from '../classes/eth-units';
-
-import * as async from "async";
-import { setTimeout } from "timers";
-
-import Web3 from 'web3';
+const Wallet = requireAppModule('angular/classes/wallet');
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule('angular/classes/token');
 
 function dec2hexString(dec) {
   return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
@@ -81,8 +76,9 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
       Token.$q = $q;
 
       Wallet.Web3Service = this;
-
+      console.log("00000000")
       Web3Service.q = async.queue((data, callback) => {
+        console.log("11111111")
         let promise = Web3Service.web3.eth[data.method].apply(this, data.args);
 
         $timeout(() => {
@@ -90,7 +86,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }, REQUEST_INTERVAL_DELAY);
 
       }, 1);
-
+      console.log("222222222")
     }
 
     syncWalletActivity() {
@@ -324,4 +320,4 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   return new Web3Service();
 }
 
-export default Web3Service;
+module.exports = Web3Service;

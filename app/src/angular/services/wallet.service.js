@@ -1,11 +1,9 @@
 'use strict';
 
-import Wallet from '../classes/wallet.js';
-import EthUtils from '../classes/eth-utils.js';
-import EthUnits from '../classes/eth-units.js';
-import Token from '../classes/token.js';
-
-import Tx from 'ethereumjs-tx';
+const Wallet = requireAppModule('angular/classes/wallet');
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule('angular/classes/token');
 
 function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService) {
   'ngInject';
@@ -301,4 +299,4 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
   return new WalletService();
 }
 
-export default WalletService;
+module.exports = WalletService;

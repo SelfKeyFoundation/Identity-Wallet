@@ -41,4 +41,4 @@ class CommonUtils {
     }
 }
 
-export default CommonUtils;
+module.exports = CommonUtils;

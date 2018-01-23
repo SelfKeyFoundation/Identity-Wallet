@@ -1,6 +1,6 @@
 'use strict';
 
-import Wallet from '../classes/wallet';
+const Wallet = requireAppModule('angular/classes/wallet');
 
 function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localStorageService) {
 	'ngInject';
@@ -175,4 +175,4 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
 	return new ElectronService();
 }
 
-export default ElectronService;
+module.exports = ElectronService;

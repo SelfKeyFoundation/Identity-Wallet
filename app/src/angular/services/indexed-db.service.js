@@ -200,4 +200,4 @@ function IndexedDBService($rootScope, $log, $q, CONFIG, localStorageService) {
   return new IndexedDBService();
 }
 
-export default IndexedDBService;
+module.exports = IndexedDBService;

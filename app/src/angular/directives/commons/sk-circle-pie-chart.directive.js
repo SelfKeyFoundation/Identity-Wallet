@@ -136,5 +136,5 @@ function SkCirclePieChartDirective() {
     }
 }
 
-export default SkCirclePieChartDirective;
+module.exports = SkCirclePieChartDirective;
 

@@ -23,4 +23,4 @@ function SkTasksBoxDirective($log) {
     }
 }
 
-export default SkTasksBoxDirective;
+module.exports = SkTasksBoxDirective;

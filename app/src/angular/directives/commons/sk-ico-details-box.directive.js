@@ -33,4 +33,4 @@ function SkIcoDetailsBoxDirective($rootScope, $log, $window, $timeout) {
     }
 }
 
-export default SkIcoDetailsBoxDirective;
+module.exports = SkIcoDetailsBoxDirective;

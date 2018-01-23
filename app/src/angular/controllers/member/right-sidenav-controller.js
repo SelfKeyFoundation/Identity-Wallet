@@ -22,4 +22,4 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
 
 };
 
-export default MemberRightSidenavController;
+module.exports = MemberRightSidenavController;

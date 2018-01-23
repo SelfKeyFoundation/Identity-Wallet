@@ -14,4 +14,4 @@ function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $
 
 };
 
-export default ReceiveTokenDialogController;
+module.exports = ReceiveTokenDialogController;

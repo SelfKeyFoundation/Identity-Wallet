@@ -121,4 +121,4 @@ class Ico {
     }
 }
 
-export default Ico;
+module.exports = Ico;

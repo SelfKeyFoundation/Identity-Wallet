@@ -13,4 +13,4 @@ function MemberSetupViewKeystoreController($rootScope, $scope, $log, $q, $timeou
 
 };
 
-export default MemberSetupViewKeystoreController;
+module.exports = MemberSetupViewKeystoreController;

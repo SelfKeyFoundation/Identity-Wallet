@@ -1,6 +1,6 @@
 'use strict';
 
-import Token from '../classes/token';
+const Token = requireAppModule('angular/classes/token');
 
 function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService) {
   'ngInject';
@@ -180,4 +180,4 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
   return new EtherScanService();
 }
 
-export default EtherScanService;
+module.exports = EtherScanService;

@@ -1,7 +1,4 @@
 'use strict';
-
-import BigNumber from 'bignumber.js';
-
 function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService, WalletService) {
     'ngInject';
 
@@ -56,4 +53,4 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
     }
 }
 
-export default SkTokenBoxDirective;
+module.exports = SkTokenBoxDirective;

@@ -7,4 +7,4 @@ function MemberProfileController($rootScope, $scope, $stateParams, $transitions)
     });
 };
 
-export default MemberProfileController;
+module.exports = MemberProfileController;

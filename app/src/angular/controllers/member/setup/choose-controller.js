@@ -1,6 +1,6 @@
-import IdAttributeType from '../../../classes/id-attribute-type';
-import IdAttributeItem from '../../../classes/id-attribute-item';
-import IdAttribute from '../../../classes/id-attribute';
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
 function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService, SelfkeyService) {
     'ngInject'
@@ -79,7 +79,7 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 ConfigFileService.save().then((savedData) => {
                     goToNextStep();
                     
-                    /*
+                    
                     let sessionPromise = SelfkeyService.retrieveKycSessionToken(
                         $rootScope.wallet.privateKeyHex,
                         $rootScope.wallet.publicKeyHex,
@@ -91,8 +91,8 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                     }).catch((error)=>{
                         console.log(">>>>error>>>>>>>>>", error);
                     });
-                    */
                     
+
                     /*
                     SelfkeyService.authWithKYC($rootScope.wallet.privateKeyHex, $rootScope.wallet.privateKeyHex.publicKeyHex, "5a50a2a87e4de3001ea161d2").then((resp)=>{
                         console.log(">>>>", resp, "<<<<<<")
@@ -134,4 +134,4 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
 };
 
-export default MemberSetupChooseController;
+module.exports = MemberSetupChooseController;

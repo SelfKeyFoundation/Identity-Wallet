@@ -50,4 +50,4 @@ function SkRightNavDirective($log, $q, $window, $timeout, $interval, $state) {
     }
 }
 
-export default SkRightNavDirective;
+module.exports = SkRightNavDirective;

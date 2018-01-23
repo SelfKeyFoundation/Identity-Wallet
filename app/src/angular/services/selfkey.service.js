@@ -1,8 +1,8 @@
 'use strict';
 
-import EthUtils from '../classes/eth-utils';
-import IdAttributeType from '../classes/id-attribute-type';
-import Ico from '../classes/ico';
+const Ico = requireAppModule('angular/classes/ico');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
   'ngInject';
@@ -70,6 +70,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         let idAttributesArray = data.ID_Attributes;
 
         for (let i in idAttributesArray) {
+          if(!idAttributesArray[i].data) continue;
           let item = idAttributesArray[i].data.fields;
           idAttributeTypes[item.key] = new IdAttributeType(
             item.key,
@@ -92,9 +93,9 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let promise = this.retrieveTableData('icos', reload);
       promise.then((data) => {
         let icoDetailsArray = data.ICO_Details;
-        console.log("ICO_Details", data.ICO_Details);
 
         for (let i in icoDetailsArray) {
+          if(!icoDetailsArray[i].data) continue;
           let item = icoDetailsArray[i].data.fields;
           if (!item.symbol) continue;
 
@@ -157,14 +158,17 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
       let store = ConfigFileService.getStore();
       let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-      
+
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
         $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
           "ethAddress": ethAddress,
           "email": email
-        }).finally(() => {
+        }).then((resp)=>{ console.log("???????", resp) }).catch((error)=>{console.log("!!!!!!!", error)}).finally(() => {
+
+          console.log(">>>> ETH ADDRESS", ethAddress);
+
           $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
 
             if (Web3Service.constructor.web3.utils.isHex(resp.data.challenge)) {
@@ -236,4 +240,4 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   return new SelfkeyService();
 }
 
-export default SelfkeyService;
+module.exports = SelfkeyService;

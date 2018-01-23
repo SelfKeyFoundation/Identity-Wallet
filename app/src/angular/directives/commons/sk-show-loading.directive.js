@@ -42,4 +42,4 @@ function skShowLoading($compile) {
     }
 }
 
-export default skShowLoading;
+module.exports = skShowLoading;

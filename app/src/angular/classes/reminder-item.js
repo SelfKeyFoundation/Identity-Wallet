@@ -1,6 +1,6 @@
 'use strict';
 
-import CommonUtils from './common-utils';
+const CommonUtils = requireAppModule('angular/classes/common-utils');
 
 let ConfigFileService;
 
@@ -22,4 +22,4 @@ class ReminderItem {
 
 }
 
-export default ReminderItem;
+module.exports = ReminderItem;

@@ -75,4 +75,4 @@ function ConfigStorageService($rootScope, $log, $q, CONFIG, localStorageService)
   return new ConfigStorageService();
 }
 
-export default ConfigStorageService;
+module.exports = ConfigStorageService;
