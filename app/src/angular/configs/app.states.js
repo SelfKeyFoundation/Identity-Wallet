@@ -22,9 +22,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
             // 1) TODO - get prices
 
-            // set token prices
-            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice;
-            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice;
+            // set token prices (TODO)
+            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
+            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
 
             // update balances
             let ethBalancePromise = $rootScope.wallet.loadBalance();
@@ -36,7 +36,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
              * 
              */
             $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
-
                 if ($rootScope.PRICES["ETH"]) {
                     $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
                 }

@@ -11,11 +11,37 @@ document.addEventListener('drop', function (event) {
 }, false);
 
 /**
+ * External Modules
+ */
+requireNodeModule('@uirouter/angularjs');
+requireNodeModule('angular-material');
+requireNodeModule('angular-local-storage');
+requireNodeModule('angular-qrcode');
+
+window.qrcode = requireNodeModule('qrcode-generator');
+
+
+/**
+ * 
+ */
+requireAppModule('angular/app.templates');
+
+/**
+ * main module: 'kyc-wallet'
+ */
+window.app = angular.module('kyc-wallet', [
+  'ngMaterial',
+  'ui.router',
+  'templates',
+  'LocalStorageModule',
+  'monospaced.qrcode'
+]);
+
+/**
  * Internal Modules
  */
 const appRun = requireAppModule('angular/configs/app.run');
 const appStates = requireAppModule('angular/configs/app.states');
-
 
 /**
  * constants
@@ -106,9 +132,6 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 const SkTasksBoxDirective = requireAppModule('angular/directives/commons/sk-tasks-box.directive');
 angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
 
-//const SkIcoItemBoxDirective = requireAppModule('angular/directives/commons/sk-ico-item-box.directive');
-//angular.module('kyc-wallet').directive('skIcoItemBox', SkIcoItemBoxDirective);
-
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
@@ -129,9 +152,6 @@ angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
 const SkKycRequirementsBoxDirective = requireAppModule('angular/directives/commons/sk-kyc-requirements-box.directive');
 angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
-
-//const SkActionLogsBoxDirective = requireAppModule('angular/directives/commons/sk-action-logs-box.directive');
-//angular.module('kyc-wallet').directive('skActionLogsBox', SkActionLogsBoxDirective);
 
 const ScrollToEndDirective = requireAppModule('angular/directives/commons/scroll-to-end.directive');
 angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);

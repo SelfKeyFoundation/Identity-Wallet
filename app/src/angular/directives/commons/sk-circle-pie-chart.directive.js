@@ -1,7 +1,8 @@
 'use strict';
 
-function SkCirclePieChartDirective() {
+function SkCirclePieChartDirective($timeout) {
     'ngInject';
+
     return {
         restrict: 'E',
         scope: {
@@ -25,7 +26,7 @@ function SkCirclePieChartDirective() {
             scope.chunkedItems = chunk(scope.data.items, 3);
 
             google.charts.load("current", { packages: ["corechart"] });
-            google.charts.setOnLoadCallback(()=>{
+            google.charts.setOnLoadCallback(() => {
                 if (scope.data.callback && scope.data.callback.onReady) {
                     scope.data.callback.onReady();
                 }
@@ -33,7 +34,8 @@ function SkCirclePieChartDirective() {
 
             function drawChart() {
                 let container = document.getElementById('chart');
-                if(!container) return;
+                
+                if (!container) return;
 
                 let dataItems = [];
                 let colors = [];
@@ -41,8 +43,8 @@ function SkCirclePieChartDirective() {
                     item.uniqueIdentifier = getUniqueIdentifier(item, index);
                     dataItems.push([item.title, item.valueUSD]);
                     colors.push(item.color);
-                
                 });
+
                 let processedData = [['Content', 'percents']].concat(dataItems);
                 let data = google.visualization.arrayToDataTable(processedData);
 
@@ -69,6 +71,7 @@ function SkCirclePieChartDirective() {
                 let chart = new google.visualization.PieChart(container);
 
                 scope.chartIsReady = false;
+                
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {
                     scope.chartIsReady = true;
                     scope.$apply();
@@ -88,7 +91,7 @@ function SkCirclePieChartDirective() {
                     let sel = chart.getSelection();
                     if (sel && sel.length && sel[0].row == chartItem.row) {
                         addOrRemoveActive(chartItem, 'removeClass');
-                        setTimeout(() => {
+                        $timeout(() => {
                             addOrRemoveActive(chartItem, 'addClass');
                         }, 100);
                         return;
@@ -124,10 +127,10 @@ function SkCirclePieChartDirective() {
             }
 
             scope.data.draw = () => {
-                setTimeout(()=>{
+                $timeout(() => {
                     scope.chunkedItems = chunk(scope.data.items, 3);
                     drawChart();
-                },400);
+                }, 400);
             }
 
         },

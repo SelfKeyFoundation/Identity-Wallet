@@ -72,13 +72,14 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         setChainId(DEFAULT_NODE, newChainId);
       });
 
+      EthUtils.web3 = new Web3();
+      window.EthUtils = EthUtils;
+
       Token.Web3Service = this;
       Token.$q = $q;
 
       Wallet.Web3Service = this;
-      console.log("00000000")
       Web3Service.q = async.queue((data, callback) => {
-        console.log("11111111")
         let promise = Web3Service.web3.eth[data.method].apply(this, data.args);
 
         $timeout(() => {
@@ -86,7 +87,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }, REQUEST_INTERVAL_DELAY);
 
       }, 1);
-      console.log("222222222")
     }
 
     syncWalletActivity() {

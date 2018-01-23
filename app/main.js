@@ -132,9 +132,11 @@ if (!handleSquirrelEvent()) {
 				minWidth: 1160,
 				minHeight: 800,
 				webPreferences: {
+					nodeIntegration: false,
+					webSecurity: true,
+					disableBlinkFeatures: 'Auxclick',
 					devTools: app.config.app.debug,
-					preload: path.join(app.dir.desktopApp, 'preload.js'),
-					nodeIntegration: false
+					preload: path.join(app.dir.desktopApp, 'preload.js')
 				},
 				icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
 			});

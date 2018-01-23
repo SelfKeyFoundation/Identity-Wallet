@@ -64,7 +64,6 @@ class Wallet {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
                 if (readyToShowNotification) {
                     ElectronService.showNotification('ETH Balance Changed', 'New Balance: ' + this.balanceEth);
-                    // TODO - scan transactions
                 }
             }
 

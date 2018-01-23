@@ -1,8 +1,29 @@
+const package = require(__dirname + "/../package.json");
+const defaultWindowOpen = window.open;
+
+const allowedUrls = [
+    'https:/youtube.com',
+    'https:/etherscan.io',
+    'https://selfkey.org',
+    'http://help.selfkey.org',
+    'https://blog.selfkey.org',
+    'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
+    'https://t.me/selfkeyfoundation'
+]
+
 window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
     let midRoute = isNear ? '/' : '/src/';
     let path = __dirname + midRoute + moduleName;
     return require(path);
+}
+
+
+window.requireNodeModule = function (moduleName) {
+    if (package.dependencies[moduleName]) {
+        return require(moduleName);
+    }
+    return null;
 }
 
 window.isDevMode = function () {
@@ -14,44 +35,30 @@ window.isDevMode = function () {
     return false;
 }
 
-/**
- * External Modules
- */
-require('@uirouter/angularjs');
-require('angular-material');
-require('angular-local-storage');
+window.version = package.version;
 
 /**
  * 
  */
 window.ipcRenderer = require('electron').ipcRenderer;
-window.qrcode = require('angular-qrcode').qrcode;
+
 window.BigNumber = require('bignumber.js');
 window.ethUtil = require('ethereumjs-util');
 window.crypto = require('crypto');
 window.ethUtil.crypto = crypto;
 
-window.async = require('async');
-console.log(async);
-
 window.Web3 = require('web3');
 window.Tx = require('ethereumjs-tx');
 
+process.once('loaded', function () {
+    window.async = require('async');
+    window.setImmediate = require('async').setImmediate;
+});
 
-
-/**
- * 
- */
-require('./src/angular/app.templates');
-  
-/**
- * main module: 'kyc-wallet'
- */
-
-window.app = angular.module('kyc-wallet', [
-    'ngMaterial',
-    'ui.router',
-    'templates',
-    'LocalStorageModule',
-    'monospaced.qrcode'
-]);
+window.open = function (url, ...args) {
+    if (allowedUrls.indexOf(url) === -1) {
+        console.log(url , "RESTRICTED");
+        return null;
+    }
+    return defaultWindowOpen(url, ...args);
+}

@@ -162,34 +162,29 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
-        $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
+        // step 1 (register)
+        let registerPromise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
           "ethAddress": ethAddress,
           "email": email
-        }).then((resp)=>{ console.log("???????", resp) }).catch((error)=>{console.log("!!!!!!!", error)}).finally(() => {
-
-          console.log(">>>> ETH ADDRESS", ethAddress);
-
-          $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
-
-            if (Web3Service.constructor.web3.utils.isHex(resp.data.challenge)) {
-              defer.reject("danger_challenge_provided");
-            } else {
-              let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
-              $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
-                wallet.sessionsStore[organizationId] = resp.data.token;
-                ConfigFileService.save().then(() => {
-                  defer.resolve(resp.data.token);
-                }).catch((error) => {
-                  defer.reject(error)
-                })
-              }).catch((error) => {
-                defer.reject(error)
-              })
-            }
-          }).catch((error) => {
-            defer.reject(error)
-          });
         });
+
+        // step 2 (challenge) | resp.data.challenge
+        registerPromise.then((resp)=>{ 
+          if (EthUtils.getWeb3().utils.isHex(resp.data.challenge)) {
+            defer.reject("danger_challenge_provided");
+          } else {
+            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
+
+            // step 3 (authentication)
+            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+              defer.resolve(resp.data.token);
+            }).catch((error) => {
+              defer.reject(error)
+            })
+          }
+        }).catch((error)=>{
+          defer.reject("auth_error");
+        })
       }
 
       return defer.promise;
