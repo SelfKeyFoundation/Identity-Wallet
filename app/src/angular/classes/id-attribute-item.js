@@ -1,7 +1,7 @@
 'use strict';
 
-import CommonUtils from './common-utils';
-import IdAttributeType from './id-attribute-type';
+const CommonUtils = requireAppModule('angular/classes/common-utils');
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
 class IdAttributeItem {
 
@@ -18,4 +18,4 @@ class IdAttributeItem {
 
 }
 
-export default IdAttributeItem;
+module.exports = IdAttributeItem;

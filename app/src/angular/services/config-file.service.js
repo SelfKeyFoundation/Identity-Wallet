@@ -1,9 +1,8 @@
 'use strict';
-import * as async from "async";
-import IdAttributeType from '../classes/id-attribute-type.js';
-import Ico from '../classes/ico.js';
-import ActionLogItem from '../classes/action-log-item.js';
-import IdAttribute from '../classes/id-attribute';
+
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+const IdAttribute = requireAppModule('angular/classes/id-attribute');
+const Ico = requireAppModule('angular/classes/ico');
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
@@ -23,8 +22,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
   class ConfigFileStore {
 
     constructor() {
-      ActionLogItem.ConfigFileService = this;
-
       this.q = async.queue((data, callback) => {
         let newStore = JSON.parse(data.store);
 
@@ -169,4 +166,4 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
   return new ConfigFileStore();
 }
 
-export default ConfigFileService;
+module.exports = ConfigFileService;

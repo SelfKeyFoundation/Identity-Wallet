@@ -45,4 +45,4 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
     }
 };
 
-export default GuestLoadingController;
+module.exports = GuestLoadingController;

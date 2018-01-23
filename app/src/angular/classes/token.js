@@ -1,8 +1,7 @@
 'use strict';
 
-import BigNumber from 'bignumber.js';
-import EthUtils from './eth-utils.js';
-import CommonUtils from './common-utils.js';
+const CommonUtils = requireAppModule('angular/classes/common-utils');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 let $rootScope, $q, Web3Service;
 
@@ -131,4 +130,4 @@ class Token {
     }
 }
 
-export default Token;
+module.exports = Token;

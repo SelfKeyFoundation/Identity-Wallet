@@ -1,7 +1,7 @@
 'use strict';
 
-import EthUnits from '../../classes/eth-units';
-import EthUtils from '../../classes/eth-utils';
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService, Web3Service) {
     'ngInject';
@@ -129,4 +129,4 @@ function SkSendTokenDirective($log, $window, $timeout, $interval, WalletService,
     }
 }
 
-export default SkSendTokenDirective;
+module.exports = SkSendTokenDirective;

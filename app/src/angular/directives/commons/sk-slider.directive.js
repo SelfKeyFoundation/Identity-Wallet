@@ -1,7 +1,6 @@
 'use strict';
 
 function skSlider($document) {
-    console.log('slider Directiiiive');
     'ngInject';
 
     // Move slider handle and range line
@@ -135,7 +134,7 @@ function skSlider($document) {
     }
 }
 
-export default skSlider;
+module.exports = skSlider;
 
 
 

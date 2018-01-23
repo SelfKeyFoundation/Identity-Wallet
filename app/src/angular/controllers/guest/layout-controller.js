@@ -4,4 +4,4 @@ function GuestLayoutController($rootScope, $scope, $log, $q, $timeout, ConfigFil
     $log.info('GuestLayoutController');
 };
 
-export default GuestLayoutController;
+module.exports = GuestLayoutController;

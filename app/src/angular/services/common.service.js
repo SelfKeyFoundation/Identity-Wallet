@@ -1,7 +1,7 @@
 'use strict';
 
-import Wallet from '../classes/wallet';
-import CommonUtils from '../classes/common-utils';
+const Wallet = requireAppModule('angular/classes/wallet');
+const CommonUtils = requireAppModule('angular/classes/common-utils');
 
 function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
   'ngInject';
@@ -81,4 +81,4 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
   return new CommonService();
 }
 
-export default CommonService;
+module.exports = CommonService;

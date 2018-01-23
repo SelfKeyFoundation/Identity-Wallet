@@ -1,6 +1,6 @@
 'use strict';
 
-import EthUnits from './eth-units';
+const EthUnits = requireAppModule('angular/classes/eth-units');
 
 let $rootScope, $q, Web3Service, CommonService, ElectronService;
 
@@ -64,7 +64,6 @@ class Wallet {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
                 if (readyToShowNotification) {
                     ElectronService.showNotification('ETH Balance Changed', 'New Balance: ' + this.balanceEth);
-                    // TODO - scan transactions
                 }
             }
 
@@ -87,4 +86,4 @@ class Wallet {
     }
 }
 
-export default Wallet;
+module.exports = Wallet;

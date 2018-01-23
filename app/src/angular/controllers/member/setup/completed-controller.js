@@ -10,4 +10,4 @@ function MemberSetupCompletedController($rootScope, $scope, $log, $q, $timeout, 
 
 };
 
-export default MemberSetupCompletedController;
+module.exports = MemberSetupCompletedController;

@@ -18,5 +18,5 @@ function SkSelectIfDirective($log) {
     }
 }
 
-export default SkSelectIfDirective;
+module.exports = SkSelectIfDirective;
 

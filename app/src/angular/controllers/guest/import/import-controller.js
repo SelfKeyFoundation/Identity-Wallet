@@ -32,4 +32,4 @@ function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $st
 
 };
 
-export default GuestImportWalletController;
+module.exports = GuestImportWalletController;

@@ -1,6 +1,7 @@
-import IdAttributeType from '../../../classes/id-attribute-type';
-import IdAttributeItem from '../../../classes/id-attribute-item';
-import IdAttribute from '../../../classes/id-attribute';
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+const IdAttribute = requireAppModule('angular/classes/id-attribute');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService, SelfkeyService) {
     'ngInject'
@@ -76,33 +77,25 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                     idAttributes[i] = idAttribute;
                 }
 
-                ConfigFileService.save().then((savedData) => {
-                    goToNextStep();
+                let sessionPromise = SelfkeyService.retrieveKycSessionToken(
+                    $rootScope.wallet.privateKeyHex,
+                    EthUtils.toChecksumAddress($rootScope.wallet.publicKeyHex),
+                    idAttributes["email"].items[idAttributes["email"].defaultItemId].values[0],     // TODO check email
+                    "5a50a2a87e4de3001ea161d2"                                                      // TODO Take from config
+                );
+                sessionPromise.then((token) => {
+                    if(!store.wallets.sessionsStore){
+                        store.wallets.sessionsStore = {}
+                        store.wallets.sessionsStore[organizationId] = token;
+                    }
                     
-                    /*
-                    let sessionPromise = SelfkeyService.retrieveKycSessionToken(
-                        $rootScope.wallet.privateKeyHex,
-                        $rootScope.wallet.publicKeyHex,
-                        idAttributes["email"].items[idAttributes["email"].defaultItemId].values[0],     // TODO check email
-                        "5a50a2a87e4de3001ea161d2"                                                      // TODO Take from config
-                    );
-                    sessionPromise.then((resp) => {
-                        console.log(">>>>>resp>>>>>>>>", resp);
-                    }).catch((error)=>{
-                        console.log(">>>>error>>>>>>>>>", error);
+                    ConfigFileService.save().then((savedData) => {
+                        goToNextStep();                 
+                    }).catch(() => {
+                        $scope.error = "store_save";
                     });
-                    */
-                    
-                    /*
-                    SelfkeyService.authWithKYC($rootScope.wallet.privateKeyHex, $rootScope.wallet.privateKeyHex.publicKeyHex, "5a50a2a87e4de3001ea161d2").then((resp)=>{
-                        console.log(">>>>", resp, "<<<<<<")
-                        //goToNextStep();
-                    }).catch((error)=>{
-                        console.log(">>>>>>>>", error);
-                    })
-                    */                    
-                }).catch(() => {
-                    $scope.error = "store_save";
+                }).catch((error)=>{
+                    $scope.error = "kyc_auth_error";
                 });
             }).catch(() => {
                 $scope.error = "kyc_import";
@@ -134,4 +127,4 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
 
 };
 
-export default MemberSetupChooseController;
+module.exports = MemberSetupChooseController;

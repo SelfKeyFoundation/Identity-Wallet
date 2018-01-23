@@ -9,4 +9,4 @@ class IdAttributeType {
     }
 }
 
-export default IdAttributeType;
+module.exports = IdAttributeType;

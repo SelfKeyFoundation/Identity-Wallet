@@ -1,6 +1,6 @@
 'use strict';
 
-import IdAttributeItem from './id-attribute-item';
+const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 
 class IdAttribute {
 
@@ -43,4 +43,4 @@ class IdAttribute {
     }
 }
 
-export default IdAttribute;
+module.exports = IdAttribute;

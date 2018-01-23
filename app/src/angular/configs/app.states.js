@@ -1,6 +1,6 @@
 'use strict';
 
-import Ico from '../classes/ico.js';
+const CommonUtils = requireAppModule('angular/classes/common-utils');
 
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
     'ngInject'
@@ -22,9 +22,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
             // 1) TODO - get prices
 
-            // set token prices
-            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice;
-            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice;
+            // set token prices (TODO)
+            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
+            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
 
             // update balances
             let ethBalancePromise = $rootScope.wallet.loadBalance();
@@ -36,7 +36,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
              * 
              */
             $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
-
                 if ($rootScope.PRICES["ETH"]) {
                     $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
                 }
@@ -402,4 +401,4 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     $urlRouterProvider.otherwise('/guest/loading');
 }
 
-export default appStates;
+module.exports = appStates;

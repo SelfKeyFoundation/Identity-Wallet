@@ -108,4 +108,4 @@ function ScrollToEndDirective($log, $window) {
     }
 }
 
-export default ScrollToEndDirective;
+module.exports = ScrollToEndDirective;

@@ -1,7 +1,5 @@
 'use strict';
 
-import BigNumber from 'bignumber.js';
-
 function EtherUnits($rootScope, $log, $http) {
   'ngInject';
 
@@ -79,4 +77,4 @@ function EtherUnits($rootScope, $log, $http) {
   return new EtherUnits();
 }
 
-export default EtherUnits;
+module.exports = EtherUnits;

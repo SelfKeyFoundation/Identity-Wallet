@@ -75,4 +75,4 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     $log.info("pie chart data:", $scope.pieChart);
 };
 
-export default MemberDashboardMainController;
+module.exports = MemberDashboardMainController;

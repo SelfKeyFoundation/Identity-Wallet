@@ -31,4 +31,4 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
     }
 }
 
-export default SkUserInfoBoxDirective;
+module.exports = SkUserInfoBoxDirective;

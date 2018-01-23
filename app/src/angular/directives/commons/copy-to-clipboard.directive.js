@@ -63,4 +63,4 @@ function CopyToClipboardDirective($document,$timeout) {
     }
 }
 
-export default CopyToClipboardDirective;
+module.exports = CopyToClipboardDirective;

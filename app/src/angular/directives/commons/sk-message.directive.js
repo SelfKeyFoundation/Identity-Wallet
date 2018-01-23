@@ -45,5 +45,5 @@ function SkMessageDirective($log, $timeout) {
     }
 }
 
-export default SkMessageDirective;
+module.exports = SkMessageDirective;
 

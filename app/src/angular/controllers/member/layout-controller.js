@@ -1,6 +1,7 @@
-import EthUnits from '../../classes/eth-units.js';
-import EthUtils from '../../classes/eth-utils.js';
-import Token from '../../classes/token.js';
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule('angular/classes/token');
+
 
 function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, ConfigFileService, ElectronService, ConfigStorageService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
     'ngInject'
@@ -36,4 +37,4 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
 
 };
 
-export default MemberLayoutController;
+module.exports = MemberLayoutController;

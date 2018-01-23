@@ -24,5 +24,5 @@ function SkLinearProgressDirective() {
     }
 }
 
-export default SkLinearProgressDirective;
+module.exports = SkLinearProgressDirective;
 

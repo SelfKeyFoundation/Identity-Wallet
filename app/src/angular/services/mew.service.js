@@ -1,7 +1,7 @@
 'use strict';
 
-import Token from '../classes/token';
-import EthUtils from '../classes/eth-utils';
+const Token = requireAppModule('angular/classes/token');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 function dec2hexString(dec) {
   return '0x' + (dec+0x10000).toString(16).substr(-4).toUpperCase();
@@ -159,4 +159,4 @@ function MEWService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSe
   return new MEWService();
 }
 
-export default MEWService;
+module.exports = MEWService;

@@ -41,5 +41,5 @@ function CountdownDirective($interval) {
     }
 }
 
-export default CountdownDirective;
+module.exports = CountdownDirective;
 

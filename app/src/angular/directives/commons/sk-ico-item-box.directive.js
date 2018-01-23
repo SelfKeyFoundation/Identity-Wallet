@@ -16,4 +16,4 @@ function SkIcoItemBoxDirective($log, $window, $timeout) {
     }
 }
 
-export default SkIcoItemBoxDirective;
+module.exports = SkIcoItemBoxDirective;
