@@ -35,10 +35,12 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                     return $scope.error = 'kyc_import'
                 }
 
-                store.wallets[$rootScope.wallet.getPublicKeyHex()] = {
-                    data: {
-                        idAttributes: idAttributes
-                    }
+                if(!store.wallets[$rootScope.wallet.getPublicKeyHex()]){
+                    store.wallets[$rootScope.wallet.getPublicKeyHex()] = {};
+                }
+
+                store.wallets[$rootScope.wallet.getPublicKeyHex()].data = {
+                    idAttributes: idAttributes
                 }
 
                 for (let i in resp) {
@@ -86,7 +88,7 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
                 sessionPromise.then((token) => {
                     if(!store.wallets.sessionsStore){
                         store.wallets.sessionsStore = {}
-                        store.wallets.sessionsStore[organizationId] = token;
+                        store.wallets.sessionsStore["5a50a2a87e4de3001ea161d2"] = token;
                     }
                     
                     ConfigFileService.save().then((savedData) => {
