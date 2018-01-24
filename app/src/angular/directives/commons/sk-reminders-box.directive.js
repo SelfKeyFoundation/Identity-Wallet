@@ -1,8 +1,6 @@
-import { setInterval } from "timers";
-
 'use strict';
 
-function SkRemindersBoxDirective($log, $window, ConfigFileService, CONFIG) {
+function SkRemindersBoxDirective($log, $window, $timeout, ConfigFileService, CONFIG) {
     'ngInject';
 
     return {
@@ -84,7 +82,7 @@ function SkRemindersBoxDirective($log, $window, ConfigFileService, CONFIG) {
 
             filterReminders();
 
-            setInterval( function() {
+            $timeout( function() {
                 filterReminders();
             }, 10000);
 
@@ -94,4 +92,4 @@ function SkRemindersBoxDirective($log, $window, ConfigFileService, CONFIG) {
     }
 }
 
-export default SkRemindersBoxDirective;
+module.exports = SkRemindersBoxDirective;

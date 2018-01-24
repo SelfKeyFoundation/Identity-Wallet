@@ -1,8 +1,8 @@
 'use strict';
 
-import EthUtils from '../classes/eth-utils';
-import IdAttributeType from '../classes/id-attribute-type';
-import Ico from '../classes/ico';
+const Ico = requireAppModule('angular/classes/ico');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
   'ngInject';
@@ -70,6 +70,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         let idAttributesArray = data.ID_Attributes;
 
         for (let i in idAttributesArray) {
+          if(!idAttributesArray[i].data) continue;
           let item = idAttributesArray[i].data.fields;
           idAttributeTypes[item.key] = new IdAttributeType(
             item.key,
@@ -92,9 +93,9 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let promise = this.retrieveTableData('icos', reload);
       promise.then((data) => {
         let icoDetailsArray = data.ICO_Details;
-        console.log("ICO_Details", data.ICO_Details);
 
         for (let i in icoDetailsArray) {
+          if(!icoDetailsArray[i].data) continue;
           let item = icoDetailsArray[i].data.fields;
           if (!item.symbol) continue;
 
@@ -157,34 +158,35 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
       let store = ConfigFileService.getStore();
       let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+    
+      console.log(">>>>>", wallet)
+
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
-        $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
+        // step 1 (register)
+        let registerPromise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
           "ethAddress": ethAddress,
           "email": email
-        }).finally(() => {
-          $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + "0x" + ethAddress).then((resp) => {
-
-            if (Web3Service.constructor.web3.utils.isHex(resp.data.challenge)) {
-              defer.reject("danger_challenge_provided");
-            } else {
-              let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
-              $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
-                wallet.sessionsStore[organizationId] = resp.data.token;
-                ConfigFileService.save().then(() => {
-                  defer.resolve(resp.data.token);
-                }).catch((error) => {
-                  defer.reject(error)
-                })
-              }).catch((error) => {
-                defer.reject(error)
-              })
-            }
-          }).catch((error) => {
-            defer.reject(error)
-          });
         });
+
+        // step 2 (challenge) | resp.data.challenge
+        registerPromise.then((resp)=>{ 
+          if (EthUtils.getWeb3().utils.isHex(resp.data.challenge)) {
+            defer.reject("danger_challenge_provided");
+          } else {
+            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
+
+            // step 3 (authentication)
+            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+              defer.resolve(resp.data.token);
+            }).catch((error) => {
+              defer.reject(error)
+            })
+          }
+        }).catch((error)=>{
+          defer.reject("auth_error");
+        })
       }
 
       return defer.promise;
@@ -235,4 +237,4 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   return new SelfkeyService();
 }
 
-export default SelfkeyService;
+module.exports = SelfkeyService;

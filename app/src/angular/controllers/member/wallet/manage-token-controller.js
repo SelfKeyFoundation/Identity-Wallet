@@ -84,4 +84,4 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     });
 };
 
-export default ManageTokenController;
+module.exports = ManageTokenController;

@@ -18,4 +18,4 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
     }
 };
 
-export default GuestKeystoreCreateStep4Controller;
+module.exports = GuestKeystoreCreateStep4Controller;

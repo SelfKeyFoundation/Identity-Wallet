@@ -17,4 +17,4 @@ function SkLoadingDirective($log) {
     }
 }
 
-export default SkLoadingDirective;
+module.exports = SkLoadingDirective;

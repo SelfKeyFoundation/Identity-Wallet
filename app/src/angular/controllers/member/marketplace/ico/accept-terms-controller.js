@@ -42,4 +42,4 @@ function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q,
 
 };
 
-export default MemberMarketplaceIcoAcceptTermsController;
+module.exports = MemberMarketplaceIcoAcceptTermsController;

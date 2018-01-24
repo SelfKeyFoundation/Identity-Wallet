@@ -1,7 +1,7 @@
 'use strict';
 
-import EthUnits from '../../../classes/eth-units';
-import EthUtils from '../../../classes/eth-utils';
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, args, Web3Service, WalletService, TokenService) {
     'ngInject'
@@ -341,7 +341,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         } else {
             $scope.errors.sendAmount = false;
             
-            newVal.sendAmount = Number(newVal.sendAmount);
+            // allow only decimals for non eth items
+            if($scope.symbol.toLowerCase() !== 'eth'){
+                newVal.sendAmount = Number(newVal.sendAmount);
+            }
 
             if(Number(newVal.sendAmount) > $scope.infoData.totalBalance){
                 $scope.formData.sendAmount = $scope.infoData.totalBalance;
@@ -394,4 +397,4 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     });
 };
 
-export default SendTokenDialogController;
+module.exports = SendTokenDialogController;

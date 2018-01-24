@@ -1,7 +1,5 @@
 'use strict';
 
-import BigNumber from 'bignumber.js';
-
 const UNIT_MAP = {
     'wei': '1',
 	'kwei': '1000',
@@ -66,4 +64,4 @@ class EthUnits {
     }
 }
 
-export default EthUnits;
+module.exports = EthUnits;

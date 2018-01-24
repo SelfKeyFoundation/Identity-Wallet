@@ -11,8 +11,10 @@
         //sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
         .sk-box(layout="column", layout-align="center center", style="height: 216px; display: flex; margin: 0;")
             md-icon(md-svg-src="assets/images/icons/airdrop.svg", style="width: 100px; height: 108px; margin-bottom: 0; margin-top: 0;")
-            span(style="margin-top: 14px; font-family: ProximaNovaRegular; font-size: 23px; color: #fff;") KEY Airdrop
-            span(style="margin-top: 10px; font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1;") Get 50 KEY Tokens
+            span(style="margin-top: 14px; font-family: ProximaNovaRegular; font-size: 23px; color: #fff;") KEY Airdrop Completed
+            //span(style="margin-top: 10px; font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1;") Get 50 KEY Tokens
+            md-button.smallest.gray(style="margin-top: 10px; display: flex;", ng-click="openEtherscanTxWindow()")
+                span(style="font-size: 11px;") VIEW TRANSACTION
 
     // my crypto
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
@@ -21,12 +23,12 @@
                 span(flex) My Crypto
                 //button.sk-icon-button(ng-click="$root.openAddCustomTokenDialog($event)")
                     sk-icon(icon="plus", size-class="icon-size-26x26")
-                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-hide="$root.totalBalanceInUsd <= 0")
+                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-if="$root.totalBalanceInUsd > 0")
                     span Get KEY
                     sk-icon(icon="plus", size-class="icon-size-26x26")
             .sk-horizontal-devider
-            sk-circle-pie-chart(data="pieChart", ng-hide="$root.totalBalanceInUsd <= 0")
-            .get-key(ng-show="$root.totalBalanceInUsd <= 0", ng-click="$root.goToSelfkeyIco($event)")
+            sk-circle-pie-chart(data="pieChart", ng-show="$root.totalBalanceInUsd > 0")
+            .get-key(ng-if="$root.totalBalanceInUsd == 0", ng-click="$root.goToSelfkeyIco($event)")
                 sk-icon(icon="empty-plus", size-class="icon-size-20x20")
                 span Get KEY
 

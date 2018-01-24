@@ -3,6 +3,10 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $log.info('MemberDashboardMainController');
 
+    $scope.openEtherscanTxWindow = (event) => {
+        $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
+    }
+
     $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
 
@@ -114,4 +118,4 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     $log.info("pie chart data:", $scope.pieChart);
 };
 
-export default MemberDashboardMainController;
+module.exports = MemberDashboardMainController;

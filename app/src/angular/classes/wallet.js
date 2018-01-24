@@ -1,6 +1,6 @@
 'use strict';
 
-import EthUnits from './eth-units';
+const EthUnits = requireAppModule('angular/classes/eth-units');
 
 let $rootScope, $q, Web3Service, CommonService, ElectronService;
 
@@ -86,4 +86,4 @@ class Wallet {
     }
 }
 
-export default Wallet;
+module.exports = Wallet;

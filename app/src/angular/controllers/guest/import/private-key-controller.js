@@ -38,4 +38,4 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
 
 };
 
-export default GuestImportPrivateKeyController;
+module.exports = GuestImportPrivateKeyController;

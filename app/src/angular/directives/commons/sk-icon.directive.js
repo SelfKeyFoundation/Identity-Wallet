@@ -17,5 +17,5 @@ function SkIconDirective($log) {
     }
 }
 
-export default SkIconDirective;
+module.exports = SkIconDirective;
 

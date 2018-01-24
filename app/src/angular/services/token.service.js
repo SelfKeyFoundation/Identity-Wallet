@@ -1,7 +1,7 @@
 'use strict';
 
-import Token from '../classes/token.js';
-import EthUtils from '../classes/eth-utils.js';
+const Token = requireAppModule('angular/classes/token');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
@@ -94,4 +94,4 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
   return new TokenService();
 }
 
-export default TokenService;
+module.exports = TokenService;

@@ -32,4 +32,4 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
     }
 };
 
-export default TermsDialogController;
+module.exports = TermsDialogController;

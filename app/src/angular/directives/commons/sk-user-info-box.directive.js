@@ -22,7 +22,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
             function reloadData(){
                 for(let i in idAttributes){
                     let item = idAttributes[i];
-                    scope.userData[i] = item.items[item.defaultItemId].value;
+                    scope.userData[i] = item.items[item.defaultItemId].values[0];
                 }    
             }
         },
@@ -31,4 +31,4 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
     }
 }
 
-export default SkUserInfoBoxDirective;
+module.exports = SkUserInfoBoxDirective;

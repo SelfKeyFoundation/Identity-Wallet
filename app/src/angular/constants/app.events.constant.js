@@ -7,4 +7,4 @@ const AppEventsConstant = {
     CHAIN_ID_CHANGED: "app:chain-id-changed"
 };
 
-export default AppEventsConstant;
+module.exports = AppEventsConstant;

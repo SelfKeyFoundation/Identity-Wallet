@@ -1,13 +1,8 @@
 
-import Wallet from '../classes/wallet';
-import Token from '../classes/token';
-import EthUtils from '../classes/eth-utils';
-import EthUnits from '../classes/eth-units';
-
-import * as async from "async";
-import { setTimeout } from "timers";
-
-import Web3 from 'web3';
+const Wallet = requireAppModule('angular/classes/wallet');
+const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule('angular/classes/token');
 
 const ABI = require('../store/abi.json').abi;
 import BigNumber from 'bignumber.js';
@@ -79,11 +74,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         setChainId(DEFAULT_NODE, newChainId);
       });
 
+      EthUtils.web3 = new Web3();
+      window.EthUtils = EthUtils;
+
       Token.Web3Service = this;
       Token.$q = $q;
 
       Wallet.Web3Service = this;
-
       Web3Service.q = async.queue((data, callback) => {
         let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
         let self = data.contract ? data.contract : this;
@@ -94,6 +91,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }, REQUEST_INTERVAL_DELAY);
 
       }, 1);
+
       
       $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
         let self = this;
@@ -102,7 +100,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         $timeout(() => {
           fn.call(self);
         },3000)
-    });
+      });
     }
 
     getSelectedChainId() {
@@ -507,4 +505,4 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   return new Web3Service();
 }
 
-export default Web3Service;
+module.exports = Web3Service;

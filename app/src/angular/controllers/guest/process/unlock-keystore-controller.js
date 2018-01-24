@@ -52,4 +52,4 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
 };
 
-export default GuestUnlockKeystoreController;
+module.exports = GuestUnlockKeystoreController;

@@ -62,4 +62,4 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
 };
 
-export default GuestImportKeystoreController;
+module.exports = GuestImportKeystoreController;

@@ -1,7 +1,7 @@
 'use strict';
 
-import IdAttributeItem from '../../classes/id-attribute-item';
-import IdAttribute from '../../classes/id-attribute';
+const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
 function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService, ConfigFileService, CommonService) {
     'ngInject';
@@ -68,4 +68,4 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
     }
 }
 
-export default SkKycRequirementsBoxDirective;
+module.exports = SkKycRequirementsBoxDirective;

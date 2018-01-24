@@ -20,4 +20,4 @@ function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $
     }
 };
 
-export default StartupGuideDialogController;
+module.exports = StartupGuideDialogController;

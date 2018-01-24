@@ -11,6 +11,8 @@ const {dialog} = require('electron');
 const deskmetrics = require('deskmetrics');
 const {Menu} = require("electron");
 
+var appRoot = path.join(__dirname, '..');
+
 // windows installer
 function handleSquirrelEvent() {
 	if (process.argv.length === 1) {
@@ -130,6 +132,9 @@ if (!handleSquirrelEvent()) {
 				minWidth: 1160,
 				minHeight: 800,
 				webPreferences: {
+					nodeIntegration: false,
+					webSecurity: true,
+					disableBlinkFeatures: 'Auxclick',
 					devTools: app.config.app.debug,
 					preload: path.join(app.dir.desktopApp, 'preload.js')
 				},
