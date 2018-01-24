@@ -99,12 +99,12 @@ module.exports = function (app) {
 						type: 'default',
 						lastBalance: 0
 					},
-					qey: {
+					key: {
 						type: 'custom',
 						lastBalance: 0,
 						contract: {
-							address: "0x3e6f45f183492a644db9d3e1fc3fb8d48ea99421",
-							symbol: "QEY",
+							address: "0x28eb857a2aee4b49fd45f163875dd5ef76e16394",
+							symbol: "KEY",
 							decimal: 18,
 							type: "default"
 						}

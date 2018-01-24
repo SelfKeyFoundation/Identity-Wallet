@@ -32,7 +32,7 @@ const AppConfigConstant = {
 				"notary": "addition_with_notary",
 				"certified_true_copy": "addition_with_certified_true_copy"
 			},
-			"primaryToken": "qey"
+			"primaryToken": "key"
 		},
 		notificationTypes : {
 			wallet : {

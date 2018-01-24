@@ -129,14 +129,8 @@ angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective
 const SkTokenBoxDirective = requireAppModule('angular/directives/commons/sk-token-box.directive');
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
-const SkTasksBoxDirective = requireAppModule('angular/directives/commons/sk-tasks-box.directive');
-angular.module('kyc-wallet').directive('skTasksBox', SkTasksBoxDirective);
-
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
-
-const SkSendTokenDirective = requireAppModule('angular/directives/commons/sk-send-token.directive');
-angular.module('kyc-wallet').directive('skSendToken', SkSendTokenDirective);
 
 const SkRightSidenavDirective = requireAppModule('angular/directives/commons/sk-right-sidenav.directive');
 angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);

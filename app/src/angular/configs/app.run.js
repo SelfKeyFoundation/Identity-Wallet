@@ -1,9 +1,6 @@
 'use strict';
 
-//import $ from 'jquery';
-
 const Wallet = requireAppModule('angular/classes/wallet');
-console.log(">>>>>", Wallet);
 const Token = requireAppModule('angular/classes/token');
 
 function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, Web3Service) {

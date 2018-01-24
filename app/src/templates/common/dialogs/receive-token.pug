@@ -7,7 +7,7 @@ md-dialog.receive-token(aira-lable="Receive Dialog")
             .barcode-container
                 qrcode(data="{{publicKeyHex}}", size="185", background="#fff")
         .receive-token-address(layout="column" layout-align="center center")
-            .address() Your Ethereum Address To Receive {{symbol == 'ETH' ? 'ETH' : symbol == 'QEY' ? 'KEY' : ''}}
+            .address Your Ethereum Address To Receive {{symbol}}
             .public-key {{publicKeyHex}}
         .receive-token-icons(layout="row", layout-align="center center")
             div(copy-to-clipboard="publicKeyHex", copy-animation="fadeUp")
