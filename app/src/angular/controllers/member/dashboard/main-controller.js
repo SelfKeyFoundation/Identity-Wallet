@@ -76,6 +76,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         return !isInProgress;
     }
 
+    $scope.allTransactions = [];
+
     $scope.setTransactionAtivity = () => {
         let store = ConfigFileService.getStore();
         
