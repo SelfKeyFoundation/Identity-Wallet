@@ -9,7 +9,10 @@
 		"start": "gulp && ./node_modules/.bin/electron-forge start -- dev",
 		"package": "gulp && ./node_modules/.bin/electron-forge package",
 		"make": "gulp && ./node_modules/.bin/electron-forge make",
-		"startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev"
+		"makewin": "gulp && node_modules\\.bin\\electron-forge make",
+		"startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev",
+		"start-auto": "gulp && gulp start",
+		"make-auto": "gulp && gulp make"
 	},
 	"dependencies": {
 		"@uirouter/angularjs": "1.0.6",
