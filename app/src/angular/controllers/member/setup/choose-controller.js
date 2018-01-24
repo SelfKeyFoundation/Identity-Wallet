@@ -28,9 +28,8 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
             let idAttributes = {};
 
             ElectronService.importKYCIdentity(file).then((resp) => {
-
                 publicAddress = Web3Service.constructor.web3.utils.toChecksumAddress(publicAddress);
-
+                
                 if (publicAddress != resp.public_key[0].value) {
                     return $scope.error = 'kyc_import'
                 }
@@ -126,7 +125,6 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
             $state.go('member.setup.completed');
         }
     }
-
 };
 
 module.exports = MemberSetupChooseController;

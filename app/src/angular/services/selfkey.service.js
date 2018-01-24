@@ -70,7 +70,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         let idAttributesArray = data.ID_Attributes;
 
         for (let i in idAttributesArray) {
-          if(!idAttributesArray[i].data) continue;
+          if (!idAttributesArray[i].data) continue;
           let item = idAttributesArray[i].data.fields;
           idAttributeTypes[item.key] = new IdAttributeType(
             item.key,
@@ -95,7 +95,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         let icoDetailsArray = data.ICO_Details;
 
         for (let i in icoDetailsArray) {
-          if(!icoDetailsArray[i].data) continue;
+          if (!icoDetailsArray[i].data) continue;
           let item = icoDetailsArray[i].data.fields;
           if (!item.symbol) continue;
 
@@ -153,43 +153,57 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       return defer.promise;
     }
 
+    /**
+     * 
+     */
     retrieveKycSessionToken(privateKeyHex, ethAddress, email, organizationId) {
       let defer = $q.defer();
 
       let store = ConfigFileService.getStore();
       let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-    
-      console.log(">>>>>", wallet)
 
       if (wallet && wallet.sessionsStore && wallet.sessionsStore[organizationId]) {
         defer.resolve(wallet.sessionsStore[organizationId]);
       } else {
-        // step 1 (register)
-        let registerPromise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
-          "ethAddress": ethAddress,
-          "email": email
-        });
-
-        // step 2 (challenge) | resp.data.challenge
-        registerPromise.then((resp)=>{ 
-          if (EthUtils.getWeb3().utils.isHex(resp.data.challenge)) {
-            defer.reject("danger_challenge_provided");
-          } else {
-            let reqBody = EthUtils.signChallenge(resp.data.challenge, privateKeyHex);
-
-            // step 3 (authentication)
-            $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
-              defer.resolve(resp.data.token);
-            }).catch((error) => {
-              defer.reject(error)
-            })
-          }
-        }).catch((error)=>{
-          defer.reject("auth_error");
-        })
+        this.retrieveKycSessionToken_register(defer, ethAddress, privateKeyHex, email, organizationId);
       }
 
       return defer.promise;
+    }
+
+    retrieveKycSessionToken_register(defer, ethAddress, privateKeyHex, email, organizationId) {
+      let promise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
+        "ethAddress": ethAddress,
+        "email": email
+      });
+
+      promise.then((resp) => {
+        if (EthUtils.getWeb3().utils.isHex(resp.data.challenge)) {
+          defer.reject("danger_challenge_provided");
+        } else {
+          this.retrieveKycSessionToken_auth(defer, resp.data.challenge, privateKeyHex);
+        }
+      }).catch((error) => {
+        this.retrieveKycSessionToken_getChallenge(defer, ethAddress, privateKeyHex);
+      });
+    }
+
+    retrieveKycSessionToken_getChallenge(defer, ethAddress, privateKeyHex) {
+      $http.get(KYC_BASE_URL + "walletauth?ethAddress=" + ethAddress).then((resp) => {
+        this.retrieveKycSessionToken_auth(defer, resp.data.challenge, privateKeyHex);
+      }).catch((error) => {
+        defer.reject("challenge_retrieve_error");
+      });
+    }
+
+    retrieveKycSessionToken_auth(defer, challenge, privateKeyHex) {
+      let reqBody = EthUtils.signChallenge(challenge, privateKeyHex);
+      // step 3 (authentication)
+      $http.post(KYC_BASE_URL + "walletauth", reqBody).then((resp) => {
+        defer.resolve(resp.data.token);
+      }).catch((error) => {
+        defer.reject("auth_error");
+      });
     }
 
     initKycProcess(privateKeyHex, templateId, organizationId, ethAddress, email) {
@@ -200,17 +214,17 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
 
       // ["KEY", "ETH"]
       let promise = $http.post("https://token-sale-demo-api.kyc-chain.com/rate/tokens/symbol", { "tokens": tokens });
-      
-      promise.then((resp)=>{
-        for(let i in resp.data.items){
+
+      promise.then((resp) => {
+        for (let i in resp.data.items) {
           let item = resp.data.items[i];
-          if(item){
+          if (item) {
             PRICES[item.symbol] = item;
           }
         }
         $rootScope.PRICES = PRICES;
         defer.resolve($rootScope.PRICES);
-      }).catch((error)=>{
+      }).catch((error) => {
         defer.reject("CANT_GET_PRICE");
       });
 
