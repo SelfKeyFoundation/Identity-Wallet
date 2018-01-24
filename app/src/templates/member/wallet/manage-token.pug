@@ -26,17 +26,17 @@
                 span.send SEND
     .body-content
         .activity-text Activity
-        sk-linear-progress(ng-if="!$root.walletActivityIsSynced",style="margin-top:10px;")
-        div(ng-if="$root.walletActivityIsSynced", ng-init="setWalletActivity()")
-            .list(ng-repeat="activity in walletActivity")
-                .list-item
-                    .item-container(layout="row")
-                        .date {{ activity.timestamp | date:'MMM'}}
-                            span {{activity.timestamp | date:'dd'}} 
-                        sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
-                        .sent-receive {{activity.to ? 'sent to' : 'received from'}}
-                        span.sent-receive-text  {{activity.to || activity.from}}
-                        .coin-change - {{activity.value}}
+        sk-linear-progress(ng-if="!$root.walletActivityStatuses[originalSymbol]",style="margin-top:10px;")
+        div(ng-if="$root.walletActivityStatuses[originalSymbol]", ng-init="setTokenActivity()")
+        .list(ng-repeat="activity in tokenActivity track by $index")
+            .list-item
+                .item-container(layout="row")
+                    .date {{ activity.timestamp | date:'MMM'}}
+                        span {{activity.timestamp | date:'dd'}} 
+                    sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
+                    .sent-receive {{ activity.sentOrReceive }}
+                    span.sent-receive-text.aqua-blue  {{activity.nameOfTo}}
+                    .coin-change(ng-class="{'aqua-blue': !!activity.nameOfTo}") {{activity.to ? '- ' : '+ '}} {{activity.value}}
                 
                 //hr
                 //.item-container(layout="row")
