@@ -46,8 +46,9 @@
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
             sk-linear-progress(ng-if="!transactionActivityIsSynced()",style="margin-top:10px;")
-            div(ng-if="transactionActivityIsSynced", ng-init="setTransactionAtivity()")
+            div(ng-if="transactionActivityIsSynced()", ng-init="setTransactionAtivity()")
             .sk-horizontal-devider(style="margin-top: 20px;")
+            span.no-transaction-title(ng-if="transactionActivityIsSynced() && !allTransactions.length") No transactions yet.
             .transactions-box-body
                 .list(ng-repeat="activity in allTransactions track by $index")
                     .list-item
