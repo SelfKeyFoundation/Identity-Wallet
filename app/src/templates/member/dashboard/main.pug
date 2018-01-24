@@ -45,6 +45,18 @@
         .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+            sk-linear-progress(ng-if="!transactionActivityIsSynced()",style="margin-top:10px;")
+            div(ng-if="transactionActivityIsSynced", ng-init="setTransactionAtivity()")
             .sk-horizontal-devider(style="margin-top: 20px;")
-
-            span(style="font-family: ProximaNovaRegular; font-size: 18px; font-weight: 300; color: #93b0c1; margin-top: 30px;") No transactions yet.
+            .transactions-box-body
+                .list(ng-repeat="activity in allTransactions track by $index")
+                    .list-item
+                        .item-container(layout="row")
+                            .date {{ activity.timestamp | date:'MMM'}}
+                                span {{activity.timestamp | date:'dd'}} 
+                            sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
+                            .sent-receive {{ activity.sentOrReceive }}
+                            span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
+                            span.sent-receive-text.grey  {{activity.nameOfTo}}
+                            .coin-change.symbol(ng-class="activity.symbol") {{activity.to ? '- ' : '+ '}} {{activity.value}}
+                        .sk-horizontal-devider(ng-if="allTransactions.length-1 != $index" style="margin-top: 20px;")

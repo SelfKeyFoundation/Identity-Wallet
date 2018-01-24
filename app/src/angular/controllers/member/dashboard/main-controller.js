@@ -1,4 +1,4 @@
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService, WalletService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController');
@@ -62,6 +62,49 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
         $scope.pieChart.draw();
     }
+    $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
+    $scope.transactionActivityIsSynced = function() {
+        let statuses = $rootScope.walletActivityStatuses;
+        let isInProgress = false;  
+        if (statuses) {
+            Object.keys(statuses).forEach(key => {
+                if (statuses[key] == false) {
+                    isInProgress = true;
+                }
+            });
+        }
+        return !isInProgress;
+    }
+
+    $scope.setTransactionAtivity = () => {
+        let store = ConfigFileService.getStore();
+        
+        let data = store.wallets[$scope.publicKeyHex].data;
+        let allTransactions = [];  
+        if (data.activities) {
+            Object.keys(data.activities).forEach(activityKey => {
+                let activity = data.activities[activityKey];
+                let transactions = activity && activity.transactions ? activity.transactions : [];
+                transactions.forEach(transaction => {
+                    if (transaction.to) {
+                        transaction.nameOfTo = WalletService.getWalletName(activityKey, transaction.to);
+                    }
+                    let symbol = activityKey.toUpperCase();
+                    transaction.sentOrReceive =  transaction.to ? 'Sent' : 'Received';
+                    transaction.symbol = symbol;
+                                    
+                });
+                allTransactions = allTransactions.concat(transactions);
+            });
+         
+            allTransactions.sort((a,b) =>{
+                return Number(b.timestamp) - Number(a.timestamp);
+            });
+
+            $scope.allTransactions = allTransactions;
+        }
+    }
+    $scope.setTransactionAtivity();
 
     /**
      * update pie chart on balance change
