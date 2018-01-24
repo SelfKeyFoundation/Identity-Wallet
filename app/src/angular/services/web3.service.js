@@ -4,8 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-const ABI = require('../store/abi.json').abi;
-import BigNumber from 'bignumber.js';
+const ABI = requireAppModule('angular/store/abi.json').abi;
 
 function dec2hexString(dec) {
   return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
