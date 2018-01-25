@@ -1,8 +1,8 @@
 'use strict';
 
 const electron = require('electron');
-const {dialog} = require('electron');
-const {Notification} = require('electron');
+const {dialog, Notification, shell} = require('electron');
+
 const path = require('path');
 const keythereum = require('../extended_modules/keythereum');
 const deskmetrics = require('deskmetrics');
@@ -12,7 +12,6 @@ const fs = require('fs-extra');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
-const {shell} = require('electron');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);

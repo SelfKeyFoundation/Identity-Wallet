@@ -1,30 +1,10 @@
 'use strict';
 
-//wallets[publicKey].data.idAttributes
-//userDataDirectory/documents
-
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
+const {Menu, Tray} = require('electron');
 //const {autoUpdater} = require('electron-updater');
-const deskmetrics = require('deskmetrics');
-const {Menu, app, Tray} = require("electron");
-
-
-
-var appRoot = path.join(__dirname, '..');
-
-let tray = null
-app.on('ready', () => {
-    // tray = new Tray('assets/icons/png/256X256.png')
-    // const contextMenu = Menu.buildFromTemplate([
-    //     {label: 'Item1', type: 'radio'}
-    // ])
-    // tray.setContextMenu(contextMenu)
-    // tray.setToolTip('selfkey')
-
-    app.dock.setIcon('assets/icons/png/256X256.png')
-})
 
 // windows installer
 function handleSquirrelEvent() {
@@ -105,9 +85,9 @@ if (!handleSquirrelEvent()) {
 		}
 	}
 
-
 	const parsedConfig = require('./config');
 	let extraConfig = parsedConfig.production;
+
 	if(devModeStarted) {
 		extraConfig = parsedConfig.default;
 	}
@@ -139,6 +119,12 @@ if (!handleSquirrelEvent()) {
 
 	function createWindow(app) {
 		return function () {
+
+			//electron.app.dock.setIcon('assets/icons/png/256X256.png');
+			let tray = new Tray('assets/icons/png/256X256.png');
+			tray.setToolTip('selfkey');
+
+
 			app.win = new electron.BrowserWindow({
 				width: 1160,
 				height: 800,
@@ -154,11 +140,8 @@ if (!handleSquirrelEvent()) {
 				icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
 			});
 
-			// If DEV loads electron source files from 'src' folder instead of 'dist' folder
-			//let webAppPath = path.join(app.dir.root, '/web-dist', 'index.html');
-			//if (app.config.app.dev) {
 			let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
-			//}
+
 			app.win.loadURL(url.format({
 				pathname: webAppPath,
 				protocol: 'file:',
@@ -179,14 +162,10 @@ if (!handleSquirrelEvent()) {
 				app.win.webContents.send('ON_READY');
 			});
 
-			deskmetrics.start({ appId: app.config.deskmetricsAppId }).then(function() {
-				deskmetrics.setProperty('version', electron.app.getVersion());
-			});
-
 			/**
 			 * Create the Application's main menu
 			 */
-			var template = [{
+			let template = [{
 				label: "Edit",
 				submenu: [
 					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
@@ -201,46 +180,7 @@ if (!handleSquirrelEvent()) {
 		
 			Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
-
-			// self updater
-			/*
-			if (!app.config.app.dev) {
-				autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-					console.log('update-downloaded');
-					const dialogOpts = {
-						type: 'info',
-						buttons: ['Restart', 'Later'],
-						title: 'Application Update',
-						message: process.platform === 'win32' ? releaseNotes : releaseName,
-						detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-					};
-
-					dialog.showMessageBox(dialogOpts, (response) => {
-						if (response === 0) { autoUpdater.quitAndInstall(); }
-					});
-				});
-
-				autoUpdater.on('error', (error) => {
-					console.error('There was a problem updating the application', error);
-				});
-
-				autoUpdater.on('update-not-available', () => {
-					console.log('update-not-available');
-				});
-
-				autoUpdater.on('update-available', () => {
-					console.log('update-available');
-				});
-
-				autoUpdater.on('checking-for-update', () => {
-					console.log('checking-for-update');
-				});
-
-				autoUpdater.checkForUpdatesAndNotify();
-			}
-			*/
-
-			app.asyncRequestHandler = new AsyncRequestHandler();
+			electron.app.asyncRequestHandler = new AsyncRequestHandler();
 
 			electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
 				console.log('ON_CONFIG_CHANGE', userConfig);
@@ -250,7 +190,7 @@ if (!handleSquirrelEvent()) {
 			electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
 				console.log('ON_ASYNC_REQUEST', actionId, actionName);
 				// TODO - check method exists
-				app.asyncRequestHandler[actionName](event, actionId, actionName, args);
+				electron.app.asyncRequestHandler[actionName](event, actionId, actionName, args);
 			});
 		};
 	}
@@ -262,11 +202,10 @@ if (!handleSquirrelEvent()) {
 	});
 
 	electron.app.on('activate', () => {
-		if (electron.app.win === null) {
+		if (app.win === null) {
 			createWindow(app);
 		}
 	});
 
 	electron.app.on('ready', createWindow(app));
-
 }

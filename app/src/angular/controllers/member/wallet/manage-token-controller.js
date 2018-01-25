@@ -10,7 +10,7 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
 
     $scope.selectedToken = TokenService.getBySymbol($stateParams.id.toUpperCase());
 
-    $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
+    $scope.publicKeyHex = "0x" + $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();
     $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
@@ -50,7 +50,7 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     $scope.setTokenActivity = () => {
         let store = ConfigFileService.getStore();
         
-        let data = store.wallets[$scope.publicKeyHex].data;
+        let data = store.wallets[$rootScope.wallet.getPublicKeyHex()].data;
         if (data.activities) {
             let activity = data.activities[$scope.originalSymbol];
             let transactions = activity && activity.transactions ? activity.transactions : [];
