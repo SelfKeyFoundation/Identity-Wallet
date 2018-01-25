@@ -7,11 +7,24 @@ const path = require('path');
 const url = require('url');
 const electron = require('electron');
 //const {autoUpdater} = require('electron-updater');
-const {dialog} = require('electron');
 const deskmetrics = require('deskmetrics');
-const {Menu} = require("electron");
+const {Menu, app, Tray} = require("electron");
+
+
 
 var appRoot = path.join(__dirname, '..');
+
+let tray = null
+app.on('ready', () => {
+    // tray = new Tray('assets/icons/png/256X256.png')
+    // const contextMenu = Menu.buildFromTemplate([
+    //     {label: 'Item1', type: 'radio'}
+    // ])
+    // tray.setContextMenu(contextMenu)
+    // tray.setToolTip('selfkey')
+
+    app.dock.setIcon('assets/icons/png/256X256.png')
+})
 
 // windows installer
 function handleSquirrelEvent() {
