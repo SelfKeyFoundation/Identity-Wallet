@@ -54,7 +54,6 @@ md-dialog {
                 position: relative;
                 padding: 30px;
                 .textual {
-                    height: 400px;
                     overflow: auto;
                     font-family: ProximaNovaRegular;
                     font-size: 16px;
@@ -65,7 +64,6 @@ md-dialog {
                     letter-spacing: normal;
                     text-align: left;
                     color: #ffffff;
-                    margin-bottom: 30px;
 
                     p{
                         margin: 0 !important;
@@ -78,6 +76,7 @@ md-dialog {
 
                         li {
                             padding-bottom: 36px;
+                            text-align: justify;
                         }
                     }
                 }
