@@ -10,13 +10,17 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
   $log.info('SelfkeyService Initialized');
 
   /**
-   * 
+   * temporary (need restructure.. take it from config);
    */
-  const BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
-  //const KYC_BASE_URL = 'https://wallet-demo-api-test.selfkey.org/';
-  const KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com/';
-
-
+  let BASE_URL = null;
+  let KYC_BASE_URL = null;
+  if ($rootScope.isDevMode) {
+    BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
+    KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com/';
+  } else {
+    BASE_URL = 'https://alpha.selfkey.org/marketplace/i/api/';
+    KYC_BASE_URL = 'https://tokensale-api.selfkey.org/';
+  }
 
   /**
    * 
@@ -172,7 +176,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
     }
 
     retrieveKycSessionToken_register(defer, ethAddress, privateKeyHex, email, organizationId) {
-      let promise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/register", {
+      let promise = $http.post(KYC_BASE_URL + "organization/" + organizationId + "/claim", {
         "ethAddress": ethAddress,
         "email": email
       });

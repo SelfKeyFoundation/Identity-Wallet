@@ -12,6 +12,9 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
 
 	let listeners = {};
 
+	const webview = document.getElementById('mywebview');
+	
+
 	/**
 	 *
 	 */

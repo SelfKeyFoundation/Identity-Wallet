@@ -8,15 +8,16 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
   $log.info('EtherScanService Initialized');
 
   // etehrscan
-  const DEFAULT_SERVER = "etehrscan";
+  const DEFAULT_NODE = "etehrscan";
+
   // ropsten testnet
-  const DEFAULT_CHAIN_ID = 3;
+  const DEFAULT_CHAIN_ID = $rootScope.network;
 
   // TODO move this into constants & configs
   const SERVER_CONFIG = {
     etehrscan: {
-      1: { url: "https://api.etherscan.io/api", key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" },    // chainId : { "api url", key )
-      3: { url: "https://ropsten.etherscan.io/api", key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" } // chainId : { "api url", key )
+      1: { url: "https://api.etherscan.io/api",     key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" },    // chainId : { "api url", key )
+      3: { url: "https://ropsten.etherscan.io/api", key: "4C1HD9C8VKIAEPWFK9DIS6ZUAQTBE7PMUD" }     // chainId : { "api url", key )
     }
   }
 
@@ -39,8 +40,8 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
 
   function setChainId(newChainId) {
     CHAIN_ID = newChainId;
-    SERVER_URL = SERVER_CONFIG[DEFAULT_SERVER][newChainId].url;
-    API_KEY = SERVER_CONFIG[DEFAULT_SERVER][newChainId].key;
+    SERVER_URL = SERVER_CONFIG[DEFAULT_NODE][newChainId].url;
+    API_KEY = SERVER_CONFIG[DEFAULT_NODE][newChainId].key;
   }
 
   /**

@@ -1,15 +1,16 @@
+const electron = require('electron');
 const package = require(__dirname + "/../package.json");
 const defaultWindowOpen = window.open;
 
 const allowedUrls = [
-    'https:/youtube.com',
-    'https:/etherscan.io',
+    'https://youtube.com',
+    'https://etherscan.io',
     'https://selfkey.org',
     'http://help.selfkey.org',
     'https://blog.selfkey.org',
     'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
     'https://t.me/selfkeyfoundation'
-]
+];
 
 window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
@@ -56,9 +57,13 @@ process.once('loaded', function () {
 });
 
 window.open = function (url, ...args) {
-    if (allowedUrls.indexOf(url) === -1) {
-        console.log(url , "RESTRICTED");
-        return null;
+    for(let i in allowedUrls){
+        console.log(url, allowedUrls[i]);
+        if(url.startsWith(allowedUrls[i])){
+            return defaultWindowOpen(url, ...args);
+        }
     }
-    return defaultWindowOpen(url, ...args);
+    
+    console.log(url , "RESTRICTED");
+    return null;
 }

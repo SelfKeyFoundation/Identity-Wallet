@@ -69,9 +69,6 @@ angular.module('kyc-wallet').constant('countries', countriesConstant);
 const ElectronService = requireAppModule('angular/services/electron.service');
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 
-const ConfigStorageService = requireAppModule('angular/services/config-storage.service');
-angular.module('kyc-wallet').service('ConfigStorageService', ConfigStorageService);
-
 const ConfigFileService = requireAppModule('angular/services/config-file.service');
 angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
 

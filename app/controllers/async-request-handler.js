@@ -102,7 +102,8 @@ module.exports = function (app) {
 						type: 'custom',
 						lastBalance: 0,
 						contract: {
-							address: "0x28eb857a2aee4b49fd45f163875dd5ef76e16394",
+							address: "0x28eb857a2aee4b49fd45f163875dd5ef76e16394", 	// testnet
+							//address: "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7",		// mainnet
 							symbol: "KEY",
 							decimal: 18,
 							type: "default"
@@ -114,9 +115,6 @@ module.exports = function (app) {
 		}
 
 		const storeData = settings.getAll();
-
-		console.log("storeData", storeData);
-
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
 	}
 
@@ -305,7 +303,7 @@ module.exports = function (app) {
 				message: 'Choose file',
 				properties: ['openFile']
 			};
-			console.log(args);
+			
 			if(args){
 				Object.assign(dialogConfig, args);
 			}
@@ -422,7 +420,6 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.importEtherKeystoreFile = function (event, actionId, actionName, args) {
-		console.log(actionName, args);
 		try {
 			keythereum.importFromFile(args.filePath, function (keystoreObject) {
 				let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
@@ -529,14 +526,12 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.showNotification = function (event, actionId, actionName, args) {
-		console.log(args)
 		let notification = new Notification({
 			title: args.title,
 			body: args.text
 		});
 
 		notification.on('click', (event) => {
-			console.log('>>>>>>> Notification clicked', args.options);
 			app.win.webContents.send('ON_NOTIFICATION_CLICK', args.options);
 		});
 

@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService, Web3Service) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
     'ngInject';
 
     $rootScope.selectedLanguage = "en";
@@ -17,6 +17,11 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
     $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
+    
+    $rootScope.network = CONFIG.ethNetwork;
+    $rootScope.node = CONFIG.ethNode;
+    $rootScope.isDevMode = CONFIG.dev;
+
 
     /**
      * TODO - remove

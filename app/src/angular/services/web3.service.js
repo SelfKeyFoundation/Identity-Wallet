@@ -25,13 +25,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   /**
    * 
    */
-  const DEFAULT_NODE = "infura";
+  const DEFAULT_NODE = $rootScope.node;
 
   /**
    * 1: main net
    * 2: test net
    */
-  const DEFAULT_CHAIN_ID = 3;
+  const DEFAULT_CHAIN_ID = $rootScope.network;
 
   /**
    * 

@@ -3,7 +3,7 @@
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
-const {Menu, Tray} = require('electron');
+const { Menu, Tray } = require('electron');
 //const {autoUpdater} = require('electron-updater');
 
 // windows installer
@@ -70,142 +70,173 @@ function handleSquirrelEvent() {
 }
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-    // app.quit() is the source of all our problems,
-    // cf. https://github.com/itchio/itch/issues/202
-    process.exit(0)
+// eslint-disable-line global-require
+if (require('electron-squirrel-startup')) { 
+	// app.quit() is the source of all our problems,
+	// cf. https://github.com/itchio/itch/issues/202
+	process.exit(0)
+}
+
+const config = buildConfig ();
+
+const app = {
+	dir: {
+		root: __dirname + '/../',
+		desktopApp: __dirname + '/../app'
+	},
+	config: {
+		app: config,
+		user: null
+	},
+	translations: {
+	},
+	win: {}
+};
+
+const i18n = [
+	'en'
+];
+
+for (let i in i18n) {
+	app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
 }
 
 if (!handleSquirrelEvent()) {
+	electron.app.on('window-all-closed', onWindowAllClosed);
+	electron.app.on('activate', onActivate(app));
+	electron.app.on('web-contents-created', onWebContentsCreated);
+	electron.app.on('ready', onReady(app));
+}
 
-	let devModeStarted = false;
-	if(process.argv.length > 2) {
-		if(process.argv[2] === 'dev') {
-			devModeStarted = true;
+/**
+ * 
+ */
+function onReady(app) {
+	return function () {
+		const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
+		electron.app.asyncRequestHandler = new AsyncRequestHandler();
+
+		//electron.app.dock.setIcon('assets/icons/png/256X256.png');
+		let tray = new Tray('assets/icons/png/256X256.png');
+		tray.setToolTip('selfkey');
+
+
+		app.win = new electron.BrowserWindow({
+			width: 1160,
+			height: 800,
+			minWidth: 1160,
+			minHeight: 800,
+			webPreferences: {
+				nodeIntegration: false,
+				webSecurity: true,
+				disableBlinkFeatures: 'Auxclick',
+				devTools: app.config.app.debug,
+				preload: path.join(app.dir.desktopApp, 'preload.js')
+			},
+			icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
+		});
+
+		let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
+
+		app.win.loadURL(url.format({
+			pathname: webAppPath,
+			protocol: 'file:',
+			slashes: true
+		}));
+
+		if (app.config.app.debug) {
+			app.win.webContents.openDevTools();
 		}
-	}
 
-	const parsedConfig = require('./config');
-	let extraConfig = parsedConfig.production;
+		//app.win.maximize(); //todo move to configs
 
-	if(devModeStarted) {
-		extraConfig = parsedConfig.default;
-	}
-	const config = Object.assign(parsedConfig.common, extraConfig);
+		app.win.on('closed', () => {
+			app.win = null;
+		});
 
-	const app = {
-		dir: {
-			root:  __dirname + '/../',
-			desktopApp: __dirname + '/../app'
-		},
-		config: {
-			app: config,
-			user: null
-		},
-		translations: {
-		},
-		win: {}
-	};
+		app.win.webContents.on('did-finish-load', () => {
+			app.win.webContents.send('ON_READY');
+		});
 
-	const i18n = [
-	  'en'
-	];
+		/**
+		 * Create the Application's main menu
+		 */
+		let template = [{
+			label: "Edit",
+			submenu: [
+				{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+				{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+				{ type: "separator" },
+				{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+				{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+				{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+				{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+			]
+		}];
 
-	const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
+		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
-	for(let i in i18n){
-		app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
-	}
+		electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
+			app.config.user = userConfig;
+		});
 
-	function createWindow(app) {
-		return function () {
-
-			//electron.app.dock.setIcon('assets/icons/png/256X256.png');
-			let tray = new Tray('assets/icons/png/256X256.png');
-			tray.setToolTip('selfkey');
-
-
-			app.win = new electron.BrowserWindow({
-				width: 1160,
-				height: 800,
-				minWidth: 1160,
-				minHeight: 800,
-				webPreferences: {
-					nodeIntegration: false,
-					webSecurity: true,
-					disableBlinkFeatures: 'Auxclick',
-					devTools: app.config.app.debug,
-					preload: path.join(app.dir.desktopApp, 'preload.js')
-				},
-				icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
-			});
-
-			let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
-
-			app.win.loadURL(url.format({
-				pathname: webAppPath,
-				protocol: 'file:',
-				slashes: true
-			}));
-
-			if (app.config.app.debug) {
-				app.win.webContents.openDevTools();
-			}
-
-			//app.win.maximize(); //todo move to configs
-
-			app.win.on('closed', () => {
-				app.win = null;
-			});
-
-			app.win.webContents.on('did-finish-load', () => {
-				app.win.webContents.send('ON_READY');
-			});
-
-			/**
-			 * Create the Application's main menu
-			 */
-			let template = [{
-				label: "Edit",
-				submenu: [
-					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-					{ type: "separator" },
-					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-				]}
-			];
-		
-			Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-
-			electron.app.asyncRequestHandler = new AsyncRequestHandler();
-
-			electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
-				console.log('ON_CONFIG_CHANGE', userConfig);
-				app.config.user = userConfig;
-			});
-
-			electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
-				console.log('ON_ASYNC_REQUEST', actionId, actionName);
-				// TODO - check method exists
+		electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
+			if(electron.app.asyncRequestHandler[actionName]){
 				electron.app.asyncRequestHandler[actionName](event, actionId, actionName, args);
-			});
-		};
-	}
+			}
+		});
+	};
+}
 
-	electron.app.on('window-all-closed', () => {
-		//if (process.platform !== 'darwin') {
-		electron.app.quit();
-		//}
-	});
-
-	electron.app.on('activate', () => {
+function onActivate (app) {
+	return function () {
 		if (app.win === null) {
-			createWindow(app);
+			onReady(app);
+		}
+	}
+}
+
+function onWindowAllClosed () {
+	return electron.app.quit;
+}
+
+function onWebContentsCreated(event, contents){
+	contents.on('will-attach-webview', (event, webPreferences, params) => {
+		delete webPreferences.preload;
+		delete webPreferences.preloadURL;
+
+		// Disable node integration
+		webPreferences.nodeIntegration = false;
+		webPreferences.sandbox = true;
+
+		let found = false;
+		for(let i in config.common.allowedUrls){
+			if(params.src.startsWith(config.common.allowedUrls[i])){
+				found = true;
+				break;
+			}
+		}
+
+		if(!found){
+			return event.preventDefault()
 		}
 	});
+}
 
-	electron.app.on('ready', createWindow(app));
+/**
+ * 
+ */
+function isDevMode(){
+	if (process.argv.length > 2) {
+		if (process.argv[2] === 'dev') {
+			return true;
+		}
+	}
+	return false;
+}
+
+function buildConfig () {
+	const parsedConfig = require('./config');
+	const extraConfig = isDevMode() ? parsedConfig.default : parsedConfig.production;
+	return Object.assign(parsedConfig.common, extraConfig);
 }
