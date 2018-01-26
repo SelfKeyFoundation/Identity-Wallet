@@ -116,12 +116,12 @@ function onReady(app) {
 		const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
 		electron.app.asyncRequestHandler = new AsyncRequestHandler();
 
-		//electron.app.dock.setIcon('assets/icons/png/256X256.png');
-		let tray = new Tray('assets/icons/png/256X256.png');
-		tray.setToolTip('selfkey');
-
+		electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
+		//let tray = new Tray('assets/icons/png/256X256.png');
+		//tray.setToolTip('selfkey');
 
 		app.win = new electron.BrowserWindow({
+			title: electron.app.getName(),
 			width: 1160,
 			height: 800,
 			minWidth: 1160,
@@ -161,7 +161,19 @@ function onReady(app) {
 		/**
 		 * Create the Application's main menu
 		 */
-		let template = [{
+		let template = [];
+
+		if (process.platform === 'darwin') {
+			template.unshift({
+			  label: electron.app.getName(),
+			  submenu: [
+				{label: "About", role: 'about'},
+				{label: "Quit", role: 'quit'}
+			  ]
+			});
+		}
+
+		template.push({
 			label: "Edit",
 			submenu: [
 				{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
@@ -172,7 +184,7 @@ function onReady(app) {
 				{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
 				{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
 			]
-		}];
+		});
 
 		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
