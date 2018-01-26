@@ -102,7 +102,7 @@ for (let i in i18n) {
 }
 
 if (!handleSquirrelEvent()) {
-	electron.app.on('window-all-closed', onWindowAllClosed);
+	electron.app.on('window-all-closed', onWindowAllClosed());
 	electron.app.on('activate', onActivate(app));
 	electron.app.on('web-contents-created', onWebContentsCreated);
 	electron.app.on('ready', onReady(app));
@@ -209,7 +209,9 @@ function onActivate (app) {
 }
 
 function onWindowAllClosed () {
-	return electron.app.quit;
+	return () => {
+		return electron.app.quit();
+	}
 }
 
 function onWebContentsCreated(event, contents){

@@ -96,6 +96,7 @@
 				"productName": "ID Wallet",
 				"overwrite": true,
 				"asar": true,
+				"icon": "./assets/icons/mac/selfkey.icns",
 				"ignore": [
 					"gulp-tasks",
 					"wallet-web-app"
