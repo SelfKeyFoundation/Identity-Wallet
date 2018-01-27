@@ -61,8 +61,8 @@ const AppConfigConstant = {
 		dev: true,
 		updateEndpoint: "http://localhost:5000",
 		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
-		ethNetwork: 3,
-		ethNode: "infura"
+		ethNetwork: 1,
+		ethNode: "mew"
 	},
     production: {
 		debug: false,

@@ -25,13 +25,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   /**
    * 
    */
-  const DEFAULT_NODE = $rootScope.node;
+  let DEFAULT_NODE = $rootScope.node;
 
   /**
    * 1: main net
    * 2: test net
    */
-  const DEFAULT_CHAIN_ID = $rootScope.network;
+  let DEFAULT_CHAIN_ID = $rootScope.network;
 
   /**
    * 
@@ -50,11 +50,11 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
   let SELECTED_CHAIN_ID = null;
   let SELECTED_SERVER_URL = null;
 
-  setChainId(DEFAULT_NODE, DEFAULT_CHAIN_ID);
+  setChainId($rootScope.node, $rootScope.network);
 
   function setChainId(node, chainId) {
     SELECTED_CHAIN_ID = chainId;
-    SELECTED_SERVER_URL = SERVER_CONFIG[node][chainId].url;
+    SELECTED_SERVER_URL = SERVER_CONFIG["mew"][chainId].url;
   }
 
   let lastRequestTime = 0;
@@ -67,11 +67,9 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
     constructor() {
       Web3Service.web3 = new Web3();
-      Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
 
-      $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
-        setChainId(DEFAULT_NODE, newChainId);
-      });
+      console.log("??????", SELECTED_SERVER_URL)
+      Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
 
       EthUtils.web3 = new Web3();
       window.EthUtils = EthUtils;
@@ -461,6 +459,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
 
     sendRawTransaction(signedTxHex) {
+      console.log(">>>>>>>", SELECTED_CHAIN_ID, SELECTED_SERVER_URL);
       let defer = $q.defer();
 
       Web3Service.waitForTicket(defer, 'sendSignedTransaction', [signedTxHex]);

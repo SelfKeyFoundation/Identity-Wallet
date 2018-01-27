@@ -5,13 +5,13 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
   'ngInject';
 
   $log.info('WalletService Initialized');
 
   let wallet = null;
-  let selectedChainId = 3;
+  let selectedChainId = CONFIG.ethNetwork;
 
   let isFirstLoad = true;
 
@@ -19,7 +19,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
   const walletNamesMap = {
       '1': {},
       '3': {
-          qey: {
+          key: {
               address: '0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb',
               name: 'SelfKey Token Sale'
           }
@@ -34,13 +34,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
     constructor() {
       $rootScope.$on(EVENTS.NEW_TOKEN_ADDED, (event, token) => {
         this.loadTokenBalance(token.symbol);
-      });
-
-      $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
-        selectedChainId = newChainId;
-        if (this.wallet && this.wallet.getPublicKeyHex()) {
-          this.loadBalance();
-        }
       });
     }
 
