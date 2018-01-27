@@ -131,6 +131,10 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
 		this.closeApp = function () {
 			return makeCall('closeApp', {});
 		}
+
+		this.installUpdate = function () {
+			return makeCall('installUpdate', {});
+		}
 	}
 
 	/**
@@ -153,6 +157,11 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
 		$timeout(() => {
 			delete listeners[actionId];
 		}, 1000);
+	});
+
+	ipcRenderer.on('UPDATE_READY', (event, releaseName) => {
+		// TODO show update dialog
+		$rootScope.openUpdateDialog(null, releaseName);
 	});
 
 	/**

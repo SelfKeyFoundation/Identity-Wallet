@@ -128,16 +128,19 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         }
     };
 
-    $rootScope.openAddCustomTokenDialog = (event) => {
+    $rootScope.openUpdateDialog = (event, releaseName) => {
         return $mdDialog.show({
-            controller: 'AddCustomTokenDialogController',
-            templateUrl: 'common/dialogs/add-custom-token.html',
+            controller: 'UpdateDialogController',
+            templateUrl: 'common/dialogs/update.html',
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,
-            fullscreen: true
+            fullscreen: true,
+            locals: {
+                releaseName: releaseName
+            }
         });
-    }
+    };
 
     /**
      * 

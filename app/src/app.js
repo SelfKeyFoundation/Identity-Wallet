@@ -169,6 +169,9 @@ angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveT
 const SendTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/send-token-controller.js');
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
 
+const UpdateDialogController = requireAppModule('angular/controllers/commons/dialogs/update-controller.js');
+angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
+
 /**
  * guest
  */

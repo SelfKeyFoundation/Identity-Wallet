@@ -1,7 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const {dialog, Notification, shell} = require('electron');
+const {dialog, Notification, shell, autoUpdater} = require('electron');
 
 const path = require('path');
 const keythereum = require('../extended_modules/keythereum');
@@ -541,15 +541,19 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.analytics = function (event, actionId, actionName, args) {
-		deskmetrics.send(args.event, args.data)
+		deskmetrics.send(args.event, args.data);
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
 	}
 
 	controller.prototype.openBrowserWindow = function (event, actionId, actionName, args) {
-		shell.openExternal(args.url)
+		shell.openExternal(args.url);
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
 	}
 
+	controller.prototype.installUpdate = function (event, actionId, actionName, args) {
+		autoUpdater.quitAndInstall();
+		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+	}
 
 	return controller;
 }
