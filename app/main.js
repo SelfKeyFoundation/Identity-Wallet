@@ -66,8 +66,9 @@ function onReady(app) {
 	return function () {
 		const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
 		electron.app.asyncRequestHandler = new AsyncRequestHandler();
-
-		electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
+		if(electron.app.doc) {
+			electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
+		}
 		//let tray = new Tray('assets/icons/png/256X256.png');
 		//tray.setToolTip('selfkey');
 
