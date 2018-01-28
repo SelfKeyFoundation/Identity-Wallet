@@ -97,7 +97,7 @@
 				"productName": "ID Wallet",
 				"overwrite": true,
 				"asar": true,
-				"icon": "./assets/icons/mac/selfkey.icns",
+				"icon": "assets/icons/selfkey",
 				"ignore": [
 					"gulp-tasks",
 					"wallet-web-app"
@@ -110,7 +110,7 @@
 				"overwrite": true
 			},
 			"electronWinstallerConfig": {
-				"name": "ID Wallet",
+				"name": "ID.Wallet",
 				"title": "ID Wallet",
 				"authors": "Selfkey Foundation"
 			},
