@@ -10,9 +10,6 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
   // etehrscan
   const DEFAULT_NODE = "etehrscan";
 
-  // ropsten testnet
-  const DEFAULT_CHAIN_ID = CONFIG.chainId;
-
   // TODO move this into constants & configs
   const SERVER_CONFIG = {
     etehrscan: {
@@ -25,7 +22,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
   let SERVER_URL = null;
   let API_KEY = null;
 
-  setChainId(DEFAULT_CHAIN_ID);
+  setChainId(CONFIG.chainId);
 
   const REQUEST_CONFIG = {
     headers: {

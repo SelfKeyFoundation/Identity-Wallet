@@ -44,7 +44,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
     retrieveTableData(table, reload) {
       let defer = $q.defer();
 
-      // temporary
+      // temporary (reload anyway)
       reload = true;
 
       const cache_data = CACHE.getItem(table);
@@ -217,7 +217,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
       let defer = $q.defer();
 
       // ["KEY", "ETH"]
-      let promise = $http.post("https://token-sale-demo-api.kyc-chain.com/rate/tokens/symbol", { "tokens": tokens });
+      let promise = $http.post( KYC_BASE_URL + "rate/tokens/symbol", { "tokens": tokens });
 
       promise.then((resp) => {
         for (let i in resp.data.items) {

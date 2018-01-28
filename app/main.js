@@ -74,9 +74,9 @@ function onReady(app) {
 
 		app.win = new electron.BrowserWindow({
 			title: electron.app.getName(),
-			width: 1160,
+			width: 1170,
 			height: 800,
-			minWidth: 1160,
+			minWidth: 1170,
 			minHeight: 800,
 			webPreferences: {
 				nodeIntegration: false,
