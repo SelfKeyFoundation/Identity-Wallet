@@ -33,7 +33,7 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
                             | price = faster transaction, but more expensive. <br />
                             | Default is 50 GWEI
 
-                md-slider(flex, ng-model="formData.gasPriceInGwei", min="1", max="120", aria-label="gas price", ng-disabled="inputStates.isGasPriceLocked")
+                md-slider(flex, ng-model="formData.gasPriceInGwei", min="1", max="99", aria-label="gas price", ng-disabled="inputStates.isGasPriceLocked")
                 .sk-send-ether-box__gas-price-container__labels
                     span Economy
                     span Plus

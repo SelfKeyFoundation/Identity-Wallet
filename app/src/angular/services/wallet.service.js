@@ -11,41 +11,38 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
   $log.info('WalletService Initialized');
 
   let wallet = null;
-  let selectedChainId = CONFIG.ethNetwork;
 
   let isFirstLoad = true;
 
   // TODO moving to config
   const walletNamesMap = {
-      '1': {},
-      '3': {
-          key: {
-              address: '0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb',
-              name: 'SelfKey Token Sale'
-          }
+    '1': {},
+    '3': {
+      key: {
+        //address: '0x603fc6DAA3dBB1e052180eC91854a7D6Af873fdb',
+        name: 'SelfKey Token Sale'
       }
+    }
   };
 
   /**
    * 
    */
   class WalletService {
-
+    
     constructor() {
       $rootScope.$on(EVENTS.NEW_TOKEN_ADDED, (event, token) => {
         this.loadTokenBalance(token.symbol);
       });
     }
 
-   
-
+    
     getWalletName(symbol, address) {
-        let chainValue = walletNamesMap[selectedChainId] || {};
-        let symbolValue = chainValue[symbol];
+      if(!walletNamesMap[CONFIG.chainId]) return '';
+        let symbolValue = walletNamesMap[CONFIG.chainId][symbol];
         if (symbolValue && symbolValue.address == address) {
             return symbolValue.name;
         }
-
         return '';
     }
 
@@ -253,7 +250,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
           gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
           to: EthUtils.sanitizeHex(toAddressHex),
           value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
-          chainId: selectedChainId
+          chainId: CONFIG.chainId
         }
 
         if (contractDataHex) {
@@ -294,7 +291,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             to: EthUtils.sanitizeHex(token.contractAddress),
             value: "0x00",
             data: EthUtils.sanitizeHex(genResult.data),
-            chainId: selectedChainId
+            chainId: CONFIG.chainId
           }
 
           let eTx = new Tx(rawTx);

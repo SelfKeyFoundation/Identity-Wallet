@@ -6,7 +6,7 @@ const AppConfigConstant = {
 		DEFAULT_LANGUAGE: "en",
 		APP_NAME: "IdentityWallet",
 		APP_TITLE: "Identity Wallet",
-		version: "0.0.4",
+		version: "0.0.15",
 		description: "Selfkey Identity Wallet",
 		companyName: "Selfkey",
 		productName: "org.selfkey.wallet",
@@ -60,17 +60,18 @@ const AppConfigConstant = {
 		debug: true,
 		dev: true,
 		updateEndpoint: "http://localhost:5000",
-		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
-		ethNetwork: 1,
-		ethNode: "mew"
+		//kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
+		kycApiEndpoint: "https://tokensale-api.selfkey.org/",
+		chainId: 1,
+		node: "infura"
 	},
     production: {
 		debug: false,
 		dev: false,
 		updateEndpoint: "http://localhost:5000",
-		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
-		ethNetwork: 1,
-		ethNode: "infura"
+		kycApiEndpoint: "https://tokensale-api.selfkey.org/",
+		chainId: 1,
+		node: "infura"
 	}
 };
 

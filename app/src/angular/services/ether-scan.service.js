@@ -2,7 +2,7 @@
 
 const Token = requireAppModule('angular/classes/token');
 
-function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService) {
+function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CONFIG) {
   'ngInject';
 
   $log.info('EtherScanService Initialized');
@@ -11,7 +11,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
   const DEFAULT_NODE = "etehrscan";
 
   // ropsten testnet
-  const DEFAULT_CHAIN_ID = $rootScope.network;
+  const DEFAULT_CHAIN_ID = CONFIG.chainId;
 
   // TODO move this into constants & configs
   const SERVER_CONFIG = {

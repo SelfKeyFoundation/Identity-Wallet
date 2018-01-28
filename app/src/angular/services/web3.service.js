@@ -12,7 +12,7 @@ function dec2hexString(dec) {
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, ConfigFileService) {
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, ConfigFileService, CONFIG) {
   'ngInject';
 
   $log.info('Web3Service Initialized');
@@ -21,17 +21,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
    * 
    */
   const REQUEST_INTERVAL_DELAY = 500;
-
-  /**
-   * 
-   */
-  let DEFAULT_NODE = $rootScope.node;
-
-  /**
-   * 1: main net
-   * 2: test net
-   */
-  let DEFAULT_CHAIN_ID = $rootScope.network;
 
   /**
    * 
@@ -47,15 +36,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
   }
 
-  let SELECTED_CHAIN_ID = null;
-  let SELECTED_SERVER_URL = null;
-
-  setChainId($rootScope.node, $rootScope.network);
-
-  function setChainId(node, chainId) {
-    SELECTED_CHAIN_ID = chainId;
-    SELECTED_SERVER_URL = SERVER_CONFIG["mew"][chainId].url;
-  }
+  const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
   let lastRequestTime = 0;
   const requestQueue = [];
@@ -68,7 +49,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     constructor() {
       Web3Service.web3 = new Web3();
 
-      console.log("??????", SELECTED_SERVER_URL)
       Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
 
       EthUtils.web3 = new Web3();
@@ -86,10 +66,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         $timeout(() => {
           callback(promise);
         }, REQUEST_INTERVAL_DELAY);
-
       }, 1);
 
-      
       $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
         let self = this;
         let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
@@ -98,10 +76,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
           fn.call(self);
         },3000)
       });
-    }
-
-    getSelectedChainId() {
-      return SELECTED_CHAIN_ID;
     }
 
     syncWalletActivityByContract(key, address) {
@@ -459,7 +433,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     }
 
     sendRawTransaction(signedTxHex) {
-      console.log(">>>>>>>", SELECTED_CHAIN_ID, SELECTED_SERVER_URL);
       let defer = $q.defer();
 
       Web3Service.waitForTicket(defer, 'sendSignedTransaction', [signedTxHex]);

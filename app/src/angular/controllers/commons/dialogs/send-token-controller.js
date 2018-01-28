@@ -27,7 +27,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.formData = {
         sendAmount: args.sendAmount || null,
         sendToAddressHex: args.sendToAddressHex || '',
-        gasPriceInGwei: args.gasPriceInGwei || 50
+        gasPriceInGwei: args.gasPriceInGwei || 1
     }
 
     /**
@@ -45,7 +45,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         reminingBalance: 0,
         reminingBalanceInUsd: 0,
 
-        gasLimit: args.gasLimit || 210000,
+        gasLimit: args.gasLimit || 21000,
 
         txFeeInEth: 0,
         txFeeInUsd: 0
@@ -210,7 +210,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             txGenPromise.then((signedHex) => {
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {
-                    console.log(resp);
                     $scope.txHex = resp.transactionHash;
                     startTxCheck();
                     $scope.viewStates.step = 'transaction-status';
@@ -238,7 +237,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 sendToAddress,
                 sendAmount,
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
-                150000, //$scope.infoData.gasLimit,
+                60000,   // $scope.infoData.gasLimit
                 $scope.symbol.toUpperCase()
             )
 
@@ -293,7 +292,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     function getBalanceInUsd(balance) {
-        console.log(balance, $scope.infoData.usdPerUnit);
         return (Number(balance) * Number($scope.infoData.usdPerUnit));
     }
     
@@ -316,12 +314,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             );
 
             promise.then((gasLimit) => {
-                console.log("getEstimateGas gasLimit", gasLimit);
-
                 $scope.infoData.gasLimit = gasLimit;
                 $scope.infoData.isReady = true;
             }).catch((error) => {
-                console.log("getEstimateGas", error);
+                $log.error("getEstimateGas", error);
             }).finally(() => {
                 $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = false;
             });

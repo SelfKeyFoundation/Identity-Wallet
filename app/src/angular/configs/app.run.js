@@ -18,8 +18,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
     
-    $rootScope.network = CONFIG.ethNetwork;
-    $rootScope.node = CONFIG.ethNode;
     $rootScope.isDevMode = CONFIG.dev;
 
 
