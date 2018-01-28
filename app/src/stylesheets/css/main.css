@@ -16335,7 +16335,6 @@ md-dialog.startup-guide {
       position: relative;
       padding: 30px; }
       md-dialog.startup-guide .main .content .textual {
-        height: 400px;
         overflow: auto;
         font-family: ProximaNovaRegular;
         font-size: 16px;
@@ -16345,8 +16344,7 @@ md-dialog.startup-guide {
         line-height: 1.5;
         letter-spacing: normal;
         text-align: left;
-        color: #ffffff;
-        margin-bottom: 30px; }
+        color: #ffffff; }
         md-dialog.startup-guide .main .content .textual p {
           margin: 0 !important;
           padding-bottom: 36px; }
@@ -16355,7 +16353,8 @@ md-dialog.startup-guide {
           padding-bottom: 36px;
           padding-left: 16px; }
           md-dialog.startup-guide .main .content .textual ul li {
-            padding-bottom: 36px; }
+            padding-bottom: 36px;
+            text-align: justify; }
       md-dialog.startup-guide .main .content section .md-button {
         font-family: ProximaNovaSemibold;
         font-size: 15px;
