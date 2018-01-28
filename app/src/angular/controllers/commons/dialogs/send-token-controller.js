@@ -153,8 +153,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     $scope.checkTransaction = (event) => {
         if (!$scope.txHex) return;
-        // TODO
-        $window.open("https://ropsten.etherscan.io/tx/" + $scope.txHex);
+        // TODO read endpoint from config
+        $window.open("https://etherscan.io/tx/" + $scope.txHex);
     }
 
     /**

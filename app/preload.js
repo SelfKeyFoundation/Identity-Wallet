@@ -7,6 +7,7 @@ const allowedUrls = [
     'https://etherscan.io',
     'https://selfkey.org',
     'http://help.selfkey.org',
+    'https://help.selfkey.org',
     'https://blog.selfkey.org',
     'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
     'https://t.me/selfkeyfoundation'
