@@ -11,8 +11,6 @@ const config = buildConfig ();
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
 
-log.warn("started");
-
 /**
  * auto updated
  */
@@ -80,8 +78,8 @@ function onReady(app) {
 			minHeight: 800,
 			webPreferences: {
 				nodeIntegration: false,
-				//webSecurity: true,
-				experimentalFeatures: true,
+				webSecurity: true,
+				//experimentalFeatures: true,
 				disableBlinkFeatures: 'Auxclick',
 				devTools: app.config.app.debug,
 				preload: path.join(app.dir.desktopApp, 'preload.js')

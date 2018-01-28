@@ -15742,6 +15742,25 @@ md-content {
   .keystore-layout-wrapper .sk-button {
     display: none; } }
 
+.member-layout__content_scroll {
+  overflow: scroll !important; }
+
+.member-layout__content_scroll::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+  -webkit-border-radius: 100px; }
+
+.member-layout__content_scroll::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09); }
+
+.member-layout__content_scroll::-webkit-scrollbar-thumb:vertical {
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 100px; }
+
+.member-layout__content_scroll::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0, 0, 0, 0.61);
+  -webkit-border-radius: 100px; }
+
 .animated {
   animation-duration: 1s;
   animation-fill-mode: both; }

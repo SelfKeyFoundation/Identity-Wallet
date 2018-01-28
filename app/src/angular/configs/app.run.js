@@ -8,8 +8,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
 
     $rootScope.selectedLanguage = "en";
 
-    $log.debug('DICTIONARY', DICTIONARY);
-
     /**
      * 
      */
@@ -19,6 +17,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
     
     $rootScope.isDevMode = CONFIG.dev;
+    $rootScope.version = CONFIG.version;
 
 
     /**
