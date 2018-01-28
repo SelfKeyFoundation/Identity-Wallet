@@ -4,8 +4,8 @@ const AppConfigConstant = {
 	common: {
 		deskmetricsAppId: "b70b7e71f1",
 		DEFAULT_LANGUAGE: "en",
-		APP_NAME: "IdentityWallet",
-		APP_TITLE: "Identity Wallet",
+		APP_NAME: "IDWallet",
+		APP_TITLE: "ID Wallet",
 		version: "0.0.16",
 		description: "Selfkey Identity Wallet",
 		companyName: "Selfkey",
@@ -60,14 +60,14 @@ const AppConfigConstant = {
 		debug: true,
 		dev: true,
 		updateEndpoint: "http://localhost:5000",
-		kycApiEndpoint: "https://tokensale-api.selfkey.org/", // https://token-sale-demo-api.kyc-chain.com/
-		chainId: 1,
+		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
+		chainId: 3,
 		node: "infura"
 	},
     production: {
 		debug: false,
 		dev: false,
-		updateEndpoint: "http://localhost:5000",
+		updateEndpoint: "https://release.selfkey.org",
 		kycApiEndpoint: "https://tokensale-api.selfkey.org/",
 		chainId: 1,
 		node: "infura"
