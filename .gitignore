@@ -24,3 +24,6 @@ release
 .vscode
 
 out/
+
+test/caps/screen/*
+test/caps/source/*
