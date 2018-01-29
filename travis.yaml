@@ -1,9 +1,9 @@
-os: linux
+os: osx
 language: node_js
 env:
 	- NODE_ENV=development
 before_install:
-	- sudo apt-get install wine rpm
+	- brew install wine rpm
 	- npm i -g gulp
 install:
 	- npm i

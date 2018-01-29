@@ -16,7 +16,8 @@
 		"make-auto": "gulp && gulp make",
 		"quick": "bash ./test/quick.sh",
 		"full": "bash ./test/full.sh",
-		"raw": "NODE_ENV=test node ./test/test.js 1"
+		"raw": "NODE_ENV=test node ./test/test.js 1",
+		"test": "node ./test/test.js 3"
 	},
 	"dependencies": {
 		"@uirouter/angularjs": "1.0.6",

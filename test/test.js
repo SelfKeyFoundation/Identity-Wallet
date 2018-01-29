@@ -49,6 +49,8 @@ app.start().then(() => {
 		// ** temp removed this from button #agree ** (ng-disabled="!scrolledBottom || storeSavePromise.$$state.status")
 		.then(() => c.click("#agree"))
 		.then(() => console.log(chalk.green('TOC Agree Test Done')))
+		
+		// Setup Wallet Confirm
 		.then(() => c.waitForExist('#setupWallet', 10000))
 		.then(() => c.click("#setupWallet"))
 		.then(() => console.log(chalk.green('Setup Wallet Test Done')))
