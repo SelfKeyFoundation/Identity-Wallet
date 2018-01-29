@@ -6,7 +6,7 @@ const AppConfigConstant = {
 		DEFAULT_LANGUAGE: "en",
 		APP_NAME: "IDWallet",
 		APP_TITLE: "ID Wallet",
-		version: "0.0.16",
+		version: "0.0.17",
 		description: "Selfkey Identity Wallet",
 		companyName: "Selfkey",
 		productName: "org.selfkey.wallet",
