@@ -1,0 +1,11 @@
+os: linux
+language: node_js
+env:
+	- NODE_ENV=development
+before_install:
+	- sudo apt-get install wine rpm
+	- npm i -g gulp
+install:
+	- npm i
+	- npm run make
+script: npm run test

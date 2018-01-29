@@ -26,11 +26,11 @@ md-sidenav.md-sidenav-right(md-component-id="right")
 
             .bottom-part-container(layout="column", style="width: 100%;")
                 .sk-right-sidenav__section.section-1
-                    .sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://www.selfkey.org')") About Selfkey
+                    #aboutLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://www.selfkey.org')") About Selfkey
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
+                    #helpLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
                 
                 span(style="color: #fff; text-align: right; padding: 20px;") V{{$root.version}}
 

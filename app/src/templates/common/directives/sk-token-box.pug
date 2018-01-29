@@ -12,6 +12,6 @@
     .sk-token-box__footer
         .sk-horizontal-devider
         .sk-token-box__footer_address-box(layout="row", layout-align="start center")
-            span.sk-token-box__footer_address-box_public-key {{publicKeyHex}}
+            span.sk-token-box__footer_address-box_public-key(id="{{symbol}}-add") {{publicKeyHex}}
             md-button.smallest.gray.copy(style="width: 46px; height: 20px; margin-left: 7px;")
-                span(copy-to-clipboard="publicKeyHex", style="width: 46px; height: 20px; font-size: 11px; line-height: 12px;") COPY
+                span(copy-to-clipboard="publicKeyHex", style="width: 46px; height: 20px; font-size: 11px; line-height: 12px;" , id="{{symbol}}-copy") COPY

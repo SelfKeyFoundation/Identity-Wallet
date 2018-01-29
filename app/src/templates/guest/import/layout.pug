@@ -16,6 +16,6 @@
                         md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
                             md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
                             md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select
-                            md-radio-button(md-no-ink, value="privateKey") Private Key
+                            md-radio-button#pkey(md-no-ink, value="privateKey") Private Key
 
                 .right(flex, ui-view="main")

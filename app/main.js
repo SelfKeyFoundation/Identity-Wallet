@@ -77,7 +77,7 @@ function onReady(app) {
 			minWidth: 1170,
 			minHeight: 800,
 			webPreferences: {
-				nodeIntegration: false,
+				nodeIntegration: true,
 				webSecurity: true,
 				//experimentalFeatures: true,
 				disableBlinkFeatures: 'Auxclick',
@@ -95,9 +95,9 @@ function onReady(app) {
 			slashes: true
 		}));
 
-		if (app.config.app.debug) {
-			app.win.webContents.openDevTools();
-		}
+		// if (app.config.app.debug) {
+		// 	app.win.webContents.openDevTools();
+		// }
 
 		//app.win.maximize(); //todo move to configs
 
