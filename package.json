@@ -93,7 +93,7 @@
 			},
 			"electronPackagerConfig": {
 				"packageManager": "npm",
-				"name": "ID Wallet",
+				"name": "id-wallet",
 				"productName": "ID Wallet",
 				"overwrite": true,
 				"asar": true,

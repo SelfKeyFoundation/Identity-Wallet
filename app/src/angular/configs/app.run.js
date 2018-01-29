@@ -6,7 +6,10 @@ const Token = requireAppModule('angular/classes/token');
 function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
     'ngInject';
 
-    $rootScope.selectedLanguage = "en";
+    $rootScope.isDevMode = CONFIG.dev;
+    $rootScope.productName = appName;
+    $rootScope.version = appVersion;
+    $rootScope.selectedLanguage = CONFIG.defaultLanguage;
 
     /**
      * 
@@ -15,17 +18,10 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
     $rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
-    
-    $rootScope.isDevMode = CONFIG.dev;
-    $rootScope.version = CONFIG.version;
-
 
     /**
-     * TODO - remove
+     * 
      */
-    //$rootScope.ethUsdPrice = 1195;
-    //$rootScope.keyUsdPrice = 0.015;
-
     $rootScope.PRICES = {};
 
     /**
@@ -148,11 +144,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
             ElectronService.sendConfigChange(data);
         }
     });
-
-    /**
-     * Descmetrics Event
-     */
-    // ElectronService.analytics('app-start', new Date().toISOString());
 }
 
 module.exports = AppRun;

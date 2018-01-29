@@ -46,12 +46,11 @@ const appStates = requireAppModule('angular/configs/app.states');
 /**
  * constants
  */
-const AppConfigConstant = requireAppModule('config', true);
+const config = requireAppModule('config', true);
+let envConfig = isDevMode() ? config.default : config.production;
+let appConfig = Object.assign(config.common, envConfig);
 
-let extraConfig = isDevMode() ? AppConfigConstant.default : AppConfigConstant.production;
-const config = Object.assign(AppConfigConstant.common, extraConfig);
-
-angular.module('kyc-wallet').constant('CONFIG', config);
+angular.module('kyc-wallet').constant('CONFIG', appConfig);
 
 const appDictionaryConstant = requireAppModule('angular/constants/app.dictionary.constant');
 angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);

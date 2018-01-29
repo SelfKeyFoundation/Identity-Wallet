@@ -2,15 +2,7 @@
 
 const AppConfigConstant = {
 	common: {
-		deskmetricsAppId: "b70b7e71f1",
-		DEFAULT_LANGUAGE: "en",
-		APP_NAME: "IDWallet",
-		APP_TITLE: "ID Wallet",
-		version: "0.0.17",
-		description: "Selfkey Identity Wallet",
-		companyName: "Selfkey",
-		productName: "org.selfkey.wallet",
-		authors: "Edmund Lowell",
+		defaultLanguage: "en",
 		constants: {
 			initialIdAttributes: {
 				"REQ_1": {"id": "1", "attributeType": "name"},

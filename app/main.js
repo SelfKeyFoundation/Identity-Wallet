@@ -6,7 +6,7 @@ const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
 
-const config = buildConfig ();
+const config = buildConfig (electron);
 
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
@@ -25,7 +25,6 @@ if (require('electron-squirrel-startup')) {
 	// cf. https://github.com/itchio/itch/issues/202
 	process.exit(0)
 }
-
 
 
 const app = {
@@ -67,6 +66,7 @@ function onReady(app) {
 		if(electron.app.doc) {
 			electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
 		}
+		
 		//let tray = new Tray('assets/icons/png/256X256.png');
 		//tray.setToolTip('selfkey');
 
@@ -99,8 +99,6 @@ function onReady(app) {
 			app.win.webContents.openDevTools();
 		}
 
-		//app.win.maximize(); //todo move to configs
-
 		app.win.on('closed', () => {
 			app.win = null;
 		});
@@ -115,7 +113,7 @@ function onReady(app) {
 		}
 
 		app.win.webContents.on('did-finish-load', () => {
-			app.win.webContents.send('ON_READY');
+			app.win.webContents.send('ON_READY', config);
 		});
 
 		/**
@@ -297,8 +295,14 @@ function isDevMode(){
 	return false;
 }
 
-function buildConfig () {
-	const parsedConfig = require('./config');
-	const extraConfig = isDevMode() ? parsedConfig.default : parsedConfig.production;
-	return Object.assign(parsedConfig.common, extraConfig);
+function buildConfig (electron) {
+	let config = require('./config');
+
+	const envConfig = isDevMode() ? config.default : config.production;
+	config = Object.assign(config, envConfig);
+
+	delete config.default;
+	delete config.production;
+
+	return config;
 }
