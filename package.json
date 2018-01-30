@@ -64,6 +64,7 @@
 		"babel-preset-env": "1.6.1",
 		"babel-preset-es2015": "6.24.1",
 		"chalk": "^2.3.0",
+		"delay": "^2.0.0",
 		"electron-forge": "4.1.7",
 		"electron-prebuilt-compile": "1.7.9",
 		"gulp": "3.9.1",
