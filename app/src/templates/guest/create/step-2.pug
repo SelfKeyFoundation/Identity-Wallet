@@ -9,7 +9,7 @@ form.content(layout="column", style="padding: 24px;")
     md-input-container.sk-input-box.no-error-spacer
         input#pw3(name="password", ng-model="userInput.password", type="password", placeholder="Password")
     
-    .sk-button.filled-blue#createWallet(style="margin: 24px 0 12px 0;", ng-click="createKeystore($event)")
+    .sk-button.filled-blue#generateWallet(style="margin: 24px 0 12px 0;", ng-click="createKeystore($event)")
         span(style="color: #fff") Generate Wallet
 
     .sk-button.outline-blue#back(style="margin: 12px 0 48px 0;", ui-sref="guest.create.step-1")
