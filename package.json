@@ -67,6 +67,8 @@
 		"delay": "^2.0.0",
 		"electron-forge": "4.1.7",
 		"electron-prebuilt-compile": "1.7.9",
+		"eslint": "^4.16.0",
+		"eslint-config-google": "^0.9.1",
 		"gulp": "3.9.1",
 		"gulp-angular-templatecache": "2.0.0",
 		"gulp-pug": "3.3.0",
