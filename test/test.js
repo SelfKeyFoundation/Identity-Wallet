@@ -11,6 +11,7 @@ const
 	usr = process.argv[2] || 0
 	APP_TITLE = require('../package.json').config.forge.electronPackagerConfig.name
 	appPath = pwd + '/out/' + APP_TITLE + '-darwin-x64/' + APP_TITLE + '.app/Contents/MacOS/' + APP_TITLE
+	password = 'Y@88@D00!'
 
 
 const app = new Application({
@@ -24,6 +25,94 @@ const app = new Application({
 //   Console Error: TypeError: Cannot read property 'startsWith' of null
 // - Upload KYC docs maybe needs hidden manual submission button for testing
 // - 
+
+// Create New Wallet Flow
+// **********************
+
+app.start().then(() => {
+	const
+		c = app.client
+		e = app.electron
+		b = app.browserWindow
+		w = app.webContents
+		
+	c.waitUntilWindowLoaded()
+		.then(() => w.savePage('test/caps/source/index.html', 'HTMLComplete'))
+		.then(() => console.log(chalk.green('Source Code Saved Done')))
+
+// TOC Confirm
+		.then(() => c.waitForVisible('#agree', 10000))
+		.then(() => console.log(chalk.blue('TOC Agree Loaded')))
+		.then(() => c.click("#agree"))
+		.then(() => console.log(chalk.green('TOC Agree Test Done')))
+
+// Click Create New Wallet
+		.then(() => c.click("#createWallet"))
+
+// 2x Password
+		.then(() => c.setValue('#pw1', password))
+		.then(() => c.setValue('#pw2', password))
+		.then(() => c.click('#confirm'))
+
+// Confirm Password
+		.then(() => c.setValue('#pw3', password))
+		.then(() => c.click('#confirm'))
+
+// Check PubKey
+// get text
+// assert vs ?
+// click download
+		.then(() => c.click('#dl'))
+		//click next
+		.then(() => c.click('#next'))
+
+// Check PrivKey
+// get text
+// assert vs ?
+		// click next
+		.then(() => c.click('#next'))
+
+// Upload KYC Docs
+	// post anything to localhost:3333/ get 200 go to dashboard
+	          name: store.wallets[key].name,
+          keystoreFilePath: store.wallets[key].keystoreFilePath,
+          publicKey: key
+
+// Dashboard
+
+})
+
+
+// Keystore Import
+// ***************
+
+// app.start().then(() => {
+// 	const
+// 		c = app.client
+// 		e = app.electron
+// 		b = app.browserWindow
+// 		w = app.webContents
+		
+// 	c.waitUntilWindowLoaded()
+// 		.then(() => w.savePage('test/caps/source/index.html', 'HTMLComplete'))
+// 		.then(() => console.log(chalk.green('Source Code Saved Done')))
+
+// Keystore Unlock
+// ***************
+
+// app.start().then(() => {
+// 	const
+// 		c = app.client
+// 		e = app.electron
+// 		b = app.browserWindow
+// 		w = app.webContents
+		
+// 	c.waitUntilWindowLoaded()
+// 		.then(() => w.savePage('test/caps/source/index.html', 'HTMLComplete'))
+// 		.then(() => console.log(chalk.green('Source Code Saved Done')))
+
+// Private Key
+// ***********
 
 app.start().then(() => {
 	const
