@@ -5,7 +5,7 @@ const CommonUtils = requireAppModule('angular/classes/common-utils');
 function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFIG, localStorageServiceProvider) {
     'ngInject'
 
-    localStorageServiceProvider.setPrefix(CONFIG.APP_NAME);
+    localStorageServiceProvider.setPrefix(appName);
 
     function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service, SelfkeyService) {
         let defer = $q.defer();

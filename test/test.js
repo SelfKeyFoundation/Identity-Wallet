@@ -4,6 +4,7 @@ const
 	fs = require('fs')
 	exec = require('child_process').exec
 	chalk = require('chalk')
+	delay = require('delay')
 	path = require('path')
 	pwd = process.cwd()
 	data = require(pwd + '/test/data/data.json')
@@ -59,7 +60,7 @@ app.start().then(() => {
 
 		// Import Wallet
 		.then(() => c.waitForVisible('#import', 10000))
-		.then(() => console.log(chalk.green('Import Button Exists')))
+		.then(() => delay(1000).then(() => console.log(chalk.green('Import Button Exists'))))
 		.then(() => b.capturePage()
 			.then(() => console.log(chalk.green('Screencap Start')))
 			.then(img => fs.writeFile(pwd + '/test/caps/screen/1.png', img))
@@ -87,10 +88,10 @@ app.start().then(() => {
 // Confirm Screen with Docs Info -> Goto Dashboard or Selfkey ICO view
 
 		// Upload KYC Docs
-		// .then(() => c.waitForExist('#uploadKyc', 10000))
-		// .then(() => c.element('#uploadKyc').keys(pwd + '/test/data/Selfkey-export.zip'))
-		// .then(() => c.chooseFile('#uploadKyc', pwd + '/test/data/Selfkey-export.zip'))
-		// .then(() => c.click('#uploadKyc', 10000))
+		.then(() => c.waitForExist('#uploadKyc', 10000))
+		.then(() => c.click('#uploadKyc', 10000))
+		.then(() => c.element('#uploadKyc').keys(pwd + '/test/data/' + usr + '.zip'))
+		// .then(() => c.chooseFile('#uploadKyc', pwd + '/test/data/' + usr + '.zip'))
 			
 // If KYC confirm private key -> Goto Dashboard
 
