@@ -9,7 +9,7 @@ const
 	pwd = process.cwd()
 	data = require(pwd + '/test/data/data.json')
 	usr = process.argv[2] || 0
-	APP_TITLE = require('../package.json').productName
+	APP_TITLE = require('../package.json').config.forge.electronPackagerConfig.name
 	appPath = pwd + '/out/' + APP_TITLE + '-darwin-x64/' + APP_TITLE + '.app/Contents/MacOS/' + APP_TITLE
 
 
