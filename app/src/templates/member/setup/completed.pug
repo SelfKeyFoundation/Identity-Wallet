@@ -14,7 +14,7 @@
                     | which speeds up the verifications process for things you apply to in the SelfKey network such as exchanges and token sales. 
                 button.btn(ng-click="$root.goToSelfkeyIco($event)") Get KEY Tokens    
                 .border-bottom
-            .go-to(ui-sref="member.dashboard.main")
+            .go-to#goToDashboard(ui-sref="member.dashboard.main")
                 span.my-dash Go to My Selfkey Dashboard
         .right-side-container 
             sk-user-info-box        

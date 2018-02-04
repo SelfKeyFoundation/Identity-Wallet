@@ -13,4 +13,4 @@ rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screens
 mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screens
 mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/source
 
-node /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/test.js 2
+NODE_ENV="test" node /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/test.js 2
