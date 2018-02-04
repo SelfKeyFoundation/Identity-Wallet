@@ -1,11 +1,29 @@
-# KYC Chain Wallet
+# Selfkey Identity Wallet
 
-## Prequesites
-1. npm install
-1. edit file ```node_modules/web3-core-method/src/index.js``` - line 33: set **TIMEOUTBLOCK** to **150**
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-## Build Web Application
-* TODO
+## Overview
 
-## Build Desktop Application & Installer
-* TODO
+_insert overview_
+
+## Prerequisites
+
+* [NodeJS](https://nodejs.org) version 9.5 or better.
+
+## Install Dependencies.
+
+    npm install
+
+## Tests
+
+### Linting
+
+    npm run lint
+
+### Tests
+
+    npm run test
+
+## Contributing
+
+Please see the [contributing notes](CONTRIBUTING.md).
