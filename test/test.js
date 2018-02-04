@@ -24,11 +24,6 @@ function catchBottom(text, stop) {
 				if (stop == true) {
 					app.stop()
 				}
-			}).then(() => rs('done'))
-			.catch((err) => {
-				console.log(chalk.red('Tests Failed With Error: '), err)
-				// app.stop()
-				rj(err)
 			})
 	})
 }
@@ -39,8 +34,13 @@ function init() {
 			app.client.waitUntilWindowLoaded()
 				.then(() => console.log(chalk.green('Start: Import Wallet From Private Key')))
 				.then(() => app.webContents.savePage('test/caps/source/index.html', 'HTMLComplete'))
-		}).then(() => catchBottom('Init Complete', false))
-
+				.then(() => rs('Init Done'))
+				.catch((err) => {
+					console.log(chalk.red('Tests Failed With Error: '), err)
+					app.stop()
+					rj(err)
+				})
+		})
 	})
 }
 
@@ -50,7 +50,12 @@ function regStep(selector) {
 			.then(() => console.log(chalk.green('Start Step')))
 			.then(() => app.client.waitForVisible(selector, 10000))
 			.then(() => app.client.click(selector))
-			.then(() => catchBottom('Step Complete', false))
+			.then(() => rs('Step Done'))
+			.catch((err) => {
+				console.log(chalk.red('Tests Failed With Error: '), err)
+				app.stop()
+				rj(err)
+			})
 	})
 }
 
@@ -85,6 +90,7 @@ function dashboardTest() {
 			.then(() => rs('done'))
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
+				app.stop()
 				rj(err)
 			})
 	})
@@ -106,6 +112,7 @@ function passwordTest(password) {
 			.then(() => rs('done'))
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
+				app.stop()
 				rj(err)
 			})
 	})
@@ -125,6 +132,7 @@ function checkPubKey() {
 			.then(() => rs('done'))
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
+				app.stop()
 				rj(err)
 			})
 	})
@@ -165,6 +173,7 @@ function uploadKycTest() {
 			.then(() => rs('done'))
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
+				app.stop()
 				rj(err)
 			})
 	})
@@ -188,6 +197,7 @@ function importWalletTest() {
 			.then(() => rs('done'))
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
+				app.stop()
 				rj(err)
 			})
 	})
@@ -217,6 +227,7 @@ function selectPrivateKey() {
 			.catch((err) => {
 				console.log(chalk.red('Test Failed With Error: '), err)
 				app.stop()
+				rj(err)
 			})
 	})
 }
@@ -268,6 +279,8 @@ function createNewWalletTest() {
 function keystoreImportTest() {
 		
 	init()
+
+	
 		.then(() => console.log(chalk.green('Done')))
 		.then(() => app.stop())
 		.catch((err) => {
@@ -285,7 +298,7 @@ function privateKeyImportTest() {
 	init()
 		
 		// TOC Agre
-		.then(() => regStep('#agree3'))
+		.then(() => regStep('#agree'))
 		
 		// Setup Wallet
 		.then(() => regStep('#setupWallet'))
@@ -303,7 +316,12 @@ function privateKeyImportTest() {
 		.then(() => dashboardTest())
 		
 		// Complete
-		.then(() => catchBottom('Testing Completed Successfully', true))
+		.then(() => console.log(chalk.green('Done')))
+		.then(() => app.stop())
+		.catch((err) => {
+			console.log(chalk.red('Test Failed With Error: '), err)
+			app.stop()
+		})
 }
 
 		// TOC Agree -> Import Key
