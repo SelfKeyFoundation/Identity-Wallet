@@ -10,6 +10,7 @@ RUN apt-get install -y rubygems
 RUN apt-get clean
 WORKDIR /home/id-wallet
 RUN npm i -g gulp-cli
+RUN npm i electron-packager -g
 RUN gem install sass
 RUN gem install compass
 RUN npm cache verify
