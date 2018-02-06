@@ -1,6 +1,6 @@
 os: osx
 language: node_js
-node_js: latest
+node_js: 9
 before_script:
   - brew install wine rpm
   - npm i -g gulp-cli
