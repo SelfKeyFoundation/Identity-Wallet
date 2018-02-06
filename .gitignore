@@ -25,8 +25,7 @@ release
 
 out/
 
-test/caps/screen/*
-test/caps/source/*
+test/caps
 
 # Logs
 logs
