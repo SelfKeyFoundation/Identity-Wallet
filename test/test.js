@@ -10,7 +10,9 @@ const APP_TITLE = require('../package.json').config.forge.electronPackagerConfig
   .name
 // const password = 'Y@88@D00!'
 
-var appPath =
+var appPath
+
+appPath =
   pwd +
   '/out/' +
   APP_TITLE +
@@ -20,9 +22,9 @@ var appPath =
   APP_TITLE
 
 if (OSENV === 'win') {
-  appPath = pwd + '/out/dist/' + APP_TITLE + '.exe'
+  appPath = pwd + '\\out\\id-wallet-win32-ia32\\' + APP_TITLE + '.exe'
 } else if (OSENV === 'lin') {
-  appPath = pwd + '/out/dist/' + APP_TITLE
+  appPath = pwd + '/out/' + APP_TITLE + '-linux-x64/' + APP_TITLE
 }
 
 const app = new Application({
@@ -363,7 +365,7 @@ function privateKeyImportTest() {
 // Confirm Private Key
 // .then(() => c.waitForExist('#pkycontinue', 10000))
 // .then(() => b.capturePage()
-// 	.then(img => fs.writeFile(pwd + '/test/caps/screen/3.png', img))
+//  .then(img => fs.writeFile(pwd + '/test/caps/screen/3.png', img))
 // ).then(() => c.click('#pkycontinue'))
 // .then(() => console.log(chalk.green('Confirm Private Key Test Done')))
 
