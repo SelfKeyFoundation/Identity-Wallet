@@ -1,4 +1,4 @@
 node_modules
 npm-debug.log
-test/caps/screens
-test/caps/source
+test/caps/screens/*
+test/caps/source/*
