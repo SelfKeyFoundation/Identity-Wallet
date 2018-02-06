@@ -9,6 +9,6 @@ install:
 test_script:
   - node --version
   - npm --version
-  - OSENV="win" npm run test
+  - npm run testwin
 
 build: off
