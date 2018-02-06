@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:latest
 ENV NODE_ENV='test'
 RUN apt-get update
 RUN apt-get install -y curl git ruby ruby-dev build-essential

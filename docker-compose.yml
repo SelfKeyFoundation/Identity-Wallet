@@ -1,18 +1,7 @@
-version: '2'
-
+version: '3'
 services:
-  install:
-    image: node:8.4.0
-    command: npm i
-    volumes:
-      - $PWD:/app
-    working_dir: /app
-  
-  dev:
-    image: node:8.4.0
-    command: npm run start
-    ports:
-      - "4000:4000"
-    volumes:
-      - $PWD:/app
-    working_dir: /app
+  myservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: result/latest
