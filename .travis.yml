@@ -6,4 +6,4 @@ before_script:
   - npm i -g gulp-cli
   - npm i
   - npm run make
-script: npm run testlin
+script: npm run test
