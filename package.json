@@ -21,7 +21,7 @@
     "test": "OSENV=osx node ./test/test.js 3",
     "testwin": "node ./test/test.js 3",
     "testlin": "OSENV=lin node ./test/test.js 3",
-    "lint": "eslint 'src/src/**/*.js'",
+    "lint": "eslint 'app/src/**/*.js'",
     "precommit": "lint-staged",
     "cz": "git-cz",
     "docker": "docker-compose build && docker-compose up -d"
