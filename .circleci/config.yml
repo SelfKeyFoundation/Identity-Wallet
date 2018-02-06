@@ -22,6 +22,9 @@ jobs:
       - run:
           name: Build App
           command: npm run make
+      - run:
+          name: Check Dir Structure
+          command: ls /home/circleci/project/out && ls /home/circleci/project/out/dist
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
