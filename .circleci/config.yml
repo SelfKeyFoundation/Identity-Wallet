@@ -12,10 +12,10 @@ jobs:
           - v1-dependencies-
       - run:
           name: Install Linux Packages
-          command: sudo apt-get update; sudo apt-get install wine rpm ruby ruby-dev build-essential
+          command: sudo apt-get update; sudo apt-get install wine rpm
       - run:
           name: Install Gulp
-          command: npm i -g gulp-cli
+          command: sudo npm i -g gulp-cli
       - run:
           name: Install Node Packages
           command: npm i
