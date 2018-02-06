@@ -24,7 +24,7 @@ jobs:
           command: npm run make
       - run:
           name: Check Dir Structure
-          command: ls /home/circleci/project/out && ls /home/circleci/project/out/dist
+          command: ls /home/circleci/project/out
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
