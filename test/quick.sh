@@ -8,9 +8,9 @@ rm -rf /Users/altninja/Library/Application\ Support/id-wallet/wallets
 rm /Users/altninja/Library/Application\ Support/id-wallet/main-store.json
 
 rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/source
-rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screens
+rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screen
 
-mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screens
+mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screen
 mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/source
 
 NODE_ENV="test" node /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/test.js 2
