@@ -4,32 +4,28 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.4.0
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
-
       - run:
           name: Install Linux Packages
           command: sudo apt-get update; sudo apt-get install wine rpm ruby ruby-dev build-essential
-
+      - run:
+          name: Install Gulp
+          command: npm i -g gulp-cli
       - run:
           name: Install Node Packages
           command: npm i
-
       - run:
           name: Build App
           command: npm run make
-
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-
       - run:
           name: UI Tests
           command: npm run test
