@@ -28,4 +28,4 @@ jobs:
             - node_modules
       - run:
           name: UI Tests
-          command: npm run test
+          command: OSENV="linux" npm run test
