@@ -12,7 +12,7 @@ jobs:
           - v1-dependencies-
       - run:
           name: Install Linux Packages
-          command: sudo apt-get update; sudo apt-get install wine rpm
+          command: sudo apt-get update; sudo apt-get install wine rpm xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4
       - run:
           name: Install Gulp
           command: sudo npm i -g gulp-cli
@@ -22,13 +22,10 @@ jobs:
       - run:
           name: Build App
           command: npm run make
-      - run:
-          name: Check Dir Structure
-          command: ls /home/circleci/project/out
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
           name: UI Tests
-          command: OSENV="lin" npm run test
+          command: npm run testlin
