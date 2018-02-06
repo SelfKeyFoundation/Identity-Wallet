@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.4.0
+      - image: circleci/node:latest
     steps:
       - checkout
       - restore_cache:
