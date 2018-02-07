@@ -15,8 +15,9 @@
     "startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev",
     "start-auto": "gulp && gulp start",
     "make-auto": "gulp && gulp make",
-    "quick": "bash ./test/quick.sh",
-    "full": "bash ./test/full.sh",
+    "quick": "LOCAL=true NODE_ENV=test node ./test/test.js 3",
+    "full":
+      "rm -rf node_modules && npm i && LOCAL=true NODE_ENV=test node ./test/utils/full.js && NODE_ENV=test npm run make && npm run quick",
     "raw": "NODE_ENV=test node ./test/test.js 1",
     "test": "OSENV=osx node ./test/test.js 3",
     "testwin": "node ./test/test.js 3",
