@@ -1,16 +1,11 @@
 #!bin/bash
-rm -rf /Users/altninja/Library/Application\ Support/Electron/documents
-rm -rf /Users/altninja/Library/Application\ Support/Electron/wallets
-rm /Users/altninja/Library/Application\ Support/Electron/main-store.json
-
-rm -rf /Users/altninja/Library/Application\ Support/id-wallet/documents
-rm -rf /Users/altninja/Library/Application\ Support/id-wallet/wallets
-rm /Users/altninja/Library/Application\ Support/id-wallet/main-store.json
-
-rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/source
-rm -rf /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screen
-
-mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/screen
-mkdir /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/caps/source
-
-NODE_ENV="test" node /Users/altninja/code/selfkey/wallets/Identity-Wallet/test/test.js 2
+quicky() {
+	rm -rf /Users/${1}/Library/Application\ Support/Electron/documents
+	rm -rf /Users/${1}/Library/Application\ Support/Electron/wallets
+	rm -rf /Users/${1}/Library/Application\ Support/${2}/documents
+	rm -rf /Users/${1}/Library/Application\ Support/${2}/wallets
+	rm /Users/${1}/Library/Application\ Support/Electron/main-store.json
+	rm /Users/${1}/Library/Application\ Support/${2}/main-store.json
+	exit 0
+}
+quicky $1 $2
