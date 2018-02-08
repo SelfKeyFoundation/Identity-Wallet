@@ -1,0 +1,74 @@
+md-dialog.send-token(aira-lable="Send {{symbol}}")
+
+    .send-token-wrapper
+        form.sk-send-ether-box(name="sendTokenForm", style="width: 600px;", ng-if="viewStates.step === 'prepare-transaction'")
+            sk-icon(icon="{{symbol}}", size-class="icon-size-64x64")
+            
+            sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
+
+            .sk-send-ether-box__recipient-container
+                qrcode(data="formData.sendToAddressHex", size="40", background="#303c49", color="#66798f")
+                input.sk-send-ether-box__recipient-container__input(ng-class="{'has-error': errors.sendToAddressHex}", name="sendToAddress", type="text", placeholder="Send to address", ng-model="formData.sendToAddressHex", ng-readonly="inputStates.isAddressLocked", ng-required)
+
+            .sk-send-ether-box__eth-amount-container
+                .sk-button.small(ng-click="selectAll($event)")
+                    span ALL
+                input.sk-send-ether-box__eth-amount-container__input(ng-class="{'has-error': errors.sendAmount}", name="sendAmount", type="text", placeholder="0.00", ng-model="formData.sendAmount", ng-readonly="inputStates.isAmountLocked", ng-required)
+                span {{symbol}}
+
+            .sk-send-ether-box__usd-amount-container
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 40px; font-weight: 300; color: #ffffff") {{infoData.sendAmountInUSD}}
+                span USD
+
+            .sk-send-ether-box__gas-price-container
+                .sk-send-ether-box__gas-price-container__header
+                    span gas price
+                    span {{formData.gasPriceInGwei}} Gwei
+                    div
+                        sk-icon(icon="information-button", size-class="icon-size-16x16")
+                        md-tooltip.sk-tooltip(md-direction="top")
+                            | Gas Price is the amount you pay per unit of gas. <br />
+                            | TX fee = gas price * gas limit & is paid to miners <br />
+                            | for including your TX in a block. Higher the gas <br />
+                            | price = faster transaction, but more expensive. <br />
+                            | Default is 50 GWEI
+
+                md-slider(flex, ng-model="formData.gasPriceInGwei", min="1", max="99", aria-label="gas price", ng-disabled="inputStates.isGasPriceLocked")
+                .sk-send-ether-box__gas-price-container__labels
+                    span Economy
+                    span Plus
+                    span Premium
+
+            .sk-send-ether-box__actions-container
+                md-button.blue(style="min-width: 144px;", ng-if="!viewStates.showConfirmButtons", ng-click="startSend($event)", ng-disabled="backgroundProcessStatuses.checkingEstimatedGasLimit || !infoData.isReady")
+                    span {{ backgroundProcessStatuses.checkingEstimatedGasLimit ? 'getting gas limit...' : 'send' }}
+                
+                md-button.green(style="margin-right: 8px; width: 144px;", ng-if="viewStates.showConfirmButtons", ng-click="confirmSend($event, true)", ng-disabled="backgroundProcessStatuses.txInProgress")
+                    span {{ backgroundProcessStatuses.txInProgress ? 'please wait...' : 'confirm' }}
+                md-button.gray(style="margin-left: 8px; width: 144px;", ng-if="viewStates.showConfirmButtons && !backgroundProcessStatuses.txInProgress", ng-click="confirmSend($event, false)", ng-disabled="backgroundProcessStatuses.txInProgress")
+                    span cancel
+
+            .sk-send-ether-box__actions-container(ng-if="errors.sendFailed", style="margin-top: 20px;")
+                span(style="color: red;") {{errors.sendFailed}}
+
+        .sk-send-ether-box(style="width: 600px; align-items: center;", ng-if="viewStates.step === 'transaction-status'")
+            sk-icon(icon="{{symbol}}", size-class="icon-size-64x64")
+
+            sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
+
+            span.sk-send-ether-box__sent(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{getTransactionStatus()}}
+
+            .sk-send-ether-box__amount-container(style="margin-top: 40px; ")
+                span(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{formData.sendAmount}}
+                span(style="font-family: ProximaNovaSemibold; font-size: 20px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-left: 4px;") {{symbol}}
+
+            .sk-send-ether-box__to-container(style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;")
+                span(style="font-family: ProximaNovaSemibold; font-size: 20px; font-weight: 600; color: #ffffff;") To
+                span(style="margin-top: 20px; font-family: ProximaNovaLight; font-size: 20px; font-weight: 300; color: #a9c5d6;") {{formData.sendToAddressHex}}
+                div(style="display: flex; flex-direction: row; align-items: center; justify-content: center;")
+                    .sk-button.small(ng-click="checkTransaction($event)", style="margin-top: 30px;")
+                        span view transaction
+
+        .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
+            span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{ infoData.reminingBalance }} {{ symbol }} ${{ infoData.reminingBalanceInUsd | number }}
+            span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ infoData.txFeeInEth }} ETH

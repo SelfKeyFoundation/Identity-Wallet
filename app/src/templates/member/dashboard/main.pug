@@ -1,0 +1,63 @@
+.dashboard-content-wrappper(layout="column", layout-align="start center")
+
+    // header
+    .dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
+        h2.proxima.white SelfKey Dashboard
+
+    // balances
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-token-box(symbol="key", style="height: 216px;")
+        sk-token-box(symbol="eth", style="height: 216px;")
+        //sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
+        .sk-box(layout="column", layout-align="center center", style="height: 216px; display: flex; margin: 0;")
+            md-icon(md-svg-src="assets/images/icons/airdrop.svg", style="width: 100px; height: 108px; margin-bottom: 0; margin-top: 0;")
+            span(style="margin-top: 14px; font-family: ProximaNovaRegular; font-size: 23px; color: #fff;") KEY Airdrop
+            //span(style="margin-top: 10px; font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1;") Get 50 KEY Tokens
+            md-button.smallest.gray(style="margin-top: 10px; display: flex;", ng-click="openEtherscanTxWindow()")
+                span(style="font-size: 11px;") VIEW TRANSACTION
+
+    // my crypto
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        .sk-box.sk-my-cryptos-box
+            .header(layout="row")
+                span(flex) My Crypto
+                //button.sk-icon-button(ng-click="$root.openAddCustomTokenDialog($event)")
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-if="$root.totalBalanceInUsd > 0")
+                    span Get KEY
+                    sk-icon(icon="plus", size-class="icon-size-26x26")
+            .sk-horizontal-devider
+            sk-circle-pie-chart(data="pieChart", ng-show="$root.totalBalanceInUsd > 0")
+            .get-key(ng-if="$root.totalBalanceInUsd == 0", ng-click="$root.goToSelfkeyIco($event)")
+                sk-icon(icon="empty-plus", size-class="icon-size-20x20")
+                span Get KEY
+
+    // alerts
+    //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-action-logs-box(title="alerts", max-notifications="5")
+        
+    // reminders
+    //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
+        sk-reminders-box(title="reminders")
+
+    // transactions
+    .dashboard-content-wrappper__content-section(layout="row", layout-align="center center", style="margin-bottom: 40px;")
+        .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
+            .transactions-box__header
+                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+            sk-linear-progress(ng-if="!transactionActivityIsSynced()",style="margin-top:10px;")
+            div(ng-if="transactionActivityIsSynced()", ng-init="setTransactionAtivity()")
+            .sk-horizontal-devider(style="margin-top: 20px;")
+            span.no-transaction-title(ng-if="transactionActivityIsSynced() && !allTransactions.length") No transactions yet.
+            .transactions-box-body
+                .list(ng-repeat="activity in allTransactions track by $index")
+                    .list-item
+                        .item-container(layout="row")
+                            .date {{ activity.timestamp | date:'MMM'}}
+                                span {{activity.timestamp | date:'dd'}} 
+                            sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
+                            .sent-receive {{ activity.sentOrReceive }}
+                            span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
+                            span.sent-receive-text.grey  {{activity.nameOfTo}}
+                            .coin-change.symbol(ng-class="activity.symbol") {{activity.to ? '- ' : '+ '}} {{activity.value}}
+                        .sk-horizontal-devider(ng-if="allTransactions.length-1 != $index" style="margin-top: 20px;")

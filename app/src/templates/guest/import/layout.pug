@@ -1,0 +1,21 @@
+.keystore-layout-wrapper(layout-fill, layout="column", layout-align="center center")
+    img(src="assets/images/icons/important.svg", alt="")
+    
+    #message-container(layout="column", layout-align="center center" style="width: 780px; height: 48px;")
+
+    .sk-box.shadowed(style="width: 780px;")
+        .header
+            span Import An Existing Wallet
+        .content(layout="column", style="padding: 40px;")
+            .description-wrapper
+                span(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.89; color: #ffffff;") Please import an existing ETH wallet so that you can send and receive KEY or ETH in the SelfKey wallet. You can do this via Keystore File (UTC) or private keys. We will have full integration with hardware wallets by the end of Q1 2018. If you need help, please visit https://help.selfkey.org
+            .content-wrapper(layout="row", style="margin-top: 50px;")
+                .left(style="width: 340px;")
+                    span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
+                    div(style="margin-top: 30px; width: 200px;")
+                        md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
+                            md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
+                            md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select
+                            md-radio-button(md-no-ink, value="privateKey") Private Key
+
+                .right(flex, ui-view="main")

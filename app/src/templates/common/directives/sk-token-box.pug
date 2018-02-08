@@ -1,0 +1,17 @@
+.sk-box.sk-token-box
+    .sk-token-box__header(layout="row", layout-align="center start")
+        md-icon.sk-token-box__token(md-svg-src="assets/images/icons/{{symbol}}.svg", aria-label="{{symbol}}")
+        sk-double-header.sk-token-box__text(header="{{title}}", sub-header="{{symbol}}", flex)
+        button.sk-icon-button(ui-sref="member.wallet.manage-token({id: symbol})")
+            sk-icon(icon="plus", size-class="sk-token-box__plus")
+
+    .sk-token-box__body
+        span {{ balance }}
+        span ${{ balanceInUsd | number }} USD
+
+    .sk-token-box__footer
+        .sk-horizontal-devider
+        .sk-token-box__footer_address-box(layout="row", layout-align="start center")
+            span.sk-token-box__footer_address-box_public-key {{publicKeyHex}}
+            md-button.smallest.gray.copy(style="width: 46px; height: 20px; margin-left: 7px;")
+                span(copy-to-clipboard="publicKeyHex", style="width: 46px; height: 20px; font-size: 11px; line-height: 12px;") COPY

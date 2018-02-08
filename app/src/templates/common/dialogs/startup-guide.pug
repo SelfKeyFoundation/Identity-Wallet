@@ -1,0 +1,24 @@
+md-dialog.startup-guide(aira-lable="Dialog Title")
+    .startup-guide-wrapper
+        div(layout='column', layout-align='center center', style="margin-bottom: 40px;")
+            img(src='assets/images/icons/selfkey.svg', width=61)
+            .title Selfkey Token Wallet
+
+        .main(layout='column', layout-align='center center')
+            md-toolbar
+                .md-toolbar-tools(layout='row', layout-align='center center')
+                    span How It Works
+            .content(flex)
+                .textual
+                    .text(style="padding-right:20px;")
+                        p
+                            | Summary of Key Points
+                        ul
+                            li
+                                | The SelfKey Wallet is an interface for your Ethereum and KEY crypto assets. You remain in full control of
+                                | your keys and your funds. In the near future, you will be able to build out your identity wallet, KYC profile,
+                                | and participate in other token sales that will be listed on the SelfKey Marketplace. Please stay tuned to our
+                                | official updates at https://www.selfkey.org
+
+                section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='')
+                    md-button.md-raised.highlighted(ng-click="goToWalletSetup($event)") Set up my Selfkey Token Wallet

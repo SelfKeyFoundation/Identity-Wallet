@@ -1,0 +1,23 @@
+.logo.animated.rotateIn(ui-sref="member.dashboard.main")
+    img(src="assets/images/icons/selfkey.svg", alt="", style="height: 44px;")
+.middle(flex)
+.right
+    .crypto-price-box(style="margin-right: 10px;")
+        .row
+            .currency KEY
+            .value {{$root.primaryToken.getBalanceDecimal()}}
+    .crypto-price-box(style="margin-left: 10px;")
+        .row
+            .currency ETH
+            .value.main {{$root.wallet.balanceEth}}
+        .row
+            .currency USD
+            .value ${{ $root.wallet.balanceInUsd | number }}
+    .sk-vertical-devider-2(style="height: 40px;")
+    .button-box
+        button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, 'eth')")
+            sk-icon(icon="plus", size-class="sk-token-box__plus")
+    .sk-vertical-devider-2(style="height: 40px;")
+    .button-box
+        button.sk-icon-button(ng-click="openRightSidenav($event)")
+            sk-icon(icon="menu-button", size-class="sk-token-box__plus")
