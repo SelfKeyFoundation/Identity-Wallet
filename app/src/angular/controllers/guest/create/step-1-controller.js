@@ -5,10 +5,11 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
 
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
-    $scope.userInput = {
-        password: '',
-        rPassword: ''
-    };
+    
+
+    $scope.createBasicId = (event) => {
+        $state.go('guest.create.step-2');
+    }
 
     $scope.nextStep = (event) => {
         if(!$scope.userInput.password) {

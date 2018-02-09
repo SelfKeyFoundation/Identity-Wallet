@@ -9,7 +9,7 @@
 @import './components/sk-box.scss';
 @import './components/sk-button.scss';
 @import './components/sk-icon-button.scss';
-@import './components/sk-vertical-devider.scss';
+@import './components/sk-deviders.scss';
 @import './components/sk-message.scss';
 @import './components/sk-show-loading.scss';
 @import './components/sk-form-inputs.scss';
@@ -42,7 +42,7 @@
 @import './directives/sk-kyc-requirements-box.scss';
 @import './directives/copy-to-clipboard.scss';
 
-@import './layouts/guest-welcome-layout.scss';
+@import './layouts/guest-layout.scss';
 @import './layouts/member-layout.scss';
 
 @import './partials/sk-documents-setup.scss';
@@ -50,16 +50,18 @@
 
 @import './views/dashboard/main.scss';
 @import './views/wallet/manage-token.scss';
-@import './views/setup/completed.scss';
 
 @import './dialogs/terms.scss';
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
 @import './dialogs/send-token.scss';
+@import './dialogs/password-warning.scss';
 
 
-@import './views/setup/completed.scss';
-@import './views/setup/wallet-setup.scss';
+@import './views/guest/create/completed.scss';
+@import './views/guest/create/step-1.scss';
+@import './views/guest/create/step-2.scss';
+@import './views/guest/create/step-3.scss';
 
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';

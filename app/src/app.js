@@ -15,6 +15,7 @@ document.addEventListener('drop', function (event) {
  */
 requireNodeModule('@uirouter/angularjs');
 requireNodeModule('angular-material');
+requireNodeModule('angular-messages');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 
@@ -31,6 +32,7 @@ requireAppModule('angular/app.templates');
  */
 window.app = angular.module('kyc-wallet', [
   'ngMaterial',
+  'ngMessages',
   'ui.router',
   'templates',
   'LocalStorageModule',
@@ -170,6 +172,9 @@ angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDi
 
 const UpdateDialogController = requireAppModule('angular/controllers/commons/dialogs/update-controller.js');
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
+
+const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
+angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
 
 /**
  * guest

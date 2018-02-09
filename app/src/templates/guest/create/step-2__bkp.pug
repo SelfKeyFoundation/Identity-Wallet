@@ -1,0 +1,16 @@
+.header
+    span.none-select-text Create New Wallet
+form.content(layout="column", style="padding: 24px;")
+    
+    span.sk-text Enter the password that you just created for your private key.
+    span.sk-text Make sure you have chosen a strong password.
+    span.sk-text Do not forget or lose this password, and do not share this password with anyone.
+
+    md-input-container.sk-input-box.no-error-spacer
+        input(name="password", ng-model="userInput.password", type="password", placeholder="Password")
+    
+    .sk-button.filled-blue(style="margin: 24px 0 12px 0;", ng-click="createKeystore($event)")
+        span(style="color: #fff") Generate Wallet
+
+    .sk-button.outline-blue(style="margin: 12px 0 48px 0;", ui-sref="guest.create.step-1")
+        span(style="color: #fff") back
