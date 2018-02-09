@@ -14,6 +14,20 @@
 
 The Official SelfKey Identity Wallet for Desktop.
 
+## Features
+
+* Storage of identity docs in the Identity Wallet locally on the user’s computer
+* ICO Marketplace where the user can view a list of available ICOs
+* ICO Details Page where the user can view ICO information and stake tokens
+* System to fetch a user’s staking status (stake/no-stake) for an ICO from the blockchain
+* Token staking flow
+* Token reclamation flow
+* Submission/upload of KYC package for processing to KYC-Chain
+* Monitoring of KYC verification status, notifications or activity/message feed for accepted, rejected, more info required.
+* Transfer of KEY
+* Viewing of token balances (KEY, ETH, related ICOs)
+* Viewing of transaction logs for KEY, ETH, related ICOs)
+
 ## Prerequisites
 
 * [NodeJS](https://nodejs.org) version 9.5 or better.
