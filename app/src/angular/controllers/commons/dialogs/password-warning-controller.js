@@ -8,7 +8,8 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $s
     }
 
     $scope.accept = (event) => {
-        $state.go('guest.welcome');
+        $state.go('guest.create.step-3');
+        $mdDialog.hide();
     }
 };
 

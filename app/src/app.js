@@ -18,6 +18,7 @@ requireNodeModule('angular-material');
 requireNodeModule('angular-messages');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
+requireNodeModule('angular-zxcvbn');
 
 window.qrcode = requireNodeModule('qrcode-generator');
 
@@ -36,7 +37,8 @@ window.app = angular.module('kyc-wallet', [
   'ui.router',
   'templates',
   'LocalStorageModule',
-  'monospaced.qrcode'
+  'monospaced.qrcode',
+  'zxcvbn'
 ]);
 
 /**

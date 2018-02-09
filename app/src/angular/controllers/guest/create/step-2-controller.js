@@ -1,4 +1,4 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, countries) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $mdDialog, countries) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep2Controller');
@@ -14,6 +14,17 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
 
     $scope.nextStep = (event, form) => {
         console.log(form.$valid);
+
+        if(!form.$valid) return;
+
+        $mdDialog.show({
+            controller: 'PasswordWarningDialogController',
+            templateUrl: 'common/dialogs/password-warning.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
     }
 
     // TODO remove

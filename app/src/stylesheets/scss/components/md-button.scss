@@ -55,25 +55,18 @@
         }
     } 
     &.outline-orange {
-        border-image-source: linear-gradient(106deg, #db7400, #b44000);
-        border-image-slice: 1;
+        height: auto;
+        border: 1px solid #db7400;
         border-radius: 4px;
-	    border-style: solid;
-        border-width: 1px;
         
         span {
             font-family: ProximaNovaSemibold;
             font-weight: 600;
-
             opacity: 0.8;
-            background-image: linear-gradient(106deg, #f9992b, #cb520f);
+            color: #db7400;
             font-size: 14px;
             line-height: 0.86;
             letter-spacing: 0.6px;
-            text-align: center;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         &:disabled {
             background-image: none;

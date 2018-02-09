@@ -14119,6 +14119,7 @@ md-toolbar {
     color: #ffffff; }
   .sk-box > .header {
     height: 65px;
+    width: 100%;
     border-radius: 4px;
     background-image: linear-gradient(to bottom, #27313b, #1e262e);
     box-shadow: inset 0 -1px 0 0 #303c49;
@@ -14955,7 +14956,16 @@ md-content {
 .md-button {
   border-radius: 4px;
   height: 44px;
-  margin: 0; }
+  margin: 0;
+  /**
+     * Colors
+     */
+  /**
+     * Size
+     */
+  /**
+     * Special Buttons
+     */ }
   .md-button span {
     font-size: 16px;
     line-height: 0.75;
@@ -14990,6 +15000,24 @@ md-content {
       background-image: none;
       border: solid 1px #93b0c1; }
       .md-button.green:disabled span {
+        font-family: ProximaNovaRegular;
+        color: #93b0c1; }
+  .md-button.outline-orange {
+    height: auto;
+    border: 1px solid #db7400;
+    border-radius: 4px; }
+    .md-button.outline-orange span {
+      font-family: ProximaNovaSemibold;
+      font-weight: 600;
+      opacity: 0.8;
+      color: #db7400;
+      font-size: 14px;
+      line-height: 0.86;
+      letter-spacing: 0.6px; }
+    .md-button.outline-orange:disabled {
+      background-image: none;
+      border: solid 1px #93b0c1; }
+      .md-button.outline-orange:disabled span {
         font-family: ProximaNovaRegular;
         color: #93b0c1; }
   .md-button.smallest {
@@ -16612,6 +16640,44 @@ md-dialog.send-token {
   background-color: #0dc7dd !important;
   box-shadow: 1px 0 0 0 rgba(118, 128, 147, 0.2); }
 
+md-dialog.password-warning {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.password-warning .wrapper {
+    width: 780px; }
+    md-dialog.password-warning .wrapper .header-wrapper img {
+      width: 68px; }
+    md-dialog.password-warning .wrapper .header-wrapper span {
+      font-family: ProximaNovaSemibold;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.5;
+      letter-spacing: 1px;
+      text-align: center;
+      color: #ffffff; }
+    md-dialog.password-warning .wrapper .body-wrapper {
+      margin-top: 55px; }
+      md-dialog.password-warning .wrapper .body-wrapper .content {
+        display: flex;
+        flex-direction: column;
+        align-items: ceter;
+        padding: 60px; }
+        md-dialog.password-warning .wrapper .body-wrapper .content > span {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          line-height: 1.89;
+          color: #ffffff; }
+        md-dialog.password-warning .wrapper .body-wrapper .content .md-button {
+          margin-top: 60px !important;
+          padding: 10px 0; }
+
 .setup-completed .container {
   margin: 0 auto; }
   .setup-completed .container .right-side-container {
@@ -16770,6 +16836,79 @@ md-dialog.send-token {
     margin-top: 30px; }
     .wallet-create-step-2 .content-wrapper md-input-container {
       margin: 14px 0; }
+
+.wallet-create-step-3 {
+  height: 100%; }
+  .wallet-create-step-3 .title {
+    margin-top: 24px;
+    user-select: none;
+    font-family: ProximaNovaSemibold;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #ffffff; }
+  .wallet-create-step-3 .description {
+    font-family: ProximaNovaRegular;
+    margin-top: 18px;
+    opacity: 0.8;
+    font-size: 18px;
+    line-height: 1.89;
+    text-align: center;
+    color: #0abbd0;
+    margin-top: 15px;
+    user-select: none; }
+  .wallet-create-step-3 .content-wrapper {
+    width: 780px;
+    margin-top: 50px; }
+    .wallet-create-step-3 .content-wrapper .content {
+      padding: 44px 36px; }
+      .wallet-create-step-3 .content-wrapper .content .password-strength-container {
+        height: 11px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px; }
+        .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container {
+          height: 11px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-around; }
+          .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container .block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 11px;
+            width: 168px;
+            background-color: #1e262e; }
+            .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container .block.active:after {
+              content: "";
+              width: 158px;
+              height: 3px;
+              background-color: #0dc7dd; }
+        .wallet-create-step-3 .content-wrapper .content .password-strength-container .status-text-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-top: 26px; }
+          .wallet-create-step-3 .content-wrapper .content .password-strength-container .status-text-container span {
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            color: #93b0c1; }
+      .wallet-create-step-3 .content-wrapper .content .actions-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 60px; }
+        .wallet-create-step-3 .content-wrapper .content .actions-wrapper .md-button {
+          width: 360px; }
 
 .ico-list-item-content-wrappper {
   flex-direction: row;
