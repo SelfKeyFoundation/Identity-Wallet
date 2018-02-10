@@ -4,10 +4,10 @@
     .title SELFKEY BASIC ID
     .description Fill in the basic details of your identity wallet.
 
-    .content-wrapper.sk-box.shadowed(style="width: 400px;")
+    .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Identity Wallet Details
-        form.content(name="basicInfoForm", layout="column", style="padding: 24px;")
+        form.content(name="basicInfoForm", layout="column")
             md-input-container.sk-input-box.sk-input-non-floating
                 label First Name 
                 input(name="firstName", type="text", ng-model="input.firstName", ng-maxlength="500", ng-required="true")
@@ -31,5 +31,5 @@
                     md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")
                     div(ng-message="required") This field is required. Please enter Country Of Residency.
-            md-button.sk-button.medium.filled-gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
+            md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid")
                 span.small Create SelfKey Basic ID

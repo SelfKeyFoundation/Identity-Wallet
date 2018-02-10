@@ -25,7 +25,7 @@
 		"angular-material": "1.1.7",
 		"angular-messages": "1.6.7",
 		"angular-qrcode": "7.2.0",
-		"angular-zxcvbn": "^3.2.2",
+		"angular-zxcvbn": "3.2.2",
 		"async": "2.6.0",
 		"bignumber.js": "4.1.0",
 		"camelcase": "4.1.0",
@@ -54,7 +54,8 @@
 		"secp256k1": "3.2.5",
 		"sjcl": "1.0.6",
 		"uuid": "3.0.0",
-		"web3": "1.0.0-beta.29"
+		"web3": "1.0.0-beta.29",
+		"zxcvbn": "^4.4.2"
 	},
 	"devDependencies": {
 		"babel-plugin-transform-async-to-generator": "6.24.1",

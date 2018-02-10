@@ -1,4 +1,4 @@
-function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $state) {
+function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $state, basicInfo) {
     'ngInject'
 
     $log.info('PasswordWarningDialogController');
@@ -8,7 +8,7 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $s
     }
 
     $scope.accept = (event) => {
-        $state.go('guest.create.step-3');
+        $state.go('guest.create.step-3', {basicInfo: basicInfo});
         $mdDialog.hide();
     }
 };

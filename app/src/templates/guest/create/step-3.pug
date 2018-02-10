@@ -10,17 +10,17 @@
         form.content(name="passwordForm", layout="column")
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password
-                input(name="password", type="password", ng-model="input.password")
+                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
             
             .password-strength-container
                 .blocks-container
-                    .block.active
-                    .block
-                    .block
-                    .block
+                    .block(ng-class="{'active': passwordStrength.score >= 0}")
+                    .block(ng-class="{'active': passwordStrength.score >= 1}")
+                    .block(ng-class="{'active': passwordStrength.score >= 2}")
+                    .block(ng-class="{'active': passwordStrength.score >= 3}")
                 .status-text-container
-                    span Strong
+                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
 
             .actions-wrapper
-                md-button.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
+                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, passwordForm)")
                     span.primary Next

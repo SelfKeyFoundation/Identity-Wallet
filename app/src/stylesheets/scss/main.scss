@@ -29,6 +29,7 @@
 @import './components/md-content.scss';
 @import './components/md-input.scss';
 @import './components/md-button.scss';
+@import './components/md-toast.scss';
 
 @import './directives/sk-token-box.scss';
 @import './directives/sk-send-token.scss';
@@ -62,6 +63,9 @@
 @import './views/guest/create/step-1.scss';
 @import './views/guest/create/step-2.scss';
 @import './views/guest/create/step-3.scss';
+@import './views/guest/create/step-4.scss';
+@import './views/guest/create/step-5.scss';
+@import './views/guest/create/step-6.scss';
 
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';

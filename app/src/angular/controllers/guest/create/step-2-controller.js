@@ -12,9 +12,10 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
         countryOfResidency: ""
     };
 
-    $scope.nextStep = (event, form) => {
-        console.log(form.$valid);
 
+
+
+    $scope.nextStep = (event, form) => {
         if(!form.$valid) return;
 
         $mdDialog.show({
@@ -23,7 +24,10 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,
-            fullscreen: true
+            fullscreen: true,
+            locals: {
+                basicInfo: $scope.input
+            }
         });
     }
 

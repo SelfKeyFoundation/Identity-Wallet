@@ -24,7 +24,12 @@
     
     .content-wrapper {
         margin-top: 30px;
+        width: 400px;
         
+        >.content {
+            padding: 24px;
+        }
+
         md-input-container {
             margin: 14px 0;
         }

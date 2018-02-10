@@ -11,6 +11,12 @@ document.addEventListener('drop', function (event) {
 }, false);
 
 /**
+ * 
+ */
+window.zxcvbn = requireNodeModule('zxcvbn');
+window.qrcode = requireNodeModule('qrcode-generator');
+
+/**
  * External Modules
  */
 requireNodeModule('@uirouter/angularjs');
@@ -20,7 +26,6 @@ requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
 
-window.qrcode = requireNodeModule('qrcode-generator');
 
 
 /**
@@ -213,6 +218,12 @@ angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', Gu
 
 const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4-controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
+
+const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
+
+const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
 
 
 /**

@@ -176,6 +176,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 templateUrl: 'guest/create/step-3.html',
                 controller: 'GuestKeystoreCreateStep3Controller'
             }
+        },
+        params: {
+            basicInfo: null
         }
     })
 
@@ -185,6 +188,30 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             main: {
                 templateUrl: 'guest/create/step-4.html',
                 controller: 'GuestKeystoreCreateStep4Controller'
+            }
+        },
+        params: {
+            thePassword: null,
+            basicInfo: null
+        }
+    })
+
+    .state('guest.create.step-5', {
+        url: '/guest/create/step-5',
+        views: {
+            main: {
+                templateUrl: 'guest/create/step-5.html',
+                controller: 'GuestKeystoreCreateStep5Controller'
+            }
+        }
+    })
+
+    .state('guest.create.step-6', {
+        url: '/guest/create/step-6',
+        views: {
+            main: {
+                templateUrl: 'guest/create/step-6.html',
+                controller: 'GuestKeystoreCreateStep6Controller'
             }
         }
     })

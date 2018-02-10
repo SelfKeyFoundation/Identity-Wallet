@@ -4,19 +4,9 @@ const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 
 class IdAttribute {
 
-    constructor(key) {
-        this.key = key;
+    constructor(type) {
+        this.type = type;
         this.defaultItemId = null;
-        this.items = {};
-    }
-
-    init(IdAttribute) {
-        this.key = IdAttribute.key;
-        this.defaultItemId = IdAttribute.defaultItemId;
-
-        for (let value of IdAttribute.items) {
-            value
-        }
         this.items = {};
     }
 
