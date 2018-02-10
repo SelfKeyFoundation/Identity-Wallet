@@ -1,0 +1,63 @@
+.add-document(layout-fill, layout="column", layout-align="center center")
+
+    .header-wrapper(layout="column", layout-align="center start")
+        span Verify your identity
+
+    .content-wrapper
+        #document.sk-box.center-divider
+            .content(layout="column")
+                .header-wrapper
+                    .step Step 4
+                    .title Upload Your National ID Document
+                    .description (can be driver's license, passport)
+                .content-wrapper
+                    .box(flex, layout="column", layout-align="center center")
+                        sk-icon(icon="upload", size-class="icon-size-34x44")
+                        span.header Your National ID
+                        span.sub-header (Minimal size 1600x900px)
+
+                    .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
+                        sk-icon(icon="hard-drive", size-class="icon-size-34x44")
+                        span.header  Your National ID
+                        span.sub-header This is stored locally
+        #check-list.sk-box
+            .content(layout="column")
+                .sk-text.header ID Wallet Checklist
+                .sk-text.sub-header If you’re not ready, you can do this later.
+
+                .sk-list(style="margin-top: 28px;")
+                    .item(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg')
+                        span First Name
+
+                    .item(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg')
+                        span Last Name
+
+                    .item(ng-click="goToBaseStep()")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="1 == 2")
+                            span(ng-if="1 == 1") 3
+                        span Middle Name
+
+                    .item(sk-select-if="1 == 1")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="1 == 2")
+                            span(ng-if="1 == 1") 4
+                        span ID Document
+
+                    .item(sk-select-if="1 == 2")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="1 == 2")
+                            span(ng-if="1 == 1") 5
+                        span Selfie with ID Document
+
+    .actions-wrapper(layout="row", layout-align="start center")
+        .left(layout="row")
+            md-button.gray(flex="70", ng-click="nextStep($event)")
+                span.primary Next
+            .sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
+
+

@@ -3,14 +3,19 @@ const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService, SelfkeyService) {
+function MemberSetupChecklistController($rootScope, $scope, $log, $state, Web3Service, ElectronService, ConfigFileService, SelfkeyService) {
     'ngInject'
 
     $scope.error = null;
 
     let store = ConfigFileService.getStore();
 
-    checkStatus();
+    $scope.nextStep = (event) => {
+        $state.go('member.setup.add-document', {type: 'id_document'});
+    }
+
+
+    //checkStatus();
 
     $scope.importIdentity = (event) => {
         $scope.error = null;
@@ -127,4 +132,4 @@ function MemberSetupChooseController($rootScope, $scope, $log, $state, Web3Servi
     }
 };
 
-module.exports = MemberSetupChooseController;
+module.exports = MemberSetupChecklistController;

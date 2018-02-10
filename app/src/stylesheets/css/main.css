@@ -17123,6 +17123,108 @@ md-dialog.password-warning {
         .wallet-create-step-6 .content-wrapper .content .actions-wrapper > .md-button {
           padding: 10px; }
 
+.member-setup-layout {
+  position: relative; }
+  .member-setup-layout:before {
+    content: "";
+    position: absolute;
+    background-image: url("../../assets/images/bgs/layouts/swirl-top-left.svg"), url("../../assets/images/bgs/layouts/swirl-bottom-right.svg");
+    background-position: top left, bottom right;
+    background-repeat: no-repeat, no-repeat;
+    width: 100%;
+    height: 100%; }
+
+.checklist > .header-wrapper {
+  width: 484px; }
+  .checklist > .header-wrapper span {
+    font-family: ProximaNovaRegular;
+    color: #ffffff; }
+    .checklist > .header-wrapper span:first-of-type {
+      font-size: 36px;
+      line-height: 1.0; }
+    .checklist > .header-wrapper span:last-of-type {
+      margin-top: 18px;
+      opacity: 0.8;
+      font-size: 18px;
+      line-height: 1.67; }
+
+.checklist > .content-wrapper {
+  margin-top: 44px;
+  width: 484px; }
+  .checklist > .content-wrapper > .content {
+    padding: 24px; }
+
+.checklist > .actions-wrapper {
+  width: 484px;
+  margin-top: 44px; }
+  .checklist > .actions-wrapper .md-button {
+    padding: 8px; }
+
+.add-document > .header-wrapper {
+  width: 1140px; }
+  .add-document > .header-wrapper span {
+    font-family: ProximaNovaRegular;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 1.5; }
+
+.add-document > .content-wrapper {
+  margin-top: 38px;
+  width: 1140px;
+  height: 400px;
+  display: flex;
+  flex-direction: row; }
+  .add-document > .content-wrapper #document {
+    width: 760px;
+    margin-right: 30px; }
+    .add-document > .content-wrapper #document > .content {
+      height: 100%; }
+      .add-document > .content-wrapper #document > .content .header-wrapper {
+        margin: 25px 30px; }
+        .add-document > .content-wrapper #document > .content .header-wrapper .step {
+          font-family: ProximaNovaSemibold;
+          font-size: 12px;
+          font-weight: 600;
+          color: #93b0c1; }
+        .add-document > .content-wrapper #document > .content .header-wrapper .title {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff; }
+        .add-document > .content-wrapper #document > .content .header-wrapper .description {
+          font-family: ProximaNovaRegular;
+          opacity: 0.8;
+          font-size: 16px;
+          line-height: 1;
+          color: #93b0c1; }
+      .add-document > .content-wrapper #document > .content .content-wrapper {
+        display: flex;
+        flex: 1; }
+        .add-document > .content-wrapper #document > .content .content-wrapper .box > .header {
+          margin-top: 36px;
+          font-family: ProximaNovaSemibold;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          color: #ffffff; }
+        .add-document > .content-wrapper #document > .content .content-wrapper .box > .sub-header {
+          margin-top: 6px;
+          font-family: ProximaNovaRegular;
+          font-size: 12px;
+          text-align: center;
+          color: #93b0c1; }
+  .add-document > .content-wrapper #check-list {
+    width: 350px; }
+    .add-document > .content-wrapper #check-list > .content {
+      padding: 30px; }
+
+.add-document > .actions-wrapper {
+  width: 1140px;
+  margin-top: 44px; }
+  .add-document > .actions-wrapper .left {
+    width: 760px; }
+    .add-document > .actions-wrapper .left .md-button {
+      padding: 8px; }
+
 .ico-list-item-content-wrappper {
   flex-direction: row;
   align-items: flex-start;
@@ -17508,17 +17610,6 @@ md-dialog.password-warning {
   outline: none; }
   .sk-hyperlink:hover {
     color: #5ba3d6 !important; }
-
-.setup-layout-wrapper {
-  position: relative; }
-  .setup-layout-wrapper:before {
-    position: absolute;
-    background-image: url("../../assets/images/bgs/layouts/swirl-top-left.svg"), url("../../assets/images/bgs/layouts/swirl-bottom-right.svg");
-    background-position: top left, bottom right;
-    background-repeat: no-repeat, no-repeat;
-    content: "";
-    width: 100%;
-    height: 100%; }
 
 md-radio-group md-radio-button {
   margin-bottom: 0; }

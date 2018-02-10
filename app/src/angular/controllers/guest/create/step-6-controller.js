@@ -13,7 +13,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.nextStep = (event) => {
-        $state.go('member.setup.choose');
+        $state.go('member.setup.checklist');
     }
 };
 

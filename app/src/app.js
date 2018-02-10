@@ -238,11 +238,14 @@ angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRi
 /**
  * setup
  */
+const MemberSetupChecklistController = requireAppModule('angular/controllers/member/setup/checklist-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupChecklistController', MemberSetupChecklistController);
+
+const MemberSetupAddDocumentController = requireAppModule('angular/controllers/member/setup/add-document-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', MemberSetupAddDocumentController);
+
 const MemberSetupViewKeystoreController = requireAppModule('angular/controllers/member/setup/view-keystore-controller.js');
 angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', MemberSetupViewKeystoreController);
-
-const MemberSetupChooseController = requireAppModule('angular/controllers/member/setup/choose-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupChooseController', MemberSetupChooseController);
 
 const MemberSetupCompletedController = requireAppModule('angular/controllers/member/setup/completed-controller.js');
 angular.module('kyc-wallet').controller('MemberSetupCompletedController', MemberSetupCompletedController);

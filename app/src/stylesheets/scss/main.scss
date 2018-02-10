@@ -67,6 +67,10 @@
 @import './views/guest/create/step-5.scss';
 @import './views/guest/create/step-6.scss';
 
+@import './views/member/setup/layout.scss';
+@import './views/member/setup/checklist.scss';
+@import './views/member/setup/add-document.scss';
+
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';
 @import './views/marketplace/ico-accept-terms.scss';
@@ -124,19 +128,7 @@ $buttonColor: rgba(255, 255, 255, 1);
 }
 
 // TODO -- move
-.setup-layout-wrapper {
-  position: relative;
 
-  &:before {
-    position: absolute;
-    background-image: url('../../assets/images/bgs/layouts/swirl-top-left.svg'), url('../../assets/images/bgs/layouts/swirl-bottom-right.svg');
-    background-position: top left, bottom right;
-    background-repeat: no-repeat, no-repeat;
-    content: "";
-    width: 100%;
-    height: 100%;
-  }
-}
 
 
 md-radio-group {

@@ -297,7 +297,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         },
         resolve: {
             checkWallet: checkWallet,
-            checkKyc: checkKyc
+            //checkKyc: checkKyc
         }
     })
 
@@ -313,6 +313,29 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         }
     })
 
+    .state('member.setup.checklist', {
+        url: '/member/setup/checklist',
+        views: {
+            main: {
+                templateUrl: 'member/setup/checklist.html',
+                controller: 'MemberSetupChecklistController'
+            }
+        }
+    })
+
+    .state('member.setup.add-document', {
+        url: '/member/setup/add-document',
+        views: {
+            main: {
+                templateUrl: 'member/setup/add-document.html',
+                controller: 'MemberSetupAddDocumentController'
+            }
+        },
+        params: {
+            type: null
+        }
+    })
+
     .state('member.setup.view-keystore', {
         url: '/member/setup/view-keystore',
         views: {
@@ -323,15 +346,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         }
     })
 
-    .state('member.setup.choose', {
-        url: '/member/setup/choose',
-        views: {
-            main: {
-                templateUrl: 'member/setup/choose.html',
-                controller: 'MemberSetupChooseController'
-            }
-        }
-    })
+    
 
     .state('member.setup.completed', {
         url: '/member/setup/completed',
