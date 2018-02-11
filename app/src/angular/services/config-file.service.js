@@ -23,10 +23,15 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 
     constructor() {
       this.q = async.queue((data, callback) => {
-        let newStore = JSON.parse(data.store);
 
-        ElectronService.saveDataStore(newStore).then(() => {
-          callback(null, newStore);
+        //console.log("BEFORE SAVE >>>>", data.store)
+
+        //let newStore = JSON.parse(data.store);
+
+        ElectronService.saveDataStore(store).then(() => {
+          //store = newStore;
+          $rootScope.$broadcast('ConfigFileService:reloaded', store);
+          callback(null, store);
         }).catch((err) => {
           callback(err);
         });
@@ -57,7 +62,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
       }
       return defer.promise;
     }
-
 
     save() {
       const me = this;

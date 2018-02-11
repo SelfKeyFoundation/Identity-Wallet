@@ -336,28 +336,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         }
     })
 
-    .state('member.setup.view-keystore', {
-        url: '/member/setup/view-keystore',
-        views: {
-            main: {
-                templateUrl: 'member/setup/view-keystore.html',
-                controller: 'MemberSetupViewKeystoreController'
-            }
-        }
-    })
-
-    
-
-    .state('member.setup.completed', {
-        url: '/member/setup/completed',
-        views: {
-            main: {
-                templateUrl: 'member/setup/completed.html',
-                controller: 'MemberSetupCompletedController'
-            }
-        }
-    })
-
     /**
      * Dashboard
      */

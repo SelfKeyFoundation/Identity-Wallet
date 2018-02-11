@@ -9,9 +9,11 @@ class IdAttributeItem {
         if (item) {
             this._id = item._id ? item._id : CommonUtils.generateId();
             this.values = item.values;
+            this.info = item.info;
         } else {
             this._id = CommonUtils.generateId();
             this.values = [];
+            this.info = {};
         }
     }
 
