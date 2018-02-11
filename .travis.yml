@@ -1,9 +1,10 @@
 os: osx
 language: node_js
 node_js: 9
-before_script:
+before_install:
   - brew install wine rpm
   - npm i -g gulp-cli
-  - npm i
-  - npm run make
+  - npm i -g electron-packager
+before_script:
+  - NODE_ENV=test npm run make
 script: npm run test
