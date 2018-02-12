@@ -19,25 +19,25 @@ function SkMessageDirective($log, $timeout) {
             scope.close = (event) => {
                 isClosed = true;
                 element.addClass('fade-out');
-                closeTimeout = $timeout(()=>{
+                closeTimeout = $timeout(() => {
                     element.remove();
                 }, 500);
             }
 
-            if(scope.closeAfter && !isClosed){
-                closeAfterTimeout = $timeout(()=>{
-                    if(!isClosed){
+            if (scope.closeAfter && !isClosed) {
+                closeAfterTimeout = $timeout(() => {
+                    if (!isClosed) {
                         element.addClass('fade-out');
-                        $timeout(()=>{
+                        $timeout(() => {
                             element.remove();
                         }, 500);
                     }
                 }, scope.closeAfter)
             }
 
-            element.on('$destroy', function() {
-                if(closeTimeout) $timeout.cancel(closeTimeout)
-                if(closeAfterTimeout) $timeout.cancel(closeAfterTimeout);
+            element.on('$destroy', function () {
+                if (closeTimeout) $timeout.cancel(closeTimeout)
+                if (closeAfterTimeout) $timeout.cancel(closeAfterTimeout);
             });
         },
         replace: true,

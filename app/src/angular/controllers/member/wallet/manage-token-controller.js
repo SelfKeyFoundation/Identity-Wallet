@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService, ConfigFileService, WalletService) {
+function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService, ConfigFileService, WalletService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -14,22 +14,22 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
     $scope.symbol = $stateParams.id.toUpperCase();
     $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
-    
+
     $scope.balance = 0;
     $scope.balanceUsd = 0;
-    
+
     $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
-    
+
 
     /**
-     * 
+     *
      */
-    prepareBalance ();
+    prepareBalance();
 
     /**
-     * 
+     *
      */
-    function prepareBalance () {
+    function prepareBalance() {
         if ($scope.symbol === 'ETH') {
             // ETHER
             $scope.balance = Number($rootScope.wallet.balanceEth);
@@ -43,13 +43,13 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
             });
         }
     }
-  
+
     /**
-     * 
+     *
      */
     $scope.setTokenActivity = () => {
         let store = ConfigFileService.getStore();
-        
+
         let data = store.wallets[$rootScope.wallet.getPublicKeyHex()].data;
         if (data.activities) {
             let activity = data.activities[$scope.originalSymbol];
@@ -57,11 +57,11 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
 
             transactions.forEach(transaction => {
                 if (transaction.to) {
-                    transaction.nameOfTo = WalletService.getWalletName($scope.originalSymbol,transaction.to);
+                    transaction.nameOfTo = WalletService.getWalletName($scope.originalSymbol, transaction.to);
                 }
 
-                let sendText = transaction.nameOfTo ?  'Sent to' : 'Sent';
-                transaction.sentOrReceive =  transaction.to ? sendText : 'Received';                
+                let sendText = transaction.nameOfTo ? 'Sent to' : 'Sent';
+                transaction.sentOrReceive = transaction.to ? sendText : 'Received';
             });
 
             $scope.tokenActivity = transactions;
@@ -79,7 +79,7 @@ function ManageTokenController($rootScope, $scope,$state, $log, $mdDialog, $stat
      */
     $rootScope.$on('balance:change', (event, symbol, balance, balanceInUsd) => {
         $log.info('balance:change', symbol, balance, balanceInUsd);
-        prepareBalance ();
+        prepareBalance();
     });
 };
 

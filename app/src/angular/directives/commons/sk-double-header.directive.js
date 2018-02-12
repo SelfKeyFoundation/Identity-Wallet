@@ -10,7 +10,7 @@ function SkDoubleHeaderDirective($log) {
             subHeader: '@'
         },
         link: (scope, element) => {
-            
+
         },
         replace: true,
         templateUrl: 'common/directives/sk-double-header.html'

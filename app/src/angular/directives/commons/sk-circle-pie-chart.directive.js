@@ -34,7 +34,7 @@ function SkCirclePieChartDirective($timeout) {
 
             function drawChart() {
                 let container = document.getElementById('chart');
-                
+
                 if (!container) return;
 
                 let dataItems = [];
@@ -71,7 +71,7 @@ function SkCirclePieChartDirective($timeout) {
                 let chart = new google.visualization.PieChart(container);
 
                 scope.chartIsReady = false;
-                
+
                 google.visualization.events.addListener(chart, 'ready', function (chartItem) {
                     scope.chartIsReady = true;
                     scope.$apply();

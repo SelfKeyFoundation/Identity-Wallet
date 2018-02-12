@@ -5,14 +5,14 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
 
     let messagesContainer = angular.element(document.getElementById("message-container"));
 
-    
+
 
     $scope.createBasicId = (event) => {
         $state.go('guest.create.step-2');
     }
 
     $scope.nextStep = (event) => {
-        if(!$scope.userInput.password) {
+        if (!$scope.userInput.password) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "error",
@@ -23,7 +23,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
             return;
         }
 
-        if($scope.userInput.password.length < 8) {
+        if ($scope.userInput.password.length < 8) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "error",
@@ -34,7 +34,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
             return;
         }
 
-        if($scope.userInput.password !== $scope.userInput.rPassword) {
+        if ($scope.userInput.password !== $scope.userInput.rPassword) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "error",
@@ -44,11 +44,9 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeo
             });
             return;
         }
-       
-        $state.go('guest.create.step-2', {thePassword: $scope.userInput.password});
-    }
 
-   
+        $state.go('guest.create.step-2', { thePassword: $scope.userInput.password });
+    }
 };
 
 module.exports = GuestKeystoreCreateStep1Controller;

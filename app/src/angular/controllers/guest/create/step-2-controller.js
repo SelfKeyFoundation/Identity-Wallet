@@ -16,7 +16,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
 
 
     $scope.nextStep = (event, form) => {
-        if(!form.$valid) return;
+        if (!form.$valid) return;
 
         $mdDialog.show({
             controller: 'PasswordWarningDialogController',
@@ -33,7 +33,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
 
     // TODO remove
     $scope.createKeystore = (event) => {
-        if(!$scope.userInput.password) {
+        if (!$scope.userInput.password) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "error",
@@ -44,7 +44,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             return;
         }
 
-        if($scope.userInput.password !== $stateParams.thePassword) {
+        if ($scope.userInput.password !== $stateParams.thePassword) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "error",
@@ -58,12 +58,12 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
         let promise = WalletService.createKeystoreFile($scope.userInput.password);
         promise.then((wallet) => {
             $rootScope.wallet = wallet;
-            
+
             // reload store
             ConfigFileService.load().then((storeData) => {
                 $state.go('guest.create.step-3')
             });
-        }).catch((error)=>{
+        }).catch((error) => {
             $log.error(error);
         });
     }

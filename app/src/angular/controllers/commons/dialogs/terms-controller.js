@@ -25,7 +25,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
     };
 
     $scope.scrollToEndContainer = (direction) => {
-        if(direction === 'bottom'){
+        if (direction === 'bottom') {
             $scope.scrolledBottom = true;
             $scope.$apply()
         }

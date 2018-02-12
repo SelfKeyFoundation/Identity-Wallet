@@ -63,9 +63,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         $scope.pieChart.draw();
     }
     $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
-    $scope.transactionActivityIsSynced = function() {
+    $scope.transactionActivityIsSynced = function () {
         let statuses = $rootScope.walletActivityStatuses;
-        let isInProgress = false;  
+        let isInProgress = false;
         if (statuses) {
             Object.keys(statuses).forEach(key => {
                 if (statuses[key] == false) {
@@ -80,9 +80,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $scope.setTransactionAtivity = () => {
         let store = ConfigFileService.getStore();
-        
+
         let data = store.wallets[$scope.publicKeyHex].data;
-        let allTransactions = [];  
+        let allTransactions = [];
         if (data.activities) {
             Object.keys(data.activities).forEach(activityKey => {
                 let activity = data.activities[activityKey];
@@ -92,14 +92,14 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
                         transaction.nameOfTo = WalletService.getWalletName(activityKey, transaction.to);
                     }
                     let symbol = activityKey.toUpperCase();
-                    transaction.sentOrReceive =  transaction.to ? 'Sent' : 'Received';
+                    transaction.sentOrReceive = transaction.to ? 'Sent' : 'Received';
                     transaction.symbol = symbol;
-                                    
+
                 });
                 allTransactions = allTransactions.concat(transactions);
             });
-         
-            allTransactions.sort((a,b) =>{
+
+            allTransactions.sort((a, b) => {
                 return Number(b.timestamp) - Number(a.timestamp);
             });
 
@@ -114,7 +114,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
         if (pieChartIsReady) {
             updatePieChart();
-        } 
+        }
     });
 
     $log.info("pie chart data:", $scope.pieChart);

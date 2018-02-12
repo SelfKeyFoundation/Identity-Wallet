@@ -16,7 +16,6 @@
 @import './components/sk-list.scss';
 @import './components/sk-linear-progress.scss';
 @import './components/sk-form.scss';
-@import './components/sk-slider.scss';
 @import './components/sk-double-header.scss';
 @import './components/sk-tasks-box.scss';
 @import './components/sk-right-sidenav.scss';
@@ -131,9 +130,9 @@ $buttonColor: rgba(255, 255, 255, 1);
 
 .no-transaction-title {
   font-family: ProximaNovaRegular;
-  font-size: 18px; 
-  font-weight: 300; 
-  color: #93b0c1; 
+  font-size: 18px;
+  font-weight: 300;
+  color: #93b0c1;
   margin-top: 30px;
 }
 

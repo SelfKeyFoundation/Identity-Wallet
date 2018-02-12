@@ -2,7 +2,7 @@ function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q,
     'ngInject'
 
     $log.info('MemberMarketplaceIcoAcceptTermsController', $stateParams);
-    
+
     /**
      * get ico data
      */
@@ -37,9 +37,7 @@ function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q,
                 }
             }
         })
-
     }
-
 };
 
 module.exports = MemberMarketplaceIcoAcceptTermsController;

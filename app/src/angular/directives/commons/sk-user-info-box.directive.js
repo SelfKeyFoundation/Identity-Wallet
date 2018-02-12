@@ -17,13 +17,13 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
             let store = ConfigFileService.getStore();
             let idAttributes = store.wallets[$rootScope.wallet.getPublicKeyHex()].data.idAttributes;
 
-            reloadData ();
+            reloadData();
 
-            function reloadData(){
-                for(let i in idAttributes){
+            function reloadData() {
+                for (let i in idAttributes) {
                     let item = idAttributes[i];
                     scope.userData[i] = item.items[item.defaultItemId].values[0];
-                }    
+                }
             }
         },
         replace: true,

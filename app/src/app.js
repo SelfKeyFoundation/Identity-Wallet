@@ -11,7 +11,7 @@ document.addEventListener('drop', function (event) {
 }, false);
 
 /**
- * 
+ *
  */
 window.zxcvbn = requireNodeModule('zxcvbn');
 window.qrcode = requireNodeModule('qrcode-generator');
@@ -29,7 +29,7 @@ requireNodeModule('angular-zxcvbn');
 
 
 /**
- * 
+ *
  */
 requireAppModule('angular/app.templates');
 
@@ -125,9 +125,6 @@ angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 const SkLinearProgressDirective = requireAppModule('angular/directives/commons/sk-linear-progress.directive');
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
-const skSlider = requireAppModule('angular/directives/commons/sk-slider.directive');
-angular.module('kyc-wallet').directive('skSlider', skSlider);
-
 const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
 angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
@@ -136,9 +133,6 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
-
-const SkRightSidenavDirective = requireAppModule('angular/directives/commons/sk-right-sidenav.directive');
-angular.module('kyc-wallet').directive('skRightSidenav', SkRightSidenavDirective);
 
 const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
 angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
