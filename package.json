@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "ID Wallet",
-	"version": "0.0.17",
+	"version": "0.0.18",
 	"description": "Selfkey Identity Wallet",
 	"repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
 	"main": "./app/main.js",
@@ -55,7 +55,7 @@
 		"sjcl": "1.0.6",
 		"uuid": "3.0.0",
 		"web3": "1.0.0-beta.29",
-		"zxcvbn": "^4.4.2"
+		"zxcvbn": "4.4.2"
 	},
 	"devDependencies": {
 		"babel-plugin-transform-async-to-generator": "6.24.1",

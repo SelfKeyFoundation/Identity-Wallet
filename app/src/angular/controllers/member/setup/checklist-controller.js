@@ -1,7 +1,4 @@
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
-const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
+'use strict';
 
 function MemberSetupChecklistController($rootScope, $scope, $log, $state, ConfigFileService) {
     'ngInject'
@@ -16,7 +13,7 @@ function MemberSetupChecklistController($rootScope, $scope, $log, $state, Config
     }
 
     /**
-     * 
+     *
      */
     function getIdAttributesStore () {
         let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
