@@ -14549,34 +14549,6 @@ md-toolbar {
 .sk-form input.ng-invalid {
   box-shadow: 0px 0px 5px 1px #dd2c00; }
 
-.slider {
-  position: relative;
-  text-align: left;
-  /*border: 6px solid #27313b;*/
-  height: 1em;
-  background: #27313b !important;
-  width: 300px; }
-  .slider .handle {
-    position: absolute;
-    z-index: 2;
-    width: 0.5em;
-    height: 2.2em;
-    background-color: #08bccd;
-    border-radius: 10px; }
-
-.handle {
-  top: -0.6em;
-  /* margin-left: -0.6em;*/ }
-
-.slider .range {
-  position: absolute;
-  z-index: 1;
-  display: block;
-  font-size: .7em;
-  background-color: #27313b;
-  top: 0;
-  height: 100%; }
-
 .sk-double-header {
   display: flex;
   flex-direction: column; }

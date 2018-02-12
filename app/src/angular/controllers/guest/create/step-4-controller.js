@@ -21,7 +21,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.previousStep = (event) => {
-        $state.go('guest.create.step-3', {basicInfo: $stateParams.basicInfo});
+        $state.go('guest.create.step-3', { basicInfo: $stateParams.basicInfo });
     }
 
     function createKeystore() {

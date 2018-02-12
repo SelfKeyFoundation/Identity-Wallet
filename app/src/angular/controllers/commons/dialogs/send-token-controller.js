@@ -52,7 +52,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     $scope.backgroundProcessStatuses = {
         checkingTransaction: false,
@@ -69,7 +69,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     $scope.viewStates = {
         step: 'prepare-transaction',
@@ -77,7 +77,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     $scope.errors = {
         sendToAddressHex: false,
@@ -86,7 +86,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     if ($scope.symbol.toLowerCase() === 'eth') {
         $scope.infoData.usdPerUnit = $rootScope.wallet.usdPerUnit;
@@ -98,7 +98,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     $scope.selectAll = (event) => {
         $scope.formData.sendAmount = angular.copy($scope.infoData.totalBalance);
@@ -109,9 +109,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.confirmSend = (event, confirm) => {
-        if(!confirm) {
+        if (!confirm) {
             setViewState('before-send');
-        }else{
+        } else {
             setViewState('sending');
             if ($scope.symbol.toLowerCase() === 'eth') {
                 sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
@@ -158,7 +158,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     function startTxCheck() {
         cancelTxCheck();
@@ -179,7 +179,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     /**
-     * 
+     *
      */
     function cancelTxCheck() {
         if (txInfoCheckInterval) {
@@ -218,7 +218,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     // reset view state
                     setViewState();
                 });
-            }).catch((error)=>{
+            }).catch((error) => {
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
                 setViewState();
@@ -252,7 +252,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     // reset view state
                     setViewState();
                 });
-            }).catch((error)=>{
+            }).catch((error) => {
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
                 setViewState();
@@ -260,12 +260,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
     }
 
-    function isNumeric(num){
+    function isNumeric(num) {
         num = "" + num; //coerce num to be a string
         return !isNaN(num) && !isNaN(parseFloat(num));
     }
 
-    function setViewState (state) {
+    function setViewState(state) {
         switch (state) {
             case 'sending':
                 $scope.inputStates.isAddressLocked = true;
@@ -274,13 +274,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 $scope.backgroundProcessStatuses.txInProgress = true;
                 $scope.backgroundProcessStatuses.checkingTransaction = true;
                 $scope.errors.sendFailed = false;
-            break;
+                break;
             case 'before-send':
                 $scope.viewStates.showConfirmButtons = false
                 $scope.inputStates.isAddressLocked = true;
                 $scope.inputStates.isAmountLocked = true;
                 $scope.inputStates.isGasPriceLocked = true;
-            break;
+                break;
             default:
                 $scope.inputStates.isAddressLocked = false;
                 $scope.inputStates.isAmountLocked = false;
@@ -294,9 +294,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     function getBalanceInUsd(balance) {
         return (Number(balance) * Number($scope.infoData.usdPerUnit));
     }
-    
+
     /**
-     * 
+     *
      */
     let checkEstimatedGasInterval = $interval(() => {
         if (!estimatedGasNeedsCheck) return;
@@ -304,7 +304,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = true;
 
         if ($scope.formData.sendAmount && $scope.formData.sendToAddressHex && web3Utils.isHex($scope.formData.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress($scope.formData.sendToAddressHex))) {
-            
+
             let wei = web3Utils.toWei($scope.formData.sendAmount.toString());
 
             let promise = Web3Service.getEstimateGas(
@@ -327,37 +327,37 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }, ESTIMATED_GAS_CHECK_INTERVAL);
 
     /**
-     * 
+     *
      */
     $scope.$watch('formData', (newVal, oldVal) => {
         $log.info("formData", newVal);
 
-        if(newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
+        if (newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
             $scope.errors.sendAmount = true;
         } else {
             $scope.errors.sendAmount = false;
-            
+
             // allow only decimals for non eth items
-            if($scope.symbol.toLowerCase() !== 'eth'){
+            if ($scope.symbol.toLowerCase() !== 'eth') {
                 newVal.sendAmount = Number(newVal.sendAmount);
             }
 
-            if(Number(newVal.sendAmount) > $scope.infoData.totalBalance){
+            if (Number(newVal.sendAmount) > $scope.infoData.totalBalance) {
                 $scope.formData.sendAmount = $scope.infoData.totalBalance;
             }
 
-            if(Number(newVal.sendAmount) < 0){
+            if (Number(newVal.sendAmount) < 0) {
                 $scope.formData.sendAmount = 0;
             }
         }
 
-        if(newVal.sendToAddressHex && (!web3Utils.isHex(newVal.sendToAddressHex) || !web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex)))){
+        if (newVal.sendToAddressHex && (!web3Utils.isHex(newVal.sendToAddressHex) || !web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex)))) {
             $scope.errors.sendToAddressHex = true;
         } else {
             $scope.errors.sendToAddressHex = false;
         }
-        
-        if (newVal.sendAmount && isNumeric(newVal.sendAmount)){
+
+        if (newVal.sendAmount && isNumeric(newVal.sendAmount)) {
             // remining balance
             $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
 
@@ -376,12 +376,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount) && newVal.sendToAddressHex && web3Utils.isHex(newVal.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal.sendToAddressHex))) {
-            if(!args.gasLimit) {
+            if (!args.gasLimit) {
                 estimatedGasNeedsCheck = true;
-            }else{
+            } else {
                 $scope.infoData.isReady = true;
             }
-            
+
             $scope.errors.sendAmount = false;
             $scope.errors.sendToAddressHex = false;
         }

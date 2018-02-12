@@ -32,7 +32,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
     Object.keys(store.wallets).forEach(key =>{
         let storedWallet = store.wallets[key];
         let storedWalletData = storedWallet.data || {};
-        delete storedWalletData.activities; 
+        delete storedWalletData.activities;
     });*/
 
     Web3Service.syncWalletActivityByContract();
@@ -50,7 +50,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             }
         }
         if (ico) {
-            $state.go('member.marketplace.ico-item', {selected: ico});
+            $state.go('member.marketplace.ico-item', { selected: ico });
         }
     }
 

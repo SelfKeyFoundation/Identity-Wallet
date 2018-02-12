@@ -8,9 +8,9 @@ function SkSelectIfDirective($log) {
         link: (scope, element, attr) => {
             attr.$observe('skSelectIf', (value) => {
                 let b = scope.$eval(value);
-                if(b){
+                if (b) {
                     element.addClass('selected');
-                }else{
+                } else {
                     element.removeClass('selected');
                 }
             });

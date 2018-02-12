@@ -10,7 +10,7 @@ function SkIconDirective($log) {
             sizeClass: "@"
         },
         link: (scope, element) => {
-            
+
         },
         replace: true,
         templateUrl: 'common/directives/sk-icon.html'

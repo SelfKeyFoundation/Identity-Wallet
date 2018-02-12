@@ -12,17 +12,17 @@ function MemberSetupLayoutController($rootScope, $scope, $log, $state, ConfigFil
         let store = ConfigFileService.getStore();
         let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
 
-        if($scope.idDocument.length === 0){
+        if ($scope.idDocument.length === 0) {
             let alert = buildMissingIdAttributeAlert('warning', 'Action Reuired', 'ID Document Missing', 'id_document');
             wallet.data.alerts.push(alert);
         }
 
-        if($scope.idSelfie.length === 0){
+        if ($scope.idSelfie.length === 0) {
             let alert = buildMissingIdAttributeAlert('warning', 'Action Reuired', 'Selfie With ID Missing', 'id_selfie');
             wallet.data.alerts.push(alert);
         }
 
-        ConfigFileService.save().then(() =>{
+        ConfigFileService.save().then(() => {
             $state.go('member.dashboard.main');
         });
     }
@@ -30,24 +30,24 @@ function MemberSetupLayoutController($rootScope, $scope, $log, $state, ConfigFil
     /**
      *
      */
-    function getIdAttributesStore () {
+    function getIdAttributesStore() {
         let store = ConfigFileService.getStore();
         let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
         return walletData.data.idAttributes;
     }
 
-    function getIdAttributeItem (type) {
-        let idAttributesStore = getIdAttributesStore ();
+    function getIdAttributeItem(type) {
+        let idAttributesStore = getIdAttributesStore();
         let idAttribute = idAttributesStore[type];
         return idAttribute.items[idAttribute.defaultItemId];
     }
 
-    function getIdAttributeItemValues (type) {
+    function getIdAttributeItemValues(type) {
         let item = getIdAttributeItem(type);
         return item.values;
     }
 
-    function buildMissingIdAttributeAlert (type, text1, text2, idAttributeType) {
+    function buildMissingIdAttributeAlert(type, text1, text2, idAttributeType) {
         return {
             type: 'warning',
             text1: 'Action reuired',

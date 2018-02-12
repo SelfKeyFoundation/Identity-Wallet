@@ -1,6 +1,6 @@
 'use strict';
 
-function CopyToClipboardDirective($document,$timeout) {
+function CopyToClipboardDirective($document, $timeout) {
     'ngInject';
     const animationDuration = 500;
 
@@ -17,23 +17,23 @@ function CopyToClipboardDirective($document,$timeout) {
             let copyAnimation = scope.copyAnimation || 'default';
             let originalText = null;
 
-            switch(copyAnimation){
+            switch (copyAnimation) {
                 case 'default':
                     originalText = angular.copy(element.html());
                     break;
                 case 'fadeUp':
-                    angular.element(element[0]).css({"position": "relative"});
+                    angular.element(element[0]).css({ "position": "relative" });
                     break;
             }
 
-            element.bind('click',function (e) {
+            element.bind('click', function (e) {
                 let fadeUpEl = null;
 
                 let messageElement = angular.element('<textarea class="copy-to-clipboard selection">' + scope.copyToClipboard + '</textarea>');
                 $document[0].body.append(messageElement[0]);
 
 
-                switch(copyAnimation){
+                switch (copyAnimation) {
                     case 'default':
                         element.html("COPIED");
                         break;
@@ -46,7 +46,7 @@ function CopyToClipboardDirective($document,$timeout) {
                 $timeout(() => {
                     messageElement[0].remove();
 
-                    switch(copyAnimation){
+                    switch (copyAnimation) {
                         case 'default':
                             element.html(originalText);
                             break;
@@ -55,7 +55,7 @@ function CopyToClipboardDirective($document,$timeout) {
                             break;
                     }
                 }, animationDuration);
-                
+
                 messageElement[0].select();
                 document.execCommand('copy');
             });

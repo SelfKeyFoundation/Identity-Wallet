@@ -4,16 +4,16 @@ function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $q, $timeo
     $log.info('GuestKeystoreCreateStep3Controller');
 
     $scope.passwordStrength = 0;
-    
+
     $scope.input = {
         password: ''
     };
 
     $scope.nextStep = (event, form) => {
-        if(!$scope.input.password) {
+        if (!$scope.input.password) {
             return CommonService.showToast('warning', 'password is required');
         }
-        $state.go('guest.create.step-4', {thePassword: $scope.input.password, basicInfo: $stateParams.basicInfo });
+        $state.go('guest.create.step-4', { thePassword: $scope.input.password, basicInfo: $stateParams.basicInfo });
     }
 };
 

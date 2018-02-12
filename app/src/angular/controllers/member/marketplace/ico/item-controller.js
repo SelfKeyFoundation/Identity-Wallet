@@ -24,13 +24,13 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
 
 
     $scope.gotToTokenSale = ($event) => {
-        $state.go('member.marketplace.ico-accept-terms', {selected: $scope.ico});
+        $state.go('member.marketplace.ico-accept-terms', { selected: $scope.ico });
     }
 
     $scope.goToDashboard = () => {
         $state.go('member.dashboard.main');
     }
-    
+
     /**
      *
      */
@@ -42,7 +42,6 @@ function MemberMarketplaceIcoItemController($rootScope, $scope, $log, $q, $timeo
             $scope.ico.cap.capPercent = (($scope.ico.cap.raised / $scope.ico.cap.total) * 100).toFixed(2);
         }
     }
-
 };
 
 module.exports = MemberMarketplaceIcoItemController;

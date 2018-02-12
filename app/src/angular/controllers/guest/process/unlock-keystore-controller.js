@@ -29,7 +29,7 @@ function GuestUnlockKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         $scope.unlockPromise.then((wallet) => {
             if (wallet.privateKeyHex) {
                 // go to private key details page
-                $state.go('guest.loading', {redirectTo: 'member.setup.view-keystore'});
+                $state.go('guest.loading', { redirectTo: 'member.setup.view-keystore' });
             } else {
                 CommonService.showMessage({
                     container: messagesContainer,

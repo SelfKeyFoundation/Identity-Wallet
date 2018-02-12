@@ -13,8 +13,8 @@ function GuestCreateKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     };
 
     $scope.createKeystore = (event) => {
-        
-        if(!$scope.userInput.password) {
+
+        if (!$scope.userInput.password) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "info",
@@ -25,7 +25,7 @@ function GuestCreateKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             return;
         }
 
-        if($scope.userInput.password.length < 8) {
+        if ($scope.userInput.password.length < 8) {
             CommonService.showMessage({
                 container: messagesContainer,
                 type: "info",

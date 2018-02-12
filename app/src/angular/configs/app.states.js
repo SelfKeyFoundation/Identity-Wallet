@@ -15,7 +15,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             defer.reject();
         } else {
             /**
-             * 
+             *
              */
             TokenService.init($rootScope.wallet.getPublicKeyHex());
             $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
@@ -33,7 +33,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
 
             /**
-             * 
+             *
              */
             $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
                 if ($rootScope.PRICES["ETH"]) {
@@ -45,7 +45,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
 
                 /**
-                 * 
+                 *
                  */
                 $rootScope.balanceWatcherPromise = $interval(() => {
                     if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
@@ -79,7 +79,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         let store = ConfigFileService.getStore();
 
         /**
-         * 
+         *
          */
         let walletStore = store.wallets[$rootScope.wallet.getPublicKeyHex()];
 
@@ -102,322 +102,322 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
     $stateProvider
 
         .state('guest', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'guest/layout.html',
-                controller: 'GuestLayoutController'
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'guest/layout.html',
+                    controller: 'GuestLayoutController'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.loading', {
-        url: '/guest/loading',
-        views: {
-            main: {
-                templateUrl: 'guest/loading.html',
-                controller: 'GuestLoadingController'
+        .state('guest.loading', {
+            url: '/guest/loading',
+            views: {
+                main: {
+                    templateUrl: 'guest/loading.html',
+                    controller: 'GuestLoadingController'
+                }
+            },
+            params: {
+                redirectTo: null
             }
-        },
-        params: {
-            redirectTo: null
-        }
-    })
+        })
 
-    .state('guest.welcome', {
-        url: '/guest/welcome',
-        views: {
-            main: {
-                templateUrl: 'guest/welcome.html' // Create Wallet | Import Wallet
+        .state('guest.welcome', {
+            url: '/guest/welcome',
+            views: {
+                main: {
+                    templateUrl: 'guest/welcome.html' // Create Wallet | Import Wallet
+                }
             }
-        }
-    })
+        })
 
 
-    /**
-     * create
-     */
-    .state('guest.create', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'guest/create/layout.html'
+        /**
+         * create
+         */
+        .state('guest.create', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'guest/create/layout.html'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.create.step-1', {
-        url: '/guest/create/step-1',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-1.html',
-                controller: 'GuestKeystoreCreateStep1Controller'
+        .state('guest.create.step-1', {
+            url: '/guest/create/step-1',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-1.html',
+                    controller: 'GuestKeystoreCreateStep1Controller'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.create.step-2', {
-        url: '/guest/create/step-2',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-2.html',
-                controller: 'GuestKeystoreCreateStep2Controller'
+        .state('guest.create.step-2', {
+            url: '/guest/create/step-2',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-2.html',
+                    controller: 'GuestKeystoreCreateStep2Controller'
+                }
+            },
+            params: {
+                thePassword: null
             }
-        },
-        params: {
-            thePassword: null
-        }
-    })
+        })
 
-    .state('guest.create.step-3', {
-        url: '/guest/create/step-3',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-3.html',
-                controller: 'GuestKeystoreCreateStep3Controller'
+        .state('guest.create.step-3', {
+            url: '/guest/create/step-3',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-3.html',
+                    controller: 'GuestKeystoreCreateStep3Controller'
+                }
+            },
+            params: {
+                basicInfo: null
             }
-        },
-        params: {
-            basicInfo: null
-        }
-    })
+        })
 
-    .state('guest.create.step-4', {
-        url: '/guest/create/step-4',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-4.html',
-                controller: 'GuestKeystoreCreateStep4Controller'
+        .state('guest.create.step-4', {
+            url: '/guest/create/step-4',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-4.html',
+                    controller: 'GuestKeystoreCreateStep4Controller'
+                }
+            },
+            params: {
+                thePassword: null,
+                basicInfo: null
             }
-        },
-        params: {
-            thePassword: null,
-            basicInfo: null
-        }
-    })
+        })
 
-    .state('guest.create.step-5', {
-        url: '/guest/create/step-5',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-5.html',
-                controller: 'GuestKeystoreCreateStep5Controller'
+        .state('guest.create.step-5', {
+            url: '/guest/create/step-5',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-5.html',
+                    controller: 'GuestKeystoreCreateStep5Controller'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.create.step-6', {
-        url: '/guest/create/step-6',
-        views: {
-            main: {
-                templateUrl: 'guest/create/step-6.html',
-                controller: 'GuestKeystoreCreateStep6Controller'
+        .state('guest.create.step-6', {
+            url: '/guest/create/step-6',
+            views: {
+                main: {
+                    templateUrl: 'guest/create/step-6.html',
+                    controller: 'GuestKeystoreCreateStep6Controller'
+                }
             }
-        }
-    })
+        })
 
-    /**
-     * import
-     */
-    .state('guest.import', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'guest/import/layout.html',
-                controller: 'GuestImportWalletController'
+        /**
+         * import
+         */
+        .state('guest.import', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'guest/import/layout.html',
+                    controller: 'GuestImportWalletController'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.import.keystore', {
-        url: '/guest/import/keystore/:type',
-        views: {
-            main: {
-                templateUrl: 'guest/import/keystore/main.html',
-                controller: 'GuestImportKeystoreController'
+        .state('guest.import.keystore', {
+            url: '/guest/import/keystore/:type',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/keystore/main.html',
+                    controller: 'GuestImportKeystoreController'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.import.private-key', {
-        url: '/guest/import/private-key',
-        views: {
-            main: {
-                templateUrl: 'guest/import/private-key/main.html',
-                controller: 'GuestImportPrivateKeyController'
+        .state('guest.import.private-key', {
+            url: '/guest/import/private-key',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/private-key/main.html',
+                    controller: 'GuestImportPrivateKeyController'
+                }
             }
-        }
-    })
+        })
 
-    /**
-     * keystore
-     */
-    .state('guest.keystore', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'guest/keystore/layout.html'
+        /**
+         * keystore
+         */
+        .state('guest.keystore', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'guest/keystore/layout.html'
+                }
             }
-        }
-    })
+        })
 
 
-    /**
-     * 
-     */
-    .state('guest.process', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'guest/process/layout.html'
+        /**
+         *
+         */
+        .state('guest.process', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'guest/process/layout.html'
+                }
             }
-        }
-    })
+        })
 
-    .state('guest.process.view-keystore', {
-        url: '/guest/process/view-keystore',
-        views: {
-            main: {
-                templateUrl: 'guest/process/view-keystore.html',
-                controller: 'GuestViewKeystoreController'
+        .state('guest.process.view-keystore', {
+            url: '/guest/process/view-keystore',
+            views: {
+                main: {
+                    templateUrl: 'guest/process/view-keystore.html',
+                    controller: 'GuestViewKeystoreController'
+                }
             }
-        }
-    })
+        })
 
-    /**
-     * Member
-     */
-    .state('member', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/layout.html',
-                controller: 'MemberLayoutController'
+        /**
+         * Member
+         */
+        .state('member', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/layout.html',
+                    controller: 'MemberLayoutController'
+                }
+            },
+            resolve: {
+                checkWallet: checkWallet,
+                //checkKyc: checkKyc
             }
-        },
-        resolve: {
-            checkWallet: checkWallet,
-            //checkKyc: checkKyc
-        }
-    })
+        })
 
-    /**
-     * setup
-     */
-    .state('member.setup', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/setup/layout.html',
-                controller: 'MemberSetupLayoutController'
+        /**
+         * setup
+         */
+        .state('member.setup', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/setup/layout.html',
+                    controller: 'MemberSetupLayoutController'
+                }
             }
-        }
-    })
+        })
 
-    .state('member.setup.checklist', {
-        url: '/member/setup/checklist',
-        views: {
-            main: {
-                templateUrl: 'member/setup/checklist.html',
-                controller: 'MemberSetupChecklistController'
+        .state('member.setup.checklist', {
+            url: '/member/setup/checklist',
+            views: {
+                main: {
+                    templateUrl: 'member/setup/checklist.html',
+                    controller: 'MemberSetupChecklistController'
+                }
             }
-        }
-    })
+        })
 
-    .state('member.setup.add-document', {
-        url: '/member/setup/add-document',
-        views: {
-            main: {
-                templateUrl: 'member/setup/add-document.html',
-                controller: 'MemberSetupAddDocumentController'
+        .state('member.setup.add-document', {
+            url: '/member/setup/add-document',
+            views: {
+                main: {
+                    templateUrl: 'member/setup/add-document.html',
+                    controller: 'MemberSetupAddDocumentController'
+                }
+            },
+            params: {
+                type: null
             }
-        },
-        params: {
-            type: null
-        }
-    })
+        })
 
-    /**
-     * Dashboard
-     */
-    .state('member.dashboard', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/dashboard/layout.html'
+        /**
+         * Dashboard
+         */
+        .state('member.dashboard', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/dashboard/layout.html'
+                }
             }
-        }
-    })
+        })
 
-    .state('member.dashboard.main', {
-        url: '/member/dashboard/main',
-        views: {
-            main: {
-                templateUrl: 'member/dashboard/main.html',
-                controller: 'MemberDashboardMainController'
+        .state('member.dashboard.main', {
+            url: '/member/dashboard/main',
+            views: {
+                main: {
+                    templateUrl: 'member/dashboard/main.html',
+                    controller: 'MemberDashboardMainController'
+                }
             }
-        }
-    })
+        })
 
-    /**
-     * Marketplace
-     */
-    .state('member.marketplace', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/marketplace/layout.html'
+        /**
+         * Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
             }
-        }
-    })
+        })
 
-    .state('member.marketplace.ico-item', {
-        url: '/member/marketplace/ico/item',
-        views: {
-            main: {
-                templateUrl: 'member/marketplace/ico/item.html',
-                controller: 'MemberMarketplaceIcoItemController'
+        .state('member.marketplace.ico-item', {
+            url: '/member/marketplace/ico/item',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico/item.html',
+                    controller: 'MemberMarketplaceIcoItemController'
+                }
+            },
+            params: {
+                selected: null
             }
-        },
-        params: {
-            selected: null
-        }
-    })
+        })
 
-    .state('member.marketplace.ico-accept-terms', {
-        url: '/member/marketplace/ico/ico-accept-terms',
-        views: {
-            main: {
-                templateUrl: 'member/marketplace/ico/accept-terms.html',
-                controller: 'MemberMarketplaceIcoAcceptTermsController'
+        .state('member.marketplace.ico-accept-terms', {
+            url: '/member/marketplace/ico/ico-accept-terms',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/ico/accept-terms.html',
+                    controller: 'MemberMarketplaceIcoAcceptTermsController'
+                }
+            },
+            params: {
+                selected: null
             }
-        },
-        params: {
-            selected: null
-        }
-    })
+        })
 
-    /**
-     * Wallet
-     */
-    .state('member.wallet', {
-        abstract: true,
-        views: {
-            main: {
-                templateUrl: 'member/wallet/layout.html'
+        /**
+         * Wallet
+         */
+        .state('member.wallet', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/layout.html'
+                }
             }
-        }
-    })
+        })
 
-    .state('member.wallet.manage-token', {
-        url: '/member/wallet/token/:id/manage',
-        views: {
-            main: {
-                templateUrl: 'member/wallet/manage-token.html',
-                controller: 'ManageTokenController'
+        .state('member.wallet.manage-token', {
+            url: '/member/wallet/token/:id/manage',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/manage-token.html',
+                    controller: 'ManageTokenController'
+                }
             }
-        }
-    })
+        })
 
     $urlRouterProvider.otherwise('/guest/loading');
 }

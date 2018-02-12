@@ -9,7 +9,7 @@ function SkIcoItemBoxDirective($log, $window, $timeout) {
             icoData: "=",
         },
         link: (scope, element) => {
-            
+
         },
         replace: true,
         templateUrl: 'common/directives/sk-ico-item-box.html'

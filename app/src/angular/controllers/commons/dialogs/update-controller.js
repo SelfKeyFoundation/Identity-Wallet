@@ -12,7 +12,7 @@ function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, Electro
 
     $scope.update = (event) => {
         $scope.updatePromise = ElectronService.installUpdate();
-        $scope.updatePromise.then(()=>{
+        $scope.updatePromise.then(() => {
             $mdDialog.hide();
         });
     };
