@@ -31,14 +31,6 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
 
             // reload store
             ConfigFileService.load().then((store) => {
-                console.log("store", store);
-
-                // TODO - save basic info
-                // firstName
-                // lastName
-                // middleName
-                // countryOfResidency
-
                 let walletData = store.wallets[wallet.getPublicKeyHex()];
                 let idAttributesStore = walletData.data.idAttributes;
 
@@ -73,24 +65,23 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
                 let idSelfieIdAttribute = new IdAttribute("id_selfie");
                 idSelfieIdAttribute.addItem(idDocumentWithSelfieItem);
 
-
                 idAttributesStore["name"] = nameIdAttribute;
                 idAttributesStore["country_of_residency"] = countryOfResidencyIdAttribute;
                 idAttributesStore["id_document"] = idDocumentIdAttribute;
                 idAttributesStore["id_selfie"] = idSelfieIdAttribute;
 
-                console.log(">>>>>>", idAttributesStore);
-
                 ConfigFileService.save().then(() => {
-                    // TODO
-                    // got to next step
                     $state.go('guest.create.step-5')
-                }).catch(() => {
-                    // TODO handle
+                }).catch((error) => {
+                    // TODO proper message
+                    $log.error(error);
+                    CommonService.showToast('error', 'Error');
                 });
             });
         }).catch((error) => {
+            // TODO proper message
             $log.error(error);
+            CommonService.showToast('error', 'Error');
         });
     }
 };

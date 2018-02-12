@@ -165,6 +165,9 @@ angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirecti
 /**
  * commons
  */
+const ToastController = requireAppModule('angular/controllers/commons/toast-controller.js');
+angular.module('kyc-wallet').controller('ToastController', ToastController);
+
 const TermsDialogController = requireAppModule('angular/controllers/commons/dialogs/terms-controller.js');
 angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 

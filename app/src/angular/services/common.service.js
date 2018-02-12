@@ -14,9 +14,21 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
       Wallet.$q = $q;
     }
 
-    showToast(type, text, delay){
+    showToast(type, text, delay) {
       delay = delay || 3000;
-      $mdToast.show($mdToast.simple().textContent(text).toastClass("md-toast-" + type).position('top right').hideDelay(delay));
+
+      $mdToast.show({
+        hideDelay: delay,
+        position: 'top right',
+        controller: 'ToastController',
+        templateUrl: 'common/toast.html',
+        locals: {
+          message: text,
+          type: type
+        }
+      });
+
+      //$mdToast.show($mdToast.simple().textContent(text).toastClass("md-toast-" + type).position('top right').hideDelay(delay));
     }
 
     // targetContainer, type, message, closeAfterMillis, clazz, style
