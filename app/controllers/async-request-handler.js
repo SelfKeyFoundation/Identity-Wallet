@@ -18,10 +18,10 @@ module.exports = function (app) {
 	const controller = function () {
 	};
 
-	const storeFileName = 'main-store.json'; // TODO
-	const userDataDirectoryPath = electron.app.getPath('userData');
-	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
-	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
+	const storeFileName 			= 'main-store.json'; // TODO
+	const userDataDirectoryPath 	= electron.app.getPath('userData');
+	const walletsDirectoryPath 		= path.resolve(userDataDirectoryPath, 'wallets');
+	const documentsDirectoryPath 	= path.resolve(userDataDirectoryPath, 'documents');
 
 	const initialStoreDataStructure = {
 		profile: {
@@ -42,7 +42,8 @@ module.exports = function (app) {
 		idAttributes: {},
 		subscribtions: [],
 		actionLogs: [],
-		reminders: []
+		reminders: [],
+		alerts: []
 	};
 
 	console.log(userDataDirectoryPath);
@@ -253,9 +254,7 @@ module.exports = function (app) {
 		}).catch(function (err) {
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, {});
 		});
-
 	}
-
 
 	// TODO - ??
 	controller.prototype.createDirectory = function (event, actionId, actionName, args) {
@@ -474,7 +473,7 @@ module.exports = function (app) {
 			console.log(e.message);
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
 		}
-	};
+	}
 
 	controller.prototype.unlockEtherKeystoreObject = function (event, actionId, actionName, args) {
 		try {
@@ -511,7 +510,6 @@ module.exports = function (app) {
 				storeData.wallets[publicKey] = {
 					type: "pk",
 					name: "Unnamed Wallet",
-					//privateKey: args.privateKey,
 					data: initialStoreDataStructure
 				}
 				settings.setAll(storeData);
@@ -525,7 +523,7 @@ module.exports = function (app) {
 		} catch (e) {
 			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
 		}
-	};
+	}
 
 	controller.prototype.closeApp = function (event, actionId, actionName, args) {
 		electron.app.quit();

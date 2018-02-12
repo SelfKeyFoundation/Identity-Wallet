@@ -308,7 +308,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         abstract: true,
         views: {
             main: {
-                templateUrl: 'member/setup/layout.html'
+                templateUrl: 'member/setup/layout.html',
+                controller: 'MemberSetupLayoutController'
             }
         }
     })

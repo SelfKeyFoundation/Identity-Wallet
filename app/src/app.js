@@ -242,6 +242,9 @@ angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRi
 /**
  * setup
  */
+const MemberSetupLayoutController = requireAppModule('angular/controllers/member/setup/layout-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupLayoutController', MemberSetupLayoutController);
+
 const MemberSetupChecklistController = requireAppModule('angular/controllers/member/setup/checklist-controller.js');
 angular.module('kyc-wallet').controller('MemberSetupChecklistController', MemberSetupChecklistController);
 
