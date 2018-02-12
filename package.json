@@ -16,8 +16,7 @@
     "start-auto": "gulp && gulp start",
     "make-auto": "gulp && gulp make",
     "quick": "LOCAL=true NODE_ENV=test node ./test/test.js 3",
-    "full":
-      "rm -rf node_modules && npm i && LOCAL=true NODE_ENV=test node ./test/utils/full.js && NODE_ENV=test npm run make && npm run quick",
+    "full": "./test/utils/npm_full.sh",
     "raw": "NODE_ENV=test node ./test/test.js 1",
     "test": "OSENV=osx node ./test/test.js 3",
     "testwin": "node ./test/test.js 3",
@@ -25,6 +24,9 @@
     "lint": "eslint 'app/src/**/*.js'",
     "precommit": "lint-staged",
     "cz": "git-cz",
+    "travis": "OSENV=osx NODE_ENV=test node ./test/test.js 3 travis",
+    "appveyor": "node ./test/test.js 3 appveyor",
+    "circle": "node ./test/test.js 3 circle",
     "docker": "docker-compose build && docker-compose up -d"
   },
   "lint-staged": {
@@ -79,6 +81,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "delay": "^2.0.0",
     "electron-forge": "4.1.7",
+    "electron-google-analytics": "0.0.24",
     "electron-prebuilt-compile": "1.7.9",
     "eslint": "^4.15.0",
     "eslint-config-prettier": "^2.8.0",

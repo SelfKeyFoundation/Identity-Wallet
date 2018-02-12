@@ -7,4 +7,4 @@ before_install:
   - npm i -g electron-packager
 before_script:
   - NODE_ENV=test npm run make
-script: npm run test
+script: npm run travis
