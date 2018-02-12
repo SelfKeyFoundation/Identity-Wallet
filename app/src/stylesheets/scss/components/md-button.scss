@@ -1,17 +1,32 @@
 .md-button {
     border-radius: 4px;
-    height: 44px;
+    //height: 44px;
+    height: auto;
     margin: 0;
+    
     span {
         font-size: 16px;
         line-height: 0.75;
         letter-spacing: 0.7px;
     }
+
+    /**
+     * Colors
+     */
     &.gray {
-        border: solid 1px #93b0c1;
+        background-color: #435160;
+        border: none;
         span {
-            color: #93b0c1;
-            font-family: ProximaNovaRegular;
+            font-family: ProximaNovaSemibold;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        &:disabled {
+            background-image: none;
+            border: solid 1px #435160;
+            span {
+                opacity: 0.6;
+            }
         }
     }
     &.blue {
@@ -48,7 +63,62 @@
                 color: #93b0c1;
             }
         }
-    } // Size
+    } 
+    &.outline-orange {
+        border: 1px solid #db7400;
+        border-radius: 4px;
+        
+        span {
+            font-family: ProximaNovaSemibold;
+            font-weight: 600;
+            opacity: 0.8;
+            color: #db7400;
+            font-size: 14px;
+            line-height: 0.86;
+            letter-spacing: 0.6px;
+        }
+        &:disabled {
+            background-image: none;
+            border: solid 1px #93b0c1;
+            span {
+                font-family: ProximaNovaRegular;
+                color: #93b0c1;
+            }
+        }
+    }
+    &.outline-blue {
+        border: 1px solid #08bccd;
+        border-radius: 4px;
+        
+        span {
+            font-family: ProximaNovaSemibold;
+            font-weight: 600;
+            opacity: 0.8;
+            color: #08bccd;
+            font-size: 14px;
+            line-height: 0.86;
+            letter-spacing: 0.6px;
+        }
+        &:disabled {
+            background-image: none;
+            border: solid 1px #93b0c1;
+            span {
+                font-family: ProximaNovaRegular;
+                color: #93b0c1;
+            }
+        }
+    }
+    &.outline-gray {
+        border: solid 1px #93b0c1;
+        span {
+            color: #93b0c1;
+            font-family: ProximaNovaRegular;
+        }
+    }
+    
+    /**
+     * Size
+     */
     &.smallest {
         height: unset;
         min-height: unset;
@@ -63,7 +133,15 @@
             line-height: 11px;
             font-weight: unset;
         }
-    } // special
+    }
+
+    &.default {
+        height: 44px;
+    }
+    
+    /**
+     * Special Buttons
+     */
     &.copy {
         padding: 0;
         width: 50px;

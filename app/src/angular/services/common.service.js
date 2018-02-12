@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const CommonUtils = requireAppModule('angular/classes/common-utils');
 
-function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
+function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
   'ngInject';
 
   $log.debug('CommonService Initialized');
@@ -12,6 +12,23 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile) {
     constructor() {
       Wallet.CommonService = this;
       Wallet.$q = $q;
+    }
+
+    showToast(type, text, delay) {
+      delay = delay || 3000;
+
+      $mdToast.show({
+        hideDelay: delay,
+        position: 'top right',
+        controller: 'ToastController',
+        templateUrl: 'common/toast.html',
+        locals: {
+          message: text,
+          type: type
+        }
+      });
+
+      //$mdToast.show($mdToast.simple().textContent(text).toastClass("md-toast-" + type).position('top right').hideDelay(delay));
     }
 
     // targetContainer, type, message, closeAfterMillis, clazz, style

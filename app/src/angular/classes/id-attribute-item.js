@@ -9,13 +9,17 @@ class IdAttributeItem {
         if (item) {
             this._id = item._id ? item._id : CommonUtils.generateId();
             this.values = item.values;
-            this.fileInfo = item.fileInfo;
+            this.info = item.info;
         } else {
             this._id = CommonUtils.generateId();
             this.values = [];
+            this.info = {};
         }
     }
 
+    addValue(value){
+        this.values.push(value)
+    }
 }
 
 module.exports = IdAttributeItem;

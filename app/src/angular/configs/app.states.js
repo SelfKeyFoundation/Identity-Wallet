@@ -176,6 +176,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 templateUrl: 'guest/create/step-3.html',
                 controller: 'GuestKeystoreCreateStep3Controller'
             }
+        },
+        params: {
+            basicInfo: null
         }
     })
 
@@ -185,6 +188,30 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             main: {
                 templateUrl: 'guest/create/step-4.html',
                 controller: 'GuestKeystoreCreateStep4Controller'
+            }
+        },
+        params: {
+            thePassword: null,
+            basicInfo: null
+        }
+    })
+
+    .state('guest.create.step-5', {
+        url: '/guest/create/step-5',
+        views: {
+            main: {
+                templateUrl: 'guest/create/step-5.html',
+                controller: 'GuestKeystoreCreateStep5Controller'
+            }
+        }
+    })
+
+    .state('guest.create.step-6', {
+        url: '/guest/create/step-6',
+        views: {
+            main: {
+                templateUrl: 'guest/create/step-6.html',
+                controller: 'GuestKeystoreCreateStep6Controller'
             }
         }
     })
@@ -270,7 +297,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         },
         resolve: {
             checkWallet: checkWallet,
-            checkKyc: checkKyc
+            //checkKyc: checkKyc
         }
     })
 
@@ -286,33 +313,26 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         }
     })
 
-    .state('member.setup.view-keystore', {
-        url: '/member/setup/view-keystore',
+    .state('member.setup.checklist', {
+        url: '/member/setup/checklist',
         views: {
             main: {
-                templateUrl: 'member/setup/view-keystore.html',
-                controller: 'MemberSetupViewKeystoreController'
+                templateUrl: 'member/setup/checklist.html',
+                controller: 'MemberSetupChecklistController'
             }
         }
     })
 
-    .state('member.setup.choose', {
-        url: '/member/setup/choose',
+    .state('member.setup.add-document', {
+        url: '/member/setup/add-document',
         views: {
             main: {
-                templateUrl: 'member/setup/choose.html',
-                controller: 'MemberSetupChooseController'
+                templateUrl: 'member/setup/add-document.html',
+                controller: 'MemberSetupAddDocumentController'
             }
-        }
-    })
-
-    .state('member.setup.completed', {
-        url: '/member/setup/completed',
-        views: {
-            main: {
-                templateUrl: 'member/setup/completed.html',
-                controller: 'MemberSetupCompletedController'
-            }
+        },
+        params: {
+            type: null
         }
     })
 

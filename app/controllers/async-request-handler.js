@@ -312,14 +312,21 @@ module.exports = function (app) {
 					try {
 						const stats = fs.statSync(filePaths[0]);
 						let mimeType = mime.lookup(filePaths[0]);
+						let name = path.parse(filePaths[0]).base;
+
+						if(args.maxFileSize){
+							if(stats.size > args.maxFileSize){
+								return app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'file_size_error', null);
+							}
+						}
 
 						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+							name: name,
 							mimeType: mimeType,
 							path: filePaths[0],
 							size: stats.size
 						});
 					} catch (e) {
-						console.log(e);
 						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
 					}
 				} else {

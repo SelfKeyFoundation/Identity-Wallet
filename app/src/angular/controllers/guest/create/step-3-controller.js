@@ -1,30 +1,19 @@
-function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, ElectronService, CommonService) {
+function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, ElectronService, CommonService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep3Controller');
 
-    let messagesContainer = angular.element(document.getElementById("message-container"));
+    $scope.passwordStrength = 0;
     
-    $scope.publicKey = "0x" + $rootScope.wallet.getPublicKeyHex();
+    $scope.input = {
+        password: ''
+    };
 
-    $scope.backupKeystore = (event) => {
-        let promise = ElectronService.openDirectorySelectDialog();
-        promise.then((directoryPath) => {
-            if (directoryPath) {
-                let store = ConfigFileService.getStore();
-                let walletSettings = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-
-                ElectronService.moveFile(walletSettings.keystoreFilePath, directoryPath).then(()=>{
-                    CommonService.showMessage({
-                        container: messagesContainer,
-                        type: "info",
-                        message: "saved",
-                        closeAfter: 1500,
-                        replace: true
-                    });
-                });
-            }
-        });
+    $scope.nextStep = (event, form) => {
+        if(!$scope.input.password) {
+            return CommonService.showToast('warning', 'password is required');
+        }
+        $state.go('guest.create.step-4', {thePassword: $scope.input.password, basicInfo: $stateParams.basicInfo });
     }
 };
 

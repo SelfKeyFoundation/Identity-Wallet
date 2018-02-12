@@ -1,0 +1,63 @@
+.add-document(layout-fill, layout="column", layout-align="center center")
+
+    .header-wrapper(layout="column", layout-align="center start")
+        span Verify your identity
+
+    .content-wrapper
+        #document.sk-box.center-divider
+            .content(layout="column")
+                .header-wrapper
+                    .step {{selected.step}}
+                    .title {{selected.title1}}
+                    .description {{selected.title2}}
+                .content-wrapper
+                    .box(flex, layout="column", layout-align="center center")
+                        sk-icon(icon="upload", size-class="icon-size-34x44")
+                        span.header {{selected.title2}}
+                        span.sub-header {{selected.title4}}
+
+                    .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
+                        sk-icon(icon="hard-drive", size-class="icon-size-34x44")
+                        span.header  {{ selected.values[0].name || selected.title2 }}
+                        span.sub-header This is stored locally
+        #check-list.sk-box
+            .content(layout="column")
+                .sk-text.header ID Wallet Checklist
+                .sk-text.sub-header If you’re not ready, you can do this later.
+
+                .sk-list(style="margin-top: 28px;")
+                    .item
+                        .bullet
+                            img(src='assets/images/icons/tick.svg')
+                        span First Name
+
+                    .item
+                        .bullet
+                            img(src='assets/images/icons/tick.svg')
+                        span Last Name
+
+                    .item
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="name[2]")
+                            span(ng-if="!name[2]") 3
+                        span Middle Name
+
+                    .item.clickable(sk-select-if="selected.type === 'id_document'")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="idDocument[0]")
+                            span(ng-if="!idDocument[0]") 4
+                        span ID Document
+
+                    .item.clickable(sk-select-if="selected.type === 'id_selfie'")
+                        .bullet
+                            img(src='assets/images/icons/tick.svg', ng-if="idSelfie[0]")
+                            span(ng-if="!idSelfie[0]") 5
+                        span Selfie with ID Document
+
+    .actions-wrapper(layout="row", layout-align="start center")
+        .left(layout="row")
+            md-button.gray(flex="70", ng-click="nextStep($event)")
+                span.primary Next
+            .sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
+
+

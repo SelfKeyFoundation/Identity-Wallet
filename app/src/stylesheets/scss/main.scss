@@ -9,7 +9,7 @@
 @import './components/sk-box.scss';
 @import './components/sk-button.scss';
 @import './components/sk-icon-button.scss';
-@import './components/sk-vertical-devider.scss';
+@import './components/sk-deviders.scss';
 @import './components/sk-message.scss';
 @import './components/sk-show-loading.scss';
 @import './components/sk-form-inputs.scss';
@@ -29,6 +29,8 @@
 @import './components/md-content.scss';
 @import './components/md-input.scss';
 @import './components/md-button.scss';
+@import './components/md-toast.scss';
+@import './components/md-radio-group.scss';
 
 @import './directives/sk-token-box.scss';
 @import './directives/sk-send-token.scss';
@@ -42,24 +44,30 @@
 @import './directives/sk-kyc-requirements-box.scss';
 @import './directives/copy-to-clipboard.scss';
 
-@import './layouts/guest-welcome-layout.scss';
+@import './layouts/guest-layout.scss';
 @import './layouts/member-layout.scss';
-
-@import './partials/sk-documents-setup.scss';
-@import './partials/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/dashboard/main.scss';
 @import './views/wallet/manage-token.scss';
-@import './views/setup/completed.scss';
 
 @import './dialogs/terms.scss';
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
 @import './dialogs/send-token.scss';
+@import './dialogs/password-warning.scss';
 
+@import './views/guest/create/step-1.scss';
+@import './views/guest/create/step-2.scss';
+@import './views/guest/create/step-3.scss';
+@import './views/guest/create/step-4.scss';
+@import './views/guest/create/step-5.scss';
+@import './views/guest/create/step-6.scss';
 
-@import './views/setup/completed.scss';
-@import './views/setup/wallet-setup.scss';
+@import './views/member/setup/layout.scss';
+@import './views/member/setup/checklist.scss';
+@import './views/member/setup/add-document.scss';
+
+@import './views/member/dashboard/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/marketplace/ico-list-item.scss';
 @import './views/marketplace/ico-manage-requirements.scss';
@@ -117,67 +125,10 @@ $buttonColor: rgba(255, 255, 255, 1);
   }
 }
 
-// TODO -- move
-.setup-layout-wrapper {
-  position: relative;
-
-  &:before {
-    position: absolute;
-    background-image: url('../../assets/images/bgs/layouts/swirl-top-left.svg'), url('../../assets/images/bgs/layouts/swirl-bottom-right.svg');
-    background-position: top left, bottom right;
-    background-repeat: no-repeat, no-repeat;
-    content: "";
-    width: 100%;
-    height: 100%;
-  }
-}
 
 
-md-radio-group {
-  md-radio-button {
-    margin-bottom: 0;
-    
-    &.md-checked {
-      .md-container {
-        .md-off {
-          background-color: unset !important;
-        }
-      }
-    }
 
-    .md-container {
-      width: 16px !important;
-      height: 16px !important;
 
-      &:before {
-        background-color: #25a7ef !important;
-      }
-
-      .md-off {
-        width: 16px;
-        height: 16px;
-        background-color: #1b2431 !important;
-        border: solid 1px #3f4f67 !important;
-      }
-
-      .md-on{
-        width: 16px !important;
-        height: 16px !important;
-        background-color: #f4f6f9 !important;
-        border: 1px solid #25a7ef !important;
-      }
-    }
-
-    .md-label {
-      span {
-        font-family: ProximaNovaRegular;
-        font-size: 18px;
-        line-height: 2.33;
-        color: #ffffff;
-      }
-    }
-  }
-}
 .no-transaction-title {
   font-family: ProximaNovaRegular;
   font-size: 18px; 

@@ -11,14 +11,21 @@ document.addEventListener('drop', function (event) {
 }, false);
 
 /**
+ * 
+ */
+window.zxcvbn = requireNodeModule('zxcvbn');
+window.qrcode = requireNodeModule('qrcode-generator');
+
+/**
  * External Modules
  */
 requireNodeModule('@uirouter/angularjs');
 requireNodeModule('angular-material');
+requireNodeModule('angular-messages');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
+requireNodeModule('angular-zxcvbn');
 
-window.qrcode = requireNodeModule('qrcode-generator');
 
 
 /**
@@ -31,10 +38,12 @@ requireAppModule('angular/app.templates');
  */
 window.app = angular.module('kyc-wallet', [
   'ngMaterial',
+  'ngMessages',
   'ui.router',
   'templates',
   'LocalStorageModule',
-  'monospaced.qrcode'
+  'monospaced.qrcode',
+  'zxcvbn'
 ]);
 
 /**
@@ -156,6 +165,9 @@ angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirecti
 /**
  * commons
  */
+const ToastController = requireAppModule('angular/controllers/commons/toast-controller.js');
+angular.module('kyc-wallet').controller('ToastController', ToastController);
+
 const TermsDialogController = requireAppModule('angular/controllers/commons/dialogs/terms-controller.js');
 angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
@@ -170,6 +182,9 @@ angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDi
 
 const UpdateDialogController = requireAppModule('angular/controllers/commons/dialogs/update-controller.js');
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
+
+const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
+angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
 
 /**
  * guest
@@ -207,6 +222,12 @@ angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', Gu
 const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4-controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
+const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
+
+const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
+
 
 /**
  * member
@@ -217,17 +238,16 @@ angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutCo
 const MemberRightSidenavController = requireAppModule('angular/controllers/member/right-sidenav-controller.js');
 angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRightSidenavController);
 
+
 /**
  * setup
  */
-const MemberSetupViewKeystoreController = requireAppModule('angular/controllers/member/setup/view-keystore-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupViewKeystoreController', MemberSetupViewKeystoreController);
+const MemberSetupChecklistController = requireAppModule('angular/controllers/member/setup/checklist-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupChecklistController', MemberSetupChecklistController);
 
-const MemberSetupChooseController = requireAppModule('angular/controllers/member/setup/choose-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupChooseController', MemberSetupChooseController);
+const MemberSetupAddDocumentController = requireAppModule('angular/controllers/member/setup/add-document-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', MemberSetupAddDocumentController);
 
-const MemberSetupCompletedController = requireAppModule('angular/controllers/member/setup/completed-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupCompletedController', MemberSetupCompletedController);
 
 /**
  * dashboard

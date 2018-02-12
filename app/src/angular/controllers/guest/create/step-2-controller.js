@@ -1,18 +1,38 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, ElectronService, CommonService) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $mdDialog, countries) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep2Controller');
 
-    let messagesContainer = angular.element(document.getElementById("message-container"));
+    $scope.countryList = countries.countryList;
 
-    $rootScope.wallet = null;
-
-    $scope.userInput = {
-        password: ''
+    $scope.input = {
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        countryOfResidency: ""
     };
 
+
+
+
+    $scope.nextStep = (event, form) => {
+        if(!form.$valid) return;
+
+        $mdDialog.show({
+            controller: 'PasswordWarningDialogController',
+            templateUrl: 'common/dialogs/password-warning.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                basicInfo: $scope.input
+            }
+        });
+    }
+
+    // TODO remove
     $scope.createKeystore = (event) => {
-        
         if(!$scope.userInput.password) {
             CommonService.showMessage({
                 container: messagesContainer,
@@ -48,7 +68,6 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
         });
     }
 
-    
 };
 
 module.exports = GuestKeystoreCreateStep2Controller;

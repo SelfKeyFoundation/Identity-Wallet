@@ -1,0 +1,42 @@
+.checklist(layout-fill, layout="column", layout-align="center center")
+
+    .header-wrapper(layout="column", layout-align="center start")
+        span Welcome to SelfKey
+        span We’ll need some basic information from you to get setup. Please have these items ready.
+
+    .content-wrapper.sk-box
+        .content(layout="column")
+            .sk-text.header ID Wallet Checklist
+            .sk-text.sub-header If you’re not ready, you can do this later.
+
+            .sk-list(style="margin-top: 28px;")
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg')
+                    span First Name
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg')
+                    span Last Name
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg', ng-if="name[2]")
+                        span(ng-if="!name[2]") 3
+                    span Middle Name
+
+                .item
+                    .bullet
+                        span 4
+                    span ID Document
+
+                .item
+                    .bullet
+                        span 5
+                    span Selfie with ID Document
+
+    .actions-wrapper(layout="row", layout-align="center center")
+        md-button.gray(flex="70", ng-click="nextStep($event)")
+            span.primary Add More Details
+        .sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="$root.skipInitialIdAttributesSetup($event)") I'm not ready
