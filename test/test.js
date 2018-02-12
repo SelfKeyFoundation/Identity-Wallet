@@ -7,21 +7,46 @@ const exec = require("child_process").exec;
 const pwd = process.cwd();
 const data = require("./data/data.json");
 const usr = process.argv[2] || 0;
+const platform = process.argv[3] || "local";
 const OSENV = process.env.OSENV;
 const APP_TITLE = require("../package.json").config.forge.electronPackagerConfig
   .name;
 const password = "Y@88@D00!";
 const user = require("os").userInfo().username;
 
-var appPath =
-  pwd +
-  "/out/" +
-  APP_TITLE +
-  "-darwin-x64/" +
-  APP_TITLE +
-  ".app/Contents/MacOS/" +
-  APP_TITLE;
-if (OSENV === "win") {
+// Platforms & Environments
+// - Travis (OSX)
+// - Appveyor (Windows)
+// - Circle (Docker/Linux)
+// - Local (Docker)
+// - Local (OSX)
+// - Local (Linux)
+// - Local (Windows)
+
+// Pre-Init TDL
+// ************
+// Check Platform
+// Check ENV
+// Clear Cache
+// Set App Path
+
+// Other TDL
+// *********
+// Source Cap Save Location
+// Screen Cap Save Location
+// Review All Delay / Timeout Settings
+
+var appPath;
+if (OSENV === "osx") {
+  appPath =
+    pwd +
+    "/out/" +
+    APP_TITLE +
+    "-darwin-x64/" +
+    APP_TITLE +
+    ".app/Contents/MacOS/" +
+    APP_TITLE;
+} else if (OSENV === "win") {
   appPath = pwd + "\\out\\id-wallet-win32-ia32\\" + APP_TITLE + ".exe";
 } else if (OSENV === "lin") {
   appPath = pwd + "/out/" + APP_TITLE + "-linux-x64/" + APP_TITLE;
@@ -33,9 +58,18 @@ const app = new Application({
 
 function preInit() {
   return new Promise((resolve, reject) => {
-    if (process.env.LOCAL === "true") {
+    if (platform && OSENV) {
       exec(
-        "bash " + pwd + "/test/utils/quick.sh " + user + " " + APP_TITLE,
+        "bash " +
+          pwd +
+          "/test/utils/" +
+          OSENV +
+          "/" +
+          platform +
+          ".sh " +
+          user +
+          " " +
+          APP_TITLE,
         err => {
           if (err) {
             reject(console.log(chalk.red("Pre-Init Failed With Error: "), err));
@@ -45,7 +79,13 @@ function preInit() {
         }
       );
     } else {
-      resolve(console.log(chalk.blue("Skip Pre-Init - ENV Not LOCAL")));
+      resolve(
+        console.log(
+          chalk.blue(
+            "Skip Pre-Init - Missing Platform and/or Environment Configuration"
+          )
+        )
+      );
     }
   });
 }
@@ -71,7 +111,7 @@ function init(testName) {
 
 function regStep(selector, delayTime) {
   return new Promise((resolve, reject) => {
-    delay(delayTime || 1000)
+    delay(1000)
       .then(() => app.client.waitForVisible(selector, 15000))
       .then(() => app.client.click(selector))
       .then(() => resolve(console.log(chalk.green(selector + " Step Done"))))
@@ -98,10 +138,10 @@ function clipboardCheck(check) {
 // function writer(savePath, img) {
 //   return new Promise((resolve, reject) => {
 //     fs.writeFile(savePath, img, err => {
-//       if (err) reject(err);
-//       resolve(savePath + "Saved");
-//     });
-//   });
+//       if (err) reject(err)
+//       resolve(savePath + 'Saved')
+//     })
+//   })
 // }
 
 // function screenshotCheck(fileName) {
