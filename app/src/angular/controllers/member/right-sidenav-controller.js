@@ -1,4 +1,4 @@
-function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state) {
+function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state, $mdDialog) {
     'ngInject'
 
     $log.info('RightSidenavController');
@@ -17,6 +17,23 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
 
     $rootScope.navigate = ($event, state, params) => {
         $state.go(state, params);
+        $scope.close();
+    }
+
+
+    $rootScope.sidenavInfoDialog = (event, item) => {
+        $mdDialog.show({
+            controller: 'InfoDialogController',
+            templateUrl: 'common/dialogs/info-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {
+                form: item
+            }
+        });
         $scope.close();
     }
 
