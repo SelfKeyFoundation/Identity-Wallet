@@ -1,7 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const {dialog, Notification, shell, autoUpdater} = require('electron');
+const { dialog, Notification, shell, autoUpdater } = require('electron');
 
 const path = require('path');
 const keythereum = require('../extended_modules/keythereum');
@@ -12,16 +12,18 @@ const fs = require('fs-extra');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
+const request = require('request');
+const config = require('../config');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
 	const controller = function () {
 	};
 
-	const storeFileName 			= 'main-store.json'; // TODO
-	const userDataDirectoryPath 	= electron.app.getPath('userData');
-	const walletsDirectoryPath 		= path.resolve(userDataDirectoryPath, 'wallets');
-	const documentsDirectoryPath 	= path.resolve(userDataDirectoryPath, 'documents');
+	const storeFileName = 'main-store.json'; // TODO
+	const userDataDirectoryPath = electron.app.getPath('userData');
+	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
 	const initialStoreDataStructure = {
 		profile: {
@@ -301,8 +303,8 @@ module.exports = function (app) {
 				message: 'Choose file',
 				properties: ['openFile']
 			};
-			
-			if(args){
+
+			if (args) {
 				Object.assign(dialogConfig, args);
 			}
 
@@ -313,8 +315,8 @@ module.exports = function (app) {
 						let mimeType = mime.lookup(filePaths[0]);
 						let name = path.parse(filePaths[0]).base;
 
-						if(args.maxFileSize){
-							if(stats.size > args.maxFileSize){
+						if (args.maxFileSize) {
+							if (stats.size > args.maxFileSize) {
 								return app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'file_size_error', null);
 							}
 						}
@@ -376,7 +378,7 @@ module.exports = function (app) {
 	}
 
 	controller.prototype.generateEthereumWallet = function (event, actionId, actionName, args) {
-		const params = {keyBytes: 32, ivBytes: 16};
+		const params = { keyBytes: 32, ivBytes: 16 };
 		let dk = keythereum.create(params);
 
 		// asynchronous
@@ -558,6 +560,15 @@ module.exports = function (app) {
 		autoUpdater.quitAndInstall();
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
 	}
+
+	controller.prototype.getCMCData = function () {
+		request.get(config.cmcUrl, (error, httpResponse, result) => {
+			console.log(result);
+			if (result) {
+
+			}
+		});
+	};
 
 	return controller;
 }
