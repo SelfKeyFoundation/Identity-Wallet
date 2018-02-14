@@ -1,0 +1,12 @@
+.id-wallet-main(layout="column", layout-align="start center")
+    .header-wrapper(ng-click="addIdAttribute($event)")
+        span SelfKey Identity Wallet
+        md-icon(md-svg-src="assets/images/icons/plus.svg")
+
+    .body-wrapper(layout="row", layout-align="start start")
+        .left-side-wrapper(layout="column")
+            .id-attributes(layout="column")
+                sk-id-attribute-box(ng-repeat="item in allIdAttributesList", id="{{item.key}}", data="item", config="idAttrbuteBoxConfig", style="width: 760px; margin-top: 40px;")
+
+        .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
+            sk-user-info-box

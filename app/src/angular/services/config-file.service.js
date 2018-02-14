@@ -78,6 +78,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 
                 for (let i in store.idAttributes) {
                     let idAttribute = new IdAttribute()
+                    console.log(idAttribute, "<<<<<")
                     idAttribute.setData(store.idAttributes[i]);
                     store.idAttributes[i] = idAttribute;
                 }

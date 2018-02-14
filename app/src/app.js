@@ -252,11 +252,20 @@ angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', Memb
 const MemberDashboardMainController = requireAppModule('angular/controllers/member/dashboard/main-controller.js');
 angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
 
+
 /**
- * wallet
+ * wallet (TODO rename to token)
  */
 const ManageTokenController = requireAppModule('angular/controllers/member/wallet/manage-token-controller.js');
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
+
+
+/**
+ * id wallet
+ */
+const MemberIdWalletMainController = requireAppModule('angular/controllers/member/id-wallet/main-controller.js');
+angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
+
 
 /**
  * Marketplace
