@@ -12,7 +12,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.selectedLanguage = CONFIG.defaultLanguage;
 
     /**
-     * 
+     *
      */
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
@@ -20,18 +20,18 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
 
     /**
-     * 
+     *
      */
     $rootScope.PRICES = {};
 
     /**
-     * 
+     *
      */
     Wallet.$rootScope = $rootScope;
     Token.$rootScope = $rootScope;
 
     /**
-     * 
+     *
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
         if (prefix) {
@@ -93,6 +93,22 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         });
     }
 
+    $rootScope.openInfoDialog = (event, text, title) => {
+        $mdDialog.show({
+            controller: 'InfoDialogController',
+            templateUrl: 'common/dialogs/info-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {
+                text: text,
+                title: title
+            }
+        });
+    }
+
     $rootScope.checkTermsAndConditions = () => {
         let store = ConfigFileService.getStore();
         let termsAccepted = store.setup ? store.setup.termsAccepted : false;
@@ -136,7 +152,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     };
 
     /**
-     * 
+     *
      */
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);

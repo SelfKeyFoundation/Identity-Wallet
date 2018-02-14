@@ -180,6 +180,11 @@ angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogCo
 const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
 angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
 
+const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
+angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
+
+
+
 /**
  * guest
  */
