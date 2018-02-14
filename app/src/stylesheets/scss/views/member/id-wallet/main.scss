@@ -1,22 +1,32 @@
 .id-wallet-main {
-    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-    .header-wrapper {
-
-    }
-
-    .body-wrapper {
+    >.center-container {
+        width: 1140px;
         margin-top: 40px;
 
-        .left-side-wrapper {
-            .id-attributes {
-                margin-top: 20px;
+        .header-wrapper {
+            width: 1140px;
+        }
+
+        .body-wrapper {
+            width: 1140px;
+            margin-top: 40px;
+
+            .left-side-wrapper {
+                width: 760px;
+
+                .id-attributes {
+                    margin-top: 20px;
+                }
+            }
+
+            .right-side-wrapper {
+
             }
         }
-
-        .right-side-wrapper {
-
-        }
     }
-
 }

@@ -17144,11 +17144,20 @@ md-dialog.info {
       color: #93b0c1; }
 
 .id-wallet-main {
-  margin-top: 40px; }
-  .id-wallet-main .body-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  .id-wallet-main > .center-container {
+    width: 1140px;
     margin-top: 40px; }
-    .id-wallet-main .body-wrapper .left-side-wrapper .id-attributes {
-      margin-top: 20px; }
+    .id-wallet-main > .center-container .header-wrapper {
+      width: 1140px; }
+    .id-wallet-main > .center-container .body-wrapper {
+      width: 1140px;
+      margin-top: 40px; }
+      .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .id-attributes {
+        margin-top: 20px; }
 
 .ico-list-item-content-wrappper {
   flex-direction: row;
