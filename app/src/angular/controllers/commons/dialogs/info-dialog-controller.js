@@ -1,8 +1,8 @@
-function InfoDialogController($rootScope, $scope, $log, $mdDialog,form) {
+function InfoDialogController($rootScope, $scope, $log, $mdDialog, text, title) {
     'ngInject'
 
-    $scope.form = form;
-    $log.info('form - ',$scope.form);
+    $scope.text = text;
+    $scope.title = title;
 
     $scope.cancel = (event) => {
         $mdDialog.cancel();

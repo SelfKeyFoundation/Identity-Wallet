@@ -10,7 +10,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
             .top-part-container(layout="column", style="width: 100%;")
 
                 .sk-right-sidenav__section.section-1
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.sidenavInfoDialog($event, 'marketplace')") Marketplace
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="getInfoDialog($event,'Coming soon', 'marketplace')") Marketplace
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
@@ -22,7 +22,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="$root.sidenavInfoDialog($event, 'About')") About
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="getInfoDialog($event,'Coming soon', 'About')") About
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
@@ -30,11 +30,11 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.submitIdea')", ng-click="$root.sidenavInfoDialog($event, 'submitIdea')") Submit An Idea
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.submitIdea')", ng-click="getInfoDialog($event,'Coming soon','submitIdea')") Submit An Idea
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.version')", ng-click="$root.sidenavInfoDialog($event, 'version')") Version
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.version')",ng-click="getVersion($event)") Version
                 .sk-right-sidenav__h-divider
 
 

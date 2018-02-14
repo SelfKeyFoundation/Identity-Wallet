@@ -20,22 +20,16 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
         $scope.close();
     }
 
-
-    $rootScope.sidenavInfoDialog = (event, item) => {
-        $mdDialog.show({
-            controller: 'InfoDialogController',
-            templateUrl: 'common/dialogs/info-dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose: false,
-            fullscreen: true,
-            escapeToClose: false,
-            locals: {
-                form: item
-            }
-        });
+    $scope.getInfoDialog = function (event, text, title) {
+        $rootScope.openInfoDialog(event, text, title)
         $scope.close();
-    }
+    };
+
+    $scope.getVersion = function (event) {
+        $rootScope.openInfoDialog(event, $rootScope.version + ' ' + 'Version', 'version')
+        $scope.close();
+    };
+
 
 };
 

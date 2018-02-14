@@ -1,7 +1,6 @@
-md-dialog.info(aira-lable="Dialog Title")
+md-dialog.info(aira-lable="{{title}}")
     .info-wrapper
         .info-text
-            span(ng-if="form !== 'version'") Coming Soon
-            span(ng-if="form == 'version'") {{$root.version}} Version
+            span {{text}}
         .info-logo
-            sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
+            sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)")

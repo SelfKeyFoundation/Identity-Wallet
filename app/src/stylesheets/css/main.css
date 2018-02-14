@@ -16647,6 +16647,11 @@ md-dialog.info {
       text-align: center;
       vertical-align: middle;
       line-height: 90px; }
+    md-dialog.info .info-wrapper .info-logo {
+      position: absolute;
+      right: -18px;
+      top: -18px;
+      cursor: pointer; }
 
 .wallet-create-step-1 {
   height: 100%; }
