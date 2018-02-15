@@ -152,6 +152,10 @@ angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 const CopyToClipboardDirective = requireAppModule('angular/directives/commons/copy-to-clipboard.directive');
 angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
 
+const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
+angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
+
+
 /**
  * controllers
  */

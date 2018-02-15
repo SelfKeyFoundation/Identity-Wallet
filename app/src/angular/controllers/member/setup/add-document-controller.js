@@ -9,7 +9,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
 
     const ID_ATTRIBUTES = {
         'id_document': {
-            type: "id_document",
+            type: "national_id",
             step: "STEP 4",
             title1: "Upload Your National ID",
             title2: "Your National ID",

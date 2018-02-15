@@ -160,6 +160,25 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
             icos[status].push(ico);
         }
 
+        /**
+         *
+         */
+        getIdAttributesStore() {
+            let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+            return walletData.data.idAttributes;
+        }
+
+        getIdAttributeItem(type) {
+            let idAttributesStore = this.getIdAttributesStore();
+            let idAttribute = idAttributesStore[type];
+            return idAttribute.items[idAttribute.defaultItemId];
+        }
+
+        getIdAttributeItemValues(type) {
+            let item = this.getIdAttributeItem(type);
+            return item.values;
+        }
+
     }
 
     return new ConfigFileStore();

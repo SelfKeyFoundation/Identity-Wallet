@@ -1,29 +1,36 @@
 .sk-box.sk-id-attribute
     .header-wrapper
         .title-wrapper
-            .title(flex) {{ $root.DICTIONARY[data.key] }}
-            .plus-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="config.showAddItemButton")
-                md-icon(md-svg-src="assets/images/icons/plus.svg", alt="add", style="width: 100%")
+            span.title-main {{ data.type }}
+            .add-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="config.features.itemAdd")
+                md-icon(md-svg-src="assets/images/icons/plus.svg", alt="Add another item")
+                md-tooltip Add another item
         .description-wrapper
-            table
-                tr
-                    td Acceptable documents
-                    td
-                        span.fc-white You can upload documents which at least contain your personal number, first name, last name, birth date and photo
+            span Acceptable documents
+            span.fc-white You can upload documents which at least contain your personal number, first name, last name, birth date and photo
 
     .body-wrapper
-        .documents-wrapper
+        .documents-wrapper(ng-repeat="(key, item) in items")
             .title-wrapper
-                span Document
+                span.title-main {{itAttributeType.type}}
+                .add-button(ng-click="openAddFileDialog($event, 'add', null)", ng-if="config.features.multipleValues")
+                    md-icon(md-svg-src="assets/images/icons/plus.svg", alt="Add another value")
+                    md-tooltip Add another value
+                .delete-button(ng-click="openDeleteItemPanel($event)", ng-if="config.features.multipleValues && getItemsCount() > 1")
+                    md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="delete file")
 
-            .content-wrapper
-                .item-wrapper(ng-repeat="item in items")
-                    // icon
-                    // title
-                    // text
-                    // action
+            .content-wrapper(ng-if="item.values.length")
+                .item-wrapper(ng-repeat="value in item.values")
+                    sk-icon(icon="success-box", size-class="icon-size-16x16")
+                    .title {{extractValue(value)}}
+                    .actions
+                        .edit-button(ng-click="openEditValuePanel($event, 'add', null)")
+                            md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="edit file")
+                        .delete-button(ng-click="openValueDeletePanel($event, value)")
+                            md-icon(md-svg-src="assets/images/icons/close-button.svg", alt="delete file")
 
-        .history-wrapper
+
+        .history-wrapper(ng-if="config.features.history")
             .title-wrapper
                 span History
 
@@ -42,57 +49,57 @@
 
 
 
-    .default-wrapper
-        .header
+    //- .default-wrapper
+    //-     .header
 
 
-        .description
-            table
-                tr
-                    td Acceptable documents
-                    td
-                        span.fc-white You can upload documents which at least contain your personal number, first name, last name, birth date and photo
+    //-     .description
+    //-         table
+    //-             tr
+    //-                 td Acceptable documents
+    //-                 td
+    //-                     span.fc-white You can upload documents which at least contain your personal number, first name, last name, birth date and photo
 
-        .h-divider
+    //-     .h-divider
 
-        .section
-            .title {{ $root.DICTIONARY[data.category] }}
-            .items-container
-                .item(ng-if="checkItemValue(item)", ng-repeat="(key, item) in data.items")
-                    sk-icon(icon="success-box", size-class="icon-size-16x16")
-                    .info-wrapper(ng-class="{selected: item.clicked}")
-                        span(ng-click="item.clicked = !item.clicked") {{ data.type === 'static_data' ? item.value : $root.DICTIONARY[item.idAttributeType.key] }}
+    //-     .section
+    //-         .title {{ $root.DICTIONARY[data.category] }}
+    //-         .items-container
+    //-             .item(ng-if="checkItemValue(item)", ng-repeat="(key, item) in data.items")
+    //-                 sk-icon(icon="success-box", size-class="icon-size-16x16")
+    //-                 .info-wrapper(ng-class="{selected: item.clicked}")
+    //-                     span(ng-click="item.clicked = !item.clicked") {{ data.type === 'static_data' ? item.value : $root.DICTIONARY[item.idAttributeType.key] }}
 
-                        //span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") &nbsp;-&nbsp;National Id with selfie
-                        //span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") &nbsp;-&nbsp;{{ item.idAttributeType.key }}
-                        .delete-dialog(ng-if="item.clicked", layout="column")
-                            .header Delete Attribute and History
-                            .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
-                            .buttons
-                                button.confirm(ng-click="deleteAttribute(item._id, item)") Delete attribute
-                                button.cancel(ng-click="item.clicked = false") Cancel Action
+    //-                     //span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") &nbsp;-&nbsp;National Id with selfie
+    //-                     //span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") &nbsp;-&nbsp;{{ item.idAttributeType.key }}
+    //-                     .delete-dialog(ng-if="item.clicked", layout="column")
+    //-                         .header Delete Attribute and History
+    //-                         .message You are deleting this ID Attribute and all related history. Once deleted you cannot recover history
+    //-                         .buttons
+    //-                             button.confirm(ng-click="deleteAttribute(item._id, item)") Delete attribute
+    //-                             button.cancel(ng-click="item.clicked = false") Cancel Action
 
-                .item(ng-if="!checkItemValue(item)", style="margin-top: 30px;", ng-repeat="(key, item) in data.items")
-                    sk-icon(icon="{{data.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
-                    .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
-                        span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") National Id with selfie
-                        span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") {{ $root.DICTIONARY[item.idAttributeType.key] }}
-                        //span(ng-if="data.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
-            .h-divider
+    //-             .item(ng-if="!checkItemValue(item)", style="margin-top: 30px;", ng-repeat="(key, item) in data.items")
+    //-                 sk-icon(icon="{{data.type === 'document' ? 'upload': 'questionary'}}", size-class="icon-size-36x36")
+    //-                 .info-wrapper.missing(ng-click="openAddEditDialog($event, 'edit', item)")
+    //-                     span(ng-if="item.idAttributeType.key === 'national_id' && item.addition.selfie") National Id with selfie
+    //-                     span(ng-if="item.idAttributeType.key !== 'national_id' || !item.addition.selfie") {{ $root.DICTIONARY[item.idAttributeType.key] }}
+    //-                     //span(ng-if="data.type === 'document'", style="font-family: ProximaNovaRegular; color: #93b0c1; margin-top: 4px;") (Minimal size 1600x900px)
+    //-         .h-divider
 
-            .section(ng-if="config.showHistory")
-                .title History
-                .items-container
-                    table(ng-init="data.attached = { historyRowCount: config.historyRowCount }")
-                        tr(ng-repeat="(index, step) in data.actionHistory", ng-show="index < data.attached.historyRowCount")
-                            td.fc-bluey-grey {{step.date | date:'shortDate'}}
-                            td.fc-bluey-grey
-                                sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
-                            td
-                                span.fc-white {{statuses[step.status].name}}
-                                span.fc-white &nbsp; - &nbsp;
-                                span.fc-white {{step.note}}
-                                button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
+    //-         .section(ng-if="config.showHistory")
+    //-             .title History
+    //-             .items-container
+    //-                 table(ng-init="data.attached = { historyRowCount: config.historyRowCount }")
+    //-                     tr(ng-repeat="(index, step) in data.actionHistory", ng-show="index < data.attached.historyRowCount")
+    //-                         td.fc-bluey-grey {{step.date | date:'shortDate'}}
+    //-                         td.fc-bluey-grey
+    //-                             sk-icon(icon="{{statuses[step.status].icon}}", size-class="icon-size-16x16")
+    //-                         td
+    //-                             span.fc-white {{statuses[step.status].name}}
+    //-                             span.fc-white &nbsp; - &nbsp;
+    //-                             span.fc-white {{step.note}}
+    //-                             button.transp-button.history-step-action-button(ng-repeat="action in step.actions", ui-sref="{{action.link}}") {{action.title}}
 
-                    .actions-container(ng-if="data.actionHistory.length > 0")
-                        button(ng-click="data.attached.historyRowCount = data.attached.historyRowCount < data.actionHistory.length ? data.actionHistory.length : config.historyRowCount") {{ data.attached.historyRowCount < data.actionHistory.length ? 'View All History' : 'View Less History '}}
+    //-                 .actions-container(ng-if="data.actionHistory.length > 0")
+    //-                     button(ng-click="data.attached.historyRowCount = data.attached.historyRowCount < data.actionHistory.length ? data.actionHistory.length : config.historyRowCount") {{ data.attached.historyRowCount < data.actionHistory.length ? 'View All History' : 'View Less History '}}
