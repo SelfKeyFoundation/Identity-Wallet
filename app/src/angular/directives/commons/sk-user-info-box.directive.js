@@ -14,17 +14,20 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
                 tempImage: 'assets/images/temp/avatar.jpg'
             }
 
-            let store = ConfigFileService.getStore();
-            let idAttributes = store.wallets[$rootScope.wallet.getPublicKeyHex()].data.idAttributes;
+            let idAttributes = ConfigFileService.getIdAttributesStore();
 
             reloadData();
 
             function reloadData() {
                 for (let i in idAttributes) {
                     let item = idAttributes[i];
+
+                    if(item.items[item.defaultItemId].values.length <= 0) {
+                        continue;
+                    }
+
                     scope.userData[i] = item.items[item.defaultItemId].values[0].value;
                     if(item.type === "name"){
-                        scope.userData[i] = item.items[item.defaultItemId].values[0].value;
                         if(item.items[item.defaultItemId].values[1]){
                             scope.userData[i] += " " + item.items[item.defaultItemId].values[1].value;
                         }
