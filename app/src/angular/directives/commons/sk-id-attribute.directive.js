@@ -14,6 +14,13 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
         },
         link: (scope, element, attrs) => {
 
+            let initialIdAttributes = [
+                'national_id',
+                'id_selfie',
+                'name',
+                'country_of_residency'
+            ];
+
             scope.itAttributeType = ConfigFileService.getIdAttributeType(scope.data.type);
             scope.items = scope.data.items;
             scope.config = {
@@ -140,125 +147,19 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
                 $mdPanel.open(config);
             }
 
-
-
-
-
-
-
-
-
-
-
-            scope.checkItemValue = (item) => {
-                return (item && (item.value || item.path));
-            }
-
-            scope.openAddEditDialog = function (event, actionType, item) {
-                let store = ConfigFileService.getStore();
-                $mdDialog.show({
-                    controller: SkIdAttributeBoxDirectiveAddEditDialog,
-                    templateUrl: 'common/directives/sk-id-attribute-box/sk-add-edit-id-attribute-item-dialog.html',
-                    parent: angular.element(document.body),
-                    targetEvent: event,
-                    clickOutsideToClose: false,
-                    fullscreen: true,
-                    locals: {
-                        config: {
-                            title: "Upload your " + $rootScope.DICTIONARY["ID_ATTR_" + item.idAttributeType.key.toUpperCase()],       // todo
-                            type: item.idAttributeType.type,                                                                          // document, static_data
-                            key: item.idAttributeType.key
-                        },
-                        item: angular.copy(item)
+            scope.isItemValueDeleteAvailable = (item) => {
+                if(initialIdAttributes.indexOf(scope.itAttributeType.key) !== -1){
+                    if(scope.itAttributeType.key === 'name'){
+                        return item.values.length >= 4;
                     }
-                }).then((respItem) => {
-                    item.name = item.name;
-                    item.value = item.value;
-                    item.path = item.path;
-                    item.size = item.size;
-                    item.contentType = item.contentType;
-
-                    if (!store.idAttributes[item.idAttributeType.key]) {
-                        store.idAttributes[item.idAttributeType.key] = scope.data;
-                    }
-
-                    let itemToSave = store.idAttributes[item.idAttributeType.key].items[respItem._id];
-
-                    itemToSave.name = respItem.name;
-                    itemToSave.value = respItem.value;
-                    if (scope.data.type === 'document') {
-                        itemToSave.size = respItem.size;
-                        itemToSave.contentType = respItem.contentType;
-                    }
-
-                    $log.info('store to save:', store);
-                    //$rootScope.$broadcast('id-attributes-changed', scope.data);
-
-
-                    ConfigFileService.save().then((resp) => {
-                        // show message
-                        if (scope.config && scope.config.callback && scope.config.callback.itemChanged) {
-                            scope.config.callback.itemChanged(scope.data);
-                        }
-
-                        $rootScope.$broadcast('id-attributes-changed', scope.data);
-                    });
-                });
-            };
-
-            scope.statuses = {
-                1: new DocumentProcessStatus(1, 'Needs verification', 'warning-box'),
-                2: new DocumentProcessStatus(2, 'Verified', 'success-box'),
-                3: new DocumentProcessStatus(3, 'Rejected', 'danger-box')
-            };
-
-            scope.deleteAttribute = (id, clickedItem) => {
-                let store = ConfigFileService.getStore();
-                console.log(id, clickedItem);
-
-                clickedItem.name = null;
-                clickedItem.value = null;
-
-                store.idAttributes[scope.data.key].items[id].name = null;
-                store.idAttributes[scope.data.key].items[id].value = null;
-
-                if (clickedItem.idAttributeType === 'document') {
-                    clickedItem.contentType = null;
-                    clickedItem.size = null;
-
-                    store.idAttributes[scope.data.key].items[id].contentType = null;
-                    store.idAttributes[scope.data.key].items[id].size = null;
+                    return item.values.length >= 2;
                 }
-
-                delete clickedItem.clicked;
-
-                $log.info('store to save:', store);
-
-                //$rootScope.$broadcast('id-attributes-changed', scope.data);
-
-                ConfigFileService.save().then((resp) => {
-                    // show message
-                    if (scope.config && scope.config.callback && scope.config.callback.itemChanged) {
-                        scope.config.callback.itemChanged(scope.data);
-                    }
-                    $rootScope.$broadcast('id-attributes-changed', scope.data);
-                });
-            };
-
-            scope.getFileNames = function (files) {
-                if (!files || !files.length) return '';
-                return files.map(file => file.name).join(', ');
-            };
+                return true;
+            }
         },
         replace: true,
         templateUrl: 'common/directives/sk-id-attribute/main.html'
     }
-}
-
-function DocumentProcessStatus(status, name, icon) {
-    this.status = status;
-    this.name = name;
-    this.icon = icon;
 }
 
 function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDialog, ElectronService, config, item, countries) {
@@ -289,7 +190,6 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 
     $scope.save = () => {
-        console.log($scope.item, item, "<<<<<<");
         if ($scope.item.value && $scope.item.name) {
             $mdDialog.hide($scope.item);
         }

@@ -193,6 +193,8 @@ angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEd
 const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-static-data-controller.js');
 angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
 
+const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
+angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
 
 /**

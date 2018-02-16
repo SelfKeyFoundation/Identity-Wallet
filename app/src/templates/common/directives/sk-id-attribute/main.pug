@@ -17,7 +17,8 @@
                     md-icon(md-svg-src="assets/images/icons/plus.svg", alt="Add another value")
                     md-tooltip Add another value
                 .delete-button(ng-click="openItemDeletePanel($event, item)", ng-if="config.features.multipleValues && getItemsCount() > 1")
-                    md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="delete file")
+                    md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="Delete file")
+                    md-tooltip Delete value
 
             .content-wrapper(ng-if="item.values.length")
                 .item-wrapper(ng-repeat="value in item.values")
@@ -26,9 +27,8 @@
                     .actions
                         .edit-button(ng-click="openValueEditDialog($event, item, value)")
                             md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="edit file")
-                        .delete-button(ng-click="openValueDeletePanel($event, item, value)")
+                        .delete-button(ng-click="openValueDeletePanel($event, item, value)", ng-if="isItemValueDeleteAvailable(item)")
                             md-icon(md-svg-src="assets/images/icons/close-button.svg", alt="delete file")
-
 
         .history-wrapper(ng-if="config.features.history")
             .title-wrapper
