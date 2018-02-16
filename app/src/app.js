@@ -152,6 +152,10 @@ angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 const CopyToClipboardDirective = requireAppModule('angular/directives/commons/copy-to-clipboard.directive');
 angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
 
+const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
+angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
+
+
 /**
  * controllers
  */
@@ -183,6 +187,14 @@ angular.module('kyc-wallet').controller('PasswordWarningDialogController', Passw
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
+const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-document-controller.js');
+angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
+
+const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-static-data-controller.js');
+angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
+
+const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
+angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
 
 /**
@@ -257,11 +269,20 @@ angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', Memb
 const MemberDashboardMainController = requireAppModule('angular/controllers/member/dashboard/main-controller.js');
 angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
 
+
 /**
- * wallet
+ * wallet (TODO rename to token)
  */
 const ManageTokenController = requireAppModule('angular/controllers/member/wallet/manage-token-controller.js');
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
+
+
+/**
+ * id wallet
+ */
+const MemberIdWalletMainController = requireAppModule('angular/controllers/member/id-wallet/main-controller.js');
+angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
+
 
 /**
  * Marketplace

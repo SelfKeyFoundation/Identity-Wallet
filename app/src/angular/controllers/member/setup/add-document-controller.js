@@ -9,7 +9,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
 
     const ID_ATTRIBUTES = {
         'id_document': {
-            type: "id_document",
+            type: "national_id",
             step: "STEP 4",
             title1: "Upload Your National ID",
             title2: "Your National ID",
@@ -29,7 +29,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
     $scope.selected = ID_ATTRIBUTES[$stateParams.type]
     $scope.selected.values = getIdAttributeItemValues($scope.selected.type);
 
-    $scope.idDocument = getIdAttributeItemValues("id_document");
+    $scope.idDocument = getIdAttributeItemValues("national_id");
     $scope.idSelfie = getIdAttributeItemValues("id_selfie");
     $scope.name = getIdAttributeItemValues("name");
 
@@ -67,7 +67,11 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
                 }
 
                 let item = getIdAttributeItem($scope.selected.type);
-                item.values[0] = fileItem;
+                if(item.values.length){
+                    item.values[0].value = fileItem;
+                }else{
+                    item.addValue(fileItem);
+                }
 
                 ConfigFileService.save().then((newStore) => {
                     store = newStore;

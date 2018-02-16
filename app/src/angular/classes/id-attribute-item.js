@@ -18,7 +18,14 @@ class IdAttributeItem {
     }
 
     addValue(value){
-        this.values.push(value)
+        let v = {};
+        if(!value._id){
+            v._id = CommonUtils.generateId();
+            v.value = value;
+        }else{
+            v = value;
+        }
+        this.values.push(v);
     }
 }
 

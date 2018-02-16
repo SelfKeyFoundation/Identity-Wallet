@@ -18,7 +18,7 @@
         font-family: ProximaNovaRegular;
         text-transform: uppercase;
         user-select: none;
-        color: #fff; 
+        color: #fff;
 
         &.primary {
             font-size: 16px;
@@ -69,7 +69,7 @@
         border-radius: 4px;
         background-image: linear-gradient(318deg, #343f4c, #2e3945);
         box-shadow: 0 2px 2px 0 #15222e;
-    
+
         > span {
             opacity: 0.4;
             font-family: ProximaNovaRegular;
@@ -126,6 +126,10 @@
             border: 1px solid #b44000;
         }
     }
-   
+
+    &.filled-red {
+        background-color: #ed1c24;
+    }
+
 }
 

@@ -398,7 +398,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         /**
-         * Wallet
+         * Wallet (TODO rename to token)
+         * member.token
+         * member.token.manage
          */
         .state('member.wallet', {
             abstract: true,
@@ -415,6 +417,28 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 main: {
                     templateUrl: 'member/wallet/manage-token.html',
                     controller: 'ManageTokenController'
+                }
+            }
+        })
+
+        /**
+         * ID Wallet
+         */
+        .state('member.id-wallet', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/id-wallet/layout.html'
+                }
+            }
+        })
+
+        .state('member.id-wallet.main', {
+            url: '/member/id-wallet/main',
+            views: {
+                main: {
+                    templateUrl: 'member/id-wallet/main.html',
+                    controller: 'MemberIdWalletMainController'
                 }
             }
         })

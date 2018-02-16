@@ -5,7 +5,7 @@ function MemberSetupLayoutController($rootScope, $scope, $log, $state, ConfigFil
 
     $log.info('MemberSetupLayoutController');
 
-    $scope.idDocument = getIdAttributeItemValues('id_document');
+    $scope.idDocument = getIdAttributeItemValues('national_id');
     $scope.idSelfie = getIdAttributeItemValues('id_selfie');
 
     $scope.skip = (event) => {

@@ -67,7 +67,6 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
                 }
                 defer.resolve(conf);
             });
-
             return defer.promise;
         }
 
@@ -145,6 +144,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
             idAttributeTypes = data;
         }
 
+
         /**
          *
          */
@@ -157,6 +157,33 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
                 icos[status] = [];
             }
             icos[status].push(ico);
+        }
+
+        /**
+         *
+         */
+        getIdAttributesStore() {
+            let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+            return walletData.data.idAttributes;
+        }
+
+        getIdAttributeItem(type) {
+            let idAttributesStore = this.getIdAttributesStore();
+            let idAttribute = idAttributesStore[type];
+            return idAttribute.items[idAttribute.defaultItemId];
+        }
+
+        getIdAttributeItemValues(type) {
+            let item = this.getIdAttributeItem(type);
+            return item.values;
+        }
+
+        dispatchIdAttributes(){
+            for (let i in store.idAttributes) {
+                let idAttribute = new IdAttribute()
+                idAttribute.setData(store.idAttributes[i]);
+                store.idAttributes[i] = idAttribute;
+            }
         }
 
     }

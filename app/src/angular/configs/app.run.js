@@ -151,6 +151,40 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         });
     };
 
+    $rootScope.openAddEditDocumentDialog = (event, item, value, itAttributeType) => {
+        return $mdDialog.show({
+            controller: 'AddEditDocumentDialogController',
+            templateUrl: 'common/dialogs/add-edit-document.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                item: item,
+                value: value,
+                idAttributeType: itAttributeType
+            }
+        });
+    };
+
+    $rootScope.openAddEditStaticDataDialog = (event, item, value, itAttributeType) => {
+        return $mdDialog.show({
+            controller: 'AddEditStaticDataDialogController',
+            templateUrl: 'common/dialogs/add-edit-static-data.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                item: item,
+                value: value,
+                idAttributeType: itAttributeType
+            }
+        });
+    };
+
+
+
     /**
      *
      */
