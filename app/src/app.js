@@ -187,6 +187,12 @@ angular.module('kyc-wallet').controller('PasswordWarningDialogController', Passw
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
+const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-document-controller.js');
+angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
+
+const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-static-data-controller.js');
+angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
+
 
 
 /**

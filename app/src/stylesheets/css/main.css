@@ -15866,11 +15866,13 @@ md-radio-group md-radio-button {
         .sk-id-attribute > .header-wrapper > .description-wrapper > span:last-of-type {
           color: #ffffff; }
   .sk-id-attribute > .body-wrapper {
-    width: 100% !important; }
+    width: 100% !important;
+    margin-top: 0 !important; }
     .sk-id-attribute > .body-wrapper > .documents-wrapper {
       display: flex;
       flex-direction: column;
       width: 100% !important;
+      margin-top: 40px !important;
       border-bottom: 1px solid #384047;
       padding-bottom: 30px; }
       .sk-id-attribute > .body-wrapper > .documents-wrapper > .title-wrapper {
@@ -15923,6 +15925,7 @@ md-radio-group md-radio-button {
  * ID Attribute Delete Panel
  */
 .value-delete-panel {
+  border-radius: 2px;
   background-color: #1e262e;
   display: flex;
   flex-direction: column;
@@ -15954,6 +15957,13 @@ md-radio-group md-radio-button {
     align-items: center;
     justify-content: flex-start;
     margin-top: 22px; }
+    .value-delete-panel > .actions-wrapper > .md-button > span {
+      margin: 0 20px; }
+    .value-delete-panel > .actions-wrapper > .md-button:first-of-type {
+      border: none;
+      box-shadow: transparent; }
+    .value-delete-panel > .actions-wrapper > .md-button:last-of-type {
+      margin-left: 8px; }
 
 .guest-layout {
   width: 100%;
@@ -16806,6 +16816,84 @@ md-dialog.info {
       top: -18px;
       cursor: pointer; }
 
+md-dialog.add-edit-document {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.add-edit-document > .content-wrapper {
+    width: 760px;
+    display: flex;
+    flex-direction: column; }
+    md-dialog.add-edit-document > .content-wrapper #document {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      flex-direction: row; }
+      md-dialog.add-edit-document > .content-wrapper #document > .content {
+        width: 100%; }
+        md-dialog.add-edit-document > .content-wrapper #document > .content > .header-wrapper > .title {
+          padding: 30px 30px 0 30px;
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff; }
+        md-dialog.add-edit-document > .content-wrapper #document > .content > .content-wrapper {
+          display: flex;
+          flex: 1; }
+          md-dialog.add-edit-document > .content-wrapper #document > .content > .content-wrapper > .box > .header {
+            margin-top: 36px;
+            font-family: ProximaNovaSemibold;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: #ffffff; }
+          md-dialog.add-edit-document > .content-wrapper #document > .content > .content-wrapper > .box > .sub-header {
+            margin-top: 6px;
+            font-family: ProximaNovaRegular;
+            font-size: 12px;
+            text-align: center;
+            color: #93b0c1; }
+  md-dialog.add-edit-document > .actions-wrapper {
+    width: 760px;
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    md-dialog.add-edit-document > .actions-wrapper .md-button {
+      width: 144px;
+      padding: 0 16px; }
+      md-dialog.add-edit-document > .actions-wrapper .md-button:last-of-type {
+        margin-left: 16px; }
+
+md-dialog.add-edit-static-data {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.add-edit-static-data > .content-wrapper > .content {
+    width: 760px;
+    padding: 40px 15px 15px 15px; }
+    md-dialog.add-edit-static-data > .content-wrapper > .content md-input-container {
+      width: 100%;
+      margin: 0; }
+  md-dialog.add-edit-static-data > .actions-wrapper {
+    width: 760px;
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    md-dialog.add-edit-static-data > .actions-wrapper .md-button {
+      width: 144px;
+      padding: 0 16px; }
+      md-dialog.add-edit-static-data > .actions-wrapper .md-button:last-of-type {
+        margin-left: 16px; }
+
 .wallet-create-step-1 {
   height: 100%; }
   .wallet-create-step-1 .header-wrapper {
@@ -17201,36 +17289,36 @@ md-dialog.info {
     margin-right: 30px; }
     .add-document > .content-wrapper #document > .content {
       height: 100%; }
-      .add-document > .content-wrapper #document > .content .header-wrapper {
+      .add-document > .content-wrapper #document > .content > .header-wrapper {
         margin: 25px 30px; }
-        .add-document > .content-wrapper #document > .content .header-wrapper .step {
+        .add-document > .content-wrapper #document > .content > .header-wrapper > .step {
           font-family: ProximaNovaSemibold;
           font-size: 12px;
           font-weight: 600;
           color: #93b0c1; }
-        .add-document > .content-wrapper #document > .content .header-wrapper .title {
+        .add-document > .content-wrapper #document > .content > .header-wrapper > .title {
           margin-top: 4px;
           font-family: ProximaNovaRegular;
           font-size: 18px;
           color: #ffffff; }
-        .add-document > .content-wrapper #document > .content .header-wrapper .description {
+        .add-document > .content-wrapper #document > .content > .header-wrapper > .description {
           margin-top: 4px;
           font-family: ProximaNovaRegular;
           opacity: 0.8;
           font-size: 16px;
           line-height: 1;
           color: #93b0c1; }
-      .add-document > .content-wrapper #document > .content .content-wrapper {
+      .add-document > .content-wrapper #document > .content > .content-wrapper {
         display: flex;
         flex: 1; }
-        .add-document > .content-wrapper #document > .content .content-wrapper .box > .header {
+        .add-document > .content-wrapper #document > .content > .content-wrapper > .box > .header {
           margin-top: 36px;
           font-family: ProximaNovaSemibold;
           font-size: 14px;
           font-weight: 600;
           text-align: center;
           color: #ffffff; }
-        .add-document > .content-wrapper #document > .content .content-wrapper .box > .sub-header {
+        .add-document > .content-wrapper #document > .content > .content-wrapper > .box > .sub-header {
           margin-top: 6px;
           font-family: ProximaNovaRegular;
           font-size: 12px;

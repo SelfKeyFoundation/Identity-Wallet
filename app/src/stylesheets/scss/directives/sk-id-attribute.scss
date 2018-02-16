@@ -61,10 +61,13 @@
 
     >.body-wrapper {
         width: 100% !important;
+        margin-top: 0 !important;
+
         >.documents-wrapper {
             display: flex;
             flex-direction: column;
             width: 100% !important;
+            margin-top: 40px !important;
 
             border-bottom: 1px solid #384047;
             padding-bottom: 30px;
@@ -148,6 +151,7 @@
  * ID Attribute Delete Panel
  */
 .value-delete-panel {
+    border-radius: 2px;
     background-color: #1e262e;
     display: flex;
     flex-direction: column;
@@ -186,5 +190,19 @@
         align-items: center;
         justify-content: flex-start;
         margin-top: 22px;
+
+        >.md-button {
+            >span {
+                margin: 0 20px;
+            }
+
+            &:first-of-type {
+                border: none;
+                box-shadow: transparent;
+            }
+            &:last-of-type {
+                margin-left: 8px;
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
     .header-wrapper
         .title-wrapper
             span.title-main {{ data.type }}
-            .add-button(ng-click="openAddEditDialog($event, 'add', null)", ng-if="config.features.itemAdd")
+            .add-button(ng-click="addNewItem($event)", ng-if="config.features.itemAdd")
                 md-icon(md-svg-src="assets/images/icons/plus.svg", alt="Add another item")
                 md-tooltip Add another item
         .description-wrapper
@@ -13,10 +13,10 @@
         .documents-wrapper(ng-repeat="(key, item) in items")
             .title-wrapper
                 span.title-main {{itAttributeType.type}}
-                .add-button(ng-click="openAddFileDialog($event, 'add', null)", ng-if="config.features.multipleValues")
+                .add-button(ng-click="openValueAddDialog($event, item)", ng-if="config.features.multipleValues")
                     md-icon(md-svg-src="assets/images/icons/plus.svg", alt="Add another value")
                     md-tooltip Add another value
-                .delete-button(ng-click="openDeleteItemPanel($event)", ng-if="config.features.multipleValues && getItemsCount() > 1")
+                .delete-button(ng-click="openItemDeletePanel($event, item)", ng-if="config.features.multipleValues && getItemsCount() > 1")
                     md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="delete file")
 
             .content-wrapper(ng-if="item.values.length")
@@ -24,9 +24,9 @@
                     sk-icon(icon="success-box", size-class="icon-size-16x16")
                     .title {{extractValue(value)}}
                     .actions
-                        .edit-button(ng-click="openEditValuePanel($event, 'add', null)")
+                        .edit-button(ng-click="openValueEditDialog($event, item, value)")
                             md-icon(md-svg-src="assets/images/icons/warning-box.svg", alt="edit file")
-                        .delete-button(ng-click="openValueDeletePanel($event, value)")
+                        .delete-button(ng-click="openValueDeletePanel($event, item, value)")
                             md-icon(md-svg-src="assets/images/icons/close-button.svg", alt="delete file")
 
 

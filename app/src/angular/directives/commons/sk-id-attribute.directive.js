@@ -3,7 +3,7 @@
 const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, ConfigFileService) {
+function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, CommonService, ConfigFileService) {
     'ngInject';
 
     return {
@@ -12,9 +12,7 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
             data: "=",
             callbacks: "="
         },
-        link: (scope, element, attrs, tabsCtrl) => {
-
-            console.log(">>>>>>", scope.data);
+        link: (scope, element, attrs) => {
 
             scope.itAttributeType = ConfigFileService.getIdAttributeType(scope.data.type);
             scope.items = scope.data.items;
@@ -26,23 +24,19 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
                 }
             }
 
-            console.log("?????", scope.itAttributeType)
-
             scope.extractValue = (value) => {
                 if (scope.itAttributeType.type !== 'static_data') {
-                    return value.name;
+                    return value.value.name;
                 }
-                return value ? value : 'empty value';
+                return value ? value.value : 'empty value';
             }
 
             scope.getItemsCount = () => {
                 return Object.keys(scope.data.items).length;
             }
 
-            scope.openValueDeletePanel = (event, value) => {
+            scope.openValueDeletePanel = (event, item, value) => {
                 let itemElement = event.target.parentElement.parentElement.parentElement;
-                console.log(itemElement, $mdPanel.yPosition);
-
 
                 let position = $mdPanel
                     .newPanelPosition()
@@ -59,15 +53,92 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
                     clickOutsideToClose: true,
                     escapeToClose: true,
                     position: position,
-                    controller: itemValueDeletePanel
+                    controller: itemValueDeletePanel,
+                    locals: {
+                        item: item,
+                        value: value
+                    }
                 }
 
-                $mdPanel.open(config).then((panelRef) => {
+                $mdPanel.open(config);
+            }
 
+            scope.openValueEditDialog = (event, item, value) => {
+                let promise = null;
+
+                if(scope.itAttributeType.type === 'static_data'){
+                    promise = $rootScope.openAddEditStaticDataDialog(event, item, value, scope.itAttributeType);
+                } else {
+                    promise = $rootScope.openAddEditDocumentDialog(event, item, value, scope.itAttributeType);
+                }
+
+                promise.then((resp) => {
+                    value.value = resp;
+                    $scope.promise = ConfigFileService.save();
+                    $scope.promise.then(() => {
+                        CommonService.showToast('success', 'saved');
+                    });
                 });
             }
 
+            scope.openValueAddDialog = (event, item) => {
+                let promise = null;
 
+                if(scope.itAttributeType.type === 'static_data'){
+                    promise = $rootScope.openAddEditStaticDataDialog(event, item, null, scope.itAttributeType);
+                } else {
+                    promise = $rootScope.openAddEditDocumentDialog(event, item, null, scope.itAttributeType);
+                }
+
+                promise.then((resp) => {
+                    let itm = new IdAttributeItem(item);
+                    itm.addValue(resp);
+                    item = itm;
+
+                    scope.promise = ConfigFileService.save();
+                    scope.promise.then(() => {
+                        CommonService.showToast('success', 'saved');
+                    });
+                });
+            }
+
+            scope.addNewItem = (event) => {
+                let item = new IdAttributeItem();
+                scope.items[item._id] = item;
+
+                scope.addNewItemPromise = ConfigFileService.save();
+                scope.addNewItemPromise.then(() => {
+                    CommonService.showToast('success', 'added');
+                });
+            }
+
+            scope.openItemDeletePanel = (event, item) => {
+                let itemElement = event.target.parentElement.parentElement.parentElement;
+
+                let position = $mdPanel
+                    .newPanelPosition()
+                    .relativeTo(angular.element(itemElement))
+                    .addPanelPosition(
+                        $mdPanel.xPosition.ALIGN_START,
+                        $mdPanel.yPosition.ABOVE
+                    );
+
+                let config = {
+                    attachTo: angular.element(document.body),
+                    targetEvent: event,
+                    templateUrl: 'common/directives/sk-id-attribute/attribute-delete-panel.html',
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    position: position,
+                    controller: itemDeletePanel,
+                    locals: {
+                        item: item,
+                        items: scope.items
+                    }
+                }
+
+                $mdPanel.open(config);
+            }
 
 
 
@@ -229,11 +300,56 @@ function SkIdAttributeBoxDirectiveAddEditDialog($rootScope, $scope, $log, $mdDia
     }
 }
 
-function itemValueDeletePanel ($rootScope, $scope, $log, mdPanelRef) {
-    $log.info(">>>>>>", mdPanelRef);
+function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, ConfigFileService, item, value) {
+    'ngInject';
+
+    $scope.promise = null;
+
+    $scope.delete = (event) => {
+        for (let i in item.values) {
+            if (item.values[i]._id === value._id) {
+                item.values.splice(i, 1);
+                break;
+            }
+        }
+
+        $scope.promise = ConfigFileService.save();
+
+        $scope.promise.then(() => {
+            CommonService.showToast('success', 'deleted');
+            mdPanelRef.close().then(() => {
+                mdPanelRef.destroy();
+            });
+        });
+    }
 
     $scope.cancel = (event) => {
-        mdPanelRef.close().then(()=>{
+        mdPanelRef.close().then(() => {
+            mdPanelRef.destroy();
+        });
+    }
+}
+
+function itemDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, ConfigFileService, items, item) {
+    'ngInject';
+
+    $scope.promise = null;
+
+    $scope.delete = (event) => {
+        delete items[item._id];
+
+        $scope.promise = ConfigFileService.save();
+
+        $scope.promise.then(() => {
+            CommonService.showToast('success', 'deleted');
+            mdPanelRef.close().then(() => {
+                mdPanelRef.destroy();
+            });
+        });
+    }
+
+    $scope.cancel = (event) => {
+        mdPanelRef.close().then(() => {
             mdPanelRef.destroy();
         });
     }
