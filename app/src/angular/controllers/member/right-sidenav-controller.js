@@ -1,4 +1,4 @@
-function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state) {
+function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state, $mdDialog) {
     'ngInject'
 
     $log.info('RightSidenavController');
@@ -19,6 +19,17 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
         $state.go(state, params);
         $scope.close();
     }
+
+    $scope.getInfoDialog = function (event, text, title) {
+        $rootScope.openInfoDialog(event, text, title)
+        $scope.close();
+    };
+
+    $scope.getVersion = function (event) {
+        $rootScope.openInfoDialog(event, $rootScope.version + ' ' + 'Version', 'version')
+        $scope.close();
+    };
+
 
 };
 

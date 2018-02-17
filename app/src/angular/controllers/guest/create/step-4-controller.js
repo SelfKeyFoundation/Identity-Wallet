@@ -59,7 +59,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
                 let countryOfResidencyIdAttribute = new IdAttribute("country_of_residency");
                 countryOfResidencyIdAttribute.addItem(countryOfResidencyItem);
 
-                let idDocumentIdAttribute = new IdAttribute("id_document");
+                let idDocumentIdAttribute = new IdAttribute("national_id");
                 idDocumentIdAttribute.addItem(idDocumentItem);
 
                 let idSelfieIdAttribute = new IdAttribute("id_selfie");
@@ -67,36 +67,8 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
 
                 idAttributesStore["name"] = nameIdAttribute;
                 idAttributesStore["country_of_residency"] = countryOfResidencyIdAttribute;
-                idAttributesStore["id_document"] = idDocumentIdAttribute;
+                idAttributesStore["national_id"] = idDocumentIdAttribute;
                 idAttributesStore["id_selfie"] = idSelfieIdAttribute;
-
-                /*
-                SelfkeyService.getIdAttributeTypes(true).then((idAttributes) => {
-                    console.log(idAttributes);
-                    for(let key in idAttributes){
-                        let idAttribute = new IdAttribute(key);
-                        idAttributesStore[key] = idAttribute;
-                    }
-                }).finally(()=>{
-                    let nameItem = new IdAttributeItem();
-                    nameItem.addValue($stateParams.basicInfo.firstName);
-                    nameItem.addValue($stateParams.basicInfo.lastName);
-                    nameItem.addValue($stateParams.basicInfo.middleName);
-
-                    let countryOfResidencyItem = new IdAttributeItem();
-                    countryOfResidencyItem.addValue($stateParams.basicInfo.countryOfResidency);
-
-                    let idDocumentItem = new IdAttributeItem();
-
-                    let idDocumentWithSelfieItem = new IdAttributeItem();
-                    idDocumentWithSelfieItem.info.selfie = true;
-
-                    idAttributesStore["name"].addItem(nameItem);
-                    idAttributesStore["country_of_residency"].addItem(countryOfResidencyItem);
-                    idAttributesStore["id_document"].addItem(idDocumentItem);
-                    idAttributesStore["id_selfie"].addItem(idDocumentWithSelfieItem);
-                });
-                */
 
                 ConfigFileService.save().then(() => {
                     $state.go('guest.create.step-5')
