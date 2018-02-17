@@ -24,6 +24,7 @@ module.exports = function (app) {
 	const userDataDirectoryPath = electron.app.getPath('userData');
 	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
+	const cmcIconsDirectoryPath = path.resolve(userDataDirectoryPath, 'cmc-icons');
 
 	const initialStoreDataStructure = {
 		profile: {
@@ -81,6 +82,10 @@ module.exports = function (app) {
 			fs.mkdir(documentsDirectoryPath);
 		}
 
+		if (!fs.existsSync(cmcIconsDirectoryPath)) {
+			fs.mkdir(cmcIconsDirectoryPath);
+		}
+
 		// check file exists
 		if (!fs.existsSync(storeFilePath)) {
 			settings.setAll({
@@ -112,7 +117,8 @@ module.exports = function (app) {
 						}
 					}
 				},
-				wallets: {}
+				wallets: {},
+				cmcData: {}
 			});
 		}
 
@@ -561,14 +567,34 @@ module.exports = function (app) {
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
 	}
 
-	controller.prototype.getCMCData = function () {
-		request.get(config.cmcUrl, (error, httpResponse, result) => {
-			console.log(result);
-			if (result) {
 
+	const loadCmcData = () => {
+		request.get(config.cmcUrl, (error, httpResponse, result) => {
+			let data = [];
+			try {
+				data = JSON.parse(result);
+			} catch (error) {
+				console.log(error);
 			}
+			if (data.length) {
+				data.forEach(item => {
+					item.cmcImagePath = `${config.cmcIconBaseUrl}${config.cmcIconSize}x${config.cmcIconSize}/${item.id}.png`;
+					item.cmcIconLocalImagePath = path.resolve(cmcIconsDirectoryPath, `${item.id}.png`);
+					request(item.cmcImagePath).pipe(fs.createWriteStream(item.cmcIconLocalImagePath));
+				});
+				let storeData = settings.getAll();
+				storeData.cmcData = { prices: data };
+				settings.setAll(storeData);
+			}
+			setTimeout(loadCmcData, config.cmcUpdatePeriod);
 		});
-	};
+	}
+
+	if (!fs.existsSync(cmcIconsDirectoryPath)) {
+		fs.mkdir(cmcIconsDirectoryPath);
+	}
+	setTimeout(loadCmcData, 1000);
+
 
 	return controller;
 }
