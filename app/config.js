@@ -50,7 +50,7 @@ const AppConfigConstant = {
 		],
 		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64,
+		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000 //ms
 	},
 	default: {
@@ -62,7 +62,7 @@ const AppConfigConstant = {
 		node: "infura",
 		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64,
+		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000 //ms
 	},
 	production: {
@@ -74,7 +74,7 @@ const AppConfigConstant = {
 		node: "infura",
 		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64,
+		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000 //ms
 	}
 };
