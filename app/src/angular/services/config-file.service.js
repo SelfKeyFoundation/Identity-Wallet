@@ -47,6 +47,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
                         $rootScope.$broadcast('config-file-loaded');
                         isReady = true;
                     }, 3000);
+                    
 
                 }).catch((error) => {
                     defer.reject(error);

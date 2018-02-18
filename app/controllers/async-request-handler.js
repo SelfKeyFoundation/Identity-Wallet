@@ -14,6 +14,7 @@ const decompress = require('decompress');
 const os = require('os');
 const request = require('request');
 const config = require('../config');
+const async = require('async');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
@@ -567,6 +568,41 @@ module.exports = function (app) {
 		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
 	}
 
+	const loadImageFromCmc = (id) => {
+		return new Promise((resolve, reject) => {
+			const cmcIconLocalImagePath = path.resolve(cmcIconsDirectoryPath, `${id}.png`);
+			if (fs.existsSync(cmcIconLocalImagePath)) {
+				resolve();
+			} else {
+				const cmcImagePath = `${config.cmcIconBaseUrl}${config.cmcIconSize}x${config.cmcIconSize}/${id}.png`;
+				let stream = request(cmcImagePath).pipe(fs.createWriteStream(cmcIconLocalImagePath));
+				stream.on('finish', function () {
+					resolve();
+				});
+			}
+		});
+	};
+
+	controller.prototype.loadCmcIconImage = (event, actionId, actionName, args) => {
+		loadImageFromCmc(args.id).then(() => {
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+		});
+	};
+
+	controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
+		const iconList = config.obligatoryImageIds;
+		async.each(iconList, function (item, callback) {
+			loadImageFromCmc(item).then(() => {
+				callback();
+			});
+		}, function (err) {
+			if (err) {
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+			} else {
+				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+			}
+		});
+	};
 
 	const loadCmcData = () => {
 		request.get(config.cmcUrl, (error, httpResponse, result) => {
@@ -580,7 +616,6 @@ module.exports = function (app) {
 				data.forEach(item => {
 					item.cmcImagePath = `${config.cmcIconBaseUrl}${config.cmcIconSize}x${config.cmcIconSize}/${item.id}.png`;
 					item.cmcIconLocalImagePath = path.resolve(cmcIconsDirectoryPath, `${item.id}.png`);
-					request(item.cmcImagePath).pipe(fs.createWriteStream(item.cmcIconLocalImagePath));
 				});
 				let storeData = settings.getAll();
 				storeData.cmcData = { prices: data };

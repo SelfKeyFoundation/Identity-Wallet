@@ -26,7 +26,7 @@
 		"angular-messages": "1.6.7",
 		"angular-qrcode": "7.2.0",
 		"angular-zxcvbn": "3.2.2",
-		"async": "2.6.0",
+		"async": "^2.6.0",
 		"bignumber.js": "4.1.0",
 		"camelcase": "4.1.0",
 		"crypto": "1.0.1",

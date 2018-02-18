@@ -135,6 +135,14 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
         this.installUpdate = function () {
             return makeCall('installUpdate', {});
         }
+
+        this.loadObligatoryIcons = function () {
+            return makeCall('loadObligatoryIcons', {});
+        };
+
+        this.loadCmcIconImage = function (id) {
+            return makeCall('loadCmcIconImage', { id: id });
+        };
     }
 
 	/**
@@ -163,6 +171,7 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
         // TODO show update dialog
         $rootScope.openUpdateDialog(null, releaseName);
     });
+
 
 	/**
 	 *
