@@ -232,7 +232,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         syncWalletActivityByETH() {
-
             let store = ConfigFileService.getStore();
             let walletKeys = Object.keys(store.wallets);
             let wallets = store.wallets;

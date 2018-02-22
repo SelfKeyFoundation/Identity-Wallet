@@ -1,4 +1,4 @@
-function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, Web3Service, SelfkeyService) {
+function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, Web3Service, SelfkeyService, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestLoadingController');
@@ -13,20 +13,15 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
     }
 
     function init() {
-        $rootScope.loadingPromise = ConfigFileService.init();
-        $rootScope.loadingPromise.then((storeData) => {
-            $log.info("storeData", storeData);
+        $rootScope.loadingPromise = SqlLiteService.loadData();
 
-            let publicKeys = ConfigFileService.getPublicKeys('ks');
+        $rootScope.loadingPromise.then(() => {
+            let publicKeys = SqlLiteService.getWalletPublicKeys();
+            let wallets = SqlLiteService.getWallets();
 
             if (publicKeys.length > 0) {
-
-                let w = storeData.wallets[publicKeys[0]];
-
-                WalletService.importUsingKeystoreFilePath(w.keystoreFilePath).then((wallet) => {
+                WalletService.importUsingKeystoreFilePath(wallets[0].keystoreFilePath).then((wallet) => {
                     $rootScope.wallet = wallet;
-                    // go to unlock state
-                    //$state.go('guest.process.unlock-keystore');
                     $state.go('guest.welcome');
                 }).catch((error) => {
                     $log.error("error", error);
@@ -35,9 +30,6 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
                 $state.go('guest.welcome');
             }
 
-            /**
-             *
-             */
             $rootScope.checkTermsAndConditions();
         }).catch((error) => {
             $log.error("error", error);

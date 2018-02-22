@@ -74,6 +74,12 @@ angular.module('kyc-wallet').constant('countries', countriesConstant);
 /**
  * services
  */
+const RPCService = requireAppModule('angular/services/rpc.service');
+angular.module('kyc-wallet').service('RPCService', RPCService);
+
+const SqlLiteService = requireAppModule('angular/services/sql-lite.service');
+angular.module('kyc-wallet').service('SqlLiteService', SqlLiteService);
+
 const ElectronService = requireAppModule('angular/services/electron.service');
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 

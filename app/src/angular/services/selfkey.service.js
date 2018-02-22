@@ -4,7 +4,7 @@ const Ico = requireAppModule('angular/classes/ico');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
-function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
+function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService, SqlLiteService) {
     'ngInject';
 
     $log.info('SelfkeyService Initialized');

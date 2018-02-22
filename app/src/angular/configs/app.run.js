@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService) {
     'ngInject';
 
     $rootScope.isDevMode = CONFIG.dev;
@@ -110,9 +110,9 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     }
 
     $rootScope.checkTermsAndConditions = () => {
-        let store = ConfigFileService.getStore();
-        let termsAccepted = store.setup ? store.setup.termsAccepted : false;
-        if (!termsAccepted) {
+        let guideSettings = SqlLiteService.getGuideSettings();
+
+        if (!guideSettings.termsAccepted) {
             $timeout(() => {
                 $mdDialog.show({
                     controller: 'TermsDialogController',
@@ -183,14 +183,12 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         });
     };
 
-
-
     /**
      *
      */
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
-        if (ElectronService.ipcRenderer) {
+        if (RPCService.ipcRenderer) {
             ElectronService.sendConfigChange(data);
         }
     });

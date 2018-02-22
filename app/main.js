@@ -20,7 +20,7 @@ const version = electron.app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-line global-require
-if (require('electron-squirrel-startup')) { 
+if (require('electron-squirrel-startup')) {
 	// app.quit() is the source of all our problems,
 	// cf. https://github.com/itchio/itch/issues/202
 	process.exit(0)
@@ -57,16 +57,32 @@ if (!handleSquirrelEvent()) {
 }
 
 /**
- * 
+ *
  */
 function onReady(app) {
 	return function () {
-		const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
-		electron.app.asyncRequestHandler = new AsyncRequestHandler();
+        app.config.userDataPath = electron.app.getPath('userData');
+
+        const CMCService = require('./controllers/sql-lite-service')(app);
+        electron.app.cmcService = new CMCService();
+
+        const SqlLiteService = require('./controllers/sql-lite-service')(app);
+        electron.app.sqlLiteService = new SqlLiteService();
+
+		const RPCHandler = require('./controllers/rpc-handler')(app);
+        electron.app.rpcHandler = new RPCHandler();
+
+        electron.app.sqlLiteService.init();
+
+        // TODO
+        // 1) load ETH & KEY icons & prices
+        // 2) insert tokenPrices - set icon & price
+        // 3) notify angular app when done
+
 		if(electron.app.doc) {
 			electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
 		}
-		
+
 		//let tray = new Tray('assets/icons/png/256X256.png');
 		//tray.setToolTip('selfkey');
 
@@ -150,9 +166,9 @@ function onReady(app) {
 			app.config.user = userConfig;
 		});
 
-		electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
-			if(electron.app.asyncRequestHandler[actionName]){
-				electron.app.asyncRequestHandler[actionName](event, actionId, actionName, args);
+		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
+			if(electron.app.rpcHandler[actionName]){
+				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
 	};
@@ -199,19 +215,19 @@ function setAutoUpdaterListeners (win) {
 	autoUpdater.on("error", (error) => {
 		log.warn('error: ' + error);
 	});
-	
+
 	autoUpdater.on("checking-for-update", ()=>{
 		log.warn('checking-for-update');
 	});
-	
+
 	autoUpdater.on("update-available", ()=>{
 		log.warn('update-available');
 	});
-	
+
 	autoUpdater.on("update-not-available", ()=>{
 		log.warn('update-not-available');
 	});
-	
+
 	autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL)=>{
 		log.warn('update-downloaded: ' + releaseName);
 		win.webContents.send('UPDATE_READY', releaseName);
@@ -219,7 +235,7 @@ function setAutoUpdaterListeners (win) {
 }
 
 /**
- * 
+ *
  */
 function handleSquirrelEvent() {
 	if (process.argv.length === 1) {
@@ -284,7 +300,7 @@ function handleSquirrelEvent() {
 }
 
 /**
- * 
+ *
  */
 function isDevMode(){
 	if (process.argv.length > 2) {

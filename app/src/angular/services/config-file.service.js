@@ -1,11 +1,13 @@
 'use strict';
 
+// TODO ------> REMOVE <--------
+
 const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const Ico = requireAppModule('angular/classes/ico');
 
 // Actually Local Storage Service
-function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
+function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService, RPCService) {
     'ngInject';
 
     $log.debug('ConfigFileService Initialized');
@@ -37,7 +39,7 @@ function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronServi
 
             let defer = $q.defer();
 
-            if (ElectronService.ipcRenderer) {
+            if (RPCService.ipcRenderer) {
                 ElectronService.initDataStore().then((data) => {
                     store = data;
 
