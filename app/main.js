@@ -6,7 +6,7 @@ const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
 
-const config = buildConfig (electron);
+const config = buildConfig(electron);
 
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
@@ -61,25 +61,28 @@ if (!handleSquirrelEvent()) {
  */
 function onReady(app) {
 	return function () {
-        app.config.userDataPath = electron.app.getPath('userData');
+		app.config.userDataPath = electron.app.getPath('userData');
 
-        const CMCService = require('./controllers/sql-lite-service')(app);
-        electron.app.cmcService = new CMCService();
+		const CMCService = require('./controllers/cmc-service')(app);
+		electron.app.cmcService = new CMCService();
 
-        const SqlLiteService = require('./controllers/sql-lite-service')(app);
-        electron.app.sqlLiteService = new SqlLiteService();
+		const SqlLiteService = require('./controllers/sql-lite-service')(app);
+		electron.app.sqlLiteService = new SqlLiteService();
 
 		const RPCHandler = require('./controllers/rpc-handler')(app);
-        electron.app.rpcHandler = new RPCHandler();
+		electron.app.rpcHandler = new RPCHandler();
 
-        electron.app.sqlLiteService.init();
+		electron.app.sqlLiteService.init();
 
-        // TODO
-        // 1) load ETH & KEY icons & prices
-        // 2) insert tokenPrices - set icon & price
-        // 3) notify angular app when done
+		//start update cmc data
+		electron.app.cmcService.startUpdateData();
 
-		if(electron.app.doc) {
+		// TODO
+		// 1) load ETH & KEY icons & prices
+		// 2) insert tokenPrices - set icon & price
+		// 3) notify angular app when done
+
+		if (electron.app.doc) {
 			electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
 		}
 
@@ -119,11 +122,11 @@ function onReady(app) {
 			app.win = null;
 		});
 
-		setAutoUpdaterListeners (app.win);
+		setAutoUpdaterListeners(app.win);
 
-		if(!isDevMode()){
+		if (!isDevMode()) {
 			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
-			setTimeout(()=>{
+			setTimeout(() => {
 				autoUpdater.checkForUpdates();
 			}, 5000);
 		}
@@ -139,11 +142,11 @@ function onReady(app) {
 
 		if (process.platform === 'darwin') {
 			template.unshift({
-			  label: electron.app.getName(),
-			  submenu: [
-				{label: "About", role: 'about'},
-				{label: "Quit", role: 'quit'}
-			  ]
+				label: electron.app.getName(),
+				submenu: [
+					{ label: "About", role: 'about' },
+					{ label: "Quit", role: 'quit' }
+				]
 			});
 		}
 
@@ -167,14 +170,14 @@ function onReady(app) {
 		});
 
 		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
-			if(electron.app.rpcHandler[actionName]){
+			if (electron.app.rpcHandler[actionName]) {
 				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
 	};
 }
 
-function onActivate (app) {
+function onActivate(app) {
 	return function () {
 		if (app.win === null) {
 			onReady(app);
@@ -182,13 +185,13 @@ function onActivate (app) {
 	}
 }
 
-function onWindowAllClosed () {
+function onWindowAllClosed() {
 	return () => {
 		return electron.app.quit();
 	}
 }
 
-function onWebContentsCreated(event, contents){
+function onWebContentsCreated(event, contents) {
 	contents.on('will-attach-webview', (event, webPreferences, params) => {
 		delete webPreferences.preload;
 		delete webPreferences.preloadURL;
@@ -198,37 +201,37 @@ function onWebContentsCreated(event, contents){
 		webPreferences.sandbox = true;
 
 		let found = false;
-		for(let i in config.common.allowedUrls){
-			if(params.src.startsWith(config.common.allowedUrls[i])){
+		for (let i in config.common.allowedUrls) {
+			if (params.src.startsWith(config.common.allowedUrls[i])) {
 				found = true;
 				break;
 			}
 		}
 
-		if(!found){
+		if (!found) {
 			return event.preventDefault()
 		}
 	});
 }
 
-function setAutoUpdaterListeners (win) {
+function setAutoUpdaterListeners(win) {
 	autoUpdater.on("error", (error) => {
 		log.warn('error: ' + error);
 	});
 
-	autoUpdater.on("checking-for-update", ()=>{
+	autoUpdater.on("checking-for-update", () => {
 		log.warn('checking-for-update');
 	});
 
-	autoUpdater.on("update-available", ()=>{
+	autoUpdater.on("update-available", () => {
 		log.warn('update-available');
 	});
 
-	autoUpdater.on("update-not-available", ()=>{
+	autoUpdater.on("update-not-available", () => {
 		log.warn('update-not-available');
 	});
 
-	autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL)=>{
+	autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL) => {
 		log.warn('update-downloaded: ' + releaseName);
 		win.webContents.send('UPDATE_READY', releaseName);
 	});
@@ -302,7 +305,7 @@ function handleSquirrelEvent() {
 /**
  *
  */
-function isDevMode(){
+function isDevMode() {
 	if (process.argv.length > 2) {
 		if (process.argv[2] === 'dev') {
 			return true;
@@ -311,7 +314,7 @@ function isDevMode(){
 	return false;
 }
 
-function buildConfig (electron) {
+function buildConfig(electron) {
 	let config = require('./config');
 
 	const envConfig = isDevMode() ? config.default : config.production;

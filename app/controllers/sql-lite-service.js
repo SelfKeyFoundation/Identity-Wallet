@@ -35,7 +35,7 @@ module.exports = function (app) {
                     table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                     table.integer('updatedAt');
                 }).then((resp) => {
-                    for(let i in countriesList){
+                    for (let i in countriesList) {
                         let item = countriesList[i];
                         createById('countries', item);
                     }
@@ -97,9 +97,9 @@ module.exports = function (app) {
                     table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                     table.integer('updatedAt');
                 }).then((resp) => {
-                    for(let i in ethTokensList){
+                    for (let i in ethTokensList) {
                         let item = ethTokensList[i];
-                        createById('tokens', {address: item.address, symbol: item.symbol, decimal: item.decimal});
+                        createById('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
                     }
                     console.log("Table:", "tokens", "created.");
                 });
@@ -368,8 +368,8 @@ module.exports = function (app) {
     controller.prototype.idAttributeTypes_selectAll = () => {
         return new Promise((resolve, reject) => {
             knex('id_attribute_types').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
+                if (rows && rows.length === 1) {
+                    resolve(rows[0]);
                 } else {
                     resolve(null);
                 }
@@ -396,6 +396,28 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.tokens_selectBySymbol = (symbol) => {
+        return new Promise((resolve, reject) => {
+            knex('tokens').select().where('symbol', symbol).then((rows) => {
+                if (rows && rows.length === 1) {
+                    resolve(rows[0]);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    controller.prototype.token_insert = (data) => {
+        return createById('tokens', data);
+    }
+
+    controller.prototype.token_update = (data) => {
+        return updateById('tokens', data);
+    }
+
     /**
      * token_prices
      */
@@ -413,8 +435,26 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.tokenPrices_select_by_symbol = (symbol) => {
+        return new Promise((resolve, reject) => {
+            knex('token_prices').select().where('symbol', symbol).then((rows) => {
+                if (rows && rows.length === 1) {
+                    resolve(rows[0]);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
     controller.prototype.tokenPrices_insert = (data) => {
         return createById('token_prices', data);
+    }
+
+    controller.prototype.tokenPrices_update = (data) => {
+        return updateById('token_prices', data);
     }
 
     /**
