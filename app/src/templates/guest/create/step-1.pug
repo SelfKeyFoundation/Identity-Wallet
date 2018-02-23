@@ -9,9 +9,9 @@
         .item-wrapper(layout="row", layout-align="center center")
             sk-icon(icon="upload-1", size-class="icon-size-43x35")
             .body
-                .title Create Basic ID
+                .title I am creating a new SelfKey Identity Wallet
                 .text
-                    | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System. 
+                    | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System.
                 .actions(style="margin-top: 30px;")
                     md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey Basic ID
 
@@ -20,10 +20,13 @@
         .item-wrapper(layout="row", layout-align="center center")
             sk-icon(icon="upload-1", size-class="icon-size-43x35")
             .body
-                .title Import My KYC File
+                .title I was approved in the SelfKey token sale KYC.
                 .text
-                    | If you completed KYC on the SelfKey.org website, you were 
-                    | emailed a verification code, which you can submit here. This code allows you to skip the Basic ID process.
+                    | If you completed KYC for the SelfKey token sale, you can download a KYC file to import and complete your Basic ID.
+                    | Please login at
+                    span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
+                        | https://token.selfkey.org
+                    |  to download your KYC file.
                 .text
                     md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
                         input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")

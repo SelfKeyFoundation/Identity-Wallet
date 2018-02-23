@@ -115,7 +115,7 @@ function SkIdAttributeDirective($rootScope, $log, $window, $mdDialog, $mdPanel, 
 
                 scope.addNewItemPromise = ConfigFileService.save();
                 scope.addNewItemPromise.then(() => {
-                    CommonService.showToast('success', 'added');
+                    CommonService.showToast('success', 'Added');
                 });
             }
 
