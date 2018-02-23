@@ -1,0 +1,32 @@
+[
+    {
+        "key": "first_name",
+        "category": "global_attribute",
+        "type": "static_data",
+        "entity": ["individual"]
+    },
+    {
+        "key": "last_name",
+        "category": "global_attribute",
+        "type": "static_data",
+        "entity": ["individual"]
+    },
+    {
+        "key": "middle_name",
+        "category": "global_attribute",
+        "type": "static_data",
+        "entity": ["individual"]
+    },
+    {
+        "key": "national_id",
+        "category": "id_document",
+        "type": "document",
+        "entity": ["individual"]
+    },
+    {
+        "key": "id_selfie",
+        "category": "id_document",
+        "type": "document",
+        "entity": ["individual"]
+    }
+]
