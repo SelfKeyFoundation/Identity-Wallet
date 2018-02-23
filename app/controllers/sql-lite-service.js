@@ -5,6 +5,7 @@ const path = require('path');
 
 const countriesList = require('./../../assets/data/country-list.json');
 const ethTokensList = require('./../../assets/data/eth-tokens.json');
+const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 
 module.exports = function (app) {
 
@@ -32,7 +33,7 @@ module.exports = function (app) {
                         table.increments('id');
                         table.string('name').unique().notNullable();
                         table.string('code').unique().notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO bug
                         table.integer('updatedAt');
                     }).then((resp) => {
                         let promises = [];
@@ -41,10 +42,10 @@ module.exports = function (app) {
                             promises.push(insertIntoTable('countries', item));
                         }
 
-                        Promise.all(promises).then(()=>{
+                        Promise.all(promises).then(() => {
                             console.log("Table:", "countries", "created.");
                             resolve("countries created");
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             reject(error);
                         });
 
@@ -89,15 +90,26 @@ module.exports = function (app) {
                 if (!exists) {
                     knex.schema.createTable('id_attribute_types', (table) => {
                         table.increments('id');
-                        table.string('key').notNullable();
-                        table.string('category').unique().notNullable();
+                        table.string('key').unique().notNullable();
+                        table.string('category').notNullable();
                         table.string('type').notNullable();
                         table.string('entity').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('isInitial').defaultTo(0)
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
-                        console.log("Table:", "id_attribute_types", "created.");
-                        resolve("id_attribute_types created");
+                        let promises = [];
+                        for (let i in initialIdAttributeTypeList) {
+                            let item = initialIdAttributeTypeList[i];
+                            item.entity = 'json_array(' + JSON.stringify(item.entity) + ')';
+                            promises.push(knex('id_attribute_types').insert({ key: item.key, category: item.category, type: item.type, entity: item.entity, isInitial: 1, createdAt: new Date().getTime() }))
+                        }
+                        Promise.all(promises).then((resp) => {
+                            console.log("Table:", "id_attribute_types", "created.");
+                            resolve("id_attribute_types created");
+                        }).catch((error) => {
+                            reject(error);
+                        });
                     }).catch((error) => {
                         reject(error);
                     });
@@ -120,12 +132,12 @@ module.exports = function (app) {
                         table.string('address').notNullable();
                         table.binary('icon');
                         table.integer('isCustom').notNullable().defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         for (let i in ethTokensList) {
                             let item = ethTokensList[i];
-                            insertIntoTable('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
+                            insertIntoTable('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal, createdAt: new Date().getTime() });
                         }
                         console.log("Table:", "tokens", "created.");
                         resolve("tokens created");
@@ -503,7 +515,48 @@ module.exports = function (app) {
      * wallets
      */
     controller.prototype.wallets_insert = (data) => {
-        return insertIntoTable('wallets', data);
+        return knex.transaction((trx) => {
+            knex('wallets')
+                .transacting(trx)
+                .insert(data)
+                .then((resp) => {
+                    let id = resp[0];
+
+                    let promises = [];
+
+                    // add wallet settings
+                    promises.push(insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1 }, trx));
+
+                    // add wallet_tokens
+                    promises.push(insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1 }, trx));
+
+                    return new Promise((resolve, reject) => {
+                        Promise.all(promises).then(()=>{
+                            let savePromises = [];
+                            selectTable('id_attribute_types', {isInitial: 1}, trx).then((idAttributeTypes)=>{
+                                for(let i in idAttributeTypes){
+                                    let idAttributeType = idAttributeTypes[i];
+
+                                    // add initial id attributes
+                                    savePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeTypeId: idAttributeType.id }, trx));
+                                }
+
+                                Promise.all(savePromises).then(() => {
+                                    resolve(data);
+                                }).catch((error)=>{
+                                    reject({message: "wallets_insert_error", error: error});
+                                })
+                            }).catch((error)=>{
+                                reject({message: "wallets_insert_error", error: error});
+                            });
+                        }).catch((error)=>{
+                            reject({message: "wallets_insert_error", error: error});
+                        });
+                    });
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
     }
 
     controller.prototype.wallets_update = (data) => {
@@ -560,6 +613,53 @@ module.exports = function (app) {
                     resolve(rows);
                 } else {
                     resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    /**
+     * id_attributes
+     */
+    controller.prototype.idAttributes_selectAll = (walletId) => {
+        return new Promise((resolve, reject) => {
+            knex('id_attributes').select().where('walletId', walletId).then((rows) => {
+                if (rows && rows.length) {
+                    let idAttributes = {};
+
+                    let idAttributeItemPromises = [];
+                    let idAttributeItemValuesPromises = [];
+
+                    for (let i in rows) {
+                        let idAttribute = rows[i];
+                        if (!idAttribute) continue;
+
+                        idAttributes[idAttribute.id] = idAttribute;
+
+                        idAttributeItemPromises.push(selectTable('id_attribute_items', { idAttributeId: idAttribute.id }).then((items) => {
+                            idAttributes[idAttribute.id].items = items ? items : [];
+
+                            for (let j in items) {
+                                idAttributeItemValuesPromises.push(selectTable('id_attribute_item_values', { idAttributeItemId: items[j].id }).then((values) => {
+                                    items[j].values = values ? values : [];
+                                }));
+                            }
+                        }));
+                    }
+
+                    Promise.all(idAttributeItemPromises).then((items) => {
+                        Promise.all(idAttributeItemValuesPromises).then((values) => {
+                            resolve(idAttributes);
+                        }).catch((error) => {
+                            reject({ message: "error_while_selecting", error: error });
+                        });
+                    }).catch((error) => {
+                        reject({ message: "error_while_selecting", error: error });
+                    });
+                } else {
+                    resolve([]);
                 }
             }).catch((error) => {
                 reject({ message: "error_while_selecting", error: error });
@@ -627,16 +727,48 @@ module.exports = function (app) {
     }
 
     /**
+     * countries
+     */
+    controller.prototype.countries_selectAll = () => {
+        return new Promise((resolve, reject) => {
+            knex('countries').select().then((rows) => {
+                if (rows && rows.length) {
+                    resolve(rows);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    /**
      *
      */
-    function insertIntoTable(table, data) {
+    function insertIntoTable(table, data, trx) {
         return new Promise((resolve, reject) => {
-            knex.insert(data).into(table).then((resp) => {
+            let promise = null;
+            if (!trx) {
+                promise = knex(table).insert(data);
+            } else {
+                promise = knex(table).transacting(trx).insert(data);
+            }
+
+            promise.then((resp) => {
                 if (!resp || resp.length !== 1) {
                     return reject({ message: "error_while_creating" });
                 }
 
-                knex.select().from(table).where('id', resp[0]).then((rows) => {
+                let selectPromise = null;
+
+                if (trx) {
+                    selectPromise = knex(table).transacting(trx).select().where('id', resp[0])
+                } else {
+                    selectPromise = knex(table).select().where('id', resp[0])
+                }
+
+                selectPromise.then((rows) => {
                     if (rows && rows.length === 1) {
                         resolve(rows[0]);
                     } else {
@@ -674,7 +806,12 @@ module.exports = function (app) {
         });
     }
 
+    // TODO remove
     function getById(table, id) {
+        return selectById(table, id);
+    }
+
+    function selectById(table, id) {
         return new Promise((resolve, reject) => {
             knex(table).select().where('id', id).then((rows) => {
                 if (rows && rows.length === 1) {
@@ -682,6 +819,23 @@ module.exports = function (app) {
                 } else {
                     resolve(null);
                 }
+            }).catch((error) => {
+                reject({ message: "error_while_updating", error: error });
+            });
+        });
+    }
+
+    function selectTable(table, where, tx) {
+        return new Promise((resolve, reject) => {
+            let promise = null;
+            if(tx){
+                promise = knex(table).transacting(tx).select().where(where);
+            }else{
+                promise = knex(table).select().where(where);
+            }
+
+            promise.then((rows) => {
+                resolve(rows);
             }).catch((error) => {
                 reject({ message: "error_while_updating", error: error });
             });

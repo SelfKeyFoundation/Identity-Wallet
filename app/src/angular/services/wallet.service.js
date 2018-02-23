@@ -5,7 +5,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
     'ngInject';
 
     $log.info('WalletService Initialized');
@@ -49,15 +49,15 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         createKeystoreFile(password) {
             let defer = $q.defer();
 
-            let promise = ElectronService.generateEthereumWallet(password);
+            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null });
             promise.then((data) => {
                 if (data && data.privateKey && data.publicKey) {
                     wallet = new Wallet(data.privateKey, data.publicKey);
 
-                    TokenService.init();
+                    //TokenService.init();
 
                     // Broadcast about changes
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
+                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
 
                     defer.resolve(wallet);
                 } else {

@@ -1,6 +1,7 @@
 'use strict';
 
 const EthUnits = requireAppModule('angular/classes/eth-units');
+const Token = requireAppModule('angular/classes/token');
 
 let $rootScope, $q, Web3Service, CommonService, ElectronService;
 
@@ -26,6 +27,8 @@ class Wallet {
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
+
+        this.tokens = {};
     }
 
     getPrivateKey() {
@@ -44,9 +47,6 @@ class Wallet {
         return this.publicKeyHex;
     }
 
-    /**
-     * 
-     */
     loadBalance() {
         let defer = $q.defer();
         let promise = Web3Service.getBalance("0x" + this.getPublicKeyHex());
@@ -77,9 +77,6 @@ class Wallet {
         return defer.promise;
     }
 
-    /**
-     * 
-     */
     updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
         this.balanceInUsd = (Number(this.balanceEth) * Number(usdPerUnit));

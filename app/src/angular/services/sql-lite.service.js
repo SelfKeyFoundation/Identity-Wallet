@@ -14,6 +14,10 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
     let TOKEN_PRICES_STORE = {};
     let WALLETS_STORE = {};
     let GUIDE_SETTINGS = {};
+    let COUNTRIES = [];
+
+    
+
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
 
@@ -42,6 +46,7 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
             promises.push(this.loadTokens());
             promises.push(this.loadTokenPrices());
             promises.push(this.loadWallets());
+            promises.push(this.loadCountries());
 
             return $q.all(promises).then((data) => {
                 $rootScope.$broadcast(EVENTS.APP_DATA_LOAD);
@@ -94,16 +99,22 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
 
         loadGuideSettings() {
             return RPCService.makeCall('getGuideSettings', null).then((guideSettings) => {
-                console.log(guideSettings, "<<<<<<<<<<")
-
                 if (guideSettings && guideSettings.length) {
                     GUIDE_SETTINGS = guideSettings[0];
                 }
             });
         }
 
+        loadCountries() {
+            return RPCService.makeCall('getCountries', null).then((data) => {
+                if (data && data.length) {
+                    COUNTRIES = data;
+                }
+            });
+        }
+
         /**
-         *
+         * wallets
          */
         getWalletPublicKeys () {
             return Object.keys(WALLETS_STORE);
@@ -117,12 +128,22 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
             return RPCService.makeCall('saveWallet', data);
         }
 
+        /**
+         * guide_settings
+         */
         getGuideSettings () {
             return GUIDE_SETTINGS;
         }
 
         saveGuideSettings (data) {
             return RPCService.makeCall('saveGuideSettings', data);
+        }
+
+        /**
+         * countries
+         */
+        getCountries () {
+            return COUNTRIES;
         }
 
     }

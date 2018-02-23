@@ -403,11 +403,25 @@ module.exports = function (app) {
             let outputPath = keythereum.exportToFile(keystoreObject, keystoreFilePath);
             let keystoreFileName = path.basename(outputPath);
 
-            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+            electron.app.sqlLiteService.wallets_insert({
+                publicKey: keystoreObject.address,
+                keystoreFilePath: outputPath
+            }).then((resp)=>{
+                let privateKey = keythereum.recover(args.password, keystoreObject);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                    publicKey: keystoreObject.address,
+                    privateKey: privateKey,
+                    keystoreFilePath: outputPath
+                });
+            }).catch((error)=>{
+                console.log(error);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            });
+
+            /*
+            // TODO remove
             settings.setPath(storeFilePath);
-
             let storeData = settings.getAll();
-
             if (!storeData.wallets[keystoreObject.address]) {
                 storeData.wallets[keystoreObject.address] = {
                     type: 'ks',
@@ -417,12 +431,9 @@ module.exports = function (app) {
                 }
                 settings.setAll(storeData);
             }
+            */
 
-            let privateKey = keythereum.recover(args.password, keystoreObject);
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                publicKey: keystoreObject.address,
-                privateKey: privateKey
-            });
+
         });
     }
 
@@ -603,6 +614,24 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+
+    controller.prototype.getWalletByPublicKey = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.wallets_selectByPublicKey(args.publicKey).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getCountries = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.countries_selectAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
 
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {

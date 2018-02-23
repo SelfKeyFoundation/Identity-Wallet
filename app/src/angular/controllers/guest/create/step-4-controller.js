@@ -1,7 +1,9 @@
+'use strict';
+
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, WalletService, ConfigFileService, CommonService) {
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, SqlLiteService, WalletService, ConfigFileService, CommonService) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep4Controller", $stateParams);
@@ -27,7 +29,17 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
     function createKeystore() {
         let promise = WalletService.createKeystoreFile($scope.input.password);
         promise.then((wallet) => {
-            $rootScope.wallet = wallet;
+
+            SqlLiteService.loadWallets().then(()=>{
+                $rootScope.wallet = wallet;
+
+                
+
+            });
+
+
+            return;
+
 
             // reload store
             ConfigFileService.load().then((store) => {

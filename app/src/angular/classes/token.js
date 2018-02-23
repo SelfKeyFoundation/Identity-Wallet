@@ -8,7 +8,7 @@ let $rootScope, $q, Web3Service;
 class Token {
 
     /**
-     * 
+     *
      */
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
@@ -18,11 +18,11 @@ class Token {
     static set $rootScope(value) { $rootScope = value; }
 
     /**
-     * 
-     * @param {*} contractAddress 
-     * @param {*} symbol 
-     * @param {*} decimal 
-     * @param {*} type 
+     *
+     * @param {*} contractAddress
+     * @param {*} symbol
+     * @param {*} decimal
+     * @param {*} type
      */
     constructor(contractAddress, symbol, decimal, type) {
         this.contractAddress = contractAddress;
@@ -64,14 +64,14 @@ class Token {
     }
 
     /**
-     * 
+     *
      */
     setOwner(publicKeyHex) {
         this.currentOwnerPublicKeyHex = publicKeyHex
     }
 
     /**
-     * 
+     *
      */
     getBalanceDecimal() {
         return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
@@ -86,7 +86,7 @@ class Token {
     }
 
     /**
-     * 
+     *
      */
     loadBalanceFor(userAddress) {
         let defer = $q.defer();
@@ -121,7 +121,7 @@ class Token {
     }
 
     /**
-     * 
+     *
      */
     updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
