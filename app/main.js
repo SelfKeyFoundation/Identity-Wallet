@@ -72,7 +72,11 @@ function onReady(app) {
 		const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
 
-        electron.app.sqlLiteService.init();
+        electron.app.sqlLiteService.init().then(()=>{
+            console.log("!!!! created !!!!");
+        }).catch((error)=>{
+            console.log("222222222222222",error);
+        });
 
         // TODO
         // 1) load ETH & KEY icons & prices
