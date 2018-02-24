@@ -6,8 +6,57 @@
 
         .body-wrapper(layout="row", layout-align="start start")
             .left-side-wrapper(layout="column")
-                .id-attributes(layout="column")
-                    sk-id-attribute(ng-repeat="item in idAttributesList", id="{{item.type}}", data="item", config="idAttrbuteConfig")
+                .attributes-table-container
+                    .table-head
+                        span.table-head-text Your Attributes
+                        md-icon(md-svg-src="assets/images/icons/plus.svg")
+                    table.attributes-table
+                        thead
+                            tr
+                                td
+                                td Attribute
+                                td Record
+                                td Last Edited
+                                td
+                                td
+                        tbody
+                            tr(ng-repeat="item in attributesList")
+                                td
+                                    md-icon(md-svg-src="assets/images/icons/success-box.svg")
+                                td {{item.idAttributeType}}
+                                td {{item.items[0].values[0].staticData}}
+                                td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg")
 
+                .ID-documents-container
+                    .table-head
+                        span.table-head-text Your ID Documents
+                        md-icon(md-svg-src="assets/images/icons/plus.svg")
+                    table.ID-documents-table
+                        thead
+                            tr
+                                td
+                                td Type
+                                td Document ID
+                                td Last Edited
+                                td
+                                td
+                                td
+                        tbody
+                            tr(ng-repeat="item in idDocumentsList")
+                                td
+                                    md-icon(md-svg-src="assets/images/icons/success-box.svg")
+                                td {{item.idAttributeType}}
+                                td {{item.items[0].values[0].documentId}}
+                                td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg")
             .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
                 sk-user-info-box

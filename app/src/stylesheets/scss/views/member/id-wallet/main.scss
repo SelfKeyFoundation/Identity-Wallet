@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
 
-    >.center-container {
+    > .center-container {
         width: 1140px;
         margin-top: 40px;
 
@@ -29,9 +29,172 @@
             .left-side-wrapper {
                 width: 760px;
 
-                .id-attributes {
+                .attributes-table-container {
 
+                    .table-head {
+                        width: 100%;
+
+                        .table-head-text {
+                            color: #93a4af;
+                            font-family: ProximaNovaRegular;
+                        }
+
+                        md-icon {
+                            float: right;
+                            cursor: pointer;
+
+                            svg {
+                                fill: #262f39;
+                            }
+                        }
+                    }
+                    .attributes-table {
+                        width: 100%;
+                        background-color: #262f39;
+                        color: #fff;
+                        font-family: ProximaNovaRegular;
+                        border-collapse: collapse;
+                        margin-top: 10px;
+
+
+                        tbody {
+
+                            tr {
+
+                                td {
+                                    padding: 5px 0;
+                                    word-break: break-word;
+
+                                    md-icon {
+                                        cursor: pointer;
+                                    }
+                                }
+                                .action-columns {
+                                    width: 35px;
+                                }
+
+                                td:first-child {
+                                    width: 5%;
+                                    md-icon {
+
+                                        svg {
+                                            fill: green;
+                                        }
+                                    }
+                                }
+                                td:nth-child(2) {
+                                    width: 30%;
+                                }
+                                td:nth-child(3) {
+                                    width: 25%;
+                                }
+                            }
+
+                            tr:nth-child(even) {
+                                background-color: #262f39;
+                            }
+
+                            tr:nth-child(odd) {
+                                background-color: #303c49;
+                            }
+
+                        }
+                        thead {
+
+                            tr {
+
+                                td {
+                                    padding: 5px 0;
+                                }
+                            }
+                        }
+
+                    }
                 }
+
+                .ID-documents-container {
+                    margin-top: 30px;
+
+                    .table-head {
+                        width: 100%;
+
+                        .table-head-text {
+                            color: #93a4af;
+                            font-family: ProximaNovaRegular;
+                        }
+
+                        md-icon {
+                            float: right;
+                            cursor: pointer;
+                        }
+                    }
+                    .ID-documents-table {
+                        width: 100%;
+                        background-color: #262f39;
+                        color: #fff;
+                        font-family: ProximaNovaRegular;
+                        border-collapse: collapse;
+                        margin-top: 10px;
+
+
+                        tbody {
+
+                            tr {
+
+                                td {
+                                    padding: 5px 0;
+                                    word-break: break-word;
+
+                                    md-icon {
+                                        cursor: pointer;
+
+                                        svg {
+
+                                        }
+                                    }
+                                }
+                                .action-columns {
+                                    width: 35px;
+                                }
+                                td:first-child {
+                                    width: 5%;
+                                    md-icon {
+
+                                        svg {
+                                            fill: green;
+                                        }
+                                    }
+                                }
+                                td:nth-child(2) {
+                                    width: 30%;
+                                }
+                                td:nth-child(3) {
+                                    width: 25%;
+                                }
+                            }
+
+                            tr:nth-child(even) {
+                                background-color: #262f39;
+                            }
+
+                            tr:nth-child(odd) {
+                                background-color: #303c49;
+                            }
+
+                        }
+                        thead {
+
+                            tr {
+
+                                td {
+                                    padding: 5px 0;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
             }
 
             .right-side-wrapper {
