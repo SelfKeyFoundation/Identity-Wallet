@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams, ConfigFileService, ElectronService, CommonService) {
+function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams, ConfigFileService, ElectronService, CommonService, RPCService) {
     'ngInject'
 
     $log.info('MemberSetupAddDocumentController');
@@ -41,49 +41,24 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         }
     }
 
-    /*
+
     $scope.selectFile = (event) => {
-        let fileSelectPromise = ElectronService.openFileSelectDialog({
-            filters: [
-                { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
-            ],
-            maxFileSize: 50 * 1000 * 1000
-        });
 
-        fileSelectPromise.then((resp) => {
-            if (!resp || !resp.path) return;
+        let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
 
-            let moveFilePrimise = ElectronService.moveFile(resp.path, store.settings.documentsDirectoryPath);
-            moveFilePrimise.then((filePath) => {
 
-                let fileItem = {
-                    name: resp.name,
-                    mimeType: resp.mimeType,
-                    size: resp.size,
-                    path: filePath,
-                }
+        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
+        addDocumentPromise.then((resp) => {
+            console.log(">>>>>>>", resp);
 
-                let item = getIdAttributeItem($scope.selected.type);
-                if(item.values.length){
-                    item.values[0].value = fileItem;
-                }else{
-                    item.addValue(fileItem);
-                }
+            CommonService.showToast('success', 'Saved!');
+            $scope.selected.values = "Saved!";
 
-                ConfigFileService.save().then((newStore) => {
-                    store = newStore;
-                    $scope.selected.values = getIdAttributeItemValues($scope.selected.type);
-                    CommonService.showToast('success', 'Saved!');
-                });
-            }).catch((error) => {
-                $log.error(error);
-                CommonService.showToast('error', 'Error while selecting document');
-            });
         }).catch((error) => {
             CommonService.showToast('error', 'Max File Size: 50mb Allowed');
         });
     }
-    */
+
 
 };
 

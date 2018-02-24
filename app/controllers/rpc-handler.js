@@ -9,6 +9,7 @@ const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs-extra');
+const fsm = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
@@ -410,7 +411,7 @@ module.exports = function (app) {
                     keystoreFilePath: outputPath
                 },
                 args.basicInfo
-            ).then((resp)=>{
+            ).then((resp) => {
                 let privateKey = keythereum.recover(args.password, keystoreObject);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
                     id: resp.id,
@@ -418,7 +419,7 @@ module.exports = function (app) {
                     privateKey: privateKey,
                     keystoreFilePath: outputPath
                 });
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
@@ -590,46 +591,55 @@ module.exports = function (app) {
             };
 
             dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+                console.log("11111", filePaths);
                 if (filePaths) {
                     try {
                         const stats = fs.statSync(filePaths[0]);
                         let mimeType = mime.lookup(filePaths[0]);
                         let name = path.parse(filePaths[0]).base;
 
-                        if (args.maxFileSize) {
-                            if (stats.size > args.maxFileSize) {
-                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
-                            }
+                        if (stats.size > dialogConfig.maxFileSize) {
+                            console.log("2222222", stats.size, dialogConfig.maxFileSize);
+                            return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
                         }
 
-
-
-                        fs.open(filePaths[0], (status, fd) => {
+                        fsm.open(filePaths[0], 'r', (status, fd) => {
                             if (status) {
+                                console.log("333333", status);
                                 return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
                             }
 
                             var buffer = new Buffer(stats.size);
-                            fs.read(fd, buffer, 0, stats.size, 0, (err, num) => {
-                                // buffer
-                                
+                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                console.log("444444", buffer);
+                                electron.app.sqlLiteService.idAttributeItemValues_insert(
+                                    {
+                                        fileName: name,
+                                        buffer: buffer,
+                                        mimeType: mimeType,
+                                        fileSize: stats.size,
+                                        idAttributeItemValueId: args.idAttributeItemValueId
+                                    }
+                                ).then((resp) => {
+                                    console.log("555555", resp);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
+                                }).catch((error) => {
+                                    console.log("66666", error);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                                });
                             });
                         });
-
-                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                            name: name,
-                            mimeType: mimeType,
-                            path: filePaths[0],
-                            size: stats.size
-                        });
                     } catch (e) {
+                        console.log("77777", e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
+                    console.log("888888", e);
                     app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
                 }
             });
         } catch (e) {
+            console.log("999999", e);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
         }
     }

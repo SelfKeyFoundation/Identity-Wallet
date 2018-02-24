@@ -66,10 +66,10 @@ module.exports = function (app) {
                 if (!exists) {
                     knex.schema.createTable('documents', (table) => {
                         table.increments('id');
-                        table.string('fileName').notNullable();
+                        table.string('name').notNullable();
                         table.string('mimeType').notNullable();
                         table.integer('size').notNullable();
-                        table.binary('file').notNullable();
+                        table.binary('buffer').notNullable();
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -685,10 +685,118 @@ module.exports = function (app) {
     }
 
     /**
-     * id_attribute_values
+     * id_attribute_item_values
      */
-    controller.prototype.idAttributeValues_insert = (idAttributeItemId, staticData, documentId, order) => {
+    controller.prototype.idAttributeItemValues_insert = (args) => {
         // TODO
+        // args.buffer, args.fileName, args.mimeType, args.fileSize, args.idAttributeItemValueId, args.idAttributeItemId
+
+        // check if value exists
+        return knex.transaction((trx) => {
+            let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId)
+            selectPromise.then((idAttributeItemValues)=>{
+                return new Promise((resolve, reject) => {
+                    if(idAttributeItemValues && idAttributeItemValues.length){
+                        let idAttributeItemValue = idAttributeItemValues[0];
+
+                        // update idAttributeItemValue
+                        idAttributeItemValue.updatedAt = new Date().getTime();
+
+                        if(args.staticData){
+                            // update only static data
+                            idAttributeItemValue.staticData = staticData;
+                            let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                            updatePromise.then((rows)=>{
+                                resolve(idAttributeItemValue);
+                            }).catch((error)=>{
+                                reject(error);
+                            });
+
+                        }else if (args.buffer){
+
+                            if(idAttributeItemValue.documentId){
+                                let selectPromise = knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId);
+                                selectPromise.then((documents)=>{
+
+                                    documents[0].name = args.fileName;
+                                    documents[0].buffer = args.buffer;
+                                    documents[0].size = args.fileSize;
+                                    documents[0].mimeType = args.mimeType;
+                                    documents[0].updatedAt = new Date().getTime();
+
+                                    let updatePromise = knex('documents').transacting(trx).update(documents[0]).where('id', documents[0].id);
+
+                                    updatePromise.then((updatedIds)=>{
+                                        resolve(idAttributeItemValue);
+                                    }).catch((error)=>{
+                                        reject(error);
+                                    })
+
+                                }).catch((error)=>{
+                                    reject(error);
+                                });
+                            }else{
+                                knex('documents').transacting(trx).insert({
+                                    buffer: args.buffer,
+                                    name: args.fileName,
+                                    mimeType: args.mimeType,
+                                    size: args.fileSize,
+                                    createdAt: new Date().getTime()
+                                }).then((rows) => {
+                                    idAttributeItemValue.documentId = rows[0];
+                                    let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                                    updatePromise.then((rows)=>{
+                                        resolve(idAttributeItemValue);
+                                    }).catch((error)=>{
+                                        reject(error);
+                                    });
+                                }).catch((error)=>{
+                                    reject(error);
+                                });
+                            }
+                        }
+                    } else {
+                        // create idAttributeItemValue
+                        let idAttributeItemValue = {
+                            idAttributeItemId: args.idAttributeItemId,
+                            createdAt: new Date().getTime()
+                        }
+
+                        if(args.staticData){
+                            idAttributeItemValue.staticData = args.staticData;
+                            let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                            insertPromise.then((insertIds)=>{
+                                idAttributeItemValue.id = insertIds[0];
+                                resolve(idAttributeItemValue);
+                            }).catch((error)=>{
+                                reject(error);
+                            });
+                        }else if (args.buffer){
+                            knex('documents').transacting(trx).insert({
+                                buffer: args.buffer,
+                                name: args.fileName,
+                                mimeType: args.mimeType,
+                                size: args.fileSize,
+                                createdAt: new Date().getTime()
+                            }).then((insertIds) => {
+                                idAttributeItemValue.documentId = insertIds[0];
+                                let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                                insertPromise.then((insertIds)=>{
+                                    idAttributeItemValue.id = insertIds[0];
+                                    resolve(idAttributeItemValue);
+                                }).catch((error)=>{
+                                    reject(error);
+                                });
+                            }).catch((error)=>{
+                                reject(error);
+                            });
+                        }
+                    }
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
     }
 
     /**
