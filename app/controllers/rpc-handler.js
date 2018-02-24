@@ -68,6 +68,7 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
     }
 
+    // TODO remove
     controller.prototype.initDataStore = function (event, actionId, actionName, args) {
         let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 

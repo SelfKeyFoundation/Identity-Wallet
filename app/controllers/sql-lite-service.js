@@ -239,6 +239,7 @@ module.exports = function (app) {
                         table.increments('id');
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
+                        table.integer('order').defaultTo(0);
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -263,6 +264,7 @@ module.exports = function (app) {
                         table.integer('idAttributeId').notNullable().references('id_attributes.id');
                         table.string('name');
                         table.integer('isVerified').notNullable().defaultTo(0);
+                        table.integer('order').defaultTo(0);
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -287,6 +289,7 @@ module.exports = function (app) {
                         table.integer('idAttributeItemId').notNullable().references('id_attribute_items.id');
                         table.integer('documentId').references('documents.id');
                         table.string('staticData');
+                        table.integer('order').defaultTo(0);
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -679,6 +682,13 @@ module.exports = function (app) {
                 reject({ message: "error_while_selecting", error: error });
             });
         });
+    }
+
+    /**
+     * id_attribute_values
+     */
+    controller.prototype.idAttributeValues_insert = (idAttributeItemId, staticData, documentId, order) => {
+        // TODO
     }
 
     /**
