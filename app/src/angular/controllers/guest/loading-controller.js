@@ -1,21 +1,22 @@
-function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, Web3Service, SelfkeyService, SqlLiteService) {
+function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, EVENTS, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestLoadingController');
 
-    switch ($stateParams.redirectTo) {
-        case 'member.setup.view-keystore':
-            $state.go($stateParams.redirectTo);
-            $scope.subHeader = "Getting Ready"
-            break;
-        default:
-            init();
+    const status = {
+        localDataLoaded: false,
+        remoteDataLoaded: false
     }
+
+    init();
 
     function init() {
         $rootScope.loadingPromise = SqlLiteService.loadData();
-
         $rootScope.loadingPromise.then(() => {
+
+            $state.go('guest.welcome');
+
+            /*
             let publicKeys = SqlLiteService.getWalletPublicKeys();
             let wallets = SqlLiteService.getWallets();
 
@@ -29,12 +30,29 @@ function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, 
             } else {
                 $state.go('guest.welcome');
             }
+            */
 
             $rootScope.checkTermsAndConditions();
         }).catch((error) => {
             $log.error("error", error);
         });
     }
+
+    $rootScope.$on(EVENTS.APP_DATA_LOAD, () => {
+        status.localDataLoaded = true;
+
+        if(status.remoteDataLoaded){
+            $state.go('guest.welcome');
+        }
+    });
+
+    $rootScope.$on(EVENTS.REMOTE_DATA_LOAD, () => {
+        status.localDataLoaded = true;
+
+        if(status.remoteDataLoaded){
+            $state.go('guest.welcome');
+        }
+    });
 };
 
 module.exports = GuestLoadingController;

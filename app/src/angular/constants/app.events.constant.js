@@ -9,7 +9,7 @@ const AppEventsConstant = {
     /**
      * on SqlLite
      */
-    APP_DATA_LOAD: "app:data-load"
+    APP_DATA_LOAD: "local-data-load"
 };
 
 module.exports = AppEventsConstant;

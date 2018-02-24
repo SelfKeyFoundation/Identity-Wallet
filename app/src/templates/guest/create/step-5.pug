@@ -3,24 +3,24 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Save Your Keystore File
+            span.none-select-text Backup Your Wallet
         .content(layout="column")
-            
-            .title "This keystore file is the encrypted version of your private key, protected by the password you just created. This is the recommended version to save your private key."
-            
+
+            .title "Please download the Keystore File to keep a backup of your newly created wallet. This file is protected by the password you just created. Inside this file are your private keys that sign all transactions on the blockchain."
+
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
                 span.primary Backup your keystore file (UTC / JSON)
 
             .warning-description
                 .item
-                    span Do not lose it!
+                    span Don't lose it!
                     span It cannot be recovered if you lose it.
                 .item
-                    span Do not share it!
-                    span Your funds will be stolen if you use this file on a malicious/phishing site.
+                    span Don't share it!
+                    span Your assets could be stolen if you open this file on a malicious or phishing site.
                 .item
-                    span Make a backup!
-                    span Secure it like the millions of dollars it may one day be worth. 
+                    //span Make a backup!
+                    span Secure it like the millions of dollars it may one day be worth.
 
             .actions-wrapper
                 md-button.outline-orange(ng-click="nextStep($event)")

@@ -5,7 +5,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
     'ngInject';
 
     $log.info('WalletService Initialized');
@@ -46,18 +46,19 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             return '';
         }
 
-        createKeystoreFile(password) {
+        // ,,,
+        createKeystoreFile(password, basicInfo) {
             let defer = $q.defer();
 
-            let promise = ElectronService.generateEthereumWallet(password);
+            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null, basicInfo: basicInfo });
             promise.then((data) => {
                 if (data && data.privateKey && data.publicKey) {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
+                    wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
-                    TokenService.init();
+                    //TokenService.init();
 
                     // Broadcast about changes
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
+                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
 
                     defer.resolve(wallet);
                 } else {
@@ -127,21 +128,20 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             return defer.promise;
         }
 
-        unlockByFilePath(filePath, password) {
+        // ...
+        unlockByFilePath(walletId, filePath, password) {
             let defer = $q.defer();
 
-            let importPromise = ElectronService.importEtherKeystoreFile(filePath);
+            let importPromise = RPCService.makeCall('importEtherKeystoreFile', { filePath: filePath });
             importPromise.then((response) => {
-                let promise = ElectronService.unlockEtherKeystoreObject(response.keystoreObject, password);
+                let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
                 promise.then((data) => {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
 
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                    this.loadBalance();
+                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
+                    //this.loadBalance();
 
-                    $rootScope.wallet = wallet;
-
-                    defer.resolve(wallet);
+                    defer.resolve($rootScope.wallet);
                 }).catch((error) => {
                     defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
                 });

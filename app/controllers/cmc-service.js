@@ -30,7 +30,6 @@ module.exports = function (app) {
                 });
                 async.each(dataToInsert, function (item, callback) {
                     electron.app.sqlLiteService.tokenPrices_select_by_symbol(item.symbol).then(currResult => {
-                        console.log(currResult)
                         if (currResult) {
                             if (item.priceUSD !== currResult.priceUSD || item.priceBTC !== currResult.priceBTC || item.priceETH !== currResult.priceETH) {
                                 currResult.priceUSD = item.priceUSD;

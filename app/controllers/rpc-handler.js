@@ -9,6 +9,7 @@ const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs-extra');
+const fsm = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
@@ -69,6 +70,7 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
     }
 
+    // TODO remove
     controller.prototype.initDataStore = function (event, actionId, actionName, args) {
         let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 
@@ -404,11 +406,29 @@ module.exports = function (app) {
             let outputPath = keythereum.exportToFile(keystoreObject, keystoreFilePath);
             let keystoreFileName = path.basename(outputPath);
 
-            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+            electron.app.sqlLiteService.wallets_insert(
+                {
+                    publicKey: keystoreObject.address,
+                    keystoreFilePath: outputPath
+                },
+                args.basicInfo
+            ).then((resp) => {
+                let privateKey = keythereum.recover(args.password, keystoreObject);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                    id: resp.id,
+                    publicKey: keystoreObject.address,
+                    privateKey: privateKey,
+                    keystoreFilePath: outputPath
+                });
+            }).catch((error) => {
+                console.log(error);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            });
+
+            /*
+            // TODO remove
             settings.setPath(storeFilePath);
-
             let storeData = settings.getAll();
-
             if (!storeData.wallets[keystoreObject.address]) {
                 storeData.wallets[keystoreObject.address] = {
                     type: 'ks',
@@ -418,12 +438,9 @@ module.exports = function (app) {
                 }
                 settings.setAll(storeData);
             }
+            */
 
-            let privateKey = keythereum.recover(args.password, keystoreObject);
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                publicKey: keystoreObject.address,
-                privateKey: privateKey
-            });
+
         });
     }
 
@@ -562,6 +579,72 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
     }
 
+    controller.prototype.openDocumentAddDialog = function (event, actionId, actionName, args) {
+        try {
+            let dialogConfig = {
+                title: 'Choose Document',
+                message: 'Choose file',
+                properties: ['openFile'],
+                filters: [
+                    { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
+                ],
+                maxFileSize: 50 * 1000 * 1000
+            };
+
+            dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+                console.log("11111", filePaths);
+                if (filePaths) {
+                    try {
+                        const stats = fs.statSync(filePaths[0]);
+                        let mimeType = mime.lookup(filePaths[0]);
+                        let name = path.parse(filePaths[0]).base;
+
+                        if (stats.size > dialogConfig.maxFileSize) {
+                            console.log("2222222", stats.size, dialogConfig.maxFileSize);
+                            return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
+                        }
+
+                        fsm.open(filePaths[0], 'r', (status, fd) => {
+                            if (status) {
+                                console.log("333333", status);
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            }
+
+                            var buffer = new Buffer(stats.size);
+                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                console.log("444444", buffer);
+                                electron.app.sqlLiteService.idAttributeItemValues_insert(
+                                    {
+                                        fileName: name,
+                                        buffer: buffer,
+                                        mimeType: mimeType,
+                                        fileSize: stats.size,
+                                        idAttributeItemValueId: args.idAttributeItemValueId
+                                    }
+                                ).then((resp) => {
+                                    console.log("555555", resp);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
+                                }).catch((error) => {
+                                    console.log("66666", error);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                                });
+                            });
+                        });
+                    } catch (e) {
+                        console.log("77777", e);
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                    }
+                } else {
+                    console.log("888888", e);
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                }
+            });
+        } catch (e) {
+            console.log("999999", e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+        }
+    }
+
     /**
      * SQL Lite
      */
@@ -605,6 +688,22 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getWalletByPublicKey = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.wallets_selectByPublicKey(args.publicKey).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getCountries = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.countries_selectAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -621,9 +720,13 @@ module.exports = function (app) {
         });
     }
 
-    controller.prototype.loadCmcIconImage = (event, actionId, actionName, args) => {
-        //TODO load one image icon 
-    };
+    controller.prototype.getIdAttributes = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttributes_selectAll(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
 
     controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
         const iconList = config.obligatoryImageIds;

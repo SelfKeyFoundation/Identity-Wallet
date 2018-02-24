@@ -1,20 +1,23 @@
 'use strict';
 
 const EthUnits = requireAppModule('angular/classes/eth-units');
+const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, Web3Service, CommonService, ElectronService;
+let $rootScope, $q, Web3Service, CommonService, ElectronService, SqlLiteService;
 
 let readyToShowNotification = false;
 
 class Wallet {
 
+    static set $rootScope(value) { $rootScope = value; }
+    static set $q(value) { $q = value; }
     static set Web3Service(value) { Web3Service = value; }
     static set CommonService(value) { CommonService = value; }
-    static set $q(value) { $q = value; }
-    static set $rootScope(value) { $rootScope = value; }
-    static set ElectronService(value) { ElectronService = value; }
+    static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
+    static set SqlLiteService(value) { SqlLiteService = value; }
 
-    constructor(privateKey, publicKey) {
+    constructor(id, privateKey, publicKey) {
+        this.id = id;
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
 
@@ -26,6 +29,10 @@ class Wallet {
 
         this.balanceInUsd = null;
         this.usdPerUnit = null;
+
+
+        this.tokens = {};
+        this.idAttributes = {}
     }
 
     getPrivateKey() {
@@ -44,9 +51,6 @@ class Wallet {
         return this.publicKeyHex;
     }
 
-    /**
-     * 
-     */
     loadBalance() {
         let defer = $q.defer();
         let promise = Web3Service.getBalance("0x" + this.getPublicKeyHex());
@@ -77,12 +81,37 @@ class Wallet {
         return defer.promise;
     }
 
-    /**
-     * 
-     */
     updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
         this.balanceInUsd = (Number(this.balanceEth) * Number(usdPerUnit));
+    }
+
+    /**
+     * ID Attributes
+     */
+    loadIdAttributes () {
+        let defer = $q.defer();
+
+        SqlLiteService.loadIdAttributes(this.id).then((idAttributes)=>{
+            for(let i in idAttributes){
+                this.idAttributes[idAttributes[i].idAttributeType] = idAttributes[i];
+            }
+
+            defer.resolve(this.idAttributes);
+        }).catch((error)=>{
+            defer.reject(error);
+        });
+
+        return defer.promise;
+    }
+
+    getIdAttributes () {
+        return this.idAttributes;
+    }
+
+    // temporary method - while we support only one item/value per attribute
+    getIdAttributeItemValue (idAttributeTypeKey) {
+        return this.idAttributes[idAttributeTypeKey] && this.idAttributes[idAttributeTypeKey].items && this.idAttributes[idAttributeTypeKey].items.length && this.idAttributes[idAttributeTypeKey].items[0].values && this.idAttributes[idAttributeTypeKey].items[0].values.length && (this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId) ? this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId : null;
     }
 }
 

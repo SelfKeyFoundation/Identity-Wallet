@@ -14,27 +14,30 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             $state.go('guest.loading');
             defer.reject();
         } else {
+            // temporary
+            defer.resolve();
             /**
              *
              */
-            TokenService.init($rootScope.wallet.getPublicKeyHex());
-            $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
+            //TokenService.init($rootScope.wallet.getPublicKeyHex());
+            //$rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
 
             // 1) TODO - get prices
 
             // set token prices (TODO)
-            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
-            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
+            //$rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
+            //$rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
 
             // update balances
-            let ethBalancePromise = $rootScope.wallet.loadBalance();
-            let keyBalancePromise = $rootScope.primaryToken.loadBalance();
+            //let ethBalancePromise = $rootScope.wallet.loadBalance();
+            //let keyBalancePromise = $rootScope.primaryToken.loadBalance();
 
-            let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
+            //let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
 
             /**
              *
              */
+            /*
             $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
                 if ($rootScope.PRICES["ETH"]) {
                     $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
@@ -44,9 +47,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
                 }
 
-                /**
-                 *
-                 */
                 $rootScope.balanceWatcherPromise = $interval(() => {
                     if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
                         SelfkeyService.getPrices(["ETH", "KEY"]).then((resp) => {
@@ -68,29 +68,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 $state.go('guest.error.offline');
                 defer.reject();
             });
-        }
-
-        return defer.promise;
-    }
-
-    function checkKyc($rootScope, $q, $state, ConfigFileService, TokenService, Web3Service, checkWallet) {
-        let defer = $q.defer();
-
-        let store = ConfigFileService.getStore();
-
-        /**
-         *
-         */
-        let walletStore = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-
-        /**
-         * check kyc status
-         */
-        if (!walletStore.data || !walletStore.data.idAttributes || Object.keys(walletStore.data.idAttributes).length <= 0) {
-            $state.go('member.setup.choose');
-            defer.resolve();
-        } else {
-            defer.resolve();
+            */
         }
 
         return defer.promise;
@@ -296,8 +274,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             resolve: {
-                checkWallet: checkWallet,
-                //checkKyc: checkKyc
+                checkWallet: checkWallet
             }
         })
 

@@ -1,8 +1,8 @@
 .checklist(layout-fill, layout="column", layout-align="center center")
 
     .header-wrapper(layout="column", layout-align="center start")
-        span Welcome to SelfKey
-        span We’ll need some basic information from you to get setup. Please have these items ready.
+        span Welcome to SelfKey Identity Wallet
+        span We’ll need some basic information from you to Get set up. Please have these items ready.
 
     .content-wrapper.sk-box
         .content(layout="column")
@@ -22,8 +22,8 @@
 
                 .item
                     .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="name[2]")
-                        span(ng-if="!name[2]") 3
+                        img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('middle_name')")
+                        span(ng-if="!$root.wallet.getIdAttributeItemValue('middle_name')") 3
                     span Middle Name
 
                 .item
