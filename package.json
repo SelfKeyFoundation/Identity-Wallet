@@ -28,6 +28,7 @@
     "angular-zxcvbn": "3.2.2",
     "async": "2.6.0",
     "bignumber.js": "4.1.0",
+    "bluebird": "^3.5.1",
     "camelcase": "4.1.0",
     "crypto": "1.0.1",
     "decompress": "4.2.0",

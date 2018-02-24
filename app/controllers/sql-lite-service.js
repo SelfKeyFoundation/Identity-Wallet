@@ -1,5 +1,6 @@
 'use strict';
 
+const Promise = require('bluebird');
 const electron = require('electron');
 const path = require('path');
 
@@ -65,12 +66,12 @@ module.exports = function (app) {
                 if (!exists) {
                     knex.schema.createTable('documents', (table) => {
                         table.increments('id');
-                        table.string('filename').notNullable();
-                        table.string('mime_type').notNullable();
+                        table.string('fileName').notNullable();
+                        table.string('mimeType').notNullable();
                         table.integer('size').notNullable();
                         table.binary('file').notNullable();
-                        table.integer('created_at').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updated_at');
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "documents", "created.");
                         resolve("documents created");
@@ -89,8 +90,7 @@ module.exports = function (app) {
             knex.schema.hasTable('id_attribute_types').then(function (exists) {
                 if (!exists) {
                     knex.schema.createTable('id_attribute_types', (table) => {
-                        table.increments('id');
-                        table.string('key').unique().notNullable();
+                        table.string('key').primary();
                         table.string('category').notNullable();
                         table.string('type').notNullable();
                         table.string('entity').notNullable();
@@ -101,7 +101,7 @@ module.exports = function (app) {
                         let promises = [];
                         for (let i in initialIdAttributeTypeList) {
                             let item = initialIdAttributeTypeList[i];
-                            item.entity = 'json_array(' + JSON.stringify(item.entity) + ')';
+                            item.entity = JSON.stringify(item.entity);
                             promises.push(knex('id_attribute_types').insert({ key: item.key, category: item.category, type: item.type, entity: item.entity, isInitial: 1, createdAt: new Date().getTime() }))
                         }
                         Promise.all(promises).then((resp) => {
@@ -238,7 +238,7 @@ module.exports = function (app) {
                     knex.schema.createTable('id_attributes', (table) => {
                         table.increments('id');
                         table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('idAttributeTypeId').notNullable().references('id_attribute_types.id');
+                        table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -263,7 +263,7 @@ module.exports = function (app) {
                         table.integer('idAttributeId').notNullable().references('id_attributes.id');
                         table.string('name');
                         table.integer('isVerified').notNullable().defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "id_attribute_items", "created.");
@@ -514,7 +514,7 @@ module.exports = function (app) {
     /**
      * wallets
      */
-    controller.prototype.wallets_insert = (data) => {
+    controller.prototype.wallets_insert = (data, basicInfo) => {
         return knex.transaction((trx) => {
             knex('wallets')
                 .transacting(trx)
@@ -532,20 +532,34 @@ module.exports = function (app) {
 
                     return new Promise((resolve, reject) => {
                         Promise.all(promises).then(()=>{
-                            let savePromises = [];
+                            let idAttributesSavePromises = [];
+                            let idAttributeItemsSavePromises = [];
+                            let idAttributeItemValuesSavePromises = [];
+
                             selectTable('id_attribute_types', {isInitial: 1}, trx).then((idAttributeTypes)=>{
                                 for(let i in idAttributeTypes){
                                     let idAttributeType = idAttributeTypes[i];
 
                                     // add initial id attributes
-                                    savePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeTypeId: idAttributeType.id }, trx));
+                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key }, trx).then((idAttribute)=>{
+                                        idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem)=>{
+                                            idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: basicInfo[idAttributeType.key], createdAt: new Date().getTime() }));
+                                        }));
+                                    }));
                                 }
 
-                                Promise.all(savePromises).then(() => {
+                                let finalPromises = [];
+                                finalPromises.push(Promise.all(idAttributesSavePromises));
+                                finalPromises.push(Promise.all(idAttributeItemsSavePromises));
+                                finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
+
+                                Promise.each(finalPromises, (el)=>{return el}).then(()=>{
+                                    data.id = id;
                                     resolve(data);
                                 }).catch((error)=>{
                                     reject({message: "wallets_insert_error", error: error});
-                                })
+                                });
+
                             }).catch((error)=>{
                                 reject({message: "wallets_insert_error", error: error});
                             });

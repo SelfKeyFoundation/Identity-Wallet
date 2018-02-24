@@ -6,10 +6,10 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
     $scope.countryList = SqlLiteService.getCountries();
 
     $scope.input = {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        countryOfResidency: ""
+        first_name: "",
+        last_name: "",
+        middle_name: "",
+        country_of_residency: ""
     };
 
     $scope.nextStep = (event, form) => {

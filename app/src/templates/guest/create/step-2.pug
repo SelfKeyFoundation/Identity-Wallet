@@ -9,25 +9,25 @@
             span.none-select-text Identity Wallet Details
         form.content(name="basicInfoForm", layout="column")
             md-input-container.sk-input-box.sk-input-non-floating
-                label First Name 
-                input(name="firstName", type="text", ng-model="input.firstName", ng-maxlength="500", ng-required="true")
+                label First Name
+                input(name="firstName", type="text", ng-model="input.first_name", ng-maxlength="500", ng-required="true")
                 div(ng-messages="basicInfoForm.firstName.$error")
                     div(ng-message="maxlength") The First Name has to be less than 500 characters long.
                     div(ng-message="required") This field is required. Please enter First Name.
             md-input-container.sk-input-box.sk-input-non-floating
                 label Last Name
-                input(type="text", name="lastName", ng-model="input.lastName", ng-required="true", ng-maxlength="500")
+                input(type="text", name="lastName", ng-model="input.last_name", ng-required="true", ng-maxlength="500")
                 div(ng-messages="basicInfoForm.lastName.$error")
                     div(ng-message="maxlength") The First Name has to be less than 500 characters long.
                     div(ng-message="required") This field is required. Please enter Last Name.
             md-input-container.sk-input-box.sk-input-non-floating
                 label Middle Name
-                input(type="text", name="middleName", ng-model="input.middleName", ng-maxlength="500")
+                input(type="text", name="middleName", ng-model="input.middle_name", ng-maxlength="500")
                 div(ng-messages="basicInfoForm.middleName.$error")
                     div(ng-message="maxlength") The Middle Name has to be less than 500 characters long.
             md-input-container.sk-input-box.sk-input-non-floating
                 label Country Of Residency
-                md-select.sk-select(name="countryOfResidency", ng-model="input.countryOfResidency", ng-required="true")
+                md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
                     md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")
                     div(ng-message="required") This field is required. Please enter Country Of Residency.

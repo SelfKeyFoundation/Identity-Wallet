@@ -403,12 +403,16 @@ module.exports = function (app) {
             let outputPath = keythereum.exportToFile(keystoreObject, keystoreFilePath);
             let keystoreFileName = path.basename(outputPath);
 
-            electron.app.sqlLiteService.wallets_insert({
-                publicKey: keystoreObject.address,
-                keystoreFilePath: outputPath
-            }).then((resp)=>{
+            electron.app.sqlLiteService.wallets_insert(
+                {
+                    publicKey: keystoreObject.address,
+                    keystoreFilePath: outputPath
+                },
+                args.basicInfo
+            ).then((resp)=>{
                 let privateKey = keythereum.recover(args.password, keystoreObject);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                    id: resp.id,
                     publicKey: keystoreObject.address,
                     privateKey: privateKey,
                     keystoreFilePath: outputPath
@@ -631,8 +635,6 @@ module.exports = function (app) {
         });
     }
 
-
-
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -649,6 +651,13 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getIdAttributes = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttributes_selectAll(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
 
 
 

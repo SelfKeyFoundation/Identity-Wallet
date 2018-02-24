@@ -1,5 +1,6 @@
 'use strict';
 
+const Wallet = requireAppModule('angular/classes/wallet');
 const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const Ico = requireAppModule('angular/classes/ico');
@@ -16,8 +17,6 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
     let GUIDE_SETTINGS = {};
     let COUNTRIES = [];
 
-    
-
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
 
@@ -25,6 +24,8 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
 
         constructor() {
             if (RPCService.ipcRenderer) {
+                Wallet.SqlLiteService = this;
+
                 this.loadData().then((resp) => {
                     $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
                 }).catch((error) => {
@@ -144,6 +145,20 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
          */
         getCountries () {
             return COUNTRIES;
+        }
+
+        /**
+         * id_attribute_types
+         */
+        getIdAttributeTypes () {
+            return ID_ATTRIBUTE_TYPES_STORE;
+        }
+
+        /**
+         * id_attributes
+         */
+        loadIdAttributes (walletId) {
+            return RPCService.makeCall('getIdAttributes', {walletId: walletId});
         }
 
     }

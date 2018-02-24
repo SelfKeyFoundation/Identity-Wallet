@@ -18,6 +18,12 @@
         "entity": ["individual"]
     },
     {
+        "key": "country_of_residency",
+        "category": "global_attribute",
+        "type": "static_data",
+        "entity": ["individual"]
+    },
+    {
         "key": "national_id",
         "category": "id_document",
         "type": "document",

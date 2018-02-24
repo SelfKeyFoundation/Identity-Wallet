@@ -46,13 +46,13 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             return '';
         }
 
-        createKeystoreFile(password) {
+        createKeystoreFile(password, basicInfo) {
             let defer = $q.defer();
 
-            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null });
+            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null, basicInfo: basicInfo });
             promise.then((data) => {
                 if (data && data.privateKey && data.publicKey) {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
+                    wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
                     //TokenService.init();
 
