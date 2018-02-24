@@ -1,11 +1,12 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, ConfigFileService) {
+function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('MemberIdWalletMainController');
 
-    $scope.idAttributesList = ConfigFileService.getIdAttributesStore();
+
+    $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
 
     $scope.idAttrbuteConfig = {}
 
@@ -32,6 +33,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, Confi
                 excludeTypes: excludeTypes
             }
         }).then((selectedIdAttributeType) => {
+            /*
             let idAttributesStore = ConfigFileService.getIdAttributesStore();
 
             if (!idAttributesStore[selectedIdAttributeType.key]) {
@@ -41,10 +43,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, Confi
             excludeTypes.push(selectedIdAttributeType.key)
 
             $log.info('selected id attribute type:', idAttributesStore);
-
-            //ConfigFileService.save().then((resp) => {
-            //    $rootScope.$broadcast('id-attributes-changed', respItem);
-            //});
+            */
         });
     }
 

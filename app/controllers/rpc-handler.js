@@ -577,6 +577,63 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
     }
 
+    controller.prototype.openDocumentAddDialog = function (event, actionId, actionName, args) {
+        try {
+            let dialogConfig = {
+                title: 'Choose Document',
+                message: 'Choose file',
+                properties: ['openFile'],
+                filters: [
+                    { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
+                ],
+                maxFileSize: 50 * 1000 * 1000
+            };
+
+            dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+                if (filePaths) {
+                    try {
+                        const stats = fs.statSync(filePaths[0]);
+                        let mimeType = mime.lookup(filePaths[0]);
+                        let name = path.parse(filePaths[0]).base;
+
+                        if (args.maxFileSize) {
+                            if (stats.size > args.maxFileSize) {
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
+                            }
+                        }
+
+
+
+                        fs.open(filePaths[0], (status, fd) => {
+                            if (status) {
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            }
+
+                            var buffer = new Buffer(stats.size);
+                            fs.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                // buffer
+                                
+                            });
+                        });
+
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                            name: name,
+                            mimeType: mimeType,
+                            path: filePaths[0],
+                            size: stats.size
+                        });
+                    } catch (e) {
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                    }
+                } else {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                }
+            });
+        } catch (e) {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+        }
+    }
+
     /**
      * SQL Lite
      */

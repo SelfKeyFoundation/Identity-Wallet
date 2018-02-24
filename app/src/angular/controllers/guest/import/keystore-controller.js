@@ -1,17 +1,16 @@
-function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ElectronService, ConfigFileService, WalletService) {
+function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ElectronService, ConfigFileService, WalletService, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
 
+    const wallets = SqlLiteService.getWallets();
+
+    $scope.publicKeyList = SqlLiteService.getWalletPublicKeys();
     $scope.isUnlocking = false;
-
     $rootScope.wallet = null;
-
-    let store = ConfigFileService.getStore();
-
     $scope.type = $stateParams.type;
 
-    $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
+
 
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
@@ -38,15 +37,15 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         let selectedFilePath = $scope.userInput.selectedFilePath;
 
         if ($scope.type === 'select') {
-            if (store.wallets[$scope.userInput.selectedPublicKey].type === 'ks') {
-                selectedFilePath = store.wallets[$scope.userInput.selectedPublicKey].keystoreFilePath;
+            if (wallets[$scope.userInput.selectedPublicKey]) {
+                selectedFilePath = wallets[$scope.userInput.selectedPublicKey].keystoreFilePath;
             }
         }
 
         if (!selectedFilePath || !$scope.userInput.password) return;
 
         $scope.isUnlocking = true;
-        let promise = WalletService.unlockByFilePath(selectedFilePath, $scope.userInput.password);
+        let promise = WalletService.unlockByFilePath(wallets[$scope.userInput.selectedPublicKey].id, selectedFilePath, $scope.userInput.password);
         promise.then((wallet) => {
             $state.go('member.dashboard.main');
         }).catch((error) => {

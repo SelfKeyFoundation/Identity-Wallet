@@ -46,6 +46,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             return '';
         }
 
+        // ,,,
         createKeystoreFile(password, basicInfo) {
             let defer = $q.defer();
 
@@ -127,21 +128,20 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             return defer.promise;
         }
 
-        unlockByFilePath(filePath, password) {
+        // ...
+        unlockByFilePath(walletId, filePath, password) {
             let defer = $q.defer();
 
-            let importPromise = ElectronService.importEtherKeystoreFile(filePath);
+            let importPromise = RPCService.makeCall('importEtherKeystoreFile', { filePath: filePath });
             importPromise.then((response) => {
-                let promise = ElectronService.unlockEtherKeystoreObject(response.keystoreObject, password);
+                let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
                 promise.then((data) => {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
 
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                    this.loadBalance();
+                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
+                    //this.loadBalance();
 
-                    $rootScope.wallet = wallet;
-
-                    defer.resolve(wallet);
+                    defer.resolve($rootScope.wallet);
                 }).catch((error) => {
                     defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
                 });
