@@ -249,6 +249,12 @@ h2 {
   width: 16px !important;
   height: 16px !important; }
 
+.icon-size-18x18 {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important; }
+
 .icon-size-24x23 {
   width: 24px !important;
   height: 23px !important; }
@@ -17501,8 +17507,10 @@ md-dialog.add-id-attribute {
             width: 35px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
             width: 5%; }
-            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
-              fill: green; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
+              padding-left: 5px; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
+                fill: green; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
             width: 30%; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
@@ -17539,8 +17547,10 @@ md-dialog.add-id-attribute {
               width: 35px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child {
               width: 5%; }
-              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
-                fill: green; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon {
+                padding-left: 5px; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
+                  fill: green; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(2) {
               width: 30%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(3) {

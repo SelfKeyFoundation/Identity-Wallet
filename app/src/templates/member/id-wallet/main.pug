@@ -22,7 +22,7 @@
                         tbody
                             tr(ng-repeat="item in attributesList")
                                 td
-                                    md-icon(md-svg-src="assets/images/icons/success-box.svg")
+                                    md-icon.icon-size-18x18(md-svg-src="assets/images/icons/success-box.svg")
                                 td {{item.idAttributeType}}
                                 td {{item.items[0].values[0].staticData}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
@@ -48,7 +48,7 @@
                         tbody
                             tr(ng-repeat="item in idDocumentsList")
                                 td
-                                    md-icon(md-svg-src="assets/images/icons/success-box.svg")
+                                    md-icon.icon-size-18x18(md-svg-src="assets/images/icons/success-box.svg")
                                 td {{item.idAttributeType}}
                                 td {{item.items[0].values[0].documentId}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
