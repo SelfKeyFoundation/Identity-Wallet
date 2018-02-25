@@ -15,12 +15,12 @@
         "startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev",
         "start-auto": "gulp && gulp start",
         "make-auto": "gulp && gulp make",
-        "full": "NODE_ENV=test ./test/utils/npm_full.sh",
+        "full": "bash full.sh",
         "test": "node test/test.js",
         "lint": "eslint 'app/src/**/*.js'",
         "precommit": "lint-staged",
         "cz": "git-cz",
-        "docker": "docker-compose build && docker-compose up -d"
+        "docker": "OSENV=docker docker-compose build && docker-compose up -d"
     },
     "lint-staged": {
         "*.{js,json,css,md}": [
