@@ -613,6 +613,24 @@ module.exports = function (app) {
     }
 
     /**
+     * wallet_tokens
+     */
+    controller.prototype.walletTokens_selectByWalletId = (walletId) => {
+        return new Promise((resolve, reject) => {
+            let promise = knex('wallet_tokens')
+            .select('wallet_tokens.*', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
+            .leftJoin('tokens', 'tokenId', 'tokens.id')
+            .where({walletId: walletId, recordState: 1});
+
+            promise.then((rows)=>{
+                resolve(rows);
+            }).catch((error)=>{
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    /**
      * id_attribute_types
      */
     controller.prototype.idAttributeTypes_insert = (data) => {
@@ -957,7 +975,12 @@ module.exports = function (app) {
         });
     }
 
+    // TODO rename to select
     function selectTable(table, where, tx) {
+        return select(table, where, tx);
+    }
+
+    function select(table, where, tx) {
         return new Promise((resolve, reject) => {
             let promise = null;
             if(tx){

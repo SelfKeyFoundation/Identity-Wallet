@@ -1,4 +1,4 @@
-function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, $mdDialog, TokenService, ConfigFileService, CommonService) {
+function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q, $timeout, $stateParams, $sce, $mdDialog) {
     'ngInject'
 
     $log.info('MemberMarketplaceIcoAcceptTermsController', $stateParams);
@@ -8,6 +8,7 @@ function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q,
      */
     $scope.ico = $stateParams.selected;
 
+    /*
     let token = TokenService.getBySymbol($scope.ico.symbol.toUpperCase());
 
     $scope.terms = {
@@ -38,6 +39,7 @@ function MemberMarketplaceIcoAcceptTermsController($rootScope, $scope, $log, $q,
             }
         })
     }
+    */
 };
 
 module.exports = MemberMarketplaceIcoAcceptTermsController;

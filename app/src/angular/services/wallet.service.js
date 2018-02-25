@@ -5,7 +5,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, EtherScanService, Web3Service, CommonService, CONFIG) {
     'ngInject';
 
     $log.info('WalletService Initialized');
@@ -94,7 +94,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             promise.then((data) => {
                 wallet = new Wallet(data.privateKey, data.publicKey);
 
-                TokenService.init();
+                //TokenService.init();
 
                 $rootScope.wallet = wallet;
 
@@ -199,12 +199,13 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
         loadTokenBalance(symbol) {
             // TODO check Address
             if (symbol) {
-                TokenService.loadBalanceBySymbol(wallet.getPublicKeyHex(), symbol);
+                //TokenService.loadBalanceBySymbol(wallet.getPublicKeyHex(), symbol);
             } else {
-                TokenService.loadAllbalance(wallet.getPublicKeyHex());
+                //TokenService.loadAllbalance(wallet.getPublicKeyHex());
             }
         }
 
+        /*
         getTransactionCount() {
             let defer = $q.defer();
             // TODO check wallet address
@@ -216,6 +217,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             });
             return defer.promise;
         }
+        */
 
         getGasPrice() {
             let defer = $q.defer();
@@ -237,6 +239,8 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
          * @param {wei} gasLimitWei
          * @param {hex} contractDataHex Contract data
          */
+        // TODO moved inside Wallet class ($rootScope.wallet.generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID))
+        /*
         generateEthRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex) {
             let defer = $q.defer();
 
@@ -267,10 +271,13 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
 
             return defer.promise;
         }
+        */
 
+        // TODO moveed inside Token class
+        // $rootScope.wallet.tokens[theSymbol].generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, chainID)
+        /*
         generateTokenRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, tokenSymbol) {
             let defer = $q.defer();
-
             let token = TokenService.getBySymbol(tokenSymbol);
             if (!token) {
                 defer.reject("ERR_TOKEN_NOT_FOUND");
@@ -307,6 +314,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
 
             return defer.promise;
         }
+        */
     };
 
     return new WalletService();

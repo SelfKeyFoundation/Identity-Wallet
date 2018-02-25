@@ -727,6 +727,15 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getWalletTokens = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.walletTokens_selectByWalletId(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
 
 
 

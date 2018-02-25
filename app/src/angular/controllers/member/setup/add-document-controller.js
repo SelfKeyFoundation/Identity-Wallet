@@ -43,16 +43,16 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
 
 
     $scope.selectFile = (event) => {
-
         let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
-
 
         let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
         addDocumentPromise.then((resp) => {
-            console.log(">>>>>>>", resp);
-
-            CommonService.showToast('success', 'Saved!');
-            $scope.selected.values = "Saved!";
+            if(!resp) return;
+            $rootScope.wallet.loadIdAttributes().then((resp)=>{
+                $scope.idAttributes = $rootScope.wallet.getIdAttributes();
+                CommonService.showToast('success', 'Saved!');
+                $scope.selected.values = "Saved!";
+            });
 
         }).catch((error) => {
             CommonService.showToast('error', 'Max File Size: 50mb Allowed');

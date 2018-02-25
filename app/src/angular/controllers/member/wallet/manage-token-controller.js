@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService, ConfigFileService, WalletService) {
+function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, ConfigFileService, WalletService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -8,7 +8,7 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
         "eth": "Ethereum"
     }
 
-    $scope.selectedToken = TokenService.getBySymbol($stateParams.id.toUpperCase());
+    $scope.selectedToken = $rootScope.wallet.tokens[$stateParams.id.toUpperCase()];
 
     $scope.publicKeyHex = "0x" + $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();

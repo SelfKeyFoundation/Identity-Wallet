@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberSetupLayoutController($rootScope, $scope, $log, $state, ConfigFileService) {
+function MemberSetupLayoutController($rootScope, $scope, $log, $state) {
     'ngInject'
 
     $log.info('MemberSetupLayoutController');

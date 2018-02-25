@@ -10,6 +10,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
 
+    // TODO
+    return;
+
     function getTotalBalanceInUsd() {
         return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
     }

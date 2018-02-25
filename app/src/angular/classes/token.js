@@ -22,13 +22,11 @@ class Token {
      * @param {*} contractAddress
      * @param {*} symbol
      * @param {*} decimal
-     * @param {*} type
      */
-    constructor(contractAddress, symbol, decimal, type) {
+    constructor(contractAddress, symbol, decimal, wallet) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
         this.decimal = decimal;
-        this.type = type;
 
         this.balanceHex = null;
         this.balanceDecimal = null;
@@ -36,9 +34,7 @@ class Token {
         this.balanceInUsd = null;
         this.usdPerUnit = null;
 
-        this.currentOwnerPublicKeyHex = null;
-
-        this.promise = null;
+        this.wallet = wallet;
     }
 
     static generateContractData(toAdd, value, decimal) {
@@ -61,13 +57,6 @@ class Token {
 
     static generateBalanceData(userAddress, contractAddress) {
         return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
-    }
-
-    /**
-     *
-     */
-    setOwner(publicKeyHex) {
-        this.currentOwnerPublicKeyHex = publicKeyHex
     }
 
     /**
@@ -104,7 +93,7 @@ class Token {
                 this.updatePriceInUsd(this.usdPerUnit);
             }
 
-            if(balanceHex !== oldBalanceHex){
+            if (balanceHex !== oldBalanceHex) {
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
             }
 
@@ -117,7 +106,7 @@ class Token {
     }
 
     loadBalance() {
-        return this.loadBalanceFor(this.currentOwnerPublicKeyHex);
+        return this.loadBalanceFor(this.wallet.getPublicKeyHex());
     }
 
     /**
@@ -126,6 +115,45 @@ class Token {
     updatePriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
+    }
+
+    /**
+     *
+     * @param {*} toAddressHex
+     * @param {*} valueWei
+     * @param {*} gasPriceWei
+     * @param {*} gasLimitWei
+     * @param {*} chainID
+     */
+    generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, chainID) {
+        let defer = $q.defer();
+
+        let promise = Web3Service.getTransactionCount(this.wallet.getPublicKeyHex());
+        promise.then((nonce) => {
+            let genResult = this.generateContractData(toAddressHex, valueWei);
+            if (genResult.error) {
+                defer.reject(genResult.error);
+            } else {
+                let rawTx = {
+                    nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
+                    gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
+                    gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
+                    to: EthUtils.sanitizeHex(this.contractAddress),
+                    value: "0x00",
+                    data: EthUtils.sanitizeHex(genResult.data),
+                    chainId: chainID
+                }
+
+                let eTx = new Tx(rawTx);
+                eTx.sign(this.wallet.privateKey);
+
+                defer.resolve('0x' + eTx.serialize().toString('hex'));
+            }
+        }).catch((error) => {
+            defer.reject(error);
+        });
+
+        return defer.promise;
     }
 }
 
