@@ -15,11 +15,13 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
+            console.log($rootScope.wallet.tokens, "<<<<<<<<<<", $rootScope.wallet.tokens[scope.symbol.toUpperCase()])
+
             loadBalance();
 
             function loadBalance() {
                 if (scope.symbol !== 'eth') {
-                    scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
+                    scope.token = $rootScope.wallet.tokens[scope.symbol.toUpperCase()];
                     let promise = scope.token.loadBalance();
                     promise.then((token) => {
                         scope.balance = scope.token.getBalanceDecimal();

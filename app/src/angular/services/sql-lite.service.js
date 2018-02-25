@@ -130,6 +130,14 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
         }
 
         /**
+         * wallet_tokens
+         */
+        loadWalletTokens (walletId) {
+            return RPCService.makeCall('getWalletTokens', {walletId: walletId});
+        }
+
+
+        /**
          * guide_settings
          */
         getGuideSettings () {

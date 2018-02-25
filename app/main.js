@@ -72,39 +72,14 @@ function onReady(app) {
 		const RPCHandler = require('./controllers/rpc-handler')(app);
 		electron.app.rpcHandler = new RPCHandler();
 
-
 		electron.app.sqlLiteService.init().then(() => {
-			console.log("!!!! created !!!!");
-
-			electron.app.sqlLiteService.idAttributes_selectAll(2).then((data) => {
-				console.log(data, "<<<<<");
-
-				console.log("--------");
-
-				for (let i in data) {
-					let idAttributeItem = data[i]
-					console.log("attribute:", idAttributeItem.id);
-
-					for (let j in idAttributeItem.items) {
-						let item = idAttributeItem.items[j];
-						console.log("item", item.id);
-
-						for (let k in item.values) {
-							let a = item.values[k];
-
-							console.log("value", a);
-						}
-					}
-				}
-
-			});
+			//start update cmc data
+			electron.app.cmcService.startUpdateData();
 		}).catch((error) => {
-			console.log("222222222222222", error);
+			console.log("error", error);
 		});
 
 
-		//start update cmc data
-		electron.app.cmcService.startUpdateData();
 
 		// TODO
 		// 1) load ETH & KEY icons & prices

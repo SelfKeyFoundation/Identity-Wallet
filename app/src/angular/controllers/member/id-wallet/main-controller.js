@@ -6,12 +6,28 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
     $log.info('MemberIdWalletMainController');
 
 
+    $scope.attributesList = [];
+    $scope.idDocumentsList = [];
+
+
+    let ID_ATTRIBUTE_TYPES = SqlLiteService.getIdAttributeTypes();
     $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
+
+    if ($scope.idAttributesList) {
+        angular.forEach($scope.idAttributesList, function (item) {
+            if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
+                $scope.idDocumentsList.push(item)
+            } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
+                $scope.attributesList.push(item)
+            }
+        })
+    }
+
 
     $scope.idAttrbuteConfig = {}
 
     let excludeTypes = [];
-    for(let i in $scope.idAttributesList){
+    for (let i in $scope.idAttributesList) {
         excludeTypes.push($scope.idAttributesList[i].type)
     }
 
@@ -46,7 +62,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
             */
         });
     }
-
 
 
 };

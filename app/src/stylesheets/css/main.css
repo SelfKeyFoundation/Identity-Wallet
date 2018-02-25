@@ -249,6 +249,12 @@ h2 {
   width: 16px !important;
   height: 16px !important; }
 
+.icon-size-18x18 {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important; }
+
 .icon-size-24x23 {
   width: 24px !important;
   height: 23px !important; }
@@ -17475,6 +17481,86 @@ md-dialog.add-id-attribute {
       margin-top: 40px; }
       .id-wallet-main > .center-container .body-wrapper .left-side-wrapper {
         width: 760px; }
+        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head {
+          width: 100%; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head .table-head-text {
+            color: #93a4af;
+            font-family: ProximaNovaRegular; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon {
+            float: right;
+            cursor: pointer; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon svg {
+              fill: #262f39; }
+        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table {
+          width: 100%;
+          background-color: #262f39;
+          color: #fff;
+          font-family: ProximaNovaRegular;
+          border-collapse: collapse;
+          margin-top: 10px; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td {
+            padding: 5px 0;
+            word-break: break-word; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td md-icon {
+              cursor: pointer; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
+            width: 35px; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
+            width: 5%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
+              padding-left: 5px; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
+                fill: green; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
+            width: 30%; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
+            width: 25%; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(even) {
+            background-color: #262f39; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(odd) {
+            background-color: #303c49; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table thead tr td {
+            padding: 5px 0; }
+        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container {
+          margin-top: 30px; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head {
+            width: 100%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head .table-head-text {
+              color: #93a4af;
+              font-family: ProximaNovaRegular; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head md-icon {
+              float: right;
+              cursor: pointer; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table {
+            width: 100%;
+            background-color: #262f39;
+            color: #fff;
+            font-family: ProximaNovaRegular;
+            border-collapse: collapse;
+            margin-top: 10px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td {
+              padding: 5px 0;
+              word-break: break-word; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td md-icon {
+                cursor: pointer; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr .action-columns {
+              width: 35px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child {
+              width: 5%; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon {
+                padding-left: 5px; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
+                  fill: green; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(2) {
+              width: 30%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(3) {
+              width: 25%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(even) {
+              background-color: #262f39; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(odd) {
+              background-color: #303c49; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table thead tr td {
+              padding: 5px 0; }
 
 .ico-list-item-content-wrappper {
   flex-direction: row;

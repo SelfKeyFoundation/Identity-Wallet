@@ -48,10 +48,13 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         let promise = WalletService.unlockByFilePath(wallets[$scope.userInput.selectedPublicKey].id, selectedFilePath, $scope.userInput.password);
         promise.then((wallet) => {
 
-            wallet.loadIdAttributes().then(()=>{
+            let initialPromises = [];
+            initialPromises.push(wallet.loadIdAttributes());
+            initialPromises.push(wallet.loadTokens());
+
+            $q.all(initialPromises).then(()=>{
                 $state.go('member.dashboard.main');
             });
-
 
         }).catch((error) => {
             $log.error(error);

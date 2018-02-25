@@ -728,6 +728,14 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getWalletTokens = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.walletTokens_selectByWalletId(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
         const iconList = config.obligatoryImageIds;
         async.each(iconList, function (item, callback) {
@@ -750,6 +758,7 @@ module.exports = function (app) {
             }
         });
     };
+
 
     return controller;
 }

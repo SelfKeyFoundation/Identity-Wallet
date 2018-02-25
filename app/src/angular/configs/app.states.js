@@ -7,7 +7,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(appName);
 
-    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service, SelfkeyService) {
+    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, Web3Service, SelfkeyService) {
         let defer = $q.defer();
 
         if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {

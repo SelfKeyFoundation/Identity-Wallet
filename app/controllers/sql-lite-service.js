@@ -662,6 +662,24 @@ module.exports = function (app) {
     }
 
     /**
+     * wallet_tokens
+     */
+    controller.prototype.walletTokens_selectByWalletId = (walletId) => {
+        return new Promise((resolve, reject) => {
+            let promise = knex('wallet_tokens')
+                .select('wallet_tokens.*', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
+                .leftJoin('tokens', 'tokenId', 'tokens.id')
+                .where({ walletId: walletId, recordState: 1 });
+
+            promise.then((rows) => {
+                resolve(rows);
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    /**
      * id_attribute_types
      */
     controller.prototype.idAttributeTypes_insert = (data) => {
@@ -675,8 +693,8 @@ module.exports = function (app) {
     controller.prototype.idAttributeTypes_selectAll = () => {
         return new Promise((resolve, reject) => {
             knex('id_attribute_types').select().then((rows) => {
-                if (rows && rows.length === 1) {
-                    resolve(rows[0]);
+                if (rows && rows.length) {
+                    resolve(rows);
                 } else {
                     resolve(null);
                 }
@@ -866,17 +884,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.tokens_selectBySymbol = (symbol) => {
-        return new Promise((resolve, reject) => {
-            knex('tokens').select().where('symbol', symbol).then((rows) => {
-                if (rows && rows.length === 1) {
-                    resolve(rows[0]);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
+        return selectTable('tokens', { symbol: 'eth' });
     }
 
     controller.prototype.token_insert = (data) => {
@@ -904,18 +912,8 @@ module.exports = function (app) {
         });
     }
 
-    controller.prototype.tokenPrices_select_by_symbol = (symbol) => {
-        return new Promise((resolve, reject) => {
-            knex('token_prices').select().where('symbol', symbol).then((rows) => {
-                if (rows && rows.length === 1) {
-                    resolve(rows[0]);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
+    controller.prototype.tokenPrices_selectBySymbol = (symbol) => {
+        return selectTable('token_prices', { symbol: symbol });
     }
 
     controller.prototype.tokenPrices_insert = (data) => {
@@ -1046,7 +1044,12 @@ module.exports = function (app) {
         });
     }
 
+    // TODO rename to select
     function selectTable(table, where, tx) {
+        return select(table, where, tx);
+    }
+
+    function select(table, where, tx) {
         return new Promise((resolve, reject) => {
             let promise = null;
             if (tx) {

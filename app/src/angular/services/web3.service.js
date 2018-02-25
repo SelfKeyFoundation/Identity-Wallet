@@ -69,12 +69,11 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             }, 1);
 
             $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-                let self = this;
-                let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
-
-                $timeout(() => {
-                    fn.call(self);
-                }, 3000)
+                //let self = this;
+                //let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
+                //$timeout(() => {
+                //    fn.call(self);
+                //}, 3000)
             });
         }
 
@@ -361,16 +360,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             });
         }
 
-        static getBlock(blockNumber, withTransactions) {
-            withTransactions = withTransactions || false;
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
-
-            return defer.promise;
-        }
-
         getMostRecentBlockNumber() {
             let defer = $q.defer();
 
@@ -451,6 +440,16 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             let defer = $q.defer();
 
             Web3Service.waitForTicket(defer, 'getTransactionReceipt', [transactionHex]);
+
+            return defer.promise;
+        }
+
+        static getBlock(blockNumber, withTransactions) {
+            withTransactions = withTransactions || false;
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
 
             return defer.promise;
         }

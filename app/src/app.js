@@ -104,8 +104,8 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 const WalletService = requireAppModule('angular/services/wallet.service');
 angular.module('kyc-wallet').service('WalletService', WalletService);
 
-const TokenService = requireAppModule('angular/services/token.service');
-angular.module('kyc-wallet').service('TokenService', TokenService);
+//const TokenService = requireAppModule('angular/services/token.service');
+//angular.module('kyc-wallet').service('TokenService', TokenService);
 
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
@@ -119,8 +119,8 @@ angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 const SkIconDirective = requireAppModule('angular/directives/commons/sk-icon.directive');
 angular.module('kyc-wallet').directive('skIcon', SkIconDirective);
 
-const SkMessageDirective = requireAppModule('angular/directives/commons/sk-message.directive');
-angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
+//const SkMessageDirective = requireAppModule('angular/directives/commons/sk-message.directive');
+//angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
 
 const SkSelectIfDirective = requireAppModule('angular/directives/commons/sk-select-if.directive');
 angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);
@@ -131,8 +131,8 @@ angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 const SkLinearProgressDirective = requireAppModule('angular/directives/commons/sk-linear-progress.directive');
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
-const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
-angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
+//const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
+//angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
 const SkTokenBoxDirective = requireAppModule('angular/directives/commons/sk-token-box.directive');
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
@@ -140,8 +140,8 @@ angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
-const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
-angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
+//const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
+//angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
 
 const SkRemindersBoxDirective = requireAppModule('angular/directives/commons/sk-reminders-box.directive');
 angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
@@ -149,8 +149,8 @@ angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective
 const SkUserInfoBoxDirective = requireAppModule('angular/directives/commons/sk-user-info-box.directive');
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
-const SkKycRequirementsBoxDirective = requireAppModule('angular/directives/commons/sk-kyc-requirements-box.directive');
-angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
+//const SkKycRequirementsBoxDirective = requireAppModule('angular/directives/commons/sk-kyc-requirements-box.directive');
+//angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
 
 const ScrollToEndDirective = requireAppModule('angular/directives/commons/scroll-to-end.directive');
 angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
@@ -158,8 +158,8 @@ angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 const CopyToClipboardDirective = requireAppModule('angular/directives/commons/copy-to-clipboard.directive');
 angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
 
-const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
-angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
+//const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
+//angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
 
 
 /**
