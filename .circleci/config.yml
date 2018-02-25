@@ -21,11 +21,11 @@ jobs:
           command: npm i
       - run:
           name: Build App
-          command: NODE_ENV=test npm run make
+          command: NODE_ENV=test OSENV=circle npm run make
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
           name: Run Spectron Tests
-          command: npm run test
+          command: NODE_ENV=test OSENV=circle npm run test
