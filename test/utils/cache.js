@@ -1,36 +1,35 @@
-const electron = require("electron");
-Application = require("spectron").Application;
-c = require("./utils/cache.js");
-t = require("./utils/tools.js");
-b = require("./utils/build.js");
-delay = require("delay");
-chalk = require("chalk");
-exec = require("child_process").exec;
-pwd = process.cwd();
-usr = process.argv[2] || 0;
-platform = process.argv[3] || "local";
-OSENV = process.env.OSENV || "osx";
-appCacheName = require("../package.json").productName;
-appBuildName = require("../package.json").config.forge.electronPackagerConfig
-    .name;
-appVersion = require("../package.json").version;
-user = require("os").userInfo().username;
+const electron = require('electron')
+Application = require('spectron').Application
+c = require('./utils/cache.js')
+t = require('./utils/tools.js')
+b = require('./utils/build.js')
+delay = require('delay')
+chalk = require('chalk')
+exec = require('child_process').exec
+pwd = process.cwd()
+usr = process.argv[2] || 0
+platform = process.argv[3] || 'local'
+OSENV = process.env.OSENV || 'osx'
+appCacheName = require('../package.json').productName
+appBuildName = require('../package.json').config.forge.electronPackagerConfig.name
+appVersion = require('../package.json').version
+user = require('os').userInfo().username
 
-var conf = [];
+var conf = []
 conf = [
-    {
-        os: "osx",
-        platform: "local",
-        remove: [
-            "/Users/" + user + "/Library/Application Support/Electron",
-            "/Users/" + user + "/Library/Application Support/ID Wallet",
-            "/Users/" + user + "/Library/Application Support/id-wallet",
-            "/Users/" + user + "/Library/Application Support/" + appCacheName,
-            "/Users/" + user + "/Library/Application Support/" + appBuildName
-            //'rm -rf ' + pwd + '/' + appBuildName + '/out'
-        ]
-    }
-];
+	{
+		os: 'osx',
+		platform: 'local',
+		remove: [
+			'/Users/' + user + '/Library/Application Support/Electron',
+			'/Users/' + user + '/Library/Application Support/ID Wallet',
+			'/Users/' + user + '/Library/Application Support/id-wallet',
+			'/Users/' + user + '/Library/Application Support/' + appCacheName,
+			'/Users/' + user + '/Library/Application Support/' + appBuildName
+			//'rm -rf ' + pwd + '/' + appBuildName + '/out'
+		]
+	}
+]
 
 // Init
 // ************
@@ -62,10 +61,10 @@ conf = [
 // }
 
 function init() {
-    return new Promise((r, rj) => {
-        exec("bash " + pwd + "/test/utils/quick.sh " + user, err => {
-            if (err) rj(err);
-            r("done");
-        });
-    });
+	return new Promise((r, rj) => {
+		exec('bash ' + pwd + '/test/utils/quick.sh ' + user, err => {
+			if (err) rj(err)
+			r('done')
+		})
+	})
 }
