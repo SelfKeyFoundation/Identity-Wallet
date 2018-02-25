@@ -1,10 +1,13 @@
 os: osx
 language: node_js
 node_js: 9
+env:
+  - NODE_ENV=test
+  - OSENV=travis
 before_install:
   - brew install wine rpm
   - npm i -g gulp-cli
   - npm i -g electron-packager
 before_script:
-  - NODE_ENV=test npm run make
+  - npm run make
 script: npm run test
