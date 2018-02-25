@@ -8,30 +8,31 @@ md-sidenav.md-sidenav-right(md-component-id="right")
 
         .sk-right-sidenav__content(layout="column", layout-align="space-between center", flex)
             .top-part-container(layout="column", style="width: 100%;")
+
                 .sk-right-sidenav__section.section-1
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')") Dashboard
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="getInfoDialog($event,'Coming soon', 'marketplace')") Marketplace
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.navigate($event, 'member.marketplace.main')") Marketplace (Coming Soon)
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.kyc-docs')", ng-click="$root.navigate($event, 'member.kyc-docs.main')") KYC Documents (Coming Soon)
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.idw')", ng-click="$root.navigate($event, 'member.idw.main')") Identity Wallet (Coming Soon)
-                .sk-right-sidenav__h-divider
-
-            .bottom-part-container(layout="column", style="width: 100%;")
-                .sk-right-sidenav__section.section-1
-                    #aboutLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://www.selfkey.org')") About Selfkey
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.id-wallet')", ng-click="$root.navigate($event, 'member.id-wallet.main')") Identity Wallet
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
                     #helpLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
-                
-                span#version(style="color: #fff; text-align: right; padding: 20px;") V{{$root.version}}
+                .sk-right-sidenav__h-divider
 
+                .sk-right-sidenav__section
+                    #aboutLink.sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="getInfoDialog($event,'Coming soon', 'About')") About
+                .sk-right-sidenav__h-divider
 
+                .sk-right-sidenav__section
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')") Dashboard
+                .sk-right-sidenav__h-divider
+
+                .sk-right-sidenav__section
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.submitIdea')", ng-click="getInfoDialog($event,'Coming soon','submitIdea')") Submit An Idea
+                .sk-right-sidenav__h-divider
+
+                .sk-right-sidenav__section
+                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.version')",ng-click="getVersion($event)") Version
+                .sk-right-sidenav__h-divider

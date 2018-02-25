@@ -1,8 +1,8 @@
 "use strict";
 
 function CopyToClipboardDirective($document, $timeout) {
-	"ngInject";
-	const animationDuration = 500;
+    'ngInject';
+    const animationDuration = 500;
 
 	return {
 		restrict: "A",
@@ -25,15 +25,17 @@ function CopyToClipboardDirective($document, $timeout) {
 					break;
 			}
 
-			element.bind("click", function(e) {
-				let fadeUpEl = null;
+            switch (copyAnimation) {
+                case 'default':
+                    originalText = angular.copy(element.html());
+                    break;
+                case 'fadeUp':
+                    angular.element(element[0]).css({ "position": "relative" });
+                    break;
+            }
 
-				let messageElement = angular.element(
-					'<textarea class="copy-to-clipboard selection">' +
-						scope.copyToClipboard +
-						"</textarea>"
-				);
-				$document[0].body.append(messageElement[0]);
+            element.bind('click', function (e) {
+                let fadeUpEl = null;
 
 				switch (copyAnimation) {
 					case "default":
@@ -50,21 +52,34 @@ function CopyToClipboardDirective($document, $timeout) {
 				$timeout(() => {
 					messageElement[0].remove();
 
-					switch (copyAnimation) {
-						case "default":
-							element.html(originalText);
-							break;
-						case "fadeUp":
-							fadeUpEl[0].remove();
-							break;
-					}
-				}, animationDuration);
+                switch (copyAnimation) {
+                    case 'default':
+                        element.html("COPIED");
+                        break;
+                    case 'fadeUp':
+                        fadeUpEl = angular.element('<div class="copy-to-clipboard-msg">Copied</div>');
+                        element[0].append(fadeUpEl[0]);
+                        break;
+                }
 
-				messageElement[0].select();
-				document.execCommand("copy");
-			});
-		}
-	};
+                $timeout(() => {
+                    messageElement[0].remove();
+
+                    switch (copyAnimation) {
+                        case 'default':
+                            element.html(originalText);
+                            break;
+                        case 'fadeUp':
+                            fadeUpEl[0].remove();
+                            break;
+                    }
+                }, animationDuration);
+
+                messageElement[0].select();
+                document.execCommand('copy');
+            });
+        }
+    }
 }
 
 module.exports = CopyToClipboardDirective;

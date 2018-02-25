@@ -4,6 +4,7 @@
         .description
             | You will need to either setup a Basic ID for your Identity Wallet or if you completed the KYC on the SelfKey.org website to
             | join the token sale, simply upload the file we provided.
+
     .content-wrapper.sk-box(layout="column", layout-align="center center")
         .item-wrapper(layout="row", layout-align="center center")
             sk-icon(icon="upload-1", size-class="icon-size-43x35")
@@ -26,5 +27,6 @@
                 .text
                     md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
                         input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
+
                 #importKYC.actions
                     md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

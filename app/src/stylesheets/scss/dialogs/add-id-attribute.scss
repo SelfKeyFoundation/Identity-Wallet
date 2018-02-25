@@ -1,0 +1,88 @@
+md-dialog {
+    &.add-id-attribute {
+        min-width: 100%;
+        min-height: 100%;
+        background-image: linear-gradient(121deg, #1e262e, #1e262e);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 780px;
+            .header-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                md-icon {
+                    width: 70px;
+                    height: 70px;
+                }
+                .title {
+                    margin-top: 24px;
+                    font-family: ProximaNovaRegular;
+                    font-size: 24px;
+                    line-height: 1.5;
+                    color: #ffffff;
+                }
+                .subtitle {
+                    margin-top: 24px;
+                    font-family: ProximaNovaRegular;
+                    font-size: 18px;
+                    line-height: 1.72;
+                    text-align: center;
+                    color: #93b0c1;
+                }
+            }
+            .sk-box {
+                margin-top: 48px;
+                .content {
+                    md-input-container {
+                        width: calc(100% - 80px);
+                        margin: 44px 40px 0 40px;
+                    }
+                }
+                .actions {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-end;
+                    padding: 20px 40px 20px 40px;
+                    .md-button {
+                        &:first-of-type {
+                            border-radius: 4px;
+                            border: solid 1px #93b0c1;
+                            width: 144px;
+                            height: 44px;
+                            span {
+                                color: #93b0c1;
+                                font-family: ProximaNovaRegular;
+                                font-size: 16px;
+                                line-height: 0.75;
+                                letter-spacing: 0.7px;
+                            }
+                        }
+                        &:last-of-type {
+                            background-image: linear-gradient(309deg, #08bccd, #2da1f8);
+                            border-radius: 4px;
+                            border: none;
+                            margin-right: 0px;
+                            width: 144px;
+                            height: 44px;
+                            span {
+                                font-family: ProximaNovaSemibold;
+                                font-size: 16px;
+                                font-weight: 600;
+                                line-height: 0.75;
+                                letter-spacing: 0.7px;
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

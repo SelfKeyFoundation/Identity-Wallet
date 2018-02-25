@@ -1,12 +1,15 @@
 .wallet-create-step-5(layout-fill, layout="column", layout-align="center center")
     sk-icon(icon="important", size-class="icon-size-68x74")
+
     .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Save Your Keystore File
         .content(layout="column")
             .title "This keystore file is the encrypted version of your private key, protected by the password you just created. This is the recommended version to save your private key."
+            
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
                 span.primary Backup your keystore file (UTC / JSON)
+
             .warning-description
                 .item
                     span Do not lose it!
@@ -17,6 +20,7 @@
                 .item
                     span Make a backup!
                     span Secure it like the millions of dollars it may one day be worth. 
+
             .actions-wrapper
                 md-button#keystoreNext.outline-orange(ng-click="nextStep($event)")
                     span I understand, continue

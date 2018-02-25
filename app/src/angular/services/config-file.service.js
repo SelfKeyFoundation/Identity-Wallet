@@ -6,165 +6,189 @@ const Ico = requireAppModule("angular/classes/ico");
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
-	"ngInject";
+    'ngInject';
 
-	$log.debug("ConfigFileService Initialized");
+    $log.debug('ConfigFileService Initialized');
 
-	let isReady = false;
+    let isReady = false;
 
-	// main store
-	let store = null;
+    // main store
+    let store = null;
 
-	// temporary stored datas
-	let idAttributeTypes = {};
-	let icos = {};
+    // temporary stored datas
+    let idAttributeTypes = {};
+    let icos = {};
 
-	class ConfigFileStore {
-		constructor() {
-			this.q = async.queue((data, callback) => {
-				ElectronService.saveDataStore(store)
-					.then(() => {
-						$rootScope.$broadcast("ConfigFileService:reloaded", store);
-						callback(null, store);
-					})
-					.catch(err => {
-						callback(err);
-					});
-			}, 1);
-		}
+    class ConfigFileStore {
 
-		init() {
-			const me = this;
+        constructor() {
+            this.q = async.queue((data, callback) => {
+                ElectronService.saveDataStore(store).then(() => {
+                    $rootScope.$broadcast('ConfigFileService:reloaded', store);
+                    callback(null, store);
+                }).catch((err) => {
+                    callback(err);
+                });
+            }, 1);
+        }
 
-			let defer = $q.defer();
+        init() {
+            const me = this;
 
-			if (ElectronService.ipcRenderer) {
-				ElectronService.initDataStore()
-					.then(data => {
-						store = data;
+            let defer = $q.defer();
 
-						// custom delay - to make visible loading
-						$timeout(() => {
-							defer.resolve(store);
-							$rootScope.$broadcast("config-file-loaded");
-							isReady = true;
-						}, 3000);
-					})
-					.catch(error => {
-						defer.reject(error);
-					});
-			} else {
-				defer.reject({ message: "electron not available" });
-			}
-			return defer.promise;
-		}
+            if (ElectronService.ipcRenderer) {
+                ElectronService.initDataStore().then((data) => {
+                    store = data;
 
-		save() {
-			const me = this;
-			const defer = $q.defer();
-			const jsonConfig = JSON.stringify(store);
-			me.q.push({ store: jsonConfig }, (err, conf) => {
-				if (err) {
-					return defer.reject(err);
-				}
-				defer.resolve(conf);
-			});
+                    // custom delay - to make visible loading
+                    $timeout(() => {
+                        defer.resolve(store);
+                        $rootScope.$broadcast('config-file-loaded');
+                        isReady = true;
+                    }, 3000);
 
-			return defer.promise;
-		}
+                }).catch((error) => {
+                    defer.reject(error);
+                });
+            } else {
+                defer.reject({ message: 'electron not available' });
+            }
+            return defer.promise;
+        }
 
-		load() {
-			let defer = $q.defer();
-			ElectronService.readDataStore()
-				.then(data => {
-					store = data;
+        save() {
+            const me = this;
+            const defer = $q.defer();
+            const jsonConfig = JSON.stringify(store);
+            me.q.push({ store: jsonConfig }, (err, conf) => {
+                if (err) {
+                    return defer.reject(err);
+                }
+                defer.resolve(conf);
+            });
+            return defer.promise;
+        }
 
-					for (let i in store.idAttributes) {
-						let idAttribute = new IdAttribute();
-						idAttribute.setData(store.idAttributes[i]);
-						store.idAttributes[i] = idAttribute;
-					}
+        load() {
+            let defer = $q.defer();
+            ElectronService.readDataStore().then((data) => {
+                store = data;
 
-					defer.resolve(store);
-				})
-				.catch(error => {
-					// TODO
-					defer.reject(error);
-				});
-			return defer.promise;
-		}
+                for (let i in store.idAttributes) {
+                    let idAttribute = new IdAttribute()
+                    idAttribute.setData(store.idAttributes[i]);
+                    store.idAttributes[i] = idAttribute;
+                }
 
-		getStore() {
-			return store;
-		}
+                defer.resolve(store);
+            }).catch((error) => {
+                // TODO
+                defer.reject(error);
+            });
+            return defer.promise;
+        }
 
-		getWalletPublicKeys() {
-			return Object.keys(store.wallets);
-		}
+        getStore() {
+            return store;
+        }
 
-		getPublicKeys(type) {
-			if (!type) {
-				return Object.keys(store.wallets);
-			} else {
-				let keys = [];
-				for (let i in store.wallets) {
-					if (store.wallets[i].type === type) {
-						keys.push(i);
-					}
-				}
-				return keys;
-			}
-		}
+        getWalletPublicKeys() {
+            return Object.keys(store.wallets);
+        }
 
-		getWalletsMetaData() {
-			let keys = this.getWalletPublicKeys();
-			let result = [];
-			for (let i in keys) {
-				let key = keys[i];
-				result.push({
-					name: store.wallets[key].name,
-					keystoreFilePath: store.wallets[key].keystoreFilePath,
-					publicKey: key
-				});
-			}
-			return result;
-		}
+        getPublicKeys(type) {
+            if (!type) {
+                return Object.keys(store.wallets);
+            } else {
+                let keys = [];
+                for (let i in store.wallets) {
+                    if (store.wallets[i].type === type) {
+                        keys.push(i);
+                    }
+                }
+                return keys;
+            }
+        }
 
-		getWalletsMetaDataByPublicKey(publicKey) {
-			return store.wallets[publicKey];
-		}
+        getWalletsMetaData() {
+            let keys = this.getWalletPublicKeys();
+            let result = [];
+            for (let i in keys) {
+                let key = keys[i];
+                result.push({
+                    name: store.wallets[key].name,
+                    keystoreFilePath: store.wallets[key].keystoreFilePath,
+                    publicKey: key
+                });
+            }
+            return result;
+        }
 
-		/**
-		 *
-		 */
-		getIdAttributeTypes() {
-			return idAttributeTypes;
-		}
+        getWalletsMetaDataByPublicKey(publicKey) {
+            return store.wallets[publicKey];
+        }
 
-		getIdAttributeType(key) {
-			return idAttributeTypes[key];
-		}
+        /**
+         *
+         */
+        getIdAttributeTypes() {
+            return idAttributeTypes;
+        }
 
-		setIdAttributeTypes(data) {
-			idAttributeTypes = data;
-		}
+        getIdAttributeType(key) {
+            return idAttributeTypes[key];
+        }
 
-		/**
-		 *
-		 */
-		getIcos() {
-			return icos;
-		}
+        setIdAttributeTypes(data) {
+            idAttributeTypes = data;
+        }
 
-		addIco(status, ico) {
-			if (!icos[status]) {
-				icos[status] = [];
-			}
-			icos[status].push(ico);
-		}
-	}
 
-	return new ConfigFileStore();
+        /**
+         *
+         */
+        getIcos() {
+            return icos;
+        }
+
+        addIco(status, ico) {
+            if (!icos[status]) {
+                icos[status] = [];
+            }
+            icos[status].push(ico);
+        }
+
+        /**
+         *
+         */
+        getIdAttributesStore() {
+            let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
+            return walletData.data.idAttributes;
+        }
+
+        getIdAttributeItem(type) {
+            let idAttributesStore = this.getIdAttributesStore();
+            let idAttribute = idAttributesStore[type];
+            return idAttribute.items[idAttribute.defaultItemId];
+        }
+
+        getIdAttributeItemValues(type) {
+            let item = this.getIdAttributeItem(type);
+            return item.values;
+        }
+
+        dispatchIdAttributes(){
+            for (let i in store.idAttributes) {
+                let idAttribute = new IdAttribute()
+                idAttribute.setData(store.idAttributes[i]);
+                store.idAttributes[i] = idAttribute;
+            }
+        }
+
+    }
+
+    return new ConfigFileStore();
 }
 
 module.exports = ConfigFileService;

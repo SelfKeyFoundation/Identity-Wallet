@@ -1,16 +1,16 @@
 function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $state, basicInfo) {
-	"ngInject";
+    'ngInject'
 
-	$log.info("PasswordWarningDialogController");
+    $log.info('PasswordWarningDialogController');
 
-	$scope.cancel = event => {
-		$mdDialog.cancel();
-	};
+    $scope.cancel = (event) => {
+        $mdDialog.cancel();
+    }
 
-	$scope.accept = event => {
-		$state.go("guest.create.step-3", { basicInfo: basicInfo });
-		$mdDialog.hide();
-	};
-}
+    $scope.accept = (event) => {
+        $state.go('guest.create.step-3', { basicInfo: basicInfo });
+        $mdDialog.hide();
+    }
+};
 
 module.exports = PasswordWarningDialogController;

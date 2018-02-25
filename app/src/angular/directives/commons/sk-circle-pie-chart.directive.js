@@ -1,139 +1,142 @@
 "use strict";
 
 function SkCirclePieChartDirective($timeout) {
-	"ngInject";
+    'ngInject';
 
-	return {
-		restrict: "E",
-		scope: {
-			data: "="
-		},
-		link: (scope, element) => {
-			let chunk = function(arr, chunk) {
-				let result = [];
-				let i, j;
-				for (i = 0, j = arr.length; i < j; i += chunk) {
-					result.push(arr.slice(i, i + chunk));
-				}
-				return result;
-			};
+    return {
+        restrict: 'E',
+        scope: {
+            data: '='
+        },
+        link: (scope, element) => {
 
-			let getUniqueIdentifier = (item, index) => {
-				return `${item.title + index}`;
-			};
+            let chunk = function (arr, chunk) {
+                let result = [];
+                let i, j;
+                for (i = 0, j = arr.length; i < j; i += chunk) {
+                    result.push(arr.slice(i, i + chunk));
+                }
+                return result;
+            };
 
-			scope.chunkedItems = chunk(scope.data.items, 3);
+            let getUniqueIdentifier = (item, index) => {
+                return `${item.title + index}`;
+            }
 
-			google.charts.load("current", { packages: ["corechart"] });
-			google.charts.setOnLoadCallback(() => {
-				if (scope.data.callback && scope.data.callback.onReady) {
-					scope.data.callback.onReady();
-				}
-			});
+            scope.chunkedItems = chunk(scope.data.items, 3);
 
-			function drawChart() {
-				let container = document.getElementById("chart");
+            google.charts.load("current", { packages: ["corechart"] });
+            google.charts.setOnLoadCallback(() => {
+                if (scope.data.callback && scope.data.callback.onReady) {
+                    scope.data.callback.onReady();
+                }
+            });
 
-				if (!container) return;
+            function drawChart() {
+                let container = document.getElementById('chart');
 
-				let dataItems = [];
-				let colors = [];
-				scope.data.items.forEach((item, index) => {
-					item.uniqueIdentifier = getUniqueIdentifier(item, index);
-					dataItems.push([item.title, item.valueUSD]);
-					colors.push(item.color);
-				});
+                if (!container) return;
 
-				let processedData = [["Content", "percents"]].concat(dataItems);
-				let data = google.visualization.arrayToDataTable(processedData);
+                let dataItems = [];
+                let colors = [];
+                scope.data.items.forEach((item, index) => {
+                    item.uniqueIdentifier = getUniqueIdentifier(item, index);
+                    dataItems.push([item.title, item.valueUSD]);
+                    colors.push(item.color);
+                });
 
-				let options = {
-					backgroundColor: "transparent",
-					title: "",
-					chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-					pieHole: 0.7,
-					pieSliceBorderColor: "none",
-					colors: colors,
-					legend: {
-						position: "none"
-					},
-					pieSliceText: "none",
-					tooltip: {
-						trigger: "none"
-					},
-					animation: {
-						duration: 4500,
-						startup: true
-					}
-				};
+                let processedData = [['Content', 'percents']].concat(dataItems);
+                let data = google.visualization.arrayToDataTable(processedData);
 
-				let chart = new google.visualization.PieChart(container);
+                let options = {
+                    backgroundColor: 'transparent',
+                    title: "",
+                    chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+                    pieHole: 0.7,
+                    pieSliceBorderColor: 'none',
+                    colors: colors,
+                    legend: {
+                        position: 'none'
+                    },
+                    pieSliceText: 'none',
+                    tooltip: {
+                        trigger: 'none'
+                    },
+                    animation: {
+                        duration: 4500,
+                        startup: true
+                    }
+                };
 
-				scope.chartIsReady = false;
+                let chart = new google.visualization.PieChart(container);
 
-				google.visualization.events.addListener(chart, "ready", function(chartItem) {
-					scope.chartIsReady = true;
-					scope.$apply();
-				});
+                scope.chartIsReady = false;
 
-				chart.draw(data, options);
+                google.visualization.events.addListener(chart, 'ready', function (chartItem) {
+                    scope.chartIsReady = true;
+                    scope.$apply();
+                });
 
-				let addOrRemoveActive = (chartItem, fn) => {
-					let index = chartItem.row;
-					let uniqueIdentifier = getUniqueIdentifier(scope.data.items[index], index);
-					let el = document.getElementsByName(uniqueIdentifier)[0];
-					let angularEl = angular.element(el);
-					angularEl[fn]("active");
-				};
+                chart.draw(data, options);
 
-				google.visualization.events.addListener(chart, "onmouseover", function(chartItem) {
-					let sel = chart.getSelection();
-					if (sel && sel.length && sel[0].row == chartItem.row) {
-						addOrRemoveActive(chartItem, "removeClass");
-						$timeout(() => {
-							addOrRemoveActive(chartItem, "addClass");
-						}, 100);
-						return;
-					}
-					addOrRemoveActive(chartItem, "addClass");
-				});
+                let addOrRemoveActive = (chartItem, fn) => {
+                    let index = chartItem.row;
+                    let uniqueIdentifier = getUniqueIdentifier(scope.data.items[index], index);
+                    let el = document.getElementsByName(uniqueIdentifier)[0];
+                    let angularEl = angular.element(el);
+                    angularEl[fn]('active');
+                };
 
-				google.visualization.events.addListener(chart, "onmouseout", function(chartItem) {
-					let sel = chart.getSelection();
-					if (sel && sel.length && sel[0].row == chartItem.row) {
-						return;
-					}
-					addOrRemoveActive(chartItem, "removeClass");
-				});
+                google.visualization.events.addListener(chart, 'onmouseover', function (chartItem) {
+                    let sel = chart.getSelection();
+                    if (sel && sel.length && sel[0].row == chartItem.row) {
+                        addOrRemoveActive(chartItem, 'removeClass');
+                        $timeout(() => {
+                            addOrRemoveActive(chartItem, 'addClass');
+                        }, 100);
+                        return;
+                    }
+                    addOrRemoveActive(chartItem, 'addClass');
+                });
 
-				google.visualization.events.addListener(chart, "select", function(chartItem) {
-					let sel = chart.getSelection();
-					if (!sel || !sel[0]) {
-						return;
-					}
 
-					scope.data.items.forEach((item, index) => {
-						if (index != sel[0].row) {
-							addOrRemoveActive({ row: index }, "removeClass");
-						} else {
-							if (scope.data.callback && scope.data.callback.onItemClick) {
-								scope.data.callback.onItemClick(item);
-							}
-						}
-					});
-				});
-			}
+                google.visualization.events.addListener(chart, 'onmouseout', function (chartItem) {
+                    let sel = chart.getSelection();
+                    if (sel && sel.length && sel[0].row == chartItem.row) {
+                        return;
+                    }
+                    addOrRemoveActive(chartItem, 'removeClass');
+                });
 
-			scope.data.draw = () => {
-				$timeout(() => {
-					scope.chunkedItems = chunk(scope.data.items, 3);
-					drawChart();
-				}, 400);
-			};
-		},
-		replace: true,
-		templateUrl: "common/directives/sk-circle-pie-chart.html"
-	};
+                google.visualization.events.addListener(chart, 'select', function (chartItem) {
+                    let sel = chart.getSelection();
+                    if (!sel || !sel[0]) {
+                        return;
+                    }
+
+                    scope.data.items.forEach((item, index) => {
+                        if (index != sel[0].row) {
+                            addOrRemoveActive({ row: index }, 'removeClass');
+                        } else {
+                            if (scope.data.callback && scope.data.callback.onItemClick) {
+                                scope.data.callback.onItemClick(item);
+                            }
+                        }
+                    });
+                });
+            }
+
+            scope.data.draw = () => {
+                $timeout(() => {
+                    scope.chunkedItems = chunk(scope.data.items, 3);
+                    drawChart();
+                }, 400);
+            }
+
+        },
+        replace: true,
+        templateUrl: 'common/directives/sk-circle-pie-chart.html'
+    }
 }
 
 module.exports = SkCirclePieChartDirective;

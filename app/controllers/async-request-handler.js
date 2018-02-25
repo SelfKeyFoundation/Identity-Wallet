@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
-const electron = require("electron");
-const { dialog, Notification, shell, autoUpdater } = require("electron");
+const electron = require('electron');
+const {dialog, Notification, shell, autoUpdater} = require('electron');
 
-const path = require("path");
-const keythereum = require("../extended_modules/keythereum");
-const deskmetrics = require("deskmetrics");
-const mime = require("mime-types");
-const settings = require("electron-settings");
-const fs = require("fs-extra");
-const ethereumjsUtil = require("ethereumjs-util");
-const decompress = require("decompress");
-const os = require("os");
+const path = require('path');
+const keythereum = require('../extended_modules/keythereum');
+const deskmetrics = require('deskmetrics');
+const mime = require('mime-types');
+const settings = require('electron-settings');
+const fs = require('fs-extra');
+const ethereumjsUtil = require('ethereumjs-util');
+const decompress = require('decompress');
+const os = require('os');
 
-module.exports = function(app) {
-	const helpers = require("./helpers")(app);
-	const controller = function() {};
+module.exports = function (app) {
+	const helpers = require('./helpers')(app);
+	const controller = function () {};
 
-	const storeFileName = "main-store.json"; // TODO
-	const userDataDirectoryPath = electron.app.getPath("userData");
-	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, "wallets");
-	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, "documents");
+	const storeFileName 			= 'main-store.json'; // TODO
+	const userDataDirectoryPath 	= electron.app.getPath('userData');
+	const walletsDirectoryPath 		= path.resolve(userDataDirectoryPath, 'wallets');
+	const documentsDirectoryPath 	= path.resolve(userDataDirectoryPath, 'documents');
 
 	const initialStoreDataStructure = {
 		profile: {
@@ -221,53 +221,33 @@ module.exports = function(app) {
 					}
 				});
 
-				attributes.email = [
-					{
-						isDoc: false,
-						value: json.user.email
-					}
-				];
+			attributes.email = [{
+				isDoc: false,
+				value: json.user.email
+			}];
 
-				if (json.user.middleName) {
-					attributes.name = [
-						{
-							isDoc: false,
-							value:
-								json.user.firstName +
-								" " +
-								json.user.middleName +
-								" " +
-								json.user.lastName
-						}
-					];
-				} else {
-					attributes.name = [
-						{
-							isDoc: false,
-							value: json.user.firstName + " " + json.user.lastName
-						}
-					];
-				}
+			if (json.user.middleName) {
+				attributes.name = [{
+					isDoc: false,
+					value: json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
+				}]
+			} else {
+				attributes.name = [{
+					isDoc: false,
+					value: json.user.firstName + " " + json.user.lastName
+				}]
+			}
 
-				attributes.public_key = [
-					{
-						isDoc: false,
-						value: etherAddress
-					}
-				];
+			attributes.public_key = [{
+				isDoc: false,
+				value: etherAddress
+			}];
 
-				app.win.webContents.send(
-					"ON_ASYNC_REQUEST",
-					actionId,
-					actionName,
-					null,
-					attributes
-				);
-			})
-			.catch(function(err) {
-				app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, err, {});
-			});
-	};
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, attributes);
+		}).catch(function (err) {
+			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, {});
+		});
+	}
 
 	// TODO - ??
 	controller.prototype.createDirectory = function(event, actionId, actionName, args) {
@@ -331,33 +311,20 @@ module.exports = function(app) {
 						const stats = fs.statSync(filePaths[0]);
 						let mimeType = mime.lookup(filePaths[0]);
 						let name = path.parse(filePaths[0]).base;
-
-						if (args.maxFileSize) {
-							if (stats.size > args.maxFileSize) {
-								return app.win.webContents.send(
-									"ON_ASYNC_REQUEST",
-									actionId,
-									actionName,
-									"file_size_error",
-									null
-								);
+						if(args.maxFileSize){
+							if(stats.size > args.maxFileSize){
+								return app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'file_size_error', null);
 							}
 						}
 
-						app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, {
+						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
 							name: name,
 							mimeType: mimeType,
 							path: filePaths[0],
 							size: stats.size
 						});
 					} catch (e) {
-						app.win.webContents.send(
-							"ON_ASYNC_REQUEST",
-							actionId,
-							actionName,
-							"error",
-							null
-						);
+						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
 					}
 				} else {
 					app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, null);
@@ -534,7 +501,7 @@ module.exports = function(app) {
 			console.log(e.message);
 			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e.message, null);
 		}
-	};
+	}
 
 	controller.prototype.unlockEtherKeystoreObject = function(event, actionId, actionName, args) {
 		try {
@@ -595,7 +562,7 @@ module.exports = function(app) {
 		} catch (e) {
 			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e.message, null);
 		}
-	};
+	}
 
 	controller.prototype.closeApp = function(event, actionId, actionName, args) {
 		electron.app.quit();

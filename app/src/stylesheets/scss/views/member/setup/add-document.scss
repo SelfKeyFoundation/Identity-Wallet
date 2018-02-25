@@ -24,24 +24,23 @@
             >.content {
                 height: 100%;
 
-                .header-wrapper {
+                >.header-wrapper {
                     margin: 25px 30px;
 
-                    .step {
+                    >.step {
                         font-family: ProximaNovaSemibold;
                         font-size: 12px;
                         font-weight: 600;
                         color: #93b0c1;
                     }
 
-                    .title {
+                    >.title {
                         margin-top: 4px;
                         font-family: ProximaNovaRegular;
                         font-size: 18px;
                         color: #ffffff;
                     }
-
-                    .description {
+                    >.description {
                         margin-top: 4px;
                         font-family: ProximaNovaRegular;
                         opacity: 0.8;
@@ -50,11 +49,11 @@
                         color: #93b0c1;
                     }
                 }
-                .content-wrapper {
+                >.content-wrapper {
                     display: flex;
                     flex: 1;
 
-                    .box {
+                    >.box {
                         >.header {
                             margin-top: 36px;
                             font-family: ProximaNovaSemibold;
@@ -75,7 +74,7 @@
                 }
             }
         }
-       
+
         #check-list {
             width: 350px;
 

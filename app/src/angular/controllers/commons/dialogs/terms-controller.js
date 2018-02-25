@@ -32,12 +32,12 @@ function TermsDialogController(
 		$rootScope.closeApp();
 	};
 
-	$scope.scrollToEndContainer = direction => {
-		if (direction === "bottom") {
-			$scope.scrolledBottom = true;
-			$scope.$apply();
-		}
-	};
-}
+    $scope.scrollToEndContainer = (direction) => {
+        if (direction === 'bottom') {
+            $scope.scrolledBottom = true;
+            $scope.$apply()
+        }
+    }
+};
 
 module.exports = TermsDialogController;

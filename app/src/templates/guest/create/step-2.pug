@@ -26,8 +26,14 @@
                     div(ng-message="maxlength") The Middle Name has to be less than 500 characters long.
             md-input-container.sk-input-box.sk-input-non-floating
                 label Country Of Residency
+            // This is for Spectrum / WebDriver not recognizing the MD tags
+            if (NODE_ENV === 'test')
                 select#country.sk-select(name="countryOfResidency", ng-model="input.countryOfResidency", ng-required="true")
                     option(id="{{item.name}}", value="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+            else
+                md-select#country.sk-select(name="countryOfResidency", ng-model="input.countryOfResidency", ng-required="true")
+                    md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")
                     div(ng-message="required") This field is required. Please enter Country Of Residency.
             md-button#submitBasic.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid")

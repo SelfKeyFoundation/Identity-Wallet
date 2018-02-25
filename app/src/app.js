@@ -25,6 +25,12 @@ window.zxcvbn = requireNodeModule("zxcvbn");
 window.qrcode = requireNodeModule("qrcode-generator");
 
 /**
+ *
+ */
+window.zxcvbn = requireNodeModule('zxcvbn');
+window.qrcode = requireNodeModule('qrcode-generator');
+
+/**
  * External Modules
  */
 requireNodeModule("@uirouter/angularjs");
@@ -132,13 +138,8 @@ const SkLinearProgressDirective = requireAppModule(
 );
 angular.module("kyc-wallet").directive("skLinearProgress", SkLinearProgressDirective);
 
-const SkDoubleHeaderDirective = requireAppModule(
-	"angular/directives/commons/sk-double-header.directive"
-);
-angular.module("kyc-wallet").directive("skDoubleHeader", SkDoubleHeaderDirective);
-
-const SkTokenBoxDirective = requireAppModule("angular/directives/commons/sk-token-box.directive");
-angular.module("kyc-wallet").directive("skTokenBox", SkTokenBoxDirective);
+const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
+angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
 const SkIcoDetailsBoxDirective = requireAppModule(
 	"angular/directives/commons/sk-ico-details-box.directive"
@@ -150,15 +151,8 @@ const SkCirclePieChartDirective = requireAppModule(
 );
 angular.module("kyc-wallet").directive("skCirclePieChart", SkCirclePieChartDirective);
 
-const SkRemindersBoxDirective = requireAppModule(
-	"angular/directives/commons/sk-reminders-box.directive"
-);
-angular.module("kyc-wallet").directive("skRemindersBox", SkRemindersBoxDirective);
-
-const SkUserInfoBoxDirective = requireAppModule(
-	"angular/directives/commons/sk-user-info-box.directive"
-);
-angular.module("kyc-wallet").directive("skUserInfoBox", SkUserInfoBoxDirective);
+const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
+angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
 
 const SkKycRequirementsBoxDirective = requireAppModule(
 	"angular/directives/commons/sk-kyc-requirements-box.directive"
@@ -173,6 +167,10 @@ const CopyToClipboardDirective = requireAppModule(
 );
 angular.module("kyc-wallet").directive("copyToClipboard", CopyToClipboardDirective);
 
+const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
+angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
+
+
 /**
  * controllers
  */
@@ -180,44 +178,39 @@ angular.module("kyc-wallet").directive("copyToClipboard", CopyToClipboardDirecti
 /**
  * commons
  */
-const ToastController = requireAppModule("angular/controllers/commons/toast-controller.js");
-angular.module("kyc-wallet").controller("ToastController", ToastController);
+const ToastController = requireAppModule('angular/controllers/commons/toast-controller.js');
+angular.module('kyc-wallet').controller('ToastController', ToastController);
 
-const TermsDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/terms-controller.js"
-);
-angular.module("kyc-wallet").controller("TermsDialogController", TermsDialogController);
+const TermsDialogController = requireAppModule('angular/controllers/commons/dialogs/terms-controller.js');
+angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
-const StartupGuideDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/startup-guide-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("StartupGuideDialogController", StartupGuideDialogController);
+const StartupGuideDialogController = requireAppModule('angular/controllers/commons/dialogs/startup-guide-controller.js');
+angular.module('kyc-wallet').controller('StartupGuideDialogController', StartupGuideDialogController);
 
-const ReceiveTokenDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/receive-token-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("ReceiveTokenDialogController", ReceiveTokenDialogController);
+const ReceiveTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/receive-token-controller.js');
+angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
 
-const SendTokenDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/send-token-controller.js"
-);
-angular.module("kyc-wallet").controller("SendTokenDialogController", SendTokenDialogController);
+const SendTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/send-token-controller.js');
+angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
 
-const UpdateDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/update-controller.js"
-);
-angular.module("kyc-wallet").controller("UpdateDialogController", UpdateDialogController);
+const UpdateDialogController = requireAppModule('angular/controllers/commons/dialogs/update-controller.js');
+angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
 
-const PasswordWarningDialogController = requireAppModule(
-	"angular/controllers/commons/dialogs/password-warning-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("PasswordWarningDialogController", PasswordWarningDialogController);
+const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
+angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
+
+const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
+angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
+
+const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-document-controller.js');
+angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
+
+const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-static-data-controller.js');
+angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
+
+const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
+angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
+
 
 /**
  * guest
@@ -253,47 +246,23 @@ angular
 /**
  * create wallet
  */
-const GuestKeystoreCreateStep1Controller = requireAppModule(
-	"angular/controllers/guest/create/step-1-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep1Controller", GuestKeystoreCreateStep1Controller);
+const GuestKeystoreCreateStep1Controller = requireAppModule('angular/controllers/guest/create/step-1-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
-const GuestKeystoreCreateStep2Controller = requireAppModule(
-	"angular/controllers/guest/create/step-2-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep2Controller", GuestKeystoreCreateStep2Controller);
+const GuestKeystoreCreateStep2Controller = requireAppModule('angular/controllers/guest/create/step-2-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
-const GuestKeystoreCreateStep3Controller = requireAppModule(
-	"angular/controllers/guest/create/step-3-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep3Controller", GuestKeystoreCreateStep3Controller);
+const GuestKeystoreCreateStep3Controller = requireAppModule('angular/controllers/guest/create/step-3-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
-const GuestKeystoreCreateStep4Controller = requireAppModule(
-	"angular/controllers/guest/create/step-4-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep4Controller", GuestKeystoreCreateStep4Controller);
+const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
-const GuestKeystoreCreateStep5Controller = requireAppModule(
-	"angular/controllers/guest/create/step-5-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep5Controller", GuestKeystoreCreateStep5Controller);
+const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
 
-const GuestKeystoreCreateStep6Controller = requireAppModule(
-	"angular/controllers/guest/create/step-6-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("GuestKeystoreCreateStep6Controller", GuestKeystoreCreateStep6Controller);
+const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6-controller.js');
+angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
 
 /**
  * member
@@ -308,27 +277,18 @@ angular
 	.module("kyc-wallet")
 	.controller("MemberRightSidenavController", MemberRightSidenavController);
 
+
 /**
  * setup
  */
-const MemberSetupLayoutController = requireAppModule(
-	"angular/controllers/member/setup/layout-controller.js"
-);
-angular.module("kyc-wallet").controller("MemberSetupLayoutController", MemberSetupLayoutController);
+const MemberSetupLayoutController = requireAppModule('angular/controllers/member/setup/layout-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupLayoutController', MemberSetupLayoutController);
 
-const MemberSetupChecklistController = requireAppModule(
-	"angular/controllers/member/setup/checklist-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("MemberSetupChecklistController", MemberSetupChecklistController);
+const MemberSetupChecklistController = requireAppModule('angular/controllers/member/setup/checklist-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupChecklistController', MemberSetupChecklistController);
 
-const MemberSetupAddDocumentController = requireAppModule(
-	"angular/controllers/member/setup/add-document-controller.js"
-);
-angular
-	.module("kyc-wallet")
-	.controller("MemberSetupAddDocumentController", MemberSetupAddDocumentController);
+const MemberSetupAddDocumentController = requireAppModule('angular/controllers/member/setup/add-document-controller.js');
+angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', MemberSetupAddDocumentController);
 
 /**
  * dashboard
@@ -340,13 +300,22 @@ angular
 	.module("kyc-wallet")
 	.controller("MemberDashboardMainController", MemberDashboardMainController);
 
+
 /**
- * wallet
+ * wallet (TODO rename to token)
  */
 const ManageTokenController = requireAppModule(
 	"angular/controllers/member/wallet/manage-token-controller.js"
 );
 angular.module("kyc-wallet").controller("ManageTokenController", ManageTokenController);
+
+
+/**
+ * id wallet
+ */
+const MemberIdWalletMainController = requireAppModule('angular/controllers/member/id-wallet/main-controller.js');
+angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
+
 
 /**
  * Marketplace

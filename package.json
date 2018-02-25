@@ -1,7 +1,7 @@
 {
     "name": "selfkey-identity-wallet",
     "productName": "ID Wallet",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "Selfkey Identity Wallet",
     "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
     "license": "MIT",
@@ -43,6 +43,7 @@
         "crypto": "1.0.1",
         "decompress": "4.2.0",
         "deskmetrics": "2.3.0-rc7",
+        "electron": "1.7.11",
         "electron-compile": "6.4.2",
         "electron-log": "2.2.14",
         "electron-settings": "3.1.4",

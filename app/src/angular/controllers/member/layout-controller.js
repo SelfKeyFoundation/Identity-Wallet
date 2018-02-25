@@ -54,24 +54,25 @@ function MemberLayoutController(
         delete storedWalletData.activities;
     }); */
 
-	Web3Service.syncWalletActivityByContract();
-	Web3Service.syncWalletActivityByETH();
+    Web3Service.syncWalletActivityByContract();
+    Web3Service.syncWalletActivityByETH();
 
-	$rootScope.goToSelfkeyIco = event => {
-		let ico = null;
-		let icos = ConfigFileService.getIcos();
-		for (let i in icos) {
-			for (let j in icos[i]) {
-				if (["key", "KEY"].indexOf(icos[i][j].symbol) !== -1) {
-					ico = icos[i][j];
-					break;
-				}
-			}
-		}
-		if (ico) {
-			$state.go("member.marketplace.ico-item", { selected: ico });
-		}
-	};
-}
+    $rootScope.goToSelfkeyIco = (event) => {
+        let ico = null;
+        let icos = ConfigFileService.getIcos();
+        for (let i in icos) {
+            for (let j in icos[i]) {
+                if (['key', 'KEY'].indexOf(icos[i][j].symbol) !== -1) {
+                    ico = icos[i][j];
+                    break;
+                }
+            }
+        }
+        if (ico) {
+            $state.go('member.marketplace.ico-item', { selected: ico });
+        }
+    }
+
+};
 
 module.exports = MemberLayoutController;

@@ -40,34 +40,31 @@ function GuestUnlockKeystoreController(
 	$scope.unlock = event => {
 		if (!$scope.ready) return;
 
-		$scope.unlockPromise = WalletService.unlockKeystoreObject($scope.keystorePassword);
-		$scope.unlockPromise
-			.then(wallet => {
-				if (wallet.privateKeyHex) {
-					// go to private key details page
-					$state.go("guest.loading", {
-						redirectTo: "member.setup.view-keystore"
-					});
-				} else {
-					CommonService.showMessage({
-						container: messagesContainer,
-						type: "info",
-						message: "incorrect password",
-						closeAfter: 2000,
-						replace: true
-					});
-				}
-			})
-			.catch(error => {
-				CommonService.showMessage({
-					container: messagesContainer,
-					type: "info",
-					message: "incorrect password",
-					closeAfter: 2000,
-					replace: true
-				});
-			});
-	};
-}
+        $scope.unlockPromise = WalletService.unlockKeystoreObject($scope.keystorePassword);
+        $scope.unlockPromise.then((wallet) => {
+            if (wallet.privateKeyHex) {
+                // go to private key details page
+                $state.go('guest.loading', { redirectTo: 'member.setup.view-keystore' });
+            } else {
+                CommonService.showMessage({
+                    container: messagesContainer,
+                    type: "info",
+                    message: "incorrect password",
+                    closeAfter: 2000,
+                    replace: true
+                });
+            }
+        }).catch((error) => {
+            CommonService.showMessage({
+                container: messagesContainer,
+                type: "info",
+                message: "incorrect password",
+                closeAfter: 2000,
+                replace: true
+            });
+        });
+    }
+
+};
 
 module.exports = GuestUnlockKeystoreController;

@@ -18,12 +18,12 @@ function UpdateDialogController(
 		$mdDialog.hide();
 	};
 
-	$scope.update = event => {
-		$scope.updatePromise = ElectronService.installUpdate();
-		$scope.updatePromise.then(() => {
-			$mdDialog.hide();
-		});
-	};
-}
+    $scope.update = (event) => {
+        $scope.updatePromise = ElectronService.installUpdate();
+        $scope.updatePromise.then(() => {
+            $mdDialog.hide();
+        });
+    };
+};
 
 module.exports = UpdateDialogController;
