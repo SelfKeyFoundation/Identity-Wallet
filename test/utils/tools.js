@@ -1,33 +1,18 @@
-const electron = require('electron')
-Application = require('spectron').Application
-delay = require('delay')
-chalk = require('chalk')
-exec = require('child_process').exec
-pwd = process.cwd()
-usr = process.argv[2] || 0
-platform = process.argv[3] || 'local'
-OSENV = process.env.OSENV || 'osx'
-pj = require('../../package.json')
-appCacheName = pj.productName
-appBuildName = pj.config.forge.electronPackagerConfig.name
-appVersion = pj.version
-user = require('os').userInfo().username
+const 
+	electron = require('electron')
+	Application = require('spectron').Application
+	delay = require('delay')
+	chalk = require('chalk')
+	exec = require('child_process').exec
+	config = require('../config/config.js')
 
-const buildPath =
-	pwd +
-	'/out/' +
-	appBuildName +
-	'-darwin-x64/' +
-	appBuildName +
-	'.app/Contents/MacOS/' +
-	appBuildName
 const app = new Application({
-	path: buildPath
+	path: config.appPath
 })
 
 function init() {
 	return new Promise((r, rj) => {
-		exec('bash ' + pwd + '/test/utils/quick.sh ' + user, err => {
+		exec(config.cacheCmd, err => {
 			if (err) rj(err)
 			r('done')
 		})
@@ -45,15 +30,6 @@ function appStop() {
 		return this.app.stop()
 	}
 	return undefined
-}
-
-function specStart(text) {
-	return console.log(text)
-}
-
-function specStop(text) {
-	return console.log(text)
-	// return screenshotCheck(app, fileName)
 }
 
 function regStep(app, selector) {
@@ -104,65 +80,12 @@ function screenshotCheck(app, fileName) {
 	})
 }
 
-function consoleNotes() {
-	const note =
-		'Working Dir: ' +
-		pwd +
-		'\n' +
-		'Build Dir: ' +
-		buildPath +
-		'\n' +
-		'Test Data: ' +
-		usr +
-		'\n' +
-		'Platform: ' +
-		process.platform +
-		'\n' +
-		'OS Environment: ' +
-		OSENV +
-		'\n' +
-		'OS Username: ' +
-		user +
-		'\n' +
-		'Product Name: ' +
-		appCacheName +
-		'\n' +
-		'Build Name: ' +
-		appBuildName +
-		'\n' +
-		'Build Version: ' +
-		pj.version +
-		'\n' +
-		'NodeJS Version: ' +
-		process.version +
-		'\n' +
-		'NPM Version: ' +
-		process.version
-
-	console.log(chalk.green('SelfKey ID Wallet Test Config'))
-	console.log(chalk.blue('*****************************'))
-	console.log(
-		chalk.blue(`
-    _______   _______   __       _______  ___ ___ _________ ____   ___
-   /       | |   ____| |  |     |   ____||  |/  / |   ____ \\   \\  /  / 
-   |   (---- |  |__    |  |     |  |__   |     /  |  |__    \\   \\/  /  
-   \\   \\     |   __|   |  |     |   __|  |   <    |   __|    \\_   _/   
-.----)   |   |  |____  |  -----||  |     |     \\  |  |____    |  |     
-|_______/    |_______| |_______||__|     |__|\\__\\ |_______|   |__|     
-                                                                      `)
-	)
-	console.log(chalk.blue(note))
-}
-
 module.exports = {
 	app,
 	init,
 	appStart,
 	appStop,
-	specStart,
-	specStop,
 	regStep,
 	clipboardCheck,
-	screenshotCheck,
-	consoleNotes
+	screenshotCheck
 }
