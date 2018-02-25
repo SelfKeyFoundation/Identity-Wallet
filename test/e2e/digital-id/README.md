@@ -1,0 +1,286 @@
+#BUILD DIGITAL ID
+https://kyc-chain.atlassian.net/wiki/spaces/IDWAL/pages/37093385/Test+Plan+-+Build+Digital+ID
+
+##TC01: Logging in to the wallet
+
+* Open ID Wallet Application
+* Click "Restore Wallet" button
+* Select "Keystore / Select"
+* Enter password
+* Click Unlock button
+* User is redirected to Selfkey Dashboard
+
+##TC02: Navigating to Identity Wallet Dashboard
+
+* Click Hamburger icon
+* Click Identity Wallet
+* User is redirected to ID Wallet Dashboard
+
+##TC03: Adding Name Attribute
+
+* Click Add Attribute button
+* Select Name in the drop down
+* Upload document in the Name field
+* Click Save
+* Hover Yellow tooltip icon
+* Name is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Name" is displayed in the History Section with timestamp
+
+##TC04: Adding Public Key Attribute
+
+* Click Add Attribute button
+* Select Public Key in the drop down
+* Upload document in the Public Key field
+* Click Save
+* Hover Yellow tooltip icon
+* Public Key is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Public Key" is displayed in the History Section with timestamp
+
+##TC05: Adding Physical Address Attribute
+
+* Click Add Attribute button
+* Select Physical Address in the drop down
+* Enter `<value>` in the Physical Address text box
+* Click Save
+* Hover Yellow tooltip icon
+* Physical Address is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Physical Address" is displayed in the History Section with timestamp
+
+##TC06: Adding Workplace Attribute
+
+* Click Add Attribute button
+* Select Workplace in the drop down
+* Enter `<value>` in the Workplace text box
+* Click Save
+* Hover Yellow tooltip icon
+* Workplace is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Workplace" is displayed in the History Section with timestamp
+
+##TC07: Adding Date of Birth Attribute
+
+* Click Add Attribute button
+* Select Date of Birth in the drop down
+* Enter `<value>` in the Date of Birth text box
+* Click Save
+* Hover Yellow tooltip icon
+* Date of Birth is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Workplace" is displayed in the History Section with timestamp
+
+##TC08: Adding Nationality Attribute
+
+* Click Add Attribute button
+* Select Nationality in the drop down
+* Enter <Country> in the Nationality drop down
+* Click Save
+* Hover Yellow tooltip icon
+* Nationality is added in the ID Wallet dashboard with <Country> displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Nationality" is displayed in the History Section with timestamp
+
+##TC09: Adding Tax Identification Number Attribute
+
+* Click Add Attribute button
+* Select Tax Identification Number in the drop down
+* Enter `<value>` in the Tax Identification Number text box
+* Click Save
+* Hover Yellow tooltip icon
+* Tax Identification Number is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Tax Identification Number" is displayed in the History Section with timestamp
+
+##TC10: Adding Passport Attribute
+
+* Click Add Attribute button
+* Select Passport in the drop down
+* Upload document in the Passport field
+* Click Save
+* Hover Yellow tooltip icon
+* Passport is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Passport" is displayed in the History Section with timestamp
+
+##TC11: Adding Driver's License Attribute
+
+* Click Add Attribute button
+* Select Driver's License in the drop down
+* Upload document in the Driver's License field
+* Click Save
+* Hover Yellow tooltip icon
+* Driver's License is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Driver's License" is displayed in the History Section with timestamp
+
+##TC12: Adding National ID Attribute
+
+* Click Add Attribute button
+* Select National ID in the drop down
+* Upload document in the National ID field
+* Click Save
+* Hover Yellow tooltip icon
+* National ID is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: National ID" is displayed in the History Section with timestamp
+
+##TC13: Adding Utility Bill Attribute
+
+* Click Add Attribute button
+* Select Utility Bill in the drop down
+* Upload document in the Utility Bill field
+* Click Save
+* Hover Yellow tooltip icon
+* Utility Bill is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Utility Bill" is displayed in the History Section with timestamp
+
+##TC14: Adding Bank Statement Attribute
+
+* Click Add Attribute button
+* Select Bank Statement in the drop down
+* Upload document in the Bank Statement field
+* Click Save
+* Hover Yellow tooltip icon
+* Bank Statement is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Bank Statement" is displayed in the History Section with timestamp
+
+##TC15: Adding Tax Certificate Attribute
+
+* Click Add Attribute button
+* Select Tax Certificate in the drop down
+* Upload document in the Tax Certificate field
+* Click Save
+* Hover Yellow tooltip icon
+* Tax Certificate is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Tax Certificate" is displayed in the History Section with timestamp
+
+##TC16: Adding Phone Country Code Attribute
+
+* Click Add Attribute button
+* Select Phone Country Code in the drop down
+* Enter `<value>` in the Phone Country Code text box
+* Click Save
+* Hover Yellow tooltip icon
+* Phone Country Code is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Phone Country Code" is displayed in the History Section with timestamp
+
+##TC17: Adding Phone Number Attribute
+
+* Click Add Attribute button
+* Select Phone Number in the drop down
+* Enter `<value>` in the Phone Number text box
+* Click Save
+* Hover Yellow tooltip icon
+* Phone Number is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Phone Number" is displayed in the History Section with timestamp
+
+##TC18: Adding Selfie Attribute
+
+* Click Add Attribute button
+* Select Selfie in the drop down
+* Upload document in the Selfie field
+* Click Save
+* Hover Yellow tooltip icon
+* Selfie is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Selfie" is displayed in the History Section with timestamp
+
+##TC19: Adding Fingerprint Attribute
+
+* Click Add Attribute button
+* Select Fingerprint in the drop down
+* Upload document in the Fingerprint field
+* Click Save
+* Hover Yellow tooltip icon
+* Fingerprint is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Fingerprint" is displayed in the History Section with timestamp
+
+##TC20: Adding Email Attribute
+
+* Click Add Attribute button
+* Select Email in the drop down
+* Enter `<value>` in the Email text box
+* Click Save
+* Hover Yellow tooltip icon
+* Email is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Email" is displayed in the History Section with timestamp
+
+##TC21: Adding Country of Residency Attribute
+
+* Click Add Attribute button
+* Select Country of Residency in the drop down
+* Enter `<value>` in the Country of Residency text box
+* Click Save
+* Hover Yellow tooltip icon
+* Country of Residency is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Country of Residency" is displayed in the History Section with timestamp
+
+##TC22: Adding Selfie with ID Attribute
+
+* Click Add Attribute button
+* Select Selfie with ID in the drop down
+* Upload document in the Selfie with ID field
+* Click Save
+* Hover Yellow tooltip icon
+* Selfie with ID is added in the ID Wallet dashboard with `<value>` displayed beside it.
+* "Completed" text is shown when hovering Yellow tooltip icon
+* "Created New Attribute: Selfie with ID" is displayed in the History Section with timestamp
+
+##TC23: Navigating to Marketplace
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Marketplace
+* Marketplace screen is opened in a modal popup. (not yet available)
+
+##TC24: Navigating to Identity Wallet
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Identity Wallet
+* User is redirected to ID Wallet Dashboard.
+
+##TC25: Navigating to Help & Support
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Help & Support
+* A browser is opened and navigates to help.selfkey.org.
+
+##TC26: Navigating to About
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click About
+* About ID Wallet screen is opened in a modal popup. (not yet available)
+
+##TC27: Navigating to Dashboard
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Dashboard
+* User is redirected to Selfkey Dashboard.
+
+##TC28: Navigating to Submit An Idea
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Submit An Idea
+* Submit an Idea screen is opened in a modal popup. (not yet available)
+
+##TC29: Navigating to Version
+###Prerequisite: TC01
+
+* Click hamburger icon
+* Click Version
+* Application version is displayed in a modal popup.

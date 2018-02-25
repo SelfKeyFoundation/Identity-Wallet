@@ -1,11 +1,5 @@
 [
     {
-        "firstName": "Bobby",
-        "middleName": "Panda",
-        "lastName": "Lee",
-        "country": "Canada",
-        "strongPass": "Y@88@D@88@D00",
-        "weakPass": "1234",
         "pubKey": "0x30B5C0767d45C05b209ca99f3B9aA189A8Af8a86",
         "privKey":
             "0x0ef413ecf0af0d5be949a0379b308ac2cb3f2b8cf4e88e834330eaabed5e7921"
