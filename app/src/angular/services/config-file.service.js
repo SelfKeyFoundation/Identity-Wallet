@@ -1,169 +1,170 @@
-'use strict';
+"use strict";
 
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const Ico = requireAppModule('angular/classes/ico');
+const IdAttributeType = requireAppModule("angular/classes/id-attribute-type");
+const IdAttribute = requireAppModule("angular/classes/id-attribute");
+const Ico = requireAppModule("angular/classes/ico");
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {
-  'ngInject';
+	"ngInject";
 
-  $log.debug('ConfigFileService Initialized');
+	$log.debug("ConfigFileService Initialized");
 
-  let isReady = false;
+	let isReady = false;
 
-  // main store
-  let store = null;
+	// main store
+	let store = null;
 
-  // temporary stored datas
-  let idAttributeTypes = {};
-  let icos = {};
+	// temporary stored datas
+	let idAttributeTypes = {};
+	let icos = {};
 
-  class ConfigFileStore {
+	class ConfigFileStore {
+		constructor() {
+			this.q = async.queue((data, callback) => {
+				ElectronService.saveDataStore(store)
+					.then(() => {
+						$rootScope.$broadcast("ConfigFileService:reloaded", store);
+						callback(null, store);
+					})
+					.catch(err => {
+						callback(err);
+					});
+			}, 1);
+		}
 
-    constructor() {
-      this.q = async.queue((data, callback) => {
-        let newStore = JSON.parse(data.store);
+		init() {
+			const me = this;
 
-        ElectronService.saveDataStore(newStore).then(() => {
-          callback(null, newStore);
-        }).catch((err) => {
-          callback(err);
-        });
-      }, 1);
-    }
+			let defer = $q.defer();
 
-    init() {
-      const me = this;
+			if (ElectronService.ipcRenderer) {
+				ElectronService.initDataStore()
+					.then(data => {
+						store = data;
 
-      let defer = $q.defer();
+						// custom delay - to make visible loading
+						$timeout(() => {
+							defer.resolve(store);
+							$rootScope.$broadcast("config-file-loaded");
+							isReady = true;
+						}, 3000);
+					})
+					.catch(error => {
+						defer.reject(error);
+					});
+			} else {
+				defer.reject({ message: "electron not available" });
+			}
+			return defer.promise;
+		}
 
-      if (ElectronService.ipcRenderer) {
-        ElectronService.initDataStore().then((data) => {
-          store = data;
+		save() {
+			const me = this;
+			const defer = $q.defer();
+			const jsonConfig = JSON.stringify(store);
+			me.q.push({ store: jsonConfig }, (err, conf) => {
+				if (err) {
+					return defer.reject(err);
+				}
+				defer.resolve(conf);
+			});
 
-          // custom delay - to make visible loading
-          $timeout(() => {
-            defer.resolve(store);
-            $rootScope.$broadcast('config-file-loaded');
-            isReady = true;
-          }, 3000);
+			return defer.promise;
+		}
 
-        }).catch((error) => {
-          defer.reject(error);
-        });
-      } else {
-        defer.reject({ message: 'electron not available' });
-      }
-      return defer.promise;
-    }
+		load() {
+			let defer = $q.defer();
+			ElectronService.readDataStore()
+				.then(data => {
+					store = data;
 
+					for (let i in store.idAttributes) {
+						let idAttribute = new IdAttribute();
+						idAttribute.setData(store.idAttributes[i]);
+						store.idAttributes[i] = idAttribute;
+					}
 
-    save() {
-      const me = this;
-      const defer = $q.defer();
-      const jsonConfig = JSON.stringify(store);
-      me.q.push({ store: jsonConfig }, (err, conf) => {
-        if (err) {
-          return defer.reject(err);
-        }
-        defer.resolve(conf);
-      });
+					defer.resolve(store);
+				})
+				.catch(error => {
+					// TODO
+					defer.reject(error);
+				});
+			return defer.promise;
+		}
 
-      return defer.promise;
-    }
+		getStore() {
+			return store;
+		}
 
-    load() {
-      let defer = $q.defer();
-      ElectronService.readDataStore().then((data) => {
-        store = data;
+		getWalletPublicKeys() {
+			return Object.keys(store.wallets);
+		}
 
-        for (let i in store.idAttributes) {
-          let idAttribute = new IdAttribute()
-          idAttribute.setData(store.idAttributes[i]);
-          store.idAttributes[i] = idAttribute;
-        }
+		getPublicKeys(type) {
+			if (!type) {
+				return Object.keys(store.wallets);
+			} else {
+				let keys = [];
+				for (let i in store.wallets) {
+					if (store.wallets[i].type === type) {
+						keys.push(i);
+					}
+				}
+				return keys;
+			}
+		}
 
-        defer.resolve(store);
-      }).catch((error) => {
-        // TODO
-        defer.reject(error);
-      });
-      return defer.promise;
-    }
+		getWalletsMetaData() {
+			let keys = this.getWalletPublicKeys();
+			let result = [];
+			for (let i in keys) {
+				let key = keys[i];
+				result.push({
+					name: store.wallets[key].name,
+					keystoreFilePath: store.wallets[key].keystoreFilePath,
+					publicKey: key
+				});
+			}
+			return result;
+		}
 
-    getStore() {
-      return store;
-    }
+		getWalletsMetaDataByPublicKey(publicKey) {
+			return store.wallets[publicKey];
+		}
 
-    getWalletPublicKeys() {
-      return Object.keys(store.wallets);
-    }
+		/**
+		 *
+		 */
+		getIdAttributeTypes() {
+			return idAttributeTypes;
+		}
 
-    getPublicKeys(type) {
-      if(!type){
-        return Object.keys(store.wallets);
-      }else{
-        let keys = [];
-        for(let i in store.wallets){
-          if(store.wallets[i].type === type){
-            keys.push(i);
-          }
-        }
-        return keys;
-      }
-    }
+		getIdAttributeType(key) {
+			return idAttributeTypes[key];
+		}
 
-    getWalletsMetaData() {
-      let keys = this.getWalletPublicKeys();
-      let result = [];
-      for (let i in keys) {
-        let key = keys[i];
-        result.push({
-          name: store.wallets[key].name,
-          keystoreFilePath: store.wallets[key].keystoreFilePath,
-          publicKey: key
-        });
-      }
-      return result;
-    }
+		setIdAttributeTypes(data) {
+			idAttributeTypes = data;
+		}
 
-    getWalletsMetaDataByPublicKey(publicKey) {
-      return store.wallets[publicKey];
-    }
+		/**
+		 *
+		 */
+		getIcos() {
+			return icos;
+		}
 
-    /**
-     * 
-     */
-    getIdAttributeTypes() {
-      return idAttributeTypes;
-    }
+		addIco(status, ico) {
+			if (!icos[status]) {
+				icos[status] = [];
+			}
+			icos[status].push(ico);
+		}
+	}
 
-    getIdAttributeType(key) {
-      return idAttributeTypes[key];
-    }
-
-    setIdAttributeTypes(data) {
-      idAttributeTypes = data;
-    }
-
-    /**
-     * 
-     */
-    getIcos() {
-      return icos;
-    }
-
-    addIco(status, ico) {
-      if (!icos[status]) {
-        icos[status] = [];
-      }
-      icos[status].push(ico);
-    }
-
-  }
-
-  return new ConfigFileStore();
+	return new ConfigFileStore();
 }
 
 module.exports = ConfigFileService;

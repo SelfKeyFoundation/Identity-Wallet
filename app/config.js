@@ -1,6 +1,14 @@
-'use strict';
+"use strict";
 
-const appTitle = require('../package.json').productName
+const appTitle = require("../package.json").productName;
+
+// "name": "selfkey-identity-wallet",
+// "productName": "ID Wallet",
+// "version": "0.0.18",
+// "description": "Selfkey Identity Wallet",
+// "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
+// "license": "MIT",
+// "main": "./app/main.js"
 
 const AppConfigConstant = {
 	common: {
@@ -16,35 +24,35 @@ const AppConfigConstant = {
 		defaultLanguage: "en",
 		constants: {
 			initialIdAttributes: {
-				"REQ_1": {"id": "1", "attributeType": "name"},
-				"REQ_2": {"id": "1", "attributeType": "email"},
-				"REQ_3": {"id": "1", "attributeType": "country_of_residency"},
-				"REQ_4": {"id": "1", "attributeType": "national_id"},
-				"REQ_5": {"id": "2", "attributeType": "national_id", "selfie": true}
+				REQ_1: { id: "1", attributeType: "name" },
+				REQ_2: { id: "1", attributeType: "email" },
+				REQ_3: { id: "1", attributeType: "country_of_residency" },
+				REQ_4: { id: "1", attributeType: "national_id" },
+				REQ_5: { id: "2", attributeType: "national_id", selfie: true }
 			},
 			idAttributeTypeAdditions: {
-				"selfie": "addition_with_selfie",
-				"signature": "addition_with_signature",
-				"notary": "addition_with_notary",
-				"certified_true_copy": "addition_with_certified_true_copy"
+				selfie: "addition_with_selfie",
+				signature: "addition_with_signature",
+				notary: "addition_with_notary",
+				certified_true_copy: "addition_with_certified_true_copy"
 			},
 			primaryToken: "key"
 		},
-		notificationTypes : {
-			wallet : {
-				icon : "wallet-without-color",
+		notificationTypes: {
+			wallet: {
+				icon: "wallet-without-color",
 				title: "the wallet title",
 				color: "green"
 			},
-			notification : {
-				icon : "appointment-reminders-without-color",
+			notification: {
+				icon: "appointment-reminders-without-color",
 				title: "you got a notifixation",
 				color: "yellow"
 			}
 		},
-		reminderTypes : {
-			regular : {
-				icon : "appointment-reminders-without-color",
+		reminderTypes: {
+			regular: {
+				icon: "appointment-reminders-without-color",
 				title: "you got a reminder",
 				color: "blue"
 			}
@@ -53,7 +61,7 @@ const AppConfigConstant = {
 			"https://youtube.com",
 			"https://etherscan.io",
 			"https://selfkey.org",
-			'https://help.selfkey.org',
+			"https://help.selfkey.org",
 			"http://help.selfkey.org",
 			"https://blog.selfkey.org",
 			"https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf",
@@ -68,7 +76,7 @@ const AppConfigConstant = {
 		chainId: 3,
 		node: "infura"
 	},
-    production: {
+	production: {
 		debug: false,
 		dev: false,
 		updateEndpoint: "https://release.selfkey.org",

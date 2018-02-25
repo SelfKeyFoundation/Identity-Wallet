@@ -1,54 +1,81 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, ElectronService, CommonService) {
-    'ngInject'
+function GuestKeystoreCreateStep2Controller(
+	$rootScope,
+	$scope,
+	$log,
+	$q,
+	$timeout,
+	$state,
+	$stateParams,
+	$mdDialog,
+	countries
+) {
+	"ngInject";
 
-    $log.info('GuestKeystoreCreateStep2Controller');
+	$log.info("GuestKeystoreCreateStep2Controller");
 
-    let messagesContainer = angular.element(document.getElementById("message-container"));
+	$scope.countryList = countries.countryList;
 
-    $rootScope.wallet = null;
+	$scope.input = {
+		firstName: "",
+		lastName: "",
+		middleName: "",
+		countryOfResidency: ""
+	};
 
-    $scope.userInput = {
-        password: ''
-    };
+	$scope.nextStep = (event, form) => {
+		if (!form.$valid) return;
 
-    $scope.createKeystore = (event) => {
-        
-        if(!$scope.userInput.password) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "password is required",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
+		$mdDialog.show({
+			controller: "PasswordWarningDialogController",
+			templateUrl: "common/dialogs/password-warning.html",
+			parent: angular.element(document.body),
+			targetEvent: event,
+			clickOutsideToClose: false,
+			fullscreen: true,
+			locals: {
+				basicInfo: $scope.input
+			}
+		});
+	};
 
-        if($scope.userInput.password !== $stateParams.thePassword) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "wrong password",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
+	// TODO remove
+	$scope.createKeystore = event => {
+		if (!$scope.userInput.password) {
+			CommonService.showMessage({
+				container: messagesContainer,
+				type: "error",
+				message: "password is required",
+				closeAfter: 1500,
+				replace: true
+			});
+			return;
+		}
 
-        let promise = WalletService.createKeystoreFile($scope.userInput.password);
-        promise.then((wallet) => {
-            $rootScope.wallet = wallet;
-            
-            // reload store
-            ConfigFileService.load().then((storeData) => {
-                $state.go('guest.create.step-3')
-            });
-        }).catch((error)=>{
-            $log.error(error);
-        });
-    }
+		if ($scope.userInput.password !== $stateParams.thePassword) {
+			CommonService.showMessage({
+				container: messagesContainer,
+				type: "error",
+				message: "wrong password",
+				closeAfter: 1500,
+				replace: true
+			});
+			return;
+		}
 
-    
-};
+		let promise = WalletService.createKeystoreFile($scope.userInput.password);
+		promise
+			.then(wallet => {
+				$rootScope.wallet = wallet;
+
+				// reload store
+				ConfigFileService.load().then(storeData => {
+					$state.go("guest.create.step-3");
+				});
+			})
+			.catch(error => {
+				$log.error(error);
+			});
+	};
+}
 
 module.exports = GuestKeystoreCreateStep2Controller;

@@ -1,12 +1,12 @@
 
-@import '../mixins/reset.scss';
+//@import '../mixins/reset.scss';
 
 .sk-my-cryptos-box {
     width: 100% !important;
     padding: 20px;       
 
     >.header {
-        @include reset('div');
+        //@include reset('div');
 
         width: 100% !important;
 

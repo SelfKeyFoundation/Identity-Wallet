@@ -1,17 +1,27 @@
-.header
-    span.none-select-text Save Your Private Key
-form.content(layout="column", style="padding: 24px;")
-    
-    md-input-container.sk-input-box.no-error-spacer
-        label Your Private Key
-        input(name="privateKey", ng-model="privateKey", type="text", placeholder="Your Private Key", disabled)
+.wallet-create-step-4(layout-fill, layout="column", layout-align="center center")
+    sk-icon(icon="selfkey", size-class="icon-size-57x65")
+    .title SELFKEY BASIC ID
+    .description BLOCKCHAIN IDENTITY WALLET
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Confirm Password
+        form.content(name="passwordForm", layout="column")
+            .title "Remember, if you forget . your password there is no way to get it back! You will not be able to change this password at any time."
+            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
+                label Password
+                input#pwd2(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
+            
+            .password-strength-container
+                .blocks-container
+                    .block(ng-class="{'active': passwordStrength.score >= 0}")
+                    .block(ng-class="{'active': passwordStrength.score >= 1}")
+                    .block(ng-class="{'active': passwordStrength.score >= 2}")
+                    .block(ng-class="{'active': passwordStrength.score >= 3}")
+                .status-text-container
+                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
 
-    .sk-button.filled-blue(style="margin: 24px 0 12px 0;", ng-click="printPaperWallet($event)")
-        span(style="color: #fff") Print Paper Wallet
-
-    span.sk-text Do not lose it! It cannot be recovered if you lose it.
-    span.sk-text Do not share it! Your funds will be stolen if you use this file on a malicious/phishing site.
-    span.sk-text Make a backup! Secure it like the millions of dollars it may one day be worth.
-
-    .sk-button.outline-blue#next2(style="margin: 24px 0 12px 0;", ng-click="nextStep($event)")
-        span(style="color: #fff") Complete
+            .actions-wrapper
+                md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
+                    span.primary Back
+                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
+                    span#pwd2Next.primary Next

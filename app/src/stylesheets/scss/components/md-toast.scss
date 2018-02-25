@@ -1,0 +1,17 @@
+.md-toast-success {
+    .md-toast-content {
+        background-image: linear-gradient(274deg, #08bccd, #2da1f8) !important;
+    }
+}
+
+.md-toast-error {
+    .md-toast-content {
+        background-color: #ed1c24 !important;
+    }
+}
+
+.md-toast-warning {
+    .md-toast-content {
+        background-image: linear-gradient(318deg, #db9218, #f5a623) !important;
+    }
+}

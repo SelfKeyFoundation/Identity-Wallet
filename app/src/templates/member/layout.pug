@@ -4,7 +4,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
     .sk-right-sidenav(ng-controller="MemberRightSidenavController", style="height: 100%;")
         .sk-right-sidenav__header
             sk-icon(icon="selfkey", size-class="icon-size-39x44")
-            span(ng-click="close($event)") ✕
+            span#closeNav(ng-click="close($event)") ✕
 
         .sk-right-sidenav__content(layout="column", layout-align="space-between center", flex)
             .top-part-container(layout="column", style="width: 100%;")
@@ -32,6 +32,6 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__section
                     #helpLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
                 
-                span(style="color: #fff; text-align: right; padding: 20px;") V{{$root.version}}
+                span#version(style="color: #fff; text-align: right; padding: 20px;") V{{$root.version}}
 
 

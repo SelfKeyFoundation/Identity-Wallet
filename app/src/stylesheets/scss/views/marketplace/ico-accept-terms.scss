@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: flex-start;
     >#message-container {
-        @include reset(div);
+        //@include reset(div);
         width: 1140px;
         height: 48px;
         display: flex;
@@ -13,7 +13,7 @@
         justify-content: center;
     }
     >.section {
-        @include reset(div);
+        //@include reset(div);
         display: flex;
         flex-direction: row;
         align-items: flex-start;

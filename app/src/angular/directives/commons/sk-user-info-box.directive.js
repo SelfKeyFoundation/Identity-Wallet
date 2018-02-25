@@ -1,34 +1,34 @@
-'use strict';
+"use strict";
 
 function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileService) {
-    'ngInject';
+	"ngInject";
 
-    return {
-        restrict: 'E',
-        scope: {},
-        link: (scope, element) => {
-            scope.userData = {
-                email: "",
-                name: "",
-                country_of_residency: "",
-                tempImage: 'assets/images/temp/avatar.jpg'
-            }
+	return {
+		restrict: "E",
+		scope: {},
+		link: (scope, element) => {
+			scope.userData = {
+				email: "",
+				name: "",
+				country_of_residency: "",
+				tempImage: "assets/images/temp/avatar.jpg"
+			};
 
-            let store = ConfigFileService.getStore();
-            let idAttributes = store.wallets[$rootScope.wallet.getPublicKeyHex()].data.idAttributes;
+			let store = ConfigFileService.getStore();
+			let idAttributes = store.wallets[$rootScope.wallet.getPublicKeyHex()].data.idAttributes;
 
-            reloadData ();
+			reloadData();
 
-            function reloadData(){
-                for(let i in idAttributes){
-                    let item = idAttributes[i];
-                    scope.userData[i] = item.items[item.defaultItemId].values[0];
-                }    
-            }
-        },
-        replace: true,
-        templateUrl: 'common/directives/sk-user-info-box.html'
-    }
+			function reloadData() {
+				for (let i in idAttributes) {
+					let item = idAttributes[i];
+					scope.userData[i] = item.items[item.defaultItemId].values[0];
+				}
+			}
+		},
+		replace: true,
+		templateUrl: "common/directives/sk-user-info-box.html"
+	};
 }
 
 module.exports = SkUserInfoBoxDirective;

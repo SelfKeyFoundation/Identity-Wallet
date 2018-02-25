@@ -1,97 +1,111 @@
-'use strict';
+"use strict";
 
-const Token = requireAppModule('angular/classes/token');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule("angular/classes/token");
+const EthUtils = requireAppModule("angular/classes/eth-utils");
 
-const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
+const TOKENS_CONTRACT_ARRAY = require("../store/tokens/eth-tokens.json");
 
-function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service, ConfigFileService) {
-  'ngInject';
+function TokenService(
+	$rootScope,
+	$log,
+	$http,
+	$interval,
+	$q,
+	EVENTS,
+	EtherScanService,
+	Web3Service,
+	ConfigFileService
+) {
+	"ngInject";
 
-  $log.info('TokenService Initialized');
+	$log.info("TokenService Initialized");
 
-  let TOKENS_MAP = {};
+	let TOKENS_MAP = {};
 
-  let totalInitialized = 0;
-  let loadBalanceQueue = [];
+	let totalInitialized = 0;
+	let loadBalanceQueue = [];
 
-  class TokenService {
+	class TokenService {
+		constructor() {
+			$rootScope.TOKEN_MAP = TOKENS_MAP;
+		}
 
-    constructor() {
-      $rootScope.TOKEN_MAP = TOKENS_MAP;
-    }
+		addTokenToMap(key, token) {
+			TOKENS_MAP[token.symbol] = token;
+			$rootScope.$broadcast(EVENTS.NEW_TOKEN_ADDED, token);
+			return TOKENS_MAP;
+		}
 
-    addTokenToMap(key, token) {
-      TOKENS_MAP[token.symbol] = token;
-      $rootScope.$broadcast(EVENTS.NEW_TOKEN_ADDED, token);
-      return TOKENS_MAP;
-    }
+		init(publicKeyHex) {
+			/**
+			 * default tokens from json data store
+			 */
+			for (let i in TOKENS_CONTRACT_ARRAY) {
+				let t = TOKENS_CONTRACT_ARRAY[i];
+				let token = new Token(t.address, t.symbol, Number(t.decimal), t.type);
+				token.setOwner(publicKeyHex);
+				this.addTokenToMap(t.symbol, token);
+			}
 
-    init(publicKeyHex) {
-      /**
-       * default tokens from json data store
-       */
-      for (let i in TOKENS_CONTRACT_ARRAY) {
-        let t = TOKENS_CONTRACT_ARRAY[i];
-        let token = new Token(t.address, t.symbol, Number(t.decimal), t.type);
-        token.setOwner(publicKeyHex);
-        this.addTokenToMap(t.symbol, token);
-      }
+			/**
+			 * custom tokens from - from store
+			 */
+			let store = ConfigFileService.getStore();
+			for (let i in store.tokens) {
+				if (store.tokens[i].type === "custom") {
+					let td = store.tokens[i];
+					let token = new Token(
+						td.contract.address,
+						td.contract.symbol,
+						Number(td.contract.decimal),
+						td.contract.type
+					);
+					token.setOwner(publicKeyHex);
+					this.addTokenToMap(i, token);
+				}
+			}
+		}
 
-      /**
-       * custom tokens from - from store
-       */
-      let store = ConfigFileService.getStore();
-      for (let i in store.tokens) {
-        if (store.tokens[i].type === 'custom') {
-          let td = store.tokens[i];
-          let token = new Token(td.contract.address, td.contract.symbol, Number(td.contract.decimal), td.contract.type);
-          token.setOwner(publicKeyHex);
-          this.addTokenToMap(i, token);
-        }
-      }
-    }
+		loadBalanceBySymbol(userAddress, symbol) {
+			let token = TOKENS_MAP[symbol];
+			let data = token.generateBalanceData(userAddress);
+		}
 
-    loadBalanceBySymbol(userAddress, symbol) {
-      let token = TOKENS_MAP[symbol];
-      let data = token.generateBalanceData(userAddress);
-    }
+		getBalanceBySymbol(userAddress, symbol) {
+			let defer = $q.defer();
 
-    getBalanceBySymbol(userAddress, symbol) {
-      let defer = $q.defer();
+			let token = TOKENS_MAP[symbol];
+			let data = token.generateBalanceData(userAddress);
 
-      let token = TOKENS_MAP[symbol];
-      let data = token.generateBalanceData(userAddress);
+			token.promise = EtherScanService.getEthCall(data);
+			token.promise.then(balanceHex => {
+				token.balance = balanceHex;
+				token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
+				defer.resolve(token);
+			});
 
-      token.promise = EtherScanService.getEthCall(data);
-      token.promise.then((balanceHex) => {
-        token.balance = balanceHex;
-        token.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
-        defer.resolve(token);
-      });
+			return defer.promise;
+		}
 
-      return defer.promise;
-    }
+		loadAllbalance(userAddress) {
+			for (let key in TOKENS_MAP) {
+				if (TOKENS_MAP.hasOwnProperty(key)) {
+					let t = TOKENS_MAP[key];
+					this.loadBalanceBySymbol(userAddress, t.symbol);
+				}
+			}
+		}
 
-    loadAllbalance(userAddress) {
-      for (let key in TOKENS_MAP) {
-        if (TOKENS_MAP.hasOwnProperty(key)) {
-          let t = TOKENS_MAP[key];
-          this.loadBalanceBySymbol(userAddress, t.symbol)
-        }
-      }
-    }
+		getBySymbol(symbol) {
+			return TOKENS_MAP[symbol];
+		}
 
-    getBySymbol(symbol) {
-      return TOKENS_MAP[symbol];
-    }
+		getAll() {
+			return TOKENS_MAP;
+		}
+	}
 
-    getAll() {
-      return TOKENS_MAP;
-    }
-  };
-
-  return new TokenService();
+	return new TokenService();
 }
 
 module.exports = TokenService;

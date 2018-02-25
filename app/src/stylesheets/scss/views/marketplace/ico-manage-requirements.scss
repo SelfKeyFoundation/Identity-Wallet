@@ -5,7 +5,7 @@
     justify-content: flex-start;
 
     > #message-container {
-        @include reset(div);
+        //@include reset(div);
 
         width: 1140px;
         height: 48px;
@@ -17,7 +17,7 @@
     }
 
     > .section {
-        @include reset(div);
+        //@include reset(div);
 
         display: flex;
         flex-direction: row;
