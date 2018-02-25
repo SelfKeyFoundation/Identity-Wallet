@@ -1,18 +1,10 @@
 # Selfkey Identity Wallet
 
-[![Build Status](https://travis-ci.org/altninja/Identity-Wallet.svg?branch=standards)](https://travis-ci.org/altninja/Identity-Wallet)
-
-[![CircleCI](https://circleci.com/gh/altninja/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/altninja/Identity-Wallet)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/1oal9hxddsx3a25f?svg=true)](https://ci.appveyor.com/project/altninja/identity-wallet)
-
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/altninja/Identity-Wallet.svg?branch=standards)](https://travis-ci.org/altninja/Identity-Wallet) [![CircleCI](https://circleci.com/gh/altninja/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/altninja/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/1oal9hxddsx3a25f?svg=true)](https://ci.appveyor.com/project/altninja/identity-wallet) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-The Official SelfKey Identity Wallet for Desktop.
+The Official SelfKey Identity Wallet for Desktop
 
 ## Features
 
