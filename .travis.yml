@@ -2,8 +2,9 @@ os: osx
 language: node_js
 node_js: 9
 env:
-  - NODE_ENV=test
-  - OSENV=travis
+  global:
+    - NODE_ENV=test
+    - OSENV=travis
 before_install:
   - brew install wine rpm
   - npm i -g gulp-cli
