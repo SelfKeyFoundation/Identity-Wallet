@@ -10,8 +10,10 @@ function CopyToClipboardDirective($document, $timeout) {
 			copyToClipboard: "=",
 			copyAnimation: "@"
 		},
-		replace: false,
-		link: (scope, element) => {
+		
+        replace: false,
+		
+        link: (scope, element) => {
 			// default : fadeUp
 			let copyAnimation = scope.copyAnimation || "default";
 			let originalText = null;
@@ -49,19 +51,6 @@ function CopyToClipboardDirective($document, $timeout) {
 						break;
 				}
 
-				$timeout(() => {
-					messageElement[0].remove();
-
-                switch (copyAnimation) {
-                    case 'default':
-                        element.html("COPIED");
-                        break;
-                    case 'fadeUp':
-                        fadeUpEl = angular.element('<div class="copy-to-clipboard-msg">Copied</div>');
-                        element[0].append(fadeUpEl[0]);
-                        break;
-                }
-
                 $timeout(() => {
                     messageElement[0].remove();
 
@@ -79,7 +68,7 @@ function CopyToClipboardDirective($document, $timeout) {
                 document.execCommand('copy');
             });
         }
-    }
+    } 
 }
 
 module.exports = CopyToClipboardDirective;

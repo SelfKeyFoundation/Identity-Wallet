@@ -176,7 +176,6 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
     };
 
     return new EtherScanService();
->>>>>>> upstream/dev
 }
 
 module.exports = EtherScanService;

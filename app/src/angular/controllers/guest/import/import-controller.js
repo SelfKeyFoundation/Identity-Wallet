@@ -39,5 +39,7 @@ function GuestImportWalletController(
 
 	$scope.onRadioButtonChange = event => {
 		$log.info("onRadioButtonChange", $scope.selectedOption);
+    }
+}
 
 module.exports = GuestImportWalletController;
