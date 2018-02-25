@@ -23,8 +23,13 @@ app/src/angular/app.templates.js
 release
 .vscode
 
+# Builds
 out/
-test/benny
+dist/
+
+# Caps
+test/local/caps/screens/*
+test/local/caps/source/*
 
 # Logs
 logs
@@ -32,6 +37,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+local/logs
 
 # Runtime data
 pids
