@@ -1,15 +1,13 @@
 environment:
   nodejs_version: "9"
-  OSENV: win
   NODE_ENV: test
+  OSENV: win
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
   - npm run makewin
-
 test_script:
   - node --version
   - npm --version
   - npm run test
-
 build: off
