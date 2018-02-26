@@ -32,9 +32,6 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
             SqlLiteService.loadWallets().then(()=>{
                 $rootScope.wallet = wallet;
                 $rootScope.wallet.loadIdAttributes().then((idAttributes)=>{
-                    $log.debug("loadIdAttributes", idAttributes);
-                    $log.debug("getIdAttributes", $rootScope.wallet.getIdAttributes());
-
                     $state.go('guest.create.step-5');
                 });
             });

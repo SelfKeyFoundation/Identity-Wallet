@@ -2,9 +2,9 @@
 
 const Ico = requireAppModule('angular/classes/ico');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+//const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
-function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService, SqlLiteService) {
+function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteService) {
     'ngInject';
 
     $log.info('SelfkeyService Initialized');
@@ -76,12 +76,15 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
                 for (let i in idAttributesArray) {
                     if (!idAttributesArray[i].data) continue;
                     let item = idAttributesArray[i].data.fields;
+
+                    /*
                     idAttributeTypes[item.key] = new IdAttributeType(
                         item.key,
                         item.category,
                         item.type,
                         item.entity
                     );
+                    */
                 }
 
                 defer.resolve(idAttributeTypes);
@@ -102,12 +105,14 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
                 for (let i in idAttributesArray) {
                     if (!idAttributesArray[i].data) continue;
                     let item = idAttributesArray[i].data.fields;
+                    /*
                     idAttributeTypes[item.key] = new IdAttributeType(
                         item.key,
                         item.category,
                         item.type,
                         item.entity
                     );
+                    */
                 }
 
                 defer.resolve(idAttributeTypes);
@@ -189,6 +194,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         retrieveKycSessionToken(privateKeyHex, ethAddress, email, organizationId) {
             let defer = $q.defer();
 
+            /*
             let store = ConfigFileService.getStore();
             let wallet = store.wallets[$rootScope.wallet.getPublicKeyHex()];
 
@@ -197,6 +203,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
             } else {
                 this.retrieveKycSessionToken_register(defer, ethAddress, privateKeyHex, email, organizationId);
             }
+            */
 
             return defer.promise;
         }
@@ -262,6 +269,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
         }
 
         loadData(reload) {
+            /*
             // 1: Load Id Attribute Types
             this.dispatchIdAttributeTypes(reload).then((data) => {
                 ConfigFileService.setIdAttributeTypes(data);
@@ -275,6 +283,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFi
             });
 
             $rootScope.icos = ConfigFileService.getIcos();
+            */
         }
     };
 

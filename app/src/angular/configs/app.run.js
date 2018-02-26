@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService) {
     'ngInject';
 
     $rootScope.isDevMode = CONFIG.dev;
@@ -28,7 +28,19 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
      *
      */
     Wallet.$rootScope = $rootScope;
+    Wallet.$interval = $interval;
+    Wallet.$q = $q;
+    Wallet.Web3Service = Web3Service;
+    Wallet.SqlLiteService = SqlLiteService;
+    Wallet.CommonService = CommonService;
+
+
     Token.$rootScope = $rootScope;
+    Token.$q = $q;
+    Token.$interval = $interval;
+    Token.Web3Service = Web3Service;
+    Token.SqlLiteService = SqlLiteService;
+    Token.CommonService = CommonService;
 
     /**
      *

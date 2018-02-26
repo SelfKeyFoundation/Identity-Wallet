@@ -4,14 +4,17 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, Web3Service, CommonService, ElectronService, SqlLiteService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService;
 
 let readyToShowNotification = false;
+
+let priceUpdaterInterval = null;
 
 class Wallet {
 
     static set $rootScope(value) { $rootScope = value; }
     static set $q(value) { $q = value; }
+    static set $interval(value) { $interval = value; }
     static set Web3Service(value) { Web3Service = value; }
     static set CommonService(value) { CommonService = value; }
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
@@ -29,13 +32,14 @@ class Wallet {
         this.balanceEth = 0;
 
         this.balanceInUsd = 0;
-        this.usdPerUnit = 956; // TODO
+        this.usdPerUnit = 0;
 
         this.totalBalanceInUSD = 0;
 
         this.tokens = {};
         this.idAttributes = {}
 
+        this.startPriceUpdater();
         this.initialBalancePromise = this.loadBalance();
     }
 
@@ -102,6 +106,34 @@ class Wallet {
 
             this.totalBalanceInUSD += token.balanceInUsd;
         }
+    }
+
+    getFormattedBalance() {
+        return this.balanceEth;
+    }
+
+    getFormattedBalanceInUSD () {
+        return CommonService.numbersAfterComma(this.balanceInUsd, 2);
+    }
+
+    getFormatedTotalBalanceInUSD () {
+        return CommonService.numbersAfterComma(this.totalBalanceInUSD, 2);
+    }
+
+    /**
+     * jobs
+     */
+    startPriceUpdater() {
+        priceUpdaterInterval = $interval(() => {
+            let price = SqlLiteService.getTokenPriceBySymbol("ETH");
+            if (price) {
+                this.setPriceInUsd(price.priceUSD);
+            }
+        }, 5000)
+    }
+
+    cancelPriceUpdater() {
+        $interval.cancel(priceUpdaterInterval);
     }
 
     /**

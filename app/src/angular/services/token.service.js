@@ -7,7 +7,7 @@ const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
-function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service, ConfigFileService) {
+function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service) {
     'ngInject';
 
     $log.info('TokenService Initialized');

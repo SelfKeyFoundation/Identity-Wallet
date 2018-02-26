@@ -3,7 +3,7 @@ const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, ConfigFileService, ElectronService, CommonService, EtherScanService, EtherUnitsService, WalletService, MEWService, Web3Service) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service) {
     'ngInject'
 
     $scope.showScrollStyle = false;
@@ -31,6 +31,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
     //Web3Service.syncWalletActivityByContract();
     //Web3Service.syncWalletActivityByETH();
 
+    /*
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;
         let icos = ConfigFileService.getIcos();
@@ -46,6 +47,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             $state.go('member.marketplace.ico-item', { selected: ico });
         }
     }
+    */
 
 };
 

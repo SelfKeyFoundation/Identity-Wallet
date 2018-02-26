@@ -1,9 +1,6 @@
 'use strict';
 
 const Wallet = requireAppModule('angular/classes/wallet');
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const Ico = requireAppModule('angular/classes/ico');
 
 function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, ElectronService, CommonService, RPCService, EVENTS) {
     'ngInject';
@@ -26,7 +23,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
 
         constructor() {
             if (RPCService.ipcRenderer) {
-                Wallet.SqlLiteService = this;
+                //Wallet.SqlLiteService = this;
 
                 this.loadData().then((resp) => {
                     $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
@@ -79,6 +76,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
                 if (idAttributeTypes) {
                     for (let i in idAttributeTypes) {
                         let item = idAttributeTypes[i];
+                        item.entity = JSON.parse(item.entity);
                         ID_ATTRIBUTE_TYPES_STORE[item.key] = item;
                     }
                 }
@@ -130,7 +128,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
         startTokenPriceUpdaterListener(){
             tokenPriceUpdaterInterval = $interval(()=>{
                 this.loadTokenPrices();
-            }, 60000)
+            }, 5000)
         }
 
         stopTokenPriceUpdaterListener(){
@@ -192,6 +190,21 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
             return RPCService.makeCall('getIdAttributes', {walletId: walletId});
         }
 
+        /**
+         * token_prices
+         */
+        getTokenPrices () {
+            return TOKEN_PRICES_STORE;
+        }
+
+        getTokenPriceBySymbol (symbol) {
+            for (let i in TOKEN_PRICES_STORE) {
+                if(TOKEN_PRICES_STORE[i].symbol === symbol){
+                    return TOKEN_PRICES_STORE[i];
+                }
+            }
+            return null;
+        }
 
     }
 

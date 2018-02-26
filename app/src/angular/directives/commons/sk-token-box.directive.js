@@ -8,6 +8,10 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             symbol: '@'
         },
         link: (scope, element) => {
+
+            scope.item = scope.symbol.toUpperCase() === 'ETH' ? $rootScope.wallet : $rootScope.wallet.tokens[scope.symbol.toUpperCase()];
+
+
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;

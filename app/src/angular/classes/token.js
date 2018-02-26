@@ -3,7 +3,9 @@
 const CommonUtils = requireAppModule('angular/classes/common-utils');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-let $rootScope, $q, Web3Service;
+let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService;
+
+let priceUpdaterInterval;
 
 class Token {
 
@@ -13,9 +15,13 @@ class Token {
     static get balanceHex() { return "0x70a08231"; }
     static get transferHex() { return "0xa9059cbb"; }
 
-    static set Web3Service(value) { Web3Service = value; }
-    static set $q(value) { $q = value; }
     static set $rootScope(value) { $rootScope = value; }
+    static set $q(value) { $q = value; }
+    static set $interval(value) { $interval = value; }
+    static set SqlLiteService(value) { SqlLiteService = value; }
+    static set Web3Service(value) { Web3Service = value; }
+    static set CommonService(value) { CommonService = value; }
+
 
     /**
      *
@@ -33,10 +39,11 @@ class Token {
         this.balanceDecimal = 0;
 
         this.balanceInUsd = 0;
-        this.usdPerUnit = 0.015; // TODO
+        this.usdPerUnit = 0;
 
         this.wallet = wallet;
 
+        this.startPriceUpdater();
         this.initialBalancePromise = this.loadBalance();
     }
 
@@ -55,8 +62,16 @@ class Token {
     /**
      *
      */
+    getFormattedBalance() {
+        return this.getBalanceDecimal();
+    }
+
     getBalanceDecimal() {
         return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
+    }
+
+    getFormattedBalanceInUSD () {
+        return CommonService.numbersAfterComma(this.balanceInUsd, 2);
     }
 
     generateContractData(toAddress, value) {
@@ -105,6 +120,22 @@ class Token {
     calculateBalanceInUSD() {
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(this.usdPerUnit));
         this.wallet.calculateTotalBalanceInUSD();
+    }
+
+    /**
+     * jobs
+     */
+    startPriceUpdater() {
+        priceUpdaterInterval = $interval(() => {
+            let price = SqlLiteService.getTokenPriceBySymbol(this.symbol);
+            if (price) {
+                this.setPriceInUsd(price.priceUSD);
+            }
+        }, 5000)
+    }
+
+    cancelPriceUpdater() {
+        $interval.cancel(priceUpdaterInterval);
     }
 
     /**

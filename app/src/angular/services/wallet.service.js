@@ -5,7 +5,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, EtherScanService, Web3Service, CommonService, CONFIG) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, Web3Service, CommonService, CONFIG) {
     'ngInject';
 
     $log.info('WalletService Initialized');

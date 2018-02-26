@@ -5,7 +5,7 @@ class Ico {
 
     constructor(symbol, status, company, category) {
 
-        this.symbol = symbol;               // symbol         
+        this.symbol = symbol;               // symbol
         this.status = status;               // status - "In Progress", "Upcoming", "Finished"
         this.company = company;             // company
         this.category = category;           // category
@@ -68,7 +68,7 @@ class Ico {
 
     setDate(startDate, endDate) {
         if(!startDate || !endDate) return;
-        
+
         this.startDate = new Date(startDate);
         this.endDate = new Date(endDate);
         this.daysLeft = this.getDaysLeft();
@@ -121,4 +121,4 @@ class Ico {
     }
 }
 
-module.exports = Ico;
+//module.exports = Ico;

@@ -83,17 +83,17 @@ angular.module('kyc-wallet').service('SqlLiteService', SqlLiteService);
 const ElectronService = requireAppModule('angular/services/electron.service');
 angular.module('kyc-wallet').service('ElectronService', ElectronService);
 
-const ConfigFileService = requireAppModule('angular/services/config-file.service');
-angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
+//const ConfigFileService = requireAppModule('angular/services/config-file.service');
+//angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
 
 const CommonService = requireAppModule('angular/services/common.service');
 angular.module('kyc-wallet').service('CommonService', CommonService);
 
-const EtherScanService = requireAppModule('angular/services/ether-scan.service');
-angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
+//const EtherScanService = requireAppModule('angular/services/ether-scan.service');
+//angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
 
-const MEWService = requireAppModule('angular/services/mew.service');
-angular.module('kyc-wallet').service('MEWService', MEWService);
+//const MEWService = requireAppModule('angular/services/mew.service');
+//angular.module('kyc-wallet').service('MEWService', MEWService);
 
 const Web3Service = requireAppModule('angular/services/web3.service');
 angular.module('kyc-wallet').service('Web3Service', Web3Service);

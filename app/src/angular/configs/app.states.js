@@ -7,7 +7,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(appName);
 
-    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, Web3Service, SelfkeyService) {
+    function checkWallet($rootScope, $q, $state, $interval, Web3Service) {
         let defer = $q.defer();
 
         if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {
@@ -19,23 +19,23 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
              */
             $rootScope.primaryToken = $rootScope.wallet.tokens["KEY"];
 
-            let initialBalancePromises = [];
+            let initialPromises = [];
 
             /**
              * check eth promise
              */
-            initialBalancePromises.push($rootScope.wallet.initialBalancePromise);
+            initialPromises.push($rootScope.wallet.initialBalancePromise);
 
             /**
              * check tokens promise
              */
-            for(let i in $rootScope.wallet.tokens){
-                initialBalancePromises.push($rootScope.wallet.tokens[i].initialBalancePromise);
+            for (let i in $rootScope.wallet.tokens) {
+                initialPromises.push($rootScope.wallet.tokens[i].initialBalancePromise);
             }
 
-            $q.all(initialBalancePromises).then((results)=>{
+            $q.all(initialPromises).then((results) => {
                 defer.resolve();
-            }).catch((error)=>{
+            }).catch((error) => {
                 $state.go('guest.error.offline');
                 defer.reject();
             });

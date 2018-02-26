@@ -12,7 +12,7 @@ function dec2hexString(dec) {
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, ConfigFileService, CONFIG) {
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, CONFIG) {
     'ngInject';
 
     $log.info('Web3Service Initialized');
@@ -54,10 +54,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
 
-            Token.Web3Service = this;
-            Token.$q = $q;
+            //Token.Web3Service = this;
+            //Token.$q = $q;
 
-            Wallet.Web3Service = this;
+            //Wallet.Web3Service = this;
             Web3Service.q = async.queue((data, callback) => {
                 let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
                 let self = data.contract ? data.contract : this;
@@ -78,7 +78,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         syncWalletActivityByContract(key, address) {
-
+            /*
             let currentWallet = $rootScope.wallet;
             if (!currentWallet || !currentWallet.getPublicKeyHex()) {
                 return;
@@ -219,6 +219,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 });
 
             });
+            */
         }
 
         getContractPastEvents(contract, args) {
@@ -231,6 +232,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         syncWalletActivityByETH() {
+            /*
             let store = ConfigFileService.getStore();
             let walletKeys = Object.keys(store.wallets);
             let wallets = store.wallets;
@@ -358,6 +360,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
                 })();
             });
+            */
         }
 
         getMostRecentBlockNumber() {
