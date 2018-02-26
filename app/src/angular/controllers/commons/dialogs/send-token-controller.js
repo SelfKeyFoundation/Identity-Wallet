@@ -121,23 +121,15 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
     }
 
-    // TODO remove
-    $scope.send = (event, sendTokenForm) => {
-        $scope.backgroundProcessStatuses.checkingTransaction = true;
-
-        if ($scope.symbol.toLowerCase() === 'eth') {
-            sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
-        } else {
-            sendToken($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
-        }
-    }
-
     $scope.getTransactionStatus = () => {
-        if (!$scope.backgroundProcessStatuses.checkingTransaction) {
+        if (!$scope.backgroundProcessStatuses.txStatus && !$scope.txHex) {
             return 'Pending';
+        } else if (!$scope.backgroundProcessStatuses.txStatus && $scope.txHex) {
+            return 'Processing';
         } else {
-            return $scope.backgroundProcessStatuses.checkingTransaction === 0 ? 'Failed!' : 'Sent!';
+            return $scope.backgroundProcessStatuses.txStatus ? 'Sent!' : 'Failed!';
         }
+
     }
 
     $scope.cancel = (event) => {
@@ -169,7 +161,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             let txInfoPromise = Web3Service.getTransactionReceipt($scope.txHex.toString());
             txInfoPromise.then((txInfo) => {
                 if (txInfo.blockNumber !== null) {
-                    $scope.backgroundProcessStatuses.checkingTransaction = Number(txInfo.status);
+                    $scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
                     $interval.cancel(txInfoCheckInterval);
                 }
             }).catch((error) => {
@@ -214,7 +206,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     $scope.txHex = resp.transactionHash;
 
                     $scope.viewStates.step = 'transaction-status';
-                    $scope.$apply();
 
                     startTxCheck();
                 }).catch((error) => {
@@ -237,8 +228,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 return;
             }
 
-            console.log(args.symbol, $rootScope.wallet, $rootScope.wallet.tokens[args.symbol]);
-
             let txGenPromise = $rootScope.wallet.tokens[args.symbol].generateRawTransaction(
                 sendToAddress,
                 sendAmount,
@@ -252,18 +241,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {
                     $scope.txHex = resp.transactionHash;
-
-                    console.log(">>>>>>>>>>>", resp);
-
-                    $scope.viewStates.step = 'transaction-status';
-                    $scope.$apply();
-
                     startTxCheck();
                 }).catch((error) => {
                     $scope.errors.sendFailed = error.toString();
                     // reset view state
                     setViewState();
                 });
+
+                $scope.viewStates.step = 'transaction-status';
             }).catch((error) => {
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
