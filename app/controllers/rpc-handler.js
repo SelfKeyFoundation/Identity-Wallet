@@ -13,6 +13,7 @@ const fsm = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
+const async = require('async');
 
 const RPC_METHOD = "ON_RPC";
 
@@ -770,12 +771,28 @@ console.log(">>>>>>>>>>>>>>>>>>>>>>>");
         });
     }
 
-
-
-
-
-
-
+    controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
+        const iconList = config.obligatoryImageIds;
+        async.each(iconList, function (item, callback) {
+            electron.app.sqlLiteService.tokens_selectBySymbol(item).then(data => {
+                if (data) {
+                    if (!data.icon) {
+                        //TODO get image and update existing one
+                    }
+                } else {
+                    //TODO insert ot continue ???
+                }
+            }).catch(err => {
+                callback(err);
+            });
+        }, function (err) {
+            if (err) {
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+            } else {
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+            }
+        });
+    };
 
 
     return controller;
