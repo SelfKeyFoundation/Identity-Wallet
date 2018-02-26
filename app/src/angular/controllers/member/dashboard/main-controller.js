@@ -1,7 +1,7 @@
 function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, ElectronService, WalletService) {
     'ngInject'
 
-    $log.info('MemberDashboardMainController');
+    $log.info('MemberDashboardMainController',$rootScope.wallet);
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
@@ -22,7 +22,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
      */
     $scope.pieChart = {
         totalTitle: 'Tolal value USD',
-        total: $filter('number')($rootScope.totalBalanceInUsd),
+        total: $rootScope.wallet.getTotalBalanceInUsd(),
         items: [{
             title: 'Ethereum',
             subTitle: 'eth',

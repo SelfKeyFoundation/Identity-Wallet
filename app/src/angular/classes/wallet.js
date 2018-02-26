@@ -99,6 +99,7 @@ class Wallet {
     calculateBalanceInUSD() {
         this.balanceInUsd = (Number(this.balanceEth) * Number(this.usdPerUnit));
         this.calculateTotalBalanceInUSD();
+        return this.balanceInUsd;
     }
 
     calculateTotalBalanceInUSD() {
@@ -108,6 +109,7 @@ class Wallet {
 
             this.totalBalanceInUSD += token.balanceInUsd;
         }
+        return this.totalBalanceInUSD;
     }
 
     getFormattedBalance() {
@@ -156,7 +158,7 @@ class Wallet {
         SqlLiteService.loadWalletTokens(this.id).then((walletTokens) => {
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, this);
+                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal,token.isCustom, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {
