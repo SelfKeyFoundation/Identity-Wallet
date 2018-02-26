@@ -431,15 +431,65 @@ module.exports = function (app) {
     }
 
     /**
+        * countries
+        */
+    function createCountries() {
+        knex.schema.hasTable('countries').then(function (exists) {
+            if (!exists) {
+                knex.schema.createTable('countries', (table) => {
+                    table.increments('id');
+                    table.string('name').unique().notNullable();
+                    table.string('code').unique().notNullable();
+                    table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                    table.integer('updatedAt');
+                }).then((resp) => {
+                    for (let i in countriesList) {
+                        let item = countriesList[i];
+                        createById('countries', item);
+                    }
+                    console.log("Table:", "countries", "created.");
+                });
+            }
+        });
+    }
+
+    /**
+     * tokens
+     */
+    function createTokens() {
+        knex.schema.hasTable('tokens').then(function (exists) {
+            if (!exists) {
+                knex.schema.createTable('tokens', (table) => {
+                    table.increments('id');
+                    table.string('symbol').unique().notNullable();
+                    table.integer('decimal').notNullable();
+                    table.string('address').notNullable();
+                    table.binary('icon');
+                    table.integer('isCustom').notNullable().defaultTo(0);
+                    table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                    table.integer('updatedAt');
+                }).then((resp) => {
+                    for (let i in ethTokensList) {
+                        let item = ethTokensList[i];
+                        createById('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
+                    }
+                    console.log("Table:", "tokens", "created.");
+                });
+            }
+        });
+    }
+
+
+    /**
      * public methods
      */
     controller.prototype.init = () => {
         let promises = [];
 
-        /**
-         * countries
-         */
+
+
         promises.push(createCountries());
+
 
         /**
          * documents
@@ -451,10 +501,9 @@ module.exports = function (app) {
          */
         promises.push(createIdAttributeTypes());
 
-        /**
-         * tokens
-         */
+
         promises.push(createTokens());
+
 
         /**
          * wallets
@@ -534,18 +583,18 @@ module.exports = function (app) {
                     promises.push(insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1 }, trx));
 
                     return new Promise((resolve, reject) => {
-                        Promise.all(promises).then(()=>{
+                        Promise.all(promises).then(() => {
                             let idAttributesSavePromises = [];
                             let idAttributeItemsSavePromises = [];
                             let idAttributeItemValuesSavePromises = [];
 
-                            selectTable('id_attribute_types', {isInitial: 1}, trx).then((idAttributeTypes)=>{
-                                for(let i in idAttributeTypes){
+                            selectTable('id_attribute_types', { isInitial: 1 }, trx).then((idAttributeTypes) => {
+                                for (let i in idAttributeTypes) {
                                     let idAttributeType = idAttributeTypes[i];
 
                                     // add initial id attributes
-                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key }, trx).then((idAttribute)=>{
-                                        idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem)=>{
+                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key }, trx).then((idAttribute) => {
+                                        idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
                                             idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: basicInfo[idAttributeType.key], createdAt: new Date().getTime() }));
                                         }));
                                     }));
@@ -556,18 +605,18 @@ module.exports = function (app) {
                                 finalPromises.push(Promise.all(idAttributeItemsSavePromises));
                                 finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
 
-                                Promise.each(finalPromises, (el)=>{return el}).then(()=>{
+                                Promise.each(finalPromises, (el) => { return el }).then(() => {
                                     data.id = id;
                                     resolve(data);
-                                }).catch((error)=>{
-                                    reject({message: "wallets_insert_error", error: error});
+                                }).catch((error) => {
+                                    reject({ message: "wallets_insert_error", error: error });
                                 });
 
-                            }).catch((error)=>{
-                                reject({message: "wallets_insert_error", error: error});
+                            }).catch((error) => {
+                                reject({ message: "wallets_insert_error", error: error });
                             });
-                        }).catch((error)=>{
-                            reject({message: "wallets_insert_error", error: error});
+                        }).catch((error) => {
+                            reject({ message: "wallets_insert_error", error: error });
                         });
                     });
                 })
@@ -618,13 +667,13 @@ module.exports = function (app) {
     controller.prototype.walletTokens_selectByWalletId = (walletId) => {
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
-            .select('wallet_tokens.*', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
-            .leftJoin('tokens', 'tokenId', 'tokens.id')
-            .where({walletId: walletId, recordState: 1});
+                .select('wallet_tokens.*', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
+                .leftJoin('tokens', 'tokenId', 'tokens.id')
+                .where({ walletId: walletId, recordState: 1 });
 
-            promise.then((rows)=>{
+            promise.then((rows) => {
                 resolve(rows);
-            }).catch((error)=>{
+            }).catch((error) => {
                 reject({ message: "error_while_selecting", error: error });
             });
         });
@@ -712,29 +761,29 @@ module.exports = function (app) {
         // check if value exists
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId)
-            selectPromise.then((idAttributeItemValues)=>{
+            selectPromise.then((idAttributeItemValues) => {
                 return new Promise((resolve, reject) => {
-                    if(idAttributeItemValues && idAttributeItemValues.length){
+                    if (idAttributeItemValues && idAttributeItemValues.length) {
                         let idAttributeItemValue = idAttributeItemValues[0];
 
                         // update idAttributeItemValue
                         idAttributeItemValue.updatedAt = new Date().getTime();
 
-                        if(args.staticData){
+                        if (args.staticData) {
                             // update only static data
                             idAttributeItemValue.staticData = staticData;
                             let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                            updatePromise.then((rows)=>{
+                            updatePromise.then((rows) => {
                                 resolve(idAttributeItemValue);
-                            }).catch((error)=>{
+                            }).catch((error) => {
                                 reject(error);
                             });
 
-                        }else if (args.buffer){
+                        } else if (args.buffer) {
 
-                            if(idAttributeItemValue.documentId){
+                            if (idAttributeItemValue.documentId) {
                                 let selectPromise = knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId);
-                                selectPromise.then((documents)=>{
+                                selectPromise.then((documents) => {
 
                                     documents[0].name = args.fileName;
                                     documents[0].buffer = args.buffer;
@@ -744,16 +793,16 @@ module.exports = function (app) {
 
                                     let updatePromise = knex('documents').transacting(trx).update(documents[0]).where('id', documents[0].id);
 
-                                    updatePromise.then((updatedIds)=>{
+                                    updatePromise.then((updatedIds) => {
                                         resolve(idAttributeItemValue);
-                                    }).catch((error)=>{
+                                    }).catch((error) => {
                                         reject(error);
                                     })
 
-                                }).catch((error)=>{
+                                }).catch((error) => {
                                     reject(error);
                                 });
-                            }else{
+                            } else {
                                 knex('documents').transacting(trx).insert({
                                     buffer: args.buffer,
                                     name: args.fileName,
@@ -763,12 +812,12 @@ module.exports = function (app) {
                                 }).then((rows) => {
                                     idAttributeItemValue.documentId = rows[0];
                                     let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                                    updatePromise.then((rows)=>{
+                                    updatePromise.then((rows) => {
                                         resolve(idAttributeItemValue);
-                                    }).catch((error)=>{
+                                    }).catch((error) => {
                                         reject(error);
                                     });
-                                }).catch((error)=>{
+                                }).catch((error) => {
                                     reject(error);
                                 });
                             }
@@ -780,16 +829,16 @@ module.exports = function (app) {
                             createdAt: new Date().getTime()
                         }
 
-                        if(args.staticData){
+                        if (args.staticData) {
                             idAttributeItemValue.staticData = args.staticData;
                             let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                            insertPromise.then((insertIds)=>{
+                            insertPromise.then((insertIds) => {
                                 idAttributeItemValue.id = insertIds[0];
                                 resolve(idAttributeItemValue);
-                            }).catch((error)=>{
+                            }).catch((error) => {
                                 reject(error);
                             });
-                        }else if (args.buffer){
+                        } else if (args.buffer) {
                             knex('documents').transacting(trx).insert({
                                 buffer: args.buffer,
                                 name: args.fileName,
@@ -799,21 +848,21 @@ module.exports = function (app) {
                             }).then((insertIds) => {
                                 idAttributeItemValue.documentId = insertIds[0];
                                 let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                                insertPromise.then((insertIds)=>{
+                                insertPromise.then((insertIds) => {
                                     idAttributeItemValue.id = insertIds[0];
                                     resolve(idAttributeItemValue);
-                                }).catch((error)=>{
+                                }).catch((error) => {
                                     reject(error);
                                 });
-                            }).catch((error)=>{
+                            }).catch((error) => {
                                 reject(error);
                             });
                         }
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -834,6 +883,18 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.tokens_selectBySymbol = (symbol) => {
+        return selectTable('tokens', { symbol: 'eth' });
+    }
+
+    controller.prototype.token_insert = (data) => {
+        return createById('tokens', data);
+    }
+
+    controller.prototype.token_update = (data) => {
+        return updateById('tokens', data);
+    }
+
     /**
      * token_prices
      */
@@ -851,8 +912,16 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.tokenPrices_selectBySymbol = (symbol) => {
+        return selectTable('token_prices', { symbol: symbol });
+    }
+
     controller.prototype.tokenPrices_insert = (data) => {
         return insertIntoTable('token_prices', data);
+    }
+
+    controller.prototype.tokenPrices_update = (data) => {
+        return updateById('token_prices', data);
     }
 
     /**
@@ -983,9 +1052,9 @@ module.exports = function (app) {
     function select(table, where, tx) {
         return new Promise((resolve, reject) => {
             let promise = null;
-            if(tx){
+            if (tx) {
                 promise = knex(table).transacting(tx).select().where(where);
-            }else{
+            } else {
                 promise = knex(table).select().where(where);
             }
 
