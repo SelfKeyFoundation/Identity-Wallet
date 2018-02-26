@@ -28,11 +28,15 @@ class Wallet {
         this.balanceWei = 0;
         this.balanceEth = 0;
 
-        this.balanceInUsd = null;
-        this.usdPerUnit = null;
+        this.balanceInUsd = 0;
+        this.usdPerUnit = 956; // TODO
+
+        this.totalBalanceInUSD = 0;
 
         this.tokens = {};
         this.idAttributes = {}
+
+        this.initialBalancePromise = this.loadBalance();
     }
 
     getPrivateKey() {
@@ -62,7 +66,7 @@ class Wallet {
             this.balanceEth = Number(CommonService.numbersAfterComma(this.balanceEth, 8));
             this.balanceWei = balanceWei;
 
-            this.updatePriceInUsd(this.usdPerUnit);
+            this.calculateBalanceInUSD();
 
             if (balanceWei !== oldBalanceInWei) {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
@@ -81,9 +85,23 @@ class Wallet {
         return defer.promise;
     }
 
-    updatePriceInUsd(usdPerUnit) {
+    setPriceInUsd(usdPerUnit) {
         this.usdPerUnit = usdPerUnit;
-        this.balanceInUsd = (Number(this.balanceEth) * Number(usdPerUnit));
+        this.calculateBalanceInUSD();
+    }
+
+    calculateBalanceInUSD() {
+        this.balanceInUsd = (Number(this.balanceEth) * Number(this.usdPerUnit));
+        this.calculateTotalBalanceInUSD();
+    }
+
+    calculateTotalBalanceInUSD() {
+        this.totalBalanceInUSD = this.balanceInUsd;
+        for (let i in this.tokens) {
+            let token = this.tokens[i];
+
+            this.totalBalanceInUSD += token.balanceInUsd;
+        }
     }
 
     /**
@@ -94,7 +112,7 @@ class Wallet {
         SqlLiteService.loadWalletTokens(this.id).then((walletTokens) => {
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.contractAddress, token.symbol, token.decimal, this);
+                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {

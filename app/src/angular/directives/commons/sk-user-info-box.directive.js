@@ -1,6 +1,6 @@
 'use strict';
 
-function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileService) {
+function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
     'ngInject';
 
     return {
@@ -14,6 +14,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
                 tempImage: 'assets/images/temp/avatar.jpg'
             }
 
+            /*
             let idAttributes = ConfigFileService.getIdAttributesStore();
 
             reloadData();
@@ -34,6 +35,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileS
                     }
                 }
             }
+            */
         },
         replace: true,
         templateUrl: 'common/directives/sk-user-info-box.html'

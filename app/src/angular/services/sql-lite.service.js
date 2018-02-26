@@ -5,7 +5,7 @@ const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const Ico = requireAppModule('angular/classes/ico');
 
-function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService, RPCService, EVENTS) {
+function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, ElectronService, CommonService, RPCService, EVENTS) {
     'ngInject';
 
     $log.debug('SqlLiteService Initialized');
@@ -20,6 +20,8 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
 
+    let tokenPriceUpdaterInterval = null;
+
     class SqlLiteService {
 
         constructor() {
@@ -28,12 +30,19 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
 
                 this.loadData().then((resp) => {
                     $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
+
+                    this.startTokenPriceUpdaterListener();
+
                 }).catch((error) => {
                     $log.error(error);
                 });
             } else {
                 defer.reject({ message: 'electron RPC not available' });
             }
+
+            $rootScope.$on("$destroy", () => {
+                this.stopTokenPriceUpdaterListener();
+            });
         }
 
         /**
@@ -83,6 +92,7 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
                         let item = tokenPrices[i];
                         TOKEN_PRICES_STORE[item.id] = item;
                     }
+                    $log.info("TOKEN_PRICES", "LOADED", TOKEN_PRICES_STORE);
                 }
             });
         }
@@ -112,6 +122,19 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
                     COUNTRIES = data;
                 }
             });
+        }
+
+        /**
+         *
+         */
+        startTokenPriceUpdaterListener(){
+            tokenPriceUpdaterInterval = $interval(()=>{
+                this.loadTokenPrices();
+            }, 60000)
+        }
+
+        stopTokenPriceUpdaterListener(){
+            $interval.cancel(tokenPriceUpdaterInterval);
         }
 
         /**
@@ -168,6 +191,7 @@ function SqlLiteService($rootScope, $log, $q, $timeout, CONFIG, ElectronService,
         loadIdAttributes (walletId) {
             return RPCService.makeCall('getIdAttributes', {walletId: walletId});
         }
+
 
     }
 

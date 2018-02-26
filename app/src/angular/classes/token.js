@@ -22,6 +22,7 @@ class Token {
      * @param {*} contractAddress
      * @param {*} symbol
      * @param {*} decimal
+     * @param {*} wallet
      */
     constructor(contractAddress, symbol, decimal, wallet) {
         this.contractAddress = contractAddress;
@@ -29,12 +30,14 @@ class Token {
         this.decimal = decimal;
 
         this.balanceHex = null;
-        this.balanceDecimal = null;
+        this.balanceDecimal = 0;
 
-        this.balanceInUsd = null;
-        this.usdPerUnit = null;
+        this.balanceInUsd = 0;
+        this.usdPerUnit = 0.015; // TODO
 
         this.wallet = wallet;
+
+        this.initialBalancePromise = this.loadBalance();
     }
 
     static generateContractData(toAdd, value, decimal) {
@@ -43,20 +46,10 @@ class Token {
             if (!CommonUtils.isNumeric(value) || parseFloat(value) < 0) return { error: 'invalid_value' };
             value = EthUtils.padLeft(new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16), 64);
             toAdd = EthUtils.padLeft(EthUtils.getNakedAddress(toAdd), 64);
-            return {
-                error: null,
-                data: Token.transferHex + toAdd + value
-            }
+            return { error: null, data: Token.transferHex + toAdd + value }
         } catch (e) {
-            return {
-                error: e,
-                data: null
-            };
+            return { error: e, data: null };
         }
-    }
-
-    static generateBalanceData(userAddress, contractAddress) {
-        return EthUtils.getDataObj(contractAddress, Token.balanceHex, [EthUtils.getNakedAddress(userAddress)])
     }
 
     /**
@@ -70,17 +63,18 @@ class Token {
         return Token.generateContractData(toAddress, value, this.decimal);
     }
 
-    generateBalanceData(userAddress) {
-        return Token.generateBalanceData(userAddress, this.contractAddress);
+    generateBalanceData() {
+        return EthUtils.getDataObj(
+            this.contractAddress,
+            Token.balanceHex,
+            [EthUtils.getNakedAddress(this.wallet.getPublicKeyHex())]
+        );
     }
 
-    /**
-     *
-     */
-    loadBalanceFor(userAddress) {
+    loadBalance() {
         let defer = $q.defer();
 
-        let data = this.generateBalanceData(userAddress);
+        let data = this.generateBalanceData();
         let promise = Web3Service.getTokenBalanceByData(data);
 
         promise.then((balanceHex) => {
@@ -89,9 +83,7 @@ class Token {
             this.balanceHex = balanceHex;
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
 
-            if (this.usdPerUnit) {
-                this.updatePriceInUsd(this.usdPerUnit);
-            }
+            this.calculateBalanceInUSD();
 
             if (balanceHex !== oldBalanceHex) {
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
@@ -105,16 +97,14 @@ class Token {
         return defer.promise;
     }
 
-    loadBalance() {
-        return this.loadBalanceFor(this.wallet.getPublicKeyHex());
+    setPriceInUsd(usdPerUnit) {
+        this.usdPerUnit = usdPerUnit;
+        this.calculateBalanceInUSD();
     }
 
-    /**
-     *
-     */
-    updatePriceInUsd(usdPerUnit) {
-        this.usdPerUnit = usdPerUnit;
-        this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(usdPerUnit));
+    calculateBalanceInUSD() {
+        this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(this.usdPerUnit));
+        this.wallet.calculateTotalBalanceInUSD();
     }
 
     /**

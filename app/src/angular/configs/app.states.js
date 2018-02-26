@@ -14,8 +14,32 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             $state.go('guest.loading');
             defer.reject();
         } else {
-            // temporary
-            defer.resolve();
+            /**
+             * set primary token
+             */
+            $rootScope.primaryToken = $rootScope.wallet.tokens["KEY"];
+
+            let initialBalancePromises = [];
+
+            /**
+             * check eth promise
+             */
+            initialBalancePromises.push($rootScope.wallet.initialBalancePromise);
+
+            /**
+             * check tokens promise
+             */
+            for(let i in $rootScope.wallet.tokens){
+                initialBalancePromises.push($rootScope.wallet.tokens[i].initialBalancePromise);
+            }
+
+            $q.all(initialBalancePromises).then((results)=>{
+                defer.resolve();
+            }).catch((error)=>{
+                $state.go('guest.error.offline');
+                defer.reject();
+            });
+
             /**
              *
              */

@@ -129,7 +129,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
         }
 
         // ...
-        unlockByFilePath(walletId, filePath, password) {
+        unlockByFilePath__(walletId, filePath, password) {
             let defer = $q.defer();
 
             let importPromise = RPCService.makeCall('importEtherKeystoreFile', { filePath: filePath });
@@ -137,10 +137,6 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
                 let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
                 promise.then((data) => {
                     $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
-
-                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                    //this.loadBalance();
-
                     defer.resolve($rootScope.wallet);
                 }).catch((error) => {
                     defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
@@ -152,19 +148,39 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             return defer.promise;
         }
 
+        unlockByFilePath(walletId, filePath, password) {
+            let defer = $q.defer();
+
+            let importPromise = RPCService.makeCall('readKeystoreObject', { filePath: filePath });
+            importPromise.then((response) => {
+                let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
+                promise.then((data) => {
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
+                    defer.resolve($rootScope.wallet);
+                }).catch((error) => {
+                    defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+                });
+            }).catch((error) => {
+                defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+            });
+
+            return defer.promise;
+        }
+
+        // ...
         unlockByPrivateKey(privateKey) {
             let defer = $q.defer();
 
-            let importPromise = ElectronService.importEtherPrivateKey(privateKey);
+            let importPromise = RPCService.makeCall('importEtherPrivateKey', { privateKey: privateKey });
             importPromise.then((data) => {
-                wallet = new Wallet(data.privateKeyBuffer, data.publicKey);
-                $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                this.loadBalance();
-
-                $rootScope.wallet = wallet;
-
-                defer.resolve(wallet);
+                if(data.id){
+                    $rootScope.wallet = new Wallet(data.id, data.privateKeyBuffer, data.publicKey);
+                    defer.resolve($rootScope.wallet, true);
+                }else{
+                    defer.resolve(data, false);
+                }
             }).catch((error) => {
+                console.log(error);
                 defer.reject("ERR_UNLOCK_PRIVATE_KEY");
             });
 

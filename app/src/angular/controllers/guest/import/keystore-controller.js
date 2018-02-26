@@ -1,4 +1,4 @@
-function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ElectronService, ConfigFileService, WalletService, SqlLiteService) {
+function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ElectronService, WalletService, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
@@ -22,10 +22,6 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         let promise = ElectronService.openFileSelectDialog();
         promise.then((data) => {
             $scope.userInput.selectedFilePath = data.path;
-
-            ConfigFileService.load().then(() => {
-                $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
-            });
         }).catch((error) => {
 
         });
@@ -59,10 +55,11 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         }).catch((error) => {
             $log.error(error);
 
-            $scope.isUnlocking = false;
 
             theForm.password.$setValidity("badKeystore", false);
             theForm.password.$setValidity("required", false);
+        }).finally(()=>{
+            $scope.isUnlocking = false;
         });
     }
 

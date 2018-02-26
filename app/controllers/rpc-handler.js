@@ -317,7 +317,7 @@ module.exports = function (app) {
                         let mimeType = mime.lookup(filePaths[0]);
                         let name = path.parse(filePaths[0]).base;
 
-                        if (args.maxFileSize) {
+                        if (args && args.maxFileSize) {
                             if (stats.size > args.maxFileSize) {
                                 return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
                             }
@@ -330,6 +330,7 @@ module.exports = function (app) {
                             size: stats.size
                         });
                     } catch (e) {
+                        console.log(e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
@@ -420,32 +421,69 @@ module.exports = function (app) {
                     keystoreFilePath: outputPath
                 });
             }).catch((error) => {
-                console.log(error);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
-
-            /*
-            // TODO remove
-            settings.setPath(storeFilePath);
-            let storeData = settings.getAll();
-            if (!storeData.wallets[keystoreObject.address]) {
-                storeData.wallets[keystoreObject.address] = {
-                    type: 'ks',
-                    name: "Unnamed Wallet",
-                    keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName),
-                    data: initialStoreDataStructure
-                }
-                settings.setAll(storeData);
-            }
-            */
-
-
         });
     }
 
     controller.prototype.importEtherKeystoreFile = function (event, actionId, actionName, args) {
         try {
+            console.log("1111", args.filePath, fs.existsSync(args.filePath), path.basename(args.filePath))
             keythereum.importFromFile(args.filePath, function (keystoreObject) {
+
+                let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
+
+                if (!fs.existsSync(keyStoreFilePath)) {
+                    fs.mkdir(keyStoreFilePath);
+                }
+
+                let keystoreFileName = path.basename(args.filePath);
+                let keyStoreFileNewPath = path.resolve(keyStoreFilePath, keystoreFileName);
+
+                if (!fs.existsSync(keyStoreFileNewPath)) {
+                    helpers.copyFile(args.filePath, keyStoreFileNewPath, (err) => {
+                        if (!err) {
+                            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+                            settings.setPath(storeFilePath);
+
+                            let storeData = settings.getAll();
+
+                            if (!storeData.wallets[keystoreObject.address]) {
+                                storeData.wallets[keystoreObject.address] = {
+                                    type: 'ks',
+                                    name: "Unnamed Wallet",
+                                    keystoreFilePath: keyStoreFileNewPath,
+                                    data: initialStoreDataStructure
+                                }
+                                settings.setAll(storeData);
+                            }
+
+                            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                                publicKey: keystoreObject.address,
+                                keystoreObject: keystoreObject
+                            });
+                        } else {
+                            app.win.webContents.send(RPC_METHOD, actionId, actionName, err, null);
+                        }
+                    });
+                } else {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                        publicKey: keystoreObject.address,
+                        keystoreObject: keystoreObject
+                    });
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
+        }
+    }
+
+    controller.prototype.readKeystoreObject = function (event, actionId, actionName, args) {
+        try {
+
+            keythereum.importFromFile(path.normalize(args.filePath), function (keystoreObject) {
+console.log(">>>>>>>>>>>>>>>>>>>>>>>");
                 let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
 
                 if (!fs.existsSync(keyStoreFilePath)) {
@@ -519,25 +557,22 @@ module.exports = function (app) {
             publicKey = publicKey.toString('hex');
 
             let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
+            let walletSelectPromise = electron.app.sqlLiteService.wallets_selectByPublicKey({ publicKey: publicKey });
 
-            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
-            settings.setPath(storeFilePath);
-
-            let storeData = settings.getAll();
-
-            if (!storeData.wallets[publicKey]) {
-                storeData.wallets[publicKey] = {
-                    type: "pk",
-                    name: "Unnamed Wallet",
-                    data: initialStoreDataStructure
+            walletSelectPromise.then((wallet) => {
+                if(wallet){
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
+                }else{
+                    //let walletInsertPromise = electron.app.sqlLiteService.wallets_insert({ publicKey: publicKey }, args.basicInfo );
+                    // TODO
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                        publicKey: publicKey,
+                        privateKey: args.privateKey,
+                        privateKeyBuffer: privateKeyBuffer,
+                    });
                 }
-                settings.setAll(storeData);
-            }
-
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                privateKey: args.privateKey,
-                privateKeyBuffer: privateKeyBuffer,
-                publicKey: publicKey
+            }).catch((error) => {
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
         } catch (e) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
