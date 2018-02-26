@@ -2,7 +2,7 @@
 
 const Wallet = requireAppModule('angular/classes/wallet');
 
-function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, ElectronService, CommonService, RPCService, EVENTS) {
+function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, EVENTS) {
     'ngInject';
 
     $log.debug('SqlLiteService Initialized');
@@ -23,13 +23,9 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
 
         constructor() {
             if (RPCService.ipcRenderer) {
-                //Wallet.SqlLiteService = this;
-
                 this.loadData().then((resp) => {
                     $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
-
                     this.startTokenPriceUpdaterListener();
-
                 }).catch((error) => {
                     $log.error(error);
                 });
@@ -125,81 +121,81 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, CONFIG, Elect
         /**
          *
          */
-        startTokenPriceUpdaterListener(){
-            tokenPriceUpdaterInterval = $interval(()=>{
+        startTokenPriceUpdaterListener() {
+            tokenPriceUpdaterInterval = $interval(() => {
                 this.loadTokenPrices();
             }, 5000)
         }
 
-        stopTokenPriceUpdaterListener(){
+        stopTokenPriceUpdaterListener() {
             $interval.cancel(tokenPriceUpdaterInterval);
         }
 
         /**
          * wallets
          */
-        getWalletPublicKeys () {
+        getWalletPublicKeys() {
             return Object.keys(WALLETS_STORE);
         }
 
-        getWallets () {
+        getWallets() {
             return WALLETS_STORE;
         }
 
-        saveWallet (data) {
+        saveWallet(data) {
             return RPCService.makeCall('saveWallet', data);
         }
 
         /**
          * wallet_tokens
          */
-        loadWalletTokens (walletId) {
-            return RPCService.makeCall('getWalletTokens', {walletId: walletId});
+        loadWalletTokens(walletId) {
+            return RPCService.makeCall('getWalletTokens', { walletId: walletId });
         }
 
 
         /**
          * guide_settings
          */
-        getGuideSettings () {
+        getGuideSettings() {
             return GUIDE_SETTINGS;
         }
 
-        saveGuideSettings (data) {
+        saveGuideSettings(data) {
             return RPCService.makeCall('saveGuideSettings', data);
         }
 
         /**
          * countries
          */
-        getCountries () {
+        getCountries() {
             return COUNTRIES;
         }
 
         /**
          * id_attribute_types
          */
-        getIdAttributeTypes () {
+        getIdAttributeTypes() {
             return ID_ATTRIBUTE_TYPES_STORE;
         }
 
         /**
          * id_attributes
          */
-        loadIdAttributes (walletId) {
-            return RPCService.makeCall('getIdAttributes', {walletId: walletId});
+        loadIdAttributes(walletId) {
+            return RPCService.makeCall('getIdAttributes', { walletId: walletId });
         }
 
         /**
          * token_prices
          */
-        getTokenPrices () {
+        getTokenPrices() {
             return TOKEN_PRICES_STORE;
         }
 
-        getTokenPriceBySymbol (symbol) {
+        getTokenPriceBySymbol(symbol) {
             for (let i in TOKEN_PRICES_STORE) {
-                if(TOKEN_PRICES_STORE[i].symbol === symbol){
+                if (TOKEN_PRICES_STORE[i].symbol === symbol) {
                     return TOKEN_PRICES_STORE[i];
                 }
             }

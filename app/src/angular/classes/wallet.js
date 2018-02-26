@@ -8,7 +8,7 @@ let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlL
 
 let readyToShowNotification = false;
 
-let priceUpdaterInterval = null;
+let priceUpdaterInterval, loadBalanceInterval = null;
 
 class Wallet {
 
@@ -40,6 +40,8 @@ class Wallet {
         this.idAttributes = {}
 
         this.startPriceUpdater();
+        this.startBalanceUpdater();
+
         this.initialBalancePromise = this.loadBalance();
     }
 
@@ -134,6 +136,16 @@ class Wallet {
 
     cancelPriceUpdater() {
         $interval.cancel(priceUpdaterInterval);
+    }
+
+    startBalanceUpdater() {
+        loadBalanceInterval = $interval(() => {
+            this.loadBalance();
+        }, 30000)
+    }
+
+    cancelBalanceUpdater() {
+        $interval.cancel(loadBalanceInterval);
     }
 
     /**

@@ -54,13 +54,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
 
-            //Token.Web3Service = this;
-            //Token.$q = $q;
 
-            //Wallet.Web3Service = this;
             Web3Service.q = async.queue((data, callback) => {
+                $log.info("WEB3 REQUESTS IN QUEUE: ", Web3Service.q.length(), "######");
+
                 let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
                 let self = data.contract ? data.contract : this;
+
                 let promise = baseFn[data.method].apply(self, data.args);
 
                 $timeout(() => {
@@ -457,19 +457,17 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             return defer.promise;
         }
 
-        static handlePromise(defer, promise) {
-            promise.then((response) => {
-                $log.info("response", response);
-                defer.resolve(response)
-            }).catch((error) => {
-                $log.error("error", error);
-                defer.reject(error);
-            });
-        }
 
         static waitForTicket(defer, method, args, contract) {
             Web3Service.q.push({ method: method, args: args, contract: contract }, (promise) => {
-                Web3Service.handlePromise(defer, promise);
+                $log.info("handle response", method);
+                promise.then((response) => {
+                    $log.info("method response", method, response);
+                    defer.resolve(response)
+                }).catch((error) => {
+                    $log.error("method response error", method, error);
+                    defer.reject(error);
+                });
             });
         }
     };

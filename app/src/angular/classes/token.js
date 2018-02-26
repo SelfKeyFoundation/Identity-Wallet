@@ -5,7 +5,7 @@ const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService;
 
-let priceUpdaterInterval;
+let priceUpdaterInterval, balanceUpdaterInterval;
 
 class Token {
 
@@ -44,6 +44,8 @@ class Token {
         this.wallet = wallet;
 
         this.startPriceUpdater();
+        this.startBalanceUpdater();
+
         this.initialBalancePromise = this.loadBalance();
     }
 
@@ -136,6 +138,16 @@ class Token {
 
     cancelPriceUpdater() {
         $interval.cancel(priceUpdaterInterval);
+    }
+
+    startBalanceUpdater() {
+        balanceUpdaterInterval = $interval(() => {
+            this.loadBalance();
+        }, 30000)
+    }
+
+    cancelBalanceUpdater() {
+        $interval.cancel(balanceUpdaterInterval);
     }
 
     /**

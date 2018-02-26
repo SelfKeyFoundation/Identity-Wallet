@@ -59,8 +59,8 @@ const AppConfigConstant = {
 		dev: true,
 		updateEndpoint: "http://localhost:5000",
 		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
-		chainId: 3,
-		node: "infura",
+		chainId: 1,
+		node: "mew",
 		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
@@ -73,7 +73,7 @@ const AppConfigConstant = {
 		updateEndpoint: "https://release.selfkey.org",
 		kycApiEndpoint: "https://tokensale-api.selfkey.org/",
 		chainId: 1,
-		node: "infura",
+		node: "mew",
 		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
