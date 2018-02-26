@@ -3,7 +3,7 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, SqlLiteService, WalletService, ConfigFileService, CommonService) {
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, SqlLiteService, WalletService, CommonService) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep4Controller", $stateParams);

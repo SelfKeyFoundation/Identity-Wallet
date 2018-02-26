@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberSetupChecklistController($rootScope, $scope, $log, $state, ConfigFileService) {
+function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
     'ngInject'
 
     $log.info('MemberSetupChecklistController', $rootScope.wallet.getIdAttributes());

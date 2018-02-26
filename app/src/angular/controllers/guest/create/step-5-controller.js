@@ -1,7 +1,7 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
 
-function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, CommonService, ElectronService, ConfigFileService) {
+function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, CommonService, ElectronService) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep5Controller", $stateParams);
@@ -10,7 +10,8 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeo
         $state.go('guest.create.step-6');
     }
 
-    $scope.backupKeystore = (event) => {
+    //TODO gio
+    /*$scope.backupKeystore = (event) => {
         let promise = ElectronService.openDirectorySelectDialog();
         promise.then((directoryPath) => {
             if (directoryPath) {
@@ -22,7 +23,7 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeo
                 });
             }
         });
-    }
+    }*/
 };
 
 module.exports = GuestKeystoreCreateStep5Controller;

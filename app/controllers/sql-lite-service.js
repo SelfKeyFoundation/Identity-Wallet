@@ -445,7 +445,7 @@ module.exports = function (app) {
                 }).then((resp) => {
                     for (let i in countriesList) {
                         let item = countriesList[i];
-                        createById('countries', item);
+                        insertIntoTable('countries', item);
                     }
                     console.log("Table:", "countries", "created.");
                 });
@@ -471,7 +471,7 @@ module.exports = function (app) {
                 }).then((resp) => {
                     for (let i in ethTokensList) {
                         let item = ethTokensList[i];
-                        createById('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
+                        insertIntoTable('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
                     }
                     console.log("Table:", "tokens", "created.");
                 });
@@ -888,7 +888,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.token_insert = (data) => {
-        return createById('tokens', data);
+        return insertIntoTable('tokens', data);
     }
 
     controller.prototype.token_update = (data) => {

@@ -1,4 +1,4 @@
-function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService, ElectronService, CommonService) {
+function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $q, $timeout, $state, WalletService, ElectronService, CommonService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep1Controller');
