@@ -18,11 +18,11 @@ fs.readdirSync(config.testDir)
 	.forEach(file => {
 		mocha.addFile(path.join(config.testDir, file))
 	})
-// slacker.quick({text: 'Test Run Start'})
+slacker.quick({text: 'Test Run Start'})
 config.consoleNotes()
 mocha.run(failures => {
 	process.on('exit', () => {
-		// slacker.quick({text: 'Test Run End'})
+		slacker.quick({text: 'Test Run End'})
 		process.exit(failures)
 	})
 	process.exit()

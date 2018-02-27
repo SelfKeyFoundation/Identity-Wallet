@@ -1,14 +1,15 @@
-const apiToken = process.env.SK_SLACK_URI
-chalk = require('chalk')
-Slack = require('slack-node')
-slack = new Slack(apiToken)
+const 
+	apiToken = process.env.SK_SLACK_URI
+	chalk = require('chalk')
+	Slack = require('slack-node')
+	slack = new Slack(apiToken)
+	slack.setWebhook(apiToken)
 
 function full(options) {
 	return new Promise((r, rj) => {
 		console.log(chalk.yellow('FINAL SLACK PAYLOAD \n *******************'))
 		console.log(options)
-		// options.push(token: apiToken)
-		slack.api('chat.postMessage', options, err => {
+		slack.webhook(options, err => {
 			if (err) {
 				console.log(chalk.red(err))
 				rj(err)
@@ -27,7 +28,6 @@ function full(options) {
 function quick(send) {
 	return new Promise((r, rj) => {
 		const options = {
-			token: apiToken,
 			username: send.name || 'SK Tests',
 			channel: send.channel || '#idwallet-builds',
 			icon_emoji: send.icon || ':joy:',
@@ -41,7 +41,7 @@ function quick(send) {
 		}
 		console.log(chalk.yellow('FINAL SLACK PAYLOAD \n *******************'))
 		console.log(options)
-		slack.api('chat.postMessage', options, (err, resp) => {
+		slack.webhook(options, (err, resp) => {
 			if (err) {
 				rj(console.log(chalk.red(err)))
 			} else {
