@@ -6,12 +6,12 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Create Password
+            span.none-select-text Create A Password For Your New Wallet (Keystore File)
         form.content(name="passwordForm", layout="column")
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password
                 input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
-            
+
             .password-strength-container
                 .blocks-container
                     .block(ng-class="{'active': passwordStrength.score >= 0}")

@@ -1,11 +1,13 @@
 'use strict';
 
+// TODO - remove this service
+
 const Token = requireAppModule('angular/classes/token');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 const TOKENS_CONTRACT_ARRAY = require('../store/tokens/eth-tokens.json');
 
-function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service, ConfigFileService) {
+function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanService, Web3Service) {
     'ngInject';
 
     $log.info('TokenService Initialized');
@@ -18,19 +20,19 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
     class TokenService {
 
         constructor() {
-            $rootScope.TOKEN_MAP = TOKENS_MAP;
+            //$rootScope.TOKEN_MAP = TOKENS_MAP;
         }
 
+        /*
         addTokenToMap(key, token) {
             TOKENS_MAP[token.symbol] = token;
             $rootScope.$broadcast(EVENTS.NEW_TOKEN_ADDED, token);
             return TOKENS_MAP;
         }
+        */
 
+        /*
         init(publicKeyHex) {
-            /**
-             * default tokens from json data store
-             */
             for (let i in TOKENS_CONTRACT_ARRAY) {
                 let t = TOKENS_CONTRACT_ARRAY[i];
                 let token = new Token(t.address, t.symbol, Number(t.decimal), t.type);
@@ -38,9 +40,6 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
                 this.addTokenToMap(t.symbol, token);
             }
 
-            /**
-             * custom tokens from - from store
-             */
             let store = ConfigFileService.getStore();
             for (let i in store.tokens) {
                 if (store.tokens[i].type === 'custom') {
@@ -51,7 +50,9 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
                 }
             }
         }
+        */
 
+        /*
         loadBalanceBySymbol(userAddress, symbol) {
             let token = TOKENS_MAP[symbol];
             let data = token.generateBalanceData(userAddress);
@@ -89,6 +90,7 @@ function TokenService($rootScope, $log, $http, $interval, $q, EVENTS, EtherScanS
         getAll() {
             return TOKENS_MAP;
         }
+        */
     };
 
     return new TokenService();

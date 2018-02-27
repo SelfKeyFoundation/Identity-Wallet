@@ -1,11 +1,11 @@
-function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService) {
+function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $state, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportWalletController');
 
     $scope.selectedOption = "keystoreSelect";
 
-    $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
+    $scope.publicKeyList = SqlLiteService.getWalletPublicKeys();
 
     if ($scope.publicKeyList.length <= 0) {
         $scope.selectedOption = "keystoreImport";

@@ -12,7 +12,7 @@ function dec2hexString(dec) {
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, ConfigFileService, CONFIG) {
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, CONFIG) {
     'ngInject';
 
     $log.info('Web3Service Initialized');
@@ -54,13 +54,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
 
-            Token.Web3Service = this;
-            Token.$q = $q;
 
-            Wallet.Web3Service = this;
             Web3Service.q = async.queue((data, callback) => {
+                $log.info("WEB3 REQUESTS IN QUEUE: ", Web3Service.q.length(), "######");
+
                 let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
                 let self = data.contract ? data.contract : this;
+
                 let promise = baseFn[data.method].apply(self, data.args);
 
                 $timeout(() => {
@@ -69,17 +69,16 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             }, 1);
 
             $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-                let self = this;
-                let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
-
-                $timeout(() => {
-                    fn.call(self);
-                }, 3000)
+                //let self = this;
+                //let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
+                //$timeout(() => {
+                //    fn.call(self);
+                //}, 3000)
             });
         }
 
         syncWalletActivityByContract(key, address) {
-
+            /*
             let currentWallet = $rootScope.wallet;
             if (!currentWallet || !currentWallet.getPublicKeyHex()) {
                 return;
@@ -220,6 +219,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 });
 
             });
+            */
         }
 
         getContractPastEvents(contract, args) {
@@ -232,6 +232,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         syncWalletActivityByETH() {
+            /*
             let store = ConfigFileService.getStore();
             let walletKeys = Object.keys(store.wallets);
             let wallets = store.wallets;
@@ -359,16 +360,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
                 })();
             });
-        }
-
-        static getBlock(blockNumber, withTransactions) {
-            withTransactions = withTransactions || false;
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
-
-            return defer.promise;
+            */
         }
 
         getMostRecentBlockNumber() {
@@ -455,19 +447,27 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             return defer.promise;
         }
 
-        static handlePromise(defer, promise) {
-            promise.then((response) => {
-                $log.info("response", response);
-                defer.resolve(response)
-            }).catch((error) => {
-                $log.error("error", error);
-                defer.reject(error);
-            });
+        static getBlock(blockNumber, withTransactions) {
+            withTransactions = withTransactions || false;
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
+
+            return defer.promise;
         }
+
 
         static waitForTicket(defer, method, args, contract) {
             Web3Service.q.push({ method: method, args: args, contract: contract }, (promise) => {
-                Web3Service.handlePromise(defer, promise);
+                $log.info("handle response", method);
+                promise.then((response) => {
+                    $log.info("method response", method, response);
+                    defer.resolve(response)
+                }).catch((error) => {
+                    $log.error("method response error", method, error);
+                    defer.reject(error);
+                });
             });
         }
     };

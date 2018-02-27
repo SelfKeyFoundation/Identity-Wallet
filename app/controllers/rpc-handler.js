@@ -9,9 +9,11 @@ const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
 const fs = require('fs-extra');
+const fsm = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
+const async = require('async');
 
 const RPC_METHOD = "ON_RPC";
 
@@ -68,6 +70,7 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
     }
 
+    // TODO remove
     controller.prototype.initDataStore = function (event, actionId, actionName, args) {
         let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 
@@ -315,7 +318,7 @@ module.exports = function (app) {
                         let mimeType = mime.lookup(filePaths[0]);
                         let name = path.parse(filePaths[0]).base;
 
-                        if (args.maxFileSize) {
+                        if (args && args.maxFileSize) {
                             if (stats.size > args.maxFileSize) {
                                 return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
                             }
@@ -328,6 +331,7 @@ module.exports = function (app) {
                             size: stats.size
                         });
                     } catch (e) {
+                        console.log(e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
@@ -403,32 +407,84 @@ module.exports = function (app) {
             let outputPath = keythereum.exportToFile(keystoreObject, keystoreFilePath);
             let keystoreFileName = path.basename(outputPath);
 
-            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
-            settings.setPath(storeFilePath);
-
-            let storeData = settings.getAll();
-
-            if (!storeData.wallets[keystoreObject.address]) {
-                storeData.wallets[keystoreObject.address] = {
-                    type: 'ks',
-                    name: "Unnamed Wallet",
-                    keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName),
-                    data: initialStoreDataStructure
-                }
-                settings.setAll(storeData);
-            }
-
-            let privateKey = keythereum.recover(args.password, keystoreObject);
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                publicKey: keystoreObject.address,
-                privateKey: privateKey
+            electron.app.sqlLiteService.wallets_insert(
+                {
+                    publicKey: keystoreObject.address,
+                    keystoreFilePath: outputPath
+                },
+                args.basicInfo
+            ).then((resp) => {
+                let privateKey = keythereum.recover(args.password, keystoreObject);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                    id: resp.id,
+                    publicKey: keystoreObject.address,
+                    privateKey: privateKey,
+                    keystoreFilePath: outputPath
+                });
+            }).catch((error) => {
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
         });
     }
 
     controller.prototype.importEtherKeystoreFile = function (event, actionId, actionName, args) {
         try {
+            console.log("1111", args.filePath, fs.existsSync(args.filePath), path.basename(args.filePath))
             keythereum.importFromFile(args.filePath, function (keystoreObject) {
+
+                let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
+
+                if (!fs.existsSync(keyStoreFilePath)) {
+                    fs.mkdir(keyStoreFilePath);
+                }
+
+                let keystoreFileName = path.basename(args.filePath);
+                let keyStoreFileNewPath = path.resolve(keyStoreFilePath, keystoreFileName);
+
+                if (!fs.existsSync(keyStoreFileNewPath)) {
+                    helpers.copyFile(args.filePath, keyStoreFileNewPath, (err) => {
+                        if (!err) {
+                            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
+                            settings.setPath(storeFilePath);
+
+                            let storeData = settings.getAll();
+
+                            if (!storeData.wallets[keystoreObject.address]) {
+                                storeData.wallets[keystoreObject.address] = {
+                                    type: 'ks',
+                                    name: "Unnamed Wallet",
+                                    keystoreFilePath: keyStoreFileNewPath,
+                                    data: initialStoreDataStructure
+                                }
+                                settings.setAll(storeData);
+                            }
+
+                            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                                publicKey: keystoreObject.address,
+                                keystoreObject: keystoreObject
+                            });
+                        } else {
+                            app.win.webContents.send(RPC_METHOD, actionId, actionName, err, null);
+                        }
+                    });
+                } else {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                        publicKey: keystoreObject.address,
+                        keystoreObject: keystoreObject
+                    });
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
+        }
+    }
+
+    controller.prototype.readKeystoreObject = function (event, actionId, actionName, args) {
+        try {
+
+            keythereum.importFromFile(path.normalize(args.filePath), function (keystoreObject) {
+console.log(">>>>>>>>>>>>>>>>>>>>>>>");
                 let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
 
                 if (!fs.existsSync(keyStoreFilePath)) {
@@ -502,25 +558,22 @@ module.exports = function (app) {
             publicKey = publicKey.toString('hex');
 
             let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
+            let walletSelectPromise = electron.app.sqlLiteService.wallets_selectByPublicKey({ publicKey: publicKey });
 
-            let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
-            settings.setPath(storeFilePath);
-
-            let storeData = settings.getAll();
-
-            if (!storeData.wallets[publicKey]) {
-                storeData.wallets[publicKey] = {
-                    type: "pk",
-                    name: "Unnamed Wallet",
-                    data: initialStoreDataStructure
+            walletSelectPromise.then((wallet) => {
+                if(wallet){
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
+                }else{
+                    //let walletInsertPromise = electron.app.sqlLiteService.wallets_insert({ publicKey: publicKey }, args.basicInfo );
+                    // TODO
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                        publicKey: publicKey,
+                        privateKey: args.privateKey,
+                        privateKeyBuffer: privateKeyBuffer,
+                    });
                 }
-                settings.setAll(storeData);
-            }
-
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                privateKey: args.privateKey,
-                privateKeyBuffer: privateKeyBuffer,
-                publicKey: publicKey
+            }).catch((error) => {
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
         } catch (e) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
@@ -559,6 +612,72 @@ module.exports = function (app) {
     controller.prototype.installUpdate = function (event, actionId, actionName, args) {
         autoUpdater.quitAndInstall();
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
+    }
+
+    controller.prototype.openDocumentAddDialog = function (event, actionId, actionName, args) {
+        try {
+            let dialogConfig = {
+                title: 'Choose Document',
+                message: 'Choose file',
+                properties: ['openFile'],
+                filters: [
+                    { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
+                ],
+                maxFileSize: 50 * 1000 * 1000
+            };
+
+            dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+                console.log("11111", filePaths);
+                if (filePaths) {
+                    try {
+                        const stats = fs.statSync(filePaths[0]);
+                        let mimeType = mime.lookup(filePaths[0]);
+                        let name = path.parse(filePaths[0]).base;
+
+                        if (stats.size > dialogConfig.maxFileSize) {
+                            console.log("2222222", stats.size, dialogConfig.maxFileSize);
+                            return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
+                        }
+
+                        fsm.open(filePaths[0], 'r', (status, fd) => {
+                            if (status) {
+                                console.log("333333", status);
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            }
+
+                            var buffer = new Buffer(stats.size);
+                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                console.log("444444", buffer);
+                                electron.app.sqlLiteService.idAttributeItemValues_insert(
+                                    {
+                                        fileName: name,
+                                        buffer: buffer,
+                                        mimeType: mimeType,
+                                        fileSize: stats.size,
+                                        idAttributeItemValueId: args.idAttributeItemValueId
+                                    }
+                                ).then((resp) => {
+                                    console.log("555555", resp);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
+                                }).catch((error) => {
+                                    console.log("66666", error);
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                                });
+                            });
+                        });
+                    } catch (e) {
+                        console.log("77777", e);
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                    }
+                } else {
+                    console.log("888888", e);
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                }
+            });
+        } catch (e) {
+            console.log("999999", e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+        }
     }
 
     /**
@@ -604,6 +723,22 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getWalletByPublicKey = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.wallets_selectByPublicKey(args.publicKey).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getCountries = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.countries_selectAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -620,12 +755,44 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getIdAttributes = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttributes_selectAll(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
 
+    controller.prototype.getWalletTokens = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.walletTokens_selectByWalletId(args.walletId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
 
-
-
-
-
+    controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
+        const iconList = config.obligatoryImageIds;
+        async.each(iconList, function (item, callback) {
+            electron.app.sqlLiteService.tokens_selectBySymbol(item).then(data => {
+                if (data) {
+                    if (!data.icon) {
+                        //TODO get image and update existing one
+                    }
+                } else {
+                    //TODO insert ot continue ???
+                }
+            }).catch(err => {
+                callback(err);
+            });
+        }, function (err) {
+            if (err) {
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+            } else {
+                app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
+            }
+        });
+    };
 
 
     return controller;

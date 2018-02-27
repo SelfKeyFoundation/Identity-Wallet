@@ -5,7 +5,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, EtherScanService, TokenService, Web3Service, CommonService, CONFIG) {
+function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, ElectronService, Web3Service, CommonService, CONFIG) {
     'ngInject';
 
     $log.info('WalletService Initialized');
@@ -46,18 +46,19 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             return '';
         }
 
-        createKeystoreFile(password) {
+        // ,,,
+        createKeystoreFile(password, basicInfo) {
             let defer = $q.defer();
 
-            let promise = ElectronService.generateEthereumWallet(password);
+            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null, basicInfo: basicInfo });
             promise.then((data) => {
                 if (data && data.privateKey && data.publicKey) {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
+                    wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
-                    TokenService.init();
+                    //TokenService.init();
 
                     // Broadcast about changes
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
+                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
 
                     defer.resolve(wallet);
                 } else {
@@ -93,7 +94,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             promise.then((data) => {
                 wallet = new Wallet(data.privateKey, data.publicKey);
 
-                TokenService.init();
+                //TokenService.init();
 
                 $rootScope.wallet = wallet;
 
@@ -127,21 +128,16 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             return defer.promise;
         }
 
-        unlockByFilePath(filePath, password) {
+        // ...
+        unlockByFilePath__(walletId, filePath, password) {
             let defer = $q.defer();
 
-            let importPromise = ElectronService.importEtherKeystoreFile(filePath);
+            let importPromise = RPCService.makeCall('importEtherKeystoreFile', { filePath: filePath });
             importPromise.then((response) => {
-                let promise = ElectronService.unlockEtherKeystoreObject(response.keystoreObject, password);
+                let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
                 promise.then((data) => {
-                    wallet = new Wallet(data.privateKey, data.publicKey);
-
-                    $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                    this.loadBalance();
-
-                    $rootScope.wallet = wallet;
-
-                    defer.resolve(wallet);
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
+                    defer.resolve($rootScope.wallet);
                 }).catch((error) => {
                     defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
                 });
@@ -152,19 +148,39 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             return defer.promise;
         }
 
+        unlockByFilePath(walletId, filePath, password) {
+            let defer = $q.defer();
+
+            let importPromise = RPCService.makeCall('readKeystoreObject', { filePath: filePath });
+            importPromise.then((response) => {
+                let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
+                promise.then((data) => {
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
+                    defer.resolve($rootScope.wallet);
+                }).catch((error) => {
+                    defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+                });
+            }).catch((error) => {
+                defer.reject("ERR_UNLOCK_KEYSTORE_FILE");
+            });
+
+            return defer.promise;
+        }
+
+        // ...
         unlockByPrivateKey(privateKey) {
             let defer = $q.defer();
 
-            let importPromise = ElectronService.importEtherPrivateKey(privateKey);
+            let importPromise = RPCService.makeCall('importEtherPrivateKey', { privateKey: privateKey });
             importPromise.then((data) => {
-                wallet = new Wallet(data.privateKeyBuffer, data.publicKey);
-                $rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_UNLOCKED, wallet);
-                this.loadBalance();
-
-                $rootScope.wallet = wallet;
-
-                defer.resolve(wallet);
+                if(data.id){
+                    $rootScope.wallet = new Wallet(data.id, data.privateKeyBuffer, data.publicKey);
+                    defer.resolve($rootScope.wallet, true);
+                }else{
+                    defer.resolve(data, false);
+                }
             }).catch((error) => {
+                console.log(error);
                 defer.reject("ERR_UNLOCK_PRIVATE_KEY");
             });
 
@@ -199,12 +215,13 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
         loadTokenBalance(symbol) {
             // TODO check Address
             if (symbol) {
-                TokenService.loadBalanceBySymbol(wallet.getPublicKeyHex(), symbol);
+                //TokenService.loadBalanceBySymbol(wallet.getPublicKeyHex(), symbol);
             } else {
-                TokenService.loadAllbalance(wallet.getPublicKeyHex());
+                //TokenService.loadAllbalance(wallet.getPublicKeyHex());
             }
         }
 
+        /*
         getTransactionCount() {
             let defer = $q.defer();
             // TODO check wallet address
@@ -216,6 +233,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
             });
             return defer.promise;
         }
+        */
 
         getGasPrice() {
             let defer = $q.defer();
@@ -237,6 +255,8 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
          * @param {wei} gasLimitWei
          * @param {hex} contractDataHex Contract data
          */
+        // TODO moved inside Wallet class ($rootScope.wallet.generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID))
+        /*
         generateEthRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex) {
             let defer = $q.defer();
 
@@ -267,10 +287,13 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
             return defer.promise;
         }
+        */
 
+        // TODO moveed inside Token class
+        // $rootScope.wallet.tokens[theSymbol].generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, chainID)
+        /*
         generateTokenRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, tokenSymbol) {
             let defer = $q.defer();
-
             let token = TokenService.getBySymbol(tokenSymbol);
             if (!token) {
                 defer.reject("ERR_TOKEN_NOT_FOUND");
@@ -307,6 +330,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, ElectronService, 
 
             return defer.promise;
         }
+        */
     };
 
     return new WalletService();

@@ -1,4 +1,4 @@
-function GuestLayoutController($rootScope, $scope, $log, $q, $timeout, ConfigFileService, CommonService) {
+function GuestLayoutController($log) {
     'ngInject'
 
     $log.info('GuestLayoutController');

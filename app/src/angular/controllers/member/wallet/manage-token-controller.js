@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, TokenService, Web3Service, CommonService, ConfigFileService, WalletService) {
+function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, WalletService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -8,15 +8,13 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
         "eth": "Ethereum"
     }
 
-    $scope.selectedToken = TokenService.getBySymbol($stateParams.id.toUpperCase());
+    $scope.selectedToken = $rootScope.wallet.tokens[$stateParams.id.toUpperCase()];
 
     $scope.publicKeyHex = "0x" + $rootScope.wallet.getPublicKeyHex();
     $scope.symbol = $stateParams.id.toUpperCase();
     $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
 
-    $scope.balance = 0;
-    $scope.balanceUsd = 0;
 
     $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
 
@@ -36,11 +34,8 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
             $scope.balanceUsd = CommonService.numbersAfterComma($rootScope.wallet.balanceInUsd, 2);
         } else {
             // TOKEN
-            let promise = $scope.selectedToken.loadBalance();
-            promise.then((token) => {
-                $scope.balance = Number(token.getBalanceDecimal());
-                $scope.balanceUsd = CommonService.numbersAfterComma(token.balanceInUsd, 2);
-            });
+            $scope.balance = $scope.selectedToken.getBalanceDecimal();
+            $scope.balanceUsd = CommonService.numbersAfterComma($scope.selectedToken.balanceInUsd, 2);
         }
     }
 
@@ -48,6 +43,7 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
      *
      */
     $scope.setTokenActivity = () => {
+        /*
         let store = ConfigFileService.getStore();
 
         let data = store.wallets[$rootScope.wallet.getPublicKeyHex()].data;
@@ -66,6 +62,7 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
 
             $scope.tokenActivity = transactions;
         }
+        */
     }
 
     $scope.setTokenActivity();

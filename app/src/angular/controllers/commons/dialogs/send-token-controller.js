@@ -3,10 +3,10 @@
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, args, Web3Service, WalletService, TokenService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service) {
     'ngInject'
 
-    $log.info("SendTokenDialogController", args);
+    $log.info("SendTokenDialogController", args, CONFIG);
 
     const TX_CHECK_INTERVAL = 1000;
     const ESTIMATED_GAS_CHECK_INTERVAL = 300;
@@ -27,7 +27,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.formData = {
         sendAmount: args.sendAmount || null,
         sendToAddressHex: args.sendToAddressHex || '',
-        gasPriceInGwei: args.gasPriceInGwei || 1
+        gasPriceInGwei: args.gasPriceInGwei || 5
     }
 
     /**
@@ -92,7 +92,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $scope.infoData.usdPerUnit = $rootScope.wallet.usdPerUnit;
         $scope.infoData.totalBalance = $rootScope.wallet.balanceEth;
     } else {
-        let token = TokenService.getBySymbol($scope.symbol);
+        let token = $rootScope.wallet.tokens[$scope.symbol];
         $scope.infoData.usdPerUnit = token.usdPerUnit;
         $scope.infoData.totalBalance = token.getBalanceDecimal();
     }
@@ -121,23 +121,15 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
     }
 
-    // TODO remove
-    $scope.send = (event, sendTokenForm) => {
-        $scope.backgroundProcessStatuses.checkingTransaction = true;
-
-        if ($scope.symbol.toLowerCase() === 'eth') {
-            sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
-        } else {
-            sendToken($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
-        }
-    }
-
     $scope.getTransactionStatus = () => {
-        if (!$scope.backgroundProcessStatuses.checkingTransaction) {
+        if (!$scope.backgroundProcessStatuses.txStatus && !$scope.txHex) {
             return 'Pending';
+        } else if (!$scope.backgroundProcessStatuses.txStatus && $scope.txHex) {
+            return 'Processing';
         } else {
-            return $scope.backgroundProcessStatuses.checkingTransaction === 0 ? 'Failed!' : 'Sent!';
+            return $scope.backgroundProcessStatuses.txStatus ? 'Sent!' : 'Failed!';
         }
+
     }
 
     $scope.cancel = (event) => {
@@ -169,7 +161,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             let txInfoPromise = Web3Service.getTransactionReceipt($scope.txHex.toString());
             txInfoPromise.then((txInfo) => {
                 if (txInfo.blockNumber !== null) {
-                    $scope.backgroundProcessStatuses.checkingTransaction = Number(txInfo.status);
+                    $scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
                     $interval.cancel(txInfoCheckInterval);
                 }
             }).catch((error) => {
@@ -200,19 +192,22 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 return;
             }
 
-            let txGenPromise = WalletService.generateEthRawTransaction(
+            let txGenPromise = $rootScope.wallet.generateRawTransaction(
                 sendToAddress,
                 EthUnits.unitToUnit(sendAmount, 'ether', 'wei'),
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
-                $scope.infoData.gasLimit
+                $scope.infoData.gasLimit,
+                CONFIG.chainId
             );
 
             txGenPromise.then((signedHex) => {
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {
                     $scope.txHex = resp.transactionHash;
-                    startTxCheck();
+
                     $scope.viewStates.step = 'transaction-status';
+
+                    startTxCheck();
                 }).catch((error) => {
                     $scope.errors.sendFailed = error.toString();
                     // reset view state
@@ -233,12 +228,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 return;
             }
 
-            let txGenPromise = WalletService.generateTokenRawTransaction(
+            let txGenPromise = $rootScope.wallet.tokens[args.symbol].generateRawTransaction(
                 sendToAddress,
                 sendAmount,
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
                 60000,   // $scope.infoData.gasLimit
-                $scope.symbol.toUpperCase()
+                $scope.symbol.toUpperCase(),
+                CONFIG.chainId
             )
 
             txGenPromise.then((signedHex) => {
@@ -246,12 +242,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 $scope.sendPromise.then((resp) => {
                     $scope.txHex = resp.transactionHash;
                     startTxCheck();
-                    $scope.viewStates.step = 'transaction-status';
                 }).catch((error) => {
                     $scope.errors.sendFailed = error.toString();
                     // reset view state
                     setViewState();
                 });
+
+                $scope.viewStates.step = 'transaction-status';
             }).catch((error) => {
                 $scope.errors.sendFailed = error.toString();
                 // reset view state

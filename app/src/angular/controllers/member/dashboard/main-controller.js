@@ -1,4 +1,4 @@
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService, WalletService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, ElectronService, WalletService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController');
@@ -9,6 +9,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
+
+    // TODO
+    return;
 
     function getTotalBalanceInUsd() {
         return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
@@ -78,6 +81,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $scope.allTransactions = [];
 
+    /*
     $scope.setTransactionAtivity = () => {
         let store = ConfigFileService.getStore();
 
@@ -107,7 +111,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         }
     }
     $scope.setTransactionAtivity();
-
+    */
+   
     /**
      * update pie chart on balance change
      */

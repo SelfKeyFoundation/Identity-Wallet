@@ -1,19 +1,16 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $mdDialog, countries) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep2Controller');
 
-    $scope.countryList = countries.countryList;
+    $scope.countryList = SqlLiteService.getCountries();
 
     $scope.input = {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        countryOfResidency: ""
+        first_name: "",
+        last_name: "",
+        middle_name: "",
+        country_of_residency: ""
     };
-
-
-
 
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
@@ -28,43 +25,6 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             locals: {
                 basicInfo: $scope.input
             }
-        });
-    }
-
-    // TODO remove
-    $scope.createKeystore = (event) => {
-        if (!$scope.userInput.password) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "password is required",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
-
-        if ($scope.userInput.password !== $stateParams.thePassword) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "wrong password",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
-
-        let promise = WalletService.createKeystoreFile($scope.userInput.password);
-        promise.then((wallet) => {
-            $rootScope.wallet = wallet;
-
-            // reload store
-            ConfigFileService.load().then((storeData) => {
-                $state.go('guest.create.step-3')
-            });
-        }).catch((error) => {
-            $log.error(error);
         });
     }
 
