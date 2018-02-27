@@ -15157,11 +15157,8 @@ md-radio-group md-radio-button {
 
 .sk-custom-token-box .title {
   font-family: ProximaNovaRegular;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 28px;
-  color: white; }
-
-.sk-custom-token-box .text {
   color: white; }
 
 .sk-custom-token-box .md-button.gray {
@@ -16751,6 +16748,20 @@ md-dialog.send-token {
       margin-top: 46px; }
       md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__actions-container .sk-button {
         width: 210px; }
+    md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container {
+      position: absolute;
+      right: 0;
+      width: 28%; }
+      md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container {
+        width: 100%; }
+        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container span {
+          color: white;
+          font-family: ProximaNovaRegular; }
+        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container .md-select-value {
+          border-bottom-width: 2px;
+          border-bottom-color: #93b0c1; }
+        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container .md-select-icon {
+          color: white; }
 
 .tooltip-multiline {
   height: auto;

@@ -7,7 +7,7 @@ md-dialog {
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        
+
         .send-token-wrapper {
             .sk-send-ether-box {
                 padding: 90px 30px 40px 30px;
@@ -175,6 +175,25 @@ md-dialog {
 
                     .sk-button {
                         width: 210px;
+                    }
+                }
+                .sk-send-ether-box__.select-token-container{
+                    position: absolute;
+                    right: 0;
+                    width: 28%;
+                    md-input-container{
+                        width: 100%;
+                        span {
+                            color: white;
+                            font-family: ProximaNovaRegular;
+                        }
+                        .md-select-value{
+                            border-bottom-width: 2px;
+                            border-bottom-color: #93b0c1;
+                        }
+                        .md-select-icon{
+                            color: white;
+                        }
                     }
                 }
             }

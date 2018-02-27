@@ -85,7 +85,8 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             escapeToClose: false,
             locals: {
                 args: {
-                    symbol: symbol
+                    symbol: symbol,
+                    isERC20TokensAllowed : false
                 }
             }
         });
