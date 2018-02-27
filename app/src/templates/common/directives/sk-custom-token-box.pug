@@ -1,0 +1,15 @@
+.sk-box.sk-token-box.sk-custom-token-box
+    .sk-token-box__header(layout="row", layout-align="center start")
+        div.title {{ name}}
+        sk-double-header.sk-token-box__text(header="{{title}}", sub-header="{{symbol}}", flex)
+        button.sk-icon-button(ui-sref="member.wallet.manage-token({id: symbol})")
+            sk-icon(icon="plus", size-class="sk-token-box__plus")
+
+    .sk-token-box__body
+        span.text {{text}}
+
+    .sk-token-box__footer
+        .sk-horizontal-devider
+        .sk-token-box__footer_address-box(layout="row", layout-align="start center")
+            md-button.gray.default
+                span Send Custom Tokens

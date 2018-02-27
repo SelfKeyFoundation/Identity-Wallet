@@ -15155,6 +15155,26 @@ md-radio-group md-radio-button {
         .sk-token-box .sk-token-box__footer .sk-token-box__footer_address-box span.sk-token-box__footer_address-box_public-key:hover {
           color: #bed6e4; }
 
+.sk-custom-token-box .title {
+  font-family: ProximaNovaRegular;
+  font-size: 14px;
+  line-height: 28px;
+  color: white; }
+
+.sk-custom-token-box .text {
+  color: white; }
+
+.sk-custom-token-box .md-button.gray {
+  width: auto;
+  height: auto;
+  padding: 0 24px 0 24px; }
+  .sk-custom-token-box .md-button.gray span {
+    width: 46px;
+    height: 20px;
+    font-size: 11px;
+    line-height: 12px;
+    color: #93b0c1; }
+
 .sk-blur-background {
   position: fixed;
   top: 0;

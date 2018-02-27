@@ -8,13 +8,7 @@
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         sk-token-box(symbol="key", style="height: 216px;")
         sk-token-box(symbol="eth", style="height: 216px;")
-        //sk-tasks-box(date="December 2017", completed="12", outstanding="23", upcoming="7", style="height: 216px;")
-        .sk-box(layout="column", layout-align="center center", style="height: 216px; display: flex; margin: 0;")
-            md-icon(md-svg-src="assets/images/icons/airdrop.svg", style="width: 100px; height: 108px; margin-bottom: 0; margin-top: 0;")
-            span(style="margin-top: 14px; font-family: ProximaNovaRegular; font-size: 23px; color: #fff;") KEY Airdrop
-            //span(style="margin-top: 10px; font-family: ProximaNovaRegular; font-size: 14px; color: #93b0c1;") Get 50 KEY Tokens
-            md-button.smallest.gray(style="margin-top: 10px; display: flex;", ng-click="openEtherscanTxWindow()")
-                span(style="font-size: 11px;") VIEW TRANSACTION
+        sk-custom-token-box(name="Custom Tokens (ERC-20)", text="Send custom erc-20 tokens from the Selfkey Identity Wallet. Before sending please add custom tokens to the management dashboard below.", style="height: 216px;")
 
     // my crypto
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
@@ -35,7 +29,7 @@
     // alerts
     //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         sk-action-logs-box(title="alerts", max-notifications="5")
-        
+
     // reminders
     //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
         sk-reminders-box(title="reminders")
@@ -54,7 +48,7 @@
                     .list-item
                         .item-container(layout="row")
                             .date {{ activity.timestamp | date:'MMM'}}
-                                span {{activity.timestamp | date:'dd'}} 
+                                span {{activity.timestamp | date:'dd'}}
                             sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
                             .sent-receive {{ activity.sentOrReceive }}
                             span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
