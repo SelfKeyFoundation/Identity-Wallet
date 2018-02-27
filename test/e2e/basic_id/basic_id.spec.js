@@ -62,10 +62,12 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	})
 
 	it('TC07.01: Adding National ID and Selfie with ID Document', () => {
-		return tools.regStep(tools.app, '#goToAddDocument')
+		return delay(3000)
+			.then(() => tools.regStep(tools.app, '#goToAddDocument'))
 	})
 
 	it('TC07.02: Skipping ID and Selfie Upload', () => {
-		return tools.regStep(tools.app, '#goToDashboard')
+		return delay(3000)
+			.then(() => tools.regStep(tools.app, '#goToDashboard'))
 	})
 })
