@@ -190,6 +190,9 @@ angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogCo
 const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
 angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
 
+const IDWInfoDialogController = requireAppModule('angular/controllers/commons/dialogs/IDW-info-dialog-controller.js');
+angular.module('kyc-wallet').controller('IDWInfoDialogController', IDWInfoDialogController);
+
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 

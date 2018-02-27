@@ -1,0 +1,13 @@
+md-dialog.IDW-info(aira-lable="{{title}}")
+    .IDW-info-wrapper
+        .container
+            .header {{dialogInfo.header}}
+            .info-section(layout="row")
+                .logo(flex="30")
+                    sk-icon(icon="{{dialogInfo.logo}}", size-class="icon-size-44x44")
+                .text(flex="70") {{dialogInfo.text}}
+            .buttons-section
+                md-button.gray(style="margin-left: 8px; width: 144px;", ng-click="backStep($event)")
+                    span {{dialogInfo.button1}}
+                md-button.gray(style="margin-left: 8px; width: 144px;" ng-click="nextStep()" ng-class="[{'button-198': dialogInfo.step == 3}]")
+                    span {{dialogInfo.button2}}

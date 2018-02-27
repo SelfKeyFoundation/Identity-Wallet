@@ -16822,6 +16822,53 @@ md-dialog.info {
       top: -18px;
       cursor: pointer; }
 
+md-dialog.IDW-info {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog.IDW-info .IDW-info-wrapper {
+    width: 550px;
+    height: 350px;
+    border-radius: 4px;
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    position: relative; }
+    md-dialog.IDW-info .IDW-info-wrapper .container {
+      padding: 20px;
+      overflow: auto; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .header {
+        margin: 0 0 40px 20px;
+        font-size: 16px;
+        color: #FFFFFF; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .info-section {
+        height: 200px;
+        overflow: auto; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .info-section .text {
+          font-family: ProximaNovaRegular;
+          font-size: 14px;
+          font-weight: 300;
+          color: #ffffff;
+          text-align: justify; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .info-section .logo .sk-icon {
+          margin: 0 auto; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section {
+        margin-top: 25px; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button {
+          width: 100px; }
+          md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button span {
+            font-size: 12px; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button:first-child {
+          float: left; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button:nth-child(2) {
+          float: right; }
+
+.button-198 {
+  width: 198px !important; }
+
 md-dialog.add-edit-document {
   min-width: 100%;
   min-height: 100%;

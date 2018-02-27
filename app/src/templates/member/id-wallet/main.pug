@@ -1,15 +1,15 @@
 .id-wallet-main
     .center-container(layout="column", layout-align="start center")
-        .header-wrapper(ng-click="addIdAttribute($event)")
-            span SelfKey Identity Wallet
-            md-icon(md-svg-src="assets/images/icons/plus.svg")
+        .header-wrapper
+            //span SelfKey Identity Wallet
+            //md-icon(md-svg-src="assets/images/icons/plus.svg")
 
         .body-wrapper(layout="row", layout-align="start start")
             .left-side-wrapper(layout="column")
                 .attributes-table-container
                     .table-head
                         span.table-head-text Your Attributes
-                        md-icon(md-svg-src="assets/images/icons/plus.svg")
+                        md-icon(md-svg-src="assets/images/icons/plus.svg", ng-click="addIdAttribute($event)")
                     table.attributes-table
                         thead
                             tr

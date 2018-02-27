@@ -1,9 +1,24 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLiteService) {
+function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLiteService, $mdDialog, RPCService) {
     'ngInject'
 
     $log.info('MemberIdWalletMainController');
+
+
+    (function () {
+        $mdDialog.show({
+            controller: 'IDWInfoDialogController',
+            templateUrl: 'common/dialogs/IDW-info-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {}
+        });
+    })();
+
 
 
     $scope.attributesList = [];
@@ -30,6 +45,27 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
     for (let i in $scope.idAttributesList) {
         excludeTypes.push($scope.idAttributesList[i].type)
     }
+
+    $scope.selectFile = (event) => {
+        let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
+
+        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
+        addDocumentPromise.then((resp) => {
+            if(!resp) return;
+            $rootScope.wallet.loadIdAttributes().then((resp)=>{
+                $scope.idAttributes = $rootScope.wallet.getIdAttributes();
+                CommonService.showToast('success', 'Saved!');
+                $scope.selected.values = "Saved!";
+            });
+
+        }).catch((error) => {
+            CommonService.showToast('error', 'Max File Size: 50mb Allowed');
+        });
+    }
+
+
+
+
 
     /**
      * 1: load IdAttributesType List
