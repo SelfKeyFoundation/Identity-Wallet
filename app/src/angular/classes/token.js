@@ -30,12 +30,12 @@ class Token {
      * @param {*} decimal
      * @param {*} wallet
      */
-    constructor(contractAddress, symbol, decimal, isCustom, wallet) {
+    constructor(contractAddress, symbol, decimal, isCustom, id, wallet) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
         this.decimal = decimal;
         this.isCustom = isCustom;
-
+        this.id = id;
         this.balanceHex = null;
         this.balanceDecimal = 0;
 

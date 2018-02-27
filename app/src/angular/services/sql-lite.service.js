@@ -13,7 +13,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     let WALLETS_STORE = {};
     let GUIDE_SETTINGS = {};
     let COUNTRIES = [];
-    let TRANSACTIONS_HISTORY = []; 
 
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
@@ -51,8 +50,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             promises.push(this.loadTokenPrices());
             promises.push(this.loadWallets());
             promises.push(this.loadCountries());
-            promises.push(this.loadTransactionsHistory());
-            
 
             return $q.all(promises).then((data) => {
                 $rootScope.$broadcast(EVENTS.APP_DATA_LOAD);
@@ -119,16 +116,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                     COUNTRIES = data;
                 }
             });
-        }
-
-        loadTransactionsHistory() {
-            return RPCService.makeCall('getTransactionsHistory', null).then((data) => {
-                if (data && data.length) {
-                    TRANSACTIONS_HISTORY = data;
-                }
-            });
-        }
-        
+        }        
 
         /**
          *
@@ -185,13 +173,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         /**
-         * transaction history
-         */
-        getTransactionsHistory() {
-            return TRANSACTIONS_HISTORY;
-        }
-
-        /**
          * id_attribute_types
          */
         getIdAttributeTypes() {
@@ -219,6 +200,29 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                 }
             }
             return null;
+        }
+        /**
+         * 
+         * wallet settings 
+         */
+        getWalletSettingsByWalletId(data) {
+            return RPCService.makeCall('getWalletSettingsByWalletId', data);
+        }
+
+        insertTransactionHistory(data) {
+            return RPCService.makeCall('insertTransactionHistory', data);
+        }
+
+        getTransactionsHistoryByWalletId(walletId) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletId', walletId);
+        }
+
+        getTransactionsHistoryByWalletIdAndTokenId(query) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', query);
+        }
+
+        saveWalletSettings(data) {
+            return RPCService.makeCall('saveWalletSettings', data);
         }
 
     }

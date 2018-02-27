@@ -49,10 +49,10 @@
         .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
-            sk-linear-progress(ng-if="!transactionActivityIsSynced()",style="margin-top:10px;")
-            div(ng-if="transactionActivityIsSynced()", ng-init="setTransactionAtivity()")
+            sk-linear-progress(ng-if="!transactionsHistoryIsSynced()", style="margin-top:10px;")
+            div(ng-if="transactionsHistoryIsSynced()", ng-init="setTransactionsHistory()")
             .sk-horizontal-devider(style="margin-top: 20px;")
-            span.no-transaction-title(ng-if="transactionActivityIsSynced() && !transactionsHistoryList.length") No transactions yet.
+            span.no-transaction-title(ng-if="transactionsHistoryIsSynced() && !transactionsHistoryList.length") No transactions yet.
             .transactions-box-body
                 .list(ng-repeat="activity in transactionsHistoryList track by $index")
                     .list-item
@@ -60,8 +60,8 @@
                             .date {{ activity.timestamp | date:'MMM'}}
                                 span {{activity.timestamp | date:'dd'}} 
                             sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
-                            .sent-receive {{ activity.sentOrReceive }}
+                            .sent-receive {{ activity.sentOrReceiveText }}
                             span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
-                            span.sent-receive-text.grey  {{activity.nameOfTo}}
+                            span.sent-receive-text.grey  {{activity.sentToName}}
                             .coin-change.symbol(ng-class="activity.symbol") {{activity.to ? '- ' : '+ '}} {{activity.value}}
                         .sk-horizontal-devider(ng-if="transactionsHistoryList.length-1 != $index" style="margin-top: 20px;")
