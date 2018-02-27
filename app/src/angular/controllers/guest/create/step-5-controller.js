@@ -1,7 +1,6 @@
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+'use strict';
 
-function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, CommonService, ElectronService) {
+function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state,  $stateParams, RPCService, CommonService) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep5Controller", $stateParams);
@@ -10,20 +9,19 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $q, $timeo
         $state.go('guest.create.step-6');
     }
 
-    //TODO gio
-    /*$scope.backupKeystore = (event) => {
-        let promise = ElectronService.openDirectorySelectDialog();
-        promise.then((directoryPath) => {
-            if (directoryPath) {
-                let store = ConfigFileService.getStore();
-                let walletSettings = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-
-                ElectronService.moveFile(walletSettings.keystoreFilePath, directoryPath).then(() => {
-                    CommonService.showToast('success', 'Saved!');
+    $scope.backupKeystore = (event) => {
+        let promise = RPCService.makeCall('openDirectorySelectDialog', null);
+        promise.then((targetDirectory) => {
+            if (targetDirectory) {
+                RPCService.makeCall('getWalletsDirectoryPath', null).then((walletsDirectoryPath)=>{
+                    let walletPath = walletsDirectoryPath + "/" + $rootScope.wallet.keystoreFilePath;
+                    RPCService.makeCall('moveFile', { src: walletPath, dest: targetDirectory, copy: true }).then(() => {
+                        CommonService.showToast('success', 'Saved!');
+                    });
                 });
             }
         });
-    }*/
+    }
 };
 
 module.exports = GuestKeystoreCreateStep5Controller;

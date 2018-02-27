@@ -46,30 +46,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             return '';
         }
 
-        // ,,,
-        createKeystoreFile(password, basicInfo) {
-            let defer = $q.defer();
-
-            let promise = RPCService.makeCall('generateEthereumWallet', { password: password, keyStoreSrc: null, basicInfo: basicInfo });
-            promise.then((data) => {
-                if (data && data.privateKey && data.publicKey) {
-                    wallet = new Wallet(data.id, data.privateKey, data.publicKey);
-
-                    //TokenService.init();
-
-                    // Broadcast about changes
-                    //$rootScope.$broadcast(EVENTS.KEYSTORE_OBJECT_LOADED, wallet);
-
-                    defer.resolve(wallet);
-                } else {
-                    defer.reject("no data in resp");
-                }
-            }).catch((error) => {
-                defer.reject(error);
-            });
-
-            return defer.promise;
-        }
+        
 
         importUsingKeystoreFileDialog() {
             let defer = $q.defer();
@@ -92,7 +69,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
 
             let promise = ElectronService.importEtherKeystoreFile(filePath);
             promise.then((data) => {
-                wallet = new Wallet(data.privateKey, data.publicKey);
+                wallet = new Wallet(data.id, data.privateKey, data.publicKey, filePath);
 
                 //TokenService.init();
 
@@ -136,7 +113,7 @@ function WalletService($rootScope, $log, $q, $timeout, EVENTS, RPCService, Elect
             importPromise.then((response) => {
                 let promise = RPCService.makeCall('unlockEtherKeystoreObject', { keystoreObject: response.keystoreObject, password: password });
                 promise.then((data) => {
-                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey);
+                    $rootScope.wallet = new Wallet(walletId, data.privateKey, data.publicKey, filePath);
                     defer.resolve($rootScope.wallet);
                 }).catch((error) => {
                     defer.reject("ERR_UNLOCK_KEYSTORE_FILE");

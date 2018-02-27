@@ -1,7 +1,6 @@
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+'use strict';
 
-function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, WalletService) {
+function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $window, $stateParams) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep6Controller");
