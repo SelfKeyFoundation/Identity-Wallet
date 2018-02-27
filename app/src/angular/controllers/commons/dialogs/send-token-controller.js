@@ -19,7 +19,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     let token = null;
     $scope.invalidData = false;
     $scope.symbol = args.symbol;
-    $scope.isERC20TokensAllowed = args.isERC20TokensAllowed;
+    $scope.allowSelectERC20Token = args.allowSelectERC20Token;
 
     /**
      * form data

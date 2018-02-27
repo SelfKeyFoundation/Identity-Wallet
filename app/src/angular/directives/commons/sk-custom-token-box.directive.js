@@ -4,11 +4,12 @@ function SkCustomBoxDirective($rootScope, $log, $window, $timeout, CommonService
 
     return {
         restrict: 'E',
-        scope: {
-            name: '@',
-            text: '@'
-        },
+        scope: {},
         link: (scope, element) => {
+            scope.data = {
+                name: "Custom Tokens (ERC-20)",
+                text: "Send custom erc-20 tokens from the Selfkey Identity Wallet. Before sending please add custom tokens to the management dashboard below."
+            }
 
         },
         replace: true,

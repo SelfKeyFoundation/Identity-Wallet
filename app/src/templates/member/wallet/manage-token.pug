@@ -21,7 +21,7 @@
             button.action-button(layout="row", ng-click="$root.openReceiveTokenDialog($event, {symbol: symbol, publicKeyHex: publicKeyHex})")
                 sk-icon(icon="coins", size-class="icon-size-24x23" style="margin: 13px 17px 14px 18px")
                 span.receive RECEIVE
-            button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, symbol)")
+            button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, symbol, false)")
                 sk-icon(icon="sent", size-class="icon-size-24x24", style="margin: 12px 14px 14px 32px")
                 span.send SEND
     .body-content
@@ -32,12 +32,12 @@
             .list-item
                 .item-container(layout="row")
                     .date {{ activity.timestamp | date:'MMM'}}
-                        span {{activity.timestamp | date:'dd'}} 
+                        span {{activity.timestamp | date:'dd'}}
                     sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
                     .sent-receive {{ activity.sentOrReceive }}
                     span.sent-receive-text.aqua-blue  {{activity.nameOfTo}}
                     .coin-change(ng-class="{'aqua-blue': !!activity.nameOfTo}") {{activity.to ? '- ' : '+ '}} {{activity.value}}
-                
+
                 //hr
                 //.item-container(layout="row")
                 //    .date DEC
@@ -54,8 +54,8 @@
                 //    .sent-receive sent to
                 //    span.sent-receive-text  Atlas Token Sale
                 //    .coin-change - 0.34283
-                
-                    
+
+
             //.list-item
             //    .item-container(layout="row")
             //        .date(flex="5") DEC
