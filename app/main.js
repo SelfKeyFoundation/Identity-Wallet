@@ -74,7 +74,7 @@ function onReady(app) {
 
 		electron.app.sqlLiteService.init().then(() => {
 			//start update cmc data
-			electron.app.cmcService.startUpdateData();
+            electron.app.cmcService.startUpdateData();
 		}).catch((error) => {
 			console.log("error", error);
 		});

@@ -20,8 +20,10 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
 
-    constructor(id, privateKey, publicKey) {
+    constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
+        this.keystoreFilePath = keystoreFilePath;
+        
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
 

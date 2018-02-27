@@ -1,9 +1,8 @@
 'use strict';
 
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const IdAttributeItem = requireAppModule('angular/classes/id-attribute-item');
+const Wallet = requireAppModule('angular/classes/wallet');
 
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeout, $state, $window, $stateParams, SqlLiteService, WalletService, CommonService) {
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state, $stateParams, SqlLiteService, RPCService, CommonService) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep4Controller", $stateParams);
@@ -27,19 +26,27 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $timeo
     }
 
     function createKeystore() {
-        let promise = WalletService.createKeystoreFile($scope.input.password, $stateParams.basicInfo);
-        promise.then((wallet) => {
-            SqlLiteService.loadWallets().then(()=>{
-                $rootScope.wallet = wallet;
-                $rootScope.wallet.loadIdAttributes().then((idAttributes)=>{
+        let promise = RPCService.makeCall('createWallet', {
+            password: $scope.input.password,
+            initialIdAttributesValues: $stateParams.basicInfo
+        });
+        promise.then((data) => {
+            SqlLiteService.loadWallets().then(() => {
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+
+                let promises = [];
+                promises.push($rootScope.wallet.loadIdAttributes());
+                promises.push($rootScope.wallet.loadTokens());
+
+                $q.all(promises).then((responses) => {
                     $state.go('guest.create.step-5');
                 });
+            }).catch((error) => {
+                $log.error(error);
+                CommonService.showToast('error', 'Error');
             });
-
         }).catch((error) => {
-            // TODO proper message
-            $log.error(error);
-            CommonService.showToast('error', 'Error');
+            defer.reject(error);
         });
     }
 };

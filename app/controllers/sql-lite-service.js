@@ -216,6 +216,7 @@ module.exports = function (app) {
                         table.string('privateKey');
                         table.string('keystoreFilePath');
                         table.binary('profilePicture');
+                        //table.integer('recordState').defaultTo(1);
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -311,6 +312,7 @@ module.exports = function (app) {
                 if (!exists) {
                     knex.schema.createTable('token_prices', (table) => {
                         table.increments('id');
+                        table.string('name').notNullable();
                         table.string('symbol').notNullable().unique();
                         table.string('source');
                         table.decimal('priceUSD');
@@ -680,8 +682,9 @@ module.exports = function (app) {
     controller.prototype.walletTokens_selectByWalletId = (walletId) => {
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
-                .select('wallet_tokens.*', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
+                .select('wallet_tokens.*', 'token_prices.name', 'token_prices.priceUSD', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
                 .leftJoin('tokens', 'tokenId', 'tokens.id')
+                .leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
                 .where({ walletId: walletId, recordState: 1 });
 
             promise.then((rows) => {

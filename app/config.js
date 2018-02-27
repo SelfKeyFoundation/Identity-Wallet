@@ -48,7 +48,7 @@ const AppConfigConstant = {
 			"https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf",
 			"https://t.me/selfkeyfoundation"
 		],
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
+		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
@@ -61,7 +61,7 @@ const AppConfigConstant = {
 		kycApiEndpoint: "https://token-sale-demo-api.kyc-chain.com/",
 		chainId: 1,
 		node: "mew",
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
+		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
@@ -74,7 +74,7 @@ const AppConfigConstant = {
 		kycApiEndpoint: "https://tokensale-api.selfkey.org/",
 		chainId: 1,
 		node: "mew",
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
+		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
