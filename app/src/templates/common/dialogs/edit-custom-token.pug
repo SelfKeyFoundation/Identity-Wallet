@@ -1,0 +1,26 @@
+md-dialog(aira-lable="Edit Tokens")
+    sk-icon.close-btn(icon="close-button", size-class="icon-size-20x20", ng-click="cancel($event)")
+    .edit-tokens-contaner
+        div(layout-fill, layout="column", layout-align="center center")
+          sk-icon(icon="currency", size-class="icon-size-57x65")
+          .header-text Edit Tokens
+          .grid-container
+              table
+                  thead
+                      tr
+                          td Token Symbol
+                          td Last Price
+                          td Balance
+                          td Total Valume
+                          td Address
+                          td
+
+                  tbody
+                      tr(ng-repeat="token in customTokens")
+                          td {{token.symbol}}
+                          td {{token.lastPrice}}
+                          td {{token.balance}}
+                          td {{token.totalValue}}
+                          td {{token.tokenAddress}}
+                          td
+                              sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken(token,$index)", icon="ic_delete_white_26px", size-class="icon-size-19x23")

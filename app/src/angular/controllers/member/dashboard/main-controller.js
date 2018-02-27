@@ -2,6 +2,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     'ngInject'
 
     $log.info('MemberDashboardMainController',$rootScope.wallet);
+    debugger;
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
@@ -79,7 +80,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         return !isInProgress;
     }
 
-    $scope.allTransactions = [];
+    $scope.transactionsHistoryList =  SqlLiteService.getTransactionsHistory();
 
     /*
     $scope.setTransactionAtivity = () => {

@@ -963,6 +963,30 @@ module.exports = function (app) {
     }
 
     /**
+     * transactions history
+     */
+    controller.prototype.transactionsHistory_selectAll = () => {
+        return new Promise((resolve, reject) => {
+            knex('transactions_history').select().then((rows) => {
+                if (rows && rows.length) {
+                    resolve(rows);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+     /**
+     * transactions_history
+     */
+    controller.prototype.transactionsHistory_insert = (data) => {
+        return insertIntoTable('transactions_history', data);
+    }
+
+    /**
      *
      */
     function insertIntoTable(table, data, trx) {

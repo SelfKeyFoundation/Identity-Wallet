@@ -13,6 +13,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     let WALLETS_STORE = {};
     let GUIDE_SETTINGS = {};
     let COUNTRIES = [];
+    let TRANSACTIONS_HISTORY = []; 
 
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
@@ -50,6 +51,8 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             promises.push(this.loadTokenPrices());
             promises.push(this.loadWallets());
             promises.push(this.loadCountries());
+            promises.push(this.loadTransactionsHistory());
+            
 
             return $q.all(promises).then((data) => {
                 $rootScope.$broadcast(EVENTS.APP_DATA_LOAD);
@@ -118,6 +121,15 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             });
         }
 
+        loadTransactionsHistory() {
+            return RPCService.makeCall('getTransactionsHistory', null).then((data) => {
+                if (data && data.length) {
+                    TRANSACTIONS_HISTORY = data;
+                }
+            });
+        }
+        
+
         /**
          *
          */
@@ -170,6 +182,13 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
          */
         getCountries() {
             return COUNTRIES;
+        }
+
+        /**
+         * transaction history
+         */
+        getTransactionsHistory() {
+            return TRANSACTIONS_HISTORY;
         }
 
         /**

@@ -219,7 +219,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 });
 
             });
-            */
+            *
         }
 
         getContractPastEvents(contract, args) {
