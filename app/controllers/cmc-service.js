@@ -20,6 +20,7 @@ module.exports = function (app) {
                 const nowDate = new Date();
                 let dataToInsert = data.map(item => {
                     return {
+                        name: item.name,
                         symbol: item.symbol,
                         source: 'https://coinmarketcap.com',
                         priceUSD: +item.price_usd,

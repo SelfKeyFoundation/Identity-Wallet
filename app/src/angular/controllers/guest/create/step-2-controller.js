@@ -1,4 +1,4 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $mdDialog, SqlLiteService) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $state, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep2Controller');
@@ -27,7 +27,6 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeo
             }
         });
     }
-
 };
 
 module.exports = GuestKeystoreCreateStep2Controller;
