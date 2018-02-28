@@ -575,6 +575,7 @@ module.exports = function (app) {
      * wallets
      */
     controller.prototype.wallets_insert = (data, basicInfo) => {
+        data.createdAt = new Date().getTime();
         return knex.transaction((trx) => {
             knex('wallets')
                 .transacting(trx)
@@ -585,10 +586,10 @@ module.exports = function (app) {
                     let promises = [];
 
                     // add wallet settings
-                    promises.push(insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1 }, trx));
+                    promises.push(insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
 
-                    // add wallet_tokens
-                    promises.push(insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1 }, trx));
+                    // add wallet tokens
+                    promises.push(insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
 
                     return new Promise((resolve, reject) => {
                         Promise.all(promises).then(() => {
@@ -601,7 +602,7 @@ module.exports = function (app) {
                                     let idAttributeType = idAttributeTypes[i];
 
                                     // add initial id attributes
-                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key }, trx).then((idAttribute) => {
+                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime()}, trx).then((idAttribute) => {
                                         idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
                                             idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: basicInfo[idAttributeType.key], createdAt: new Date().getTime() }));
                                         }));
@@ -648,7 +649,7 @@ module.exports = function (app) {
     controller.prototype.walletSettings_update = (data) => {
         return updateById('wallet_settings', data);
     }
-    
+
     controller.prototype.wallets_selectByPublicKey = (publicKey) => {
         return new Promise((resolve, reject) => {
             knex('wallets').select().where('publicKey', publicKey).then((rows) => {
@@ -736,11 +737,7 @@ module.exports = function (app) {
     controller.prototype.idAttributeTypes_selectAll = () => {
         return new Promise((resolve, reject) => {
             knex('id_attribute_types').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve(null);
-                }
+                resolve(rows);
             }).catch((error) => {
                 reject({ message: "error_while_selecting", error: error });
             });
@@ -751,6 +748,8 @@ module.exports = function (app) {
      * id_attributes
      */
     controller.prototype.idAttribute_add = (args) => {
+        args.createdAt = new Date().getTime();
+
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attributes').transacting(trx).select().where('idAttributeType', args.idAttributeType);
             selectPromise.then((rows)=>{
@@ -812,6 +811,8 @@ module.exports = function (app) {
                 .where('id_attributes.id', args.id);
 
             selectPromise.then((rows)=>{
+                console.log(rows, "11111");
+
                 return new Promise((resolve, reject) => {
                     let dataToDelete = rows[0];
 
@@ -834,8 +835,10 @@ module.exports = function (app) {
                     }
 
                     Promise.all(promises).then((responses)=>{
+                        console.log(responses, "22222");
                         resolve();
-                    }).catch(()=>{
+                    }).catch((error)=>{
+                        console.log("err", error);
                         reject();
                     });
                 });
@@ -950,7 +953,7 @@ module.exports = function (app) {
 
                                     documents[0].name = args.fileName;
                                     documents[0].buffer = args.buffer;
-                                    documents[0].size = args.fileSize;
+                                    documents[0].size = args.size;
                                     documents[0].mimeType = args.mimeType;
                                     documents[0].updatedAt = new Date().getTime();
 
@@ -970,7 +973,7 @@ module.exports = function (app) {
                                     buffer: args.buffer,
                                     name: args.fileName,
                                     mimeType: args.mimeType,
-                                    size: args.fileSize,
+                                    size: args.size,
                                     createdAt: new Date().getTime()
                                 }).then((rows) => {
                                     idAttributeItemValue.documentId = rows[0];
@@ -1006,7 +1009,7 @@ module.exports = function (app) {
                                 buffer: args.buffer,
                                 name: args.fileName,
                                 mimeType: args.mimeType,
-                                size: args.fileSize,
+                                size: args.size,
                                 createdAt: new Date().getTime()
                             }).then((insertIds) => {
                                 idAttributeItemValue.documentId = insertIds[0];
@@ -1222,7 +1225,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.transactionsHistory_selectByWalletId = (id) => {
-        
+
         return selectTable('transactions_history', { walletId: id });
     }
 

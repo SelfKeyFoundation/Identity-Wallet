@@ -18,7 +18,7 @@
 
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
                         sk-icon(icon="hard-drive", size-class="icon-size-34x44")
-                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type) || selected.title2 }}
+                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type) ? 'Saved' : selected.title2 }}
                         span.sub-header This is stored locally
         #check-list.sk-box
             .content(layout="column")
