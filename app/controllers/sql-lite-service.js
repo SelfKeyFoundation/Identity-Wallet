@@ -365,14 +365,17 @@ module.exports = function (app) {
                 if (!exists) {
                     knex.schema.createTable('transactions_history', (table) => {
                         table.increments('id');
-                        table.integer('wallet_id').notNullable().references('wallets.id');
-                        table.integer('token_id').notNullable().references('tokens.id');
-                        table.string('tx_id').notNullable();
+                        table.integer('walletId').notNullable().references('wallets.id');
+                        table.integer('tokenId').references('tokens.id');
+                        table.string('txId').unique().notNullable();
+                        table.string('isSentTo');
                         table.decimal('value').notNullable();
                         table.integer('timestamp').notNullable();
                         table.integer('blockNumber').notNullable();
-                        table.integer('created_at').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updated_at');
+                        table.decimal('gas').notNullable();
+                        table.string('gasPrice').notNullable();
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "transactions_history", "created.");
                         resolve("transactions_history created");
@@ -418,6 +421,8 @@ module.exports = function (app) {
                         table.increments('id');
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('sowDesktopNotifications').notNullable().defaultTo(0);
+                        table.integer('ERC20TxHistoryLastBlock');
+                        table.integer('EthTxHistoryLastBlock');
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -636,6 +641,14 @@ module.exports = function (app) {
         return getById('wallets', id);
     }
 
+    controller.prototype.walletSettings_selectByWalletId = (id) => {
+        return selectTable('wallet_settings', { walletId: id });
+    }
+
+    controller.prototype.walletSettings_update = (data) => {
+        return updateById('wallet_settings', data);
+    }
+    
     controller.prototype.wallets_selectByPublicKey = (publicKey) => {
         return new Promise((resolve, reject) => {
             knex('wallets').select().where('publicKey', publicKey).then((rows) => {
@@ -1190,6 +1203,40 @@ module.exports = function (app) {
             });
         });
     }
+
+    /**
+     * transactions history
+     */
+    controller.prototype.transactionsHistory_selectAll = () => {
+        return new Promise((resolve, reject) => {
+            knex('transactions_history').select().then((rows) => {
+                if (rows && rows.length) {
+                    resolve(rows);
+                } else {
+                    resolve([]);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    controller.prototype.transactionsHistory_selectByWalletId = (id) => {
+        
+        return selectTable('transactions_history', { walletId: id });
+    }
+
+    controller.prototype.transactionsHistory_selectByWalletIdAndTokenId = (query) => {
+        return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
+    }
+
+     /**
+     * transactions_history
+     */
+    controller.prototype.transactionsHistory_insert = (data) => {
+        return insertIntoTable('transactions_history', data);
+    }
+
 
     /**
      *

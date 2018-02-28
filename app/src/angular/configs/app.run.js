@@ -192,6 +192,28 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             }
         });
     };
+    
+    $rootScope.openAddCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'AddEditCustomTokenDialogController',
+            templateUrl: 'common/dialogs/add-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openEditCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'AddEditCustomTokenDialogController',
+            templateUrl: 'common/dialogs/edit-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
 
     /**
      *

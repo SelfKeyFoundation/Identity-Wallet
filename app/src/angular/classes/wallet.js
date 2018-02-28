@@ -101,6 +101,7 @@ class Wallet {
     calculateBalanceInUSD() {
         this.balanceInUsd = (Number(this.balanceEth) * Number(this.usdPerUnit));
         this.calculateTotalBalanceInUSD();
+        return this.balanceInUsd;
     }
 
     calculateTotalBalanceInUSD() {
@@ -110,6 +111,7 @@ class Wallet {
 
             this.totalBalanceInUSD += token.balanceInUsd;
         }
+        return this.totalBalanceInUSD;
     }
 
     getFormattedBalance() {
@@ -158,7 +160,7 @@ class Wallet {
         SqlLiteService.loadWalletTokens(this.id).then((walletTokens) => {
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, this);
+                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal,token.isCustom,token.id, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {
@@ -234,6 +236,39 @@ class Wallet {
 
         return defer.promise;
     }
+
+    processTransactionsHistory(data) {
+        let tokens = $rootScope.wallet.tokens;
+
+        let getTokenById = (id)=> {
+            let tokenKey = Object.keys(tokens).find((key) => {
+                let token = tokens[key];
+                if (token.id == id) {
+                    return true;
+                }
+            });
+            return tokens[tokenKey];
+        };
+
+        return data.map((transaction) => {
+            //is sent
+            if (transaction.type == 0) {
+                transaction.sentToName = WalletService.getWalletName(activityKey, transaction.isSentTo);
+            }
+
+            if (transaction.tokenId) {
+                let token = getTokenById(transaction.tokenId);                
+            }
+
+            transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
+            let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
+            transaction.sentOrReceiveText =  transaction.type == 0 ? sendText : 'Received';
+           
+            return transaction;
+        }).sort((a, b) => {
+            return Number(b.timestamp) - Number(a.timestamp);
+        });
+    };
 
 }
 

@@ -30,11 +30,12 @@ class Token {
      * @param {*} decimal
      * @param {*} wallet
      */
-    constructor(contractAddress, symbol, decimal, wallet) {
+    constructor(contractAddress, symbol, decimal, isCustom, id, wallet) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
         this.decimal = decimal;
-
+        this.isCustom = isCustom;
+        this.id = id;
         this.balanceHex = null;
         this.balanceDecimal = 0;
 
@@ -122,6 +123,7 @@ class Token {
     calculateBalanceInUSD() {
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(this.usdPerUnit));
         this.wallet.calculateTotalBalanceInUSD();
+        return this.balanceInUsd;
     }
 
     /**

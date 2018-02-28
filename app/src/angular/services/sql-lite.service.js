@@ -119,7 +119,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                     COUNTRIES = data;
                 }
             });
-        }
+        }        
 
         /**
          *
@@ -221,6 +221,29 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                 }
             }
             return null;
+        }
+        /**
+         * 
+         * wallet settings 
+         */
+        getWalletSettingsByWalletId(data) {
+            return RPCService.makeCall('getWalletSettingsByWalletId', data);
+        }
+
+        insertTransactionHistory(data) {
+            return RPCService.makeCall('insertTransactionHistory', data);
+        }
+
+        getTransactionsHistoryByWalletId(walletId) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletId', walletId);
+        }
+
+        getTransactionsHistoryByWalletIdAndTokenId(query) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', query);
+        }
+
+        saveWalletSettings(data) {
+            return RPCService.makeCall('saveWalletSettings', data);
         }
 
     }

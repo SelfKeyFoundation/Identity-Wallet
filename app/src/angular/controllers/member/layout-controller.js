@@ -28,8 +28,9 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
         });
     }
 
-    //Web3Service.syncWalletActivityByContract();
-    //Web3Service.syncWalletActivityByETH();
+    Web3Service.syncTokensTransactionHistory();
+
+    Web3Service.syncETHTransactionsHistory();
 
     /*
     $rootScope.goToSelfkeyIco = (event) => {
