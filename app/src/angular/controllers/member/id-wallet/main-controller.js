@@ -1,43 +1,24 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLiteService) {
+function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPanel, SqlLiteService, CommonService) {
     'ngInject'
 
     $log.info('MemberIdWalletMainController');
 
+    let ID_ATTRIBUTE_TYPES = {};
+    let excludeKeys = [];
+
+    $scope.initialIdAttributes = ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'];
 
     $scope.attributesList = [];
     $scope.idDocumentsList = [];
 
-
-    let ID_ATTRIBUTE_TYPES = SqlLiteService.getIdAttributeTypes();
-    $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
-
-    if ($scope.idAttributesList) {
-        angular.forEach($scope.idAttributesList, function (item) {
-            if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
-                $scope.idDocumentsList.push(item)
-            } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
-                $scope.attributesList.push(item)
-            }
-        })
-    }
-
-
-    $scope.idAttrbuteConfig = {}
-
-    let excludeTypes = [];
-    for (let i in $scope.idAttributesList) {
-        excludeTypes.push($scope.idAttributesList[i].type)
-    }
+    prepareData();
 
     /**
-     * 1: load IdAttributesType List
-     * 2: load user's IdAttribute List
-     * 3: render user's IdAttribute List
+     *
      */
-
-    $scope.addIdAttribute = (event) => {
+    $scope.addIdAttribute = (event, type) => {
         $mdDialog.show({
             controller: "AddIdAttributeDialogController",
             templateUrl: "common/dialogs/add-id-attribute.html",
@@ -46,24 +27,121 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
             clickOutsideToClose: false,
             fullscreen: true,
             locals: {
-                excludeTypes: excludeTypes
+                excludeKeys: excludeKeys,
+                type
             }
         }).then((selectedIdAttributeType) => {
-            /*
-            let idAttributesStore = ConfigFileService.getIdAttributesStore();
-
-            if (!idAttributesStore[selectedIdAttributeType.key]) {
-                let idAttribute = new IdAttribute(selectedIdAttributeType.key);
-                idAttributesStore[selectedIdAttributeType.key] = idAttribute;
+            let idAttribute = {
+                walletId: $rootScope.wallet.id,
+                idAttributeType: selectedIdAttributeType.key
             }
-            excludeTypes.push(selectedIdAttributeType.key)
 
-            $log.info('selected id attribute type:', idAttributesStore);
-            */
+            SqlLiteService.addIdAttribute(idAttribute).then((response)=>{
+                prepareData();
+                CommonService.showToast('success', 'saved');
+            }).catch((error)=>{
+                $log.error(error);
+                CommonService.showToast('error', 'error');
+            })
         });
     }
 
+    $scope.editIdAttributeItemValue = (event, idAttributeItemValue, idAttributeType) => {
+        $rootScope.openAddEditStaticDataDialog(event, idAttributeItemValue, idAttributeType).then(()=>{
+            prepareData();
+            CommonService.showToast('success', 'saved');
+        });
+    }
 
+    $scope.editIdAttributeItemDocument = (event, idAttributeItemValue, idAttributeType) => {
+        $rootScope.openAddEditDocumentDialog(event, idAttributeItemValue, idAttributeType).then(()=>{
+            prepareData();
+            CommonService.showToast('success', 'saved');
+        });
+    }
+
+    $scope.openValueDeletePanel = (event, idAttribute, idAttributeItem, idAttributeItemValue) => {
+        let itemElement = event.target.parentElement.parentElement;
+
+        let position = $mdPanel
+            .newPanelPosition()
+            .relativeTo(angular.element(itemElement))
+            .addPanelPosition(
+                $mdPanel.xPosition.ALIGN_END,
+                $mdPanel.yPosition.ABOVE
+            );
+
+        let config = {
+            attachTo: angular.element(document.body),
+            targetEvent: event,
+            templateUrl: 'common/directives/sk-id-attribute/value-delete-panel.html',
+            clickOutsideToClose: true,
+            escapeToClose: true,
+            position: position,
+            controller: itemValueDeletePanel,
+            locals: {
+                idAttribute: idAttribute,
+                idAttributeItem: idAttributeItem,
+                idAttributeItemValue: idAttributeItemValue
+            }
+        }
+
+        $mdPanel.open(config);
+    }
+
+    $rootScope.$on('id-attribute:changed', () => {
+        prepareData();
+    });
+
+    function prepareData () {
+        $rootScope.wallet.loadIdAttributes().then(()=>{
+            $scope.attributesList = [];
+            $scope.idDocumentsList = [];
+
+            ID_ATTRIBUTE_TYPES = SqlLiteService.getIdAttributeTypes();
+            $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
+
+            if ($scope.idAttributesList) {
+                angular.forEach($scope.idAttributesList,  (item)=> {
+                    if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
+                        $scope.idDocumentsList.push(item)
+                    } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
+                        $scope.attributesList.push(item)
+                    }
+                });
+
+                console.log($scope.idDocumentsList, $scope.attributesList);
+            }
+
+            excludeKeys = [];
+            for (let i in $scope.idAttributesList) {
+                excludeKeys.push($scope.idAttributesList[i].idAttributeType);
+            }
+        });
+    }
 };
+
+function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, SqlLiteService, idAttribute, idAttributeItem, idAttributeItemValue) {
+    'ngInject';
+
+    $scope.promise = null;
+
+    $scope.delete = (event) => {
+        $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
+        $scope.promise.then(() => {
+            CommonService.showToast('success', 'deleted');
+            mdPanelRef.close().then(() => {
+                $rootScope.$broadcast('id-attribute:changed');
+                mdPanelRef.destroy();
+            });
+        });
+    }
+
+    $scope.cancel = (event) => {
+        mdPanelRef.close().then(() => {
+            mdPanelRef.destroy();
+        });
+    }
+}
 
 module.exports = MemberIdWalletMainController;

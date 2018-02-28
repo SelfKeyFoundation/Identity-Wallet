@@ -1,18 +1,18 @@
-md-dialog.add-edit-document(aira-lable="{{idAttributeType.type}}")
+md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
     .content-wrapper
         #document.sk-box.center-divider
             .content(layout="column")
                 .header-wrapper
-                    .title {{idAttributeType.type}}
+                    .title {{idAttributeType}}
                 .content-wrapper
                     .box(flex, layout="column", layout-align="center center")
                         sk-icon(icon="upload", size-class="icon-size-34x44")
-                        span.header {{idAttributeType.type}}
+                        span.header {{idAttributeType}}
                         span.sub-header (Minimal size 1600x900px)
 
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
                         sk-icon(icon="hard-drive", size-class="icon-size-34x44")
-                        span.header {{fileItem.name || 'Select Document'}}
+                        span.header {{selectedFile.name || 'Select Document'}}
                         span.sub-header This is stored locally
     .actions-wrapper
         md-button.outline-gray(ng-click="close($event)")

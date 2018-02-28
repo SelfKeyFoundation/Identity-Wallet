@@ -34,12 +34,13 @@ module.exports = function (app) {
                         table.increments('id');
                         table.string('name').unique().notNullable();
                         table.string('code').unique().notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO bug
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         let promises = [];
                         for (let i in countriesList) {
                             let item = countriesList[i];
+                            item.createdAt = new Date().getTime();
                             promises.push(insertIntoTable('countries', item));
                         }
 
@@ -70,7 +71,7 @@ module.exports = function (app) {
                         table.string('mimeType').notNullable();
                         table.integer('size').notNullable();
                         table.binary('buffer').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "documents", "created.");
@@ -158,7 +159,7 @@ module.exports = function (app) {
                     knex.schema.createTable('app_settings', (table) => {
                         table.increments('id');
                         table.string('dataFolderPath').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "app_settings", "created.");
@@ -186,7 +187,7 @@ module.exports = function (app) {
                         table.integer('guideShown').defaultTo(0);
                         table.integer('icoAdsShown').defaultTo(0);
                         table.integer('termsAccepted').defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "app_settings", "created.");
@@ -217,7 +218,7 @@ module.exports = function (app) {
                         table.string('keystoreFilePath');
                         table.binary('profilePicture');
                         //table.integer('recordState').defaultTo(1);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable(); // TODO remove default
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "wallets", "created.");
@@ -241,7 +242,7 @@ module.exports = function (app) {
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
                         table.integer('order').defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "id_attributes", "created.");
@@ -291,7 +292,7 @@ module.exports = function (app) {
                         table.integer('documentId').references('documents.id');
                         table.string('staticData');
                         table.integer('order').defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "id_attribute_item_values", "created.");
@@ -318,7 +319,7 @@ module.exports = function (app) {
                         table.decimal('priceUSD');
                         table.decimal('priceBTC');
                         table.decimal('priceETH');
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+                        table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
                         console.log("Table:", "token_prices", "created.");
@@ -693,6 +694,32 @@ module.exports = function (app) {
         return updateById('id_attribute_types', data);
     }
 
+    controller.prototype.idAttributeTypes_add = (data) => {
+        return new Promise((resolve, reject)=>{
+            knex('id_attribute_types').select().where("key", data.key).then((rows)=>{
+                if(rows && rows.length){
+                    resolve();
+                }else{
+                    let dataToSave = {
+                        key: data.key,
+                        type: data.type[0],
+                        category: data.category,
+                        entity: JSON.stringify(data.entity),
+                        createdAt: new Date().getTime()
+                    };
+                    knex('id_attribute_types').insert(dataToSave).then((insertedIds)=>{
+                        resolve();
+                    }).catch((error)=>{
+                        console.log(error);
+                        reject({message:"error", error: error});
+                    });
+                }
+            }).catch((error)=>{
+                reject({message:"error", error: error});
+            });
+        });
+    }
+
     controller.prototype.idAttributeTypes_selectAll = () => {
         return new Promise((resolve, reject) => {
             knex('id_attribute_types').select().then((rows) => {
@@ -710,6 +737,101 @@ module.exports = function (app) {
     /**
      * id_attributes
      */
+    controller.prototype.idAttribute_add = (args) => {
+        return knex.transaction((trx) => {
+            let selectPromise = knex('id_attributes').transacting(trx).select().where('idAttributeType', args.idAttributeType);
+            selectPromise.then((rows)=>{
+                return new Promise((resolve, reject) => {
+                    if(rows && rows.length){
+                        reject({message: "id_attribute_already_exists"});
+                    }else{
+                        knex('id_attributes').transacting(trx).insert(args).then((insertedIds) => {
+                            if(insertedIds){
+                                let idAttributeItem = {
+                                    idAttributeId: insertedIds[0],
+                                    name: args.idAttributeType,
+                                    createdAt: new Date().getTime()
+                                }
+                                knex('id_attribute_items').transacting(trx).insert(idAttributeItem).then((insertedIds) => {
+                                    let idAttributeItemValue = {
+                                        idAttributeItemId: insertedIds[0],
+                                        createdAt: new Date().getTime()
+                                    }
+                                    knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).then((insertedIds) => {
+                                        if(insertedIds && insertedIds.length){
+                                            knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIds[0]).then((rows)=>{
+                                                if(rows && rows.length){
+                                                    resolve(rows[0]);
+                                                }else{
+                                                    reject({message: "error"});
+                                                }
+                                            }).catch((error)=>{
+                                                reject({message: "error", error: error});
+                                            })
+                                        }else{
+                                            reject({message: "error"});
+                                        }
+                                    }).catch((error)=>{
+                                        reject({message: "error", error: error});
+                                    });
+                                }).catch((error)=>{
+                                    reject({message: "error", error: error});
+                                });
+                            }
+                        }).catch((error) => {
+                            reject({message: "error", error: error});
+                        });
+                    }
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
+
+    controller.prototype.idAttribute_delete = (args) => {
+        return knex.transaction((trx) => {
+            let selectPromise = knex('id_attributes')
+                .transacting(trx)
+                .select('id_attributes.id as idAttributeId', 'id_attribute_items.id as idAttributeItemId', 'id_attribute_item_values.id as idAttributeItemValueId', 'id_attribute_item_values.documentId as documentId')
+                .leftJoin('id_attribute_items', 'id_attributes.id', 'id_attribute_items.idAttributeId')
+                .leftJoin('id_attribute_item_values', 'id_attribute_items.id', 'id_attribute_item_values.idAttributeItemId')
+                .where('id_attributes.id', args.id);
+
+            selectPromise.then((rows)=>{
+                return new Promise((resolve, reject) => {
+                    let dataToDelete = rows[0];
+
+                    let promises = [];
+
+                    if(dataToDelete.documentId){
+                        promises.push(knex('documents').transacting(trx).del().where('id', dataToDelete.documentId));
+                    }
+
+                    if(dataToDelete.idAttributeItemValueId){
+                        promises.push(knex('id_attribute_item_values').transacting(trx).del().where('id', dataToDelete.idAttributeItemValueId));
+                    }
+
+                    if(dataToDelete.idAttributeItemId){
+                        promises.push(knex('id_attribute_items').transacting(trx).del().where('id', dataToDelete.idAttributeItemId));
+                    }
+
+                    if(dataToDelete.idAttributeId){
+                        promises.push(knex('id_attributes').transacting(trx).del().where('id', dataToDelete.idAttributeId));
+                    }
+
+                    Promise.all(promises).then((responses)=>{
+                        resolve();
+                    }).catch(()=>{
+                        reject();
+                    });
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
+
     controller.prototype.idAttributes_selectAll = (walletId) => {
         return new Promise((resolve, reject) => {
             knex('id_attributes').select().where('walletId', walletId).then((rows) => {
@@ -729,7 +851,7 @@ module.exports = function (app) {
                             idAttributes[idAttribute.id].items = items ? items : [];
 
                             for (let j in items) {
-                                idAttributeItemValuesPromises.push(selectTable('id_attribute_item_values', { idAttributeItemId: items[j].id }).then((values) => {
+                                idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
                                     items[j].values = values ? values : [];
                                 }));
                             }
@@ -754,6 +876,31 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.idAttributeItem_add = (args) => {
+        return knex.transaction((trx) => {
+            args.createdAt = new Date().getTime();
+
+            // name, idAttributeId, createdAt
+            knex('id_attributes').transacting(trx).insert(args).then((insertedIdAttributeIds) => {
+                knex('id_attribute_item_values').transacting(trx).insert({
+                    idAttributeItemId: insertedIdAttributeIds[0],
+                    createdAt: new Date().getTime()
+                }).then((insertedIdAttributeItemValueIds) => {
+                    let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIdAttributeItemValueIds[0]);
+                    selectPromise.then((idAttributeItemValue) => {
+                        resolve(idAttributeItemValue);
+                    }).catch((error) => {
+                        reject({ message: "error", error: error });
+                    });
+                }).catch((error) => {
+                    reject({ message: "error", error: error });
+                });
+            }).catch((error) => {
+                reject({ message: "error", error: error });
+            });
+        });
+    }
+
     /**
      * id_attribute_item_values
      */
@@ -763,7 +910,7 @@ module.exports = function (app) {
 
         // check if value exists
         return knex.transaction((trx) => {
-            let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId)
+            let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId);
             selectPromise.then((idAttributeItemValues) => {
                 return new Promise((resolve, reject) => {
                     if (idAttributeItemValues && idAttributeItemValues.length) {
@@ -864,10 +1011,89 @@ module.exports = function (app) {
                     }
                 });
             })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            .then(trx.commit)
+            .catch(trx.rollback);
         });
     }
+
+    controller.prototype.idAttributeItemValues_update = (args) => {
+        return knex.transaction((trx) => {
+            let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.id);
+            selectPromise.then((rows)=>{
+                return new Promise((resolve, reject) => {
+                    let idAttributeItemValue = rows[0];
+
+                    if(args.staticData){
+                        knex('id_attribute_item_values').transacting(trx).update(args).where('id', args.id).then((rows)=>{
+                            resolve(rows);
+                        }).catch((error)=>{
+                            reject({message: "error", error: error});
+                        });
+                    }else{
+                        if(args.buffer){
+                            knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId).then((rows)=>{
+                                if(rows && rows.length){
+                                    let document = rows[0];
+                                    document.name = args.name;
+                                    document.buffer = args.buffer;
+                                    document.mimeType = args.mimeType;
+                                    document.size = args.size;
+                                    document.updatedAt = new Date().getTime();
+
+                                    knex('documents').transacting(trx).update(document).then((updatedIds) => {
+                                        if(updatedIds){
+                                            resolve(rows)
+                                        }else{
+                                            reject({message: "error"});
+                                        }
+                                    }).catch((error) => {
+                                        reject({message: "error", error: error});
+                                    });
+
+                                } else {
+                                    let document = {
+                                        name: args.name,
+                                        buffer: args.buffer,
+                                        mimeType: args.mimeType,
+                                        size: args.size,
+                                        createdAt: new Date().getTime()
+                                    }
+
+                                    knex('documents').transacting(trx).insert(document).then((insertedIds) => {
+                                        if(insertedIds && insertedIds.length){
+                                            let updateData = {
+                                                documentId: insertedIds[0]
+                                            }
+                                            knex('id_attribute_item_values').transacting(trx).update(updateData).where('id', args.id).then((rows)=>{
+                                                resolve(rows);
+                                            }).catch((error)=>{
+                                                reject({message: "error", error: error});
+                                            });
+                                        }else{
+                                            reject({message: "error"});
+                                        }
+                                    }).catch((error) => {
+                                        reject({message: "error", error: error});
+                                    });
+                                }
+                            }).catch((error)=>{
+                                reject({message: "error", error: error});
+                            })
+                        }else{
+                            reject({message: "file_is_missing"});
+                        }
+                    }
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
+
+
+
+
+
 
     /**
      * tokens
@@ -968,6 +1194,34 @@ module.exports = function (app) {
     /**
      *
      */
+    function selectIdAttributeItemValueView (where, tx) {
+        return new Promise((resolve, reject) => {
+            let promise = null;
+            if (tx) {
+                promise = knex('id_attribute_item_values')
+                    .transacting(tx)
+                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId')
+                    .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
+                    .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
+                    .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
+                    .where(where);
+            } else {
+                promise = knex('id_attribute_item_values')
+                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId')
+                    .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
+                    .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
+                    .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
+                    .where(where);
+            }
+
+            promise.then((rows) => {
+                resolve(rows);
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
     function insertIntoTable(table, data, trx) {
         return new Promise((resolve, reject) => {
             let promise = null;
@@ -1064,7 +1318,7 @@ module.exports = function (app) {
             promise.then((rows) => {
                 resolve(rows);
             }).catch((error) => {
-                reject({ message: "error_while_updating", error: error });
+                reject({ message: "error_while_selecting", error: error });
             });
         });
     }

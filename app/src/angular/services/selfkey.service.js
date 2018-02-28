@@ -76,15 +76,6 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteS
                 for (let i in idAttributesArray) {
                     if (!idAttributesArray[i].data) continue;
                     let item = idAttributesArray[i].data.fields;
-
-                    /*
-                    idAttributeTypes[item.key] = new IdAttributeType(
-                        item.key,
-                        item.category,
-                        item.type,
-                        item.entity
-                    );
-                    */
                 }
 
                 defer.resolve(idAttributeTypes);

@@ -1,49 +1,39 @@
-function AddEditDocumentDialogController($rootScope, $scope, $log, $q, $mdDialog, ConfigFileService, CommonService, ElectronService, item, value, idAttributeType) {
+'use strict';
+
+function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, RPCService, CommonService, idAttributeItemValue, idAttributeType) {
     'ngInject'
 
-    $log.info('AddEditDocumentDialogController', item, value, idAttributeType);
+    $log.info('AddEditDocumentDialogController');
 
-    $scope.item = item;
-    $scope.value = value;
+    $scope.idAttributeItemValue = idAttributeItemValue;
     $scope.idAttributeType = idAttributeType;
 
-    $scope.fileItem = value ? value.value : null;
+    $scope.selectedFile = null;
 
     $scope.close = (event) => {
-        $mdDialog.hide();
+        $mdDialog.cancel();
     };
 
     $scope.save = (event) => {
-        $mdDialog.hide($scope.fileItem);
+        if($scope.selectedFile){
+            SqlLiteService.updateIdAttributeItemValueDocument(idAttributeItemValue, $scope.selectedFile).then(()=>{
+                $mdDialog.hide();
+            }).catch((error)=>{
+                $log.error(error);
+                CommonService.showToast('error', 'error while saving document');
+            });
+        }
     }
 
     $scope.selectFile = (event) => {
-        let fileSelectPromise = ElectronService.openFileSelectDialog({
+        let fileSelect = RPCService.makeCall('openFileSelectDialog', {
             filters: [
                 { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
             ],
             maxFileSize: 50 * 1000 * 1000
         });
-
-        let store = ConfigFileService.getStore();
-
-        fileSelectPromise.then((resp) => {
-            if (!resp || !resp.path) return;
-
-            let moveFilePrimise = ElectronService.moveFile(resp.path, store.settings.documentsDirectoryPath);
-            moveFilePrimise.then((filePath) => {
-                let fileItem = {
-                    name: resp.name,
-                    mimeType: resp.mimeType,
-                    size: resp.size,
-                    path: filePath,
-                }
-
-                $scope.fileItem = fileItem;
-            }).catch((error) => {
-                $log.error(error);
-                CommonService.showToast('error', 'Error while selecting document');
-            });
+        fileSelect.then((selectedFile) => {
+            $scope.selectedFile = selectedFile;
         }).catch((error) => {
             CommonService.showToast('error', 'Max File Size: 50mb Allowed');
         });

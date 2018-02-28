@@ -1,22 +1,33 @@
-function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, item, value, idAttributeType) {
+'use strict';
+
+function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService, idAttributeItemValue, idAttributeType) {
     'ngInject'
 
-    $log.info('AddEditStaticDataDialogController', item, value, idAttributeType);
+    $log.info('AddEditStaticDataDialogController', idAttributeItemValue, idAttributeType);
 
-    $scope.item = item;
-    $scope.value = value;
+    $scope.idAttributeItemValue = idAttributeItemValue;
     $scope.idAttributeType = idAttributeType;
 
-    $scope.input = value ? value.value : null;
+    $scope.input = angular.copy(idAttributeItemValue.staticData);
 
     $scope.close = (event) => {
-        $mdDialog.hide();
+        $mdDialog.cancel();
     };
 
     $scope.save = (event) => {
-        $mdDialog.hide($scope.input);
-    }
+        if($scope.input && $scope.input !== idAttributeItemValue.staticData){
+            let value = {
+                id: idAttributeItemValue.id,
+                staticData: $scope.input
+            }
 
+            SqlLiteService.updateIdAttributeItemValueStaticData(value).then((data)=>{
+                $mdDialog.hide($scope.input);
+            }).catch((error)=>{
+                CommonService.showToast('error', 'error');
+            });
+        }
+    }
 };
 
 module.exports = AddEditStaticDataDialogController;

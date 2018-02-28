@@ -1,15 +1,15 @@
 .id-wallet-main
     .center-container(layout="column", layout-align="start center")
-        .header-wrapper(ng-click="addIdAttribute($event)")
+        .header-wrapper
             span SelfKey Identity Wallet
-            md-icon(md-svg-src="assets/images/icons/plus.svg")
+            //md-icon(md-svg-src="assets/images/icons/plus.svg")
 
         .body-wrapper(layout="row", layout-align="start start")
             .left-side-wrapper(layout="column")
                 .attributes-table-container
                     .table-head
                         span.table-head-text Your Attributes
-                        md-icon(md-svg-src="assets/images/icons/plus.svg")
+                        md-icon(md-svg-src="assets/images/icons/plus.svg", ng-click="addIdAttribute($event, 'static_data')")
                     table.attributes-table
                         thead
                             tr
@@ -27,14 +27,14 @@
                                 td {{item.items[0].values[0].staticData}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg")
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemValue($event, item.items[0].values[0], item.idAttributeType)")
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg")
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", ng-click="openValueDeletePanel($event, item, item.items[0], item.items[0].values[0])")
 
                 .ID-documents-container
                     .table-head
                         span.table-head-text Your ID Documents
-                        md-icon(md-svg-src="assets/images/icons/plus.svg")
+                        md-icon(md-svg-src="assets/images/icons/plus.svg", ng-click="addIdAttribute($event, 'document')")
                     table.ID-documents-table
                         thead
                             tr
@@ -50,13 +50,13 @@
                                 td
                                     md-icon.icon-size-18x18(md-svg-src="assets/images/icons/success-box.svg")
                                 td {{item.idAttributeType}}
-                                td {{item.items[0].values[0].documentId}}
+                                td {{item.items[0].values[0].documentFileName}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
                                 td.action-columns
                                     md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg")
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg")
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemDocument($event, item.items[0].values[0], item.idAttributeType)")
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg")
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1")
             .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
                 sk-user-info-box
