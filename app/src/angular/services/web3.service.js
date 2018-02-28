@@ -125,7 +125,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
                                     SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
                                         let setting = settings[0];
-                                        setting.tokenTransactionsHistoryLastBlock = toBlock;
+                                        setting.ERC20TxHistoryLastBlock = toBlock;
                                         SqlLiteService.saveWalletSettings(setting).catch((err) => {
                                             console.log(err); //TODO
                                         })
@@ -171,7 +171,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 this.getMostRecentBlockNumber().then((lastBlock) => {
                     SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
                         let setting = settings[0];
-                        let fromBlock = setting.tokenTransactionsHistoryLastBlock || lastBlock;
+                        let fromBlock = setting.ERC20TxHistoryLastBlock || lastBlock;
                         processAllActivities(fromBlock, lastBlock);
                     }).catch(err => {
                         //TODO 
@@ -201,7 +201,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             this.getMostRecentBlockNumber().then((blockNumber) => {
                 SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
                     let setting = settings[0];
-                    let previousLastBlockNumber = setting.transactionsHistoryLastBlock || blockNumber;
+                    let previousLastBlockNumber = setting.EthTxHistoryLastBlock || blockNumber;
 
                     let blockNumbersToProcess = [];
                     for (let i = previousLastBlockNumber; i <= blockNumber; i++) {
@@ -215,7 +215,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
                             SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
                                 let setting = settings[0];
-                                setting.transactionsHistoryLastBlock = blockNumber;
+                                setting.EthTxHistoryLastBlock = blockNumber;
                                 SqlLiteService.saveWalletSettings(setting).catch((err) => {
                                     console.log(err); //TODO
                                 })

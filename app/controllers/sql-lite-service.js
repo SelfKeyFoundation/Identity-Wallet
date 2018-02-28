@@ -420,8 +420,8 @@ module.exports = function (app) {
                         table.increments('id');
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('sowDesktopNotifications').notNullable().defaultTo(0);
-                        table.integer('tokenTransactionsHistoryLastBlock');
-                        table.integer('transactionsHistoryLastBlock'); //TODO change name it stands for ETH
+                        table.integer('ERC20TxHistoryLastBlock');
+                        table.integer('EthTxHistoryLastBlock');
                         table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -987,7 +987,7 @@ module.exports = function (app) {
                 if (rows && rows.length) {
                     resolve(rows);
                 } else {
-                    resolve(null);
+                    resolve([]);
                 }
             }).catch((error) => {
                 reject({ message: "error_while_selecting", error: error });
