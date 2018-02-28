@@ -17558,6 +17558,8 @@ md-dialog.add-id-attribute {
               padding-left: 5px; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
                 fill: green; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg g {
+                  fill: green; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
             width: 30%; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
@@ -17598,6 +17600,8 @@ md-dialog.add-id-attribute {
                 padding-left: 5px; }
                 .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
                   fill: green; }
+                  .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg g {
+                    fill: green; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(2) {
               width: 30%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(3) {

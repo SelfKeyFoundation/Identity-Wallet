@@ -11,7 +11,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
             controller: 'IDWInfoDialogController',
             templateUrl: 'common/dialogs/IDW-info-dialog.html',
             parent: angular.element(document.body),
-            targetEvent: event,
             clickOutsideToClose: false,
             fullscreen: true,
             escapeToClose: false,
@@ -19,14 +18,13 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
         });
     })();
 
-
-
     $scope.attributesList = [];
     $scope.idDocumentsList = [];
 
 
     let ID_ATTRIBUTE_TYPES = SqlLiteService.getIdAttributeTypes();
     $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
+
 
     if ($scope.idAttributesList) {
         angular.forEach($scope.idAttributesList, function (item) {
@@ -43,16 +41,19 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
 
     let excludeTypes = [];
     for (let i in $scope.idAttributesList) {
-        excludeTypes.push($scope.idAttributesList[i].type)
+        excludeTypes.push($scope.idAttributesList[i].idAttributeType)
     }
+    console.log(333, $scope.idAttributesList)
+
+    console.log(222, excludeTypes)
 
     $scope.selectFile = (event) => {
         let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
 
-        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
+        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', {idAttributeItemValueId: selectedValue.id});
         addDocumentPromise.then((resp) => {
-            if(!resp) return;
-            $rootScope.wallet.loadIdAttributes().then((resp)=>{
+            if (!resp) return;
+            $rootScope.wallet.loadIdAttributes().then((resp) => {
                 $scope.idAttributes = $rootScope.wallet.getIdAttributes();
                 CommonService.showToast('success', 'Saved!');
                 $scope.selected.values = "Saved!";
@@ -62,9 +63,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, SqlLi
             CommonService.showToast('error', 'Max File Size: 50mb Allowed');
         });
     }
-
-
-
 
 
     /**

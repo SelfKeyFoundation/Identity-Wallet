@@ -56,7 +56,6 @@
                         border-collapse: collapse;
                         margin-top: 10px;
 
-
                         tbody {
 
                             tr {
@@ -80,6 +79,10 @@
 
                                         svg {
                                             fill: green;
+
+                                            g {
+                                                fill: green;
+                                            }
                                         }
                                     }
                                 }
@@ -137,7 +140,6 @@
                         border-collapse: collapse;
                         margin-top: 10px;
 
-
                         tbody {
 
                             tr {
@@ -164,6 +166,10 @@
 
                                         svg {
                                             fill: green;
+
+                                            g {
+                                                fill: green;
+                                            }
                                         }
                                     }
                                 }
