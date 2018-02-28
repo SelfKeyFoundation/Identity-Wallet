@@ -205,6 +205,8 @@ angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', Add
 const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
 angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
+const AddEditCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-custom-token-controller.js');
+angular.module('kyc-wallet').controller('AddEditCustomTokenDialogController', AddEditCustomTokenDialogController);
 
 /**
  * guest

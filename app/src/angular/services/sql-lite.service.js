@@ -56,6 +56,9 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             });
         }
 
+        /**
+         *
+         */
         loadTokens() {
             return RPCService.makeCall('getTokens', null).then((tokens) => {
                 if (tokens) {
@@ -116,7 +119,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                     COUNTRIES = data;
                 }
             });
-        }
+        }        
 
         /**
          *
@@ -124,7 +127,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         startTokenPriceUpdaterListener() {
             tokenPriceUpdaterInterval = $interval(() => {
                 this.loadTokenPrices();
-            }, 5000)
+            }, 35000)
         }
 
         stopTokenPriceUpdaterListener() {
@@ -152,7 +155,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         loadWalletTokens(walletId) {
             return RPCService.makeCall('getWalletTokens', { walletId: walletId });
         }
-
 
         /**
          * guide_settings
@@ -186,6 +188,25 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('getIdAttributes', { walletId: walletId });
         }
 
+        addIdAttribute(idAttribute) {
+            return RPCService.makeCall('addIdAttribute', idAttribute);
+        }
+
+        deleteIdAttribute(idAttribute){
+            return RPCService.makeCall('deleteIdAttribute', idAttribute);
+        }
+
+        /**
+         *
+         */
+        updateIdAttributeItemValueStaticData (idAttributeValue) {
+            return RPCService.makeCall('updateIdAttributeItemValueStaticData', idAttributeValue);
+        }
+
+        updateIdAttributeItemValueDocument (idAttributeItemValue, document) {
+            return RPCService.makeCall('updateIdAttributeItemValueDocument', { idAttributeItemValue: idAttributeItemValue, document: document});
+        }
+
         /**
          * token_prices
          */
@@ -200,6 +221,29 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                 }
             }
             return null;
+        }
+        /**
+         * 
+         * wallet settings 
+         */
+        getWalletSettingsByWalletId(data) {
+            return RPCService.makeCall('getWalletSettingsByWalletId', data);
+        }
+
+        insertTransactionHistory(data) {
+            return RPCService.makeCall('insertTransactionHistory', data);
+        }
+
+        getTransactionsHistoryByWalletId(walletId) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletId', walletId);
+        }
+
+        getTransactionsHistoryByWalletIdAndTokenId(query) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', query);
+        }
+
+        saveWalletSettings(data) {
+            return RPCService.makeCall('saveWalletSettings', data);
         }
 
     }

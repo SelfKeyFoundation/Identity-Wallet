@@ -17017,6 +17017,65 @@ md-dialog.add-id-attribute {
             letter-spacing: 0.7px;
             color: #ffffff; }
 
+md-dialog {
+  background-image: linear-gradient(124deg, #2b3540, #1e262e);
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog .close-btn {
+    cursor: pointer;
+    position: absolute;
+    outline: none;
+    top: 30.8px;
+    right: 30.8px; }
+  md-dialog .edit-tokens-contaner {
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; }
+    md-dialog .edit-tokens-contaner * {
+      font-family: ProximaNovaRegular; }
+    md-dialog .edit-tokens-contaner .header-text {
+      padding-top: 36px;
+      padding-bottom: 24px;
+      font-size: 24px;
+      line-height: 1.5;
+      text-align: center;
+      color: #ffffff; }
+    md-dialog .edit-tokens-contaner .grid-container {
+      width: 1140px;
+      padding-top: 80px; }
+      md-dialog .edit-tokens-contaner .grid-container table {
+        border-spacing: 0px;
+        width: 100%; }
+        md-dialog .edit-tokens-contaner .grid-container table thead tr {
+          height: 38px; }
+          md-dialog .edit-tokens-contaner .grid-container table thead tr td {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            color: #7f8fa4;
+            text-transform: uppercase; }
+            md-dialog .edit-tokens-contaner .grid-container table thead tr td:first-child {
+              padding-left: 24px; }
+        md-dialog .edit-tokens-contaner .grid-container table tbody tr {
+          height: 74px;
+          cursor: pointer; }
+          md-dialog .edit-tokens-contaner .grid-container table tbody tr:nth-child(odd) {
+            background-color: #262f39; }
+          md-dialog .edit-tokens-contaner .grid-container table tbody tr td {
+            padding: 0px;
+            font-size: 15px;
+            text-align: left;
+            color: #ffffff; }
+            md-dialog .edit-tokens-contaner .grid-container table tbody tr td:first-child {
+              padding-left: 24px !important; }
+
 .wallet-create-step-1 {
   height: 100%; }
   .wallet-create-step-1 .header-wrapper {

@@ -14,23 +14,23 @@ md-dialog.add-id-attribute(aria-label="Add ID Attribute")
                         // global_attribute
                         md-option(ng-value="key", ng-repeat="(key, item) in globalAttributes") {{$root.DICTIONARY[key]}}
 
-                        md-select-header
+                        md-select-header(ng-if="getLength(globalAttributes)")
                             span
 
                         // id_document
                         md-option(ng-value="key", ng-repeat="(key, item) in idDocuments") {{$root.DICTIONARY[key]}}
 
-                        md-select-header
+                        md-select-header(ng-if="getLength(idDocuments)")
                             span
 
                         // proof_of_address
                         md-option(ng-value="key", ng-repeat="(key, item) in proofOfAddresses") {{$root.DICTIONARY[key]}}
 
-                        md-select-header
+                        //md-select-header
                             span
 
                         // online_identity_attribute
-                        md-option(ng-value="key", ng-repeat="(key, item) in onlineIdentityAttributes") {{$root.DICTIONARY[key]}}
+                        //md-option(ng-value="key", ng-repeat="(key, item) in onlineIdentityAttributes") {{$root.DICTIONARY[key]}}
             .actions
                 md-button.gray(ng-click="cancel($event)")
                     span.primary Cancel

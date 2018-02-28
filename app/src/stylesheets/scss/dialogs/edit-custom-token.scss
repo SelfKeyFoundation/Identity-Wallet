@@ -1,0 +1,80 @@
+md-dialog {
+  background-image: linear-gradient(124deg, #2b3540, #1e262e);
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .close-btn {
+      cursor: pointer;
+      position: absolute;
+      outline: none;
+      top: 30.8px;
+      right: 30.8px;
+  }
+
+  .edit-tokens-contaner {
+      * {
+          font-family: ProximaNovaRegular; 
+      }
+      min-width: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      .header-text {
+          padding-top: 36px;
+          padding-bottom: 24px;
+          font-size: 24px;
+          line-height: 1.5;
+          text-align: center;
+          color: #ffffff;
+      }
+      .grid-container {
+          width: 1140px;
+          padding-top: 80px;
+          $table-left-padding: 24px;
+          table {
+              border-spacing: 0px;
+              width: 100%;
+              thead {
+                  tr {
+                      height: 38px;
+                      td {
+                          &:first-child {
+                              padding-left: $table-left-padding;
+                          }
+                          font-size: 12px;
+                          font-weight: 600;
+                          text-align: left;
+                          color: #7f8fa4;
+                          text-transform: uppercase;
+                      }
+                  }
+              }
+              tbody {
+                  tr {
+                      &:nth-child(odd) {
+                          background-color: #262f39;
+                      }
+                      height: 74px;
+                      td {
+                          padding: 0px;
+                          &:first-child {
+                              padding-left: $table-left-padding !important;
+                          }
+                          font-size: 15px;
+                          text-align: left;
+                          color: #ffffff;
+                      }
+                      cursor: pointer;
+                  }
+              }
+          }
+      }
+  }
+}

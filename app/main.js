@@ -66,6 +66,9 @@ function onReady(app) {
 		const CMCService = require('./controllers/cmc-service')(app);
 		electron.app.cmcService = new CMCService();
 
+        const AirtableService = require('./controllers/airtable-service')(app);
+		electron.app.airtableService = new AirtableService();
+
 		const SqlLiteService = require('./controllers/sql-lite-service')(app);
 		electron.app.sqlLiteService = new SqlLiteService();
 
@@ -75,6 +78,7 @@ function onReady(app) {
 		electron.app.sqlLiteService.init().then(() => {
 			//start update cmc data
             electron.app.cmcService.startUpdateData();
+            electron.app.airtableService.loadIdAttributeTypes();
 		}).catch((error) => {
 			console.log("error", error);
 		});

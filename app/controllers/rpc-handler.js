@@ -301,7 +301,7 @@ module.exports = function (app) {
                                         fileName: name,
                                         buffer: buffer,
                                         mimeType: mimeType,
-                                        fileSize: stats.size,
+                                        size: stats.size,
                                         idAttributeItemValueId: args.idAttributeItemValueId
                                     }
                                 ).then((resp) => {
@@ -323,7 +323,7 @@ module.exports = function (app) {
         }
     }
 
-    
+
 
 
     /**
@@ -612,11 +612,21 @@ module.exports = function (app) {
                             }
                         }
 
-                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-                            name: name,
-                            mimeType: mimeType,
-                            path: filePaths[0],
-                            size: stats.size
+                        fsm.open(filePaths[0], 'r', (status, fd) => {
+                            if (status) {
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            }
+
+                            var buffer = new Buffer(stats.size);
+                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                                    name: name,
+                                    mimeType: mimeType,
+                                    path: filePaths[0],
+                                    size: stats.size,
+                                    buffer: buffer
+                                });
+                            });
                         });
                     } catch (e) {
                         console.log(e);
@@ -906,6 +916,54 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.getTransactionsHistory = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.transactionsHistory_selectAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getTransactionsHistoryByWalletId = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.transactionsHistory_selectByWalletId(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getTransactionsHistoryByWalletIdAndTokenId = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.transactionsHistory_selectByWalletIdAndTokenId(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getWalletSettingsByWalletId = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.walletSettings_selectByWalletId(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.saveWalletSettings = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.walletSettings_update(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.insertTransactionHistory = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.transactionsHistory_insert(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -937,6 +995,67 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+
+    controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttributeItem_add(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.updateIdAttributeItemValueStaticData = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttributeItemValues_update(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            console.log(error);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.updateIdAttributeItemValueDocument = function (event, actionId, actionName, args) {
+
+        let params = {
+            id: args.idAttributeItemValue.id
+        }
+
+        params = Object.assign(params, args.document);
+
+        console.log(params);
+
+        electron.app.sqlLiteService.idAttributeItemValues_update(params).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            console.log(error);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
+
+
+    controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttribute_add(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            console.log(error);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.deleteIdAttribute = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.idAttribute_delete(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            console.log(error);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    //
+
+
+    //
 
     controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
         const iconList = config.obligatoryImageIds;

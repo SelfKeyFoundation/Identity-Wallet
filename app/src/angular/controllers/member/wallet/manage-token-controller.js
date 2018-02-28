@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, WalletService) {
+function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, WalletService, SqlLiteService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)
@@ -15,9 +15,10 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
     $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
 
-
-    $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
-
+    $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
+    $scope.transactionsHistoryIsSynced = () => {
+        return $rootScope.transactionHistorySyncStatuses[$scope.symbol.toUpperCase()];
+    };
 
     /**
      *
@@ -39,33 +40,21 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
         }
     }
 
-    /**
-     *
-     */
-    $scope.setTokenActivity = () => {
-        /*
-        let store = ConfigFileService.getStore();
+    $scope.loadTransactionHistory = () => {
+        let tokenId = $scope.symbol.toUpperCase() === 'ETH' ? null : $scope.selectedToken.id;
+        let query = {
+            walletId: $rootScope.wallet.id,
+            tokenId:  tokenId
+        };
+        SqlLiteService.getTransactionsHistoryByWalletIdAndTokenId(query).then((data)=> {
+            $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
+        }).catch((err) => {
+            console.log(err);
+            //TODO
+        });
+    };
 
-        let data = store.wallets[$rootScope.wallet.getPublicKeyHex()].data;
-        if (data.activities) {
-            let activity = data.activities[$scope.originalSymbol];
-            let transactions = activity && activity.transactions ? activity.transactions : [];
-
-            transactions.forEach(transaction => {
-                if (transaction.to) {
-                    transaction.nameOfTo = WalletService.getWalletName($scope.originalSymbol, transaction.to);
-                }
-
-                let sendText = transaction.nameOfTo ? 'Sent to' : 'Sent';
-                transaction.sentOrReceive = transaction.to ? sendText : 'Received';
-            });
-
-            $scope.tokenActivity = transactions;
-        }
-        */
-    }
-
-    $scope.setTokenActivity();
+    $scope.loadTransactionHistory();
 
     $scope.goToDashboard = () => {
         $state.go('member.dashboard.main');

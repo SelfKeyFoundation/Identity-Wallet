@@ -163,7 +163,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
         });
     };
 
-    $rootScope.openAddEditDocumentDialog = (event, item, value, itAttributeType) => {
+    $rootScope.openAddEditDocumentDialog = (event, idAttributeItemValue, idAttributeType) => {
         return $mdDialog.show({
             controller: 'AddEditDocumentDialogController',
             templateUrl: 'common/dialogs/add-edit-document.html',
@@ -172,14 +172,13 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             clickOutsideToClose: false,
             fullscreen: true,
             locals: {
-                item: item,
-                value: value,
-                idAttributeType: itAttributeType
+                idAttributeItemValue: idAttributeItemValue,
+                idAttributeType: idAttributeType
             }
         });
     };
 
-    $rootScope.openAddEditStaticDataDialog = (event, item, value, itAttributeType) => {
+    $rootScope.openAddEditStaticDataDialog = (event, idAttributeItemValue, itAttributeType) => {
         return $mdDialog.show({
             controller: 'AddEditStaticDataDialogController',
             templateUrl: 'common/dialogs/add-edit-static-data.html',
@@ -188,10 +187,31 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             clickOutsideToClose: false,
             fullscreen: true,
             locals: {
-                item: item,
-                value: value,
+                idAttributeItemValue: idAttributeItemValue,
                 idAttributeType: itAttributeType
             }
+        });
+    };
+    
+    $rootScope.openAddCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'AddEditCustomTokenDialogController',
+            templateUrl: 'common/dialogs/add-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openEditCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'AddEditCustomTokenDialogController',
+            templateUrl: 'common/dialogs/edit-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
         });
     };
 
