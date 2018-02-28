@@ -16828,8 +16828,9 @@ md-dialog.IDW-info {
   background-image: linear-gradient(121deg, #1e262e, #1e262e);
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center; }
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20%; }
   md-dialog.IDW-info .IDW-info-wrapper {
     width: 550px;
     height: 350px;
@@ -17581,7 +17582,8 @@ md-dialog {
         font-size: 18px;
         color: #768fa9; }
       .id-wallet-main > .center-container .header-wrapper md-icon {
-        margin-left: 16px; }
+        margin-left: 16px;
+        outline: none; }
     .id-wallet-main > .center-container .body-wrapper {
       width: 1140px;
       margin-top: 40px; }
@@ -17594,7 +17596,8 @@ md-dialog {
             font-family: ProximaNovaRegular; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon {
             float: right;
-            cursor: pointer; }
+            cursor: pointer;
+            outline: none; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon svg {
               fill: #262f39; }
         .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table {
@@ -17608,13 +17611,15 @@ md-dialog {
             padding: 5px 0;
             word-break: break-word; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td md-icon {
-              cursor: pointer; }
+              cursor: pointer;
+              outline: none; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
             width: 35px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
             width: 5%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
-              padding-left: 5px; }
+              padding-left: 5px;
+              outline: none; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
                 fill: green; }
                 .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg g {
@@ -17622,7 +17627,8 @@ md-dialog {
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
             width: 30%; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
-            width: 25%; }
+            width: 38%;
+            padding-right: 10px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(even) {
             background-color: #262f39; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(odd) {
@@ -17638,7 +17644,8 @@ md-dialog {
               font-family: ProximaNovaRegular; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head md-icon {
               float: right;
-              cursor: pointer; }
+              cursor: pointer;
+              outline: none; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table {
             width: 100%;
             background-color: #262f39;
@@ -17650,13 +17657,15 @@ md-dialog {
               padding: 5px 0;
               word-break: break-word; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td md-icon {
-                cursor: pointer; }
+                cursor: pointer;
+                outline: none; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr .action-columns {
               width: 35px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child {
               width: 5%; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon {
-                padding-left: 5px; }
+                padding-left: 5px;
+                outline: none; }
                 .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
                   fill: green; }
                   .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg g {
@@ -17664,7 +17673,8 @@ md-dialog {
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(2) {
               width: 30%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(3) {
-              width: 25%; }
+              width: 38%;
+              padding-right: 10px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(even) {
               background-color: #262f39; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(odd) {

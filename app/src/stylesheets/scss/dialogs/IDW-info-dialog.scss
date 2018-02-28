@@ -5,8 +5,10 @@ md-dialog {
         background-image: linear-gradient(121deg, #1e262e, #1e262e);
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
+        padding-top: 20%;
+
         .IDW-info-wrapper {
             width: 550px;
             height: 350px;

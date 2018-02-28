@@ -23,12 +23,20 @@ function IDWInfoDialogController($rootScope, $scope, $log, $mdDialog) {
             step: 2
         },
         {
+            logo: 'menu-button',
+            text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+            header: 'Your ID Documents',
+            button1: 'back',
+            button2: 'continue',
+            step: 3
+        },
+        {
             logo: 'plus',
             text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             header: 'Everything Is Stored Locally On Your Computer',
             button1: 'back',
             button2: 'Ok,take me to my ID wallet',
-            step: 3
+            step: 4
         },
     ]
 
@@ -39,9 +47,9 @@ function IDWInfoDialogController($rootScope, $scope, $log, $mdDialog) {
     $scope.nextStep = function () {
         count++;
         $scope.dialogInfo = $scope.infoArray.find(function (item) {
-            if (count == 4) {
+            if (count == 5) {
                 $scope.cancel();
-            } else if (item.step == count && count != 4) {
+            } else if (item.step == count && count != 5) {
                 return item;
             }
         });
