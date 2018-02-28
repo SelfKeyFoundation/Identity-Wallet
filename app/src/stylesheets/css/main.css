@@ -16752,16 +16752,12 @@ md-dialog.send-token {
       position: absolute;
       right: 0;
       width: 28%; }
-      md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container {
-        width: 100%; }
-        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container span {
-          color: white;
-          font-family: ProximaNovaRegular; }
-        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container .md-select-value {
-          border-bottom-width: 2px;
-          border-bottom-color: #93b0c1; }
-        md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container .md-select-icon {
-          color: white; }
+      md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container span {
+        color: white;
+        font-family: ProximaNovaRegular;
+        display: block !important;
+        font-size: 14px;
+        text-align: center; }
 
 .tooltip-multiline {
   height: auto;

@@ -182,17 +182,12 @@ md-dialog {
                     right: 0;
                     width: 28%;
                     md-input-container{
-                        width: 100%;
                         span {
                             color: white;
                             font-family: ProximaNovaRegular;
-                        }
-                        .md-select-value{
-                            border-bottom-width: 2px;
-                            border-bottom-color: #93b0c1;
-                        }
-                        .md-select-icon{
-                            color: white;
+                            display: block !important;
+                            font-size: 14px;
+                            text-align: center;
                         }
                     }
                 }
