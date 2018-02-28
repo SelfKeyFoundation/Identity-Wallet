@@ -23,7 +23,7 @@ class Wallet {
     constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
         this.keystoreFilePath = keystoreFilePath;
-        
+
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
 
@@ -177,6 +177,8 @@ class Wallet {
         let defer = $q.defer();
 
         SqlLiteService.loadIdAttributes(this.id).then((idAttributes) => {
+            this.idAttributes = {};
+            
             for (let i in idAttributes) {
                 this.idAttributes[idAttributes[i].idAttributeType] = idAttributes[i];
             }
@@ -257,13 +259,13 @@ class Wallet {
             }
 
             if (transaction.tokenId) {
-                let token = getTokenById(transaction.tokenId);                
+                let token = getTokenById(transaction.tokenId);
             }
 
             transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
             let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
             transaction.sentOrReceiveText =  transaction.type == 0 ? sendText : 'Received';
-           
+
             return transaction;
         }).sort((a, b) => {
             return Number(b.timestamp) - Number(a.timestamp);

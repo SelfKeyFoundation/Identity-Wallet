@@ -15,6 +15,10 @@ function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
     $scope.nextStep = (event) => {
         $state.go('member.setup.add-document', { type: 'national_id' });
     }
+
+    $scope.skip = (event) => {
+        $state.go('member.dashboard.main');
+    }
 };
 
 module.exports = MemberSetupChecklistController;

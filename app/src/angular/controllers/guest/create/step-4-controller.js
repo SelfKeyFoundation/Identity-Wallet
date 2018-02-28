@@ -46,7 +46,8 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
                 CommonService.showToast('error', 'Error');
             });
         }).catch((error) => {
-            defer.reject(error);
+            $log.error(error);
+            CommonService.showToast('error', 'Error');
         });
     }
 };

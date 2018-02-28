@@ -102,7 +102,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         $mdPanel.open(config);
     }
 
-    $rootScope.$on('id-attribute:changed', () => {
+    $scope.$on('id-attribute:changed', () => {
         prepareData();
     });
 
@@ -130,6 +130,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             for (let i in $scope.idAttributesList) {
                 excludeKeys.push($scope.idAttributesList[i].idAttributeType);
             }
+
+            $rootScope.$broadcast('sk-user-info-box:update');
         });
     }
 };
@@ -142,9 +144,9 @@ function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonServic
     $scope.delete = (event) => {
         $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
         $scope.promise.then(() => {
+            $rootScope.$broadcast('id-attribute:changed');
             CommonService.showToast('success', 'deleted');
             mdPanelRef.close().then(() => {
-                $rootScope.$broadcast('id-attribute:changed');
                 mdPanelRef.destroy();
             });
         });

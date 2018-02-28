@@ -55,7 +55,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                     });
                 }).catch((error)=>{
                     console.log(error);
-                    return CommonService.showToast('error', 'error');
+                    return CommonService.showToast('error', 'incorrect password');
                 });
             }
         } else if ($scope.type === 'import'){
@@ -69,34 +69,9 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 $state.go('guest.create.step-1');
             }).catch((error)=>{
                 console.log(error);
-                return CommonService.showToast('error', 'error');
+                return CommonService.showToast('error', 'incorrect password');
             });
         }
-
-        /*
-        if (!selectedFilePath || !$scope.userInput.password) return;
-
-        $scope.isUnlocking = true;
-        let promise = WalletService.unlockByFilePath(wallets[$scope.userInput.selectedPublicKey].id, selectedFilePath, $scope.userInput.password);
-        promise.then((wallet) => {
-
-            let initialPromises = [];
-            initialPromises.push(wallet.loadIdAttributes());
-            initialPromises.push(wallet.loadTokens());
-
-            $q.all(initialPromises).then(()=>{
-                $state.go('member.dashboard.main');
-            });
-
-        }).catch((error) => {
-            $log.error(error);
-
-            theForm.password.$setValidity("badKeystore", false);
-            theForm.password.$setValidity("required", false);
-        }).finally(()=>{
-            $scope.isUnlocking = false;
-        });
-        */
     }
 
 };

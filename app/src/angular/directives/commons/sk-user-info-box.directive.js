@@ -14,28 +14,24 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
                 tempImage: 'assets/images/temp/avatar.jpg'
             }
 
-            /*
-            let idAttributes = ConfigFileService.getIdAttributesStore();
+            scope.idAttributes = {};
+            prepareData();
 
-            reloadData();
+            scope.$on('sk-user-info-box:update', () => {
+                console.log('sk-user-info-box:update')
+                prepareData();
+            });
 
-            function reloadData() {
-                for (let i in idAttributes) {
-                    let item = idAttributes[i];
+            function prepareData () {
+                scope.idAttributes = {};
+                let idAttributes = $rootScope.wallet.getIdAttributes();
 
-                    if(item.items[item.defaultItemId].values.length <= 0) {
-                        continue;
-                    }
-
-                    scope.userData[i] = item.items[item.defaultItemId].values[0].value;
-                    if(item.type === "name"){
-                        if(item.items[item.defaultItemId].values[1]){
-                            scope.userData[i] += " " + item.items[item.defaultItemId].values[1].value;
-                        }
-                    }
+                for(let i in idAttributes){
+                    scope.idAttributes[idAttributes[i].idAttributeType] = {}
+                    scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData || idAttributes[i].items[0].values[0].documentFileName
                 }
+                console.log(" > > >> > >> > >>>>>>>", scope.idAttributes)
             }
-            */
         },
         replace: true,
         templateUrl: 'common/directives/sk-user-info-box.html'

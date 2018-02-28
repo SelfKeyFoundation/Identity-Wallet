@@ -57,6 +57,6 @@
                                 td.action-columns
                                     md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemDocument($event, item.items[0].values[0], item.idAttributeType)")
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1")
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", ng-click="openValueDeletePanel($event, item, item.items[0], item.items[0].values[0])")
             .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
                 sk-user-info-box
