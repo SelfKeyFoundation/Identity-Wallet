@@ -707,6 +707,11 @@ module.exports = function (app) {
         return updateById('id_attribute_types', data);
     }
 
+    controller.prototype.wallet_tokens_insert = (data) => {
+        return insertIntoTable('wallet_tokens', data);
+    }
+    
+
     controller.prototype.idAttributeTypes_add = (data) => {
         return new Promise((resolve, reject)=>{
             knex('id_attribute_types').select().where("key", data.key).then((rows)=>{

@@ -16,11 +16,11 @@ md-dialog(aira-lable="Edit Tokens")
                           td
 
                   tbody
-                      tr(ng-repeat="token in customTokens")
+                      tr(ng-repeat="token in walletTokens")
                           td {{token.symbol}}
                           td {{token.lastPrice}}
                           td {{token.balance}}
                           td {{token.totalValue}}
-                          td {{token.tokenAddress}}
+                          td {{token.contractAddress}}
                           td
                               sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken(token,$index)", icon="ic_delete_white_26px", size-class="icon-size-19x23")

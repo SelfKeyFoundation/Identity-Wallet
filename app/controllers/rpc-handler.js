@@ -964,6 +964,14 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.insertWalletToken = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.wallet_tokens_insert(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);

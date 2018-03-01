@@ -17029,6 +17029,83 @@ md-dialog {
             md-dialog .edit-tokens-contaner .grid-container table tbody tr td:first-child {
               padding-left: 24px !important; }
 
+md-dialog {
+  background-image: linear-gradient(124deg, #2b3540, #1e262e);
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  md-dialog * {
+    font-family: ProximaNovaRegular; }
+  md-dialog .close-btn {
+    cursor: pointer;
+    position: absolute;
+    outline: none;
+    top: 30.8px;
+    right: 30.8px; }
+  md-dialog .add-custom-token-container {
+    margin-top: 20px;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; }
+    md-dialog .add-custom-token-container .sk-icon-button {
+      height: 15.8px;
+      margin-top: 2px; }
+    md-dialog .add-custom-token-container .header-text {
+      padding-top: 36px;
+      padding-bottom: 24px;
+      font-size: 24px;
+      line-height: 1.5;
+      text-align: center;
+      color: #ffffff; }
+    md-dialog .add-custom-token-container .sub-header-text {
+      width: 500px;
+      font-size: 18px;
+      line-height: 1.72;
+      text-align: center;
+      color: #93b0c1; }
+    md-dialog .add-custom-token-container .form-container {
+      width: 780px;
+      margin-top: 48px; }
+      md-dialog .add-custom-token-container .form-container .input-form {
+        padding-top: 44px;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-bottom: 36px; }
+        md-dialog .add-custom-token-container .form-container .input-form label {
+          margin: 0 !important;
+          line-height: 2 !important;
+          letter-spacing: 1.5px !important;
+          padding-bottom: 15px !important; }
+        md-dialog .add-custom-token-container .form-container .input-form .sk-input-container {
+          padding-bottom: 36px !important; }
+          md-dialog .add-custom-token-container .form-container .input-form .sk-input-container > div {
+            color: #dd2c00;
+            margin-top: 10px; }
+        md-dialog .add-custom-token-container .form-container .input-form input[type=number]::-webkit-inner-spin-button,
+        md-dialog .add-custom-token-container .form-container .input-form input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0; }
+        md-dialog .add-custom-token-container .form-container .input-form .add-custom-token-btn {
+          outline: none;
+          border: none;
+          width: 100%;
+          padding: 0;
+          text-transform: uppercase;
+          height: 58px;
+          border-radius: 4px;
+          background-image: linear-gradient(282deg, #08bccd, #2da1f8);
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 0.75;
+          letter-spacing: 0.7px;
+          color: #ffffff; }
+
 .wallet-create-step-1 {
   height: 100%; }
   .wallet-create-step-1 .header-wrapper {
