@@ -5,6 +5,19 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
 
     $log.info('MemberIdWalletMainController');
 
+    (function () {
+        $mdDialog.show({
+            controller: 'IDWInfoDialogController',
+            templateUrl: 'common/dialogs/IDW-info-dialog.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {}
+        });
+    })();
+
+
     let ID_ATTRIBUTE_TYPES = {};
     let excludeKeys = [];
 

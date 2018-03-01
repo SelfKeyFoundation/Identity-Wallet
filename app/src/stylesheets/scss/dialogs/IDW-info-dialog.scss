@@ -1,0 +1,73 @@
+md-dialog {
+    &.IDW-info {
+        min-width: 100%;
+        min-height: 100%;
+        background-image: linear-gradient(121deg, #1e262e, #1e262e);
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 20%;
+
+        .IDW-info-wrapper {
+            width: 550px;
+            height: 350px;
+            border-radius: 4px;
+            background-color: #262f39;
+            border: solid 1px #303c49;
+            position: relative;
+
+            .container {
+                padding: 20px;
+                overflow: auto;
+
+                .header {
+                    margin: 0 0 40px 20px;
+                    font-size: 16px;
+                    color: #FFFFFF;
+                }
+
+                .info-section {
+                    height: 200px;
+                    overflow: auto;
+
+                    .text {
+                        font-family: ProximaNovaRegular;
+                        font-size: 14px;
+                        font-weight: 300;
+                        color: #ffffff;
+                        text-align: justify;
+                    }
+                    .logo {
+                        .sk-icon {
+                            margin: 0 auto;
+                        }
+                    }
+                }
+
+                .buttons-section {
+                    margin-top: 25px;
+
+                    .md-button {
+                        width: 100px;
+
+                        span {
+                            font-size: 12px;
+                        }
+                    }
+                    .md-button:first-child {
+                        float: left;
+                    }
+                    .md-button:nth-child(2) {
+                        float: right;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.button-198 {
+    width: 198px !important;
+}
