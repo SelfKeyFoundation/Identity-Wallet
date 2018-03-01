@@ -137,6 +137,9 @@ angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirec
 const SkTokenBoxDirective = requireAppModule('angular/directives/commons/sk-token-box.directive');
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
+const SkCustomTokenBoxDirective = requireAppModule('angular/directives/commons/sk-custom-token-box.directive');
+angular.module('kyc-wallet').directive('skCustomTokenBox', SkCustomTokenBoxDirective);
+
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 

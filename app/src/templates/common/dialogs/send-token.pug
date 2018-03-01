@@ -14,7 +14,12 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
                 .sk-button.small(ng-click="selectAll($event)")
                     span ALL
                 input.sk-send-ether-box__eth-amount-container__input(ng-class="{'has-error': errors.sendAmount}", name="sendAmount", type="text", placeholder="0.00", ng-model="formData.sendAmount", ng-readonly="inputStates.isAmountLocked", ng-required)
-                span {{symbol}}
+                span(ng-if="!allowSelectERC20Token") {{symbol}}
+                .sk-send-ether-box__.select-token-container(ng-if="allowSelectERC20Token")
+                    md-input-container(style="width: 100%;")
+                        label Choose A Token
+                        md-select.sk-select(ng-model='formData.selectedToken')
+                            md-option( ng-repeat="(key, value) in $root.wallet.tokens" ng-value='value') {{key}}
 
             .sk-send-ether-box__usd-amount-container
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 40px; font-weight: 300; color: #ffffff") {{infoData.sendAmountInUSD}}
