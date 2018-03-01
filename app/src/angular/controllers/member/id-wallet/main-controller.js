@@ -13,6 +13,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     $scope.attributesList = [];
     $scope.idDocumentsList = [];
 
+    SqlLiteService.loadIdAttributeTypes();
+
     prepareData();
 
     /**
