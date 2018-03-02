@@ -16,6 +16,7 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
             let promise = RPCService.makeCall('importAndUnlockExistingWallet', {
                 keystoreFilePath: $rootScope.walletImportData.keystoreFilePath,
                 publicKey: $rootScope.walletImportData.publicKey,
+                privateKey: $rootScope.walletImportData.privateKey,
                 password: $rootScope.walletImportData.password,
                 initialIdAttributesValues: basicInfo
             });

@@ -178,7 +178,7 @@ class Token {
                     data: EthUtils.sanitizeHex(genResult.data),
                     chainId: chainID
                 }
-
+console.log(">>>>>>", this.wallet.privateKey);
                 let eTx = new Tx(rawTx);
                 eTx.sign(this.wallet.privateKey);
 

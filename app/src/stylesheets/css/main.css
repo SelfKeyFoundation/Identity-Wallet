@@ -15155,6 +15155,23 @@ md-radio-group md-radio-button {
         .sk-token-box .sk-token-box__footer .sk-token-box__footer_address-box span.sk-token-box__footer_address-box_public-key:hover {
           color: #bed6e4; }
 
+.sk-custom-token-box .title {
+  font-family: ProximaNovaRegular;
+  font-size: 18px;
+  line-height: 28px;
+  color: white; }
+
+.sk-custom-token-box .md-button.gray {
+  width: auto;
+  height: auto;
+  padding: 0 24px 0 24px; }
+  .sk-custom-token-box .md-button.gray span {
+    width: 46px;
+    height: 20px;
+    font-size: 11px;
+    line-height: 12px;
+    color: #93b0c1; }
+
 .sk-blur-background {
   position: fixed;
   top: 0;
@@ -16731,6 +16748,16 @@ md-dialog.send-token {
       margin-top: 46px; }
       md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__actions-container .sk-button {
         width: 210px; }
+    md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container {
+      position: absolute;
+      right: 0;
+      width: 28%; }
+      md-dialog.send-token .send-token-wrapper .sk-send-ether-box .sk-send-ether-box__.select-token-container md-input-container span {
+        color: white;
+        font-family: ProximaNovaRegular;
+        display: block !important;
+        font-size: 14px;
+        text-align: center; }
 
 .tooltip-multiline {
   height: auto;
@@ -16821,6 +16848,54 @@ md-dialog.info {
       right: -18px;
       top: -18px;
       cursor: pointer; }
+
+md-dialog.IDW-info {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: linear-gradient(121deg, #1e262e, #1e262e);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20%; }
+  md-dialog.IDW-info .IDW-info-wrapper {
+    width: 550px;
+    height: 350px;
+    border-radius: 4px;
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    position: relative; }
+    md-dialog.IDW-info .IDW-info-wrapper .container {
+      padding: 20px;
+      overflow: auto; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .header {
+        margin: 0 0 40px 20px;
+        font-size: 16px;
+        color: #FFFFFF; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .info-section {
+        height: 200px;
+        overflow: auto; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .info-section .text {
+          font-family: ProximaNovaRegular;
+          font-size: 14px;
+          font-weight: 300;
+          color: #ffffff;
+          text-align: justify; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .info-section .logo .sk-icon {
+          margin: 0 auto; }
+      md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section {
+        margin-top: 25px; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button {
+          width: 100px; }
+          md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button span {
+            font-size: 12px; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button:first-child {
+          float: left; }
+        md-dialog.IDW-info .IDW-info-wrapper .container .buttons-section .md-button:nth-child(2) {
+          float: right; }
+
+.button-198 {
+  width: 198px !important; }
 
 md-dialog.add-edit-document {
   min-width: 100%;
@@ -17611,7 +17686,8 @@ md-dialog {
         font-size: 18px;
         color: #768fa9; }
       .id-wallet-main > .center-container .header-wrapper md-icon {
-        margin-left: 16px; }
+        margin-left: 16px;
+        outline: none; }
     .id-wallet-main > .center-container .body-wrapper {
       width: 1140px;
       margin-top: 40px; }
@@ -17624,7 +17700,8 @@ md-dialog {
             font-family: ProximaNovaRegular; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon {
             float: right;
-            cursor: pointer; }
+            cursor: pointer;
+            outline: none; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon svg {
               fill: #262f39; }
         .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table {
@@ -17638,19 +17715,24 @@ md-dialog {
             padding: 5px 0;
             word-break: break-word; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td md-icon {
-              cursor: pointer; }
+              cursor: pointer;
+              outline: none; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
             width: 35px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
             width: 5%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
-              padding-left: 5px; }
+              padding-left: 5px;
+              outline: none; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
                 fill: green; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg g {
+                  fill: green; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
             width: 30%; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
-            width: 25%; }
+            width: 38%;
+            padding-right: 10px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(even) {
             background-color: #262f39; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(odd) {
@@ -17666,7 +17748,8 @@ md-dialog {
               font-family: ProximaNovaRegular; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head md-icon {
               float: right;
-              cursor: pointer; }
+              cursor: pointer;
+              outline: none; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table {
             width: 100%;
             background-color: #262f39;
@@ -17678,19 +17761,24 @@ md-dialog {
               padding: 5px 0;
               word-break: break-word; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td md-icon {
-                cursor: pointer; }
+                cursor: pointer;
+                outline: none; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr .action-columns {
               width: 35px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child {
               width: 5%; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon {
-                padding-left: 5px; }
+                padding-left: 5px;
+                outline: none; }
                 .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg {
                   fill: green; }
+                  .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:first-child md-icon svg g {
+                    fill: green; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(2) {
               width: 30%; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr td:nth-child(3) {
-              width: 25%; }
+              width: 38%;
+              padding-right: 10px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(even) {
               background-color: #262f39; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table tbody tr:nth-child(odd) {

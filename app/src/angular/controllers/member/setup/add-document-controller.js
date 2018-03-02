@@ -41,7 +41,6 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         }
     }
 
-
     $scope.selectFile = (event) => {
         let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
 
@@ -49,16 +48,19 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         addDocumentPromise.then((resp) => {
             if(!resp) return;
             $rootScope.wallet.loadIdAttributes().then((resp)=>{
+                console.log(resp);
                 $scope.idAttributes = $rootScope.wallet.getIdAttributes();
                 CommonService.showToast('success', 'Saved!');
                 $scope.selected.values = "Saved!";
             });
-
         }).catch((error) => {
             CommonService.showToast('error', 'Max File Size: 50mb Allowed');
         });
     }
 
+    $scope.skip = (event) => {
+        $state.go('member.dashboard.main');
+    }
 
 };
 

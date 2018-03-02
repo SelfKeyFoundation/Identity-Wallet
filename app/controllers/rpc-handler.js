@@ -254,6 +254,7 @@ module.exports = function (app) {
                             keystoreFilePath: keystoreFilePath
                         });
                     }).catch((error) => {
+                        console.log(error);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
                     });
                 } else {
@@ -286,6 +287,7 @@ module.exports = function (app) {
                         let name = path.parse(filePaths[0]).base;
 
                         if (stats.size > dialogConfig.maxFileSize) {
+                            console.log(111);
                             return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
                         }
 
@@ -307,11 +309,13 @@ module.exports = function (app) {
                                 ).then((resp) => {
                                     app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
                                 }).catch((error) => {
+                                    console.log(error);
                                     app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                                 });
                             });
                         });
                     } catch (e) {
+                        console.log(e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
@@ -319,6 +323,7 @@ module.exports = function (app) {
                 }
             });
         } catch (e) {
+            console.log(e);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
         }
     }
@@ -864,6 +869,7 @@ module.exports = function (app) {
         electron.app.sqlLiteService.idAttributeTypes_selectAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
+        console.log(error);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
@@ -1004,6 +1010,7 @@ module.exports = function (app) {
         });
     }
 
+    /*
     controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.idAttributeItem_add(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1011,6 +1018,8 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+    */
+
 
     controller.prototype.updateIdAttributeItemValueStaticData = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.idAttributeItemValues_update(args).then((data) => {
@@ -1050,6 +1059,7 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+
 
     controller.prototype.deleteIdAttribute = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.idAttribute_delete(args).then((data) => {

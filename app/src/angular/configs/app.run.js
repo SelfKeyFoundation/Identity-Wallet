@@ -74,7 +74,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
         useInAppBrowser ? $window.open(url) : ElectronService.openBrowserWindow(url);
     }
 
-    $rootScope.openSendTokenDialog = (event, symbol) => {
+    $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
         return $mdDialog.show({
             controller: 'SendTokenDialogController',
             templateUrl: 'common/dialogs/send-token.html',
@@ -85,7 +85,8 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             escapeToClose: false,
             locals: {
                 args: {
-                    symbol: symbol
+                    symbol: symbol,
+                    allowSelectERC20Token : allowSelectERC20Token
                 }
             }
         });

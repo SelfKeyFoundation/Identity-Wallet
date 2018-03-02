@@ -7,7 +7,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     'ngInject'
 
     $log.info("SendTokenDialogController", args, CONFIG);
-
     const TX_CHECK_INTERVAL = 1000;
     const ESTIMATED_GAS_CHECK_INTERVAL = 300;
 
@@ -20,6 +19,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     let token = null;
     $scope.invalidData = false;
     $scope.symbol = args.symbol;
+    $scope.allowSelectERC20Token = args.allowSelectERC20Token;
 
     /**
      * form data

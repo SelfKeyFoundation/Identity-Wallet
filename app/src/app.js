@@ -137,6 +137,9 @@ angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirec
 const SkTokenBoxDirective = requireAppModule('angular/directives/commons/sk-token-box.directive');
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
+const SkCustomTokenBoxDirective = requireAppModule('angular/directives/commons/sk-custom-token-box.directive');
+angular.module('kyc-wallet').directive('skCustomTokenBox', SkCustomTokenBoxDirective);
+
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
@@ -189,6 +192,9 @@ angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogCo
 
 const PasswordWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/password-warning-controller.js');
 angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
+
+const IDWInfoDialogController = requireAppModule('angular/controllers/commons/dialogs/IDW-info-dialog-controller.js');
+angular.module('kyc-wallet').controller('IDWInfoDialogController', IDWInfoDialogController);
 
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
