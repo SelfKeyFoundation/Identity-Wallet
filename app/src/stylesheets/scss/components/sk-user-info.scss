@@ -1,0 +1,29 @@
+.user-info-box {
+
+    .info {
+
+        table{
+
+            tr{
+
+                td {
+
+                    word-break: break-word;
+                    font-size: 14px;
+
+                    div{
+
+                        span {
+
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                td:first-child {
+                    width: 26%;
+                }
+            }
+        }
+    }
+}
