@@ -211,6 +211,9 @@ angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdA
 const AddEditCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-custom-token-controller.js');
 angular.module('kyc-wallet').controller('AddEditCustomTokenDialogController', AddEditCustomTokenDialogController);
 
+const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
+angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
+
 /**
  * guest
  */

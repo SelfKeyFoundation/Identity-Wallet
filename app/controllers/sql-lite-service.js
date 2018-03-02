@@ -571,6 +571,27 @@ module.exports = function (app) {
         return Promise.all(promises)
     }
 
+
+    controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
+        console.log('here',data);
+        console.log('wallet Id', walletId, balance)
+         data.createdAt = new Date().getTime();
+        return knex.transaction((trx) => {
+            knex('tokens')
+                .transacting(trx)
+                .insert(data)
+                .then((resp) => {
+                    let id = resp[0];
+                    console.log('new token ID', id);
+                    // add wallet tokens
+                    return insertIntoTable('wallet_tokens', { walletId: walletId, tokenId: id, balance: balance, recordState: 1, createdAt: new Date().getTime() }, trx);
+                   
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
+    }
+
     /**
      * wallets
      */
@@ -707,6 +728,16 @@ module.exports = function (app) {
     controller.prototype.idAttributeTypes_update = (data) => {
         return updateById('id_attribute_types', data);
     }
+
+    controller.prototype.wallet_tokens_insert = (data) => {
+        data.recordState = 1;
+        return insertIntoTable('wallet_tokens', data);
+    }
+
+    controller.prototype.wallet_tokens_update = (data) => {
+        return updateById('wallet_tokens', data);
+    }
+    
 
     controller.prototype.idAttributeTypes_add = (data) => {
         return new Promise((resolve, reject)=>{

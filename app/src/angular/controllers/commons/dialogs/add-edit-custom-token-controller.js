@@ -1,56 +1,206 @@
-function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog) {
-  'ngInject'
+const Token = requireAppModule('angular/classes/token');
 
-  $log.info('AddCustomTokenDialogController');
+function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service) {
+    'ngInject'
 
-  $scope.cancel = (event) => {
-      $mdDialog.cancel();
-  }
+    $log.info('AddCustomTokenDialogController');
 
-  $scope.formDataIsValid = (form) => {
-      return form.$valid;
-  };
+    $scope.cancel = (event) => {
+        $mdDialog.cancel();
+    }
 
-  $scope.customTokens = [];//TODO 
+    $scope.inProgress = false;
+    $scope.formDataIsValid = (form) => {
+        return form.$valid;
+    };
 
- 
-  let sortCustomTokens = () => {
-      $scope.customTokens.sort((a, b) => {
-          let key = 'totalValue';
-          return parseFloat(b[key]) - parseFloat(a[key]);
-      });
-  };
+    let tokens = SqlLiteService.getTokens() || {};
+    let tokenKeys = Object.keys(tokens);
+    let allTokensArr = tokenKeys.map((key) => {
+        return tokens[key];
+    });
 
-  sortCustomTokens();
+    let getTokenByContractAddress = (contractAddress) => {
+        return allTokensArr.find((token) => {
+            return token.address == contractAddress;
+        });
+    };
 
-  $scope.formData = {
-      decimalPlaces: null,
-      symbol: '',
-      tokenAddress: ''
-  };
+    $scope.walletTokens = [];
+    let wallet = $rootScope.wallet;
+    wallet.loadTokens().then((tokens) => {
+        tokens = tokens || {};
+        $scope.walletTokens = Object.keys(tokens).map((tokenKey) => {
 
-  $scope.isDeletable = (token) =>{
-      return token.isDeletable;
-  };
+            let token = tokens[tokenKey];
+            token.totalValue = wallet.tokens[token.symbol.toUpperCase()].getBalanceDecimal();
 
-  $scope.deleteCustomToken = (token, index) => {
-    //TODO
-  }
-  
-  $scope.addCustomToken = (event, form) => {
-      if (!$scope.formDataIsValid(form)) {
-          return;
-      }
+            let lastPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
+            token.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
 
-      let newToken = $scope.formData;
+            return token;
+        })
 
-      let isDublicateKey = currentTokensKeys.indexOf(newToken.symbol) != -1; 
-      if (isDublicateKey) {
-          //TODO tato
-          return;
-      }
-      //TODO
-  }
+        let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
+        $scope.walletTokens.push({
+            symbol: 'ETH',
+            lastPrice: ethPrice ? ethPrice.priceUSD : 0,
+            balance: wallet.balanceEth,
+            contractAddress: '0x' + wallet.publicKeyHex
+        });
+
+        $scope.walletTokens.sort((a,b) =>{
+            return !(a.symbol == 'ETH' || a.symbol == 'KEY'); 
+        });
+
+    });
+
+    
+
+    const web3Utils = Web3Service.constructor.web3.utils;
+    /**
+   *
+   */
+    $scope.$watch('formData.contractAddress', (newVal, oldVal) => {
+        let data = $scope.formData;
+
+        let check = false;
+        try {
+            check = web3Utils.isHex(newVal) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
+        } catch (error) {
+            console.log(error);
+        }
+        let isValidHex = newVal && check
+        if (isValidHex) {
+
+            let existingToken = getTokenByContractAddress(newVal);
+
+            if (existingToken) {
+                data.symbol = existingToken.symbol;
+                data.decimalPlaces = existingToken.decimal;
+                data.tokenId = existingToken.id;
+            } else {
+                data.tokenId = '';
+                Web3Service.getContractInfo(newVal).then((responseArr) => {
+                    if (!responseArr || responseArr.length != 2) {
+                        return resetFormData();
+                    }
+
+                    let decimal = responseArr[0];
+                    let symbol = responseArr[1];
+
+                    data.symbol = symbol;
+                    data.decimalPlaces = Number(decimal);
+                    data.tokenId = '';
+
+
+                }).catch((err) => {
+                    resetFormData();
+                });
+            }
+
+        } else {
+            resetFormData();
+        }
+    }, true);
+
+    $scope.customTokens = [];//TODO 
+
+
+    let sortCustomTokens = () => {
+        $scope.customTokens.sort((a, b) => {
+            let key = 'totalValue';
+            return parseFloat(b[key]) - parseFloat(a[key]);
+        });
+    };
+
+    sortCustomTokens();
+
+    $scope.formData = {
+        decimalPlaces: null,
+        symbol: '',
+        contractAddress: '',
+        tokenId: ''
+    };
+
+    let resetFormData = () => {
+        let data = $scope.formData;
+
+        data.symbol = '';
+        data.decimalPlaces = null;
+        data.tokenId = '';
+    };
+
+    const PRIMARY_TOKEN_KEYS = ['KEY', 'ETH'];
+    $scope.isDeletable = (token) => {
+        if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) != -1) {
+            return false;
+        }
+        return true;
+    };
+
+    $scope.deleteCustomToken = (token, index) => {
+
+        SqlLiteService.updateWalletToken({
+            tokenId: token.id,
+            walletId: wallet.id,
+            id: token.walletTokenId,
+            balance: token.balance,
+            recordState: 0
+        }).then(() => {
+            $scope.walletTokens.splice(index, 1);
+        });
+
+    }
+
+    $scope.addCustomToken = (event, form) => {
+        if (!$scope.formDataIsValid(form)) {
+            return;
+        }
+
+        //todo check dublicate & disable add button while adding is in progress
+
+        let newToken = $scope.formData;
+        $scope.inProgress = true;
+
+        Token.getBalanceByContractAddress(newToken.contractAddress, wallet.getPublicKeyHex()).then((balance) => {
+            balance = Number(balance);
+            let newWalletToken = {
+                walletId: wallet.id,
+                tokenId: newToken.tokenId,
+                balance: balance
+            }
+
+            let successFn = (data) => {
+                $scope.inProgress = false;
+                $scope.cancel();
+                $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, balance);
+                //TODO show success popup
+            };
+
+            let errFn = (err) => {
+                $scope.inProgress = false;
+            }
+
+            if (newToken.tokenId) {
+                SqlLiteService.insertWalletToken(newWalletToken).then(successFn).catch(errFn);
+            } else {
+                newWalletToken.symbol = newToken.symbol;
+                newWalletToken.decimal = newToken.decimalPlaces;
+                newWalletToken.address = newToken.contractAddress;
+                newWalletToken.isCustom = 1;
+
+                delete newWalletToken.tokenId;
+                delete newWalletToken.balance;
+                delete newWalletToken.walletId;
+                SqlLiteService.insertNewWalletToken(newWalletToken, balance, wallet.id).then(successFn).catch(errFn);
+            }
+
+        }).catch(err => {
+            $scope.inProgress = false;
+        });
+
+    }
 };
 
 module.exports = AddEditCustomTokenDialogController;

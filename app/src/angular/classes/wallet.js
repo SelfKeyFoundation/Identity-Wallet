@@ -158,9 +158,10 @@ class Wallet {
     loadTokens() {
         let defer = $q.defer();
         SqlLiteService.loadWalletTokens(this.id).then((walletTokens) => {
+            this.tokens = {};
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.id, this);
+                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.tokenId, token.id, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {

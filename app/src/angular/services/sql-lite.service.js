@@ -145,6 +145,10 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return WALLETS_STORE;
         }
 
+        getTokens() {
+            return TOKENS_STORE;
+        }
+
         saveWallet(data) {
             return RPCService.makeCall('saveWallet', data);
         }
@@ -244,6 +248,18 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 
         saveWalletSettings(data) {
             return RPCService.makeCall('saveWalletSettings', data);
+        }
+
+        insertWalletToken(data) {
+            return RPCService.makeCall('insertWalletToken', data);
+        }
+
+        insertNewWalletToken(data, balance, walletId) {
+            return RPCService.makeCall('insertNewWalletToken', {data: data, balance: balance, walletId: walletId});
+        }
+
+        updateWalletToken(data) {
+            return RPCService.makeCall('updateWalletToken', data);
         }
 
     }

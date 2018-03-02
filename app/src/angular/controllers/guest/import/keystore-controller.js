@@ -15,6 +15,8 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     $rootScope.wallet = null;
     $scope.type = $stateParams.type;
 
+    $scope.unlockPromise = null;
+
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
         selectedFilePath: null,
@@ -26,7 +28,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         promise.then((data) => {
             $rootScope.walletImportData = data;
         }).catch((error) => {
-
+            CommonService.showToast('error', 'wrong file selected');
         });
     }
 
@@ -39,24 +41,13 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
         if ($scope.type === 'select') {
             if (wallets[$scope.userInput.selectedPublicKey]) {
-                let unlockExistingWalletPromise = RPCService.makeCall('unlockExistingWallet', {
-                    publicKey: $scope.userInput.selectedPublicKey,
-                    password: $scope.userInput.password
-                });
-
-                unlockExistingWalletPromise.then((data)=>{
-                    $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
-                    let initialPromises = [];
-                    initialPromises.push($rootScope.wallet.loadIdAttributes());
-                    initialPromises.push($rootScope.wallet.loadTokens());
-
-                    $q.all(initialPromises).then(()=>{
-                        $state.go('member.dashboard.main');
-                    });
+                $scope.unlockPromise = unlockExistingWallet();
+                $scope.unlockPromise.then(()=>{
+                    $state.go('member.dashboard.main');
+                    $scope.$applyAsync();
                 }).catch((error)=>{
-                    console.log(error);
-                    return CommonService.showToast('error', 'incorrect password');
-                });
+                    CommonService.showToast('error', 'incorrect password');
+                })
             }
         } else if ($scope.type === 'import'){
             let promise = RPCService.makeCall('unlockKeystoreFile', {
@@ -68,10 +59,35 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 $rootScope.walletImportData = data;
                 $state.go('guest.create.step-1');
             }).catch((error)=>{
-                console.log(error);
                 return CommonService.showToast('error', 'incorrect password');
             });
         }
+    }
+
+    function unlockExistingWallet(){
+        let defer = $q.defer();
+
+        let unlockExistingWalletPromise = RPCService.makeCall('unlockExistingWallet', {
+            publicKey: $scope.userInput.selectedPublicKey,
+            password: $scope.userInput.password
+        });
+
+        unlockExistingWalletPromise.then((data)=>{
+            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+            let initialPromises = [];
+            initialPromises.push($rootScope.wallet.loadIdAttributes());
+            initialPromises.push($rootScope.wallet.loadTokens());
+
+            $q.all(initialPromises).then((resp)=>{
+                defer.resolve();
+            }).catch((error)=>{
+                defer.reject(error);
+            });
+        }).catch((error)=>{
+            defer.reject(error);
+        });
+
+        return defer.promise;
     }
 
 };

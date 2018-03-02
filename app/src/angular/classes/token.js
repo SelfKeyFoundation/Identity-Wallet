@@ -30,12 +30,13 @@ class Token {
      * @param {*} decimal
      * @param {*} wallet
      */
-    constructor(contractAddress, symbol, decimal, isCustom, id, wallet) {
+    constructor(contractAddress, symbol, decimal, isCustom, id, walletTokenId, wallet) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
         this.decimal = decimal;
         this.isCustom = isCustom;
         this.id = id;
+        this.walletTokenId = walletTokenId;
         this.balanceHex = null;
         this.balanceDecimal = 0;
 
@@ -81,18 +82,20 @@ class Token {
         return Token.generateContractData(toAddress, value, this.decimal);
     }
 
-    generateBalanceData() {
+    static generateBalanceData(contractAddress, walletPublicKeyHex) {
+        contractAddress = contractAddress || this.contractAddress; 
+        walletPublicKeyHex = walletPublicKeyHex || this.wallet.getPublicKeyHex();
         return EthUtils.getDataObj(
-            this.contractAddress,
+            contractAddress,
             Token.balanceHex,
-            [EthUtils.getNakedAddress(this.wallet.getPublicKeyHex())]
+            [EthUtils.getNakedAddress(walletPublicKeyHex)]
         );
     }
 
     loadBalance() {
         let defer = $q.defer();
 
-        let data = this.generateBalanceData();
+        let data = Token.generateBalanceData.bind(this).call();
         let promise = Web3Service.getTokenBalanceByData(data);
 
         promise.then((balanceHex) => {
@@ -108,6 +111,22 @@ class Token {
             }
 
             defer.resolve(this);
+        }).catch((error) => {
+            defer.reject(error);
+        });
+
+        return defer.promise;
+    }
+
+    static getBalanceByContractAddress(contractAddress, walletPublicKeyHex) {
+        let defer = $q.defer();
+        let data = Token.generateBalanceData(contractAddress, walletPublicKeyHex);
+        let promise = Web3Service.getTokenBalanceByData(data);
+
+        promise.then((balanceHex) => {
+            let balanceDecimal = EthUtils.hexToDecimal(balanceHex);
+
+            defer.resolve(balanceDecimal);
         }).catch((error) => {
             defer.reject(error);
         });
