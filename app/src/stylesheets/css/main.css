@@ -17625,54 +17625,102 @@ md-dialog {
       margin-top: 40px; }
       .id-wallet-main > .center-container .body-wrapper .left-side-wrapper {
         width: 760px; }
-        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head {
-          width: 100%; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head .table-head-text {
-            color: #93a4af;
-            font-family: ProximaNovaRegular; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon {
-            float: right;
-            cursor: pointer;
-            outline: none; }
-            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon svg {
-              fill: #262f39; }
-        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table {
-          width: 100%;
-          background-color: #262f39;
-          color: #fff;
-          font-family: ProximaNovaRegular;
-          border-collapse: collapse;
-          margin-top: 10px; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td {
-            padding: 5px 0;
-            word-break: break-word; }
-            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td md-icon {
+        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container {
+          overflow: auto;
+          border: 1px solid #303c49; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-head {
+            width: 758px;
+            padding: 10px 0;
+            border-bottom: 1px solid #303c49; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-head span {
+              padding-left: 10px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-head .table-head-text {
+              color: #93a4af;
+              font-family: ProximaNovaRegular; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-head md-icon {
+              float: right;
               cursor: pointer;
               outline: none; }
-            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td .sk-icon {
-              margin-left: 5px; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
-            width: 35px; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
-            width: 5%; }
-            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
-              padding-left: 5px;
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-head md-icon svg {
+                fill: #262f39; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body {
+            overflow: auto;
+            height: 220px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table {
+              width: 100%;
+              background-color: #262f39;
+              color: #fff;
+              font-family: ProximaNovaRegular;
+              border-collapse: collapse; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td {
+                padding: 10px 0;
+                word-break: break-word; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td md-icon {
+                  cursor: pointer;
+                  outline: none; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td .sk-icon {
+                  margin-left: 5px; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr .action-columns {
+                width: 35px; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td:first-child {
+                padding-left: 10px;
+                width: 22%; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td:nth-child(2) {
+                width: 13%; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table tbody tr td:nth-child(3) {
+                width: 70%; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .history-table-container .table-body .history-table thead tr td {
+                padding: 5px 0; }
+        .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container {
+          margin-top: 30px; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head {
+            width: 100%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head .table-head-text {
+              color: #93a4af;
+              font-family: ProximaNovaRegular; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon {
+              float: right;
+              cursor: pointer;
               outline: none; }
-              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
-                fill: green; }
-                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg g {
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .table-head md-icon svg {
+                fill: #262f39; }
+          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table {
+            width: 100%;
+            background-color: #262f39;
+            color: #fff;
+            font-family: ProximaNovaRegular;
+            border-collapse: collapse;
+            margin-top: 10px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td {
+              padding: 5px 0;
+              word-break: break-word; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td md-icon {
+                cursor: pointer;
+                outline: none; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td .sk-icon {
+                margin-left: 5px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
+              width: 35px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {
+              width: 5%; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon {
+                padding-left: 5px;
+                outline: none; }
+                .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg {
                   fill: green; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
-            width: 30%; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
-            width: 38%;
-            padding-right: 10px; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(even) {
-            background-color: #262f39; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(odd) {
-            background-color: #303c49; }
-          .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table thead tr td {
-            padding: 5px 0; }
+                  .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child md-icon svg g {
+                    fill: green; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(2) {
+              width: 30%; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:nth-child(3) {
+              width: 38%;
+              padding-right: 10px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(even) {
+              background-color: #262f39; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr:nth-child(odd) {
+              background-color: #303c49; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table thead tr td {
+              padding: 5px 0; }
         .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container {
           margin-top: 30px; }
           .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .table-head {
