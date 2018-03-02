@@ -119,8 +119,8 @@ angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 const SkIconDirective = requireAppModule('angular/directives/commons/sk-icon.directive');
 angular.module('kyc-wallet').directive('skIcon', SkIconDirective);
 
-//const SkMessageDirective = requireAppModule('angular/directives/commons/sk-message.directive');
-//angular.module('kyc-wallet').directive('skMessage', SkMessageDirective);
+const SkButtonLoadingDirective = requireAppModule('angular/directives/commons/sk-button-loading.directive');
+angular.module('kyc-wallet').directive('skButtonLoading', SkButtonLoadingDirective);
 
 const SkSelectIfDirective = requireAppModule('angular/directives/commons/sk-select-if.directive');
 angular.module('kyc-wallet').directive('skSelectIf', SkSelectIfDirective);

@@ -7,6 +7,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
 
     $log.info("GuestKeystoreCreateStep4Controller", $stateParams);
 
+    $scope.walletCreationPromise = null;
     $scope.passwordStrength = 0;
 
     $scope.input = {
@@ -15,7 +16,14 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
 
     $scope.nextStep = (event) => {
         if ($scope.input.password === $stateParams.thePassword) {
-            createKeystore();
+            $scope.walletCreationPromise = createKeystore();
+
+            $scope.walletCreationPromise.then(() => {
+                $state.go('guest.create.step-5');
+            }).catch((error) => {
+                $log.error(error);
+                CommonService.showToast('error', 'Error creating wallet');
+            });
         } else {
             CommonService.showToast('error', 'wrong confirmation password');
         }
@@ -26,10 +34,13 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
     }
 
     function createKeystore() {
+        let defer = $q.defer();
+
         let promise = RPCService.makeCall('createWallet', {
             password: $scope.input.password,
             initialIdAttributesValues: $stateParams.basicInfo
         });
+
         promise.then((data) => {
             SqlLiteService.loadWallets().then(() => {
                 $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
@@ -39,16 +50,18 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
                 promises.push($rootScope.wallet.loadTokens());
 
                 $q.all(promises).then((responses) => {
-                    $state.go('guest.create.step-5');
+                    defer.resolve();
+                }).catch((error) => {
+                    defer.reject(error);
                 });
             }).catch((error) => {
-                $log.error(error);
-                CommonService.showToast('error', 'Error');
+                defer.reject(error);
             });
         }).catch((error) => {
-            $log.error(error);
-            CommonService.showToast('error', 'Error');
+            defer.reject(error);
         });
+
+        return defer.promise;
     }
 };
 

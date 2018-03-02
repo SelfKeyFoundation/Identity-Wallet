@@ -160,7 +160,7 @@ class Wallet {
         SqlLiteService.loadWalletTokens(this.id).then((walletTokens) => {
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal,token.isCustom,token.id, this);
+                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.id, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {
@@ -178,7 +178,7 @@ class Wallet {
 
         SqlLiteService.loadIdAttributes(this.id).then((idAttributes) => {
             this.idAttributes = {};
-            
+
             for (let i in idAttributes) {
                 this.idAttributes[idAttributes[i].idAttributeType] = idAttributes[i];
             }
