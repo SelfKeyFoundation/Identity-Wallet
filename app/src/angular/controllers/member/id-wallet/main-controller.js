@@ -7,8 +7,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
 
     (function () {
         $mdDialog.show({
-            controller: 'IDWInfoDialogController',
-            templateUrl: 'common/dialogs/IDW-info-dialog.html',
+            controller: 'IdWalletInfoController',
+            templateUrl: 'common/dialogs/id-wallet-info.html',
             parent: angular.element(document.body),
             clickOutsideToClose: false,
             fullscreen: true,

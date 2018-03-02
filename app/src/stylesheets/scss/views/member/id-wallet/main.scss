@@ -71,6 +71,10 @@
                                         cursor: pointer;
                                         outline: none;
                                     }
+
+                                    .sk-icon {
+                                        margin-left: 5px;
+                                    }
                                 }
                                 .action-columns {
                                     width: 35px;
@@ -163,6 +167,9 @@
 
                                         }
                                     }
+                                    .sk-icon {
+                                        margin-left: 5px;
+                                    }
                                 }
                                 .action-columns {
                                     width: 35px;
@@ -219,5 +226,23 @@
 
             }
         }
+    }
+}
+
+.color-orange {
+    svg {
+        fill: #CFD8DC !important;
+    }
+}
+
+.color-violet {
+    svg {
+        fill: #FF4081 !important;
+    }
+}
+
+.color-light-grey {
+    svg {
+        fill: #78909C !important;
     }
 }
