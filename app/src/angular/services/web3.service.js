@@ -60,6 +60,9 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
                 let self = data.contract ? data.contract : this;
 
+                if (data.baseFn) {
+                    baseFn = data.baseFn;
+                }
                 let promise = baseFn[data.method].apply(self, data.args);
 
                 $timeout(() => {
@@ -187,6 +190,22 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             Web3Service.waitForTicket(defer, 'getPastEvents', args, contract);
 
             return defer.promise;
+        }
+
+        getContractInfo(contractAddress) {
+
+            let deferDecimal = $q.defer();
+            let deferSymbol = $q.defer();
+
+            var tokenContract = new Web3Service.web3.eth.Contract(ABI,contractAddress);
+            let decimalFn = tokenContract.methods.decimals();
+            var symbolFn = tokenContract.methods.symbol();
+
+            // wei
+            Web3Service.waitForTicket(deferDecimal, 'call', [], null, decimalFn);
+            Web3Service.waitForTicket(deferSymbol, 'call', [], null, symbolFn);
+            
+            return $q.all([deferDecimal.promise,deferSymbol.promise]);
         }
 
         syncETHTransactionsHistory() {
@@ -366,8 +385,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
 
-        static waitForTicket(defer, method, args, contract) {
-            Web3Service.q.push({ method: method, args: args, contract: contract }, (promise) => {
+        static waitForTicket(defer, method, args, contract, baseFn) {
+            Web3Service.q.push({ method: method, args: args, contract: contract, baseFn: baseFn }, (promise) => {
                 $log.info("handle response", method);
                 promise.then((response) => {
                     $log.info("method response", method, response);

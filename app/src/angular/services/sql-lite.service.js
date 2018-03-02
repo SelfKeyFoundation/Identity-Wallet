@@ -254,6 +254,14 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('insertWalletToken', data);
         }
 
+        insertNewWalletToken(data, balance, walletId) {
+            return RPCService.makeCall('insertNewWalletToken', {data: data, balance: balance, walletId: walletId});
+        }
+
+        updateWalletToken(data) {
+            return RPCService.makeCall('updateWalletToken', data);
+        }
+
     }
 
     return new SqlLiteService();

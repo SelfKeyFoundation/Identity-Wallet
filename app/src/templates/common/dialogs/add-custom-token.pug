@@ -26,14 +26,14 @@ md-dialog(aira-lable="Add Custom Token")
                             div(ng-message="required") This field is required. Please enter Address.
                     .sk-input-container
                         label token symbol
-                        input.sk-input(type="text", ng-disabled="formData.tokenId", name="symbol", ng-model="formData.symbol", ng-maxlength="500", ng-required="true")
+                        input.sk-input(type="text", disabled , name="symbol", ng-model="formData.symbol", ng-maxlength="500", ng-required="true")
                         div(ng-messages="theForm.symbol.$dirty && theForm.symbol.$error")
                             div(ng-message="maxlength") The Token Symbol has to be less than 1000 characters long.
                             div(ng-message="required") This field is required. Please enter Token Symbol.
                     .sk-input-container
                         label decimal places
-                        input.sk-input(type="number", ng-disabled="formData.tokenId", name="decimalPlaces", ng-model="formData.decimalPlaces", ng-required="true")
+                        input.sk-input(type="number", disabled , name="decimalPlaces", ng-model="formData.decimalPlaces", ng-required="true")
                         div(ng-messages="theForm.decimalPlaces.$dirty && theForm.decimalPlaces.$error")
                             div(ng-message="required") This field is required. Please enter Token Symbol.
 
-                    md-button.sk-button.add-custom-token-btn(ng-disabled="!formDataIsValid(theForm)", ng-click="addCustomToken($event,theForm)") Add custom token
+                    md-button.sk-button.add-custom-token-btn(ng-disabled="!formDataIsValid(theForm) || inProgress", ng-click="addCustomToken($event,theForm)") Add custom token

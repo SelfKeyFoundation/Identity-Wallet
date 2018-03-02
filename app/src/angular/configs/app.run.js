@@ -122,6 +122,23 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
         });
     }
 
+    $rootScope.openNewERC20TokenInfoDialog = (event, title, symbol, balance) => {
+        $mdDialog.show({
+            controller: 'NewERC20TokenInfoController',
+            templateUrl: 'common/dialogs/new-erc20-token-info.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: false,
+            escapeToClose: false,
+            locals: {
+                symbol: symbol,
+                title: title,
+                balance: balance
+            }
+        });
+    }
+
     $rootScope.checkTermsAndConditions = () => {
         let guideSettings = SqlLiteService.getGuideSettings();
 

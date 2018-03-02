@@ -323,6 +323,10 @@ h2 {
   width: 68px !important;
   height: 74px !important; }
 
+.icon-size-19x23 {
+  width: 19.6px !important;
+  height: 23.1px !important; }
+
 body, html {
   margin: 0;
   padding: 0; }
@@ -17180,6 +17184,31 @@ md-dialog {
           line-height: 0.75;
           letter-spacing: 0.7px;
           color: #ffffff; }
+
+.info-container {
+  width: 320px !important;
+  height: 180px !important;
+  min-height: inherit !important;
+  min-width: inherit !important;
+  display: block !important; }
+  .info-container * {
+    font-family: ProximaNovaRegular;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #ffffff; }
+  .info-container .info-wrapper {
+    position: relative;
+    height: 100%; }
+    .info-container .info-wrapper .info-title {
+      padding-top: 15px;
+      text-align: center; }
+    .info-container .info-wrapper .info-body > div {
+      text-align: center; }
+    .info-container .info-wrapper .ok-button {
+      bottom: 15px;
+      position: absolute !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important; }
 
 .wallet-create-step-1 {
   height: 100%; }
