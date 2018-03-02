@@ -22,11 +22,11 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
                 prepareData();
             });
 
-            function prepareData () {
+            function prepareData() {
                 scope.idAttributes = {};
                 let idAttributes = $rootScope.wallet.getIdAttributes();
 
-                for(let i in idAttributes){
+                for (let i in idAttributes) {
                     scope.idAttributes[idAttributes[i].idAttributeType] = {}
                     scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData || idAttributes[i].items[0].values[0].documentFileName
                 }

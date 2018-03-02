@@ -179,7 +179,7 @@ class Wallet {
 
         SqlLiteService.loadIdAttributes(this.id).then((idAttributes) => {
             this.idAttributes = {};
-            
+
             for (let i in idAttributes) {
                 this.idAttributes[idAttributes[i].idAttributeType] = idAttributes[i];
             }

@@ -13,5 +13,5 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
         div(ng-messages="theForm.password.$error")
             div(ng-message="theForm.password.$error.required") {{ theForm.password.$error.badKeystore ? 'Incorrect keystore or password' : 'Required!' }}
     
-    md-button.blue(style="width: 100%;", ng-click="unlock($event, theForm)", ng-disabled="isUnlocking")
+    md-button.blue(style="width: 100%;", ng-click="unlock($event, theForm)", sk-button-loading="unlockPromise.$$state.status")
         span {{ isUnlocking ? 'Please wait...' : 'unlock' }}

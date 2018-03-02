@@ -31,7 +31,96 @@
             .left-side-wrapper {
                 width: 760px;
 
+                .history-table-container {
+
+                    overflow: auto;
+                    border: 1px solid #303c49;
+
+                    .table-head {
+                        width: 758px;
+                        padding: 10px 0;
+                        border-bottom: 1px solid #303c49;
+
+                        span {
+                            padding-left: 10px;
+                        }
+
+                        .table-head-text {
+                            color: #93a4af;
+                            font-family: ProximaNovaRegular;
+                        }
+
+                        md-icon {
+                            float: right;
+                            cursor: pointer;
+                            outline: none;
+
+                            svg {
+                                fill: #262f39;
+                            }
+                        }
+                    }
+                    .table-body {
+                        overflow: auto;
+                        height: 220px;
+
+                        .history-table {
+                            width: 100%;
+                            background-color: #262f39;
+                            color: #fff;
+                            font-family: ProximaNovaRegular;
+                            border-collapse: collapse;
+
+                            tbody {
+
+                                tr {
+
+                                    td {
+                                        padding: 10px 0;
+                                        word-break: break-word;
+
+                                        md-icon {
+                                            cursor: pointer;
+                                            outline: none;
+                                        }
+
+                                        .sk-icon {
+                                            margin-left: 5px;
+                                        }
+                                    }
+                                    .action-columns {
+                                        width: 35px;
+                                    }
+
+                                    td:first-child {
+                                        padding-left: 10px;
+                                        width: 22%;
+                                    }
+                                    td:nth-child(2) {
+                                        width: 13%;
+                                    }
+                                    td:nth-child(3) {
+                                        width: 70%;
+                                    }
+                                }
+
+                            }
+                            thead {
+
+                                tr {
+
+                                    td {
+                                        padding: 5px 0;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
                 .attributes-table-container {
+                    margin-top: 30px;
 
                     .table-head {
                         width: 100%;
@@ -70,6 +159,10 @@
                                     md-icon {
                                         cursor: pointer;
                                         outline: none;
+                                    }
+
+                                    .sk-icon {
+                                        margin-left: 5px;
                                     }
                                 }
                                 .action-columns {
@@ -163,6 +256,9 @@
 
                                         }
                                     }
+                                    .sk-icon {
+                                        margin-left: 5px;
+                                    }
                                 }
                                 .action-columns {
                                     width: 35px;
@@ -219,5 +315,23 @@
 
             }
         }
+    }
+}
+
+.color-orange {
+    svg {
+        fill: #CFD8DC !important;
+    }
+}
+
+.color-violet {
+    svg {
+        fill: #FF4081 !important;
+    }
+}
+
+.color-light-grey {
+    svg {
+        fill: #78909C !important;
     }
 }

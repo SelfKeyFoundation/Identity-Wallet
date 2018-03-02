@@ -26,5 +26,6 @@
             .actions-wrapper
                 md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
                     span.primary Back
-                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
+                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
                     span.primary Next
+

@@ -6,7 +6,7 @@
             .pic(style='background-image: url({{userData.tempImage}});')
         .name
             sk-icon(icon="success-box", size-class="icon-size-16x16")
-            span {{ idAttributes.first_name.value + ' ' +  idAttributes.last_name.value }}
+            span {{ idAttributes.first_name.value + ' ' + idAttributes.middle_name.value + ' '  +  idAttributes.last_name.value }}
 
     hr
 
@@ -16,29 +16,29 @@
                 td.fc-bluey-grey Residency:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.country_of_residency ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ idAttributes.country_of_residency.value }}
+                        sk-icon(icon="{{ idAttributes.country_of_residency.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ idAttributes.country_of_residency.value ? idAttributes.country_of_residency.value : 'Missing' }}
 
             tr
                 td.fc-bluey-grey Email:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.email ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ idAttributes.email.value }}
+                        sk-icon(icon="{{ idAttributes.email.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ idAttributes.email.value ? idAttributes.email.value : 'Missing' }}
 
             tr(ng-if="idAttributes.national_id")
                 td.fc-bluey-grey National ID:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.email ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{idAttributes.national_id ? 'Uploaded' : 'Missing'}}
+                        sk-icon(icon="{{ idAttributes.national_id.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
 
             tr(ng-if="idAttributes.national_id")
                 td.fc-bluey-grey ID Selfie:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.id_selfie ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{idAttributes.id_selfie ? 'Uploaded' : 'Missing'}}
+                        sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
 
     hr
 

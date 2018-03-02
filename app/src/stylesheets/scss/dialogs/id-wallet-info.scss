@@ -1,5 +1,5 @@
 md-dialog {
-    &.IDW-info {
+    &.id-wallet-info {
         min-width: 100%;
         min-height: 100%;
         background-image: linear-gradient(121deg, #1e262e, #1e262e);
@@ -9,7 +9,7 @@ md-dialog {
         justify-content: center;
         padding-top: 20%;
 
-        .IDW-info-wrapper {
+        .id-wallet-info-wrapper {
             width: 550px;
             height: 350px;
             border-radius: 4px;
