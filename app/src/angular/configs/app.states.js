@@ -39,60 +39,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 $state.go('guest.error.offline');
                 defer.reject();
             });
-
-            /**
-             *
-             */
-            //TokenService.init($rootScope.wallet.getPublicKeyHex());
-            //$rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
-
-            // 1) TODO - get prices
-
-            // set token prices (TODO)
-            //$rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
-            //$rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
-
-            // update balances
-            //let ethBalancePromise = $rootScope.wallet.loadBalance();
-            //let keyBalancePromise = $rootScope.primaryToken.loadBalance();
-
-            //let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
-
-            /**
-             *
-             */
-            /*
-            $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
-                if ($rootScope.PRICES["ETH"]) {
-                    $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
-                }
-
-                if ($rootScope.PRICES["KEY"]) {
-                    $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
-                }
-
-                $rootScope.balanceWatcherPromise = $interval(() => {
-                    if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
-                        SelfkeyService.getPrices(["ETH", "KEY"]).then((resp) => {
-                            if ($rootScope.PRICES["ETH"]) {
-                                $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
-                            }
-
-                            if ($rootScope.PRICES["KEY"]) {
-                                $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
-                            }
-                        });
-                        $rootScope.wallet.loadBalance();
-                        $rootScope.primaryToken.loadBalance();
-                    }
-                }, 10000); // TODO - take interval from config
-
-                defer.resolve();
-            }).catch(() => {
-                $state.go('guest.error.offline');
-                defer.reject();
-            });
-            */
         }
 
         return defer.promise;

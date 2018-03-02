@@ -14937,6 +14937,7 @@ md-content {
   border-radius: 4px;
   height: auto;
   margin: 0;
+  color: #ffffff !important;
   /**
      * Colors
      */
