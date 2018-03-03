@@ -177,19 +177,10 @@ md-dialog {
                         width: 210px;
                     }
                 }
-                .sk-send-ether-box__.select-token-container{
+                .sk-send-ether-box__select-token-container{
                     position: absolute;
                     right: 0;
                     width: 28%;
-                    md-input-container{
-                        span {
-                            color: white;
-                            font-family: ProximaNovaRegular;
-                            display: block !important;
-                            font-size: 14px;
-                            text-align: center;
-                        }
-                    }
                 }
             }
         }

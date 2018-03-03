@@ -50,9 +50,9 @@
                         .item-container(layout="row")
                             .date {{ activity.timestamp | date:'MMM'}}
                                 span {{activity.timestamp | date:'dd'}}
-                            sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
+                            sk-icon(icon="{{ activity.sentTo ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
                             .sent-receive {{ activity.sentOrReceiveText }}
                             span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
                             span.sent-receive-text.grey  {{activity.sentToName}}
-                            .coin-change.symbol(ng-class="activity.symbol") {{activity.to ? '- ' : '+ '}} {{activity.value}}
+                            .coin-change.symbol(ng-class="activity.symbol") {{activity.sentTo ? '- ' : '+ '}} {{activity.value}}
                         .sk-horizontal-devider(ng-if="transactionsHistoryList.length-1 != $index" style="margin-top: 20px;")

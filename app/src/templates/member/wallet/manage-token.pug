@@ -33,10 +33,10 @@
                 .item-container(layout="row")
                     .date {{ activity.timestamp | date:'MMM'}}
                         span {{activity.timestamp | date:'dd'}}
-                    sk-icon(icon="{{ activity.to ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
+                    sk-icon(icon="{{ activity.sentTo ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
                     .sent-receive {{ activity.sentOrReceiveText }}
                     span.sent-receive-text.aqua-blue  {{activity.sentToName}}
-                    .coin-change(ng-class="{'aqua-blue': !!activity.sentToName}") {{activity.to ? '- ' : '+ '}} {{activity.value}}
+                    .coin-change(ng-class="{'aqua-blue': !!activity.sentToName}") {{activity.sentTo ? '- ' : '+ '}} {{activity.value}}
 
                 //hr
                 //.item-container(layout="row")

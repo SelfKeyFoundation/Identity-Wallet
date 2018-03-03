@@ -368,7 +368,7 @@ module.exports = function (app) {
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('tokenId').references('tokens.id');
                         table.string('txId').unique().notNullable();
-                        table.string('isSentTo');
+                        table.string('sentTo');
                         table.decimal('value').notNullable();
                         table.integer('timestamp').notNullable();
                         table.integer('blockNumber').notNullable();
