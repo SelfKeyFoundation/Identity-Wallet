@@ -260,7 +260,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                 walletTransactions.forEach(transaction => {
                                     let value = new BigNumber(transaction.value || 0).div(valueDivider).toString();
                                     if (value && value != 0) {
-                                        let sentTo = (transaction.to || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
+                                        let sentTo = (transaction.from || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
 
                                         let newTransaction = {
                                             walletId: wallet.id,
