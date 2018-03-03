@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 
 
-function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, RPCService, SqlLiteService, CommonService) {
+function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $transitions, RPCService, SqlLiteService, CommonService) {
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
@@ -15,7 +15,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     $rootScope.wallet = null;
     $scope.type = $stateParams.type;
 
-    $scope.unlockPromise = null;
+    $scope.isAuthenticating = false;
 
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
@@ -39,15 +39,16 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             return CommonService.showToast('warning', 'password is required');;
         }
 
+        $scope.isAuthenticating = true;
         if ($scope.type === 'select') {
             if (wallets[$scope.userInput.selectedPublicKey]) {
-                $scope.unlockPromise = unlockExistingWallet();
-                $scope.unlockPromise.then(()=>{
+                let promise = unlockExistingWallet();
+                promise.then(()=>{
                     $state.go('member.dashboard.main');
-                    $scope.$applyAsync();
                 }).catch((error)=>{
+                    $scope.isAuthenticating = false;
                     CommonService.showToast('error', 'incorrect password');
-                })
+                });
             }
         } else if ($scope.type === 'import'){
             let promise = RPCService.makeCall('unlockKeystoreFile', {
@@ -59,10 +60,17 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 $rootScope.walletImportData = data;
                 $state.go('guest.create.step-1');
             }).catch((error)=>{
-                return CommonService.showToast('error', 'incorrect password');
+                $scope.isAuthenticating = false;
+                CommonService.showToast('error', 'incorrect password');
             });
         }
     }
+
+    $transitions.onStart({ }, function(trans) {
+        trans.promise.finally(()=>{
+            $scope.isAuthenticating = false;
+        });
+    });
 
     function unlockExistingWallet(){
         let defer = $q.defer();

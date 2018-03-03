@@ -2,12 +2,11 @@
 
 const Wallet = requireAppModule('angular/classes/wallet');
 
-function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, $timeout, RPCService, CommonService, basicInfo) {
+function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, $transitions, RPCService, CommonService, basicInfo) {
     'ngInject'
 
     $log.info('PasswordWarningDialogController');
 
-    $scope.importAndUnlockExistingWalletPromise = null;
     $scope.isLoading = false;
 
     $scope.cancel = (event) => {
@@ -17,15 +16,10 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
     $scope.accept = (event) => {
         if ($rootScope.walletImportData) {
             $scope.isLoading = true;
-            $scope.importAndUnlockExistingWalletPromise = importAndUnlockExistingWallet()
-            $scope.importAndUnlockExistingWalletPromise.then(() => {
+            let promise = importAndUnlockExistingWallet()
+            promise.then(() => {
                 $rootScope.walletImportData = null;
                 $state.go('member.setup.checklist');
-
-                // Temporary
-                $timeout(() => {
-                    $mdDialog.hide();
-                }, 6000);
             }).catch((error) => {
                 if (error.code && error.code == "SQLITE_CONSTRAINT") {
                     CommonService.showToast('error', 'That Wallet already imported');
@@ -39,6 +33,13 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
             $mdDialog.hide();
         }
     }
+
+    $transitions.onStart({ }, function(trans) {
+        trans.promise.finally(()=>{
+            $mdDialog.hide();
+            $scope.isLoading = false;
+        });
+    });
 
     function importAndUnlockExistingWallet() {
         let defer = $q.defer();

@@ -3,8 +3,10 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService) {
     'ngInject';
+
+    $trace.enable('TRANSITION');
 
     $rootScope.isDevMode = CONFIG.dev;
     $rootScope.productName = appName;
@@ -210,7 +212,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $mdD
             }
         });
     };
-    
+
     $rootScope.openAddCustomTokenDialog = (event) => {
         return $mdDialog.show({
             controller: 'AddEditCustomTokenDialogController',

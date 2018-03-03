@@ -1,6 +1,6 @@
 const Token = requireAppModule('angular/classes/token');
 
-function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service) {
+function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {
     'ngInject'
 
     $log.info('AddCustomTokenDialogController');
@@ -28,10 +28,10 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
 
     $scope.walletTokens = [];
     let wallet = $rootScope.wallet;
+
     wallet.loadTokens().then((tokens) => {
         tokens = tokens || {};
         $scope.walletTokens = Object.keys(tokens).map((tokenKey) => {
-
             let token = tokens[tokenKey];
             token.totalValue = wallet.tokens[token.symbol.toUpperCase()].getBalanceDecimal();
 
@@ -39,7 +39,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             token.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
 
             return token;
-        })
+        });
 
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
         $scope.walletTokens.push({
@@ -50,29 +50,28 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         });
 
         $scope.walletTokens.sort((a,b) =>{
-            return !(a.symbol == 'ETH' || a.symbol == 'KEY'); 
+            return !(a.symbol == 'ETH' || a.symbol == 'KEY');
         });
-
     });
 
-    
-
     const web3Utils = Web3Service.constructor.web3.utils;
+
     /**
-   *
-   */
+     *
+     */
     $scope.$watch('formData.contractAddress', (newVal, oldVal) => {
         let data = $scope.formData;
 
         let check = false;
+
         try {
             check = web3Utils.isHex(newVal) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
         } catch (error) {
-            console.log(error);
+            $log.error(error);
         }
+
         let isValidHex = newVal && check
         if (isValidHex) {
-
             let existingToken = getTokenByContractAddress(newVal);
 
             if (existingToken) {
@@ -80,6 +79,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
                 data.decimalPlaces = existingToken.decimal;
                 data.tokenId = existingToken.id;
             } else {
+                CommonService.showToast('success', 'Looking ERC20 Contract into blockchain');
                 data.tokenId = '';
                 Web3Service.getContractInfo(newVal).then((responseArr) => {
                     if (!responseArr || responseArr.length != 2) {
@@ -93,19 +93,18 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
                     data.decimalPlaces = Number(decimal);
                     data.tokenId = '';
 
-
+                    CommonService.showToast('success', 'Found Contract: ' + data.symbol);
                 }).catch((err) => {
                     resetFormData();
+                    CommonService.showToast('warning', 'ERC20 Contract not found');
                 });
             }
-
         } else {
             resetFormData();
         }
     }, true);
 
-    $scope.customTokens = [];//TODO 
-
+    $scope.customTokens = [];//TODO
 
     let sortCustomTokens = () => {
         $scope.customTokens.sort((a, b) => {
@@ -155,7 +154,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
 
     $scope.addCustomToken = (event, form) => {
         if (!$scope.formDataIsValid(form)) {
-            return;
+            return CommonService.showToast('warning', "Form isn't valid");
         }
 
         //todo check dublicate & disable add button while adding is in progress
@@ -175,11 +174,12 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
                 $scope.inProgress = false;
                 $scope.cancel();
                 $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, balance);
-                //TODO show success popup
+                CommonService.showToast('success', "Added");
             };
 
             let errFn = (err) => {
                 $scope.inProgress = false;
+                CommonService.showToast('error', err ? err.Error : 'Error');
             }
 
             if (newToken.tokenId) {
@@ -195,9 +195,9 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
                 delete newWalletToken.walletId;
                 SqlLiteService.insertNewWalletToken(newWalletToken, balance, wallet.id).then(successFn).catch(errFn);
             }
-
         }).catch(err => {
             $scope.inProgress = false;
+            return CommonService.showToast('error', err ? err.Error : 'Error');
         });
 
     }
