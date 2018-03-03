@@ -112,13 +112,11 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                         getActivity(contract, fromBlock, toBlock, { to: walletAddress }).then(logsTo => {
                             logsFrom = logsFrom || [];
                             logsTo = logsTo || [];
+
                             let transactions = logsFrom.map((logFrom) => {
-                                logFrom.type = 0;
-                                logFrom.isSentTo = logFrom.to;
+                                logFrom.sentTo = logFrom.returnValues.to;
                                 return logFrom;
                             }).concat(logsTo.map((logTo) => {
-
-                                logTo.type = 1;
                                 return logTo;
                             }));
 
@@ -146,6 +144,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                     let transactionFromBlok = blockData.transactions.find((blockTransaction => {
                                         return blockTransaction.hash == txId;
                                     }));
+
                                     let newTransaction = {
                                         walletId: wallet.id,
                                         tokenId: token.id,
@@ -153,7 +152,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                         blockNumber: blockNumber,
                                         value: Number(new BigNumber(transaction.returnValues.value).div(valueDivider).toString()),
                                         txId: txId,
-                                        isSentTo: transaction.isSentTo || null,
+                                        sentTo: transaction.sentTo || null,
                                         gas: transactionFromBlok.gas,
                                         gasPrice: transactionFromBlok.gasPrice
                                     };
@@ -261,7 +260,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                 walletTransactions.forEach(transaction => {
                                     let value = new BigNumber(transaction.value || 0).div(valueDivider).toString();
                                     if (value && value != 0) {
-                                        let isSentTo = (transaction.to || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
+                                        let sentTo = (transaction.to || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
 
                                         let newTransaction = {
                                             walletId: wallet.id,
@@ -269,7 +268,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                             blockNumber: currentBlockNumber,
                                             value: Number(value.toString()),
                                             txId: transaction.hash,
-                                            isSentTo: isSentTo,
+                                            sentTo: sentTo,
                                             gas: transaction.gas,
                                             gasPrice: transaction.gasPrice
                                         };

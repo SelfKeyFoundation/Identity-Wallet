@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService;
 
 let readyToShowNotification = false;
 
@@ -19,6 +19,8 @@ class Wallet {
     static set CommonService(value) { CommonService = value; }
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
+    static set WalletService(value) { WalletService = value; }
+    
 
     constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
@@ -254,18 +256,18 @@ class Wallet {
         };
 
         return data.map((transaction) => {
+            transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
+            
             //is sent
-            if (transaction.type == 0) {
-                transaction.sentToName = WalletService.getWalletName(activityKey, transaction.isSentTo);
+            if (transaction.sentTo) {
+                transaction.sentToName = WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);
             }
 
             if (transaction.tokenId) {
                 let token = getTokenById(transaction.tokenId);
             }
-
-            transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
             let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
-            transaction.sentOrReceiveText =  transaction.type == 0 ? sendText : 'Received';
+            transaction.sentOrReceiveText =  transaction.sentTo ? sendText : 'Received';
 
             return transaction;
         }).sort((a, b) => {
