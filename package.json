@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
-  "productName": "ID Wallet",
-  "version": "0.0.20",
+  "productName": "SelfKey Identity Wallet",
+  "version": "0.0.21",
   "description": "Selfkey Identity Wallet",
   "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
   "main": "./app/main.js",
@@ -81,7 +81,7 @@
     "vinyl-source-stream": "1.1.0"
   },
   "build": {
-    "name": "ID Wallet",
+    "name": "selfkey-identity-wallet",
     "appId": "org.selfkey.wallet"
   },
   "config": {
@@ -99,8 +99,8 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
-        "name": "id-wallet",
-        "productName": "ID Wallet",
+        "name": "selfkey-identity-wallet",
+        "productName": "SelfKey Identity Wallet",
         "overwrite": true,
         "asar": true,
         "icon": "assets/icons/selfkey",
@@ -110,14 +110,14 @@
         ]
       },
       "electronInstallerDMG": {
-        "name": "ID Wallet",
+        "name": "SelfKey Identity Wallet",
         "icon": "./assets/icons/mac/selfkey.icns",
         "background": "./assets/backgrounds/mac/installer.jpg",
         "overwrite": true
       },
       "electronWinstallerConfig": {
-        "name": "ID.Wallet",
-        "title": "ID Wallet",
+        "name": "selfkey-identity-wallet",
+        "title": "SelfKey Identity Wallet",
         "authors": "Selfkey Foundation"
       },
       "electronInstallerDebian": {},
@@ -128,7 +128,7 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "ID Wallet"
+        "name": "SelfKey Identity Wallet"
       }
     }
   }

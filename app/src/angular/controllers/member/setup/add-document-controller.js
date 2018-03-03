@@ -14,7 +14,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
             title1: "Upload Your National ID",
             title2: "Your National ID",
             title3: "(can be driver's license, passport)",
-            title4: "(Minimal size 1600x900px)",
+            title4: "(Max file size: 50mb)",
         },
         'id_selfie': {
             type: "id_selfie",
@@ -22,7 +22,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
             title1: "Upload Selfie With ID",
             title2: "Selfie With National ID",
             title3: "(can be driver's license, passport)",
-            title4: "(Minimal size 1600x900px)",
+            title4: "(Max file size: 50mb)",
         }
     }
 
@@ -54,7 +54,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
                 $scope.selected.values = "Saved!";
             });
         }).catch((error) => {
-            CommonService.showToast('error', 'Max File Size: 50mb Allowed');
+            CommonService.showToast('error', 'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
         });
     }
 

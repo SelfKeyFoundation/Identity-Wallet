@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
@@ -10,6 +11,11 @@ const config = buildConfig(electron);
 
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
+
+const userDataDirectoryPath = electron.app.getPath('userData');
+const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
+
 
 /**
  * auto updated
@@ -74,6 +80,8 @@ function onReady(app) {
 
 		const RPCHandler = require('./controllers/rpc-handler')(app);
 		electron.app.rpcHandler = new RPCHandler();
+
+        createKeystoreFolder();
 
 		electron.app.sqlLiteService.init().then(() => {
 			//start update cmc data
@@ -243,6 +251,12 @@ function setAutoUpdaterListeners(win) {
 		log.warn('update-downloaded: ' + releaseName);
 		win.webContents.send('UPDATE_READY', releaseName);
 	});
+}
+
+function createKeystoreFolder () {
+    if (!fs.existsSync(walletsDirectoryPath)) {
+        fs.mkdir(walletsDirectoryPath);
+    }
 }
 
 /**

@@ -1,12 +1,20 @@
 .wallet-create-step-6 {
     height: 100%;
-    
+
     .content-wrapper {
         width: 780px;
         margin-top: 50px;
 
         .content {
             padding: 60px 40px;
+
+            .md-icon-button{
+                md-icon {
+                    svg {
+                        fill: #ffffff;
+                    }
+                }
+            }
 
             >.title {
                 font-family: ProximaNovaRegular;
@@ -22,9 +30,6 @@
                 margin-top: 44px;
 
                 >.item {
-                    display: flex;
-                    flex-direction: row;
-
                     span {
                         font-family: ProximaNovaRegular;
                         font-size: 18px;
@@ -32,8 +37,9 @@
                         line-height: 1.89;
                         &:first-of-type {
                             font-weight: bold;
+                            margin-right: 8px;
                         }
-                    }   
+                    }
                 }
             }
 

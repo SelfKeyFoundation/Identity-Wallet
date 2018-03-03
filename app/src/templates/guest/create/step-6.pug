@@ -5,11 +5,13 @@
         .header
             span.none-select-text Save Your Private Key
         .content(layout="column")
-            
+
             md-input-container.sk-input-box.no-error-spacer
                 label Your Private Key
-                input(name="privateKey", ng-model="privateKey", type="text", placeholder="Your Private Key", disabled)
-            
+                input(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
+                md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
+                    md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
+
             md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
                 span.primary Print Paper Wallet
 
@@ -22,7 +24,7 @@
                     span Your funds will be stolen if you use this file on a malicious/phishing site.
                 .item
                     span Make a backup!
-                    span Secure it like the millions of dollars it may one day be worth. 
+                    span Secure it like the millions of dollars it may one day be worth.
 
             .actions-wrapper
                 md-button.outline-blue(ng-click="nextStep($event)")

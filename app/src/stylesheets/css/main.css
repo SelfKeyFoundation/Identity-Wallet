@@ -15795,22 +15795,26 @@ md-radio-group md-radio-button {
     width: 100%;
     padding-left: 30px;
     padding-right: 30px; }
-    .user-info-box .info tr td {
-      padding-top: 15px;
-      padding-bottom: 15px;
-      text-align: left; }
-      .user-info-box .info tr td div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        margin-left: 5px; }
-        .user-info-box .info tr td div span {
-          margin-left: 12px;
-          font-family: ProximaNovaSemibold;
-          font-size: 15px;
-          font-weight: 600;
-          color: #ffffff; }
+    .user-info-box .info table {
+      width: 100%; }
+      .user-info-box .info table tr td {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        text-align: left; }
+        .user-info-box .info table tr td:first-of-type {
+          width: 30%; }
+        .user-info-box .info table tr td div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          margin-left: 5px; }
+          .user-info-box .info table tr td div span {
+            margin-left: 12px;
+            font-family: ProximaNovaSemibold;
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff; }
 
 .sk-kyc-requirements-box > .title {
   width: unset;
@@ -17496,16 +17500,14 @@ md-dialog {
         display: flex;
         flex-direction: column;
         margin-top: 44px; }
-        .wallet-create-step-5 .content-wrapper .content .warning-description > .item {
-          display: flex;
-          flex-direction: row; }
-          .wallet-create-step-5 .content-wrapper .content .warning-description > .item span {
-            font-family: ProximaNovaRegular;
-            font-size: 18px;
-            color: #ffffff;
-            line-height: 1.89; }
-            .wallet-create-step-5 .content-wrapper .content .warning-description > .item span:first-of-type {
-              font-weight: bold; }
+        .wallet-create-step-5 .content-wrapper .content .warning-description > .item span {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff;
+          line-height: 1.89; }
+          .wallet-create-step-5 .content-wrapper .content .warning-description > .item span:first-of-type {
+            font-weight: bold;
+            margin-right: 8px; }
       .wallet-create-step-5 .content-wrapper .content .actions-wrapper {
         width: 100%;
         display: flex;
@@ -17523,6 +17525,8 @@ md-dialog {
     margin-top: 50px; }
     .wallet-create-step-6 .content-wrapper .content {
       padding: 60px 40px; }
+      .wallet-create-step-6 .content-wrapper .content .md-icon-button md-icon svg {
+        fill: #ffffff; }
       .wallet-create-step-6 .content-wrapper .content > .title {
         font-family: ProximaNovaRegular;
         font-size: 18px;
@@ -17533,16 +17537,14 @@ md-dialog {
         display: flex;
         flex-direction: column;
         margin-top: 44px; }
-        .wallet-create-step-6 .content-wrapper .content .warning-description > .item {
-          display: flex;
-          flex-direction: row; }
-          .wallet-create-step-6 .content-wrapper .content .warning-description > .item span {
-            font-family: ProximaNovaRegular;
-            font-size: 18px;
-            color: #ffffff;
-            line-height: 1.89; }
-            .wallet-create-step-6 .content-wrapper .content .warning-description > .item span:first-of-type {
-              font-weight: bold; }
+        .wallet-create-step-6 .content-wrapper .content .warning-description > .item span {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff;
+          line-height: 1.89; }
+          .wallet-create-step-6 .content-wrapper .content .warning-description > .item span:first-of-type {
+            font-weight: bold;
+            margin-right: 8px; }
       .wallet-create-step-6 .content-wrapper .content .actions-wrapper {
         width: 100%;
         display: flex;

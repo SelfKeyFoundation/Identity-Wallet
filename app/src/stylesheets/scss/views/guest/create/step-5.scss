@@ -19,9 +19,9 @@
         text-align: center;
         color: #0abbd0;
         margin-top: 15px;
-        user-select: none; 
+        user-select: none;
     }
-    
+
     .content-wrapper {
         width: 780px;
         margin-top: 50px;
@@ -43,9 +43,6 @@
                 margin-top: 44px;
 
                 >.item {
-                    display: flex;
-                    flex-direction: row;
-
                     span {
                         font-family: ProximaNovaRegular;
                         font-size: 18px;
@@ -53,8 +50,9 @@
                         line-height: 1.89;
                         &:first-of-type {
                             font-weight: bold;
+                            margin-right: 8px;
                         }
-                    }   
+                    }
                 }
             }
 
