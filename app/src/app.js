@@ -143,8 +143,8 @@ angular.module('kyc-wallet').directive('skCustomTokenBox', SkCustomTokenBoxDirec
 const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
 angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
-//const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
-//angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
+const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
+angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
 
 const SkRemindersBoxDirective = requireAppModule('angular/directives/commons/sk-reminders-box.directive');
 angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
