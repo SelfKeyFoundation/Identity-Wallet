@@ -7,95 +7,23 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     'ngInject'
 
     $log.info("SendTokenDialogController", args, CONFIG);
+    const web3Utils = Web3Service.constructor.web3.utils;
     const TX_CHECK_INTERVAL = 1000;
     const ESTIMATED_GAS_CHECK_INTERVAL = 300;
 
     let txInfoCheckInterval = null;
-
+    let checkEstimatedGasInterval = null;
     let estimatedGasNeedsCheck = false;
 
-    const web3Utils = Web3Service.constructor.web3.utils;
-
-    let token = null;
-    $scope.invalidData = false;
-    $scope.symbol = args.symbol;
-    $scope.allowSelectERC20Token = args.allowSelectERC20Token;
-
     /**
-     * form data
+     * Prepare
      */
-    $scope.formData = {
-        sendAmount: args.sendAmount || null,
-        sendToAddressHex: args.sendToAddressHex || '',
-        gasPriceInGwei: args.gasPriceInGwei || 5
-    }
-
-    /**
-     * informational data
-     */
-    $scope.infoData = {
-        isReady: false,
-        usdPerUnit: 0,
-
-        sendAmountInUSD: 0.00,
-
-        totalBalance: 0,
-        totalBalanceInUsd: 0,
-
-        reminingBalance: 0,
-        reminingBalanceInUsd: 0,
-
-        gasLimit: args.gasLimit || 21000,
-
-        txFeeInEth: 0,
-        txFeeInUsd: 0
-    }
+    prepare(args.symbol);
 
     /**
      *
      */
-    $scope.backgroundProcessStatuses = {
-        checkingTransaction: false,
-        checkingEstimatedGasLimit: false
-    }
-
-    /**
-     * input states
-     */
-    $scope.inputStates = {
-        isAddressLocked: args.isAddressLocked,
-        isAmountLocked: args.isAmountLocked,
-        isGasPriceLocked: args.isGasPriceLocked
-    }
-
-    /**
-     *
-     */
-    $scope.viewStates = {
-        step: 'prepare-transaction',
-        showConfirmButtons: false
-    }
-
-    /**
-     *
-     */
-    $scope.errors = {
-        sendToAddressHex: false,
-        sendAmount: false,
-        sendFailed: false
-    }
-
-    /**
-     *
-     */
-    if ($scope.symbol.toLowerCase() === 'eth') {
-        $scope.infoData.usdPerUnit = $rootScope.wallet.usdPerUnit;
-        $scope.infoData.totalBalance = $rootScope.wallet.balanceEth;
-    } else {
-        let token = $rootScope.wallet.tokens[$scope.symbol];
-        $scope.infoData.usdPerUnit = token.usdPerUnit;
-        $scope.infoData.totalBalance = token.getBalanceDecimal();
-    }
+    startEstimatedGasCheck();
 
     /**
      *
@@ -129,7 +57,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         } else {
             return $scope.backgroundProcessStatuses.txStatus ? 'Sent!' : 'Failed!';
         }
-
     }
 
     $scope.cancel = (event) => {
@@ -147,6 +74,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         if (!$scope.txHex) return;
         // TODO read endpoint from config
         $window.open("https://etherscan.io/tx/" + $scope.txHex);
+    }
+
+    $scope.onTokenChange = (newTokenKey) => {
+        prepare(newTokenKey);
     }
 
     /**
@@ -170,13 +101,42 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }, TX_CHECK_INTERVAL);
     }
 
-    /**
-     *
-     */
     function cancelTxCheck() {
         if (txInfoCheckInterval) {
             $interval.cancel(txInfoCheckInterval);
         }
+    }
+
+    function startEstimatedGasCheck() {
+        cancelEstimatedGasCheck();
+
+        checkEstimatedGasInterval = $interval(() => {
+            if (!estimatedGasNeedsCheck) return;
+
+            $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = true;
+
+            if ($scope.formData.sendAmount && $scope.formData.sendToAddressHex && web3Utils.isHex($scope.formData.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress($scope.formData.sendToAddressHex))) {
+
+                let wei = web3Utils.toWei($scope.formData.sendAmount.toString());
+
+                let promise = Web3Service.getEstimateGas(
+                    $rootScope.wallet.getPublicKeyHex(),
+                    $scope.formData.sendToAddressHex,
+                    web3Utils.numberToHex(wei)
+                );
+
+                promise.then((gasLimit) => {
+                    $scope.infoData.gasLimit = gasLimit;
+                    $scope.infoData.isReady = true;
+                }).catch((error) => {
+                    $log.error("getEstimateGas", error);
+                }).finally(() => {
+                    $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = false;
+                });
+
+                estimatedGasNeedsCheck = false;
+            }
+        }, ESTIMATED_GAS_CHECK_INTERVAL);
     }
 
     function cancelEstimatedGasCheck() {
@@ -292,36 +252,99 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         return (Number(balance) * Number($scope.infoData.usdPerUnit));
     }
 
-    /**
-     *
-     */
-    let checkEstimatedGasInterval = $interval(() => {
-        if (!estimatedGasNeedsCheck) return;
+    function calculateSendAmountInUSD () {
+        // send amount in USD
+        $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
+    }
 
-        $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = true;
+    function calculateReminingBalance () {
+        // remining balance
+        $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
 
-        if ($scope.formData.sendAmount && $scope.formData.sendToAddressHex && web3Utils.isHex($scope.formData.sendToAddressHex) && web3Utils.isAddress(web3Utils.toChecksumAddress($scope.formData.sendToAddressHex))) {
+        // remining balance in USD
+        $scope.infoData.reminingBalanceInUsd = Number($scope.infoData.reminingBalance) * Number($scope.infoData.usdPerUnit);
+    }
 
-            let wei = web3Utils.toWei($scope.formData.sendAmount.toString());
+    function prepare(symbol) {
 
-            let promise = Web3Service.getEstimateGas(
-                $rootScope.wallet.getPublicKeyHex(),
-                $scope.formData.sendToAddressHex,
-                web3Utils.numberToHex(wei)
-            );
+        $scope.invalidData = false;
+        $scope.symbol = symbol;
+        $scope.allowSelectERC20Token = args.allowSelectERC20Token;
 
-            promise.then((gasLimit) => {
-                $scope.infoData.gasLimit = gasLimit;
-                $scope.infoData.isReady = true;
-            }).catch((error) => {
-                $log.error("getEstimateGas", error);
-            }).finally(() => {
-                $scope.backgroundProcessStatuses.checkingEstimatedGasLimit = false;
-            });
-
-            estimatedGasNeedsCheck = false;
+        /**
+         * form data
+         */
+        $scope.formData = {
+            sendAmount: args.sendAmount || null,
+            sendToAddressHex: args.sendToAddressHex || '',
+            gasPriceInGwei: args.gasPriceInGwei || 5
         }
-    }, ESTIMATED_GAS_CHECK_INTERVAL);
+
+        /**
+         * informational data
+         */
+        $scope.infoData = {
+            isReady: false,
+            usdPerUnit: 0,
+
+            sendAmountInUSD: 0.00,
+
+            totalBalance: 0,
+            totalBalanceInUsd: 0,
+
+            reminingBalance: 0,
+            reminingBalanceInUsd: 0,
+
+            gasLimit: args.gasLimit || 21000,
+
+            txFeeInEth: 0,
+            txFeeInUsd: 0
+        }
+
+        /**
+         *
+         */
+        $scope.backgroundProcessStatuses = {
+            checkingTransaction: false,
+            checkingEstimatedGasLimit: false
+        }
+
+        /**
+         * input states
+         */
+        $scope.inputStates = {
+            isAddressLocked: args.isAddressLocked,
+            isAmountLocked: args.isAmountLocked,
+            isGasPriceLocked: args.isGasPriceLocked
+        }
+
+        /**
+         *
+         */
+        $scope.viewStates = {
+            step: 'prepare-transaction',
+            showConfirmButtons: false
+        }
+
+        /**
+         *
+         */
+        $scope.errors = {
+            sendToAddressHex: false,
+            sendAmount: false,
+            sendFailed: false
+        }
+
+        if ($scope.symbol.toLowerCase() === 'eth') {
+            $scope.infoData.usdPerUnit = $rootScope.wallet.usdPerUnit;
+            $scope.infoData.totalBalance = $rootScope.wallet.balanceEth;
+        } else {
+            let token = $rootScope.wallet.tokens[$scope.symbol];
+            $scope.infoData.usdPerUnit = token.usdPerUnit;
+            $scope.infoData.totalBalance = token.getBalanceDecimal();
+            calculateReminingBalance ();
+        }
+    }
 
     /**
      *
@@ -355,14 +378,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount)) {
-            // remining balance
-            $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
+            calculateReminingBalance ();
 
-            // remining balance in USD
-            $scope.infoData.reminingBalanceInUsd = Number($scope.infoData.reminingBalance) * Number($scope.infoData.usdPerUnit);
+            calculateSendAmountInUSD ();
 
-            // send amount in USD
-            $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
 
             // tx fee in eth
             let wei = Number($scope.formData.gasPriceInGwei) * Number($scope.infoData.gasLimit);
