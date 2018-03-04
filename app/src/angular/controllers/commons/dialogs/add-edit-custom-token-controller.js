@@ -57,6 +57,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             if (symbolA == 'eth') {
                 return -1;
             }
+
             if (symbolB == 'eth') {
                 return 1;
             }
@@ -64,11 +65,12 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             if (symbolA == 'key') {
                 return -1;
             }
+
             if (symbolB == 'key') {
                 return 1;
             }
 
-            return parseFloat(b.value || 0) - parseFloat(a.value || 0);
+            return parseFloat(b.totalValue || 0) - parseFloat(a.totalValue || 0);
         });
 
     });
