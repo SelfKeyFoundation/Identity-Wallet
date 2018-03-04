@@ -10,8 +10,7 @@ function SkCirclePieChartDirective($timeout) {
         },
         link: (scope, element) => {
             const TOP_MAX_SIZE = 5;
-
-            const colorForOther = 'red';
+            const colorForOthers = 'red';
 
             scope.isCollapsed = true;
             scope.isCollapsable = false;
@@ -47,7 +46,6 @@ function SkCirclePieChartDirective($timeout) {
                     if (symbolB == 'eth') {
                         return 1;
                     }
-
                     if (symbolA == 'key') {
                         return -1;
                     }
@@ -59,7 +57,6 @@ function SkCirclePieChartDirective($timeout) {
                 });
 
                 scope.topItems = items.slice(0, TOP_MAX_SIZE);
-
                 let otherItems = items.slice(TOP_MAX_SIZE, items.length);
 
                 if (items.length > TOP_MAX_SIZE) {
@@ -69,7 +66,7 @@ function SkCirclePieChartDirective($timeout) {
                         value: 0,
                         isOtherItem: true,
                         valueUSD: 0,
-                        color: colorForOther
+                        color: colorForOthers
                     };
 
                     otherItems.forEach(otherItem => {
@@ -78,19 +75,22 @@ function SkCirclePieChartDirective($timeout) {
                     });
 
                     scope.topItems.push(otherAggregated);
+                   
+                }
+              
+                if (items.length <= TOP_MAX_SIZE) {
+                    scope.isCollapsable = false;
+                } else {
+                    scope.isCollapsable = true;
+                }
 
+                if (!scope.isCollapsed) {
+                    scope.isCollapsable = true;
+                    scope.displayedItems = items;
+                } else {
                     scope.displayedItems = scope.topItems;
                 }
 
-                if (items.length > TOP_MAX_SIZE && scope.isCollapsed) {
-                    scope.isCollapsable = true;
-                } else {
-                    scope.displayedItems = items;
-                }
-
-                if (items.length <= TOP_MAX_SIZE) {
-                    scope.isCollapsable = false;
-                }
                 if (otherItems.length > 0) {
                     otherItems.forEach((otherItem) => {
                         otherItem.isOtherItem = true;
@@ -114,7 +114,7 @@ function SkCirclePieChartDirective($timeout) {
                         if (TOP_COLORS.length) {
                             item.color = TOP_COLORS.shift();
                         } else {
-                            item.color = colorForOther;
+                            item.color = colorForOthers;
                         }
                     }
                 })

@@ -37,11 +37,11 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     }
 
     $rootScope.CUSTOM_TOKENS_LIMIT = 20;
-    let processCustomTokens = ()=> {
+    let processCustomTokens = () => {
         let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
-        $rootScope.tokenLimitIsExceed =  tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
+        $rootScope.tokenLimitIsExceed = tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
     };
-   
+
     processCustomTokens();
 
     $scope.pieChart = null;
@@ -52,9 +52,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         Object.keys(wallet.tokens).forEach((tokeyKey) => {
             let pieChartItem = {};
             let token = wallet.tokens[tokeyKey];
-    
+
             let balanceDecimal = token.getBalanceDecimal() || 0;
-    
+
             let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             if (tokenPrice) {
                 pieChartItem.title = tokenPrice.name;
@@ -63,13 +63,13 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
                 pieChartItem.title = 'Unknown';
                 pieChartItem.valueUSD = 0;
             }
-    
+
             pieChartItem.subTitle = token.symbol;
             pieChartItem.value = balanceDecimal;
-    
+
             pieChartItems.push(pieChartItem);
         });
-    
+
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
         pieChartItems.unshift({
             subTitle: 'ETH',
@@ -77,9 +77,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             valueUSD: wallet.getBalanceInUsd(),
             value: wallet.balanceEth,
         });
-        
+
         return pieChartItems;
-       
+
     };
 
     $scope.pieChart = {
@@ -108,14 +108,14 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             tokensTotalBalanceInUSD += token.getBalanceInUsd();
         });
 
-        $scope.totalBalanceInUsd = tokensTotalBalanceInUSD + wallet.getBalanceInUsd(); 
+        $scope.totalBalanceInUsd = tokensTotalBalanceInUSD + wallet.getBalanceInUsd();
         return $scope.totalBalanceInUsd;
     }
 
 
     function updatePieChart() {
         processCustomTokens();
-        $scope.pieChart.items =  $scope.getPieChartItems();
+        $scope.pieChart.items = $scope.getPieChartItems();
         $scope.pieChart.total = getTotalBalanceInUsd();
         $scope.pieChart.draw();
     }
@@ -124,9 +124,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
      * update pie chart on balance change
      */
     $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-        //if (pieChartIsReady) {
-        //    updatePieChart();
-        //}
+        if (pieChartIsReady) {
+            updatePieChart();
+        }
     });
 
     /**
@@ -137,7 +137,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             updatePieChart();
         }
     });
-    
+
 
     $log.info("pie chart data:", $scope.pieChart);
 };
