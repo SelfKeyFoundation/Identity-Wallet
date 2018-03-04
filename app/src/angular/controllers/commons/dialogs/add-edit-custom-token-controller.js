@@ -34,11 +34,11 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         $scope.walletTokens = Object.keys(tokens).map((tokenKey) => {
             let token = tokens[tokenKey];
             let walletToken = wallet.tokens[token.symbol.toUpperCase()];
-            token.totalValue = walletToken.getBalanceDecimal();
+            token.totalValue = walletToken.calculateBalanceInUSD();
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             token.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
-            token.balance = walletToken.getBalanceDecimal();
+            token.balance = walletToken.getFormattedBalance();
             return token;
         });
 
@@ -46,8 +46,8 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         $scope.walletTokens.push({
             symbol: 'ETH',
             lastPrice: ethPrice ? ethPrice.priceUSD : 0,
-            balance: wallet.getBalanceInUsd(),
-            totalValue: wallet.getFormattedBalance(),
+            balance: wallet.getFormattedBalance(),
+            totalValue: wallet.calculateBalanceInUSD(),
             contractAddress: '0x' + wallet.publicKeyHex
         });
 
@@ -82,7 +82,6 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
      */
     $scope.$watch('formData.contractAddress', (newVal, oldVal) => {
         let data = $scope.formData;
-
         let check = false;
 
         try {
@@ -91,7 +90,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             $log.error(error);
         }
 
-        let isValidHex = newVal && check
+        let isValidHex = newVal && check;
         if (isValidHex) {
             let existingToken = getTokenByContractAddress(newVal);
 
