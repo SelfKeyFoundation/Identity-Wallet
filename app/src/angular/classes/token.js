@@ -139,6 +139,10 @@ class Token {
         this.calculateBalanceInUSD();
     }
 
+    getBalanceInUsd() {
+        return this.balanceInUsd;
+    }
+
     calculateBalanceInUSD() {
         this.balanceInUsd = (Number(this.getBalanceDecimal()) * Number(this.usdPerUnit));
         this.wallet.calculateTotalBalanceInUSD();

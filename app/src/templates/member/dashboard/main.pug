@@ -21,11 +21,9 @@
                     sk-icon(icon="plus", size-class="icon-size-26x26")
                     md-tooltip(ng-if="$root.tokenLimitIsExceed",md-direction="left")
                         | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token.
-                button.sk-icon-button(ng-click="$root.goToSelfkeyIco($event)", ng-if="$root.totalBalanceInUsd > 0")
-                    span Get KEY
                     sk-icon(icon="plus", size-class="icon-size-26x26")
             .sk-horizontal-devider
-            sk-circle-pie-chart(data="pieChart", ng-show="$root.totalBalanceInUsd > 0")
+            sk-circle-pie-chart(data="pieChart", ng-if="totalBalanceInUsd > 0")
 
     // alerts
     //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
