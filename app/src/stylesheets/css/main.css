@@ -15373,86 +15373,20 @@ md-radio-group md-radio-button {
     width: 12px !important;
     height: 12px !important; }
 
-.sk-circle-pie-chart * {
-  font-family: ProximaNovaRegular; }
-
-.sk-circle-pie-chart .active {
-  border-radius: 4px;
-  box-shadow: 0px 0px 5px 1px #0dc7dd;
-  outline-width: 0;
-  border: none; }
-
-.sk-circle-pie-chart #chart {
-  width: 280px;
-  height: 280px; }
-
-.sk-circle-pie-chart .chart-parent {
-  margin-right: 74px;
-  position: relative; }
-
-.sk-circle-pie-chart .chart-center-container {
-  position: absolute;
-  text-align: center;
-  cursor: default;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); }
-  .sk-circle-pie-chart .chart-center-container .tolalPrice {
-    font-size: 30px;
-    font-weight: 300;
-    text-align: center;
-    color: #ffffff; }
-  .sk-circle-pie-chart .chart-center-container .totalPriceTitle {
-    font-size: 14px;
-    margin-top: 5px;
-    text-align: center;
-    color: #93b0c1; }
-
-.sk-circle-pie-chart .details-container .value {
-  margin-left: 53px;
-  font-size: 18px;
-  text-align: left;
-  color: #ffffff; }
-
-.sk-circle-pie-chart .details-container table:not(:first-child) {
-  margin-left: 76px; }
-
-.sk-circle-pie-chart .details-container table {
-  padding-left: 2px;
-  padding-right: 2px;
-  border-spacing: 0 30px; }
-  .sk-circle-pie-chart .details-container table tr {
-    padding: 4px; }
-
-.sk-circle-pie-chart .item * {
-  cursor: default; }
-
-.sk-circle-pie-chart .item td {
-  padding: 7px;
-  vertical-align: top; }
-
-.sk-circle-pie-chart .item .sk-icon {
-  margin-right: 12px; }
-
-.sk-circle-pie-chart .item .title .titleFull {
-  font-size: 18px;
-  text-align: left;
-  color: #ffffff; }
-
-.sk-circle-pie-chart .item .title .titleSmall {
-  opacity: 0.7;
-  margin-top: 4px;
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 1px;
-  text-align: left;
-  color: #ffffff; }
-
-.sk-circle-pie-chart .item .animated {
-  -webkit-animation-duration: 10s;
-  animation-duration: 10s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both; }
+.sk-circle-pie-chart {
+  opacity: 0; }
+  .sk-circle-pie-chart .google-visualization-tooltip {
+    text-align: center !important;
+    pointer-events: none !important;
+    background-color: #ffffff !important;
+    border: none !important;
+    box-shadow: unset !important;
+    color: #262f39 !important; }
+  .sk-circle-pie-chart .animated {
+    -webkit-animation-duration: 10s;
+    animation-duration: 10s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both; }
 
 @-webkit-keyframes fadeIn {
   from {
@@ -15465,33 +15399,132 @@ md-radio-group md-radio-button {
     opacity: 0; }
   to {
     opacity: 1; } }
-
-.sk-circle-pie-chart .item .fadeIn {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn; }
-
-@media screen and (max-width: 1000px) {
-  .sk-circle-pie-chart details-container {
-    margin-top: 18px; }
-  .sk-circle-pie-chart .chart-parent {
-    margin-right: 27px; }
-  .sk-circle-pie-chart .details-container .value {
-    font-size: 16px;
-    margin-left: 20px; }
-  .sk-circle-pie-chart .details-container table:not(:first-child) {
-    margin-left: 22px; }
-  .sk-circle-pie-chart .details-container table {
-    border-spacing: 0 18px; }
-  .sk-circle-pie-chart .item td {
-    padding: 6px; }
-  .sk-circle-pie-chart .item .sk-icon {
-    margin-right: 10px; }
-  .sk-circle-pie-chart .item .title .titleFull {
-    font-size: 16px; }
-  .sk-circle-pie-chart .item .title .titleSmall {
-    margin-top: 3px;
+  .sk-circle-pie-chart .fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn; }
+  .sk-circle-pie-chart .pos-relative {
+    position: relative; }
+  .sk-circle-pie-chart .view-all-tokens {
+    outline: none;
     font-size: 12px;
-    letter-spacing: 1px; } }
+    color: #93b0c1; }
+    .sk-circle-pie-chart .view-all-tokens * {
+      cursor: pointer;
+      text-transform: uppercase; }
+    .sk-circle-pie-chart .view-all-tokens i {
+      display: inline-block;
+      font-style: normal;
+      position: relative; }
+    .sk-circle-pie-chart .view-all-tokens i.arrow {
+      width: 15.4px;
+      height: 15.4px;
+      opacity: 0.4;
+      margin-right: 10px;
+      transform: rotate(-45deg);
+      border-left: 2px solid #93b0c1;
+      border-bottom: 2px solid #93b0c1; }
+    .sk-circle-pie-chart .view-all-tokens > span {
+      position: relative;
+      padding-bottom: 5px; }
+      .sk-circle-pie-chart .view-all-tokens > span:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        border-bottom: 1px dashed #93b0c1; }
+  .sk-circle-pie-chart .collapse-view {
+    width: 100%;
+    text-align: center !important;
+    border-radius: 4px;
+    border: solid 1px #3b4a5a;
+    font-size: 12px;
+    text-align: left;
+    color: #93b0c1; }
+  .sk-circle-pie-chart * {
+    font-family: ProximaNovaRegular; }
+  .sk-circle-pie-chart .active {
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px 1px #0dc7dd;
+    outline-width: 0;
+    border: none; }
+  .sk-circle-pie-chart #chart {
+    width: 280px;
+    height: 280px; }
+    .sk-circle-pie-chart #chart.full {
+      margin: 0 auto;
+      width: 436px !important;
+      height: 436px !important; }
+  .sk-circle-pie-chart .chart-parent {
+    margin-top: 28px;
+    margin-right: 74px;
+    position: relative; }
+    .sk-circle-pie-chart .chart-parent.full {
+      margin-right: 0px !important;
+      margin-top: 0px; }
+  .sk-circle-pie-chart .chart-center-container {
+    position: absolute;
+    text-align: center;
+    cursor: default;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
+    .sk-circle-pie-chart .chart-center-container .tolalPrice {
+      font-size: 30px;
+      font-weight: 300;
+      text-align: center;
+      color: #ffffff; }
+    .sk-circle-pie-chart .chart-center-container .totalPriceTitle {
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: center;
+      color: #93b0c1; }
+  .sk-circle-pie-chart .details-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: row;
+    max-height: 100vh;
+    margin-top: 58px; }
+    .sk-circle-pie-chart .details-container .value-container {
+      width: 100%;
+      margin-right: 82px; }
+      .sk-circle-pie-chart .details-container .value-container .value {
+        float: right;
+        font-size: 18px;
+        text-align: left;
+        color: #ffffff; }
+  .sk-circle-pie-chart .item {
+    padding: 5px;
+    margin-right: 10px;
+    width: 47%;
+    margin-bottom: 46px; }
+    .sk-circle-pie-chart .item.full {
+      width: 30% !important; }
+    .sk-circle-pie-chart .item * {
+      cursor: default; }
+    .sk-circle-pie-chart .item .sk-icon {
+      margin-right: 12px; }
+    .sk-circle-pie-chart .item .colored-box-container {
+      margin-right: 12px !important; }
+      .sk-circle-pie-chart .item .colored-box-container .colored-box {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 8px !important;
+        background-color: green; }
+    .sk-circle-pie-chart .item .title .titleFull {
+      font-size: 18px;
+      text-align: left;
+      color: #ffffff; }
+    .sk-circle-pie-chart .item .title .titleSmall {
+      opacity: 0.7;
+      margin-top: 4px;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-align: left;
+      color: #ffffff; }
 
 .sk-reminders-box {
   border-radius: 4px;

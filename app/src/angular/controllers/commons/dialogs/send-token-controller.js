@@ -3,7 +3,7 @@
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service, CommonService) {
     'ngInject'
 
     $log.info("SendTokenDialogController", args, CONFIG);
@@ -50,6 +50,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.getTransactionStatus = () => {
+        if($scope.errors.sendFailed) return $scope.errors.sendFailed;
+
         if (!$scope.backgroundProcessStatuses.txStatus && !$scope.txHex) {
             return 'Pending';
         } else if (!$scope.backgroundProcessStatuses.txStatus && $scope.txHex) {
@@ -169,11 +171,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
                     startTxCheck();
                 }).catch((error) => {
+                    CommonService.showToast('error', error.toString(), 20000);
                     $scope.errors.sendFailed = error.toString();
                     // reset view state
                     setViewState();
                 });
             }).catch((error) => {
+                CommonService.showToast('error', error.toString(), 20000);
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
                 setViewState();
@@ -188,7 +192,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 return;
             }
 
-            let txGenPromise = $rootScope.wallet.tokens[args.symbol].generateRawTransaction(
+            let txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
                 sendToAddress,
                 sendAmount,
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
@@ -203,6 +207,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     $scope.txHex = resp.transactionHash;
                     startTxCheck();
                 }).catch((error) => {
+                    CommonService.showToast('error', error.toString(), 20000);
                     $scope.errors.sendFailed = error.toString();
                     // reset view state
                     setViewState();
@@ -210,6 +215,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
                 $scope.viewStates.step = 'transaction-status';
             }).catch((error) => {
+                CommonService.showToast('error', error.toString(), 20000);
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
                 setViewState();

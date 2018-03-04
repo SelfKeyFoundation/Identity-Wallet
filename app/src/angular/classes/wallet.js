@@ -20,7 +20,7 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set WalletService(value) { WalletService = value; }
-    
+
 
     constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
@@ -43,6 +43,8 @@ class Wallet {
         this.tokens = {};
         this.idAttributes = {}
 
+        this.updatePriceInUSD();
+
         this.startPriceUpdater();
         this.startBalanceUpdater();
 
@@ -56,7 +58,7 @@ class Wallet {
     getPrivateKeyHex() {
         return this.privateKeyHex;
     }
-    
+
     getBalanceInUsd() {
         return this.balanceInUsd;
     }
@@ -132,15 +134,19 @@ class Wallet {
         return CommonService.numbersAfterComma(this.totalBalanceInUSD, 2);
     }
 
+    updatePriceInUSD(){
+        let price = SqlLiteService.getTokenPriceBySymbol("ETH");
+        if (price) {
+            this.setPriceInUsd(price.priceUSD);
+        }
+    }
+
     /**
      * jobs
      */
     startPriceUpdater() {
         priceUpdaterInterval = $interval(() => {
-            let price = SqlLiteService.getTokenPriceBySymbol("ETH");
-            if (price) {
-                this.setPriceInUsd(price.priceUSD);
-            }
+            this.updatePriceInUSD();
         }, 5000)
     }
 
@@ -261,7 +267,7 @@ class Wallet {
 
         return data.map((transaction) => {
             transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
-            
+
             //is sent
             if (transaction.sentTo) {
                 transaction.sentToName = WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);

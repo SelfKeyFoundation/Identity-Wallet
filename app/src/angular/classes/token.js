@@ -45,6 +45,8 @@ class Token {
 
         this.wallet = wallet;
 
+        this.updatePriceInUSD();
+
         this.startPriceUpdater();
         this.startBalanceUpdater();
 
@@ -74,7 +76,7 @@ class Token {
         return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
     }
 
-    getFormattedBalanceInUSD () {
+    getFormattedBalanceInUSD() {
         return CommonService.numbersAfterComma(this.balanceInUsd, 2);
     }
 
@@ -83,7 +85,7 @@ class Token {
     }
 
     static generateBalanceData(contractAddress, walletPublicKeyHex) {
-        contractAddress = contractAddress || this.contractAddress; 
+        contractAddress = contractAddress || this.contractAddress;
         walletPublicKeyHex = walletPublicKeyHex || this.wallet.getPublicKeyHex();
         return EthUtils.getDataObj(
             contractAddress,
@@ -149,15 +151,19 @@ class Token {
         return this.balanceInUsd;
     }
 
+    updatePriceInUSD() {
+        let price = SqlLiteService.getTokenPriceBySymbol(this.symbol);
+        if (price) {
+            this.setPriceInUsd(price.priceUSD);
+        }
+    }
+
     /**
      * jobs
      */
     startPriceUpdater() {
         priceUpdaterInterval = $interval(() => {
-            let price = SqlLiteService.getTokenPriceBySymbol(this.symbol);
-            if (price) {
-                this.setPriceInUsd(price.priceUSD);
-            }
+            this.updatePriceInUSD();
         }, 5000)
     }
 
@@ -201,7 +207,7 @@ class Token {
                     data: EthUtils.sanitizeHex(genResult.data),
                     chainId: chainID
                 }
-console.log(">>>>>>", this.wallet.privateKey);
+
                 let eTx = new Tx(rawTx);
                 eTx.sign(this.wallet.privateKey);
 

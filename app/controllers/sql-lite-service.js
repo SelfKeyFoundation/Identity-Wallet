@@ -573,9 +573,9 @@ module.exports = function (app) {
 
 
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
-        console.log('here',data);
+        console.log('here', data);
         console.log('wallet Id', walletId, balance)
-         data.createdAt = new Date().getTime();
+        data.createdAt = new Date().getTime();
         return knex.transaction((trx) => {
             knex('tokens')
                 .transacting(trx)
@@ -585,7 +585,7 @@ module.exports = function (app) {
                     console.log('new token ID', id);
                     // add wallet tokens
                     return insertIntoTable('wallet_tokens', { walletId: walletId, tokenId: id, balance: balance, recordState: 1, createdAt: new Date().getTime() }, trx);
-                   
+
                 })
                 .then(trx.commit)
                 .catch(trx.rollback);
@@ -623,7 +623,7 @@ module.exports = function (app) {
                                     let idAttributeType = idAttributeTypes[i];
 
                                     // add initial id attributes
-                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime()}, trx).then((idAttribute) => {
+                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
                                         idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
                                             idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: basicInfo[idAttributeType.key], createdAt: new Date().getTime() }));
                                         }));
@@ -737,14 +737,14 @@ module.exports = function (app) {
     controller.prototype.wallet_tokens_update = (data) => {
         return updateById('wallet_tokens', data);
     }
-    
+
 
     controller.prototype.idAttributeTypes_add = (data) => {
-        return new Promise((resolve, reject)=>{
-            knex('id_attribute_types').select().where("key", data.key).then((rows)=>{
-                if(rows && rows.length){
+        return new Promise((resolve, reject) => {
+            knex('id_attribute_types').select().where("key", data.key).then((rows) => {
+                if (rows && rows.length) {
                     resolve();
-                }else{
+                } else {
                     let dataToSave = {
                         key: data.key,
                         type: data.type[0],
@@ -752,15 +752,15 @@ module.exports = function (app) {
                         entity: JSON.stringify(data.entity),
                         createdAt: new Date().getTime()
                     };
-                    knex('id_attribute_types').insert(dataToSave).then((insertedIds)=>{
+                    knex('id_attribute_types').insert(dataToSave).then((insertedIds) => {
                         resolve();
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         console.log(error);
-                        reject({message:"error", error: error});
+                        reject({ message: "error", error: error });
                     });
                 }
-            }).catch((error)=>{
-                reject({message:"error", error: error});
+            }).catch((error) => {
+                reject({ message: "error", error: error });
             });
         });
     }
@@ -783,13 +783,13 @@ module.exports = function (app) {
 
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attributes').transacting(trx).select().where('idAttributeType', args.idAttributeType);
-            selectPromise.then((rows)=>{
+            selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
-                    if(rows && rows.length){
-                        reject({message: "id_attribute_already_exists"});
-                    }else{
+                    if (rows && rows.length) {
+                        reject({ message: "id_attribute_already_exists" });
+                    } else {
                         knex('id_attributes').transacting(trx).insert(args).then((insertedIds) => {
-                            if(insertedIds){
+                            if (insertedIds) {
                                 let idAttributeItem = {
                                     idAttributeId: insertedIds[0],
                                     name: args.idAttributeType,
@@ -801,34 +801,34 @@ module.exports = function (app) {
                                         createdAt: new Date().getTime()
                                     }
                                     knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).then((insertedIds) => {
-                                        if(insertedIds && insertedIds.length){
-                                            knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIds[0]).then((rows)=>{
-                                                if(rows && rows.length){
+                                        if (insertedIds && insertedIds.length) {
+                                            knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIds[0]).then((rows) => {
+                                                if (rows && rows.length) {
                                                     resolve(rows[0]);
-                                                }else{
-                                                    reject({message: "error"});
+                                                } else {
+                                                    reject({ message: "error" });
                                                 }
-                                            }).catch((error)=>{
-                                                reject({message: "error", error: error});
+                                            }).catch((error) => {
+                                                reject({ message: "error", error: error });
                                             })
-                                        }else{
-                                            reject({message: "error"});
+                                        } else {
+                                            reject({ message: "error" });
                                         }
-                                    }).catch((error)=>{
-                                        reject({message: "error", error: error});
+                                    }).catch((error) => {
+                                        reject({ message: "error", error: error });
                                     });
-                                }).catch((error)=>{
-                                    reject({message: "error", error: error});
+                                }).catch((error) => {
+                                    reject({ message: "error", error: error });
                                 });
                             }
                         }).catch((error) => {
-                            reject({message: "error", error: error});
+                            reject({ message: "error", error: error });
                         });
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -841,7 +841,7 @@ module.exports = function (app) {
                 .leftJoin('id_attribute_item_values', 'id_attribute_items.id', 'id_attribute_item_values.idAttributeItemId')
                 .where('id_attributes.id', args.id);
 
-            selectPromise.then((rows)=>{
+            selectPromise.then((rows) => {
                 console.log(rows, "11111");
 
                 return new Promise((resolve, reject) => {
@@ -849,33 +849,33 @@ module.exports = function (app) {
 
                     let promises = [];
 
-                    if(dataToDelete.documentId){
+                    if (dataToDelete.documentId) {
                         promises.push(knex('documents').transacting(trx).del().where('id', dataToDelete.documentId));
                     }
 
-                    if(dataToDelete.idAttributeItemValueId){
+                    if (dataToDelete.idAttributeItemValueId) {
                         promises.push(knex('id_attribute_item_values').transacting(trx).del().where('id', dataToDelete.idAttributeItemValueId));
                     }
 
-                    if(dataToDelete.idAttributeItemId){
+                    if (dataToDelete.idAttributeItemId) {
                         promises.push(knex('id_attribute_items').transacting(trx).del().where('id', dataToDelete.idAttributeItemId));
                     }
 
-                    if(dataToDelete.idAttributeId){
+                    if (dataToDelete.idAttributeId) {
                         promises.push(knex('id_attributes').transacting(trx).del().where('id', dataToDelete.idAttributeId));
                     }
 
-                    Promise.all(promises).then((responses)=>{
+                    Promise.all(promises).then((responses) => {
                         console.log(responses, "22222");
                         resolve();
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         console.log("err", error);
                         reject();
                     });
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -1058,45 +1058,41 @@ module.exports = function (app) {
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
     controller.prototype.idAttributeItemValues_update = (args) => {
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.id);
-            selectPromise.then((rows)=>{
+            selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
                     let idAttributeItemValue = rows[0];
 
-                    if(args.staticData){
-                        knex('id_attribute_item_values').transacting(trx).update(args).where('id', args.id).then((rows)=>{
+                    if (args.staticData) {
+                        knex('id_attribute_item_values').transacting(trx).update(args).where('id', args.id).then((updatedIds) => {
                             resolve(rows);
-                        }).catch((error)=>{
-                            reject({message: "error", error: error});
+                        }).catch((error) => {
+                            reject({ message: "error", error: error });
                         });
-                    }else{
-                        if(args.buffer){
-                            knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId).then((rows)=>{
-                                if(rows && rows.length){
-                                    let document = rows[0];
+                    } else {
+                        if (args.buffer) {
+                            knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId).then((documents) => {
+                                if (documents && documents.length) {
+                                    let document = documents[0];
+
                                     document.name = args.name;
                                     document.buffer = args.buffer;
                                     document.mimeType = args.mimeType;
                                     document.size = args.size;
                                     document.updatedAt = new Date().getTime();
 
-                                    knex('documents').transacting(trx).update(document).then((updatedIds) => {
-                                        if(updatedIds){
-                                            resolve(rows)
-                                        }else{
-                                            reject({message: "error"});
-                                        }
+                                    knex('documents').transacting(trx).update(document).where("id", document.id).then((updatedIds) => {
+                                        resolve(rows);
                                     }).catch((error) => {
-                                        reject({message: "error", error: error});
+                                        reject({ message: "error", error: error });
                                     });
-
                                 } else {
                                     let document = {
                                         name: args.name,
@@ -1107,33 +1103,33 @@ module.exports = function (app) {
                                     }
 
                                     knex('documents').transacting(trx).insert(document).then((insertedIds) => {
-                                        if(insertedIds && insertedIds.length){
+                                        if (insertedIds && insertedIds.length) {
                                             let updateData = {
                                                 documentId: insertedIds[0]
                                             }
-                                            knex('id_attribute_item_values').transacting(trx).update(updateData).where('id', args.id).then((rows)=>{
+                                            knex('id_attribute_item_values').transacting(trx).update(updateData).where('id', args.id).then((updatedIds) => {
                                                 resolve(rows);
-                                            }).catch((error)=>{
-                                                reject({message: "error", error: error});
+                                            }).catch((error) => {
+                                                reject({ message: "error", error: error });
                                             });
-                                        }else{
-                                            reject({message: "error"});
+                                        } else {
+                                            reject({ message: "error" });
                                         }
                                     }).catch((error) => {
-                                        reject({message: "error", error: error});
+                                        reject({ message: "error", error: error });
                                     });
                                 }
-                            }).catch((error)=>{
-                                reject({message: "error", error: error});
+                            }).catch((error) => {
+                                reject({ message: "error", error: error });
                             })
-                        }else{
-                            reject({message: "file_is_missing"});
+                        } else {
+                            reject({ message: "file_is_missing" });
                         }
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -1264,9 +1260,9 @@ module.exports = function (app) {
         return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
     }
 
-     /**
-     * transactions_history
-     */
+    /**
+    * transactions_history
+    */
     controller.prototype.transactionsHistory_insert = (data) => {
         return insertIntoTable('transactions_history', data);
     }
@@ -1275,7 +1271,7 @@ module.exports = function (app) {
     /**
      *
      */
-    function selectIdAttributeItemValueView (where, tx) {
+    function selectIdAttributeItemValueView(where, tx) {
         return new Promise((resolve, reject) => {
             let promise = null;
             if (tx) {
