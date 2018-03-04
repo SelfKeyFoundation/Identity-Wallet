@@ -220,7 +220,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 
         getTokenPriceBySymbol(symbol) {
             for (let i in TOKEN_PRICES_STORE) {
-                if (TOKEN_PRICES_STORE[i].symbol === symbol) {
+                if (TOKEN_PRICES_STORE[i].symbol.toUpperCase() === symbol.toUpperCase()) {
                     return TOKEN_PRICES_STORE[i];
                 }
             }

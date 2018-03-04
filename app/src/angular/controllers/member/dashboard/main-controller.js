@@ -1,21 +1,19 @@
 function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, ElectronService, WalletService, SqlLiteService) {
     'ngInject'
 
-    $log.info('MemberDashboardMainController',$rootScope.wallet);
+    $log.info('MemberDashboardMainController', $rootScope.wallet);
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
     }
 
-    $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
 
-    
     let wallet = $rootScope.wallet;
     $scope.transactionsHistoryList = [];
 
     $scope.setTransactionsHistory = () => {
-        SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data)=> {
+        SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
             $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
         }).catch((err) => {
             console.log(err);
@@ -37,35 +35,57 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         }
         return !isInProgress;
     }
-  
-    // TODO
-    return;
 
-    function getTotalBalanceInUsd() {
-        return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
-    }
+    $rootScope.CUSTOM_TOKENS_LIMIT = 20;
+    let processCustomTokens = ()=> {
+        let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
+        $rootScope.tokenLimitIsExceed =  tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
+    };
+   
+    processCustomTokens();
 
-    /**
-     * init pie chart
-     */
+    $scope.pieChart = null;
+    $scope.totalBalanceInUsd = 0;
+
+    $scope.getPieChartItems = () => {
+        let pieChartItems = [];
+        Object.keys(wallet.tokens).forEach((tokeyKey) => {
+            let pieChartItem = {};
+            let token = wallet.tokens[tokeyKey];
+    
+            let balanceDecimal = token.getBalanceDecimal() || 0;
+    
+            let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
+            if (tokenPrice) {
+                pieChartItem.title = tokenPrice.name;
+                pieChartItem.valueUSD = token.getBalanceInUsd();
+            } else {
+                pieChartItem.title = 'Unknown';
+                pieChartItem.valueUSD = 0;
+            }
+    
+            pieChartItem.subTitle = token.symbol;
+            pieChartItem.value = balanceDecimal;
+    
+            pieChartItems.push(pieChartItem);
+        });
+    
+        let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
+        pieChartItems.unshift({
+            subTitle: 'ETH',
+            title: 'Ethereum',
+            valueUSD: wallet.getBalanceInUsd(),
+            value: wallet.balanceEth,
+        });
+        
+        return pieChartItems;
+       
+    };
+
     $scope.pieChart = {
         totalTitle: 'Tolal value USD',
-        total: $rootScope.wallet.getTotalBalanceInUsd(),
-        items: [{
-            title: 'Ethereum',
-            subTitle: 'eth',
-            value: Number($rootScope.wallet.balanceEth),
-            valueUSD: Number($rootScope.wallet.balanceInUsd),
-            color: '#9c27b0',
-            icon: 'eth'
-        }, {
-            title: 'Selfkey',
-            subTitle: 'key',
-            icon: 'key',
-            value: Number($rootScope.primaryToken.getBalanceDecimal()),
-            valueUSD: Number($rootScope.primaryToken.balanceInUsd),
-            color: '#0dc7dd'
-        }],
+        total: getTotalBalanceInUsd(),
+        items: $scope.getPieChartItems(),
         callback: {
             onReady: () => {
                 // TODO set listenere on balance change here
@@ -81,29 +101,43 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         actions: {}
     };
 
+    function getTotalBalanceInUsd() {
+        let tokensTotalBalanceInUSD = 0;
+        Object.keys(wallet.tokens).forEach(tokenKey => {
+            let token = wallet.tokens[tokenKey];
+            tokensTotalBalanceInUSD += token.getBalanceInUsd();
+        });
+
+        $scope.totalBalanceInUsd = tokensTotalBalanceInUSD + wallet.getBalanceInUsd(); 
+        return $scope.totalBalanceInUsd;
+    }
+
+
     function updatePieChart() {
-        $rootScope.totalBalanceInUsd = getTotalBalanceInUsd();
-        $scope.pieChart.total = $filter('number')($rootScope.totalBalanceInUsd);
-
-        $scope.pieChart.items[0].value = Number($rootScope.wallet.balanceEth);
-        $scope.pieChart.items[0].valueUSD = Number($rootScope.wallet.balanceInUsd);
-
-        $scope.pieChart.items[1].value = Number($rootScope.primaryToken.getBalanceDecimal());
-        $scope.pieChart.items[1].valueUSD = Number($rootScope.primaryToken.balanceInUsd);
-
+        processCustomTokens();
+        $scope.pieChart.items =  $scope.getPieChartItems();
+        $scope.pieChart.total = getTotalBalanceInUsd();
         $scope.pieChart.draw();
     }
-    $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
 
-   
     /**
      * update pie chart on balance change
      */
     $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+        //if (pieChartIsReady) {
+        //    updatePieChart();
+        //}
+    });
+
+    /**
+     * update pie chart on balance change
+     */
+    $rootScope.$on('piechart:reload', (event) => {
         if (pieChartIsReady) {
             updatePieChart();
         }
     });
+    
 
     $log.info("pie chart data:", $scope.pieChart);
 };

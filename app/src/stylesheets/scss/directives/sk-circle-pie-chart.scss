@@ -165,6 +165,15 @@
         .sk-icon {
             margin-right: 12px;
         }
+        .colored-box-container {
+            .colored-box {
+                width: 44px !important;
+                height: 44px !important;
+                border-radius: 8px !important;
+                background-color: green;
+            }
+            margin-right: 12px !important;
+        }
         .title {
             .titleFull {
                 font-size: 18px;

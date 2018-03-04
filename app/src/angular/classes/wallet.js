@@ -56,6 +56,10 @@ class Wallet {
     getPrivateKeyHex() {
         return this.privateKeyHex;
     }
+    
+    getBalanceInUsd() {
+        return this.balanceInUsd;
+    }
 
     getPublicKey() {
         return this.publicKey;
@@ -163,7 +167,7 @@ class Wallet {
             this.tokens = {};
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.tokenId, token.id, this);
+                this.tokens[token.symbol.toUpperCase()] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.tokenId, token.id, this);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {

@@ -9,8 +9,10 @@ function SkCirclePieChartDirective($timeout) {
             data: '='
         },
         link: (scope, element) => {
-
             const TOP_MAX_SIZE = 5;
+
+            const colorForOther = 'red';
+
             scope.isCollapsed = true;
             scope.isCollapsable = false;
             scope.topItems = [];
@@ -34,14 +36,23 @@ function SkCirclePieChartDirective($timeout) {
 
             let processItems = () => {
                 let items = scope.data.items;
+                let TOP_COLORS = ['green', 'blue', 'grey'];
 
                 items.sort((a, b) => {
-                    let symbol = a.subTitle.toLowerCase();
-                    if (symbol == 'eth') {
+                    let symbolA = a.subTitle.toLowerCase();
+                    let symbolB = b.subTitle.toLowerCase();
+                    if (symbolA == 'eth') {
                         return -1;
                     }
-                    if (symbol == 'key') {
+                    if (symbolB == 'eth') {
+                        return 1;
+                    }
+
+                    if (symbolA == 'key') {
                         return -1;
+                    }
+                    if (symbolB == 'key') {
+                        return 1;
                     }
 
                     return parseFloat(b.value || 0) - parseFloat(a.value || 0);
@@ -51,20 +62,19 @@ function SkCirclePieChartDirective($timeout) {
 
                 let otherItems = items.slice(TOP_MAX_SIZE, items.length);
 
-                if (items.length >= TOP_MAX_SIZE) {
+                if (items.length > TOP_MAX_SIZE) {
                     let otherAggregated = {
                         title: 'Others',
                         subTitle: '',
                         value: 0,
                         isOtherItem: true,
                         valueUSD: 0,
-                        color: 'red',
-                        icon: 'eth' //TODO
+                        color: colorForOther
                     };
 
                     otherItems.forEach(otherItem => {
-                        otherAggregated.value += otherItem.value;
-                        otherAggregated.valueUSD += otherItem.valueUSD;
+                        otherAggregated.value += Number(otherItem.value);
+                        otherAggregated.valueUSD += Number(otherItem.valueUSD);
                     });
 
                     scope.topItems.push(otherAggregated);
@@ -72,17 +82,42 @@ function SkCirclePieChartDirective($timeout) {
                     scope.displayedItems = scope.topItems;
                 }
 
-                if (items.length >= TOP_MAX_SIZE && scope.isCollapsed) {
+                if (items.length > TOP_MAX_SIZE && scope.isCollapsed) {
                     scope.isCollapsable = true;
                 } else {
                     scope.displayedItems = items;
                 }
 
+                if (items.length <= TOP_MAX_SIZE) {
+                    scope.isCollapsable = false;
+                }
                 if (otherItems.length > 0) {
                     otherItems.forEach((otherItem) => {
                         otherItem.isOtherItem = true;
                     });
                 }
+
+                let ethItem = items.find((item) => {
+                    return item.subTitle.toLowerCase() == 'eth';
+                });
+                ethItem.icon = 'eth';
+                ethItem.color = '#a727e0';
+
+                let keyItem = items.find((item) => {
+                    return item.subTitle.toLowerCase() == 'key';
+                });
+                keyItem.icon = 'key';
+                keyItem.color = '#00aeee';
+
+                items.forEach((item) => {
+                    if (!item.color) {
+                        if (TOP_COLORS.length) {
+                            item.color = TOP_COLORS.shift();
+                        } else {
+                            item.color = colorForOther;
+                        }
+                    }
+                })
             };
 
             let getUniqueIdentifier = (item, index) => {
@@ -132,7 +167,6 @@ function SkCirclePieChartDirective($timeout) {
                 scope.displayedItems.forEach((displayedItem, index) => {
                     displayedItem.uniqueIdentifier = getUniqueIdentifier(displayedItem, index);
                 });
-
 
                 let processedData = [['Content', 'percents']].concat(dataItems);
                 let data = google.visualization.arrayToDataTable(processedData);

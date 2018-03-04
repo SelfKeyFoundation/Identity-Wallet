@@ -9,7 +9,9 @@
         div(ng-class="config.itemCls", name="{{item.uniqueIdentifier}}" ng-repeat="item in displayedItems track by $index")
             div(layout="row", layout-align="start start")
                 div(layout="row")
-                    sk-icon(icon="{{item.icon || 'information-button'}}", size-class="icon-size-44x44")
+                    sk-icon(ng-if="item.icon", icon="{{item.icon}}", size-class="icon-size-44x44")
+                    .colored-box-container(ng-if="!item.icon")
+                        .colored-box(ng-style="{ 'background-color': item.color}")
                     .title(layout="column") 
                         .titleFull {{item.title}}
                         .titleSmall {{item.subTitle}}

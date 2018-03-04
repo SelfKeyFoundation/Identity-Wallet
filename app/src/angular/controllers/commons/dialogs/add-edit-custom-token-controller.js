@@ -33,11 +33,12 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         tokens = tokens || {};
         $scope.walletTokens = Object.keys(tokens).map((tokenKey) => {
             let token = tokens[tokenKey];
-            token.totalValue = wallet.tokens[token.symbol.toUpperCase()].getBalanceDecimal();
+            let walletToken = wallet.tokens[token.symbol.toUpperCase()];
+            token.totalValue = walletToken.getBalanceDecimal();
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             token.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
-
+            token.balance = walletToken.getBalanceDecimal();
             return token;
         });
 
@@ -45,13 +46,31 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         $scope.walletTokens.push({
             symbol: 'ETH',
             lastPrice: ethPrice ? ethPrice.priceUSD : 0,
-            balance: wallet.balanceEth,
+            balance: wallet.getBalanceInUsd(),
+            totalValue: wallet.getFormattedBalance(),
             contractAddress: '0x' + wallet.publicKeyHex
         });
 
-        $scope.walletTokens.sort((a,b) =>{
-            return !(a.symbol == 'ETH' || a.symbol == 'KEY');
+        $scope.walletTokens.sort((a, b) => {
+            let symbolA = a.symbol.toLowerCase();
+            let symbolB = b.symbol.toLowerCase();
+            if (symbolA == 'eth') {
+                return -1;
+            }
+            if (symbolB == 'eth') {
+                return 1;
+            }
+
+            if (symbolA == 'key') {
+                return -1;
+            }
+            if (symbolB == 'key') {
+                return 1;
+            }
+
+            return parseFloat(b.value || 0) - parseFloat(a.value || 0);
         });
+
     });
 
     const web3Utils = Web3Service.constructor.web3.utils;
@@ -65,7 +84,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         let check = false;
 
         try {
-            check = web3Utils.isHex(newVal) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
+            check = newVal && web3Utils.isHex(newVal) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
         } catch (error) {
             $log.error(error);
         }
@@ -147,6 +166,9 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             balance: token.balance,
             recordState: 0
         }).then(() => {
+            $rootScope.wallet.loadTokens().then(()=> {
+                $rootScope.$broadcast("piechart:reload");
+            });
             $scope.walletTokens.splice(index, 1);
         });
 
