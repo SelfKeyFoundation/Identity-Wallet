@@ -45,7 +45,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     processCustomTokens();
 
     $scope.pieChart = null;
-    $scope.totalBalanceInUsd = 0;
+    $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
 
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
@@ -84,13 +84,13 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     $scope.pieChart = {
         totalTitle: 'Tolal value USD',
-        total: getTotalBalanceInUsd(),
+        total: wallet.calculateTotalBalanceInUSD(),
         items: $scope.getPieChartItems(),
         callback: {
             onReady: () => {
                 // TODO set listenere on balance change here
                 pieChartIsReady = true;
-                if (getTotalBalanceInUsd() > 0) {
+                if (wallet.calculateTotalBalanceInUSD() > 0) {
                     updatePieChart();
                 }
             },
@@ -101,22 +101,12 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         actions: {}
     };
 
-    function getTotalBalanceInUsd() {
-        let tokensTotalBalanceInUSD = 0;
-        Object.keys(wallet.tokens).forEach(tokenKey => {
-            let token = wallet.tokens[tokenKey];
-            tokensTotalBalanceInUSD += token.getBalanceInUsd();
-        });
-
-        $scope.totalBalanceInUsd = tokensTotalBalanceInUSD + wallet.getBalanceInUsd();
-        return $scope.totalBalanceInUsd;
-    }
-
-
     function updatePieChart() {
         processCustomTokens();
         $scope.pieChart.items = $scope.getPieChartItems();
-        $scope.pieChart.total = getTotalBalanceInUsd();
+
+        $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD(); 
+        $scope.pieChart.total = $scope.totalBalanceInUsd;
         $scope.pieChart.draw();
     }
 
