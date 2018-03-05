@@ -44,7 +44,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     processCustomTokens();
 
-    $scope.pieChart = null;
     $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
 
     $scope.getPieChartItems = () => {

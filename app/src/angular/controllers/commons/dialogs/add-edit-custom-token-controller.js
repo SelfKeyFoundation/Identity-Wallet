@@ -22,7 +22,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
 
     let getTokenByContractAddress = (contractAddress) => {
         return allTokensArr.find((token) => {
-            return token.address == contractAddress;
+            return token.address.toLowerCase() == contractAddress.toLowerCase();
         });
     };
 
@@ -76,6 +76,9 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
     });
 
     const web3Utils = Web3Service.constructor.web3.utils;
+    const incorectTokenSymbolsMap = {
+        'latoken': 'LA'
+    };
 
     /**
      *
@@ -100,7 +103,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
                 data.tokenId = existingToken.id;
             } else {
                 CommonService.showToast('success', 'Looking ERC20 Contract into blockchain');
-                data.tokenId = '';
+                resetFormData();
                 Web3Service.getContractInfo(newVal).then((responseArr) => {
                     if (!responseArr || responseArr.length != 2) {
                         return resetFormData();
@@ -108,6 +111,10 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
 
                     let decimal = responseArr[0];
                     let symbol = responseArr[1];
+                    
+                    if (incorectTokenSymbolsMap[symbol.toLowerCase()]) {
+                        symbol = incorectTokenSymbolsMap[symbol.toLowerCase()];
+                    }
 
                     data.symbol = symbol;
                     data.decimalPlaces = Number(decimal);
@@ -123,17 +130,6 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             resetFormData();
         }
     }, true);
-
-    $scope.customTokens = [];//TODO
-
-    let sortCustomTokens = () => {
-        $scope.customTokens.sort((a, b) => {
-            let key = 'totalValue';
-            return parseFloat(b[key]) - parseFloat(a[key]);
-        });
-    };
-
-    sortCustomTokens();
 
     $scope.formData = {
         decimalPlaces: null,
