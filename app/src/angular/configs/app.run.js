@@ -35,7 +35,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.Web3Service = Web3Service;
     Wallet.SqlLiteService = SqlLiteService;
     Wallet.CommonService = CommonService;
-    Wallet.WalletService = WalletService; 
+    Wallet.WalletService = WalletService;
 
 
     Token.$rootScope = $rootScope;
@@ -214,6 +214,20 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openDocumentPreviewDialog = (event, documentId) => {
+        return $mdDialog.show({
+            controller: 'DocumentPreviewDialogController',
+            templateUrl: 'common/dialogs/document-preview.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                documentId: documentId
+            }
+        });
+    };
+
     $rootScope.openAddCustomTokenDialog = (event) => {
         if ($rootScope.tokenLimitIsExceed) {
             return;
@@ -238,6 +252,16 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true
         });
     };
+
+    /**
+     *
+     */
+    $timeout(()=>{
+        //RPCService.makeCall('openPdfViewer', {});
+
+        //$rootScope.openDocumentPreviewDialog(null, 1)
+    }, 5000);
+
 
     /**
      *

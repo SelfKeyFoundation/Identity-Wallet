@@ -15,6 +15,8 @@ document.addEventListener('drop', function (event) {
  */
 window.zxcvbn = requireNodeModule('zxcvbn');
 window.qrcode = requireNodeModule('qrcode-generator');
+//window.PDFJS = requireNodeModule('pdf.js-viewer');
+requireNodeModule('pdf.js-viewer');
 
 /**
  * External Modules
@@ -25,8 +27,6 @@ requireNodeModule('angular-messages');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
-
-
 
 /**
  *
@@ -213,6 +213,9 @@ angular.module('kyc-wallet').controller('AddEditCustomTokenDialogController', Ad
 
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
+
+const DocumentPreviewDialogController = requireAppModule('angular/controllers/commons/dialogs/document-preview-controller.js');
+angular.module('kyc-wallet').controller('DocumentPreviewDialogController', DocumentPreviewDialogController);
 
 /**
  * guest

@@ -119,7 +119,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                     COUNTRIES = data;
                 }
             });
-        }        
+        }
 
         /**
          *
@@ -212,6 +212,13 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         /**
+         *
+         */
+        loadDocumentById (documentId) {
+            return RPCService.makeCall('loadDocumentById', { documentId: documentId });
+        }
+
+        /**
          * token_prices
          */
         getTokenPrices() {
@@ -227,8 +234,8 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return null;
         }
         /**
-         * 
-         * wallet settings 
+         *
+         * wallet settings
          */
         getWalletSettingsByWalletId(data) {
             return RPCService.makeCall('getWalletSettingsByWalletId', data);

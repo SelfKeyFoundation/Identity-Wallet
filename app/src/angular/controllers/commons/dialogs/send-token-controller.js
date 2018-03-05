@@ -159,6 +159,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 EthUnits.unitToUnit(sendAmount, 'ether', 'wei'),
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
                 $scope.infoData.gasLimit,
+                null,
                 CONFIG.chainId
             );
 

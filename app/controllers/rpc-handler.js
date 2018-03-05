@@ -14,6 +14,7 @@ const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
 const async = require('async');
+const PDFWindow = require('electron-pdf-window');
 
 const RPC_METHOD = "ON_RPC";
 
@@ -328,7 +329,59 @@ module.exports = function (app) {
         }
     }
 
-    
+    controller.prototype.openPdfViewer = function (event, actionId, actionName, args) {
+        try {
+            const win = new PDFWindow({
+                width: 800,
+                height: 600
+            });
+
+            let tempFilePath = "";
+
+            electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
+                fs.appendFile(tempFilePath, new Buffer(document.buffer), (error) => {
+                    if (error) {
+                        return app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+                    }
+
+                    win.loadURL(tempFilePath);
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                });
+            }).catch((error) => {
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            });
+
+
+
+            /*
+            var fs = require('fs');
+            try {
+                fs.writeFileSync()
+                fs.writeFileSync('myfile.txt', content, 'utf-8');
+            }
+            catch(e) { alert('Failed to save the file !'); }
+            */
+        } catch (e) {
+            console.log(e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+        }
+    }
+
+
+
+
+    /**
+     * sql-lite methods
+     */
+    controller.prototype.loadDocumentById = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
 
 
 

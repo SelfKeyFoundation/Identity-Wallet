@@ -1134,7 +1134,12 @@ module.exports = function (app) {
     }
 
 
-
+    /**
+     * documents
+     */
+    controller.prototype.documents_selectById = (id) => {
+        return selectById('documents', id);
+    }
 
 
 
@@ -1367,13 +1372,9 @@ module.exports = function (app) {
     function selectById(table, id) {
         return new Promise((resolve, reject) => {
             knex(table).select().where('id', id).then((rows) => {
-                if (rows && rows.length === 1) {
-                    resolve(rows[0]);
-                } else {
-                    resolve(null);
-                }
+                rows && rows.length ? resolve(rows[0]) : resolve(null);
             }).catch((error) => {
-                reject({ message: "error_while_updating", error: error });
+                reject({ message: "error_while_selecting", error: error });
             });
         });
     }

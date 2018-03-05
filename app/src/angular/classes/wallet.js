@@ -215,11 +215,12 @@ class Wallet {
 
     /**
      *
-     * @param {hex} toAddressHex
-     * @param {eth} valueWei
-     * @param {wei} gasPriceWei
-     * @param {wei} gasLimitWei
-     * @param {hex} contractDataHex Contract data
+     * @param {*} toAddressHex
+     * @param {*} valueWei
+     * @param {*} gasPriceWei
+     * @param {*} gasLimitWei
+     * @param {*} contractDataHex
+     * @param {*} chainID
      */
     generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID) {
         let defer = $q.defer();

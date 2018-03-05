@@ -112,6 +112,7 @@ function onReady(app) {
 			minWidth: 1170,
 			minHeight: 800,
 			webPreferences: {
+                plugins: true,
 				nodeIntegration: false,
 				webSecurity: true,
 				//experimentalFeatures: true,
