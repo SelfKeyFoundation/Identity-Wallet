@@ -14,7 +14,7 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
             Wallet.$q = $q;
         }
 
-        showToast(type, text, delay) {
+        showToast(type, text, delay, headerText) {
             delay = delay || 3000;
 
             $mdToast.show({
@@ -24,7 +24,8 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
                 templateUrl: 'common/toast.html',
                 locals: {
                     message: text,
-                    type: type
+                    type: type,
+                    headerText: headerText
                 }
             });
         }

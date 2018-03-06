@@ -15,7 +15,9 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         return form.$valid;
     };
 
-    let tokens = SqlLiteService.getTokens() || {}; //TODO
+    let tokensAreLoaded = false;
+
+    let tokens = SqlLiteService.getTokens() || {}; 
     let tokenKeys = Object.keys(tokens);
     let allTokensArr = tokenKeys.map((key) => {
         return tokens[key];
@@ -25,6 +27,12 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         return allTokensArr.find((token) => {
             return token.address.toLowerCase() == contractAddress.toLowerCase();
         });
+    };
+
+    let getExistingTokenByAddress = (address) => {
+        address = address.toLowerCase();
+        let tokenKey = Object.keys(wallet.tokens).find((key) => wallet.tokens[key].contractAddress.toLowerCase() == address)
+        return tokenKey ? wallet.tokens[tokenKey.toUpperCase()] : null;
     };
 
     let wallet = $rootScope.wallet;
@@ -47,6 +55,13 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         }
 
         let isValidHex = newVal && check;
+
+        let existingToken = isValidHex ? getExistingTokenByAddress(newVal) : null;
+        if (existingToken) {
+            CommonService.showToast('warning', `${existingToken.symbol} token already exists. Please add a unique token and try again.`, null, 'Duplicate Token');
+            return resetFormData(); 
+        }
+
         if (isValidHex) {
             let existingToken = getTokenByContractAddress(newVal);
 
@@ -104,8 +119,6 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
             return CommonService.showToast('warning', "Form isn't valid");
         }
 
-        //todo check dublicate & disable add button while adding is in progress
-
         let newToken = $scope.formData;
         $scope.inProgress = true;
 
@@ -118,11 +131,18 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
             }
 
             let successFn = (data) => {
-                $scope.inProgress = false;
-                $scope.cancel();
                 let formatedBalance = CommonService.numbersAfterComma(balance, 2);
-                $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, formatedBalance);
-                CommonService.showToast('success', "Added");
+                
+                let newToken = wallet.addNewToken(data);
+                
+                let loadTokensPromise = SqlLiteService.loadTokens();
+
+                $q.all([newToken.initialBalancePromise,loadTokensPromise]).then(() => {
+                    $scope.inProgress = false;
+                    $scope.cancel();
+                    $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, formatedBalance);
+                    CommonService.showToast('success', "Added");
+                });
             };
 
             let errFn = (err) => {

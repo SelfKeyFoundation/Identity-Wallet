@@ -223,10 +223,15 @@ function SkCirclePieChartDirective($timeout) {
                 });
             }
 
+            let requestQueue = [];
             scope.data.draw = () => {
+                requestQueue.push('newDrowRequest');
                 $timeout(() => {
-                    drawChart();
-                }, 400);
+                    if (requestQueue.length) {
+                        drawChart();                        
+                        requestQueue = [];
+                    }
+                }, 500);
             }
 
         },

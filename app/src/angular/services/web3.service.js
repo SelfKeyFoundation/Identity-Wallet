@@ -80,7 +80,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         syncTokensTransactionHistory() {
-
             let wallet = $rootScope.wallet;
             if (!wallet || !wallet.tokens) { 
                 return;
