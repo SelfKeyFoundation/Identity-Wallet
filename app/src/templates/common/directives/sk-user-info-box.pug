@@ -6,7 +6,7 @@
             .pic(style='background-image: url({{userData.tempImage}});')
         .name
             sk-icon(icon="success-box", size-class="icon-size-16x16")
-            span {{ idAttributes.first_name.value + ' ' +  idAttributes.last_name.value }}
+            span {{ idAttributes.first_name.value + ' ' + (idAttributes.middle_name && idAttributes.middle_name.value ? idAttributes.middle_name.value : '') +  idAttributes.last_name.value }}
 
     hr
 
@@ -18,13 +18,6 @@
                     div
                         sk-icon(icon="{{ idAttributes.country_of_residency.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
                         span.fc-white {{ idAttributes.country_of_residency.value ? idAttributes.country_of_residency.value : 'Missing' }}
-
-            tr
-                td.fc-bluey-grey Email:
-                td
-                    div
-                        sk-icon(icon="{{ idAttributes.email.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ idAttributes.email.value ? idAttributes.email.value : 'Missing' }}
 
             tr(ng-if="idAttributes.national_id")
                 td.fc-bluey-grey National ID:
@@ -40,12 +33,19 @@
                         sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
                         span.fc-white {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
 
+            tr
+                td.fc-bluey-grey Email:
+                td
+                    div
+                        sk-icon(icon="{{ idAttributes.email.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ idAttributes.email.value ? idAttributes.email.value : 'Missing' }}
+
     hr
 
     .info
         table
             tr(ng-repeat="(key, value) in idAttributes", ng-if="value.value && ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'].indexOf(key) === -1")
-                td.fc-bluey-grey {{key}}:
+                td.fc-bluey-grey {{$root.DICTIONARY[key]}}:
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")

@@ -327,6 +327,20 @@ h2 {
   width: 19.6px !important;
   height: 23.1px !important; }
 
+.md-button.blue:disabled {
+  background-image: none;
+  border: solid 1px #93b0c1;
+  opacity: 0.3; }
+
+.color-light-grey svg {
+  fill: #CFD8DC !important; }
+
+.color-violet svg {
+  fill: #FF4081 !important; }
+
+.color-grey svg {
+  fill: #78909C !important; }
+
 body, html {
   margin: 0;
   padding: 0; }
@@ -17905,15 +17919,6 @@ md-dialog {
               background-color: #303c49; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table thead tr td {
               padding: 5px 0; }
-
-.color-orange svg {
-  fill: #CFD8DC !important; }
-
-.color-violet svg {
-  fill: #FF4081 !important; }
-
-.color-light-grey svg {
-  fill: #78909C !important; }
 
 .ico-list-item-content-wrappper {
   flex-direction: row;

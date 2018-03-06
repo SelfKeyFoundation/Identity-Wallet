@@ -51,10 +51,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                 idAttributeType: selectedIdAttributeType.key
             }
 
-            SqlLiteService.addIdAttribute(idAttribute).then((response)=>{
+            SqlLiteService.addIdAttribute(idAttribute).then((response) => {
                 prepareData();
                 CommonService.showToast('success', 'saved');
-            }).catch((error)=>{
+            }).catch((error) => {
                 $log.error(error);
                 CommonService.showToast('error', 'error');
             })
@@ -62,14 +62,14 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     }
 
     $scope.editIdAttributeItemValue = (event, idAttributeItemValue, idAttributeType) => {
-        $rootScope.openAddEditStaticDataDialog(event, idAttributeItemValue, idAttributeType).then(()=>{
+        $rootScope.openAddEditStaticDataDialog(event, idAttributeItemValue, idAttributeType).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
         });
     }
 
     $scope.editIdAttributeItemDocument = (event, idAttributeItemValue, idAttributeType) => {
-        $rootScope.openAddEditDocumentDialog(event, idAttributeItemValue, idAttributeType).then(()=>{
+        $rootScope.openAddEditDocumentDialog(event, idAttributeItemValue, idAttributeType).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
         });
@@ -108,8 +108,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         prepareData();
     });
 
-    function prepareData () {
-        $rootScope.wallet.loadIdAttributes().then(()=>{
+    function prepareData() {
+        $rootScope.wallet.loadIdAttributes().then(() => {
             $scope.attributesList = [];
             $scope.idDocumentsList = [];
 
@@ -117,7 +117,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
 
             if ($scope.idAttributesList) {
-                angular.forEach($scope.idAttributesList,  (item)=> {
+                angular.forEach($scope.idAttributesList, (item) => {
                     if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
                         $scope.idDocumentsList.push(item)
                     } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {

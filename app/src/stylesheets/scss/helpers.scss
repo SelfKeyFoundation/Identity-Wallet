@@ -326,3 +326,31 @@ h2 {
   width: 19.6px !important;;
   height: 23.1px !important;;
 }
+
+//buttons
+
+.md-button.blue:disabled {
+    background-image: none;
+    border: solid 1px #93b0c1;
+    opacity: 0.3;
+}
+
+//colors
+
+.color-light-grey {
+    svg {
+        fill: #CFD8DC !important;
+    }
+}
+
+.color-violet {
+    svg {
+        fill: #FF4081 !important;
+    }
+}
+
+.color-grey {
+    svg {
+        fill: #78909C !important;
+    }
+}
