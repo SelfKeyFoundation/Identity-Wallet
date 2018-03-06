@@ -1,6 +1,6 @@
 const Token = requireAppModule('angular/classes/token');
 
-function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {
+function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {
     'ngInject'
 
     $log.info('AddCustomTokenDialogController');
@@ -10,11 +10,12 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
     }
 
     $scope.inProgress = false;
+    const balanceValueDivider = new BigNumber(10 ** 18);
     $scope.formDataIsValid = (form) => {
         return form.$valid;
     };
 
-    let tokens = SqlLiteService.getTokens() || {};
+    let tokens = SqlLiteService.getTokens() || {}; //TODO
     let tokenKeys = Object.keys(tokens);
     let allTokensArr = tokenKeys.map((key) => {
         return tokens[key];
@@ -26,55 +27,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         });
     };
 
-    $scope.walletTokens = [];
     let wallet = $rootScope.wallet;
-
-    wallet.loadTokens().then((tokens) => {
-        tokens = tokens || {};
-        $scope.walletTokens = Object.keys(tokens).map((tokenKey) => {
-            let token = tokens[tokenKey];
-            let walletToken = wallet.tokens[token.symbol.toUpperCase()];
-            token.totalValue = walletToken.calculateBalanceInUSD();
-
-            let lastPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
-            token.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
-            token.balance = walletToken.getFormattedBalance();
-            return token;
-        });
-
-        let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
-        $scope.walletTokens.push({
-            symbol: 'ETH',
-            lastPrice: ethPrice ? ethPrice.priceUSD : 0,
-            balance: wallet.getFormattedBalance(),
-            totalValue: wallet.calculateBalanceInUSD(),
-            contractAddress: '0x' + wallet.publicKeyHex
-        });
-
-        $scope.walletTokens.sort((a, b) => {
-            let symbolA = a.symbol.toLowerCase();
-            let symbolB = b.symbol.toLowerCase();
-            if (symbolA == 'eth') {
-                return -1;
-            }
-
-            if (symbolB == 'eth') {
-                return 1;
-            }
-
-            if (symbolA == 'key') {
-                return -1;
-            }
-
-            if (symbolB == 'key') {
-                return 1;
-            }
-
-            return parseFloat(b.totalValue || 0) - parseFloat(a.totalValue || 0);
-        });
-
-    });
-
     const web3Utils = Web3Service.constructor.web3.utils;
     const incorectTokenSymbolsMap = {
         'latoken': 'LA'
@@ -145,32 +98,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         data.decimalPlaces = null;
         data.tokenId = '';
     };
-
-    const PRIMARY_TOKEN_KEYS = ['KEY', 'ETH'];
-    $scope.isDeletable = (token) => {
-        if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) != -1) {
-            return false;
-        }
-        return true;
-    };
-
-    $scope.deleteCustomToken = (token, index) => {
-
-        SqlLiteService.updateWalletToken({
-            tokenId: token.id,
-            walletId: wallet.id,
-            id: token.walletTokenId,
-            balance: token.balance,
-            recordState: 0
-        }).then(() => {
-            $rootScope.wallet.loadTokens().then(()=> {
-                $rootScope.$broadcast("piechart:reload");
-            });
-            $scope.walletTokens.splice(index, 1);
-        });
-
-    }
-
+    
     $scope.addCustomToken = (event, form) => {
         if (!$scope.formDataIsValid(form)) {
             return CommonService.showToast('warning', "Form isn't valid");
@@ -182,7 +110,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         $scope.inProgress = true;
 
         Token.getBalanceByContractAddress(newToken.contractAddress, wallet.getPublicKeyHex()).then((balance) => {
-            balance = Number(balance);
+            balance = Number(new BigNumber(balance).div(balanceValueDivider));
             let newWalletToken = {
                 walletId: wallet.id,
                 tokenId: newToken.tokenId,
@@ -192,7 +120,8 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             let successFn = (data) => {
                 $scope.inProgress = false;
                 $scope.cancel();
-                $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, balance);
+                let formatedBalance = CommonService.numbersAfterComma(balance, 2);
+                $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, formatedBalance);
                 CommonService.showToast('success', "Added");
             };
 
@@ -222,4 +151,4 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
     }
 };
 
-module.exports = AddEditCustomTokenDialogController;
+module.exports = AddCustomTokenDialogController;

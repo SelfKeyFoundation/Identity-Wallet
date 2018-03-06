@@ -233,7 +233,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             return;
         }
         return $mdDialog.show({
-            controller: 'AddEditCustomTokenDialogController',
+            controller: 'AddCustomTokenDialogController',
             templateUrl: 'common/dialogs/add-custom-token.html',
             parent: angular.element(document.body),
             targetEvent: event,
@@ -244,7 +244,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
 
     $rootScope.openEditCustomTokenDialog = (event) => {
         return $mdDialog.show({
-            controller: 'AddEditCustomTokenDialogController',
+            controller: 'EditCustomTokenDialogController',
             templateUrl: 'common/dialogs/edit-custom-token.html',
             parent: angular.element(document.body),
             targetEvent: event,

@@ -17,7 +17,7 @@
                 span(flex) My Crypto
                 button.sk-icon-button(ng-click="$root.openEditCustomTokenDialog($event)")
                     sk-icon(icon="gear", size-class="icon-size-26x26")
-                button.sk-icon-button(ng-click="$root.openAddCustomTokenDialog($event)")
+                button.sk-icon-button(ng-class="{'disable-opacity': $root.tokenLimitIsExceed}", ng-click="$root.openAddCustomTokenDialog($event)")
                     sk-icon(icon="plus", size-class="icon-size-26x26")
                     md-tooltip(ng-if="$root.tokenLimitIsExceed",md-direction="left")
                         | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token.

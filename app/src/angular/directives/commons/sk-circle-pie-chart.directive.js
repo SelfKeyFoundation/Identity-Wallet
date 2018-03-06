@@ -38,22 +38,7 @@ function SkCirclePieChartDirective($timeout) {
                 let TOP_COLORS = ['green', 'blue', 'grey'];
 
                 items.sort((a, b) => {
-                    let symbolA = a.subTitle.toLowerCase();
-                    let symbolB = b.subTitle.toLowerCase();
-                    if (symbolA == 'eth') {
-                        return -1;
-                    }
-                    if (symbolB == 'eth') {
-                        return 1;
-                    }
-                    if (symbolA == 'key') {
-                        return -1;
-                    }
-                    if (symbolB == 'key') {
-                        return 1;
-                    }
-
-                    return parseFloat(b.value || 0) - parseFloat(a.value || 0);
+                    return parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
                 });
 
                 scope.topItems = items.slice(0, TOP_MAX_SIZE);
@@ -63,14 +48,12 @@ function SkCirclePieChartDirective($timeout) {
                     let otherAggregated = {
                         title: 'Others',
                         subTitle: '',
-                        value: 0,
                         isOtherItem: true,
                         valueUSD: 0,
                         color: colorForOthers
                     };
 
                     otherItems.forEach(otherItem => {
-                        otherAggregated.value += Number(otherItem.value);
                         otherAggregated.valueUSD += Number(otherItem.valueUSD);
                     });
 
