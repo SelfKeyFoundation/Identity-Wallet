@@ -91,7 +91,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
                     CommonService.showToast('success', 'Found Contract: ' + data.symbol);
                 }).catch((err) => {
                     resetFormData();
-                    CommonService.showToast('warning', 'ERC20 Contract not found');
+                    CommonService.showToast('warning', 'Token address does not exist. Please double check and try again.');
                 });
             }
         } else {
