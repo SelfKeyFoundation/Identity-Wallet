@@ -25,10 +25,12 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
 
     $scope.attributesList = [];
     $scope.idDocumentsList = [];
+    $scope.walletHistoryList = [];
 
     SqlLiteService.loadIdAttributeTypes();
 
     prepareData();
+    loadWalletHistory ();
 
     /**
      *
@@ -54,10 +56,14 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             SqlLiteService.addIdAttribute(idAttribute).then((response) => {
                 prepareData();
                 CommonService.showToast('success', 'saved');
+
+                SqlLiteService.registerActionLog("Created Attribute: " + $rootScope.DICTIONARY[selectedIdAttributeType.key]).then(()=>{
+                    loadWalletHistory()
+                });
             }).catch((error) => {
                 $log.error(error);
                 CommonService.showToast('error', 'error');
-            })
+            });
         });
     }
 
@@ -65,6 +71,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         $rootScope.openAddEditStaticDataDialog(event, idAttributeItemValue, idAttributeType).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
+
+            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType]).then(()=>{
+                loadWalletHistory()
+            });
         });
     }
 
@@ -72,6 +82,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         $rootScope.openAddEditDocumentDialog(event, idAttributeItemValue, idAttributeType).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
+
+            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType]).then(()=>{
+                loadWalletHistory()
+            });
         });
     }
 
@@ -114,6 +128,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
 
     $scope.$on('id-attribute:changed', () => {
         prepareData();
+        loadWalletHistory();
     });
 
     function prepareData() {
@@ -144,6 +159,13 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             $rootScope.$broadcast('sk-user-info-box:update');
         });
     }
+
+    function loadWalletHistory () {
+        SqlLiteService.loadWalletHistory().then((data)=>{
+            $scope.walletHistoryList = data.reverse();
+
+        });
+    }
 };
 
 function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, SqlLiteService, idAttribute, idAttributeItem, idAttributeItemValue) {
@@ -154,10 +176,12 @@ function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonServic
     $scope.delete = (event) => {
         $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
         $scope.promise.then(() => {
-            $rootScope.$broadcast('id-attribute:changed');
-            CommonService.showToast('success', 'deleted');
-            mdPanelRef.close().then(() => {
-                mdPanelRef.destroy();
+            SqlLiteService.registerActionLog("Deleted Attribute: " + $rootScope.DICTIONARY[idAttribute.idAttributeType]).then(()=>{
+                $rootScope.$broadcast('id-attribute:changed');
+                CommonService.showToast('success', 'deleted');
+                mdPanelRef.close().then(() => {
+                    mdPanelRef.destroy();
+                });
             });
         });
     }

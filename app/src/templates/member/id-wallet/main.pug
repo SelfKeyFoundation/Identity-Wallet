@@ -17,11 +17,11 @@
                                     td
                                     td
                             tbody
-                                tr(ng-repeat="item in attributesList")
+                                tr(ng-repeat="item in walletHistoryList | orderBy:'item.createdAt'")
                                     td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                     td
-                                        sk-icon(icon="{{item.items[0].values[0].staticData ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                                    td {{item.items[0].values[0].staticData}}
+                                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                                    td {{item.content}}
 
 
                 .attributes-table-container

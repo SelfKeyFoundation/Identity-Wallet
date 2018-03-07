@@ -203,6 +203,22 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         /**
          *
          */
+        registerActionLog(actionText){
+            let theAction = {
+                walletId: $rootScope.wallet.id,
+                title: "untitled",
+                content: actionText
+            }
+            return RPCService.makeCall('actionLogs_add', theAction);
+        }
+
+        loadWalletHistory(){
+            return RPCService.makeCall('actionLogs_findAll', {});
+        }
+
+        /**
+         *
+         */
         updateIdAttributeItemValueStaticData (idAttributeValue) {
             return RPCService.makeCall('updateIdAttributeItemValueStaticData', idAttributeValue);
         }

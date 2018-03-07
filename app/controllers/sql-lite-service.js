@@ -1180,14 +1180,18 @@ module.exports = function (app) {
      */
     controller.prototype.actionLogs_add = (item) => {
         item.createdAt = new Date().getTime();
-        item.content = JSON.stringify(item.content);
+        //item.content = JSON.stringify(item.content);
         return insertIntoTable('action_logs', item);
     }
 
     controller.prototype.actionLogs_findAll = () => {
         return new Promise((resolve, reject)=>{
-            
-        })
+            knex('action_logs').select().then((rows) => {
+                resolve(rows);
+            }).catch((error) => {
+                reject({ message: "error", error: error });
+            });
+        });
     }
 
     /**
