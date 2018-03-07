@@ -44,7 +44,8 @@ const app = {
 	},
 	translations: {
 	},
-	win: {}
+    win: {},
+    log: log
 };
 
 const i18n = [
@@ -90,8 +91,6 @@ function onReady(app) {
 		}).catch((error) => {
 			console.log("error", error);
 		});
-
-
 
 		// TODO
 		// 1) load ETH & KEY icons & prices

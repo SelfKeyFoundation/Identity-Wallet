@@ -356,16 +356,26 @@ module.exports = function (app) {
 
                 let win = null;
 
+                const config = {
+                    width: 800,
+                    height: 600,
+                    protocol: 'file:',
+                    slashes: true
+                };
+
                 if(data.mimeType === 'application/pdf'){
-                    win = new PDFWindow({ width: 800, height: 600 });
+                    win = new PDFWindow(config);
+                    win.addSupport(app.win);
                 }else{
-                    win = new electron.BrowserWindow({ width: 800, height: 600 });
+                    win = new electron.BrowserWindow(config);
                 }
 
                 win.on("close", ()=>{
                     onClose();
                     win = null;
                 });
+
+                app.log.warn(filePathToPreview);
 
                 //win.loadURL(filePathToPreview);
                 win.loadURL(`file://${filePathToPreview}`)
