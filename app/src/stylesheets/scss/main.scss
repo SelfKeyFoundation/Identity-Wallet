@@ -59,9 +59,12 @@
 @import './dialogs/password-warning.scss';
 @import './dialogs/info-dialog.scss';
 @import './dialogs/id-wallet-info.scss';
-@import './dialogs/add-edit-document.scss';
-@import './dialogs/add-edit-static-data.scss';
-@import './dialogs/add-id-attribute.scss';
+@import 'dialogs/id-attributes/add-edit-document';
+@import 'dialogs/id-attributes/add-edit-static-data';
+@import 'dialogs/id-attributes/add-id-attribute';
+@import 'dialogs/id-attributes/forms/address';
+@import 'dialogs/id-attributes/forms/country';
+@import 'dialogs/id-attributes/forms/birth-date';
 @import './dialogs/edit-custom-token.scss';
 @import './dialogs/add-custom-token.scss';
 @import './dialogs/new-erc20-token-info.scss';

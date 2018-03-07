@@ -575,7 +575,7 @@ module.exports = function (app) {
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
         data.createdAt = new Date().getTime();
         return new Promise((resolve, reject) => {
-            
+
             knex.transaction((trx) => {
                 knex('tokens')
                     .transacting(trx)
@@ -879,8 +879,6 @@ module.exports = function (app) {
                 .where('id_attributes.id', args.id);
 
             selectPromise.then((rows) => {
-                console.log(rows, "11111");
-
                 return new Promise((resolve, reject) => {
                     let dataToDelete = rows[0];
 
@@ -1170,7 +1168,6 @@ module.exports = function (app) {
         });
     }
 
-
     /**
      * documents
      */
@@ -1178,7 +1175,20 @@ module.exports = function (app) {
         return selectById('documents', id);
     }
 
+    /**
+     * action_logs
+     */
+    controller.prototype.actionLogs_add = (item) => {
+        item.createdAt = new Date().getTime();
+        item.content = JSON.stringify(item.content);
+        return insertIntoTable('action_logs', item);
+    }
 
+    controller.prototype.actionLogs_findAll = () => {
+        return new Promise((resolve, reject)=>{
+            
+        })
+    }
 
     /**
      * tokens

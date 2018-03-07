@@ -17124,6 +17124,27 @@ md-dialog.add-id-attribute {
             letter-spacing: 0.7px;
             color: #ffffff; }
 
+form.address-content {
+  width: 760px;
+  padding: 40px 15px 15px 15px; }
+  form.address-content md-input-container {
+    width: 100%;
+    margin: 0; }
+
+form.nationality-content {
+  width: 760px;
+  padding: 40px 15px 15px 15px; }
+  form.nationality-content md-input-container {
+    width: 100%;
+    margin: 0; }
+
+form.birth-date-content {
+  width: 760px;
+  padding: 40px 15px 15px 15px; }
+  form.birth-date-content md-input-container {
+    width: 100%;
+    margin: 0; }
+
 md-dialog {
   background-image: linear-gradient(124deg, #2b3540, #1e262e);
   min-width: 100%;

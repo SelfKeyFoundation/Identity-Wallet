@@ -36,7 +36,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     $scope.addIdAttribute = (event, type) => {
         $mdDialog.show({
             controller: "AddIdAttributeDialogController",
-            templateUrl: "common/dialogs/add-id-attribute.html",
+            templateUrl: "common/dialogs/id-attributes/add-id-attribute.html",
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,

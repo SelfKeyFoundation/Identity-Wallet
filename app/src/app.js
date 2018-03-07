@@ -199,13 +199,13 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
-const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-document-controller.js');
+const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
 
-const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-static-data-controller.js');
+const AddEditStaticDataDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-edit-static-data-controller.js');
 angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
 
-const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
+const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-id-attribute-controller.js');
 angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
 const AddCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-custom-token-controller.js');

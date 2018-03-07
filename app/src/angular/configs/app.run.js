@@ -187,7 +187,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     $rootScope.openAddEditDocumentDialog = (event, idAttributeItemValue, idAttributeType) => {
         return $mdDialog.show({
             controller: 'AddEditDocumentDialogController',
-            templateUrl: 'common/dialogs/add-edit-document.html',
+            templateUrl: 'common/dialogs/id-attributes/add-edit-document.html',
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,
@@ -202,7 +202,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     $rootScope.openAddEditStaticDataDialog = (event, idAttributeItemValue, itAttributeType) => {
         return $mdDialog.show({
             controller: 'AddEditStaticDataDialogController',
-            templateUrl: 'common/dialogs/add-edit-static-data.html',
+            templateUrl: 'common/dialogs/id-attributes/add-edit-static-data.html',
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,

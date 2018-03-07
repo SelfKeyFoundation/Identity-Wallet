@@ -1,0 +1,11 @@
+.content
+    md-input-container.sk-input-box.sk-input-non-floating
+        label Birth Date(YYYY/MM/DD)
+        input(name="birthDate", type="date", ng-model="inputs.date", ng-required="true")
+
+.actions-wrapper
+    md-button.outline-gray(ng-click="close($event)")
+        span.primary cancel
+    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")
+        span.primary save
+
