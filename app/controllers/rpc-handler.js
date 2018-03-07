@@ -4,12 +4,13 @@ const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
 
 const path = require('path');
+const fs = require('fs-extra');
+const fsm = require('fs');
+
 const keythereum = require('../extended_modules/keythereum');
 const deskmetrics = require('deskmetrics');
 const mime = require('mime-types');
 const settings = require('electron-settings');
-const fs = require('fs-extra');
-const fsm = require('fs');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
@@ -329,43 +330,59 @@ module.exports = function (app) {
         }
     }
 
-    controller.prototype.openPdfViewer = function (event, actionId, actionName, args) {
+    controller.prototype.openFileViewer = function (event, actionId, actionName, args) {
         try {
-            const win = new PDFWindow({
-                width: 800,
-                height: 600
-            });
-
-            let tempFilePath = "";
+            function onClose () {
+                try{
+                    let files = fsm.readdirSync(documentsDirectoryPath);
+                    for (const file of files) {
+                        fsm.unlinkSync(path.join(documentsDirectoryPath, file));
+                    }
+                }catch(e){
+                    console.log(e);
+                    return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+                }
+            }
 
             electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
-                fs.appendFile(tempFilePath, new Buffer(document.buffer), (error) => {
-                    if (error) {
-                        return app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-                    }
+                const filePathToPreview = path.join(documentsDirectoryPath, data.name);
 
-                    win.loadURL(tempFilePath);
-                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                try{
+                    fsm.appendFileSync(documentsDirectoryPath + "/" + data.name, new Buffer(data.buffer));
+                }catch(e){
+                    console.log(e);
+                    return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+                }
+
+                let win = null;
+
+                if(data.mimeType === 'application/pdf'){
+                    win = new PDFWindow({ width: 800, height: 600 });
+                }else{
+                    win = new electron.BrowserWindow({ width: 800, height: 600 });
+                }
+
+                win.on("close", ()=>{
+                    onClose();
+                    win = null;
                 });
+
+                //win.loadURL(filePathToPreview);
+                win.loadURL(`file://${filePathToPreview}`)
+
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
             }).catch((error) => {
+                console.log(error);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
 
-
-
-            /*
-            var fs = require('fs');
-            try {
-                fs.writeFileSync()
-                fs.writeFileSync('myfile.txt', content, 'utf-8');
-            }
-            catch(e) { alert('Failed to save the file !'); }
-            */
         } catch (e) {
             console.log(e);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
         }
     }
+
+
 
 
 
