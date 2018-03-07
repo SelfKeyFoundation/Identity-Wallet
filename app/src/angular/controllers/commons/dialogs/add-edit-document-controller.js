@@ -15,10 +15,10 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
     };
 
     $scope.save = (event) => {
-        if($scope.selectedFile){
-            SqlLiteService.updateIdAttributeItemValueDocument(idAttributeItemValue, $scope.selectedFile).then(()=>{
+        if ($scope.selectedFile) {
+            SqlLiteService.updateIdAttributeItemValueDocument(idAttributeItemValue, $scope.selectedFile).then(() => {
                 $mdDialog.hide();
-            }).catch((error)=>{
+            }).catch((error) => {
                 $log.error(error);
                 CommonService.showToast('error', 'error while saving document');
             });
@@ -28,7 +28,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
     $scope.selectFile = (event) => {
         let fileSelect = RPCService.makeCall('openFileSelectDialog', {
             filters: [
-                { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
+                {name: 'Documents', extensions: ['jpg', 'png', 'pdf']},
             ],
             maxFileSize: 50 * 1000 * 1000
         });

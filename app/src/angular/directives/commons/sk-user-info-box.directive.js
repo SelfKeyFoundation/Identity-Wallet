@@ -28,7 +28,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
 
                 for (let i in idAttributes) {
                     scope.idAttributes[idAttributes[i].idAttributeType] = {}
-                    scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData || idAttributes[i].items[0].values[0].documentFileName
+                    scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData || idAttributes[i].items[0].values[0].documentFileName;
                 }
                 console.log(" > > >> > >> > >>>>>>>", scope.idAttributes)
             }

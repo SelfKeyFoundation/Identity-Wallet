@@ -89,7 +89,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             locals: {
                 args: {
                     symbol: symbol,
-                    allowSelectERC20Token : allowSelectERC20Token
+                    allowSelectERC20Token: allowSelectERC20Token
                 }
             }
         });
@@ -194,7 +194,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true,
             locals: {
                 idAttributeItemValue: idAttributeItemValue,
-                idAttributeType: idAttributeType
+                idAttributeType: idAttributeType,
             }
         });
     };
@@ -209,7 +209,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true,
             locals: {
                 idAttributeItemValue: idAttributeItemValue,
-                idAttributeType: itAttributeType
+                idAttributeType: itAttributeType,
             }
         });
     };
@@ -253,9 +253,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
-    /**
-     *
-     */
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
         if (RPCService.ipcRenderer) {

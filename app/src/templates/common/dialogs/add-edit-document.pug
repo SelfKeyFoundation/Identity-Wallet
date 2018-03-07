@@ -3,11 +3,11 @@ md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
         #document.sk-box.center-divider
             .content(layout="column")
                 .header-wrapper
-                    .title {{idAttributeType}}
+                    .title {{$root.DICTIONARY[idAttributeType]}}
                 .content-wrapper
                     .box(flex, layout="column", layout-align="center center")
                         sk-icon(icon="upload", size-class="icon-size-34x44")
-                        span.header {{idAttributeType}}
+                        span.header {{$root.DICTIONARY[idAttributeType]}}
                         span.sub-header (Minimal size 1600x900px)
 
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
@@ -17,5 +17,5 @@ md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
     .actions-wrapper
         md-button.outline-gray(ng-click="close($event)")
             span.primary cancel
-        md-button.blue(ng-click="save($event)")
+        md-button.blue(ng-click="save($event)", ng-disabled="!selectedFile")
             span.primary save
