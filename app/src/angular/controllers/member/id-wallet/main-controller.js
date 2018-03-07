@@ -57,7 +57,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                 prepareData();
                 CommonService.showToast('success', 'saved');
 
-                SqlLiteService.registerActionLog("Created Attribute: " + $rootScope.DICTIONARY[selectedIdAttributeType.key]).then(()=>{
+                SqlLiteService.registerActionLog("Created Attribute: " + $rootScope.DICTIONARY[selectedIdAttributeType.key], 'Created').then(()=>{
                     loadWalletHistory()
                 });
             }).catch((error) => {
@@ -72,7 +72,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             prepareData();
             CommonService.showToast('success', 'saved');
 
-            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType]).then(()=>{
+            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType], 'Updated').then(()=>{
                 loadWalletHistory()
             });
         });
@@ -83,7 +83,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             prepareData();
             CommonService.showToast('success', 'saved');
 
-            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType]).then(()=>{
+            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType], 'Updated').then(()=>{
                 loadWalletHistory()
             });
         });
@@ -166,7 +166,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     function loadWalletHistory () {
         SqlLiteService.loadWalletHistory().then((data)=>{
             $scope.walletHistoryList = data.reverse();
-
         });
     }
 };
@@ -180,7 +179,7 @@ function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonServic
     $scope.delete = (event) => {
         $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
         $scope.promise.then(() => {
-            SqlLiteService.registerActionLog("Deleted Attribute: " + $rootScope.DICTIONARY[idAttribute.idAttributeType]).then(()=>{
+            SqlLiteService.registerActionLog("Deleted Attribute: " + $rootScope.DICTIONARY[idAttribute.idAttributeType], 'Deleted').then(()=>{
                 $rootScope.$broadcast('id-attribute:changed');
                 CommonService.showToast('success', 'deleted');
                 mdPanelRef.close().then(() => {

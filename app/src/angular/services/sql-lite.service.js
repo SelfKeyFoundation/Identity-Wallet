@@ -203,10 +203,10 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         /**
          *
          */
-        registerActionLog(actionText){
+        registerActionLog(actionText, title){
             let theAction = {
                 walletId: $rootScope.wallet.id,
-                title: "untitled",
+                title: title || "untitled",
                 content: actionText
             }
             return RPCService.makeCall('actionLogs_add', theAction);

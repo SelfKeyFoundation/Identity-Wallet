@@ -17,10 +17,10 @@
                                     td
                                     td
                             tbody
-                                tr(ng-repeat="item in walletHistoryList | orderBy:'item.createdAt'")
+                                tr(ng-repeat="item in walletHistoryList")
                                     td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                     td
-                                        sk-icon(icon="success-box", size-class="icon-size-16x16")
+                                        sk-icon(icon="{{ item.title === 'Deleted' ? 'danger-box' : 'success-box' }}", size-class="icon-size-16x16")
                                     td {{item.content}}
 
 
