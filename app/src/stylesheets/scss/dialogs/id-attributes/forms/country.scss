@@ -8,3 +8,20 @@ form.nationality-content {
         margin: 0;
     }
 }
+
+.actions-wrapper {
+    width: 760px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+
+    .md-button {
+        width: 144px;
+        padding: 0 16px;
+
+        &:last-of-type {
+            margin-left: 16px;
+        }
+    }
+}

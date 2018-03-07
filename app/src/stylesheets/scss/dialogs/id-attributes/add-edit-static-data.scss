@@ -23,10 +23,10 @@ md-dialog {
 
         >.actions-wrapper {
             width: 760px;
-            margin-top: 24px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
+            padding-bottom: 10px;
 
             .md-button {
                 width: 144px;
