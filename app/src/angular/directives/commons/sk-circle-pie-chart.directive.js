@@ -10,7 +10,7 @@ function SkCirclePieChartDirective($timeout) {
         },
         link: (scope, element) => {
             const TOP_MAX_SIZE = 5;
-            const colorForOthers = 'red';
+            const colorForOthers = '#bad0db';
 
             scope.isCollapsed = true;
             scope.isCollapsable = false;
@@ -35,8 +35,8 @@ function SkCirclePieChartDirective($timeout) {
 
             let processItems = () => {
                 let items = scope.data.items;
-                let TOP_COLORS = ['green', 'blue', 'grey'];
-
+                let TOP_COLORS = ['#ff6400', '#03c8ce', '#a6e43b','#5f5f5f','#5f5f5f','#50b0fc'];
+                
                 items.sort((a, b) => {
                     return parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
                 });
@@ -84,13 +84,11 @@ function SkCirclePieChartDirective($timeout) {
                     return item.subTitle.toLowerCase() == 'eth';
                 });
                 ethItem.icon = 'eth';
-                ethItem.color = '#a727e0';
 
                 let keyItem = items.find((item) => {
                     return item.subTitle.toLowerCase() == 'key';
                 });
                 keyItem.icon = 'key';
-                keyItem.color = '#00aeee';
 
                 items.forEach((item) => {
                     if (!item.color) {
