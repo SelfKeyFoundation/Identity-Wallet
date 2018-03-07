@@ -20,7 +20,7 @@
             md-select.sk-select(name="country", ng-model="inputs.country", ng-required="true")
                 md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
 
-.actions-wrapper(style="padding: 0 15px 15px 15px;")
+.address-actions-wrapper
     md-button.outline-gray(ng-click="close($event)")
         span.primary cancel
     md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")

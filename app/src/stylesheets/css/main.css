@@ -17054,6 +17054,18 @@ md-dialog.add-edit-static-data {
       md-dialog.add-edit-static-data > .actions-wrapper .md-button:last-of-type {
         margin-left: 16px; }
 
+.static-data-actions-wrapper {
+  width: 760px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 10px; }
+  .static-data-actions-wrapper .md-button {
+    width: 144px;
+    padding: 0 16px; }
+    .static-data-actions-wrapper .md-button:last-of-type {
+      margin-left: 16px; }
+
 md-dialog.add-id-attribute {
   min-width: 100%;
   min-height: 100%;
@@ -17131,16 +17143,16 @@ form.address-content {
     width: 100%;
     margin: 0; }
 
-.actions-wrapper {
+.address-actions-wrapper {
   width: 760px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 10px; }
-  .actions-wrapper .md-button {
+  .address-actions-wrapper .md-button {
     width: 144px;
     padding: 0 16px; }
-    .actions-wrapper .md-button:last-of-type {
+    .address-actions-wrapper .md-button:last-of-type {
       margin-left: 16px; }
 
 form.nationality-content {
@@ -17150,16 +17162,16 @@ form.nationality-content {
     width: 100%;
     margin: 0; }
 
-.actions-wrapper {
+.country-actions-wrapper {
   width: 760px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 10px; }
-  .actions-wrapper .md-button {
+  .country-actions-wrapper .md-button {
     width: 144px;
     padding: 0 16px; }
-    .actions-wrapper .md-button:last-of-type {
+    .country-actions-wrapper .md-button:last-of-type {
       margin-left: 16px; }
 
 form.birth-date-content {
@@ -17169,16 +17181,16 @@ form.birth-date-content {
     width: 100%;
     margin: 0; }
 
-.actions-wrapper {
+.birth-date-actions-wrapper {
   width: 760px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 10px; }
-  .actions-wrapper .md-button {
+  .birth-date-actions-wrapper .md-button {
     width: 144px;
     padding: 0 16px; }
-    .actions-wrapper .md-button:last-of-type {
+    .birth-date-actions-wrapper .md-button:last-of-type {
       margin-left: 16px; }
 
 md-dialog {

@@ -3,7 +3,7 @@
         label {{$root.DICTIONARY[idAttributeType]}}
         input(name="input", type="{{singleInputType}}", ng-model="inputs.staticData", ng-required="true")
 
-.actions-wrapper
+.static-data-actions-wrapper
     md-button.outline-gray(ng-click="close($event)")
         span.primary cancel
     md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")

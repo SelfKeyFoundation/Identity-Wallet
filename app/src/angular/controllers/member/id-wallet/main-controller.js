@@ -148,7 +148,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                             item.longDateValue = Number(item.items[0].values[0].staticData)
                         }
                         $scope.attributesList.push(item)
-                        console.log(333, $scope.attributesList)
                     }
                 });
 
