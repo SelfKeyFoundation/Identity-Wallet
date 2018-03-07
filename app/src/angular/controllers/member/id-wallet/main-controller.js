@@ -1,6 +1,6 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPanel, SqlLiteService, CommonService) {
+function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
     'ngInject'
 
     $log.info('MemberIdWalletMainController');
@@ -102,6 +102,14 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         }
 
         $mdPanel.open(config);
+    }
+
+    $scope.openFilePreview = (event, item) => {
+        if(item && item.documentId){
+            RPCService.makeCall('openFileViewer', {documentId: item.documentId});
+        }else{
+            CommonService.showToast('error', 'documentId is missing');
+        }
     }
 
     $scope.$on('id-attribute:changed', () => {

@@ -256,16 +256,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     /**
      *
      */
-    $timeout(()=>{
-        //RPCService.makeCall('openPdfViewer', {});
-
-        //$rootScope.openDocumentPreviewDialog(null, 1)
-    }, 5000);
-
-
-    /**
-     *
-     */
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
         if (RPCService.ipcRenderer) {

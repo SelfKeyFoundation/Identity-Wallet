@@ -71,7 +71,7 @@
                                 td {{item.items[0].values[0].documentFileName}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'dd.MM.yyyy'}}
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg" ng-if="item.items[0].values[0].documentFileName", class="color-violet")
+                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg" ng-if="item.items[0].values[0].documentFileName", class="color-violet", ng-click="openFilePreview($event, item.items[0].values[0])")
                                 td.action-columns
                                     md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemDocument($event, item.items[0].values[0], item.idAttributeType)", class="color-orange")
                                 td.action-columns
