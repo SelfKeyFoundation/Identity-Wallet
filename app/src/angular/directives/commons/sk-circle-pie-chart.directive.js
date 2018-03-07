@@ -84,13 +84,11 @@ function SkCirclePieChartDirective($timeout) {
                     return item.subTitle.toLowerCase() == 'eth';
                 });
                 ethItem.icon = 'eth';
-                ethItem.color = '#a727e0';
 
                 let keyItem = items.find((item) => {
                     return item.subTitle.toLowerCase() == 'key';
                 });
                 keyItem.icon = 'key';
-                keyItem.color = '#00aeee';
 
                 items.forEach((item) => {
                     if (!item.color) {
