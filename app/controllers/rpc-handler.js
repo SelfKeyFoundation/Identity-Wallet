@@ -348,13 +348,14 @@ module.exports = function (app) {
                 const filePathToPreview = path.join(documentsDirectoryPath, data.name);
 
                 try{
-                    fsm.appendFileSync(documentsDirectoryPath + "/" + data.name, new Buffer(data.buffer));
+                    fsm.appendFileSync(filePathToPreview, new Buffer(data.buffer));
                 }catch(e){
                     app.log.warn(e);
                     console.log(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
                 }
 
+                /*
                 let win = null;
 
                 const config = {
@@ -362,7 +363,6 @@ module.exports = function (app) {
                     height: 600,
                     protocol: 'file:',
                     slashes: true,
-
                     //allowDisplayingInsecureContent: true,
                     //allowRunningInsecureContent: true
                 };
@@ -380,9 +380,12 @@ module.exports = function (app) {
                 });
 
                 app.log.warn(filePathToPreview);
+                */
 
                 //win.loadURL(filePathToPreview);
-                win.loadURL(`file://${filePathToPreview}`)
+                //win.loadURL(`file://${filePathToPreview}`)
+
+                shell.openExternal(`file://${filePathToPreview}`);
 
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
             }).catch((error) => {
