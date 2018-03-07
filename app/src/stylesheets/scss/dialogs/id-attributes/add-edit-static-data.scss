@@ -8,9 +8,9 @@ md-dialog {
         align-items: center;
         justify-content: center;
 
-        >.content-wrapper {
+        > .content-wrapper {
 
-            >.content {
+            > .content {
                 width: 760px;
                 padding: 40px 15px 15px 15px;
 
@@ -21,7 +21,7 @@ md-dialog {
             }
         }
 
-        >.actions-wrapper {
+        > .actions-wrapper {
             width: 760px;
             display: flex;
             justify-content: flex-end;
@@ -36,6 +36,23 @@ md-dialog {
                     margin-left: 16px;
                 }
             }
+        }
+    }
+}
+
+.static-data-actions-wrapper {
+    width: 760px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+
+    .md-button {
+        width: 144px;
+        padding: 0 16px;
+
+        &:last-of-type {
+            margin-left: 16px;
         }
     }
 }
