@@ -105,9 +105,9 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     }
 
     $scope.openFilePreview = (event, item) => {
-        if(item && item.documentId){
+        if (item && item.documentId) {
             RPCService.makeCall('openFileViewer', {documentId: item.documentId});
-        }else{
+        } else {
             CommonService.showToast('error', 'documentId is missing');
         }
     }
@@ -129,11 +129,14 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                     if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
                         $scope.idDocumentsList.push(item)
                     } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
+                        if (item.idAttributeType == "birthdate") {
+                            item.longDateValue = Number(item.items[0].values[0].staticData)
+                        }
                         $scope.attributesList.push(item)
+                        console.log(333, $scope.attributesList)
                     }
                 });
 
-                console.log($scope.idDocumentsList, $scope.attributesList);
             }
 
             excludeKeys = [];
@@ -145,6 +148,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         });
     }
 };
+
 
 function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, SqlLiteService, idAttribute, idAttributeItem, idAttributeItemValue) {
     'ngInject';

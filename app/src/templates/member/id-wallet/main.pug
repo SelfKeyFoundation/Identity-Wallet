@@ -42,7 +42,7 @@
                                 td
                                     sk-icon(icon="{{item.items[0].values[0].staticData ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
                                 td {{$root.DICTIONARY[item.idAttributeType]}}
-                                td {{item.items[0].values[0].staticData}}
+                                td {{item.idAttributeType == "birthdate" ? (item.longDateValue | date: 'yyyy/MM/dd') : item.items[0].values[0].staticData}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                 td.action-columns
                                     md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemValue($event, item.items[0].values[0], item.idAttributeType)", class="color-light-grey")
