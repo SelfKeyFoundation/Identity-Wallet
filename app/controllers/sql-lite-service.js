@@ -573,22 +573,29 @@ module.exports = function (app) {
 
 
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
-        console.log('here', data);
-        console.log('wallet Id', walletId, balance)
         data.createdAt = new Date().getTime();
-        return knex.transaction((trx) => {
-            knex('tokens')
-                .transacting(trx)
-                .insert(data)
-                .then((resp) => {
-                    let id = resp[0];
-                    console.log('new token ID', id);
-                    // add wallet tokens
-                    return insertIntoTable('wallet_tokens', { walletId: walletId, tokenId: id, balance: balance, recordState: 1, createdAt: new Date().getTime() }, trx);
-
-                })
-                .then(trx.commit)
-                .catch(trx.rollback);
+        return new Promise((resolve, reject) => {
+            
+            knex.transaction((trx) => {
+                knex('tokens')
+                    .transacting(trx)
+                    .insert(data)
+                    .then((resp) => {
+                        let id = resp[0];
+                        // add wallet tokens
+                        return insertIntoTable('wallet_tokens', { walletId: walletId, tokenId: id, balance: balance, recordState: 1, createdAt: new Date().getTime() }, trx);
+                    })
+                    .then(trx.commit)
+                    .catch(trx.rollback);
+            }).then((rowData)=>{
+                walletTokens_selectById(rowData.id).then((walletData)=>{
+                    resolve(walletData);
+                }).catch((err) => {
+                    reject(err);
+                });
+            }).catch((err) => {
+                reject(err);
+            });
         });
     }
 
@@ -718,6 +725,25 @@ module.exports = function (app) {
         });
     }
 
+    function walletTokens_selectById (id)  {
+        return new Promise((resolve, reject) => {
+            let promise = knex('wallet_tokens')
+                .select('wallet_tokens.*', 'token_prices.name', 'token_prices.priceUSD', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
+                .leftJoin('tokens', 'tokenId', 'tokens.id')
+                .leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
+                .where({ 'wallet_tokens.id': id, recordState: 1 });
+
+            promise.then((rows) => {
+                rows && rows.length ? resolve(rows[0]) : resolve(null);
+            }).catch((error) => {
+                console.log(error);
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+
+    controller.prototype.walletTokens_selectById = walletTokens_selectById;
+
     /**
      * id_attribute_types
      */
@@ -731,7 +757,18 @@ module.exports = function (app) {
 
     controller.prototype.wallet_tokens_insert = (data) => {
         data.recordState = 1;
-        return insertIntoTable('wallet_tokens', data);
+
+        return new Promise((resolve, reject) => {
+            insertIntoTable('wallet_tokens', data).then((rowData) => {
+                walletTokens_selectById(rowData.id).then((walletData)=>{
+                    resolve(walletData);
+                }).catch((err) => {
+                    reject(err);
+                });
+            }).catch((err) => {
+                reject(err);
+            });
+        });
     }
 
     controller.prototype.wallet_tokens_update = (data) => {

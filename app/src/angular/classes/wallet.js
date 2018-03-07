@@ -83,7 +83,6 @@ class Wallet {
             this.balanceWei = balanceWei;
 
             this.calculateBalanceInUSD();
-
             if (balanceWei !== oldBalanceInWei) {
                 $rootScope.$broadcast('balance:change', 'eth', this.balanceEth, this.balanceInUsd);
                 if (readyToShowNotification) {
@@ -173,7 +172,7 @@ class Wallet {
             this.tokens = {};
             for (let i in walletTokens) {
                 let token = walletTokens[i];
-                this.tokens[token.symbol.toUpperCase()] = new Token(token.address, token.symbol, token.decimal, token.isCustom, token.tokenId, token.id, this);
+                this.tokens[token.symbol.toUpperCase()] = this.addNewToken(token);
             }
             defer.resolve(this.tokens);
         }).catch((error) => {
@@ -181,6 +180,12 @@ class Wallet {
         });
 
         return defer.promise;
+    }
+
+    addNewToken(data) {
+        let newToken = new Token(data.address, data.symbol, data.decimal, data.isCustom, data.tokenId, data.id, this);
+        this.tokens[data.symbol.toUpperCase()] = newToken;
+        return newToken;
     }
 
     /**

@@ -107,7 +107,6 @@ class Token {
             this.balanceDecimal = EthUtils.hexToDecimal(balanceHex);
 
             this.calculateBalanceInUSD();
-
             if (balanceHex !== oldBalanceHex) {
                 $rootScope.$broadcast('balance:change', this.symbol, this.getBalanceDecimal(), this.balanceInUsd);
             }

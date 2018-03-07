@@ -52,19 +52,16 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             let pieChartItem = {};
             let token = wallet.tokens[tokeyKey];
 
-            let balanceDecimal = token.getBalanceDecimal() || 0;
-
             let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             if (tokenPrice) {
                 pieChartItem.title = tokenPrice.name;
-                pieChartItem.valueUSD = token.getBalanceInUsd();
+                pieChartItem.valueUSD = Number(CommonService.numbersAfterComma(token.getBalanceInUsd(), 2));
             } else {
                 pieChartItem.title = 'Unknown';
                 pieChartItem.valueUSD = 0;
             }
 
             pieChartItem.subTitle = token.symbol;
-            pieChartItem.value = balanceDecimal;
 
             pieChartItems.push(pieChartItem);
         });
@@ -73,8 +70,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         pieChartItems.unshift({
             subTitle: 'ETH',
             title: 'Ethereum',
-            valueUSD: wallet.getBalanceInUsd(),
-            value: wallet.balanceEth,
+            valueUSD: Number(CommonService.numbersAfterComma(wallet.getBalanceInUsd(), 2))
         });
 
         return pieChartItems;

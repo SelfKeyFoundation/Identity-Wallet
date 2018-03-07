@@ -5,17 +5,13 @@ function NewERC20TokenInfoController($rootScope, $scope, $log, $q, $timeout, $md
     $scope.reloadTokensPrimise = null;
 
     $scope.cancel = (event) => {
-        $scope.reloadTokensPrimise = $rootScope.wallet.loadTokens();
-        $scope.reloadTokensPrimise.then(()=> {
-            $rootScope.$broadcast("piechart:reload");
-            $mdDialog.cancel();
-        });
-    }
+        $rootScope.$broadcast("piechart:reload");
+        $mdDialog.cancel();
+    };
 
     $scope.symbol = symbol;
     $scope.balance = balance;
     $scope.title = title;
-
 
   };
 

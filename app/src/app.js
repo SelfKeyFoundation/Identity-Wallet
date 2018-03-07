@@ -208,8 +208,11 @@ angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', Add
 const AddIdAttributeDialogController = requireAppModule('angular/controllers/commons/dialogs/add-id-attribute-controller.js');
 angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
-const AddEditCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-edit-custom-token-controller.js');
-angular.module('kyc-wallet').controller('AddEditCustomTokenDialogController', AddEditCustomTokenDialogController);
+const AddCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-custom-token-controller.js');
+angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
+
+const EditCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/edit-custom-token-controller.js');
+angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditCustomTokenDialogController);
 
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
