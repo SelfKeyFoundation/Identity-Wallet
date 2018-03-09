@@ -49,4 +49,4 @@
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        span.fc-white {{ value.dateValueInMillis ? (value.dateValueInMillis | date: 'yyyy/MM/dd') : value.value}}
+                        span.fc-white {{ value.dateValueInMillis ? (value.dateValueInMillis | date: 'yyyy/MM/dd') : value.isDocument && value.value ? 'Uploaded' : value.value }}
