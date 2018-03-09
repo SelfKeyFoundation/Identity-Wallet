@@ -10,6 +10,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     const COUNTRY_ID_ATTRIBUTES = ['nationality', 'country_of_residency'];
     const DATE_ID_ATTRIBUTES = ['birthdate'];
 
+    $scope.currentDate = new Date();
     $scope.idAttributeItemValue = idAttributeItemValue;
     $scope.idAttributeType = idAttributeType;
     $scope.countryList = SqlLiteService.getCountries();

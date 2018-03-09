@@ -73,7 +73,7 @@ const EN = {
     work_place: "Workplace",
     birthdate: "Date of Birth",
     nationality: "Nationality",
-    tax_id_number: "Tax ID",
+    tax_id_number: "Tax Identification Number",
     passport: "Passport",
     drivers_license: "Driver's License",
     national_id: "National ID",
