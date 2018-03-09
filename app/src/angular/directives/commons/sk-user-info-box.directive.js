@@ -38,6 +38,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
                         }
                     }else{
                         scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].documentFileName;
+                        scope.idAttributes[idAttributes[i].idAttributeType].isDocument = true;
                     }
                 }
             }

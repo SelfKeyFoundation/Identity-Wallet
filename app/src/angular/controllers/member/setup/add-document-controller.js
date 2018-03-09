@@ -35,10 +35,10 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
 
     $scope.selectFile = (event) => {
         let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
-        let actionText = 'Created Attribute: ';
+        let actionText = 'Created Document: ';
         let actionTitle = 'Created';
         if(selectedValue.documentId){
-            actionText = 'Updated Attribute: ';
+            actionText = 'Updated Document: ';
             actionTitle = 'Updated';
         }
 

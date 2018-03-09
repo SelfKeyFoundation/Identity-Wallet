@@ -8,6 +8,7 @@ function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, Sql
     $scope.globalAttributes = {};
     $scope.idDocuments = {};
     $scope.proofOfAddresses = {};
+    $scope.proofOfWealthes = {};
     //$scope.onlineIdentityAttributes = {};
 
     let data = SqlLiteService.getIdAttributeTypes();
@@ -24,9 +25,9 @@ function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, Sql
             case "proof_of_address":
                 $scope.proofOfAddresses[i] = data[i];
                 break;
-            //case "online_identity_attribute":
-            //    $scope.onlineIdentityAttributes[i] = data[i];
-            //    break;
+            case "proof_of_wealth":
+                $scope.proofOfWealthes[i] = data[i];
+                break;
         }
     }
 

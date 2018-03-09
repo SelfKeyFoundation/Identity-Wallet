@@ -83,7 +83,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             prepareData();
             CommonService.showToast('success', 'saved');
 
-            SqlLiteService.registerActionLog("Updated Attribute: " + $rootScope.DICTIONARY[idAttributeType], 'Updated').then(()=>{
+            SqlLiteService.registerActionLog("Updated Document: " + $rootScope.DICTIONARY[idAttributeType], 'Updated').then(()=>{
                 loadWalletHistory()
             });
         });
@@ -154,7 +154,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                         $scope.attributesList.push(item)
                     }
                 });
-
             }
 
             excludeKeys = [];
