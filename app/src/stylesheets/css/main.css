@@ -17690,6 +17690,22 @@ md-dialog {
         margin-top: 44px; }
         .wallet-create-step-6 .content-wrapper .content .actions-wrapper > .md-button {
           padding: 10px; }
+  .wallet-create-step-6 .private-key-print-box {
+    display: none; }
+
+@media print {
+  .wallet-create-step-6 .content-wrapper {
+    display: none; }
+  .wallet-create-step-6 .private-key-print-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; }
+    .wallet-create-step-6 .private-key-print-box span :first-of-type {
+      font-weight: bold;
+      font-size: 18px; }
+    .wallet-create-step-6 .private-key-print-box span :last-of-type {
+      margin-top: 18px; } }
 
 .member-setup-layout {
   position: relative; }

@@ -1,21 +1,17 @@
 .wallet-create-step-6 {
     height: 100%;
-
     .content-wrapper {
         width: 780px;
         margin-top: 50px;
-
         .content {
             padding: 60px 40px;
-
-            .md-icon-button{
+            .md-icon-button {
                 md-icon {
                     svg {
                         fill: #ffffff;
                     }
                 }
             }
-
             >.title {
                 font-family: ProximaNovaRegular;
                 font-size: 18px;
@@ -23,12 +19,10 @@
                 color: #ffffff;
                 margin-bottom: 40px;
             }
-
             .warning-description {
                 display: flex;
                 flex-direction: column;
                 margin-top: 44px;
-
                 >.item {
                     span {
                         font-family: ProximaNovaRegular;
@@ -42,7 +36,6 @@
                     }
                 }
             }
-
             .actions-wrapper {
                 width: 100%;
                 display: flex;
@@ -50,10 +43,37 @@
                 justify-content: center;
                 align-items: stretch;
                 margin-top: 44px;
-
                 >.md-button {
                     padding: 10px;
                 }
+            }
+        }
+    }
+    .private-key-print-box {
+        display: none;
+    }
+}
+
+@media print {
+    .wallet-create-step-6 {
+        .content-wrapper {
+            display: none;
+        }
+        
+        .private-key-print-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .title {
+                margin-top: 16px;
+                font-weight: bold;
+                font-size: 18px;
+            }
+
+            .pk {
+                margin-top: 8px;
             }
         }
     }
