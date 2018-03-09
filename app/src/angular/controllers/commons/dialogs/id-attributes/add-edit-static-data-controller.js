@@ -22,8 +22,10 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     $scope.theForm = null;
 
     $scope.inputs = {
-        staticData: angular.copy(idAttributeItemValue.staticData)
+
     }
+
+    prepare ();
 
     $scope.close = (event) => {
         $mdDialog.cancel();
@@ -31,9 +33,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
     $scope.isFormInvalid = (theForm) => {
         $scope.theForm = theForm;
-        if(!$scope.theForm.$valid) return true;
-
-        return false;
+        return !$scope.theForm.$valid;
     }
 
     $scope.getFormPath = () => {
@@ -49,23 +49,28 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     }
 
     $scope.save = (event, theForm) => {
-
         if($scope.isFormInvalid(theForm)) return;
 
         let value = {
-            id: idAttributeItemValue.id
+            id: idAttributeItemValue.id,
+            staticData: {}
         }
 
         $scope.savePromise = null;
 
         if(ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1){
-            value.staticData = $scope.inputs.address1;
+            value.staticData.line1 = $scope.inputs.line1;
+            value.staticData.line2 = $scope.inputs.line2;
+            value.staticData.line3 = $scope.inputs.line3;
+            value.staticData.line4 = $scope.inputs.line4;
+            value.staticData.line5 = $scope.inputs.line5;
+            value.staticData.line6 = $scope.inputs.line6;
         } else if (COUNTRY_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-            value.staticData = $scope.inputs.country;
+            value.staticData.line1 = $scope.inputs.line1;
         } else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-            value.staticData = $scope.inputs.date.getTime()
+            value.staticData.line1 = $scope.inputs.line1.getTime()
         } else {
-            value.staticData = $scope.inputs.staticData
+            value.staticData.line1 = $scope.inputs.line1;
         }
 
         $scope.savePromise = SqlLiteService.updateIdAttributeItemValueStaticData(value);
@@ -82,6 +87,23 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             CommonService.showToast('error', 'This field is required. Please enter ' + $scope.idAttributeType);
         }
     };
+
+    function prepare () {
+        if(!idAttributeItemValue.staticData){
+            return;
+        }
+        $scope.inputs.line1 = angular.copy(idAttributeItemValue.staticData.line1);
+
+        if(ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1){
+            $scope.inputs.line2 = angular.copy(idAttributeItemValue.staticData.line2);
+            $scope.inputs.line3 = angular.copy(idAttributeItemValue.staticData.line3);
+            $scope.inputs.line4 = angular.copy(idAttributeItemValue.staticData.line4);
+            $scope.inputs.line5 = angular.copy(idAttributeItemValue.staticData.line5);
+            $scope.inputs.line6 = angular.copy(idAttributeItemValue.staticData.line6);
+        } else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+            $scope.inputs.line1 = new Date(idAttributeItemValue.staticData.line1);
+        }
+    }
 };
 
 module.exports = AddEditStaticDataDialogController;

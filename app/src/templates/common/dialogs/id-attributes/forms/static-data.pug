@@ -1,7 +1,7 @@
 .content
     md-input-container.sk-input-box.sk-input-non-floating
         label {{$root.DICTIONARY[idAttributeType]}}
-        input(name="input", type="{{singleInputType}}", ng-model="inputs.staticData", ng-required="true")
+        input(name="input", type="{{singleInputType}}", ng-model="inputs.line1", ng-required="true")
 
 .static-data-actions-wrapper
     md-button.outline-gray(ng-click="close($event)")

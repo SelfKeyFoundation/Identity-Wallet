@@ -6,7 +6,7 @@
             .pic(style='background-image: url({{userData.tempImage}});')
         .name
             sk-icon(icon="success-box", size-class="icon-size-16x16")
-            span {{ idAttributes.first_name.value + ' ' + (idAttributes.middle_name && idAttributes.middle_name.value ? idAttributes.middle_name.value + ' ' : '') +  idAttributes.last_name.value }}
+            span {{ idAttributes.first_name.value.line1 + ' ' + (idAttributes.middle_name && idAttributes.middle_name.value ? idAttributes.middle_name.value + ' ' : '') +  idAttributes.last_name.value }}
 
     hr
 
@@ -49,4 +49,4 @@
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        span.fc-white {{value.value}}
+                        span.fc-white {{ value.dateValueInMillis ? (value.dateValueInMillis | date: 'yyyy/MM/dd') : value.value}}

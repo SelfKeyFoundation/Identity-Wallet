@@ -18,7 +18,6 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
             prepareData();
 
             scope.$on('sk-user-info-box:update', () => {
-                console.log('sk-user-info-box:update')
                 prepareData();
             });
 
@@ -28,9 +27,15 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
 
                 for (let i in idAttributes) {
                     scope.idAttributes[idAttributes[i].idAttributeType] = {}
-                    scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData || idAttributes[i].items[0].values[0].documentFileName;
+                    if(idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1){
+                        scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData.line1;
+                        if (idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1 && idAttributes[i].idAttributeType == "birthdate") {
+                            scope.idAttributes[idAttributes[i].idAttributeType].dateValueInMillis = Number(idAttributes[i].items[0].values[0].staticData.line1)
+                        }
+                    }else{
+                        scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].documentFileName;
+                    }
                 }
-                console.log(" > > >> > >> > >>>>>>>", scope.idAttributes)
             }
         },
         replace: true,

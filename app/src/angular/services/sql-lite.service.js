@@ -212,8 +212,8 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('actionLogs_add', theAction);
         }
 
-        loadWalletHistory(){
-            return RPCService.makeCall('actionLogs_findAll', {});
+        loadWalletHistory(walletId){
+            return RPCService.makeCall('actionLogs_findAll', {walletId: walletId});
         }
 
         /**
