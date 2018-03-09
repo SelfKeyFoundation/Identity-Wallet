@@ -1,16 +1,35 @@
-.header
-    span.none-select-text Create New Wallet
-form.content(layout="column", style="padding: 24px;")
-    
-    span.sk-text Enter the password that you just created for your private key.
-    span.sk-text Make sure you have chosen a strong password.
-    span.sk-text Do not forget or lose this password, and do not share this password with anyone.
+.wallet-create-step-2(layout-fill, layout="column", layout-align="center center")
 
-    md-input-container.sk-input-box.no-error-spacer
-        input(name="password", ng-model="userInput.password", type="password", placeholder="Password")
-    
-    .sk-button.filled-blue(style="margin: 24px 0 12px 0;", ng-click="createKeystore($event)")
-        span(style="color: #fff") Generate Wallet
+    sk-icon(icon="selfkey", size-class="icon-size-57x65")
+    .title SELFKEY BASIC ID
+    .description Fill in the basic details of your identity wallet.
 
-    .sk-button.outline-blue(style="margin: 12px 0 48px 0;", ui-sref="guest.create.step-1")
-        span(style="color: #fff") back
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Identity Wallet Details
+        form.content(name="basicInfoForm", layout="column")
+            md-input-container.sk-input-box.sk-input-non-floating
+                label First Name
+                input(name="firstName", type="text", ng-model="input.first_name", ng-maxlength="500", ng-required="true")
+                div(ng-messages="basicInfoForm.firstName.$error")
+                    div(ng-message="maxlength") The First Name has to be less than 500 characters long.
+                    div(ng-message="required") This field is required. Please enter First Name.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label Last Name
+                input(type="text", name="lastName", ng-model="input.last_name", ng-required="true", ng-maxlength="500")
+                div(ng-messages="basicInfoForm.lastName.$error")
+                    div(ng-message="maxlength") The First Name has to be less than 500 characters long.
+                    div(ng-message="required") This field is required. Please enter Last Name.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label Middle Name
+                input(type="text", name="middleName", ng-model="input.middle_name", ng-maxlength="500")
+                div(ng-messages="basicInfoForm.middleName.$error")
+                    div(ng-message="maxlength") The Middle Name has to be less than 500 characters long.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label Country Of Residency
+                md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                    md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                div(ng-messages="basicInfoForm.countryOfResidency.$error")
+                    div(ng-message="required") This field is required. Please enter Country Of Residency.
+            md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid")
+                span.small Create SelfKey Basic ID

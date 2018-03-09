@@ -1,4 +1,4 @@
-function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, ElectronService, ConfigFileService) {
+function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('TermsDialogController');
@@ -11,11 +11,10 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
     }
 
     $scope.agree = (event) => {
-        let store = ConfigFileService.getStore();
-        store.setup = store.setup || {};
-        store.setup.termsAccepted = true;
-        $scope.storeSavePromise = ConfigFileService.save();
-        $scope.storeSavePromise.then(() => {
+        let guideSettings = SqlLiteService.getGuideSettings();
+        guideSettings.termsAccepted = true;
+
+        SqlLiteService.saveGuideSettings(guideSettings).then(()=>{
             $mdDialog.hide();
         });
     };
@@ -25,7 +24,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, Electron
     };
 
     $scope.scrollToEndContainer = (direction) => {
-        if(direction === 'bottom'){
+        if (direction === 'bottom') {
             $scope.scrolledBottom = true;
             $scope.$apply()
         }

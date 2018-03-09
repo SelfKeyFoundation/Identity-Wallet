@@ -1,15 +1,21 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
 
-const config = buildConfig (electron);
+const config = buildConfig(electron);
 
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
+
+const userDataDirectoryPath = electron.app.getPath('userData');
+const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
+
 
 /**
  * auto updated
@@ -20,7 +26,7 @@ const version = electron.app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-line global-require
-if (require('electron-squirrel-startup')) { 
+if (require('electron-squirrel-startup')) {
 	// app.quit() is the source of all our problems,
 	// cf. https://github.com/itchio/itch/issues/202
 	process.exit(0)
@@ -38,7 +44,8 @@ const app = {
 	},
 	translations: {
 	},
-	win: {}
+    win: {},
+    log: log
 };
 
 const i18n = [
@@ -57,16 +64,43 @@ if (!handleSquirrelEvent()) {
 }
 
 /**
- * 
+ *
  */
 function onReady(app) {
 	return function () {
-		const AsyncRequestHandler = require('./controllers/async-request-handler')(app);
-		electron.app.asyncRequestHandler = new AsyncRequestHandler();
-		if(electron.app.doc) {
+		app.config.userDataPath = electron.app.getPath('userData');
+
+		const CMCService = require('./controllers/cmc-service')(app);
+		electron.app.cmcService = new CMCService();
+
+        const AirtableService = require('./controllers/airtable-service')(app);
+		electron.app.airtableService = new AirtableService();
+
+		const SqlLiteService = require('./controllers/sql-lite-service')(app);
+		electron.app.sqlLiteService = new SqlLiteService();
+
+		const RPCHandler = require('./controllers/rpc-handler')(app);
+		electron.app.rpcHandler = new RPCHandler();
+
+        createKeystoreFolder();
+
+		electron.app.sqlLiteService.init().then(() => {
+			//start update cmc data
+            electron.app.cmcService.startUpdateData();
+            electron.app.airtableService.loadIdAttributeTypes();
+		}).catch((error) => {
+			console.log("error", error);
+		});
+
+		// TODO
+		// 1) load ETH & KEY icons & prices
+		// 2) insert tokenPrices - set icon & price
+		// 3) notify angular app when done
+
+		if (electron.app.doc) {
 			electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
 		}
-		
+
 		//let tray = new Tray('assets/icons/png/256X256.png');
 		//tray.setToolTip('selfkey');
 
@@ -103,11 +137,11 @@ function onReady(app) {
 			app.win = null;
 		});
 
-		setAutoUpdaterListeners (app.win);
+		setAutoUpdaterListeners(app.win);
 
-		if(!isDevMode()){
+		if (!isDevMode()) {
 			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
-			setTimeout(()=>{
+			setTimeout(() => {
 				autoUpdater.checkForUpdates();
 			}, 5000);
 		}
@@ -123,11 +157,11 @@ function onReady(app) {
 
 		if (process.platform === 'darwin') {
 			template.unshift({
-			  label: electron.app.getName(),
-			  submenu: [
-				{label: "About", role: 'about'},
-				{label: "Quit", role: 'quit'}
-			  ]
+				label: electron.app.getName(),
+				submenu: [
+					{ label: "About", role: 'about' },
+					{ label: "Quit", role: 'quit' }
+				]
 			});
 		}
 
@@ -150,15 +184,15 @@ function onReady(app) {
 			app.config.user = userConfig;
 		});
 
-		electron.ipcMain.on('ON_ASYNC_REQUEST', (event, actionId, actionName, args) => {
-			if(electron.app.asyncRequestHandler[actionName]){
-				electron.app.asyncRequestHandler[actionName](event, actionId, actionName, args);
+		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
+			if (electron.app.rpcHandler[actionName]) {
+				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
 	};
 }
 
-function onActivate (app) {
+function onActivate(app) {
 	return function () {
 		if (app.win === null) {
 			onReady(app);
@@ -166,13 +200,13 @@ function onActivate (app) {
 	}
 }
 
-function onWindowAllClosed () {
+function onWindowAllClosed() {
 	return () => {
 		return electron.app.quit();
 	}
 }
 
-function onWebContentsCreated(event, contents){
+function onWebContentsCreated(event, contents) {
 	contents.on('will-attach-webview', (event, webPreferences, params) => {
 		delete webPreferences.preload;
 		delete webPreferences.preloadURL;
@@ -182,44 +216,54 @@ function onWebContentsCreated(event, contents){
 		webPreferences.sandbox = true;
 
 		let found = false;
-		for(let i in config.common.allowedUrls){
-			if(params.src.startsWith(config.common.allowedUrls[i])){
+		for (let i in config.common.allowedUrls) {
+			if (params.src.startsWith(config.common.allowedUrls[i])) {
 				found = true;
 				break;
 			}
 		}
 
-		if(!found){
+		if (!found) {
 			return event.preventDefault()
 		}
 	});
 }
 
-function setAutoUpdaterListeners (win) {
+function setAutoUpdaterListeners(win) {
 	autoUpdater.on("error", (error) => {
 		log.warn('error: ' + error);
 	});
-	
-	autoUpdater.on("checking-for-update", ()=>{
+
+	autoUpdater.on("checking-for-update", () => {
 		log.warn('checking-for-update');
 	});
-	
-	autoUpdater.on("update-available", ()=>{
+
+	autoUpdater.on("update-available", () => {
 		log.warn('update-available');
 	});
-	
-	autoUpdater.on("update-not-available", ()=>{
+
+	autoUpdater.on("update-not-available", () => {
 		log.warn('update-not-available');
 	});
-	
-	autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL)=>{
+
+	autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL) => {
 		log.warn('update-downloaded: ' + releaseName);
 		win.webContents.send('UPDATE_READY', releaseName);
 	});
 }
 
+function createKeystoreFolder () {
+    if (!fs.existsSync(walletsDirectoryPath)) {
+        fs.mkdir(walletsDirectoryPath);
+    }
+
+    if (!fs.existsSync(documentsDirectoryPath)) {
+        fs.mkdir(documentsDirectoryPath);
+    }
+}
+
 /**
- * 
+ *
  */
 function handleSquirrelEvent() {
 	if (process.argv.length === 1) {
@@ -284,9 +328,9 @@ function handleSquirrelEvent() {
 }
 
 /**
- * 
+ *
  */
-function isDevMode(){
+function isDevMode() {
 	if (process.argv.length > 2) {
 		if (process.argv[2] === 'dev') {
 			return true;
@@ -295,7 +339,7 @@ function isDevMode(){
 	return false;
 }
 
-function buildConfig (electron) {
+function buildConfig(electron) {
 	let config = require('./config');
 
 	const envConfig = isDevMode() ? config.default : config.production;

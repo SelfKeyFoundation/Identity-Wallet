@@ -51,7 +51,7 @@ class EthUtils {
 
         /*
         const hash = ethUtil.sha256(Buffer.from(message, 'hex'));
-        
+
         //signature = ethUtil.ecsign(msgHash, Buffer.from('56ac03d5164ddd66f50d83b63b6c66261ea94285e81d5e0e2ffdb9f6a439f46f', 'hex'));
         //signature = '0x' + signature.r.toString('hex') + signature.s.toString('hex') + signature.v.toString();
 
@@ -77,6 +77,7 @@ class EthUtils {
     }
 
     static sanitizeHex(hex) {
+        hex = ""+hex;
         hex = hex.substring(0, 2) == '0x' ? hex.substring(2) : hex;
         if (hex == "") return "";
         return '0x' + EthUtils.padLeftEven(hex);

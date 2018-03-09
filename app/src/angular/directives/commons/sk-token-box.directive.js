@@ -8,6 +8,10 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             symbol: '@'
         },
         link: (scope, element) => {
+
+            scope.item = scope.symbol.toUpperCase() === 'ETH' ? $rootScope.wallet : $rootScope.wallet.tokens[scope.symbol.toUpperCase()];
+
+
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;
@@ -15,22 +19,32 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
+            console.log($rootScope.wallet.tokens, "<<<<<<<<<<", $rootScope.wallet.tokens[scope.symbol.toUpperCase()])
+
             loadBalance();
 
             function loadBalance() {
                 if (scope.symbol !== 'eth') {
-                    scope.token = $rootScope.TOKEN_MAP[scope.symbol.toUpperCase()];
+                    scope.token = $rootScope.wallet.tokens[scope.symbol.toUpperCase()];
+                    scope.balance = scope.token.getBalanceDecimal();
+                    scope.balanceInUsd = scope.token.balanceInUsd;
+                    /*
                     let promise = scope.token.loadBalance();
                     promise.then((token) => {
                         scope.balance = scope.token.getBalanceDecimal();
                         scope.balanceInUsd = scope.token.balanceInUsd;
                     });
+                    */
                 } else {
+                    scope.balance = $rootScope.wallet.balanceEth;
+                    scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
+                    /*
                     let promise = $rootScope.wallet.loadBalance();
                     promise.then(() => {
                         scope.balance = $rootScope.wallet.balanceEth;
                         scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
                     });
+                    */
                 }
             }
 

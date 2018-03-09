@@ -7,7 +7,7 @@ md-dialog {
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        
+
         .send-token-wrapper {
             .sk-send-ether-box {
                 padding: 90px 30px 40px 30px;
@@ -176,6 +176,11 @@ md-dialog {
                     .sk-button {
                         width: 210px;
                     }
+                }
+                .sk-send-ether-box__select-token-container{
+                    position: absolute;
+                    right: 0;
+                    width: 28%;
                 }
             }
         }

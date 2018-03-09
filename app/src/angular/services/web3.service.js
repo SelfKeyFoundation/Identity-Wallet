@@ -1,4 +1,3 @@
-
 const Wallet = requireAppModule('angular/classes/wallet');
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
@@ -7,473 +6,398 @@ const Token = requireAppModule('angular/classes/token');
 const ABI = requireAppModule('angular/store/abi.json').abi;
 
 function dec2hexString(dec) {
-  return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
+    return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
 }
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, ConfigFileService, CONFIG) {
-  'ngInject';
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, CONFIG, SqlLiteService) {
+    'ngInject';
 
-  $log.info('Web3Service Initialized');
+    $log.info('Web3Service Initialized');
 
-  /**
-   * 
-   */
-  const REQUEST_INTERVAL_DELAY = 500;
+    /**
+     *
+     */
+    const REQUEST_INTERVAL_DELAY = 500;
 
-  /**
-   * 
-   */
-  const SERVER_CONFIG = {
-    mew: {
-      1: { url: "https://api.myetherapi.com/eth" },
-      3: { url: "https://api.myetherapi.com/rop" }
-    },
-    infura: {
-      1: { url: "https://mainnet.infura.io" },
-      3: { url: "https://ropsten.infura.io" }
-    }
-  }
-
-  const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
-
-  let lastRequestTime = 0;
-  const requestQueue = [];
-
-  /**
-   * 
-   */
-  class Web3Service {
-
-    constructor() {
-      Web3Service.web3 = new Web3();
-
-      Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
-
-      EthUtils.web3 = new Web3();
-      window.EthUtils = EthUtils;
-
-      Token.Web3Service = this;
-      Token.$q = $q;
-
-      Wallet.Web3Service = this;
-      Web3Service.q = async.queue((data, callback) => {
-        let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
-        let self = data.contract ? data.contract : this;
-        let promise = baseFn[data.method].apply(self, data.args);
-
-        $timeout(() => {
-          callback(promise);
-        }, REQUEST_INTERVAL_DELAY);
-      }, 1);
-
-      $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-        let self = this;
-        let fn = symbol == 'eth' ? self.syncWalletActivityByETH : self.syncWalletActivityByContract;
-        
-        $timeout(() => {
-          fn.call(self);
-        },3000)
-      });
+    /**
+     *
+     */
+    const SERVER_CONFIG = {
+        mew: {
+            1: { url: "https://api.myetherapi.com/eth" },
+            3: { url: "https://api.myetherapi.com/rop" }
+        },
+        infura: {
+            1: { url: "https://mainnet.infura.io" },
+            3: { url: "https://ropsten.infura.io" }
+        }
     }
 
-    syncWalletActivityByContract(key, address) {
+    const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-      let currentWallet = $rootScope.wallet;
-      if (!currentWallet || !currentWallet.getPublicKeyHex()) {
-        return;
-      }
+    let lastRequestTime = 0;
+    const requestQueue = [];
 
-      let contractInfos = [];
-      let processAllContracts = key && address ? false : true;
-      let store = ConfigFileService.getStore();
-      if (processAllContracts) {
+    /**
+     *
+     */
+    class Web3Service {
 
-        let tokens = store.tokens || {};
-        Object.keys(tokens).forEach(tokenKey => {
-          let value = tokens[tokenKey];
-          if (value && value.contract && value.contract.address) {
-            contractInfos.push({
-              key: tokenKey,
-              address: value.contract.address
-            });
-          }
-        })
-      } else {
-        contractInfos.push({
-          address,
-          key
-        });
-      }
+        constructor() {
+            Web3Service.web3 = new Web3();
 
-      if (!contractInfos.length) {
-        return;
-      }
+            Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
 
-      $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
-
-      let publicKeyHex = $rootScope.wallet.getPublicKeyHex();
-      let walletAddressHex = '0x' + publicKeyHex;
-      let valueDivider = new BigNumber(10 ** 18);
-
-      let storedWallet = store.wallets[publicKeyHex];
-      let storedWalletData = storedWallet.data || {};
-      let activities = storedWalletData.activities = storedWalletData.activities || {};
-
-      let getActivity = (contract, fromBlock, toBlock, filter) => {
-        return this.getContractPastEvents(contract, ['Transfer', {
-          filter: filter,
-          fromBlock: fromBlock,
-          toBlock: toBlock
-        }]);
-      };
-
-      contractInfos.forEach(contractInfo => {
-        $rootScope.walletActivityStatuses[contractInfo.key] = false;
-        let contract = new Web3Service.web3.eth.Contract(ABI, contractInfo.address);
-        let activity = activities[contractInfo.key] = activities[contractInfo.key] || {};
+            EthUtils.web3 = new Web3();
+            window.EthUtils = EthUtils;
 
 
+            Web3Service.q = async.queue((data, callback) => {
+                $log.info("WEB3 REQUESTS IN QUEUE: ", Web3Service.q.length(), "######");
 
-        let processAllActivities = (fromBlock, toBlock) => {
-          // TODO refactor on applay
-          getActivity(contract, fromBlock, toBlock, { from: walletAddressHex }).then(logsFrom => {
-            getActivity(contract, fromBlock, toBlock, { to: walletAddressHex }).then(logsTo => {
+                let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
+                let self = data.contract ? data.contract : this;
 
-              activity.lastProccessedBlock = toBlock;
-              activity.blocks = activity.blocks || {};
-
-              let processLogs = (log, isFrom) => {
-                let logBlockNumber = log.blockNumber;
-                let block = activity.blocks[logBlockNumber] = activity.blocks[logBlockNumber] || {};
-
-                // reverse
-                let fromOrTo = isFrom ? 'to' : 'from';
-                block[log.transactionHash] = {
-                  [fromOrTo]: log.returnValues[fromOrTo],
-                  value: new BigNumber(log.returnValues.value).div(valueDivider).toString(),
-                  blockNumber: logBlockNumber
-                };
-              }
-
-
-              if (logsFrom && logsFrom.length) {
-                logsFrom.forEach(logFrom => {
-                  processLogs(logFrom, true);
-                });
-              }
-              if (logsTo && logsTo.length) {
-                logsTo.forEach(logTo => {
-                  processLogs(logTo, false);
-                });
-              }
-
-              let transactions = [];
-              Object.keys(activity.blocks).forEach(block => {
-                let blockData = activity.blocks[block];
-
-                Object.keys(blockData).forEach(transactionHash => {
-                  let transaction = blockData[transactionHash];
-                  transactions.push(transaction);
-                })
-
-              });
-
-              activity.transactions = [];
-              (function next() {
-                if (!transactions.length) {
-                  activity.transactions.sort((a, b) => {
-                    return Number(b.timestamp) - Number(a.timestamp);
-                  });
-
-                  ConfigFileService.save().then((store) => {
-                    $rootScope.walletActivityStatuses[contractInfo.key] = true;
-                  }).catch((error) => {
-                  });
-
-                  return;
+                if (data.baseFn) {
+                    baseFn = data.baseFn;
                 }
+                let promise = baseFn[data.method].apply(self, data.args);
 
-                let transaction = transactions.shift();
-                if (transaction.timestamp) {
-                  activity.transactions.push(transaction);
-                  next();
-                } else {
-                  Web3Service.getBlock(transaction.blockNumber, true).then((blockData) => {
-                    transaction.timestamp = blockData.timestamp + '000';
-                    activity.transactions.push(transaction);
-                    next();
-                  });
-                }
+                $timeout(() => {
+                    callback(promise);
+                }, REQUEST_INTERVAL_DELAY);
+            }, 1);
 
-              })();
-
+            $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+                let self = this;
+                let fn = symbol == 'eth' ? self.syncETHTransactionsHistory : self.syncTokensTransactionHistory;
+                $timeout(() => {
+                    fn.call(self);
+                }, 3000)
             });
-          });
         }
 
-        this.getMostRecentBlockNumber().then((lastBlock) => {
-          let fromBlock = activity.lastProccessedBlock || lastBlock;
-
-          processAllActivities(fromBlock, lastBlock);
-        });
-
-      });
-    }
-
-    getContractPastEvents(contract, args) {
-      let defer = $q.defer();
-
-      // wei
-      Web3Service.waitForTicket(defer, 'getPastEvents', args, contract);
-
-      return defer.promise;
-    }
-
-    syncWalletActivityByETH() {
-
-      let store = ConfigFileService.getStore();
-      let walletKeys = Object.keys(store.wallets);
-      let wallets = store.wallets;
-      if (!walletKeys.length) {
-        return;
-      }
-
-      let ethKey = 'eth';
-      $rootScope.walletActivityStatuses = $rootScope.walletActivityStatuses || {};
-      $rootScope.walletActivityStatuses[ethKey] = false;
-
-      let prefix = '0x';
-      let valueDivider = new BigNumber(10 ** 18);
-
-      walletKeys.forEach((key) => {
-        let wallet = wallets[key];
-        let data = wallet.data = wallet.data || {};
-        data.activities = data.activities || {};
-        let activities = data.activities[ethKey] = data.activities[ethKey] || {};
-
-        activities.blocks = activities.blocks || {};
-
-        //remove last block we are processing again 
-        if (activities.lastBlockNumber) {
-          delete activities.blocks[activities.lastBlockNumber];
-        }
-      });
-
-      let anyWallet = wallets[walletKeys[0]];
-      let previousLastBlockNumber = anyWallet.data.activities[ethKey].lastBlockNumber;
-
-      let updateLastBlockNumber = (lastBlockNumber) => {
-        walletKeys.forEach((key) => {
-          let wallet = wallets[key];
-          wallet.data.activities[ethKey].lastBlockNumber = lastBlockNumber;
-        });
-      };
-
-      let addNewTransaction = (blockNumber, key, transaction) => {
-
-        let wallet = wallets[key];
-        let blocks = wallet.data.activities[ethKey].blocks;
-
-        let from = transaction.from ? transaction.from.toLowerCase() : null;
-        let to = transaction.to ? transaction.to.toLowerCase() : null;
-        key = (prefix + key).toLowerCase();
-        if (key == to) {
-          delete transaction.to;
-        }
-        if (key == from) {
-          delete transaction.from;
-        }
-
-        let block = blocks[blockNumber] = blocks[blockNumber] || {};
-        block[transaction.hash] = transaction;
-      };
-
-      this.getMostRecentBlockNumber().then((blockNumber) => {
-        previousLastBlockNumber = previousLastBlockNumber || blockNumber;
-        let blockNumbersToProcess = [];
-        for (let i = previousLastBlockNumber; i <= blockNumber; i++) {
-          blockNumbersToProcess.push(i);
-        }
-        updateLastBlockNumber(blockNumber);
-
-        (function next() {
-
-          if (blockNumbersToProcess.length === 0) {
-            walletKeys.forEach((key) => {
-              let wallet = wallets[key];
-              let activities = wallet.data.activities[ethKey];
-              let blocks = activities.blocks;
-               //reset transactions we will calculate from saved blocks
-              let transactions = activities.transactions  = [];
-
-              let blockKeys = Object.keys(blocks);
-              blockKeys.forEach(blockKey => {
-                let transactionHashes = blocks[blockKey];
-                Object.keys(transactionHashes).forEach(hash => {
-                  let transaction = transactionHashes[hash];
-                  transactions.push(transaction);
-                });
-              });
-              transactions.sort((a, b) => {
-                return Number(b.timestamp) - Number(a.timestamp);
-              });
-            });
-
-            ConfigFileService.save().then((store) => {
-              $rootScope.walletActivityStatuses[ethKey] = true;
-            }).catch((error) => {
-            });
-            return;
-          }
-
-          let currentBlockNumber = blockNumbersToProcess.shift();
-          Web3Service.getBlock(currentBlockNumber, true).then((blockData) => {
-            if (blockData) {
-              if (blockData && blockData.transactions) {
-                blockData.transactions.forEach(transaction => {
-                  let from = transaction.from ? transaction.from.toLowerCase() : null;
-                  let to = transaction.to ? transaction.to.toLowerCase() : null;
-
-                  walletKeys.forEach((walletKey) => {
-                    let fullAddressHex = (prefix + walletKey).toLowerCase();
-                    let value = transaction.value;
-                    if ((value && value != 0) && ( from == fullAddressHex || to == fullAddressHex )) {
-                      let value = new BigNumber(transaction.value).div(valueDivider).toString();
-                      if (value && value != 0) {
-                        addNewTransaction(currentBlockNumber, walletKey, {
-                          to: transaction.to,
-                          from: transaction.from,
-                          timestamp: blockData.timestamp + '000',
-                          hash: transaction.hash,
-                          value: value
-                        });
-                      }
-                    }
-                  });
-                });
-              }
+        syncTokensTransactionHistory() {
+            let wallet = $rootScope.wallet;
+            if (!wallet || !wallet.tokens) { 
+                return;
             }
-            next();
-          });
 
-        })();
-      });
-    }
+            let tokens = wallet.tokens;
+            let walletAddress = '0x' + $rootScope.wallet.publicKeyHex; 
+            const valueDivider = new BigNumber(10 ** 18);
 
-    static getBlock(blockNumber, withTransactions) {
-      withTransactions = withTransactions || false;
-      let defer = $q.defer();
+            $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
 
-      // wei
-      Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
+            let getActivity = (contract, fromBlock, toBlock, filter) => {
+                return this.getContractPastEvents(contract, ['Transfer', {
+                    filter: filter,
+                    fromBlock: fromBlock,
+                    toBlock: toBlock
+                }]);
+            };
 
-      return defer.promise;
-    }
+            Object.keys(tokens).forEach(key => {
+                let token = tokens[key];
+                $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = false; 
+                let contract = new Web3Service.web3.eth.Contract(ABI, token.contractAddress);
 
-    getMostRecentBlockNumber() {
-      let defer = $q.defer();
+                let processAllActivities = (fromBlock, toBlock) => {
+                    // process from
+                    getActivity(contract, fromBlock, toBlock, { from: walletAddress }).then(logsFrom => {
+                        //process to
+                        getActivity(contract, fromBlock, toBlock, { to: walletAddress }).then(logsTo => {
+                            logsFrom = logsFrom || [];
+                            logsTo = logsTo || [];
 
-      // wei
-      Web3Service.waitForTicket(defer, 'getBlockNumber', []);
+                            let transactions = logsFrom.map((logFrom) => {
+                                logFrom.sentTo = logFrom.returnValues.to;
+                                return logFrom;
+                            }).concat(logsTo.map((logTo) => {
+                                return logTo;
+                            }));
 
-      return defer.promise;
-    }
+                            (function next(err) {
+                                if (/*|| err*/ !transactions.length) {
+                                    $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = true;
 
-    getBalance(addressHex) {
-      let defer = $q.defer();
+                                    SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+                                        let setting = settings[0];
+                                        setting.ERC20TxHistoryLastBlock = toBlock;
+                                        SqlLiteService.saveWalletSettings(setting).catch((err) => {
+                                            console.log(err); //TODO
+                                        })
+                                    }).catch(err => {
+                                        //TODO 
+                                    });
 
-      // wei
-      Web3Service.waitForTicket(defer, 'getBalance', [addressHex]);
+                                    return;
+                                }
 
-      return defer.promise;
-    }
+                                let transaction = transactions.shift();
+                                let blockNumber = transaction.blockNumber;
+                                let txId = transaction.transactionHash;
+                                Web3Service.getBlock(blockNumber, true).then((blockData) => {
+                                    let transactionFromBlok = blockData.transactions.find((blockTransaction => {
+                                        return blockTransaction.hash == txId;
+                                    }));
 
-    getTokenBalanceByData(data) {
-      let defer = $q.defer();
+                                    let newTransaction = {
+                                        walletId: wallet.id,
+                                        tokenId: token.id,
+                                        timestamp: Number(blockData.timestamp + '000'),
+                                        blockNumber: blockNumber,
+                                        value: Number(new BigNumber(transaction.returnValues.value).div(valueDivider).toString()),
+                                        txId: txId,
+                                        sentTo: transaction.sentTo || null,
+                                        gas: transactionFromBlok.gas,
+                                        gasPrice: transactionFromBlok.gasPrice
+                                    };
 
-      // wei
-      Web3Service.waitForTicket(defer, 'call', [data]);
+                                    SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
+                                        next();
+                                    }).catch(err => {
+                                        next(err);
+                                    });
+                                });
 
-      return defer.promise;
-    }
 
-    getEstimateGas(fromAddressHex, toAddressHex, amountHex) {
-      let defer = $q.defer();
+                            })();
+                        });
+                    });
+                }
 
-      let args = {
-        "from": fromAddressHex,
-        "to": toAddressHex,
-        "value": amountHex
-      }
+                this.getMostRecentBlockNumber().then((lastBlock) => {
+                    SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+                        let setting = settings[0];
+                        let fromBlock = setting.ERC20TxHistoryLastBlock || lastBlock;
+                        processAllActivities(fromBlock, lastBlock);
+                    }).catch(err => {
+                        //TODO 
+                    });
+                });
+            });
+        }
 
-      // wei
-      Web3Service.waitForTicket(defer, 'estimateGas', [args]);
+        getContractPastEvents(contract, args) {
+            let defer = $q.defer();
 
-      return defer.promise;
-    }
+            // wei
+            Web3Service.waitForTicket(defer, 'getPastEvents', args, contract);
 
-    getGasPrice() {
-      let defer = $q.defer();
+            return defer.promise;
+        }
 
-      // wei
-      Web3Service.waitForTicket(defer, 'getGasPrice', []);
+        getContractInfo(contractAddress) {
 
-      return defer.promise;
-    }
+            let deferDecimal = $q.defer();
+            let deferSymbol = $q.defer();
 
-    getTransactionCount(addressHex) {
-      let defer = $q.defer();
+            var tokenContract = new Web3Service.web3.eth.Contract(ABI,contractAddress);
+            let decimalFn = tokenContract.methods.decimals();
+            var symbolFn = tokenContract.methods.symbol();
 
-      // number
-      Web3Service.waitForTicket(defer, 'getTransactionCount', [addressHex, 'pending']);
+            // wei
+            Web3Service.waitForTicket(deferDecimal, 'call', [], null, decimalFn);
+            Web3Service.waitForTicket(deferSymbol, 'call', [], null, symbolFn);
+            
+            return $q.all([deferDecimal.promise,deferSymbol.promise]);
+        }
 
-      return defer.promise;
-    }
+        syncETHTransactionsHistory() {
+            let ethKey = 'eth';
+            $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
+            $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = false;
 
-    sendRawTransaction(signedTxHex) {
-      let defer = $q.defer();
+            let valueDivider = new BigNumber(10 ** 18);
+            let wallet = $rootScope.wallet;
+            let walletAddress = '0x' + wallet.publicKeyHex;
 
-      Web3Service.waitForTicket(defer, 'sendSignedTransaction', [signedTxHex]);
+            this.getMostRecentBlockNumber().then((blockNumber) => {
+                SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+                    let setting = settings[0];
+                    let previousLastBlockNumber = setting.EthTxHistoryLastBlock || blockNumber;
 
-      return defer.promise;
-    }
+                    let blockNumbersToProcess = [];
+                    for (let i = previousLastBlockNumber; i <= blockNumber; i++) {
+                        blockNumbersToProcess.push(i);
+                    }
 
-    getTransaction(transactionHex) {
-      let defer = $q.defer();
+                    (function next(err) {
 
-      Web3Service.waitForTicket(defer, 'getTransaction', [transactionHex]);
+                        if (/*err || */blockNumbersToProcess.length == 0) {
+                            $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = true;
 
-      return defer.promise;
-    }
+                            SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+                                let setting = settings[0];
+                                setting.EthTxHistoryLastBlock = blockNumber;
+                                SqlLiteService.saveWalletSettings(setting).catch((err) => {
+                                    console.log(err); //TODO
+                                })
+                            }).catch(err => {
+                                //TODO 
+                            });
 
-    getTransactionReceipt(transactionHex) {
-      let defer = $q.defer();
+                            return;
+                        }
 
-      Web3Service.waitForTicket(defer, 'getTransactionReceipt', [transactionHex]);
+                        let currentBlockNumber = blockNumbersToProcess.shift();
+                        Web3Service.getBlock(currentBlockNumber, true).then((blockData) => {
+                            if (blockData && blockData.transactions) {
 
-      return defer.promise;
-    }
+                                let walletTransactions = blockData.transactions.filter((transaction) => {
+                                    let addresses = [transaction.to || '', transaction.from || ''].map(item => { return item.toLowerCase() });
+                                    return addresses.indexOf(walletAddress.toLowerCase()) != -1;
+                                });
 
-    static handlePromise(defer, promise) {
-      promise.then((response) => {
-        $log.info("response", response);
-        defer.resolve(response)
-      }).catch((error) => {
-        $log.error("error", error);
-        defer.reject(error);
-      });
-    }
+                                if (!walletTransactions.length) {
+                                    return next();
+                                }
 
-    static waitForTicket(defer, method, args, contract) {
-      Web3Service.q.push({ method: method, args: args, contract: contract }, (promise) => {
-        Web3Service.handlePromise(defer, promise);
-      });
-    }
-  };
+                                walletTransactions.forEach(transaction => {
+                                    let value = new BigNumber(transaction.value || 0).div(valueDivider).toString();
+                                    if (value && value != 0) {
+                                        let sentTo = (transaction.from || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
 
-  return new Web3Service();
+                                        let newTransaction = {
+                                            walletId: wallet.id,
+                                            timestamp: Number(blockData.timestamp + '000'),
+                                            blockNumber: currentBlockNumber,
+                                            value: Number(value.toString()),
+                                            txId: transaction.hash,
+                                            sentTo: sentTo,
+                                            gas: transaction.gas,
+                                            gasPrice: transaction.gasPrice
+                                        };
+
+                                        SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
+                                            next();
+                                        }).catch(err => {
+                                            next(err);
+                                        });
+                                    }
+                                });
+                            }
+                            next();
+                        });
+
+                    })();
+                });
+            });
+        }
+
+        getMostRecentBlockNumber() {
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getBlockNumber', []);
+
+            return defer.promise;
+        }
+
+        getBalance(addressHex) {
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getBalance', [addressHex]);
+
+            return defer.promise;
+        }
+
+        getTokenBalanceByData(data) {
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'call', [data]);
+
+            return defer.promise;
+        }
+
+        getEstimateGas(fromAddressHex, toAddressHex, amountHex) {
+            let defer = $q.defer();
+
+            let args = {
+                "from": fromAddressHex,
+                "to": toAddressHex,
+                "value": amountHex
+            }
+
+            // wei
+            Web3Service.waitForTicket(defer, 'estimateGas', [args]);
+
+            return defer.promise;
+        }
+
+        getGasPrice() {
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getGasPrice', []);
+
+            return defer.promise;
+        }
+
+        getTransactionCount(addressHex) {
+            let defer = $q.defer();
+
+            // number
+            Web3Service.waitForTicket(defer, 'getTransactionCount', [addressHex, 'pending']);
+
+            return defer.promise;
+        }
+
+        sendRawTransaction(signedTxHex) {
+            let defer = $q.defer();
+
+            Web3Service.waitForTicket(defer, 'sendSignedTransaction', [signedTxHex]);
+
+            return defer.promise;
+        }
+
+        getTransaction(transactionHex) {
+            let defer = $q.defer();
+
+            Web3Service.waitForTicket(defer, 'getTransaction', [transactionHex]);
+
+            return defer.promise;
+        }
+
+        getTransactionReceipt(transactionHex) {
+            let defer = $q.defer();
+
+            Web3Service.waitForTicket(defer, 'getTransactionReceipt', [transactionHex]);
+
+            return defer.promise;
+        }
+
+        static getBlock(blockNumber, withTransactions) {
+            withTransactions = withTransactions || false;
+            let defer = $q.defer();
+
+            // wei
+            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
+
+            return defer.promise;
+        }
+
+
+        static waitForTicket(defer, method, args, contract, baseFn) {
+            Web3Service.q.push({ method: method, args: args, contract: contract, baseFn: baseFn }, (promise) => {
+                $log.info("handle response", method);
+                promise.then((response) => {
+                    $log.info("method response", method, response);
+                    defer.resolve(response)
+                }).catch((error) => {
+                    $log.error("method response error", method, error);
+                    defer.reject(error);
+                });
+            });
+        }
+    };
+
+    return new Web3Service();
 }
 
 module.exports = Web3Service;

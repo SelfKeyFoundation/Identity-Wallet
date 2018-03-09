@@ -5,9 +5,9 @@
         .image(style="align-items: center; display: flex; justify-content: center;")
             .pic(style='background-image: url({{userData.tempImage}});')
         .name
-            sk-icon(icon="{{ userData.name ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-            span {{ userData.name ? userData.name : 'missing' }}
-    
+            sk-icon(icon="success-box", size-class="icon-size-16x16")
+            span {{ idAttributes.first_name.value.line1 + ' ' + (idAttributes.middle_name && idAttributes.middle_name.value ? idAttributes.middle_name.value + ' ' : '') +  idAttributes.last_name.value }}
+
     hr
 
     .info
@@ -16,40 +16,37 @@
                 td.fc-bluey-grey Residency:
                 td
                     div
-                        sk-icon(icon="{{ userData.country_of_residency ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ userData.country_of_residency }}
+                        sk-icon(icon="{{ idAttributes.country_of_residency.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ idAttributes.country_of_residency.value ? idAttributes.country_of_residency.value : 'Missing' }}
+
+            tr(ng-if="idAttributes.national_id")
+                td.fc-bluey-grey National ID:
+                td
+                    div
+                        sk-icon(icon="{{ idAttributes.national_id.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
+
+            tr(ng-if="idAttributes.national_id")
+                td.fc-bluey-grey ID Selfie:
+                td
+                    div
+                        sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
 
             tr
                 td.fc-bluey-grey Email:
                 td
                     div
-                        sk-icon(icon="{{ userData.email ? 'success-box' : 'warning-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ userData.email }}
+                        sk-icon(icon="{{ idAttributes.email.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ idAttributes.email.value ? idAttributes.email.value : 'Missing' }}
 
-            tr(ng-if="userData.mobile")
-                td.fc-bluey-grey Mobile:
-                td
-                    div
-                        sk-icon(icon="warning-box", size-class="icon-size-16x16")
-                        span.fc-white {{userData.mobile}}
+    hr
 
-            tr(ng-if="userData.passport")
-                td.fc-bluey-grey Passport:
+    .info
+        table
+            tr(ng-repeat="(key, value) in idAttributes", ng-if="value.value && ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'].indexOf(key) === -1")
+                td.fc-bluey-grey {{$root.DICTIONARY[key]}}:
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        //span.fc-white {{userData.passport}}
-
-            tr(ng-if="userData.nationalId")
-                td.fc-bluey-grey National ID:
-                td
-                    div
-                        sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        span.fc-white {{userData.nationalId}}
-
-            tr(ng-if="userData.utilityBill")
-                td.fc-bluey-grey Utility Bill:
-                td
-                    div
-                        sk-icon(icon="danger-box", size-class="icon-size-16x16")
-                        span.fc-white {{userData.utilityBill}}
+                        span.fc-white {{ value.dateValueInMillis ? (value.dateValueInMillis | date: 'yyyy/MM/dd') : value.value}}

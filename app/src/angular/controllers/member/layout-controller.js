@@ -3,7 +3,7 @@ const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, ConfigFileService, ElectronService, CommonService, EtherScanService, EtherUnitsService, TokenService, WalletService, MEWService, Web3Service) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service) {
     'ngInject'
 
     $scope.showScrollStyle = false;
@@ -27,17 +27,12 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             $log.debug("toggle " + "right" + " is done");
         });
     }
+
+    Web3Service.syncTokensTransactionHistory();
+
+    Web3Service.syncETHTransactionsHistory();
+
     /*
-    let store = ConfigFileService.getStore();
-    Object.keys(store.wallets).forEach(key =>{
-        let storedWallet = store.wallets[key];
-        let storedWalletData = storedWallet.data || {};
-        delete storedWalletData.activities; 
-    });*/
-
-    Web3Service.syncWalletActivityByContract();
-    Web3Service.syncWalletActivityByETH();
-
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;
         let icos = ConfigFileService.getIcos();
@@ -50,9 +45,10 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
             }
         }
         if (ico) {
-            $state.go('member.marketplace.ico-item', {selected: ico});
+            $state.go('member.marketplace.ico-item', { selected: ico });
         }
     }
+    */
 
 };
 

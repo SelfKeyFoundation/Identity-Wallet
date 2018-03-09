@@ -1,0 +1,27 @@
+form.birth-date-content {
+
+    width: 760px;
+    padding: 40px 15px 15px 15px;
+
+    md-input-container {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.birth-date-actions-wrapper {
+    width: 760px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+
+    .md-button {
+        width: 144px;
+        padding: 0 16px;
+
+        &:last-of-type {
+            margin-left: 16px;
+        }
+    }
+}

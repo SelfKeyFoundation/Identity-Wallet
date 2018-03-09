@@ -3,8 +3,10 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialog, DICTIONARY, CONFIG, ElectronService, ConfigFileService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService, WalletService) {
     'ngInject';
+
+    $trace.enable('TRANSITION');
 
     $rootScope.isDevMode = CONFIG.dev;
     $rootScope.productName = appName;
@@ -12,7 +14,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.selectedLanguage = CONFIG.defaultLanguage;
 
     /**
-     * 
+     *
      */
     $rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
     $rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
@@ -20,18 +22,31 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
     $rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
 
     /**
-     * 
+     *
      */
     $rootScope.PRICES = {};
 
     /**
-     * 
+     *
      */
     Wallet.$rootScope = $rootScope;
+    Wallet.$interval = $interval;
+    Wallet.$q = $q;
+    Wallet.Web3Service = Web3Service;
+    Wallet.SqlLiteService = SqlLiteService;
+    Wallet.CommonService = CommonService;
+    Wallet.WalletService = WalletService;
+
+
     Token.$rootScope = $rootScope;
+    Token.$q = $q;
+    Token.$interval = $interval;
+    Token.Web3Service = Web3Service;
+    Token.SqlLiteService = SqlLiteService;
+    Token.CommonService = CommonService;
 
     /**
-     * 
+     *
      */
     $rootScope.getTranslation = function (prefix, keyword, args) {
         if (prefix) {
@@ -62,7 +77,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         useInAppBrowser ? $window.open(url) : ElectronService.openBrowserWindow(url);
     }
 
-    $rootScope.openSendTokenDialog = (event, symbol) => {
+    $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
         return $mdDialog.show({
             controller: 'SendTokenDialogController',
             templateUrl: 'common/dialogs/send-token.html',
@@ -73,7 +88,8 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
             escapeToClose: false,
             locals: {
                 args: {
-                    symbol: symbol
+                    symbol: symbol,
+                    allowSelectERC20Token: allowSelectERC20Token
                 }
             }
         });
@@ -93,10 +109,43 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         });
     }
 
+    $rootScope.openInfoDialog = (event, text, title) => {
+        $mdDialog.show({
+            controller: 'InfoDialogController',
+            templateUrl: 'common/dialogs/info-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {
+                text: text,
+                title: title
+            }
+        });
+    }
+
+    $rootScope.openNewERC20TokenInfoDialog = (event, title, symbol, balance) => {
+        $mdDialog.show({
+            controller: 'NewERC20TokenInfoController',
+            templateUrl: 'common/dialogs/new-erc20-token-info.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: false,
+            escapeToClose: false,
+            locals: {
+                symbol: symbol,
+                title: title,
+                balance: balance
+            }
+        });
+    }
+
     $rootScope.checkTermsAndConditions = () => {
-        let store = ConfigFileService.getStore();
-        let termsAccepted = store.setup ? store.setup.termsAccepted : false;
-        if (!termsAccepted) {
+        let guideSettings = SqlLiteService.getGuideSettings();
+
+        if (!guideSettings.termsAccepted) {
             $timeout(() => {
                 $mdDialog.show({
                     controller: 'TermsDialogController',
@@ -135,12 +184,78 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $state, $mdDialo
         });
     };
 
-    /**
-     * 
-     */
+    $rootScope.openAddEditDocumentDialog = (event, idAttributeItemValue, idAttributeType) => {
+        return $mdDialog.show({
+            controller: 'AddEditDocumentDialogController',
+            templateUrl: 'common/dialogs/id-attributes/add-edit-document.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                idAttributeItemValue: idAttributeItemValue,
+                idAttributeType: idAttributeType,
+            }
+        });
+    };
+
+    $rootScope.openAddEditStaticDataDialog = (event, idAttributeItemValue, itAttributeType) => {
+        return $mdDialog.show({
+            controller: 'AddEditStaticDataDialogController',
+            templateUrl: 'common/dialogs/id-attributes/add-edit-static-data.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                idAttributeItemValue: idAttributeItemValue,
+                idAttributeType: itAttributeType,
+            }
+        });
+    };
+
+    $rootScope.openDocumentPreviewDialog = (event, documentId) => {
+        return $mdDialog.show({
+            controller: 'DocumentPreviewDialogController',
+            templateUrl: 'common/dialogs/document-preview.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                documentId: documentId
+            }
+        });
+    };
+
+    $rootScope.openAddCustomTokenDialog = (event) => {
+        if ($rootScope.tokenLimitIsExceed) {
+            return;
+        }
+        return $mdDialog.show({
+            controller: 'AddCustomTokenDialogController',
+            templateUrl: 'common/dialogs/add-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openEditCustomTokenDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'EditCustomTokenDialogController',
+            templateUrl: 'common/dialogs/edit-custom-token.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
-        if (ElectronService.ipcRenderer) {
+        if (RPCService.ipcRenderer) {
             ElectronService.sendConfigChange(data);
         }
     });

@@ -1,0 +1,12 @@
+.member-setup-layout {
+    position: relative;
+    &:before {
+        content: "";
+        position: absolute;
+        background-image: url('../../assets/images/bgs/layouts/swirl-top-left.svg'), url('../../assets/images/bgs/layouts/swirl-bottom-right.svg');
+        background-position: top left, bottom right;
+        background-repeat: no-repeat, no-repeat;
+        width: 100%;
+        height: 100%;
+    }
+}

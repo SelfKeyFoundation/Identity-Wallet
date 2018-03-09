@@ -1,11 +1,9 @@
-.guest-welcome-layout(layout-fill, layout="column")
+.guest-layout(layout-fill, layout="column")
     .header
-    .content(flex, layout="column", layout-align="center center") 
+    .content(flex, layout="column", layout-align="center center")
         .logo
         .header selfkey
-        .subheader blockchain identity wallet 
-        //.sk-button.filled-blue.create-button(ui-sref="guest.import.keystore({type: 'select'})")
-            span.primary Import Wallet
+        .subheader blockchain identity wallet
         .sk-button.filled-blue.create-button(ui-sref="guest.create.step-1")
             span.primary create new wallet
         .sk-button.outline-blue.import-button(ui-sref="guest.import.keystore({type: 'select'})")

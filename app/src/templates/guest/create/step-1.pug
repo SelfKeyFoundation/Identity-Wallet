@@ -1,18 +1,34 @@
-.header
-    span.none-select-text Create New Wallet
-form.content(layout="column", style="padding: 24px;")
-    .desc-container
-        .sk-text Enter the password you want to use to encrypt your new private key.
-        .sk-text Choose a password that is strong enough to protect the millions of dollars your key someday may be worth.
-        .sk-text Do not forget or lose this password, and do not share this password with anyone.
+.wallet-create-step-1(layout="column", layout-align="center center", style="z-index: 100;")
+    .header-wrapper(layout="column", layout-align="start start")
+        .title Setup Identity Wallet
+        .description
+            | You will need to either setup a Basic ID for your Identity Wallet or if you completed the KYC on the SelfKey.org website to
+            | join the token sale, simply upload the file we provided.
 
-    md-input-container.sk-input-box.no-error-spacer
-        input(name="password", ng-model="userInput.password", type="password", placeholder="Password")
-    md-input-container.sk-input-box.no-error-spacer
-        input(name="password", ng-model="userInput.rPassword", type="password", placeholder="Repeat password")
+    .content-wrapper.sk-box(layout="column", layout-align="center center")
+        .item-wrapper(layout="row", layout-align="center center")
+            sk-icon(icon="upload-1", size-class="icon-size-43x35")
+            .body
+                .title I am creating a new SelfKey Identity Wallet
+                .text
+                    | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System.
+                .actions(style="margin-top: 30px;")
+                    md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey Basic ID
 
-    .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event)")
-        span(style="color: #fff") Continue
+        .sk-divider-h1(style="width: 555px;")
 
-    .sk-button.outline-blue(style="margin: 12px 0 48px 0;", ui-sref="guest.welcome")
-        span(style="color: #fff") back
+        .item-wrapper(layout="row", layout-align="center center")
+            sk-icon(icon="upload-1", size-class="icon-size-43x35")
+            .body
+                .title I was approved in the SelfKey token sale KYC.
+                .text
+                    | If you completed KYC for the SelfKey token sale, you can download a KYC file to import and complete your Basic ID.
+                    | Please login at
+                    span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
+                        | https://token.selfkey.org
+                    |  to download your KYC file.
+                .text
+                    md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
+                        input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
+                .actions
+                    md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

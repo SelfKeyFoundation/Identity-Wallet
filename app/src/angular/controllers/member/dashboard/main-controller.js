@@ -1,45 +1,91 @@
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, ConfigFileService, CommonService, ElectronService, EtherScanService, WalletService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, ElectronService, WalletService, SqlLiteService) {
     'ngInject'
 
-    $log.info('MemberDashboardMainController');
+    $log.info('MemberDashboardMainController', $rootScope.wallet);
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
     }
 
-    $rootScope.totalBalanceInUsd = 0;
     let pieChartIsReady = false;
 
-    function getTotalBalanceInUsd() {
-        return Number($rootScope.wallet.balanceInUsd) + Number($rootScope.primaryToken.balanceInUsd);
+    let wallet = $rootScope.wallet;
+    $scope.transactionsHistoryList = [];
+
+    $scope.setTransactionsHistory = () => {
+        SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
+            $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
+        }).catch((err) => {
+            console.log(err);
+            //TODO
+        });
+    };
+
+    $scope.setTransactionsHistory();
+
+    $scope.transactionsHistoryIsSynced = () => {
+        let statuses = $rootScope.transactionHistorySyncStatuses;
+        let isInProgress = false;
+        if (statuses) {
+            Object.keys(statuses).forEach(key => {
+                if (statuses[key] == false) {
+                    isInProgress = true;
+                }
+            });
+        }
+        return !isInProgress;
     }
 
-    /**
-     * init pie chart
-     */
+    $rootScope.CUSTOM_TOKENS_LIMIT = 20;
+    let processCustomTokens = () => {
+        let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
+        $rootScope.tokenLimitIsExceed = tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
+    };
+
+    processCustomTokens();
+
+    $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
+
+    $scope.getPieChartItems = () => {
+        let pieChartItems = [];
+        Object.keys(wallet.tokens).forEach((tokeyKey) => {
+            let pieChartItem = {};
+            let token = wallet.tokens[tokeyKey];
+
+            let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
+            if (tokenPrice) {
+                pieChartItem.title = tokenPrice.name;
+                pieChartItem.valueUSD = Number(CommonService.numbersAfterComma(token.getBalanceInUsd(), 2));
+            } else {
+                pieChartItem.title = 'Unknown';
+                pieChartItem.valueUSD = 0;
+            }
+
+            pieChartItem.subTitle = token.symbol;
+
+            pieChartItems.push(pieChartItem);
+        });
+
+        let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
+        pieChartItems.unshift({
+            subTitle: 'ETH',
+            title: 'Ethereum',
+            valueUSD: Number(CommonService.numbersAfterComma(wallet.getBalanceInUsd(), 2))
+        });
+
+        return pieChartItems;
+
+    };
+
     $scope.pieChart = {
         totalTitle: 'Tolal value USD',
-        total: $filter('number')($rootScope.totalBalanceInUsd),
-        items: [{
-            title: 'Ethereum',
-            subTitle: 'eth',
-            value: Number($rootScope.wallet.balanceEth),
-            valueUSD: Number($rootScope.wallet.balanceInUsd),
-            color: '#9c27b0',
-            icon: 'eth'
-        }, {
-            title: 'Selfkey',
-            subTitle: 'key',
-            icon: 'key',
-            value: Number($rootScope.primaryToken.getBalanceDecimal()),
-            valueUSD: Number($rootScope.primaryToken.balanceInUsd),
-            color: '#0dc7dd'
-        }],
+        total: CommonService.numbersAfterComma(wallet.calculateTotalBalanceInUSD(), 2),
+        items: $scope.getPieChartItems(),
         callback: {
             onReady: () => {
                 // TODO set listenere on balance change here
                 pieChartIsReady = true;
-                if (getTotalBalanceInUsd() > 0) {
+                if (wallet.calculateTotalBalanceInUSD() > 0) {
                     updatePieChart();
                 }
             },
@@ -51,62 +97,13 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     };
 
     function updatePieChart() {
-        $rootScope.totalBalanceInUsd = getTotalBalanceInUsd();
-        $scope.pieChart.total = $filter('number')($rootScope.totalBalanceInUsd);
+        processCustomTokens();
+        $scope.pieChart.items = $scope.getPieChartItems();
 
-        $scope.pieChart.items[0].value = Number($rootScope.wallet.balanceEth);
-        $scope.pieChart.items[0].valueUSD = Number($rootScope.wallet.balanceInUsd);
-
-        $scope.pieChart.items[1].value = Number($rootScope.primaryToken.getBalanceDecimal());
-        $scope.pieChart.items[1].valueUSD = Number($rootScope.primaryToken.balanceInUsd);
-
+        $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
+        $scope.pieChart.total = CommonService.numbersAfterComma($scope.totalBalanceInUsd, 2);
         $scope.pieChart.draw();
     }
-    $scope.publicKeyHex = $rootScope.wallet.getPublicKeyHex();
-    $scope.transactionActivityIsSynced = function() {
-        let statuses = $rootScope.walletActivityStatuses;
-        let isInProgress = false;  
-        if (statuses) {
-            Object.keys(statuses).forEach(key => {
-                if (statuses[key] == false) {
-                    isInProgress = true;
-                }
-            });
-        }
-        return !isInProgress;
-    }
-
-    $scope.allTransactions = [];
-
-    $scope.setTransactionAtivity = () => {
-        let store = ConfigFileService.getStore();
-        
-        let data = store.wallets[$scope.publicKeyHex].data;
-        let allTransactions = [];  
-        if (data.activities) {
-            Object.keys(data.activities).forEach(activityKey => {
-                let activity = data.activities[activityKey];
-                let transactions = activity && activity.transactions ? activity.transactions : [];
-                transactions.forEach(transaction => {
-                    if (transaction.to) {
-                        transaction.nameOfTo = WalletService.getWalletName(activityKey, transaction.to);
-                    }
-                    let symbol = activityKey.toUpperCase();
-                    transaction.sentOrReceive =  transaction.to ? 'Sent' : 'Received';
-                    transaction.symbol = symbol;
-                                    
-                });
-                allTransactions = allTransactions.concat(transactions);
-            });
-         
-            allTransactions.sort((a,b) =>{
-                return Number(b.timestamp) - Number(a.timestamp);
-            });
-
-            $scope.allTransactions = allTransactions;
-        }
-    }
-    $scope.setTransactionAtivity();
 
     /**
      * update pie chart on balance change
@@ -114,7 +111,16 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
         if (pieChartIsReady) {
             updatePieChart();
-        } 
+        }
+    });
+
+    /**
+     * update pie chart on balance change
+     */
+    $rootScope.$on('piechart:reload', (event) => {
+        if (pieChartIsReady) {
+            updatePieChart();
+        }
     });
 
     $log.info("pie chart data:", $scope.pieChart);

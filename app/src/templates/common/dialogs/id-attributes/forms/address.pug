@@ -1,0 +1,31 @@
+.content
+    .address-content(layout="column")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label Street Address 1
+            input(name="address1", type="text", ng-model="inputs.line1", ng-required="true")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label Street Address 2
+            input(name="address2", type="text", ng-model="inputs.line2")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label city
+            input(name="city", type="text", ng-model="inputs.line3", ng-required="true")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label State/Province/Region
+            input(name="region", type="text", ng-model="inputs.line4", ng-required="true")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label Zip/Postal Code
+            input(name="code", type="number", ng-model="inputs.line5", ng-required="true")
+        md-input-container.sk-input-box.sk-input-non-floating
+            label Country
+            md-select.sk-select(name="country", ng-model="inputs.line6", ng-required="true")
+                md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+
+.address-actions-wrapper
+    md-button.outline-gray(ng-click="close($event)")
+        span.primary cancel
+    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")
+        span.primary save
+
+
+
+

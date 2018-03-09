@@ -1,54 +1,32 @@
-function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, ElectronService, CommonService) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $state, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep2Controller');
 
-    let messagesContainer = angular.element(document.getElementById("message-container"));
+    $scope.countryList = SqlLiteService.getCountries();
 
-    $rootScope.wallet = null;
-
-    $scope.userInput = {
-        password: ''
+    $scope.input = {
+        first_name: "",
+        last_name: "",
+        middle_name: "",
+        country_of_residency: ""
     };
 
-    $scope.createKeystore = (event) => {
-        
-        if(!$scope.userInput.password) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "password is required",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
+    $scope.nextStep = (event, form) => {
+        if (!form.$valid) return;
 
-        if($scope.userInput.password !== $stateParams.thePassword) {
-            CommonService.showMessage({
-                container: messagesContainer,
-                type: "error",
-                message: "wrong password",
-                closeAfter: 1500,
-                replace: true
-            });
-            return;
-        }
-
-        let promise = WalletService.createKeystoreFile($scope.userInput.password);
-        promise.then((wallet) => {
-            $rootScope.wallet = wallet;
-            
-            // reload store
-            ConfigFileService.load().then((storeData) => {
-                $state.go('guest.create.step-3')
-            });
-        }).catch((error)=>{
-            $log.error(error);
+        $mdDialog.show({
+            controller: 'PasswordWarningDialogController',
+            templateUrl: 'common/dialogs/password-warning.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                basicInfo: $scope.input
+            }
         });
     }
-
-    
 };
 
 module.exports = GuestKeystoreCreateStep2Controller;

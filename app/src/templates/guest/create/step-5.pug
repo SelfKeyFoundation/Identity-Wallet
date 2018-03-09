@@ -1,0 +1,27 @@
+.wallet-create-step-5(layout-fill, layout="column", layout-align="center center")
+    sk-icon(icon="important", size-class="icon-size-68x74")
+
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Backup Your Wallet
+        .content(layout="column")
+
+            .title "Please download the Keystore File to keep a backup of your newly created wallet. This file is protected by the password you just created. Inside this file are your private keys that sign all transactions on the blockchain."
+
+            md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
+                span.primary Backup your keystore file (UTC / JSON)
+
+            .warning-description
+                .item
+                    span Don't lose it!
+                    span It cannot be recovered if you lose it.
+                .item
+                    span Don't share it!
+                    span Your assets could be stolen if you open this file on a malicious or phishing site.
+                .item
+                    //span Make a backup!
+                    span Secure it like the millions of dollars it may one day be worth.
+
+            .actions-wrapper
+                md-button.outline-orange(ng-click="nextStep($event)")
+                    span I understand, continue

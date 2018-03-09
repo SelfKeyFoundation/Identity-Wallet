@@ -1,0 +1,33 @@
+.info-container {
+    width: 320px !important;
+    height: 180px !important;
+    min-height: inherit !important;
+    min-width: inherit !important;
+    display: block !important;
+    * {
+        font-family: ProximaNovaRegular;
+        font-size: 17px;
+        line-height: 1.8;
+        color: #ffffff;
+    }
+   
+    .info-wrapper {
+        position: relative;
+        height: 100%;
+        .info-title {
+            padding-top: 15px;
+            text-align: center; 
+        }
+        .info-body {
+            > div {
+               text-align: center; 
+            }
+        }
+        .ok-button {
+            bottom: 15px;
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+    }
+}

@@ -41,8 +41,8 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
 
                     for (let i in questions) {
                         let req = questions[i];
-                        
-                        if(!req.attributeType) continue;
+
+                        if (!req.attributeType) continue;
 
                         let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
                         requirementsList.push({ key: req.attributeType, idAttributeType: idAttributeType, req: req });
@@ -50,8 +50,8 @@ function SkKycRequirementsBoxDirective($rootScope, $log, $window, SelfkeyService
 
                     for (let i in uploads) {
                         let req = uploads[i];
-                        
-                        if(!req.attributeType) continue;
+
+                        if (!req.attributeType) continue;
 
                         let idAttributeType = ConfigFileService.getIdAttributeType(req.attributeType);
                         requirementsList.push({ key: req.attributeType, idAttributeType: idAttributeType, req: req });

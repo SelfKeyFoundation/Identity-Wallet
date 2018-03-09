@@ -1,0 +1,38 @@
+md-dialog.add-id-attribute(aria-label="Add ID Attribute")
+
+    .content-wrapper
+        .header-section
+            //md-icon(md-svg-src="assets/images/icons/add-property.svg")
+            //span.title Add ID Attribute
+            //span.subtitle Select the type of attribute you would like to add to your identity wallet.
+        .sk-box.shadowed
+            .header
+                span.none-select-text Add Attribute
+            form.content
+                md-input-container
+                    md-select.sk-select(ng-model="selectedKey")
+                        // global_attribute
+                        md-option(ng-value="key", ng-repeat="(key, item) in globalAttributes") {{$root.DICTIONARY[key]}}
+
+                        md-select-header(ng-if="getLength(globalAttributes)")
+                            span
+
+                        // id_document
+                        md-option(ng-value="key", ng-repeat="(key, item) in idDocuments") {{$root.DICTIONARY[key]}}
+
+                        md-select-header(ng-if="getLength(idDocuments)")
+                            span
+
+                        // proof_of_address
+                        md-option(ng-value="key", ng-repeat="(key, item) in proofOfAddresses") {{$root.DICTIONARY[key]}}
+
+                        //md-select-header
+                            span
+
+                        // online_identity_attribute
+                        //md-option(ng-value="key", ng-repeat="(key, item) in onlineIdentityAttributes") {{$root.DICTIONARY[key]}}
+            .actions
+                md-button.gray(ng-click="cancel($event)")
+                    span.primary Cancel
+                md-button.blue(ng-click="save($event)", style="margin-left: 16px;")
+                    span.primary Save

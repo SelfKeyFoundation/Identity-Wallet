@@ -8,8 +8,8 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
     return {
         restrict: 'E',
         scope: {
-            title : "@",
-            maxNotifications : "@",
+            title: "@",
+            maxNotifications: "@",
             callbacks: "="
         },
         link: (scope, element) => {
@@ -29,44 +29,44 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
             }
 
             let store = ConfigFileService.getStore();
-            
-            
 
-            const filterNotifications = function(){
-                
+
+
+            const filterNotifications = function () {
+
                 let orderedNotifications = JSON.parse(JSON.stringify(store.actionLogs));
 
-                
+
                 //change string date to date
-                orderedNotifications = orderedNotifications.map(function(obj){
-                    if(typeof obj.date == "string"){
+                orderedNotifications = orderedNotifications.map(function (obj) {
+                    if (typeof obj.date == "string") {
                         obj.date = new Date(obj.date);
                     }
                     return obj;
                 })
                 //order by date asc
-                orderedNotifications = orderedNotifications.sort(function(a,b){
-                    
-                    if(a.date && b.date){
+                orderedNotifications = orderedNotifications.sort(function (a, b) {
+
+                    if (a.date && b.date) {
                         return a.date.getTime() < b.date.getTime();
                     }
                     return false;
                 })
-                
-                if(scope.maxNotifications){
+
+                if (scope.maxNotifications) {
                     //remove unnececary notifications that are more the maxNotifications
-                    orderedNotifications = orderedNotifications.filter(function(el, index){
-                        if(!el.date){
+                    orderedNotifications = orderedNotifications.filter(function (el, index) {
+                        if (!el.date) {
                             return false;
                         }
                         return (index < parseInt(scope.maxNotifications));
-                    }) 
-                }   
+                    })
+                }
 
                 //add icon title and color to the notifications of the specific type
-                orderedNotifications = orderedNotifications.map(function(obj){
+                orderedNotifications = orderedNotifications.map(function (obj) {
                     let conf = CONFIG.notificationTypes[obj.type];
-                    if(!conf){
+                    if (!conf) {
                         return obj;
                     }
                     obj.icon = conf.icon;
@@ -74,8 +74,8 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
                     obj.color = conf.color;
                     return obj;
                 })
-                
-                
+
+
                 scope.actionLogList = orderedNotifications;
             }
 
@@ -83,7 +83,7 @@ function SkActionLogsBoxDirective($log, $window, ConfigFileService, CONFIG) {
 
             filterNotifications();
 
-            scope.$watch(function(){return store.actionLogs.length}, function() {
+            scope.$watch(function () { return store.actionLogs.length }, function () {
                 filterNotifications();
             });
 
