@@ -341,6 +341,9 @@ h2 {
 .color-grey svg {
   fill: #78909C !important; }
 
+.color-white svg {
+  fill: #fff !important; }
+
 body, html {
   margin: 0;
   padding: 0; }

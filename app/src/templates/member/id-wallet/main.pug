@@ -41,6 +41,7 @@
                             tr(ng-repeat="item in attributesList")
                                 td
                                     sk-icon(icon="{{item.items[0].values[0].staticData ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.items[0].values[0].staticData ? 'Completed' : 'Missing' }}
                                 td {{$root.DICTIONARY[item.idAttributeType]}}
                                 td {{item.idAttributeType == "birthdate" ? (item.longDateValue | date: 'yyyy/MM/dd') : item.items[0].values[0].staticData.line1}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
@@ -67,11 +68,12 @@
                             tr(ng-repeat="item in idDocumentsList")
                                 td
                                     sk-icon(icon="{{item.items[0].values[0].documentFileName ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.items[0].values[0].documentFileName ? 'Completed' : 'Missing' }}
                                 td {{$root.DICTIONARY[item.idAttributeType]}}
                                 td {{item.items[0].values[0].documentFileName}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                 td.action-columns
-                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg" ng-if="item.items[0].values[0].documentFileName", class="color-violet", ng-click="openFilePreview($event, item.items[0].values[0])")
+                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg" ng-if="item.items[0].values[0].documentFileName", class="color-white", ng-click="openFilePreview($event, item.items[0].values[0])")
                                 td.action-columns
                                     md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemDocument($event, item.items[0].values[0], item.idAttributeType)", class="color-light-grey")
                                 td.action-columns

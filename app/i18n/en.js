@@ -69,9 +69,9 @@ const EN = {
 
     full_name: "Full Name",
     public_key: "Public Key",
-    physical_address: "Address",
+    physical_address: "Physical Address",
     work_place: "Workplace",
-    birthdate: "Birthdate",
+    birthdate: "Date of Birth",
     nationality: "Nationality",
     tax_id_number: "Tax ID",
     passport: "Passport",
