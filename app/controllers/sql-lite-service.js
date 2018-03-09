@@ -21,8 +21,6 @@ module.exports = function (app) {
         }
     });
 
-    // select wallets.id , json_extract(wallets.name, '$.test') as phone from wallets where phone = 'is';
-
     /**
      * tables
      */
@@ -632,7 +630,8 @@ module.exports = function (app) {
                                     // add initial id attributes
                                     idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
                                         idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-                                            idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: basicInfo[idAttributeType.key], createdAt: new Date().getTime() }));
+                                            let staticData = JSON.stringify({line1: basicInfo[idAttributeType.key]});
+                                            idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() }));
                                         }));
                                     }));
                                 }
@@ -819,7 +818,7 @@ module.exports = function (app) {
         args.createdAt = new Date().getTime();
 
         return knex.transaction((trx) => {
-            let selectPromise = knex('id_attributes').transacting(trx).select().where('idAttributeType', args.idAttributeType);
+            let selectPromise = knex('id_attributes').transacting(trx).select().where({'walletId': args.walletId, 'idAttributeType': args.idAttributeType});
             selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
                     if (rows && rows.length) {
@@ -934,7 +933,16 @@ module.exports = function (app) {
 
                             for (let j in items) {
                                 idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
-                                    items[j].values = values ? values : [];
+                                    if(values){
+                                        for(let i in values){
+                                            if(values[i].staticData){
+                                                values[i].staticData = JSON.parse(values[i].staticData);
+                                            }
+                                        }
+                                        items[j].values = values;
+                                    }else{
+                                        items[j].values = []
+                                    }
                                 }));
                             }
                         }));
@@ -986,11 +994,7 @@ module.exports = function (app) {
     /**
      * id_attribute_item_values
      */
-    controller.prototype.idAttributeItemValues_insert = (args) => {
-        // TODO
-        // args.buffer, args.fileName, args.mimeType, args.fileSize, args.idAttributeItemValueId, args.idAttributeItemId
-
-        // check if value exists
+    controller.prototype.idAttributeItemValues_addStaticData = (args) => {
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId);
             selectPromise.then((idAttributeItemValues) => {
@@ -1002,86 +1006,67 @@ module.exports = function (app) {
                         idAttributeItemValue.updatedAt = new Date().getTime();
 
                         if (args.staticData) {
-                            // update only static data
-                            idAttributeItemValue.staticData = staticData;
-                            let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                            updatePromise.then((rows) => {
-                                resolve(idAttributeItemValue);
-                            }).catch((error) => {
-                                reject(error);
-                            });
-
-                        } else if (args.buffer) {
-
-                            if (idAttributeItemValue.documentId) {
-                                let selectPromise = knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId);
-                                selectPromise.then((documents) => {
-
-                                    documents[0].name = args.fileName;
-                                    documents[0].buffer = args.buffer;
-                                    documents[0].size = args.size;
-                                    documents[0].mimeType = args.mimeType;
-                                    documents[0].updatedAt = new Date().getTime();
-
-                                    let updatePromise = knex('documents').transacting(trx).update(documents[0]).where('id', documents[0].id);
-
-                                    updatePromise.then((updatedIds) => {
-                                        resolve(idAttributeItemValue);
-                                    }).catch((error) => {
-                                        reject(error);
-                                    })
-
-                                }).catch((error) => {
-                                    reject(error);
-                                });
-                            } else {
-                                knex('documents').transacting(trx).insert({
-                                    buffer: args.buffer,
-                                    name: args.fileName,
-                                    mimeType: args.mimeType,
-                                    size: args.size,
-                                    createdAt: new Date().getTime()
-                                }).then((rows) => {
-                                    idAttributeItemValue.documentId = rows[0];
-                                    let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                                    updatePromise.then((rows) => {
-                                        resolve(idAttributeItemValue);
-                                    }).catch((error) => {
-                                        reject(error);
-                                    });
-                                }).catch((error) => {
-                                    reject(error);
-                                });
-                            }
+                            idAttributeItemValue.staticData = JSON.stringify(staticData);
                         }
+
+                        let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                        updatePromise.then((rows) => {
+                            resolve(idAttributeItemValue);
+                        }).catch((error) => {
+                            reject(error);
+                        });
                     } else {
-                        // create idAttributeItemValue
-                        let idAttributeItemValue = {
-                            idAttributeItemId: args.idAttributeItemId,
-                            createdAt: new Date().getTime()
-                        }
+                        reject({message: 'record_not_found'});
+                    }
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
 
-                        if (args.staticData) {
-                            idAttributeItemValue.staticData = args.staticData;
-                            let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                            insertPromise.then((insertIds) => {
-                                idAttributeItemValue.id = insertIds[0];
-                                resolve(idAttributeItemValue);
+    controller.prototype.idAttributeItemValues_addDocument = (args) => {
+        return knex.transaction((trx) => {
+            let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.idAttributeItemValueId);
+            selectPromise.then((idAttributeItemValues) => {
+                return new Promise((resolve, reject) => {
+                    if (idAttributeItemValues && idAttributeItemValues.length) {
+                        let idAttributeItemValue = idAttributeItemValues[0];
+
+                        // update idAttributeItemValue
+                        idAttributeItemValue.updatedAt = new Date().getTime();
+
+                        if (idAttributeItemValue.documentId) {
+                            let selectPromise = knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId);
+                            selectPromise.then((documents) => {
+
+                                documents[0].name = args.fileName;
+                                documents[0].buffer = args.buffer;
+                                documents[0].size = args.size;
+                                documents[0].mimeType = args.mimeType;
+                                documents[0].updatedAt = new Date().getTime();
+
+                                let updatePromise = knex('documents').transacting(trx).update(documents[0]).where('id', documents[0].id);
+
+                                updatePromise.then((updatedIds) => {
+                                    resolve(idAttributeItemValue);
+                                }).catch((error) => {
+                                    reject(error);
+                                })
                             }).catch((error) => {
                                 reject(error);
                             });
-                        } else if (args.buffer) {
+                        } else {
                             knex('documents').transacting(trx).insert({
                                 buffer: args.buffer,
                                 name: args.fileName,
                                 mimeType: args.mimeType,
                                 size: args.size,
                                 createdAt: new Date().getTime()
-                            }).then((insertIds) => {
-                                idAttributeItemValue.documentId = insertIds[0];
-                                let insertPromise = knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).where('id', idAttributeItemValue.id);
-                                insertPromise.then((insertIds) => {
-                                    idAttributeItemValue.id = insertIds[0];
+                            }).then((rows) => {
+                                idAttributeItemValue.documentId = rows[0];
+                                let updatePromise = knex('id_attribute_item_values').transacting(trx).update(idAttributeItemValue).where('id', idAttributeItemValue.id);
+                                updatePromise.then((rows) => {
                                     resolve(idAttributeItemValue);
                                 }).catch((error) => {
                                     reject(error);
@@ -1090,81 +1075,94 @@ module.exports = function (app) {
                                 reject(error);
                             });
                         }
+                    } else {
+                        reject({message: "record_not_found"});
                     }
                 });
             })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            .then(trx.commit)
+            .catch(trx.rollback);
         });
     }
 
-    controller.prototype.idAttributeItemValues_update = (args) => {
+    controller.prototype.idAttributeItemValues_updateStaticData = (args) => {
         return knex.transaction((trx) => {
             let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', args.id);
             selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
                     let idAttributeItemValue = rows[0];
 
-                    if (args.staticData) {
-                        knex('id_attribute_item_values').transacting(trx).update(args).where('id', args.id).then((updatedIds) => {
-                            resolve(rows);
-                        }).catch((error) => {
-                            reject({ message: "error", error: error });
-                        });
-                    } else {
-                        if (args.buffer) {
-                            knex('documents').transacting(trx).select().where('id', idAttributeItemValue.documentId).then((documents) => {
-                                if (documents && documents.length) {
-                                    let document = documents[0];
+                    if(args.staticData){
+                        args.staticData = JSON.stringify(args.staticData);
+                    }
 
-                                    document.name = args.name;
-                                    document.buffer = args.buffer;
-                                    document.mimeType = args.mimeType;
-                                    document.size = args.size;
-                                    document.updatedAt = new Date().getTime();
+                    knex('id_attribute_item_values').transacting(trx).update(args).where('id', args.id).then((updatedIds) => {
+                        resolve(rows);
+                    }).catch((error) => {
+                        reject({ message: "error", error: error });
+                    });
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
 
-                                    knex('documents').transacting(trx).update(document).where("id", document.id).then((updatedIds) => {
+    controller.prototype.idAttributeItemValues_updateDocument = (args) => {
+        return knex.transaction((trx) => {
+            let selectPromise = select('id_attribute_item_values', {'id': args.id}, trx);
+            selectPromise.then((rows) => {
+                return new Promise((resolve, reject) => {
+                    let idAttributeItemValue = rows[0];
+
+                    select('documents', {'id': idAttributeItemValue.documentId}, trx).then((documents) => {
+                        if (documents && documents.length) {
+                            let document = documents[0];
+
+                            document.name = args.name;
+                            document.buffer = args.buffer;
+                            document.mimeType = args.mimeType;
+                            document.size = args.size;
+                            document.updatedAt = new Date().getTime();
+
+                            knex('documents').transacting(trx).update(document).where("id", document.id).then((updatedIds) => {
+                                resolve(rows);
+                            }).catch((error) => {
+                                reject({ message: "error", error: error });
+                            });
+                        } else {
+                            let document = {
+                                name: args.name,
+                                buffer: args.buffer,
+                                mimeType: args.mimeType,
+                                size: args.size,
+                                createdAt: new Date().getTime()
+                            }
+
+                            knex('documents').transacting(trx).insert(document).then((insertedIds) => {
+                                if (insertedIds && insertedIds.length) {
+                                    let updateData = {
+                                        documentId: insertedIds[0]
+                                    }
+                                    knex('id_attribute_item_values').transacting(trx).update(updateData).where('id', args.id).then((updatedIds) => {
                                         resolve(rows);
                                     }).catch((error) => {
                                         reject({ message: "error", error: error });
                                     });
                                 } else {
-                                    let document = {
-                                        name: args.name,
-                                        buffer: args.buffer,
-                                        mimeType: args.mimeType,
-                                        size: args.size,
-                                        createdAt: new Date().getTime()
-                                    }
-
-                                    knex('documents').transacting(trx).insert(document).then((insertedIds) => {
-                                        if (insertedIds && insertedIds.length) {
-                                            let updateData = {
-                                                documentId: insertedIds[0]
-                                            }
-                                            knex('id_attribute_item_values').transacting(trx).update(updateData).where('id', args.id).then((updatedIds) => {
-                                                resolve(rows);
-                                            }).catch((error) => {
-                                                reject({ message: "error", error: error });
-                                            });
-                                        } else {
-                                            reject({ message: "error" });
-                                        }
-                                    }).catch((error) => {
-                                        reject({ message: "error", error: error });
-                                    });
+                                    reject({ message: "error" });
                                 }
                             }).catch((error) => {
                                 reject({ message: "error", error: error });
-                            })
-                        } else {
-                            reject({ message: "file_is_missing" });
+                            });
                         }
-                    }
+                    }).catch((error) => {
+                        reject({ message: "error", error: error });
+                    })
                 });
             })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            .then(trx.commit)
+            .catch(trx.rollback);
         });
     }
 
@@ -1184,9 +1182,9 @@ module.exports = function (app) {
         return insertIntoTable('action_logs', item);
     }
 
-    controller.prototype.actionLogs_findAll = () => {
+    controller.prototype.actionLogs_findAll = (args) => {
         return new Promise((resolve, reject)=>{
-            knex('action_logs').select().then((rows) => {
+            knex('action_logs').select().where({walletId: args.walletId}).then((rows) => {
                 resolve(rows);
             }).catch((error) => {
                 reject({ message: "error", error: error });

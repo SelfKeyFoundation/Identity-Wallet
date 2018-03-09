@@ -1,7 +1,7 @@
 .content
     md-input-container.sk-input-box.sk-input-non-floating
         label Nationality
-        md-select.sk-select(name="nationality", ng-model="inputs.country", ng-required="true")
+        md-select.sk-select(name="nationality", ng-model="inputs.line1", ng-required="true")
             md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
 
 .country-actions-wrapper

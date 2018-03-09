@@ -289,7 +289,6 @@ module.exports = function (app) {
                         let name = path.parse(filePaths[0]).base;
 
                         if (stats.size > dialogConfig.maxFileSize) {
-                            console.log(111);
                             return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
                         }
 
@@ -300,7 +299,7 @@ module.exports = function (app) {
 
                             var buffer = new Buffer(stats.size);
                             fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
-                                electron.app.sqlLiteService.idAttributeItemValues_insert(
+                                electron.app.sqlLiteService.idAttributeItemValues_addDocument(
                                     {
                                         fileName: name,
                                         buffer: buffer,
@@ -1143,7 +1142,7 @@ module.exports = function (app) {
 
 
     controller.prototype.updateIdAttributeItemValueStaticData = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttributeItemValues_update(args).then((data) => {
+        electron.app.sqlLiteService.idAttributeItemValues_updateStaticData(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             console.log(error);
@@ -1152,25 +1151,19 @@ module.exports = function (app) {
     }
 
     controller.prototype.updateIdAttributeItemValueDocument = function (event, actionId, actionName, args) {
-
         let params = {
             id: args.idAttributeItemValue.id
         }
 
         params = Object.assign(params, args.document);
 
-        console.log(params);
-
-        electron.app.sqlLiteService.idAttributeItemValues_update(params).then((data) => {
+        electron.app.sqlLiteService.idAttributeItemValues_updateDocument(params).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             console.log(error);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
-
-
-
 
     controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.idAttribute_add(args).then((data) => {

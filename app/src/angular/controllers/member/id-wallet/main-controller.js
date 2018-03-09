@@ -144,8 +144,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
                     if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
                         $scope.idDocumentsList.push(item)
                     } else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
-                        if (item.idAttributeType == "birthdate") {
-                            item.longDateValue = Number(item.items[0].values[0].staticData)
+                        if (item.items[0].values[0].staticData && item.items[0].values[0].staticData.line1 && item.idAttributeType == "birthdate") {
+                            item.longDateValue = Number(item.items[0].values[0].staticData.line1);
                         }
                         $scope.attributesList.push(item)
                     }
@@ -163,7 +163,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
     }
 
     function loadWalletHistory () {
-        SqlLiteService.loadWalletHistory().then((data)=>{
+        SqlLiteService.loadWalletHistory($rootScope.wallet.id).then((data)=>{
             $scope.walletHistoryList = data.reverse();
         });
     }
