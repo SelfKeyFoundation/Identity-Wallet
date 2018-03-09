@@ -24,14 +24,14 @@
                 td
                     div
                         sk-icon(icon="{{ idAttributes.national_id.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
+                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.national_id)") {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
 
-            tr(ng-if="idAttributes.national_id")
+            tr(ng-if="idAttributes.id_selfie")
                 td.fc-bluey-grey ID Selfie:
                 td
                     div
                         sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
+                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.id_selfie)") {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
 
             tr
                 td.fc-bluey-grey Email:

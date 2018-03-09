@@ -131,6 +131,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
         loadWalletHistory();
     });
 
+    $scope.$on('id-attribute:open-document-add-dialog', (event, idAttributeItemValue, idAttributeType) => {
+        $scope.editIdAttributeItemDocument(null, idAttributeItemValue, idAttributeType);
+    });
+
     function prepareData() {
         $rootScope.wallet.loadIdAttributes().then(() => {
             $scope.attributesList = [];

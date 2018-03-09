@@ -21,12 +21,16 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
                 prepareData();
             });
 
+            scope.openDocumentAddEditModal = (event, idAttribute) => {
+                $rootScope.$broadcast('id-attribute:open-document-add-dialog', idAttribute.item.items[0].values[0], idAttribute.item.idAttributeType);
+            }
+
             function prepareData() {
                 scope.idAttributes = {};
                 let idAttributes = $rootScope.wallet.getIdAttributes();
 
                 for (let i in idAttributes) {
-                    scope.idAttributes[idAttributes[i].idAttributeType] = {}
+                    scope.idAttributes[idAttributes[i].idAttributeType] = {item: idAttributes[i]}
                     if(idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1){
                         scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData.line1;
                         if (idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1 && idAttributes[i].idAttributeType == "birthdate") {

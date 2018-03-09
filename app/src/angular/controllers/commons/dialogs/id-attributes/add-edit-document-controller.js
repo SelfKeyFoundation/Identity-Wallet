@@ -35,7 +35,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
         fileSelect.then((selectedFile) => {
             $scope.selectedFile = selectedFile;
         }).catch((error) => {
-            CommonService.showToast('error', 'Max File Size: 50mb Allowed');
+            CommonService.showToast('error', 'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
         });
     }
 };
