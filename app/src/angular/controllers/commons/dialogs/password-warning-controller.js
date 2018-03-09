@@ -2,7 +2,7 @@
 
 const Wallet = requireAppModule('angular/classes/wallet');
 
-function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, $transitions, RPCService, CommonService, basicInfo) {
+function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, $transitions, RPCService, CommonService, basicInfo, SqlLiteService) {
     'ngInject'
 
     $log.info('PasswordWarningDialogController');
@@ -59,6 +59,14 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
             initialPromises.push($rootScope.wallet.loadTokens());
 
             $q.all(initialPromises).then((resp) => {
+
+                SqlLiteService.registerActionLog("Created Attribute: First Name", "Created");
+                SqlLiteService.registerActionLog("Created Attribute: Last Name", "Created");
+                if(basicInfo.middle_name){
+                    SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
+                }
+                SqlLiteService.registerActionLog("Created Attribute: Country Of Residency", "Created");
+
                 defer.resolve();
             }).catch((error) => {
                 defer.reject(error);

@@ -25,7 +25,6 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         }
 
         WalletService.unlockByPrivateKey(privateKey).then((wallet, isReady) => {
-            console.log(wallet, isReady, "<<<<<<")
             if(isReady){
                 let initialPromises = [];
                 initialPromises.push(wallet.loadIdAttributes());
