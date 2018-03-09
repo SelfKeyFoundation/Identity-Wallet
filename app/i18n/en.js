@@ -69,9 +69,9 @@ const EN = {
 
     full_name: "Full Name",
     public_key: "Public Key",
-    physical_address: "Address",
+    physical_address: "Physical Address",
     work_place: "Workplace",
-    birthdate: "Birthdate",
+    birthdate: "Date of Birth",
     nationality: "Nationality",
     tax_id_number: "Tax ID",
     passport: "Passport",
@@ -92,7 +92,6 @@ const EN = {
     middle_name: "Middle Name",
     last_name: "Last Name",
     city: "City",
-    voice_id_attributes: "Voice ID attributes",
 
     selfie_with_id_document: "Selfie with ID Document",
 
