@@ -1,6 +1,6 @@
 'use strict';
 
-function SkCirclePieChartDirective($timeout) {
+function SkCirclePieChartDirective($timeout,CommonService) {
     'ngInject';
 
     return {
@@ -35,7 +35,7 @@ function SkCirclePieChartDirective($timeout) {
 
             let processItems = () => {
                 let items = scope.data.items;
-                let TOP_COLORS = ['#ff6400', '#03c8ce', '#a6e43b','#5f5f5f','#5f5f5f','#50b0fc'];
+                let TOP_COLORS = ['#ff6400', '#03c8ce', '#a6e43b','#5f5f5f','#50b0fc'];
                 
                 items.sort((a, b) => {
                     return parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
@@ -56,6 +56,8 @@ function SkCirclePieChartDirective($timeout) {
                     otherItems.forEach(otherItem => {
                         otherAggregated.valueUSD += Number(otherItem.valueUSD);
                     });
+
+                    otherAggregated.valueUSD = Number(CommonService.numbersAfterComma(otherAggregated.valueUSD, 2));
 
                     scope.topItems.push(otherAggregated);
                    
