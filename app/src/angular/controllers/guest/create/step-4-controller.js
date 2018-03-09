@@ -50,6 +50,12 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
                 promises.push($rootScope.wallet.loadTokens());
 
                 $q.all(promises).then((responses) => {
+                    SqlLiteService.registerActionLog("Created Attribute: First Name", "Created");
+                    SqlLiteService.registerActionLog("Created Attribute: Last Name", "Created");
+                    if($stateParams.basicInfo.middle_name){
+                        SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
+                    }
+                    SqlLiteService.registerActionLog("Created Attribute: Country Of Residency", "Created");
                     defer.resolve();
                 }).catch((error) => {
                     defer.reject(error);

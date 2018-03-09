@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams,  ElectronService, CommonService, RPCService) {
+function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams,  ElectronService, CommonService, RPCService, SqlLiteService) {
     'ngInject'
 
     $log.info('MemberSetupAddDocumentController');
@@ -30,28 +30,29 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
     $scope.selected.values = $rootScope.wallet.getIdAttributeItemValue($scope.selected.type);
 
     $scope.nextStep = (event) => {
-        if ($stateParams.type === 'national_id') {
-            $state.go('member.setup.add-document', { type: 'id_selfie' });
-        } else {
-            // TODO
-            // 1) find missing ID attributes
-            // 2) register alerts
-
-            $state.go('member.dashboard.main');
-        }
+        goToNextStep ();
     }
 
     $scope.selectFile = (event) => {
         let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
+        let actionText = 'Created Attribute: ';
+        let actionTitle = 'Created';
+        if(selectedValue.documentId){
+            actionText = 'Updated Attribute: ';
+            actionTitle = 'Updated';
+        }
 
         let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
         addDocumentPromise.then((resp) => {
             if(!resp) return;
             $rootScope.wallet.loadIdAttributes().then((resp)=>{
-                console.log(resp);
                 $scope.idAttributes = $rootScope.wallet.getIdAttributes();
                 CommonService.showToast('success', 'Saved!');
                 $scope.selected.values = "Saved!";
+
+                SqlLiteService.registerActionLog(actionText + $rootScope.DICTIONARY[$stateParams.type], actionTitle);
+
+                goToNextStep();
             });
         }).catch((error) => {
             CommonService.showToast('error', 'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
@@ -62,6 +63,13 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         $state.go('member.dashboard.main');
     }
 
+    function goToNextStep () {
+        if ($stateParams.type === 'national_id') {
+            $state.go('member.setup.add-document', { type: 'id_selfie' });
+        } else {
+            $state.go('member.dashboard.main');
+        }
+    }
 };
 
 module.exports = MemberSetupAddDocumentController;

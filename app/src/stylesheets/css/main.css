@@ -17701,11 +17701,12 @@ md-dialog {
     flex-direction: column;
     align-items: center;
     justify-content: center; }
-    .wallet-create-step-6 .private-key-print-box span :first-of-type {
+    .wallet-create-step-6 .private-key-print-box .title {
+      margin-top: 16px;
       font-weight: bold;
       font-size: 18px; }
-    .wallet-create-step-6 .private-key-print-box span :last-of-type {
-      margin-top: 18px; } }
+    .wallet-create-step-6 .private-key-print-box .pk {
+      margin-top: 8px; } }
 
 .member-setup-layout {
   position: relative; }
