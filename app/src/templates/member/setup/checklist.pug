@@ -13,28 +13,22 @@
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg')
-                    span First Name
+                    span Full Legal Name
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg')
-                    span Last Name
-
-                .item
-                    .bullet
-                        img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('middle_name', 'line1')")
-                        span(ng-if="!$root.wallet.getIdAttributeItemValue('middle_name', 'line1')") 3
-                    span Middle Name
+                    span Country Of Residency
 
                 .item
                     .bullet
                         span 4
-                    span ID Document
+                    span National ID
 
                 .item
                     .bullet
                         span 5
-                    span Selfie with ID Document
+                    span National ID Selfie
 
     .actions-wrapper(layout="row", layout-align="center center")
         md-button.gray(flex="70", ng-click="nextStep($event)")

@@ -29,30 +29,25 @@
                     .item
                         .bullet
                             img(src='assets/images/icons/tick.svg')
-                        span First Name
+                        span Full Legal Name
 
                     .item
                         .bullet
                             img(src='assets/images/icons/tick.svg')
-                        span Last Name
+                        span Country Of Residency
 
-                    .item
-                        .bullet
-                            img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('middle_name', 'line1')")
-                            span(ng-if="!$root.wallet.getIdAttributeItemValue('middle_name', 'line1')") 3
-                        span Middle Name
 
                     .item.clickable(sk-select-if="selected.type === 'id_document'")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('national_id', 'line1')")
                             span(ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')") 4
-                        span ID Document
+                        span National ID
 
                     .item.clickable(sk-select-if="selected.type === 'id_selfie'")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')")
                             span(ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')") 5
-                        span Selfie with ID Document
+                        span National ID Selfie
 
     .actions-wrapper(layout="row", layout-align="start center")
         .left(layout="row")
