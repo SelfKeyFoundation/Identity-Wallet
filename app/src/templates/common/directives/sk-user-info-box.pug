@@ -27,7 +27,7 @@
                         span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.national_id)") {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
 
             tr(ng-if="idAttributes.id_selfie")
-                td.fc-bluey-grey ID Selfie:
+                td.fc-bluey-grey National ID Selfie:
                 td
                     div
                         sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
