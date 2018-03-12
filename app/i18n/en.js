@@ -85,7 +85,7 @@ const EN = {
     selfie: "Profile Photo",
     fingerprint: "Fingerprint",
     email: "Email",
-    country_of_residency: "Country of Residency",
+    country_of_residency: "Country of Residence",
     id_selfie: "National ID Selfie",
     national_id_back: "National ID (Back)",
     first_name: "First Name",

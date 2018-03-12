@@ -14866,6 +14866,9 @@ md-content {
 .sk-input-box.no-char-counter .md-errors-spacer .md-char-counter {
   display: none; }
 
+.sk-input-box.small-margins {
+  margin: 12px 0 !important; }
+
 .sk-input-box > label {
   color: #ffffff;
   opacity: 0.5;
