@@ -17145,12 +17145,10 @@ md-dialog.add-id-attribute {
             letter-spacing: 0.7px;
             color: #ffffff; }
 
-form.address-content {
-  width: 760px;
-  padding: 40px 15px 15px 15px; }
-  form.address-content md-input-container {
-    width: 100%;
-    margin: 18px 0 0 0 !important; }
+.address-content md-input-container {
+  width: 100%; }
+  .address-content md-input-container:not(:first-child) {
+    margin: 15px 0 0 0 !important; }
 
 .address-actions-wrapper {
   width: 760px;
