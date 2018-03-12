@@ -14,7 +14,9 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     $scope.idAttributeItemValue = idAttributeItemValue;
     $scope.idAttributeType = idAttributeType;
     $scope.countryList = SqlLiteService.getCountries();
+
     $scope.singleInputType = "text";
+
 
     if(idAttributeType === 'email'){
         $scope.singleInputType = 'email';

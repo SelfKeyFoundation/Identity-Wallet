@@ -5,6 +5,7 @@ const electron = require('electron');
 const path = require('path');
 
 const countriesList = require('./../../assets/data/country-list.json');
+const countryCodesList = require('./../../assets/data/country-codes.json');
 const ethTokensList = require('./../../assets/data/eth-tokens.json');
 const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 

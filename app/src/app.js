@@ -70,6 +70,8 @@ angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
 const countriesConstant = requireAppModule('angular/constants/countries');
 angular.module('kyc-wallet').constant('countries', countriesConstant);
 
+const countriesCodesConstant = requireAppModule('angular/constants/country-codes');
+angular.module('kyc-wallet').constant('countryCodes', countriesCodesConstant);
 
 /**
  * services
