@@ -1,22 +1,9 @@
 const IdAttribute = requireAppModule('angular/classes/id-attribute');
 
-function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
+function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
     'ngInject'
 
     $log.info('MemberIdWalletMainController');
-
-    (function () {
-        $mdDialog.show({
-            controller: 'IdWalletInfoController',
-            templateUrl: 'common/dialogs/id-wallet-info.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: false,
-            fullscreen: true,
-            escapeToClose: false,
-            locals: {}
-        });
-    })();
-
 
     let ID_ATTRIBUTE_TYPES = {};
     let excludeKeys = [];
@@ -170,6 +157,18 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $mdDialog, $mdPa
             $scope.walletHistoryList = data.reverse();
         });
     }
+
+    $timeout(()=>{
+        $mdDialog.show({
+            controller: 'IdWalletInfoController',
+            templateUrl: 'common/dialogs/id-wallet-info.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose: false,
+            fullscreen: true,
+            escapeToClose: false,
+            locals: {}
+        });
+    }, 1000);
 };
 
 
