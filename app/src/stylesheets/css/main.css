@@ -14099,6 +14099,8 @@ md-toolbar {
       filter: drop-shadow(0px 0px 5px #000);
       animation: sk-loading-logo-glowing 1s linear infinite alternate; }
   .sk-loading > .info-container {
+    display: flex !important;
+    justify-content: center;
     position: absolute;
     z-index: 0;
     text-align: center;
@@ -14109,7 +14111,11 @@ md-toolbar {
       font-size: 17px;
       font-weight: 500;
       letter-spacing: 2.6px;
-      color: #0dc7dd; }
+      color: #0dc7dd;
+      z-index: 1000;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end; }
     .sk-loading > .info-container > .content {
       margin-top: 15px;
       font-family: ProximaNovaRegular;

@@ -40,8 +40,8 @@
                         tbody
                             tr(ng-repeat="item in attributesList")
                                 td
-                                    sk-icon(icon="{{item.items[0].values[0].staticData ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                                    md-tooltip(md-direction="top") {{item.items[0].values[0].staticData ? 'Completed' : 'Missing' }}
+                                    sk-icon(icon="{{item.items[0].values[0].staticData.line1 ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.items[0].values[0].staticData.line1 ? 'Completed' : 'Missing' }}
                                 td {{$root.DICTIONARY[item.idAttributeType]}}
                                 td {{item.idAttributeType == "birthdate" ? (item.longDateValue | date: 'yyyy/MM/dd') : item.items[0].values[0].staticData.line1}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}

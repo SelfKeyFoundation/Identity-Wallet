@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "0.0.23",
+  "version": "0.0.25",
   "description": "Selfkey Identity Wallet",
   "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
   "main": "./app/main.js",
