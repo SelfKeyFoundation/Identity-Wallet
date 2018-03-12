@@ -20,7 +20,7 @@
                 div(ng-message="required") This field is required. Please enter State/Province/Region
         md-input-container.sk-input-box.sk-input-non-floating.small-margins
             label Zip/Postal Code
-            input(name="code", type="text", ng-model="inputs.line5", ng-required="true")
+            input(name="code", type="number", ng-model="inputs.line5", ng-required="true")
             div(ng-messages="theForm.code.$error")
                 div(ng-message="required") This field is required. Please enter Zip/Postal Code
         md-input-container.sk-input-box.sk-input-non-floating.small-margins
