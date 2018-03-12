@@ -17958,6 +17958,10 @@ md-dialog {
             font-family: ProximaNovaRegular;
             border-collapse: collapse;
             margin-top: 10px; }
+            .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table ul {
+              margin: 0;
+              padding: 0;
+              list-style-type: none; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td {
               padding: 5px 0;
               word-break: break-word; }
