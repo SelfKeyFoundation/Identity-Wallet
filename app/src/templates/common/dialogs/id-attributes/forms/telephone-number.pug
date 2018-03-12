@@ -1,0 +1,14 @@
+.content
+    md-input-container.sk-input-box.sk-input-non-floating
+        label Country Code
+        md-select.sk-select(name="countryCode", ng-model="inputs.line1")
+            md-option(ng-value="item.dialCode", ng-repeat="(key, item) in countryList") {{item.name + ' ' + item.dialCode}}
+    md-input-container.sk-input-box.sk-input-non-floating.small-margins
+        label Telephone Number
+        input(name="telephoneNumber", type="text", ng-model="inputs.line2")
+
+.country-actions-wrapper
+    md-button.outline-gray(ng-click="close($event)")
+        span.primary cancel
+    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")
+        span.primary save
