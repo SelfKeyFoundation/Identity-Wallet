@@ -33,6 +33,7 @@ module.exports = function (app) {
                         table.increments('id');
                         table.string('name').unique().notNullable();
                         table.string('code').unique().notNullable();
+                        table.string('dialCode').unique().notNullable();
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
@@ -40,6 +41,10 @@ module.exports = function (app) {
                         for (let i in countriesList) {
                             let item = countriesList[i];
                             item.createdAt = new Date().getTime();
+                            item.dialCode = item.dial_code;
+                            delete item.dial_code;
+
+                            console.log(">>>>>>>>>", item)
                             promises.push(insertIntoTable('countries', item));
                         }
 
@@ -438,139 +443,31 @@ module.exports = function (app) {
     }
 
     /**
-        * countries
-        */
-    function createCountries() {
-        knex.schema.hasTable('countries').then(function (exists) {
-            if (!exists) {
-                knex.schema.createTable('countries', (table) => {
-                    table.increments('id');
-                    table.string('name').unique().notNullable();
-                    table.string('code').unique().notNullable();
-                    table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                    table.integer('updatedAt');
-                }).then((resp) => {
-                    for (let i in countriesList) {
-                        let item = countriesList[i];
-                        insertIntoTable('countries', item);
-                    }
-                    console.log("Table:", "countries", "created.");
-                });
-            }
-        });
-    }
-
-    /**
-     * tokens
-     */
-    function createTokens() {
-        knex.schema.hasTable('tokens').then(function (exists) {
-            if (!exists) {
-                knex.schema.createTable('tokens', (table) => {
-                    table.increments('id');
-                    table.string('symbol').unique().notNullable();
-                    table.integer('decimal').notNullable();
-                    table.string('address').notNullable();
-                    table.binary('icon');
-                    table.integer('isCustom').notNullable().defaultTo(0);
-                    table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                    table.integer('updatedAt');
-                }).then((resp) => {
-                    for (let i in ethTokensList) {
-                        let item = ethTokensList[i];
-                        insertIntoTable('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal });
-                    }
-                    console.log("Table:", "tokens", "created.");
-                });
-            }
-        });
-    }
-
-
-    /**
      * public methods
      */
     controller.prototype.init = () => {
         let promises = [];
-
-
-
         promises.push(createCountries());
-
-
-        /**
-         * documents
-         */
         promises.push(createDocuments());
-
-        /**
-         * id_attribute_types
-         */
         promises.push(createIdAttributeTypes());
-
-
         promises.push(createTokens());
-
-
-        /**
-         * wallets
-         */
         promises.push(createWallet());
-
-        /**
-         * app_settings
-         */
         promises.push(createAppSettings());
-
-        /**
-         * guide_settings
-         */
         promises.push(createGuideSettings());
-
-        /**
-         * id_attributes
-         */
         promises.push(createIdAttributes());
-
-        /**
-         * id_attribute_items
-         */
         promises.push(createIdAttributeItems());
-
-        /**
-         * id_attribute_item_values
-         */
         promises.push(createIdAttributeValues());
-
-        /**
-         * token_prices
-         */
         promises.push(createTokenPrices());
-
-        /**
-         * token_prices
-         */
         promises.push(createWalletTokens());
-
-        /**
-         * transactions_history
-         */
         promises.push(createTransactionsHistory());
-
-        /**
-         * action_logs
-         */
         promises.push(createActionLogs());
-
-        /**
-         * wallet_settings
-         */
         promises.push(createWalletSettings());
-
         return Promise.all(promises)
     }
 
-
+    /**
+     *
+     */
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
         data.createdAt = new Date().getTime();
         return new Promise((resolve, reject) => {
@@ -1386,6 +1283,7 @@ module.exports = function (app) {
                     reject({ message: "error_while_creating", error: error });
                 });
             }).catch((error) => {
+                console.log(error);
                 reject({ message: "error_while_creating", error: error });
             })
         });
