@@ -92,6 +92,7 @@ const EN = {
     middle_name: "Middle Name",
     last_name: "Last Name",
     city: "City",
+    voice_id: "Voice ID",
 
     selfie_with_id_document: "Selfie with ID Document",
 

@@ -30,6 +30,6 @@
                 md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
                     md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")
-                    div(ng-message="required") This field is required. Please enter Country Of Residency.
+                    div(ng-message="required") This field is required. Please enter Country Of Residence.
             md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid")
                 span.small Create SelfKey Basic ID
