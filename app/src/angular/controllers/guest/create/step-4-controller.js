@@ -55,7 +55,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
                     if($stateParams.basicInfo.middle_name){
                         SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
                     }
-                    SqlLiteService.registerActionLog("Created Attribute: Country Of Residency", "Created");
+                    SqlLiteService.registerActionLog("Created Attribute: Country Of Residence", "Created");
                     defer.resolve();
                 }).catch((error) => {
                     defer.reject(error);

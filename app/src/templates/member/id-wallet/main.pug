@@ -44,8 +44,9 @@
                                     md-tooltip(md-direction="top") {{item.items[0].values[0].staticData.line1 ? 'Completed' : 'Missing' }}
                                 td {{$root.DICTIONARY[item.idAttributeType]}}
                                 td
-                                    span(ng-if="item.idAttributeType === 'birthdate'") {{ (item.longDateValue | date: 'yyyy/MM/dd') }}
-                                    ul(ng-if="item.idAttributeType !== 'birthdate'")
+                                    span(ng-if="item.idAttributeType == 'birthdate'") {{ (item.longDateValue | date: 'yyyy/MM/dd') }}
+                                    span(ng-if="item.idAttributeType == 'phonenumber_countrycode'") {{ item.items[0].values[0].staticData.line1 }} {{ item.items[0].values[0].staticData.line2 }}
+                                    ul(ng-if="item.idAttributeType != 'birthdate' && item.idAttributeType != 'phonenumber_countrycode'")
                                         li(ng-repeat="(key, value) in item.items[0].values[0].staticData") {{value}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                 td.action-columns

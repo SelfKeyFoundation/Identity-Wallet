@@ -26,7 +26,7 @@
                 div(ng-messages="basicInfoForm.middleName.$error")
                     div(ng-message="maxlength") The Middle Name has to be less than 500 characters long.
             md-input-container.sk-input-box.sk-input-non-floating
-                label Country Of Residency
+                label Country Of Residence
                 md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
                     md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")

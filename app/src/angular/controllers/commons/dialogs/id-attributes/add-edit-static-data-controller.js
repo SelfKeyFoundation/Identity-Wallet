@@ -9,6 +9,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     const ADDRESS_ID_ATTRIBUTES = ['physical_address', 'work_place'];
     const COUNTRY_ID_ATTRIBUTES = ['nationality', 'country_of_residency'];
     const DATE_ID_ATTRIBUTES = ['birthdate'];
+    const TELEPHONE_ID_ATTRIBUTES = ['phonenumber_countrycode'];
 
     $scope.currentDate = new Date();
     $scope.idAttributeItemValue = idAttributeItemValue;
@@ -44,6 +45,8 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             return 'common/dialogs/id-attributes/forms/country.html';
         } else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             return 'common/dialogs/id-attributes/forms/birth-date.html';
+        } else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+            return 'common/dialogs/id-attributes/forms/phone-number.html';
         } else {
             return 'common/dialogs/id-attributes/forms/static-data.html';
         }
@@ -70,6 +73,9 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             value.staticData.line1 = $scope.inputs.line1;
         } else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             value.staticData.line1 = $scope.inputs.line1.getTime()
+        } else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+            value.staticData.line1 = $scope.inputs.line1;
+            value.staticData.line2 = $scope.inputs.line2;
         } else {
             value.staticData.line1 = $scope.inputs.line1;
         }
@@ -103,7 +109,10 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             $scope.inputs.line6 = angular.copy(idAttributeItemValue.staticData.line6);
         } else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             $scope.inputs.line1 = new Date(idAttributeItemValue.staticData.line1);
+        } else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+            $scope.inputs.line2 = idAttributeItemValue.staticData.line2;
         }
+
     }
 };
 

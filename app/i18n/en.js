@@ -80,7 +80,7 @@ const EN = {
     utility_bill: "Utility Bill",
     bank_statement: "Bank Statement",
     tax_certificate: "Tax Certificate",
-    phonenumber_countrycode: "Country Code",
+    phonenumber_countrycode: "Phone",
     phonenumber: "Phone",
     selfie: "Profile Photo",
     fingerprint: "Fingerprint",

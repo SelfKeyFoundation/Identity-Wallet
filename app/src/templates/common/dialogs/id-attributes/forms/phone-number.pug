@@ -1,0 +1,16 @@
+.content(style="display: flex;")
+    md-input-container.sk-input-box.sk-input-non-floating(style="width: 160px;")
+        label Country Code
+        md-select.sk-select(name="countryCode", ng-model="inputs.line1")
+            md-option(ng-value="item.dialCode", ng-repeat="(key, item) in countryList") {{item.code}} {{item.dialCode}}
+    md-input-container.sk-input-box.sk-input-non-floating
+        label Telephone Number
+        input(name="telephoneNumber", type="number", maxlength="15",ng-model="inputs.line2", ng-required="true")
+        div(ng-messages="theForm.telephoneNumber.$error")
+            div(ng-message="required") This field is required. Please enter telephoneNumber
+
+.country-actions-wrapper
+    md-button.outline-gray(ng-click="close($event)")
+        span.primary cancel
+    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")
+        span.primary save
