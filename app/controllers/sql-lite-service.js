@@ -708,6 +708,51 @@ module.exports = function (app) {
     /**
      * id_attributes
      */
+    function _select (table, select, where, tx) {
+        let query = knex(table);
+
+        if (tx) {
+            query = query.transacting(tx);
+        }
+
+        query = query.select(select);
+
+        if (where) {
+            query = query.where(where);
+        }
+
+        return query;
+    }
+
+    function _insert (table, args, tx) {
+        let query = knex(table);
+
+        if (tx) {
+            query = query.transacting(tx);
+        }
+
+        return query.insert(args);
+    }
+
+    /*
+let selectQ = _select(
+        'id_attribute_item_values',
+        ['id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId'],
+        null,
+        null
+    );
+
+    selectQ = selectQ
+        .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
+        .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
+        .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
+
+    selectQ.then((resp)=>{
+        console.log(">>>>>>>>>>", resp);
+    }).catch((err)=>{
+        console.log(">>>>>>>>>>", err);
+    })
+    */
     controller.prototype.idAttribute_add = (args) => {
         args.createdAt = new Date().getTime();
 
@@ -1278,14 +1323,14 @@ module.exports = function (app) {
             if (tx) {
                 promise = knex('id_attribute_item_values')
                     .transacting(tx)
-                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId')
+                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id as idAttributeItemId', 'id_attributes.id as idAttributeId', 'id_attributes.idAttributeType', 'id_attributes.walletId')
                     .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
                     .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
                     .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
                     .where(where);
             } else {
                 promise = knex('id_attribute_item_values')
-                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId')
+                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id as idAttributeItemId', 'id_attributes.id as idAttributeId', 'id_attributes.idAttributeType', 'id_attributes.walletId')
                     .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
                     .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
                     .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')

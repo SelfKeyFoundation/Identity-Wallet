@@ -96,6 +96,7 @@ const EN = {
 
     selfie_with_id_document: "Selfie with ID Document",
 
+    full_legal_name: "Full Legal Name",
 
     /**
      *

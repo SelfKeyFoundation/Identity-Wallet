@@ -13,22 +13,22 @@
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg')
-                    span Full Legal Name
+                    span {{ $root.DICTIONARY['full_legal_name'] }}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg')
-                    span Country Of Residence
+                    span {{ $root.DICTIONARY['country_of_residency'] }}
 
                 .item
                     .bullet
                         span 4
-                    span National ID
+                    span {{ $root.DICTIONARY['national_id'] }}
 
                 .item
                     .bullet
                         span 5
-                    span National ID Selfie
+                    span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="center center")
         md-button.gray(flex="70", ng-click="nextStep($event)")
