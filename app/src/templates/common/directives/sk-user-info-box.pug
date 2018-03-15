@@ -6,7 +6,7 @@
             .pic(style='background-image: url({{userData.tempImage}});')
         .name
             sk-icon(icon="success-box", size-class="icon-size-16x16")
-            span {{ idAttributes.first_name.value + ' ' + (idAttributes.middle_name && idAttributes.middle_name.value ? idAttributes.middle_name.value + ' ' : '') +  idAttributes.last_name.value }}
+            span {{ getItemValue(idAttributes.first_name) + ' ' + (getItemValue(idAttributes.middle_name) ? getItemValue(idAttributes.middle_name) + ' ' : '') +  getItemValue(idAttributes.last_name) }}
 
     hr
 
@@ -16,37 +16,37 @@
                 td.fc-bluey-grey Residence:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.country_of_residency.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ idAttributes.country_of_residency.value ? idAttributes.country_of_residency.value : 'Missing' }}
+                        sk-icon(icon="{{ getItemValue(idAttributes.country_of_residency) ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ getItemValue(idAttributes.country_of_residency) ? getItemValue(idAttributes.country_of_residency) : 'Missing' }}
 
-            tr(ng-if="idAttributes.national_id")
+            tr
                 td.fc-bluey-grey National ID:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.national_id.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.national_id)") {{idAttributes.national_id.value ? 'Uploaded' : 'Not Uploaded'}}
+                        sk-icon(icon="{{ getItemValue(idAttributes.national_id) ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.national_id)") {{getItemValue(idAttributes.national_id) ? 'Uploaded' : 'Not Uploaded'}}
 
-            tr(ng-if="idAttributes.id_selfie")
+            tr
                 td.fc-bluey-grey National ID Selfie:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.id_selfie.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.id_selfie)") {{idAttributes.id_selfie.value ? 'Uploaded' : 'Not Uploaded'}}
+                        sk-icon(icon="{{ getItemValue(idAttributes.id_selfie) ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white(ng-click="openDocumentAddEditModal($event, idAttributes.id_selfie)") {{getItemValue(idAttributes.id_selfie) ? 'Uploaded' : 'Not Uploaded'}}
 
             tr
                 td.fc-bluey-grey Email:
                 td
                     div
-                        sk-icon(icon="{{ idAttributes.email.value ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                        span.fc-white {{ idAttributes.email.value ? idAttributes.email.value : 'Missing' }}
+                        sk-icon(icon="{{ getItemValue(idAttributes.email) ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                        span.fc-white {{ getItemValue(idAttributes.email) ? getItemValue(idAttributes.email) : 'Missing' }}
 
     hr
 
     .info
         table
-            tr(ng-repeat="(key, value) in idAttributes", ng-if="value.value && ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'].indexOf(key) === -1")
+            tr(ng-repeat="(key, value) in idAttributes", ng-if="getItemValue(value) && ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'].indexOf(key) === -1")
                 td.fc-bluey-grey {{$root.DICTIONARY[key]}}:
                 td
                     div
                         sk-icon(icon="success-box", size-class="icon-size-16x16")
-                        span.fc-white {{ value.dateValueInMillis ? (value.dateValueInMillis | date: 'yyyy/MM/dd') : value.isDocument && value.value ? 'Uploaded' : value.value }}
+                        span.fc-white {{ getItemValue(value) | date: 'yyyy/MM/dd' }}

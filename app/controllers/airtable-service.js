@@ -15,8 +15,14 @@ module.exports = function (app) {
             let idAttributesArray = JSON.parse(result).ID_Attributes;
             for (let i in idAttributesArray) {
                 if (!idAttributesArray[i].data) continue;
+
                 let item = idAttributesArray[i].data.fields;
-                electron.app.sqlLiteService.idAttributeTypes_add(item);
+
+                electron.app.sqlLiteService.IdAttributeType.create(item).then((idAttributeType)=>{
+                    // inserted
+                }).catch((error)=>{
+                    // error
+                });
             }
         });
 

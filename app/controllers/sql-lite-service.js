@@ -22,107 +22,30 @@ module.exports = function (app) {
     });
 
     /**
+     * common methods
+     */
+    controller.knex = knex;
+
+    controller.insertIntoTable = insertIntoTable;
+    controller.select = _select;
+    controller.insert = _insert;
+
+
+    let Country = require('./models/country.js')(app, controller)
+    controller.prototype.Country = Country;
+
+    let Document = require('./models/document.js')(app, controller)
+    controller.prototype.Document = Document;
+
+    let IdAttributeType = require('./models/id-attribute-type.js')(app, controller)
+    controller.prototype.IdAttributeType = IdAttributeType;
+
+    let IdAttribute = require('./models/id-attribute.js')(app, controller)
+    controller.prototype.IdAttribute = IdAttribute;
+
+    /**
      * tables
      */
-    function createCountries() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('countries').then((exists) => {
-                if (!exists) {
-                    knex.schema.createTable('countries', (table) => {
-                        table.increments('id');
-                        table.string('name').unique().notNullable();
-                        table.string('code').unique().notNullable();
-                        table.string('dialCode').notNullable();
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        let promises = [];
-                        for (let i in countriesList) {
-                            let item = countriesList[i];
-                            item.createdAt = new Date().getTime();
-                            item.dialCode = item.dial_code;
-                            delete item.dial_code;
-                            promises.push(insertIntoTable('countries', item));
-                        }
-
-                        Promise.all(promises).then(() => {
-                            console.log("Table:", "countries", "created.");
-                            resolve("countries created");
-                        }).catch((error) => {
-                            reject(error);
-                        });
-
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    function createDocuments() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('documents').then((exists) => {
-                if (!exists) {
-                    knex.schema.createTable('documents', (table) => {
-                        table.increments('id');
-                        table.string('name').notNullable();
-                        table.string('mimeType').notNullable();
-                        table.integer('size').notNullable();
-                        table.binary('buffer').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "documents", "created.");
-                        resolve("documents created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    function createIdAttributeTypes() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('id_attribute_types').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('id_attribute_types', (table) => {
-                        table.string('key').primary();
-                        table.string('category').notNullable();
-                        table.string('type').notNullable();
-                        table.string('entity').notNullable();
-                        table.integer('isInitial').defaultTo(0)
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        let promises = [];
-                        for (let i in initialIdAttributeTypeList) {
-                            let item = initialIdAttributeTypeList[i];
-                            item.entity = JSON.stringify(item.entity);
-                            promises.push(knex('id_attribute_types').insert({ key: item.key, category: item.category, type: item.type, entity: item.entity, isInitial: 1, createdAt: new Date().getTime() }))
-                        }
-                        Promise.all(promises).then((resp) => {
-                            console.log("Table:", "id_attribute_types", "created.");
-                            resolve("id_attribute_types created");
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-
-    }
-
     function createTokens() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable('tokens').then(function (exists) {
@@ -224,30 +147,6 @@ module.exports = function (app) {
                     }).then((resp) => {
                         console.log("Table:", "wallets", "created.");
                         resolve("wallets created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    function createIdAttributes() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('id_attributes').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('id_attributes', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
-                        table.integer('order').defaultTo(0);
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "id_attributes", "created.");
-                        resolve("id_attributes created");
                     }).catch((error) => {
                         reject(error);
                     });
@@ -444,14 +343,14 @@ module.exports = function (app) {
      */
     controller.prototype.init = () => {
         let promises = [];
-        promises.push(createCountries());
-        promises.push(createDocuments());
-        promises.push(createIdAttributeTypes());
+        promises.push(Country.init());
+        promises.push(Document.init());
+        promises.push(IdAttributeType.init());
         promises.push(createTokens());
         promises.push(createWallet());
         promises.push(createAppSettings());
         promises.push(createGuideSettings());
-        promises.push(createIdAttributes());
+        promises.push(IdAttribute.init());
         promises.push(createIdAttributeItems());
         promises.push(createIdAttributeValues());
         promises.push(createTokenPrices());
@@ -638,17 +537,6 @@ module.exports = function (app) {
 
     controller.prototype.walletTokens_selectById = walletTokens_selectById;
 
-    /**
-     * id_attribute_types
-     */
-    controller.prototype.idAttributeTypes_insert = (data) => {
-        return insertIntoTable('id_attribute_types', data);
-    }
-
-    controller.prototype.idAttributeTypes_update = (data) => {
-        return updateById('id_attribute_types', data);
-    }
-
     controller.prototype.wallet_tokens_insert = (data) => {
         data.recordState = 1;
 
@@ -669,44 +557,8 @@ module.exports = function (app) {
         return updateById('wallet_tokens', data);
     }
 
-    controller.prototype.idAttributeTypes_add = (data) => {
-        return new Promise((resolve, reject) => {
-            knex('id_attribute_types').select().where("key", data.key).then((rows) => {
-                if (rows && rows.length) {
-                    resolve();
-                } else {
-                    let dataToSave = {
-                        key: data.key,
-                        type: data.type[0],
-                        category: data.category,
-                        entity: JSON.stringify(data.entity),
-                        createdAt: new Date().getTime()
-                    };
-                    knex('id_attribute_types').insert(dataToSave).then((insertedIds) => {
-                        resolve();
-                    }).catch((error) => {
-                        console.log(error);
-                        reject({ message: "error", error: error });
-                    });
-                }
-            }).catch((error) => {
-                reject({ message: "error", error: error });
-            });
-        });
-    }
-
-    controller.prototype.idAttributeTypes_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('id_attribute_types').select().then((rows) => {
-                resolve(rows);
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
     /**
-     * id_attributes
+     * commons
      */
     function _select (table, select, where, tx) {
         let query = knex(table);
@@ -732,83 +584,6 @@ module.exports = function (app) {
         }
 
         return query.insert(args);
-    }
-
-    /*
-let selectQ = _select(
-        'id_attribute_item_values',
-        ['id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id', 'id_attributes.id', 'id_attributes.idAttributeType', 'id_attributes.walletId'],
-        null,
-        null
-    );
-
-    selectQ = selectQ
-        .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
-        .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
-        .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
-
-    selectQ.then((resp)=>{
-        console.log(">>>>>>>>>>", resp);
-    }).catch((err)=>{
-        console.log(">>>>>>>>>>", err);
-    })
-    */
-    controller.prototype.idAttribute_add = (args) => {
-        args.createdAt = new Date().getTime();
-
-        return knex.transaction((trx) => {
-            let selectPromise = knex('id_attributes').transacting(trx).select().where({'walletId': args.walletId, 'idAttributeType': args.idAttributeType});
-            selectPromise.then((rows) => {
-                return new Promise((resolve, reject) => {
-                    if (rows && rows.length) {
-                        reject({ message: "id_attribute_already_exists" });
-                    } else {
-                        knex('id_attributes').transacting(trx).insert(args).then((insertedIds) => {
-                            if (insertedIds) {
-                                let idAttributeItem = {
-                                    idAttributeId: insertedIds[0],
-                                    name: args.idAttributeType,
-                                    createdAt: new Date().getTime()
-                                }
-                                knex('id_attribute_items').transacting(trx).insert(idAttributeItem).then((insertedIds) => {
-                                    let idAttributeItemValue = {
-                                        idAttributeItemId: insertedIds[0],
-                                        createdAt: new Date().getTime()
-                                    }
-                                    knex('id_attribute_item_values').transacting(trx).insert(idAttributeItemValue).then((insertedIds) => {
-                                        if (insertedIds && insertedIds.length) {
-                                            knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIds[0]).then((rows) => {
-                                                if (rows && rows.length) {
-                                                    idAttributes_selectById(idAttributeItem.idAttributeId, trx).then((rows)=>{
-                                                        resolve(rows);
-                                                    }).catch((error)=>{
-                                                        reject({ message: "error", error: error });
-                                                    });
-                                                } else {
-                                                    reject({ message: "error" });
-                                                }
-                                            }).catch((error) => {
-                                                reject({ message: "error", error: error });
-                                            })
-                                        } else {
-                                            reject({ message: "error" });
-                                        }
-                                    }).catch((error) => {
-                                        reject({ message: "error", error: error });
-                                    });
-                                }).catch((error) => {
-                                    reject({ message: "error", error: error });
-                                });
-                            }
-                        }).catch((error) => {
-                            reject({ message: "error", error: error });
-                        });
-                    }
-                });
-            })
-                .then(trx.commit)
-                .catch(trx.rollback);
-        });
     }
 
     controller.prototype.idAttribute_delete = (args) => {
@@ -1212,23 +987,6 @@ let selectQ = _select(
 
     controller.prototype.guideSettings_update = (data) => {
         return updateById('guide_settings', data);
-    }
-
-    /**
-     * countries
-     */
-    controller.prototype.countries_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('countries').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
     }
 
     /**

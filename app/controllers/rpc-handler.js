@@ -128,7 +128,7 @@ module.exports = function (app) {
     controller.prototype.unlockExistingWallet = function (event, actionId, actionName, args) {
         try {
             let selectWalletPromise = electron.app.sqlLiteService.wallets_selectByPublicKey(args.publicKey)
-            selectWalletPromise.then((wallet)=>{
+            selectWalletPromise.then((wallet) => {
                 let keystoreFileName = path.basename(wallet.keystoreFilePath);
                 let keystoreFileFullPath = path.join(walletsDirectoryPath, wallet.keystoreFilePath);
 
@@ -145,10 +145,10 @@ module.exports = function (app) {
                     } else {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
                 });
-            }).catch((error)=>{
+            }).catch((error) => {
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
         } catch (e) {
@@ -188,7 +188,7 @@ module.exports = function (app) {
                                 publicKey: keystoreObject.address,
                                 keystoreFilePath: filePaths[0]
                             });
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             app.win.webContents.send(RPC_METHOD, actionId, actionName, 'wrong_keystore_file', null);
                         });
                     } catch (e) {
@@ -218,7 +218,7 @@ module.exports = function (app) {
                 } else {
                     app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
         } catch (e) {
@@ -331,13 +331,13 @@ module.exports = function (app) {
 
     controller.prototype.openFileViewer = function (event, actionId, actionName, args) {
         try {
-            function onClose () {
-                try{
+            function onClose() {
+                try {
                     let files = fsm.readdirSync(documentsDirectoryPath);
                     for (const file of files) {
                         fsm.unlinkSync(path.join(documentsDirectoryPath, file));
                     }
-                }catch(e){
+                } catch (e) {
                     console.log(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
                 }
@@ -346,9 +346,9 @@ module.exports = function (app) {
             electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
                 const filePathToPreview = path.join(documentsDirectoryPath, data.name);
 
-                try{
+                try {
                     fsm.appendFileSync(filePathToPreview, new Buffer(data.buffer));
-                }catch(e){
+                } catch (e) {
                     app.log.warn(e);
                     console.log(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
@@ -969,10 +969,9 @@ module.exports = function (app) {
      * SQL Lite
      */
     controller.prototype.getIdAttributeTypes = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttributeTypes_selectAll().then((data) => {
+        electron.app.sqlLiteService.IdAttributeType.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
-        console.log(error);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
@@ -1018,7 +1017,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.getCountries = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.countries_selectAll().then((data) => {
+        electron.app.sqlLiteService.Country.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -1166,7 +1165,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttribute_add(args).then((data) => {
+        electron.app.sqlLiteService.IdAttribute.create(args.walletId, args.idAttributeType, args.staticData, args.file).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             console.log(error);

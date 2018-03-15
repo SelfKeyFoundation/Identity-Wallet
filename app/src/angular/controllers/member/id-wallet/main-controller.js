@@ -35,11 +35,40 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
                 type
             }
         }).then((selectedIdAttributeType) => {
+
+
+
+            // part 1
+            // $rootScope.wallet.id
+            // selectedIdAttributeType.key
+
+            if(selectedIdAttributeType.type === 'document'){
+                $rootScope.openAddEditDocumentDialog(event, 'create', selectedIdAttributeType.key, null).then(() => {
+                    prepareData();
+                    CommonService.showToast('success', 'saved');
+
+                    SqlLiteService.registerActionLog("Created Document: " + $rootScope.DICTIONARY[selectedIdAttributeType.key], 'Created').then(() => {
+                        loadWalletHistory()
+                    });
+                });
+            } else {
+                $rootScope.openAddEditStaticDataDialog(event, 'create', selectedIdAttributeType.key, null).then(() => {
+                    prepareData();
+                    CommonService.showToast('success', 'saved');
+
+                    SqlLiteService.registerActionLog("Created Attribute: " + $rootScope.DICTIONARY[selectedIdAttributeType.key], 'Created').then(() => {
+                        loadWalletHistory()
+                    });
+                });
+            }
+
+
+
+            /*
             let idAttribute = {
                 walletId: $rootScope.wallet.id,
                 idAttributeType: selectedIdAttributeType.key
             }
-
             SqlLiteService.addIdAttribute(idAttribute).then((response) => {
                 prepareData();
                 CommonService.showToast('success', 'saved');
@@ -61,6 +90,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
                 $log.error(error);
                 CommonService.showToast('error', 'error');
             });
+            */
         });
     }
 
@@ -68,7 +98,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         console.log("### idAttributeItemValue", idAttributeItemValue);
         console.log("### idAttributeType", idAttributeType);
 
-        $rootScope.openAddEditStaticDataDialog(event, idAttributeItemValue, idAttributeType).then(() => {
+        $rootScope.openAddEditStaticDataDialog(event, 'update', idAttributeType, idAttributeItemValue).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
 
@@ -79,7 +109,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
     }
 
     $scope.editIdAttributeItemDocument = (event, idAttributeItemValue, idAttributeType) => {
-        $rootScope.openAddEditDocumentDialog(event, idAttributeItemValue, idAttributeType).then(() => {
+        $rootScope.openAddEditDocumentDialog(event, 'update', idAttributeType, idAttributeItemValue).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
 
@@ -193,7 +223,9 @@ function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonServic
     $scope.delete = (event) => {
         $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
         $scope.promise.then(() => {
-            SqlLiteService.registerActionLog("Deleted Attribute: " + $rootScope.DICTIONARY[idAttribute.idAttributeType], 'Deleted').then(() => {
+            let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
+            let actionText = idAttributeTypes[idAttribute.idAttributeType].type === 'document' ? 'Document' : 'Attribute';
+            SqlLiteService.registerActionLog("Deleted " + actionText + ": " + $rootScope.DICTIONARY[idAttribute.idAttributeType], 'Deleted').then(() => {
                 $rootScope.$broadcast('id-attribute:changed');
                 CommonService.showToast('success', 'deleted');
                 mdPanelRef.close().then(() => {

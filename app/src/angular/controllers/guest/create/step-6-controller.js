@@ -17,8 +17,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $w
     }
 
     $scope.nextStep = (event) => {
-        $state.go('guest.loading', {redirectTo: 'member.setup.checklist'});
-        //$state.go('member.setup.checklist');
+        $state.go('member.setup.checklist');
     }
 
     $scope.togglePrivateKeyVisibility = () => {

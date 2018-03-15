@@ -1,12 +1,14 @@
 'use strict';
 
-function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, RPCService, CommonService, idAttributeItemValue, idAttributeType) {
+function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, RPCService, CommonService, mode, idAttributeType, idAttributeItemValue) {
     'ngInject'
 
     $log.info('AddEditDocumentDialogController');
-
-    $scope.idAttributeItemValue = idAttributeItemValue;
     $scope.idAttributeType = idAttributeType;
+
+    if (mode === 'update') {
+        $scope.idAttributeItemValue = idAttributeItemValue;
+    }
 
     $scope.selectedFile = null;
 
@@ -15,7 +17,24 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
     };
 
     $scope.save = (event) => {
-        if ($scope.selectedFile) {
+        if (!$scope.selectedFile) {
+            return;
+        }
+
+        if (mode === 'create') {
+            RPCService.makeCall('addIdAttribute', {
+                walletId: $rootScope.wallet.id,
+                idAttributeType: idAttributeType,
+                staticData: null,
+                file: $scope.selectedFile
+            }).then(() => {
+                CommonService.showToast('success', 'saved');
+                $mdDialog.hide();
+            }).catch((error) => {
+                $log.error(error);
+                CommonService.showToast('error', 'error while saving document');
+            });
+        } else {
             SqlLiteService.updateIdAttributeItemValueDocument(idAttributeItemValue, $scope.selectedFile).then(() => {
                 $mdDialog.hide();
             }).catch((error) => {
@@ -28,7 +47,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
     $scope.selectFile = (event) => {
         let fileSelect = RPCService.makeCall('openFileSelectDialog', {
             filters: [
-                {name: 'Documents', extensions: ['jpg', 'png', 'pdf']},
+                { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
             ],
             maxFileSize: 50 * 1000 * 1000
         });

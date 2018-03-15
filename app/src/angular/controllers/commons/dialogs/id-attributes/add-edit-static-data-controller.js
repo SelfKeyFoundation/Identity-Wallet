@@ -1,9 +1,9 @@
 'use strict';
 
-function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService, idAttributeItemValue, idAttributeType, CommonService) {
+function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, CommonService, SqlLiteService, RPCService, mode, idAttributeType, idAttributeItemValue) {
     'ngInject'
 
-    $log.info('AddEditStaticDataDialogController', idAttributeItemValue, idAttributeType);
+    $log.info('AddEditStaticDataDialogController');
 
     const INITIAL_ID_ATTRIBUTES = ['first_name', 'last_name', 'middle_name', 'country_of_residency', 'id_selfie', 'national_id', 'email'];
     const ADDRESS_ID_ATTRIBUTES = ['physical_address', 'work_place'];
@@ -17,7 +17,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     $scope.countryList = SqlLiteService.getCountries();
     $scope.singleInputType = "text";
 
-    if(idAttributeType === 'email'){
+    if (idAttributeType === 'email') {
         $scope.singleInputType = 'email';
     }
 
@@ -27,7 +27,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
     }
 
-    prepare ();
+    prepare();
 
     $scope.close = (event) => {
         $mdDialog.cancel();
@@ -39,7 +39,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     }
 
     $scope.getFormPath = () => {
-        if(ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1){
+        if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             return 'common/dialogs/id-attributes/forms/address.html';
         } else if (COUNTRY_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             return 'common/dialogs/id-attributes/forms/country.html';
@@ -53,16 +53,15 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     }
 
     $scope.save = (event, theForm) => {
-        if($scope.isFormInvalid(theForm)) return;
+        if ($scope.isFormInvalid(theForm)) return;
 
         let value = {
-            id: idAttributeItemValue.id,
             staticData: {}
         }
 
         $scope.savePromise = null;
 
-        if(ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1){
+        if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             value.staticData.line1 = $scope.inputs.line1;
             value.staticData.line2 = $scope.inputs.line2;
             value.staticData.line3 = $scope.inputs.line3;
@@ -80,7 +79,17 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             value.staticData.line1 = $scope.inputs.line1;
         }
 
-        $scope.savePromise = SqlLiteService.updateIdAttributeItemValueStaticData(value);
+        if (mode === 'create') {
+            $scope.savePromise = RPCService.makeCall('addIdAttribute', {
+                walletId: $rootScope.wallet.id,
+                idAttributeType: idAttributeType,
+                staticData: value.staticData,
+                file: null
+            });
+        } else {
+            value.id = idAttributeItemValue.id;
+            $scope.savePromise = SqlLiteService.updateIdAttributeItemValueStaticData(value);
+        }
 
         $scope.savePromise.then((data) => {
             $mdDialog.hide($scope.inputs);
@@ -95,13 +104,14 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     };
 
-    function prepare () {
-        if(!idAttributeItemValue.staticData){
+    function prepare() {
+        if (!idAttributeItemValue || !idAttributeItemValue.staticData) {
             return;
         }
+
         $scope.inputs.line1 = angular.copy(idAttributeItemValue.staticData.line1);
 
-        if(ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1){
+        if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             $scope.inputs.line2 = angular.copy(idAttributeItemValue.staticData.line2);
             $scope.inputs.line3 = angular.copy(idAttributeItemValue.staticData.line3);
             $scope.inputs.line4 = angular.copy(idAttributeItemValue.staticData.line4);
@@ -112,7 +122,6 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         } else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             $scope.inputs.line2 = idAttributeItemValue.staticData.line2;
         }
-
     }
 };
 

@@ -20,7 +20,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
             type: "id_selfie",
             step: "STEP 5",
             title1: "Upload Selfie With ID",
-            title2: "Selfie With National ID",
+            title2: "National ID Selfie",
             title3: "(can be driver's license, passport)",
             title4: "(Max file size: 50mb)",
         }
@@ -67,7 +67,9 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         if ($stateParams.type === 'national_id') {
             $state.go('member.setup.add-document', { type: 'id_selfie' });
         } else {
-            $state.go('member.dashboard.main');
+            // got to loading
+            $state.go('guest.loading', {redirectTo: 'member.id-wallet.main'});
+            //$state.go('member.dashboard.main');
         }
     }
 };

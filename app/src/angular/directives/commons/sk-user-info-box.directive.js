@@ -1,6 +1,6 @@
 'use strict';
 
-function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
+function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteService) {
     'ngInject';
 
     return {
@@ -14,6 +14,8 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
                 tempImage: 'assets/images/temp/avatar.jpg'
             }
 
+            let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
+
             scope.idAttributes = {};
             prepareData();
 
@@ -22,25 +24,57 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout) {
             });
 
             scope.openDocumentAddEditModal = (event, idAttribute) => {
-                $rootScope.$broadcast('id-attribute:open-document-add-dialog', idAttribute.item.items[0].values[0], idAttribute.item.idAttributeType);
+                let idAttributes = $rootScope.wallet.getIdAttributes();
+                $rootScope.$broadcast('id-attribute:open-document-add-dialog', idAttributes[idAttribute.key].items[0].values[0], idAttribute.key);
+            }
+
+            scope.getItemValue = (item) => {
+                if(item.type === 'document'){
+                    return item.documentFileName;
+                }
+
+                switch(item.key){
+                    case 'birthdate':
+                        return Number(item.staticData.line1)
+                        break;
+                    case 'work_place':
+                    case 'physical_address':
+                        let value = item.staticData.line1 + ", ";
+
+                        if(item.staticData.line2){
+                            value += item.staticData.line2 + ", ";
+                        }
+
+                        value += item.staticData.line3 + ", ";
+                        value += item.staticData.line4 + ", ";
+                        value += item.staticData.line5 ;
+
+                        return value
+                        break;
+                    case 'phonenumber_countrycode':
+                        return item.staticData.line1 + " " + item.staticData.line2
+                        break;
+                    default:
+                        return item.staticData.line1
+                }
             }
 
             function prepareData() {
                 scope.idAttributes = {};
+
                 let idAttributes = $rootScope.wallet.getIdAttributes();
 
+
                 for (let i in idAttributes) {
-                    scope.idAttributes[idAttributes[i].idAttributeType] = {item: idAttributes[i]}
-                    if(idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1){
-                        scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].staticData.line1;
-                        if (idAttributes[i].items[0].values[0].staticData && idAttributes[i].items[0].values[0].staticData.line1 && idAttributes[i].idAttributeType == "birthdate") {
-                            scope.idAttributes[idAttributes[i].idAttributeType].dateValueInMillis = Number(idAttributes[i].items[0].values[0].staticData.line1)
-                        }
-                    }else{
-                        scope.idAttributes[idAttributes[i].idAttributeType].value = idAttributes[i].items[0].values[0].documentFileName;
-                        scope.idAttributes[idAttributes[i].idAttributeType].isDocument = true;
+                    scope.idAttributes[i] = {
+                        key: i,
+                        type: idAttributeTypes[i].type,
+                        staticData: idAttributes[i].items[0].values[0].staticData,
+                        documentFileName: idAttributes[i].items[0].values[0].documentFileName
                     }
                 }
+
+                console.log("?????", idAttributes, scope.idAttributes);
             }
         },
         replace: true,

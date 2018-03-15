@@ -23,10 +23,10 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
                 $log.error("error", error);
             });
         } else {
-            if ($stateParams.redirectTo === 'member.setup.checklist') {
+            if ($stateParams.redirectTo === 'member.id-wallet.main') {
                 $scope.header = 'Setup Completed';
                 $timeout(() => {
-                    $state.go('member.setup.checklist');
+                    $state.go($stateParams.redirectTo);
                 }, 2000);
             }
         }
