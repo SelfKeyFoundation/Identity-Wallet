@@ -583,10 +583,10 @@ module.exports = function (app) {
 		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
 	};
 
-	controller.prototype.analytics = function(event, actionId, actionName, args) {
-		deskmetrics.send(args.event, args.data);
-		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
-	};
+	// controller.prototype.analytics = function(event, actionId, actionName, args) {
+	// 	deskmetrics.send(args.event, args.data);
+	// 	app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
+	// };
 
 	controller.prototype.openBrowserWindow = function(event, actionId, actionName, args) {
 		shell.openExternal(args.url);

@@ -1,23 +1,15 @@
 "use strict";
 
-const appTitle = require("../package.json").productName;
-
-// "name": "selfkey-identity-wallet",
-// "productName": "ID Wallet",
-// "version": "0.0.18",
-// "description": "Selfkey Identity Wallet",
-// "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
-// "license": "MIT",
-// "main": "./app/main.js"
+const pj = require("../package.json")
 
 const AppConfigConstant = {
 	common: {
 		deskmetricsAppId: "b70b7e71f1",
 		DEFAULT_LANGUAGE: "en",
 		APP_NAME: "IDWallet",
-		APP_TITLE: appTitle,
-		version: "0.0.17",
-		description: "Selfkey Identity Wallet",
+		APP_TITLE: pj.productName,
+		version: pj.version,
+		description: pj.description,
 		companyName: "Selfkey",
 		productName: "org.selfkey.wallet",
 		authors: "Edmund Lowell",

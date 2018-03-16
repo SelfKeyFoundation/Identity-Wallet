@@ -108,12 +108,12 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, localS
             });
         }
 
-        this.analytics = function (event, data) {
-            return makeCall('analytics', {
-                event: event,
-                data: data
-            });
-        }
+        // this.analytics = function (event, data) {
+        //     return makeCall('analytics', {
+        //         event: event,
+        //         data: data
+        //     });
+        // }
 
         this.unlockEtherKeystoreObject = function (keystoreObject, password) {
             return makeCall('unlockEtherKeystoreObject', {

@@ -25,6 +25,13 @@ if (require("electron-squirrel-startup")) {
 	process.exit(0);
 }
 
+// if (process.env.NODE_ENV == "test") {
+// 	require('server.js')
+// }
+
+if (process.env.NODE_ENV == "test") require('child_process').exec('which node', (err, res) => err ? console.log(err) : console.log('1'+ res))
+if (process.env.NODE_ENV == "test") require('child_process').exec('pwd', (err, res) => err ? console.log(err) : console.log(res))
+
 const app = {
 	dir: {
 		root: __dirname + "/../",
