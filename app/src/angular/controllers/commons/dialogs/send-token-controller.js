@@ -79,6 +79,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.onTokenChange = (newTokenKey) => {
+        /*
+        if(newTokenKey === 'Choose a Token.'){
+            $scope.formData.sendToAddressHex = '';
+            return;
+        }
+        */
         prepare(newTokenKey);
     }
 
@@ -281,11 +287,16 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         /**
          * form data
          */
-        $scope.formData = {
-            sendAmount: args.sendAmount || null,
-            sendToAddressHex: args.sendToAddressHex || '',
-            gasPriceInGwei: args.gasPriceInGwei || 5
-        }
+        //if(!$scope.formData || !$scope.formData.sendToAddressHex){
+            $scope.formData = {
+                sendToAddressHex: args.sendToAddressHex || '',
+                sendAmount: args.sendAmount || null,
+                gasPriceInGwei: args.gasPriceInGwei || 5
+            }
+        //} else {
+        //    $scope.formData.sendAmount = null;
+        //    $scope.formData.gasPriceInGwei = 5;
+        //}
 
         /**
          * informational data
