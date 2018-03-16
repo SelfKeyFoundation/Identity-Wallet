@@ -977,7 +977,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.getTokens = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.tokens_selectAll().then((data) => {
+        electron.app.sqlLiteService.Token.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -1114,7 +1114,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.getIdAttributes = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttributes_selectAll(args.walletId).then((data) => {
+        electron.app.sqlLiteService.IdAttribute.findAllByWalletId(args.walletId).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -1128,17 +1128,6 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
-
-    /*
-    controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttributeItem_add(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
-    */
-
 
     controller.prototype.updateIdAttributeItemValueStaticData = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.idAttributeItemValues_updateStaticData(args).then((data) => {
@@ -1164,6 +1153,9 @@ module.exports = function (app) {
         });
     }
 
+    /**
+     * IdAttribute
+     */
     controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.IdAttribute.create(args.walletId, args.idAttributeType, args.staticData, args.file).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1173,20 +1165,14 @@ module.exports = function (app) {
         });
     }
 
-
     controller.prototype.deleteIdAttribute = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.idAttribute_delete(args).then((data) => {
+        electron.app.sqlLiteService.IdAttribute.delete(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             console.log(error);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
-
-    //
-
-
-    //
 
     controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
         const iconList = config.obligatoryImageIds;

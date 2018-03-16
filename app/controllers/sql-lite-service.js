@@ -30,106 +30,30 @@ module.exports = function (app) {
     controller.select = _select;
     controller.insert = _insert;
 
+    let AppSetting = require('./models/app-setting.js')(app, controller);
+    controller.prototype.AppSetting = AppSetting;
 
-    let Country = require('./models/country.js')(app, controller)
+    let Country = require('./models/country.js')(app, controller);
     controller.prototype.Country = Country;
 
-    let Document = require('./models/document.js')(app, controller)
+    let Document = require('./models/document.js')(app, controller);
     controller.prototype.Document = Document;
 
-    let IdAttributeType = require('./models/id-attribute-type.js')(app, controller)
+    let IdAttributeType = require('./models/id-attribute-type.js')(app, controller);
     controller.prototype.IdAttributeType = IdAttributeType;
 
-    let IdAttribute = require('./models/id-attribute.js')(app, controller)
+    let IdAttribute = require('./models/id-attribute.js')(app, controller);
     controller.prototype.IdAttribute = IdAttribute;
+
+    let Token = require('./models/token.js')(app, controller);
+    controller.prototype.Token = Token;
+
+    let GuideSetting = require('./models/guide-setting.js')(app, controller);
+    controller.prototype.GuideSetting = GuideSetting;
 
     /**
      * tables
      */
-    function createTokens() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('tokens').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('tokens', (table) => {
-                        table.increments('id');
-                        table.string('symbol').unique().notNullable();
-                        table.integer('decimal').notNullable();
-                        table.string('address').notNullable();
-                        table.binary('icon');
-                        table.integer('isCustom').notNullable().defaultTo(0);
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        for (let i in ethTokensList) {
-                            let item = ethTokensList[i];
-                            insertIntoTable('tokens', { address: item.address, symbol: item.symbol, decimal: item.decimal, createdAt: new Date().getTime() });
-                        }
-                        console.log("Table:", "tokens", "created.");
-                        resolve("tokens created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    function createAppSettings() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('app_settings').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('app_settings', (table) => {
-                        table.increments('id');
-                        table.string('dataFolderPath').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "app_settings", "created.");
-                        insertIntoTable('app_settings', { dataFolderPath: electron.app.getPath('userData') }).then(() => {
-                            resolve("tokens created");
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    function createGuideSettings() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('guide_settings').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('guide_settings', (table) => {
-                        table.increments('id');
-                        table.integer('guideShown').defaultTo(0);
-                        table.integer('icoAdsShown').defaultTo(0);
-                        table.integer('termsAccepted').defaultTo(0);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime()); // TODO remove default
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "app_settings", "created.");
-                        insertIntoTable('guide_settings', { guideShown: 0, icoAdsShown: 0, termsAccepted: 0 }).then(() => {
-                            resolve("app_settings created");
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
     function createWallet() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable('wallets').then(function (exists) {
@@ -346,10 +270,10 @@ module.exports = function (app) {
         promises.push(Country.init());
         promises.push(Document.init());
         promises.push(IdAttributeType.init());
-        promises.push(createTokens());
+        promises.push(Token.init());
         promises.push(createWallet());
-        promises.push(createAppSettings());
-        promises.push(createGuideSettings());
+        promises.push(AppSetting.init());
+        promises.push(GuideSetting.init());
         promises.push(IdAttribute.init());
         promises.push(createIdAttributeItems());
         promises.push(createIdAttributeValues());
@@ -586,129 +510,6 @@ module.exports = function (app) {
         return query.insert(args);
     }
 
-    controller.prototype.idAttribute_delete = (args) => {
-        return knex.transaction((trx) => {
-            let selectPromise = knex('id_attributes')
-                .transacting(trx)
-                .select('id_attributes.id as idAttributeId', 'id_attribute_items.id as idAttributeItemId', 'id_attribute_item_values.id as idAttributeItemValueId', 'id_attribute_item_values.documentId as documentId')
-                .leftJoin('id_attribute_items', 'id_attributes.id', 'id_attribute_items.idAttributeId')
-                .leftJoin('id_attribute_item_values', 'id_attribute_items.id', 'id_attribute_item_values.idAttributeItemId')
-                .where('id_attributes.id', args.id);
-
-            selectPromise.then((rows) => {
-                return new Promise((resolve, reject) => {
-                    let dataToDelete = rows[0];
-
-                    let promises = [];
-
-                    if (dataToDelete.documentId) {
-                        promises.push(knex('documents').transacting(trx).del().where('id', dataToDelete.documentId));
-                    }
-
-                    if (dataToDelete.idAttributeItemValueId) {
-                        promises.push(knex('id_attribute_item_values').transacting(trx).del().where('id', dataToDelete.idAttributeItemValueId));
-                    }
-
-                    if (dataToDelete.idAttributeItemId) {
-                        promises.push(knex('id_attribute_items').transacting(trx).del().where('id', dataToDelete.idAttributeItemId));
-                    }
-
-                    if (dataToDelete.idAttributeId) {
-                        promises.push(knex('id_attributes').transacting(trx).del().where('id', dataToDelete.idAttributeId));
-                    }
-
-                    Promise.all(promises).then((responses) => {
-                        console.log(responses, "22222");
-                        resolve();
-                    }).catch((error) => {
-                        console.log("err", error);
-                        reject();
-                    });
-                });
-            })
-                .then(trx.commit)
-                .catch(trx.rollback);
-        });
-    }
-
-    controller.prototype.idAttributes_selectAll = (walletId) => {
-        return new Promise((resolve, reject) => {
-            knex('id_attributes').select().where('walletId', walletId).then((rows) => {
-                if (rows && rows.length) {
-                    let idAttributes = {};
-
-                    let idAttributeItemPromises = [];
-                    let idAttributeItemValuesPromises = [];
-
-                    for (let i in rows) {
-                        let idAttribute = rows[i];
-                        if (!idAttribute) continue;
-
-                        idAttributes[idAttribute.id] = idAttribute;
-
-                        idAttributeItemPromises.push(selectTable('id_attribute_items', { idAttributeId: idAttribute.id }).then((items) => {
-                            idAttributes[idAttribute.id].items = items ? items : [];
-
-                            for (let j in items) {
-                                idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
-                                    if(values){
-                                        for(let i in values){
-                                            if(values[i].staticData){
-                                                values[i].staticData = JSON.parse(values[i].staticData);
-                                            }
-                                        }
-                                        items[j].values = values;
-                                    }else{
-                                        items[j].values = []
-                                    }
-                                }));
-                            }
-                        }));
-                    }
-
-                    Promise.all(idAttributeItemPromises).then((items) => {
-                        Promise.all(idAttributeItemValuesPromises).then((values) => {
-                            resolve(idAttributes);
-                        }).catch((error) => {
-                            reject({ message: "error_while_selecting", error: error });
-                        });
-                    }).catch((error) => {
-                        reject({ message: "error_while_selecting", error: error });
-                    });
-                } else {
-                    resolve([]);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
-    controller.prototype.idAttributeItem_add = (args) => {
-        return knex.transaction((trx) => {
-            args.createdAt = new Date().getTime();
-
-            // name, idAttributeId, createdAt
-            knex('id_attributes').transacting(trx).insert(args).then((insertedIdAttributeIds) => {
-                knex('id_attribute_item_values').transacting(trx).insert({
-                    idAttributeItemId: insertedIdAttributeIds[0],
-                    createdAt: new Date().getTime()
-                }).then((insertedIdAttributeItemValueIds) => {
-                    let selectPromise = knex('id_attribute_item_values').transacting(trx).select().where('id', insertedIdAttributeItemValueIds[0]);
-                    selectPromise.then((idAttributeItemValue) => {
-                        resolve(idAttributeItemValue);
-                    }).catch((error) => {
-                        reject({ message: "error", error: error });
-                    });
-                }).catch((error) => {
-                    reject({ message: "error", error: error });
-                });
-            }).catch((error) => {
-                reject({ message: "error", error: error });
-            });
-        });
-    }
-
     /**
      * id_attribute_item_values
      */
@@ -913,20 +714,6 @@ module.exports = function (app) {
     /**
      * tokens
      */
-    controller.prototype.tokens_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('tokens').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
     controller.prototype.tokens_selectBySymbol = (symbol) => {
         return selectTable('tokens', { symbol: 'eth' });
     }
@@ -1020,87 +807,6 @@ module.exports = function (app) {
     */
     controller.prototype.transactionsHistory_insert = (data) => {
         return insertIntoTable('transactions_history', data);
-    }
-
-
-    /**
-     *
-     */
-    function idAttributes_selectById (id, trx) {
-        return new Promise((resolve, reject) => {
-            knex('id_attributes').transacting(trx).select().where('id', id).then((rows) => {
-
-                let idAttribute = null;
-
-                let idAttributeItemPromises = [];
-                let idAttributeItemValuesPromises = [];
-
-                if(!rows || !rows.length) {
-                    return reject({message: 'not_found'});
-                }
-
-                idAttribute = rows[0];
-
-                idAttributeItemPromises.push(selectTable('id_attribute_items', { idAttributeId: idAttribute.id }, trx).then((items) => {
-                    idAttribute.items = items ? items : [];
-
-                    for (let j in items) {
-                        idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }, trx).then((values) => {
-                            if(values){
-                                for(let i in values){
-                                    if(values[i].staticData){
-                                        values[i].staticData = JSON.parse(values[i].staticData);
-                                    }
-                                }
-                                items[j].values = values;
-                            }else{
-                                items[j].values = [];
-                            }
-                        }));
-                    }
-                }));
-
-                Promise.all(idAttributeItemPromises).then((items) => {
-                    Promise.all(idAttributeItemValuesPromises).then((values) => {
-                        resolve(idAttribute);
-                    }).catch((error) => {
-                        reject({ message: "error_while_selecting", error: error });
-                    });
-                }).catch((error) => {
-                    reject({ message: "error_while_selecting", error: error });
-                });
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
-    function selectIdAttributeItemValueView(where, tx) {
-        return new Promise((resolve, reject) => {
-            let promise = null;
-            if (tx) {
-                promise = knex('id_attribute_item_values')
-                    .transacting(tx)
-                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id as idAttributeItemId', 'id_attributes.id as idAttributeId', 'id_attributes.idAttributeType', 'id_attributes.walletId')
-                    .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
-                    .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
-                    .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
-                    .where(where);
-            } else {
-                promise = knex('id_attribute_item_values')
-                    .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id as idAttributeItemId', 'id_attributes.id as idAttributeId', 'id_attributes.idAttributeType', 'id_attributes.walletId')
-                    .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
-                    .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
-                    .leftJoin('documents', 'id_attribute_item_values.documentId', 'documents.id')
-                    .where(where);
-            }
-
-            promise.then((rows) => {
-                resolve(rows);
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
     }
 
     function insertIntoTable(table, data, trx) {

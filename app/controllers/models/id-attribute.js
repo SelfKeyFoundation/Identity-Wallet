@@ -6,7 +6,20 @@ module.exports = function (app, sqlLiteService) {
 
     let knex = sqlLiteService.knex;
 
-    Controller.init = () => {
+    Controller.init = init;
+
+    Controller.selectById = selectById;
+
+    Controller.create = create;
+
+    Controller.delete = _delete;
+
+    Controller.findAllByWalletId = _findAllByWalletId;
+
+    /**
+     *
+     */
+    function init () {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable(TABLE_NAME).then(function (exists) {
                 if (!exists) {
@@ -29,7 +42,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    Controller.create = (walletId, idAttributeType, staticData, file) => {
+    function create (walletId, idAttributeType, staticData, file) {
         let idAttribute = {};
         idAttribute.createdAt = new Date().getTime();
         idAttribute.walletId = walletId;
@@ -107,16 +120,53 @@ module.exports = function (app, sqlLiteService) {
                     });
                 });
             })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            .then(trx.commit)
+            .catch(trx.rollback);
         });
     }
 
-    Controller.selectById = selectById;
+    function _delete (args) {
+        return knex.transaction((trx) => {
+            let selectPromise = knex(TABLE_NAME).transacting(trx)
+                .select('id_attributes.id as idAttributeId', 'id_attribute_items.id as idAttributeItemId', 'id_attribute_item_values.id as idAttributeItemValueId', 'id_attribute_item_values.documentId as documentId')
+                .leftJoin('id_attribute_items', 'id_attributes.id', 'id_attribute_items.idAttributeId')
+                .leftJoin('id_attribute_item_values', 'id_attribute_items.id', 'id_attribute_item_values.idAttributeItemId')
+                .where('id_attributes.id', args.id);
 
-    /**
-     *
-     */
+            selectPromise.then((rows) => {
+                return new Promise((resolve, reject) => {
+                    let dataToDelete = rows[0];
+
+                    let promises = [];
+
+                    if (dataToDelete.documentId) {
+                        promises.push(knex('documents').transacting(trx).del().where('id', dataToDelete.documentId));
+                    }
+
+                    if (dataToDelete.idAttributeItemValueId) {
+                        promises.push(knex('id_attribute_item_values').transacting(trx).del().where('id', dataToDelete.idAttributeItemValueId));
+                    }
+
+                    if (dataToDelete.idAttributeItemId) {
+                        promises.push(knex('id_attribute_items').transacting(trx).del().where('id', dataToDelete.idAttributeItemId));
+                    }
+
+                    if (dataToDelete.idAttributeId) {
+                        promises.push(knex('id_attributes').transacting(trx).del().where('id', dataToDelete.idAttributeId));
+                    }
+
+                    Promise.all(promises).then((responses) => {
+                        resolve();
+                    }).catch((error) => {
+                        reject();
+                    });
+                });
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
+        });
+    }
+
     function selectById(id, trx) {
         return new Promise((resolve, reject) => {
 
@@ -170,8 +220,14 @@ module.exports = function (app, sqlLiteService) {
 
     function selectIdAttributeItemValueView(where, trx) {
         return new Promise((resolve, reject) => {
-            let promise = knex('id_attribute_item_values')
-                .transacting(trx)
+
+            let query = knex('id_attribute_item_values');
+
+            if(trx){
+                query = query.transacting(trx);
+            }
+
+            let promise = query
                 .select('id_attribute_item_values.*', 'documents.name as documentFileName', 'id_attribute_items.id as idAttributeItemId', 'id_attributes.id as idAttributeId', 'id_attributes.idAttributeType', 'id_attributes.walletId')
                 .leftJoin('id_attribute_items', 'id_attribute_item_values.idAttributeItemId', 'id_attribute_items.id')
                 .leftJoin('id_attributes', 'id_attribute_items.idAttributeId', 'id_attributes.id')
@@ -218,6 +274,63 @@ module.exports = function (app, sqlLiteService) {
                 });
             }).catch((error) => {
                 reject({ message: "insert_error", error: error });
+            });
+        });
+    }
+
+    function _findAllByWalletId(walletId){
+        return new Promise((resolve, reject) => {
+            knex(TABLE_NAME).select().where('walletId', walletId).then((rows) => {
+                if (!rows || !rows.length) {
+                    return resolve([]);
+                }
+
+                let idAttributes = {};
+
+                let idAttributeItemPromises = [];
+                let idAttributeItemValuesPromises = [];
+
+                for (let i in rows) {
+                    let idAttribute = rows[i];
+                    if (!idAttribute) continue;
+
+                    idAttributes[idAttribute.id] = idAttribute;
+
+                    let query = sqlLiteService.select('id_attribute_items', '*', { idAttributeId: idAttribute.id });
+
+                    idAttributeItemPromises.push(query.then((items) => {
+                        idAttributes[idAttribute.id].items = items ? items : [];
+
+                        for (let j in items) {
+
+                            idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
+                                if(values){
+                                    for(let i in values){
+                                        if(values[i].staticData){
+                                            values[i].staticData = JSON.parse(values[i].staticData);
+                                        }
+                                    }
+                                    items[j].values = values;
+                                }else{
+                                    items[j].values = []
+                                }
+                            }));
+                        }
+                    }));
+                }
+
+                Promise.all(idAttributeItemPromises).then((items) => {
+                    Promise.all(idAttributeItemValuesPromises).then((values) => {
+                        resolve(idAttributes);
+                    }).catch((error) => {
+                        reject({ message: "error_while_selecting", error: error });
+                    });
+                }).catch((error) => {
+                    reject({ message: "error_while_selecting", error: error });
+                });
+
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
             });
         });
     }

@@ -6,7 +6,9 @@ const request = require('request');
 
 module.exports = function (app) {
 
+    // TODO - take this from config
     const AIRTABLE_API = "https://alpha.selfkey.org/marketplace/i/api/";
+
     const ID_ATTRIBUTE_TABLE = "id-attributes"
     const controller = function () { };
 
