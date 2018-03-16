@@ -172,7 +172,6 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
 
             ID_ATTRIBUTE_TYPES = SqlLiteService.getIdAttributeTypes();
             $scope.idAttributesList = $rootScope.wallet.getIdAttributes();
-            console.log(777, $scope.idAttributesList)
 
             if ($scope.idAttributesList) {
                 angular.forEach($scope.idAttributesList, (item) => {
