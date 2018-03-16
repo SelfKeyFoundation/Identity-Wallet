@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const Ico = requireAppModule('angular/classes/ico');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+const Ico = requireAppModule("angular/classes/ico");
+const EthUtils = requireAppModule("angular/classes/eth-utils");
+const IdAttributeType = requireAppModule("angular/classes/id-attribute-type");
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, ConfigFileService) {
     'ngInject';

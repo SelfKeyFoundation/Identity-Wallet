@@ -5,7 +5,6 @@
         .header
             span.none-select-text Save Your Keystore File
         .content(layout="column")
-            
             .title "This keystore file is the encrypted version of your private key, protected by the password you just created. This is the recommended version to save your private key."
             
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
@@ -23,5 +22,5 @@
                     span Secure it like the millions of dollars it may one day be worth. 
 
             .actions-wrapper
-                md-button.outline-orange(ng-click="nextStep($event)")
+                md-button#keystoreNext.outline-orange(ng-click="nextStep($event)")
                     span I understand, continue

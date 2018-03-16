@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 
 function SkMessageDirective($log, $timeout) {
-    'ngInject';
+	"ngInject";
 
-    return {
-        restrict: 'E',
-        scope: {
-            type: '@',
-            sizeClass: "@",
-            message: "@",
-            closeAfter: "@"
-        },
-        link: (scope, element) => {
-            let isClosed = false;
-            let closeTimeout;
-            let closeAfterTimeout;
+	return {
+		restrict: "E",
+		scope: {
+			type: "@",
+			sizeClass: "@",
+			message: "@",
+			closeAfter: "@"
+		},
+		link: (scope, element) => {
+			let isClosed = false;
+			let closeTimeout;
+			let closeAfterTimeout;
 
             scope.close = (event) => {
                 isClosed = true;
@@ -46,4 +46,3 @@ function SkMessageDirective($log, $timeout) {
 }
 
 module.exports = SkMessageDirective;
-

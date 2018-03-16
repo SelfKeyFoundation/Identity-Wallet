@@ -1,10 +1,9 @@
+const Wallet = requireAppModule("angular/classes/wallet");
+const EthUnits = requireAppModule("angular/classes/eth-units");
+const EthUtils = requireAppModule("angular/classes/eth-utils");
+const Token = requireAppModule("angular/classes/token");
 
-const Wallet = requireAppModule('angular/classes/wallet');
-const EthUnits = requireAppModule('angular/classes/eth-units');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
-const Token = requireAppModule('angular/classes/token');
-
-const ABI = requireAppModule('angular/store/abi.json').abi;
+const ABI = requireAppModule("angular/store/abi.json").abi;
 
 function dec2hexString(dec) {
     return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();

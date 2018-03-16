@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function EtherUnits($rootScope, $log, $http) {
     'ngInject';

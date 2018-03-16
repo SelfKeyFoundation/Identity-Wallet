@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 
 function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, ConfigFileService) {
-    'ngInject';
+	"ngInject";
 
-    return {
-        restrict: 'E',
-        scope: {},
-        link: (scope, element) => {
-            scope.userData = {
-                email: "",
-                name: "",
-                country_of_residency: "",
-                tempImage: 'assets/images/temp/avatar.jpg'
-            }
+	return {
+		restrict: "E",
+		scope: {},
+		link: (scope, element) => {
+			scope.userData = {
+				email: "",
+				name: "",
+				country_of_residency: "",
+				tempImage: "assets/images/temp/avatar.jpg"
+			};
 
             let idAttributes = ConfigFileService.getIdAttributesStore();
 

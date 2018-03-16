@@ -1,18 +1,15 @@
 .wallet-create-step-4(layout-fill, layout="column", layout-align="center center")
-
     sk-icon(icon="selfkey", size-class="icon-size-57x65")
     .title SELFKEY BASIC ID
     .description BLOCKCHAIN IDENTITY WALLET
-
     .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Confirm Password
         form.content(name="passwordForm", layout="column")
             .title "Remember, if you forget . your password there is no way to get it back! You will not be able to change this password at any time."
-
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
+                input#pwd2(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
             
             .password-strength-container
                 .blocks-container
@@ -27,4 +24,4 @@
                 md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
                     span.primary Back
                 md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
-                    span.primary Next
+                    span#pwd2Next.primary Next

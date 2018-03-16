@@ -1,29 +1,29 @@
-'use strict';
+"use strict";
 
 function skShowLoading($compile) {
-    'ngInject';
+	"ngInject";
 
-    return {
-        restrict: 'A',
-        require: '?ngClick',
-        priority: -100,
-        scope: {
-            skShowLoading: '=',
-            skLoadingMessage: '@'
-        },
-        link: (scope, element, attr) => {
-            let innerHTML = angular.copy(element.html());
-            let isLoading = false;
+	return {
+		restrict: "A",
+		require: "?ngClick",
+		priority: -100,
+		scope: {
+			skShowLoading: "=",
+			skLoadingMessage: "@"
+		},
+		link: (scope, element, attr) => {
+			let innerHTML = angular.copy(element.html());
+			let isLoading = false;
 
-            element.on('click', (event) => {
-                if (isLoading) {
-                    event.stopImmediatePropagation();
-                    event.preventDefault();
-                    return false;
-                } else {
-                    return true
-                }
-            });
+			element.on("click", event => {
+				if (isLoading) {
+					event.stopImmediatePropagation();
+					event.preventDefault();
+					return false;
+				} else {
+					return true;
+				}
+			});
 
             scope.$watch('skShowLoading', function (newVal, oldVal) {
                 if (newVal === 0) {

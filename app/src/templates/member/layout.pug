@@ -4,7 +4,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
     .sk-right-sidenav(ng-controller="MemberRightSidenavController", style="height: 100%;")
         .sk-right-sidenav__header
             sk-icon(icon="selfkey", size-class="icon-size-39x44")
-            span(ng-click="close($event)") ✕
+            span#closeNav(ng-click="close($event)") ✕
 
         .sk-right-sidenav__content(layout="column", layout-align="space-between center", flex)
             .top-part-container(layout="column", style="width: 100%;")
@@ -18,11 +18,11 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
+                    #helpLink.sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="getInfoDialog($event,'Coming soon', 'About')") About
+                    #aboutLink.sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="getInfoDialog($event,'Coming soon', 'About')") About
                 .sk-right-sidenav__h-divider
 
                 .sk-right-sidenav__section
@@ -36,5 +36,3 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__section
                     .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.version')",ng-click="getVersion($event)") Version
                 .sk-right-sidenav__h-divider
-
-

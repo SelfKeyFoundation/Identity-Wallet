@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
-const Ico = requireAppModule('angular/classes/ico');
+const IdAttributeType = requireAppModule("angular/classes/id-attribute-type");
+const IdAttribute = requireAppModule("angular/classes/id-attribute");
+const Ico = requireAppModule("angular/classes/ico");
 
 // Actually Local Storage Service
 function ConfigFileService($rootScope, $log, $q, $timeout, CONFIG, ElectronService, CommonService) {

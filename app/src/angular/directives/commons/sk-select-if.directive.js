@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function SkSelectIfDirective($log) {
-    'ngInject';
+	"ngInject";
 
     return {
         restrict: 'A',
@@ -19,4 +19,3 @@ function SkSelectIfDirective($log) {
 }
 
 module.exports = SkSelectIfDirective;
-

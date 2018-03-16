@@ -1,0 +1,12 @@
+///Users/altninja/code/selfkey/wallets/Identity-Wallet/out/id-wallet-darwin-x64/id-wallet.app/Contents/MacOS/id-wallet/app/server.js
+{
+  "name": "org.selfkey.login.echo",
+  "description": "SelfKey Login Browser Extension Native Messaging Host for ID Wallet",
+  "path": "/Users/altninja/code/selfkey/selfkey-login/wallet/host/server.js",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik/"
+  ]
+}
+
+

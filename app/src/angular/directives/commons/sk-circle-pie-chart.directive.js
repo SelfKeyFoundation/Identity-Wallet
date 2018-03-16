@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function SkCirclePieChartDirective($timeout) {
     'ngInject';
@@ -140,4 +140,3 @@ function SkCirclePieChartDirective($timeout) {
 }
 
 module.exports = SkCirclePieChartDirective;
-

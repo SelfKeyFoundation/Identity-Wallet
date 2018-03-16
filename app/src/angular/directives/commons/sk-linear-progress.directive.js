@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function SkLinearProgressDirective() {
     'ngInject';
@@ -25,4 +25,3 @@ function SkLinearProgressDirective() {
 }
 
 module.exports = SkLinearProgressDirective;
-

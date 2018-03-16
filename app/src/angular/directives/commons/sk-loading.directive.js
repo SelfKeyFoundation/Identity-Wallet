@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function SkLoadingDirective($log) {
-    'ngInject';
+	"ngInject";
 
     return {
         restrict: 'E',

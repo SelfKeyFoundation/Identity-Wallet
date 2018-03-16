@@ -1,11 +1,19 @@
-function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, ConfigFileService) {
-    'ngInject'
+function StartupGuideDialogController(
+	$rootScope,
+	$scope,
+	$log,
+	$q,
+	$mdDialog,
+	$state,
+	ConfigFileService
+) {
+	"ngInject";
 
-    $log.info('StartupGuideDialogController');
+	$log.info("StartupGuideDialogController");
 
-    $scope.cancel = (event) => {
-        $mdDialog.cancel();
-    }
+	$scope.cancel = event => {
+		$mdDialog.cancel();
+	};
 
     $scope.goToWalletSetup = () => {
         let store = ConfigFileService.getStore();

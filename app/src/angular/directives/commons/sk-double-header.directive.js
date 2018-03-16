@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function SkDoubleHeaderDirective($log) {
-    'ngInject';
+	"ngInject";
 
     return {
         restrict: 'E',

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function SkIconDirective($log) {
-    'ngInject';
+	"ngInject";
 
     return {
         restrict: 'E',
@@ -18,4 +18,3 @@ function SkIconDirective($log) {
 }
 
 module.exports = SkIconDirective;
-

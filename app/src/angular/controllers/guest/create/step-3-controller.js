@@ -1,7 +1,7 @@
 function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, ElectronService, CommonService) {
     'ngInject'
 
-    $log.info('GuestKeystoreCreateStep3Controller');
+	$log.info("GuestKeystoreCreateStep3Controller");
 
     $scope.passwordStrength = 0;
 

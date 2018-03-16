@@ -1,16 +1,14 @@
 .wallet-create-step-6(layout-fill, layout="column", layout-align="center center")
     sk-icon(icon="important", size-class="icon-size-68x74")
-
     .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Save Your Private Key
-        .content(layout="column")
-            
+        .content(layout="column")            
             md-input-container.sk-input-box.no-error-spacer
                 label Your Private Key
-                input(name="privateKey", ng-model="privateKey", type="text", placeholder="Your Private Key", disabled)
+                input#privateKey(name="privateKey", ng-model="privateKey", type="text", placeholder="Your Private Key", disabled)
             
-            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
+            md-button#printPaperWallet.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
                 span.primary Print Paper Wallet
 
             .warning-description
@@ -25,5 +23,5 @@
                     span Secure it like the millions of dollars it may one day be worth. 
 
             .actions-wrapper
-                md-button.outline-blue(ng-click="nextStep($event)")
+                md-button#printWalletNext.outline-blue(ng-click="nextStep($event)")
                     span continue

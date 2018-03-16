@@ -1,11 +1,18 @@
-function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService) {
-    'ngInject'
+function GuestImportWalletController(
+	$rootScope,
+	$scope,
+	$log,
+	$q,
+	$timeout,
+	$state,
+	ConfigFileService,
+	WalletService
+) {
+	"ngInject";
 
     $log.info('GuestImportWalletController');
 
-    $scope.selectedOption = "keystoreSelect";
-
-    $scope.publicKeyList = ConfigFileService.getPublicKeys('ks');
+	$scope.selectedOption = "keystoreSelect";
 
     if ($scope.publicKeyList.length <= 0) {
         $scope.selectedOption = "keystoreImport";
@@ -30,6 +37,9 @@ function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $st
         }
     }
 
-};
+	$scope.onRadioButtonChange = event => {
+		$log.info("onRadioButtonChange", $scope.selectedOption);
+    }
+}
 
 module.exports = GuestImportWalletController;

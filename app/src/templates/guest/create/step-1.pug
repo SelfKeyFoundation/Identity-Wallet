@@ -12,7 +12,7 @@
                 .title Create Basic ID
                 .text
                     | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System. 
-                .actions(style="margin-top: 30px;")
+                #createBasic.actions(style="margin-top: 30px;")
                     md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey Basic ID
 
         .sk-divider-h1(style="width: 555px;")
@@ -27,5 +27,6 @@
                 .text
                     md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
                         input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
-                .actions
+
+                #importKYC.actions
                     md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

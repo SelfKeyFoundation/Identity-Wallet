@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const UNIT_MAP = {
     'wei': '1',
@@ -28,9 +28,7 @@ const UNIT_MAP = {
 }
 
 class EthUnits {
-
-    constructor() {
-    }
+	constructor() {}
 
     static getValueOfUnit(unit) {
         unit = unit ? unit.toLowerCase() : 'ether';
@@ -38,10 +36,13 @@ class EthUnits {
         return unitValue === undefined ? null : new BigNumber(unitValue, 10);
     }
 
-    static fiatToWei(number, pricePerEther) {
-        let returnValue = new BigNumber(String(number)).div(pricePerEther).times(EthUnits.getValueOfUnit('ether')).round(0);
-        return returnValue.toString(10);
-    }
+	static fiatToWei(number, pricePerEther) {
+		let returnValue = new BigNumber(String(number))
+			.div(pricePerEther)
+			.times(EthUnits.getValueOfUnit("ether"))
+			.round(0);
+		return returnValue.toString(10);
+	}
 
     static toWei(number, unit) {
         let returnValue = new BigNumber(String(number)).times(EthUnits.getValueOfUnit(unit));
@@ -62,6 +63,7 @@ class EthUnits {
         var returnValue = new BigNumber(String(number)).times(EthUnits.getValueOfUnit(from)).div(EthUnits.getValueOfUnit(to));
         return returnValue.toString(10);
     }
+
 }
 
 module.exports = EthUnits;

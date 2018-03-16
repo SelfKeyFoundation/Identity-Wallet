@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const CommonUtils = requireAppModule('angular/classes/common-utils');
-const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
+const CommonUtils = requireAppModule("angular/classes/common-utils");
+const IdAttributeType = requireAppModule("angular/classes/id-attribute-type");
 
 class IdAttributeItem {
 

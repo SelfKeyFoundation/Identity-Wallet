@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Token = requireAppModule('angular/classes/token');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
+const Token = requireAppModule("angular/classes/token");
+const EthUtils = requireAppModule("angular/classes/eth-utils");
 
 function dec2hexString(dec) {
     return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();

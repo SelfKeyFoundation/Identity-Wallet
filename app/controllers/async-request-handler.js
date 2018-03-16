@@ -15,8 +15,7 @@ const os = require('os');
 
 module.exports = function (app) {
 	const helpers = require('./helpers')(app);
-	const controller = function () {
-	};
+	const controller = function () {};
 
 	const storeFileName 			= 'main-store.json'; // TODO
 	const userDataDirectoryPath 	= electron.app.getPath('userData');
@@ -48,25 +47,25 @@ module.exports = function (app) {
 
 	console.log(userDataDirectoryPath);
 
-	controller.prototype.readDataStore = function (event, actionId, actionName, args) {
+	controller.prototype.readDataStore = function(event, actionId, actionName, args) {
 		let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 
 		settings.setPath(storeFilePath);
 
 		const data = settings.getAll();
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, data);
+	};
 
-	controller.prototype.saveDataStore = function (event, actionId, actionName, args) {
+	controller.prototype.saveDataStore = function(event, actionId, actionName, args) {
 		let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 
 		settings.setPath(storeFilePath);
 
 		const data = settings.setAll(args.data);
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, data);
+	};
 
-	controller.prototype.initDataStore = function (event, actionId, actionName, args) {
+	controller.prototype.initDataStore = function(event, actionId, actionName, args) {
 		let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 
 		settings.setPath(storeFilePath);
@@ -96,14 +95,14 @@ module.exports = function (app) {
 				},
 				tokens: {
 					eth: {
-						type: 'default',
+						type: "default",
 						lastBalance: 0
 					},
 					key: {
-						type: 'custom',
+						type: "custom",
 						lastBalance: 0,
 						contract: {
-							address: "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7",		// mainnet: 0x4cc19356f2d37338b9802aa8e8fc58b0373296e7 | testnet: 0x28eb857a2aee4b49fd45f163875dd5ef76e16394
+							address: "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7", // mainnet: 0x4cc19356f2d37338b9802aa8e8fc58b0373296e7 | testnet: 0x28eb857a2aee4b49fd45f163875dd5ef76e16394
 							symbol: "KEY",
 							decimal: 18,
 							type: "default"
@@ -115,118 +114,112 @@ module.exports = function (app) {
 		}
 
 		const storeData = settings.getAll();
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, storeData);
+	};
 
-	controller.prototype.importKYCIdentity = function (event, actionId, actionName, args) {
-		decompress(args.file.path, os.tmpdir()).then(files => {
-			let documentFiles = {};
+	controller.prototype.importKYCIdentity = function(event, actionId, actionName, args) {
+		decompress(args.file.path, os.tmpdir())
+			.then(files => {
+				let documentFiles = {};
 
-			//searching for documents
-			files.forEach(function (file) {
-				if (file.path == "kycprocess.json") {
+				// searching for documents
+				files.forEach(function(file) {
+					if (file.path == "kycprocess.json") {
+						return false;
+					}
+					documentFiles[file.path] = file;
+				});
+
+				// searching for the json file
+				const jsonFile = files.find(function(file) {
+					if (file.path == "kycprocess.json") {
+						return true;
+					}
 					return false;
-				}
-				documentFiles[file.path] = file;
-			});
+				});
 
+				const json = JSON.parse(jsonFile.data.toString("utf8"));
+				let requirementQuestions = {};
+				let requirementDocuments = {};
+				let ethAddressRequirementId = "";
 
-			//searching for the json file
-			const jsonFile = files.find(function (file) {
-				if (file.path == "kycprocess.json") {
-					return true;
-				}
-				return false;
-			});
+				// get all required uploads
+				json.requirements.uploads.forEach(function(upload) {
+					requirementDocuments[upload._id] = upload;
+				});
 
+				// get all required questions
+				json.requirements.questions.forEach(function(question) {
+					// if the question is ethereum address then save it into the selarate variable
+					if (question.tokenSale.ethAddress) {
+						ethAddressRequirementId = question._id;
+					} else {
+						requirementQuestions[question._id] = question;
+					}
+				});
 
-			const json = JSON.parse(jsonFile.data.toString('utf8'));
-			let requirementQuestions = {};
-			let requirementDocuments = {};
-			let ethAddressRequirementId = "";
+				let etherAddress = "";
+				let attributes = {};
 
-			//get all required uploads
-			json.requirements.uploads.forEach(function (upload) {
-				requirementDocuments[upload._id] = upload;
-			})
+				// check for answers on the quesitons
+				json.escrow.answers.forEach(function(answer) {
+					// if re requirement is the ether address then save answer to the separate variable
+					if (answer.requirementId == ethAddressRequirementId) {
+						etherAddress = answer.answer[0];
+					} else if (requirementQuestions[answer.requirementId]) {
+						let questionRequirement = requirementQuestions[answer.requirementId];
+						let idAttribute = questionRequirement.attributeType;
+						if (!idAttribute) {
+							return;
+						}
 
-			//get all required questions
-			json.requirements.questions.forEach(function (question) {
-				//if the question is ethereum address then save it into the selarate variable
-				if (question.tokenSale.ethAddress) {
-					ethAddressRequirementId = question._id;
-				} else {
-					requirementQuestions[question._id] = question;
-				}
+						if (!attributes[idAttribute]) {
+							attributes[idAttribute] = [];
+						}
+						let obj = {
+							isDoc: false,
+							value: answer.answer[0]
+						};
+						attributes[idAttribute].push(obj);
+					}
+				});
+				let fileDir = userDataDirectoryPath + "/documents/" + etherAddress + "/";
 
-			})
-
-			let etherAddress = "";
-			let attributes = {};
-
-			//check for answers on the quesitons
-			json.escrow.answers.forEach(function (answer) {
-				//if re requirement is the ether address then save answer to the separate variable
-				if (answer.requirementId == ethAddressRequirementId) {
-					etherAddress = answer.answer[0];
-				} else if (requirementQuestions[answer.requirementId]) {
-					let questionRequirement = requirementQuestions[answer.requirementId];
-					let idAttribute = questionRequirement.attributeType;
-					if (!idAttribute) {
+				// loop through the uploaded documents
+				json.escrow.documents.forEach(function(document) {
+					let uploadRequirements = requirementDocuments[document.requirementId];
+					let idAttribute = uploadRequirements.attributeType;
+					// if doc is removed or does not have idAttribute do nothing
+					if (document.doc.removed || !idAttribute) {
 						return;
 					}
 
 					if (!attributes[idAttribute]) {
 						attributes[idAttribute] = [];
 					}
-					let obj = {
-						isDoc: false,
-						value: answer.answer[0]
 
-					};
-					attributes[idAttribute].push(obj);
-				}
-			})
-			let fileDir = userDataDirectoryPath + "/documents/" + etherAddress + "/";
-
-
-			//loop through the uploaded documents
-			json.escrow.documents.forEach(function (document) {
-				let uploadRequirements = requirementDocuments[document.requirementId];
-				let idAttribute = uploadRequirements.attributeType;
-				//if doc is removed or does not have idAttribute do nothing
-				if (document.doc.removed || !idAttribute) {
-					return;
-				}
-
-				if (!attributes[idAttribute]) {
-					attributes[idAttribute] = [];
-				}
-
-
-				if (requirementDocuments[document.requirementId]) {
-					document.doc.files.forEach(function (file) {
-						let filePath = fileDir + file.fileName;
-						let obj = {
-							isDoc: true,
-							name: file.fileName,
-							contentType: file.contentType,
-							value: filePath,
-							addition: {
-								selfie: uploadRequirements.selfie,
-								ifEidIsSkipped: uploadRequirements.ifEidIsSkipped,
-								signature: uploadRequirements.signature,
-								optional: uploadRequirements.optional
-							}
-						};
-						//ensure the directory exists and save the file
-						fs.ensureDirSync(fileDir);
-						fs.writeFileSync(filePath, documentFiles[file.fileName].data);
-						attributes[idAttribute].push(obj);
-					});
-				}
-			})
-
+					if (requirementDocuments[document.requirementId]) {
+						document.doc.files.forEach(function(file) {
+							let filePath = fileDir + file.fileName;
+							let obj = {
+								isDoc: true,
+								name: file.fileName,
+								contentType: file.contentType,
+								value: filePath,
+								addition: {
+									selfie: uploadRequirements.selfie,
+									ifEidIsSkipped: uploadRequirements.ifEidIsSkipped,
+									signature: uploadRequirements.signature,
+									optional: uploadRequirements.optional
+								}
+							};
+							// ensure the directory exists and save the file
+							fs.ensureDirSync(fileDir);
+							fs.writeFileSync(filePath, documentFiles[file.fileName].data);
+							attributes[idAttribute].push(obj);
+						});
+					}
+				});
 
 			attributes.email = [{
 				isDoc: false,
@@ -257,62 +250,67 @@ module.exports = function (app) {
 	}
 
 	// TODO - ??
-	controller.prototype.createDirectory = function (event, actionId, actionName, args) {
+	controller.prototype.createDirectory = function(event, actionId, actionName, args) {
 		fs.mkdir(path.resolve(walletsDirectoryPath, args.publickKey));
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, storeData);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, storeData);
+	};
 
-	controller.prototype.checkFileStat = function (event, actionId, actionName, args) {
+	controller.prototype.checkFileStat = function(event, actionId, actionName, args) {
 		try {
 			fs.stat(args.src, (err, stat) => {
 				if (stat) {
 					stat.path = args.src;
 				}
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, stat);
+				app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, err, stat);
 			});
 		} catch (e) {
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e, null);
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e, null);
 		}
-	}
+	};
 
-	controller.prototype.openDirectorySelectDialog = function (event, actionId, actionName, args) {
+	controller.prototype.openDirectorySelectDialog = function(event, actionId, actionName, args) {
 		try {
 			let dialogConfig = {
-				title: 'Choose where to save documents',
-				message: 'Choose where to save documents',
-				properties: ['openDirectory']
+				title: "Choose where to save documents",
+				message: "Choose where to save documents",
+				properties: ["openDirectory"]
 			};
-			dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+			dialog.showOpenDialog(app.win, dialogConfig, filePaths => {
 				if (filePaths) {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, filePaths[0]);
+					app.win.webContents.send(
+						"ON_ASYNC_REQUEST",
+						actionId,
+						actionName,
+						null,
+						filePaths[0]
+					);
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, null);
+					app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, null);
 				}
 			});
 		} catch (e) {
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e, null);
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e, null);
 		}
-	}
+	};
 
-	controller.prototype.openFileSelectDialog = function (event, actionId, actionName, args) {
+	controller.prototype.openFileSelectDialog = function(event, actionId, actionName, args) {
 		try {
 			let dialogConfig = {
-				title: 'Choose file',
-				message: 'Choose file',
-				properties: ['openFile']
+				title: "Choose file",
+				message: "Choose file",
+				properties: ["openFile"]
 			};
-			
-			if(args){
+
+			if (args) {
 				Object.assign(dialogConfig, args);
 			}
 
-			dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+			dialog.showOpenDialog(app.win, dialogConfig, filePaths => {
 				if (filePaths) {
 					try {
 						const stats = fs.statSync(filePaths[0]);
 						let mimeType = mime.lookup(filePaths[0]);
 						let name = path.parse(filePaths[0]).base;
-
 						if(args.maxFileSize){
 							if(stats.size > args.maxFileSize){
 								return app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'file_size_error', null);
@@ -329,58 +327,70 @@ module.exports = function (app) {
 						app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
 					}
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, null);
+					app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, null);
 				}
 			});
 		} catch (e) {
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e, null);
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e, null);
 		}
-	}
+	};
 
-	controller.prototype.signPdf = function (event, actionId, actionName, args) {
-		let exec = require('child_process').exec;
+	controller.prototype.signPdf = function(event, actionId, actionName, args) {
+		let exec = require("child_process").exec;
 
-		let execJarPath = path.join(app.dir.desktopApp, 'executables', 'pdfsigner-0.0.1.jar');
+		let execJarPath = path.join(app.dir.desktopApp, "executables", "pdfsigner-0.0.1.jar");
 
-		let command = 'java -jar ' + execJarPath + ' ';
-		command += '-input ' + args.input + ' ';
-		command += '-output ' + args.output + ' ';
-		command += '-cert ' + args.certificate + ' ';
-		command += '-password ' + args.password;
+		let command = "java -jar " + execJarPath + " ";
+		command += "-input " + args.input + " ";
+		command += "-output " + args.output + " ";
+		command += "-cert " + args.certificate + " ";
+		command += "-password " + args.password;
 
-		exec(command, function (error, stdout, stderr) {
+		exec(command, function(error, stdout, stderr) {
 			if (error || stderr) {
-				callback('error', null);
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'error', null);
+				callback("error", null);
+				app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, "error", null);
 			} else {
-				let data = stdout.toString().split('\n')[0];
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, data);
+				let data = stdout.toString().split("\n")[0];
+				app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, data);
 			}
 		});
-	}
+	};
 
-	controller.prototype.moveFile = function (event, actionId, actionName, args) {
-		args.dest += '/' + path.basename(args.src);
+	controller.prototype.moveFile = function(event, actionId, actionName, args) {
+		args.dest += "/" + path.basename(args.src);
 		if (args.copy) {
-			helpers.copyFile(args.src, args.dest, (err) => {
+			helpers.copyFile(args.src, args.dest, err => {
 				if (!err) {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, args.dest);
+					app.win.webContents.send(
+						"ON_ASYNC_REQUEST",
+						actionId,
+						actionName,
+						null,
+						args.dest
+					);
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+					app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, err, null);
 				}
 			});
 		} else {
 			// TODO
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, 'not implemented yet', null);
+			app.win.webContents.send(
+				"ON_ASYNC_REQUEST",
+				actionId,
+				actionName,
+				"not implemented yet",
+				null
+			);
 		}
-	}
+	};
 
-	controller.prototype.generateEthereumWallet = function (event, actionId, actionName, args) {
-		const params = {keyBytes: 32, ivBytes: 16};
+	controller.prototype.generateEthereumWallet = function(event, actionId, actionName, args) {
+		const params = { keyBytes: 32, ivBytes: 16 };
 		let dk = keythereum.create(params);
 
 		// asynchronous
-		keythereum.create(params, function (dk) {
+		keythereum.create(params, function(dk) {
 			let options = {
 				kdf: "pbkdf2",
 				cipher: "aes-128-ctr",
@@ -391,7 +401,13 @@ module.exports = function (app) {
 				}
 			};
 
-			let keystoreObject = keythereum.dump(args.password, dk.privateKey, dk.salt, dk.iv, options);
+			let keystoreObject = keythereum.dump(
+				args.password,
+				dk.privateKey,
+				dk.salt,
+				dk.iv,
+				options
+			);
 
 			let keystoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
 			if (!fs.existsSync(keystoreFilePath)) {
@@ -408,25 +424,25 @@ module.exports = function (app) {
 
 			if (!storeData.wallets[keystoreObject.address]) {
 				storeData.wallets[keystoreObject.address] = {
-					type: 'ks',
+					type: "ks",
 					name: "Unnamed Wallet",
 					keystoreFilePath: path.resolve(keystoreFilePath, keystoreFileName),
 					data: initialStoreDataStructure
-				}
+				};
 				settings.setAll(storeData);
 			}
 
 			let privateKey = keythereum.recover(args.password, keystoreObject);
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, {
 				publicKey: keystoreObject.address,
 				privateKey: privateKey
 			});
 		});
-	}
+	};
 
-	controller.prototype.importEtherKeystoreFile = function (event, actionId, actionName, args) {
+	controller.prototype.importEtherKeystoreFile = function(event, actionId, actionName, args) {
 		try {
-			keythereum.importFromFile(args.filePath, function (keystoreObject) {
+			keythereum.importFromFile(args.filePath, function(keystoreObject) {
 				let keyStoreFilePath = path.resolve(walletsDirectoryPath, keystoreObject.address);
 
 				if (!fs.existsSync(keyStoreFilePath)) {
@@ -437,7 +453,7 @@ module.exports = function (app) {
 				let keyStoreFileNewPath = path.resolve(keyStoreFilePath, keystoreFileName);
 
 				if (!fs.existsSync(keyStoreFileNewPath)) {
-					helpers.copyFile(args.filePath, keyStoreFileNewPath, (err) => {
+					helpers.copyFile(args.filePath, keyStoreFileNewPath, err => {
 						if (!err) {
 							let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 							settings.setPath(storeFilePath);
@@ -446,24 +462,36 @@ module.exports = function (app) {
 
 							if (!storeData.wallets[keystoreObject.address]) {
 								storeData.wallets[keystoreObject.address] = {
-									type: 'ks',
+									type: "ks",
 									name: "Unnamed Wallet",
 									keystoreFilePath: keyStoreFileNewPath,
 									data: initialStoreDataStructure
-								}
+								};
 								settings.setAll(storeData);
 							}
 
-							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
-								publicKey: keystoreObject.address,
-								keystoreObject: keystoreObject
-							});
+							app.win.webContents.send(
+								"ON_ASYNC_REQUEST",
+								actionId,
+								actionName,
+								null,
+								{
+									publicKey: keystoreObject.address,
+									keystoreObject: keystoreObject
+								}
+							);
 						} else {
-							app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
+							app.win.webContents.send(
+								"ON_ASYNC_REQUEST",
+								actionId,
+								actionName,
+								err,
+								null
+							);
 						}
 					});
 				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+					app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, {
 						publicKey: keystoreObject.address,
 						keystoreObject: keystoreObject
 					});
@@ -471,35 +499,46 @@ module.exports = function (app) {
 			});
 		} catch (e) {
 			console.log(e.message);
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e.message, null);
 		}
 	}
 
-	controller.prototype.unlockEtherKeystoreObject = function (event, actionId, actionName, args) {
+	controller.prototype.unlockEtherKeystoreObject = function(event, actionId, actionName, args) {
 		try {
 			let privateKey = keythereum.recover(args.password, args.keystoreObject);
 			if (privateKey) {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+				app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, {
 					privateKey: privateKey,
 					publicKey: args.keystoreObject.address,
 					keystoreObject: args.keystoreObject
 				});
 			} else {
-				app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
+				app.win.webContents.send(
+					"ON_ASYNC_REQUEST",
+					actionId,
+					actionName,
+					"authentication code mismatch",
+					null
+				);
 			}
-
 		} catch (e) {
 			console.log(">>>>>>>", e);
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, "authentication code mismatch", null);
+			app.win.webContents.send(
+				"ON_ASYNC_REQUEST",
+				actionId,
+				actionName,
+				"authentication code mismatch",
+				null
+			);
 		}
-	}
+	};
 
-	controller.prototype.importEtherPrivateKey = function (event, actionId, actionName, args) {
+	controller.prototype.importEtherPrivateKey = function(event, actionId, actionName, args) {
 		try {
 			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
-			publicKey = publicKey.toString('hex');
+			publicKey = publicKey.toString("hex");
 
-			let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
+			let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex");
 
 			let storeFilePath = path.resolve(userDataDirectoryPath, storeFileName);
 			settings.setPath(storeFilePath);
@@ -511,53 +550,53 @@ module.exports = function (app) {
 					type: "pk",
 					name: "Unnamed Wallet",
 					data: initialStoreDataStructure
-				}
+				};
 				settings.setAll(storeData);
 			}
 
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, {
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, {
 				privateKey: args.privateKey,
 				privateKeyBuffer: privateKeyBuffer,
 				publicKey: publicKey
 			});
 		} catch (e) {
-			app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, e.message, null);
+			app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, e.message, null);
 		}
 	}
 
-	controller.prototype.closeApp = function (event, actionId, actionName, args) {
+	controller.prototype.closeApp = function(event, actionId, actionName, args) {
 		electron.app.quit();
-	}
+	};
 
-	controller.prototype.showNotification = function (event, actionId, actionName, args) {
+	controller.prototype.showNotification = function(event, actionId, actionName, args) {
 		let notification = new Notification({
 			title: args.title,
 			body: args.text
 		});
 
-		notification.on('click', (event) => {
-			app.win.webContents.send('ON_NOTIFICATION_CLICK', args.options);
+		notification.on("click", event => {
+			app.win.webContents.send("ON_NOTIFICATION_CLICK", args.options);
 		});
 
 		notification.show();
 
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
+	};
 
-	controller.prototype.analytics = function (event, actionId, actionName, args) {
-		deskmetrics.send(args.event, args.data);
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
-	}
+	// controller.prototype.analytics = function(event, actionId, actionName, args) {
+	// 	deskmetrics.send(args.event, args.data);
+	// 	app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
+	// };
 
-	controller.prototype.openBrowserWindow = function (event, actionId, actionName, args) {
+	controller.prototype.openBrowserWindow = function(event, actionId, actionName, args) {
 		shell.openExternal(args.url);
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
+	};
 
-	controller.prototype.installUpdate = function (event, actionId, actionName, args) {
+	controller.prototype.installUpdate = function(event, actionId, actionName, args) {
 		autoUpdater.quitAndInstall();
-		app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
-	}
+		app.win.webContents.send("ON_ASYNC_REQUEST", actionId, actionName, null, true);
+	};
 
 	return controller;
-}
+};

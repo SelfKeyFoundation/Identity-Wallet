@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function SkIcoItemBoxDirective($log, $window, $timeout) {
-    'ngInject';
+	"ngInject";
 
     return {
         restrict: 'E',

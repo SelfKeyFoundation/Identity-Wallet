@@ -15776,12 +15776,6 @@ md-radio-group md-radio-button {
           color: #ffffff; }
 
 .sk-kyc-requirements-box > .title {
-  width: unset;
-  height: unset;
-  display: block;
-  background-image: unset;
-  box-shadow: unset;
-  border-radius: 0;
   font-family: ProximaNovaRegular;
   font-size: 18px;
   font-weight: 600;
@@ -17414,12 +17408,6 @@ md-dialog.add-id-attribute {
   width: 100% !important;
   padding: 20px; }
   .sk-my-cryptos-box > .header {
-    width: unset;
-    height: unset;
-    display: block;
-    background-image: unset;
-    box-shadow: unset;
-    border-radius: 0;
     width: 100% !important;
     display: flex;
     flex-direction: row;
@@ -17688,12 +17676,6 @@ md-dialog.add-id-attribute {
   align-items: center;
   justify-content: flex-start; }
   .ico-manage-requirements-content-wrappper > #message-container {
-    width: unset;
-    height: unset;
-    display: block;
-    background-image: unset;
-    box-shadow: unset;
-    border-radius: 0;
     width: 1140px;
     height: 48px;
     display: flex;
@@ -17701,12 +17683,6 @@ md-dialog.add-id-attribute {
     align-items: center;
     justify-content: center; }
   .ico-manage-requirements-content-wrappper > .section {
-    width: unset;
-    height: unset;
-    display: block;
-    background-image: unset;
-    box-shadow: unset;
-    border-radius: 0;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -17731,12 +17707,6 @@ md-dialog.add-id-attribute {
   align-items: center;
   justify-content: flex-start; }
   .ico-accept-terms-content-wrappper > #message-container {
-    width: unset;
-    height: unset;
-    display: block;
-    background-image: unset;
-    box-shadow: unset;
-    border-radius: 0;
     width: 1140px;
     height: 48px;
     display: flex;
@@ -17744,12 +17714,6 @@ md-dialog.add-id-attribute {
     align-items: center;
     justify-content: center; }
   .ico-accept-terms-content-wrappper > .section {
-    width: unset;
-    height: unset;
-    display: block;
-    background-image: unset;
-    box-shadow: unset;
-    border-radius: 0;
     display: flex;
     flex-direction: row;
     align-items: flex-start;

@@ -4,15 +4,15 @@
         .logo
         .header selfkey
         .subheader blockchain identity wallet 
-        .sk-button.filled-blue.create-button(ui-sref="guest.create.step-1")
+        #createWallet.sk-button.filled-blue.create-button(ui-sref="guest.create.step-1")
             span.primary create new wallet
-        .sk-button.outline-blue.import-button(ui-sref="guest.import.keystore({type: 'select'})")
+        #restoreWallet.sk-button.outline-blue.import-button(ui-sref="guest.import.keystore({type: 'select'})")
             span.secondary Restore Wallet
     .footer(layout="row", layout-align="center center")
-        .sk-icon-button(style="margin-right: 44px;", ng-click="$root.openInBrowser('http://help.selfkey.org/')")
+        #welcomeHelp.sk-icon-button(style="margin-right: 44px;", ng-click="$root.openInBrowser('http://help.selfkey.org/')")
             sk-icon(icon="help")
             span Help
         .sk-vertical-devider-1
-        .sk-icon-button(style="margin-left: 44px;", ng-click="closeApp($event)")
+        #welcomeQuit.sk-icon-button(style="margin-left: 44px;", ng-click="closeApp($event)")
             sk-icon(icon="quit")
             span Quit

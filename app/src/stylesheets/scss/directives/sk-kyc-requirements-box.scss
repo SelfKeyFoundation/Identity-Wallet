@@ -1,7 +1,8 @@
+//@import '../mixins/reset.scss';
 .sk-kyc-requirements-box {
 
     > .title {
-        @include reset(div);
+        //@include reset(div);
 
         font-family: ProximaNovaRegular;
         font-size: 18px;
