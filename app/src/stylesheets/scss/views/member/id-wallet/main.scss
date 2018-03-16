@@ -136,6 +136,17 @@
                                     .sk-icon {
                                         margin-left: 5px;
                                     }
+                                    ul{
+
+                                        li{
+
+                                            display: inline-block;
+                                        }
+
+                                        li:not(:first-child) {
+                                            margin-left: 4px;
+                                        }
+                                    }
                                 }
                                 .action-columns {
                                     width: 35px;

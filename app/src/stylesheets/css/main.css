@@ -17971,6 +17971,10 @@ md-dialog {
                 outline: none; }
               .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td .sk-icon {
                 margin-left: 5px; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td ul li {
+                display: inline-block; }
+              .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td ul li:not(:first-child) {
+                margin-left: 4px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr .action-columns {
               width: 35px; }
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .attributes-table-container .attributes-table tbody tr td:first-child {

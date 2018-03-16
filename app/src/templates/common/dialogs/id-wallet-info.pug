@@ -1,5 +1,6 @@
 md-dialog.id-wallet-info(aira-lable="{{title}}")
     .id-wallet-info-wrapper
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
         .container
             .header {{dialogInfo.header}}
             .info-section(layout="row")
