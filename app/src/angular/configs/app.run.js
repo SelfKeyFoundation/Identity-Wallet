@@ -37,7 +37,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.CommonService = CommonService;
     Wallet.WalletService = WalletService;
     Wallet.EtherScanService = EtherScanService;
-    Wallet.$timeout = $timeout;
 
     Token.$rootScope = $rootScope;
     Token.$q = $q;

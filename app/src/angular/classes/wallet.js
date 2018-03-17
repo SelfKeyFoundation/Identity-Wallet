@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService, EtherScanService, $timeout;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService, EtherScanService;
 
 let readyToShowNotification = false;
 
@@ -21,9 +21,6 @@ class Wallet {
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set WalletService(value) { WalletService = value; }
     static set EtherScanService(value) { EtherScanService = value; }
-    static set $timeout(value) { $timeout = value; }
-
-
 
     constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
