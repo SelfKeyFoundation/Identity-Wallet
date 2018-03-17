@@ -10,7 +10,6 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
     }
 
     $scope.inProgress = false;
-    const balanceValueDivider = new BigNumber(10 ** 18);
     $scope.formDataIsValid = (form) => {
         return form.$valid;
     };
@@ -123,7 +122,8 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         $scope.inProgress = true;
 
         Token.getBalanceByContractAddress(newToken.contractAddress, wallet.getPublicKeyHex()).then((balance) => {
-            balance = Number(new BigNumber(balance).div(balanceValueDivider));
+            let balanceValueDivider = new BigNumber(10 ** newToken.decimalPlaces)
+            balance = new BigNumber(balance).div(balanceValueDivider);
             let newWalletToken = {
                 walletId: wallet.id,
                 tokenId: newToken.tokenId,

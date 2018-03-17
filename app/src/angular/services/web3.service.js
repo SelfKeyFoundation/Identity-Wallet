@@ -69,30 +69,22 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                     callback(promise);
                 }, REQUEST_INTERVAL_DELAY);
             }, 1);
-
-            $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-                let self = this;
-                let fn = symbol == 'eth' ? self.syncETHTransactionsHistory : self.syncTokensTransactionHistory;
-                $timeout(() => {
-                    fn.call(self);
-                }, 3000)
-            });
         }
 
-        syncTokensTransactionHistory() {
+        syncTokensTransactionHistory(tokenSymbol) {
             let wallet = $rootScope.wallet;
             if (!wallet || !wallet.tokens) { 
                 return;
             }
 
-            let tokens = wallet.tokens;
+            let tokens = tokenSymbol ? [wallet.tokens[tokenSymbol.toUpperCase()]]: wallet.tokens;  
+             
             let walletAddress = '0x' + $rootScope.wallet.publicKeyHex; 
-            const valueDivider = new BigNumber(10 ** 18);
-
+            
             $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
 
             let getActivity = (contract, fromBlock, toBlock, filter) => {
-                return this.getContractPastEvents(contract, ['Transfer', {
+                return Web3Service.getContractPastEvents(contract, ['Transfer', {
                     filter: filter,
                     fromBlock: fromBlock,
                     toBlock: toBlock
@@ -101,6 +93,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
             Object.keys(tokens).forEach(key => {
                 let token = tokens[key];
+                let valueDivider = new BigNumber(10 ** token.decimal);
+                
                 $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = false; 
                 let contract = new Web3Service.web3.eth.Contract(ABI, token.contractAddress);
 
@@ -152,10 +146,10 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                         value: Number(new BigNumber(transaction.returnValues.value).div(valueDivider).toString()),
                                         txId: txId,
                                         sentTo: transaction.sentTo || null,
-                                        gas: transactionFromBlok.gas,
+                                        gas: Number(transactionFromBlok.gas),
                                         gasPrice: transactionFromBlok.gasPrice
                                     };
-
+                                  
                                     SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
                                         next();
                                     }).catch(err => {
@@ -169,7 +163,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                     });
                 }
 
-                this.getMostRecentBlockNumber().then((lastBlock) => {
+                Web3Service.getMostRecentBlockNumberStatic().then((lastBlock) => {
                     SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
                         let setting = settings[0];
                         let fromBlock = setting.ERC20TxHistoryLastBlock || lastBlock;
@@ -181,7 +175,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             });
         }
 
-        getContractPastEvents(contract, args) {
+        static getContractPastEvents(contract, args) {
             let defer = $q.defer();
 
             // wei
@@ -206,89 +200,16 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             return $q.all([deferDecimal.promise,deferSymbol.promise]);
         }
 
-        syncETHTransactionsHistory() {
-            let ethKey = 'eth';
-            $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
-            $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = false;
+        getMostRecentBlockNumber() {
+            let defer = $q.defer();
 
-            let valueDivider = new BigNumber(10 ** 18);
-            let wallet = $rootScope.wallet;
-            let walletAddress = '0x' + wallet.publicKeyHex;
+            // wei
+            Web3Service.waitForTicket(defer, 'getBlockNumber', []);
 
-            this.getMostRecentBlockNumber().then((blockNumber) => {
-                SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
-                    let setting = settings[0];
-                    let previousLastBlockNumber = setting.EthTxHistoryLastBlock || blockNumber;
-
-                    let blockNumbersToProcess = [];
-                    for (let i = previousLastBlockNumber; i <= blockNumber; i++) {
-                        blockNumbersToProcess.push(i);
-                    }
-
-                    (function next(err) {
-
-                        if (/*err || */blockNumbersToProcess.length == 0) {
-                            $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = true;
-
-                            SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
-                                let setting = settings[0];
-                                setting.EthTxHistoryLastBlock = blockNumber;
-                                SqlLiteService.saveWalletSettings(setting).catch((err) => {
-                                    console.log(err); //TODO
-                                })
-                            }).catch(err => {
-                                //TODO 
-                            });
-
-                            return;
-                        }
-
-                        let currentBlockNumber = blockNumbersToProcess.shift();
-                        Web3Service.getBlock(currentBlockNumber, true).then((blockData) => {
-                            if (blockData && blockData.transactions) {
-
-                                let walletTransactions = blockData.transactions.filter((transaction) => {
-                                    let addresses = [transaction.to || '', transaction.from || ''].map(item => { return item.toLowerCase() });
-                                    return addresses.indexOf(walletAddress.toLowerCase()) != -1;
-                                });
-
-                                if (!walletTransactions.length) {
-                                    return next();
-                                }
-
-                                walletTransactions.forEach(transaction => {
-                                    let value = new BigNumber(transaction.value || 0).div(valueDivider).toString();
-                                    if (value && value != 0) {
-                                        let sentTo = (transaction.from || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
-
-                                        let newTransaction = {
-                                            walletId: wallet.id,
-                                            timestamp: Number(blockData.timestamp + '000'),
-                                            blockNumber: currentBlockNumber,
-                                            value: Number(value.toString()),
-                                            txId: transaction.hash,
-                                            sentTo: sentTo,
-                                            gas: transaction.gas,
-                                            gasPrice: transaction.gasPrice
-                                        };
-
-                                        SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
-                                            next();
-                                        }).catch(err => {
-                                            next(err);
-                                        });
-                                    }
-                                });
-                            }
-                            next();
-                        });
-
-                    })();
-                });
-            });
+            return defer.promise;
         }
 
-        getMostRecentBlockNumber() {
+        static getMostRecentBlockNumberStatic() {
             let defer = $q.defer();
 
             // wei

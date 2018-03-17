@@ -193,7 +193,7 @@ module.exports = function (app) {
                         table.integer('tokenId').references('tokens.id');
                         table.string('txId').unique().notNullable();
                         table.string('sentTo');
-                        table.decimal('value').notNullable();
+                        table.decimal('value', null).notNullable();
                         table.integer('timestamp').notNullable();
                         table.integer('blockNumber').notNullable();
                         table.decimal('gas').notNullable();

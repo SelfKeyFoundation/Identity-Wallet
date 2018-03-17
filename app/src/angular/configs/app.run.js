@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService, WalletService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService, WalletService, EtherScanService) {
     'ngInject';
 
     $trace.enable('TRANSITION');
@@ -36,6 +36,8 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.SqlLiteService = SqlLiteService;
     Wallet.CommonService = CommonService;
     Wallet.WalletService = WalletService;
+    Wallet.EtherScanService = EtherScanService;
+    Wallet.$timeout = $timeout;
 
     Token.$rootScope = $rootScope;
     Token.$q = $q;

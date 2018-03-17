@@ -3,7 +3,7 @@ const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service, EtherScanService) {
     'ngInject'
 
     $scope.showScrollStyle = false;
@@ -28,9 +28,23 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
         });
     }
 
+    $rootScope.wallet.syncEthTransactionsHistory();
     Web3Service.syncTokensTransactionHistory();
 
-    Web3Service.syncETHTransactionsHistory();
+    let addBalaceChageListener = () => {
+        $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+            $timeout(() => {
+                if (symbol.toLowerCase() == 'eth') {
+                    EtherScanService.syncEthTransactionsHistory();
+                } else {
+                    Web3Service.syncTokensTransactionHistory(symbol);
+
+                }
+            }, 3000);
+        });
+    };
+
+    addBalaceChageListener();
 
     /*
     $rootScope.goToSelfkeyIco = (event) => {
