@@ -345,7 +345,7 @@ module.exports = function (app) {
                 try {
                     fsm.appendFileSync(filePathToPreview, new Buffer(data.buffer));
                 } catch (e) {
-                    app.log.warn(e);
+                    //app.log.warn(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
                 }
 
@@ -383,13 +383,12 @@ module.exports = function (app) {
 
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
             }).catch((error) => {
-                app.log.warn(error);
+                //app.log.warn(error);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
 
         } catch (e) {
-            app.log.warn(e);
-            console.log(e);
+            //app.log.warn(e);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
         }
     }
