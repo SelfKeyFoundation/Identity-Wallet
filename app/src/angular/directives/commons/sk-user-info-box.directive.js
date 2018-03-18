@@ -29,8 +29,8 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteServ
             }
 
             scope.getItemValue = (item) => {
-                if(item.type === 'document'){
-                    return item.documentFileName;
+                if(item.type === 'document' && item.documentFileName){
+                    return 'Uploaded';
                 }
 
                 switch(item.key){
@@ -47,7 +47,8 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteServ
 
                         value += item.staticData.line3 + ", ";
                         value += item.staticData.line4 + ", ";
-                        value += item.staticData.line5 ;
+                        value += item.staticData.line5 + ", ";
+                        value += item.staticData.line6;
 
                         return value
                         break;
@@ -73,8 +74,6 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteServ
                         documentFileName: idAttributes[i].items[0].values[0].documentFileName
                     }
                 }
-
-                console.log("?????", idAttributes, scope.idAttributes);
             }
         },
         replace: true,
