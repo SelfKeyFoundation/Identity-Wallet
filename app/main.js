@@ -23,9 +23,11 @@ const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
+/*
 if (require('electron-squirrel-startup')) {
 	process.exit(0)
 }
+*/
 
 const app = {
 	dir: {
@@ -50,12 +52,14 @@ for (let i in i18n) {
 	app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
 }
 
+/*
 if (!handleSquirrelEvent()) {
 	electron.app.on('window-all-closed', onWindowAllClosed());
 	electron.app.on('activate', onActivate(app));
 	electron.app.on('web-contents-created', onWebContentsCreated);
 	electron.app.on('ready', onReady(app));
 }
+*/
 
 /**
  *
