@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams,  ElectronService, CommonService, RPCService, SqlLiteService) {
+function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $stateParams, CommonService, RPCService, SqlLiteService) {
     'ngInject'
 
     $log.info('MemberSetupAddDocumentController');

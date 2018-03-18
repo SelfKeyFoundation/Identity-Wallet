@@ -1,3 +1,5 @@
+'use strict';
+
 function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $state, $mdDialog, SqlLiteService) {
     'ngInject'
 

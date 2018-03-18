@@ -1,5 +1,5 @@
 'use strict';
-function SkCustomBoxDirective($rootScope, $log, $window, $timeout, CommonService, WalletService) {
+function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
     'ngInject';
 
     return {

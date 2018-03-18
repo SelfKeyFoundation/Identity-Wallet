@@ -18,6 +18,8 @@ log.transports.console.level = 'info';
 
 log.info('starting: ' + electron.app.getName());
 
+log.info({hello: 'test'});
+
 const userDataDirectoryPath = electron.app.getPath('userData');
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
@@ -144,7 +146,7 @@ function onReady(app) {
         */
 
 		app.win.webContents.on('did-finish-load', () => {
-			log.error('did-finish-load');
+			log.info('did-finish-load');
             app.win.webContents.send('APP_START_LOADING');
             electron.app.sqlLiteService.init().then(() => {
                 //start update cmc data

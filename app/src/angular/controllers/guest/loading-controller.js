@@ -1,3 +1,5 @@
+'use strict';
+
 function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $stateParams, EVENTS, SqlLiteService) {
     'ngInject'
 
@@ -33,7 +35,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     }
 
     function goTo(state) {
-        $state.go('guest.welcome');
+        $state.go(state);
         $rootScope.checkTermsAndConditions();
     }
 

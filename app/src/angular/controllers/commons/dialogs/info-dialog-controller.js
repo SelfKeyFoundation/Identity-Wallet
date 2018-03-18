@@ -1,3 +1,5 @@
+'use strict';
+
 function InfoDialogController($rootScope, $scope, $log, $mdDialog, text, title) {
     'ngInject'
 

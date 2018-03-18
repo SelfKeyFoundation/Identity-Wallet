@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService, EtherScanService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService;
 
 let readyToShowNotification = false;
 
@@ -19,7 +19,6 @@ class Wallet {
     static set CommonService(value) { CommonService = value; }
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
-    static set WalletService(value) { WalletService = value; }
     static set EtherScanService(value) { EtherScanService = value; }
 
     constructor(id, privateKey, publicKey, keystoreFilePath) {
@@ -281,7 +280,7 @@ class Wallet {
 
             //is sent
             if (transaction.sentTo) {
-                transaction.sentToName = WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);
+                transaction.sentToName = null; //WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);
             }
 
             if (transaction.tokenId) {
@@ -315,7 +314,7 @@ class Wallet {
                     console.log(err); //TODO
                 })
             }).catch(err => {
-                //TODO 
+                //TODO
             });
 
         };

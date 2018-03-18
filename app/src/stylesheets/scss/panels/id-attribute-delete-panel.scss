@@ -1,0 +1,56 @@
+.id-attribute-delete-panel {
+    border-radius: 2px;
+    background-color: #1e262e;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    width: 400px;
+    padding: 20px;
+
+    >.header-wrapper {
+        width: auto !important;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >span {
+            flex: 1;
+            font-family: ProximaNovaRegular;
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.29;
+            color: #ffffff;
+        }
+    }
+
+    >.content-wrapper {
+        margin-top: 22px;
+        font-family: ProximaNovaMedium;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.46;
+	    color: #93b0c1;
+    }
+
+    >.actions-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 22px;
+
+        >.md-button {
+            >span {
+                margin: 0 20px;
+            }
+
+            &:first-of-type {
+                border: none;
+                box-shadow: transparent;
+            }
+            &:last-of-type {
+                margin-left: 8px;
+            }
+        }
+    }
+}

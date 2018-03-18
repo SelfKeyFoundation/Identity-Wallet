@@ -1,3 +1,5 @@
+'use strict';
+
 function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, SqlLiteService) {
     'ngInject'
 

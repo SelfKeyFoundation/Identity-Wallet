@@ -10,7 +10,7 @@ function SkLoadingDirective($log) {
             subHeader: '='
         },
         link: (scope, element) => {
-            console.log(scope, "<<<<<<<<")
+            
         },
         replace: true,
         templateUrl: 'common/directives/sk-loading.html'

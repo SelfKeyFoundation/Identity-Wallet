@@ -1,4 +1,4 @@
-const IdAttribute = requireAppModule('angular/classes/id-attribute');
+'use strict';
 
 function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
     'ngInject'
@@ -61,43 +61,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
                     });
                 });
             }
-
-
-
-            /*
-            let idAttribute = {
-                walletId: $rootScope.wallet.id,
-                idAttributeType: selectedIdAttributeType.key
-            }
-            SqlLiteService.addIdAttribute(idAttribute).then((response) => {
-                prepareData();
-                CommonService.showToast('success', 'saved');
-
-                let actionText = "Attribute";
-                let iat = SqlLiteService.getIdAttributeTypes()[response.idAttributeType];
-
-                if (iat.type === 'document') {
-                    actionText = "Document"
-                    $scope.editIdAttributeItemDocument(event, response.items[0].values[0], response.idAttributeType);
-                } else {
-                    $scope.editIdAttributeItemValue(event, response.items[0].values[0], response.idAttributeType);
-                }
-
-                SqlLiteService.registerActionLog("Created " + actionText + ": " + $rootScope.DICTIONARY[selectedIdAttributeType.key], 'Created').then(() => {
-                    loadWalletHistory()
-                });
-            }).catch((error) => {
-                $log.error(error);
-                CommonService.showToast('error', 'error');
-            });
-            */
         });
     }
 
     $scope.editIdAttributeItemValue = (event, idAttributeItemValue, idAttributeType) => {
-        console.log("### idAttributeItemValue", idAttributeItemValue);
-        console.log("### idAttributeType", idAttributeType);
-
         $rootScope.openAddEditStaticDataDialog(event, 'update', idAttributeType, idAttributeItemValue).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
@@ -133,7 +100,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         let config = {
             attachTo: angular.element(document.body),
             targetEvent: event,
-            templateUrl: 'common/directives/sk-id-attribute/value-delete-panel.html',
+            templateUrl: 'common/panels/id-attribute-delete-panel.html',
             clickOutsideToClose: true,
             escapeToClose: true,
             position: position,

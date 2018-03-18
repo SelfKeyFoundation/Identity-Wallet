@@ -1,5 +1,5 @@
 'use strict';
-function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService, WalletService) {
+function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService) {
     'ngInject';
 
     return {
@@ -18,8 +18,6 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService,
 
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
-
-            console.log($rootScope.wallet.tokens, "<<<<<<<<<<", $rootScope.wallet.tokens[scope.symbol.toUpperCase()])
 
             loadBalance();
 

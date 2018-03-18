@@ -2,7 +2,7 @@
 
 const Token = requireAppModule('angular/classes/token');
 
-function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CONFIG) {
+function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CONFIG) {
     'ngInject';
 
     $log.info('EtherScanService Initialized');
@@ -83,7 +83,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
                 defer.reject($rootScope.buildErrorObject("ERR_HTTP_CONNECTION", error));
             });
         }
-        
+
         static waitForTicket(defer, url, args) {
             EtherScanService.q.push({ url: url }, (promise) => {
                 EtherScanService.handlePromise(defer, promise);

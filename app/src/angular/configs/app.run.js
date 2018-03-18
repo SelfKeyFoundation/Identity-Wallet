@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, ElectronService, RPCService, SqlLiteService, Web3Service, CommonService, WalletService, EtherScanService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService) {
     'ngInject';
 
     $trace.enable('TRANSITION');
@@ -35,7 +35,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.Web3Service = Web3Service;
     Wallet.SqlLiteService = SqlLiteService;
     Wallet.CommonService = CommonService;
-    Wallet.WalletService = WalletService;
     Wallet.EtherScanService = EtherScanService;
 
     Token.$rootScope = $rootScope;
@@ -70,11 +69,11 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     }
 
     $rootScope.closeApp = (event) => {
-        ElectronService.closeApp();
+        RPCService.makeCall('closeApp', {});
     }
 
     $rootScope.openInBrowser = function (url, useInAppBrowser) {
-        useInAppBrowser ? $window.open(url) : ElectronService.openBrowserWindow(url);
+        useInAppBrowser ? $window.open(url) : RPCService.makeCall('openBrowserWindow', { url: url });
     }
 
     $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
@@ -258,7 +257,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
         if (RPCService.ipcRenderer) {
-            ElectronService.sendConfigChange(data);
+            RPCService.makeCustomCall("ON_CONFIG_CHANGE", data)
         }
     });
 }

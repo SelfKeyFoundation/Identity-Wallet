@@ -19,7 +19,6 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
                 .sk-send-ether-box__select-token-container(ng-if="allowSelectERC20Token")
                     md-input-container(style="width: 100%;")
                         md-select.sk-select(ng-model="symbol", ng-change="onTokenChange(symbol)")
-                            md-option(ng-value='Choose a Token.') Choose a Token.
                             md-option(ng-repeat="(key, value) in $root.wallet.tokens" ng-value='key') {{key}}
 
             .sk-send-ether-box__usd-amount-container

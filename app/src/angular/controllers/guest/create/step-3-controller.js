@@ -1,4 +1,6 @@
-function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, CommonService) {
+'use strict';
+
+function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $state, $stateParams, CommonService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep3Controller');

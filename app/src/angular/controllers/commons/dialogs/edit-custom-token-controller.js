@@ -1,3 +1,5 @@
+'use strict';
+
 const Token = requireAppModule('angular/classes/token');
 
 function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {

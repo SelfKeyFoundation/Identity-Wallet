@@ -11,7 +11,7 @@ function dec2hexString(dec) {
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CommonService, $interval, CONFIG, SqlLiteService) {
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CommonService, $interval, CONFIG, SqlLiteService) {
     'ngInject';
 
     $log.info('Web3Service Initialized');
@@ -73,14 +73,14 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
         syncTokensTransactionHistory(tokenSymbol) {
             let wallet = $rootScope.wallet;
-            if (!wallet || !wallet.tokens) { 
+            if (!wallet || !wallet.tokens) {
                 return;
             }
 
-            let tokens = tokenSymbol ? [wallet.tokens[tokenSymbol.toUpperCase()]]: wallet.tokens;  
-             
-            let walletAddress = '0x' + $rootScope.wallet.publicKeyHex; 
-            
+            let tokens = tokenSymbol ? [wallet.tokens[tokenSymbol.toUpperCase()]]: wallet.tokens;
+
+            let walletAddress = '0x' + $rootScope.wallet.publicKeyHex;
+
             $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
 
             let getActivity = (contract, fromBlock, toBlock, filter) => {
@@ -94,8 +94,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             Object.keys(tokens).forEach(key => {
                 let token = tokens[key];
                 let valueDivider = new BigNumber(10 ** token.decimal);
-                
-                $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = false; 
+
+                $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = false;
                 let contract = new Web3Service.web3.eth.Contract(ABI, token.contractAddress);
 
                 let processAllActivities = (fromBlock, toBlock) => {
@@ -124,7 +124,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                             console.log(err); //TODO
                                         })
                                     }).catch(err => {
-                                        //TODO 
+                                        //TODO
                                     });
 
                                     return;
@@ -149,7 +149,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                                         gas: Number(transactionFromBlok.gas),
                                         gasPrice: transactionFromBlok.gasPrice
                                     };
-                                  
+
                                     SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
                                         next();
                                     }).catch(err => {
@@ -169,7 +169,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                         let fromBlock = setting.ERC20TxHistoryLastBlock || lastBlock;
                         processAllActivities(fromBlock, lastBlock);
                     }).catch(err => {
-                        //TODO 
+                        //TODO
                     });
                 });
             });
@@ -196,7 +196,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             // wei
             Web3Service.waitForTicket(deferDecimal, 'call', [], null, decimalFn);
             Web3Service.waitForTicket(deferSymbol, 'call', [], null, symbolFn);
-            
+
             return $q.all([deferDecimal.promise,deferSymbol.promise]);
         }
 

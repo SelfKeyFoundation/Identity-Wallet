@@ -197,40 +197,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        /**
-         * keystore
-         */
-        .state('guest.keystore', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/layout.html'
-                }
-            }
-        })
-
-
-        /**
-         *
-         */
-        .state('guest.process', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'guest/process/layout.html'
-                }
-            }
-        })
-
-        .state('guest.process.view-keystore', {
-            url: '/guest/process/view-keystore',
-            views: {
-                main: {
-                    templateUrl: 'guest/process/view-keystore.html',
-                    controller: 'GuestViewKeystoreController'
-                }
-            }
-        })
 
         /**
          * Member
@@ -303,44 +269,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'member/dashboard/main.html',
                     controller: 'MemberDashboardMainController'
                 }
-            }
-        })
-
-        /**
-         * Marketplace
-         */
-        .state('member.marketplace', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/layout.html'
-                }
-            }
-        })
-
-        .state('member.marketplace.ico-item', {
-            url: '/member/marketplace/ico/item',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/item.html',
-                    controller: 'MemberMarketplaceIcoItemController'
-                }
-            },
-            params: {
-                selected: null
-            }
-        })
-
-        .state('member.marketplace.ico-accept-terms', {
-            url: '/member/marketplace/ico/ico-accept-terms',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/accept-terms.html',
-                    controller: 'MemberMarketplaceIcoAcceptTermsController'
-                }
-            },
-            params: {
-                selected: null
             }
         })
 

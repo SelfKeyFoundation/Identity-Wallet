@@ -1,4 +1,4 @@
-function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, WalletService, SqlLiteService) {
+function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $stateParams, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info("ManageTokenController", $stateParams)

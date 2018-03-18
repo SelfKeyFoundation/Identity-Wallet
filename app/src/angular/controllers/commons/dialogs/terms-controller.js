@@ -1,3 +1,5 @@
+'use strict';
+
 function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService) {
     'ngInject'
 

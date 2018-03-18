@@ -1,4 +1,6 @@
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, ElectronService, WalletService, SqlLiteService) {
+'use strict';
+
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController', $rootScope.wallet);

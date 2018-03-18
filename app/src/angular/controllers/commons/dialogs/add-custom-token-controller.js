@@ -1,3 +1,5 @@
+'use strict';
+
 const Token = requireAppModule('angular/classes/token');
 
 function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {
@@ -16,7 +18,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
 
     let tokensAreLoaded = false;
 
-    let tokens = SqlLiteService.getTokens() || {}; 
+    let tokens = SqlLiteService.getTokens() || {};
     let tokenKeys = Object.keys(tokens);
     let allTokensArr = tokenKeys.map((key) => {
         return tokens[key];
@@ -58,7 +60,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         let existingToken = isValidHex ? getExistingTokenByAddress(newVal) : null;
         if (existingToken) {
             CommonService.showToast('warning', `${existingToken.symbol} token already exists. Please add a unique token and try again.`, null, 'Duplicate Token');
-            return resetFormData(); 
+            return resetFormData();
         }
 
         if (isValidHex) {
@@ -78,7 +80,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
 
                     let decimal = responseArr[0];
                     let symbol = responseArr[1];
-                    
+
                     if (incorectTokenSymbolsMap[symbol.toLowerCase()]) {
                         symbol = incorectTokenSymbolsMap[symbol.toLowerCase()];
                     }
@@ -112,7 +114,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         data.decimalPlaces = null;
         data.tokenId = '';
     };
-    
+
     $scope.addCustomToken = (event, form) => {
         if (!$scope.formDataIsValid(form)) {
             return CommonService.showToast('warning', "Form isn't valid");
@@ -132,9 +134,9 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
 
             let successFn = (data) => {
                 let formatedBalance = CommonService.numbersAfterComma(balance, 2);
-                
+
                 let newToken = wallet.addNewToken(data);
-                
+
                 let loadTokensPromise = SqlLiteService.loadTokens();
 
                 $q.all([newToken.initialBalancePromise,loadTokensPromise]).then(() => {

@@ -1,8 +1,6 @@
 'use strict';
 
-const Ico = requireAppModule('angular/classes/ico');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
-//const IdAttributeType = requireAppModule('angular/classes/id-attribute-type');
 
 function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteService) {
     'ngInject';
@@ -38,7 +36,7 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteS
     class SelfkeyService {
 
         constructor() {
-            this.loadData(true);
+
         }
 
         retrieveTableData(table, reload) {
@@ -107,60 +105,6 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteS
                 }
 
                 defer.resolve(idAttributeTypes);
-            });
-
-            return defer.promise;
-        }
-
-        dispatchIcos(reload) {
-            let defer = $q.defer();
-
-            let icos = [];
-            let promise = this.retrieveTableData('icos', reload);
-            promise.then((data) => {
-                let icoDetailsArray = data.ICO_Details;
-
-                for (let i in icoDetailsArray) {
-                    if (!icoDetailsArray[i].data) continue;
-                    let item = icoDetailsArray[i].data.fields;
-                    if (!item.symbol) continue;
-
-                    let ico = new Ico(
-                        item.symbol,
-                        item.status,
-                        item.company,
-                        item.category
-                    );
-
-                    ico.setDate(item.start_date, item.end_date);
-
-                    ico.setTokenInfo(
-                        item.token_price,
-                        item.total_token_supply,
-                        item.presale_sold_usd,
-                        item.tokens_available_for_sale,
-                        item.token_issuance
-                    );
-
-                    ico.setCap(item.hard_cap_USD, item.raised_USD);
-                    ico.setRestrictions(item.min_contribution_usd, item.max_contribution_usd, item.restrictions);
-                    ico.setKyc(item.kyc_api_endpoint, item.kyc, item.template, item.organisation);
-                    ico.setVideos(item.youtube_video, null);
-
-                    ico.setInfo(
-                        item.description,
-                        item.short_description,
-                        item.ethaddress,
-                        item.whitepaper,
-                        item.website,
-                        item.whitelist,
-                        item.accepts
-                    );
-
-                    icos.push(ico);
-                }
-
-                defer.resolve(icos);
             });
 
             return defer.promise;
@@ -257,24 +201,6 @@ function SelfkeyService($rootScope, $window, $q, $timeout, $log, $http, SqlLiteS
             });
 
             return defer.promise;
-        }
-
-        loadData(reload) {
-            /*
-            // 1: Load Id Attribute Types
-            this.dispatchIdAttributeTypes(reload).then((data) => {
-                ConfigFileService.setIdAttributeTypes(data);
-            });
-
-            // 2: Load ICOs
-            this.dispatchIcos(reload).then((data) => {
-                for (let i in data) {
-                    ConfigFileService.addIco(data[i].status, data[i]);
-                }
-            });
-
-            $rootScope.icos = ConfigFileService.getIcos();
-            */
         }
     };
 

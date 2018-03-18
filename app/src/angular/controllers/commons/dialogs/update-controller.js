@@ -1,4 +1,6 @@
-function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, ElectronService, releaseName) {
+'use strict';
+
+function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, releaseName) {
     'ngInject'
 
     $log.info('UpdateDialogController', releaseName);
@@ -11,10 +13,12 @@ function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, Electro
     };
 
     $scope.update = (event) => {
+        /*
         $scope.updatePromise = ElectronService.installUpdate();
         $scope.updatePromise.then(() => {
             $mdDialog.hide();
         });
+        */
     };
 };
 

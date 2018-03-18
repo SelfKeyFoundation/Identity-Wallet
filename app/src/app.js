@@ -15,8 +15,7 @@ document.addEventListener('drop', function (event) {
  */
 window.zxcvbn = requireNodeModule('zxcvbn');
 window.qrcode = requireNodeModule('qrcode-generator');
-//window.PDFJS = requireNodeModule('pdf.js-viewer');
-requireNodeModule('pdf.js-viewer');
+//requireNodeModule('pdf.js-viewer');
 
 /**
  * External Modules
@@ -80,11 +79,8 @@ angular.module('kyc-wallet').service('RPCService', RPCService);
 const SqlLiteService = requireAppModule('angular/services/sql-lite.service');
 angular.module('kyc-wallet').service('SqlLiteService', SqlLiteService);
 
-const ElectronService = requireAppModule('angular/services/electron.service');
-angular.module('kyc-wallet').service('ElectronService', ElectronService);
-
-//const ConfigFileService = requireAppModule('angular/services/config-file.service');
-//angular.module('kyc-wallet').service('ConfigFileService', ConfigFileService);
+//const ElectronService = requireAppModule('angular/services/electron.service');
+//angular.module('kyc-wallet').service('ElectronService', ElectronService);
 
 const CommonService = requireAppModule('angular/services/common.service');
 angular.module('kyc-wallet').service('CommonService', CommonService);
@@ -92,20 +88,11 @@ angular.module('kyc-wallet').service('CommonService', CommonService);
 const EtherScanService = requireAppModule('angular/services/ether-scan.service');
 angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
 
-//const MEWService = requireAppModule('angular/services/mew.service');
-//angular.module('kyc-wallet').service('MEWService', MEWService);
-
 const Web3Service = requireAppModule('angular/services/web3.service');
 angular.module('kyc-wallet').service('Web3Service', Web3Service);
 
 const EtherUnitsService = requireAppModule('angular/services/ether-units.service');
 angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
-
-const WalletService = requireAppModule('angular/services/wallet.service');
-angular.module('kyc-wallet').service('WalletService', WalletService);
-
-//const TokenService = requireAppModule('angular/services/token.service');
-//angular.module('kyc-wallet').service('TokenService', TokenService);
 
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
@@ -131,17 +118,11 @@ angular.module('kyc-wallet').directive('skShowLoading', skShowLoading);
 const SkLinearProgressDirective = requireAppModule('angular/directives/commons/sk-linear-progress.directive');
 angular.module('kyc-wallet').directive('skLinearProgress', SkLinearProgressDirective);
 
-//const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
-//angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
-
 const SkTokenBoxDirective = requireAppModule('angular/directives/commons/sk-token-box.directive');
 angular.module('kyc-wallet').directive('skTokenBox', SkTokenBoxDirective);
 
 const SkCustomTokenBoxDirective = requireAppModule('angular/directives/commons/sk-custom-token-box.directive');
 angular.module('kyc-wallet').directive('skCustomTokenBox', SkCustomTokenBoxDirective);
-
-const SkIcoDetailsBoxDirective = requireAppModule('angular/directives/commons/sk-ico-details-box.directive');
-angular.module('kyc-wallet').directive('skIcoDetailsBox', SkIcoDetailsBoxDirective);
 
 const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
 angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
@@ -152,17 +133,11 @@ angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective
 const SkUserInfoBoxDirective = requireAppModule('angular/directives/commons/sk-user-info-box.directive');
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);
 
-//const SkKycRequirementsBoxDirective = requireAppModule('angular/directives/commons/sk-kyc-requirements-box.directive');
-//angular.module('kyc-wallet').directive('skKycRequirementsBox', SkKycRequirementsBoxDirective);
-
 const ScrollToEndDirective = requireAppModule('angular/directives/commons/scroll-to-end.directive');
 angular.module('kyc-wallet').directive('scrollToEnd', ScrollToEndDirective);
 
 const CopyToClipboardDirective = requireAppModule('angular/directives/commons/copy-to-clipboard.directive');
 angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirective);
-
-//const SkIdAttributeDirective = requireAppModule('angular/directives/commons/sk-id-attribute.directive');
-//angular.module('kyc-wallet').directive('skIdAttribute', SkIdAttributeDirective);
 
 
 /**
@@ -216,9 +191,6 @@ angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditC
 
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
-
-const DocumentPreviewDialogController = requireAppModule('angular/controllers/commons/dialogs/document-preview-controller.js');
-angular.module('kyc-wallet').controller('DocumentPreviewDialogController', DocumentPreviewDialogController);
 
 /**
  * guest
@@ -305,16 +277,6 @@ angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenCont
  */
 const MemberIdWalletMainController = requireAppModule('angular/controllers/member/id-wallet/main-controller.js');
 angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
-
-
-/**
- * Marketplace
- */
-const MemberMarketplaceIcoItemController = requireAppModule('angular/controllers/member/marketplace/ico/item-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceIcoItemController', MemberMarketplaceIcoItemController);
-
-const MemberMarketplaceIcoAcceptTermsController = requireAppModule('angular/controllers/member/marketplace/ico/accept-terms-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceIcoAcceptTermsController', MemberMarketplaceIcoAcceptTermsController);
 
 /**
  * config states

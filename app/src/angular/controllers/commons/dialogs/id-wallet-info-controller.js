@@ -1,3 +1,5 @@
+'use strict';
+
 function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
     'ngInject'
 

@@ -1,4 +1,4 @@
-function GuestImportWalletController($rootScope, $scope, $log, $q, $timeout, $state, SqlLiteService) {
+function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportWalletController');

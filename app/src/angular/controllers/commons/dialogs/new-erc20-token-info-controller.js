@@ -1,3 +1,5 @@
+'use strict';
+
 function NewERC20TokenInfoController($rootScope, $scope, $log, $q, $timeout, $mdDialog, symbol, balance, title) {
     'ngInject'
 

@@ -1,4 +1,8 @@
-function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout, $state, CommonService, WalletService, SqlLiteService) {
+'use strict';
+
+const Wallet = requireAppModule('angular/classes/wallet');
+
+function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout, $state, RPCService, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportPrivateKeyController');
@@ -24,8 +28,13 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
             privateKey = "0x" + $scope.userInput.privateKey;
         }
 
-        WalletService.unlockByPrivateKey(privateKey).then((wallet, isReady) => {
-            if(isReady){
+
+        let importPromise = RPCService.makeCall('importEtherPrivateKey', { privateKey: privateKey });
+        importPromise.then((data) => {
+            console.log(data);
+            if(data.id){
+                $rootScope.wallet = new Wallet(data.id, data.privateKeyBuffer, data.publicKey);
+
                 let initialPromises = [];
                 initialPromises.push(wallet.loadIdAttributes());
                 initialPromises.push(wallet.loadTokens());
@@ -34,7 +43,6 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
                     $state.go('member.dashboard.main');
                 });
             }else{
-                // TODO - create flow to fill basic id attributes
                 CommonService.showToast('warning', 'missing implementation');
             }
         }).catch((error) => {
