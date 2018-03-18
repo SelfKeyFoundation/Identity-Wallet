@@ -3,7 +3,7 @@
         div.pos-relative
             #chart(ng-class="config.pieChartCls")
             .chart-center-container(ng-show="chartIsReady")
-                .tolalPrice {{data.total}}
+                .tolalPrice {{totalValueFormated}}
                 .totalPriceTitle {{data.totalTitle}}
     .details-container(layout="row",ng-show="chartIsReady")        
         div(ng-class="config.itemCls", name="{{item.uniqueIdentifier}}" ng-repeat="item in displayedItems track by $index")

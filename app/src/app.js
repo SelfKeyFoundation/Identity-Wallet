@@ -89,8 +89,8 @@ angular.module('kyc-wallet').service('ElectronService', ElectronService);
 const CommonService = requireAppModule('angular/services/common.service');
 angular.module('kyc-wallet').service('CommonService', CommonService);
 
-//const EtherScanService = requireAppModule('angular/services/ether-scan.service');
-//angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
+const EtherScanService = requireAppModule('angular/services/ether-scan.service');
+angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
 
 //const MEWService = requireAppModule('angular/services/mew.service');
 //angular.module('kyc-wallet').service('MEWService', MEWService);

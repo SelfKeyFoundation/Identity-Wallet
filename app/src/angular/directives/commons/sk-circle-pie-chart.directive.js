@@ -37,8 +37,22 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                 let items = scope.data.items;
                 let TOP_COLORS = ['#ff6400', '#03c8ce', '#a6e43b','#5f5f5f','#50b0fc'];
                 
+                scope.totalValueFormated = new BigNumber(0);
+                items.forEach((item) => {
+                    item.valueUSD = Number(CommonService.numbersAfterComma(item.valueUSD, 2));
+                    scope.totalValueFormated = scope.totalValueFormated.plus(new BigNumber(item.valueUSD));
+                });
+
+                scope.totalValueFormated = scope.totalValueFormated.toString(10);
+
                 items.sort((a, b) => {
-                    return parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
+                    let check = parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
+                    if (check == 0) {
+                        let textA = a.title.toLowerCase();
+                        let textB = b.title.toLowerCase();  
+                        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    }
+                    return check;
                 });
 
                 scope.topItems = items.slice(0, TOP_MAX_SIZE);
@@ -57,10 +71,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                         otherAggregated.valueUSD += Number(otherItem.valueUSD);
                     });
 
-                    otherAggregated.valueUSD = Number(CommonService.numbersAfterComma(otherAggregated.valueUSD, 2));
-
                     scope.topItems.push(otherAggregated);
-                   
                 }
               
                 if (items.length <= TOP_MAX_SIZE) {

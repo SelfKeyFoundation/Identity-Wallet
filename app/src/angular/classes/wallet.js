@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, WalletService, EtherScanService;
 
 let readyToShowNotification = false;
 
@@ -20,7 +20,7 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set WalletService(value) { WalletService = value; }
-
+    static set EtherScanService(value) { EtherScanService = value; }
 
     constructor(id, privateKey, publicKey, keystoreFilePath) {
         this.id = id;
@@ -125,15 +125,15 @@ class Wallet {
         return this.balanceEth;
     }
 
-    getFormattedBalanceInUSD () {
+    getFormattedBalanceInUSD() {
         return CommonService.numbersAfterComma(this.balanceInUsd, 2);
     }
 
-    getFormatedTotalBalanceInUSD () {
+    getFormatedTotalBalanceInUSD() {
         return CommonService.numbersAfterComma(this.totalBalanceInUSD, 2);
     }
 
-    updatePriceInUSD(){
+    updatePriceInUSD() {
         let price = SqlLiteService.getTokenPriceBySymbol("ETH");
         if (price) {
             this.setPriceInUsd(price.priceUSD);
@@ -182,6 +182,8 @@ class Wallet {
         return defer.promise;
     }
 
+
+
     addNewToken(data) {
         let newToken = new Token(data.address, data.symbol, data.decimal, data.isCustom, data.tokenId, data.id, this);
         this.tokens[data.symbol.toUpperCase()] = newToken;
@@ -215,7 +217,7 @@ class Wallet {
 
     // temporary method - while we support only *ONE* item/value per attribute
     getIdAttributeItemValue(idAttributeTypeKey, line) {
-        if(this.idAttributes[idAttributeTypeKey] && this.idAttributes[idAttributeTypeKey].items && this.idAttributes[idAttributeTypeKey].items.length && this.idAttributes[idAttributeTypeKey].items[0].values && this.idAttributes[idAttributeTypeKey].items[0].values.length){
+        if (this.idAttributes[idAttributeTypeKey] && this.idAttributes[idAttributeTypeKey].items && this.idAttributes[idAttributeTypeKey].items.length && this.idAttributes[idAttributeTypeKey].items[0].values && this.idAttributes[idAttributeTypeKey].items[0].values.length) {
             return this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData[line] || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId
         }
         //return  && (this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId) ? this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId : null;
@@ -264,7 +266,7 @@ class Wallet {
     processTransactionsHistory(data) {
         let tokens = $rootScope.wallet.tokens;
 
-        let getTokenById = (id)=> {
+        let getTokenById = (id) => {
             let tokenKey = Object.keys(tokens).find((key) => {
                 let token = tokens[key];
                 if (token.id == id) {
@@ -286,13 +288,91 @@ class Wallet {
                 let token = getTokenById(transaction.tokenId);
             }
             let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
-            transaction.sentOrReceiveText =  transaction.sentTo ? sendText : 'Received';
-
+            transaction.sentOrReceiveText = transaction.sentTo ? sendText : 'Received';
+            transaction.value = new BigNumber(transaction.value).toString(10);
             return transaction;
         }).sort((a, b) => {
             return Number(b.timestamp) - Number(a.timestamp);
         });
     };
+
+    syncEthTransactionsHistory() {
+        let wallet = this;
+        let walletAddress = '0x' + this.getPublicKeyHex();
+        let ethKey = 'eth';
+        let valueDivider = new BigNumber(10 ** 18);
+
+        $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
+        $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = false;
+
+        let finishFn = (blockNumber) => {
+            $rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = true;
+
+            SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+                let setting = settings[0];
+                setting.EthTxHistoryLastBlock = blockNumber;
+                SqlLiteService.saveWalletSettings(setting).catch((err) => {
+                    console.log(err); //TODO
+                })
+            }).catch(err => {
+                //TODO 
+            });
+
+        };
+
+        Web3Service.getMostRecentBlockNumber().then((blockNumber) => {
+            SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
+
+                let setting = settings[0];
+                let previousLastBlockNumber = setting.EthTxHistoryLastBlock || blockNumber;
+                let startBlock = previousLastBlockNumber;
+                let endBlock = blockNumber;
+                let ethTransactions = [];
+
+                EtherScanService.getTransactionsHistory(walletAddress, startBlock, endBlock).then((result) => {
+                    result = result || [];
+                    result.forEach((transaction) => {
+                        let value = transaction.value;
+                        //means that it is eth transaction
+                        if (value && Number(value) > 0) {
+                            ethTransactions.push(transaction);
+                        }
+                    });
+
+                    if (!ethTransactions.length) {
+                        return finishFn(endBlock);
+                    }
+                    ethTransactions.forEach((transaction, index) => {
+                        let currentIdex = index;
+                        let value = new BigNumber(transaction.value).div(valueDivider).toString();
+                        let sentTo = (transaction.from || '').toLowerCase() == walletAddress.toLowerCase() ? transaction.to : null;
+
+                        let newTransaction = {
+                            walletId: wallet.id,
+                            timestamp: Number(transaction.timeStamp + '000'),
+                            blockNumber: transaction.blockNumber,
+                            value: Number(value),
+                            txId: transaction.hash,
+                            sentTo: sentTo,
+                            gas: Number(transaction.gas),
+                            gasPrice: transaction.gasPrice,
+                        };
+
+                        SqlLiteService.insertTransactionHistory(newTransaction).then((insertedTransaction) => {
+                            if (currentIdex == ethTransactions.length - 1) {
+                                finishFn(endBlock);
+                            }
+                        }).catch(err => {
+                            if (currentIdex == ethTransactions.length - 1) {
+                                finishFn(endBlock);
+                            }
+                        });
+                    });
+
+                });
+            });
+        });
+    }
 
 }
 
