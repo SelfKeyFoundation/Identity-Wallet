@@ -31,7 +31,6 @@ if (require('electron-squirrel-startup')) {
 	process.exit(0)
 }
 
-
 const app = {
 	dir: {
 		root: __dirname + '/../',
