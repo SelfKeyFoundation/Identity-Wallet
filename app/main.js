@@ -11,6 +11,9 @@ const config = buildConfig(electron);
 
 const log = require('electron-log');
 log.transports.file.appName = electron.app.getName();
+log.transports.console.level = 'verbose';
+
+log.info('starting: ' + electron.app.getName());
 
 const userDataDirectoryPath = electron.app.getPath('userData');
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
@@ -23,11 +26,11 @@ const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-/*
 if (require('electron-squirrel-startup')) {
+    log.info('missing: electron-squirrel-startup');
 	process.exit(0)
 }
-*/
+
 
 const app = {
 	dir: {
@@ -52,20 +55,19 @@ for (let i in i18n) {
 	app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
 }
 
-/*
 if (!handleSquirrelEvent()) {
 	electron.app.on('window-all-closed', onWindowAllClosed());
 	electron.app.on('activate', onActivate(app));
 	electron.app.on('web-contents-created', onWebContentsCreated);
 	electron.app.on('ready', onReady(app));
 }
-*/
 
 /**
  *
  */
 function onReady(app) {
 	return function () {
+        app.log.info('onReady');
 		app.config.userDataPath = electron.app.getPath('userData');
 
 		const CMCService = require('./controllers/cmc-service')(app);
@@ -81,8 +83,6 @@ function onReady(app) {
 		electron.app.rpcHandler = new RPCHandler();
 
         createKeystoreFolder();
-
-
 
 		// TODO
 		// 1) load ETH & KEY icons & prices
@@ -122,10 +122,12 @@ function onReady(app) {
 		}));
 
 		if (app.config.app.debug) {
+            app.log.info('app is running in debug mode');
 			app.win.webContents.openDevTools();
 		}
 
 		app.win.on('closed', () => {
+            app.log.info('app closed');
 			app.win = null;
 		});
 
@@ -148,7 +150,7 @@ function onReady(app) {
                 app.win.webContents.send('APP_SUCCESS_LOADING');
             }).catch((error) => {
                 // TODO log error in file
-                console.log("error", error);
+                app.log.error(error);
                 app.win.webContents.send('APP_FAILED_LOADING');
             });
 		});
@@ -183,7 +185,9 @@ function onReady(app) {
 
 		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
+        // TODO - check
 		electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
+            app.log.info('ON_CONFIG_CHANGE');
 			app.config.user = userConfig;
 		});
 
@@ -274,7 +278,6 @@ function handleSquirrelEvent() {
 	}
 
 	const ChildProcess = require('child_process');
-	const path = require('path');
 
 	const appFolder = path.resolve(process.execPath, '..');
 	const rootAtomFolder = path.resolve(appFolder, '..');

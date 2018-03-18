@@ -310,13 +310,11 @@ module.exports = function (app) {
                                 ).then((resp) => {
                                     app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
                                 }).catch((error) => {
-                                    console.log(error);
                                     app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                                 });
                             });
                         });
                     } catch (e) {
-                        console.log(e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
@@ -324,7 +322,6 @@ module.exports = function (app) {
                 }
             });
         } catch (e) {
-            console.log(e);
             app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
         }
     }
@@ -338,7 +335,6 @@ module.exports = function (app) {
                         fsm.unlinkSync(path.join(documentsDirectoryPath, file));
                     }
                 } catch (e) {
-                    console.log(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
                 }
             }
@@ -350,7 +346,6 @@ module.exports = function (app) {
                     fsm.appendFileSync(filePathToPreview, new Buffer(data.buffer));
                 } catch (e) {
                     app.log.warn(e);
-                    console.log(e);
                     return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
                 }
 
@@ -389,7 +384,6 @@ module.exports = function (app) {
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
             }).catch((error) => {
                 app.log.warn(error);
-                console.log(error);
                 app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
             });
 
