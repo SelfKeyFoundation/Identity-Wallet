@@ -16,22 +16,16 @@ const userDataDirectoryPath = electron.app.getPath('userData');
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
-
 /**
  * auto updated
  */
 const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
 
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-// eslint-disable-line global-require
 if (require('electron-squirrel-startup')) {
-	// app.quit() is the source of all our problems,
-	// cf. https://github.com/itchio/itch/issues/202
 	process.exit(0)
 }
-
 
 const app = {
 	dir: {
@@ -131,23 +125,27 @@ function onReady(app) {
 			app.win = null;
 		});
 
+        /*
 		setAutoUpdaterListeners(app.win);
-
 		if (!isDevMode()) {
 			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
 			setTimeout(() => {
 				autoUpdater.checkForUpdates();
 			}, 5000);
-		}
+        }
+        */
 
 		app.win.webContents.on('did-finish-load', () => {
+            app.win.webContents.send('APP_START_LOADING');
             electron.app.sqlLiteService.init().then(() => {
                 //start update cmc data
                 electron.app.cmcService.startUpdateData();
                 electron.app.airtableService.loadIdAttributeTypes();
-                app.win.webContents.send('SQL_DB_READY');
+                app.win.webContents.send('APP_SUCCESS_LOADING');
             }).catch((error) => {
+                // TODO log error in file
                 console.log("error", error);
+                app.win.webContents.send('APP_FAILED_LOADING');
             });
 		});
 

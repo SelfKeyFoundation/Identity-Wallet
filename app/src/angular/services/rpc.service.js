@@ -35,10 +35,20 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
                 $rootScope.openUpdateDialog(null, releaseName);
             });
 
-            this.ipcRenderer.on('SQL_DB_READY', (event) => {
-                $rootScope.$broadcast('SQL_DB_READY');
+            this.ipcRenderer.on('APP_START_LOADING', (event) => {
+                console.log("####", "APP_START_LOADING");
+                $rootScope.$broadcast('APP_START_LOADING');
             });
 
+            this.ipcRenderer.on('APP_SUCCESS_LOADING', (event) => {
+                console.log("####", "APP_SUCCESS_LOADING");
+                $rootScope.$broadcast('APP_SUCCESS_LOADING');
+            });
+
+            this.ipcRenderer.on('APP_FAILED_LOADING', (event) => {
+                console.log("####", "APP_FAILED_LOADING");
+                $rootScope.$broadcast('APP_FAILED_LOADING');
+            });
         }
 
         makeCall (actionName, data) {
