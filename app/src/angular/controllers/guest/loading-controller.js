@@ -4,8 +4,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     $log.info('GuestLoadingController');
 
     const status = {
-        localDataLoaded: false,
-        remoteDataLoaded: false
+        isSqlDBReady: false
     }
 
     $scope.header = 'Loading';
@@ -14,37 +13,32 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     init();
 
     function init() {
-        if (!$stateParams.redirectTo) {
-            $rootScope.loadingPromise = SqlLiteService.loadData();
-            $rootScope.loadingPromise.then(() => {
-                $state.go('guest.welcome');
-                $rootScope.checkTermsAndConditions();
-            }).catch((error) => {
-                $log.error("error", error);
-            });
-        } else {
+        if ($stateParams.redirectTo) {
             if ($stateParams.redirectTo === 'member.id-wallet.main') {
                 $scope.header = 'Setup Completed';
                 $timeout(() => {
-                    $state.go($stateParams.redirectTo);
+                    goTo($stateParams.redirectTo);
                 }, 2000);
             }
         }
     }
 
-    $rootScope.$on(EVENTS.APP_DATA_LOAD, () => {
-        status.localDataLoaded = true;
+    function loadSqlLiteData() {
+        $rootScope.loadingPromise = SqlLiteService.loadData();
+        $rootScope.loadingPromise.then(() => {
+            goTo('guest.welcome');
+        }).catch((error) => {
+            $log.error("error", error);
+        });
+    }
 
-        if (status.remoteDataLoaded) {
-            $state.go('guest.welcome');
-        }
-    });
+    function goTo(state) {
+        $state.go('guest.welcome');
+        $rootScope.checkTermsAndConditions();
+    }
 
-    $rootScope.$on(EVENTS.REMOTE_DATA_LOAD, () => {
-        status.localDataLoaded = true;
-        if (status.remoteDataLoaded) {
-            $state.go('guest.welcome');
-        }
+    $rootScope.$on('SQL_DB_READY', () => {
+        loadSqlLiteData();
     });
 };
 

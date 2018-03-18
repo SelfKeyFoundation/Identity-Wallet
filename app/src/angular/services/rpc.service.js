@@ -34,6 +34,11 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
             this.ipcRenderer.on('UPDATE_READY', (event, releaseName) => {
                 $rootScope.openUpdateDialog(null, releaseName);
             });
+
+            this.ipcRenderer.on('SQL_DB_READY', (event) => {
+                $rootScope.$broadcast('SQL_DB_READY');
+            });
+
         }
 
         makeCall (actionName, data) {

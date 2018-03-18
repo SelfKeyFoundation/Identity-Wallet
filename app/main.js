@@ -84,13 +84,7 @@ function onReady(app) {
 
         createKeystoreFolder();
 
-		electron.app.sqlLiteService.init().then(() => {
-			//start update cmc data
-            electron.app.cmcService.startUpdateData();
-            electron.app.airtableService.loadIdAttributeTypes();
-		}).catch((error) => {
-			console.log("error", error);
-		});
+
 
 		// TODO
 		// 1) load ETH & KEY icons & prices
@@ -147,7 +141,14 @@ function onReady(app) {
 		}
 
 		app.win.webContents.on('did-finish-load', () => {
-			app.win.webContents.send('ON_READY', config);
+            electron.app.sqlLiteService.init().then(() => {
+                //start update cmc data
+                electron.app.cmcService.startUpdateData();
+                electron.app.airtableService.loadIdAttributeTypes();
+                app.win.webContents.send('SQL_DB_READY');
+            }).catch((error) => {
+                console.log("error", error);
+            });
 		});
 
 		/**
