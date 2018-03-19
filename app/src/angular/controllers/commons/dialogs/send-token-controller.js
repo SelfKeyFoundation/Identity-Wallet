@@ -288,11 +288,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
          * form data
          */
         //if(!$scope.formData || !$scope.formData.sendToAddressHex){
-            $scope.formData = {
-                sendToAddressHex: args.sendToAddressHex || '',
-                sendAmount: args.sendAmount || null,
-                gasPriceInGwei: args.gasPriceInGwei || 5
-            }
+            $scope.formData = $scope.formData || {};
+            $scope.fromData.sendAmount = args.sendAmount || null;
+            $scope.fromData.gasPriceInGwei = args.gasPriceInGwei || 5;
         //} else {
         //    $scope.formData.sendAmount = null;
         //    $scope.formData.gasPriceInGwei = 5;
