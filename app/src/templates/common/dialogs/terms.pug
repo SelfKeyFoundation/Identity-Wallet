@@ -152,12 +152,12 @@ md-dialog.terms(aira-lable="Dialog Title")
                             a(href='mailto:finance@selfkey.org', target='_top', style='color: white;\
                              margin-left: 5px;') finance@selfkey.org
                         p
-                            | SelfKey reserves all rights in the look and feel of the SelfKey Wallet. Some parts of the SelfKey Wallet. are licensed under third-party open source licenses. 
-                            | We also make some of our own code available under open source licenses. As for other parts of the SelfKey Wallet, you may not copy or adapt any portion of our 
+                            | SelfKey reserves all rights in the look and feel of the SelfKey Wallet. Some parts of the SelfKey Wallet. are licensed under third-party open source licenses.
+                            | We also make some of our own code available under open source licenses. As for other parts of the SelfKey Wallet, you may not copy or adapt any portion of our
                             | code or visual design elements (including logos) without express written permission from SelfKey unless otherwise permitted by law.
 
                 section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='', style="z-index: 100;")
-                    md-button.md-raised.default(ng-class="{'highlighted': scrolledBottom}", ng-disabled="!scrolledBottom || storeSavePromise.$$state.status", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
+                    md-button.md-raised.default(ng-class="{'highlighted': scrolledBottom}", ng-disabled="!scrolledBottom", sk-button-loading="isLoading", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
                     md-button.md-raised.default(ng-click="changeStep('before-disagree')", style="margin-left: 4px;") I don't agree
         .main(layout='column', layout-align='center center', ng-if="step === 'before-disagree'")
             md-toolbar

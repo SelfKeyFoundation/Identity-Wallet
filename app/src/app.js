@@ -15,7 +15,6 @@ document.addEventListener('drop', function (event) {
  */
 window.zxcvbn = requireNodeModule('zxcvbn');
 window.qrcode = requireNodeModule('qrcode-generator');
-//requireNodeModule('pdf.js-viewer');
 
 /**
  * External Modules
@@ -66,9 +65,6 @@ angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);
 const appEventsConstant = requireAppModule('angular/constants/app.events.constant');
 angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
 
-const countriesConstant = requireAppModule('angular/constants/countries');
-angular.module('kyc-wallet').constant('countries', countriesConstant);
-
 
 /**
  * services
@@ -78,9 +74,6 @@ angular.module('kyc-wallet').service('RPCService', RPCService);
 
 const SqlLiteService = requireAppModule('angular/services/sql-lite.service');
 angular.module('kyc-wallet').service('SqlLiteService', SqlLiteService);
-
-//const ElectronService = requireAppModule('angular/services/electron.service');
-//angular.module('kyc-wallet').service('ElectronService', ElectronService);
 
 const CommonService = requireAppModule('angular/services/common.service');
 angular.module('kyc-wallet').service('CommonService', CommonService);
@@ -126,9 +119,6 @@ angular.module('kyc-wallet').directive('skCustomTokenBox', SkCustomTokenBoxDirec
 
 const SkCirclePieChartDirective = requireAppModule('angular/directives/commons/sk-circle-pie-chart.directive');
 angular.module('kyc-wallet').directive('skCirclePieChart', SkCirclePieChartDirective);
-
-const SkRemindersBoxDirective = requireAppModule('angular/directives/commons/sk-reminders-box.directive');
-angular.module('kyc-wallet').directive('skRemindersBox', SkRemindersBoxDirective);
 
 const SkUserInfoBoxDirective = requireAppModule('angular/directives/commons/sk-user-info-box.directive');
 angular.module('kyc-wallet').directive('skUserInfoBox', SkUserInfoBoxDirective);

@@ -4,19 +4,23 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
     'ngInject'
 
     $log.info('TermsDialogController');
-    $scope.storeSavePromise = null;
+    $scope.isLoading = false;
     $scope.step = 'main'
     $scope.scrolledBottom = false;
+
+    let guideSettings = SqlLiteService.getGuideSettings();
 
     $scope.changeStep = (step) => {
         $scope.step = step;
     }
 
     $scope.agree = (event) => {
-        let guideSettings = SqlLiteService.getGuideSettings();
+        $scope.isLoading = true;
         guideSettings.termsAccepted = true;
 
-        SqlLiteService.saveGuideSettings(guideSettings).then(()=>{
+        let savePromise = SqlLiteService.saveGuideSettings(guideSettings);
+        savePromise.then(() => {
+            $scope.isLoading = false;
             $mdDialog.hide();
         });
     };

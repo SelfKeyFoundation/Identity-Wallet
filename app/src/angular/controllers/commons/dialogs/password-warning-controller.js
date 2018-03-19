@@ -55,13 +55,14 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
         promise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
             let initialPromises = [];
+            
             initialPromises.push($rootScope.wallet.loadIdAttributes());
             initialPromises.push($rootScope.wallet.loadTokens());
 
             $q.all(initialPromises).then((resp) => {
-
                 SqlLiteService.registerActionLog("Created Attribute: First Name", "Created");
                 SqlLiteService.registerActionLog("Created Attribute: Last Name", "Created");
+
                 if(basicInfo.middle_name){
                     SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
                 }

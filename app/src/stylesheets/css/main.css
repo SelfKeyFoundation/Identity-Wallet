@@ -14593,43 +14593,6 @@ md-toolbar {
 .user-info-box .info table tr td:first-child {
   width: 26%; }
 
-.sk-tasks-box {
-  height: 216px;
-  padding: 20px 20px 10px 20px; }
-  .sk-tasks-box .sk-tasks-box__header {
-    margin-bottom: 24px; }
-    .sk-tasks-box .sk-tasks-box__header span:first-of-type {
-      font-family: ProximaNovaRegular;
-      font-size: 18px;
-      color: #ffffff; }
-    .sk-tasks-box .sk-tasks-box__header span:last-of-type {
-      font-family: ProximaNovaRegular;
-      font-size: 14px;
-      color: #93b0c1; }
-  .sk-tasks-box .sk-tasks-box__item {
-    margin-top: 16px; }
-    .sk-tasks-box .sk-tasks-box__item:first-of-type {
-      margin-top: 0; }
-    .sk-tasks-box .sk-tasks-box__item span:first-of-type {
-      font-family: ProximaNovaRegular;
-      font-size: 14px;
-      font-weight: 600;
-      color: #ffffff; }
-    .sk-tasks-box .sk-tasks-box__item span:last-of-type {
-      font-family: ProximaNovaRegular;
-      font-size: 14px;
-      color: #ffffff; }
-  .sk-tasks-box .sk-horizontal-devider {
-    margin-top: 30px; }
-  .sk-tasks-box .sk-tasks-box__footer {
-    margin-top: 16px; }
-    .sk-tasks-box .sk-tasks-box__footer span {
-      color: #fff; }
-      .sk-tasks-box .sk-tasks-box__footer span:first-of-type {
-        margin-right: 16px; }
-      .sk-tasks-box .sk-tasks-box__footer span:last-of-type {
-        margin-left: 16px; }
-
 .sk-right-sidenav {
   display: flex;
   flex-direction: column;
@@ -15595,45 +15558,6 @@ md-radio-group md-radio-button {
       letter-spacing: 1px;
       text-align: left;
       color: #ffffff; }
-
-.sk-reminders-box {
-  border-radius: 4px;
-  background-color: #262f39;
-  border: solid 1px #303c49;
-  padding: 0 30px;
-  flex-direction: column; }
-  .sk-reminders-box .sk-reminders-box__title {
-    font-family: ProximaNovaRegular;
-    font-size: 18px;
-    font-weight: 600;
-    color: #ffffff; }
-  .sk-reminders-box .sk-reminders-box__item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-family: ProximaNovaRegular;
-    font-size: 18px; }
-    .sk-reminders-box .sk-reminders-box__item .sk-reminders-box__item__header {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      margin-top: 36px;
-      border-bottom: 1px solid #384047;
-      padding-bottom: 30px;
-      width: 100%;
-      font-size: 16px;
-      outline: none; }
-      .sk-reminders-box .sk-reminders-box__item .sk-reminders-box__item__header .sk-reminders-box__item__header__date {
-        display: flex;
-        flex-direction: column;
-        align-items: center; }
-      .sk-reminders-box .sk-reminders-box__item .sk-reminders-box__item__header .sk-icon {
-        margin-left: 20px; }
-      .sk-reminders-box .sk-reminders-box__item .sk-reminders-box__item__header .sk-reminders-box__item__header__text {
-        margin-left: 10px; }
-        .sk-reminders-box .sk-reminders-box__item .sk-reminders-box__item__header .sk-reminders-box__item__header__text span {
-          margin-left: 10px; }
 
 .user-info-box {
   background-color: #262f39;
