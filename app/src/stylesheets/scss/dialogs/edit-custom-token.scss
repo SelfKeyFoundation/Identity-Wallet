@@ -1,12 +1,4 @@
 md-dialog {
-  background-image: linear-gradient(124deg, #2b3540, #1e262e);
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
   .close-btn {
       cursor: pointer;
       position: absolute;
@@ -15,17 +7,18 @@ md-dialog {
       right: 30.8px;
   }
 
-  .edit-tokens-contaner {
+  &.edit-tokens {
       * {
           font-family: ProximaNovaRegular; 
       }
-      min-width: 100%;
-      min-height: 100%;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+      background-image: linear-gradient(124deg, #2b3540, #1e262e);
 
+      .container {
+        height: 100vh;
+      }
+      .content {
+        padding-top: 80px;
+      }
       .header-text {
           padding-top: 36px;
           padding-bottom: 24px;
@@ -37,6 +30,7 @@ md-dialog {
       .grid-container {
           width: 1140px;
           padding-top: 80px;
+          padding-bottom: 80px;
           $table-left-padding: 24px;
           table {
               border-spacing: 0px;
