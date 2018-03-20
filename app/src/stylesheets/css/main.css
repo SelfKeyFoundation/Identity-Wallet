@@ -17645,6 +17645,45 @@ md-dialog {
           width: 16px !important;
           min-height: 16px !important;
           min-width: 16px !important; }
+    .marketplace-main > .center-container .body-wrapper {
+      width: 1140px;
+      margin: 0 auto; }
+      .marketplace-main > .center-container .body-wrapper ul {
+        list-style-type: none;
+        width: 1140px; }
+        .marketplace-main > .center-container .body-wrapper ul li {
+          width: 320px;
+          height: 250px;
+          font-size: 16px;
+          font-family: ProximaNovaRegular;
+          margin: 20px;
+          float: left; }
+          .marketplace-main > .center-container .body-wrapper ul li .list-title {
+            border: 1px solid #303c49;
+            font-size: 18px;
+            font-family: ProximaNovaRegular;
+            color: #FFFFFF;
+            height: 40px; }
+            .marketplace-main > .center-container .body-wrapper ul li .list-title .title-text {
+              margin: 10px 0 0 10px;
+              word-break: break-all; }
+          .marketplace-main > .center-container .body-wrapper ul li .list-body {
+            border: 1px solid #303c49;
+            padding: 10px;
+            font-size: 16px;
+            font-family: ProximaNovaRegular;
+            color: #FFFFFF;
+            height: 205px;
+            margin-top: 3px; }
+            .marketplace-main > .center-container .body-wrapper ul li .list-body .body-description {
+              word-break: break-all;
+              height: 175px; }
+            .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
+              min-height: 28px !important;
+              height: 28px !important;
+              line-height: 28px !important; }
+              .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
+                font-size: 14px; }
 
 .bg-gradient {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #d5eaf1), color-stop(1, #dfe3e2));
