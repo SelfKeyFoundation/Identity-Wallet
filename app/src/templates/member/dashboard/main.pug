@@ -23,7 +23,7 @@
                         | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token.
                     sk-icon(icon="plus", size-class="icon-size-26x26")
             .sk-horizontal-devider
-            sk-circle-pie-chart(data="pieChart", ng-if="totalBalanceInUsd > 0")
+            sk-circle-pie-chart(data="pieChart", ng-if="wallet.calculateTotalBalanceInUSD() > 0")
 
     // alerts
     //.dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
