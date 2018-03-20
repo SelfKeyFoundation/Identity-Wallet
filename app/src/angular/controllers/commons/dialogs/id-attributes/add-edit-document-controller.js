@@ -47,7 +47,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
     $scope.selectFile = (event) => {
         let fileSelect = RPCService.makeCall('openFileSelectDialog', {
             filters: [
-                { name: 'Documents', extensions: ['jpg', 'png', 'pdf'] },
+                { name: 'Documents', extensions: ['jpg', 'jpeg', 'png', 'pdf'] },
             ],
             maxFileSize: 50 * 1000 * 1000
         });

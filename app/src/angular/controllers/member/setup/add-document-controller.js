@@ -11,7 +11,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         'national_id': {
             type: "national_id",
             step: "STEP 4",
-            title1: "Upload Your National ID",
+            title1: "Upload National ID",
             title2: "Your National ID",
             title3: "(can be driver's license, passport)",
             title4: "(Max file size: 50mb)",
@@ -19,7 +19,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         'id_selfie': {
             type: "id_selfie",
             step: "STEP 5",
-            title1: "Upload Selfie With ID",
+            title1: "Upload National ID Selfie",
             title2: "National ID Selfie",
             title3: "(can be driver's license, passport)",
             title4: "(Max file size: 50mb)",

@@ -1,6 +1,6 @@
 'use strict';
 
-function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteService) {
+function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, SqlLiteService) {
     'ngInject';
 
     return {
@@ -35,7 +35,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteServ
 
                 switch(item.key){
                     case 'birthdate':
-                        return Number(item.staticData.line1)
+                        return $filter('date')(Number(item.staticData.line1), 'yyyy/MM/dd');
                         break;
                     case 'work_place':
                     case 'physical_address':
@@ -74,6 +74,8 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, SqlLiteServ
                         documentFileName: idAttributes[i].items[0].values[0].documentFileName
                     }
                 }
+
+                console.log(scope.idAttributes, "<<<<")
             }
         },
         replace: true,
