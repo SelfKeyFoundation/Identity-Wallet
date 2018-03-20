@@ -17614,6 +17614,38 @@ md-dialog {
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table thead tr td {
               padding: 5px 0; }
 
+.marketplace-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  .marketplace-main > .center-container {
+    width: 100%;
+    margin-top: 30px; }
+    .marketplace-main > .center-container .header-wrapper {
+      width: 100%;
+      border-bottom: 1px solid #303c49;
+      padding-bottom: 30px;
+      display: block; }
+      .marketplace-main > .center-container .header-wrapper .title {
+        font-size: 20px;
+        color: #768fa9;
+        margin-left: 80px;
+        font-family: ProximaNovaRegular; }
+      .marketplace-main > .center-container .header-wrapper .status {
+        color: #768fa9;
+        font-size: 16px;
+        font-family: ProximaNovaRegular;
+        float: right;
+        margin-top: -15px;
+        margin-right: 150px; }
+        .marketplace-main > .center-container .header-wrapper .status md-icon {
+          padding: 0 5px;
+          height: 16px !important;
+          width: 16px !important;
+          min-height: 16px !important;
+          min-width: 16px !important; }
+
 .bg-gradient {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #d5eaf1), color-stop(1, #dfe3e2));
   background: -moz-linear-gradient(top, #4a0c6b 0%, #669966 100%);

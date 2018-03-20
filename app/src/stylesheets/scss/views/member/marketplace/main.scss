@@ -5,7 +5,42 @@
     justify-content: center;
 
     > .center-container {
-        width: 1140px;
-        margin-top: 40px;
+        width: 100%;
+        margin-top: 30px;
+
+        .header-wrapper {
+            width: 100%;
+            border-bottom: 1px solid #303c49;
+            padding-bottom: 30px;
+            display: block;
+
+            .title {
+                font-size: 20px;
+                color: #768fa9;
+                margin-left: 80px;
+                font-family: ProximaNovaRegular;
+            }
+            .status {
+                color: #768fa9;
+                font-size: 16px;
+                font-family: ProximaNovaRegular;
+                float: right;
+                margin-top: -15px;
+                margin-right: 150px;
+
+                md-icon {
+
+                    padding: 0 5px;
+                    height: 16px !important;
+                    width: 16px !important;
+                    min-height: 16px !important;
+                    min-width: 16px !important;
+                }
+            }
+
+        }
+        .body-wrapper {
+
+        }
     }
 }
