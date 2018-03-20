@@ -1,0 +1,11 @@
+.marketplace-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    > .center-container {
+        width: 1140px;
+        margin-top: 40px;
+    }
+}

@@ -269,6 +269,12 @@ const MemberIdWalletMainController = requireAppModule('angular/controllers/membe
 angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
 
 /**
+ * marketplace
+ */
+const MemberMarketplaceMainController = requireAppModule('angular/controllers/member/marketplace/main-controller.js');
+angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
+
+/**
  * config states
  */
 angular.module('kyc-wallet').config(appStates);

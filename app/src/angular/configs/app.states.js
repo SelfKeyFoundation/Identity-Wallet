@@ -318,6 +318,28 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        /**
+         *  Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.main', {
+            url: '/member/marketplace/main',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/main.html',
+                    controller: 'MemberMarketplaceMainController'
+                }
+            }
+        })
+
     $urlRouterProvider.otherwise('/guest/loading');
 }
 
