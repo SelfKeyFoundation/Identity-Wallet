@@ -51,6 +51,9 @@ module.exports = function (app) {
     let GuideSetting = require('./models/guide-setting.js')(app, controller);
     controller.prototype.GuideSetting = GuideSetting;
 
+    let ExchangeDataHandler = require('./models/exchange.js')(app, controller);
+    controller.prototype.ExchangeDataHandler = ExchangeDataHandler;
+
     /**
      * tables
      */
@@ -282,6 +285,7 @@ module.exports = function (app) {
         promises.push(createTransactionsHistory());
         promises.push(createActionLogs());
         promises.push(createWalletSettings());
+        promises.push(ExchangeDataHandler.init());
         return Promise.all(promises)
     }
 
@@ -303,8 +307,8 @@ module.exports = function (app) {
                     })
                     .then(trx.commit)
                     .catch(trx.rollback);
-            }).then((rowData)=>{
-                walletTokens_selectById(rowData.id).then((walletData)=>{
+            }).then((rowData) => {
+                walletTokens_selectById(rowData.id).then((walletData) => {
                     resolve(walletData);
                 }).catch((err) => {
                     reject(err);
@@ -348,7 +352,7 @@ module.exports = function (app) {
                                     // add initial id attributes
                                     idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
                                         idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-                                            let staticData = JSON.stringify({line1: basicInfo[idAttributeType.key]});
+                                            let staticData = JSON.stringify({ line1: basicInfo[idAttributeType.key] });
                                             idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() }));
                                         }));
                                     }));
@@ -442,7 +446,7 @@ module.exports = function (app) {
         });
     }
 
-    function walletTokens_selectById (id)  {
+    function walletTokens_selectById(id) {
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
                 .select('wallet_tokens.*', 'token_prices.name', 'token_prices.priceUSD', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
@@ -466,7 +470,7 @@ module.exports = function (app) {
 
         return new Promise((resolve, reject) => {
             insertIntoTable('wallet_tokens', data).then((rowData) => {
-                walletTokens_selectById(rowData.id).then((walletData)=>{
+                walletTokens_selectById(rowData.id).then((walletData) => {
                     resolve(walletData);
                 }).catch((err) => {
                     reject(err);
@@ -484,7 +488,7 @@ module.exports = function (app) {
     /**
      * commons
      */
-    function _select (table, select, where, tx) {
+    function _select(table, select, where, tx) {
         let query = knex(table);
 
         if (tx) {
@@ -500,7 +504,7 @@ module.exports = function (app) {
         return query;
     }
 
-    function _insert (table, args, tx) {
+    function _insert(table, args, tx) {
         let query = knex(table);
 
         if (tx) {
@@ -535,12 +539,12 @@ module.exports = function (app) {
                             reject(error);
                         });
                     } else {
-                        reject({message: 'record_not_found'});
+                        reject({ message: 'record_not_found' });
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -595,12 +599,12 @@ module.exports = function (app) {
                             });
                         }
                     } else {
-                        reject({message: "record_not_found"});
+                        reject({ message: "record_not_found" });
                     }
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -611,7 +615,7 @@ module.exports = function (app) {
                 return new Promise((resolve, reject) => {
                     let idAttributeItemValue = rows[0];
 
-                    if(args.staticData){
+                    if (args.staticData) {
                         args.staticData = JSON.stringify(args.staticData);
                     }
 
@@ -622,19 +626,19 @@ module.exports = function (app) {
                     });
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
     controller.prototype.idAttributeItemValues_updateDocument = (args) => {
         return knex.transaction((trx) => {
-            let selectPromise = select('id_attribute_item_values', {'id': args.id}, trx);
+            let selectPromise = select('id_attribute_item_values', { 'id': args.id }, trx);
             selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
                     let idAttributeItemValue = rows[0];
 
-                    select('documents', {'id': idAttributeItemValue.documentId}, trx).then((documents) => {
+                    select('documents', { 'id': idAttributeItemValue.documentId }, trx).then((documents) => {
                         if (documents && documents.length) {
                             let document = documents[0];
 
@@ -680,8 +684,8 @@ module.exports = function (app) {
                     })
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -702,8 +706,8 @@ module.exports = function (app) {
     }
 
     controller.prototype.actionLogs_findAll = (args) => {
-        return new Promise((resolve, reject)=>{
-            knex('action_logs').select().where({walletId: args.walletId}).then((rows) => {
+        return new Promise((resolve, reject) => {
+            knex('action_logs').select().where({ walletId: args.walletId }).then((rows) => {
                 resolve(rows);
             }).catch((error) => {
                 reject({ message: "error", error: error });
