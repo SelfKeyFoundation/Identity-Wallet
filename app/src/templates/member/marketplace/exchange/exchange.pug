@@ -1,23 +1,22 @@
 .exchange-container
     md-button.gray.default.back
-        span.primary Back
+        span.primary(ui-sref="member.marketplace.exchange-list")  Back
     .exchange
         .exchange-content
             .header
                 .logo
                     img(src='assets/images/icons/selfkey.svg', width=36)
-                    span.name Gatecoin
+                    span.name {{realData.name}}
 
             .body
                 .section
                     .section-content
                         .textual
-                            .text
-                                | {{ jobs.description | limitTo:strLimit }}
-                                span(ng-if='jobs.description.length > 300 && jobs.description.length != strLimit')
+                            .text(ng-bind-html="realData.gio")
+                            span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
                                     md-button.gray.default(ng-click='showMore()') Show more
-                                span(ng-if='jobs.description.length == strLimit')
-                                    md-button.gray.default(ng-click='showLess()') Show less
+                            span(ng-if='realData.description.length == strLimit')
+                                md-button.gray.default(ng-click='showLess()') Show less
 
                 .section
                     .section-content
@@ -32,12 +31,12 @@
                                 div
                                     label
                                         span Year Launched:
-                                    strong 2016
+                                    strong {{realData['year_launched']}}
 
                                 div
                                     label
                                         span Coin Pairs:
-                                    strong 69
+                                    strong(ng-repeat="i in realData['Currency Pairs']") {{i}}
 
                                 div
                                     label

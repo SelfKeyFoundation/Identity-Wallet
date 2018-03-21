@@ -1,26 +1,31 @@
 'use strict';
 
-function MemberMarketplaceExchangeController($rootScope, $scope,$log, $state, $timeout, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
+function MemberMarketplaceExchangeController($rootScope, $scope,$log,$filter, $state,$sce, $timeout, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
     'ngInject'
-    //$scope.realData = statdata;
-    console.log('dataaaaaaaaa', $state.params.data);
+    $scope.realData = $state.params.data;
+    console.log('gio', $state.params);
     $log.info('MemberMarketplaceExchangeController');
     // Initial 300 characters will be displayed.
     $scope.strLimit = 300;
+    $scope.test = function () {
+        $scope.realData.gio = $filter('limitTo')($scope.realData.description, $scope.strLimit, 0);
+        $scope.realData.gio = $sce.trustAsHtml($scope.realData.gio);
+    }
+    $scope.test();
 
     // String
-    $scope.jobs = {
-        description: "Hi. I have a list of items along with their information. The problem is I want to show the description up to 50 letters, but if it exceeds this value I want to show show more button upon clicking it I want to show the full text. I want to do it with filters, but I don't know one could achieve this with my way."
-    };
+
 
     // Event trigger on click of the Show more button.
     $scope.showMore = function() {
-        $scope.strLimit = $scope.jobs.description.length;
+        $scope.strLimit = $scope.realData.description.length;
+        $scope.test();
     };
 
     // Event trigger on click on the Show less button.
     $scope.showLess = function() {
         $scope.strLimit = 300;
+        $scope.test();
     };
 
 
