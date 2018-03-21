@@ -13,10 +13,6 @@ function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $time
             item.content = $sce.trustAsHtml(item.content);
         }
     });
-
-    console.log(333, $scope.exchangesList)
-
-
 };
 
 module.exports = MemberMarketplaceExchangeListController;
