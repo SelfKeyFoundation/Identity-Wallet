@@ -41,7 +41,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             setViewState('before-send');
         } else {
             setViewState('sending');
-            if ($scope.symbol.toLowerCase() === 'eth') {
+            if ($scope.symbol && $scope.symbol.toLowerCase() === 'eth') {
                 sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
             } else {
                 sendToken($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
@@ -50,7 +50,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.getTransactionStatus = () => {
-        if($scope.errors.sendFailed) return $scope.errors.sendFailed;
+        if ($scope.errors.sendFailed) return $scope.errors.sendFailed;
 
         if (!$scope.backgroundProcessStatuses.txStatus && !$scope.txHex) {
             return 'Pending';
@@ -265,12 +265,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         return (Number(balance) * Number($scope.infoData.usdPerUnit));
     }
 
-    function calculateSendAmountInUSD () {
+    function calculateSendAmountInUSD() {
         // send amount in USD
         $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
     }
 
-    function calculateReminingBalance () {
+    function calculateReminingBalance() {
         // remining balance
         $scope.infoData.reminingBalance = Number($scope.infoData.totalBalance) - Number($scope.formData.sendAmount);
 
@@ -281,18 +281,16 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     function prepare(symbol) {
 
         $scope.invalidData = false;
-        $scope.symbol = symbol;
+        $scope.symbol = symbol || '0';
         $scope.allowSelectERC20Token = args.allowSelectERC20Token;
 
         /**
          * form data
          */
         //if(!$scope.formData || !$scope.formData.sendToAddressHex){
-            $scope.formData = {
-                sendToAddressHex: args.sendToAddressHex || '',
-                sendAmount: args.sendAmount || null,
-                gasPriceInGwei: args.gasPriceInGwei || 5
-            }
+        $scope.formData = $scope.formData || {};
+        $scope.formData.sendAmount = args && args.sendAmount || null;
+        $scope.formData.gasPriceInGwei = args && args.gasPriceInGwei || 5;
         //} else {
         //    $scope.formData.sendAmount = null;
         //    $scope.formData.gasPriceInGwei = 5;
@@ -353,14 +351,16 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             sendFailed: false
         }
 
-        if ($scope.symbol.toLowerCase() === 'eth') {
+        if ($scope.symbol && $scope.symbol.toLowerCase() === 'eth') {
             $scope.infoData.usdPerUnit = $rootScope.wallet.usdPerUnit;
             $scope.infoData.totalBalance = $rootScope.wallet.balanceEth;
         } else {
             let token = $rootScope.wallet.tokens[$scope.symbol];
-            $scope.infoData.usdPerUnit = token.usdPerUnit;
-            $scope.infoData.totalBalance = token.getBalanceDecimal();
-            calculateReminingBalance ();
+            if (token) {
+                $scope.infoData.usdPerUnit = token.usdPerUnit;
+                $scope.infoData.totalBalance = token.getBalanceDecimal();
+                calculateReminingBalance();
+            }
         }
     }
 
@@ -376,7 +376,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             $scope.errors.sendAmount = false;
 
             // allow only decimals for non eth items
-            if ($scope.symbol.toLowerCase() !== 'eth') {
+            if ($scope.symbol && $scope.symbol.toLowerCase() !== 'eth') {
                 newVal.sendAmount = Number(newVal.sendAmount);
             }
 
@@ -396,9 +396,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
 
         if (newVal.sendAmount && isNumeric(newVal.sendAmount)) {
-            calculateReminingBalance ();
+            calculateReminingBalance();
 
-            calculateSendAmountInUSD ();
+            calculateSendAmountInUSD();
 
 
             // tx fee in eth

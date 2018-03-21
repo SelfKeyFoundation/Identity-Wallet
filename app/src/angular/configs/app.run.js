@@ -87,7 +87,8 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             escapeToClose: false,
             locals: {
                 args: {
-                    symbol: symbol,
+                    //because default must be empty
+                    //symbol: symbol,
                     allowSelectERC20Token: allowSelectERC20Token
                 }
             }
