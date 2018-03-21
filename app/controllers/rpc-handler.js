@@ -1007,6 +1007,17 @@ module.exports = function (app) {
         });
     }
 
+    /**
+     * Exchange data
+     */
+    controller.prototype.findAllExchangeData = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.ExchangeDataHandler.findAll(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
         const iconList = config.obligatoryImageIds;
         async.each(iconList, function (item, callback) {

@@ -159,7 +159,8 @@ function onReady(app) {
             electron.app.sqlLiteService.init().then(() => {
                 //start update cmc data
                 electron.app.cmcService.startUpdateData();
-                electron.app.airtableService.loadIdAttributeTypes();
+				electron.app.airtableService.loadIdAttributeTypes();
+				electron.app.airtableService.loadExchangeData();
                 app.win.webContents.send('APP_SUCCESS_LOADING');
             }).catch((error) => {
                 log.error(error);

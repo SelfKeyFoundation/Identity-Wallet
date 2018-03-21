@@ -52,7 +52,8 @@ const AppConfigConstant = {
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH']
+		obligatoryImageIds: ['ETH'],
+		airtableBaseUrl: "https://alpha.selfkey.org/marketplace/i/api/"
 	},
 	default: {
 		debug: true,
@@ -65,7 +66,8 @@ const AppConfigConstant = {
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH']
+		obligatoryImageIds: ['ETH'],
+		airtableBaseUrl: "https://alpha.selfkey.org/marketplace/i/api/"
 	},
 	production: {
 		debug: false,
@@ -78,7 +80,8 @@ const AppConfigConstant = {
 		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
 		cmcIconSize: 64, //availble are 16, 32, 128
 		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH']
+		obligatoryImageIds: ['ETH'],
+		airtableBaseUrl: "https://alpha.selfkey.org/marketplace/i/api/"
 	}
 };
 

@@ -322,6 +322,37 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        /**
+         *  Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.exchange-list', {
+            url: '/member/marketplace/exchange-list',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/exchange-list.html',
+                    controller: 'MemberMarketplaceExchangeListController'
+                }
+            }
+        })
+        .state('member.marketplace.exchange', {
+            url: '/member/marketplace/exchange',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/exchange/exchange.html',
+                    controller: 'MemberMarketplaceExchangeController'
+                }
+            }
+        })
+
     $urlRouterProvider.otherwise('/guest/loading');
 }
 
