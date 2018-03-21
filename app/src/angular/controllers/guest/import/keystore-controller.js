@@ -58,7 +58,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
             promise.then((data) => {
                 $rootScope.walletImportData = data;
-                $state.go('guest.create.step-1');
+                $state.go('guest.create.step-1', {type: 'import'});
             }).catch((error)=>{
                 $scope.isAuthenticating = false;
                 CommonService.showToast('error', 'incorrect password');

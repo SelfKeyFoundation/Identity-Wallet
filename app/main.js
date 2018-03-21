@@ -18,8 +18,6 @@ log.transports.console.level = 'info';
 
 log.info('starting: ' + electron.app.getName());
 
-log.info({hello: 'test'});
-
 const userDataDirectoryPath = electron.app.getPath('userData');
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
@@ -54,6 +52,8 @@ const app = {
 const i18n = [
 	'en'
 ];
+
+let shouldIgnoreClose = true;
 
 for (let i in i18n) {
 	app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
@@ -130,6 +130,14 @@ function onReady(app) {
 			app.win.webContents.openDevTools();
 		}
 
+        app.win.on('close', (event) => {
+            if(shouldIgnoreClose) {
+                event.preventDefault();
+                shouldIgnoreClose = false;
+                app.win.webContents.send('SHOW_CLOSE_DIALOG');
+            }
+		});
+
 		app.win.on('closed', () => {
             log.info('app closed');
 			app.win = null;
@@ -203,6 +211,10 @@ function onReady(app) {
 			if (electron.app.rpcHandler[actionName]) {
 				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
+        });
+
+        electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', (event) => {
+            shouldIgnoreClose = true;
 		});
 	};
 }

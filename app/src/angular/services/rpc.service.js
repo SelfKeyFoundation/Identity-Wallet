@@ -51,7 +51,7 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
             });
         }
 
-        makeCall (actionName, data) {
+        makeCall(actionName, data) {
             let defer = $q.defer();
             let id = CommonService.generateId();
 
@@ -64,10 +64,13 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
             return listeners[id].defer.promise;
         }
 
-        makeCustomCall (actionName, data) {
+        makeCustomCall(actionName, data) {
             this.ipcRenderer.send(actionName, data);
         }
-
+        
+        on(method, cb) {
+            this.ipcRenderer.on(method, cb);
+        }
     };
 
     return new RPCService();

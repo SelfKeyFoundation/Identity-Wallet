@@ -6,21 +6,23 @@
             span.none-select-text Backup Your Wallet
         .content(layout="column")
 
-            .title "Please download the Keystore File to keep a backup of your newly created wallet. This file is protected by the password you just created. Inside this file are your private keys that sign all transactions on the blockchain."
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Public Key
+                input(name="publicKey", ng-model="$root.wallet.publicKeyHex", type="text", placeholder="Your Public Key", disabled)
+
+            .title
+                | Please download the Keystore File to save a backup of your wallet.
+                | The Keystore File is encrypted by the password you just created.
+                | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
 
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
                 span.primary Backup your keystore file (UTC / JSON)
 
-            .warning-description
-                .item
-                    span Do not lose it!
-                    span It cannot be recovered if you lose it.
-                .item
-                    span Do not share it!
-                    span Your funds will be stolen if you use this file on a malicious/phishing site.
-                .item
-                    span Make a backup!
-                    span Secure it like the millions of dollars it may one day be worth.
+            .title
+                p
+                    | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
+                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password, &nbsp;
+                    a(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-wallet/what-is-a-keystore-file-utc', false)") click here.
 
             .actions-wrapper
                 md-button.outline-orange(ng-click="nextStep($event)")
