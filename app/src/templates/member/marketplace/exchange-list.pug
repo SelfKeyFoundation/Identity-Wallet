@@ -10,7 +10,6 @@
                         |  Staking acts similarly like <br />
                         |  a refundable security deposit. <br />
                         |  to learn more,click here.. </div>
-                //sk-icon(icon="ic_help_outline_black_24px", size-class="icon-size-16x16")
                 span : Coming soon
         .body-wrapper
             ul
@@ -22,5 +21,5 @@
                     .list-body
                         .body-description(ng-bind-html="item.content + (item.data.description.length > 300 ? '...' : '')")
                         .buttons-section
-                            md-button.gray(ng-disabled='!item.available')
-                                span {{item.available ? 'View' : 'Coming Soon'}}
+                            md-button.gray(ng-disabled='!item.data')
+                                span {{item.data ? 'View' : 'Coming Soon'}}
