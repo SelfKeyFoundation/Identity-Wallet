@@ -339,6 +339,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             }
         })
+        .state('member.marketplace.exchange', {
+            url: '/member/marketplace/exchange',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/exchange/exchange.html',
+                    controller: 'MemberMarketplaceExchangeController'
+                }
+            }
+        })
 
     $urlRouterProvider.otherwise('/guest/loading');
 }

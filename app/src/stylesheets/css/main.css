@@ -17805,3 +17805,53 @@ md-dialog {
         .dashboard-content-wrappper .transactions-box-body .list .list-item .item-container .coin-change.squash,
         .wallet-manage-token-wrappper .body-content .list .list-item .item-container .coin-change.squash {
           color: #f5a623; }
+
+/*Martketplace Exchange*/
+.exchange-container {
+  border: 1px solid #303c49;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
+  color: white;
+  width: 800px; }
+  .exchange-container .back {
+    margin: 20px 0 0 20px; }
+    .exchange-container .back span {
+      font-size: 13px; }
+  .exchange-container .exchange {
+    padding: 40px; }
+    .exchange-container .exchange .exchange-content .header {
+      border: 1px solid #303c49;
+      padding: 15px; }
+      .exchange-container .exchange .exchange-content .header .logo {
+        display: flex; }
+        .exchange-container .exchange .exchange-content .header .logo span {
+          align-self: center;
+          margin-left: 15px; }
+    .exchange-container .exchange .exchange-content .body .section {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #303c49; }
+      .exchange-container .exchange .exchange-content .body .section:last-child {
+        border: none; }
+      .exchange-container .exchange .exchange-content .body .section .section-content {
+        margin-bottom: 10px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .title {
+          font-size: 20px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .textual {
+          padding: 25px 15px 0 15px;
+          width: 650px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
+            display: table;
+            margin: 25px auto; }
+            .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray span {
+              font-size: 13px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .columns {
+          display: flex;
+          margin-left: 15px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .columns .column {
+            margin-right: 100px; }
+            .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div {
+              margin: 15px 0; }
+              .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div label {
+                display: inline-block;
+                width: 8em; }
