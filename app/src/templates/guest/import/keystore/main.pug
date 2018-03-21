@@ -7,7 +7,7 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
     md-button.gray(style="width: 100%; margin: 18px 0;", ng-click="selectKystoreFile($event, theForm)", ng-if="type === 'import'")
         span {{ userInput.selectedFilePath ? 'Keystore is selected' : 'Select Keystore File' }}
 
-    md-input-container.sk-input-box(style="width: 100%;")
+    md-input-container.sk-input-box.no-error-spacer(style="width: 100%;")
         label Decrypt wallet using password
         input(type="password", name="password", ng-model="userInput.password", ng-required="true")
         div(ng-messages="theForm.password.$error")

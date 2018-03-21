@@ -46,8 +46,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
 
     processCustomTokens();
 
-    $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
-
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
         Object.keys(wallet.tokens).forEach((tokeyKey) => {
@@ -102,8 +100,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         processCustomTokens();
         $scope.pieChart.items = $scope.getPieChartItems();
 
-        $scope.totalBalanceInUsd = wallet.calculateTotalBalanceInUSD();
-        $scope.pieChart.total = CommonService.numbersAfterComma($scope.totalBalanceInUsd, 2);
+        $scope.pieChart.total = CommonService.numbersAfterComma(wallet.calculateTotalBalanceInUSD(), 2);
         $scope.pieChart.draw();
     }
 

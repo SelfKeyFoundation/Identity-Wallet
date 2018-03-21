@@ -22,6 +22,7 @@ window.qrcode = requireNodeModule('qrcode-generator');
 requireNodeModule('@uirouter/angularjs');
 requireNodeModule('angular-material');
 requireNodeModule('angular-messages');
+requireNodeModule('angular-sanitize');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
@@ -37,6 +38,7 @@ requireAppModule('angular/app.templates');
 window.app = angular.module('kyc-wallet', [
   'ngMaterial',
   'ngMessages',
+  'ngSanitize',
   'ui.router',
   'templates',
   'LocalStorageModule',
@@ -89,6 +91,7 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
+
 
 /**
  * directives
@@ -182,6 +185,10 @@ angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditC
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
 
+const CloseWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/close-warning-controller.js');
+angular.module('kyc-wallet').controller('CloseWarningDialogController', CloseWarningDialogController);
+
+
 /**
  * guest
  */
@@ -271,8 +278,8 @@ angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberId
 /**
  * marketplace
  */
-const MemberMarketplaceMainController = requireAppModule('angular/controllers/member/marketplace/main-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceMainController', MemberMarketplaceMainController);
+const MemberMarketplaceExchangeListController = requireAppModule('angular/controllers/member/marketplace/exchange-list-controller.js');
+angular.module('kyc-wallet').controller('MemberMarketplaceExchangeListController', MemberMarketplaceExchangeListController);
 
 const MemberMarketplaceExchangeController = requireAppModule('angular/controllers/member/marketplace/exchange/exchange-controller.js');
 angular.module('kyc-wallet').controller('MemberMarketplaceExchangeController', MemberMarketplaceExchangeController);

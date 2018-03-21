@@ -8,18 +8,23 @@
         .header
             span.none-select-text Create A Password For Your New Wallet (Keystore File)
         form.content(name="passwordForm", layout="column")
+            .title
+                | You must remember this password to unlock the wallet.
+                | There is no way it can be restored or reset,
+                | and Selfkey cannot help you if the password is lost.
+
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
+                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
 
             .password-strength-container
                 .blocks-container
-                    .block(ng-class="{'active': passwordStrength.score >= 0}")
+                    .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
                     .block(ng-class="{'active': passwordStrength.score >= 1}")
                     .block(ng-class="{'active': passwordStrength.score >= 2}")
                     .block(ng-class="{'active': passwordStrength.score >= 3}")
                 .status-text-container
-                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
+                    span {{getPasswordStrengthInfo()}}
 
             .actions-wrapper
                 md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, passwordForm)")

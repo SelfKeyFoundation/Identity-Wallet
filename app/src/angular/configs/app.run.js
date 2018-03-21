@@ -254,12 +254,31 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openCloseWarningDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'CloseWarningDialogController',
+            templateUrl: 'common/dialogs/close-warning.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    /*
     $rootScope.$on('local-storage:change', (event, data) => {
         $log.info('local-storage:change', data);
         if (RPCService.ipcRenderer) {
             RPCService.makeCustomCall("ON_CONFIG_CHANGE", data)
         }
     });
+    */
+
+    RPCService.on('SHOW_CLOSE_DIALOG', (event) => {
+        console.log("????????", 'SHOW_CLOSE_DIALOG');
+        $rootScope.openCloseWarningDialog();
+    })
+    //
 }
 
 module.exports = AppRun;

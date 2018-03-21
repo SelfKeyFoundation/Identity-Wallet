@@ -16,18 +16,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $state, $m
 
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
-
-        $mdDialog.show({
-            controller: 'PasswordWarningDialogController',
-            templateUrl: 'common/dialogs/password-warning.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose: false,
-            fullscreen: true,
-            locals: {
-                basicInfo: $scope.input
-            }
-        });
+        $state.go('guest.create.step-3', { basicInfo: $scope.input });
     }
 };
 

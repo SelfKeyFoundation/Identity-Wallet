@@ -14,6 +14,8 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
     }
 
     $scope.accept = (event) => {
+        $mdDialog.hide();
+        /*
         if ($rootScope.walletImportData) {
             $scope.isLoading = true;
             let promise = importAndUnlockExistingWallet()
@@ -32,6 +34,7 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
             $state.go('guest.create.step-3', { basicInfo: basicInfo });
             $mdDialog.hide();
         }
+        */
     }
 
     $transitions.onStart({ }, function(trans) {
@@ -55,7 +58,7 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
         promise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
             let initialPromises = [];
-            
+
             initialPromises.push($rootScope.wallet.loadIdAttributes());
             initialPromises.push($rootScope.wallet.loadTokens());
 

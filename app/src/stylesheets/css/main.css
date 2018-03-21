@@ -16773,64 +16773,57 @@ form.birth-date-content {
     .birth-date-actions-wrapper .md-button:last-of-type {
       margin-left: 16px; }
 
-md-dialog {
-  background-image: linear-gradient(124deg, #2b3540, #1e262e);
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center; }
-  md-dialog .close-btn {
-    cursor: pointer;
-    position: absolute;
-    outline: none;
-    top: 30.8px;
-    right: 30.8px; }
-  md-dialog .edit-tokens-contaner {
-    min-width: 100%;
-    min-height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center; }
-    md-dialog .edit-tokens-contaner * {
-      font-family: ProximaNovaRegular; }
-    md-dialog .edit-tokens-contaner .header-text {
-      padding-top: 36px;
-      padding-bottom: 24px;
-      font-size: 24px;
-      line-height: 1.5;
-      text-align: center;
-      color: #ffffff; }
-    md-dialog .edit-tokens-contaner .grid-container {
-      width: 1140px;
-      padding-top: 80px; }
-      md-dialog .edit-tokens-contaner .grid-container table {
-        border-spacing: 0px;
-        width: 100%; }
-        md-dialog .edit-tokens-contaner .grid-container table thead tr {
-          height: 38px; }
-          md-dialog .edit-tokens-contaner .grid-container table thead tr td {
-            font-size: 12px;
-            font-weight: 600;
-            text-align: left;
-            color: #7f8fa4;
-            text-transform: uppercase; }
-            md-dialog .edit-tokens-contaner .grid-container table thead tr td:first-child {
-              padding-left: 24px; }
-        md-dialog .edit-tokens-contaner .grid-container table tbody tr {
-          height: 74px;
-          cursor: pointer; }
-          md-dialog .edit-tokens-contaner .grid-container table tbody tr:nth-child(odd) {
-            background-color: #262f39; }
-          md-dialog .edit-tokens-contaner .grid-container table tbody tr td {
-            padding: 0px;
-            font-size: 15px;
-            text-align: left;
-            color: #ffffff; }
-            md-dialog .edit-tokens-contaner .grid-container table tbody tr td:first-child {
-              padding-left: 24px !important; }
+md-dialog .close-btn {
+  cursor: pointer;
+  position: absolute;
+  outline: none;
+  top: 30.8px;
+  right: 30.8px; }
+
+md-dialog.edit-tokens {
+  background-image: linear-gradient(124deg, #2b3540, #1e262e); }
+  md-dialog.edit-tokens * {
+    font-family: ProximaNovaRegular; }
+  md-dialog.edit-tokens .container {
+    height: 100vh; }
+  md-dialog.edit-tokens .content {
+    padding-top: 80px; }
+  md-dialog.edit-tokens .header-text {
+    padding-top: 36px;
+    padding-bottom: 24px;
+    font-size: 24px;
+    line-height: 1.5;
+    text-align: center;
+    color: #ffffff; }
+  md-dialog.edit-tokens .grid-container {
+    width: 1140px;
+    padding-top: 80px;
+    padding-bottom: 80px; }
+    md-dialog.edit-tokens .grid-container table {
+      border-spacing: 0px;
+      width: 100%; }
+      md-dialog.edit-tokens .grid-container table thead tr {
+        height: 38px; }
+        md-dialog.edit-tokens .grid-container table thead tr td {
+          font-size: 12px;
+          font-weight: 600;
+          text-align: left;
+          color: #7f8fa4;
+          text-transform: uppercase; }
+          md-dialog.edit-tokens .grid-container table thead tr td:first-child {
+            padding-left: 24px; }
+      md-dialog.edit-tokens .grid-container table tbody tr {
+        height: 74px;
+        cursor: pointer; }
+        md-dialog.edit-tokens .grid-container table tbody tr:nth-child(odd) {
+          background-color: #262f39; }
+        md-dialog.edit-tokens .grid-container table tbody tr td {
+          padding: 0px;
+          font-size: 15px;
+          text-align: left;
+          color: #ffffff; }
+          md-dialog.edit-tokens .grid-container table tbody tr td:first-child {
+            padding-left: 24px !important; }
 
 md-dialog {
   background-image: linear-gradient(124deg, #2b3540, #1e262e);
@@ -17032,7 +17025,7 @@ md-dialog {
 .wallet-create-step-3 {
   height: 100%; }
   .wallet-create-step-3 .title {
-    margin-top: 24px;
+    margin-bottom: 24px;
     user-select: none;
     font-family: ProximaNovaSemibold;
     font-weight: 600;
@@ -17053,7 +17046,7 @@ md-dialog {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-3 .content-wrapper .content {
-      padding: 44px 36px; }
+      padding: 24px 36px; }
       .wallet-create-step-3 .content-wrapper .content .password-strength-container {
         height: 11px;
         width: 100%;
@@ -17105,7 +17098,7 @@ md-dialog {
 .wallet-create-step-4 {
   height: 100%; }
   .wallet-create-step-4 > .title {
-    margin-top: 24px;
+    margin-bottom: 24px;
     user-select: none;
     font-family: ProximaNovaSemibold;
     font-weight: 600;
@@ -17126,7 +17119,7 @@ md-dialog {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-4 .content-wrapper .content {
-      padding: 44px 36px; }
+      padding: 24px 36px; }
       .wallet-create-step-4 .content-wrapper .content > .title {
         font-family: ProximaNovaRegular;
         font-size: 18px;
@@ -17614,75 +17607,75 @@ md-dialog {
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table thead tr td {
               padding: 5px 0; }
 
-.marketplace-main {
+.marketplace-exchange-list {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center; }
-  .marketplace-main > .center-container {
+  .marketplace-exchange-list > .center-container {
     width: 100%;
     margin-top: 30px; }
-    .marketplace-main > .center-container .header-wrapper {
+    .marketplace-exchange-list > .center-container .header-wrapper {
       width: 100%;
       border-bottom: 1px solid #303c49;
       padding-bottom: 30px;
       display: block; }
-      .marketplace-main > .center-container .header-wrapper .title {
+      .marketplace-exchange-list > .center-container .header-wrapper .title {
         font-size: 20px;
         color: #768fa9;
         margin-left: 80px;
         font-family: ProximaNovaRegular; }
-      .marketplace-main > .center-container .header-wrapper .status {
+      .marketplace-exchange-list > .center-container .header-wrapper .status {
         color: #768fa9;
         font-size: 16px;
         font-family: ProximaNovaRegular;
         float: right;
         margin-top: -15px;
         margin-right: 150px; }
-        .marketplace-main > .center-container .header-wrapper .status md-icon {
+        .marketplace-exchange-list > .center-container .header-wrapper .status md-icon {
           padding: 0 5px;
           height: 16px !important;
           width: 16px !important;
           min-height: 16px !important;
           min-width: 16px !important; }
-    .marketplace-main > .center-container .body-wrapper {
+    .marketplace-exchange-list > .center-container .body-wrapper {
       width: 1140px;
       margin: 0 auto; }
-      .marketplace-main > .center-container .body-wrapper ul {
+      .marketplace-exchange-list > .center-container .body-wrapper ul {
         list-style-type: none;
         width: 1140px; }
-        .marketplace-main > .center-container .body-wrapper ul li {
+        .marketplace-exchange-list > .center-container .body-wrapper ul li {
           width: 320px;
           height: 250px;
           font-size: 16px;
           font-family: ProximaNovaRegular;
-          margin: 20px;
+          margin: 50px 20px;
           float: left; }
-          .marketplace-main > .center-container .body-wrapper ul li .list-title {
+          .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title {
             border: 1px solid #303c49;
             font-size: 18px;
             font-family: ProximaNovaRegular;
             color: #FFFFFF;
             height: 40px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-title .title-text {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
               margin: 10px 0 0 10px;
               word-break: break-all; }
-          .marketplace-main > .center-container .body-wrapper ul li .list-body {
+          .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body {
             border: 1px solid #303c49;
             padding: 10px;
             font-size: 16px;
             font-family: ProximaNovaRegular;
             color: #FFFFFF;
-            height: 205px;
+            height: 220px;
             margin-top: 3px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-body .body-description {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .body-description {
               word-break: break-all;
               height: 175px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
               min-height: 28px !important;
               height: 28px !important;
               line-height: 28px !important; }
-              .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
+              .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
                 font-size: 14px; }
 
 .bg-gradient {

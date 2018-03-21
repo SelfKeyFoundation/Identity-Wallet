@@ -1,7 +1,7 @@
-.marketplace-main
+.marketplace-exchange-list
     .center-container
         .header-wrapper
-            .title Exchanges
+            .title(ui-sref="member.marketplace.exchange") Exchanges
             .status(layout='row')
                 span Your Staking Status
                 md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
@@ -14,14 +14,13 @@
                 span : Coming soon
         .body-wrapper
             ul
-                li(ng-repeat='item in marketplaceData')
+                li(ng-repeat='item in exchangesList')
                     .list-title(layout='row')
                         .title-logo
                             sk-icon(ng-if='item.logo', icon="{{item.logo}}", size-class="icon-size-36x36")
-                        .title-text   {{item.title}}
+                        .title-text   {{item.name}}
                     .list-body
-                        .body-description {{ item.description | limitTo:300 }}
-                            span(ng-if='item.description.length > 300') ...
+                        .body-description(ng-bind-html="item.content + (item.data.description.length > 300 ? '...' : '')")
                         .buttons-section
                             md-button.gray(ui-sref="member.marketplace.exchange({data: item})",ng-disabled='!item.available')
                                 span {{item.available ? 'View' : 'Coming Soon'}}
