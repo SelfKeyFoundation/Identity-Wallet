@@ -13,6 +13,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     let WALLETS_STORE = {};
     let GUIDE_SETTINGS = {};
     let COUNTRIES = [];
+    let EXCHANGE_DATA = [];
 
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
@@ -50,6 +51,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             promises.push(this.loadTokenPrices());
             promises.push(this.loadWallets());
             promises.push(this.loadCountries());
+            promises.push(this.loadExchangeData());
 
             return $q.all(promises).then((data) => {
                 $rootScope.$broadcast(EVENTS.APP_DATA_LOAD);
@@ -122,6 +124,18 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         /**
+         * Load Exchange Data
+         */
+        loadExchangeData() {
+            return RPCService.makeCall('findAllExchangeData', null).then((data) => {
+                if (data && data.length) {
+                    EXCHANGE_DATA = data;
+                    $log.info("EXCHANGE_DATA", "LOADED", EXCHANGE_DATA);
+                }
+            })
+        }
+
+        /**
          *
          */
         startTokenPriceUpdaterListener() {
@@ -186,6 +200,13 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         /**
+         * get exchange data
+         */
+        getExchangeData() {
+            return EXCHANGE_DATA;
+        }
+
+        /**
          * id_attributes
          */
         loadIdAttributes(walletId) {
@@ -196,14 +217,14 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('addIdAttribute', idAttribute);
         }
 
-        deleteIdAttribute(idAttribute){
+        deleteIdAttribute(idAttribute) {
             return RPCService.makeCall('deleteIdAttribute', idAttribute);
         }
 
         /**
          *
          */
-        registerActionLog(actionText, title){
+        registerActionLog(actionText, title) {
             let theAction = {
                 walletId: $rootScope.wallet.id,
                 title: title || "untitled",
@@ -212,25 +233,25 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('actionLogs_add', theAction);
         }
 
-        loadWalletHistory(walletId){
-            return RPCService.makeCall('actionLogs_findAll', {walletId: walletId});
+        loadWalletHistory(walletId) {
+            return RPCService.makeCall('actionLogs_findAll', { walletId: walletId });
         }
 
         /**
          *
          */
-        updateIdAttributeItemValueStaticData (idAttributeValue) {
+        updateIdAttributeItemValueStaticData(idAttributeValue) {
             return RPCService.makeCall('updateIdAttributeItemValueStaticData', idAttributeValue);
         }
 
-        updateIdAttributeItemValueDocument (idAttributeItemValue, document) {
-            return RPCService.makeCall('updateIdAttributeItemValueDocument', { idAttributeItemValue: idAttributeItemValue, document: document});
+        updateIdAttributeItemValueDocument(idAttributeItemValue, document) {
+            return RPCService.makeCall('updateIdAttributeItemValueDocument', { idAttributeItemValue: idAttributeItemValue, document: document });
         }
 
         /**
          *
          */
-        loadDocumentById (documentId) {
+        loadDocumentById(documentId) {
             return RPCService.makeCall('loadDocumentById', { documentId: documentId });
         }
 
@@ -278,7 +299,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         insertNewWalletToken(data, balance, walletId) {
-            return RPCService.makeCall('insertNewWalletToken', {data: data, balance: balance, walletId: walletId});
+            return RPCService.makeCall('insertNewWalletToken', { data: data, balance: balance, walletId: walletId });
         }
 
         updateWalletToken(data) {
