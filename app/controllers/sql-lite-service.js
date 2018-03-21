@@ -29,6 +29,10 @@ module.exports = function (app) {
     controller.insertIntoTable = insertIntoTable;
     controller.select = _select;
     controller.insert = _insert;
+    controller.update = _update;
+
+    let Wallet = require('./models/wallet.js')(app, controller);
+    controller.prototype.Wallet = Wallet;
 
     let AppSetting = require('./models/app-setting.js')(app, controller);
     controller.prototype.AppSetting = AppSetting;
@@ -51,36 +55,12 @@ module.exports = function (app) {
     let GuideSetting = require('./models/guide-setting.js')(app, controller);
     controller.prototype.GuideSetting = GuideSetting;
 
+    let ActionLog = require('./models/action-log.js')(app, controller);
+    controller.prototype.ActionLog = ActionLog;
+
     /**
      * tables
      */
-    function createWallet() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('wallets').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('wallets', (table) => {
-                        table.increments('id');
-                        table.string('name');
-                        table.string('publicKey').unique().notNullable();
-                        table.string('privateKey');
-                        table.string('keystoreFilePath');
-                        table.binary('profilePicture');
-                        //table.integer('recordState').defaultTo(1);
-                        table.integer('createdAt').notNullable(); // TODO remove default
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "wallets", "created.");
-                        resolve("wallets created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
     function createIdAttributeItems() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable('id_attribute_items').then(function (exists) {
@@ -213,30 +193,6 @@ module.exports = function (app) {
         });
     }
 
-    function createActionLogs() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('action_logs').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('action_logs', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.string('title');
-                        table.string('content');
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "action_logs", "created.");
-                        resolve("action_logs created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
     function createWalletSettings() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable('wallet_settings').then(function (exists) {
@@ -271,7 +227,7 @@ module.exports = function (app) {
         promises.push(Document.init());
         promises.push(IdAttributeType.init());
         promises.push(Token.init());
-        promises.push(createWallet());
+        promises.push(Wallet.init());
         promises.push(AppSetting.init());
         promises.push(GuideSetting.init());
         promises.push(IdAttribute.init());
@@ -280,7 +236,7 @@ module.exports = function (app) {
         promises.push(createTokenPrices());
         promises.push(createWalletTokens());
         promises.push(createTransactionsHistory());
-        promises.push(createActionLogs());
+        promises.push(ActionLog.init());
         promises.push(createWalletSettings());
         return Promise.all(promises)
     }
@@ -318,6 +274,7 @@ module.exports = function (app) {
     /**
      * wallets
      */
+    /*
     controller.prototype.wallets_insert = (data, basicInfo) => {
         data.createdAt = new Date().getTime();
         return knex.transaction((trx) => {
@@ -378,6 +335,7 @@ module.exports = function (app) {
                 .catch(trx.rollback);
         });
     }
+    */
 
     controller.prototype.wallets_update = (data) => {
         return updateById('wallets', data);
@@ -508,6 +466,20 @@ module.exports = function (app) {
         }
 
         return query.insert(args);
+    }
+
+    function _update (table, args, where, tx) {
+        let query = knex(table);
+
+        if (tx) {
+            query = query.transacting(tx);
+        }
+
+        if (where) {
+            query = query.where(where);
+        }
+
+        return query.update(args);
     }
 
     /**
@@ -693,25 +665,6 @@ module.exports = function (app) {
     }
 
     /**
-     * action_logs
-     */
-    controller.prototype.actionLogs_add = (item) => {
-        item.createdAt = new Date().getTime();
-        //item.content = JSON.stringify(item.content);
-        return insertIntoTable('action_logs', item);
-    }
-
-    controller.prototype.actionLogs_findAll = (args) => {
-        return new Promise((resolve, reject)=>{
-            knex('action_logs').select().where({walletId: args.walletId}).then((rows) => {
-                resolve(rows);
-            }).catch((error) => {
-                reject({ message: "error", error: error });
-            });
-        });
-    }
-
-    /**
      * tokens
      */
     controller.prototype.tokens_selectBySymbol = (symbol) => {
@@ -756,27 +709,6 @@ module.exports = function (app) {
     }
 
     /**
-     * guide_settings
-     */
-    controller.prototype.guideSettings_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('guide_settings').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
-    controller.prototype.guideSettings_update = (data) => {
-        return updateById('guide_settings', data);
-    }
-
-    /**
      * transactions history
      */
     controller.prototype.transactionsHistory_selectAll = () => {
@@ -794,7 +726,6 @@ module.exports = function (app) {
     }
 
     controller.prototype.transactionsHistory_selectByWalletId = (id) => {
-
         return selectTable('transactions_history', { walletId: id });
     }
 
@@ -802,9 +733,6 @@ module.exports = function (app) {
         return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
     }
 
-    /**
-    * transactions_history
-    */
     controller.prototype.transactionsHistory_insert = (data) => {
         return insertIntoTable('transactions_history', data);
     }

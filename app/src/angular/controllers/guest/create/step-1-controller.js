@@ -5,8 +5,8 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $s
 
     $log.info('GuestKeystoreCreateStep1Controller');
 
-    $timeout(()=>{
-        if(!$stateParams.type){
+    $timeout(() => {
+        if (!$stateParams.type) {
             $mdDialog.show({
                 controller: 'PasswordWarningDialogController',
                 templateUrl: 'common/dialogs/password-warning.html',
@@ -21,9 +21,9 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $s
         }
     }, 200)
 
-
     $scope.createBasicId = (event) => {
-        $state.go('guest.create.step-2');
+        console.log("$$$$$$$", $stateParams.type)
+        $state.go('guest.create.step-2', { type: $stateParams.type });
     }
 };
 

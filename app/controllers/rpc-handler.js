@@ -67,7 +67,8 @@ module.exports = function (app) {
             let keystoreFileName = path.basename(outputPath);
             let keystoreFilePath = path.join(keystoreObject.address, keystoreFileName);
 
-            electron.app.sqlLiteService.wallets_insert(
+            //electron.app.sqlLiteService.wallets_insert(
+            electron.app.sqlLiteService.Wallet.add(
                 {
                     publicKey: keystoreObject.address,
                     keystoreFilePath: keystoreFilePath
@@ -250,7 +251,8 @@ module.exports = function (app) {
 
             helpers.copyFile(args.keystoreFilePath, path.join(keystoreFileDirectoryPath, keystoreFileName), (error) => {
                 if (!error) {
-                    electron.app.sqlLiteService.wallets_insert(
+                    //electron.app.sqlLiteService.wallets_insert(
+                    electron.app.sqlLiteService.Wallet.add(
                         {
                             publicKey: args.publicKey,
                             keystoreFilePath: keystoreFilePath
@@ -508,7 +510,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.actionLogs_add = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.actionLogs_add(args).then((data) => {
+        electron.app.sqlLiteService.ActionLog.add(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             log.error(error);
@@ -516,8 +518,9 @@ module.exports = function (app) {
         });
     }
 
+    // TODO - rename actionLogs_findByWalletId
     controller.prototype.actionLogs_findAll = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.actionLogs_findAll(args).then((data) => {
+        electron.app.sqlLiteService.ActionLog.findByWalletId(args.walletId).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             log.error(error);
@@ -825,7 +828,8 @@ module.exports = function (app) {
     }
 
     controller.prototype.saveWallet = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.wallets_insert(args).then((data) => {
+        //electron.app.sqlLiteService.wallets_insert(args).then((data) => {
+        electron.app.sqlLiteService.Wallet.add(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -929,7 +933,8 @@ module.exports = function (app) {
     }
 
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
+        //electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
+        electron.app.sqlLiteService.GuideSetting.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -937,7 +942,8 @@ module.exports = function (app) {
     }
 
     controller.prototype.saveGuideSettings = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.guideSettings_update(args).then((data) => {
+        //electron.app.sqlLiteService.guideSettings_update(args).then((data) => {
+        electron.app.sqlLiteService.GuideSetting.updateById(args.id, args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);

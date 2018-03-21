@@ -1,7 +1,8 @@
+const electron = require('electron');
 const Promise = require('bluebird');
 
 module.exports = function (app, sqlLiteService) {
-    const TABLE_NAME = 'guide_settings';
+    const TABLE_NAME = 'action_logs';
     const Controller = function () { };
 
     let knex = sqlLiteService.knex;
@@ -10,8 +11,8 @@ module.exports = function (app, sqlLiteService) {
      *
      */
     Controller.init = _init;
-    Controller.findAll = _findAll;
-    Controller.updateById = _updateById;
+    Controller.add = _add;
+    Controller.findByWalletId = _findByWalletId;
 
     /**
      *
@@ -22,17 +23,13 @@ module.exports = function (app, sqlLiteService) {
                 if (!exists) {
                     knex.schema.createTable(TABLE_NAME, (table) => {
                         table.increments('id');
-                        table.integer('guideShown').defaultTo(0);
-                        table.integer('icoAdsShown').defaultTo(0);
-                        table.integer('termsAccepted').defaultTo(0);
+                        table.integer('walletId').notNullable().references('wallets.id');
+                        table.string('title');
+                        table.string('content');
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {
-                        sqlLiteService.insertIntoTable(TABLE_NAME, { guideShown: 0, icoAdsShown: 0, termsAccepted: 0, createdAt: new Date().getTime() }).then(() => {
-                            resolve("Table: " + TABLE_NAME + " created.");
-                        }).catch((error) => {
-                            reject(error);
-                        });
+                        resolve("Table: " + TABLE_NAME + " created.");
                     }).catch((error) => {
                         reject(error);
                     });
@@ -43,12 +40,13 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    function _findAll() {
-        return sqlLiteService.select(TABLE_NAME, "*");
+    function _add (item) {
+        item.createdAt = new Date().getTime();
+        return sqlLiteService.insert(TABLE_NAME, item)
     }
 
-    function _updateById(id, data) {
-        return sqlLiteService.update(TABLE_NAME, data, { id: id });
+    function _findByWalletId (walletId) {
+        return sqlLiteService.select(TABLE_NAME, "*", {walletId: walletId});
     }
 
     return Controller;

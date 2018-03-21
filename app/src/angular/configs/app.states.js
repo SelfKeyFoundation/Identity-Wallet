@@ -116,7 +116,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                thePassword: null
+                type: null
             }
         })
 
@@ -129,7 +129,8 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                basicInfo: null
+                basicInfo: null,
+                type: null
             }
         })
 
