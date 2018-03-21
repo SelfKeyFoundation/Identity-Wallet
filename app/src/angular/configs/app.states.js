@@ -330,12 +330,12 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        .state('member.marketplace.main', {
-            url: '/member/marketplace/main',
+        .state('member.marketplace.exchange-list', {
+            url: '/member/marketplace/exchange-list',
             views: {
                 main: {
-                    templateUrl: 'member/marketplace/main.html',
-                    controller: 'MemberMarketplaceMainController'
+                    templateUrl: 'member/marketplace/exchange-list.html',
+                    controller: 'MemberMarketplaceExchangeListController'
                 }
             }
         })

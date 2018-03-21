@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberMarketplaceMainController($rootScope, $scope, $log, $timeout, $mdDialog, $mdPanel, SqlLiteService, $sce, $filter) {
+function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $timeout, $mdDialog, $mdPanel, SqlLiteService, $sce, $filter) {
     'ngInject'
 
     $log.info('MemberMarketplaceMainController');
@@ -20,4 +20,4 @@ function MemberMarketplaceMainController($rootScope, $scope, $log, $timeout, $md
 
 };
 
-module.exports = MemberMarketplaceMainController;
+module.exports = MemberMarketplaceExchangeListController;

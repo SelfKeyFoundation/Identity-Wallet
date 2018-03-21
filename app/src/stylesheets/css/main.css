@@ -17614,60 +17614,60 @@ md-dialog {
             .id-wallet-main > .center-container .body-wrapper .left-side-wrapper .ID-documents-container .ID-documents-table thead tr td {
               padding: 5px 0; }
 
-.marketplace-main {
+.marketplace-exchange-list {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center; }
-  .marketplace-main > .center-container {
+  .marketplace-exchange-list > .center-container {
     width: 100%;
     margin-top: 30px; }
-    .marketplace-main > .center-container .header-wrapper {
+    .marketplace-exchange-list > .center-container .header-wrapper {
       width: 100%;
       border-bottom: 1px solid #303c49;
       padding-bottom: 30px;
       display: block; }
-      .marketplace-main > .center-container .header-wrapper .title {
+      .marketplace-exchange-list > .center-container .header-wrapper .title {
         font-size: 20px;
         color: #768fa9;
         margin-left: 80px;
         font-family: ProximaNovaRegular; }
-      .marketplace-main > .center-container .header-wrapper .status {
+      .marketplace-exchange-list > .center-container .header-wrapper .status {
         color: #768fa9;
         font-size: 16px;
         font-family: ProximaNovaRegular;
         float: right;
         margin-top: -15px;
         margin-right: 150px; }
-        .marketplace-main > .center-container .header-wrapper .status md-icon {
+        .marketplace-exchange-list > .center-container .header-wrapper .status md-icon {
           padding: 0 5px;
           height: 16px !important;
           width: 16px !important;
           min-height: 16px !important;
           min-width: 16px !important; }
-    .marketplace-main > .center-container .body-wrapper {
+    .marketplace-exchange-list > .center-container .body-wrapper {
       width: 1140px;
       margin: 0 auto; }
-      .marketplace-main > .center-container .body-wrapper ul {
+      .marketplace-exchange-list > .center-container .body-wrapper ul {
         list-style-type: none;
         width: 1140px; }
-        .marketplace-main > .center-container .body-wrapper ul li {
+        .marketplace-exchange-list > .center-container .body-wrapper ul li {
           width: 320px;
           height: 250px;
           font-size: 16px;
           font-family: ProximaNovaRegular;
           margin: 50px 20px;
           float: left; }
-          .marketplace-main > .center-container .body-wrapper ul li .list-title {
+          .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title {
             border: 1px solid #303c49;
             font-size: 18px;
             font-family: ProximaNovaRegular;
             color: #FFFFFF;
             height: 40px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-title .title-text {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
               margin: 10px 0 0 10px;
               word-break: break-all; }
-          .marketplace-main > .center-container .body-wrapper ul li .list-body {
+          .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body {
             border: 1px solid #303c49;
             padding: 10px;
             font-size: 16px;
@@ -17675,14 +17675,14 @@ md-dialog {
             color: #FFFFFF;
             height: 220px;
             margin-top: 3px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-body .body-description {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .body-description {
               word-break: break-all;
               height: 175px; }
-            .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
               min-height: 28px !important;
               height: 28px !important;
               line-height: 28px !important; }
-              .marketplace-main > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
+              .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
                 font-size: 14px; }
 
 .bg-gradient {
