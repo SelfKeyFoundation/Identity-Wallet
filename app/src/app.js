@@ -185,6 +185,10 @@ angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditC
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
 
+const CloseWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/close-warning-controller.js');
+angular.module('kyc-wallet').controller('CloseWarningDialogController', CloseWarningDialogController);
+
+
 /**
  * guest
  */

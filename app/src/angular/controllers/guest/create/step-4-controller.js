@@ -25,12 +25,24 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
                 CommonService.showToast('error', 'Error creating wallet');
             });
         } else {
-            CommonService.showToast('error', 'wrong confirmation password');
+            CommonService.showToast('error', 'Wrong confirmation password.');
         }
     }
 
     $scope.previousStep = (event) => {
         $state.go('guest.create.step-3', { basicInfo: $stateParams.basicInfo });
+    }
+
+    $scope.getPasswordStrengthInfo = () => {
+        if(!$scope.input.password || !$scope.input.password.length){
+            return 'Please create a new password.';
+        }
+
+        if($scope.passwordStrength && $scope.passwordStrength.score){
+            return $scope.passwordStrength.score > 2 ? 'Strong' : 'Weak';
+        }else {
+            return 'Weak';
+        }
     }
 
     function createKeystore() {

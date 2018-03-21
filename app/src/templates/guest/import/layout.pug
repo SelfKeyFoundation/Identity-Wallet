@@ -4,11 +4,24 @@
     #message-container(layout="column", layout-align="center center" style="width: 780px; height: 48px;")
 
     .sk-box.shadowed(style="width: 780px;")
-        .header
-            span Import An Existing Wallet
-        .content(layout="column", style="padding: 40px;")
+        .header(style="position: relative;")
+            span Use An Existing Wallet
+            sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)", style="cursor: pointer; position: absolute; right: -18px; top: -18px;")
+        .content(layout="column", style="padding: 20px 40px;")
             .description-wrapper
-                span(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.89; color: #ffffff;")  You can do this via Keystore File (UTC) or private keys. We will have full integration with hardware wallets by the end of Q1 2018. If you need help, please visit https://help.selfkey.org
+                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | Do you have an existing Selfkey Identity Wallet?
+                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | If you have previously created a wallet in our application,
+                    | please select the ETH address from below and unlock the Keystore
+                    | file with the password you have set during creation.
+                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | Do you have another Keystore file (UTC)?
+
+                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | If you have an existing ETH wallet via Keystore File,
+                    | you can import the file to integrate with the Selfkey Identity Wallet
+
             .content-wrapper(layout="row", style="margin-top: 50px;")
                 .left(style="width: 340px;")
                     span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
@@ -16,6 +29,8 @@
                         md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
                             md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
                             md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select
+                            md-radio-button(md-no-ink, value="ledger") Ledger (Coming Soon)
+                            md-radio-button(md-no-ink, value="trezor") Trezor (Coming Soon)
                             md-radio-button(md-no-ink, value="privateKey") Private Key
 
                 .right(flex, ui-view="main")

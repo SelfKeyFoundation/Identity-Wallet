@@ -2,7 +2,7 @@
     height: 100%;
 
     > .title {
-        margin-top: 24px;
+        margin-bottom: 24px;
         user-select: none;
         font-family: ProximaNovaSemibold;
         font-weight: 600;
@@ -19,15 +19,15 @@
         text-align: center;
         color: #0abbd0;
         margin-top: 15px;
-        user-select: none; 
+        user-select: none;
     }
-    
+
     .content-wrapper {
         width: 780px;
         margin-top: 50px;
 
         .content {
-            padding: 44px 36px;
+            padding: 24px 36px;
 
             >.title {
                 font-family: ProximaNovaRegular;
@@ -59,11 +59,11 @@
                         flex-direction: row;
                         align-items: center;
                         justify-content: center;
-    
+
                         height: 11px;
                         width: 168px;
                         background-color: #1e262e;
-    
+
                         &.active {
                             &:after {
                                 content: "";
@@ -74,7 +74,7 @@
                         }
                     }
                 }
-                
+
                 .status-text-container {
                     display: flex;
                     flex-direction: column;

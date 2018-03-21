@@ -17032,7 +17032,7 @@ md-dialog {
 .wallet-create-step-3 {
   height: 100%; }
   .wallet-create-step-3 .title {
-    margin-top: 24px;
+    margin-bottom: 24px;
     user-select: none;
     font-family: ProximaNovaSemibold;
     font-weight: 600;
@@ -17053,7 +17053,7 @@ md-dialog {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-3 .content-wrapper .content {
-      padding: 44px 36px; }
+      padding: 24px 36px; }
       .wallet-create-step-3 .content-wrapper .content .password-strength-container {
         height: 11px;
         width: 100%;
@@ -17105,7 +17105,7 @@ md-dialog {
 .wallet-create-step-4 {
   height: 100%; }
   .wallet-create-step-4 > .title {
-    margin-top: 24px;
+    margin-bottom: 24px;
     user-select: none;
     font-family: ProximaNovaSemibold;
     font-weight: 600;
@@ -17126,7 +17126,7 @@ md-dialog {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-4 .content-wrapper .content {
-      padding: 44px 36px; }
+      padding: 24px 36px; }
       .wallet-create-step-4 .content-wrapper .content > .title {
         font-family: ProximaNovaRegular;
         font-size: 18px;

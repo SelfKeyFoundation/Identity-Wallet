@@ -1,27 +1,30 @@
 .wallet-create-step-4(layout-fill, layout="column", layout-align="center center")
 
     sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
+    .title SELFKEY
     .description BLOCKCHAIN IDENTITY WALLET
 
     .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Confirm Password
         form.content(name="passwordForm", layout="column")
-            .title "If you forget your password, there is no way to get it back. You cannot change this password once it is set."
+            .title
+                | Please reconfirm the password you just entered.
+                | There is no way it can be restored or reset,
+                | and Selfkey cannot help you if the password is lost.
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
+                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
 
             .password-strength-container
                 .blocks-container
-                    .block(ng-class="{'active': passwordStrength.score >= 0}")
+                    .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
                     .block(ng-class="{'active': passwordStrength.score >= 1}")
                     .block(ng-class="{'active': passwordStrength.score >= 2}")
                     .block(ng-class="{'active': passwordStrength.score >= 3}")
                 .status-text-container
-                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
+                    span {{ getPasswordStrengthInfo() }}
 
             .actions-wrapper
                 md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
