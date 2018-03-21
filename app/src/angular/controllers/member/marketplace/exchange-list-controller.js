@@ -15,9 +15,6 @@ function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $time
     });
 
 
-    console.log(333, $scope.exchangesList);
-
-
 };
 
 module.exports = MemberMarketplaceExchangeListController;
