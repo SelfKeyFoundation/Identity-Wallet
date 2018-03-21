@@ -22,6 +22,7 @@ window.qrcode = requireNodeModule('qrcode-generator');
 requireNodeModule('@uirouter/angularjs');
 requireNodeModule('angular-material');
 requireNodeModule('angular-messages');
+requireNodeModule('angular-sanitize');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
@@ -37,6 +38,7 @@ requireAppModule('angular/app.templates');
 window.app = angular.module('kyc-wallet', [
   'ngMaterial',
   'ngMessages',
+  'ngSanitize',
   'ui.router',
   'templates',
   'LocalStorageModule',
@@ -89,6 +91,7 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
+
 
 /**
  * directives

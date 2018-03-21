@@ -17656,7 +17656,7 @@ md-dialog {
           height: 250px;
           font-size: 16px;
           font-family: ProximaNovaRegular;
-          margin: 20px;
+          margin: 50px 20px;
           float: left; }
           .marketplace-main > .center-container .body-wrapper ul li .list-title {
             border: 1px solid #303c49;
@@ -17673,7 +17673,7 @@ md-dialog {
             font-size: 16px;
             font-family: ProximaNovaRegular;
             color: #FFFFFF;
-            height: 205px;
+            height: 220px;
             margin-top: 3px; }
             .marketplace-main > .center-container .body-wrapper ul li .list-body .body-description {
               word-break: break-all;

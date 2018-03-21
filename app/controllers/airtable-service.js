@@ -38,10 +38,13 @@ module.exports = function (app) {
                     continue;
                 }
                 const item = data[i].data.fields;
+                if (!item.name) {
+                    continue;
+                }
                 const dataToSave = {
                     name: item.name,
                     data: JSON.stringify(item)
-                }
+                };
                 electron.app.sqlLiteService.ExchangeDataHandler.create(dataToSave).then((data) => {
                     // inserted
                 }).catch((error) => {
