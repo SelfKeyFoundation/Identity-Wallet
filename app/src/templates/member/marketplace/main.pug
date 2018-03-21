@@ -1,7 +1,7 @@
 .marketplace-main
     .center-container
         .header-wrapper
-            .title(ui-sref="member.marketplace.exchange") Exchanges
+            .title Exchanges
             .status(layout='row')
                 span Your Staking Status
                 md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
@@ -23,5 +23,5 @@
                         .body-description {{ item.description | limitTo:300 }}
                             span(ng-if='item.description.length > 300') ...
                         .buttons-section
-                            md-button.gray(ng-click="openExchange($event)",ng-disabled='!item.available')
+                            md-button.gray(ui-sref="member.marketplace.exchange({data: item})",ng-disabled='!item.available')
                                 span {{item.available ? 'View' : 'Coming Soon'}}

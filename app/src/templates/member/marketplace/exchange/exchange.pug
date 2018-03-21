@@ -12,10 +12,12 @@
                 .section
                     .section-content
                         .textual
-                            .text {{text}}
-
-                            md-button.gray.default(ng-if="text.length > 300")
-                                span.primary View All Details
+                            .text
+                                | {{ jobs.description | limitTo:strLimit }}
+                                span(ng-if='jobs.description.length > 300 && jobs.description.length != strLimit')
+                                    md-button.gray.default(ng-click='showMore()') Show more
+                                span(ng-if='jobs.description.length == strLimit')
+                                    md-button.gray.default(ng-click='showLess()') Show less
 
                 .section
                     .section-content

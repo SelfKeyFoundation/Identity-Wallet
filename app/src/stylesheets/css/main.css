@@ -17881,9 +17881,8 @@ md-dialog {
           width: 650px; }
           .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
             display: table;
-            margin: 25px auto; }
-            .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray span {
-              font-size: 13px; }
+            margin: 25px auto;
+            font-size: 13px; }
         .exchange-container .exchange .exchange-content .body .section .section-content .columns {
           display: flex;
           margin-left: 15px; }
