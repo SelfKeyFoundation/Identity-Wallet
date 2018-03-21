@@ -88,7 +88,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             locals: {
                 args: {
                     //because default must be empty
-                    //symbol: symbol,
+                    symbol: symbol,
                     allowSelectERC20Token: allowSelectERC20Token
                 }
             }
@@ -276,7 +276,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     */
 
     RPCService.on('SHOW_CLOSE_DIALOG', (event) => {
-        console.log("????????", 'SHOW_CLOSE_DIALOG');
         $rootScope.openCloseWarningDialog();
     })
     //
