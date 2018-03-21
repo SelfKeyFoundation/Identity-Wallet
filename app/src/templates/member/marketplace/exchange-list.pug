@@ -16,7 +16,8 @@
                 li(ng-repeat='item in exchangesList')
                     .list-title(layout='row')
                         .title-logo
-                            sk-icon(ng-if='item.logo', icon="{{item.logo}}", size-class="icon-size-36x36")
+                            span.helper
+                            img.logo-image(ng-src="{{item.data.logo[0].url}}", alt="")
                         .title-text   {{item.name}}
                     .list-body
                         .body-description(ng-bind-html="item.content + (item.data.description.length > 300 ? '...' : '')")
