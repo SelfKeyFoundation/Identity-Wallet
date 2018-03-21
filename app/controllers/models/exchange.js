@@ -25,7 +25,7 @@ module.exports = function (app, sqlLiteService) {
                 }
             });
         });
-    }
+    };
 
     Controller.create = (data) => {
         return new Promise((resolve, reject) => {
@@ -36,11 +36,11 @@ module.exports = function (app, sqlLiteService) {
                         if (!resp || resp !== 1) {
                             return reject({ message: "error_while_updating" });
                         }
-                        knex.select().from(TABLE_NAME).where('name', data.name).then((rows) => {
-                            if (rows && rows.length) {
-                                resolve(rows[0]);
+                        knex.select().from(TABLE_NAME).where('name', data.name).then((newRows) => {
+                            if (newRows && newRows.length) {
+                                resolve(newRows[0]);
                             } else {
-                                reject({ message: "error_while_updating" });
+                                reject({message: "error_while_updating"});
                             }
                         }).catch((error) => {
                             reject({ message: "error_while_updating", error: error });
@@ -57,17 +57,20 @@ module.exports = function (app, sqlLiteService) {
                 reject({ message: "error", error: error });
             });
         });
-    }
+    };
 
     Controller.findAll = () => {
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).select().then((rows) => {
-                resolve(rows);
+                let data = (rows || []).map(e => {
+                    return {name: e.name, data: JSON.parse(e.data)};
+                });
+                resolve(data);
             }).catch((error) => {
                 reject({ message: "error_while_selecting", error: error });
             });
         });
-    }
+    };
 
     return Controller;
 };
