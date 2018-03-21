@@ -65,6 +65,19 @@
 
                         .title-logo {
 
+                            .helper {
+                                display: inline-block;
+                                height: 100%;
+                                vertical-align: middle;
+                            }
+
+                            img{
+
+                                max-width: 60px;
+                                vertical-align: middle;
+                                margin-left: 5px;
+                            }
+
                         }
                         .title-text {
                             margin: 10px 0 0 10px;

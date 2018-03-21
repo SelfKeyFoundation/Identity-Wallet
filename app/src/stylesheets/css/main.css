@@ -17657,6 +17657,14 @@ md-dialog {
             font-family: ProximaNovaRegular;
             color: #FFFFFF;
             height: 40px; }
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo .helper {
+              display: inline-block;
+              height: 100%;
+              vertical-align: middle; }
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo img {
+              max-width: 60px;
+              vertical-align: middle;
+              margin-left: 5px; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
               margin: 10px 0 0 10px;
               word-break: break-all; }
