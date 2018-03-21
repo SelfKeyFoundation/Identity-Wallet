@@ -281,8 +281,8 @@ angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberId
 const MemberMarketplaceExchangeListController = requireAppModule('angular/controllers/member/marketplace/exchange-list-controller.js');
 angular.module('kyc-wallet').controller('MemberMarketplaceExchangeListController', MemberMarketplaceExchangeListController);
 
-const MemberMarketplaceExchangeController = requireAppModule('angular/controllers/member/marketplace/exchange/exchange-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceExchangeController', MemberMarketplaceExchangeController);
+const MemberMarketplaceExchangeItemController = requireAppModule('angular/controllers/member/marketplace/exchange-item-controller.js');
+angular.module('kyc-wallet').controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
 
 
 /**

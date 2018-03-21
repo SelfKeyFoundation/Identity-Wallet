@@ -5,23 +5,38 @@
         .exchange-content
             .header
                 .logo
-                    img(src='assets/images/icons/selfkey.svg', width=36)
+                    img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
                     span.name {{realData.name}}
 
             .body
                 .section
                     .section-content
-                        .textual
-                            .text(ng-bind-html="realData.gio")
-                            span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
+                        .descr
+                            .textual
+                                .text(ng-bind-html="realData.text + (realData.description.length > 300 ? '...' : '')")
+                                span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
                                     md-button.gray.default(ng-click='showMore()') Show more
-                            span(ng-if='realData.description.length == strLimit')
-                                md-button.gray.default(ng-click='showLess()') Show less
+                                span(ng-if='realData.description.length == strLimit')
+                                    md-button.gray.default(ng-click='showLess()') Show less
+                            .status
+                                md-button.gray.default Coming Soon
+                                div.text Your Staking Status
+                                    md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
+                                        md-tooltip.sk-tooltip(md-direction="bottom")
+                                            |  <div style="text-align:left;"> What is Staking? <br />
+                                            |  Staking acts similarly like <br />
+                                            |  a refundable security deposit. <br />
+                                            |  to learn more,click here.. </div>
+                                    span : Coming soon
+
+
+
+
 
                 .section
                     .section-content
                         .title Exchange Highlights
-                        .columns
+                        .columns.highlights
                             .column
                                 div
                                     label
@@ -36,35 +51,35 @@
                                 div
                                     label
                                         span Coin Pairs:
-                                    strong(ng-repeat="i in realData['Currency Pairs']") {{i}}
+                                    strong USD, BTC
 
                                 div
                                     label
                                         span Maker Fee:
-                                    strong 2.0%
+                                    strong {{realData['realData.bank_transfer_deposit_fee']}}
 
                                 div
                                     label
                                         span Taker Fee:
-                                    strong 1.5%
+                                    strong {{realData['realData.bank_transfer_withdrawal_fee']}}
 
 
                                 div
                                     label
                                         span Url:
-                                    strong www.getecoin.com
+                                    strong {{realData['email 2']}}
 
 
                             .column
                                 div
                                     label
                                         span Fiat Payments:
-                                    strong Bank Transfer, Paypal
+                                    strong(ng-repeat="i in realData['fiat_payments']") {{i}}
 
                                 div
                                     label
                                         span Fiat Supported:
-                                    strong HKD, EUR, USD
+                                    strong(ng-repeat="i in realData['fiat_supported']") {{i}}
 
                                 div
                                     label
@@ -89,32 +104,37 @@
                 .section
                     .section-content
                         .title KYC Requirements
-                        .columns
+                        .columns.requirements
                             .column
                                 div
                                     label
-                                        span icon
+                                        span
+                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     strong First Name
 
                                 div
                                     label
-                                        span icon:
+                                        span
+                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     strong Last Name
 
                                 div
                                     label
-                                        span icon
+                                        span
+                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     strong country of residence
 
                             .column
                                 div
                                     label
-                                        span icon
+                                        span
+                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     strong National ID
 
                                 div
                                     label
-                                        span icon
+                                        span
+                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     strong National ID Selfie
 
 

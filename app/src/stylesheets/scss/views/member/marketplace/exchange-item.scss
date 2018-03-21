@@ -1,0 +1,111 @@
+.exchange-container{
+    border: 1px solid #303c49;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    color: white;
+    .back {
+        margin: 20px 0 0 20px;
+        span {
+            font-size: 13px;
+        }
+    }
+    .exchange {
+        padding: 40px;
+        .exchange-content {
+            .header {
+                border: 1px solid #303c49;
+                padding: 15px;
+                .logo {
+                    display: flex;
+                    span {
+                        align-self: center;
+                        margin-left: 15px;
+                        font-size: 20px;
+                        font-family: ProximaNovaRegular;
+                    }
+                    img {
+                        width: 100px;
+                    }
+                }
+            }
+            .body{
+                .section{
+                    margin-bottom: 30px;
+                    border-bottom: 1px solid #303c49;
+                    &:last-child{
+                        border: none;
+                    }
+                    .section-content {
+                        margin-bottom: 10px;
+                        .title {
+                            font-size: 18px;
+                        }
+                        .descr {
+                            display: flex;
+                            padding: 25px 15px 0 15px;
+                            justify-content: space-between;
+                        }
+                        .textual {
+                            .text {
+                                width: 600px;
+                                font-family: ProximaNovaRegular;
+                            }
+                            .gray{
+                                display: table;
+                                margin: 25px auto;
+                                font-size: 13px;
+                                padding: 0 15px 0 15px;
+                            }
+                        }
+                        .status {
+                            .gray {
+                                padding: 0 30px 0 30px;
+                                display: table;
+                                margin: 0 auto;
+                            }
+                            .text {
+                                margin-top: 5px;
+                                font-size: 14px;
+                                font-family: ProximaNovaRegular;
+                            }
+
+                        }
+                        .columns {
+                            display: flex;
+                            margin-left: 15px;
+                            .column {
+                                margin-right: 100px;
+                                div {
+                                    margin: 15px 0;
+                                    label {
+                                        display: inline-block;
+                                    }
+                                    strong {
+                                        font-size: 14px;
+                                        margin-left: 15px;
+                                    }
+                                }
+                            }
+                            &.highlights {
+                                .column {
+                                    label {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            &.requirements {
+                                .column {
+                                    label {
+                                        font-size: 13px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

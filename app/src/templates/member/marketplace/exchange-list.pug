@@ -22,5 +22,5 @@
                     .list-body
                         .body-description(ng-bind-html="item.content + (item.data.description.length > 300 ? '...' : '')")
                         .buttons-section
-                            md-button.gray(ui-sref="member.marketplace.exchange({data: item.data})")
+                            md-button.gray(ui-sref="member.marketplace.exchange-item({data: item.data})")
                                 span {{item.data ? 'View' : 'Coming Soon'}}
