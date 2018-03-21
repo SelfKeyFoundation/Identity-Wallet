@@ -78,6 +78,7 @@
 
 @import './views/member/id-wallet/main.scss';
 @import './views/member/marketplace/exchange-list.scss';
+@import './views/member/marketplace/exchange-item.scss';
 
 .bg-gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, rgb(213, 234, 241)), color-stop(1, rgb(223, 227, 226)));
@@ -247,75 +248,5 @@ $buttonColor: rgba(255, 255, 255, 1);
     }
   }
 }
-/*Martketplace Exchange*/
-.exchange-container{
-    border: 1px solid #303c49;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 20px;
-    color: white;
-    width: 800px;
-    .back {
-       margin: 20px 0 0 20px;
-        span {
-            font-size: 13px;
-        }
-    }
-    .exchange {
-        padding: 40px;
-        .exchange-content {
-            .header {
-                border: 1px solid #303c49;
-                padding: 15px;
-                .logo {
-                    display: flex;
-                    span {
-                        align-self: center;
-                        margin-left: 15px;
-                    }
-                }
-            }
-            .body{
-                .section{
-                    margin-bottom: 30px;
-                    border-bottom: 1px solid #303c49;
-                    &:last-child{
-                        border: none;
-                    }
-                    .section-content {
-                        margin-bottom: 10px;
-                        .title {
-                            font-size: 20px;
-                        }
-                        .textual {
-                            padding: 25px 15px 0 15px;
-                            width: 650px;
-                            .gray{
-                                display: table;
-                                margin: 25px auto;
-                                span {
-                                    font-size: 13px;
-                                }
-                            }
-                        }
-                        .columns {
-                            display: flex;
-                            margin-left: 15px;
-                            .column {
-                                margin-right: 100px;
-                                div {
-                                    margin: 15px 0;
-                                    label {
-                                        display: inline-block;
-                                        width: 8em;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
-    }
-}
+

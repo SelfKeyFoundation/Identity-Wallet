@@ -17686,6 +17686,76 @@ md-dialog {
               .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
                 font-size: 14px; }
 
+.exchange-container {
+  border: 1px solid #303c49;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
+  color: white; }
+  .exchange-container .back {
+    margin: 20px 0 0 20px; }
+    .exchange-container .back span {
+      font-size: 13px; }
+  .exchange-container .exchange {
+    padding: 40px; }
+    .exchange-container .exchange .exchange-content .header {
+      border: 1px solid #303c49;
+      padding: 15px; }
+      .exchange-container .exchange .exchange-content .header .logo {
+        display: flex; }
+        .exchange-container .exchange .exchange-content .header .logo span {
+          align-self: center;
+          margin-left: 15px;
+          font-size: 20px;
+          font-family: ProximaNovaRegular; }
+        .exchange-container .exchange .exchange-content .header .logo img {
+          width: 100px; }
+    .exchange-container .exchange .exchange-content .body .section {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #303c49; }
+      .exchange-container .exchange .exchange-content .body .section:last-child {
+        border: none; }
+      .exchange-container .exchange .exchange-content .body .section .section-content {
+        margin-bottom: 10px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .title {
+          font-size: 18px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .descr {
+          display: flex;
+          padding: 25px 15px 0 15px;
+          justify-content: space-between; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .textual .text {
+          width: 600px;
+          font-family: ProximaNovaRegular; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
+          display: table;
+          margin: 25px auto;
+          font-size: 13px;
+          padding: 0 15px 0 15px; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .status .gray {
+          padding: 0 30px 0 30px;
+          display: table;
+          margin: 0 auto; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .status .text {
+          margin-top: 5px;
+          font-size: 14px;
+          font-family: ProximaNovaRegular; }
+        .exchange-container .exchange .exchange-content .body .section .section-content .columns {
+          display: flex;
+          margin-left: 15px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .columns .column {
+            margin-right: 100px; }
+            .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div {
+              margin: 15px 0; }
+              .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div label {
+                display: inline-block; }
+              .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div strong {
+                font-size: 14px;
+                margin-left: 15px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .columns.highlights .column label {
+            font-size: 15px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .columns.requirements .column label {
+            font-size: 13px; }
+
 .bg-gradient {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #d5eaf1), color-stop(1, #dfe3e2));
   background: -moz-linear-gradient(top, #4a0c6b 0%, #669966 100%);
@@ -17845,53 +17915,3 @@ md-dialog {
         .dashboard-content-wrappper .transactions-box-body .list .list-item .item-container .coin-change.squash,
         .wallet-manage-token-wrappper .body-content .list .list-item .item-container .coin-change.squash {
           color: #f5a623; }
-
-/*Martketplace Exchange*/
-.exchange-container {
-  border: 1px solid #303c49;
-  margin-left: 50px;
-  margin-right: 50px;
-  margin-top: 20px;
-  color: white;
-  width: 800px; }
-  .exchange-container .back {
-    margin: 20px 0 0 20px; }
-    .exchange-container .back span {
-      font-size: 13px; }
-  .exchange-container .exchange {
-    padding: 40px; }
-    .exchange-container .exchange .exchange-content .header {
-      border: 1px solid #303c49;
-      padding: 15px; }
-      .exchange-container .exchange .exchange-content .header .logo {
-        display: flex; }
-        .exchange-container .exchange .exchange-content .header .logo span {
-          align-self: center;
-          margin-left: 15px; }
-    .exchange-container .exchange .exchange-content .body .section {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #303c49; }
-      .exchange-container .exchange .exchange-content .body .section:last-child {
-        border: none; }
-      .exchange-container .exchange .exchange-content .body .section .section-content {
-        margin-bottom: 10px; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .title {
-          font-size: 20px; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .textual {
-          padding: 25px 15px 0 15px;
-          width: 650px; }
-          .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
-            display: table;
-            margin: 25px auto; }
-            .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray span {
-              font-size: 13px; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .columns {
-          display: flex;
-          margin-left: 15px; }
-          .exchange-container .exchange .exchange-content .body .section .section-content .columns .column {
-            margin-right: 100px; }
-            .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div {
-              margin: 15px 0; }
-              .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div label {
-                display: inline-block;
-                width: 8em; }
