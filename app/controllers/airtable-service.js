@@ -45,6 +45,7 @@ module.exports = function (app) {
                     name: item.name,
                     data: JSON.stringify(item)
                 };
+                
                 electron.app.sqlLiteService.ExchangeDataHandler.create(dataToSave).then((data) => {
                     // inserted
                 }).catch((error) => {
