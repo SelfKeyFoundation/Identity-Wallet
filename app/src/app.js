@@ -96,6 +96,9 @@ angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 /**
  * directives
  */
+const SkCloseWarningBoxDirective = requireAppModule('angular/directives/commons/sk-close-warning-box.directive');
+angular.module('kyc-wallet').directive('skCloseWarningBox', SkCloseWarningBoxDirective);
+
 const SkLoadingDirective = requireAppModule('angular/directives/commons/sk-loading.directive');
 angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
@@ -184,9 +187,6 @@ angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditC
 
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
-
-const CloseWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/close-warning-controller.js');
-angular.module('kyc-wallet').controller('CloseWarningDialogController', CloseWarningDialogController);
 
 
 /**

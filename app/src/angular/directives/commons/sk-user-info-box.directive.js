@@ -74,8 +74,6 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
                         documentFileName: idAttributes[i].items[0].values[0].documentFileName
                     }
                 }
-
-                console.log(scope.idAttributes, "<<<<")
             }
         },
         replace: true,

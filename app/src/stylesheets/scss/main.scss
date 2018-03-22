@@ -80,6 +80,23 @@
 @import './views/member/marketplace/exchange-list.scss';
 @import './views/member/marketplace/exchange-item.scss';
 
+
+#close-dialog {
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-image: linear-gradient(124deg, #2b3540, #1e262e);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .bg-gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, rgb(213, 234, 241)), color-stop(1, rgb(223, 227, 226)));
     background: -moz-linear-gradient(top, #4a0c6b 0%, #669966 100%); /* FF3.6+ */
