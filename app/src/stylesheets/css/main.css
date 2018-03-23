@@ -17751,7 +17751,9 @@ md-dialog {
     padding: 40px; }
     .exchange-container .exchange .exchange-content .header {
       border: 1px solid #303c49;
-      padding: 15px; }
+      padding: 15px;
+      display: flex;
+      justify-content: space-between; }
       .exchange-container .exchange .exchange-content .header .logo {
         display: flex; }
         .exchange-container .exchange .exchange-content .header .logo span {
@@ -17761,6 +17763,10 @@ md-dialog {
           font-family: ProximaNovaRegular; }
         .exchange-container .exchange .exchange-content .header .logo img {
           width: 100px; }
+      .exchange-container .exchange .exchange-content .header .status .text {
+        margin-top: 5px;
+        font-size: 14px;
+        font-family: ProximaNovaRegular; }
     .exchange-container .exchange .exchange-content .body .section {
       margin-bottom: 30px;
       border-bottom: 1px solid #303c49; }
@@ -17775,21 +17781,22 @@ md-dialog {
           padding: 25px 15px 0 15px;
           justify-content: space-between; }
         .exchange-container .exchange .exchange-content .body .section .section-content .textual .text {
-          width: 600px;
-          font-family: ProximaNovaRegular; }
+          width: 605px;
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          letter-spacing: normal;
+          text-align: left;
+          color: #FFFFFF; }
         .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
           display: table;
           margin: 25px auto;
           font-size: 13px;
-          padding: 0 15px 0 15px; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .status .gray {
-          padding: 0 30px 0 30px;
-          display: table;
-          margin: 0 auto; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .status .text {
-          margin-top: 5px;
-          font-size: 14px;
-          font-family: ProximaNovaRegular; }
+          width: 600px;
+          height: 36px; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray.status {
+            padding: 0 30px 0 30px;
+            display: table;
+            margin: 0 auto; }
         .exchange-container .exchange .exchange-content .body .section .section-content .columns {
           display: flex;
           margin-left: 15px; }

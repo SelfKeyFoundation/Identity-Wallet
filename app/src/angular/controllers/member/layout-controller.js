@@ -40,7 +40,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
                     Web3Service.syncTokensTransactionHistory(symbol);
 
                 }
-            }, 3000);
+            }, 4000);
         });
     };
 
