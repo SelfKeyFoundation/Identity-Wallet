@@ -17613,25 +17613,30 @@ md-dialog {
   align-items: center;
   justify-content: center; }
   .marketplace-exchange-list > .center-container {
-    width: 100%;
     margin-top: 30px; }
     .marketplace-exchange-list > .center-container .header-wrapper {
-      width: 100%;
-      border-bottom: 1px solid #303c49;
-      padding-bottom: 30px;
-      display: block; }
+      width: 1140px;
+      height: 147px;
+      border-bottom: solid 1px #475768; }
       .marketplace-exchange-list > .center-container .header-wrapper .title {
-        font-size: 20px;
-        color: #768fa9;
-        margin-left: 80px;
-        font-family: ProximaNovaRegular; }
+        width: 124px;
+        height: 36px;
+        font-size: 26px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.38;
+        letter-spacing: normal;
+        text-align: left;
+        color: #ffffff;
+        font-family: ProximaNovaRegular;
+        padding: 57px 54px 0 95px; }
       .marketplace-exchange-list > .center-container .header-wrapper .status {
         color: #768fa9;
         font-size: 16px;
         font-family: ProximaNovaRegular;
         float: right;
-        margin-top: -15px;
-        margin-right: 150px; }
+        margin-top: -15px; }
         .marketplace-exchange-list > .center-container .header-wrapper .status md-icon {
           padding: 0 5px;
           height: 16px !important;
@@ -17639,52 +17644,87 @@ md-dialog {
           min-height: 16px !important;
           min-width: 16px !important; }
     .marketplace-exchange-list > .center-container .body-wrapper {
-      width: 1140px;
-      margin: 0 auto; }
+      width: 1140px; }
       .marketplace-exchange-list > .center-container .body-wrapper ul {
         list-style-type: none;
-        width: 1140px; }
+        width: 1140px;
+        padding: 0;
+        margin-top: 50px; }
         .marketplace-exchange-list > .center-container .body-wrapper ul li {
-          width: 320px;
-          height: 250px;
+          width: 360px;
+          height: 312px;
+          border-radius: 4px;
+          background-color: #262f39;
+          border: solid 1px #303c49;
           font-size: 16px;
           font-family: ProximaNovaRegular;
-          margin: 50px 20px;
-          float: left; }
+          float: left;
+          margin-right: 27px;
+          margin-top: 30px; }
           .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title {
-            border: 1px solid #303c49;
-            font-size: 18px;
-            font-family: ProximaNovaRegular;
-            color: #FFFFFF;
-            height: 40px; }
-            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo .helper {
-              display: inline-block;
-              height: 100%;
-              vertical-align: middle; }
-            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo img {
-              max-width: 60px;
-              vertical-align: middle;
-              margin-left: 5px; }
+            width: 360px;
+            height: 76px;
+            background-color: #2a3540;
+            box-shadow: inset 0 -1px 0 0 #374758; }
+            .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo {
+              margin-left: 30px; }
+              .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo .helper {
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle; }
+              .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo img {
+                max-width: 60px;
+                vertical-align: middle;
+                margin-left: 5px; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
-              margin: 10px 0 0 10px;
+              height: 36px;
+              font-family: ProximaNovaRegular;
+              font-size: 20px;
+              font-weight: normal;
+              font-style: normal;
+              font-stretch: normal;
+              line-height: 1.8;
+              letter-spacing: normal;
+              text-align: left;
+              color: #ffffff;
+              margin-left: 12px;
+              margin-top: 20px;
               word-break: break-all; }
           .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body {
-            border: 1px solid #303c49;
-            padding: 10px;
+            height: 224px;
+            width: 360px;
             font-size: 16px;
             font-family: ProximaNovaRegular;
-            color: #FFFFFF;
-            height: 220px;
-            margin-top: 3px; }
+            color: #FFFFFF; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .body-description {
-              word-break: break-all;
-              height: 175px; }
+              word-break: break-word;
+              padding: 30px 30px 0 30px;
+              height: 144px; }
+              .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .body-description p {
+                margin: 0; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button {
-              min-height: 28px !important;
-              height: 28px !important;
-              line-height: 28px !important; }
+              min-height: 24px !important;
+              min-width: 50px !important;
+              line-height: 24px !important;
+              border-radius: 4px;
+              border: solid 1px #3b4a5a;
+              background-color: #262f39;
+              margin-left: 24px;
+              margin-top: 24px; }
               .marketplace-exchange-list > .center-container .body-wrapper ul li .list-body .buttons-section .md-button span {
-                font-size: 14px; }
+                width: 29px;
+                height: 14px;
+                font-family: ProximaNovaRegular;
+                font-size: 12px;
+                font-weight: normal;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #93b0c1; }
+        .marketplace-exchange-list > .center-container .body-wrapper ul li:nth-child(3n+3) {
+          margin-right: 0 !important; }
 
 .exchange-container {
   border: 1px solid #303c49;
