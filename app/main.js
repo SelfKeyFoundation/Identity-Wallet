@@ -30,7 +30,7 @@ const version = electron.app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-    log.info('missing: electron-squirrel-startup');
+	log.info('missing: electron-squirrel-startup');
 	process.exit(0)
 }
 
@@ -45,8 +45,8 @@ const app = {
 	},
 	translations: {
 	},
-    win: {},
-    log: log
+	win: {},
+	log: log
 };
 
 const i18n = [
@@ -66,18 +66,34 @@ if (!handleSquirrelEvent()) {
 	electron.app.on('ready', onReady(app));
 }
 
+let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+	// Someone tried to run a second instance, we should focus our window.
+	if (app.win) {
+		if (app.win.isMinimized()) app.win.restore()
+		app.win.focus()
+	};
+	return true;
+});
+
 /**
  *
  */
 function onReady(app) {
+
 	return function () {
-        log.info('onReady');
+
+		if (isSecondInstance) {
+			electron.app.quit();
+			return
+		}
+
+		log.info('onReady');
 		app.config.userDataPath = electron.app.getPath('userData');
 
 		const CMCService = require('./controllers/cmc-service')(app);
 		electron.app.cmcService = new CMCService();
 
-        const AirtableService = require('./controllers/airtable-service')(app);
+		const AirtableService = require('./controllers/airtable-service')(app);
 		electron.app.airtableService = new AirtableService();
 
 		const SqlLiteService = require('./controllers/sql-lite-service')(app);
@@ -86,7 +102,7 @@ function onReady(app) {
 		const RPCHandler = require('./controllers/rpc-handler')(app);
 		electron.app.rpcHandler = new RPCHandler();
 
-        createKeystoreFolder();
+		createKeystoreFolder();
 
 		// TODO
 		// 1) load ETH & KEY icons & prices
@@ -126,20 +142,20 @@ function onReady(app) {
 		}));
 
 		if (app.config.app.debug) {
-            log.info('app is running in debug mode');
+			log.info('app is running in debug mode');
 			app.win.webContents.openDevTools();
 		}
 
-        app.win.on('close', (event) => {
-            if(shouldIgnoreClose) {
-                event.preventDefault();
-                shouldIgnoreClose = false;
-                app.win.webContents.send('SHOW_CLOSE_DIALOG');
-            }
+		app.win.on('close', (event) => {
+			if (shouldIgnoreClose) {
+				event.preventDefault();
+				shouldIgnoreClose = false;
+				app.win.webContents.send('SHOW_CLOSE_DIALOG');
+			}
 		});
 
 		app.win.on('closed', () => {
-            log.info('app closed');
+			log.info('app closed');
 			app.win = null;
 		});
 
@@ -155,21 +171,21 @@ function onReady(app) {
 
 		app.win.webContents.on('did-finish-load', () => {
 			log.info('did-finish-load');
-            app.win.webContents.send('APP_START_LOADING');
-            electron.app.sqlLiteService.init().then(() => {
-                //start update cmc data
-                electron.app.cmcService.startUpdateData();
+			app.win.webContents.send('APP_START_LOADING');
+			electron.app.sqlLiteService.init().then(() => {
+				//start update cmc data
+				electron.app.cmcService.startUpdateData();
 				electron.app.airtableService.loadIdAttributeTypes();
 				electron.app.airtableService.loadExchangeData();
-                app.win.webContents.send('APP_SUCCESS_LOADING');
-            }).catch((error) => {
-                log.error(error);
-                app.win.webContents.send('APP_FAILED_LOADING');
-            });
+				app.win.webContents.send('APP_SUCCESS_LOADING');
+			}).catch((error) => {
+				log.error(error);
+				app.win.webContents.send('APP_FAILED_LOADING');
+			});
 		});
 
 		app.win.webContents.on('did-fail-load', () => {
-            log.error('did-fail-load');
+			log.error('did-fail-load');
 		});
 
 		/**
@@ -202,9 +218,9 @@ function onReady(app) {
 
 		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
-        // TODO - check
+		// TODO - check
 		electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
-            log.info('ON_CONFIG_CHANGE');
+			log.info('ON_CONFIG_CHANGE');
 			app.config.user = userConfig;
 		});
 
@@ -212,10 +228,10 @@ function onReady(app) {
 			if (electron.app.rpcHandler[actionName]) {
 				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
-        });
+		});
 
-        electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', (event) => {
-            shouldIgnoreClose = true;
+		electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', (event) => {
+			shouldIgnoreClose = true;
 		});
 	};
 }
@@ -281,14 +297,14 @@ function setAutoUpdaterListeners(win) {
 	});
 }
 
-function createKeystoreFolder () {
-    if (!fs.existsSync(walletsDirectoryPath)) {
-        fs.mkdir(walletsDirectoryPath);
-    }
+function createKeystoreFolder() {
+	if (!fs.existsSync(walletsDirectoryPath)) {
+		fs.mkdir(walletsDirectoryPath);
+	}
 
-    if (!fs.existsSync(documentsDirectoryPath)) {
-        fs.mkdir(documentsDirectoryPath);
-    }
+	if (!fs.existsSync(documentsDirectoryPath)) {
+		fs.mkdir(documentsDirectoryPath);
+	}
 }
 
 /**
