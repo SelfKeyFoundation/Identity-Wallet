@@ -16531,40 +16531,78 @@ md-dialog.id-wallet-info {
   justify-content: center;
   padding-top: 20%; }
   md-dialog.id-wallet-info .id-wallet-info-wrapper {
-    width: 550px;
-    height: 350px;
+    width: 780px;
+    height: 494px;
     border-radius: 4px;
     background-color: #262f39;
     border: solid 1px #303c49;
     position: relative; }
     md-dialog.id-wallet-info .id-wallet-info-wrapper .container {
-      padding: 20px;
       overflow: auto; }
       md-dialog.id-wallet-info .id-wallet-info-wrapper .container .header {
-        margin: 0 0 40px 20px;
-        font-size: 16px;
-        color: #FFFFFF; }
-      md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section {
-        height: 200px;
-        overflow: auto; }
-        md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section .text {
+        width: 780px;
+        height: 65px;
+        background-image: linear-gradient(to bottom, #27313b, #1e262e);
+        box-shadow: inset 0 -1px 0 0 #303c49;
+        text-align: center; }
+        md-dialog.id-wallet-info .id-wallet-info-wrapper .container .header > span {
+          height: 24px;
+          opacity: 0.83;
           font-family: ProximaNovaRegular;
-          font-size: 14px;
-          font-weight: 300;
+          font-size: 19px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.26;
+          letter-spacing: normal;
+          text-align: center;
           color: #ffffff;
-          text-align: justify; }
+          display: block;
+          padding-top: 20px; }
+      md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section {
+        overflow: auto;
+        font-family: ProximaNovaRegular;
+        width: 700px;
+        height: 240px;
+        font-size: 18px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.67;
+        letter-spacing: normal;
+        text-align: left;
+        color: #ffffff;
+        padding: 40px; }
         md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section .logo .sk-icon {
           margin: 0 auto; }
       md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section {
-        margin-top: 25px; }
-        md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section .md-button {
-          width: 100px; }
-          md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section .md-button span {
-            font-size: 12px; }
+        margin-top: 10px;
+        float: right; }
+        md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section .md-button span {
+          width: 67px;
+          height: 12px;
+          font-family: ProximaNovaRegular;
+          font-size: 15px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 0.8;
+          letter-spacing: 0.6px;
+          text-align: center;
+          color: #ffffff; }
         md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section .md-button:first-child {
-          float: left; }
+          width: 200px;
+          height: 48px;
+          opacity: 0.6;
+          border-radius: 4px;
+          border: solid 1px #93b0c1;
+          margin-right: 20px; }
         md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section .md-button:nth-child(2) {
-          float: right; }
+          width: 200px;
+          height: 48px;
+          border-radius: 4px;
+          background-color: #435160;
+          margin-right: 40px; }
 
 .button-198 {
   width: 198px !important; }

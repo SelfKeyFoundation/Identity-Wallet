@@ -10,7 +10,9 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
     $scope.infoArray = [
         {
             logo: 'selfkey',
-            text: 'In the SelfKey Identity Wallet you can manage, own, and control various parts of your digital identity. Whether it’s a copy of your passport, utility bill, or other document—everything is stored locally on your machine and not in a server. After building out your identity, you can participate in the SelfKey Marketplace for products and services such as joining an ICO by submitting KYC documents from the wallet.',
+            text: 'Inside the SelfKey Identity Wallet you can manage, own, and fully control various parts of your SelfKey ID. It is also a direct interface to the Ethereum blockchain, allowing you to manage all of your ETH and ERC-20 token assets inside the wallet.\n' +
+            '\n' +
+            'After building out your SelfKey ID, you can unlock products and services inside the SelfKey Marketplace by staking KEY tokens. Think of staking like a refundable deposit. Staking is required to prevent spam and to ensure all parties interact in a professional and respectable manner. To learn more about this, click here.',
             header: 'About The SelfKey Identity Wallet',
             button1: 'cancel',
             button2: 'continue',
@@ -18,9 +20,11 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
         },
         {
             logo: 'information-button',
-            text: 'Your identity profile is broken down into two parts: attributes and documents. Attributes are details about your identity such as birthday, phone, address, and city. Documents are proof of your identity such as a passport or utility bill. We’ll be adding more features in the future, such as blockchain verified claims in your identity profile. All attributes and documents regarding your identity profile are stored locally on your computer, and SelfKey does not have any access to your information.',
-            header: 'What Are ID Attributes & Documents',
-            button1: 'back',
+            text: 'Your identity profile is broken down into two parts: attributes and documents. Attributes are details about your identity such as birthday, phone, address, and city. Documents are proof of your identity such as a passport or utility bill. \n' +
+            '\n' +
+            'We’ll be adding more features in the future, such as blockchain verified claims in your identity profile. All attributes and documents regarding your identity profile are stored locally on your computer, and SelfKey does not have any access to your information.',
+            header: 'What Are ID Attributes & Documents?',
+            button1: 'cancel',
             button2: 'continue',
             step: 2
         },
