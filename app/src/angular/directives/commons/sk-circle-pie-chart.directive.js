@@ -10,7 +10,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
         },
         link: (scope, element) => {
             const TOP_MAX_SIZE = 5;
-            const colorForOthers = '#bad0db';
+            const colorForOthers = '#71a6b8';
 
             scope.isCollapsed = true;
             scope.isCollapsable = false;
@@ -35,7 +35,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
 
             let processItems = () => {
                 let items = scope.data.items;
-                let TOP_COLORS = ['#ff6400', '#03c8ce', '#a6e43b','#5f5f5f','#50b0fc'];
+                let TOP_COLORS = ['#46dfba', '#46b7df', '#238db4','#1d7999','#0e4b61'];
                 
                 scope.totalValueFormated = new BigNumber(0);
                 items.forEach((item) => {
