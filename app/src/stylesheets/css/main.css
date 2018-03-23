@@ -17729,23 +17729,18 @@ md-dialog {
           display: flex;
           padding: 25px 15px 0 15px;
           justify-content: space-between; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .textual .text {
-          width: 605px;
-          font-family: ProximaNovaRegular;
-          font-size: 18px;
-          letter-spacing: normal;
-          text-align: left;
-          color: #FFFFFF; }
-        .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray {
-          display: table;
-          margin: 25px auto;
-          font-size: 13px;
-          width: 600px;
-          height: 36px; }
-          .exchange-container .exchange .exchange-content .body .section .section-content .textual .gray.status {
-            padding: 0 30px 0 30px;
-            display: table;
-            margin: 0 auto; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .descr .textual .text {
+            width: 605px;
+            font-family: ProximaNovaRegular;
+            font-size: 18px;
+            letter-spacing: normal;
+            text-align: left;
+            color: #FFFFFF; }
+          .exchange-container .exchange .exchange-content .body .section .section-content .descr .gray {
+            font-size: 13px;
+            width: 200px;
+            height: 44px;
+            margin-top: 25px; }
         .exchange-container .exchange .exchange-content .body .section .section-content .columns {
           display: flex;
           margin-left: 15px; }
