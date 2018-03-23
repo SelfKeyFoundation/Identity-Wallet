@@ -13,16 +13,12 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $s
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: false,
-                fullscreen: true,
-                locals: {
-                    basicInfo: $scope.input
-                }
+                fullscreen: true
             });
         }
     }, 200)
 
     $scope.createBasicId = (event) => {
-        console.log("$$$$$$$", $stateParams.type)
         $state.go('guest.create.step-2', { type: $stateParams.type });
     }
 };

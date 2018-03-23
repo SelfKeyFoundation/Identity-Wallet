@@ -2,12 +2,10 @@
 
 const Wallet = requireAppModule('angular/classes/wallet');
 
-function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, $transitions, RPCService, CommonService, basicInfo, SqlLiteService) {
+function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, RPCService, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info('PasswordWarningDialogController');
-
-    $scope.isLoading = false;
 
     $scope.cancel = (event) => {
         $mdDialog.cancel();
@@ -16,13 +14,6 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog
     $scope.accept = (event) => {
         $mdDialog.hide();
     }
-
-    $transitions.onStart({ }, function(trans) {
-        trans.promise.finally(()=>{
-            $mdDialog.hide();
-            $scope.isLoading = false;
-        });
-    });
 };
 
 module.exports = PasswordWarningDialogController;
