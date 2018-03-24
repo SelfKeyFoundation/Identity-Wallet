@@ -81,7 +81,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-
         /**
          * create
          */
@@ -101,9 +100,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-1.html',
                     controller: 'GuestKeystoreCreateStep1Controller'
                 }
-            },
-            params: {
-                type: null
             }
         })
 
@@ -116,7 +112,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                type: null
+                thePassword: null
             }
         })
 
@@ -129,8 +125,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                basicInfo: null,
-                type: null
+                walletData: null
             }
         })
 
@@ -141,10 +136,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-4.html',
                     controller: 'GuestKeystoreCreateStep4Controller'
                 }
-            },
-            params: {
-                thePassword: null,
-                basicInfo: null
             }
         })
 

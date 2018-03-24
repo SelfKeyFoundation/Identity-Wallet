@@ -32,6 +32,7 @@
 
 @import './panels/id-attribute-delete-panel.scss';
 
+@import './directives/sk-close-warning-box.scss';
 @import './directives/sk-token-box.scss';
 @import './directives/sk-custom-token-box.scss';
 @import './directives/sk-send-token.scss';
@@ -79,6 +80,7 @@
 @import './views/member/id-wallet/main.scss';
 @import './views/member/marketplace/exchange-list.scss';
 @import './views/member/marketplace/exchange-item.scss';
+
 
 .bg-gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, rgb(213, 234, 241)), color-stop(1, rgb(223, 227, 226)));

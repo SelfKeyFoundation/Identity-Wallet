@@ -101,6 +101,12 @@ const EN = {
     /**
      *
      */
+    incorrect_password: "Incorrect Password",
+    wallet_already_imported: "Wallet Already Imported",
+
+    /**
+     *
+     */
     TOKEN_ETH: "Ethereum",
     TOKEN_KEY: "Selfkey",
     TOKEN_QEY: "Selfkey",   // testnet

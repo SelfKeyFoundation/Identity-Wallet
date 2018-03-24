@@ -7,7 +7,17 @@
                 .logo
                     img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
                     span.name {{realData.name}}
+                .status
 
+                .text Your Staking Status
+                    md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
+                        md-tooltip.sk-tooltip(md-direction="bottom")
+                            | What is Staking?
+                            | Staking acts similarly like
+                            | a refundable security deposit.
+                            | to learn more,click here..
+                        span : Coming soon
+                        
             .body
                 .section
                     .section-content
@@ -15,24 +25,10 @@
                             .textual
                                 .text(ng-bind-html="realData.text + (realData.description.length > 300 ? '...' : '')")
                                 span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
-                                    md-button.gray.default(ng-click='showMore()') Show more
+                                    md-button.gray.default(ng-click='showMore()') View All Details
                                 span(ng-if='realData.description.length == strLimit')
-                                    md-button.gray.default(ng-click='showLess()') Show less
-                            .status
-                                md-button.gray.default Coming Soon
-                                div.text Your Staking Status
-                                    md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
-                                        md-tooltip.sk-tooltip(md-direction="bottom")
-                                            |  <div style="text-align:left;"> What is Staking? <br />
-                                            |  Staking acts similarly like <br />
-                                            |  a refundable security deposit. <br />
-                                            |  to learn more,click here.. </div>
-                                    span : Coming soon
-
-
-
-
-
+                                    md-button.gray.default(ng-click='showLess()') View Less Details
+                            md-button.gray.status.default Coming Soon
                 .section
                     .section-content
                         .title Exchange Highlights
@@ -41,7 +37,7 @@
                                 div
                                     label
                                         span Location:
-                                    strong Honng Kong
+                                    strong {{realData.Location}}
 
                                 div
                                     label
@@ -51,55 +47,55 @@
                                 div
                                     label
                                         span Coin Pairs:
-                                    strong USD, BTC
+                                    strong(ng-repeat="i in realData['Coin Pairs']") {{i}}
 
                                 div
                                     label
                                         span Maker Fee:
-                                    strong {{realData['realData.bank_transfer_deposit_fee']}}
+                                    strong {{realData['Maker Fee']}}
 
                                 div
                                     label
                                         span Taker Fee:
-                                    strong {{realData['realData.bank_transfer_withdrawal_fee']}}
+                                    strong {{realData['Taker Fee']}}
 
 
                                 div
                                     label
                                         span Url:
-                                    strong {{realData['email 2']}}
+                                    strong {{realData['url']}}
 
 
                             .column
                                 div
                                     label
                                         span Fiat Payments:
-                                    strong(ng-repeat="i in realData['fiat_payments']") {{i}}
+                                    strong(ng-repeat="i in realData['Fiat Payments']") {{i}}
 
                                 div
                                     label
                                         span Fiat Supported:
-                                    strong(ng-repeat="i in realData['fiat_supported']") {{i}}
+                                    strong(ng-repeat="i in realData['Fiat Supported']") {{i}}
 
                                 div
                                     label
                                         span Margin Trading:
-                                    strong No
+                                    strong {{realData['Margin Trading']}}
 
                                 div
                                     label
                                         span KYC/AML:
-                                    strong Yes
+                                    strong {{realData['KYC/AML']}}
 
                                 div
                                     label
                                         span Excluded residents:
-                                    strong USA
+                                    strong(ng-repeat="i in realData['Excluded Residents']") {{i}}
 
                                 div
                                     label
                                         span Contact Support:
-                                    strong www.support@getecoin.com
+                                    strong {{realData['Email']}}
 
                 .section
                     .section-content

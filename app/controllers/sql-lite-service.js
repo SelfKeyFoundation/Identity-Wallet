@@ -357,20 +357,6 @@ module.exports = function (app) {
         return updateById('wallet_settings', data);
     }
 
-    controller.prototype.wallets_selectByPublicKey = (publicKey) => {
-        return new Promise((resolve, reject) => {
-            knex('wallets').select().where('publicKey', publicKey).then((rows) => {
-                if (rows && rows.length === 1) {
-                    resolve(rows[0]);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_updating", error: error });
-            });
-        });
-    }
-
     controller.prototype.wallets_selectAll = () => {
         return new Promise((resolve, reject) => {
             knex('wallets').select().then((rows) => {

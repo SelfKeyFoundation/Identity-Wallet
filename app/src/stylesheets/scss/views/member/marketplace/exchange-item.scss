@@ -16,6 +16,8 @@
             .header {
                 border: 1px solid #303c49;
                 padding: 15px;
+                display: flex;
+                justify-content: space-between;
                 .logo {
                     display: flex;
                     span {
@@ -26,6 +28,13 @@
                     }
                     img {
                         width: 100px;
+                    }
+                }
+                .status {
+                    .text {
+                        margin-top: 5px;
+                        font-size: 14px;
+                        font-family: ProximaNovaRegular;
                     }
                 }
             }
@@ -45,32 +54,26 @@
                             display: flex;
                             padding: 25px 15px 0 15px;
                             justify-content: space-between;
-                        }
-                        .textual {
-                            .text {
-                                width: 600px;
-                                font-family: ProximaNovaRegular;
-                            }
-                            .gray{
-                                display: table;
-                                margin: 25px auto;
-                                font-size: 13px;
-                                padding: 0 15px 0 15px;
-                            }
-                        }
-                        .status {
-                            .gray {
-                                padding: 0 30px 0 30px;
-                                display: table;
-                                margin: 0 auto;
-                            }
-                            .text {
-                                margin-top: 5px;
-                                font-size: 14px;
-                                font-family: ProximaNovaRegular;
+
+                            .textual {
+                                .text {
+                                    width: 605px;
+                                    font-family: ProximaNovaRegular;
+                                    font-size: 18px;
+                                    letter-spacing: normal;
+                                    text-align: left;
+                                    color: #FFFFFF;
+                                }
                             }
 
+                            .gray{
+                                font-size: 13px;
+                                width: 200px;
+                                height: 44px;
+                                margin-top: 25px;
+                            }
                         }
+
                         .columns {
                             display: flex;
                             margin-left: 15px;

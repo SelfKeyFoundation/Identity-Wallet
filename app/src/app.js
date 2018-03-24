@@ -96,6 +96,9 @@ angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 /**
  * directives
  */
+const SkCloseWarningBoxDirective = requireAppModule('angular/directives/commons/sk-close-warning-box.directive');
+angular.module('kyc-wallet').directive('skCloseWarningBox', SkCloseWarningBoxDirective);
+
 const SkLoadingDirective = requireAppModule('angular/directives/commons/sk-loading.directive');
 angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
@@ -185,9 +188,6 @@ angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditC
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
 
-const CloseWarningDialogController = requireAppModule('angular/controllers/commons/dialogs/close-warning-controller.js');
-angular.module('kyc-wallet').controller('CloseWarningDialogController', CloseWarningDialogController);
-
 
 /**
  * guest
@@ -213,22 +213,22 @@ angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', Guest
 /**
  * create wallet
  */
-const GuestKeystoreCreateStep1Controller = requireAppModule('angular/controllers/guest/create/step-1-controller.js');
+const GuestKeystoreCreateStep1Controller = requireAppModule('angular/controllers/guest/create/step-1.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
-const GuestKeystoreCreateStep2Controller = requireAppModule('angular/controllers/guest/create/step-2-controller.js');
+const GuestKeystoreCreateStep2Controller = requireAppModule('angular/controllers/guest/create/step-2.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
-const GuestKeystoreCreateStep3Controller = requireAppModule('angular/controllers/guest/create/step-3-controller.js');
+const GuestKeystoreCreateStep3Controller = requireAppModule('angular/controllers/guest/create/step-3.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
-const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4-controller.js');
+const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
-const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5-controller.js');
+const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
 
-const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6-controller.js');
+const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
 
 

@@ -2,10 +2,10 @@
 
 const Wallet = requireAppModule('angular/classes/wallet');
 
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state, $stateParams, SqlLiteService, RPCService, CommonService) {
+function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state, $stateParams, SqlLiteService, RPCService, CommonService) {
     'ngInject'
 
-    $log.info("GuestKeystoreCreateStep4Controller", $stateParams);
+    $log.info("GuestKeystoreCreateStep2Controller", $stateParams);
 
     $scope.walletCreationPromise = null;
     $scope.passwordStrength = 0;
@@ -19,7 +19,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
             $scope.walletCreationPromise = createKeystore();
 
             $scope.walletCreationPromise.then(() => {
-                $state.go('guest.create.step-5');
+                $state.go('guest.create.step-3');
             }).catch((error) => {
                 $log.error(error);
                 CommonService.showToast('error', 'Error creating wallet');
@@ -30,7 +30,7 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
     }
 
     $scope.previousStep = (event) => {
-        $state.go('guest.create.step-3', { basicInfo: $stateParams.basicInfo });
+        $state.go('guest.create.step-3');
     }
 
     $scope.getPasswordStrengthInfo = () => {
@@ -48,15 +48,14 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
     function createKeystore() {
         let defer = $q.defer();
 
-        let promise = RPCService.makeCall('createWallet', {
-            password: $scope.input.password,
-            initialIdAttributesValues: $stateParams.basicInfo
-        });
+        let promise = RPCService.makeCall('createKeystoreFile', { password: $scope.input.password });
 
         promise.then((data) => {
-            SqlLiteService.loadWallets().then(() => {
-                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+            defer.resolve();
 
+            /*
+            SqlLiteService.loadWallets().then(() => {
                 let promises = [];
                 promises.push($rootScope.wallet.loadIdAttributes());
                 promises.push($rootScope.wallet.loadTokens());
@@ -75,6 +74,8 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
             }).catch((error) => {
                 defer.reject(error);
             });
+            */
+
         }).catch((error) => {
             defer.reject(error);
         });
@@ -83,4 +84,4 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $q, $state
     }
 };
 
-module.exports = GuestKeystoreCreateStep4Controller;
+module.exports = GuestKeystoreCreateStep2Controller;
