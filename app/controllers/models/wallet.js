@@ -74,7 +74,6 @@ module.exports = function (app, sqlLiteService) {
             }).then((data) => {
                 resolve(data);
             }).catch((e) => {
-                console.log("########", e);
                 reject(e);
             });
         });
