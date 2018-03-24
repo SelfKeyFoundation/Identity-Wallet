@@ -68,7 +68,7 @@ if (!handleSquirrelEvent()) {
 
 let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
 	// Someone tried to run a second instance, we should focus our window.
-	if (app.win) {
+	if (app.win && Object.keys(app.win).length) {
 		if (app.win.isMinimized()) app.win.restore()
 		app.win.focus()
 	};
