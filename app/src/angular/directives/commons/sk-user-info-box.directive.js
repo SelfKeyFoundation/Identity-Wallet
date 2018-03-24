@@ -87,7 +87,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
             
             updateProfilePictureStyles();
 
-            RPCService.makeCall('getWalletProfilePictureId', {
+            RPCService.makeCall('getWalletProfilePicture', {
                 id: $rootScope.wallet.id
             }).then((profilePicture)=>{
                 updateProfilePictureStyles(profilePicture);

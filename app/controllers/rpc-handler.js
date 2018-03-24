@@ -709,15 +709,15 @@ module.exports = function (app) {
     }
 
     controller.prototype.updateWalletprofilePicture = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.wallets_updateProfilePicture(args).then((data) => {
+        electron.app.sqlLiteService.Wallet.updateProfilePicture(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
 
-    controller.prototype.getWalletProfilePictureId = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.wallets_selectProfilePictureById(args).then((data) => {
+    controller.prototype.getWalletProfilePicture = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.Wallet.selectProfilePictureById(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
