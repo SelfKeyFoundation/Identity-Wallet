@@ -327,6 +327,10 @@ h2 {
   width: 19.6px !important;
   height: 23.1px !important; }
 
+.icon-size-19x24 {
+  width: 19px !important;
+  height: 24px !important; }
+
 .md-button.blue:disabled {
   background-image: none;
   border: solid 1px #93b0c1;
@@ -343,6 +347,9 @@ h2 {
 
 .color-white svg {
   fill: #fff !important; }
+
+.background-green {
+  background-color: #417505 !important; }
 
 body, html {
   margin: 0;
@@ -17711,6 +17718,9 @@ md-dialog {
   .exchange-container .exchange {
     padding: 40px; }
     .exchange-container .exchange .exchange-content .header {
+      border-radius: 4px;
+      background-color: #2a3540;
+      box-shadow: inset 0 -1px 0 0 #374758;
       border: 1px solid #303c49;
       padding: 15px;
       display: flex;
