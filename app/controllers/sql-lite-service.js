@@ -385,6 +385,42 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.wallets_updateProfilePicture = (args) => {
+       
+        return knex.transaction((trx) => {
+            let selectPromise = knex('wallets').transacting(trx).select().where('id', args.id);
+            selectPromise.then((rows) => {
+                return new Promise((resolve, reject) => {
+                    let wallet = rows[0];
+
+                    wallet.profilePicture = args.profilePicture;
+
+                    knex('wallets').transacting(trx).update(wallet).where('id', args.id).then((updatedData) => {
+                        resolve(wallet);
+                    }).catch((error) => {
+                        reject({ message: "error", error: error });
+                    });
+                });
+            })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
+    }
+   
+    controller.prototype.wallets_selectProfilePictureById = (args) => {
+        return new Promise((resolve, reject) => {
+            knex('wallets').select().where('id', args.id).then((rows) => {
+                if (rows && rows.length) {
+                    resolve(rows[0].profilePicture);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting_profile_picture", error: error });
+            });
+        });
+    }
+
     /**
      * wallet_tokens
      */
