@@ -5,7 +5,9 @@ md-dialog.id-wallet-info(aira-lable="{{title}}")
             .header
                 span {{dialogInfo.header}}
             .info-section
-                .text {{dialogInfo.text}}
+                .text
+                    p {{dialogInfo.textPart1}}
+                    p {{dialogInfo.textPart2}}
             .buttons-section
                 md-button(ng-click="backStep($event)")
                     span {{dialogInfo.button1}}
