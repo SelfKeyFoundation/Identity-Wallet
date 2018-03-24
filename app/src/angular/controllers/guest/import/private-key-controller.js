@@ -28,20 +28,16 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
             privateKey = "0x" + $scope.userInput.privateKey;
         }
 
-
-        let importPromise = RPCService.makeCall('importEtherPrivateKey', { privateKey: privateKey });
+        let importPromise = RPCService.makeCall('importPrivateKey', { privateKey: privateKey });
         importPromise.then((data) => {
-            console.log(data);
             if(data.id){
-                $rootScope.wallet = new Wallet(data.id, data.privateKeyBuffer, data.publicKey);
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
-                let initialPromises = [];
-                initialPromises.push(wallet.loadIdAttributes());
-                initialPromises.push(wallet.loadTokens());
-
-                $q.all(initialPromises).then(()=>{
+                if (data.isSetupFinished) {
                     $state.go('member.dashboard.main');
-                });
+                } else {
+                    $state.go('guest.create.step-3', { walletData: data });
+                }
             }else{
                 CommonService.showToast('warning', 'missing implementation');
             }

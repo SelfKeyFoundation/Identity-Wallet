@@ -1,29 +1,34 @@
-.wallet-create-step-5(layout-fill, layout="column", layout-align="center center")
-    sk-icon(icon="important", size-class="icon-size-68x74")
+.wallet-create-step-5(layout="column", layout-align="center center", style="z-index: 100;")
+    .header-wrapper(layout="column", layout-align="start start")
+        .title Setup Identity Wallet
+        .description
+            | You will need to either setup a Basic ID for your Identity Wallet or if you completed the KYC on the SelfKey.org website to
+            | join the token sale, simply upload the file we provided.
 
-    .content-wrapper.sk-box.shadowed
-        .header
-            span.none-select-text Backup Your Wallet
-        .content(layout="column")
+    .content-wrapper.sk-box(layout="column", layout-align="center center")
+        .item-wrapper(layout="row", layout-align="center center")
+            sk-icon(icon="upload-1", size-class="icon-size-43x35")
+            .body
+                .title I am creating a new SelfKey Identity Wallet
+                .text
+                    | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System.
+                .actions(style="margin-top: 30px;")
+                    md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey Basic ID
 
-            md-input-container.sk-input-box.no-error-spacer
-                label Your Public Key
-                input(name="publicKey", ng-model="$root.wallet.publicKeyHex", type="text", placeholder="Your Public Key", disabled)
+        .sk-divider-h1(style="width: 555px;")
 
-            .title
-                | Please download the Keystore File to save a backup of your wallet.
-                | The Keystore File is encrypted by the password you just created.
-                | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
-
-            md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
-                span.primary Backup your keystore file (UTC / JSON)
-
-            .title
-                p
-                    | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
-                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password, &nbsp;
-                    a(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-wallet/what-is-a-keystore-file-utc', false)") click here.
-
-            .actions-wrapper
-                md-button.outline-orange(ng-click="nextStep($event)")
-                    span I understand, continue
+        .item-wrapper(layout="row", layout-align="center center")
+            sk-icon(icon="upload-1", size-class="icon-size-43x35")
+            .body
+                .title I was approved in the SelfKey token sale KYC.
+                .text
+                    | If you completed KYC for the SelfKey token sale, you can download a KYC file to import and complete your Basic ID.
+                    | Please login at
+                    span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
+                        | https://token.selfkey.org
+                    |  to download your KYC file.
+                .text
+                    md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
+                        input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
+                .actions
+                    md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

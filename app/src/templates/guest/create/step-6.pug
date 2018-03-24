@@ -1,29 +1,35 @@
 .wallet-create-step-6(layout-fill, layout="column", layout-align="center center")
-    sk-icon(icon="important", size-class="icon-size-68x74")
+
+    sk-icon(icon="selfkey", size-class="icon-size-57x65")
+    .title SELFKEY BASIC ID
+    .description Fill in the basic details of your identity wallet.
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Save Your Private Key
-        .content(layout="column")
-
-            md-input-container.sk-input-box.no-error-spacer
-                label Your Private Key
-                input(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
-                md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
-                    md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
-
-            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
-                span.primary Print Paper Wallet
-
-            .warning-description
-                .item(style="font-weight: normal;")
-                    span Private keys are used to sign transactions on the Ethereum blockchain. Your private key is encrypted within the Keystore File, which is protected by the password you just created. You can also print a copy of your private keys to make an offline backup - this is also known as "cold storage".
-
-            .actions-wrapper
-                md-button.outline-blue(ng-click="nextStep($event)")
-                    span continue
-
-    .private-key-print-box
-        .title Private key
-        .pk {{privateKey}}
-
+            span.none-select-text Identity Wallet Details
+        form.content(name="basicInfoForm", layout="column")
+            md-input-container.sk-input-box.sk-input-non-floating
+                label {{ $root.DICTIONARY['first_name'] }}
+                input(name="firstName", type="text", ng-model="input.first_name", ng-maxlength="500", ng-required="true")
+                div(ng-messages="basicInfoForm.firstName.$error")
+                    div(ng-message="maxlength") The {{ $root.DICTIONARY['first_name'] }} has to be less than 500 characters long.
+                    div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['first_name'] }}.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label {{ $root.DICTIONARY['last_name'] }}
+                input(type="text", name="lastName", ng-model="input.last_name", ng-required="true", ng-maxlength="500")
+                div(ng-messages="basicInfoForm.lastName.$error")
+                    div(ng-message="maxlength") The {{ $root.DICTIONARY['last_name'] }} has to be less than 500 characters long.
+                    div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['last_name'] }}.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label {{ $root.DICTIONARY['middle_name'] }}
+                input(type="text", name="middleName", ng-model="input.middle_name", ng-maxlength="500")
+                div(ng-messages="basicInfoForm.middleName.$error")
+                    div(ng-message="maxlength") The {{ $root.DICTIONARY['middle_name'] }} has to be less than 500 characters long.
+            md-input-container.sk-input-box.sk-input-non-floating
+                label {{ $root.DICTIONARY['country_of_residency'] }}
+                md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                    md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                div(ng-messages="basicInfoForm.countryOfResidency.$error")
+                    div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['country_of_residency'] }}.
+            md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
+                span.small Create SelfKey Basic ID

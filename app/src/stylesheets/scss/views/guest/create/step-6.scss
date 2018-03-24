@@ -1,80 +1,37 @@
 .wallet-create-step-6 {
     height: 100%;
+
+    .title {
+        margin-top: 24px;
+        user-select: none;
+        font-family: ProximaNovaSemibold;
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+    .description {
+        font-family: ProximaNovaRegular;
+        margin-top: 18px;
+        opacity: 0.8;
+        font-size: 18px;
+        line-height: 1.89;
+        text-align: center;
+        color: #ffffff;
+        margin-top: 15px;
+        user-select: none;
+    }
+
     .content-wrapper {
-        width: 780px;
-        margin-top: 50px;
-        .content {
-            padding: 60px 40px;
-            .md-icon-button {
-                md-icon {
-                    svg {
-                        fill: #ffffff;
-                    }
-                }
-            }
-            >.title {
-                font-family: ProximaNovaRegular;
-                font-size: 18px;
-                line-height: 1.72;
-                color: #ffffff;
-                margin-bottom: 40px;
-            }
-            .warning-description {
-                display: flex;
-                flex-direction: column;
-                margin-top: 44px;
-                >.item {
-                    span {
-                        font-family: ProximaNovaRegular;
-                        font-size: 18px;
-                        color: #ffffff;
-                        line-height: 1.89;
-                        &:first-of-type {
-                            font-weight: bold;
-                            margin-right: 8px;
-                        }
-                    }
-                }
-            }
-            .actions-wrapper {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: stretch;
-                margin-top: 44px;
-                >.md-button {
-                    padding: 10px;
-                }
-            }
+        margin-top: 30px;
+        width: 400px;
+
+        >.content {
+            padding: 24px;
         }
-    }
-    .private-key-print-box {
-        display: none;
-    }
-}
 
-@media print {
-    .wallet-create-step-6 {
-        .content-wrapper {
-            display: none;
-        }
-        
-        .private-key-print-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            .title {
-                margin-top: 16px;
-                font-weight: bold;
-                font-size: 18px;
-            }
-
-            .pk {
-                margin-top: 8px;
-            }
+        md-input-container {
+            margin: 14px 0;
         }
     }
 }

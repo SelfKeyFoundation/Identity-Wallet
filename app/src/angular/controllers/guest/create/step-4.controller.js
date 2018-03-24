@@ -1,9 +1,9 @@
 'use strict';
 
-function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $window, $stateParams) {
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $window, $stateParams) {
     'ngInject'
 
-    $log.info("GuestKeystoreCreateStep6Controller");
+    $log.info("GuestKeystoreCreateStep4Controller");
 
     const SHOW_ICON = "ic_visibility_black_24px";
     const HIDE_ICON = "ic_visibility_off_black_24px";
@@ -17,7 +17,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $w
     }
 
     $scope.nextStep = (event) => {
-        $state.go('member.setup.checklist');
+        $state.go('guest.create.step-5');
     }
 
     $scope.togglePrivateKeyVisibility = () => {
@@ -26,4 +26,4 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $w
     }
 };
 
-module.exports = GuestKeystoreCreateStep6Controller;
+module.exports = GuestKeystoreCreateStep4Controller;

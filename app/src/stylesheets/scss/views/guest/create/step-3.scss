@@ -1,8 +1,8 @@
 .wallet-create-step-3 {
     height: 100%;
 
-    .title {
-        margin-bottom: 24px;
+    > .title {
+        margin-top: 24px;
         user-select: none;
         font-family: ProximaNovaSemibold;
         font-weight: 600;
@@ -10,8 +10,7 @@
         letter-spacing: normal;
         color: #ffffff;
     }
-
-    .description {
+    > .description {
         font-family: ProximaNovaRegular;
         margin-top: 18px;
         opacity: 0.8;
@@ -28,57 +27,30 @@
         margin-top: 50px;
 
         .content {
-            padding: 24px 36px;
+            padding: 50px 44px;
 
-            .password-strength-container {
-                height: 11px;
-                width: 100%;
+            >.title {
+                font-family: ProximaNovaRegular;
+                font-size: 18px;
+                line-height: 1.72;
+                color: #ffffff;
+            }
+
+            .warning-description {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin-top: 16px;
+                margin-top: 44px;
 
-                .blocks-container {
-                    height: 11px;
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-around;
-
-                    .block {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        justify-content: center;
-
-                        height: 11px;
-                        width: 168px;
-                        background-color: #1e262e;
-
-                        &.active {
-                            &:after {
-                                content: "";
-                                width: 158px;
-                                height: 3px;
-                                background-color: #0dc7dd;
-                            }
-                        }
-                    }
-                }
-
-                .status-text-container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    margin-top: 26px;
-
+                >.item {
                     span {
                         font-family: ProximaNovaRegular;
-                        font-size: 16px;
-                        color: #93b0c1;
+                        font-size: 18px;
+                        color: #ffffff;
+                        line-height: 1.89;
+                        &:first-of-type {
+                            font-weight: bold;
+                            margin-right: 8px;
+                        }
                     }
                 }
             }
@@ -88,11 +60,11 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
-                margin-top: 60px;
+                align-items: stretch;
+                margin-top: 44px;
 
-                .md-button {
-                    width: 360px;
+                >.md-button {
+                    padding: 10px;
                 }
             }
         }

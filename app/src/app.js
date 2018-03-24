@@ -213,22 +213,22 @@ angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', Guest
 /**
  * create wallet
  */
-const GuestKeystoreCreateStep1Controller = requireAppModule('angular/controllers/guest/create/step-1-controller.js');
+const GuestKeystoreCreateStep1Controller = requireAppModule('angular/controllers/guest/create/step-1.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
-const GuestKeystoreCreateStep2Controller = requireAppModule('angular/controllers/guest/create/step-2-controller.js');
+const GuestKeystoreCreateStep2Controller = requireAppModule('angular/controllers/guest/create/step-2.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
-const GuestKeystoreCreateStep3Controller = requireAppModule('angular/controllers/guest/create/step-3-controller.js');
+const GuestKeystoreCreateStep3Controller = requireAppModule('angular/controllers/guest/create/step-3.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
-const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4-controller.js');
+const GuestKeystoreCreateStep4Controller = requireAppModule('angular/controllers/guest/create/step-4.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
-const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5-controller.js');
+const GuestKeystoreCreateStep5Controller = requireAppModule('angular/controllers/guest/create/step-5.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
 
-const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6-controller.js');
+const GuestKeystoreCreateStep6Controller = requireAppModule('angular/controllers/guest/create/step-6.controller.js');
 angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
 
 

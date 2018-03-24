@@ -16942,102 +16942,7 @@ md-dialog {
 
 .wallet-create-step-1 {
   height: 100%; }
-  .wallet-create-step-1 .header-wrapper {
-    width: 600px;
-    margin-bottom: 30px;
-    color: #ffffff; }
-    .wallet-create-step-1 .header-wrapper .title {
-      font-family: ProximaNovaRegular;
-      font-size: 36px;
-      line-height: 1; }
-    .wallet-create-step-1 .header-wrapper .description {
-      font-family: ProximaNovaRegular;
-      margin-top: 18px;
-      opacity: 0.8;
-      font-size: 18px;
-      line-height: 1.67;
-      color: #ffffff; }
-  .wallet-create-step-1 .content-wrapper {
-    width: 600px;
-    background-color: #262f39;
-    padding: 20px 0 20px 0; }
-    .wallet-create-step-1 .content-wrapper .item-wrapper {
-      margin: 20px 0 20px 0;
-      align-items: flex-start; }
-      .wallet-create-step-1 .content-wrapper .item-wrapper .body {
-        margin-left: 20px; }
-        .wallet-create-step-1 .content-wrapper .item-wrapper .body .title {
-          opacity: 0.83;
-          font-family: SFNSDisplay;
-          font-size: 21px;
-          font-weight: normal;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 1.14;
-          letter-spacing: normal;
-          text-align: left;
-          color: #ffffff; }
-        .wallet-create-step-1 .content-wrapper .item-wrapper .body .text {
-          margin-top: 10px;
-          width: 491px;
-          opacity: 0.8;
-          font-family: ProximaNovaRegular;
-          font-size: 16px;
-          font-weight: normal;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 1.63;
-          letter-spacing: normal;
-          text-align: left;
-          color: #ffffff; }
-        .wallet-create-step-1 .content-wrapper .item-wrapper .body .actions button {
-          font-family: ProximaNovaSemibold;
-          font-size: 15px;
-          font-weight: 600;
-          font-style: normal;
-          font-stretch: normal;
-          line-height: 0.8;
-          letter-spacing: 0.6px;
-          text-align: center;
-          color: #ffffff;
-          text-transform: initial; }
-          .wallet-create-step-1 .content-wrapper .item-wrapper .body .actions button.md-raised {
-            width: 320px;
-            height: 50px;
-            border-radius: 4px;
-            background-color: #435160; }
-
-.wallet-create-step-2 {
-  height: 100%; }
-  .wallet-create-step-2 .title {
-    margin-top: 24px;
-    user-select: none;
-    font-family: ProximaNovaSemibold;
-    font-weight: 600;
-    line-height: 1.5;
-    letter-spacing: normal;
-    color: #ffffff; }
-  .wallet-create-step-2 .description {
-    font-family: ProximaNovaRegular;
-    margin-top: 18px;
-    opacity: 0.8;
-    font-size: 18px;
-    line-height: 1.89;
-    text-align: center;
-    color: #ffffff;
-    margin-top: 15px;
-    user-select: none; }
-  .wallet-create-step-2 .content-wrapper {
-    margin-top: 30px;
-    width: 400px; }
-    .wallet-create-step-2 .content-wrapper > .content {
-      padding: 24px; }
-    .wallet-create-step-2 .content-wrapper md-input-container {
-      margin: 14px 0; }
-
-.wallet-create-step-3 {
-  height: 100%; }
-  .wallet-create-step-3 .title {
+  .wallet-create-step-1 .title {
     margin-bottom: 24px;
     user-select: none;
     font-family: ProximaNovaSemibold;
@@ -17045,7 +16950,159 @@ md-dialog {
     line-height: 1.5;
     letter-spacing: normal;
     color: #ffffff; }
-  .wallet-create-step-3 .description {
+  .wallet-create-step-1 .description {
+    font-family: ProximaNovaRegular;
+    margin-top: 18px;
+    opacity: 0.8;
+    font-size: 18px;
+    line-height: 1.89;
+    text-align: center;
+    color: #0abbd0;
+    margin-top: 15px;
+    user-select: none; }
+  .wallet-create-step-1 .content-wrapper {
+    width: 780px;
+    margin-top: 50px; }
+    .wallet-create-step-1 .content-wrapper .content {
+      padding: 24px 36px; }
+      .wallet-create-step-1 .content-wrapper .content .password-strength-container {
+        height: 11px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px; }
+        .wallet-create-step-1 .content-wrapper .content .password-strength-container .blocks-container {
+          height: 11px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-around; }
+          .wallet-create-step-1 .content-wrapper .content .password-strength-container .blocks-container .block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 11px;
+            width: 168px;
+            background-color: #1e262e; }
+            .wallet-create-step-1 .content-wrapper .content .password-strength-container .blocks-container .block.active:after {
+              content: "";
+              width: 158px;
+              height: 3px;
+              background-color: #0dc7dd; }
+        .wallet-create-step-1 .content-wrapper .content .password-strength-container .status-text-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-top: 26px; }
+          .wallet-create-step-1 .content-wrapper .content .password-strength-container .status-text-container span {
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            color: #93b0c1; }
+      .wallet-create-step-1 .content-wrapper .content .actions-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 60px; }
+        .wallet-create-step-1 .content-wrapper .content .actions-wrapper .md-button {
+          width: 360px; }
+
+.wallet-create-step-2 {
+  height: 100%; }
+  .wallet-create-step-2 > .title {
+    margin-bottom: 24px;
+    user-select: none;
+    font-family: ProximaNovaSemibold;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #ffffff; }
+  .wallet-create-step-2 > .description {
+    font-family: ProximaNovaRegular;
+    margin-top: 18px;
+    opacity: 0.8;
+    font-size: 18px;
+    line-height: 1.89;
+    text-align: center;
+    color: #0abbd0;
+    margin-top: 15px;
+    user-select: none; }
+  .wallet-create-step-2 .content-wrapper {
+    width: 780px;
+    margin-top: 50px; }
+    .wallet-create-step-2 .content-wrapper .content {
+      padding: 24px 36px; }
+      .wallet-create-step-2 .content-wrapper .content > .title {
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        line-height: 1.72;
+        color: #ffffff;
+        margin-bottom: 24px; }
+      .wallet-create-step-2 .content-wrapper .content .password-strength-container {
+        height: 11px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px; }
+        .wallet-create-step-2 .content-wrapper .content .password-strength-container .blocks-container {
+          height: 11px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-around; }
+          .wallet-create-step-2 .content-wrapper .content .password-strength-container .blocks-container .block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 11px;
+            width: 168px;
+            background-color: #1e262e; }
+            .wallet-create-step-2 .content-wrapper .content .password-strength-container .blocks-container .block.active:after {
+              content: "";
+              width: 158px;
+              height: 3px;
+              background-color: #0dc7dd; }
+        .wallet-create-step-2 .content-wrapper .content .password-strength-container .status-text-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-top: 26px; }
+          .wallet-create-step-2 .content-wrapper .content .password-strength-container .status-text-container span {
+            font-family: ProximaNovaRegular;
+            font-size: 16px;
+            color: #93b0c1; }
+      .wallet-create-step-2 .content-wrapper .content .actions-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 60px; }
+        .wallet-create-step-2 .content-wrapper .content .actions-wrapper .md-button {
+          width: 320px; }
+
+.wallet-create-step-3 {
+  height: 100%; }
+  .wallet-create-step-3 > .title {
+    margin-top: 24px;
+    user-select: none;
+    font-family: ProximaNovaSemibold;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #ffffff; }
+  .wallet-create-step-3 > .description {
     font-family: ProximaNovaRegular;
     margin-top: 18px;
     opacity: 0.8;
@@ -17059,224 +17116,71 @@ md-dialog {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-3 .content-wrapper .content {
-      padding: 24px 36px; }
-      .wallet-create-step-3 .content-wrapper .content .password-strength-container {
-        height: 11px;
-        width: 100%;
+      padding: 50px 44px; }
+      .wallet-create-step-3 .content-wrapper .content > .title {
+        font-family: ProximaNovaRegular;
+        font-size: 18px;
+        line-height: 1.72;
+        color: #ffffff; }
+      .wallet-create-step-3 .content-wrapper .content .warning-description {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-top: 16px; }
-        .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container {
-          height: 11px;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-around; }
-          .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container .block {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            height: 11px;
-            width: 168px;
-            background-color: #1e262e; }
-            .wallet-create-step-3 .content-wrapper .content .password-strength-container .blocks-container .block.active:after {
-              content: "";
-              width: 158px;
-              height: 3px;
-              background-color: #0dc7dd; }
-        .wallet-create-step-3 .content-wrapper .content .password-strength-container .status-text-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          margin-top: 26px; }
-          .wallet-create-step-3 .content-wrapper .content .password-strength-container .status-text-container span {
-            font-family: ProximaNovaRegular;
-            font-size: 16px;
-            color: #93b0c1; }
+        margin-top: 44px; }
+        .wallet-create-step-3 .content-wrapper .content .warning-description > .item span {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff;
+          line-height: 1.89; }
+          .wallet-create-step-3 .content-wrapper .content .warning-description > .item span:first-of-type {
+            font-weight: bold;
+            margin-right: 8px; }
       .wallet-create-step-3 .content-wrapper .content .actions-wrapper {
         width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        margin-top: 60px; }
-        .wallet-create-step-3 .content-wrapper .content .actions-wrapper .md-button {
-          width: 360px; }
+        align-items: stretch;
+        margin-top: 44px; }
+        .wallet-create-step-3 .content-wrapper .content .actions-wrapper > .md-button {
+          padding: 10px; }
 
 .wallet-create-step-4 {
   height: 100%; }
-  .wallet-create-step-4 > .title {
-    margin-bottom: 24px;
-    user-select: none;
-    font-family: ProximaNovaSemibold;
-    font-weight: 600;
-    line-height: 1.5;
-    letter-spacing: normal;
-    color: #ffffff; }
-  .wallet-create-step-4 > .description {
-    font-family: ProximaNovaRegular;
-    margin-top: 18px;
-    opacity: 0.8;
-    font-size: 18px;
-    line-height: 1.89;
-    text-align: center;
-    color: #0abbd0;
-    margin-top: 15px;
-    user-select: none; }
   .wallet-create-step-4 .content-wrapper {
     width: 780px;
     margin-top: 50px; }
     .wallet-create-step-4 .content-wrapper .content {
-      padding: 24px 36px; }
+      padding: 60px 40px; }
+      .wallet-create-step-4 .content-wrapper .content .md-icon-button md-icon svg {
+        fill: #ffffff; }
       .wallet-create-step-4 .content-wrapper .content > .title {
         font-family: ProximaNovaRegular;
         font-size: 18px;
         line-height: 1.72;
         color: #ffffff;
-        margin-bottom: 24px; }
-      .wallet-create-step-4 .content-wrapper .content .password-strength-container {
-        height: 11px;
-        width: 100%;
+        margin-bottom: 40px; }
+      .wallet-create-step-4 .content-wrapper .content .warning-description {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-top: 16px; }
-        .wallet-create-step-4 .content-wrapper .content .password-strength-container .blocks-container {
-          height: 11px;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-around; }
-          .wallet-create-step-4 .content-wrapper .content .password-strength-container .blocks-container .block {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            height: 11px;
-            width: 168px;
-            background-color: #1e262e; }
-            .wallet-create-step-4 .content-wrapper .content .password-strength-container .blocks-container .block.active:after {
-              content: "";
-              width: 158px;
-              height: 3px;
-              background-color: #0dc7dd; }
-        .wallet-create-step-4 .content-wrapper .content .password-strength-container .status-text-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          margin-top: 26px; }
-          .wallet-create-step-4 .content-wrapper .content .password-strength-container .status-text-container span {
-            font-family: ProximaNovaRegular;
-            font-size: 16px;
-            color: #93b0c1; }
+        margin-top: 44px; }
+        .wallet-create-step-4 .content-wrapper .content .warning-description > .item span {
+          font-family: ProximaNovaRegular;
+          font-size: 18px;
+          color: #ffffff;
+          line-height: 1.89; }
+          .wallet-create-step-4 .content-wrapper .content .warning-description > .item span:first-of-type {
+            font-weight: bold;
+            margin-right: 8px; }
       .wallet-create-step-4 .content-wrapper .content .actions-wrapper {
         width: 100%;
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        margin-top: 60px; }
-        .wallet-create-step-4 .content-wrapper .content .actions-wrapper .md-button {
-          width: 320px; }
-
-.wallet-create-step-5 {
-  height: 100%; }
-  .wallet-create-step-5 > .title {
-    margin-top: 24px;
-    user-select: none;
-    font-family: ProximaNovaSemibold;
-    font-weight: 600;
-    line-height: 1.5;
-    letter-spacing: normal;
-    color: #ffffff; }
-  .wallet-create-step-5 > .description {
-    font-family: ProximaNovaRegular;
-    margin-top: 18px;
-    opacity: 0.8;
-    font-size: 18px;
-    line-height: 1.89;
-    text-align: center;
-    color: #0abbd0;
-    margin-top: 15px;
-    user-select: none; }
-  .wallet-create-step-5 .content-wrapper {
-    width: 780px;
-    margin-top: 50px; }
-    .wallet-create-step-5 .content-wrapper .content {
-      padding: 50px 44px; }
-      .wallet-create-step-5 .content-wrapper .content > .title {
-        font-family: ProximaNovaRegular;
-        font-size: 18px;
-        line-height: 1.72;
-        color: #ffffff;
-        margin-bottom: 40px; }
-      .wallet-create-step-5 .content-wrapper .content .warning-description {
-        display: flex;
-        flex-direction: column;
-        margin-top: 44px; }
-        .wallet-create-step-5 .content-wrapper .content .warning-description > .item span {
-          font-family: ProximaNovaRegular;
-          font-size: 18px;
-          color: #ffffff;
-          line-height: 1.89; }
-          .wallet-create-step-5 .content-wrapper .content .warning-description > .item span:first-of-type {
-            font-weight: bold;
-            margin-right: 8px; }
-      .wallet-create-step-5 .content-wrapper .content .actions-wrapper {
-        width: 100%;
-        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: stretch;
         margin-top: 44px; }
-        .wallet-create-step-5 .content-wrapper .content .actions-wrapper > .md-button {
+        .wallet-create-step-4 .content-wrapper .content .actions-wrapper > .md-button {
           padding: 10px; }
-
-.wallet-create-step-6 {
-  height: 100%; }
-  .wallet-create-step-6 .content-wrapper {
-    width: 780px;
-    margin-top: 50px; }
-    .wallet-create-step-6 .content-wrapper .content {
-      padding: 60px 40px; }
-      .wallet-create-step-6 .content-wrapper .content .md-icon-button md-icon svg {
-        fill: #ffffff; }
-      .wallet-create-step-6 .content-wrapper .content > .title {
-        font-family: ProximaNovaRegular;
-        font-size: 18px;
-        line-height: 1.72;
-        color: #ffffff;
-        margin-bottom: 40px; }
-      .wallet-create-step-6 .content-wrapper .content .warning-description {
-        display: flex;
-        flex-direction: column;
-        margin-top: 44px; }
-        .wallet-create-step-6 .content-wrapper .content .warning-description > .item span {
-          font-family: ProximaNovaRegular;
-          font-size: 18px;
-          color: #ffffff;
-          line-height: 1.89; }
-          .wallet-create-step-6 .content-wrapper .content .warning-description > .item span:first-of-type {
-            font-weight: bold;
-            margin-right: 8px; }
-      .wallet-create-step-6 .content-wrapper .content .actions-wrapper {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: stretch;
-        margin-top: 44px; }
-        .wallet-create-step-6 .content-wrapper .content .actions-wrapper > .md-button {
-          padding: 10px; }
-  .wallet-create-step-6 .private-key-print-box {
+  .wallet-create-step-4 .private-key-print-box {
     display: none; }
 
 @media print {
@@ -17293,6 +17197,101 @@ md-dialog {
       font-size: 18px; }
     .wallet-create-step-6 .private-key-print-box .pk {
       margin-top: 8px; } }
+
+.wallet-create-step-5 {
+  height: 100%; }
+  .wallet-create-step-5 .header-wrapper {
+    width: 600px;
+    margin-bottom: 30px;
+    color: #ffffff; }
+    .wallet-create-step-5 .header-wrapper .title {
+      font-family: ProximaNovaRegular;
+      font-size: 36px;
+      line-height: 1; }
+    .wallet-create-step-5 .header-wrapper .description {
+      font-family: ProximaNovaRegular;
+      margin-top: 18px;
+      opacity: 0.8;
+      font-size: 18px;
+      line-height: 1.67;
+      color: #ffffff; }
+  .wallet-create-step-5 .content-wrapper {
+    width: 600px;
+    background-color: #262f39;
+    padding: 20px 0 20px 0; }
+    .wallet-create-step-5 .content-wrapper .item-wrapper {
+      margin: 20px 0 20px 0;
+      align-items: flex-start; }
+      .wallet-create-step-5 .content-wrapper .item-wrapper .body {
+        margin-left: 20px; }
+        .wallet-create-step-5 .content-wrapper .item-wrapper .body .title {
+          opacity: 0.83;
+          font-family: SFNSDisplay;
+          font-size: 21px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.14;
+          letter-spacing: normal;
+          text-align: left;
+          color: #ffffff; }
+        .wallet-create-step-5 .content-wrapper .item-wrapper .body .text {
+          margin-top: 10px;
+          width: 491px;
+          opacity: 0.8;
+          font-family: ProximaNovaRegular;
+          font-size: 16px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.63;
+          letter-spacing: normal;
+          text-align: left;
+          color: #ffffff; }
+        .wallet-create-step-5 .content-wrapper .item-wrapper .body .actions button {
+          font-family: ProximaNovaSemibold;
+          font-size: 15px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 0.8;
+          letter-spacing: 0.6px;
+          text-align: center;
+          color: #ffffff;
+          text-transform: initial; }
+          .wallet-create-step-5 .content-wrapper .item-wrapper .body .actions button.md-raised {
+            width: 320px;
+            height: 50px;
+            border-radius: 4px;
+            background-color: #435160; }
+
+.wallet-create-step-6 {
+  height: 100%; }
+  .wallet-create-step-6 .title {
+    margin-top: 24px;
+    user-select: none;
+    font-family: ProximaNovaSemibold;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #ffffff; }
+  .wallet-create-step-6 .description {
+    font-family: ProximaNovaRegular;
+    margin-top: 18px;
+    opacity: 0.8;
+    font-size: 18px;
+    line-height: 1.89;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 15px;
+    user-select: none; }
+  .wallet-create-step-6 .content-wrapper {
+    margin-top: 30px;
+    width: 400px; }
+    .wallet-create-step-6 .content-wrapper > .content {
+      padding: 24px; }
+    .wallet-create-step-6 .content-wrapper md-input-container {
+      margin: 14px 0; }
 
 .member-setup-layout {
   position: relative; }

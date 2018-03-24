@@ -1,12 +1,12 @@
 'use strict';
 
-function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $stateParams, RPCService, CommonService) {
+function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $state, $stateParams, RPCService, CommonService) {
     'ngInject'
 
-    $log.info("GuestKeystoreCreateStep5Controller", $stateParams);
+    $log.info("GuestKeystoreCreateStep3Controller");
 
     $scope.nextStep = (event) => {
-        $state.go('guest.create.step-6');
+        $state.go('guest.create.step-4');
     }
 
     $scope.backupKeystore = (event) => {
@@ -24,4 +24,4 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
     }
 };
 
-module.exports = GuestKeystoreCreateStep5Controller;
+module.exports = GuestKeystoreCreateStep3Controller;
