@@ -5,12 +5,58 @@
     justify-content: center;
 
     > .center-container {
-        margin-top: 30px;
 
         .header-wrapper {
             width: 1140px;
             height: 147px;
             border-bottom: solid 1px #475768;
+
+            .logo {
+                float: left;
+                position: relative;
+                width: 76px;
+                height: 43.88px;
+                margin: 21.94px 0;
+                border-left: solid 1px #475768;
+                border-right: solid 1px #475768;
+                margin-top: 52px !important;
+
+                .sk-icon {
+                    margin-left: 19px;
+                    margin-top: 4px;
+                }
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    z-index: 1;
+                    width: 53.74px;
+                    height: 53.74px;
+                    -webkit-transform: scaleY(0.5774) rotate(-45deg);
+                    -ms-transform: scaleY(0.5774) rotate(-45deg);
+                    transform: scaleY(0.5774) rotate(-45deg);
+                    background-color: inherit;
+                    left: 10.1299px;
+                    top: -26.8701px;
+                    border-top: solid 1.4142px #475768;
+                    border-right: solid 1.4142px #475768;
+                }
+                &:after {
+                    content: "";
+                    position: absolute;
+                    z-index: 1;
+                    width: 53.74px;
+                    height: 53.74px;
+                    -webkit-transform: scaleY(0.5774) rotate(-45deg);
+                    -ms-transform: scaleY(0.5774) rotate(-45deg);
+                    transform: scaleY(0.5774) rotate(-45deg);
+                    background-color: inherit;
+                    left: 10.1299px;
+                    bottom: -26.8701px;
+                    border-bottom: solid 1.4142px #475768;
+                    border-left: solid 1.4142px #475768;
+                }
+            }
 
             .title {
                 width: 124px;
@@ -24,14 +70,16 @@
                 text-align: left;
                 color: #ffffff;
                 font-family: ProximaNovaRegular;
-                padding: 57px 54px 0 95px;
+                margin-top: 57px;
+                margin-left: 20px;
+                float: left;
             }
             .status {
                 color: #768fa9;
                 font-size: 16px;
                 font-family: ProximaNovaRegular;
                 float: right;
-                margin-top: -15px;
+                margin-top: 69px;
 
                 md-icon {
 
