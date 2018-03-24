@@ -650,33 +650,13 @@ module.exports = function (app) {
     /**
      * documents
      */
+    /*
     controller.prototype.documents_selectById = (id) => {
         return selectById('documents', id);
     }
+    */
 
     /**
-<<<<<<< HEAD
-=======
-     * action_logs
-     */
-    controller.prototype.actionLogs_add = (item) => {
-        item.createdAt = new Date().getTime();
-        //item.content = JSON.stringify(item.content);
-        return insertIntoTable('action_logs', item);
-    }
-
-    controller.prototype.actionLogs_findAll = (args) => {
-        return new Promise((resolve, reject) => {
-            knex('action_logs').select().where({ walletId: args.walletId }).then((rows) => {
-                resolve(rows);
-            }).catch((error) => {
-                reject({ message: "error", error: error });
-            });
-        });
-    }
-
-    /**
->>>>>>> d097422cf41823b223259e2b05c086acc7c16f29
      * tokens
      */
     controller.prototype.tokens_selectBySymbol = (symbol) => {
