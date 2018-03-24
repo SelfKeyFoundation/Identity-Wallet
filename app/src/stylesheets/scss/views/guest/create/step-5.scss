@@ -1,71 +1,77 @@
 .wallet-create-step-5 {
     height: 100%;
-
-    > .title {
-        margin-top: 24px;
-        user-select: none;
-        font-family: ProximaNovaSemibold;
-        font-weight: 600;
-        line-height: 1.5;
-        letter-spacing: normal;
+    .header-wrapper {
+        width: 600px;
+        margin-bottom: 30px;
         color: #ffffff;
+        .title {
+            font-family: ProximaNovaRegular;
+            font-size: 36px;
+            line-height: 1;
+        }
+        .description {
+            font-family: ProximaNovaRegular;
+            margin-top: 18px;
+            opacity: 0.8;
+            font-size: 18px;
+            line-height: 1.67;
+            color: #ffffff;
+        }
     }
-    > .description {
-        font-family: ProximaNovaRegular;
-        margin-top: 18px;
-        opacity: 0.8;
-        font-size: 18px;
-        line-height: 1.89;
-        text-align: center;
-        color: #0abbd0;
-        margin-top: 15px;
-        user-select: none;
-    }
-
     .content-wrapper {
-        width: 780px;
-        margin-top: 50px;
-
-        .content {
-            padding: 50px 44px;
-
-            >.title {
-                font-family: ProximaNovaRegular;
-                font-size: 18px;
-                line-height: 1.72;
-                color: #ffffff;
-                margin-bottom: 40px;
-            }
-
-            .warning-description {
-                display: flex;
-                flex-direction: column;
-                margin-top: 44px;
-
-                >.item {
-                    span {
-                        font-family: ProximaNovaRegular;
-                        font-size: 18px;
+        width: 600px;
+        background-color: #262f39;
+        padding: 20px 0 20px 0;
+        .item-wrapper {
+            margin: 20px 0 20px 0;
+            align-items: flex-start;
+            .body {
+                margin-left: 20px;
+                .title {
+                    opacity: 0.83;
+                    font-family: SFNSDisplay;
+                    font-size: 21px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.14;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #ffffff;
+                }
+                .text {
+                    margin-top: 10px;
+                    width: 491px;
+                    opacity: 0.8;
+                    font-family: ProximaNovaRegular;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.63;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #ffffff;
+                }
+                .actions {
+                    button {
+                        font-family: ProximaNovaSemibold;
+                        font-size: 15px;
+                        font-weight: 600;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: 0.8;
+                        letter-spacing: 0.6px;
+                        text-align: center;
                         color: #ffffff;
-                        line-height: 1.89;
-                        &:first-of-type {
-                            font-weight: bold;
-                            margin-right: 8px;
+                        text-transform: initial;
+                        &.md-raised {
+                            width: 320px;
+                            height: 50px;
+                            border-radius: 4px;
+                            background-color: #435160;
                         }
                     }
-                }
-            }
-
-            .actions-wrapper {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: stretch;
-                margin-top: 44px;
-
-                >.md-button {
-                    padding: 10px;
                 }
             }
         }

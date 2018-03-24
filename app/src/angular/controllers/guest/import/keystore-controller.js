@@ -42,56 +42,62 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         $scope.isAuthenticating = true;
         if ($scope.type === 'select') {
             if (wallets[$scope.userInput.selectedPublicKey]) {
-                let promise = unlockExistingWallet();
-                promise.then(()=>{
-                    $state.go('member.dashboard.main');
-                }).catch((error)=>{
+                let promise = unlockExistingWallet($scope.userInput.selectedPublicKey, $scope.userInput.password);
+                promise.then((data) => {
+                    if (data.isSetupFinished) {
+                        $state.go('member.dashboard.main');
+                    } else {
+                        $state.go('guest.create.step-3', { walletData: data });
+                    }
+                }).catch((error) => {
                     $scope.isAuthenticating = false;
                     CommonService.showToast('error', 'incorrect password');
                 });
             }
-        } else if ($scope.type === 'import'){
-            let promise = RPCService.makeCall('unlockKeystoreFile', {
+        } else if ($scope.type === 'import') {
+            let promise = RPCService.makeCall('importKeystoreFile', {
                 keystoreFilePath: $rootScope.walletImportData.keystoreFilePath,
                 password: $scope.userInput.password
             });
 
             promise.then((data) => {
                 $rootScope.walletImportData = data;
-                $state.go('guest.create.step-1', {type: 'import'});
-            }).catch((error)=>{
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+
+                $state.go('guest.create.step-3', { walletData: data });
+            }).catch((error) => {
                 $scope.isAuthenticating = false;
-                CommonService.showToast('error', 'incorrect password');
+                CommonService.showToast('error', $rootScope.DICTIONARY[error]);
             });
         }
     }
 
-    $transitions.onStart({ }, function(trans) {
-        trans.promise.finally(()=>{
+    $transitions.onStart({}, function (trans) {
+        trans.promise.finally(() => {
             $scope.isAuthenticating = false;
         });
     });
 
-    function unlockExistingWallet(){
+    function unlockExistingWallet(publicKey, password) {
         let defer = $q.defer();
 
-        let unlockExistingWalletPromise = RPCService.makeCall('unlockExistingWallet', {
-            publicKey: $scope.userInput.selectedPublicKey,
-            password: $scope.userInput.password
+        let unlockExistingWalletPromise = RPCService.makeCall('unlockKeystoreFile', {
+            publicKey: publicKey,
+            password: password
         });
 
-        unlockExistingWalletPromise.then((data)=>{
+        unlockExistingWalletPromise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
             let initialPromises = [];
             initialPromises.push($rootScope.wallet.loadIdAttributes());
             initialPromises.push($rootScope.wallet.loadTokens());
 
-            $q.all(initialPromises).then((resp)=>{
-                defer.resolve();
-            }).catch((error)=>{
+            $q.all(initialPromises).then((resp) => {
+                defer.resolve(data);
+            }).catch((error) => {
                 defer.reject(error);
             });
-        }).catch((error)=>{
+        }).catch((error) => {
             defer.reject(error);
         });
 

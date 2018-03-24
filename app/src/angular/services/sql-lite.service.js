@@ -97,7 +97,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         loadWallets() {
-            return RPCService.makeCall('getWallets', null).then((wallets) => {
+            return RPCService.makeCall('findAllWallets', null).then((wallets) => {
                 if (wallets) {
                     for (let i in wallets) {
                         let item = wallets[i];
