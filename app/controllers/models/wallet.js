@@ -21,7 +21,6 @@ module.exports = function (app, sqlLiteService) {
     Controller.selectProfilePictureById = _selectProfilePictureById;
     Controller.updateProfilePicture = _updateProfilePicture;
 
-
     /**
      *
      */
@@ -179,14 +178,14 @@ module.exports = function (app, sqlLiteService) {
     function _updateProfilePicture (args) {
        
         return knex.transaction((trx) => {
-            let selectPromise = knex('wallets').transacting(trx).select().where('id', args.id);
+            let selectPromise = knex(TABLE_NAME).transacting(trx).select().where('id', args.id);
             selectPromise.then((rows) => {
                 return new Promise((resolve, reject) => {
                     let wallet = rows[0];
 
                     wallet.profilePicture = args.profilePicture;
 
-                    knex('wallets').transacting(trx).update(wallet).where('id', args.id).then((updatedData) => {
+                    knex(TABLE_NAME).transacting(trx).update(wallet).where('id', args.id).then((updatedData) => {
                         resolve(wallet);
                     }).catch((error) => {
                         reject({ message: "error", error: error });
@@ -200,7 +199,7 @@ module.exports = function (app, sqlLiteService) {
    
     function _selectProfilePictureById (args) {
         return new Promise((resolve, reject) => {
-            knex('wallets').select().where('id', args.id).then((rows) => {
+            knex(TABLE_NAME).select().where('id', args.id).then((rows) => {
                 if (rows && rows.length) {
                     resolve(rows[0].profilePicture);
                 } else {
