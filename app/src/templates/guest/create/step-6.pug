@@ -1,7 +1,7 @@
 .wallet-create-step-6(layout-fill, layout="column", layout-align="center center")
 
     sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
+    .title SELFKEY ID
     .description Fill in the basic details of your identity wallet.
 
     .content-wrapper.sk-box.shadowed
@@ -32,4 +32,4 @@
                 div(ng-messages="basicInfoForm.countryOfResidency.$error")
                     div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['country_of_residency'] }}.
             md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
-                span.small Create SelfKey Basic ID
+                span.small Create SelfKey ID
