@@ -2,13 +2,14 @@ md-dialog.id-wallet-info(aira-lable="{{title}}")
     .id-wallet-info-wrapper
         sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
         .container
-            .header {{dialogInfo.header}}
-            .info-section(layout="row")
-                .logo(flex="30")
-                    sk-icon(icon="{{dialogInfo.logo}}", size-class="icon-size-44x44")
-                .text(flex="70") {{dialogInfo.text}}
+            .header
+                span {{dialogInfo.header}}
+            .info-section
+                .text
+                    p {{dialogInfo.textPart1}}
+                    p {{dialogInfo.textPart2}}
             .buttons-section
-                md-button.gray(style="margin-left: 8px; width: 144px;", ng-click="backStep($event)")
+                md-button(ng-click="backStep($event)")
                     span {{dialogInfo.button1}}
-                md-button.gray(style="margin-left: 8px; width: 144px;" ng-click="nextStep()" ng-class="[{'button-198': dialogInfo.step == 4}]")
+                md-button(ng-click="nextStep()" ng-class="[{'button-198': dialogInfo.step == 4}]")
                     span {{dialogInfo.button2}}

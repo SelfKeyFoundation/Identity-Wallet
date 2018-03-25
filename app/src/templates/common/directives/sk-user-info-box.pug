@@ -2,8 +2,8 @@
     //.box-icon
         sk-icon(icon="danger-box", size-class="icon-size-16x16")
     .visual
-        .image(style="align-items: center; display: flex; justify-content: center;")
-            .pic(style='background-image: url({{userData.tempImage}});')
+        .image(style="align-items: center; display: flex; justify-content: center; cursor: pointer")
+            .pic(ng-click="selectProfilePicture($event)", ng-style='profilePictureStyles')
         .name
             sk-icon(icon="success-box", size-class="icon-size-16x16")
             span {{ getItemValue(idAttributes.first_name) + ' ' + (getItemValue(idAttributes.middle_name) ? getItemValue(idAttributes.middle_name) + ' ' : '') +  getItemValue(idAttributes.last_name) }}
