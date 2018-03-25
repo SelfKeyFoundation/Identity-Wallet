@@ -37,6 +37,9 @@ module.exports = function (app) {
     let AppSetting = require('./models/app-setting.js')(app, controller);
     controller.prototype.AppSetting = AppSetting;
 
+    let WalletSetting = require('./models/wallet-setting.js')(app, controller);
+    controller.prototype.WalletSetting = WalletSetting;
+
     let Country = require('./models/country.js')(app, controller);
     controller.prototype.Country = Country;
 
@@ -196,31 +199,6 @@ module.exports = function (app) {
         });
     }
 
-    function createWalletSettings() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('wallet_settings').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('wallet_settings', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('sowDesktopNotifications').notNullable().defaultTo(0);
-                        table.integer('ERC20TxHistoryLastBlock');
-                        table.integer('EthTxHistoryLastBlock');
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "wallet_settings", "created.");
-                        resolve("wallet_settings created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
     /**
      * public methods
      */
@@ -240,7 +218,7 @@ module.exports = function (app) {
         promises.push(createWalletTokens());
         promises.push(createTransactionsHistory());
         promises.push(ActionLog.init());
-        promises.push(createWalletSettings());
+        promises.push(WalletSetting.init());
         promises.push(ExchangeDataHandler.init());
         return Promise.all(promises)
     }
@@ -278,83 +256,12 @@ module.exports = function (app) {
     /**
      * wallets
      */
-    /*
-    controller.prototype.wallets_insert = (data, basicInfo) => {
-        data.createdAt = new Date().getTime();
-        return knex.transaction((trx) => {
-            knex('wallets')
-                .transacting(trx)
-                .insert(data)
-                .then((resp) => {
-                    let id = resp[0];
-
-                    let promises = [];
-
-                    // add wallet settings
-                    promises.push(insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
-
-                    // add wallet tokens
-                    promises.push(insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
-
-                    return new Promise((resolve, reject) => {
-                        Promise.all(promises).then(() => {
-                            let idAttributesSavePromises = [];
-                            let idAttributeItemsSavePromises = [];
-                            let idAttributeItemValuesSavePromises = [];
-
-                            selectTable('id_attribute_types', { isInitial: 1 }, trx).then((idAttributeTypes) => {
-                                for (let i in idAttributeTypes) {
-                                    let idAttributeType = idAttributeTypes[i];
-
-                                    // add initial id attributes
-                                    idAttributesSavePromises.push(insertIntoTable('id_attributes', { walletId: id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
-                                        idAttributeItemsSavePromises.push(insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-                                            let staticData = JSON.stringify({ line1: basicInfo[idAttributeType.key] });
-                                            idAttributeItemValuesSavePromises.push(insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() }));
-                                        }));
-                                    }));
-                                }
-
-                                let finalPromises = [];
-                                finalPromises.push(Promise.all(idAttributesSavePromises));
-                                finalPromises.push(Promise.all(idAttributeItemsSavePromises));
-                                finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
-
-                                Promise.each(finalPromises, (el) => { return el }).then(() => {
-                                    data.id = id;
-                                    resolve(data);
-                                }).catch((error) => {
-                                    reject({ message: "wallets_insert_error", error: error });
-                                });
-
-                            }).catch((error) => {
-                                reject({ message: "wallets_insert_error", error: error });
-                            });
-                        }).catch((error) => {
-                            reject({ message: "wallets_insert_error", error: error });
-                        });
-                    });
-                })
-                .then(trx.commit)
-                .catch(trx.rollback);
-        });
-    }
-    */
-
     controller.prototype.wallets_update = (data) => {
         return updateById('wallets', data);
     }
 
     controller.prototype.wallets_selectById = (id) => {
         return getById('wallets', id);
-    }
-
-    controller.prototype.walletSettings_selectByWalletId = (id) => {
-        return selectTable('wallet_settings', { walletId: id });
-    }
-
-    controller.prototype.walletSettings_update = (data) => {
-        return updateById('wallet_settings', data);
     }
 
     controller.prototype.wallets_selectAll = () => {
@@ -458,7 +365,7 @@ module.exports = function (app) {
         return query.insert(args);
     }
 
-    function _update (table, args, where, tx) {
+    function _update (table, item, where, tx) {
         let query = knex(table);
 
         if (tx) {
@@ -469,7 +376,7 @@ module.exports = function (app) {
             query = query.where(where);
         }
 
-        return query.update(args);
+        return query.update(item);
     }
 
     /**
@@ -761,7 +668,6 @@ module.exports = function (app) {
                     reject({ message: "error_while_creating", error: error });
                 });
             }).catch((error) => {
-                console.log(error);
                 reject({ message: "error_while_creating", error: error });
             })
         });

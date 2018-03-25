@@ -1,4 +1,4 @@
-function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteService, RPCService) {
+function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportWalletController');
@@ -29,13 +29,6 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
                 $state.go('guest.import.keystore', { type: 'select' });
         }
     }
-
-    RPCService.makeCall('importKYCPackage', {}).then(()=>{
-        console.log(">>>>>>>>>>>>>>");
-    }).catch((error)=>{
-
-    });
-
 };
 
 module.exports = GuestImportWalletController;

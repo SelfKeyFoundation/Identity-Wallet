@@ -43,8 +43,6 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
             }).catch((error) => {
                 console.log(">>>>>>>", error);
             });
-
-
         }
     }
 
@@ -82,6 +80,28 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
 
         return defer.promise;
     }
+
+    function loadIdAttributes () {
+        let idAttributes = $rootScope.wallet.getIdAttributes();
+
+        for(let i in $scope.input){
+            $scope.input[i] = getIdAttribute(idAttributes, i);
+        }
+    }
+
+    function getIdAttribute (idAttributes, type) {
+        if(idAttributes[type] && idAttributes[type].items && idAttributes[type].items.length && idAttributes[type].items[0].values && idAttributes[type].items[0].values.length){
+            if(idAttributes[type].items[0].values[0].staticData.line1){
+                return idAttributes[type].items[0].values[0].staticData.line1
+            } else if (idAttributes[type].items[0].values[0].documentFileName) {
+                idAttributes[type].items[0].values[0].documentFileName
+            } else {
+                return null;
+            }
+        }
+    }
+
+    loadIdAttributes ();
 };
 
 module.exports = GuestKeystoreCreateStep6Controller;

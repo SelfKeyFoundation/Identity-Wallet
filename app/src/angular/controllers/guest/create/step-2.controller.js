@@ -30,7 +30,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
     }
 
     $scope.previousStep = (event) => {
-        $state.go('guest.create.step-3');
+        $state.go('guest.create.step-1');
     }
 
     $scope.getPasswordStrengthInfo = () => {

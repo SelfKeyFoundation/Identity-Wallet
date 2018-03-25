@@ -80,7 +80,6 @@ module.exports = function (app, sqlLiteService) {
     }
 
     function _addInitialIdAttributesAndActivate(walletId, initialIdAttributes) {
-        console.log(walletId, initialIdAttributes)
         return knex.transaction((trx) => {
 
             sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
@@ -119,21 +118,16 @@ module.exports = function (app, sqlLiteService) {
                             sqlLiteService.update(TABLE_NAME, wallet, { id: wallet.id }, trx).then(() => {
                                 resolve(wallet);
                             }).catch((error) => {
-                                console.log("?????????? 11", error);
                                 reject({ message: "wallets_insert_error", error: error });
                             })
                         }).catch((error) => {
-                            console.log("?????????? 22", error);
                             reject({ message: "wallets_insert_error", error: error });
                         });
                     }).catch((error) => {
-                        console.log("?????????? 33", error);
                         reject({ message: "wallets_insert_error", error: error });
                     });
                 });
-            })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            }).then(trx.commit).catch(trx.rollback);
         });
     }
 

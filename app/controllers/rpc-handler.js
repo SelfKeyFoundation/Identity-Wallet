@@ -514,17 +514,31 @@ module.exports = function (app) {
     // TODO keep this...
     controller.prototype.importKYCPackage = function (event, actionId, actionName, args) {
 
-        console.log("111111111111");
-
-        function getFile(kycprocess, requirementId) {
-            // escrow.documents[0].requirementId
-            // escrow.documents.doc.files (contentType, fileName)
-            // read file
+        function getFileItems(kycprocess, requirementId) {
+            let result = [];
+            let documents = kycprocess.escrow.documents;
+            for(let i in documents){
+                let document = documents[i];
+                if(document.requirementId == requirementId){
+                    let files = document.doc.files;
+                    for(let j in files){
+                        result.push({ name: files[j].fileName,  mimeType: files[j].contentType});
+                    }
+                }
+            }
+            return result;
         }
 
-        function getStaticData(kycprocess, requirementId) {
-            // escrow.answers[0].requirementId
-            // escrow.answers.answer -> []
+        function getStaticDatas(kycprocess, requirementId) {
+            let result = [];
+            let answers = kycprocess.escrow.answers;
+            for(let i in answers){
+                let answer = answers[i];
+                if(answer.requirementId == requirementId){
+                    result = answer.answer;
+                }
+            }
+            return result;
         }
 
         function getStaticDataRequirements(kycprocess){
@@ -559,10 +573,7 @@ module.exports = function (app) {
          * prepare files (fileName, mimeType, size & etc...)
          */
 
-
-
         try {
-            console.log("22222222222222");
             let dialogConfig = {
                 title: 'Import KYC Package',
                 message: 'Choose file',
@@ -574,51 +585,104 @@ module.exports = function (app) {
             };
 
             dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
-                console.log("3333333333333333", filePaths);
                 if (filePaths && filePaths[0]) {
                     try {
-                        //const stats = fs.statSync(filePaths[0]);
-                        //let mimeType = mime.lookup(filePaths[0]);
-                        //let name = path.parse(filePaths[0]).base;
-
-                        /*
-                        if (stats.size > dialogConfig.maxFileSize) {
-                            return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
-                        }
-                        */
-
                         decompress(filePaths[0], os.tmpdir()).then(files => {
-                            console.log(">>>>>>>", files);
-                        });
+                            let documentFiles = {};
 
-                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                            files.forEach( (file) => {
+                                if (['export_code', 'kycprocess.json'].indexOf(file.path) > 0) {
+                                    return false;
+                                }
+                                documentFiles[file.path] = {
+                                    buffer: file.data,
+                                    size: file.data.byteLength
+                                };
+                            });
 
-                        /*
-                        fsm.open(filePaths[0], 'r', (status, fd) => {
-                            if (status) {
-                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            // searching for the json file
+                            const kycprocessJSONFile = files.find((file) => {
+                                if (file.path == "kycprocess.json") {
+                                    return true;
+                                }
+                                return false;
+                            });
+
+                            // searching for the export_code file
+                            const exportCodeFile = files.find((file) => {
+                                if (file.path == "export_code") {
+                                    return true;
+                                }
+                                return false;
+                            });
+
+                            const exportCode = exportCodeFile.data.toString('utf8');
+                            const kycprocess = JSON.parse(kycprocessJSONFile.data.toString('utf8'));
+
+                            let requiredDocuments = getDocumentRequirements(kycprocess);
+                            let requiredStaticData = getStaticDataRequirements(kycprocess);
+
+                            for(let i in requiredDocuments){
+                                let fileItems = getFileItems(kycprocess, requiredDocuments[i]._id);
+                                requiredDocuments[i].fileItems = fileItems;
                             }
 
-                            var buffer = new Buffer(stats.size);
-                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
-                                electron.app.sqlLiteService.idAttributeItemValues_addDocument(
-                                    {
-                                        fileName: name,
-                                        buffer: buffer,
-                                        mimeType: mimeType,
-                                        size: stats.size,
-                                        idAttributeItemValueId: args.idAttributeItemValueId
-                                    }
-                                ).then((resp) => {
-                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
-                                }).catch((error) => {
-                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                            for(let i in requiredStaticData){
+                                let staticDatas = getStaticDatas(kycprocess, requiredStaticData[i]._id);
+                                console.log("THE static data", staticDatas);
+                                requiredStaticData[i].staticDatas = staticDatas;
+                            }
+
+                            if(kycprocess.user.firstName){
+                                requiredStaticData.push({
+                                    attributeType: 'first_name',
+                                    staticDatas: [kycprocess.user.firstName]
                                 });
-                            });
+                            }
+
+                            if(kycprocess.user.lastName){
+                                requiredStaticData.push({
+                                    attributeType: 'last_name',
+                                    staticDatas: [kycprocess.user.lastName]
+                                });
+                            }
+
+                            if(kycprocess.user.middleName){
+                                requiredStaticData.push({
+                                    attributeType: 'middle_name',
+                                    staticDatas: [kycprocess.user.middleName]
+                                });
+                            }
+
+                            if(kycprocess.user.email){
+                                requiredStaticData.push({
+                                    attributeType: 'email',
+                                    staticDatas: [kycprocess.user.email]
+                                });
+                            }
+
+                            for(let i in requiredDocuments){
+                                for(let j in requiredDocuments[i].fileItems){
+                                    let fileItem = requiredDocuments[i].fileItems[j];
+                                    fileItem.buffer = documentFiles[fileItem.name] ? documentFiles[fileItem.name].buffer : null;
+                                    fileItem.size = documentFiles[fileItem.name] ? documentFiles[fileItem.name].size : null;
+                                }
+                            }
+
+                            // ready - requiredDocuments, requiredStaticData, exportCode
+
+                            electron.app.sqlLiteService.IdAttribute.addImportedIdAttributes(
+                                args.walletId,
+                                exportCode,
+                                requiredDocuments,
+                                requiredStaticData
+                            ).then((data)=>{
+                                app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+                            }).catch((error)=>{
+                                app.win.webContents.send(RPC_METHOD, actionId, actionName, "error", null);
+                            })
                         });
-                        */
                     } catch (e) {
-                        console.log(e);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
                     }
                 } else {
@@ -626,160 +690,8 @@ module.exports = function (app) {
                 }
             });
         } catch (e) {
-            console.log("????????", e);
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, "error", null);
         }
-
-
-
-
-        //app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);;
-
-        return
-        decompress(args.file.path, os.tmpdir()).then(files => {
-            let documentFiles = {};
-
-            // searching for document files
-            files.forEach( (file) => {
-                console.log(file);
-                if (['export_code', 'kycprocess.json'].indexOf(file.path) > 0) {
-                    return false;
-                }
-                documentFiles[file.path] = file;
-            });
-
-
-            // searching for the json file
-            const kycprocessJSONFile = files.find((file) => {
-                if (file.path == "kycprocess.json") {
-                    return true;
-                }
-                return false;
-            });
-
-            // searching for the export_code file
-            const exportCodeFile = files.find((file) => {
-                if (file.path == "export_code") {
-                    return true;
-                }
-                return false;
-            });
-
-            const kycprocess = JSON.parse(kycprocessJSONFile.data.toString('utf8'));
-
-            let requirementQuestions = {};
-            let requirementDocuments = {};
-            let ethAddressRequirementId = "";
-
-            // get all required uploads
-            let documents = getDocumentRequirements(kycprocess);
-            let staticDatas = getStaticDataRequirements(kycprocess);
-
-            /*
-            //get all required questions
-            kycprocess.requirements.questions.forEach(function (question) {
-                //if the question is ethereum address then save it into the selarate variable
-                if (question.tokenSale.ethAddress) {
-                    ethAddressRequirementId = question._id;
-                } else {
-                    requirementQuestions[question._id] = question;
-                }
-
-            })
-
-            let etherAddress = "";
-            let attributes = {};
-
-            //check for answers on the quesitons
-            kycprocess.escrow.answers.forEach(function (answer) {
-                //if re requirement is the ether address then save answer to the separate variable
-                if (answer.requirementId == ethAddressRequirementId) {
-                    etherAddress = answer.answer[0];
-                } else if (requirementQuestions[answer.requirementId]) {
-                    let questionRequirement = requirementQuestions[answer.requirementId];
-                    let idAttribute = questionRequirement.attributeType;
-                    if (!idAttribute) {
-                        return;
-                    }
-
-                    if (!attributes[idAttribute]) {
-                        attributes[idAttribute] = [];
-                    }
-                    let obj = {
-                        isDoc: false,
-                        value: answer.answer[0]
-
-                    };
-                    attributes[idAttribute].push(obj);
-                }
-            })
-            let fileDir = userDataDirectoryPath + "/documents/" + etherAddress + "/";
-
-
-            //loop through the uploaded documents
-            kycprocess.escrow.documents.forEach(function (document) {
-                let uploadRequirements = requirementDocuments[document.requirementId];
-                let idAttribute = uploadRequirements.attributeType;
-                //if doc is removed or does not have idAttribute do nothing
-                if (document.doc.removed || !idAttribute) {
-                    return;
-                }
-
-                if (!attributes[idAttribute]) {
-                    attributes[idAttribute] = [];
-                }
-
-
-                if (requirementDocuments[document.requirementId]) {
-                    document.doc.files.forEach(function (file) {
-                        let filePath = fileDir + file.fileName;
-                        let obj = {
-                            isDoc: true,
-                            name: file.fileName,
-                            contentType: file.contentType,
-                            value: filePath,
-                            addition: {
-                                selfie: uploadRequirements.selfie,
-                                ifEidIsSkipped: uploadRequirements.ifEidIsSkipped,
-                                signature: uploadRequirements.signature,
-                                optional: uploadRequirements.optional
-                            }
-                        };
-                        //ensure the directory exists and save the file
-                        fs.ensureDirSync(fileDir);
-                        fs.writeFileSync(filePath, documentFiles[file.fileName].data);
-                        attributes[idAttribute].push(obj);
-                    });
-                }
-            })
-
-            attributes.email = [{
-                isDoc: false,
-                value: json.user.email
-            }];
-
-            if (kycprocess.user.middleName) {
-                attributes.name = [{
-                    isDoc: false,
-                    value: json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
-                }]
-            } else {
-                attributes.name = [{
-                    isDoc: false,
-                    value: json.user.firstName + " " + json.user.lastName
-                }]
-            }
-
-            attributes.public_key = [{
-                isDoc: false,
-                value: etherAddress
-            }];
-            */
-
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
-        }).catch(function (err) {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, err, {});
-        });
     }
 
 
@@ -880,7 +792,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.getWalletSettingsByWalletId = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.walletSettings_selectByWalletId(args).then((data) => {
+        electron.app.sqlLiteService.WalletSetting.findByWalletId(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -888,7 +800,7 @@ module.exports = function (app) {
     }
 
     controller.prototype.saveWalletSettings = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.walletSettings_update(args).then((data) => {
+        electron.app.sqlLiteService.WalletSetting.edit(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);

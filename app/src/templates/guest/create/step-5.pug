@@ -27,8 +27,5 @@
                     span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
                         | https://token.selfkey.org
                     |  to download your KYC file.
-                .text
-                    md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
-                        input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
                 .actions
                     md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

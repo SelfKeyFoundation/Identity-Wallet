@@ -7,19 +7,18 @@ module.exports = function (app, sqlLiteService) {
     let knex = sqlLiteService.knex;
 
     Controller.init = init;
-
     Controller.selectById = selectById;
-
     Controller.create = create;
-
     Controller.delete = _delete;
-
     Controller.findAllByWalletId = _findAllByWalletId;
+    Controller.addImportedIdAttributes = _addImportedIdAttributes;
+
+
 
     /**
      *
      */
-    function init () {
+    function init() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable(TABLE_NAME).then(function (exists) {
                 if (!exists) {
@@ -42,7 +41,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    function create (walletId, idAttributeType, staticData, file) {
+    function create(walletId, idAttributeType, staticData, file) {
         let idAttribute = {};
         idAttribute.createdAt = new Date().getTime();
         idAttribute.walletId = walletId;
@@ -120,12 +119,12 @@ module.exports = function (app, sqlLiteService) {
                     });
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
-    function _delete (args) {
+    function _delete(args) {
         return knex.transaction((trx) => {
             let selectPromise = knex(TABLE_NAME).transacting(trx)
                 .select('id_attributes.id as idAttributeId', 'id_attribute_items.id as idAttributeItemId', 'id_attribute_item_values.id as idAttributeItemValueId', 'id_attribute_item_values.documentId as documentId')
@@ -162,8 +161,8 @@ module.exports = function (app, sqlLiteService) {
                     });
                 });
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+                .then(trx.commit)
+                .catch(trx.rollback);
         });
     }
 
@@ -223,7 +222,7 @@ module.exports = function (app, sqlLiteService) {
 
             let query = knex('id_attribute_item_values');
 
-            if(trx){
+            if (trx) {
                 query = query.transacting(trx);
             }
 
@@ -278,7 +277,16 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    function _findAllByWalletId(walletId){
+    function temp__checkType(idAttributes, idAttributeType) {
+        for (let i in idAttributes) {
+            if (idAttributes[i].idAttributeType === idAttributeType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function _findAllByWalletId(walletId) {
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).select().where('walletId', walletId).then((rows) => {
                 if (!rows || !rows.length) {
@@ -292,29 +300,42 @@ module.exports = function (app, sqlLiteService) {
 
                 for (let i in rows) {
                     let idAttribute = rows[i];
+
                     if (!idAttribute) continue;
+
+                    if (temp__checkType(idAttributes, idAttribute.idAttributeType)) {
+                        continue;
+                    }
 
                     idAttributes[idAttribute.id] = idAttribute;
 
                     let query = sqlLiteService.select('id_attribute_items', '*', { idAttributeId: idAttribute.id });
 
                     idAttributeItemPromises.push(query.then((items) => {
-                        idAttributes[idAttribute.id].items = items ? items : [];
+                        if (items && items.length) {
+                            idAttributes[idAttribute.id].items = [items[0]];
 
-                        for (let j in items) {
+                            for (let j in items) {
+                                idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
+                                    if (values && values.length) {
 
-                            idAttributeItemValuesPromises.push(selectIdAttributeItemValueView({ idAttributeItemId: items[j].id }).then((values) => {
-                                if(values){
-                                    for(let i in values){
-                                        if(values[i].staticData){
-                                            values[i].staticData = JSON.parse(values[i].staticData);
+                                        if (values[0].staticData) {
+                                            values[0].staticData = JSON.parse(values[0].staticData);
                                         }
+
+                                        /*
+                                        for(let i in values){
+                                            if(values[i].staticData){
+                                                values[i].staticData = JSON.parse(values[i].staticData);
+                                            }
+                                        }
+                                        */
+                                        items[j].values = [values[0]];
+                                    } else {
+                                        items[j].values = []
                                     }
-                                    items[j].values = values;
-                                }else{
-                                    items[j].values = []
-                                }
-                            }));
+                                }));
+                            }
                         }
                     }));
                 }
@@ -333,6 +354,85 @@ module.exports = function (app, sqlLiteService) {
                 reject({ message: "error_while_selecting", error: error });
             });
         });
+    }
+
+    function _addImportedIdAttributes(walletId, exportCode, requiredDocuments, requiredStaticData) {
+        return knex.transaction((trx) => {
+            sqlLiteService.select('wallet_settings', "*", { walletId: walletId }, trx).then((rows) => {
+                return new Promise((resolve, reject) => {
+                    let walletSetting = rows[0];
+
+                    let idAttributesSavePromises = [];
+                    let idAttributeItemsSavePromises = [];
+                    let documentsSavePromises = [];
+                    let idAttributeItemValuesSavePromises = [];
+
+
+                    for (let i in requiredDocuments) {
+                        let doc = requiredDocuments[i];
+
+                        idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', { walletId: walletId, idAttributeType: doc.attributeType, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
+                            idAttributeItemsSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
+
+                                for (let j in doc.fileItems) {
+                                    let fileItem = doc.fileItems[j];
+                                    let data = { name: fileItem.name, mimeType: fileItem.mimeType, size: fileItem.size, buffer: fileItem.buffer, createdAt: new Date().getTime() };
+                                    documentsSavePromises.push(sqlLiteService.insertIntoTable('documents', data).then((document) => {
+                                        idAttributeItemValuesSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, documentId: document.id, staticData: "{}", createdAt: new Date().getTime() }).catch((error)=>{
+                                            reject(error);
+                                        }));
+                                    }).catch((error) => {
+                                        reject(error);
+                                    }));
+                                }
+                            }).catch((error)=>{
+                                reject(error);
+                            }));
+                        }));
+                    }
+
+
+                    for (let i in requiredStaticData) {
+                        let item = requiredStaticData[i];
+
+                        idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', { walletId: walletId, idAttributeType: item.attributeType, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
+                            idAttributeItemsSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
+                                let staticData = {};
+                                for (let j in item.staticDatas) {
+                                    let answer = item.staticDatas[j];
+                                    staticData["line" + (parseInt(j) + 1).toString()] = answer;
+                                }
+
+                                staticData = JSON.stringify(staticData);
+                                let data = { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() };
+
+                                idAttributeItemValuesSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_item_values', data).catch((error)=>{
+                                    reject(error);
+                                }));
+                            }));
+                        }));
+                    }
+
+
+                    walletSetting.airDropCode = exportCode;
+
+
+                    let finalPromises = [];
+                    finalPromises.push(Promise.all(idAttributesSavePromises));
+                    finalPromises.push(Promise.all(idAttributeItemsSavePromises));
+                    finalPromises.push(Promise.all(documentsSavePromises));
+                    finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
+
+                    finalPromises.push(sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx));
+
+                    Promise.each(finalPromises, (el) => { return el }).then(() => {
+                        resolve(walletSetting);
+                    }).catch((error) => {
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+                });
+            }).then(trx.commit).catch(trx.rollback);
+        })
     }
 
     return Controller;
