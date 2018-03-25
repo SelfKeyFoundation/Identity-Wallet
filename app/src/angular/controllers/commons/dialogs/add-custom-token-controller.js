@@ -42,13 +42,18 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         'latoken': 'LA'
     };
 
+    let resetVariables = () => {
+        $scope.tokenDoesNotExists = false;
+        $scope.lookingContractIntoBlockain = false;
+    };
+
     /**
      *
      */
     $scope.$watch('formData.contractAddress', (newVal, oldVal) => {
         let data = $scope.formData;
         let check = false;
-
+        resetVariables();
         try {
             check = newVal && web3Utils.isHex(newVal) && web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
         } catch (error) {
@@ -90,11 +95,10 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
                     data.decimalPlaces = Number(decimal);
                     data.tokenId = '';
 
-                    CommonService.showToast('success', 'Found Contract: ' + data.symbol);
                     $scope.lookingContractIntoBlockain = false;
                 }).catch((err) => {
                     resetFormData();
-                    CommonService.showToast('warning', 'Token address does not exist. Please double check and try again.');
+                    $scope.tokenDoesNotExists = true;
                 });
             }
         } else {
@@ -108,14 +112,14 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         contractAddress: '',
         tokenId: ''
     };
-
+  
     let resetFormData = () => {
         let data = $scope.formData;
 
         data.symbol = '';
         data.decimalPlaces = null;
         data.tokenId = '';
-        $scope.lookingContractIntoBlockain = false;
+        resetVariables();     
     };
 
     $scope.addCustomToken = (event, form) => {
