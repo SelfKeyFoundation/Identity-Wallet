@@ -84,6 +84,7 @@ md-dialog {
                 }
                 .sk-send-ether-box__recipient-container {
                     display: flex;
+                    position: relative;
                     flex-direction: row;
                     .sk-send-ether-box__recipient-container__input {
                         outline-width: 0;
