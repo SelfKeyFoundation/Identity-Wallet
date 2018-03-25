@@ -18,7 +18,7 @@ md-dialog {
       right: 30.8px;
   }
 
-  .add-custom-token-container{
+  .add-custom-token-container {
       margin-top: 20px;
       min-width: 100%;
       min-height: 100%;
@@ -26,6 +26,13 @@ md-dialog {
       flex-direction: row;
       align-items: center;
       justify-content: center;
+  
+      .looking-contract-info-text {
+        font-size: 14px;
+        line-height: 1.71;
+        letter-spacing: 0.2px;
+        color: #0fb8d0;
+      }
       .sk-icon-button {
           height: 15.8px;
           margin-top: 2px;
@@ -78,18 +85,19 @@ md-dialog {
 
               .add-custom-token-btn {
                   outline: none;
-                  border: none;
                   width: 100%;
                   padding: 0;
                   text-transform: uppercase;
                   height: 58px;
-                  border-radius: 4px;
-                  background-image: linear-gradient(282deg, #08bccd, #2da1f8);
                   font-size: 16px;
                   font-weight: 600;
                   line-height: 0.75;
                   letter-spacing: 0.7px;
                   color: #ffffff;
+
+                  border-radius: 4px;
+                  background-image: linear-gradient(to top, #09a8ba, #0abbd0);
+                  border: solid 1px #0fb8d0 !important;
               }
           }
       }
