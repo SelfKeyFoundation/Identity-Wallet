@@ -2,38 +2,27 @@
 
 md-sidenav.md-sidenav-right(md-component-id="right")
     .sk-right-sidenav(ng-controller="MemberRightSidenavController", style="height: 100%;")
+        .sk-right-sidenav__close-icon(ng-click="close($event)") ✕
         .sk-right-sidenav__header
             sk-icon(icon="selfkey", size-class="icon-size-39x44")
-            span(ng-click="close($event)") ✕
+            span.title selfkey
 
         .sk-right-sidenav__content(layout="column", layout-align="space-between center", flex)
-            .top-part-container(layout="column", style="width: 100%;")
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')") Dashboard
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section.section-1
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.navigate($event, 'member.marketplace.exchange-list')") Marketplace
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.id-wallet')", ng-click="$root.navigate($event, 'member.id-wallet.main')") Identity Wallet
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.About')", ng-click="getInfoDialog($event,'Coming soon', 'About')") About
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')") Help & Support
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.submitIdea')", ng-click="getInfoDialog($event,'Coming soon','submitIdea')") Submit An Idea
-                .sk-right-sidenav__h-divider
-
-                .sk-right-sidenav__section
-                    .sk-right-sidenav__section__item(ng-class="getSelectedClass('member.version')",ng-click="getVersion($event)") Version
-                .sk-right-sidenav__h-divider
-
-
+            .sk-right-sidenav__top-section-container(layout="column")
+                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')")
+                    md-icon(md-svg-src="assets/images/icons/dashboard_16px.svg")
+                    span Dashboard
+                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.navigate($event, 'member.marketplace.exchange-list')")
+                    md-icon(md-svg-src="assets/images/icons/swap_vertical_16px.svg")
+                    span Marketplace
+                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.id-wallet')", ng-click="$root.navigate($event, 'member.id-wallet.main')")
+                    md-icon(md-svg-src="assets/images/icons/selfkey_id_16px.svg")
+                    span Selfkey ID
+            .sk-right-sidenav__botton-section-container(layout="column")
+                .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://selfkey.org')")
+                    span About Selfkey
+                .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://idea.selfkey.org')") 
+                    span Submit Idea
+                .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')")
+                    span Help & Support 
+        .version v {{ $root.version }}

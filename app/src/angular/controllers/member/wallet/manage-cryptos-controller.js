@@ -2,14 +2,14 @@
 
 const Token = requireAppModule('angular/classes/token');
 
-function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, $mdDialog, SqlLiteService, Web3Service, CommonService) {
+function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $state, SqlLiteService, Web3Service, CommonService) {
     'ngInject'
 
-    $log.info('AddCustomTokenDialogController');
+    $log.info('ManageCryptosController');
 
     let reloadPieChartIsNeeded = false;
     $scope.cancel = (event) => {
-        $mdDialog.cancel();
+        $state.go('member.dashboard.main');
         if (reloadPieChartIsNeeded) {
             $rootScope.$broadcast("piechart:reload");
         }
@@ -35,7 +35,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             lastPrice: ethPrice ? ethPrice.priceUSD : 0,
             balance: wallet.getFormattedBalance(),
             totalValue: Number(CommonService.numbersAfterComma(wallet.calculateBalanceInUSD(), 2)),
-            contractAddress: '0x' + wallet.publicKeyHex
+            contractAddress: ''
         });
         data.sort((a, b) => {
             let symbolA = a.symbol.toLowerCase();
@@ -72,7 +72,7 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
         return true;
     };
 
-    $scope.deleteCustomToken = (token, index) => {
+    $scope.deleteCustomToken = (event, token, index) => {
         SqlLiteService.updateWalletToken({
             tokenId: token.id,
             walletId: wallet.id,
@@ -83,8 +83,10 @@ function AddEditCustomTokenDialogController($rootScope, $scope, $log, $q, $timeo
             delete $rootScope.wallet.tokens[token.symbol.toUpperCase()];
             $scope.data.splice(index, 1);
             reloadPieChartIsNeeded = true;
+            $rootScope.openInfoDialog(event, `Removing tokens from this list only disables them from the display,
+         and does not impact their status on the Ethereum blockchain.`, 'Token Removed');
         });
     }
 };
 
-module.exports = AddEditCustomTokenDialogController;
+module.exports = ManageCryptosController;
