@@ -71,7 +71,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         }
         return true;
     };
-    //event.target.parentElement.parentElement;
+
     $scope.deleteCustomToken = (event, token, index) => {
         SqlLiteService.updateWalletToken({
             tokenId: token.id,
@@ -87,7 +87,6 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
          and does not impact their status on the Ethereum blockchain.`, 'Token Removed');
         });
     }
-
 };
 
 module.exports = ManageCryptosController;

@@ -20,7 +20,12 @@ md-dialog(aira-lable="Add Custom Tokens")
                                         | <div style="text-align:center;"> Every ERC-20 token has its own smart contract <br />
                                         | address. To learn more, <span style="color: #0dc7dd !important;"> click here. </span> </div>
                                 sk-icon(icon="info-italic", size-class="icon-size-15x15")
-                            .looking-contract-info-text(ng-if="lookingContractIntoBlockain") Please wait. Checking the blockchain for ERC-20 token information.
+                            .looking-contract-info-container() 
+                                .wave
+                                    span.dot
+                                    span.dot
+                                    span.dot
+                                span Please wait. Checking the blockchain for ERC-20 token information.
                         input.sk-input(type="text", ng-disabled="inProgress", name="contractAddress", ng-model="formData.contractAddress", ng-maxlength="500", ng-required="true")
                         div(ng-messages="theForm.contractAddress.$dirty && theForm.contractAddress.$error")
                             div(ng-message="maxlength") The Address has to be less than 1000 characters long.
