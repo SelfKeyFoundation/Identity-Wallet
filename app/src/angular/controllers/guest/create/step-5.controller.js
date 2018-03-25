@@ -1,6 +1,6 @@
 'use strict';
 
-function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $stateParams, $mdDialog, $timeout) {
+function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $stateParams, $mdDialog, $timeout, RPCService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep5Controller');
@@ -8,6 +8,15 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
     $scope.createBasicId = (event) => {
         $state.go('guest.create.step-6');
     }
+
+    $scope.importKycFile = (event) => {
+        RPCService.makeCall('importKYCPackage', {}).then(()=>{
+            console.log(">>>>>>>>>>>>>>");
+        }).catch((error)=>{
+
+        });
+    }
+    //
 };
 
 module.exports = GuestKeystoreCreateStep5Controller;

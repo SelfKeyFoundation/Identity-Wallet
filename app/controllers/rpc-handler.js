@@ -512,40 +512,172 @@ module.exports = function (app) {
      * TODO - check & remove
      */
     // TODO keep this...
-    controller.prototype.importKYCIdentity = function (event, actionId, actionName, args) {
+    controller.prototype.importKYCPackage = function (event, actionId, actionName, args) {
+
+        console.log("111111111111");
+
+        function getFile(kycprocess, requirementId) {
+            // escrow.documents[0].requirementId
+            // escrow.documents.doc.files (contentType, fileName)
+            // read file
+        }
+
+        function getStaticData(kycprocess, requirementId) {
+            // escrow.answers[0].requirementId
+            // escrow.answers.answer -> []
+        }
+
+        function getStaticDataRequirements(kycprocess){
+            let result = [];
+            kycprocess.requirements.questions.forEach((item) => {
+                if(item.attributeType){
+                    result.push({_id: item._id, attributeType: item.attributeType});
+                }
+            });
+
+            return result;
+        }
+
+        function getDocumentRequirements(kycprocess){
+            let result = [];
+            kycprocess.requirements.uploads.forEach((item) => {
+                if(item.attributeType){
+                    result.push({_id: item._id, attributeType: item.attributeType});
+                }
+            });
+
+            return result;
+        }
+
+        /**
+         * TODO
+         *
+         * args: (walletId)
+         * extract static_data that has id_attribute_type
+         * extract documents that has id_attribute_type
+         * find files of the documents
+         * prepare files (fileName, mimeType, size & etc...)
+         */
+
+
+
+        try {
+            console.log("22222222222222");
+            let dialogConfig = {
+                title: 'Import KYC Package',
+                message: 'Choose file',
+                properties: ['openFile'],
+                filters: [
+                    { name: 'Archive', extensions: ['zip'] },
+                ],
+                maxFileSize: 50 * 1000 * 1000
+            };
+
+            dialog.showOpenDialog(app.win, dialogConfig, (filePaths) => {
+                console.log("3333333333333333", filePaths);
+                if (filePaths && filePaths[0]) {
+                    try {
+                        //const stats = fs.statSync(filePaths[0]);
+                        //let mimeType = mime.lookup(filePaths[0]);
+                        //let name = path.parse(filePaths[0]).base;
+
+                        /*
+                        if (stats.size > dialogConfig.maxFileSize) {
+                            return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_size_error', null);
+                        }
+                        */
+
+                        decompress(filePaths[0], os.tmpdir()).then(files => {
+                            console.log(">>>>>>>", files);
+                        });
+
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+
+                        /*
+                        fsm.open(filePaths[0], 'r', (status, fd) => {
+                            if (status) {
+                                return app.win.webContents.send(RPC_METHOD, actionId, actionName, 'file_read_error', null);
+                            }
+
+                            var buffer = new Buffer(stats.size);
+                            fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+                                electron.app.sqlLiteService.idAttributeItemValues_addDocument(
+                                    {
+                                        fileName: name,
+                                        buffer: buffer,
+                                        mimeType: mimeType,
+                                        size: stats.size,
+                                        idAttributeItemValueId: args.idAttributeItemValueId
+                                    }
+                                ).then((resp) => {
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, resp);
+                                }).catch((error) => {
+                                    app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                                });
+                            });
+                        });
+                        */
+                    } catch (e) {
+                        console.log(e);
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, 'error', null);
+                    }
+                } else {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
+                }
+            });
+        } catch (e) {
+            console.log("????????", e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
+        }
+
+
+
+
+        //app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);;
+
+        return
         decompress(args.file.path, os.tmpdir()).then(files => {
             let documentFiles = {};
 
-            //searching for documents
-            files.forEach(function (file) {
-                if (file.path == "kycprocess.json") {
+            // searching for document files
+            files.forEach( (file) => {
+                console.log(file);
+                if (['export_code', 'kycprocess.json'].indexOf(file.path) > 0) {
                     return false;
                 }
                 documentFiles[file.path] = file;
             });
 
 
-            //searching for the json file
-            const jsonFile = files.find(function (file) {
+            // searching for the json file
+            const kycprocessJSONFile = files.find((file) => {
                 if (file.path == "kycprocess.json") {
                     return true;
                 }
                 return false;
             });
 
+            // searching for the export_code file
+            const exportCodeFile = files.find((file) => {
+                if (file.path == "export_code") {
+                    return true;
+                }
+                return false;
+            });
 
-            const json = JSON.parse(jsonFile.data.toString('utf8'));
+            const kycprocess = JSON.parse(kycprocessJSONFile.data.toString('utf8'));
+
             let requirementQuestions = {};
             let requirementDocuments = {};
             let ethAddressRequirementId = "";
 
-            //get all required uploads
-            json.requirements.uploads.forEach(function (upload) {
-                requirementDocuments[upload._id] = upload;
-            })
+            // get all required uploads
+            let documents = getDocumentRequirements(kycprocess);
+            let staticDatas = getStaticDataRequirements(kycprocess);
 
+            /*
             //get all required questions
-            json.requirements.questions.forEach(function (question) {
+            kycprocess.requirements.questions.forEach(function (question) {
                 //if the question is ethereum address then save it into the selarate variable
                 if (question.tokenSale.ethAddress) {
                     ethAddressRequirementId = question._id;
@@ -559,7 +691,7 @@ module.exports = function (app) {
             let attributes = {};
 
             //check for answers on the quesitons
-            json.escrow.answers.forEach(function (answer) {
+            kycprocess.escrow.answers.forEach(function (answer) {
                 //if re requirement is the ether address then save answer to the separate variable
                 if (answer.requirementId == ethAddressRequirementId) {
                     etherAddress = answer.answer[0];
@@ -585,7 +717,7 @@ module.exports = function (app) {
 
 
             //loop through the uploaded documents
-            json.escrow.documents.forEach(function (document) {
+            kycprocess.escrow.documents.forEach(function (document) {
                 let uploadRequirements = requirementDocuments[document.requirementId];
                 let idAttribute = uploadRequirements.attributeType;
                 //if doc is removed or does not have idAttribute do nothing
@@ -621,13 +753,12 @@ module.exports = function (app) {
                 }
             })
 
-
             attributes.email = [{
                 isDoc: false,
                 value: json.user.email
             }];
 
-            if (json.user.middleName) {
+            if (kycprocess.user.middleName) {
                 attributes.name = [{
                     isDoc: false,
                     value: json.user.firstName + " " + json.user.middleName + " " + json.user.lastName
@@ -643,8 +774,9 @@ module.exports = function (app) {
                 isDoc: false,
                 value: etherAddress
             }];
+            */
 
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, attributes);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, null);
         }).catch(function (err) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, err, {});
         });
@@ -684,7 +816,6 @@ module.exports = function (app) {
     }
 
     controller.prototype.saveWallet = function (event, actionId, actionName, args) {
-        //electron.app.sqlLiteService.wallets_insert(args).then((data) => {
         electron.app.sqlLiteService.Wallet.add(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
@@ -797,7 +928,6 @@ module.exports = function (app) {
     }
 
     controller.prototype.getGuideSettings = function (event, actionId, actionName, args) {
-        //electron.app.sqlLiteService.guideSettings_selectAll().then((data) => {
         electron.app.sqlLiteService.GuideSetting.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
@@ -858,8 +988,6 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
-
-    //addInitialIdAttributesToWalletAndActivate
 
     /**
      * IdAttribute
