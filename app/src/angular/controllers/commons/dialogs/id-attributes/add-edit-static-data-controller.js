@@ -52,6 +52,12 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     }
 
+    $scope.dateChange = function (val) {
+        var elem = document.getElementsByName('birthDate')[0];
+        elem.setAttribute("data-date", moment(elem.value, "YYYY-MM-DD")
+            .format(elem.getAttribute("data-date-format")));
+    }
+
     $scope.save = (event, theForm) => {
         if ($scope.isFormInvalid(theForm)) return;
 

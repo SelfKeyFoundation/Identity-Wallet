@@ -26,6 +26,7 @@ requireNodeModule('angular-sanitize');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
+requireNodeModule('angular-moment');
 
 /**
  *
@@ -43,7 +44,8 @@ window.app = angular.module('kyc-wallet', [
   'templates',
   'LocalStorageModule',
   'monospaced.qrcode',
-  'zxcvbn'
+  'zxcvbn',
+  'angularMoment'
 ]);
 
 /**
