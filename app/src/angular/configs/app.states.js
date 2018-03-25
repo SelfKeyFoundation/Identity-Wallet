@@ -291,6 +291,16 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.wallet.manage-cryptos', {
+            url: '/member/wallet/manage-cryptos',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/manage-cryptos.html',
+                    controller: 'ManageCryptosController'
+                }
+            }
+        })
+
         /**
          * ID Wallet
          */

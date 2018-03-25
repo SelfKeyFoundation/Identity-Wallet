@@ -1,0 +1,80 @@
+.manage-cryptos-container {
+    .close-btn {
+        cursor: pointer;
+        position: absolute;
+        outline: none;
+        top: 30.8px;
+        right: 30.8px;
+    }
+    * {
+        font-family: ProximaNovaRegular; 
+    }
+    background-image: linear-gradient(124deg, #2b3540, #1e262e);
+
+    .content {
+        padding-top: 80px;
+    }
+    .header-text {
+        padding-top: 36px;
+        padding-bottom: 24px;
+        font-size: 24px;
+        line-height: 1.5;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .header-description {
+        font-family: ProximaNovaRegular;
+        width: 660px;
+        font-size: 18px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.72;
+        letter-spacing: normal;
+        text-align: center;
+        color: #93b0c1;
+    }
+    .grid-container {
+        width: 1140px;
+        padding-top: 80px;
+        $table-left-padding: 24px;
+        table {
+            border-spacing: 0px;
+            width: 100%;
+            thead {
+                tr {
+                    height: 38px;
+                    td {
+                        &:first-child {
+                            padding-left: $table-left-padding;
+                        }
+                        font-size: 12px;
+                        font-weight: 600;
+                        text-align: left;
+                        color: #7f8fa4;
+                        text-transform: uppercase;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    &:nth-child(odd) {
+                        background-color: #262f39;
+                    }
+                    height: 74px;
+                    td {
+                        padding: 0px;
+                        &:first-child {
+                            padding-left: $table-left-padding !important;
+                        }
+                        font-size: 15px;
+                        text-align: left;
+                        color: #ffffff;
+                    }
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

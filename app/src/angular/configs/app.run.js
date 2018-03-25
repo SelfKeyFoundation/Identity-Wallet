@@ -116,7 +116,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: false,
-            fullscreen: true,
+            fullscreen: false,
             escapeToClose: false,
             locals: {
                 text: text,
@@ -243,17 +243,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true
         });
     };
-
-    $rootScope.openEditCustomTokenDialog = (event) => {
-        return $mdDialog.show({
-            controller: 'EditCustomTokenDialogController',
-            templateUrl: 'common/dialogs/edit-custom-token.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose: false,
-            fullscreen: true
-        });
-    };
+ 
 }
 
 module.exports = AppRun;

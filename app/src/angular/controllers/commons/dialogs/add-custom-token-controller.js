@@ -71,8 +71,9 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
                 data.decimalPlaces = existingToken.decimal;
                 data.tokenId = existingToken.id;
             } else {
-                CommonService.showToast('success', 'Looking ERC20 Contract into blockchain');
+
                 resetFormData();
+                $scope.lookingContractIntoBlockain = true;
                 Web3Service.getContractInfo(newVal).then((responseArr) => {
                     if (!responseArr || responseArr.length != 2) {
                         return resetFormData();
@@ -90,6 +91,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
                     data.tokenId = '';
 
                     CommonService.showToast('success', 'Found Contract: ' + data.symbol);
+                    $scope.lookingContractIntoBlockain = false;
                 }).catch((err) => {
                     resetFormData();
                     CommonService.showToast('warning', 'Token address does not exist. Please double check and try again.');
@@ -113,6 +115,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         data.symbol = '';
         data.decimalPlaces = null;
         data.tokenId = '';
+        $scope.lookingContractIntoBlockain = false;
     };
 
     $scope.addCustomToken = (event, form) => {
@@ -139,7 +142,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
 
                 let loadTokensPromise = SqlLiteService.loadTokens();
 
-                $q.all([newToken.initialBalancePromise,loadTokensPromise]).then(() => {
+                $q.all([newToken.initialBalancePromise, loadTokensPromise]).then(() => {
                     $scope.inProgress = false;
                     $scope.cancel();
                     $rootScope.openNewERC20TokenInfoDialog(event, 'New ERC-20 Token Added:', newToken.symbol, formatedBalance);

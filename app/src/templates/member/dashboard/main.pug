@@ -15,7 +15,7 @@
         .sk-box.sk-my-cryptos-box
             .header(layout="row")
                 span(flex) My Crypto
-                button.sk-icon-button(ng-click="$root.openEditCustomTokenDialog($event)")
+                button.sk-icon-button(ng-click="navigateToManageCryptos($event)")
                     sk-icon(icon="gear", size-class="icon-size-26x26")
                 button.sk-icon-button(ng-class="{'disable-opacity': $root.tokenLimitIsExceed}", ng-click="$root.openAddCustomTokenDialog($event)")
                     sk-icon(icon="plus", size-class="icon-size-26x26")

@@ -1,6 +1,8 @@
-md-dialog.info(aira-lable="{{title}}")
+md-dialog.generic-info-container(aira-lable="{{title}}")
     .info-wrapper
-        .info-text
-            span {{text}}
-        .info-logo
-            sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)")
+        .info-title
+            span {{ title }}
+        .info-body 
+            div {{ text }}    
+            md-button.default.cancal-btn(ng-click="cancel($event)")
+                span.primary close

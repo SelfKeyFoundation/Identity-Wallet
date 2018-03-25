@@ -6,6 +6,9 @@
         .row
             .currency KEY
             .value {{ $root.primaryToken.getFormattedBalance() }}
+        .row
+            .currency USD
+            .value ${{ $root.wallet.getFormattedTokenBalanceInUSD('KEY') }}
     .crypto-price-box(style="margin-left: 10px;")
         .row
             .currency ETH

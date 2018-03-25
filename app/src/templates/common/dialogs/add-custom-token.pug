@@ -1,10 +1,12 @@
-md-dialog(aira-lable="Add Custom Token")
+md-dialog(aira-lable="Add Custom Tokens")
     sk-icon.close-btn(icon="close-button", size-class="icon-size-20x20", ng-click="cancel($event)")
     .add-custom-token-container
         div(layout-fill, layout="column", layout-align="center center")
             sk-icon(icon="currency", size-class="icon-size-57x65")
-            .header-text Add Custom Token
-            .sub-header-text Add ERC20 tokens to your SelfKey Wallet. you will need the token address (smart contract), symbol and decimal value.
+            .header-text Add Custom Tokens
+            .sub-header-text
+                | Add ERC20 tokens to be displayed in the dashboard. After entering the token address,
+                | the wallet will verify it exists on the blockchain and auto-fill the remaining information of ticker and decimals.
 
             .sk-box.shadowed.form-container
                 .header
@@ -15,11 +17,15 @@ md-dialog(aira-lable="Add Custom Token")
                             label Address
                             button.sk-icon-button
                                 md-tooltip.sk-tooltip(md-direction="top")
-                                        | <div style="text-align:center;"> You can find the <br />
-                                        | address of your token <br />
-                                        | by visiting  <span style="color: #0dc7dd !important;"> ethlorer </span> </div>
+                                        | <div style="text-align:center;"> Every ERC-20 token has its own smart contract <br />
+                                        | address. To learn more, <span style="color: #0dc7dd !important;"> click here. </span> </div>
                                 sk-icon(icon="info-italic", size-class="icon-size-15x15")
-
+                            .looking-contract-info-container(ng-if="lookingContractIntoBlockain") 
+                                .wave
+                                    span.dot
+                                    span.dot
+                                    span.dot
+                                span Please wait. Checking the blockchain for ERC-20 token information.
                         input.sk-input(type="text", ng-disabled="inProgress", name="contractAddress", ng-model="formData.contractAddress", ng-maxlength="500", ng-required="true")
                         div(ng-messages="theForm.contractAddress.$dirty && theForm.contractAddress.$error")
                             div(ng-message="maxlength") The Address has to be less than 1000 characters long.
@@ -36,5 +42,5 @@ md-dialog(aira-lable="Add Custom Token")
                         div(ng-messages="theForm.decimalPlaces.$dirty && theForm.decimalPlaces.$error")
                             div(ng-message="required") This field is required. Please enter Token Symbol.
 
-                    md-button.sk-button.blue(sk-button-loading="inProgress", ng-click="addCustomToken($event,theForm)")
+                    md-button.sk-button.add-custom-token-btn(sk-button-loading="inProgress", ng-click="addCustomToken($event,theForm)")
                         span.primary Add custom token

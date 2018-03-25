@@ -93,17 +93,8 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     });
                 }
 
-                let ethItem = items.find((item) => {
-                    return item.subTitle.toLowerCase() == 'eth';
-                });
-                ethItem.icon = 'eth';
-
-                let keyItem = items.find((item) => {
-                    return item.subTitle.toLowerCase() == 'key';
-                });
-                keyItem.icon = 'key';
-
                 items.forEach((item) => {
+                    item.firstLetter = item.title.charAt(0);
                     if (!item.color) {
                         if (TOP_COLORS.length) {
                             item.color = TOP_COLORS.shift();
