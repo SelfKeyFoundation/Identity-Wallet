@@ -171,6 +171,16 @@
                 height: 44px !important;
                 border-radius: 8px !important;
                 background-color: green;
+                position: relative;
+                .value {
+                    color: #ffffff;
+                    position: absolute;
+                    text-align: center;
+                    cursor: default;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                }
             }
             margin-right: 12px !important;
         }

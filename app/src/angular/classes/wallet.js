@@ -128,6 +128,11 @@ class Wallet {
         return CommonService.numbersAfterComma(this.balanceInUsd, 2);
     }
 
+    getFormattedTokenBalanceInUSD(symbol) {
+        let token = this.tokens[symbol.toUpperCase()]
+        return token ? token.getFormattedBalanceInUSD() : 0;
+    }
+
     getFormatedTotalBalanceInUSD() {
         return CommonService.numbersAfterComma(this.totalBalanceInUSD, 2);
     }
