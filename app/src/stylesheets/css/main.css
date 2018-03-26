@@ -331,6 +331,10 @@ h2 {
   width: 19.6px !important;
   height: 23.1px !important; }
 
+.icon-size-19x24 {
+  width: 19px !important;
+  height: 24px !important; }
+
 .md-button.blue:disabled {
   background-image: none;
   border: solid 1px #93b0c1;
@@ -347,6 +351,9 @@ h2 {
 
 .color-white svg {
   fill: #fff !important; }
+
+.background-green {
+  background-color: #417505 !important; }
 
 body, html {
   margin: 0;
@@ -16993,6 +17000,30 @@ form.birth-date-content {
     .birth-date-actions-wrapper .md-button:last-of-type {
       margin-left: 16px; }
 
+.cusom-date-picker input {
+  position: relative;
+  width: 760px;
+  height: 40px;
+  color: white; }
+
+.cusom-date-picker input:before {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  content: attr(data-date);
+  display: inline-block;
+  color: black; }
+
+.cusom-date-picker input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+  display: none; }
+
+.cusom-date-picker input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  color: black;
+  opacity: 1; }
+
 md-dialog {
   background-image: linear-gradient(124deg, #2b3540, #1e262e);
   min-width: 100%;
@@ -18012,6 +18043,9 @@ md-dialog {
   .exchange-container .exchange {
     padding: 40px; }
     .exchange-container .exchange .exchange-content .header {
+      border-radius: 4px;
+      background-color: #2a3540;
+      box-shadow: inset 0 -1px 0 0 #374758;
       border: 1px solid #303c49;
       padding: 15px;
       display: flex;

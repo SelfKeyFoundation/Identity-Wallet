@@ -6,18 +6,18 @@
             .header
                 .logo
                     img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
-                    span.name {{realData.name}}
-                .status
-
-                .text Your Staking Status
+                    span.name(style="font-weight: 600") {{realData.name}} (Exchange)
+                .status(layout="row" layout-align="center center")
                     md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
                         md-tooltip.sk-tooltip(md-direction="bottom")
                             | What is Staking?
-                            | Staking acts similarly like
+                            |    Staking acts similarly like
                             | a refundable security deposit.
                             | to learn more,click here..
-                        span : Coming soon
-
+                        span : {{realData.name}}
+                    .text(style="margin-left: 5px; margin-bottom: 5px") Staking Status:  
+                        span(style="font-style: italic") Comming Soon
+                        
             .body
                 .section
                     .section-content
@@ -31,107 +31,104 @@
                             md-button.gray.status.default Coming Soon
                 .section
                     .section-content
-                        .title Exchange Highlights
+                        .title(style="font-weight: 600") Exchange Highlights
                         .columns.highlights
                             .column
                                 div
                                     label
-                                        span Location:
+                                        span(style="font-weight: 600") Location:
                                     strong {{realData.Location}}
 
                                 div
                                     label
-                                        span Year Launched:
+                                        span(style="font-weight: 600") Year Launched:
                                     strong {{realData['year_launched']}}
 
                                 div
                                     label
-                                        span Coin Pairs:
+                                        span(style="font-weight: 600") Coin Pairs:
                                     strong(ng-repeat="i in realData['Coin Pairs']") {{i}}
 
                                 div
                                     label
-                                        span Maker Fee:
+                                        span(style="font-weight: 600") Maker Fee:
                                     strong {{realData['Maker Fee']}}
 
                                 div
                                     label
-                                        span Taker Fee:
+                                        span(style="font-weight: 600") Taker Fee:
                                     strong {{realData['Taker Fee']}}
 
 
                                 div
                                     label
-                                        span Url:
+                                        span(style="font-weight: 600") Url:
                                     strong {{realData['url']}}
 
 
                             .column
                                 div
                                     label
-                                        span Fiat Payments:
+                                        span(style="font-weight: 600") Fiat Payments:
                                     strong(ng-repeat="i in realData['Fiat Payments']") {{i}}
 
                                 div
                                     label
-                                        span Fiat Supported:
+                                        span(style="font-weight: 600") Fiat Supported:
                                     strong(ng-repeat="i in realData['Fiat Supported']") {{i}}
 
                                 div
                                     label
-                                        span Margin Trading:
+                                        span(style="font-weight: 600") Margin Trading:
                                     strong {{realData['Margin Trading']}}
 
                                 div
                                     label
-                                        span KYC/AML:
+                                        span(style="font-weight: 600") KYC/AML:
                                     strong {{realData['KYC/AML']}}
 
                                 div
                                     label
-                                        span Excluded residents:
+                                        span(style="font-weight: 600") Excluded residents:
                                     strong(ng-repeat="i in realData['Excluded Residents']") {{i}}
 
                                 div
                                     label
-                                        span Contact Support:
+                                        span(style="font-weight: 600") Contact Support:
                                     strong {{realData['Email']}}
 
                 .section
                     .section-content
-                        .title KYC Requirements
+                        .title(style="font-weight: 600") KYC Requirements
                         .columns.requirements
                             .column
-                                div
-                                    label
-                                        span
-                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    strong First Name
-
-                                div
-                                    label
-                                        span
-                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    strong Last Name
-
-                                div
-                                    label
-                                        span
-                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    strong country of residence
+                                .sk-list(style="margin-top: 28px;")
+                                    .item
+                                        .bullet(ng-class="{'background-green': isInKycFields('fuel_legal_name')}")
+                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        span Full Legal Name
+                                    .item
+                                        .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
+                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        span Email Address
+                                    
+                                    .item
+                                        .bullet(ng-class="{'background-green': isInKycFields('country_of_residence')}")
+                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        span Country Of Residence
 
                             .column
-                                div
-                                    label
-                                        span
-                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    strong National ID
-
-                                div
-                                    label
-                                        span
-                                            md-icon(md-svg-icon="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    strong National ID Selfie
+                                .sk-list(style="margin-top: 28px;")
+                                    .item
+                                        .bullet(ng-class="{'background-green': isInKycFields('national_id')}")
+                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        span National ID
+                                        sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
+                                    .item
+                                        .bullet(ng-class="{'background-green': isInKycFields('id_selfie')}")
+                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        span Selfie w/ID Document
+                                        sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
 
 
 
