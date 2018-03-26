@@ -1,16 +1,18 @@
 .marketplace-exchange-list
     .center-container
         .header-wrapper
+            .logo
+                sk-icon(icon="exchanges-icon", size-class="icon-size-36x36")
             .title Exchanges
             .status(layout='row')
-                span Your Staking Status
+                span(style='color: #fff') Your Staking Status
                 md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
                     md-tooltip.sk-tooltip(md-direction="bottom")
                         |  <div style="text-align:left;"> What is Staking? <br />
                         |  Staking acts similarly like <br />
                         |  a refundable security deposit. <br />
                         |  to learn more,click here.. </div>
-                span : Coming soon
+                span(style='color: #f5a623') : Coming soon
         .body-wrapper
             ul
                 li(ng-repeat='item in exchangesList')
