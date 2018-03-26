@@ -113,6 +113,10 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         }
     });
 
+    $scope.navigateToManageCryptos = () => {
+        $state.go('member.wallet.manage-cryptos');
+    };
+
     /**
      * update pie chart on balance change
      */

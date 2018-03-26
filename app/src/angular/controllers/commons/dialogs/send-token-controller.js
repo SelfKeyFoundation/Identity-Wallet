@@ -3,7 +3,7 @@
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service, CommonService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info("SendTokenDialogController", args, CONFIG);
@@ -14,6 +14,13 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     let txInfoCheckInterval = null;
     let checkEstimatedGasInterval = null;
     let estimatedGasNeedsCheck = false;
+
+    $scope.getTokenTitleBySymbol = (symbol) => {
+        symbol = symbol.toUpperCase();
+        let token = $rootScope.wallet.tokens[symbol];
+        let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol);
+        return (tokenPrice ? (tokenPrice.name + ' - ') : '') + token.getBalanceDecimal() + ' '+ token.symbol;
+    }
 
     /**
      * Prepare

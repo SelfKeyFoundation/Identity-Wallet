@@ -327,7 +327,7 @@ module.exports = function (app) {
                 }
             }
 
-            electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
+            electron.app.sqlLiteService.Document.findById(args.documentId).then((data) => {
                 const filePathToPreview = path.join(documentsDirectoryPath, data.name);
 
                 try {
@@ -466,7 +466,7 @@ module.exports = function (app) {
      * sql-lite methods
      */
     controller.prototype.loadDocumentById = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.documents_selectById(args.documentId).then((data) => {
+        electron.app.sqlLiteService.Document.findById(args.documentId).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             log.error(error);
@@ -702,6 +702,22 @@ module.exports = function (app) {
 
     controller.prototype.findAllWallets = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.Wallet.findAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.updateWalletprofilePicture = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.Wallet.updateProfilePicture(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getWalletProfilePicture = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.Wallet.selectProfilePictureById(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);

@@ -6,7 +6,10 @@ module.exports = function (app, sqlLiteService) {
 
     let knex = sqlLiteService.knex;
 
-    Controller.init = () => {
+    Controller.init = _init;
+    Controller.findById = _findById
+
+    function _init() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable(TABLE_NAME).then((exists) => {
                 if (!exists) {
@@ -27,6 +30,16 @@ module.exports = function (app, sqlLiteService) {
                     resolve();
                 }
             });
+        });
+    }
+
+    function _findById(id) {
+        return new Promise((resolve, reject) => {
+            sqlLiteService.select(TABLE_NAME, "*", { id: id }).then((rows) => {
+                resolve(rows[0]);
+            }).catch((error) => {
+                reject({ message: "document_findById", error: error });
+            })
         });
     }
 
