@@ -19,7 +19,7 @@ function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $
     $scope.goToWalletSetup = () => {
         $scope.isLoading = true;
         $mdDialog.hide();
-        $state.go('guest.create.step-1');
+        $state.go('guest.welcome');
     }
 };
 
