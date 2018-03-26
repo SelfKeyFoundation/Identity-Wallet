@@ -52,6 +52,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     }
 
+   
     $scope.save = (event, theForm) => {
         if ($scope.isFormInvalid(theForm)) return;
 
