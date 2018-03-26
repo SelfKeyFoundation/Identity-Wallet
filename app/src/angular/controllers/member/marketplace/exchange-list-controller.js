@@ -8,6 +8,8 @@ function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $time
     SqlLiteService.loadExchangeData().then(()=>{
         $scope.exchangesList = SqlLiteService.getExchangeData();
 
+        console.log(333, $scope.exchangesList)
+
         angular.forEach($scope.exchangesList, (item) => {
             if (item.data && item.data.description) {
                 item.content = $filter('limitTo')(item.data.description, 300, 0);

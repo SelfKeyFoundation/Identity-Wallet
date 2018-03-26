@@ -17947,8 +17947,7 @@ md-dialog {
               vertical-align: middle; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo img {
               max-width: 60px;
-              vertical-align: middle;
-              margin-left: 5px; }
+              vertical-align: middle; }
           .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
             height: 36px;
             font-family: ProximaNovaRegular;
@@ -18023,8 +18022,6 @@ md-dialog {
           margin-left: 15px;
           font-size: 20px;
           font-family: ProximaNovaRegular; }
-        .exchange-container .exchange .exchange-content .header .logo img {
-          width: 100px; }
       .exchange-container .exchange .exchange-content .header .status .text {
         margin-top: 5px;
         font-size: 14px;
