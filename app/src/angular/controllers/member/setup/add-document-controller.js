@@ -11,7 +11,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         'national_id': {
             type: "national_id",
             step: "STEP 4",
-            title1: "Upload National ID",
+            title1: "Upload Your National ID",
             title2: "Your National ID",
             title3: "(can be driver's license, passport)",
             title4: "(Max file size: 50mb)",
@@ -47,7 +47,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
             if(!resp) return;
             $rootScope.wallet.loadIdAttributes().then((resp)=>{
                 $scope.idAttributes = $rootScope.wallet.getIdAttributes();
-                CommonService.showToast('success', 'Saved!');
+                CommonService.showToast('success', 'File successfully saved.');
                 $scope.selected.values = "Saved!";
 
                 SqlLiteService.registerActionLog(actionText + $rootScope.DICTIONARY[$stateParams.type], actionTitle);
@@ -55,7 +55,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
                 goToNextStep();
             });
         }).catch((error) => {
-            CommonService.showToast('error', 'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
+            CommonService.showToast('error', 'File size is over 50MB. Please upload a smaller file.');
         });
     }
 
