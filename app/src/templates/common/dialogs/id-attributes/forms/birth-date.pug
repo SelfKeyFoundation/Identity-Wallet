@@ -1,7 +1,7 @@
 .content
     md-input-container.sk-input-box.sk-input-non-floating
         label Date of Birth
-        input(name="birthDate", type="date", max="{{currentDate | date:'yyyy-MM-dd'}}", ng-model="inputs.line1", ng-required="true")
+        input(name="birthDate", type="date", max="{{currentDate | date:'YYYY-MM-DD'}}", ng-model="inputs.line1", ng-required="true")
 
 .birth-date-actions-wrapper
     md-button.outline-gray(ng-click="close($event)")

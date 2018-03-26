@@ -1,9 +1,10 @@
 .wallet-create-step-5(layout="column", layout-align="center center", style="z-index: 100;")
     .header-wrapper(layout="column", layout-align="start start")
-        .title Setup Identity Wallet
+        .title Setup Your SelfKey Identity Wallet
         .description
-            | You will need to either setup a Basic ID for your Identity Wallet or if you completed the KYC on the SelfKey.org website to
-            | join the token sale, simply upload the file we provided.
+            | Create a new SelfKey ID to start building your identity profile. If you were previously
+            | whitelisted for the KEY token sale, simply import the zip file we provided as your SelfKey
+            | ID. This data is stored locally on your device, not in a server or on the blockchain.
 
     .content-wrapper.sk-box(layout="column", layout-align="center center")
         .item-wrapper(layout="row", layout-align="center center")
@@ -11,9 +12,9 @@
             .body
                 .title I am creating a new SelfKey Identity Wallet
                 .text
-                    | Set up the SelfKey Basic ID. This will form the basis of your locally managed and stored Identity System.
+                    | Setup the SelfKey ID. This will form the basis of your locally managed and stored identity profile.
                 .actions(style="margin-top: 30px;")
-                    md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey Basic ID
+                    md-button.md-raised(ng-click="createBasicId($event)") Create Selfkey ID
 
         .sk-divider-h1(style="width: 555px;")
 
@@ -22,10 +23,6 @@
             .body
                 .title I was approved in the SelfKey token sale KYC.
                 .text
-                    | If you completed KYC for the SelfKey token sale, you can download a KYC file to import and complete your Basic ID.
-                    | Please login at
-                    span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
-                        | https://token.selfkey.org
-                    |  to download your KYC file.
-                .actions
+                    | If you were whitelisted for the SelfKey token sale, you can download a zip file and import to complete your SelfKey ID.
+                .actions(style="margin-top: 30px;")
                     md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

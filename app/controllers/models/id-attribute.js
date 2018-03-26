@@ -13,8 +13,6 @@ module.exports = function (app, sqlLiteService) {
     Controller.findAllByWalletId = _findAllByWalletId;
     Controller.addImportedIdAttributes = _addImportedIdAttributes;
 
-
-
     /**
      *
      */
@@ -26,6 +24,7 @@ module.exports = function (app, sqlLiteService) {
                         table.increments('id');
                         table.integer('walletId').notNullable().references('wallets.id');
                         table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
+                        table.integer('data').notNullable().defaultTo("{}");
                         table.integer('order').defaultTo(0);
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');

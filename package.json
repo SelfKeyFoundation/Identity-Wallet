@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "2.0.0-alpha-34",
+  "version": "2.0.0-alpha-35",
   "description": "Selfkey Identity Wallet",
   "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
   "main": "./app/main.js",
@@ -28,6 +28,7 @@
     "angular-sanitize": "^1.6.9",
     "angular-zxcvbn": "3.2.2",
     "async": "2.6.0",
+    "babel-runtime": "^6.26.0",
     "bignumber.js": "4.1.0",
     "bluebird": "3.5.1",
     "crypto": "1.0.1",

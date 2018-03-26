@@ -104,7 +104,23 @@ md-dialog {
                     padding-bottom: 15px !important;
                 }
                 .sk-input-container {
+                    position: relative;
                     padding-bottom: 36px !important;
+                    .error-field {
+                        border: solid 1px #d0021b;
+                        box-shadow: none;
+                        color: #fe4b61;
+                    }
+                    .success-field {
+                        border-radius: 4px;
+                        background-color: #1e262e;
+                        border: solid 1px #0dc7dd;
+                    }
+                    .address-green-check {
+                        position: absolute;
+                        top: 55px;
+                        left: 11px;
+                    }
                     //stands for error messages
                     > div {
                         color: rgb(221,44,0);

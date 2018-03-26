@@ -316,6 +316,11 @@ h2 {
   width: 15.8px !important;
   height: 15.8px !important;
 }
+.icon-size-20x15 {
+  width: 20px !important;
+  height: 15px !important;
+}
+
 
 .icon-size-68x74 {
   width: 68px !important;
@@ -325,6 +330,11 @@ h2 {
 .icon-size-19x23 {
   width: 19.6px !important;;
   height: 23.1px !important;;
+}
+
+.icon-size-19x24 {
+  width: 19px !important;;
+  height: 24px !important;;
 }
 
 //buttons
@@ -361,3 +371,6 @@ h2 {
     }
 }
 
+.background-green {
+  background-color: #417505 !important;
+}
