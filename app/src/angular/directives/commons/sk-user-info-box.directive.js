@@ -1,6 +1,6 @@
 'use strict';
 
-function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, SqlLiteService) {
+function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, SqlLiteService, RPCService, CommonService) {
     'ngInject';
 
     return {
@@ -75,6 +75,52 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
                     }
                 }
             }
+
+            // profile picture start 
+
+            let updateProfilePictureStyles = (profilePicture) => {
+                //binary
+                scope.profilePictureStyles = {
+                    'background-image':  !profilePicture ? `url(${scope.userData.tempImage})` : `url("data:image/gif;base64,${profilePicture}")`
+                };
+            };
+            
+            updateProfilePictureStyles();
+
+            RPCService.makeCall('getWalletProfilePicture', {
+                id: $rootScope.wallet.id
+            }).then((profilePicture)=>{
+                updateProfilePictureStyles(profilePicture);
+            });
+
+            let updateWalletprofilePicture = (profilePicture) => {
+                let data = {
+                    id: $rootScope.wallet.id,
+                    profilePicture: profilePicture
+                }
+                RPCService.makeCall('updateWalletprofilePicture',data).then((res)=> {
+                    updateProfilePictureStyles(res.profilePicture);
+                }).catch((err)=> {
+                    CommonService.showToast('error', 'Error while saving the file');
+                });
+            };
+
+            scope.selectProfilePicture = (event) => {
+                let fileSelect = RPCService.makeCall('openFileSelectDialog', {
+                    filters: [
+                        { name: 'Documents', extensions: ['jpg', 'jpeg', 'png'] }, 
+                    ],
+                    maxFileSize: 50 * 1000 * 1000
+                });
+                fileSelect.then((selectedFile) => {
+                    let profilePicture = selectedFile.buffer.toString('base64'); 
+                    updateWalletprofilePicture(profilePicture);
+                }).catch((error) => {
+                    CommonService.showToast('error', 'Maximum file size: The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
+                });
+            };
+
+            // profile picture  end
         },
         replace: true,
         templateUrl: 'common/directives/sk-user-info-box.html'

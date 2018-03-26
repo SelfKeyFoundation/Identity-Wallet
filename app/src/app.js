@@ -26,7 +26,6 @@ requireNodeModule('angular-sanitize');
 requireNodeModule('angular-local-storage');
 requireNodeModule('angular-qrcode');
 requireNodeModule('angular-zxcvbn');
-requireNodeModule('angular-moment');
 
 /**
  *
@@ -44,8 +43,7 @@ window.app = angular.module('kyc-wallet', [
   'templates',
   'LocalStorageModule',
   'monospaced.qrcode',
-  'zxcvbn',
-  'angularMoment'
+  'zxcvbn'
 ]);
 
 /**
@@ -184,9 +182,6 @@ angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdA
 const AddCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/add-custom-token-controller.js');
 angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
 
-const EditCustomTokenDialogController = requireAppModule('angular/controllers/commons/dialogs/edit-custom-token-controller.js');
-angular.module('kyc-wallet').controller('EditCustomTokenDialogController', EditCustomTokenDialogController);
-
 const NewERC20TokenInfoController = requireAppModule('angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
 
@@ -269,6 +264,9 @@ angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberD
  */
 const ManageTokenController = requireAppModule('angular/controllers/member/wallet/manage-token-controller.js');
 angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenController);
+
+const ManageCryptosController = requireAppModule('angular/controllers/member/wallet/manage-cryptos-controller.js');
+angular.module('kyc-wallet').controller('ManageCryptosController', ManageCryptosController);
 
 
 /**
