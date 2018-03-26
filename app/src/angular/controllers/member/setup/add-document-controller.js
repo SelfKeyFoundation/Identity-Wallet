@@ -42,9 +42,16 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
             actionTitle = 'Updated';
         }
 
-        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', { idAttributeItemValueId: selectedValue.id });
+        let args = {
+            idAttributeId: $scope.idAttributes[$scope.selected.type].id,
+            idAttributeItemId: $scope.idAttributes[$scope.selected.type].items[0].id,
+            idAttributeItemValueId: $scope.idAttributes[$scope.selected.type].items[0].values[0].id
+        }
+
+        let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', args);
         addDocumentPromise.then((resp) => {
             if(!resp) return;
+
             $rootScope.wallet.loadIdAttributes().then((resp)=>{
                 $scope.idAttributes = $rootScope.wallet.getIdAttributes();
                 CommonService.showToast('success', 'File successfully saved.');
@@ -69,7 +76,6 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         } else {
             // got to loading
             $state.go('guest.loading', {redirectTo: 'member.id-wallet.main'});
-            //$state.go('member.dashboard.main');
         }
     }
 };

@@ -101,7 +101,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         }
     }
 
-    loadIdAttributes ();
+    //loadIdAttributes ();
 };
 
 module.exports = GuestKeystoreCreateStep6Controller;

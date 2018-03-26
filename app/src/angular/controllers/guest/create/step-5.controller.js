@@ -10,11 +10,11 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
     }
 
     $scope.importKycFile = (event) => {
-        RPCService.makeCall('importKYCPackage', {walletId: $rootScope.wallet.id}).then(()=>{
-            $rootScope.wallet.loadIdAttributes().then(()=>{
+        RPCService.makeCall('importKYCPackage', { walletId: $rootScope.wallet.id }).then(() => {
+            $rootScope.wallet.loadIdAttributes().then(() => {
                 $state.go('guest.create.step-6');
             })
-        }).catch((error)=>{
+        }).catch((error) => {
             CommonService.showToast('error', 'Error');
         });
     }
