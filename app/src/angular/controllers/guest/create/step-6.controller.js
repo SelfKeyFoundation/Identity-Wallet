@@ -20,32 +20,15 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
 
-        if ($stateParams.type === 'import') {
-            $scope.isLoading = true;
-            let promise = importAndUnlockExistingWallet()
-            promise.then(() => {
-                $rootScope.walletImportData = null;
-                $state.go('member.setup.checklist');
-            }).catch((error) => {
-                if (error.code && error.code == "SQLITE_CONSTRAINT") {
-                    CommonService.showToast('error', 'That Wallet already imported');
-                } else {
-                    CommonService.showToast('error', 'error');
-                }
-                $scope.isLoading = false;
-            });
-        } else {
+        $scope.isLoading = true;
+        let promise = createInitialIdAttributesAndActivateWallet();
 
-            let promise = createInitialIdAttributesAndActivateWallet();
-
-            promise.then((data) => {
-                $state.go('member.setup.checklist');
-            }).catch((error) => {
-                console.log(">>>>>>>", error);
-            });
-
-
-        }
+        promise.then((data) => {
+            $state.go('member.setup.checklist');
+        }).catch((error) => {
+            CommonService.showToast('error', 'Check Internet Connection.');
+            $scope.isLoading = false;
+        });
     }
 
     function createInitialIdAttributesAndActivateWallet() {
