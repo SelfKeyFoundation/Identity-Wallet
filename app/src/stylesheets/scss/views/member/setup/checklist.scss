@@ -1,0 +1,40 @@
+.checklist {
+    >.header-wrapper {
+        width: 484px;
+
+        span {
+            font-family: ProximaNovaRegular;
+            color: #ffffff;
+
+            &:first-of-type {
+	            font-size: 36px;
+	            line-height: 1.0;
+            }
+
+            &:last-of-type {
+                margin-top: 18px;
+                opacity: 0.8;
+	            font-size: 18px;
+	            line-height: 1.67;
+            }
+        }
+    }
+
+    >.content-wrapper {
+        margin-top: 44px;
+        width: 484px;
+
+        >.content {
+            padding: 24px;
+        }
+    }
+
+    >.actions-wrapper {
+        width: 484px;
+        margin-top: 44px;
+
+        .md-button {
+            padding: 8px;
+        }
+    }
+}

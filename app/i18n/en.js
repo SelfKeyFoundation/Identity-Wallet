@@ -3,7 +3,7 @@
 const EN = {
 
     /**
-     * 
+     *
      */
     code: 'en',
 
@@ -17,7 +17,7 @@ const EN = {
     transaction_already_imported: "transaction already imported with selected hex",
 
     /**
-     * 
+     *
      */
     test_template: "hello {0}, hey {1}",
 
@@ -46,7 +46,7 @@ const EN = {
     ERR_GENERATE_TOKEN_RAW_TX: "ERR_GENERATE_TOKEN_RAW_TX",
 
     /**
-     * 
+     *
      */
     ID_ATTR_DOC_BOX_TITLE: "You can upload documents which at least contain your personal number, first name, last name, birth date and photo",
 
@@ -66,44 +66,46 @@ const EN = {
     document: "Document",
     static_data: "Static Data",
 
-    name: "Name",
+
+    full_name: "Full Name",
     public_key: "Public Key",
     physical_address: "Physical Address",
-    work_place: "Work Place",
-    birthdate: "Birth Date",
+    work_place: "Workplace",
+    birthdate: "Date of Birth",
     nationality: "Nationality",
-    tax_id_number: "Tax id number",
+    tax_id_number: "Tax Identification Number",
     passport: "Passport",
     drivers_license: "Driver's License",
     national_id: "National ID",
     utility_bill: "Utility Bill",
     bank_statement: "Bank Statement",
     tax_certificate: "Tax Certificate",
-    phonenumber_countrycode: "Phone Number",
-    phonenumber: "Phone Number",
-    selfie: "Selfie",
+    phonenumber_countrycode: "Telephone Number",
+    phonenumber: "Telephone Number",
+    selfie: "Profile Photo",
     fingerprint: "Fingerprint",
-    voiceid: "voiceid",
-    facebook: "facebook",
-    twitter: "twitter",
-    linkedin: "linkedin",
-    github: "github",
-    instagram: "instagram",
-    id_selfie: "id_selfie",
-    email: "Email Address",
-    country_of_residency: "Country Of Residency",
-    
+    email: "Email",
+    country_of_residency: "Country of Residence",
+    id_selfie: "National ID Selfie",
+    national_id_back: "National ID (Back)",
+    first_name: "First Name",
+    middle_name: "Middle Name",
+    last_name: "Last Name",
+    city: "City",
+    voice_id: "Voice ID",
+
     selfie_with_id_document: "Selfie with ID Document",
-    
-    
-    
-    
 
-
-
+    full_legal_name: "Full Legal Name",
 
     /**
-     * 
+     *
+     */
+    incorrect_password: "Incorrect Password",
+    wallet_already_imported: "Wallet Already Imported",
+
+    /**
+     *
      */
     TOKEN_ETH: "Ethereum",
     TOKEN_KEY: "Selfkey",

@@ -1,0 +1,8 @@
+md-dialog.generic-info-container(aira-lable="{{title}}")
+    .info-wrapper
+        .info-title
+            span {{ title }}
+        .info-body 
+            div {{ text }}    
+            md-button.default.cancal-btn(ng-click="cancel($event)")
+                span.primary close

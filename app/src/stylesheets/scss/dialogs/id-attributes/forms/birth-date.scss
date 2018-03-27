@@ -1,0 +1,53 @@
+form.birth-date-content {
+
+    width: 760px;
+    padding: 40px 15px 15px 15px;
+
+    md-input-container {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.birth-date-actions-wrapper {
+    width: 760px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+
+    .md-button {
+        width: 144px;
+        padding: 0 16px;
+
+        &:last-of-type {
+            margin-left: 16px;
+        }
+    }
+}
+
+.cusom-date-picker input {
+    position: relative;
+    width: 760px; height: 40px;
+    color: white;
+}
+
+.cusom-date-picker input:before {
+    position: absolute;
+    top: 10px; left: 10px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+}
+
+.cusom-date-picker input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+.cusom-date-picker input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}

@@ -1,16 +1,34 @@
-.header
-    span.none-select-text Create New Wallet
-form.content(layout="column", style="padding: 24px;")
-    
-    span.sk-text Enter the password that you just created for your private key.
-    span.sk-text Make sure you have chosen a strong password.
-    span.sk-text Do not forget or lose this password, and do not share this password with anyone.
+.wallet-create-step-2(layout-fill, layout="column", layout-align="center center")
 
-    md-input-container.sk-input-box.no-error-spacer
-        input(name="password", ng-model="userInput.password", type="password", placeholder="Password")
-    
-    .sk-button.filled-blue(style="margin: 24px 0 12px 0;", ng-click="createKeystore($event)")
-        span(style="color: #fff") Generate Wallet
+    sk-icon(icon="selfkey", size-class="icon-size-57x65")
+    .title SELFKEY
+    .description BLOCKCHAIN IDENTITY WALLET
 
-    .sk-button.outline-blue(style="margin: 12px 0 48px 0;", ui-sref="guest.create.step-1")
-        span(style="color: #fff") back
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Confirm Password
+        form.content(name="passwordForm", layout="column")
+            .title
+                | Please reconfirm the password you just entered.
+                | There is no way it can be restored or reset,
+                | and Selfkey cannot help you if the password is lost.
+
+            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
+                label Password
+                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
+
+            .password-strength-container
+                .blocks-container
+                    .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
+                    .block(ng-class="{'active': passwordStrength.score >= 1}")
+                    .block(ng-class="{'active': passwordStrength.score >= 2}")
+                    .block(ng-class="{'active': passwordStrength.score >= 3}")
+                .status-text-container
+                    span {{ getPasswordStrengthInfo() }}
+
+            .actions-wrapper
+                md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
+                    span.primary Back
+                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
+                    span.primary Next
+

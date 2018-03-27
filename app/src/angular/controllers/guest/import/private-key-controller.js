@@ -1,4 +1,8 @@
-function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout, $state, ConfigFileService, WalletService) {
+'use strict';
+
+const Wallet = requireAppModule('angular/classes/wallet');
+
+function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout, $state, RPCService, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestImportPrivateKeyController');
@@ -24,11 +28,19 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
             privateKey = "0x" + $scope.userInput.privateKey;
         }
 
-        WalletService.unlockByPrivateKey(privateKey).then((wallet) => {
-            ConfigFileService.load().then((storeData) => {
-                $state.go('member.setup.view-keystore');
+        let importPromise = RPCService.makeCall('importPrivateKey', { privateKey: privateKey });
+        importPromise.then((data) => {
+            if(data.id){
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
-            });
+                if (data.isSetupFinished) {
+                    $state.go('member.dashboard.main');
+                } else {
+                    $state.go('guest.create.step-3', { walletData: data });
+                }
+            }else{
+                CommonService.showToast('warning', 'missing implementation');
+            }
         }).catch((error) => {
             $log.error(error);
             theForm.privateKey.$setValidity("badPrivateKey", false);

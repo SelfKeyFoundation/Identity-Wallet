@@ -6,8 +6,8 @@ function SkLoadingDirective($log) {
     return {
         restrict: 'E',
         scope: {
-            header: '@',
-            subHeader: '@'
+            header: '=',
+            subHeader: '='
         },
         link: (scope, element) => {
             

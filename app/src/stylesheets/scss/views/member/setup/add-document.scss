@@ -1,0 +1,103 @@
+.add-document {
+    >.header-wrapper {
+        width: 1140px;
+
+        span {
+            font-family: ProximaNovaRegular;
+            color: #ffffff;
+            font-size: 24px;
+            line-height: 1.5;
+        }
+    }
+
+    >.content-wrapper {
+        margin-top: 38px;
+        width: 1140px;
+        height: 400px;
+        display: flex;
+        flex-direction: row;
+
+        #document {
+            width: 760px;
+            margin-right: 30px;
+
+            >.content {
+                height: 100%;
+
+                >.header-wrapper {
+                    margin: 25px 30px;
+
+                    >.step {
+                        font-family: ProximaNovaSemibold;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: #93b0c1;
+                    }
+
+                    >.title {
+                        margin-top: 4px;
+                        font-family: ProximaNovaRegular;
+                        font-size: 18px;
+                        color: #ffffff;
+                    }
+
+                    >.description {
+                        margin-top: 4px;
+                        font-family: ProximaNovaRegular;
+                        opacity: 0.8;
+                        font-size: 16px;
+                        line-height: 1;
+                        color: #93b0c1;
+                    }
+                }
+                >.content-wrapper {
+                    display: flex;
+                    flex: 1;
+
+                    >.box {
+                        >.header {
+                            margin-top: 36px;
+                            font-family: ProximaNovaSemibold;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-align: center;
+                            color: #ffffff;
+                        }
+
+                        >.sub-header {
+                            margin-top: 6px;
+                            font-family: ProximaNovaRegular;
+                            font-size: 12px;
+                            text-align: center;
+                            color: #93b0c1;
+                        }
+                    }
+                }
+            }
+        }
+
+        #check-list {
+            width: 350px;
+
+            >.content {
+                padding: 30px;
+            }
+        }
+    }
+
+    >.actions-wrapper {
+        width: 1140px;
+        margin-top: 30px;
+
+        .left {
+            width: 760px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .md-button {
+                padding: 8px;
+            }
+        }
+    }
+}

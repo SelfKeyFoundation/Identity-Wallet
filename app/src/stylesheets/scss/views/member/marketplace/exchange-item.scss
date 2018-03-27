@@ -1,0 +1,114 @@
+.exchange-container{
+    border: 1px solid #303c49;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    color: white;
+    .back {
+        margin: 20px 0 0 20px;
+        span {
+            font-size: 13px;
+        }
+    }
+    .exchange {
+        padding: 40px;
+        .exchange-content {
+            .header {
+                border-radius: 4px;
+                background-color: #2a3540;
+                box-shadow: inset 0 -1px 0 0 #374758;
+                border: 1px solid #303c49;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                .logo {
+                    display: flex;
+                    span {
+                        align-self: center;
+                        margin-left: 15px;
+                        font-size: 20px;
+                        font-family: ProximaNovaRegular;
+                    }
+                }
+                .status {
+                    .text {
+                        margin-top: 5px;
+                        font-size: 14px;
+                        font-family: ProximaNovaRegular;
+                    }
+                }
+            }
+            .body{
+                .section{
+                    margin-bottom: 30px;
+                    border-bottom: 1px solid #303c49;
+                    &:last-child{
+                        border: none;
+                    }
+                    .section-content {
+                        margin-bottom: 10px;
+                        .title {
+                            font-size: 18px;
+                        }
+                        .descr {
+                            display: flex;
+                            padding: 25px 15px 0 15px;
+                            justify-content: space-between;
+
+                            .textual {
+                                .text {
+                                    width: 605px;
+                                    font-family: ProximaNovaRegular;
+                                    font-size: 18px;
+                                    letter-spacing: normal;
+                                    text-align: left;
+                                    color: #FFFFFF;
+                                }
+                            }
+
+                            .gray{
+                                font-size: 13px;
+                                width: 200px;
+                                height: 44px;
+                                margin-top: 25px;
+                            }
+                        }
+
+                        .columns {
+                            display: flex;
+                            margin-left: 15px;
+                            .column {
+                                margin-right: 100px;
+                                div {
+                                    margin: 15px 0;
+                                    label {
+                                        display: inline-block;
+                                    }
+                                    strong {
+                                        font-size: 14px;
+                                        margin-left: 15px;
+                                    }
+                                }
+                            }
+                            &.highlights {
+                                .column {
+                                    label {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            &.requirements {
+                                .column {
+                                    label {
+                                        font-size: 13px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

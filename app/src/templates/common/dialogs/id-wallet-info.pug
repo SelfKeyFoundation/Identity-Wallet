@@ -1,0 +1,16 @@
+md-dialog.id-wallet-info(aira-lable="{{title}}")
+    .id-wallet-info-wrapper
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
+        .container
+            .header
+                span {{dialogInfo.header}}
+            .info-section
+                .text
+                    p {{dialogInfo.textPart1}}
+                    p {{dialogInfo.textPart2}}
+                        span(ng-if='dialogInfo.step == 1', ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-identity-wallet')") here...
+            .buttons-section
+                md-button(ng-click="backStep($event)")
+                    span {{dialogInfo.button1}}
+                md-button(ng-click="nextStep()" ng-class="[{'button-198': dialogInfo.step == 4}]")
+                    span {{dialogInfo.button2}}

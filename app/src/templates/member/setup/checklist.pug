@@ -1,0 +1,40 @@
+.checklist(layout-fill, layout="column", layout-align="center center")
+
+    .header-wrapper(layout="column", layout-align="center start")
+        span SelfKey ID
+        span 
+            | You can now create your SelfKey ID, the first step to accessing 
+            | products and services within the SelfKey Marketplace. All identity 
+            | attributes and documents are stoerd locally in your device, not in a 
+            | server or the blockchain. SelfKey does not have access to your data.
+
+    .content-wrapper.sk-box
+        .content(layout="column")
+            .sk-text.header ID Wallet Checklist
+            .sk-text.sub-header If you’re not ready, you can do this later.
+
+            .sk-list(style="margin-top: 28px;")
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg')
+                    span {{ $root.DICTIONARY['full_legal_name'] }}
+
+                .item
+                    .bullet
+                        img(src='assets/images/icons/tick.svg')
+                    span {{ $root.DICTIONARY['country_of_residency'] }}
+
+                .item
+                    .bullet
+                        span 4
+                    span {{ $root.DICTIONARY['national_id'] }}
+
+                .item
+                    .bullet
+                        span 5
+                    span {{ $root.DICTIONARY['id_selfie'] }}
+
+    .actions-wrapper(layout="row", layout-align="center center")
+        md-button.gray(flex="70", ng-click="nextStep($event)")
+            span.primary Add More Details
+        .sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="skip($event)") I'm not ready

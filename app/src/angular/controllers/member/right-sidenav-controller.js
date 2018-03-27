@@ -1,4 +1,4 @@
-function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state) {
+function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state, $mdDialog) {
     'ngInject'
 
     $log.info('RightSidenavController');
@@ -19,7 +19,6 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
         $state.go(state, params);
         $scope.close();
     }
-
 };
 
 module.exports = MemberRightSidenavController;

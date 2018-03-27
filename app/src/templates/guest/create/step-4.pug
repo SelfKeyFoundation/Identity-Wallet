@@ -1,17 +1,29 @@
-.header
-    span.none-select-text Save Your Private Key
-form.content(layout="column", style="padding: 24px;")
-    
-    md-input-container.sk-input-box.no-error-spacer
-        label Your Private Key
-        input(name="privateKey", ng-model="privateKey", type="text", placeholder="Your Private Key", disabled)
+.wallet-create-step-4(layout-fill, layout="column", layout-align="center center")
+    sk-icon(icon="important", size-class="icon-size-68x74")
 
-    .sk-button.filled-blue(style="margin: 24px 0 12px 0;", ng-click="printPaperWallet($event)")
-        span(style="color: #fff") Print Paper Wallet
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Save Your Private Key
+        .content(layout="column")
 
-    span.sk-text Do not lose it! It cannot be recovered if you lose it.
-    span.sk-text Do not share it! Your funds will be stolen if you use this file on a malicious/phishing site.
-    span.sk-text Make a backup! Secure it like the millions of dollars it may one day be worth.
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Private Key
+                input(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
+                md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
+                    md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
 
-    .sk-button.outline-blue(style="margin: 24px 0 12px 0;", ng-click="nextStep($event)")
-        span(style="color: #fff") Complete
+            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
+                span.primary Print Paper Wallet
+
+            .warning-description
+                .item(style="font-weight: normal;")
+                    span Private keys are used to sign transactions on the Ethereum blockchain. Your private key is encrypted within the Keystore File, which is protected by the password you just created. You can also print a copy of your private keys to make an offline backup - this is also known as "cold storage".
+
+            .actions-wrapper
+                md-button.outline-blue(ng-click="nextStep($event)")
+                    span continue
+
+    .private-key-print-box
+        .title Private key
+        .pk {{privateKey}}
+

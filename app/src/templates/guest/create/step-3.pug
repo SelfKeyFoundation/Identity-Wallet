@@ -1,18 +1,29 @@
-.header
-    span.none-select-text Save Your Keystore File
-form.content(layout="column", style="padding: 24px;")
-    
-    md-input-container.sk-input-box.no-error-spacer
-        label Your Public Key
-        input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
+.wallet-create-step-3(layout-fill, layout="column", layout-align="center center")
+    sk-icon(icon="important", size-class="icon-size-68x74")
 
-    .sk-button.filled-blue(style="margin: 12px 0 12px 0;", ng-click="backupKeystore($event)")
-        span(style="color: #fff") Backup your keystore file (UTC / JSON)
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Backup Your Wallet
+        .content(layout="column")
 
-    span.sk-text The keystore file is the encrypted version of your private key, protected by the password you just created. This is the recommended version to save your private key.
-    span.sk-text Do not lose it! It cannot be recovered if you lose it.
-    span.sk-text Do not share it! Your funds will be stolen if you use this file on a malicious/phishing site.
-    span.sk-text Make a backup! Secure it like the millions of dollars it may one day be worth.
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Public Key
+                input(name="publicKey", ng-model="$root.wallet.publicKeyHex", type="text", placeholder="Your Public Key", disabled)
 
-    .sk-button.orange-blue(style="margin: 24px 0 12px 0;", ui-sref="guest.create.step-4")
-        span(style="color: #fff") I understand, continue
+            .title
+                | Please download the Keystore File to save a backup of your wallet.
+                | The Keystore File is encrypted by the password you just created.
+                | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
+
+            md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
+                span.primary Backup your keystore file (UTC / JSON)
+
+            .title
+                p
+                    | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
+                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password, &nbsp;
+                    a(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-wallet/what-is-a-keystore-file-utc', false)") click here.
+
+            .actions-wrapper
+                md-button.outline-orange(ng-click="nextStep($event)")
+                    span I understand, continue

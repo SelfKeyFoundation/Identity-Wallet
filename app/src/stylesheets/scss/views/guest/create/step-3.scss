@@ -1,0 +1,72 @@
+.wallet-create-step-3 {
+    height: 100%;
+
+    > .title {
+        margin-top: 24px;
+        user-select: none;
+        font-family: ProximaNovaSemibold;
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+    > .description {
+        font-family: ProximaNovaRegular;
+        margin-top: 18px;
+        opacity: 0.8;
+        font-size: 18px;
+        line-height: 1.89;
+        text-align: center;
+        color: #0abbd0;
+        margin-top: 15px;
+        user-select: none;
+    }
+
+    .content-wrapper {
+        width: 780px;
+        margin-top: 50px;
+
+        .content {
+            padding: 50px 44px;
+
+            >.title {
+                font-family: ProximaNovaRegular;
+                font-size: 18px;
+                line-height: 1.72;
+                color: #ffffff;
+            }
+
+            .warning-description {
+                display: flex;
+                flex-direction: column;
+                margin-top: 44px;
+
+                >.item {
+                    span {
+                        font-family: ProximaNovaRegular;
+                        font-size: 18px;
+                        color: #ffffff;
+                        line-height: 1.89;
+                        &:first-of-type {
+                            font-weight: bold;
+                            margin-right: 8px;
+                        }
+                    }
+                }
+            }
+
+            .actions-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: stretch;
+                margin-top: 44px;
+
+                >.md-button {
+                    padding: 10px;
+                }
+            }
+        }
+    }
+}

@@ -1,48 +1,47 @@
-function GuestLoadingController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, ConfigFileService, WalletService, Web3Service, SelfkeyService) {
+'use strict';
+
+function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $stateParams, EVENTS, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestLoadingController');
 
-    switch ($stateParams.redirectTo) {
-        case 'member.setup.view-keystore':
-            $state.go($stateParams.redirectTo);
-            $scope.subHeader = "Getting Ready"
-            break;
-        default:
-            init();
+    const status = {
+        isSqlDBReady: false
     }
 
+    $scope.header = 'Loading';
+    $scope.subHeader = '';
+
+    init();
+
     function init() {
-        $rootScope.loadingPromise = ConfigFileService.init();
-        $rootScope.loadingPromise.then((storeData) => {
-            $log.info("storeData", storeData);
-
-            let publicKeys = ConfigFileService.getPublicKeys('ks');
-
-            if (publicKeys.length > 0) {
-
-                let w = storeData.wallets[publicKeys[0]];
-
-                WalletService.importUsingKeystoreFilePath(w.keystoreFilePath).then((wallet) => {
-                    $rootScope.wallet = wallet;
-                    // go to unlock state
-                    //$state.go('guest.process.unlock-keystore');
-                    $state.go('guest.welcome');
-                }).catch((error) => {
-                    $log.error("error", error);
-                });
-            } else {
-                $state.go('guest.welcome');
+        if ($stateParams.redirectTo) {
+            if ($stateParams.redirectTo === 'member.id-wallet.main') {
+                $scope.header = 'Setup Completed';
+                $timeout(() => {
+                    goTo($stateParams.redirectTo);
+                }, 2000);
             }
+        }
+    }
 
-            /**
-             *
-             */
-            $rootScope.checkTermsAndConditions();
+    function loadSqlLiteData() {
+        $rootScope.loadingPromise = SqlLiteService.loadData();
+        $rootScope.loadingPromise.then(() => {
+            goTo('guest.welcome');
         }).catch((error) => {
             $log.error("error", error);
         });
     }
+
+    function goTo(state) {
+        $state.go(state);
+        $rootScope.checkTermsAndConditions();
+    }
+
+    $rootScope.$on('APP_SUCCESS_LOADING', () => {
+        loadSqlLiteData();
+    });
 };
 
 module.exports = GuestLoadingController;
