@@ -6,12 +6,16 @@
             .title Exchanges
             .status(layout='row')
                 span(style='color: #fff') Your Staking Status
-                md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
-                    md-tooltip.sk-tooltip(md-direction="bottom")
+                .icon-container
+                    md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
+                    .tooltip
                         |  <div style="text-align:left;"> What is Staking? <br />
                         |  Staking acts similarly like <br />
                         |  a refundable security deposit. <br />
-                        |  to learn more,click here.. </div>
+                        |  to learn more,click
+                        span(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-marketplace')") here...
+                        </div>
+
                 span(style='color: #f5a623') : Coming soon
         .body-wrapper
             ul
