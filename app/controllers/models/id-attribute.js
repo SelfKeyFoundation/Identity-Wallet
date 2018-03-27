@@ -39,6 +39,7 @@ module.exports = function (app, sqlLiteService) {
                         table.integer('order').defaultTo(0);
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
+                        table.unique(['walletId', 'idAttributeType']);
                     }).then((resp) => {
                         resolve("Table: " + TABLE_NAME + " created.");
                     }).catch((error) => {
@@ -147,7 +148,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    // NEED TEST
+    // DONE !!!!!
     function _addEditStaticDataToIdAttributeItemValue(idAttributeId, idAttributeItemId, idAttributeItemValueId, staticData) {
         return knex.transaction((trx) => {
             let selectPromise = sqlLiteService.select(TABLE_NAME, "*", { id: idAttributeId }, trx);
@@ -211,7 +212,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    // NEED TEST
+    // DONE !!!!!
     function _delete(idAttributeId, idAttributeItemId, idAttributeItemValueId) {
         console.log(idAttributeId, idAttributeItemId, idAttributeItemValueId);
         return knex.transaction((trx) => {
@@ -237,6 +238,129 @@ module.exports = function (app, sqlLiteService) {
                 });
             }).then(trx.commit).catch(trx.rollback);
         });
+    }
+
+    // TODO
+    function _addImportedIdAttributes(walletId, exportCode, requiredDocuments, requiredStaticData) {
+        return knex.transaction((trx) => {
+            sqlLiteService.select('wallet_settings', "*", { walletId: walletId }, trx).then((rows) => {
+                return new Promise((resolve, reject) => {
+                    let walletSetting = rows[0];
+
+                    let idAttributesSavePromises = [];
+                    let documentsSavePromises = [];
+
+                    let itemsToSave = {};
+
+                    for (let i in requiredDocuments) {
+                        let requirement = requiredDocuments[i];
+                        if(!requirement.attributeType) continue;
+
+                        let idAttribute = helpers.generateEmptyIdAttributeObject(walletId, requirement.attributeType);
+                        idAttribute.tempId = helpers.generateId();
+
+                        for (let j in requirement.docs) {
+                            let fileItems = requirement.docs[j].fileItems;
+                            let idAttributeItem = helpers.generateEmptyIdAttributeItemObject();
+                            idAttribute.items.push(idAttributeItem);
+
+                            for (let k in fileItems) {
+                                let fileItem = fileItems[k];
+                                let idAttributeItemValue = helpers.generateEmptyIdAttributeItemValueObject();
+                                idAttributeItem.values.push(idAttributeItemValue);
+
+                                let document = {
+                                    name: fileItem.name,
+                                    mimeType: fileItem.mimeType,
+                                    size: fileItem.size,
+                                    buffer: fileItem.buffer,
+                                    createdAt: new Date().getTime()
+                                };
+
+                                documentsSavePromises.push(sqlLiteService.insertIntoTable('documents', document, trx).then((document) => {
+                                    idAttributeItemValue.documentId = document.id;
+                                    idAttributeItemValue.documentName = document.name;
+                                    itemsToSave[idAttribute.tempId] = idAttribute;
+                                }).catch((error) => {
+                                    console.log(error);
+                                }));
+                            }
+                        }
+                    }
+
+
+                    for (let i in requiredStaticData) {
+                        let requirement = requiredStaticData[i];
+                        if(!requirement.attributeType) continue;
+
+                        let staticData = {};
+                        for (let j in requirement.staticDatas) {
+                            let answer = requirement.staticDatas[j];
+                            staticData["line" + (parseInt(j) + 1).toString()] = answer;
+                        }
+
+                        let idAttribute = helpers.generateIdAttributeObject(walletId, requirement.attributeType, staticData, null);
+                        idAttribute.tempId = helpers.generateId();
+
+                        itemsToSave[idAttribute.tempId] = idAttribute;
+
+                    }
+
+                    walletSetting.airDropCode = exportCode;
+
+                    Promise.all(documentsSavePromises).then(() => {
+
+                        for(let i in itemsToSave){
+                            (function(){
+                                delete itemsToSave[i].tempId;
+                                itemsToSave[i].items = JSON.stringify(itemsToSave[i].items);
+                                idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', itemsToSave[i], trx))
+                            })(i)
+                        }
+
+                        Promise.all(idAttributesSavePromises).then(() => {
+
+                            sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx).then(()=>{
+                                resolve();
+                            }).catch((error)=>{
+                                console.log(error);
+                                reject({ message: "wallets_insert_error", error: error });
+                            })
+                        }).catch((error) => {
+                            console.log(error);
+                            reject({ message: "wallets_insert_error", error: error });
+                        });
+
+                    }).catch((error) => {
+                        console.log(error);
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+
+                    /*
+                    let finalPromises = [];
+                    finalPromises.push(Promise.all(documentsSavePromises));
+                    finalPromises.push(Promise.all(idAttributesSavePromises));
+                    finalPromises.push(sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx));
+
+                    Promise.all(finalPromises).then(() => {
+                        resolve(walletSetting);
+                    }).catch((error) => {
+                        console.log(error);
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+                    */
+
+                    /*
+                    Promise.each(finalPromises, (el) => { return el }).then(() => {
+                        resolve(walletSetting);
+                    }).catch((error) => {
+                        console.log(error);
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+                    */
+                });
+            }).then(trx.commit).catch(trx.rollback);
+        })
     }
 
 
@@ -335,84 +459,7 @@ module.exports = function (app, sqlLiteService) {
 
 
 
-    function _addImportedIdAttributes(walletId, exportCode, requiredDocuments, requiredStaticData) {
-        return knex.transaction((trx) => {
-            sqlLiteService.select('wallet_settings', "*", { walletId: walletId }, trx).then((rows) => {
-                return new Promise((resolve, reject) => {
-                    let walletSetting = rows[0];
 
-                    let idAttributesSavePromises = [];
-                    let idAttributeItemsSavePromises = [];
-                    let documentsSavePromises = [];
-                    let idAttributeItemValuesSavePromises = [];
-
-
-                    for (let i in requiredDocuments) {
-                        let doc = requiredDocuments[i];
-
-                        idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', { walletId: walletId, idAttributeType: doc.attributeType, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
-                            idAttributeItemsSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-
-                                for (let j in doc.fileItems) {
-                                    let fileItem = doc.fileItems[j];
-                                    let data = { name: fileItem.name, mimeType: fileItem.mimeType, size: fileItem.size, buffer: fileItem.buffer, createdAt: new Date().getTime() };
-                                    documentsSavePromises.push(sqlLiteService.insertIntoTable('documents', data).then((document) => {
-                                        idAttributeItemValuesSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, documentId: document.id, staticData: "{}", createdAt: new Date().getTime() }).catch((error) => {
-                                            reject(error);
-                                        }));
-                                    }).catch((error) => {
-                                        reject(error);
-                                    }));
-                                }
-                            }).catch((error) => {
-                                reject(error);
-                            }));
-                        }));
-                    }
-
-
-                    for (let i in requiredStaticData) {
-                        let item = requiredStaticData[i];
-
-                        idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', { walletId: walletId, idAttributeType: item.attributeType, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
-                            idAttributeItemsSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-                                let staticData = {};
-                                for (let j in item.staticDatas) {
-                                    let answer = item.staticDatas[j];
-                                    staticData["line" + (parseInt(j) + 1).toString()] = answer;
-                                }
-
-                                staticData = JSON.stringify(staticData);
-                                let data = { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() };
-
-                                idAttributeItemValuesSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_item_values', data).catch((error) => {
-                                    reject(error);
-                                }));
-                            }));
-                        }));
-                    }
-
-
-                    walletSetting.airDropCode = exportCode;
-
-
-                    let finalPromises = [];
-                    finalPromises.push(Promise.all(idAttributesSavePromises));
-                    finalPromises.push(Promise.all(idAttributeItemsSavePromises));
-                    finalPromises.push(Promise.all(documentsSavePromises));
-                    finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
-
-                    finalPromises.push(sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx));
-
-                    Promise.each(finalPromises, (el) => { return el }).then(() => {
-                        resolve(walletSetting);
-                    }).catch((error) => {
-                        reject({ message: "wallets_insert_error", error: error });
-                    });
-                });
-            }).then(trx.commit).catch(trx.rollback);
-        })
-    }
 
 
 

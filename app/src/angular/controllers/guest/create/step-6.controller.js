@@ -20,7 +20,13 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
 
-        if ($stateParams.type === 'import') {
+        if ($stateParams.type === 'kyc_import') {
+            let promise = fillMissingBasicIds();
+            promise.then(() => {
+                $state.go('member.setup.checklist');
+            });
+
+            /*
             $scope.isLoading = true;
             let promise = importAndUnlockExistingWallet()
             promise.then(() => {
@@ -34,6 +40,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
                 }
                 $scope.isLoading = false;
             });
+            */
         } else {
 
             let promise = createInitialIdAttributesAndActivateWallet();
@@ -93,15 +100,52 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         if(idAttributes[type] && idAttributes[type].items && idAttributes[type].items.length && idAttributes[type].items[0].values && idAttributes[type].items[0].values.length){
             if(idAttributes[type].items[0].values[0].staticData.line1){
                 return idAttributes[type].items[0].values[0].staticData.line1
-            } else if (idAttributes[type].items[0].values[0].documentFileName) {
-                idAttributes[type].items[0].values[0].documentFileName
+            } else if (idAttributes[type].items[0].values[0].documentName) {
+                idAttributes[type].items[0].values[0].documentName
             } else {
                 return null;
             }
         }
     }
 
-    //loadIdAttributes ();
+    loadIdAttributes ();
+
+    // .......
+
+    function fillMissingBasicIds () {
+        let defer = $q.defer();
+
+        let promise = RPCService.makeCall('fillMissingBasicIds', {
+            walletId: $rootScope.wallet.id,
+            initialIdAttributesValues: $scope.input
+        });
+
+        promise.then(() => {
+            SqlLiteService.loadWallets().then(() => {
+                let promises = [];
+                promises.push($rootScope.wallet.loadIdAttributes());
+                promises.push($rootScope.wallet.loadTokens());
+
+                $q.all(promises).then((responses) => {
+                    SqlLiteService.registerActionLog("Created Attribute: First Name", "Created");
+                    SqlLiteService.registerActionLog("Created Attribute: Last Name", "Created");
+                    if ($scope.input.middle_name) {
+                        SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
+                    }
+                    SqlLiteService.registerActionLog("Created Attribute: Country Of Residence", "Created");
+                    defer.resolve();
+                }).catch((error) => {
+                    defer.reject(error);
+                });
+            }).catch((error) => {
+                defer.reject(error);
+            });
+        }).catch((error) => {
+            defer.reject(error);
+        });
+
+        return defer.promise;
+    }
 };
 
 module.exports = GuestKeystoreCreateStep6Controller;

@@ -151,6 +151,91 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
+    // have to select item before add
+    // if item exists... edit first item value
+    // if not exists... add item/value
+
+    function _experiment(walletId, initialIdAttributes) {
+        return knex.transaction((trx) => {
+
+            sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
+                let wallet = rows[0]
+
+                return new Promise((resolve, reject) => {
+                    sqlLiteService.select('id_attribute_types', '*', { isInitial: 1 }, trx).then((idAttributeTypes) => {
+                        let idAttributesSavePromises = [];
+                        for (let i in idAttributeTypes) {
+                            let idAttributeType = idAttributeTypes[i];
+
+                            sqlLiteService.select('id_attributes', '*', { walletId: walletId, idAttributeType: idAttributeType.key }, trx).then((idAttributes) => {
+                                let idAttribute = null;
+                                if(idAttributes && idAttributes.length === 1){
+                                    idAttribute = idAttributes[0];
+
+                                    idAttributes.items = JSON.parse(idAttribute.items);
+                                    idAttributes.items[0].values[0].staticData.line1 = initialIdAttributes[idAttributeType.key];
+                                    idAttributes.items = JSON.stringify(idAttribute.items);
+
+                                    // TODO update.. item
+                                    idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', item, trx).catch((error)=>{
+                                        console.log(error);
+                                    }));
+                                }else{
+                                    idAttribute = {
+                                        walletId: wallet.id,
+                                        idAttributeType: idAttributeType.key,
+                                        items: [],
+                                        createdAt: new Date().getTime()
+                                    };
+
+                                    idAttribute.items.push({
+                                        "id": helpers.generateId(),
+                                        "name": null,
+                                        "isVerified": 0,
+                                        "order": 0,
+                                        "createdAt": new Date().getTime(),
+                                        "updatedAt": null,
+                                        "values": [{
+                                            "id": helpers.generateId(),
+                                            "staticData": { line1: initialIdAttributes[idAttributeType.key] },
+                                            "documentId": null,
+                                            "order": 0,
+                                            "createdAt": new Date().getTime(),
+                                            "updatedAt": null
+                                        }]
+                                    });
+                                    idAttribute.items = JSON.stringify(idAttribute.items);
+
+                                    // add initial id attributes
+                                    idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', item, trx).catch((error)=>{
+                                        console.log(error);
+                                    }));
+                                }
+                            })
+                        }
+
+                        Promise.all(idAttributesSavePromises).then(() => {
+                            wallet.isSetupFinished = 1;
+
+                            sqlLiteService.update(TABLE_NAME, wallet, { id: wallet.id }, trx).then(() => {
+                                resolve(wallet);
+                            }).catch((error) => {
+                                console.log(error);
+                                reject({ message: "wallets_insert_error", error: error });
+                            })
+                        }).catch((error) => {
+                            console.log(error);
+                            reject({ message: "wallets_insert_error", error: error });
+                        });
+                    }).catch((error) => {
+                        console.log(error);
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+                });
+            }).then(trx.commit).catch(trx.rollback);
+        });
+    }
+
 
 
     function _findActive() {

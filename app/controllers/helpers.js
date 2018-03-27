@@ -61,6 +61,11 @@ module.exports = function (app) {
     controller.getRecordById = _getRecordById;
     controller.getIdAttributeItemValue = _getIdAttributeItemValue;
     controller.generateIdAttributeObject = _generateIdAttributeObject;
+    controller.generateEmptyIdAttributeObject = _generateEmptyIdAttributeObject;
+    controller.generateEmptyIdAttributeItemObject = _generateEmptyIdAttributeItemObject;
+    controller.generateEmptyIdAttributeItemValueObject = _generateEmptyIdAttributeItemValueObject;
+
+
 
 
 
@@ -112,6 +117,42 @@ module.exports = function (app) {
             }]
         })
 
+        return item;
+    }
+
+    function _generateEmptyIdAttributeObject (walletId, idAttributeType) {
+        let item = {
+            walletId: walletId,
+            idAttributeType: idAttributeType,
+            items: [],
+            createdAt: new Date().getTime()
+        };
+        return item;
+    }
+
+    function _generateEmptyIdAttributeItemObject (name) {
+        let item = {
+            id: _generateId(),
+            name: name ? name : null,
+            isVerified: 0,
+            order: 0,
+            createdAt: new Date().getTime(),
+            updatedAt: null,
+            values: []
+        };
+        return item;
+    }
+
+    function _generateEmptyIdAttributeItemValueObject () {
+        let item = {
+            id: _generateId(),
+            staticData: {},
+            documentId: null,
+            documentName: null,
+            order: 0,
+            createdAt: new Date().getTime(),
+            updatedAt: null
+        };
         return item;
     }
 

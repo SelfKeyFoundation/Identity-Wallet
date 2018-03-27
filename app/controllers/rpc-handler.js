@@ -519,16 +519,29 @@ module.exports = function (app) {
     // TODO keep this...
     controller.prototype.importKYCPackage = function (event, actionId, actionName, args) {
 
-        function getFileItems(kycprocess, requirementId) {
+        function getDocs(kycprocess, requirementId, documentFiles) {
             let result = [];
             let documents = kycprocess.escrow.documents;
             for(let i in documents){
                 let document = documents[i];
                 if(document.requirementId == requirementId){
+
+                    let fileItems = [];
+
                     let files = document.doc.files;
                     for(let j in files){
-                        result.push({ name: files[j].fileName,  mimeType: files[j].contentType});
+                        let file = files[j];
+                        let fileItem = { name: files[j].fileName,  mimeType: files[j].contentType};
+
+                        fileItem.buffer = documentFiles[fileItem.name] ? documentFiles[fileItem.name].buffer : null;
+                        fileItem.size = documentFiles[fileItem.name] ? documentFiles[fileItem.name].size : null;
+
+                        fileItems.push(fileItem);
                     }
+
+                    result.push({
+                        fileItems: fileItems
+                    })
                 }
             }
             return result;
@@ -547,10 +560,13 @@ module.exports = function (app) {
         }
 
         function getStaticDataRequirements(kycprocess){
-            let result = [];
+            let result = {};
             kycprocess.requirements.questions.forEach((item) => {
-                if(item.attributeType){
-                    result.push({_id: item._id, attributeType: item.attributeType});
+                if(!result[item.attributeType]){
+                    result[item.attributeType] = {
+                        _id: item._id,
+                        attributeType: item.attributeType
+                    };
                 }
             });
 
@@ -558,10 +574,15 @@ module.exports = function (app) {
         }
 
         function getDocumentRequirements(kycprocess){
-            let result = [];
+            let result = {};
             kycprocess.requirements.uploads.forEach((item) => {
                 if(item.attributeType){
-                    result.push({_id: item._id, attributeType: item.attributeType});
+                    if(!result[item.attributeType]){
+                        result[item.attributeType] = {
+                            _id: item._id,
+                            attributeType: item.attributeType
+                        };
+                    }
                 }
             });
 
@@ -628,8 +649,8 @@ module.exports = function (app) {
                             let requiredStaticData = getStaticDataRequirements(kycprocess);
 
                             for(let i in requiredDocuments){
-                                let fileItems = getFileItems(kycprocess, requiredDocuments[i]._id);
-                                requiredDocuments[i].fileItems = fileItems;
+                                let docs = getDocs(kycprocess, requiredDocuments[i]._id, documentFiles);
+                                requiredDocuments[i].docs = docs;
                             }
 
                             for(let i in requiredStaticData){
@@ -639,39 +660,31 @@ module.exports = function (app) {
                             }
 
                             if(kycprocess.user.firstName){
-                                requiredStaticData.push({
+                                requiredStaticData['first_name'] = {
                                     attributeType: 'first_name',
                                     staticDatas: [kycprocess.user.firstName]
-                                });
+                                };
                             }
 
                             if(kycprocess.user.lastName){
-                                requiredStaticData.push({
+                                requiredStaticData['last_name'] = {
                                     attributeType: 'last_name',
                                     staticDatas: [kycprocess.user.lastName]
-                                });
+                                };
                             }
 
                             if(kycprocess.user.middleName){
-                                requiredStaticData.push({
+                                requiredStaticData['middle_name'] = {
                                     attributeType: 'middle_name',
                                     staticDatas: [kycprocess.user.middleName]
-                                });
+                                };
                             }
 
                             if(kycprocess.user.email){
-                                requiredStaticData.push({
+                                requiredStaticData['email'] = {
                                     attributeType: 'email',
                                     staticDatas: [kycprocess.user.email]
-                                });
-                            }
-
-                            for(let i in requiredDocuments){
-                                for(let j in requiredDocuments[i].fileItems){
-                                    let fileItem = requiredDocuments[i].fileItems[j];
-                                    fileItem.buffer = documentFiles[fileItem.name] ? documentFiles[fileItem.name].buffer : null;
-                                    fileItem.size = documentFiles[fileItem.name] ? documentFiles[fileItem.name].size : null;
-                                }
+                                };
                             }
 
                             // ready - requiredDocuments, requiredStaticData, exportCode
