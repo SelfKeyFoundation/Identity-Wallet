@@ -29,7 +29,6 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
                 $state.go('guest.import.keystore', { type: 'select' });
         }
     }
-
 };
 
 module.exports = GuestImportWalletController;

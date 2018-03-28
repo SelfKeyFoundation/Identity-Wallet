@@ -6,6 +6,7 @@ module.exports = function (app, sqlLiteService) {
     const Controller = function () { };
 
     let knex = sqlLiteService.knex;
+    let helpers = electron.app.helpers;
 
     /**
      *
@@ -21,9 +22,12 @@ module.exports = function (app, sqlLiteService) {
     Controller.selectProfilePictureById = _selectProfilePictureById;
     Controller.updateProfilePicture = _updateProfilePicture;
 
+    Controller.editImportedIdAttributes = _editImportedIdAttributes;
+
     /**
      *
      */
+    // DONE !!!!!
     function _init() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable(TABLE_NAME).then((exists) => {
@@ -50,95 +54,194 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    function _add(data) {
-        return new Promise((resolve, reject) => {
-            data.createdAt = new Date().getTime();
-            knex.transaction((trx) => {
-                return knex(TABLE_NAME).transacting(trx).insert(data).then((insertedIds) => {
-                    let id = insertedIds[0];
-                    data.id = id;
-
-                    let promises = [];
-
-                    // add wallet settings
-                    promises.push(sqlLiteService.insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
-
-                    // add wallet tokens
-                    promises.push(sqlLiteService.insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
-
-                    return new Promise((resolve, reject) => {
-                        Promise.all(promises).then(() => {
-                            resolve(data);
-                        }).catch((error) => {
-                            reject({ message: "wallet_init_error", error: error });
-                        });
-                    });
-                }).then(trx.commit).catch(trx.rollback);
-            }).then((data) => {
-                resolve(data);
-            }).catch((e) => {
-                reject(e);
-            });
-        });
-    }
-
+    // DONE !!!!!
     function _addInitialIdAttributesAndActivate(walletId, initialIdAttributes) {
-        console.log(walletId, initialIdAttributes)
         return knex.transaction((trx) => {
-
             sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
                 let wallet = rows[0]
 
-                let promises = [];
-
                 return new Promise((resolve, reject) => {
-
-                    let idAttributesSavePromises = [];
-                    let idAttributeItemsSavePromises = [];
-                    let idAttributeItemValuesSavePromises = [];
-
                     sqlLiteService.select('id_attribute_types', '*', { isInitial: 1 }, trx).then((idAttributeTypes) => {
+                        let idAttributesSavePromises = [];
                         for (let i in idAttributeTypes) {
                             let idAttributeType = idAttributeTypes[i];
 
+                            let item = {
+                                walletId: wallet.id,
+                                idAttributeType: idAttributeType.key,
+                                items: [],
+                                createdAt: new Date().getTime()
+                            };
+
+                            item.items.push({
+                                "id": helpers.generateId(),
+                                "name": null,
+                                "isVerified": 0,
+                                "order": 0,
+                                "createdAt": new Date().getTime(),
+                                "updatedAt": null,
+                                "values": [{
+                                    "id": helpers.generateId(),
+                                    "staticData": { line1: initialIdAttributes[idAttributeType.key] },
+                                    "documentId": null,
+                                    "order": 0,
+                                    "createdAt": new Date().getTime(),
+                                    "updatedAt": null
+                                }]
+                            })
+
+                            item.items = JSON.stringify(item.items);
+
                             // add initial id attributes
-                            idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', { walletId: wallet.id, idAttributeType: idAttributeType.key, createdAt: new Date().getTime() }, trx).then((idAttribute) => {
-                                idAttributeItemsSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_items', { idAttributeId: idAttribute.id, isVerified: 0, createdAt: new Date().getTime() }).then((idAttributeItem) => {
-                                    let staticData = JSON.stringify({ line1: initialIdAttributes[idAttributeType.key] });
-                                    idAttributeItemValuesSavePromises.push(sqlLiteService.insertIntoTable('id_attribute_item_values', { idAttributeItemId: idAttributeItem.id, staticData: staticData, createdAt: new Date().getTime() }));
-                                }));
+                            idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', item, trx).catch((error)=>{
+                                console.log(error);
                             }));
                         }
 
-                        let finalPromises = [];
-                        finalPromises.push(Promise.all(idAttributesSavePromises));
-                        finalPromises.push(Promise.all(idAttributeItemsSavePromises));
-                        finalPromises.push(Promise.all(idAttributeItemValuesSavePromises));
-
-                        Promise.each(finalPromises, (el) => { return el }).then(() => {
-
+                        Promise.all(idAttributesSavePromises).then(() => {
                             wallet.isSetupFinished = 1;
 
                             sqlLiteService.update(TABLE_NAME, wallet, { id: wallet.id }, trx).then(() => {
                                 resolve(wallet);
                             }).catch((error) => {
-                                console.log("?????????? 11", error);
+                                console.log(error);
                                 reject({ message: "wallets_insert_error", error: error });
-                            })
+                            });
                         }).catch((error) => {
-                            console.log("?????????? 22", error);
+                            console.log(error);
                             reject({ message: "wallets_insert_error", error: error });
                         });
                     }).catch((error) => {
-                        console.log("?????????? 33", error);
+                        console.log(error);
                         reject({ message: "wallets_insert_error", error: error });
                     });
                 });
-            })
-                .then(trx.commit)
-                .catch(trx.rollback);
+            }).then(trx.commit).catch(trx.rollback);
         });
     }
+
+    function _add(data) {
+        data.createdAt = new Date().getTime();
+        return knex.transaction((trx) => {
+            knex(TABLE_NAME).transacting(trx).insert(data).then((insertedIds) => {
+                let id = insertedIds[0];
+                data.id = id;
+
+                let promises = [];
+
+                // add wallet settings
+                promises.push(sqlLiteService.insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
+
+                // add wallet tokens
+                promises.push(sqlLiteService.insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
+
+                return new Promise((resolve, reject) => {
+                    Promise.all(promises).then((t) => {
+                        resolve(data);
+                    }).catch((error) => {
+                        reject({ message: "wallet_init_error", error: error });
+                    });
+                });
+            }).then(trx.commit).catch(trx.rollback);
+        });
+    }
+
+    // DONE
+    function _editImportedIdAttributes(walletId, initialIdAttributes) {
+        return knex.transaction((trx) => {
+
+            sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
+                let wallet = rows[0]
+
+                return new Promise((resolve, reject) => {
+                    sqlLiteService.select('id_attribute_types', '*', { isInitial: 1 }, trx).then((idAttributeTypes) => {
+
+                        let idAttributeTypesSelectPromises = [];
+                        let idAttributesSavePromises = [];
+
+                        let idAttributesToInsert = [];
+
+                        for (let i in idAttributeTypes) {
+                            let idAttributeType = idAttributeTypes[i];
+
+                            idAttributeTypesSelectPromises.push(sqlLiteService.select('id_attributes', '*', { walletId: walletId, idAttributeType: idAttributeType.key }, trx).then((idAttributes)=>{
+                                let idAttribute = null;
+
+                                if(idAttributes && idAttributes.length === 1){
+                                    idAttribute = idAttributes[0];
+                                    idAttribute.items = JSON.parse(idAttribute.items);
+                                    if(initialIdAttributes[idAttributeType.key]){
+                                        idAttribute.items[0].values[0].staticData.line1 = initialIdAttributes[idAttributeType.key];
+                                    }
+                                    idAttribute.items = JSON.stringify(idAttribute.items);
+                                }else{
+                                    idAttribute = {
+                                        walletId: wallet.id,
+                                        idAttributeType: idAttributeType.key,
+                                        items: [],
+                                        createdAt: new Date().getTime()
+                                    };
+
+                                    idAttribute.items.push({
+                                        "id": helpers.generateId(),
+                                        "name": null,
+                                        "isVerified": 0,
+                                        "order": 0,
+                                        "createdAt": new Date().getTime(),
+                                        "updatedAt": null,
+                                        "values": [{
+                                            "id": helpers.generateId(),
+                                            "staticData": { line1: initialIdAttributes[idAttributeType.key] },
+                                            "documentId": null,
+                                            "order": 0,
+                                            "createdAt": new Date().getTime(),
+                                            "updatedAt": null
+                                        }]
+                                    });
+                                    idAttribute.items = JSON.stringify(idAttribute.items);
+                                }
+
+                                return idAttribute;
+                            }));
+                        }
+
+
+                        Promise.all(idAttributeTypesSelectPromises).then((idAttributesList)=>{
+                            let finalPromises = [];
+
+                            for(let i in idAttributesList){
+                                (function(){
+                                    let idAttribute = idAttributesList[i];
+                                    if(idAttribute.id){
+                                        finalPromises.push(sqlLiteService.update('id_attributes', idAttribute, {id: idAttribute.id}, trx));
+                                    }else{
+                                        finalPromises.push(sqlLiteService.insertIntoTable('id_attributes', idAttribute, trx));
+                                    }
+                                })(i)
+                            }
+
+                            Promise.all(finalPromises).then((results)=>{
+                                wallet.isSetupFinished = 1;
+                                sqlLiteService.update('wallets', wallet, { id: wallet.id }, trx).then(() => {
+                                    resolve(wallet);
+                                }).catch((error) => {
+                                    reject({ message: "wallets_insert_error", error: error });
+                                });
+                            }).catch((error)=>{
+                                reject({ message: "wallets_insert_error", error: error });
+                            });
+                        }).catch((error)=>{
+                            reject({ message: "wallets_insert_error", error: error });
+                        })
+                    }).catch((error) => {
+                        reject({ message: "wallets_insert_error", error: error });
+                    });
+                });
+            }).then(trx.commit).catch(trx.rollback);
+        });
+    }
+
+
 
     function _findActive() {
         return new Promise((resolve, reject) => {
@@ -175,7 +278,7 @@ module.exports = function (app, sqlLiteService) {
     }
 
     function _updateProfilePicture (args) {
-       
+
         return knex.transaction((trx) => {
             let selectPromise = knex(TABLE_NAME).transacting(trx).select().where('id', args.id);
             selectPromise.then((rows) => {
@@ -195,7 +298,7 @@ module.exports = function (app, sqlLiteService) {
                 .catch(trx.rollback);
         });
     }
-   
+
     function _selectProfilePictureById (args) {
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).select().where('id', args.id).then((rows) => {

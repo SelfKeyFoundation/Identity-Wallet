@@ -156,6 +156,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-6.html',
                     controller: 'GuestKeystoreCreateStep6Controller'
                 }
+            },
+            params: {
+                type: null
             }
         })
 

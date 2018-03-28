@@ -1,6 +1,6 @@
 'use strict';
 
-function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, CommonService, SqlLiteService, RPCService, mode, idAttributeType, idAttributeItemValue) {
+function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDialog, CommonService, SqlLiteService, RPCService, mode, idAttributeType, idAttribute) {
     'ngInject'
 
     $log.info('AddEditStaticDataDialogController');
@@ -12,7 +12,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     const TELEPHONE_ID_ATTRIBUTES = ['phonenumber_countrycode'];
 
     $scope.currentDate = new Date();
-    $scope.idAttributeItemValue = idAttributeItemValue;
+    $scope.idAttribute = idAttribute;
     $scope.idAttributeType = idAttributeType;
     $scope.countryList = SqlLiteService.getCountries();
     $scope.singleInputType = "text";
@@ -52,7 +52,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     }
 
-   
+
     $scope.save = (event, theForm) => {
         if ($scope.isFormInvalid(theForm)) return;
 
@@ -88,8 +88,12 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
                 file: null
             });
         } else {
-            value.id = idAttributeItemValue.id;
-            $scope.savePromise = SqlLiteService.updateIdAttributeItemValueStaticData(value);
+            $scope.savePromise = RPCService.makeCall('addEditStaticDataToIdAttributeItemValue', {
+                idAttributeId: idAttribute.id,
+                idAttributeItemId: idAttribute.items[0].id,
+                idAttributeItemValueId: idAttribute.items[0].values[0].id,
+                staticData: value.staticData,
+            });
         }
 
         $scope.savePromise.then((data) => {
@@ -106,6 +110,9 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     };
 
     function prepare() {
+        if(mode === 'create') return;
+        
+        let idAttributeItemValue = idAttribute.items[0].values[0];
         if (!idAttributeItemValue || !idAttributeItemValue.staticData) {
             return;
         }
