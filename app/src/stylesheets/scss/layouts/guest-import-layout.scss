@@ -1,0 +1,8 @@
+.access-wallet-options-container {
+  md-radio-button {
+    margin-bottom: 4px !important;
+    &[disabled] {
+      opacity: 0.4 !important;
+    }
+  }
+}

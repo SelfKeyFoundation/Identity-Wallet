@@ -6,9 +6,8 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
     $log.info('GuestKeystoreCreateStep1Controller');
 
     $scope.passwordStrength = 0;
-
     $scope.input = {
-        password: ''
+        password: $stateParams.thePassword || ''
     };
 
     $scope.nextStep = (event, form) => {
@@ -20,7 +19,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
 
     $scope.getPasswordStrengthInfo = () => {
         if(!$scope.input.password || !$scope.input.password.length){
-            return 'Please create a new password.';
+            return '';
         }
 
         if($scope.passwordStrength && $scope.passwordStrength.score){
@@ -29,9 +28,8 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
             return 'Weak';
         }
     }
-
     $timeout(() => {
-        if (!$stateParams.type) {
+        if (!$stateParams.thePassword) {
             $mdDialog.show({
                 controller: 'PasswordWarningDialogController',
                 templateUrl: 'common/dialogs/password-warning.html',

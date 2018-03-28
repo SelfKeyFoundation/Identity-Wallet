@@ -100,6 +100,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-1.html',
                     controller: 'GuestKeystoreCreateStep1Controller'
                 }
+            },
+            params: {
+                thePassword: null // stands for recover reason after clicking 'back' btn from confirm pass 
             }
         })
 
