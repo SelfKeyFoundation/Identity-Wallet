@@ -9,7 +9,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
     $scope.input = {
         password: $stateParams.thePassword || ''
     };
-    
+
     $scope.nextStep = (event, form) => {
         if (!$scope.input.password) {
             $scope.passwordIsRequiredErr = true;
@@ -19,11 +19,11 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
     }
 
     $scope.getPasswordStrengthInfo = () => {
-        if(!$scope.input.password || !$scope.input.password.length){
+        if (!$scope.input.password || !$scope.input.password.length) {
             return '';
         }
 
-        if($scope.passwordStrength && $scope.passwordStrength.score){
+        if ($scope.passwordStrength && $scope.passwordStrength.score) {
             return $scope.passwordStrength.score > 2 ? 'Strong' : 'Weak';
         } else {
             return 'Weak';
