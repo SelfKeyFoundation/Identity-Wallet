@@ -6,6 +6,8 @@
     color: white;
     .back {
         margin: 20px 0 0 20px;
+        height: auto !important;
+
         span {
             font-size: 13px;
         }
@@ -162,6 +164,7 @@
                                     strong {
                                         font-size: 14px;
                                         margin-left: 15px;
+                                        word-break: break-word;
                                     }
                                 }
                             }

@@ -18081,7 +18081,8 @@ md-dialog {
   margin-top: 20px;
   color: white; }
   .exchange-container .back {
-    margin: 20px 0 0 20px; }
+    margin: 20px 0 0 20px;
+    height: auto !important; }
     .exchange-container .back span {
       font-size: 13px; }
   .exchange-container .exchange {
@@ -18191,7 +18192,8 @@ md-dialog {
                 display: inline-block; }
               .exchange-container .exchange .exchange-content .body .section .section-content .columns .column div strong {
                 font-size: 14px;
-                margin-left: 15px; }
+                margin-left: 15px;
+                word-break: break-word; }
           .exchange-container .exchange .exchange-content .body .section .section-content .columns.highlights .column label {
             font-size: 15px; }
           .exchange-container .exchange .exchange-content .body .section .section-content .columns.requirements .column label {

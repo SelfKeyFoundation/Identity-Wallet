@@ -4,7 +4,9 @@ function MemberMarketplaceExchangeItemController($rootScope, $scope, $log, $filt
     'ngInject'
 
     $scope.realData = $state.params.data;
+
     $log.info('MemberMarketplaceExchangeItemController');
+
     // Initial 300 characters will be displayed.
     $scope.strLimit = 300;
     $scope.toggle = function () {
@@ -27,7 +29,7 @@ function MemberMarketplaceExchangeItemController($rootScope, $scope, $log, $filt
     };
 
     $scope.isInKycFields = function (item) {
-        return ($scope.realData ? $scope.realData['KYC Field'] || [] : []).indexOf(item) > -1;
+        return ($scope.realData ? $scope.realData['kyc_template'] || [] : []).indexOf(item) > -1;
     }
 };
 
