@@ -14642,13 +14642,6 @@ md-toolbar {
     padding-bottom: 52px;
     padding-left: 29px;
     padding-top: 30px; }
-    .sk-right-sidenav .sk-right-sidenav__header .title {
-      margin-left: 12px;
-      font-family: OrbitronMedium;
-      font-size: 18px;
-      letter-spacing: 2.8px;
-      text-align: left;
-      color: #ffffff; }
   .sk-right-sidenav .sk-right-sidenav__top-section-container {
     padding-left: 29px;
     padding-top: 44px;
@@ -16669,7 +16662,13 @@ md-dialog.password-warning {
       display: flex;
       font-size: 19px;
       line-height: 1.26;
-      color: #ffffff; }
+      color: #ffffff;
+      position: relative; }
+      .generic-info-container .info-wrapper .info-title .close {
+        color: #797e83;
+        font-size: 30px;
+        right: 15px;
+        position: absolute; }
     .generic-info-container .info-wrapper .info-body {
       height: calc(100% - 68px);
       border-radius: 4px;
