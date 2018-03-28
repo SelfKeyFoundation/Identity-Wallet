@@ -18057,56 +18057,58 @@ md-dialog {
           margin-left: 15px;
           font-size: 20px;
           font-family: ProximaNovaRegular; }
-      .exchange-container .exchange .exchange-content .header .status .icon-container {
-        position: relative;
-        display: inline-block; }
-        .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip {
-          height: auto;
-          width: 195px;
-          border-radius: 4px;
-          background-color: #262f39;
-          border: solid 1px #303c49;
-          visibility: hidden;
-          color: #fff;
-          text-align: center;
-          position: absolute;
-          z-index: 1;
-          left: -42px;
-          top: 20px;
-          margin-left: -60px;
-          opacity: 0;
-          transition: opacity 0.3s;
-          font-family: ProximaNovaRegular;
-          font-size: 14px;
-          font-weight: 600;
-          line-height: 1.36;
-          padding: 16px; }
-          .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip:before {
-            content: "";
+      .exchange-container .exchange .exchange-content .header .status {
+        margin-top: 8px; }
+        .exchange-container .exchange .exchange-content .header .status .icon-container {
+          position: relative;
+          display: inline-block; }
+          .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip {
+            height: auto;
+            width: 195px;
+            border-radius: 4px;
+            background-color: #262f39;
+            border: solid 1px #303c49;
+            visibility: hidden;
+            color: #fff;
+            text-align: center;
             position: absolute;
-            top: -11px;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent #303c49 transparent; }
-          .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip > div > span {
-            margin-left: 3px;
-            cursor: pointer; }
-            .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip > div > span:focus {
-              outline: none !important; }
-        .exchange-container .exchange .exchange-content .header .status .icon-container:hover .tooltip {
-          visibility: visible;
-          opacity: 1; }
-        .exchange-container .exchange .exchange-content .header .status .icon-container md-icon {
-          padding: 0 5px;
-          height: 16px !important;
-          width: 16px !important;
-          min-height: 16px !important;
-          min-width: 16px !important; }
-      .exchange-container .exchange .exchange-content .header .status .text {
-        margin-top: 5px;
-        font-size: 14px;
-        font-family: ProximaNovaRegular; }
+            z-index: 1;
+            left: -42px;
+            top: 20px;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-family: ProximaNovaRegular;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.36;
+            padding: 16px; }
+            .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip:before {
+              content: "";
+              position: absolute;
+              top: -11px;
+              margin-left: -5px;
+              border-width: 5px;
+              border-style: solid;
+              border-color: transparent transparent #303c49 transparent; }
+            .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip > div > span {
+              margin-left: 3px;
+              cursor: pointer; }
+              .exchange-container .exchange .exchange-content .header .status .icon-container .tooltip > div > span:focus {
+                outline: none !important; }
+          .exchange-container .exchange .exchange-content .header .status .icon-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1; }
+          .exchange-container .exchange .exchange-content .header .status .icon-container md-icon {
+            padding: 0 5px;
+            height: 16px !important;
+            width: 16px !important;
+            min-height: 16px !important;
+            min-width: 16px !important; }
+        .exchange-container .exchange .exchange-content .header .status .text {
+          margin-top: 5px;
+          font-size: 14px;
+          font-family: ProximaNovaRegular; }
     .exchange-container .exchange .exchange-content .body .section {
       margin-bottom: 30px;
       border-bottom: 1px solid #303c49; }
