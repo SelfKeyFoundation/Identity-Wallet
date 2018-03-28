@@ -499,25 +499,6 @@ module.exports = function (app) {
         });
     }
 
-
-
-
-
-
-
-
-
-    /**
-     * TODO check usage
-     */
-
-
-
-
-    /**
-     * TODO - check & remove
-     */
-    // TODO keep this...
     controller.prototype.importKYCPackage = function (event, actionId, actionName, args) {
 
         function getDocs(kycprocess, requirementId, documentFiles) {
@@ -589,16 +570,6 @@ module.exports = function (app) {
 
             return result;
         }
-
-        /**
-         * TODO
-         *
-         * args: (walletId)
-         * extract static_data that has id_attribute_type
-         * extract documents that has id_attribute_type
-         * find files of the documents
-         * prepare files (fileName, mimeType, size & etc...)
-         */
 
         try {
             let dialogConfig = {
@@ -719,6 +690,14 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
     }
 
+    controller.prototype.getTokenPrices = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.TokenPrice.findAll().then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
     /**
      * SQL Lite
      */
@@ -738,13 +717,7 @@ module.exports = function (app) {
         });
     }
 
-    controller.prototype.getTokenPrices = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.tokenPrices_selectAll().then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+
 
     controller.prototype.saveWallet = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.Wallet.add(args).then((data) => {

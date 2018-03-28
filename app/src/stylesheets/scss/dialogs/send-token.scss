@@ -13,6 +13,18 @@ md-dialog {
             top: 18px;
             cursor: pointer;
         }
+        .sk-send-ether-box__sent {
+            font-family: ProximaNovaLight;
+            font-size: 40px;
+            font-weight: 300;
+            color: #ffffff;
+            &.send-error-text {
+                font-family: ProximaNovaRegular !important;
+                font-size: 17px !important;
+                font-weight: normal !important;
+                line-height: 1.59 !important;
+            }
+        }
         .send-token-wrapper {
             .sk-send-ether-box__select-token-container {
                 height: 65px;
