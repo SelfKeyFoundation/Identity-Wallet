@@ -14645,6 +14645,7 @@ md-toolbar {
     .sk-right-sidenav .sk-right-sidenav__header .title {
       margin-left: 12px;
       font-family: OrbitronMedium;
+      text-transform: uppercase;
       font-size: 18px;
       letter-spacing: 2.8px;
       text-align: left;

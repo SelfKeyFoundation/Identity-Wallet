@@ -5,9 +5,8 @@
         .exchange-content
             .header
                 .logo
-                    img.logo-image(ng-src="{{realData.logo[0].thumbnails.large.url}}", alt="")
+                    img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
                     span.name(style="font-weight: 600") {{realData.name}} (Exchange)
-<<<<<<< HEAD
                 .status(layout="row")
                     span(style='color: #fff') Your Staking Status
                     .icon-container
@@ -20,12 +19,13 @@
                             span(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-marketplace')") here...
                             </div>
                     span(style="font-style: italic") Coming Soon
+
             .body
                 .section
                     .section-content
                         .descr
                             .textual
-                                .text(ng-bind-html="realData.text + (strLimit <= 300 ? '...' : '')")
+                                .text(ng-bind-html="realData.text + (realData.description.length > 300 ? '...' : '')")
                                 span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
                                     md-button.gray.default(ng-click='showMore()') View All Details
                                 span(ng-if='realData.description.length == strLimit')
@@ -109,17 +109,10 @@
                                         .bullet(ng-class="{'background-green': isInKycFields('fuel_legal_name')}")
                                             img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                         span Full Legal Name
-<<<<<<< HEAD
                                     //.item
                                     //    .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
                                     //        img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                     //    span Email Address
-=======
-                                    .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                        span Email Address
->>>>>>> 87c678d687ee5ecd5311ccfea294e174ec280424
 
                                     .item
                                         .bullet(ng-class="{'background-green': isInKycFields('country_of_residence')}")
