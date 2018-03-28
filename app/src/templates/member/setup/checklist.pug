@@ -5,7 +5,7 @@
         span
             | You can now create your SelfKey ID, the first step to accessing
             | products and services within the SelfKey Marketplace. All identity
-            | attributes and documents are stoerd locally in your device, not in a
+            | attributes and documents are stored locally in your device, not in a
             | server or the blockchain. SelfKey does not have access to your data.
 
     .content-wrapper.sk-box
@@ -27,13 +27,13 @@
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="national_id")
-                        span(ng-if="!national_id") 4
+                        span(ng-if="!national_id") 3
                     span {{ $root.DICTIONARY['national_id'] }}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="id_selfie")
-                        span(ng-if="!id_selfie") 5
+                        span(ng-if="!id_selfie") 4
                     span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="center center")
