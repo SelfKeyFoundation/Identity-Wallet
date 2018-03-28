@@ -26,6 +26,8 @@ function MemberMarketplaceExchangeItemController($rootScope, $scope, $log, $filt
     };
 
     $scope.isInKycFields = function (item) {
+        console.log('kyc-fields', $scope.realData['KYC Field']);
+        console.log('realData', $scope.realData);
         return ($scope.realData ? $scope.realData['KYC Field'] || [] : []).indexOf(item) > -1;
     }
 };
