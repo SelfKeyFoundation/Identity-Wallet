@@ -5,7 +5,7 @@ function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $time
 
     $log.info('MemberMarketplaceMainController', SqlLiteService.getExchangeData());
 
-    SqlLiteService.loadExchangeData().then(()=>{
+    SqlLiteService.loadExchangeData().then(() => {
         $scope.exchangesList = SqlLiteService.getExchangeData();
 
         angular.forEach($scope.exchangesList, (item) => {

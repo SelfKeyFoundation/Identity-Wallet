@@ -63,14 +63,15 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                         title: 'Others',
                         subTitle: '',
                         isOtherItem: true,
-                        valueUSD: 0,
+                        valueUSD: new BigNumber(0),
                         color: colorForOthers
                     };
 
                     otherItems.forEach(otherItem => {
-                        otherAggregated.valueUSD += Number(otherItem.valueUSD);
+                        otherAggregated.valueUSD = new BigNumber(otherAggregated.valueUSD).plus(new BigNumber(otherItem.valueUSD));
                     });
 
+                    otherAggregated.valueUSD = +CommonService.numbersAfterComma(otherAggregated.valueUSD, 2);
                     scope.topItems.push(otherAggregated);
                 }
               

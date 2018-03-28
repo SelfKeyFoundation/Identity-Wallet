@@ -224,7 +224,6 @@ class Wallet {
         if (this.idAttributes[idAttributeTypeKey] && this.idAttributes[idAttributeTypeKey].items && this.idAttributes[idAttributeTypeKey].items.length && this.idAttributes[idAttributeTypeKey].items[0].values && this.idAttributes[idAttributeTypeKey].items[0].values.length) {
             return this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData[line] || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId
         }
-        //return  && (this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId) ? this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData || this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId : null;
     }
 
     /**

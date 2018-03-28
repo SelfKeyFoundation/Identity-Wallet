@@ -25,6 +25,13 @@
             font-size: 19px;
             line-height: 1.26;
             color: #ffffff;
+            position: relative;
+            .close {
+                color: #797e83;
+                font-size: 30px;
+                right: 15px;
+                position: absolute;
+            }
         }
         .info-body {
             height: calc(100% - 68px);

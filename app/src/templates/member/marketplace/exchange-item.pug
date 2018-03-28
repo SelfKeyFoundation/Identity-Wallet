@@ -1,6 +1,6 @@
 .exchange-container
-    md-button.gray.default.back
-        span.primary(ui-sref="member.marketplace.exchange-list")  Back
+    md-button.gray.default.back(ui-sref="member.marketplace.exchange-list")
+        span.primary  Back
     .exchange
         .exchange-content
             .header
@@ -25,7 +25,7 @@
                     .section-content
                         .descr
                             .textual
-                                .text(ng-bind-html="realData.text + (realData.description.length > 300 ? '...' : '')")
+                                .text(ng-bind-html="realData.text + (realData.description.length > strLimit ? '...' : '')")
                                 span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
                                     md-button.gray.default(ng-click='showMore()') View All Details
                                 span(ng-if='realData.description.length == strLimit')
@@ -39,7 +39,7 @@
                                 div
                                     label
                                         span(style="font-weight: 600") Location:
-                                    strong {{realData.Location}}
+                                    strong {{realData.location[0]}}
 
                                 div
                                     label
@@ -49,40 +49,40 @@
                                 div
                                     label
                                         span(style="font-weight: 600") Coin Pairs:
-                                    strong(ng-repeat="i in realData['Coin Pairs']") {{i}}
+                                    strong {{realData.coin_pairs}}
 
                                 div
                                     label
                                         span(style="font-weight: 600") Maker Fee:
-                                    strong {{realData['Maker Fee']}}
+                                    strong {{realData.maker_fee}}
 
                                 div
                                     label
                                         span(style="font-weight: 600") Taker Fee:
-                                    strong {{realData['Taker Fee']}}
+                                    strong {{realData.taker_fee}}
 
 
                                 div
                                     label
-                                        span(style="font-weight: 600") Url:
-                                    strong {{realData['url']}}
+                                        span(style="font-weight: 600") URL:
+                                    strong {{realData.URL}}
 
 
                             .column
                                 div
                                     label
-                                        span(style="font-weight: 600") Fiat Payments:
-                                    strong(ng-repeat="i in realData['Fiat Payments']") {{i}}
+                                        span(style="font-weight: 600") FIAT Payment:
+                                    strong(ng-repeat="i in realData['fiat_payments']") {{i}}
 
                                 div
                                     label
-                                        span(style="font-weight: 600") Fiat Supported:
-                                    strong(ng-repeat="i in realData['Fiat Supported']") {{i}}
+                                        span(style="font-weight: 600") FIAT Supported:
+                                    strong(ng-repeat="i in realData['fiat_supported']") {{i}}
 
                                 div
                                     label
                                         span(style="font-weight: 600") Margin Trading:
-                                    strong {{realData['Margin Trading']}}
+                                    strong {{realData['margin_trading']}}
 
                                 div
                                     label
@@ -91,13 +91,13 @@
 
                                 div
                                     label
-                                        span(style="font-weight: 600") Excluded residents:
-                                    strong(ng-repeat="i in realData['Excluded Residents']") {{i}}
+                                        span(style="font-weight: 600") Excluded Resident:
+                                    strong(ng-repeat="i in realData['excluded_residents']") {{i}}
 
                                 div
                                     label
-                                        span(style="font-weight: 600") Contact Support:
-                                    strong {{realData['Email']}}
+                                        span(style="font-weight: 600") Contact:
+                                    strong {{realData['email']}}
 
                 .section
                     .section-content
@@ -106,32 +106,31 @@
                             .column
                                 .sk-list(style="margin-top: 28px;")
                                     .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('fuel_legal_name')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                        span Full Legal Name
-                                    //.item
-                                    //    .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
-                                    //        img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                    //    span Email Address
+                                        .bullet
+                                            img(src="assets/images/icons/{{isInKycFields('first_name') ? 'tick' : 'warning'}}.svg")
+                                        span First Name
+                                    .item
+                                        .bullet
+                                            img(src="assets/images/icons/{{isInKycFields('last_name') ? 'tick' : 'warning'}}.svg")
+                                        span Last Name
 
                                     .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('country_of_residence')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        .bullet
+                                            img(src="assets/images/icons/{{isInKycFields('country_of_residency') ? 'tick' : 'warning'}}.svg")
                                         span Country Of Residence
 
                             .column
                                 .sk-list(style="margin-top: 28px;")
                                     .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('national_id')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        .bullet
+                                            img(src="assets/images/icons/{{isInKycFields('national_id') ? 'tick' : 'warning'}}.svg")
                                         span National ID
                                         sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
                                     .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('id_selfie')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                        .bullet
+                                            img(src="assets/images/icons/{{isInKycFields('id_selfie') ? 'tick' : 'warning'}}.svg")
                                         span National ID Selfie
                                         sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
-
 
 
 
