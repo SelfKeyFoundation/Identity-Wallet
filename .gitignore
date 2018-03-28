@@ -14,6 +14,7 @@
 app/src/app-bundle.js
 app/src/angular/app.templates.js
 app/src/stylesheets/css/*
+app/src/stylesheets/css/main.css
 
 release
 .vscode

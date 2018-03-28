@@ -18,7 +18,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     $scope.isAuthenticating = false;
 
     $scope.userInput = {
-        selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
+        selectedPublicKey: $scope.publicKeyList.length == 1 ? $scope.publicKeyList[0] : null,
         selectedFilePath: null,
         password: null
     }
