@@ -5,6 +5,8 @@ function GuestKeystoreCreateStep3Controller($rootScope, $scope, $log, $state, $s
 
     $log.info("GuestKeystoreCreateStep3Controller");
 
+    $scope.publicKey = "0x" + $rootScope.wallet.publicKeyHex;
+
     $scope.nextStep = (event) => {
         $state.go('guest.create.step-4');
     }
