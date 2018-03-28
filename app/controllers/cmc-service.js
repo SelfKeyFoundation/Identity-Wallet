@@ -30,21 +30,20 @@ module.exports = function (app) {
                     }
                 });
                 async.each(dataToInsert, function (item, callback) {
-                    electron.app.sqlLiteService.tokenPrices_selectBySymbol(item.symbol).then(rows => {
-                        const currResult = rows && rows.length ? rows[0] : null;
-                        if (currResult) {
-                            if (item.priceUSD !== currResult.priceUSD || item.priceBTC !== currResult.priceBTC || item.priceETH !== currResult.priceETH) {
-                                currResult.priceUSD = item.priceUSD;
-                                currResult.priceBTC = item.priceBTC;
-                                currResult.priceETH = item.priceETH;
-                                electron.app.sqlLiteService.tokenPrices_update(currResult).then(updateData => {
+                    electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
+                        if (symbol) {
+                            if (item.priceUSD !== symbol.priceUSD || item.priceBTC !== symbol.priceBTC || item.priceETH !== symbol.priceETH) {
+                                symbol.priceUSD = item.priceUSD;
+                                symbol.priceBTC = item.priceBTC;
+                                symbol.priceETH = item.priceETH;
+                                electron.app.sqlLiteService.TokenPrice.edit(symbol).then(updateData => {
                                     callback();
                                 }).catch(err => {
                                     callback();
                                 });
                             }
                         } else {
-                            electron.app.sqlLiteService.tokenPrices_insert(item).then(insertData => {
+                            electron.app.sqlLiteService.TokenPrice.add(item).then(insertData => {
                                 callback();
                             }).catch(err => {
                                 callback();
@@ -66,10 +65,6 @@ module.exports = function (app) {
 
     controller.prototype.startUpdateData = () => {
         setTimeout(loadCmcData, 1000);
-    }
-
-    controller.prototype.getIcon = (symbol) => {
-
     }
 
     return controller;

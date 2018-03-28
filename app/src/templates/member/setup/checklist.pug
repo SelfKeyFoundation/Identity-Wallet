@@ -26,12 +26,14 @@
 
                 .item
                     .bullet
-                        span 4
+                        img(src='assets/images/icons/tick.svg', ng-if="national_id")
+                        span(ng-if="!national_id") 3
                     span {{ $root.DICTIONARY['national_id'] }}
 
                 .item
                     .bullet
-                        span 5
+                        img(src='assets/images/icons/tick.svg', ng-if="id_selfie")
+                        span(ng-if="!id_selfie") 4
                     span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="center center")

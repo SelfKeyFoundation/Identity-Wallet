@@ -184,7 +184,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
-    $rootScope.openAddEditDocumentDialog = (event, mode, idAttributeType, idAttributeItemValue) => {
+    $rootScope.openAddEditDocumentDialog = (event, mode, idAttributeType, idAttribute) => {
         return $mdDialog.show({
             controller: 'AddEditDocumentDialogController',
             templateUrl: 'common/dialogs/id-attributes/add-edit-document.html',
@@ -195,12 +195,12 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             locals: {
                 mode: mode,
                 idAttributeType: idAttributeType,
-                idAttributeItemValue: idAttributeItemValue
+                idAttribute: idAttribute
             }
         });
     };
 
-    $rootScope.openAddEditStaticDataDialog = (event, mode, itAttributeType, idAttributeItemValue) => {
+    $rootScope.openAddEditStaticDataDialog = (event, mode, itAttributeType, idAttribute) => {
         return $mdDialog.show({
             controller: 'AddEditStaticDataDialogController',
             templateUrl: 'common/dialogs/id-attributes/add-edit-static-data.html',
@@ -211,7 +211,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             locals: {
                 mode: mode,
                 idAttributeType: itAttributeType,
-                idAttributeItemValue: idAttributeItemValue
+                idAttribute: idAttribute
             }
         });
     };
@@ -243,7 +243,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true
         });
     };
- 
+
 }
 
 module.exports = AppRun;
