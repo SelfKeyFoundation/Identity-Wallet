@@ -22,6 +22,8 @@ module.exports = function (app, sqlLiteService) {
     Controller.selectProfilePictureById = _selectProfilePictureById;
     Controller.updateProfilePicture = _updateProfilePicture;
 
+    Controller.editImportedIdAttributes = _editImportedIdAttributes;
+
     /**
      *
      */
@@ -55,7 +57,6 @@ module.exports = function (app, sqlLiteService) {
     // DONE !!!!!
     function _addInitialIdAttributesAndActivate(walletId, initialIdAttributes) {
         return knex.transaction((trx) => {
-
             sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
                 let wallet = rows[0]
 
@@ -105,7 +106,7 @@ module.exports = function (app, sqlLiteService) {
                             }).catch((error) => {
                                 console.log(error);
                                 reject({ message: "wallets_insert_error", error: error });
-                            })
+                            });
                         }).catch((error) => {
                             console.log(error);
                             reject({ message: "wallets_insert_error", error: error });
@@ -120,42 +121,33 @@ module.exports = function (app, sqlLiteService) {
     }
 
     function _add(data) {
-        return new Promise((resolve, reject) => {
-            data.createdAt = new Date().getTime();
-            knex.transaction((trx) => {
-                return knex(TABLE_NAME).transacting(trx).insert(data).then((insertedIds) => {
-                    let id = insertedIds[0];
-                    data.id = id;
+        data.createdAt = new Date().getTime();
+        return knex.transaction((trx) => {
+            knex(TABLE_NAME).transacting(trx).insert(data).then((insertedIds) => {
+                let id = insertedIds[0];
+                data.id = id;
 
-                    let promises = [];
+                let promises = [];
 
-                    // add wallet settings
-                    promises.push(sqlLiteService.insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
+                // add wallet settings
+                promises.push(sqlLiteService.insertIntoTable('wallet_settings', { walletId: id, sowDesktopNotifications: 1, createdAt: new Date().getTime() }, trx));
 
-                    // add wallet tokens
-                    promises.push(sqlLiteService.insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
+                // add wallet tokens
+                promises.push(sqlLiteService.insertIntoTable('wallet_tokens', { walletId: id, tokenId: 1, createdAt: new Date().getTime() }, trx));
 
-                    return new Promise((resolve, reject) => {
-                        Promise.all(promises).then(() => {
-                            resolve(data);
-                        }).catch((error) => {
-                            reject({ message: "wallet_init_error", error: error });
-                        });
+                return new Promise((resolve, reject) => {
+                    Promise.all(promises).then((t) => {
+                        resolve(data);
+                    }).catch((error) => {
+                        reject({ message: "wallet_init_error", error: error });
                     });
-                }).then(trx.commit).catch(trx.rollback);
-            }).then((data) => {
-                resolve(data);
-            }).catch((e) => {
-                reject(e);
-            });
+                });
+            }).then(trx.commit).catch(trx.rollback);
         });
     }
 
-    // have to select item before add
-    // if item exists... edit first item value
-    // if not exists... add item/value
-
-    function _experiment(walletId, initialIdAttributes) {
+    // DONE
+    function _editImportedIdAttributes(walletId, initialIdAttributes) {
         return knex.transaction((trx) => {
 
             sqlLiteService.select(TABLE_NAME, "*", { id: walletId }, trx).then((rows) => {
@@ -163,23 +155,25 @@ module.exports = function (app, sqlLiteService) {
 
                 return new Promise((resolve, reject) => {
                     sqlLiteService.select('id_attribute_types', '*', { isInitial: 1 }, trx).then((idAttributeTypes) => {
+
+                        let idAttributeTypesSelectPromises = [];
                         let idAttributesSavePromises = [];
+
+                        let idAttributesToInsert = [];
+
                         for (let i in idAttributeTypes) {
                             let idAttributeType = idAttributeTypes[i];
 
-                            sqlLiteService.select('id_attributes', '*', { walletId: walletId, idAttributeType: idAttributeType.key }, trx).then((idAttributes) => {
+                            idAttributeTypesSelectPromises.push(sqlLiteService.select('id_attributes', '*', { walletId: walletId, idAttributeType: idAttributeType.key }, trx).then((idAttributes)=>{
                                 let idAttribute = null;
+
                                 if(idAttributes && idAttributes.length === 1){
                                     idAttribute = idAttributes[0];
-
-                                    idAttributes.items = JSON.parse(idAttribute.items);
-                                    idAttributes.items[0].values[0].staticData.line1 = initialIdAttributes[idAttributeType.key];
-                                    idAttributes.items = JSON.stringify(idAttribute.items);
-
-                                    // TODO update.. item
-                                    idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', item, trx).catch((error)=>{
-                                        console.log(error);
-                                    }));
+                                    idAttribute.items = JSON.parse(idAttribute.items);
+                                    if(initialIdAttributes[idAttributeType.key]){
+                                        idAttribute.items[0].values[0].staticData.line1 = initialIdAttributes[idAttributeType.key];
+                                    }
+                                    idAttribute.items = JSON.stringify(idAttribute.items);
                                 }else{
                                     idAttribute = {
                                         walletId: wallet.id,
@@ -205,30 +199,41 @@ module.exports = function (app, sqlLiteService) {
                                         }]
                                     });
                                     idAttribute.items = JSON.stringify(idAttribute.items);
-
-                                    // add initial id attributes
-                                    idAttributesSavePromises.push(sqlLiteService.insertIntoTable('id_attributes', item, trx).catch((error)=>{
-                                        console.log(error);
-                                    }));
                                 }
-                            })
+
+                                return idAttribute;
+                            }));
                         }
 
-                        Promise.all(idAttributesSavePromises).then(() => {
-                            wallet.isSetupFinished = 1;
 
-                            sqlLiteService.update(TABLE_NAME, wallet, { id: wallet.id }, trx).then(() => {
-                                resolve(wallet);
-                            }).catch((error) => {
-                                console.log(error);
+                        Promise.all(idAttributeTypesSelectPromises).then((idAttributesList)=>{
+                            let finalPromises = [];
+
+                            for(let i in idAttributesList){
+                                (function(){
+                                    let idAttribute = idAttributesList[i];
+                                    if(idAttribute.id){
+                                        finalPromises.push(sqlLiteService.update('id_attributes', idAttribute, {id: idAttribute.id}, trx));
+                                    }else{
+                                        finalPromises.push(sqlLiteService.insertIntoTable('id_attributes', idAttribute, trx));
+                                    }
+                                })(i)
+                            }
+
+                            Promise.all(finalPromises).then((results)=>{
+                                wallet.isSetupFinished = 1;
+                                sqlLiteService.update('wallets', wallet, { id: wallet.id }, trx).then(() => {
+                                    resolve(wallet);
+                                }).catch((error) => {
+                                    reject({ message: "wallets_insert_error", error: error });
+                                });
+                            }).catch((error)=>{
                                 reject({ message: "wallets_insert_error", error: error });
-                            })
-                        }).catch((error) => {
-                            console.log(error);
+                            });
+                        }).catch((error)=>{
                             reject({ message: "wallets_insert_error", error: error });
-                        });
+                        })
                     }).catch((error) => {
-                        console.log(error);
                         reject({ message: "wallets_insert_error", error: error });
                     });
                 });

@@ -240,7 +240,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    // TODO
+    // TODO test
     function _addImportedIdAttributes(walletId, exportCode, requiredDocuments, requiredStaticData) {
         return knex.transaction((trx) => {
             sqlLiteService.select('wallet_settings', "*", { walletId: walletId }, trx).then((rows) => {

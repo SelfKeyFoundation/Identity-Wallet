@@ -134,10 +134,11 @@ module.exports = function (app) {
                 } else {
                     app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
                 }
-            }).catch((error) => {
-                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-            });
-        } catch (e) { }
+            })
+        } catch (e) {
+            console.log(e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, 'incorrect_password', null);
+        }
     }
 
     // refactored
@@ -954,6 +955,17 @@ module.exports = function (app) {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+
+    // TODO .... test
+    controller.prototype.editImportedIdAttributes = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.Wallet.editImportedIdAttributes(args.walletId, args.initialIdAttributesValues).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
 
     /**
      * Exchange data

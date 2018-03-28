@@ -33,6 +33,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     }
 
     $scope.unlock = (event, theForm) => {
+        console.log("######", 11111, theForm, $scope.type);
         if (!theForm.$valid) return;
 
         if (!$scope.userInput.password) {
@@ -55,17 +56,21 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 });
             }
         } else if ($scope.type === 'import') {
+            console.log("##### 1", $rootScope.walletImportData.keystoreFilePath, $scope.userInput.password);
+
             let promise = RPCService.makeCall('importKeystoreFile', {
                 keystoreFilePath: $rootScope.walletImportData.keystoreFilePath,
                 password: $scope.userInput.password
             });
 
             promise.then((data) => {
+                console.log("##### 2", data);
                 $rootScope.walletImportData = data;
                 $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
 
                 $state.go('guest.create.step-3', { walletData: data });
             }).catch((error) => {
+                console.log("##### 3", error);
                 $scope.isAuthenticating = false;
                 CommonService.showToast('error', $rootScope.DICTIONARY[error]);
             });

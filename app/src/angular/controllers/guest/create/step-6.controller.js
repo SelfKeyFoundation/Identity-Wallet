@@ -19,36 +19,20 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
 
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
-
+        $scope.isLoading = true;
         if ($stateParams.type === 'kyc_import') {
-            let promise = fillMissingBasicIds();
+            let promise = editImportedIdAttributes();
             promise.then(() => {
                 $state.go('member.setup.checklist');
-            });
-
-            /*
-            $scope.isLoading = true;
-            let promise = importAndUnlockExistingWallet()
-            promise.then(() => {
-                $rootScope.walletImportData = null;
-                $state.go('member.setup.checklist');
-            }).catch((error) => {
-                if (error.code && error.code == "SQLITE_CONSTRAINT") {
-                    CommonService.showToast('error', 'That Wallet already imported');
-                } else {
-                    CommonService.showToast('error', 'error');
-                }
+            }).catch(()=>{
                 $scope.isLoading = false;
             });
-            */
         } else {
-
             let promise = createInitialIdAttributesAndActivateWallet();
-
             promise.then((data) => {
                 $state.go('member.setup.checklist');
             }).catch((error) => {
-                console.log(">>>>>>>", error);
+                $scope.isLoading = false;
             });
         }
     }
@@ -112,10 +96,10 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
 
     // .......
 
-    function fillMissingBasicIds () {
+    function editImportedIdAttributes () {
         let defer = $q.defer();
 
-        let promise = RPCService.makeCall('fillMissingBasicIds', {
+        let promise = RPCService.makeCall('editImportedIdAttributes', {
             walletId: $rootScope.wallet.id,
             initialIdAttributesValues: $scope.input
         });
