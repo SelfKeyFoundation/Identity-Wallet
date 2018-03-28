@@ -112,7 +112,11 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
                     ],
                     maxFileSize: 50 * 1000 * 1000
                 });
+
                 fileSelect.then((selectedFile) => {
+                    if (!selectedFile) {
+                        return;
+                    }
                     let profilePicture = selectedFile.buffer.toString('base64');
                     updateWalletprofilePicture(profilePicture);
                 }).catch((error) => {
