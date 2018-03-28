@@ -2,6 +2,7 @@
 
 function MemberMarketplaceExchangeItemController($rootScope, $scope, $log, $filter, $state, $sce, $timeout, $mdDialog, $mdPanel, SqlLiteService, CommonService, RPCService) {
     'ngInject'
+
     $scope.realData = $state.params.data;
     $log.info('MemberMarketplaceExchangeItemController');
     // Initial 300 characters will be displayed.
