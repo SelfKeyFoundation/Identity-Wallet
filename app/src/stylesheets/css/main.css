@@ -190,6 +190,9 @@ h2 {
 .cursor-pointer {
   cursor: pointer !important; }
 
+.outline-none {
+  outline: none !important; }
+
 /**
  *
  */
@@ -16181,6 +16184,8 @@ md-dialog.terms {
           letter-spacing: normal;
           text-align: center;
           color: #ffffff; }
+    md-dialog.terms .main .need-to-accept-terms-text {
+      margin-left: 16px; }
     md-dialog.terms .main .content {
       position: relative;
       padding: 30px; }

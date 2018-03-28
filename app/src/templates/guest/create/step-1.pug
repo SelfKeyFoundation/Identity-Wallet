@@ -1,17 +1,16 @@
 .wallet-create-step-1(layout-fill, layout="column", layout-align="center center")
 
     sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
-    .description BLOCKCHAIN IDENTITY WALLET
+    .title SELFKEY
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Create A Password For Your New Wallet (Keystore File)
+            span.none-select-text Create A Password
         form.content(name="passwordForm", layout="column")
             .title
                 | You must remember this password to unlock the wallet.
                 | There is no way it can be restored or reset,
-                | and Selfkey cannot help you if the password is lost.
+                | and SelfKey cannot help you if this password is lost.
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
                 label Password

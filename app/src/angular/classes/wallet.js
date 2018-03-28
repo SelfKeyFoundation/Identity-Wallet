@@ -30,6 +30,7 @@ class Wallet {
 
         this.publicKey = publicKey;
         this.publicKeyHex = publicKey ? publicKey.toString('hex') : null;
+        this.publicKeyHexWith0x = '0x' + this.publicKeyHex; 
 
         this.balanceWei = 0;
         this.balanceEth = 0;
