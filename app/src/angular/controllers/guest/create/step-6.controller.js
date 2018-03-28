@@ -24,7 +24,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
             let promise = editImportedIdAttributes();
             promise.then(() => {
                 $state.go('member.setup.checklist');
-            }).catch(()=>{
+            }).catch(() => {
                 $scope.isLoading = false;
             });
         } else {
@@ -72,17 +72,17 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         return defer.promise;
     }
 
-    function loadIdAttributes () {
+    function loadIdAttributes() {
         let idAttributes = $rootScope.wallet.getIdAttributes();
 
-        for(let i in $scope.input){
+        for (let i in $scope.input) {
             $scope.input[i] = getIdAttribute(idAttributes, i);
         }
     }
 
-    function getIdAttribute (idAttributes, type) {
-        if(idAttributes[type] && idAttributes[type].items && idAttributes[type].items.length && idAttributes[type].items[0].values && idAttributes[type].items[0].values.length){
-            if(idAttributes[type].items[0].values[0].staticData.line1){
+    function getIdAttribute(idAttributes, type) {
+        if (idAttributes[type] && idAttributes[type].items && idAttributes[type].items.length && idAttributes[type].items[0].values && idAttributes[type].items[0].values.length) {
+            if (idAttributes[type].items[0].values[0].staticData.line1) {
                 return idAttributes[type].items[0].values[0].staticData.line1
             } else if (idAttributes[type].items[0].values[0].documentName) {
                 idAttributes[type].items[0].values[0].documentName
@@ -92,11 +92,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         }
     }
 
-    loadIdAttributes ();
-
-    // .......
-
-    function editImportedIdAttributes () {
+    function editImportedIdAttributes() {
         let defer = $q.defer();
 
         let promise = RPCService.makeCall('editImportedIdAttributes', {
@@ -130,6 +126,8 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
 
         return defer.promise;
     }
+
+    loadIdAttributes();
 };
 
 module.exports = GuestKeystoreCreateStep6Controller;

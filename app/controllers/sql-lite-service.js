@@ -175,6 +175,7 @@ module.exports = function (app) {
     /**
      *
      */
+    // TODO
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
         data.createdAt = new Date().getTime();
         return new Promise((resolve, reject) => {
@@ -203,33 +204,9 @@ module.exports = function (app) {
     }
 
     /**
-     * wallets
-     */
-    controller.prototype.wallets_update = (data) => {
-        return updateById('wallets', data);
-    }
-
-    controller.prototype.wallets_selectById = (id) => {
-        return getById('wallets', id);
-    }
-
-    controller.prototype.wallets_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('wallets').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve(null);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
-    /**
      * wallet_tokens
      */
+    // TODO
     controller.prototype.walletTokens_selectByWalletId = (walletId) => {
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
@@ -246,6 +223,7 @@ module.exports = function (app) {
         });
     }
 
+    // TODO
     function walletTokens_selectById(id) {
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
@@ -263,8 +241,10 @@ module.exports = function (app) {
         });
     }
 
+    // TODO
     controller.prototype.walletTokens_selectById = walletTokens_selectById;
 
+    // TODO
     controller.prototype.wallet_tokens_insert = (data) => {
         data.recordState = 1;
 
@@ -281,6 +261,7 @@ module.exports = function (app) {
         });
     }
 
+    // TODO
     controller.prototype.wallet_tokens_update = (data) => {
         return updateById('wallet_tokens', data);
     }
