@@ -11,7 +11,7 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
         {
             logo: 'selfkey',
             textPart1: 'Inside the SelfKey Identity Wallet you can manage, own, and fully control various parts of your SelfKey ID. It is also a direct interface to the Ethereum blockchain, allowing you to manage all of your ETH and ERC-20 token assets inside the wallet.',
-            textPart2: 'After building out your SelfKey ID, you can unlock products and services inside the SelfKey Marketplace by staking KEY tokens. Think of staking like a refundable deposit. Staking is required to prevent spam and to ensure all parties interact in a professional and respectable manner. To learn more about this, click here.\n',
+            textPart2: 'After building out your SelfKey ID, you can unlock products and services inside the SelfKey Marketplace by staking KEY tokens. Think of staking like a refundable deposit. Staking is required to prevent spam and to ensure all parties interact in a professional and respectable manner. To learn more about this, click\n',
             header: 'About The SelfKey Identity Wallet',
             button1: 'cancel',
             button2: 'continue',
