@@ -27,7 +27,12 @@ md-dialog {
         align-items: center;
         justify-content: center;
 
-
+        .fixed-tooltip {
+            width: 290px !important;
+            margin-left: 0px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
         .wave {
             position: relative;
             margin-left: 13px;
