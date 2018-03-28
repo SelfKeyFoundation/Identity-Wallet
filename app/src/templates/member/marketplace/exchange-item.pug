@@ -7,17 +7,19 @@
                 .logo
                     img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
                     span.name(style="font-weight: 600") {{realData.name}} (Exchange)
-                .status(layout="row" layout-align="center center")
-                    md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
-                        md-tooltip.sk-tooltip(md-direction="bottom")
-                            | What is Staking?
-                            |    Staking acts similarly like
-                            | a refundable security deposit.
-                            | to learn more,click here..
-                        span : {{realData.name}}
-                    .text(style="margin-left: 5px; margin-bottom: 5px") Staking Status:  
-                        span(style="font-style: italic") Comming Soon
-                        
+                .status(layout="row")
+                    span(style='color: #fff') Your Staking Status
+                    .icon-container
+                        md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
+                        .tooltip
+                            |  <div style="text-align:left;"> What is Staking? <br />
+                            |  Staking acts similarly like <br />
+                            |  a refundable security deposit. <br />
+                            |  to learn more,click
+                            span(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-marketplace')") here...
+                            </div>
+                    span(style="font-style: italic") Coming Soon
+
             .body
                 .section
                     .section-content
@@ -107,11 +109,11 @@
                                         .bullet(ng-class="{'background-green': isInKycFields('fuel_legal_name')}")
                                             img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
                                         span Full Legal Name
-                                    .item
-                                        .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
-                                            img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                        span Email Address
-                                    
+                                    //.item
+                                    //    .bullet(ng-class="{'background-green': isInKycFields('email_address')}")
+                                    //        img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
+                                    //    span Email Address
+
                                     .item
                                         .bullet(ng-class="{'background-green': isInKycFields('country_of_residence')}")
                                             img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
@@ -127,7 +129,7 @@
                                     .item
                                         .bullet(ng-class="{'background-green': isInKycFields('id_selfie')}")
                                             img(src="assets/images/icons/{{realData.name ? 'tick' : 'warning'}}.svg")
-                                        span Selfie w/ID Document
+                                        span National ID Selfie
                                         sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
 
 
