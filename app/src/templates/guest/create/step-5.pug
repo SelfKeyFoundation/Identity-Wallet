@@ -2,8 +2,8 @@
     .header-wrapper(layout="column", layout-align="start start")
         .title Setup Your SelfKey Identity Wallet
         .description
-            | Create a new SelfKey ID to start building your identity profile. If you were previously 
-            | whitelisted for the KEY token sale, simply import the zip file we provided as your SelfKey 
+            | Create a new SelfKey ID to start building your identity profile. If you were previously
+            | whitelisted for the KEY token sale, simply import the zip file we provided as your SelfKey
             | ID. This data is stored locally on your device, not in a server or on the blockchain.
 
     .content-wrapper.sk-box(layout="column", layout-align="center center")
@@ -24,12 +24,5 @@
                 .title I was approved in the SelfKey token sale KYC.
                 .text
                     | If you were whitelisted for the SelfKey token sale, you can download a zip file and import to complete your SelfKey ID.
-                    //- | Please login at
-                    //- span(ng-click="$root.openInBrowser('https://token.selfkey.org/')")
-                    //-     | https://token.selfkey.org
-                    //- |  to download your KYC file.
-                //- .text
-                //-     md-input-container.sk-input-box.no-error-spacer(style="width: 320px;")
-                //-         input(name="kycCode", ng-model="userInput.kycCode", type="text", placeholder="KYC Code")
                 .actions(style="margin-top: 30px;")
                     md-button.md-raised(ng-click="importKycFile($event)") Import KYC File

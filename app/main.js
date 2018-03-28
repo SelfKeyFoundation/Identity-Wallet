@@ -90,6 +90,8 @@ function onReady(app) {
 		log.info('onReady');
 		app.config.userDataPath = electron.app.getPath('userData');
 
+        electron.app.helpers = require('./controllers/helpers')(app);
+
 		const CMCService = require('./controllers/cmc-service')(app);
 		electron.app.cmcService = new CMCService();
 

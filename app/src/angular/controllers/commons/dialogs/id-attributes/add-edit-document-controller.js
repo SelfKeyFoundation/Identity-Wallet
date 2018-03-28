@@ -1,13 +1,13 @@
 'use strict';
 
-function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, RPCService, CommonService, mode, idAttributeType, idAttributeItemValue) {
+function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RPCService, CommonService, mode, idAttributeType, idAttribute) {
     'ngInject'
 
     $log.info('AddEditDocumentDialogController');
     $scope.idAttributeType = idAttributeType;
 
     if (mode === 'update') {
-        $scope.idAttributeItemValue = idAttributeItemValue;
+        $scope.idAttribute = idAttribute;
     }
 
     $scope.selectedFile = null;
@@ -35,7 +35,12 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, Sq
                 CommonService.showToast('error', 'error while saving document');
             });
         } else {
-            SqlLiteService.updateIdAttributeItemValueDocument(idAttributeItemValue, $scope.selectedFile).then(() => {
+            RPCService.makeCall('addEditDocumentToIdAttributeItemValue', {
+                idAttributeId: idAttribute.id,
+                idAttributeItemId: idAttribute.items[0].id,
+                idAttributeItemValueId: idAttribute.items[0].values[0].id,
+                file: $scope.selectedFile
+            }).then(() => {
                 $mdDialog.hide();
             }).catch((error) => {
                 $log.error(error);

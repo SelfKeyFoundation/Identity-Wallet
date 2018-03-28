@@ -81,13 +81,74 @@
                 float: right;
                 margin-top: 69px;
 
-                md-icon {
+                .icon-container {
 
-                    padding: 0 5px;
-                    height: 16px !important;
-                    width: 16px !important;
-                    min-height: 16px !important;
-                    min-width: 16px !important;
+                    position: relative;
+                    display: inline-block;
+
+                    .tooltip {
+
+                        height: auto;
+                        width: 195px;
+                        border-radius: 4px;
+                        background-color: #262f39;
+                        border: solid 1px #303c49;
+                        visibility: hidden;
+                        color: #fff;
+                        text-align: center;
+                        position: absolute;
+                        z-index: 1;
+                        left: -42px;
+                        top: 20px;
+                        margin-left: -60px;
+                        opacity: 0;
+                        transition: opacity 0.3s;
+                        font-family: ProximaNovaRegular;
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 1.36;
+                        padding: 16px;
+
+                        &:before {
+                            content: "";
+                            position: absolute;
+                            top: -11px;
+                            margin-left: -5px;
+                            border-width: 5px;
+                            border-style: solid;
+                            border-color: transparent transparent #303c49 transparent;
+                        }
+
+                        > div {
+
+                            > span {
+                                margin-left: 3px;
+                                cursor: pointer;
+
+                                &:focus {
+                                    outline: none !important;
+                                }
+                            }
+                        }
+
+                    }
+
+                    &:hover {
+
+                        .tooltip {
+                            visibility: visible;
+                            opacity: 1;
+                        }
+                    }
+
+                    md-icon {
+
+                        padding: 0 5px;
+                        height: 16px !important;
+                        width: 16px !important;
+                        min-height: 16px !important;
+                        min-width: 16px !important;
+                    }
                 }
             }
 
@@ -133,7 +194,6 @@
 
                                 max-width: 60px;
                                 vertical-align: middle;
-                                margin-left: 5px;
                             }
 
                         }

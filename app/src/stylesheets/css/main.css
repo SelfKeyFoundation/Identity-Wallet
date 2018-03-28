@@ -16749,6 +16749,10 @@ md-dialog.id-wallet-info {
         text-align: left;
         color: #ffffff;
         padding: 40px; }
+        md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section .text > p > span {
+          cursor: pointer; }
+          md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section .text > p > span:focus {
+            outline: none !important; }
         md-dialog.id-wallet-info .id-wallet-info-wrapper .container .info-section .logo .sk-icon {
           margin: 0 auto; }
       md-dialog.id-wallet-info .id-wallet-info-wrapper .container .buttons-section {
@@ -17941,12 +17945,52 @@ md-dialog {
       font-family: ProximaNovaRegular;
       float: right;
       margin-top: 69px; }
-      .marketplace-exchange-list > .center-container .header-wrapper .status md-icon {
-        padding: 0 5px;
-        height: 16px !important;
-        width: 16px !important;
-        min-height: 16px !important;
-        min-width: 16px !important; }
+      .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container {
+        position: relative;
+        display: inline-block; }
+        .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container .tooltip {
+          height: auto;
+          width: 195px;
+          border-radius: 4px;
+          background-color: #262f39;
+          border: solid 1px #303c49;
+          visibility: hidden;
+          color: #fff;
+          text-align: center;
+          position: absolute;
+          z-index: 1;
+          left: -42px;
+          top: 20px;
+          margin-left: -60px;
+          opacity: 0;
+          transition: opacity 0.3s;
+          font-family: ProximaNovaRegular;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.36;
+          padding: 16px; }
+          .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container .tooltip:before {
+            content: "";
+            position: absolute;
+            top: -11px;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #303c49 transparent; }
+          .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container .tooltip > div > span {
+            margin-left: 3px;
+            cursor: pointer; }
+            .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container .tooltip > div > span:focus {
+              outline: none !important; }
+        .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container:hover .tooltip {
+          visibility: visible;
+          opacity: 1; }
+        .marketplace-exchange-list > .center-container .header-wrapper .status .icon-container md-icon {
+          padding: 0 5px;
+          height: 16px !important;
+          width: 16px !important;
+          min-height: 16px !important;
+          min-width: 16px !important; }
   .marketplace-exchange-list > .center-container .body-wrapper {
     width: 1140px; }
     .marketplace-exchange-list > .center-container .body-wrapper ul {
@@ -17978,8 +18022,7 @@ md-dialog {
               vertical-align: middle; }
             .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-logo img {
               max-width: 60px;
-              vertical-align: middle;
-              margin-left: 5px; }
+              vertical-align: middle; }
           .marketplace-exchange-list > .center-container .body-wrapper ul li .list-title .title-text {
             height: 36px;
             font-family: ProximaNovaRegular;
