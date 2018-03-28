@@ -20,6 +20,7 @@
 @import './components/sk-right-sidenav.scss';
 @import './components/sk-table.scss';
 @import './components/sk-dropdown-menu.scss'; // TODO - change prefix of file to md (actually it is realod of md styles)
+@import './components/sk-field-error-tooltip.scss';
 
 @import './components/md-select.scss';
 @import './components/md-tooltip.scss';
@@ -82,47 +83,6 @@
 @import './views/member/marketplace/exchange-list.scss';
 @import './views/member/marketplace/exchange-item.scss';
 
-
-.sk-error-tooltip  {
-    position: absolute;
-    $background: #d0021b;
-    background-color: $background;
-
-    font-family: ProximaNovaRegular;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.5;
-    letter-spacing: 0.3px;
-    &.right {
-        right: 0;
-    }
-    
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
-    color: #ffffff !important;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-
-    > span {
-        padding: 12px 12px;
-    }
-    &:after {
-        content:'';
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        width: 0;
-        height: 0;
-        border-top: solid 10px $background;
-        border-left: solid 10px transparent;
-        border-right: solid 10px transparent;
-    }
-}
 
 .fixed-tooltip-container {
     position: relative;
