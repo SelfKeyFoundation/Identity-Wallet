@@ -9,10 +9,11 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
     $scope.input = {
         password: $stateParams.thePassword || ''
     };
-
+    
     $scope.nextStep = (event, form) => {
         if (!$scope.input.password) {
-            return CommonService.showToast('warning', 'Password is required.');
+            $scope.passwordIsRequiredErr = true;
+            return;
         }
         $state.go('guest.create.step-2', { thePassword: $scope.input.password });
     }

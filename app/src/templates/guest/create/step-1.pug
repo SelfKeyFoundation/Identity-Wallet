@@ -12,10 +12,11 @@
                 | There is no way it can be restored or reset,
                 | and SelfKey cannot help you if this password is lost.
 
-            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
+            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
                 label Password
                 input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
-
+                .sk-field-error-tooltip.center.default-top(ng-if="!input.password && passwordIsRequiredErr")
+                    span Password is required.
             .password-strength-container
                 .blocks-container
                     .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
