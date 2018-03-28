@@ -11,7 +11,7 @@
     .content-wrapper.sk-box
         .content(layout="column")
             .sk-text.header ID Wallet Checklist
-            .sk-text.sub-header If you’re not ready, you can finish this later.
+            .sk-text.sub-header If you’re not ready, you can do this later.
 
             .sk-list(style="margin-top: 28px;")
                 .item
@@ -26,12 +26,14 @@
 
                 .item
                     .bullet
-                        span 3
+                        img(src='assets/images/icons/tick.svg', ng-if="national_id")
+                        span(ng-if="!national_id") 3
                     span {{ $root.DICTIONARY['national_id'] }}
 
                 .item
                     .bullet
-                        span 4
+                        img(src='assets/images/icons/tick.svg', ng-if="id_selfie")
+                        span(ng-if="!id_selfie") 4
                     span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="center center")
