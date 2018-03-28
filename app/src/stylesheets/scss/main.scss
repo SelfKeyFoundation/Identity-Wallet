@@ -123,6 +123,65 @@
     }
 }
 
+.fixed-tooltip-container {
+    position: relative;
+    
+    &:hover {
+        .fixed-tooltip {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    }
+}
+
+.fixed-tooltip {
+
+    height: auto;
+    width: 195px;
+    border-radius: 4px;
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    visibility: hidden;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    left: -42px;
+    top: 20px;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: ProximaNovaRegular;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.36;
+    padding: 16px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: -11px;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent #303c49 transparent;
+    }
+
+    > div {
+
+        > span {
+            margin-left: 3px;
+            cursor: pointer;
+
+            &:focus {
+                outline: none !important;
+            }
+        }
+    }
+
+}
+
+
 .bg-gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, rgb(213, 234, 241)), color-stop(1, rgb(223, 227, 226)));
     background: -moz-linear-gradient(top, #4a0c6b 0%, #669966 100%); /* FF3.6+ */
