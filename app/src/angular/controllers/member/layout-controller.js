@@ -35,7 +35,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
         $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
             $timeout(() => {
                 if (symbol.toLowerCase() == 'eth') {
-                    EtherScanService.syncEthTransactionsHistory();
+                    $rootScope.wallet.syncEthTransactionsHistory();
                 } else {
                     Web3Service.syncTokensTransactionHistory(symbol);
 
