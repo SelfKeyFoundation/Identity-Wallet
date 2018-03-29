@@ -32,6 +32,27 @@
 
         md-input-container {
             margin: 14px 0;
+            .sk-error-tooltip {
+                top: -35px;
+                left: 80px;
+                z-index: 1;
+                position: absolute;
+                span {
+                    color: #ffffff;
+                    padding:12px 12px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 1.5;
+                    letter-spacing: 0.3px;
+                    text-align: left;
+                    font-family: ProximaNovaRegular;
+                }
+            }
+            &.md-input-invalid {
+                .sk-error-tooltip{
+                    overflow: visible!important;
+                }
+            }
         }
     }
 }

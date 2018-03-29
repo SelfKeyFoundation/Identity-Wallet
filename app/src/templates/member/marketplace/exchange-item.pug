@@ -25,7 +25,7 @@
                     .section-content
                         .descr
                             .textual
-                                .text(ng-bind-html="realData.text + (realData.description.length > 300 ? '...' : '')")
+                                .text(ng-bind-html="realData.text + (realData.description.length > strLimit ? '...' : '')")
                                 span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
                                     md-button.gray.default(ng-click='showMore()') View All Details
                                 span(ng-if='realData.description.length == strLimit')
