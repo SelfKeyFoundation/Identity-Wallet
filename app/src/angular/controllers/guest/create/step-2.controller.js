@@ -25,7 +25,7 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
                 CommonService.showToast('error', 'Error creating wallet');
             });
         } else {
-            CommonService.showToast('error', 'Wrong confirmation password.');
+            $scope.isWrongConfirmationPassword = true;
         }
     }
 

@@ -29,7 +29,9 @@
 
         .content {
             padding: 24px 36px;
-
+            .title {
+                margin-bottom: 33px !important;
+            }
             .password-strength-container {
                 height: 11px;
                 width: 100%;

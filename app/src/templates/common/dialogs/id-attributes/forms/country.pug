@@ -1,6 +1,6 @@
 .content
     md-input-container.sk-input-box.sk-input-non-floating
-        label Nationality
+        label {{ $root.DICTIONARY[idAttributeType] }}
         md-select.sk-select(name="nationality", ng-model="inputs.line1", ng-required="true")
             md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
 

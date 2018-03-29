@@ -18,7 +18,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     $scope.isAuthenticating = false;
 
     $scope.userInput = {
-        selectedPublicKey: $scope.publicKeyList.length > 0 ? $scope.publicKeyList[0] : null,
+        selectedPublicKey: $scope.publicKeyList.length == 1 ? $scope.publicKeyList[0] : null,
         selectedFilePath: null,
         password: null
     }
@@ -41,8 +41,13 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
         $scope.isAuthenticating = true;
         if ($scope.type === 'select') {
-            if (wallets[$scope.userInput.selectedPublicKey]) {
-                let promise = unlockExistingWallet($scope.userInput.selectedPublicKey, $scope.userInput.password);
+            let selectedPublicKey = $scope.userInput.selectedPublicKey;
+            if (!selectedPublicKey) {
+                $scope.isAuthenticating = false;
+                return;
+            }
+            if (wallets[selectedPublicKey]) {
+                let promise = unlockExistingWallet(selectedPublicKey, $scope.userInput.password);
                 promise.then((data) => {
                     if (data.isSetupFinished) {
                         $state.go('member.dashboard.main');

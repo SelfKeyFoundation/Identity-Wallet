@@ -12,17 +12,18 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
 
     $scope.nextStep = (event, form) => {
         if (!$scope.input.password) {
-            return CommonService.showToast('warning', 'Password is required.');
+            $scope.passwordIsRequiredErr = true;
+            return;
         }
         $state.go('guest.create.step-2', { thePassword: $scope.input.password });
     }
 
     $scope.getPasswordStrengthInfo = () => {
-        if(!$scope.input.password || !$scope.input.password.length){
+        if (!$scope.input.password || !$scope.input.password.length) {
             return '';
         }
 
-        if($scope.passwordStrength && $scope.passwordStrength.score){
+        if ($scope.passwordStrength && $scope.passwordStrength.score) {
             return $scope.passwordStrength.score > 2 ? 'Strong' : 'Weak';
         } else {
             return 'Weak';
