@@ -30,12 +30,12 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
     }
 
     $scope.previousStep = (event) => {
-        $state.go('guest.create.step-1');
+        $state.go('guest.create.step-1', { thePassword: $stateParams.thePassword });
     }
 
     $scope.getPasswordStrengthInfo = () => {
         if(!$scope.input.password || !$scope.input.password.length){
-            return 'Please create a new password.';
+            return '';
         }
 
         if($scope.passwordStrength && $scope.passwordStrength.score){
@@ -53,29 +53,6 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
         promise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
             defer.resolve();
-
-            /*
-            SqlLiteService.loadWallets().then(() => {
-                let promises = [];
-                promises.push($rootScope.wallet.loadIdAttributes());
-                promises.push($rootScope.wallet.loadTokens());
-
-                $q.all(promises).then((responses) => {
-                    SqlLiteService.registerActionLog("Created Attribute: First Name", "Created");
-                    SqlLiteService.registerActionLog("Created Attribute: Last Name", "Created");
-                    if($stateParams.basicInfo.middle_name){
-                        SqlLiteService.registerActionLog("Created Attribute: Middle Name", "Created");
-                    }
-                    SqlLiteService.registerActionLog("Created Attribute: Country Of Residence", "Created");
-                    defer.resolve();
-                }).catch((error) => {
-                    defer.reject(error);
-                });
-            }).catch((error) => {
-                defer.reject(error);
-            });
-            */
-
         }).catch((error) => {
             defer.reject(error);
         });

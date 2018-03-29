@@ -1,36 +1,39 @@
 .keystore-layout-wrapper(layout-fill, layout="column", layout-align="center center")
     img(src="assets/images/icons/important.svg", alt="")
 
-    #message-container(layout="column", layout-align="center center" style="width: 780px; height: 48px;")
+    #message-container(layout="column", layout-align="center center" style="width: 880px; height: 48px;")
 
-    .sk-box.shadowed(style="width: 780px;")
+    .sk-box.shadowed(style="width: 880px;")
         .header(style="position: relative;")
             span Use An Existing Wallet
             sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)", style="cursor: pointer; position: absolute; right: -18px; top: -18px;")
-        .content(layout="column", style="padding: 20px 40px;")
+        .content(layout="column", style="padding: 20px 35px;")
             .description-wrapper
+                p(style="font-weight: 600; opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | Do you have an existing SelfKey Identity Wallet?
                 p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | Do you have an existing Selfkey Identity Wallet?
-                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | If you have previously created a wallet in our application,
-                    | please select the ETH address from below and unlock the Keystore
-                    | file with the password you have set during creation.
-                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | Do you have another Keystore file (UTC)?
+                    | If you already have a SelfKey Identity Wallet created,
+                    | please select the ETH address from below and unlock it with your password.
+                    | As the wallet is stored locally on your device,
+                    | SelfKey does not have access and therefore cannot help you if the password is lost.
+                p(style="font-weight: 600; opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
+                    | Do you have another ETH wallet?
 
                 p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | If you have an existing ETH wallet via Keystore File,
-                    | you can import the file to integrate with the Selfkey Identity Wallet
+                    | If you have an existing ETH wallet to import,
+                    | you can do so via Keystore File by selecting the file on your computer and unlocking it here.
+                    | For security purposes, the SelfKey Identity Wallet will require you to unlock it with
+                    | your password every time you close and reopen the application.
 
             .content-wrapper(layout="row", style="margin-top: 50px;")
-                .left(style="width: 340px;")
-                    span(style="font-family: ProximaNovaSemibold; font-size: 18px; font-weight: 600; line-height: 1.89; color: #ffffff;") How would you like to access your wallet?
-                    div(style="margin-top: 30px; width: 200px;")
+                .left.access-wallet-options-container(style="width: 400px; padding-top: 18px;")
+                    span(style="font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.89; color: #ffffff;") How would you like to access your existing wallet?
+                    div(style="margin-top: 30px; width: 315px;")
                         md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
-                            md-radio-button(md-no-ink, value="keystoreImport") Keystore / Import
-                            md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Keystore / Select
-                            md-radio-button(md-no-ink, value="ledger") Ledger (Coming Soon)
-                            md-radio-button(md-no-ink, value="trezor") Trezor (Coming Soon)
+                            md-radio-button(md-no-ink, value="keystoreImport") Import a new Keystore File (UTC)
+                            md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Select an existing Keystore File (UTC)
+                            md-radio-button(md-no-ink, value="ledger", ng-disabled="true") Ledger (Coming Soon)
+                            md-radio-button(md-no-ink, value="trezor", ng-disabled="true") TREZOR (Coming Soon)
                             md-radio-button(md-no-ink, value="privateKey") Private Key
 
                 .right(flex, ui-view="main")

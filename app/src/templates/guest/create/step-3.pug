@@ -8,7 +8,7 @@
 
             md-input-container.sk-input-box.no-error-spacer
                 label Your Public Key
-                input(name="publicKey", ng-model="$root.wallet.publicKeyHex", type="text", placeholder="Your Public Key", disabled)
+                input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
 
             .title
                 | Please download the Keystore File to save a backup of your wallet.
@@ -16,7 +16,7 @@
                 | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
 
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
-                span.primary Backup your keystore file (UTC / JSON)
+                span.primary DOWNLOAD KEYSTORE FILE (UTC/JSON)
 
             .title
                 p

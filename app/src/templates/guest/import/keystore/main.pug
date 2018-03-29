@@ -8,7 +8,7 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
         span {{ userInput.selectedFilePath ? 'Keystore is selected' : 'Select Keystore File' }}
 
     md-input-container.sk-input-box.no-error-spacer(style="width: 100%;")
-        label Decrypt wallet using password
+        label Enter Your Password To Decryp
         input(type="password", name="password", ng-model="userInput.password", ng-required="true")
         div(ng-messages="theForm.password.$error")
             div(ng-message="theForm.password.$error.required") {{ theForm.password.$error.badKeystore ? 'Incorrect keystore or password' : 'Required!' }}

@@ -14,9 +14,9 @@ md-dialog(aira-lable="Add Custom Tokens")
                 form.content.input-form(layout="column",name="theForm")
                     .sk-input-container
                         div(layout="row")
-                            label Address
-                            button.sk-icon-button
-                                md-tooltip.sk-tooltip(md-direction="top")
+                            label Token Address
+                            button.sk-icon-button.fixed-tooltip-container
+                                .fixed-tooltip
                                         | <div style="text-align:center;"> Every ERC-20 token has its own smart contract <br />
                                         | address. To learn more, <span style="color: #0dc7dd !important;"> click here. </span> </div>
                                 sk-icon(icon="info-italic", size-class="icon-size-15x15")
