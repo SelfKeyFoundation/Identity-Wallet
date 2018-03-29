@@ -15,7 +15,6 @@ function MemberMarketplaceExchangeItemController($rootScope, $scope, $log, $filt
     };
     $scope.toggle();
 
-
     // Event trigger on click of the Show more button.
     $scope.showMore = function () {
         $scope.strLimit = $scope.realData.description.length;
