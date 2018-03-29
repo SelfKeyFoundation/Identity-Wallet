@@ -27,9 +27,11 @@
                             .textual
                                 .text(ng-bind-html="realData.text + (realData.description.length > strLimit ? '...' : '')")
                                 span(ng-if='realData.description.length > 300 && realData.description.length != strLimit')
-                                    md-button.gray.default(ng-click='showMore()') View All Details
+                                    md-button(ng-click='showMore()')
+                                        span View All Details
                                 span(ng-if='realData.description.length == strLimit')
-                                    md-button.gray.default(ng-click='showLess()') View Less Details
+                                    md-button(ng-click='showLess()')
+                                        span View Less Details
                             md-button.gray.status.default Coming Soon
                 .section
                     .section-content
@@ -125,12 +127,10 @@
                                         .bullet
                                             img(src="assets/images/icons/{{isInKycFields('national_id') ? 'tick' : 'warning'}}.svg")
                                         span National ID
-                                        sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
                                     .item
                                         .bullet
                                             img(src="assets/images/icons/{{isInKycFields('id_selfie') ? 'tick' : 'warning'}}.svg")
                                         span National ID Selfie
-                                        sk-icon(icon="upload", size-class="icon-size-19x24", style="margin-left: 15px")
 
 
 

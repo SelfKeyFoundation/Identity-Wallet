@@ -1,4 +1,4 @@
-.exchange-container{
+.exchange-container {
     border: 1px solid #303c49;
     margin-left: 50px;
     margin-right: 50px;
@@ -113,11 +113,11 @@
                     }
                 }
             }
-            .body{
-                .section{
+            .body {
+                .section {
                     margin-bottom: 30px;
                     border-bottom: 1px solid #303c49;
-                    &:last-child{
+                    &:last-child {
                         border: none;
                     }
                     .section-content {
@@ -133,8 +133,31 @@
                             .textual {
                                 text-align: center;
 
+                                .md-button {
+                                    width: 785px;
+                                    height: 36.6px;
+                                    border-radius: 2px;
+                                    background-color: #242e37;
+                                    border: solid 1px #303c49;
+                                    margin-top: 20px;
+
+                                    > span {
+
+                                        opacity: 0.7;
+                                        font-family: ProximaNovaRegular;
+                                        font-size: 13px;
+                                        font-weight: 600;
+                                        font-style: normal;
+                                        font-stretch: normal;
+                                        line-height: 1.23;
+                                        letter-spacing: normal;
+                                        text-align: center;
+                                        color: #ffffff;
+                                    }
+                                }
+
                                 .text {
-                                    width: 605px;
+                                    width: 785px;
                                     font-family: ProximaNovaRegular;
                                     font-size: 18px;
                                     letter-spacing: normal;
@@ -143,7 +166,7 @@
                                 }
                             }
 
-                            .gray{
+                            .gray {
                                 font-size: 13px;
                                 width: 200px;
                                 height: 44px;
