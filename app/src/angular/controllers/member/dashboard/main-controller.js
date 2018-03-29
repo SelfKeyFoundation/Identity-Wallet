@@ -1,9 +1,20 @@
 'use strict';
 
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, SqlLiteService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, RPCService, SqlLiteService, SelfkeyService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController', $rootScope.wallet);
+
+    RPCService.makeCall('getWalletSettingsByWalletId', $rootScope.wallet.id).then((walletSettings) => {
+        if(walletSettings && walletSettings.length > 0){
+            let walletSetting = walletSettings[0];
+            if (walletSetting.airDropCode) {
+                SelfkeyService.triggerAirdrop(walletSetting.airDropCode).then(() => {
+                    SqlLiteService.removeAirdropCode();
+                });
+            }
+        }
+    });
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);

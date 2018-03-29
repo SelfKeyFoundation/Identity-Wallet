@@ -275,6 +275,11 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('saveWalletSettings', data);
         }
 
+        removeAirdropCode (walletSetting) {
+            walletSetting.airDropCode = null;
+            return RPCService.makeCall('saveWalletSettings', walletSetting);
+        }
+
         insertWalletToken(data) {
             return RPCService.makeCall('insertWalletToken', data);
         }
