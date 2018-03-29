@@ -240,7 +240,7 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-    // TODO test
+    // DONE !!!!!
     function _addImportedIdAttributes(walletId, exportCode, requiredDocuments, requiredStaticData) {
         return knex.transaction((trx) => {
             sqlLiteService.select('wallet_settings', "*", { walletId: walletId }, trx).then((rows) => {
@@ -309,7 +309,6 @@ module.exports = function (app, sqlLiteService) {
                     walletSetting.airDropCode = exportCode;
 
                     Promise.all(documentsSavePromises).then(() => {
-
                         for(let i in itemsToSave){
                             (function(){
                                 delete itemsToSave[i].tempId;
@@ -321,7 +320,7 @@ module.exports = function (app, sqlLiteService) {
                         Promise.all(idAttributesSavePromises).then(() => {
 
                             sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx).then(()=>{
-                                resolve();
+                                resolve(walletSetting);
                             }).catch((error)=>{
                                 console.log(error);
                                 reject({ message: "wallets_insert_error", error: error });
@@ -335,39 +334,10 @@ module.exports = function (app, sqlLiteService) {
                         console.log(error);
                         reject({ message: "wallets_insert_error", error: error });
                     });
-
-                    /*
-                    let finalPromises = [];
-                    finalPromises.push(Promise.all(documentsSavePromises));
-                    finalPromises.push(Promise.all(idAttributesSavePromises));
-                    finalPromises.push(sqlLiteService.update('wallet_settings', walletSetting, { id: walletSetting.id }, trx));
-
-                    Promise.all(finalPromises).then(() => {
-                        resolve(walletSetting);
-                    }).catch((error) => {
-                        console.log(error);
-                        reject({ message: "wallets_insert_error", error: error });
-                    });
-                    */
-
-                    /*
-                    Promise.each(finalPromises, (el) => { return el }).then(() => {
-                        resolve(walletSetting);
-                    }).catch((error) => {
-                        console.log(error);
-                        reject({ message: "wallets_insert_error", error: error });
-                    });
-                    */
                 });
             }).then(trx.commit).catch(trx.rollback);
         })
     }
-
-
-
-
-
-
 
     function selectById(id, trx) {
         return new Promise((resolve, reject) => {
@@ -444,10 +414,6 @@ module.exports = function (app, sqlLiteService) {
         });
     }
 
-
-
-
-
     function temp__checkType(idAttributes, idAttributeType) {
         for (let i in idAttributes) {
             if (idAttributes[i].idAttributeType === idAttributeType) {
@@ -456,13 +422,6 @@ module.exports = function (app, sqlLiteService) {
         }
         return false;
     }
-
-
-
-
-
-
-
 
     function __insert(idAttribute, trx){
         return sqlLiteService.insertAndSelect(TABLE_NAME, idAttribute, trx);

@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 
 
-function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $transitions, RPCService, SqlLiteService, CommonService) {
+function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $state, $stateParams, $transitions, RPCService, SqlLiteService, CommonService, SelfkeyService) {
     'ngInject'
 
     $log.info('GuestImportKeystoreController');
@@ -93,6 +93,16 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
         unlockExistingWalletPromise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+
+            /*
+            // POLYGON
+            SelfkeyService.triggerAirdrop("49ada4743684950d1fec57a8f244ea96fa1cae72ad37f8cc4d12e04709dd8896_5ab69d7ea3c1c60001a98fdc_5ab69d65a3c1c60001a98fdb").then((data)=>{
+                console.log(">>>>>>>>>> data:", data);
+            }).catch((error)=>{
+                console.log(">>>>>>>>>> error:", error);
+            })
+            */
+
             let initialPromises = [];
             initialPromises.push($rootScope.wallet.loadIdAttributes());
             initialPromises.push($rootScope.wallet.loadTokens());
