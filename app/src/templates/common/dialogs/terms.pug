@@ -163,11 +163,11 @@ md-dialog.terms(aira-lable="Terms of Service Agreement")
             md-toolbar
                 .md-toolbar-tools(layout='row', layout-align='center center')
                     sk-icon(icon="high-priority", size-class="icon-size-35x35")
-                    span Need to Accept Terms
+                    span.need-to-accept-terms-text Need to Accept Terms
             .content(flex)
                 .textual(style="height: unset;")
                     .text(style="padding-right:20px;")
-                        p Unfortunately, you will need to accept the Terms of Service Agreement in order to use the SelfKey Application or you will be unable to proceed. Return to the TOS agreement below or exit and close the application.
+                        p Unfortunately, you will need to accept the Terms of Service in order to use the SelfKey Identity Wallet or you will be unable to proceed. Return to the TOS agreement below or exit and close the application.
                 section(layout='row', layout-sm='column', layout-align='center center', layout-wrap='')
                     md-button.md-raised.default(ng-click="changeStep('main')", style="margin-right: 4px;") Return to TOS
                     md-button.md-raised.default(ng-click="notAgree()", style="margin-left: 4px;") Exit and Close

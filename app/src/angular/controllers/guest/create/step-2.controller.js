@@ -30,12 +30,12 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
     }
 
     $scope.previousStep = (event) => {
-        $state.go('guest.create.step-1');
+        $state.go('guest.create.step-1', { thePassword: $stateParams.thePassword });
     }
 
     $scope.getPasswordStrengthInfo = () => {
         if(!$scope.input.password || !$scope.input.password.length){
-            return 'Please create a new password.';
+            return '';
         }
 
         if($scope.passwordStrength && $scope.passwordStrength.score){

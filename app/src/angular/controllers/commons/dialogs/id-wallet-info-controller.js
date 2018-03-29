@@ -23,7 +23,7 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
             textPart2: 'We’ll be adding more features in the future, such as blockchain verified claims in your identity profile. All attributes and documents regarding your identity profile are stored locally on your computer, and SelfKey does not have any access to your information.',
             header: 'What Are ID Attributes & Documents?',
             button1: 'back',
-            button2: 'continue',
+            button2: 'Ok, take me to my Identity Wallet',
             step: 2
         },
     ];
