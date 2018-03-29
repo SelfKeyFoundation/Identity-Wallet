@@ -36,17 +36,14 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
             });
 
             this.ipcRenderer.on('APP_START_LOADING', (event) => {
-                console.log("####", "APP_START_LOADING");
                 $rootScope.$broadcast('APP_START_LOADING');
             });
 
             this.ipcRenderer.on('APP_SUCCESS_LOADING', (event) => {
-                console.log("####", "APP_SUCCESS_LOADING");
                 $rootScope.$broadcast('APP_SUCCESS_LOADING');
             });
 
             this.ipcRenderer.on('APP_FAILED_LOADING', (event) => {
-                console.log("####", "APP_FAILED_LOADING");
                 $rootScope.$broadcast('APP_FAILED_LOADING');
             });
         }
@@ -67,7 +64,7 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
         makeCustomCall(actionName, data) {
             this.ipcRenderer.send(actionName, data);
         }
-        
+
         on(method, cb) {
             this.ipcRenderer.on(method, cb);
         }

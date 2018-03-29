@@ -14,7 +14,7 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
             .sk-send-ether-box__recipient-container
                 qrcode(data="formData.sendToAddressHex", size="40", background="#303c49", color="#66798f")
                 input.sk-send-ether-box__recipient-container__input(ng-class="{'has-error': errors.sendToAddressHex}", name="sendToAddress", type="text", placeholder="Send to address", ng-model="formData.sendToAddressHex", ng-readonly="inputStates.isAddressLocked", ng-required)
-                .sk-error-tooltip(ng-if="errors.sendToAddressHex", style="top: -62px;")
+                .sk-field-error-tooltip(ng-if="errors.sendToAddressHex", style="top: -62px;")
                     span Invalid address. Please check and try again.
 
             .sk-send-ether-box__eth-amount-container

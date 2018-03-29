@@ -29,7 +29,7 @@ md-dialog(aira-lable="Add Custom Tokens")
                         
                         input.sk-input(type="text", ng-class="{'error-field': tokenDoesNotExists, 'success-field': formDataIsValid(theForm)}", ng-disabled="inProgress", name="contractAddress", ng-model="formData.contractAddress", ng-maxlength="500", ng-required="true")
                         sk-icon.address-green-check(icon="check-bold", size-class="icon-size-20x15",ng-if="formDataIsValid(theForm)")
-                        .sk-error-tooltip.right(ng-if="tokenDoesNotExists", style="top: -27px;") 
+                        .sk-field-error-tooltip.right(ng-if="tokenDoesNotExists", style="top: -27px;") 
                             span Token contract does not exist. Please double check and try again
                         div(ng-messages="theForm.contractAddress.$dirty && theForm.contractAddress.$error")
                             div(ng-message="maxlength") The Address has to be less than 1000 characters long.
