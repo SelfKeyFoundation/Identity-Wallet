@@ -34,7 +34,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
     $scope.unlock = (event, theForm) => {
         if (!theForm.$valid) return;
-        debugger;
+
         if (!$scope.userInput.password) {
             return CommonService.showToast('warning', 'password is required');;
         }
