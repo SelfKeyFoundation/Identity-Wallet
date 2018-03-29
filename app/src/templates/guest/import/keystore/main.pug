@@ -2,7 +2,7 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
 
     md-input-container(style="width: 100%;", ng-if="type === 'select'")
         md-select.sk-select(ng-model="userInput.selectedPublicKey")
-            md-option(ng-value="key", ng-repeat="key in publicKeyList") {{key}}
+            md-option(ng-value="key", ng-repeat="key in publicKeyList") 0x{{key}}
 
     md-button.gray(style="width: 100%; margin: 18px 0;", ng-click="selectKystoreFile($event, theForm)", ng-if="type === 'import'")
         span {{ userInput.selectedFilePath ? 'Keystore is selected' : 'Select Keystore File' }}

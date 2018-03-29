@@ -7,7 +7,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
 
     $scope.passwordStrength = 0;
     $scope.input = {
-        password: $stateParams.thePassword || ''
+        password: ''
     };
 
     $scope.nextStep = (event, form) => {

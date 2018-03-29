@@ -17,7 +17,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     function init() {
         if ($stateParams.redirectTo) {
             if ($stateParams.redirectTo === 'member.id-wallet.main') {
-                $scope.header = 'Setup Completed';
+                $scope.header = 'Wallet Setup Complete';
                 $timeout(() => {
                     goTo($stateParams.redirectTo);
                 }, 2000);
