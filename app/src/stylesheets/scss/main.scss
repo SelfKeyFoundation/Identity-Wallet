@@ -16,11 +16,11 @@
 @import './components/sk-list.scss';
 @import './components/sk-linear-progress.scss';
 @import './components/sk-form.scss';
-@import './components/sk-double-header.scss';
-@import './components/sk-tasks-box.scss';
+@import './components/sk-user-info.scss';
 @import './components/sk-right-sidenav.scss';
 @import './components/sk-table.scss';
 @import './components/sk-dropdown-menu.scss'; // TODO - change prefix of file to md (actually it is realod of md styles)
+@import './components/sk-field-error-tooltip.scss';
 
 @import './components/md-select.scss';
 @import './components/md-tooltip.scss';
@@ -31,24 +31,24 @@
 @import './components/md-toast.scss';
 @import './components/md-radio-group.scss';
 
+@import './panels/id-attribute-delete-panel.scss';
+
+@import './directives/sk-close-warning-box.scss';
 @import './directives/sk-token-box.scss';
+@import './directives/sk-custom-token-box.scss';
 @import './directives/sk-send-token.scss';
 @import './directives/sk-icon.scss';
 @import './directives/sk-circle-pie-chart.scss';
-@import './directives/sk-reminders-box.scss';
-@import './directives/sk-action-logs-box.scss';
-@import './directives/sk-ico-item-box.scss'; // used incorrect places
-@import './directives/sk-ico-details-box.scss';
 @import './directives/sk-user-info-box.scss';
-@import './directives/sk-kyc-requirements-box.scss';
 @import './directives/copy-to-clipboard.scss';
-@import './directives/sk-id-attribute.scss';
 
 @import './layouts/guest-layout.scss';
+@import './layouts/guest-import-layout.scss';
 @import './layouts/member-layout.scss';
 
 @import './views/dashboard/main.scss';
 @import './views/wallet/manage-token.scss';
+@import './views/wallet/manage-cryptos.scss';
 
 @import './dialogs/terms.scss';
 @import './dialogs/startup-guide.scss';
@@ -56,9 +56,15 @@
 @import './dialogs/send-token.scss';
 @import './dialogs/password-warning.scss';
 @import './dialogs/info-dialog.scss';
-@import './dialogs/add-edit-document.scss';
-@import './dialogs/add-edit-static-data.scss';
-@import './dialogs/add-id-attribute.scss';
+@import './dialogs/id-wallet-info.scss';
+@import './dialogs/id-attributes/add-edit-document';
+@import './dialogs/id-attributes/add-edit-static-data';
+@import './dialogs/id-attributes/add-id-attribute';
+@import './dialogs/id-attributes/forms/address';
+@import './dialogs/id-attributes/forms/country';
+@import './dialogs/id-attributes/forms/birth-date';
+@import './dialogs/add-custom-token.scss';
+@import './dialogs/new-erc20-token-info.scss';
 
 @import './views/guest/create/step-1.scss';
 @import './views/guest/create/step-2.scss';
@@ -74,10 +80,68 @@
 @import './views/member/dashboard/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/member/id-wallet/main.scss';
+@import './views/member/marketplace/exchange-list.scss';
+@import './views/member/marketplace/exchange-item.scss';
 
-@import './views/marketplace/ico-list-item.scss';
-@import './views/marketplace/ico-manage-requirements.scss';
-@import './views/marketplace/ico-accept-terms.scss';
+
+.fixed-tooltip-container {
+    position: relative;
+
+    &:hover {
+        .fixed-tooltip {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    }
+}
+
+.fixed-tooltip {
+
+    height: auto;
+    width: 195px;
+    border-radius: 4px;
+    background-color: #262f39;
+    border: solid 1px #303c49;
+    visibility: hidden;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    left: -42px;
+    top: 20px;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: ProximaNovaRegular;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.36;
+    padding: 16px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: -11px;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent #303c49 transparent;
+    }
+
+    > div {
+
+        > span {
+            margin-left: 3px;
+            cursor: pointer;
+
+            &:focus {
+                outline: none !important;
+            }
+        }
+    }
+
+}
+
 
 .bg-gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, rgb(213, 234, 241)), color-stop(1, rgb(223, 227, 226)));
@@ -247,3 +311,4 @@ $buttonColor: rgba(255, 255, 255, 1);
     }
   }
 }
+

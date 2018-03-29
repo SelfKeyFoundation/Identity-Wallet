@@ -1,26 +1,29 @@
 .wallet-create-step-3(layout-fill, layout="column", layout-align="center center")
-
-    sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
-    .description BLOCKCHAIN IDENTITY WALLET
+    sk-icon(icon="important", size-class="icon-size-68x74")
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Create Password
-        form.content(name="passwordForm", layout="column")
-            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
-                label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
-            
-            .password-strength-container
-                .blocks-container
-                    .block(ng-class="{'active': passwordStrength.score >= 0}")
-                    .block(ng-class="{'active': passwordStrength.score >= 1}")
-                    .block(ng-class="{'active': passwordStrength.score >= 2}")
-                    .block(ng-class="{'active': passwordStrength.score >= 3}")
-                .status-text-container
-                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
+            span.none-select-text Backup Your Wallet
+        .content(layout="column")
+
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Public Key
+                input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
+
+            .title
+                | Please download the Keystore File to save a backup of your wallet.
+                | The Keystore File is encrypted by the password you just created.
+                | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
+
+            md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
+                span.primary DOWNLOAD KEYSTORE FILE (UTC/JSON)
+
+            .title.second
+                p
+                    | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
+                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password,
+                    a.link(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-identity-wallet', false)") click here.
 
             .actions-wrapper
-                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, passwordForm)")
-                    span.primary Next
+                md-button.outline-orange(ng-click="nextStep($event)")
+                    span I understand, continue

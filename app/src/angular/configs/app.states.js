@@ -7,7 +7,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
 
     localStorageServiceProvider.setPrefix(appName);
 
-    function checkWallet($rootScope, $q, $state, $interval, ConfigFileService, TokenService, Web3Service, SelfkeyService) {
+    function checkWallet($rootScope, $q, $state, $interval, Web3Service) {
         let defer = $q.defer();
 
         if (!$rootScope.wallet || !$rootScope.wallet.getPublicKeyHex()) {
@@ -15,82 +15,30 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             defer.reject();
         } else {
             /**
-             *
+             * set primary token
              */
-            TokenService.init($rootScope.wallet.getPublicKeyHex());
-            $rootScope.primaryToken = TokenService.getBySymbol($rootScope.PRIMARY_TOKEN.toUpperCase());
+            $rootScope.primaryToken = $rootScope.wallet.tokens["KEY"];
 
-            // 1) TODO - get prices
-
-            // set token prices (TODO)
-            $rootScope.wallet.usdPerUnit = $rootScope.ethUsdPrice || 900;
-            $rootScope.primaryToken.usdPerUnit = $rootScope.keyUsdPrice || 0.02;
-
-            // update balances
-            let ethBalancePromise = $rootScope.wallet.loadBalance();
-            let keyBalancePromise = $rootScope.primaryToken.loadBalance();
-
-            let loadPricesPromise = SelfkeyService.getPrices(["ETH", "KEY"]);
+            let initialPromises = [];
 
             /**
-             *
+             * check eth promise
              */
-            $q.all([loadPricesPromise, ethBalancePromise, keyBalancePromise]).then(() => {
-                if ($rootScope.PRICES["ETH"]) {
-                    $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
-                }
+            initialPromises.push($rootScope.wallet.initialBalancePromise);
 
-                if ($rootScope.PRICES["KEY"]) {
-                    $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
-                }
+            /**
+             * check tokens promise
+             */
+            for (let i in $rootScope.wallet.tokens) {
+                initialPromises.push($rootScope.wallet.tokens[i].initialBalancePromise);
+            }
 
-                /**
-                 *
-                 */
-                $rootScope.balanceWatcherPromise = $interval(() => {
-                    if ($rootScope.wallet && $rootScope.wallet.getPublicKeyHex()) {
-                        SelfkeyService.getPrices(["ETH", "KEY"]).then((resp) => {
-                            if ($rootScope.PRICES["ETH"]) {
-                                $rootScope.wallet.usdPerUnit = $rootScope.PRICES["ETH"].priceUsd;
-                            }
-
-                            if ($rootScope.PRICES["KEY"]) {
-                                $rootScope.primaryToken.usdPerUnit = $rootScope.PRICES["KEY"].priceUsd;
-                            }
-                        });
-                        $rootScope.wallet.loadBalance();
-                        $rootScope.primaryToken.loadBalance();
-                    }
-                }, 10000); // TODO - take interval from config
-
+            $q.all(initialPromises).then((results) => {
                 defer.resolve();
-            }).catch(() => {
+            }).catch((error) => {
                 $state.go('guest.error.offline');
                 defer.reject();
             });
-        }
-
-        return defer.promise;
-    }
-
-    function checkKyc($rootScope, $q, $state, ConfigFileService, TokenService, Web3Service, checkWallet) {
-        let defer = $q.defer();
-
-        let store = ConfigFileService.getStore();
-
-        /**
-         *
-         */
-        let walletStore = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-
-        /**
-         * check kyc status
-         */
-        if (!walletStore.data || !walletStore.data.idAttributes || Object.keys(walletStore.data.idAttributes).length <= 0) {
-            $state.go('member.setup.choose');
-            defer.resolve();
-        } else {
-            defer.resolve();
         }
 
         return defer.promise;
@@ -133,7 +81,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-
         /**
          * create
          */
@@ -153,6 +100,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-1.html',
                     controller: 'GuestKeystoreCreateStep1Controller'
                 }
+            },
+            params: {
+                thePassword: null // stands for recover reason after clicking 'back' btn from confirm pass 
             }
         })
 
@@ -178,7 +128,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             params: {
-                basicInfo: null
+                walletData: null
             }
         })
 
@@ -189,10 +139,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-4.html',
                     controller: 'GuestKeystoreCreateStep4Controller'
                 }
-            },
-            params: {
-                thePassword: null,
-                basicInfo: null
             }
         })
 
@@ -213,6 +159,9 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'guest/create/step-6.html',
                     controller: 'GuestKeystoreCreateStep6Controller'
                 }
+            },
+            params: {
+                type: null
             }
         })
 
@@ -249,40 +198,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
-        /**
-         * keystore
-         */
-        .state('guest.keystore', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'guest/keystore/layout.html'
-                }
-            }
-        })
-
-
-        /**
-         *
-         */
-        .state('guest.process', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'guest/process/layout.html'
-                }
-            }
-        })
-
-        .state('guest.process.view-keystore', {
-            url: '/guest/process/view-keystore',
-            views: {
-                main: {
-                    templateUrl: 'guest/process/view-keystore.html',
-                    controller: 'GuestViewKeystoreController'
-                }
-            }
-        })
 
         /**
          * Member
@@ -296,8 +211,7 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             },
             resolve: {
-                checkWallet: checkWallet,
-                //checkKyc: checkKyc
+                checkWallet: checkWallet
             }
         })
 
@@ -360,44 +274,6 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
         })
 
         /**
-         * Marketplace
-         */
-        .state('member.marketplace', {
-            abstract: true,
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/layout.html'
-                }
-            }
-        })
-
-        .state('member.marketplace.ico-item', {
-            url: '/member/marketplace/ico/item',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/item.html',
-                    controller: 'MemberMarketplaceIcoItemController'
-                }
-            },
-            params: {
-                selected: null
-            }
-        })
-
-        .state('member.marketplace.ico-accept-terms', {
-            url: '/member/marketplace/ico/ico-accept-terms',
-            views: {
-                main: {
-                    templateUrl: 'member/marketplace/ico/accept-terms.html',
-                    controller: 'MemberMarketplaceIcoAcceptTermsController'
-                }
-            },
-            params: {
-                selected: null
-            }
-        })
-
-        /**
          * Wallet (TODO rename to token)
          * member.token
          * member.token.manage
@@ -417,6 +293,16 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 main: {
                     templateUrl: 'member/wallet/manage-token.html',
                     controller: 'ManageTokenController'
+                }
+            }
+        })
+
+        .state('member.wallet.manage-cryptos', {
+            url: '/member/wallet/manage-cryptos',
+            views: {
+                main: {
+                    templateUrl: 'member/wallet/manage-cryptos.html',
+                    controller: 'ManageCryptosController'
                 }
             }
         })
@@ -442,6 +328,40 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             }
         })
+
+        /**
+         *  Marketplace
+         */
+        .state('member.marketplace', {
+            abstract: true,
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/layout.html'
+                }
+            }
+        })
+
+        .state('member.marketplace.exchange-list', {
+            url: '/member/marketplace/exchange-list',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/exchange-list.html',
+                    controller: 'MemberMarketplaceExchangeListController'
+                }
+            }
+        })
+        .state('member.marketplace.exchange-item', {
+            url: '/member/marketplace/exchange-item',
+            views: {
+                main: {
+                    templateUrl: 'member/marketplace/exchange-item.html',
+                    controller: 'MemberMarketplaceExchangeItemController'
+                }
+            },
+            params:{
+                data: {}
+            }
+        });
 
     $urlRouterProvider.otherwise('/guest/loading');
 }

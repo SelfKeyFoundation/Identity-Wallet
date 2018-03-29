@@ -1,0 +1,215 @@
+.exchange-container {
+    border: 1px solid #303c49;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    color: white;
+    .back {
+        margin: 20px 0 0 20px;
+        height: auto !important;
+
+        span {
+            font-size: 13px;
+        }
+    }
+    .exchange {
+        padding: 40px;
+        .exchange-content {
+            .header {
+                border-radius: 4px;
+                background-color: #2a3540;
+                box-shadow: inset 0 -1px 0 0 #374758;
+                border: 1px solid #303c49;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                .logo {
+                    display: flex;
+                    span {
+                        align-self: center;
+                        margin-left: 15px;
+                        font-size: 20px;
+                        font-family: ProximaNovaRegular;
+                    }
+                }
+                .status {
+
+                    margin-top: 8px;
+
+                    .icon-container {
+
+                        position: relative;
+                        display: inline-block;
+
+                        .tooltip {
+
+                            height: auto;
+                            width: 195px;
+                            border-radius: 4px;
+                            background-color: #262f39;
+                            border: solid 1px #303c49;
+                            visibility: hidden;
+                            color: #fff;
+                            text-align: center;
+                            position: absolute;
+                            z-index: 1;
+                            left: -42px;
+                            top: 20px;
+                            margin-left: -60px;
+                            opacity: 0;
+                            transition: opacity 0.3s;
+                            font-family: ProximaNovaRegular;
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 1.36;
+                            padding: 16px;
+
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                top: -11px;
+                                margin-left: -5px;
+                                border-width: 5px;
+                                border-style: solid;
+                                border-color: transparent transparent #303c49 transparent;
+                            }
+
+                            > div {
+
+                                > span {
+                                    margin-left: 3px;
+                                    cursor: pointer;
+
+                                    &:focus {
+                                        outline: none !important;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        &:hover {
+
+                            .tooltip {
+                                visibility: visible;
+                                opacity: 1;
+                            }
+                        }
+
+                        md-icon {
+
+                            padding: 0 5px;
+                            height: 16px !important;
+                            width: 16px !important;
+                            min-height: 16px !important;
+                            min-width: 16px !important;
+                        }
+                    }
+
+                    .text {
+                        margin-top: 5px;
+                        font-size: 14px;
+                        font-family: ProximaNovaRegular;
+                    }
+                }
+            }
+            .body {
+                .section {
+                    margin-bottom: 30px;
+                    border-bottom: 1px solid #303c49;
+                    &:last-child {
+                        border: none;
+                    }
+                    .section-content {
+                        margin-bottom: 10px;
+                        .title {
+                            font-size: 18px;
+                        }
+                        .descr {
+                            display: flex;
+                            padding: 25px 15px 0 15px;
+                            justify-content: space-between;
+
+                            .textual {
+                                text-align: center;
+
+                                .md-button {
+                                    width: 785px;
+                                    height: 36.6px;
+                                    border-radius: 2px;
+                                    background-color: #242e37;
+                                    border: solid 1px #303c49;
+                                    margin-top: 20px;
+
+                                    > span {
+
+                                        opacity: 0.7;
+                                        font-family: ProximaNovaRegular;
+                                        font-size: 13px;
+                                        font-weight: 600;
+                                        font-style: normal;
+                                        font-stretch: normal;
+                                        line-height: 1.23;
+                                        letter-spacing: normal;
+                                        text-align: center;
+                                        color: #ffffff;
+                                    }
+                                }
+
+                                .text {
+                                    width: 785px;
+                                    font-family: ProximaNovaRegular;
+                                    font-size: 18px;
+                                    letter-spacing: normal;
+                                    text-align: left;
+                                    color: #FFFFFF;
+                                }
+                            }
+
+                            .gray {
+                                font-size: 13px;
+                                width: 200px;
+                                height: 44px;
+                                margin-top: 25px;
+                            }
+                        }
+
+                        .columns {
+                            display: flex;
+                            margin-left: 15px;
+                            .column {
+                                margin-right: 100px;
+                                div {
+                                    margin: 15px 0;
+                                    label {
+                                        display: inline-block;
+                                    }
+                                    strong {
+                                        font-size: 14px;
+                                        margin-left: 15px;
+                                        word-break: break-word;
+                                    }
+                                }
+                            }
+                            &.highlights {
+                                .column {
+                                    label {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            &.requirements {
+                                .column {
+                                    label {
+                                        font-size: 13px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

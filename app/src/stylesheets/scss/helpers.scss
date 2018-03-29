@@ -72,11 +72,11 @@ h1 {
     font-family: ProximaNovaRegular;
   }
 
-  &.white {  
+  &.white {
     color: #ffffff;
   }
 
-  &.blue {  
+  &.blue {
     color: #0dc7dd;
   }
 }
@@ -96,7 +96,7 @@ h2 {
     font-family: OrbitronMedium;
   }
 
-  &.white {  
+  &.white {
     color: #ffffff;
   }
 }
@@ -150,6 +150,10 @@ h2 {
  */
 .cursor-pointer {
   cursor: pointer !important;
+}
+
+.outline-none {
+  outline: none !important;
 }
 
 /**
@@ -217,7 +221,7 @@ h2 {
 }
 
 .display-none {
-  display: none !important; 
+  display: none !important;
 }
 
 /**
@@ -226,6 +230,13 @@ h2 {
  .icon-size-16x16 {
   width: 16px !important;
   height: 16px !important;
+}
+
+.icon-size-18x18 {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
 }
 
 .icon-size-24x23 {
@@ -309,8 +320,61 @@ h2 {
   width: 15.8px !important;
   height: 15.8px !important;
 }
+.icon-size-20x15 {
+  width: 20px !important;
+  height: 15px !important;
+}
+
 
 .icon-size-68x74 {
   width: 68px !important;
   height: 74px !important;
+}
+
+.icon-size-19x23 {
+  width: 19.6px !important;;
+  height: 23.1px !important;;
+}
+
+.icon-size-19x24 {
+  width: 19px !important;;
+  height: 24px !important;;
+}
+
+//buttons
+
+.md-button.blue:disabled {
+    background-image: none;
+    border: solid 1px #93b0c1;
+    opacity: 0.3;
+}
+
+//colors
+
+.color-light-grey {
+    svg {
+        fill: #CFD8DC !important;
+    }
+}
+
+.color-violet {
+    svg {
+        fill: #FF4081 !important;
+    }
+}
+
+.color-grey {
+    svg {
+        fill: #78909C !important;
+    }
+}
+
+.color-white {
+    svg {
+        fill: #fff !important;
+    }
+}
+
+.background-green {
+  background-color: #417505 !important;
 }

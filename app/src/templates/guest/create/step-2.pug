@@ -1,35 +1,34 @@
 .wallet-create-step-2(layout-fill, layout="column", layout-align="center center")
 
     sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
-    .description Fill in the basic details of your identity wallet.
+    .title SELFKEY
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Identity Wallet Details
-        form.content(name="basicInfoForm", layout="column")
-            md-input-container.sk-input-box.sk-input-non-floating
-                label First Name 
-                input(name="firstName", type="text", ng-model="input.firstName", ng-maxlength="500", ng-required="true")
-                div(ng-messages="basicInfoForm.firstName.$error")
-                    div(ng-message="maxlength") The First Name has to be less than 500 characters long.
-                    div(ng-message="required") This field is required. Please enter First Name.
-            md-input-container.sk-input-box.sk-input-non-floating
-                label Last Name
-                input(type="text", name="lastName", ng-model="input.lastName", ng-required="true", ng-maxlength="500")
-                div(ng-messages="basicInfoForm.lastName.$error")
-                    div(ng-message="maxlength") The First Name has to be less than 500 characters long.
-                    div(ng-message="required") This field is required. Please enter Last Name.
-            md-input-container.sk-input-box.sk-input-non-floating
-                label Middle Name
-                input(type="text", name="middleName", ng-model="input.middleName", ng-maxlength="500")
-                div(ng-messages="basicInfoForm.middleName.$error")
-                    div(ng-message="maxlength") The Middle Name has to be less than 500 characters long.
-            md-input-container.sk-input-box.sk-input-non-floating
-                label Country Of Residency
-                md-select.sk-select(name="countryOfResidency", ng-model="input.countryOfResidency", ng-required="true")
-                    md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-                div(ng-messages="basicInfoForm.countryOfResidency.$error")
-                    div(ng-message="required") This field is required. Please enter Country Of Residency.
-            md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid")
-                span.small Create SelfKey Basic ID
+            span.none-select-text Confirm Password
+        form.content(name="passwordForm", layout="column")
+            .title
+                | Please reconfirm the password you just entered.
+                | There is no way it can be restored or reset,
+                | and Selfkey cannot help you if the password is lost.
+
+            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
+                label Password
+                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
+                .sk-field-error-tooltip.center.default-top(ng-if="isWrongConfirmationPassword")
+                    span Wrong confirmation password.
+            .password-strength-container
+                .blocks-container
+                    .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
+                    .block(ng-class="{'active': passwordStrength.score >= 1}")
+                    .block(ng-class="{'active': passwordStrength.score >= 2}")
+                    .block(ng-class="{'active': passwordStrength.score >= 3}")
+                .status-text-container
+                    span {{ getPasswordStrengthInfo() }}
+
+            .actions-wrapper
+                md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
+                    span.primary Back
+                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
+                    span.primary Next
+

@@ -1,21 +1,26 @@
-function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, ElectronService, ConfigFileService) {
+'use strict';
+
+function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService) {
     'ngInject'
 
     $log.info('TermsDialogController');
-    $scope.storeSavePromise = null;
+    $scope.isLoading = false;
     $scope.step = 'main'
     $scope.scrolledBottom = false;
+
+    let guideSettings = SqlLiteService.getGuideSettings();
 
     $scope.changeStep = (step) => {
         $scope.step = step;
     }
 
     $scope.agree = (event) => {
-        let store = ConfigFileService.getStore();
-        store.setup = store.setup || {};
-        store.setup.termsAccepted = true;
-        $scope.storeSavePromise = ConfigFileService.save();
-        $scope.storeSavePromise.then(() => {
+        $scope.isLoading = true;
+        guideSettings.termsAccepted = true;
+
+        let savePromise = SqlLiteService.saveGuideSettings(guideSettings);
+        savePromise.then(() => {
+            $scope.isLoading = false;
             $mdDialog.hide();
         });
     };

@@ -4,13 +4,17 @@
             display: none;
         }
     }
-    
+
     &.no-char-counter {
         .md-errors-spacer {
             .md-char-counter {
                 display: none;
             }
         }
+    }
+
+    &.small-margins {
+        margin: 12px 0 !important;
     }
 
     >label {
@@ -106,7 +110,7 @@
             box-shadow: 0px 0px 5px 1px #93b0c1 !important;
         }
     }
-    
+
     &:hover {
         >label {
             color: #ffffff !important;
@@ -138,7 +142,7 @@
         top: -24px;
         font-weight: 600;
     }
-    
+
     .md-select-placeholder > span:not(.md-select-icon) {
       color: transparent;
     }

@@ -11,14 +11,10 @@
 
 **/*.log
 
-wallet-web-app/dist/
-wallet-web-app/src/app-bundle.js
-wallet-web-app/src/angular/app.templates.js
-wallet-web-app/src/stylesheets/css/**/*.css
-
-desktop-app/config.electron.js
+app/src/app-bundle.js
 app/src/angular/app.templates.js
-./app/src/stylesheets/css
+app/src/stylesheets/css/*
+app/src/stylesheets/css/main.css
 
 release
 .vscode

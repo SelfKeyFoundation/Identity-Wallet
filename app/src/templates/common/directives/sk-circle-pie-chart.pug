@@ -1,17 +1,23 @@
-.sk-circle-pie-chart(layout="row")
-    .chart-parent
-        #chart.animated.fadeIn
-        .chart-center-container.animated.fadeIn(ng-show="chartIsReady")
-            .tolalPrice {{data.total}}
-            .totalPriceTitle {{data.totalTitle}}
-    .details-container.animated.fadeIn(layout="row",ng-show="chartIsReady")        
-        table(ng-repeat="chunk in chunkedItems" )
-            tr(class="item", name="{{item.uniqueIdentifier}}" ng-repeat="item in chunk")
-                td
-                    div(layout="raw")
-                        sk-icon(icon="{{item.icon || 'information-button'}}", size-class="icon-size-44x44")
-                        .title 
-                            .titleFull {{item.title}}
-                            .titleSmall {{item.subTitle}}
-                td
-                    .value {{item.value}}
+.sk-circle-pie-chart.animated(ng-class="{'fadeIn': chartIsReady }", layout="{{config.mainLayout}}")
+    .chart-parent(ng-class="config.pieChartCls")
+        div.pos-relative
+            #chart(ng-class="config.pieChartCls")
+            .chart-center-container(ng-show="chartIsReady")
+                .tolalPrice {{totalValueFormated}}
+                .totalPriceTitle {{data.totalTitle}}
+    .details-container(layout="row",ng-show="chartIsReady")        
+        div(ng-class="config.itemCls", name="{{item.uniqueIdentifier}}" ng-repeat="item in displayedItems track by $index")
+            div(layout="row", layout-align="start start")
+                div(layout="row")
+                    .colored-box-container
+                        .colored-box(ng-style="{ 'background-color': item.color}")
+                            .value {{item.firstLetter}}
+                    .title(layout="column") 
+                        .titleFull {{item.title}}
+                        .titleSmall {{item.subTitle}}
+                .value-container
+                    .value ${{item.valueUSD}}
+        .view-all-tokens(ng-click="toogleCollapse(false)", ng-if="isCollapsable && isCollapsed")
+            i.arrow
+            span view all tokens
+    md-button.collapse-view(ng-click="toogleCollapse(true)",ng-if="isCollapsable && !isCollapsed") Collapse View

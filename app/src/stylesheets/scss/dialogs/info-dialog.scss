@@ -1,35 +1,72 @@
-md-dialog {
-    &.info {
-        min-width: 100%;
-        min-height: 100%;
-        background-image: linear-gradient(121deg, #1e262e, #1e262e);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        .info-wrapper {
-            width: 250px;
-            height: 100px;
+.generic-info-container {
+    width: 500px !important;
+    height: 302px !important;
+    min-height: inherit !important;
+    min-width: inherit !important;
+    display: block !important;
+    * {
+        font-family: ProximaNovaRegular;
+    }
+   
+    .info-wrapper {
+        position: relative;
+        height: 100%;
+        .info-title {
+            height: 65px;
+            border-radius: 4px;
+            background-image: linear-gradient(to bottom, #27313b, #1e262e);
+            box-shadow: inset 0 -1px 0 0 #303c49;
+            
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            display: flex;
+
+            font-size: 19px;
+            line-height: 1.26;
+            color: #ffffff;
+            position: relative;
+            .close {
+                color: #797e83;
+                font-size: 30px;
+                cursor: pointer;
+                outline: none;
+                right: 15px;
+                position: absolute;
+            }
+        }
+        .info-body {
+            height: calc(100% - 68px);
             border-radius: 4px;
             background-color: #262f39;
             border: solid 1px #303c49;
-            position: relative;
-            .info-text {
-                font-family: ProximaNovaRegular;
-                font-size: 16px;
-                font-weight: 300;
-                color: #ffffff;
+
+            font-size: 17px;
+            line-height: 1.59;
+            color: #ffffff;
+            > div{
+                padding: 40px 36px;
                 text-align: center;
-                vertical-align: middle;
-                line-height: 90px;
             }
-            .info-logo {
-                position: absolute;
-                right: -18px;
-                top: -18px;
-                cursor: pointer;
+            .cancal-btn {
+                width: 200px;
+                border-radius: 4px;
+                background-color: #435160;
+    
+                font-family: ProximaNovaRegular;
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 0.8;
+                letter-spacing: 0.6px;
+                text-align: center;
+                color: #ffffff !important;
+    
+                bottom: 38px;
+                position: absolute !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
             }
         }
+        
     }
-
 }

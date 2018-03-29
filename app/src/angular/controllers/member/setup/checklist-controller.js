@@ -1,34 +1,21 @@
 'use strict';
 
-function MemberSetupChecklistController($rootScope, $scope, $log, $state, ConfigFileService) {
+function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
     'ngInject'
 
-    $log.info('MemberSetupChecklistController');
+    $log.info('MemberSetupChecklistController', $rootScope.wallet.getIdAttributes());
 
-    let store = ConfigFileService.getStore();
-    $scope.name = getIdAttributeItemValues("name");
+    $scope.idAttributes = $rootScope.wallet.getIdAttributes();
+
+    $scope.national_id = $rootScope.wallet.getIdAttributeItemValue('national_id');
+    $scope.id_selfie = $rootScope.wallet.getIdAttributeItemValue('id_selfie');
 
     $scope.nextStep = (event) => {
-        $state.go('member.setup.add-document', { type: 'id_document' });
+        $state.go('member.setup.add-document', { type: 'national_id' });
     }
 
-    /**
-     *
-     */
-    function getIdAttributesStore() {
-        let walletData = store.wallets[$rootScope.wallet.getPublicKeyHex()];
-        return walletData.data.idAttributes;
-    }
-
-    function getIdAttributeItem(type) {
-        let idAttributesStore = getIdAttributesStore();
-        let idAttribute = idAttributesStore[type];
-        return idAttribute.items[idAttribute.defaultItemId];
-    }
-
-    function getIdAttributeItemValues(type) {
-        let item = getIdAttributeItem(type);
-        return item.values;
+    $scope.skip = (event) => {
+        $state.go('member.dashboard.main');
     }
 };
 

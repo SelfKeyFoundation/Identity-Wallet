@@ -5,14 +5,17 @@
     .crypto-price-box(style="margin-right: 10px;")
         .row
             .currency KEY
-            .value {{$root.primaryToken.getBalanceDecimal()}}
+            .value {{ $root.primaryToken.getFormattedBalance() }}
+        .row
+            .currency USD
+            .value ${{ $root.wallet.getFormattedTokenBalanceInUSD('KEY') }}
     .crypto-price-box(style="margin-left: 10px;")
         .row
             .currency ETH
-            .value.main {{$root.wallet.balanceEth}}
+            .value.main {{ $root.wallet.getFormattedBalance() }}
         .row
             .currency USD
-            .value ${{ $root.wallet.balanceInUsd | number }}
+            .value ${{ $root.wallet.getFormattedBalanceInUSD() }}
     .sk-vertical-devider-2(style="height: 40px;")
     .button-box
         button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, 'eth')")

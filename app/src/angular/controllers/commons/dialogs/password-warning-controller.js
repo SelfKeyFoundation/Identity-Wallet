@@ -1,4 +1,8 @@
-function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $state, basicInfo) {
+'use strict';
+
+const Wallet = requireAppModule('angular/classes/wallet');
+
+function PasswordWarningDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, RPCService, CommonService, SqlLiteService) {
     'ngInject'
 
     $log.info('PasswordWarningDialogController');
@@ -8,7 +12,6 @@ function PasswordWarningDialogController($rootScope, $scope, $log, $mdDialog, $s
     }
 
     $scope.accept = (event) => {
-        $state.go('guest.create.step-3', { basicInfo: basicInfo });
         $mdDialog.hide();
     }
 };

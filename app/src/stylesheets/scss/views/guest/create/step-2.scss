@@ -1,8 +1,8 @@
 .wallet-create-step-2 {
     height: 100%;
 
-    .title {
-        margin-top: 24px;
+    > .title {
+        margin-bottom: 24px;
         user-select: none;
         font-family: ProximaNovaSemibold;
         font-weight: 600;
@@ -10,28 +10,98 @@
         letter-spacing: normal;
         color: #ffffff;
     }
-    .description {
+    > .description {
         font-family: ProximaNovaRegular;
         margin-top: 18px;
         opacity: 0.8;
         font-size: 18px;
         line-height: 1.89;
         text-align: center;
-        color: #ffffff;
+        color: #0abbd0;
         margin-top: 15px;
-        user-select: none; 
+        user-select: none;
     }
-    
-    .content-wrapper {
-        margin-top: 30px;
-        width: 400px;
-        
-        >.content {
-            padding: 24px;
-        }
 
-        md-input-container {
-            margin: 14px 0;
+    .content-wrapper {
+        width: 780px;
+        margin-top: 50px;
+
+        .content {
+            padding: 24px 36px;
+
+            >.title {
+                font-family: ProximaNovaRegular;
+                font-size: 18px;
+                line-height: 1.72;
+                color: #ffffff;
+                margin-bottom: 33px;
+            }
+
+            .password-strength-container {
+                height: 11px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-top: 16px;
+
+                .blocks-container {
+                    height: 11px;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-around;
+
+                    .block {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+
+                        height: 11px;
+                        width: 168px;
+                        background-color: #1e262e;
+
+                        &.active {
+                            &:after {
+                                content: "";
+                                width: 158px;
+                                height: 3px;
+                                background-color: #0dc7dd;
+                            }
+                        }
+                    }
+                }
+
+                .status-text-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: 26px;
+
+                    span {
+                        font-family: ProximaNovaRegular;
+                        font-size: 16px;
+                        color: #93b0c1;
+                    }
+                }
+            }
+
+            .actions-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                margin-top: 60px;
+
+                .md-button {
+                    width: 320px;
+                }
+            }
         }
     }
 }

@@ -1,30 +1,29 @@
 .wallet-create-step-4(layout-fill, layout="column", layout-align="center center")
-
-    sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY BASIC ID
-    .description BLOCKCHAIN IDENTITY WALLET
+    sk-icon(icon="selfkey", size-class="icon-size-68x74")
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Confirm Password
-        form.content(name="passwordForm", layout="column")
-            .title "Remember, if you forget . your password there is no way to get it back! You will not be able to change this password at any time."
+            span.none-select-text Backup Your Private Key
+        .content(layout="column")
 
-            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer
-                label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength")
-            
-            .password-strength-container
-                .blocks-container
-                    .block(ng-class="{'active': passwordStrength.score >= 0}")
-                    .block(ng-class="{'active': passwordStrength.score >= 1}")
-                    .block(ng-class="{'active': passwordStrength.score >= 2}")
-                    .block(ng-class="{'active': passwordStrength.score >= 3}")
-                .status-text-container
-                    span {{passwordStrength.score > 2 ? 'Strong' : 'Weak'}}
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Private Key
+                input(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
+                md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
+                    md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
+
+            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
+                span.primary print private keys
+
+            .warning-description
+                .item(style="font-weight: normal;")
+                    span Private keys are used to sign transactions on the Ethereum blockchain. Your private key is encrypted within the Keystore File, which is protected by the password you just created. You can also print a copy of your private keys to make an offline backup - this is also known as "cold storage".
 
             .actions-wrapper
-                md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
-                    span.primary Back
-                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)")
-                    span.primary Next
+                md-button.outline-blue(ng-click="nextStep($event)")
+                    span continue
+
+    .private-key-print-box
+        .title Private key
+        .pk {{privateKey}}
+

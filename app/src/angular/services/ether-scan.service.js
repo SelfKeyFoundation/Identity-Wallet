@@ -2,7 +2,7 @@
 
 const Token = requireAppModule('angular/classes/token');
 
-function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, ElectronService, CONFIG) {
+function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CONFIG) {
     'ngInject';
 
     $log.info('EtherScanService Initialized');
@@ -21,6 +21,7 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
     let CHAIN_ID = null;
     let SERVER_URL = null;
     let API_KEY = null;
+    const REQUEST_INTERVAL_DELAY = 200;
 
     setChainId(CONFIG.chainId);
 
@@ -49,115 +50,24 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
             $rootScope.$on(EVENTS.CHAIN_ID_CHANGED, (event, newChainId) => {
                 setChainId(newChainId);
             });
+
+            EtherScanService.q = async.queue((data, callback) => {
+                $log.info("EtherScan REQUESTS IN QUEUE: ", EtherScanService.q.length(), "######");
+
+                let promise = $http.get(data.url);
+
+                $timeout(() => {
+                    callback(promise);
+                }, REQUEST_INTERVAL_DELAY);
+            }, 1);
         }
 
-        getBalance(address) {
+        getTransactionsHistory(address, startblock, endblock) {
             let defer = $q.defer();
-
-            const apiUrl = SERVER_URL + "?module=account&action=balance&address=" + address + "&tag=latest&apikey=" + API_KEY
-            let promise = $http.get(apiUrl);
-
-            EtherScanService.handlePromise(defer, promise);
-
-            return defer.promise;
-        }
-
-        sendRawTransaction(trxSignedHex) {
-            let defer = $q.defer();
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_sendRawTransaction&tag=latest&apikey=" + API_KEY
-            let primise = $http.post(apiUrl, $httpParamSerializerJQLike({ hex: trxSignedHex }), REQUEST_CONFIG);
-
-            EtherScanService.handlePromise(defer, promise);
-
-            return defer.promise;
-        }
-
-        getTransaction(txHash) {
-            let defer = $q.defer();
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_getTransactionByHash&txHash=" + txHash + "&tag=latest&apikey=" + API_KEY
+            const apiUrl = SERVER_URL + `?module=account&action=txlist&address=${address}&startblock=${startblock}&endblock=${endblock}&sort=asc&apikey=${API_KEY}`;
 
             let promise = $http.get(apiUrl);
-
-            EtherScanService.handlePromise(defer, promise);
-
-            return defer.promise;
-        }
-
-        getCurrentBlock() {
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_blockNumber&tag=latest&apikey=" + API_KEY
-            return $http.get(apiUrl);
-        }
-
-        // TODO - remove after we implement custom node method
-        getTransactionCount(address) {
-            let defer = $q.defer();
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_getTransactionCount&address=" + address + "&tag=latest&apikey=" + API_KEY
-            $http.get(apiUrl).then((response) => {
-                if (response.data.error || !response.data || !response.data.result) {
-                    defer.reject({ "message": $rootScope.getTranslation(ERROR_CODES[response.data.error.code]), "error": response.data.error });
-                } else {
-                    try {
-                        defer.resolve({
-                            hex: response.data.result,
-                            dec: Number(response.data.result)
-                        });
-                    } catch (e) {
-                        // TODO - orginise error messages
-                        defer.reject({ "message": e })
-                    }
-                }
-            }).catch((error) => {
-                defer.reject({ "message": $rootScope.getTranslation('http_connection_error') })
-            });
-
-            return defer.promise;
-        }
-
-        getEthCall(data) {
-            let defer = $q.defer();
-
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_call&to=" + data.to + "&data=" + data.data + "&tag=latest&apikey=" + API_KEY
-
-            $http.get(apiUrl).then((response) => {
-                if (response.data.error || !response.data || !response.data.result) {
-                    defer.reject({ "message": $rootScope.getTranslation(ERROR_CODES[response.data.error.code]), "error": response.data.error });
-                } else {
-                    try {
-                        defer.resolve(response.data.result);
-                    } catch (e) {
-                        // TODO - orginise error messages
-                        defer.reject({ "message": e })
-                    }
-                }
-            }).catch((error) => {
-                defer.reject({ "message": $rootScope.getTranslation('http_connection_error') })
-            });
-
-            return defer.promise;
-        }
-
-        getGasPrice() {
-            let defer = $q.defer();
-
-            const apiUrl = SERVER_URL + "?module=proxy&action=eth_gasPrice&apikey=" + API_KEY
-
-            $http.get(apiUrl).then((response) => {
-                if (response.data.error || !response.data || !response.data.result) {
-                    defer.reject({ "message": $rootScope.getTranslation(ERROR_CODES[response.data.error.code]), "error": response.data.error });
-                } else {
-                    try {
-                        defer.resolve({
-                            hex: response.data.result,
-                            dev: Number(response.data.result)
-                        });
-                    } catch (e) {
-                        // TODO - orginise error messages
-                        defer.reject({ "message": e })
-                    }
-                }
-            }).catch((error) => {
-                defer.reject({ "message": $rootScope.getTranslation('http_connection_error') })
-            });
+            EtherScanService.waitForTicket(defer, apiUrl);
 
             return defer.promise;
         }
@@ -173,6 +83,13 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
                 defer.reject($rootScope.buildErrorObject("ERR_HTTP_CONNECTION", error));
             });
         }
+
+        static waitForTicket(defer, url, args) {
+            EtherScanService.q.push({ url: url }, (promise) => {
+                EtherScanService.handlePromise(defer, promise);
+            });
+        }
+
     };
 
     return new EtherScanService();

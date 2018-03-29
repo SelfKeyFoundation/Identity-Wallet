@@ -11,7 +11,7 @@
     .dashboard-content-wrappper__content-section {
         margin-top: 30px;
 
-        > * {
+        > *:not(:last-child) {
             width: 33%;
             margin-left: 15px;
             margin-right: 15px;
@@ -27,6 +27,9 @@
         .sk-tasks-box {
             margin-right: 0;
             margin-left: 0;
+        }
+        .disable-opacity {
+            opacity: 0.4;
         }
     }
 }   
