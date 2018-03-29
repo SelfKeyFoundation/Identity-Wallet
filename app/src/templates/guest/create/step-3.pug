@@ -18,11 +18,11 @@
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
                 span.primary DOWNLOAD KEYSTORE FILE (UTC/JSON)
 
-            .title
+            .title.second
                 p
                     | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
-                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password, &nbsp;
-                    a(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-wallet/what-is-a-keystore-file-utc', false)") click here.
+                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password,
+                    a.link(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-identity-wallet', false)") click here.
 
             .actions-wrapper
                 md-button.outline-orange(ng-click="nextStep($event)")

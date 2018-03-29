@@ -30,8 +30,18 @@
             padding: 50px 44px;
 
             >.title {
+                &.second {
+                    padding-top: 36px;
+                    padding-bottom: 42px !important; 
+                }
+                .link {
+                    cursor: pointer;
+                    outline: none;
+                    margin-left: 4px;
+                }
                 font-family: ProximaNovaRegular;
                 font-size: 18px;
+                padding-bottom: 34px;
                 line-height: 1.72;
                 color: #ffffff;
             }
@@ -61,7 +71,6 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: stretch;
-                margin-top: 44px;
 
                 >.md-button {
                     padding: 10px;

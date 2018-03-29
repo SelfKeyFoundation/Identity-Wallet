@@ -124,7 +124,7 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
 
     $scope.addCustomToken = (event, form) => {
         if (!$scope.formDataIsValid(form)) {
-            return CommonService.showToast('warning', "Form isn't valid");
+            return CommonService.showToast('warning', "Invalid token contract address.");
         }
 
         let newToken = $scope.formData;

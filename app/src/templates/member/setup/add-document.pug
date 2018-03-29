@@ -40,13 +40,13 @@
                     .item.clickable(sk-select-if="selected.type === 'id_document'")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('national_id', 'line1')")
-                            span(ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')") 4
+                            span(ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')") 3
                         span {{ $root.DICTIONARY['national_id'] }}
 
                     .item.clickable(sk-select-if="selected.type === 'id_selfie'")
                         .bullet
                             img(src='assets/images/icons/tick.svg', ng-if="$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')")
-                            span(ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')") 5
+                            span(ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')") 4
                         span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="start center")
