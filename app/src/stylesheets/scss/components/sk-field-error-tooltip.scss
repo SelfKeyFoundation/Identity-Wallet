@@ -3,7 +3,7 @@
 }
 
 .sk-field-error-tooltip  {
-  position: absolute;
+  position: absolute !important;
   $background: #d0021b;
   background-color: $background;
 
@@ -24,7 +24,7 @@
   
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   border-radius: 4px;
-  color: #ffffff !important;
+  
 
   display: flex;
   flex-direction: row;
@@ -32,7 +32,8 @@
   justify-content: center;
 
   > span {
-      padding: 12px 12px;
+      color: #ffffff !important;
+      padding: 12px 12px !important;
   }
   &:after {
       content:'';
