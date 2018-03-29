@@ -28,18 +28,19 @@
 
         >.content {
             padding: 24px;
+            margin-top: 10px;
         }
 
         md-input-container {
             margin: 14px 0;
             .sk-error-tooltip {
-                top: -35px;
+                top: -42px;
                 left: 80px;
                 z-index: 1;
                 position: absolute;
                 span {
                     color: #ffffff;
-                    padding:12px 12px;
+                    padding:10px 12px;
                     font-size: 16px;
                     font-weight: 600;
                     line-height: 1.5;
