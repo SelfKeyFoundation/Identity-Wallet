@@ -14642,14 +14642,6 @@ md-toolbar {
     padding-bottom: 52px;
     padding-left: 29px;
     padding-top: 30px; }
-    .sk-right-sidenav .sk-right-sidenav__header .title {
-      margin-left: 12px;
-      font-family: OrbitronMedium;
-      text-transform: uppercase;
-      font-size: 18px;
-      letter-spacing: 2.8px;
-      text-align: left;
-      color: #ffffff; }
   .sk-right-sidenav .sk-right-sidenav__top-section-container {
     padding-left: 29px;
     padding-top: 44px;
@@ -17457,18 +17449,18 @@ md-dialog {
     display: none; }
 
 @media print {
-  .wallet-create-step-6 .content-wrapper {
+  .wallet-create-step-4 .content-wrapper {
     display: none; }
-  .wallet-create-step-6 .private-key-print-box {
+  .wallet-create-step-4 .private-key-print-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center; }
-    .wallet-create-step-6 .private-key-print-box .title {
+    .wallet-create-step-4 .private-key-print-box .title {
       margin-top: 16px;
       font-weight: bold;
       font-size: 18px; }
-    .wallet-create-step-6 .private-key-print-box .pk {
+    .wallet-create-step-4 .private-key-print-box .pk {
       margin-top: 8px; } }
 
 .wallet-create-step-5 {
