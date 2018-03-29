@@ -14642,14 +14642,6 @@ md-toolbar {
     padding-bottom: 52px;
     padding-left: 29px;
     padding-top: 30px; }
-    .sk-right-sidenav .sk-right-sidenav__header .title {
-      margin-left: 12px;
-      font-family: OrbitronMedium;
-      text-transform: uppercase;
-      font-size: 18px;
-      letter-spacing: 2.8px;
-      text-align: left;
-      color: #ffffff; }
   .sk-right-sidenav .sk-right-sidenav__top-section-container {
     padding-left: 29px;
     padding-top: 44px;
@@ -17457,18 +17449,18 @@ md-dialog {
     display: none; }
 
 @media print {
-  .wallet-create-step-6 .content-wrapper {
+  .wallet-create-step-4 .content-wrapper {
     display: none; }
-  .wallet-create-step-6 .private-key-print-box {
+  .wallet-create-step-4 .private-key-print-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center; }
-    .wallet-create-step-6 .private-key-print-box .title {
+    .wallet-create-step-4 .private-key-print-box .title {
       margin-top: 16px;
       font-weight: bold;
       font-size: 18px; }
-    .wallet-create-step-6 .private-key-print-box .pk {
+    .wallet-create-step-4 .private-key-print-box .pk {
       margin-top: 8px; } }
 
 .wallet-create-step-5 {
@@ -17562,9 +17554,26 @@ md-dialog {
     margin-top: 30px;
     width: 400px; }
     .wallet-create-step-6 .content-wrapper > .content {
-      padding: 24px; }
+      padding: 24px;
+      margin-top: 10px; }
     .wallet-create-step-6 .content-wrapper md-input-container {
       margin: 14px 0; }
+      .wallet-create-step-6 .content-wrapper md-input-container .sk-error-tooltip {
+        top: -42px;
+        left: 122px;
+        z-index: 1;
+        position: absolute; }
+        .wallet-create-step-6 .content-wrapper md-input-container .sk-error-tooltip span {
+          color: #ffffff;
+          padding: 10px 12px;
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 1.5;
+          letter-spacing: 0.3px;
+          text-align: left;
+          font-family: ProximaNovaRegular; }
+      .wallet-create-step-6 .content-wrapper md-input-container.md-input-invalid .sk-error-tooltip {
+        overflow: visible !important; }
 
 .member-setup-layout {
   position: relative; }
