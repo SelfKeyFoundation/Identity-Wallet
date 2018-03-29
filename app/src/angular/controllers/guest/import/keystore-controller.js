@@ -94,9 +94,11 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         unlockExistingWalletPromise.then((data) => {
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
 
-            /*
             // POLYGON
-            SelfkeyService.triggerAirdrop("49ada4743684950d1fec57a8f244ea96fa1cae72ad37f8cc4d12e04709dd8896_5ab69d7ea3c1c60001a98fdc_5ab69d65a3c1c60001a98fdb").then((data)=>{
+            //SelfkeyService.triggerAirdrop("49ada4743684950d1fec57a8f244ea96fa1cae72ad37f8cc4d12e04709dd8896_5ab69d7ea3c1c60001a98fdc_5ab69d65a3c1c60001a98fdb").then((data)=>{
+            /*
+            SelfkeyService.triggerAirdrop("b1e3d491fd9e93dca7e9fa93265dd174744124464679632f899bf480e6fc1295_5abd074ae300550001443146_5abd072be300550001443145").then((data)=>{
+
                 console.log(">>>>>>>>>> data:", data);
             }).catch((error)=>{
                 console.log(">>>>>>>>>> error:", error);
