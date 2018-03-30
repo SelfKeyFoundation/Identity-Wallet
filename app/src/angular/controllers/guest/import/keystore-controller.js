@@ -57,7 +57,6 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 }).catch((error) => {
                     $scope.isAuthenticating = false;
                     $scope.incorrectPassword = true;
-                    //CommonService.showToast('error', 'Incorrect password');
                 });
             }
         } else if ($scope.type === 'import') {
