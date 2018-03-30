@@ -63,7 +63,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 if (data.baseFn) {
                     baseFn = data.baseFn;
                 }
-                let promise = baseFn[data.method].apply(self, data.args);
+
+                let promise = baseFn[data.method].apply(self, data.args)
 
                 $timeout(() => {
                     callback(promise);

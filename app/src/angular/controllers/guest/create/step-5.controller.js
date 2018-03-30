@@ -11,8 +11,12 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
 
     $scope.importKycFile = (event) => {
         RPCService.makeCall('importKYCPackage', { walletId: $rootScope.wallet.id }).then((walletSetting) => {
+            //on cancel choose a file
+            if (!walletSetting) {
+                return;
+            }
             SelfkeyService.triggerAirdrop(walletSetting.airDropCode).then(()=>{
-                SqlLiteService.removeAirdropCode();
+                SqlLiteService.removeAirdropCode(walletSetting);
             });
 
             $rootScope.wallet.loadIdAttributes().then(() => {
