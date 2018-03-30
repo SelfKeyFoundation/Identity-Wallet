@@ -50,12 +50,11 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     }
 
     $rootScope.CUSTOM_TOKENS_LIMIT = 20;
-    let processCustomTokens = () => {
+    $rootScope.tokenLimitIsExceed = () => {
         let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
-        $rootScope.tokenLimitIsExceed = tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
+        return tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
     };
 
-    processCustomTokens();
 
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
@@ -108,7 +107,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     };
 
     function updatePieChart() {
-        processCustomTokens();
         $scope.pieChart.items = $scope.getPieChartItems();
 
         $scope.pieChart.total = CommonService.numbersAfterComma(wallet.calculateTotalBalanceInUSD(), 2);
