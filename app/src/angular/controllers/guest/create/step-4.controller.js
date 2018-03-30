@@ -17,7 +17,8 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $w
     }
 
     $scope.nextStep = (event) => {
-        $state.go('guest.create.step-5');
+        // got to loading
+        $state.go('guest.loading', {redirectTo: 'guest.create.step-5'});
     }
 
     $scope.togglePrivateKeyVisibility = () => {

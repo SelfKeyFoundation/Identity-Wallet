@@ -74,8 +74,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $sta
         if ($stateParams.type === 'national_id') {
             $state.go('member.setup.add-document', { type: 'id_selfie' });
         } else {
-            // got to loading
-            $state.go('guest.loading', {redirectTo: 'member.id-wallet.main'});
+            $state.go('member.id-wallet.main');
         }
     }
 };
