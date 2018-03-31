@@ -22,7 +22,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
     /**
      *
      */
-    $scope.addIdAttribute = (event, type) => {
+    $scope.addIdAttribute = (event, type, title) => {
         $mdDialog.show({
             controller: "AddIdAttributeDialogController",
             templateUrl: "common/dialogs/id-attributes/add-id-attribute.html",
@@ -32,7 +32,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
             fullscreen: true,
             locals: {
                 excludeKeys: excludeKeys,
-                type
+                type,
+                title
             }
         }).then((selectedIdAttributeType) => {
             // part 1
