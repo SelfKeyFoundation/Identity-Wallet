@@ -17,6 +17,13 @@ md-dialog {
             border: solid 1px #303c49;
             position: relative;
 
+            .sk-icon {
+                position: absolute;
+                right: -18px;
+                top: -18px;
+                cursor: pointer;
+            }
+
             .container {
                 overflow: auto;
 
