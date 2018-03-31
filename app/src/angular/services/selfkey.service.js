@@ -5,8 +5,8 @@ function SelfkeyService($rootScope, $log, $http, CONFIG) {
 
     $log.info('SelfkeyService Initialized');
 
-    // 'https://token-sale-demo-api.kyc-chain.com';
-    const KYC_BASE_URL = CONFIG.kycApiEndpoint;
+    //const KYC_BASE_URL = CONFIG.kycApiEndpoint;
+    const KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com';
 
     /**
      *

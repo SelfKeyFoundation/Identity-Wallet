@@ -179,7 +179,7 @@ module.exports = function (app) {
             publicKey = publicKey.toString('hex');
 
             let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
-            let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey({ publicKey: publicKey });
+            let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey(publicKey);
 
             walletSelectPromise.then((wallet) => {
                 if (wallet) {

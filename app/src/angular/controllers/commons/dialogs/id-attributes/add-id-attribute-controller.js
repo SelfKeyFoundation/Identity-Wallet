@@ -1,6 +1,6 @@
 'use strict';
 
-function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, excludeKeys, type) {
+function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, SqlLiteService, excludeKeys, type, title) {
     'ngInject';
 
     $log.info("AddIdAttributeDialogController", excludeKeys);
@@ -9,6 +9,7 @@ function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, Sql
     $scope.idDocuments = {};
     $scope.proofOfAddresses = {};
     $scope.proofOfWealthes = {};
+    $scope.title = title || 'Add Attribute';
     //$scope.onlineIdentityAttributes = {};
 
     let data = SqlLiteService.getIdAttributeTypes();

@@ -75,6 +75,6 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
                     .sk-button.small(ng-click="checkTransaction($event)", style="margin-top: 30px;", ng-if="txHex")
                         span view transaction
 
-        .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
+        .sk-balance-box(ng-if="allowSelectERC20Token && symbol && symbol !='0'", style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
             span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{ infoData.reminingBalance }} {{ symbol }} ${{ infoData.reminingBalanceInUsd | number }}
             span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ infoData.txFeeInEth }} ETH
