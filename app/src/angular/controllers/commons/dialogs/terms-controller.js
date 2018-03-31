@@ -18,6 +18,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
         if (!$scope.scrolledBottom){
             return;
         }
+        
         $scope.isLoading = true;
         guideSettings.termsAccepted = true;
 
