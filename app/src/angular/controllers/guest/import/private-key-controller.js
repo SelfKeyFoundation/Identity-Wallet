@@ -30,15 +30,19 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
 
         let importPromise = RPCService.makeCall('importPrivateKey', { privateKey: privateKey });
         importPromise.then((data) => {
-            if(data.id){
+            if (data.id) {
                 $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
                 if (data.isSetupFinished) {
                     $state.go('member.dashboard.main');
                 } else {
-                    $state.go('guest.create.step-3', { walletData: data });
+                    if (data.keystoreFilePath) {
+                        $state.go('guest.create.step-3', { walletData: data });
+                    } else {
+                        $state.go('guest.create.step-4');
+                    }
                 }
-            }else{
+            } else {
                 CommonService.showToast('warning', 'missing implementation');
             }
         }).catch((error) => {

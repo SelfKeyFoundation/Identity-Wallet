@@ -183,11 +183,9 @@ module.exports = function (app) {
 
             walletSelectPromise.then((wallet) => {
                 if (wallet) {
+                    wallet.privateKey = privateKeyBuffer;
                     app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
                 } else {
-
-                    // TODO insert into sqlLite
-
                     electron.app.sqlLiteService.Wallet.add(
                         {
                             publicKey: publicKey
