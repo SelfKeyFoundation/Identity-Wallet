@@ -5,18 +5,19 @@
                 sk-icon(icon="exchanges-icon", size-class="icon-size-36x36")
             .title Exchanges
             .status(layout='row')
-                span(style='color: #fff') Your Staking Status
+                span Your Staking Status
                 .icon-container
                     md-icon(md-svg-src="assets/images/icons/ic_help_outline_black_24px.svg" class="color-white")
                     .fixed-tooltip
-                        |  <div style="text-align:left;"> What is Staking? <br />
+                        |  <div> What is Staking? <br />
                         |  Staking acts similarly like <br />
                         |  a refundable security deposit. <br />
                         |  To learn more, click
                         span(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-marketplace')") here...
                         </div>
 
-                span(style='color: #f5a623') : Coming soon
+                span :
+                    .coming-soon Coming soon
         .body-wrapper
             ul
                 li(ng-repeat='item in exchangesList')
