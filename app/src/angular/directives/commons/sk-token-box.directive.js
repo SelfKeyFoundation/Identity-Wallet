@@ -15,6 +15,7 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService)
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;
+            scope.getPublicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();

@@ -1,6 +1,6 @@
 'use strict';
 
-function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $stateParams, $mdDialog, $timeout, RPCService, CommonService, SelfkeyService) {
+function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $stateParams, $mdDialog, $timeout, SqlLiteService, RPCService, CommonService, SelfkeyService) {
     'ngInject'
 
     $log.info('GuestKeystoreCreateStep5Controller');
@@ -11,9 +11,13 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
 
     $scope.importKycFile = (event) => {
         RPCService.makeCall('importKYCPackage', { walletId: $rootScope.wallet.id }).then((walletSetting) => {
-
-            //walletSetting.airDropCode
-            //SelfkeyService.triggerAirdrop(walletSetting.airDropCode)
+            //on cancel choose a file
+            if (!walletSetting) {
+                return;
+            }
+            SelfkeyService.triggerAirdrop(walletSetting.airDropCode).then(()=>{
+                SqlLiteService.removeAirdropCode(walletSetting);
+            });
 
             $rootScope.wallet.loadIdAttributes().then(() => {
                 $state.go('guest.create.step-6', {type: 'kyc_import'});
@@ -22,6 +26,8 @@ function GuestKeystoreCreateStep5Controller($rootScope, $scope, $log, $state, $s
             CommonService.showToast('error', 'Error');
         });
     }
+
+
 };
 
 module.exports = GuestKeystoreCreateStep5Controller;
