@@ -10,6 +10,7 @@
                     .step {{selected.step}}
                     .title {{selected.title1}}
                     .description {{selected.title3}}
+                    .snackbar(ng-class="{'show': isShown, 'success': status === 'success', 'error': status === 'error' }") {{message}}
                 .content-wrapper
                     .box(flex, layout="column", layout-align="center center")
                         sk-icon(icon="upload", size-class="icon-size-34x44")

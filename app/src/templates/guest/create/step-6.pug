@@ -39,7 +39,7 @@
                     md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 //div(ng-messages="basicInfoForm.countryOfResidency.$error")
                     div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['country_of_residency'] }}.
-                sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
+                .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
                     span(ng-message="required") Field is Required
             md-button.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
                 span.small Create SelfKey ID
