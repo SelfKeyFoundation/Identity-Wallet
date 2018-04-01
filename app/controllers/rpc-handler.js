@@ -773,24 +773,37 @@ module.exports = function (app) {
         });
     }
 
+    /*
     controller.prototype.getTransactionsHistory = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.transactionsHistory_selectAll().then((data) => {
+        electron.app.sqlLiteService.TransactionHistory.findAll().then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
+    */
 
+    // NEED TEST
     controller.prototype.getTransactionsHistoryByWalletId = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.transactionsHistory_selectByWalletId(args).then((data) => {
+        electron.app.sqlLiteService.TransactionHistory.findByWalletId(args.walletId).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
 
+    // NEED TEST
     controller.prototype.getTransactionsHistoryByWalletIdAndTokenId = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.transactionsHistory_selectByWalletIdAndTokenId(args).then((data) => {
+        electron.app.sqlLiteService.TransactionHistory.findByWalletIdAndTokenId(args.walletId, args.tokenId).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    // TODO
+    controller.prototype.insertTransactionHistory = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.transactionsHistory_insert(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -807,14 +820,6 @@ module.exports = function (app) {
 
     controller.prototype.saveWalletSettings = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.WalletSetting.edit(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
-
-    controller.prototype.insertTransactionHistory = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.transactionsHistory_insert(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);

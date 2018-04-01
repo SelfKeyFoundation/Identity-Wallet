@@ -29,8 +29,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
             $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
         }).catch((err) => {
-            console.log(err);
-            //TODO
+            // TODO
         });
     };
 

@@ -33,17 +33,27 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
             if (data.id) {
                 $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey);
 
-                if (data.isSetupFinished) {
-                    $state.go('member.dashboard.main');
-                } else {
-                    if (data.keystoreFilePath) {
-                        $state.go('guest.create.step-3', { walletData: data });
+
+                let initialPromises = [];
+                initialPromises.push($rootScope.wallet.loadIdAttributes());
+                initialPromises.push($rootScope.wallet.loadTokens());
+
+                $q.all(initialPromises).then((resp) => {
+                    if (data.isSetupFinished) {
+                        $state.go('member.dashboard.main');
                     } else {
-                        $state.go('guest.create.step-4');
+                        if (data.keystoreFilePath) {
+                            $state.go('guest.create.step-3', { walletData: data });
+                        } else {
+                            $state.go('guest.create.step-4');
+                        }
                     }
-                }
+
+                }).catch((error) => {
+                    CommonService.showToast('error', 'error');
+                });
             } else {
-                CommonService.showToast('warning', 'missing implementation');
+                CommonService.showToast('error', 'error');
             }
         }).catch((error) => {
             $log.error(error);
