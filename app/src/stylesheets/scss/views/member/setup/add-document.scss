@@ -116,12 +116,13 @@
     font-stretch: normal;
     line-height: 1.5;
     letter-spacing: 0.3px;
-    text-align: left;
+    text-align: center;
     color: #ffffff;
     padding: 16px;
     position: absolute;
     z-index: 1;
     left: 30px;
+    margin-top: 20px;
     &.show {
         visibility: visible;
         -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
@@ -146,7 +147,7 @@
     to {top: 50px; opacity: 1;}
 }
 
-@-webkit-keyframes fadeout {
+/*@-webkit-keyframes fadeout {
     from {top: 50px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
@@ -154,4 +155,4 @@
 @keyframes fadeout {
     from {top: 50px; opacity: 1;}
     to {top: 0; opacity: 0;}
-}
+}*/

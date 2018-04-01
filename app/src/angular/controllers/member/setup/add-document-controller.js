@@ -34,13 +34,14 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
     };
 
     $scope.snackbar = function (status, message, isShown) {
-        $scope.status = status;
-        $scope.message = message;
-        $scope.isShown = isShown;
-        $timeout(function () {
+        this.status = status;
+        this.message = message;
+        this.isShown = isShown;
+        // Fade out
+     /*   $timeout(function () {
             isShown = false;
-        }, 3000);
-        $scope.$apply();
+            $scope.isShown = false;
+        }, 3000);*/
     };
 
     $scope.selectFile = (event) => {
