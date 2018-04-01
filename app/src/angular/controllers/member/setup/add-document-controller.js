@@ -24,7 +24,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
             title3: "(can be driver's license, passport)",
             title4: "(Max file size: 50mb)",
         }
-    }
+    };
 
     $scope.selected = ID_ATTRIBUTES[$stateParams.type]
     $scope.selected.values = $rootScope.wallet.getIdAttributeItemValue($scope.selected.type);
