@@ -1,5 +1,6 @@
 .add-document {
     >.header-wrapper {
+        position: relative;
         width: 1140px;
 
         span {
@@ -101,3 +102,57 @@
         }
     }
 }
+
+/* The snackbar */
+.snackbar {
+    visibility: hidden;
+    width: 203px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    font-family: ProximaNovaRegular;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+    padding: 16px;
+    position: absolute;
+    z-index: 1;
+    left: 30px;
+    margin-top: 20px;
+    &.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    &.success {
+        background-color: #4dd2b4;
+    }
+    &.error {
+        background-color: #d0021b;
+    }
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+/*@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}*/
