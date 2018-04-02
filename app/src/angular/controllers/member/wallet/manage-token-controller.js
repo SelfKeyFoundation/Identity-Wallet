@@ -42,11 +42,8 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
 
     $scope.loadTransactionHistory = () => {
         let tokenId = $scope.symbol.toUpperCase() === 'ETH' ? null : $scope.selectedToken.id;
-        let query = {
-            walletId: $rootScope.wallet.id,
-            tokenId:  tokenId
-        };
-        SqlLiteService.getTransactionsHistoryByWalletIdAndTokenId(query).then((data)=> {
+
+        SqlLiteService.getTransactionsHistoryByWalletIdAndTokenId($rootScope.wallet.id, tokenId).then((data)=> {
             $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
         }).catch((err) => {
             console.log(err);

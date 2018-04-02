@@ -1,6 +1,6 @@
 'use strict';
 
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $window, $stateParams) {
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $window) {
     'ngInject'
 
     $log.info("GuestKeystoreCreateStep4Controller");
