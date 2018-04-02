@@ -81,7 +81,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
 
     $scope.skip = (event) => {
         $state.go('member.dashboard.main');
-    }
+    };
 
     function goToNextStep () {
         if ($stateParams.type === 'national_id') {
