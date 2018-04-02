@@ -104,7 +104,7 @@
                             visibility: visible;
                             opacity: 1;
 
-                             > div {
+                            > div {
                                 text-align: left;
                             }
                         }
@@ -194,6 +194,7 @@
                             word-break: break-word;
                             padding: 30px 30px 0 30px;
                             height: 144px;
+                            line-height: 1.88;
 
                             p {
                                 margin: 0;
