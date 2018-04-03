@@ -5,7 +5,6 @@ md-sidenav.md-sidenav-right(md-component-id="right")
         .sk-right-sidenav__close-icon(ng-click="close($event)") ✕
         .sk-right-sidenav__header
             sk-icon(icon="selfkey", size-class="icon-size-39x44")
-            span.title selfkey
 
         .sk-right-sidenav__content(layout="column", layout-align="space-between center", flex)
             .sk-right-sidenav__top-section-container(layout="column")
@@ -17,10 +16,10 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                     span Marketplace
                 .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.id-wallet')", ng-click="$root.navigate($event, 'member.id-wallet.main')")
                     md-icon(md-svg-src="assets/images/icons/selfkey_id_16px.svg")
-                    span Selfkey ID
+                    span SelfKey ID
             .sk-right-sidenav__botton-section-container(layout="column")
                 .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://selfkey.org')")
-                    span About Selfkey
+                    span About SelfKey
                 .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://idea.selfkey.org')") 
                     span Submit Idea
                 .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')")

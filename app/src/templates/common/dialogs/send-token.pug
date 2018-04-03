@@ -14,7 +14,7 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
             .sk-send-ether-box__recipient-container
                 qrcode(data="formData.sendToAddressHex", size="40", background="#303c49", color="#66798f")
                 input.sk-send-ether-box__recipient-container__input(ng-class="{'has-error': errors.sendToAddressHex}", name="sendToAddress", type="text", placeholder="Send to address", ng-model="formData.sendToAddressHex", ng-readonly="inputStates.isAddressLocked", ng-required)
-                .sk-error-tooltip(ng-if="errors.sendToAddressHex", style="top: -62px;")
+                .sk-field-error-tooltip(ng-if="errors.sendToAddressHex", style="top: -62px;")
                     span Invalid address. Please check and try again.
 
             .sk-send-ether-box__eth-amount-container
@@ -62,7 +62,7 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
         .sk-send-ether-box(style="width: 600px; align-items: center;", ng-if="viewStates.step === 'transaction-status'")
             sk-icon(icon="{{symbol}}", size-class="icon-size-64x64", ng-if="!allowSelectERC20Token")
 
-            span.sk-send-ether-box__sent(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{getTransactionStatus()}}
+            span.sk-send-ether-box__sent(ng-class="{'send-error-text': errors.sendFailed}") {{getTransactionStatus()}}
 
             .sk-send-ether-box__amount-container(style="margin-top: 40px; ")
                 span(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{formData.sendAmount}}
@@ -75,6 +75,6 @@ md-dialog.send-token(aira-lable="Send {{symbol}}")
                     .sk-button.small(ng-click="checkTransaction($event)", style="margin-top: 30px;", ng-if="txHex")
                         span view transaction
 
-        .sk-balance-box(style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
+        .sk-balance-box(ng-if="allowSelectERC20Token && symbol && symbol !='0'", style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
             span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{ infoData.reminingBalance }} {{ symbol }} ${{ infoData.reminingBalanceInUsd | number }}
             span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ infoData.txFeeInEth }} ETH

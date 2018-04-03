@@ -1,0 +1,55 @@
+.sk-field-error-tooltip-parent {
+    position: relative !important;
+}
+
+.sk-field-error-tooltip  {
+  z-index: 2;
+  position: absolute !important;
+  $background: #d0021b;
+  background-color: $background;
+
+  font-family: ProximaNovaRegular;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  &.right {
+      right: 0;
+  }
+  &.top {
+      bottom: 100%;
+  }
+  &.center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.default-top {
+    top: -50px !important;
+  }
+  
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  > span {
+      color: #ffffff !important;
+      padding: 12px 12px !important;
+  }
+  &:after {
+      content:'';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 0;
+      height: 0;
+      border-top: solid 10px $background;
+      border-left: solid 10px transparent;
+      border-right: solid 10px transparent;
+  }
+}

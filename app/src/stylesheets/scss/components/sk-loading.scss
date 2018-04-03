@@ -33,16 +33,20 @@ $glowingColor: #000;
         justify-content: center;
 
         background-position: center center;
-        background-image: url('../../assets/images/icons/swirl.svg');
+        background-image: url('../../assets/images/bgs/loading-background.png');
         background-repeat: no-repeat;
-        background-size: 650px;
+        //background-size: 650px;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
         object-fit: contain;
 
-        animation-name: sk-loading-animation;
-        animation-duration: 15.5s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-        transition-delay: now;
+        //animation-name: sk-loading-animation;
+        //animation-duration: 15.5s;
+        //animation-iteration-count: infinite;
+        //animation-timing-function: linear;
+        //transition-delay: now;
     }
 
     > .logo {
@@ -75,7 +79,7 @@ $glowingColor: #000;
         z-index: 0;
 
         text-align: center;
-        bottom: 20px;
+        bottom: 30px;
 
         > .header {
             text-transform: uppercase;

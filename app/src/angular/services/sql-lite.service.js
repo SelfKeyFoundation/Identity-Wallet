@@ -213,14 +213,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('getIdAttributes', { walletId: walletId });
         }
 
-        addIdAttribute(idAttribute) {
-            return RPCService.makeCall('addIdAttribute', idAttribute);
-        }
-
-        deleteIdAttribute(idAttribute) {
-            return RPCService.makeCall('deleteIdAttribute', idAttribute);
-        }
-
         /**
          *
          */
@@ -235,17 +227,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 
         loadWalletHistory(walletId) {
             return RPCService.makeCall('actionLogs_findAll', { walletId: walletId });
-        }
-
-        /**
-         *
-         */
-        updateIdAttributeItemValueStaticData(idAttributeValue) {
-            return RPCService.makeCall('updateIdAttributeItemValueStaticData', idAttributeValue);
-        }
-
-        updateIdAttributeItemValueDocument(idAttributeItemValue, document) {
-            return RPCService.makeCall('updateIdAttributeItemValueDocument', { idAttributeItemValue: idAttributeItemValue, document: document });
         }
 
         /**
@@ -283,15 +264,20 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         getTransactionsHistoryByWalletId(walletId) {
-            return RPCService.makeCall('getTransactionsHistoryByWalletId', walletId);
+            return RPCService.makeCall('getTransactionsHistoryByWalletId', { walletId: walletId });
         }
 
-        getTransactionsHistoryByWalletIdAndTokenId(query) {
-            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', query);
+        getTransactionsHistoryByWalletIdAndTokenId(walletId, tokenId) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', { walletId: walletId, tokenId: tokenId });
         }
 
         saveWalletSettings(data) {
             return RPCService.makeCall('saveWalletSettings', data);
+        }
+
+        removeAirdropCode(walletSetting) {
+            walletSetting.airDropCode = null;
+            return RPCService.makeCall('saveWalletSettings', walletSetting);
         }
 
         insertWalletToken(data) {

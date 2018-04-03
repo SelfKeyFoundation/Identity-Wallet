@@ -1,9 +1,20 @@
 'use strict';
 
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, SqlLiteService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, RPCService, SqlLiteService, SelfkeyService) {
     'ngInject'
 
     $log.info('MemberDashboardMainController', $rootScope.wallet);
+
+    RPCService.makeCall('getWalletSettingsByWalletId', $rootScope.wallet.id).then((walletSettings) => {
+        if(walletSettings && walletSettings.length > 0){
+            let walletSetting = walletSettings[0];
+            if (walletSetting.airDropCode) {
+                SelfkeyService.triggerAirdrop(walletSetting.airDropCode).then(() => {
+                    SqlLiteService.removeAirdropCode();
+                });
+            }
+        }
+    });
 
     $scope.openEtherscanTxWindow = (event) => {
         $rootScope.openInBrowser("https://etherscan.io/address/0x" + $rootScope.wallet.getPublicKeyHex(), true);
@@ -18,8 +29,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
             $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
         }).catch((err) => {
-            console.log(err);
-            //TODO
+            // TODO
         });
     };
 
@@ -39,12 +49,11 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     }
 
     $rootScope.CUSTOM_TOKENS_LIMIT = 20;
-    let processCustomTokens = () => {
+    $rootScope.tokenLimitIsExceed = () => {
         let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
-        $rootScope.tokenLimitIsExceed = tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
+        return tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
     };
 
-    processCustomTokens();
 
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
@@ -97,7 +106,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     };
 
     function updatePieChart() {
-        processCustomTokens();
         $scope.pieChart.items = $scope.getPieChartItems();
 
         $scope.pieChart.total = CommonService.numbersAfterComma(wallet.calculateTotalBalanceInUSD(), 2);

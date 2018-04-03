@@ -17,6 +17,13 @@ md-dialog {
             border: solid 1px #303c49;
             position: relative;
 
+            .sk-icon {
+                position: absolute;
+                right: -18px;
+                top: -18px;
+                cursor: pointer;
+            }
+
             .container {
                 overflow: auto;
 
@@ -27,7 +34,7 @@ md-dialog {
                     box-shadow: inset 0 -1px 0 0 #303c49;
                     text-align: center;
 
-                    > span{
+                    > span {
                         height: 24px;
                         opacity: 0.83;
                         font-family: ProximaNovaRegular;
@@ -60,6 +67,18 @@ md-dialog {
                     padding: 40px;
 
                     .text {
+
+                        > p {
+
+                            > span {
+
+                                cursor: pointer;
+
+                                &:focus {
+                                    outline: none !important;
+                                }
+                            }
+                        }
 
                     }
                     .logo {
@@ -113,6 +132,8 @@ md-dialog {
 
 }
 
-.button-198 {
-    width: 198px !important;
+.button-300 {
+    width: 300px !important;
 }
+
+

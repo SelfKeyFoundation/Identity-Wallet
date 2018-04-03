@@ -15,6 +15,7 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService)
             scope.token = null;
             scope.balance = 0;
             scope.balanceInUsd = 0;
+            scope.getPublicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
             scope.title = $rootScope.getTranslation("token", scope.symbol.toUpperCase());
             scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
@@ -26,23 +27,9 @@ function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService)
                     scope.token = $rootScope.wallet.tokens[scope.symbol.toUpperCase()];
                     scope.balance = scope.token.getBalanceDecimal();
                     scope.balanceInUsd = scope.token.balanceInUsd;
-                    /*
-                    let promise = scope.token.loadBalance();
-                    promise.then((token) => {
-                        scope.balance = scope.token.getBalanceDecimal();
-                        scope.balanceInUsd = scope.token.balanceInUsd;
-                    });
-                    */
                 } else {
                     scope.balance = $rootScope.wallet.balanceEth;
                     scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
-                    /*
-                    let promise = $rootScope.wallet.loadBalance();
-                    promise.then(() => {
-                        scope.balance = $rootScope.wallet.balanceEth;
-                        scope.balanceInUsd = $rootScope.wallet.balanceInUsd;
-                    });
-                    */
                 }
             }
 

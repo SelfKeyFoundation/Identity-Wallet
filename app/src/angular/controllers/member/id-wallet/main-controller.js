@@ -22,7 +22,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
     /**
      *
      */
-    $scope.addIdAttribute = (event, type) => {
+    $scope.addIdAttribute = (event, type, title) => {
         $mdDialog.show({
             controller: "AddIdAttributeDialogController",
             templateUrl: "common/dialogs/id-attributes/add-id-attribute.html",
@@ -32,12 +32,10 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
             fullscreen: true,
             locals: {
                 excludeKeys: excludeKeys,
-                type
+                type,
+                title
             }
         }).then((selectedIdAttributeType) => {
-
-
-
             // part 1
             // $rootScope.wallet.id
             // selectedIdAttributeType.key
@@ -64,8 +62,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         });
     }
 
-    $scope.editIdAttributeItemValue = (event, idAttributeItemValue, idAttributeType) => {
-        $rootScope.openAddEditStaticDataDialog(event, 'update', idAttributeType, idAttributeItemValue).then(() => {
+    $scope.editIdAttributeItemValue = (event, idAttribute, idAttributeType) => {
+        $rootScope.openAddEditStaticDataDialog(event, 'update', idAttributeType, idAttribute).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
 
@@ -75,8 +73,8 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         });
     }
 
-    $scope.editIdAttributeItemDocument = (event, idAttributeItemValue, idAttributeType) => {
-        $rootScope.openAddEditDocumentDialog(event, 'update', idAttributeType, idAttributeItemValue).then(() => {
+    $scope.editIdAttributeItemDocument = (event, idAttribute, idAttributeType) => {
+        $rootScope.openAddEditDocumentDialog(event, 'update', idAttributeType, idAttribute).then(() => {
             prepareData();
             CommonService.showToast('success', 'saved');
 
@@ -86,7 +84,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         });
     }
 
-    $scope.openValueDeletePanel = (event, idAttribute, idAttributeItem, idAttributeItemValue) => {
+    $scope.openValueDeletePanel = (event, idAttribute) => {
         let itemElement = event.target.parentElement.parentElement;
 
         let position = $mdPanel
@@ -106,9 +104,7 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
             position: position,
             controller: itemValueDeletePanel,
             locals: {
-                idAttribute: idAttribute,
-                idAttributeItem: idAttributeItem,
-                idAttributeItemValue: idAttributeItemValue
+                idAttribute: idAttribute
             }
         }
 
@@ -182,13 +178,17 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
 };
 
 
-function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, SqlLiteService, idAttribute, idAttributeItem, idAttributeItemValue) {
+function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonService, SqlLiteService, RPCService, idAttribute) {
     'ngInject';
 
     $scope.promise = null;
 
     $scope.delete = (event) => {
-        $scope.promise = SqlLiteService.deleteIdAttribute(idAttribute);
+        $scope.promise = RPCService.makeCall('deleteIdAttribute', {
+            idAttributeId: idAttribute.id,
+            idAttributeItemId: idAttribute.items[0].id,
+            idAttributeItemValueId: idAttribute.items[0].values[0].id,
+        });
         $scope.promise.then(() => {
             let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
             let actionText = idAttributeTypes[idAttribute.idAttributeType].type === 'document' ? 'Document' : 'Attribute';

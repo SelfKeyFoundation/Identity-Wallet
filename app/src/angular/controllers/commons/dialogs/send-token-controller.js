@@ -19,7 +19,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         symbol = symbol.toUpperCase();
         let token = $rootScope.wallet.tokens[symbol];
         let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol);
-        return (tokenPrice ? (tokenPrice.name + ' - ') : '') + token.getBalanceDecimal() + ' '+ token.symbol;
+
+        const tokenNameExceptions = {
+            'KEY': 'SelfKey'
+        };
+        let getTokenName = () => {
+            return tokenNameExceptions[symbol] || tokenPrice.name; 
+        };
+        return (tokenPrice ? (getTokenName() + ' - ') : '') + token.getBalanceDecimal() + ' '+ token.symbol;
     }
 
     /**
@@ -221,16 +228,27 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     $scope.txHex = resp.transactionHash;
                     startTxCheck();
                 }).catch((error) => {
-                    CommonService.showToast('error', error.toString(), 20000);
-                    $scope.errors.sendFailed = error.toString();
+                    error = error.toString();
+                    if (error.indexOf('Insufficient funds') == -1) {
+                        CommonService.showToast('error', error, 20000);
+                    }
+                    
+                    $scope.errors.sendFailed = error;
                     // reset view state
                     setViewState();
                 });
 
                 $scope.viewStates.step = 'transaction-status';
             }).catch((error) => {
-                CommonService.showToast('error', error.toString(), 20000);
-                $scope.errors.sendFailed = error.toString();
+                error = error.toString();
+                if (error == 'invalid_address') {
+                    $scope.errors.sendToAddressHex = true;
+                    setViewState();
+                    return;
+                }
+
+                CommonService.showToast('error', error, 20000);
+                $scope.errors.sendFailed = error;
                 // reset view state
                 setViewState();
             });

@@ -81,13 +81,43 @@
                 float: right;
                 margin-top: 69px;
 
-                md-icon {
+                > span {
 
-                    padding: 0 5px;
-                    height: 16px !important;
-                    width: 16px !important;
-                    min-height: 16px !important;
-                    min-width: 16px !important;
+                    color: #FFFFFF;
+                    display: flex;
+
+                    .coming-soon {
+
+                        color: #f5a623;
+                        margin-left: 3px;
+                    }
+                }
+
+                .icon-container {
+
+                    position: relative;
+                    display: inline-block;
+
+                    &:hover {
+
+                        .fixed-tooltip {
+                            visibility: visible;
+                            opacity: 1;
+
+                             > div {
+                                text-align: left;
+                            }
+                        }
+                    }
+
+                    md-icon {
+
+                        padding-left: 5px;
+                        height: 16px !important;
+                        width: 16px !important;
+                        min-height: 16px !important;
+                        min-width: 16px !important;
+                    }
                 }
             }
 
@@ -133,7 +163,6 @@
 
                                 max-width: 60px;
                                 vertical-align: middle;
-                                margin-left: 5px;
                             }
 
                         }

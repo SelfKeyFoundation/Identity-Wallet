@@ -2,14 +2,16 @@ form(name="theForm", style="height: 100%; padding-left: 40px;", layout="column",
 
     md-input-container(style="width: 100%;", ng-if="type === 'select'")
         md-select.sk-select(ng-model="userInput.selectedPublicKey")
-            md-option(ng-value="key", ng-repeat="key in publicKeyList") {{key}}
+            md-option(ng-value="key", ng-repeat="key in publicKeyList") 0x{{key}}
 
     md-button.gray(style="width: 100%; margin: 18px 0;", ng-click="selectKystoreFile($event, theForm)", ng-if="type === 'import'")
         span {{ userInput.selectedFilePath ? 'Keystore is selected' : 'Select Keystore File' }}
 
-    md-input-container.sk-input-box.no-error-spacer(style="width: 100%;")
-        label Decrypt wallet using password
+    md-input-container.sk-input-box.no-error-spacer.sk-field-error-tooltip-parent(style="width: 100%;")
+        label Enter Your Password To Decrypt
         input(type="password", name="password", ng-model="userInput.password", ng-required="true")
+        .sk-field-error-tooltip.top.center(ng-if="incorrectPassword")
+                    span Incorrect password
         div(ng-messages="theForm.password.$error")
             div(ng-message="theForm.password.$error.required") {{ theForm.password.$error.badKeystore ? 'Incorrect keystore or password' : 'Required!' }}
 
