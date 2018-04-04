@@ -9,7 +9,7 @@ const
 
 // Default Settings (OSX)
 var appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
-var testDir = pwd + '/test/e2e/_first/'
+var testDir = pwd + '/test/e2e/basic_id/'
 var cacheCmd = 'bash ' + pwd + '/test/utils/quick.sh ' + user
 var fullCmd = 'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '')
 

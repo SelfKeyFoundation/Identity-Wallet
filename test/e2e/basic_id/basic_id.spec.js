@@ -9,40 +9,18 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	before(tools.appStart)
 	after(tools.appStop)
 
-	it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
-		return tools.regStep(tools.app, '#agree')
-			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
-	})
+	// it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
+	// 	return tools.regStep(tools.app, '#agree')
+	// 		.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+	// })
 
 	it('TC01: Navigating to Selfkey Basic ID screen', () => {
 		return tools.regStep(tools.app, '#createWallet')
-			.then(() => tools.regStep(tools.app, '#createBasic'))
-	})
-	
-	it('TC02: Verifying required fields in the Selfkey Basic ID screen', () => {
-		return delay(1000)
-			.then(() => tools.app.client.waitForVisible('#firstName', 10000))
-			.then(() => tools.app.client.click('#firstName'))
-			.then(() => tools.app.client.click('#lastName'))
-			.then(() => tools.app.client.click('#middleName'))
-	})
-
-	it('TC03: Populating and submitting Selfkey Basic ID form', () => {
-		return delay(1000)
-			.then(() => tools.app.client.waitForVisible('#firstName', 10000))
-			.then(() => tools.app.client.setValue('#firstName', data[0].firstName))
-			.then(() => tools.app.client.setValue('#lastName', data[0].lastName))
-			.then(() => tools.app.client.setValue('#middleName', data[0].middleName))
-			.then(() => tools.app.client.click('#country'))
-			.then(() => delay(3000))
-			.then(() => tools.app.client.waitForExist('#Afghanistan', 10000))
-			.then(() => tools.app.client.click('#Afghanistan'))
-			.then(() => tools.app.client.click('#submitBasic'))
+			.then(() => tools.regStep(tools.app, '#protectWallet'))
 	})
 
 	it('TC04: Create and Confirm Password', () => {
-		return tools.regStep(tools.app, '#pwWarningNext')
-			.then(() => delay(2000))
+		return delay(2000)
 			.then(() => tools.app.client.waitForVisible('#pwd1', 10000))
 			.then(() => tools.app.client.setValue('#pwd1', data[0].strongPass))
 			.then(() => tools.app.client.click('#pwdNext'))
@@ -63,11 +41,25 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 
 	it('TC07.01: Adding National ID and Selfie with ID Document', () => {
 		return delay(3000)
-			.then(() => tools.regStep(tools.app, '#goToAddDocument'))
+			.then(() => tools.regStep(tools.app, '#createID'))
+	})
+
+	it('TC03: Populating and submitting Selfkey Basic ID form', () => {
+		return delay(2000)
+			.then(() => tools.app.client.waitForVisible('#firstName', 10000))
+			.then(() => tools.app.client.setValue('#firstName', data[0].firstName))
+			.then(() => tools.app.client.setValue('#lastName', data[0].lastName))
+			.then(() => tools.app.client.setValue('#middleName', data[0].middleName))
+			.then(() => tools.app.client.click('#country'))
+			.then(() => delay(3000))
+			.then(() => tools.app.client.waitForExist('#Afghanistan', 10000))
+			.then(() => tools.app.client.click('#Afghanistan'))
+			.then(() => delay(1000))
+			.then(() => tools.app.client.click('#submitBasic'))
 	})
 
 	it('TC07.02: Skipping ID and Selfie Upload', () => {
 		return delay(3000)
-			.then(() => tools.regStep(tools.app, '#goToDashboard'))
+			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
 	})
 })

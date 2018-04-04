@@ -8,7 +8,7 @@
 
             md-input-container.sk-input-box.no-error-spacer
                 label Your Private Key
-                input(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
+                input#privateKey(name="privateKey", ng-model="privateKey", type="{{inputType}}", placeholder="Your Private Key", disabled)
                 md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
                     md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
 
@@ -20,7 +20,7 @@
                     span Private keys are used to sign transactions on the Ethereum blockchain. Your private key is encrypted within the Keystore File, which is protected by the password you just created. You can also print a copy of your private keys to make an offline backup - this is also known as "cold storage".
 
             .actions-wrapper
-                md-button.outline-blue(ng-click="nextStep($event)")
+                md-button#printWalletNext.outline-blue(ng-click="nextStep($event)")
                     span continue
 
     .private-key-print-box
