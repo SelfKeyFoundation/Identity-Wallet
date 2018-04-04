@@ -15,6 +15,14 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
     }
 
     $scope.agree = (event) => {
+        
+        if (process.env.NODE_ENV !== 'test') {
+            if (!$scope.scrolledBottom){
+                return;
+            }
+        }
+
+        
         $scope.isLoading = true;
         guideSettings.termsAccepted = true;
 

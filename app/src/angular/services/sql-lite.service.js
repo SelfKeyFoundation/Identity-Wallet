@@ -264,18 +264,18 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
         }
 
         getTransactionsHistoryByWalletId(walletId) {
-            return RPCService.makeCall('getTransactionsHistoryByWalletId', walletId);
+            return RPCService.makeCall('getTransactionsHistoryByWalletId', { walletId: walletId });
         }
 
-        getTransactionsHistoryByWalletIdAndTokenId(query) {
-            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', query);
+        getTransactionsHistoryByWalletIdAndTokenId(walletId, tokenId) {
+            return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', { walletId: walletId, tokenId: tokenId });
         }
 
         saveWalletSettings(data) {
             return RPCService.makeCall('saveWalletSettings', data);
         }
 
-        removeAirdropCode (walletSetting) {
+        removeAirdropCode(walletSetting) {
             walletSetting.airDropCode = null;
             return RPCService.makeCall('saveWalletSettings', walletSetting);
         }

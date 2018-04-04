@@ -3,6 +3,7 @@
 }
 
 .sk-field-error-tooltip  {
+  z-index: 2;
   position: absolute !important;
   $background: #d0021b;
   background-color: $background;
@@ -13,6 +14,9 @@
   letter-spacing: 0.3px;
   &.right {
       right: 0;
+  }
+  &.top {
+      bottom: 100%;
   }
   &.center {
     left: 50%;

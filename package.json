@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "2.0.0-alpha-36",
+  "version": "2.0.0-alpha-40",
   "description": "Selfkey Identity Wallet",
   "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
   "main": "./app/main.js",
@@ -13,7 +13,23 @@
     "makewin": "gulp && node_modules\\.bin\\electron-forge make",
     "startwin": "gulp && node_modules\\.bin\\electron-forge start -- dev",
     "start-auto": "gulp && gulp start",
-    "make-auto": "gulp && gulp make"
+    "make-auto": "gulp && gulp make",
+    "full": "bash full.sh",
+    "test": "node test/test.js",
+    "lint": "eslint 'app/src/**/*.js'",
+    "precommit": "lint-staged",
+    "cz": "git-cz",
+    "docker": "OSENV=docker docker-compose build && docker-compose up -d"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "@uirouter/angularjs": "1.0.15",
@@ -33,7 +49,7 @@
     "bluebird": "3.5.1",
     "crypto": "1.0.1",
     "decompress": "4.2.0",
-    "electron": "1.8.3",
+    "electron": "1.7.12",
     "electron-compile": "6.4.2",
     "electron-log": "2.2.14",
     "electron-settings": "3.1.4",
@@ -75,7 +91,29 @@
     "node-sass": "4.6.1",
     "require-reload": "0.2.2",
     "run-sequence": "2.1.0",
-    "vinyl-source-stream": "1.1.0"
+    "vinyl-source-stream": "1.1.0",
+    "chai": "^4.1.2",
+    "chalk": "^2.3.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.1.0",
+    "delay": "^2.0.0",
+    "electron": "1.7.11",
+    "electron-builder": "^20.0.4",
+    "eslint": "^4.15.0",
+    "eslint-config-prettier": "^2.8.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "mocha": "^5.0.1",
+    "prettier": "^1.10.2",
+    "serial-mocha": "0.0.4",
+    "spectron": "3.7.3"
   },
   "build": {
     "name": "selfkey-identity-wallet",
@@ -127,6 +165,9 @@
         "packageName": "",
         "name": "SelfKey Identity Wallet"
       }
+    },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }

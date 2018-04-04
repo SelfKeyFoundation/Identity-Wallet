@@ -1,26 +1,24 @@
 .exchange-container {
-    border: 1px solid #303c49;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 20px;
     color: white;
     .back {
         margin: 20px 0 0 20px;
         height: auto !important;
-
         span {
             font-size: 13px;
         }
     }
+
     .exchange {
-        padding: 40px;
+        width: 946px;
+        margin: 0 auto;
+        border-radius: 4px;
+        background-color: #262f39;
         .exchange-content {
             .header {
-                border-radius: 4px;
+                border-radius: 4px 4px 0 0;
                 background-color: #2a3540;
                 box-shadow: inset 0 -1px 0 0 #374758;
-                border: 1px solid #303c49;
-                padding: 15px;
+                padding: 19px 30px 19px 30px;
                 display: flex;
                 justify-content: space-between;
                 .logo {
@@ -33,16 +31,11 @@
                     }
                 }
                 .status {
-
                     margin-top: 8px;
-
                     .icon-container {
-
                         position: relative;
                         display: inline-block;
-
                         .tooltip {
-
                             height: auto;
                             width: 195px;
                             border-radius: 4px;
@@ -114,32 +107,47 @@
                 }
             }
             .body {
+                border: solid 1px #303c49;
+                border-radius: 0 0 4px 4px;
+                padding: 36px 36px 0 36px;
                 .section {
                     margin-bottom: 30px;
                     border-bottom: 1px solid #303c49;
+                    display: table;
+                    width: 100%;
                     &:last-child {
                         border: none;
+                        margin-bottom: 0;
                     }
                     .section-content {
-                        margin-bottom: 10px;
+                        display: table;
+                        width: 100%;
+                        margin-bottom: 44px;
                         .title {
-                            font-size: 18px;
+                            width: 183px;
+                            height: 36px;
+                            font-family: ProximaNovaRegular;
+                            font-size: 20px;
+                            font-weight: 600;
+                            font-style: normal;
+                            font-stretch: normal;
+                            line-height: 1.8;
+                            letter-spacing: normal;
+                            text-align: left;
+                            color: #ffffff;
                         }
                         .descr {
-                            display: flex;
-                            padding: 25px 15px 0 15px;
-                            justify-content: space-between;
-
                             .textual {
-                                text-align: center;
-
+                                width: 605px;
+                                float: left;
                                 .md-button {
-                                    width: 785px;
-                                    height: 36.6px;
+                                    width: 600px;
+                                    height: 40px;
                                     border-radius: 2px;
                                     background-color: #242e37;
                                     border: solid 1px #303c49;
                                     margin-top: 20px;
+                                    text-transform: none;
 
                                     > span {
 
@@ -157,30 +165,45 @@
                                 }
 
                                 .text {
-                                    width: 785px;
                                     font-family: ProximaNovaRegular;
                                     font-size: 18px;
                                     letter-spacing: normal;
                                     text-align: left;
                                     color: #FFFFFF;
+                                    font-weight: normal;
+                                    font-style: normal;
+                                    font-stretch: normal;
+                                    line-height: 1.67;
+                                    float: left;
                                 }
                             }
 
                             .gray {
-                                font-size: 13px;
-                                width: 200px;
-                                height: 44px;
-                                margin-top: 25px;
+                                float: right;
+                                width: 232px;
+                                height: 50px;
+                                border-radius: 4px;
+                                background-color: #435160;
+                                font-family: ProximaNovaRegular;
+                                text-transform: none;
+                                font-size: 16px;
+                                font-weight: 600;
+                                font-style: normal;
+                                font-stretch: normal;
+                                line-height: 1.5;
+                                letter-spacing: 0.7px;
+                                text-align: center;
+                                color: #ffffff !important;
                             }
                         }
 
                         .columns {
                             display: flex;
-                            margin-left: 15px;
                             .column {
                                 margin-right: 100px;
                                 div {
-                                    margin: 15px 0;
+                                    margin: 18px 0;
+                                    position: relative;
                                     label {
                                         display: inline-block;
                                     }
@@ -194,14 +217,25 @@
                             &.highlights {
                                 .column {
                                     label {
-                                        font-size: 15px;
+                                        font-size: 16px;
                                     }
                                 }
                             }
                             &.requirements {
                                 .column {
-                                    label {
-                                        font-size: 13px;
+                                    div {
+                                        margin: 10px 0;
+                                        .bullet {
+                                            &:after {
+                                                content: '';
+                                                width: 2px;
+                                                position: absolute;
+                                                top: 29px;
+                                                height: 16px;
+                                                opacity: 0.3;
+                                                background-color: #364357;
+                                            }
+                                        }
                                     }
                                 }
                             }

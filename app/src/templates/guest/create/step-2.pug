@@ -8,13 +8,13 @@
             span.none-select-text Confirm Password
         form.content(name="passwordForm", layout="column")
             .title
-                | Please reconfirm the password you just entered.
+                | Please reconfirm the password you just created.
                 | There is no way it can be restored or reset,
                 | and Selfkey cannot help you if the password is lost.
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
                 label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
+                input#pwd2(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
                 .sk-field-error-tooltip.center.default-top(ng-if="isWrongConfirmationPassword")
                     span Wrong confirmation password.
             .password-strength-container
@@ -29,6 +29,6 @@
             .actions-wrapper
                 md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
                     span.primary Back
-                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
+                md-button#pwd2Next.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
                     span.primary Next
 

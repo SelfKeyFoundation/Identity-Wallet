@@ -1,7 +1,7 @@
 .dashboard-content-wrappper(layout="column", layout-align="start center")
 
     // header
-    .dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
+    #viewDashboard.dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
         h2.proxima.white SelfKey Dashboard
 
     // balances
@@ -17,9 +17,9 @@
                 span(flex) My Crypto
                 button.sk-icon-button(ng-click="navigateToManageCryptos($event)")
                     sk-icon(icon="gear", size-class="icon-size-26x26")
-                button.sk-icon-button(ng-class="{'disable-opacity': $root.tokenLimitIsExceed}", ng-click="$root.openAddCustomTokenDialog($event)")
+                button.sk-icon-button(ng-class="{'disable-opacity': $root.tokenLimitIsExceed()}", ng-click="$root.openAddCustomTokenDialog($event)")
                     sk-icon(icon="plus", size-class="icon-size-26x26")
-                    md-tooltip(ng-if="$root.tokenLimitIsExceed",md-direction="left")
+                    md-tooltip(ng-if="$root.tokenLimitIsExceed()",md-direction="left")
                         | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token.
                     sk-icon(icon="plus", size-class="icon-size-26x26")
             .sk-horizontal-devider

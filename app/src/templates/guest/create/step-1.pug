@@ -14,7 +14,7 @@
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
                 label Password
-                input(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
+                input#pwd1(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
                 .sk-field-error-tooltip.center.default-top(ng-if="!input.password && passwordIsRequiredErr")
                     span Password is required.
             .password-strength-container
@@ -27,5 +27,5 @@
                     span {{getPasswordStrengthInfo()}}
 
             .actions-wrapper
-                md-button.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, passwordForm)")
+                md-button#pwdNext.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, passwordForm)")
                     span.primary Next

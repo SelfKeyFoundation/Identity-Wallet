@@ -69,6 +69,9 @@ module.exports = function (app) {
     let TokenPrice = require('./models/token-price.js')(app, controller);
     controller.prototype.TokenPrice = TokenPrice;
 
+    let TransactionHistory = require('./models/transaction-history.js')(app, controller);
+    controller.prototype.TransactionHistory = TransactionHistory;
+
     /**
      * tables
      */
@@ -97,6 +100,7 @@ module.exports = function (app) {
         });
     }
 
+    /*
     function createTransactionsHistory() {
         return new Promise((resolve, reject) => {
             knex.schema.hasTable('transactions_history').then(function (exists) {
@@ -126,6 +130,7 @@ module.exports = function (app) {
             });
         });
     }
+    */
 
     /**
      * public methods
@@ -142,7 +147,7 @@ module.exports = function (app) {
         promises.push(IdAttribute.init());
         promises.push(TokenPrice.init());
         promises.push(createWalletTokens());
-        promises.push(createTransactionsHistory());
+        promises.push(TransactionHistory.init());
         promises.push(ActionLog.init());
         promises.push(WalletSetting.init());
         promises.push(ExchangeDataHandler.init());
@@ -244,6 +249,56 @@ module.exports = function (app) {
     }
 
     /**
+     * tokens
+     */
+    controller.prototype.tokens_selectBySymbol = (symbol) => {
+        return selectTable('tokens', { symbol: 'eth' });
+    }
+
+    controller.prototype.token_insert = (data) => {
+        return insertIntoTable('tokens', data);
+    }
+
+    controller.prototype.token_update = (data) => {
+        return updateById('tokens', data);
+    }
+
+    /**
+     * transactions history
+     */
+    /*
+    controller.prototype.transactionsHistory_selectAll = () => {
+        return new Promise((resolve, reject) => {
+            knex('transactions_history').select().then((rows) => {
+                if (rows && rows.length) {
+                    resolve(rows);
+                } else {
+                    resolve([]);
+                }
+            }).catch((error) => {
+                reject({ message: "error_while_selecting", error: error });
+            });
+        });
+    }
+    */
+
+    /*
+    controller.prototype.transactionsHistory_selectByWalletId = (id) => {
+        return selectTable('transactions_history', { walletId: id });
+    }
+    */
+
+    /*
+    controller.prototype.transactionsHistory_selectByWalletIdAndTokenId = (query) => {
+        return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
+    }
+    */
+
+    controller.prototype.transactionsHistory_insert = (data) => {
+        return insertIntoTable('transactions_history', data);
+    }
+
+    /**
      * commons
      */
     function _select(table, select, where, tx) {
@@ -322,52 +377,6 @@ module.exports = function (app) {
         }
 
         return query.update(item);
-    }
-
-    /**
-     * tokens
-     */
-    controller.prototype.tokens_selectBySymbol = (symbol) => {
-        return selectTable('tokens', { symbol: 'eth' });
-    }
-
-    controller.prototype.token_insert = (data) => {
-        return insertIntoTable('tokens', data);
-    }
-
-    controller.prototype.token_update = (data) => {
-        return updateById('tokens', data);
-    }
-
-
-
-    /**
-     * transactions history
-     */
-    controller.prototype.transactionsHistory_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('transactions_history').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve([]);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-
-    controller.prototype.transactionsHistory_selectByWalletId = (id) => {
-        return selectTable('transactions_history', { walletId: id });
-    }
-
-    controller.prototype.transactionsHistory_selectByWalletIdAndTokenId = (query) => {
-        return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
-    }
-
-    controller.prototype.transactionsHistory_insert = (data) => {
-        return insertIntoTable('transactions_history', data);
     }
 
     function insertIntoTable(table, data, trx) {
