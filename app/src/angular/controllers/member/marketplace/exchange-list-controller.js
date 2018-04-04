@@ -10,7 +10,7 @@ function MemberMarketplaceExchangeListController($rootScope, $scope, $log, $time
 
         angular.forEach($scope.exchangesList, (item) => {
             if (item.data && item.data.description) {
-                item.content = $filter('limitTo')(item.data.description, 300, 0);
+                item.content = $filter('limitTo')(item.data.description, 150, 0);
                 item.content = $sce.trustAsHtml(item.content);
             }
         });
