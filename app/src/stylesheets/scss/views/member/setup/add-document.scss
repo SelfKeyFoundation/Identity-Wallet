@@ -106,7 +106,7 @@
 /* The snackbar */
 .snackbar {
     visibility: hidden;
-    width: 203px;
+    width: 250px;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     font-family: ProximaNovaRegular;
@@ -130,6 +130,7 @@
     }
     &.success {
         background-color: #4dd2b4;
+        width: 203px;
     }
     &.error {
         background-color: #d0021b;
