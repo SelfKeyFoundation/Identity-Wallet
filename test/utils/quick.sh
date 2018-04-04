@@ -1,5 +1,4 @@
 #!bin/bash
 rm -rf /Users/${1}/Library/Application\ Support/Electron
-rm -rf /Users/${1}/Library/Application\ Support/ID\ Wallet
-rm -rf /Users/${1}/Library/Application\ Support/id-wallet
+rm -rf /Users/${1}/Library/Application\ Support/Selfkey\ Identity\ Wallet
 exit 0

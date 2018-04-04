@@ -157,10 +157,10 @@ md-dialog.terms(aira-lable="Terms of Service Agreement")
                             | code or visual design elements (including logos) without express written permission from SelfKey unless otherwise permitted by law.
 
                 section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='', style="z-index: 100;")
-                if (process.env.NODE_ENV === 'test')
-                    md-button#agree.md-raised.default(sk-button-loading="isLoading", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
-                else
-                    md-button#agree.md-raised.default(ng-class="{'highlighted': scrolledBottom}", ng-disabled="!scrolledBottom", sk-button-loading="isLoading", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
+                    if (process.env.NODE_ENV === 'test')
+                        md-button#agree.md-raised.default(ng-class="{'highlighted': scrolledBottom}", sk-button-loading="isLoading", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
+                    else
+                        md-button#agree.md-raised.default(ng-class="{'highlighted': scrolledBottom}", ng-disabled="!scrolledBottom", sk-button-loading="isLoading", ng-click="agree()", style="margin-right: 4px;") I agree to the terms of service
                     md-button.md-raised.default(ng-click="changeStep('before-disagree')", style="margin-left: 4px;") I don't agree
         .main(layout='column', layout-align='center center', ng-if="step === 'before-disagree'")
             md-toolbar

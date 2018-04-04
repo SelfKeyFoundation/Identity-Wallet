@@ -60,6 +60,7 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 
 	it('TC07.02: Skipping ID and Selfie Upload', () => {
 		return delay(3000)
+			.then(() => tools.app.client.click('#skipDashboard'))
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
 	})
 })
