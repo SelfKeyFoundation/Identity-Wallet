@@ -9,10 +9,10 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	before(tools.appStart)
 	after(tools.appStop)
 
-	// it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
-	// 	return tools.regStep(tools.app, '#agree')
-	// 		.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
-	// })
+	it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
+		return tools.regStep(tools.app, '#agree')
+			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+	})
 
 	it('TC01: Navigating to Selfkey Basic ID screen', () => {
 		return tools.regStep(tools.app, '#createWallet')
