@@ -1,0 +1,70 @@
+New Test Dir Structure
+**********************
+
+/config
+	config.js // string concats, pull env vars etc into a config array - stuff that won't play nice in a json file
+
+/data
+	/files // files used for test data
+	data.json // strings and such
+
+/e2e
+	/erc20
+		readme // scraped test case text from Jira 
+		tcX.spec.js // named to match Jira test case ie: tc1.spec.js, tc2.spec.js etc...
+	/onboard
+		readme
+		tcX.spec.js
+	/digital-id
+		readme
+		tcX.spec.js
+
+/local
+	/caps // temp store screenshots etc during dev
+	/logs // temp store verbose logs during local dev
+
+/unit
+	/controllers
+		X.spec.js // file/dir structure matches angular controllers etc...
+	/services
+		X.spec.js
+
+/utils
+	api.js // fake API if needed
+	cache.js // clears cache for multiple test runs (now filesystem, later SQLite)
+	build.js // builds app for OSX/Windows/Linux etc... (electron-forge / electron-builder)
+	alerts.js // sends alerts to Slack etc...
+	helpers.js // contains functions to speed up working with Spectron API etc...
+
+test.js // runs all the things
+
+MAIN FILES
+**********
+
+test.js 
+- does preliminary checks
+- setup for environment
+- runs through unit specs
+- runs through e2e specs
+- sends builds
+- sends alerts
+- makes you a coffee
+
+e2e/tcX.spec.js
+- uses helpers to keep things clean
+- matches Jira test cases
+
+unit/X.spec.js
+- follows Angular / React unit testing conventions
+- currently no unit test specific spec / documentation to follow
+
+NOTES
+*****
+
+node/npm version check if electron-forge build
+mocha programmatically 
+sorted explicit file splits
+native promises / await
+electron-builder programmatically
+electron-forge conditionally
+mocha-chrome headless for docker

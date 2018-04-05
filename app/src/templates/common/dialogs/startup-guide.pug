@@ -15,4 +15,4 @@ md-dialog.startup-guide(aira-lable="How It Works: SelfKey Identity Wallet")
                             span.cursor-pointer.outline-none.textual(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-marketplace')") click here.
 
                 section(layout="row", layout-sm="column", layout-align="center center")
-                    md-button.md-raised.highlighted(ng-click="goToWalletSetup($event)", sk-button-loading="isLoading") Setup My SelfKey Identity Wallet
+                    md-button#setupWallet.md-raised.highlighted(ng-click="goToWalletSetup($event)", sk-button-loading="isLoading") Setup My SelfKey Identity Wallet
