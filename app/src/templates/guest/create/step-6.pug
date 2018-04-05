@@ -35,15 +35,15 @@
                     span(ng-message="maxlength") The {{ $root.DICTIONARY['middle_name'] }} has to be less than 500 characters long.
             md-input-container.sk-input-box.sk-input-non-floating
                 label {{ $root.DICTIONARY['country_of_residency'] }}
-            if (process.env.NODE_ENV === 'test')
-                select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
-                    option(id="{{item.name}}", value="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-            else
-                md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
-                    md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-                //div(ng-messages="basicInfoForm.countryOfResidency.$error")
-                    div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['country_of_residency'] }}.
-                .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
-                    span(ng-message="required") Field is Required
+                if (process.env.NODE_ENV === 'test')
+                    select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                        option(id="{{item.name}}", value="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                else
+                    md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                        md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                    //div(ng-messages="basicInfoForm.countryOfResidency.$error")
+                        div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY['country_of_residency'] }}.
+                    .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
+                        span(ng-message="required") Field is Required
             md-button#submitBasic.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
                 span.small Create SelfKey ID
