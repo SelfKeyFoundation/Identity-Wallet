@@ -133,8 +133,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             updatePieChart();
         }
     });
-
-    $log.info("pie chart data:", $scope.pieChart);
 };
 
 module.exports = MemberDashboardMainController;
