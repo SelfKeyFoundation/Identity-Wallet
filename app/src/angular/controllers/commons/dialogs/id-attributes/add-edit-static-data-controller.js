@@ -54,6 +54,8 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
 
     $scope.save = (event, theForm) => {
+
+        console.log(777,theForm)
         if ($scope.isFormInvalid(theForm)) return;
 
         let value = {
@@ -111,7 +113,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
     function prepare() {
         if(mode === 'create') return;
-        
+
         let idAttributeItemValue = idAttribute.items[0].values[0];
         if (!idAttributeItemValue || !idAttributeItemValue.staticData) {
             return;

@@ -6,6 +6,6 @@
 .birth-date-actions-wrapper
     md-button.outline-gray(ng-click="close($event)")
         span.primary cancel
-    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", sk-button-loading="savePromise.$$state.status")
+    md-button.blue(ng-click="save($event, theForm)", ng-disabled="isFormInvalid(theForm)", key-press="save($event, theForm)", sk-button-loading="savePromise.$$state.status")
         span.primary save
 
