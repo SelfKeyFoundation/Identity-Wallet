@@ -7,8 +7,8 @@ function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
         scope: {},
         link: (scope, element) => {
             scope.data = {
-                name: "Custom Tokens (ERC-20)",
-                text: "Send custom ERC-20 tokens from the SelfKey Identity Wallet. Before sending please add custom tokens to the management dashboard below."
+                name: "Custom Tokens",
+                text: "Send or receive any custom Ethereum token (ERC-20)."
             };
         },
         replace: true,
