@@ -25,10 +25,10 @@
                 .sk-field-error-tooltip(ng-messages="basicInfoForm.lastName.$error")
                     span(ng-message="maxlength") The {{ $root.DICTIONARY['last_name'] }} has to be less than 500 characters long.
                     span(ng-message="required") Field is Required
-            md-input-container.sk-input-box.sk-input-non-floating
+            md-input-container.sk-input-box.sk-input-non-floating.hide-input-invalid-mark
                 label {{ $root.DICTIONARY['country_of_residency'] }}
                 if (process.env.NODE_ENV === 'test')
-                    select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                    select#country(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
                         option(id="{{item.name}}", value="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
                 else
                     md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
