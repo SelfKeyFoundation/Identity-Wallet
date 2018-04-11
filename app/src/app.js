@@ -138,7 +138,6 @@ angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirecti
 const SkDoubleHeaderDirective = requireAppModule('angular/directives/commons/sk-double-header.directive');
 angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
-
 /**
  * controllers
  */
