@@ -4,23 +4,18 @@
         span Create Your SelfKey ID
 
     .content-wrapper
-        #document.sk-box.center-divider
+        #document.sk-box
             .content(layout="column")
                 .header-wrapper
                     .step {{selected.step}}
                     .title {{selected.title1}}
-                    .description {{selected.title3}}
+                    .description {{selected.title2}}
                     .snackbar(ng-class="{'show': isShown, '': !isShown, 'success': status === 'success', 'error': status === 'error' }") {{message}}
                 .content-wrapper
-                    .box(flex, layout="column", layout-align="center center")
-                        sk-icon(icon="upload", size-class="icon-size-34x44")
-                        span.header {{selected.title2}}
-                        span.sub-header {{selected.title4}}
-
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
                         sk-icon(icon="hard-drive", size-class="icon-size-34x44")
-                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type, 'line1') ? 'Saved' : selected.title2 }}
-                        span.sub-header This is stored locally
+                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type, 'line1') ? 'Saved' : selected.title1 }}
+                        span.sub-header This is stored locally. Max file size 50mb.
         #check-list.sk-box
             .content(layout="column")
                 .sk-text.header ID Wallet Checklist
