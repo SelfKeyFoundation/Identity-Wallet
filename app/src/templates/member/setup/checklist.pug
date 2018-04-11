@@ -25,13 +25,13 @@
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="national_id")
-                        span(ng-if="!national_id") 3
+                        img(src='assets/images/icons/question-mark.svg', ng-if="!national_id", style="width: 12px;")
                     span {{ $root.DICTIONARY['national_id'] }}
 
                 .item
                     .bullet
                         img(src='assets/images/icons/tick.svg', ng-if="id_selfie")
-                        span(ng-if="!id_selfie") 4
+                        img(src='assets/images/icons/question-mark.svg', ng-if="!id_selfie", style="width: 12px;")
                     span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="center center")

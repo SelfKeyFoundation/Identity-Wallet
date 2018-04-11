@@ -3,7 +3,7 @@
         md-icon.sk-token-box__token(md-svg-src="assets/images/icons/{{symbol}}.svg", aria-label="{{symbol}}")
         sk-double-header.sk-token-box__text(header="{{title}}", sub-header="{{symbol}}", flex)
         button.sk-icon-button(ui-sref="member.wallet.manage-token({id: symbol})")
-            sk-icon(icon="paper-plane", size-class="sk-token-box__plus")
+            md-icon.sk-token-box__plus(md-svg-src="assets/images/icons/transfer.svg", aria-label="transfer")
 
     .sk-token-box__body
         span {{ item.getFormattedBalance() }}
