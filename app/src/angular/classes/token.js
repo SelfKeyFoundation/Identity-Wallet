@@ -69,7 +69,7 @@ class Token {
      *
      */
     getFormattedBalance() {
-        return this.getBalanceDecimal();
+        return CommonService.commasAfterNumber(this.getBalanceDecimal());
     }
 
     getBalanceDecimal() {
@@ -77,7 +77,7 @@ class Token {
     }
 
     getFormattedBalanceInUSD() {
-        return CommonService.numbersAfterComma(this.balanceInUsd, 2);
+        return CommonService.commasAfterNumber(this.balanceInUsd, 3);
     }
 
     generateContractData(toAddress, value) {
