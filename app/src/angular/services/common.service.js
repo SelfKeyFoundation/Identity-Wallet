@@ -44,6 +44,31 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
             return num.toString().match(re)[0];
         }
 
+        // 123123481283
+        commasAfterNumber(amount, num) {
+            console.log("commasAfterNumber", amount, num);
+            let result = "";
+            const array = amount.toString().split('');
+
+            let counter = 1;
+            for (let i = array.length - 1; i >= 0; i--) {
+                if (i % num === 0) {
+                    result = "," + result;
+                } else {
+                    result = array[i] + result;
+                }
+                counter
+            }
+
+            return result;
+        }
+
+        commasAfterNumber (amount, num) {
+            var parts = amount.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
         chunkArray(myArray, chunkSize) {
             return CommonUtils.chunkArray(myArray, chunkSize);
         }

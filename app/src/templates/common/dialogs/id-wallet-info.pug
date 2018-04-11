@@ -8,7 +8,8 @@ md-dialog.id-wallet-info(aira-lable="{{title}}")
                 .text
                     p {{dialogInfo.textPart1}}
                     p {{dialogInfo.textPart2}}
-                        span(ng-if='dialogInfo.step == 1', ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-identity-wallet')") here...
+                    p {{dialogInfo.textPart3}}
+                    p {{dialogInfo.textPart4}}
             .buttons-section
                 md-button(ng-click="backStep($event)")
                     span {{dialogInfo.button1}}

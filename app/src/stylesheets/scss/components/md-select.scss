@@ -15,7 +15,6 @@ md-input-container {
         background-color: #1e262e;
 
         > md-select {
-
             > md-select-value {
                 color: #fff !important;
                 border: none !important;
@@ -26,7 +25,23 @@ md-input-container {
         }
     }
 
+    &.hide-input-invalid-mark {
+        > md-select {
+            &:after {
+                display: none !important;
+            }
 
+            > md-select-value {
+                > span {
+                    &:first-of-type {
+                        &:after {
+                            display: none !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .md-select-menu-container {
@@ -35,7 +50,6 @@ md-input-container {
 
         md-option {
             color: #fff !important;
-
             &:hover {
                 background-color: #2f4458 !important;
             }
@@ -48,9 +62,6 @@ md-input-container {
 
 
 // ------------------------
-
-
-
 .sk-select {
     border: solid 1px #384656;
     border-radius: 4px;
@@ -60,13 +71,6 @@ md-input-container {
     .md-text {
         padding-left: 8px;
         color: #fff;
-    }
-
-   .md-select-value.md-select-placeholder{
-
-     > span {
-       display: none !important;
-     }
     }
 
     md-select-value {

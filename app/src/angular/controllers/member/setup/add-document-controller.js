@@ -10,19 +10,17 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
     const ID_ATTRIBUTES = {
         'national_id': {
             type: "national_id",
-            step: "STEP 3",
+            step: "STEP 4",
             title1: "Upload Your National ID",
-            title2: "Your National ID",
-            title3: "(can be driver's license, passport)",
-            title4: "(Max file size: 50mb)",
+            title2: "(Can be a driver's license or passport)",
+            title3: "(Max file size: 50mb)",
         },
         'id_selfie': {
             type: "id_selfie",
             step: "STEP 4",
-            title1: "Upload National ID Selfie",
-            title2: "National ID Selfie",
-            title3: "(can be driver's license, passport)",
-            title4: "(Max file size: 50mb)",
+            title1: "Upload National ID with Selfie",
+            title2: "(A selfie photo of you holding your National ID)",
+            title3: "This is stored locally. Max file size 50mb.",
         }
     };
 

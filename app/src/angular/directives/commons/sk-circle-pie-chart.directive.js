@@ -1,6 +1,6 @@
 'use strict';
 
-function SkCirclePieChartDirective($timeout,CommonService) {
+function SkCirclePieChartDirective($timeout, CommonService) {
     'ngInject';
 
     return {
@@ -35,8 +35,8 @@ function SkCirclePieChartDirective($timeout,CommonService) {
 
             let processItems = () => {
                 let items = scope.data.items;
-                let TOP_COLORS = ['#46dfba', '#46b7df', '#238db4','#1d7999','#0e4b61'];
-                
+                let TOP_COLORS = ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+
                 scope.totalValueFormated = new BigNumber(0);
                 items.forEach((item) => {
                     item.valueUSD = Number(CommonService.numbersAfterComma(item.valueUSD, 2));
@@ -49,7 +49,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     let check = parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
                     if (check == 0) {
                         let textA = a.title.toLowerCase();
-                        let textB = b.title.toLowerCase();  
+                        let textB = b.title.toLowerCase();
                         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     }
                     return check;
@@ -74,7 +74,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     otherAggregated.valueUSD = +CommonService.numbersAfterComma(otherAggregated.valueUSD, 2);
                     scope.topItems.push(otherAggregated);
                 }
-              
+
                 if (items.length <= TOP_MAX_SIZE) {
                     scope.isCollapsable = false;
                 } else {
@@ -119,6 +119,8 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     scope.data.callback.onReady();
                 }
             });
+
+            let chart = null;
 
             function drawChart() {
                 let container = document.getElementById('chart');
@@ -177,7 +179,7 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     }
                 };
 
-                let chart = new google.visualization.PieChart(container);
+                chart = new google.visualization.PieChart(container);
 
                 scope.chartIsReady = false;
 
@@ -198,7 +200,6 @@ function SkCirclePieChartDirective($timeout,CommonService) {
                     }
                     addOrRemoveActive(chartItem, 'addClass');
                 });
-
 
                 google.visualization.events.addListener(chart, 'onmouseout', function (chartItem) {
                     let sel = chart.getSelection();
@@ -227,16 +228,24 @@ function SkCirclePieChartDirective($timeout,CommonService) {
             }
 
             let requestQueue = [];
+
             scope.data.draw = () => {
                 requestQueue.push('newDrowRequest');
                 $timeout(() => {
                     if (requestQueue.length) {
-                        drawChart();                        
+                        drawChart();
                         requestQueue = [];
                     }
                 }, 500);
             }
 
+            scope.onItemHoverEnter = (event, index) => {
+                chart.setSelection([{ row: index }]);
+            }
+
+            scope.onItemHoverLeave = () => {
+                chart.setSelection([]);
+            }
         },
         replace: true,
         templateUrl: 'common/directives/sk-circle-pie-chart.html'

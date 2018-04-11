@@ -8,10 +8,17 @@ md-dialog {
         align-items: center;
         justify-content: center;
 
-        >.content-wrapper {
+        > .content-wrapper {
             width: 760px;
             display: flex;
             flex-direction: column;
+
+            > .clickable {
+
+                &:focus {
+                    outline: none !important;
+                }
+            }
 
             #document {
                 width: 100%;
@@ -19,11 +26,11 @@ md-dialog {
                 display: flex;
                 flex-direction: row;
 
-                >.content {
+                > .content {
                     width: 100%;
 
-                    >.header-wrapper {
-                        >.title {
+                    > .header-wrapper {
+                        > .title {
                             padding: 30px 30px 0 30px;
                             font-family: ProximaNovaRegular;
                             font-size: 18px;
@@ -31,12 +38,12 @@ md-dialog {
                         }
                     }
 
-                    >.content-wrapper {
+                    > .content-wrapper {
                         display: flex;
                         flex: 1;
 
-                        >.box {
-                            >.header {
+                        > .box {
+                            > .header {
                                 margin-top: 36px;
                                 font-family: ProximaNovaSemibold;
                                 font-size: 14px;
@@ -45,7 +52,7 @@ md-dialog {
                                 color: #ffffff;
                             }
 
-                            >.sub-header {
+                            > .sub-header {
                                 margin-top: 6px;
                                 font-family: ProximaNovaRegular;
                                 font-size: 12px;
@@ -56,12 +63,10 @@ md-dialog {
                     }
                 }
 
-
-
             }
         }
 
-        >.actions-wrapper {
+        > .actions-wrapper {
             width: 760px;
             margin-top: 24px;
             display: flex;
