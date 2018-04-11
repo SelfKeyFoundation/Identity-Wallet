@@ -17,13 +17,6 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     $scope.countryList = SqlLiteService.getCountries();
     $scope.singleInputType = "text";
 
-
-    $rootScope.$on('selfkey:on-keypress', (event, key) => {
-        if (key == 'Enter') {
-            $scope.save(event, $scope.theForm);
-        }
-    });
-
     if (idAttributeType === 'email') {
         $scope.singleInputType = 'email';
     }
@@ -136,6 +129,12 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
             $scope.inputs.line2 = idAttributeItemValue.staticData.line2;
         }
     }
+
+    $rootScope.$on('selfkey:on-keypress', (event, key) => {
+        if (key == 'Enter') {
+            $scope.save(event, $scope.theForm);
+        }
+    });
 };
 
 module.exports = AddEditStaticDataDialogController;
