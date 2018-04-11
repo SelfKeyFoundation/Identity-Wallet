@@ -12,5 +12,5 @@ md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
     .actions-wrapper
         md-button.outline-gray(ng-click="close($event)")
             span.primary cancel
-        md-button.blue(ng-click="save($event)", key-press="save($event, theForm)" , ng-disabled="!selectedFile")
+        md-button.blue(ng-click="save($event)", ng-disabled="!selectedFile")
             span.primary save
