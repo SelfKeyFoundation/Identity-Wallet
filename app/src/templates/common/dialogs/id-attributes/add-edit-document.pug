@@ -8,7 +8,7 @@ md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
                         sk-icon(icon="hard-drive", size-class="icon-size-34x44")
                         span.header {{selectedFile.name || 'Select Document'}}
-                        span.sub-header This is stored locally
+                        span.sub-header This is stored locally on your machine
     .actions-wrapper
         md-button.outline-gray(ng-click="close($event)")
             span.primary cancel
