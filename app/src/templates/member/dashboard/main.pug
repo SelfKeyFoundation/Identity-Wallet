@@ -38,6 +38,10 @@
         .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .transactions-box__header
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+                span(flex)
+                span
+                    button.sk-icon-button(ng-click="refreshTxHistory($event)")
+                        sk-icon(icon="refresh", size-class="icon-size-26x26")
             sk-linear-progress(ng-if="!transactionsHistoryIsSynced()", style="margin-top:10px;")
             div(ng-if="transactionsHistoryIsSynced()", ng-init="setTransactionsHistory()")
             .sk-horizontal-devider(style="margin-top: 20px;")

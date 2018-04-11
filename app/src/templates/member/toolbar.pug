@@ -18,9 +18,5 @@
             .value ${{ $root.wallet.getFormattedBalanceInUSD() }}
     .sk-vertical-devider-2(style="height: 40px;")
     .button-box
-        button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, 'eth')")
-            sk-icon(icon="plus", size-class="sk-token-box__plus")
-    .sk-vertical-devider-2(style="height: 40px;")
-    .button-box
         button.sk-icon-button(ng-click="openRightSidenav($event)")
             sk-icon(icon="menu-button", size-class="sk-token-box__plus")

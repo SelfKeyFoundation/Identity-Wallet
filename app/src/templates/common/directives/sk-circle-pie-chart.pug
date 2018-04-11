@@ -16,7 +16,8 @@
                         .titleFull {{item.title}}
                         .titleSmall {{item.subTitle}}
                 .value-container
-                    .value ${{item.valueUSD}}
+                    .value {{item.amount || 0}}
+                    .valueSmall ${{item.valueUSD || 0}}
         .view-all-tokens(ng-click="toogleCollapse(false)", ng-if="isCollapsable && isCollapsed")
             i.arrow
             span view all tokens

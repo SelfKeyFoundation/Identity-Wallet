@@ -48,6 +48,12 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         return !isInProgress;
     }
 
+    $rootScope.refreshTxHistory = (event) => {
+        SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
+            $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
+        });
+    }
+
     $rootScope.CUSTOM_TOKENS_LIMIT = 20;
     $rootScope.tokenLimitIsExceed = () => {
         let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
@@ -65,6 +71,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             if (tokenPrice) {
                 pieChartItem.title = tokenPrice.name;
                 pieChartItem.valueUSD = Number(CommonService.numbersAfterComma(token.getBalanceInUsd(), 2));
+                pieChartItem.amount = token.getFormattedBalance();
+                //token
             } else {
                 pieChartItem.title = 'Unknown';
                 pieChartItem.valueUSD = 0;
@@ -79,7 +87,8 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         pieChartItems.unshift({
             subTitle: 'ETH',
             title: 'Ethereum',
-            valueUSD: Number(CommonService.numbersAfterComma(wallet.getBalanceInUsd(), 2))
+            valueUSD: Number(CommonService.numbersAfterComma(wallet.getBalanceInUsd(), 2)),
+            amount: wallet.getFormattedBalance()
         });
 
         return pieChartItems;

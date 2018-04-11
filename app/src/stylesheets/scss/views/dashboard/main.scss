@@ -22,6 +22,13 @@
                 margin-left: 0;
                 margin-right: 0;
             }
+
+            &.transactions-box {
+                .transactions-box__header {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
         }
 
         .sk-tasks-box {
@@ -31,5 +38,6 @@
         .disable-opacity {
             opacity: 0.4;
         }
+
     }
-}   
+}
