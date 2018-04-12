@@ -130,7 +130,9 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
     $scope.$on('selfkey:on-keypress', (event, key) => {
         if (key == 'Enter') {
-            $scope.save(event, $scope.theForm);
+            if (!$scope.savePromise){
+                $scope.save(event, $scope.theForm);
+            }
         }
     });
 
