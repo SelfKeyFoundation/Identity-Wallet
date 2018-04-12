@@ -34,12 +34,7 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
     let addBalaceChageListener = () => {
         $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
             $timeout(() => {
-                if (symbol.toLowerCase() == 'eth') {
-                    $rootScope.wallet.syncEthTransactionsHistory();
-                } else {
-                    Web3Service.syncTokensTransactionHistory(symbol);
-
-                }
+                $rootScope.refreshTxHistory(symbol);
             }, 4000);
         });
     };

@@ -1,6 +1,6 @@
 'use strict';
 
-function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, RPCService, SqlLiteService, SelfkeyService) {
+function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, $timeout, $mdSidenav, $state, $filter, CommonService, RPCService, SqlLiteService, SelfkeyService, Web3Service) {
     'ngInject'
 
     $log.info('MemberDashboardMainController', $rootScope.wallet);
@@ -48,10 +48,18 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         return !isInProgress;
     }
 
-    $rootScope.refreshTxHistory = (event) => {
-        SqlLiteService.getTransactionsHistoryByWalletId(wallet.id).then((data) => {
-            $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
-        });
+    $rootScope.refreshTxHistory = (symbol) => {
+        if (!symbol) {
+            $rootScope.wallet.syncEthTransactionsHistory();
+            Web3Service.syncTokensTransactionHistory(symbol);
+            return;
+        }
+
+        if (symbol.toLowerCase() == 'eth') {
+            $rootScope.wallet.syncEthTransactionsHistory();
+        } else {
+            Web3Service.syncTokensTransactionHistory(symbol);
+        }
     }
 
     $rootScope.CUSTOM_TOKENS_LIMIT = 20;
