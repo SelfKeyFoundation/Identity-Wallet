@@ -10,6 +10,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RP
         $scope.idAttribute = idAttribute;
     }
 
+    $scope.savePromise = null;
     $scope.selectedFile = null;
 
     $scope.close = (event) => {
@@ -17,15 +18,17 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RP
     };
 
     $scope.save = (event) => {
-        if (!$scope.selectedFile) { return; }
+        if (!$scope.selectedFile || $scope.savePromise) { return; }
 
         if (mode === 'create') {
-            RPCService.makeCall('addIdAttribute', {
+            $scope.savePromise = RPCService.makeCall('addIdAttribute', {
                 walletId: $rootScope.wallet.id,
                 idAttributeType: idAttributeType,
                 staticData: null,
                 file: $scope.selectedFile
-            }).then(() => {
+            });
+
+            $scope.savePromise.then(() => {
                 CommonService.showToast('success', 'saved');
                 $mdDialog.hide();
             }).catch((error) => {
@@ -33,12 +36,14 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RP
                 CommonService.showToast('error', 'error while saving document');
             });
         } else {
-            RPCService.makeCall('addEditDocumentToIdAttributeItemValue', {
+            $scope.savePromise = RPCService.makeCall('addEditDocumentToIdAttributeItemValue', {
                 idAttributeId: idAttribute.id,
                 idAttributeItemId: idAttribute.items[0].id,
                 idAttributeItemValueId: idAttribute.items[0].values[0].id,
                 file: $scope.selectedFile
-            }).then(() => {
+            });
+
+            $scope.savePromise.then(() => {
                 $mdDialog.hide();
             }).catch((error) => {
                 $log.error(error);

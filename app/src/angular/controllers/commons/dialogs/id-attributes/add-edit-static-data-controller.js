@@ -51,12 +51,11 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
     }
 
     $scope.save = (event, theForm) => {;
-        if (!theForm.$valid) return;
+        if (!theForm.$valid || $scope.savePromise) return;
+
         let value = {
             staticData: {}
         }
-
-        $scope.savePromise = null;
 
         if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
             value.staticData.line1 = $scope.inputs.line1;
@@ -130,9 +129,7 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
 
     $scope.$on('selfkey:on-keypress', (event, key) => {
         if (key == 'Enter') {
-            if (!$scope.savePromise){
-                $scope.save(event, $scope.theForm);
-            }
+            $scope.save(event, $scope.theForm);
         }
     });
 
