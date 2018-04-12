@@ -96,7 +96,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     };
 
     $scope.pieChart = {
-        totalTitle: 'Total value USD',
+        totalTitle: 'Total Value USD',
         total: CommonService.numbersAfterComma(wallet.calculateTotalBalanceInUSD(), 2),
         items: $scope.getPieChartItems(),
         callback: {

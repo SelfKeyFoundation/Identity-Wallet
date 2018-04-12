@@ -11,7 +11,7 @@
                 div(layout="row")
                     .colored-box-container
                         .colored-box(ng-style="{ 'background-color': item.color}")
-                            .value {{item.firstLetter}}
+                            .value {{item.firstLetter | uppercase}}
                     .title(layout="column")
                         .titleFull {{item.title}}
                         .titleSmall {{item.subTitle}}
