@@ -1,7 +1,7 @@
 .content(style="display: flex;")
     md-input-container.sk-input-box.sk-input-non-floating(style="width: 160px;")
         label Country Code
-        md-select.sk-select(name="countryCode", ng-model="inputs.line1", ng-required="true")
+        md-select.sk-select(name="countryCode", ng-model="inputs.line1", ng-required="true", ng-keydown="ignoreEnterKey($event)")
             md-option(ng-value="item.dialCode", ng-repeat="(key, item) in countryList") {{item.code}} {{item.dialCode}}
         div(ng-messages="theForm.countryCode.$error")
             div(ng-message="required") This field is required. Please enter Country Code

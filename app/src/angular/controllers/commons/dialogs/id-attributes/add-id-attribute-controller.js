@@ -47,6 +47,22 @@ function AddIdAttributeDialogController($rootScope, $scope, $log, $mdDialog, Sql
     $scope.cancel = (event) => {
         $mdDialog.cancel();
     }
+
+    $scope.$on('selfkey:on-keypress', (event, key) => {
+        if (key == 'Enter') {
+            $scope.save(event);
+        }
+    });
+
+    $scope.ignoreEnterKey = (event) => {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+        $scope.save(event);
+
+        return;
+    }
 }
 
 module.exports = AddIdAttributeDialogController;

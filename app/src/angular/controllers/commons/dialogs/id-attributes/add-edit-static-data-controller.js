@@ -50,10 +50,8 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     }
 
-
-    $scope.save = (event, theForm) => {
-        if ($scope.isFormInvalid(theForm)) return;
-
+    $scope.save = (event, theForm) => {;
+        if (!theForm.$valid) return;
         let value = {
             staticData: {}
         }
@@ -130,11 +128,20 @@ function AddEditStaticDataDialogController($rootScope, $scope, $log, $q, $mdDial
         }
     }
 
-    $rootScope.$on('selfkey:on-keypress', (event, key) => {
+    $scope.$on('selfkey:on-keypress', (event, key) => {
         if (key == 'Enter') {
             $scope.save(event, $scope.theForm);
         }
     });
+
+    $scope.ignoreEnterKey = (event) => {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+        $scope.save(event, $scope.theForm);
+        return;
+    }
 };
 
 module.exports = AddEditStaticDataDialogController;

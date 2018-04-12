@@ -18,7 +18,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
         'id_selfie': {
             type: "id_selfie",
             step: "STEP 4",
-            title1: "Upload National ID with Selfie",
+            title1: "Upload Your National ID Selfie",
             title2: "(A selfie photo of you holding your National ID)",
             title3: "This is stored locally. Max file size 50mb.",
         }

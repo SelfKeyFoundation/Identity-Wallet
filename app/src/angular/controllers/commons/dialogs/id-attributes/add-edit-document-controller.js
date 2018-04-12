@@ -17,9 +17,7 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RP
     };
 
     $scope.save = (event) => {
-        if (!$scope.selectedFile) {
-            return;
-        }
+        if (!$scope.selectedFile) { return; }
 
         if (mode === 'create') {
             RPCService.makeCall('addIdAttribute', {
@@ -61,6 +59,21 @@ function AddEditDocumentDialogController($rootScope, $scope, $log, $mdDialog, RP
         }).catch((error) => {
             CommonService.showToast('error', 'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.');
         });
+    }
+
+    $scope.$on('selfkey:on-keypress', (event, key) => {
+        if (key == 'Enter') {
+            $scope.save(event);
+        }
+    });
+
+    $scope.ignoreEnterKey = (event) => {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+        $scope.save(event);
+        return;
     }
 };
 

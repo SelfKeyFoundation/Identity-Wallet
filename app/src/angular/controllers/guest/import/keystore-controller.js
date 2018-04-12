@@ -83,6 +83,9 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
     });
 
+    /**
+     *
+     */
     function unlockExistingWallet(publicKey, password) {
         let defer = $q.defer();
 
@@ -110,6 +113,14 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         return defer.promise;
     }
 
+    /**
+     *
+     */
+    $scope.$on('selfkey:on-keypress', (event, key) => {
+        if (key == 'Enter') {
+            $scope.unlock(event, $scope.theForm);
+        }
+    });
 };
 
 module.exports = GuestImportKeystoreController;
