@@ -10,7 +10,7 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
     $scope.infoArray = [
         {
             logo: 'selfkey',
-            textPart1: '1. The SelfKey ID allows you to manage, own, and control various parts of your identity',
+            textPart1: '1. The SelfKey ID allows you to manage, own, and control various parts of your identity.',
             textPart2: '2. Your SelfKey ID is broken down into two parts: attributes and documents. ',
             textPart3: '3. All information is stored locally on your device, and not on the server or blockchain.',
             textPart4: '4. SelfKey does not have access to this information, as it is under your full control.',
