@@ -93,7 +93,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
                 }
             }
         });
-    }
+    };
 
     $rootScope.openReceiveTokenDialog = (event, args) => {
         return $mdDialog.show({
@@ -107,7 +107,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
                 args: args
             }
         });
-    }
+    };
 
     $rootScope.openInfoDialog = (event, text, title) => {
         $mdDialog.show({
@@ -123,7 +123,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
                 title: title
             }
         });
-    }
+    };
 
     $rootScope.openNewERC20TokenInfoDialog = (event, title, symbol, balance) => {
         $mdDialog.show({
@@ -140,7 +140,23 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
                 balance: balance
             }
         });
-    }
+    };
+
+    $rootScope.openConfirmationDialog = (event, text, title) => {
+        return $mdDialog.show({
+            controller: 'ConfirmationDialogController',
+            templateUrl: 'common/dialogs/confirmation-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: false,
+            escapeToClose: false,
+            locals: {
+                text: text,
+                title: title
+            }
+        });
+    };
 
     $rootScope.checkTermsAndConditions = () => {
         let guideSettings = SqlLiteService.getGuideSettings();

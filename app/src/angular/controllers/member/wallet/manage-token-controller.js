@@ -31,12 +31,12 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
     function prepareBalance() {
         if ($scope.symbol === 'ETH') {
             // ETHER
-            $scope.balance = Number($rootScope.wallet.balanceEth);
-            $scope.balanceUsd = CommonService.numbersAfterComma($rootScope.wallet.balanceInUsd, 2);
+            $scope.balance = CommonService.commasAfterNumber($rootScope.wallet.balanceEth, 2);
+            $scope.balanceUsd = CommonService.commasAfterNumber($rootScope.wallet.balanceInUsd, 2);
         } else {
             // TOKEN
-            $scope.balance = $scope.selectedToken.getBalanceDecimal();
-            $scope.balanceUsd = CommonService.numbersAfterComma($scope.selectedToken.balanceInUsd, 2);
+            $scope.balance = CommonService.commasAfterNumber($scope.selectedToken.getBalanceDecimal(), 2);
+            $scope.balanceUsd = CommonService.commasAfterNumber($scope.selectedToken.balanceInUsd, 2);
         }
     }
 

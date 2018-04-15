@@ -3,27 +3,27 @@
     .content(layout="column", layout-align="center center")
         sk-icon(icon="currency", size-class="icon-size-57x65")
         .header-text Manage My Crypto
-        .header-description 
-                            | Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
-                            | Removing tokens from this list only disables them from the display, and does not
-                            | impact their status on the Ethereum blockchain.
+        .header-description
+                            | Manage your ERC20 tokens displayed in the dashboard.
         .grid-container
             table
                 thead
                     tr
+                        td NAME
                         td Token Symbol
-                        td Last Price
                         td Balance
+                        td Last Price
                         td Total Value
                         td Token Contract Address
                         td
 
                 tbody
                     tr(ng-repeat="token in data")
+                        td {{token.name}}
                         td {{token.symbol}}
-                        td $ {{token.lastPrice}}
                         td {{token.balance}}
+                        td $ {{token.lastPrice}}
                         td $ {{token.totalValue}}
                         td {{token.contractAddress}}
                         td
-                            sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken($event, token, $index)", icon="ic_delete_white_24px", size-class="icon-size-19x23")
+                            sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken($event, token, $index)", icon="ic_visibility_off_black_24px", size-class="icon-size-19x23")
