@@ -27,6 +27,11 @@
             align-items: flex-start;
             .body {
                 margin-left: 20px;
+
+                >*{
+                    width: 400px !important;
+                }
+
                 .title {
                     opacity: 0.83;
                     font-family: SFNSDisplay;
