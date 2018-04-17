@@ -112,14 +112,14 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         contractAddress: '',
         tokenId: ''
     };
-  
+
     let resetFormData = () => {
         let data = $scope.formData;
 
         data.symbol = '';
         data.decimalPlaces = null;
         data.tokenId = '';
-        resetVariables();     
+        resetVariables();
     };
 
     $scope.addCustomToken = (event, form) => {
