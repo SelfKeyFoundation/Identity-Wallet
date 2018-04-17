@@ -1,0 +1,12 @@
+md-dialog.confirmation-dialog-container(aira-lable="{{title}}")
+    .info-wrapper
+        .info-title
+            span {{ title }}
+            span.close(ng-click="cancel($event)") x
+        .info-body
+            div {{ text }}
+
+            md-button.default.cancal-btn(ng-click="cancel($event)")
+                span.primary Cancel
+            md-button.default.save-btn(ng-click="save($event)")
+                span.primary Yes

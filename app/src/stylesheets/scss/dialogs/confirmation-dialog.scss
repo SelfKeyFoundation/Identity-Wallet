@@ -1,0 +1,85 @@
+.confirmation-dialog-container {
+    width: 500px !important;
+    height: 302px !important;
+    min-height: inherit !important;
+    min-width: inherit !important;
+    display: block !important;
+    * {
+        font-family: ProximaNovaRegular;
+    }
+
+    .info-wrapper {
+        position: relative;
+        height: 100%;
+        .info-title {
+            height: 68px;
+            background-image: linear-gradient(to bottom, #27313b, #1e262e);
+            box-shadow: inset 0 -1px 0 0 #303c49;
+
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            display: flex;
+
+            font-size: 19px;
+            line-height: 1.26;
+            color: #ffffff;
+            position: relative;
+            .close {
+                color: #797e83;
+                font-size: 30px;
+                cursor: pointer;
+                outline: none;
+                right: 15px;
+                position: absolute;
+            }
+        }
+        .info-body {
+            height: calc(100% - 68px);
+            background-color: #262f39;
+            font-size: 17px;
+            line-height: 1.59;
+            color: #ffffff;
+            > div {
+                padding: 40px 36px;
+                text-align: left;
+            }
+            .cancal-btn {
+                width: 150px;
+                border-radius: 4px;
+                background-color: #435160;
+
+                font-family: ProximaNovaRegular;
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 0.8;
+                letter-spacing: 0.6px;
+                text-align: center;
+                color: #ffffff !important;
+                bottom: 38px;
+                position: absolute !important;
+                left: 30% !important;
+                transform: translateX(-50%) !important;
+            }
+            .save-btn {
+                width: 150px;
+                border-radius: 4px;
+                background-color: #435160;
+
+                font-family: ProximaNovaRegular;
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 0.8;
+                letter-spacing: 0.6px;
+                text-align: center;
+                color: #ffffff !important;
+
+                bottom: 38px;
+                position: absolute !important;
+                right: 0 !important;
+                transform: translateX(-50%) !important;
+            }
+        }
+
+    }
+}
