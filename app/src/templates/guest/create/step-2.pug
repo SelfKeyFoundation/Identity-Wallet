@@ -5,12 +5,13 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Confirm Password
+            span.none-select-text Step 2: Confirm Password
         form.content(name="passwordForm", layout="column")
+            .icon
+                img(src='assets/images/logos/icon-confirm-password.png' height=54)
             .title
-                | Please reconfirm the password you just created.
-                | There is no way it can be restored or reset,
-                | and SelfKey cannot help you if the password is lost.
+                | Confirm the password you just created. After this step, there is no way the
+                | password can be restored or reset, and SelfKey cannot you help if it is lost.
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
                 label Password

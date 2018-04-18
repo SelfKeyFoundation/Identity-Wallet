@@ -3,22 +3,26 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Backup Your Wallet
+            span.none-select-text Step 3: Backup Your Ethereum Address
         .content(layout="column")
-
+            .icon
+                img(src='assets/images/logos/download.png' height=54)
             md-input-container.sk-input-box.no-error-spacer
                 label Your Public Key
                 input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
+                md-button.smallest.gray.copy
+                    span(copy-to-clipboard="publicKey") COPY
 
             .title
-                | Please download the Keystore File to save a backup of your wallet.
-                | The Keystore File is encrypted by the password you just created.
-                | Together, they unlock your private keys which grant the abiity to sign transactions on the Ethereum network.
+                | Your public key is a unique address on the Ethereum blockchain. Think of it like a bank
+                | account number that you own, used to send and receive Ether or tokens. The ability to
+                | authorize transactions on this address is encrypted by the password you just created.
+                | Download a backup and save this address in a convenient location.
 
             md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
                 span.primary DOWNLOAD KEYSTORE FILE (UTC/JSON)
 
-            .title.second
+            //.title.second
                 p
                     | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
                     | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password,
