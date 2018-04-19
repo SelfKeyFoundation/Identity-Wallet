@@ -3,8 +3,10 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Backup Your Private Key
+            span.none-select-text Step 4: Backup Your Private Keys
         .content(layout="column")
+            .icon
+                img(src='assets/images/logos/silenced.png' height=54)
 
             md-input-container.sk-input-box.no-error-spacer
                 label Your Private Key
@@ -17,7 +19,7 @@
 
             .warning-description
                 .item(style="font-weight: normal;")
-                    span Private keys are used to sign transactions on the Ethereum blockchain. Your private key is encrypted within the Keystore File, which is protected by the password you just created. You can also print a copy of your private keys to make an offline backup - this is also known as "cold storage".
+                    span Your private key is used to authorize transactions for sending Ether or tokens on your Ethereum address. Do not share this with anyone, as this will give them full access to move your assets somewhere else. You can print a copy to make an offline backup. This is also known as "cold storage".
 
             .actions-wrapper
                 md-button#printWalletNext.outline-blue(ng-click="nextStep($event)")
