@@ -21,23 +21,29 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
     let processTokens = (walletTokens) => {
         let data = Object.keys(walletTokens).map((tokenKey) => {
             let walletToken = walletTokens[tokenKey];
-            walletToken.totalValue = CommonService.commasAfterNumber(walletToken.calculateBalanceInUSD(), 2);
+            let roundedBalanceUSD = walletToken.calculateBalanceInUSD() > 0 ? walletToken.calculateBalanceInUSD().toFixed(2) : walletToken.calculateBalanceInUSD();
+            let roundedFormattedBalance = Number(walletToken.getFormattedBalance()) > 0 && !CommonService.isInt(Number(walletToken.getFormattedBalance())) ? Number(walletToken.getFormattedBalance()).toFixed(2) : Number(walletToken.getFormattedBalance());
+
+            walletToken.totalValue = CommonService.commasAfterNumber(roundedBalanceUSD, 2);
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(walletToken.symbol.toUpperCase());
             walletToken.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
-            walletToken.balance = CommonService.commasAfterNumber(walletToken.getFormattedBalance(), 2);
+            walletToken.balance = CommonService.commasAfterNumber(roundedFormattedBalance, 2);
             walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey).name;
 
             return walletToken;
         });
 
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
+        let ethRoundedFormattedBalance = Number(wallet.getFormattedBalance()) > 0 && !CommonService.isInt(Number(wallet.getFormattedBalance())) ? Number(wallet.getFormattedBalance()).toFixed(2) : Number(wallet.getFormattedBalance());
+        let ethRoundedBalanceUSD = wallet.calculateBalanceInUSD() > 0 ? wallet.calculateBalanceInUSD().toFixed(2) : wallet.calculateBalanceInUSD();
+
         data.push({
             symbol: 'ETH',
             name: 'Ethereum',
             lastPrice: ethPrice ? ethPrice.priceUSD : 0,
-            balance: CommonService.commasAfterNumber(wallet.getFormattedBalance(), 2),
-            totalValue: CommonService.commasAfterNumber(wallet.calculateBalanceInUSD(), 2),
+            balance: CommonService.commasAfterNumber(ethRoundedFormattedBalance, 2),
+            totalValue: CommonService.commasAfterNumber(ethRoundedBalanceUSD, 2),
             contractAddress: ''
         });
         data.sort((a, b) => {

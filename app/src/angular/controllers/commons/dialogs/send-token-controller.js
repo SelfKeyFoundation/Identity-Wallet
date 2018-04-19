@@ -294,8 +294,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         // send amount in USD
         let roundedAmountUSD = (Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit)).toFixed(2)
         $scope.infoData.sendAmountInUSD = CommonService.commasAfterNumber(roundedAmountUSD, 2);
-        console.log(222, $scope.infoData)
-        console.log(111, roundedAmountUSD)
     }
 
     function calculateReminingBalance() {
@@ -344,14 +342,14 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             txFeeInEth: 0,
             txFeeInUsd: 0
         };
-        console.log(444, $scope.infoData)
+
         /**
          *
          */
         $scope.backgroundProcessStatuses = {
             checkingTransaction: false,
             checkingEstimatedGasLimit: false
-        }
+        };
 
         /**
          * input states
@@ -360,7 +358,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             isAddressLocked: args.isAddressLocked,
             isAmountLocked: args.isAmountLocked,
             isGasPriceLocked: args.isGasPriceLocked
-        }
+        };
 
         /**
          *
@@ -453,8 +451,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         cancelTxCheck();
         cancelEstimatedGasCheck();
     });
-
-    console.log(333, $scope.infoData)
 };
 
 module.exports = SendTokenDialogController;

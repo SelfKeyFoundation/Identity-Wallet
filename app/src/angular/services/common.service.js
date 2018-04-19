@@ -63,14 +63,19 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
             return result;
         }
 
-        commasAfterNumber (amount, num) {
+        commasAfterNumber(amount, num) {
             var parts = amount.toString().split(".");
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             return parts.join(".");
         }
 
+
         chunkArray(myArray, chunkSize) {
             return CommonUtils.chunkArray(myArray, chunkSize);
+        }
+
+        isInt(n) {
+            return n % 1 === 0;
         }
 
     }
