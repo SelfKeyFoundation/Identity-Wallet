@@ -26,7 +26,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(walletToken.symbol.toUpperCase());
             walletToken.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
             walletToken.balance = CommonService.commasAfterNumber(walletToken.getFormattedBalance(), 2);
-            walletToken.name = tokenKey == 'KEY' ? 'SelfKey' : tokenKey;
+            walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey).name;
 
             return walletToken;
         });
@@ -63,6 +63,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         });
 
         $scope.data = data;
+
     };
 
     processTokens(wallet.tokens);
@@ -77,7 +78,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
 
 
     $scope.deleteCustomToken = (event, token, index) => {
-        $rootScope.openConfirmationDialog(event, 'Removing tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n', 'Are you sure?').then((val) => {
+        $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n').then((val) => {
             if (val == 'accept') {
                 SqlLiteService.updateWalletToken({
                     tokenId: token.id,

@@ -24,9 +24,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             'KEY': 'SelfKey'
         };
         let getTokenName = () => {
-            return tokenNameExceptions[symbol] || tokenPrice.name; 
+            return tokenNameExceptions[symbol] || tokenPrice.name;
         };
-        return (tokenPrice ? (getTokenName() + ' - ') : '') + token.getBalanceDecimal() + ' '+ token.symbol;
+        return (tokenPrice ? (getTokenName() + ' - ') : '') + token.getBalanceDecimal() + ' ' + token.symbol;
     }
 
     /**
@@ -232,7 +232,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     if (error.indexOf('Insufficient funds') == -1) {
                         CommonService.showToast('error', error, 20000);
                     }
-                    
+
                     $scope.errors.sendFailed = error;
                     // reset view state
                     setViewState();
@@ -292,7 +292,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     function calculateSendAmountInUSD() {
         // send amount in USD
-        $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
+        let roundedAmountUSD = (Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit)).toFixed(2)
+        $scope.infoData.sendAmountInUSD = CommonService.commasAfterNumber(roundedAmountUSD, 2);
+        console.log(222, $scope.infoData)
+        console.log(111, roundedAmountUSD)
     }
 
     function calculateReminingBalance() {
@@ -340,8 +343,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             txFeeInEth: 0,
             txFeeInUsd: 0
-        }
-
+        };
+        console.log(444, $scope.infoData)
         /**
          *
          */
@@ -450,6 +453,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         cancelTxCheck();
         cancelEstimatedGasCheck();
     });
+
+    console.log(333, $scope.infoData)
 };
 
 module.exports = SendTokenDialogController;
