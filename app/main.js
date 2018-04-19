@@ -118,6 +118,7 @@ function onReady(app) {
         //let tray = new Tray('assets/icons/png/256X256.png');
         //tray.setToolTip('selfkey');
 
+
         app.win = new electron.BrowserWindow({
             title: electron.app.getName(),
             width: 1170,
@@ -205,7 +206,41 @@ function onReady(app) {
                 ]
             });
         }
-
+        function openAbout() {
+            let win = new electron.BrowserWindow({
+                width: 800,
+                height: 600,
+                resizable: false,
+                minimizable: false,
+                maximizable: false,
+                fullscreen: false,
+                title: '',
+                closable: false,
+                center: true
+            });
+            win.on('closed', () => {
+                win = null
+            })
+            let webAppPath = path.join(app.dir.root, '/app/src', 'about.html');
+            win.loadURL(url.format({
+                pathname: webAppPath,
+                protocol: 'file:',
+                slashes: true
+            }));
+        }
+        if (process.platform === 'linux') {
+            template.unshift({
+                label: electron.app.getName(),
+                submenu: [
+                    { label: "About", role: 'about',
+                        click () {
+                         openAbout();
+                        }
+                    },
+                    { label: "Quit", role: 'quit' }
+                ]
+            });
+        }
         template.push({
             label: "Edit",
             submenu: [
