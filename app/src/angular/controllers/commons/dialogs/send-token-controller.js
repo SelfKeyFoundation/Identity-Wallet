@@ -292,8 +292,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     function calculateSendAmountInUSD() {
         // send amount in USD
-        let roundedAmountUSD = (Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit)).toFixed(2)
-        $scope.infoData.sendAmountInUSD = CommonService.commasAfterNumber(roundedAmountUSD, 2);
+        $scope.infoData.sendAmountInUSD = Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit));
     }
 
     function calculateReminingBalance() {

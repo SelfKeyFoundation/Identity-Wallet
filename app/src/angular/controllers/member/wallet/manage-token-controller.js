@@ -31,17 +31,18 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
     function prepareBalance() {
         if ($scope.symbol === 'ETH') {
             // ETHER
-            let ethRoundedBalanceUSD = $rootScope.wallet.balanceInUsd > 0 ? $rootScope.wallet.balanceInUsd.toFixed(2) : $rootScope.wallet.balanceInUsd;
-            let ethRoundedFormattedBalance = $rootScope.wallet.balanceEth > 0 ? $rootScope.wallet.balanceEth.toFixed(2) : $rootScope.wallet.balanceEth;
-
-            $scope.balance = CommonService.commasAfterNumber(ethRoundedFormattedBalance, 2);
-            $scope.balanceUsd = CommonService.commasAfterNumber(ethRoundedBalanceUSD, 2);
+            $scope.balance = Intl.NumberFormat('en-US').format($rootScope.wallet.balanceEth.toFixed(2));
+            $scope.balanceUsd = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format($rootScope.wallet.balanceInUsd);
         } else {
             // TOKEN
-            let roundedBalanceUSD = $scope.selectedToken.balanceInUsd > 0 ? $scope.selectedToken.balanceInUsd.toFixed(2) : $scope.selectedToken.balanceInUsd;
-            let roundedFormattedBalance = Number($scope.selectedToken.getBalanceDecimal()) > 0 && !CommonService.isInt(Number($scope.selectedToken.getBalanceDecimal())) ? Number($scope.selectedToken.getBalanceDecimal()).toFixed(2) : Number($scope.selectedToken.getBalanceDecimal());
-            $scope.balance = CommonService.commasAfterNumber(roundedFormattedBalance, 2);
-            $scope.balanceUsd = CommonService.commasAfterNumber(roundedBalanceUSD, 2);
+            $scope.balance = Intl.NumberFormat('en-US').format(Number($scope.selectedToken.getBalanceDecimal()).toFixed(2));
+            $scope.balanceUsd = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format($scope.selectedToken.balanceInUsd);
         }
     }
 
