@@ -197,7 +197,7 @@ function onReady(app) {
 		 */
         let template = [];
 
-        if (process.platform === 'darwin') {
+    /*    if (process.platform === 'darwin') {
             template.unshift({
                 label: electron.app.getName(),
                 submenu: [
@@ -205,7 +205,7 @@ function onReady(app) {
                     { label: "Quit", role: 'quit' }
                 ]
             });
-        }
+        }*/
         function openAbout() {
             let win = new electron.BrowserWindow({
                 width: 800,
@@ -220,7 +220,7 @@ function onReady(app) {
             });
             win.on('closed', () => {
                 win = null
-            })
+            });
             let webAppPath = path.join(app.dir.root, '/app/src', 'about.html');
             win.loadURL(url.format({
                 pathname: webAppPath,
@@ -228,7 +228,7 @@ function onReady(app) {
                 slashes: true
             }));
         }
-        if (process.platform === 'linux') {
+
             template.unshift({
                 label: electron.app.getName(),
                 submenu: [
@@ -240,7 +240,6 @@ function onReady(app) {
                     { label: "Quit", role: 'quit' }
                 ]
             });
-        }
         template.push({
             label: "Edit",
             submenu: [
