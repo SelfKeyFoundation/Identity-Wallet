@@ -28,7 +28,10 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
             }).format(walletToken.calculateBalanceInUSD());
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(walletToken.symbol.toUpperCase());
-            walletToken.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
+            walletToken.lastPrice = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(lastPrice ? lastPrice.priceUSD : 0);
             walletToken.balance = Intl.NumberFormat('en-US').format(Number(walletToken.getFormattedBalance()).toFixed(2));
 
             walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey).name;
@@ -40,7 +43,10 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         data.push({
             symbol: 'ETH',
             name: 'Ethereum',
-            lastPrice: ethPrice ? ethPrice.priceUSD : 0,
+            lastPrice: Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(ethPrice ? ethPrice.priceUSD : 0),
             balance: Intl.NumberFormat('en-US').format(Number(wallet.getFormattedBalance()).toFixed(2)),
             totalValue: Intl.NumberFormat('en-US', {
                 style: 'currency',
