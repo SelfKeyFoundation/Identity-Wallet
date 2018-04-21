@@ -208,16 +208,25 @@ function onReady(app) {
         }*/
         function openAbout() {
             let win = new electron.BrowserWindow({
-                width: 800,
-                height: 600,
+                width: 600,
+                height: 300,
                 resizable: false,
                 minimizable: false,
                 maximizable: false,
                 fullscreen: false,
-                title: '',
-                closable: false,
-                center: true
+                center: true,
+                parent: app.win,
+                webPreferences: {
+                    nodeIntegration: true,
+                    webSecurity: true,
+                    disableBlinkFeatures: 'Auxclick',
+                    devTools: app.config.app.debug,
+                },
             });
+            win.webContents.on('did-finish-load', () => {
+                win.webContents.send('version', version)
+            });
+            //win.webContents.openDevTools();
             win.on('closed', () => {
                 win = null
             });
