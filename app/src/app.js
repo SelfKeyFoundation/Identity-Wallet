@@ -172,6 +172,9 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
+const ConnectingToLedgerDialogController = requireAppModule('angular/controllers/commons/dialogs/connecting-to-ledger.js');
+angular.module('kyc-wallet').controller('ConnectingToLedgerDialogController', ConnectingToLedgerDialogController);
+
 const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
 
@@ -208,6 +211,9 @@ angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestIm
 
 const GuestImportPrivateKeyController = requireAppModule('angular/controllers/guest/import/private-key-controller.js');
 angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
+
+const GuestImportLedgerController = requireAppModule('angular/controllers/guest/import/ledger.js');
+angular.module('kyc-wallet').controller('GuestImportLedgerController', GuestImportLedgerController);
 
 /**
  * create wallet

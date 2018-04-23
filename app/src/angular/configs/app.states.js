@@ -197,6 +197,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             }
         })
+        .state('guest.import.ledger', {
+            url: '/guest/import/ledger',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/ledger/main.html',
+                    controller: 'GuestImportLedgerController'
+                }
+            }
+        })
 
 
         /**

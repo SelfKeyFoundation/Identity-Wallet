@@ -244,6 +244,17 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openConnectingToLedgerDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'ConnectingToLedgerDialogController',
+            templateUrl: 'common/dialogs/connecting-to-ledger.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
     $rootScope.broadcastKeyPress = (event) => {
         $rootScope.$broadcast('selfkey:on-keypress', event.key);
     }

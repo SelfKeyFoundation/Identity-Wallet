@@ -178,6 +178,7 @@ class Wallet {
                 let token = walletTokens[i];
                 this.tokens[token.symbol.toUpperCase()] = this.addNewToken(token);
             }
+            debugger;
             defer.resolve(this.tokens);
         }).catch((error) => {
             defer.reject(error);
