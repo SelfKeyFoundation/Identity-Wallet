@@ -1,11 +1,11 @@
 .sk-blur-background {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    right: 0; 
-    bottom: 0; 
-    z-index: 100; 
-    
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+
     //ackground-image: linear-gradient(131deg, #2b3540, #1e262e);
 
     display: flex;
@@ -15,14 +15,14 @@
 
     &:before{
         content:'';
-        opacity: 0.98; 
+        opacity: 0.98;
         background-image: linear-gradient(131deg, #2b3540, #1e262e);
 
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-        right: 0; 
-        bottom: 0; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 }
 
@@ -76,7 +76,7 @@
             top: -32px;
             left: calc(50% - 32px);
         }
-        
+
         &:last-of-type {
             position: absolute;
             right: -18px;
@@ -109,7 +109,7 @@
                 font-size: 20px;
                 color: #a9c5d6
             }
-            
+
         }
     }
 
@@ -143,7 +143,7 @@
             font-weight: 300;
             color: #ffffff;
 
-            
+
         }
 
         > span {
@@ -237,7 +237,7 @@
     .sk-send-ether-box__actions-container {
         display: flex;
         flex-direction: row;
-        
+
         align-items: center;
         justify-content: space-around;
 
@@ -261,6 +261,6 @@
     font-size: 14px !important;
 	font-weight: 600 !important;
     line-height: 1.36 !important;
-    
+
     padding: 16px !important;
 }

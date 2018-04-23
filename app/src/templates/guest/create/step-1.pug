@@ -5,12 +5,14 @@
 
     .content-wrapper.sk-box.shadowed
         .header
-            span.none-select-text Create A Password
+            span.none-select-text Step 1: Create A Password
         form.content(name="passwordForm", layout="column")
+            .icon
+                img(src='assets/images/logos/icon-bank.png' height=54)
             .title
-                | You must remember this password to unlock the wallet.
-                | There is no way it can be restored or reset,
-                | and SelfKey cannot help you if this password is lost.
+                | Protect your SelfKey Identity Wallet and Ethereum address with a password. Your
+                | address is like a bank account number on the blockchain, used to send and
+                | receive Ether or tokens. This password is required to unlock your wallet.
 
             md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
                 label Password

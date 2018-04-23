@@ -29,10 +29,22 @@
         .content {
             padding: 50px 44px;
 
+            .icon {
+                text-align: center;
+                margin-bottom: 12px;
+            }
+            .copy {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                right: 20px;
+            }
+
             >.title {
                 &.second {
                     padding-top: 36px;
-                    padding-bottom: 42px !important; 
+                    padding-bottom: 42px !important;
                 }
                 .link {
                     cursor: pointer;
@@ -44,6 +56,9 @@
                 padding-bottom: 34px;
                 line-height: 1.72;
                 color: #ffffff;
+            }
+            .blue {
+                margin-bottom: 15px;
             }
 
             .warning-description {

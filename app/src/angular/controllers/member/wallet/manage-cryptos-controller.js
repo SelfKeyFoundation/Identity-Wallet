@@ -21,20 +21,37 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
     let processTokens = (walletTokens) => {
         let data = Object.keys(walletTokens).map((tokenKey) => {
             let walletToken = walletTokens[tokenKey];
-            walletToken.totalValue = Number(CommonService.numbersAfterComma(walletToken.calculateBalanceInUSD(), 2));
+
+            walletToken.totalValue = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(walletToken.calculateBalanceInUSD());
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(walletToken.symbol.toUpperCase());
-            walletToken.lastPrice = lastPrice ? lastPrice.priceUSD : 0;
-            walletToken.balance = walletToken.getFormattedBalance();
+            walletToken.lastPrice = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(lastPrice ? lastPrice.priceUSD : 0);
+            walletToken.balance = Intl.NumberFormat('en-US').format(Number(walletToken.getFormattedBalance()).toFixed(2));
+
+            walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey).name;
+
             return walletToken;
         });
 
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
         data.push({
             symbol: 'ETH',
-            lastPrice: ethPrice ? ethPrice.priceUSD : 0,
-            balance: wallet.getFormattedBalance(),
-            totalValue: Number(CommonService.numbersAfterComma(wallet.calculateBalanceInUSD(), 2)),
+            name: 'Ethereum',
+            lastPrice: Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(ethPrice ? ethPrice.priceUSD : 0),
+            balance: Intl.NumberFormat('en-US').format(Number(wallet.getFormattedBalance()).toFixed(2)),
+            totalValue: Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(wallet.calculateBalanceInUSD()),
             contractAddress: ''
         });
         data.sort((a, b) => {
@@ -60,6 +77,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         });
 
         $scope.data = data;
+
     };
 
     processTokens(wallet.tokens);
@@ -72,20 +90,24 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         return true;
     };
 
+
     $scope.deleteCustomToken = (event, token, index) => {
-        SqlLiteService.updateWalletToken({
-            tokenId: token.id,
-            walletId: wallet.id,
-            id: token.walletTokenId,
-            balance: token.balance,
-            recordState: 0
-        }).then(() => {
-            delete $rootScope.wallet.tokens[token.symbol.toUpperCase()];
-            $scope.data.splice(index, 1);
-            reloadPieChartIsNeeded = true;
-            $rootScope.openInfoDialog(event, `Removing tokens from this list only disables them from the display,
-         and does not impact their status on the Ethereum blockchain.`, 'Token Removed');
+        $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n').then((val) => {
+            if (val == 'accept') {
+                SqlLiteService.updateWalletToken({
+                    tokenId: token.id,
+                    walletId: wallet.id,
+                    id: token.walletTokenId,
+                    balance: token.balance,
+                    recordState: 0
+                }).then(() => {
+                    delete $rootScope.wallet.tokens[token.symbol.toUpperCase()];
+                    $scope.data.splice(index, 1);
+                    reloadPieChartIsNeeded = true;
+                });
+            }
         });
+
     }
 };
 
