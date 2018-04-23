@@ -22,8 +22,8 @@
                         td {{token.name}}
                         td {{token.symbol}}
                         td {{token.balance}}
-                        td $ {{token.lastPrice}}
-                        td $ {{token.totalValue}}
+                        td {{token.lastPrice}}
+                        td {{token.totalValue}}
                         td {{token.contractAddress}}
                         td
                             sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken($event, token, $index)", icon="ic_visibility_off_black_24px", size-class="icon-size-19x23")

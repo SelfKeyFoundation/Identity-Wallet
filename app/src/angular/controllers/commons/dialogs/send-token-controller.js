@@ -24,9 +24,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             'KEY': 'SelfKey'
         };
         let getTokenName = () => {
-            return tokenNameExceptions[symbol] || tokenPrice.name; 
+            return tokenNameExceptions[symbol] || tokenPrice.name;
         };
-        return (tokenPrice ? (getTokenName() + ' - ') : '') + token.getBalanceDecimal() + ' '+ token.symbol;
+        return (tokenPrice ? (getTokenName() + ' - ') : '') + token.getBalanceDecimal() + ' ' + token.symbol;
     }
 
     /**
@@ -232,7 +232,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     if (error.indexOf('Insufficient funds') == -1) {
                         CommonService.showToast('error', error, 20000);
                     }
-                    
+
                     $scope.errors.sendFailed = error;
                     // reset view state
                     setViewState();
@@ -292,7 +292,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
     function calculateSendAmountInUSD() {
         // send amount in USD
-        $scope.infoData.sendAmountInUSD = Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit);
+        $scope.infoData.sendAmountInUSD = Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(Number($scope.formData.sendAmount) * Number($scope.infoData.usdPerUnit));
     }
 
     function calculateReminingBalance() {
@@ -340,7 +343,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             txFeeInEth: 0,
             txFeeInUsd: 0
-        }
+        };
 
         /**
          *
@@ -348,7 +351,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $scope.backgroundProcessStatuses = {
             checkingTransaction: false,
             checkingEstimatedGasLimit: false
-        }
+        };
 
         /**
          * input states
@@ -357,7 +360,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             isAddressLocked: args.isAddressLocked,
             isAmountLocked: args.isAmountLocked,
             isGasPriceLocked: args.isGasPriceLocked
-        }
+        };
 
         /**
          *

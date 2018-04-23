@@ -34,7 +34,7 @@ md-dialog {
                 > .sk-select {
                     margin: 0px;
                     position: absolute;
-                    top: -40px;
+                    top: 6px;
                     right: 0px;
                     height: 38px;
                     border-radius: 19px;
@@ -50,6 +50,16 @@ md-dialog {
                     > md-select-value {
                         margin-left: 10px;
                     }
+                }
+
+                &:before{
+                    content:'';
+
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    border-bottom: 2px solid #93b0c1;
                 }
             }
 
@@ -95,7 +105,7 @@ md-dialog {
                         color: #ffffff
                     }
                 }
-                >.sk-icon {
+                > .sk-icon {
                     &:first-of-type {
                         position: absolute;
                         top: -32px;
@@ -148,7 +158,7 @@ md-dialog {
                         background-color: #262f39;
                         padding-bottom: 16px;
                         margin-left: 16px;
-                        width: 100%;
+                        width: 275px;
                         border: none;
                         border-bottom: 2px solid #93b0c1;
                         font-family: ProximaNovaRegular;
@@ -160,7 +170,7 @@ md-dialog {
                             border-bottom: 2px solid #d33131;
                         }
                     }
-                    >span {
+                    > span {
                         position: absolute;
                         right: 0;
                         bottom: 20px;
