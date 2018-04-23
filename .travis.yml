@@ -32,7 +32,7 @@ before_script:
     #- npm run make-win
 script:
     - npm run test
-    - zip -r out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-darwin-x64
+    - if [ "$TRAVIS_BRANCH" = "travis-osx" ]; then zip -r out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-darwin-x64; fi
     #- zip -r out/selfkey-identity-wallet-win32-ia32-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-win32-ia32
-    - gsutil cp out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/
+    - if [ "$TRAVIS_BRANCH" = "travis-osx" ]; then gsutil cp out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/; fi
     #- gsutil cp out/selfkey-identity-wallet-win32-ia32-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/
