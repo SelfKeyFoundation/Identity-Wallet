@@ -118,6 +118,7 @@ function onReady(app) {
         //let tray = new Tray('assets/icons/png/256X256.png');
         //tray.setToolTip('selfkey');
 
+
         app.win = new electron.BrowserWindow({
             title: electron.app.getName(),
             width: 1170,
@@ -196,7 +197,7 @@ function onReady(app) {
 		 */
         let template = [];
 
-        if (process.platform === 'darwin') {
+    /*    if (process.platform === 'darwin') {
             template.unshift({
                 label: electron.app.getName(),
                 submenu: [
@@ -204,8 +205,50 @@ function onReady(app) {
                     { label: "Quit", role: 'quit' }
                 ]
             });
+        }*/
+        function openAbout() {
+            let win = new electron.BrowserWindow({
+                width: 600,
+                height: 300,
+                resizable: false,
+                minimizable: false,
+                maximizable: false,
+                fullscreen: false,
+                center: true,
+                parent: app.win,
+                webPreferences: {
+                    nodeIntegration: true,
+                    webSecurity: true,
+                    disableBlinkFeatures: 'Auxclick',
+                    devTools: app.config.app.debug,
+                },
+            });
+            win.webContents.on('did-finish-load', () => {
+                win.webContents.send('version', version)
+            });
+            //win.webContents.openDevTools();
+            win.on('closed', () => {
+                win = null
+            });
+            let webAppPath = path.join(app.dir.root, '/app/src', 'about.html');
+            win.loadURL(url.format({
+                pathname: webAppPath,
+                protocol: 'file:',
+                slashes: true
+            }));
         }
 
+            template.unshift({
+                label: electron.app.getName(),
+                submenu: [
+                    { label: "About", role: 'about',
+                        click () {
+                         openAbout();
+                        }
+                    },
+                    { label: "Quit", role: 'quit' }
+                ]
+            });
         template.push({
             label: "Edit",
             submenu: [
