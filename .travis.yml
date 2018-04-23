@@ -28,7 +28,7 @@ before_install:
     - gcloud auth activate-service-account --key-file client-secret.json
 before_script:
     - "PACKAGE_VERSION=$(cat package.json  | grep version  | head -1  | awk -F: '{ print $2 }'  | sed 's/[\",]//g'  | tr -d '[[:space:]]')"
-    - if [ "$TRAVIS_BRANCH" = "travis-osx" ]; then npm run make; fi
+    - npm run make
     #- npm run make-win
 script:
     - npm run test
