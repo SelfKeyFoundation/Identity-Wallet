@@ -27,6 +27,7 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
  */
 const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
+const { appUpdater } = require('./autoupdater');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -162,15 +163,10 @@ function onReady(app) {
             app.win = null;
         });
 
-        /*
-		setAutoUpdaterListeners(app.win);
-		if (!isDevMode()) {
-			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
-			setTimeout(() => {
-				autoUpdater.checkForUpdates();
-			}, 5000);
+        if (!isDevMode()) {
+            // Initate auto-updates
+            appUpdater();
         }
-        */
 
         app.win.webContents.on('did-finish-load', () => {
             log.info('did-finish-load');
@@ -218,12 +214,12 @@ function onReady(app) {
                 { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
             ]
         },
-        {
-            label: 'View',
-            submenu: [
-                { role: 'togglefullscreen' }
-            ]
-        });
+            {
+                label: 'View',
+                submenu: [
+                    { role: 'togglefullscreen' }
+                ]
+            });
 
         Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
@@ -283,28 +279,6 @@ function onWebContentsCreated(event, contents) {
     });
 }
 
-function setAutoUpdaterListeners(win) {
-    autoUpdater.on("error", (error) => {
-        log.warn('error: ' + error);
-    });
-
-    autoUpdater.on("checking-for-update", () => {
-        log.warn('checking-for-update');
-    });
-
-    autoUpdater.on("update-available", () => {
-        log.warn('update-available');
-    });
-
-    autoUpdater.on("update-not-available", () => {
-        log.warn('update-not-available');
-    });
-
-    autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-        log.warn('update-downloaded: ' + releaseName);
-        win.webContents.send('UPDATE_READY', releaseName);
-    });
-}
 
 function createKeystoreFolder() {
     if (!fs.existsSync(walletsDirectoryPath)) {
