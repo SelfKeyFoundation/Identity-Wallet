@@ -5,7 +5,7 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
-  - npm run makewin
+  - npm run make-auto
 test_script:
   - node --version
   - npm --version
