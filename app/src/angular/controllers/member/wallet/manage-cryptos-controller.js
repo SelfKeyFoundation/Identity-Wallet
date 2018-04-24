@@ -22,19 +22,24 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         let data = Object.keys(walletTokens).map((tokenKey) => {
             let walletToken = walletTokens[tokenKey];
 
+            console.log(1111,walletToken)
+
             walletToken.totalValue = Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
             }).format(walletToken.calculateBalanceInUSD());
 
             let lastPrice = SqlLiteService.getTokenPriceBySymbol(walletToken.symbol.toUpperCase());
+            console.log(555,lastPrice)
             walletToken.lastPrice = Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
             }).format(lastPrice ? lastPrice.priceUSD : 0);
             walletToken.balance = Intl.NumberFormat('en-US').format(Number(walletToken.getFormattedBalance()).toFixed(2));
 
-            walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey).name;
+          //  console.log(111,tokenKey)
+          //  console.log(222,SqlLiteService.getTokenPriceBySymbol(tokenKey))
+         //   walletToken.name = SqlLiteService.getTokenPriceBySymbol(tokenKey) ? SqlLiteService.getTokenPriceBySymbol(tokenKey).name : '';
 
             return walletToken;
         });
