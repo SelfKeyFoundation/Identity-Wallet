@@ -15,7 +15,7 @@ cache:
 before_install:
 - openssl aes-256-cbc -K $encrypted_40ef2f4394e3_key -iv $encrypted_40ef2f4394e3_iv -in client-secret.json.enc -out client-secret.json -d
 - brew install wine rpm
-- npm i g node-gyp
+- npm i -g node-gyp
 - npm i -g gulp-cli
 - npm i -g electron-packager
 - gcloud version || true
