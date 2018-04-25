@@ -1,6 +1,6 @@
 os: osx
 language: node_js
-node_js: 9
+node_js: 8.9.4
 env:
   global:
   - NODE_ENV=test
@@ -8,10 +8,28 @@ env:
 notifications:
   slack:
     secure: fZJNvR4gMUki9/UcaaXYf76JxsdvYV7X15wzkIdQU42qboFG8jvlEiKEr7WP4h3WShJEfG/l70YoSvzO+e3K7vJ+bdpNnvcvgChVZosqVLKmv/jipjmFEdYS11pVvaWPdTet04zmYqrB24waAsaeMt1hMUSAOSuFwvcoYd01fo2guzoGwc+2NkuZTRrGkn3jZ0muQGQNUfHNQGV9yNA1wgl354mi6Uaa0gb3VNev59RUYCsjBXb2+N14MZIAAZVvumm0jZxlX8KDQuwQDAc2GaHU8zC4SJ9rUxcvcfA8jN0dTk/X7RcuyTPGGy4OwL0ESPblBByJ0BUvcWosra4+Rzi+c3DNCTsTQmQdCoMSe0N2CmvhVi0XlGh1b5Efes8n9CIId2fVpw017Lh8J0C6YrRBtKWn3r1XWFOkwaAeQr7z89V3CnLxQdwu59IFyAdjSHcu1gIxKwP1Ad33zUTQlcZZpyswKk3DcEGVgZdRGlzPQ1i9w9PLYUiK+nVWRMY3+XYCnsQfSDYZI/1eLFMElaVTl4iWilAp1tUTWwAQOmlJzIX2ayuIxUrkbGmMu7smb7YjllVhef18yFB68y5SePOknYkeEYO5Sxa1KDCc+OsUlUIrnrmG7YSx6q1bKW7G74m0dj6ImR+goYDVNFZi28AsUD4xqFTA51uBQo/fqJY=
+cache:
+  directories:
+  - "$HOME/google-cloud-sdk/"
+  - "$HOME/Library/Caches/Homebrew"
+  - node_modules
+  - "$(npm config get prefix)/bin/gulp-cli"
+  - "$(npm config get prefix)/bin/electron-packager"
 before_install:
+- openssl aes-256-cbc -K $encrypted_40ef2f4394e3_key -iv $encrypted_40ef2f4394e3_iv -in client-secret.json.enc -out client-secret.json -d
 - brew install wine rpm
+- npm i g node-gyp
 - npm i -g gulp-cli
 - npm i -g electron-packager
+- gcloud version || true
+- if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+- source $HOME/google-cloud-sdk/path.bash.inc
+- gcloud version
+- gcloud auth activate-service-account --key-file client-secret.json
 before_script:
+- 'PACKAGE_VERSION=$(cat package.json  | grep version  | head -1  | awk -F: ''{ print $2 }''  | sed ''s/[",]//g''  | tr -d ''[[:space:]]'')'
 - npm run make
-script: npm run test
+script:
+- npm run test
+- if [ "$TRAVIS_BRANCH" = "dev" ]; then zip -r out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-darwin-x64; fi
+- if [ "$TRAVIS_BRANCH" = "dev" ]; then gsutil cp out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/; fi
