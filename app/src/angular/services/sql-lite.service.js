@@ -18,25 +18,12 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
 
-    let tokenPriceUpdaterInterval = null;
-
     class SqlLiteService {
 
         constructor() {
-            if (RPCService.ipcRenderer) {
-                this.loadData().then((resp) => {
-                    $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
-                    this.startTokenPriceUpdaterListener();
-                }).catch((error) => {
-                    $log.error(error);
-                });
-            } else {
+            if (!RPCService.ipcRenderer) {
                 defer.reject({ message: 'electron RPC not available' });
             }
-
-            $rootScope.$on("$destroy", () => {
-                this.stopTokenPriceUpdaterListener();
-            });
         }
 
         /**
@@ -133,19 +120,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
                     $log.info("EXCHANGE_DATA", "LOADED", EXCHANGE_DATA);
                 }
             })
-        }
-
-        /**
-         *
-         */
-        startTokenPriceUpdaterListener() {
-            tokenPriceUpdaterInterval = $interval(() => {
-                this.loadTokenPrices();
-            }, 35000)
-        }
-
-        stopTokenPriceUpdaterListener() {
-            $interval.cancel(tokenPriceUpdaterInterval);
         }
 
         /**
