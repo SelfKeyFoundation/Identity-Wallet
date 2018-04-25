@@ -43,7 +43,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     function startTokenPriceUpdaterListener() {
         tokenPriceUpdaterInterval = $interval(() => {
             SqlLiteService.loadTokenPrices();
-        }, 10000)
+        }, 10000);
     }
 
     function stopTokenPriceUpdaterListener() {
