@@ -7,7 +7,29 @@ const request = require('request');
 const async = require('async');
 
 module.exports = function (app) {
+    const sortCMCData = (data) => {
+        return data.sort((a, b) => {
+            let symbolA = a.symbol.toLowerCase();
+            let symbolB = b.symbol.toLowerCase();
+            if (symbolA == 'eth') {
+                return -1;
+            }
 
+            if (symbolB == 'eth') {
+                return 1;
+            }
+
+            if (symbolA == 'key') {
+                return -1;
+            }
+
+            if (symbolB == 'key') {
+                return 1;
+            }
+
+            return 0; //the others is not important
+        });
+    };
     const loadCmcData = () => {
         request.get(config.cmcUrl, (error, httpResponse, result) => {
             let data = [];
@@ -29,6 +51,9 @@ module.exports = function (app) {
                         createdAt: nowDate.getTime()
                     }
                 });
+
+                dataToInsert = sortCMCData(dataToInsert);
+
                 async.each(dataToInsert, function (item, callback) {
                     electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
                         if (symbol) {

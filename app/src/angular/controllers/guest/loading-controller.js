@@ -1,6 +1,6 @@
 'use strict';
 
-function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $stateParams, EVENTS, SqlLiteService) {
+function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $stateParams, $interval, EVENTS, SqlLiteService) {
     'ngInject'
 
     $log.info('GuestLoadingController');
@@ -11,6 +11,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
 
     $scope.header = 'Loading';
     $scope.subHeader = '';
+    let tokenPriceUpdaterInterval = null;
 
     init();
 
@@ -28,10 +29,25 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
     function loadSqlLiteData() {
         $rootScope.loadingPromise = SqlLiteService.loadData();
         $rootScope.loadingPromise.then(() => {
+            startTokenPriceUpdaterListener();
             goTo('guest.welcome');
         }).catch((error) => {
             $log.error("error", error);
         });
+    }
+
+    $rootScope.$on("$destroy", () => {
+        stopTokenPriceUpdaterListener();
+    });
+
+    function startTokenPriceUpdaterListener() {
+        tokenPriceUpdaterInterval = $interval(() => {
+            SqlLiteService.loadTokenPrices();
+        }, 10000);
+    }
+
+    function stopTokenPriceUpdaterListener() {
+        $interval.cancel(tokenPriceUpdaterInterval);
     }
 
     function goTo(state) {
