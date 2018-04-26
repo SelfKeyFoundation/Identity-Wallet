@@ -92,7 +92,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
 
 
     $scope.deleteCustomToken = (event, token, index) => {
-        $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n').then((val) => {
+        $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n', 'Are you sure?',).then((val) => {
             if (val == 'accept') {
                 SqlLiteService.updateWalletToken({
                     tokenId: token.id,
