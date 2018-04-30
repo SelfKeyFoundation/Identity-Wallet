@@ -14,12 +14,12 @@
                 md-button.md-icon-button(style="position: absolute; right: 10px; top: 4px;", ng-click="togglePrivateKeyVisibility()")
                     md-icon(md-svg-icon="assets/images/icons/{{visibilityIconName}}.svg")
 
-            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
-                span.primary print private keys
-
             .warning-description
                 .item(style="font-weight: normal;")
                     span Your private key is used to authorize transactions for sending Ether or tokens on your Ethereum address. Do not share this with anyone, as this will give them full access to move your assets somewhere else. You can print a copy to make an offline backup. This is also known as "cold storage".
+
+            md-button.blue(style="padding: 10px;", ng-click="printPaperWallet($event)")
+                span.primary print private keys
 
             .actions-wrapper
                 md-button#printWalletNext.outline-blue(ng-click="nextStep($event)")
