@@ -7,6 +7,10 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
   $scope.connectionFailed = false;
   $scope.isConnecting = true;
 
+  $scope.cancelConectToLedger = () => {
+    $mdDialog.cancel();
+  };
+
   LedgerService.connect().then(() => {
     $scope.isConnecting = false;
 

@@ -1,0 +1,52 @@
+.ledger-is-connecting-container {
+  width: 593px !important;
+  height: 330px !important;
+  min-height: inherit !important;
+  min-width: inherit !important;
+  display: block !important;
+  * {
+      font-family: ProximaNovaRegular;
+  }
+ 
+  .body-container {
+      padding-left: 40px;
+      padding-right: 40px;
+      padding-top: 40px;
+      
+      font-size: 17px;
+      line-height: 1.59;
+      color: #ffffff;
+      .header-title {
+        font-size: 22px;
+        text-align: center;
+        margin-bottom: 16px;
+        font-weight: 500;
+      }
+
+      .items {
+        .title {
+          padding-bottom: 15px;
+          font-size: 20px;
+        }
+      }
+
+      .cancal-btn {
+        width: 200px;
+        border-radius: 4px;
+        background-color: #435160;
+
+        font-family: ProximaNovaRegular;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 0.8;
+        letter-spacing: 0.6px;
+        text-align: center;
+        color: #ffffff !important;
+
+        bottom: 18px;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+  }
+}

@@ -265,12 +265,10 @@ class Wallet {
                 defer.resolve('0x' + eTx.serialize().toString('hex'));
             } else {
                 LedgerService.signTransaction(rawTx,'0x' + this.getPublicKeyHex()).then((signedRes)=>{
-                    console.log(signedRes.raw);
                     defer.resolve(signedRes.raw);
                 }).catch((err)=>{
                     //TODO 
                 });
-
             }
            
         }).catch((error) => {

@@ -1,2 +1,12 @@
-md-dialog
-  div connecting to ledger
+md-dialog.ledger-is-connecting-container(aira-lable="Connecting to Ledger")
+    .body-container
+      .header-title Connecting To Ledger...
+      .items 
+        .title To ensure a successful connection, please check if:
+        .item 1) Your Ledger is properly plugged in.
+        .item 2) You have logged into your Ledger.
+        .item 3) You have launched the Ethereum application on your Ledger.
+        .item 4) "Browser Support" is enabled. If not, learn more here.
+      md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
+        span.primary close
+        
