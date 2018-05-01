@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService, LedgerService) {
     'ngInject';
 
     $trace.enable('TRANSITION');
@@ -36,6 +36,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.SqlLiteService = SqlLiteService;
     Wallet.CommonService = CommonService;
     Wallet.EtherScanService = EtherScanService;
+    Wallet.LedgerService = LedgerService;
 
     Token.$rootScope = $rootScope;
     Token.$q = $q;
@@ -43,6 +44,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Token.Web3Service = Web3Service;
     Token.SqlLiteService = SqlLiteService;
     Token.CommonService = CommonService;
+    Token.LedgerService = LedgerService;
 
     /**
      *
@@ -262,7 +264,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
 
     $rootScope.openConnectingToLedgerDialog = (event) => {
         return $mdDialog.show({
-            controller: 'ConnectingToLedgerDialogController',
+            controller: 'ConnectingToLedgerController',
             templateUrl: 'common/dialogs/connecting-to-ledger.html',
             parent: angular.element(document.body),
             targetEvent: event,

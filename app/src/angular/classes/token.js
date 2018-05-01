@@ -3,7 +3,7 @@
 const CommonUtils = requireAppModule('angular/classes/common-utils');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService;
+let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService, LedgerService;
 
 let priceUpdaterInterval, balanceUpdaterInterval;
 
@@ -21,6 +21,7 @@ class Token {
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set Web3Service(value) { Web3Service = value; }
     static set CommonService(value) { CommonService = value; }
+    static set LedgerService(value) { LedgerService = value; }
 
 
     /**
@@ -207,10 +208,20 @@ class Token {
                     chainId: chainID
                 }
 
-                let eTx = new Tx(rawTx);
-                eTx.sign(this.wallet.privateKey);
+                if (!this.wallet.isLedger) {
+                    let eTx = new Tx(rawTx);
+                    eTx.sign(this.wallet.privateKey);
+                    defer.resolve('0x' + eTx.serialize().toString('hex'));
 
-                defer.resolve('0x' + eTx.serialize().toString('hex'));
+                } else {
+                    LedgerService.signTransaction(rawTx,'0x' + this.wallet.getPublicKeyHex()).then((signedRes)=>{
+                        console.log(signedRes.raw);
+                        defer.resolve(signedRes.raw);
+                    }).catch((err)=>{
+                        //TODO 
+                    });
+                }
+
             }
         }).catch((error) => {
             defer.reject(error);

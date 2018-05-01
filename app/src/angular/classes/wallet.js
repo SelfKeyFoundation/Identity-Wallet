@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, LedgerService;
 
 let readyToShowNotification = false;
 
@@ -20,10 +20,13 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set EtherScanService(value) { EtherScanService = value; }
+    static set LedgerService(value) { LedgerService = value; }
+    
 
-    constructor(id, privateKey, publicKey, keystoreFilePath) {
+    constructor(id, privateKey, publicKey, keystoreFilePath, isLedger) {
         this.id = id;
         this.keystoreFilePath = keystoreFilePath;
+        this.isLedger = isLedger;
 
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
@@ -178,7 +181,6 @@ class Wallet {
                 let token = walletTokens[i];
                 this.tokens[token.symbol.toUpperCase()] = this.addNewToken(token);
             }
-            debugger;
             defer.resolve(this.tokens);
         }).catch((error) => {
             defer.reject(error);
@@ -255,11 +257,22 @@ class Wallet {
             if (contractDataHex) {
                 rawTx.data = EthUtils.sanitizeHex(contractDataHex);
             }
+            
+            if (!this.isLedger) {
+                let eTx = new Tx(rawTx);
+                eTx.sign(this.privateKey);
+    
+                defer.resolve('0x' + eTx.serialize().toString('hex'));
+            } else {
+                LedgerService.signTransaction(rawTx,'0x' + this.getPublicKeyHex()).then((signedRes)=>{
+                    console.log(signedRes.raw);
+                    defer.resolve(signedRes.raw);
+                }).catch((err)=>{
+                    //TODO 
+                });
 
-            let eTx = new Tx(rawTx);
-            eTx.sign(this.privateKey);
-
-            defer.resolve('0x' + eTx.serialize().toString('hex'));
+            }
+           
         }).catch((error) => {
             defer.reject(error);
         });
@@ -376,7 +389,7 @@ class Wallet {
                 });
             });
         });
-    }
+    }  
 }
 
 module.exports = Wallet;

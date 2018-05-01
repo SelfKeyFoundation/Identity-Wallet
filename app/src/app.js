@@ -92,6 +92,9 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
+const LedgerService = requireAppModule('angular/services/ledger.service');
+angular.module('kyc-wallet').service('LedgerService', LedgerService);
+
 
 /**
  * directives
@@ -172,8 +175,8 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
-const ConnectingToLedgerDialogController = requireAppModule('angular/controllers/commons/dialogs/connecting-to-ledger.js');
-angular.module('kyc-wallet').controller('ConnectingToLedgerDialogController', ConnectingToLedgerDialogController);
+const ConnectingToLedgerController = requireAppModule('angular/controllers/commons/dialogs/connecting-to-ledger-controller.js');
+angular.module('kyc-wallet').controller('ConnectingToLedgerController', ConnectingToLedgerController);
 
 const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);

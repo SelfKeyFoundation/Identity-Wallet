@@ -101,6 +101,9 @@ function onReady(app) {
         const SqlLiteService = require('./controllers/sql-lite-service')(app);
         electron.app.sqlLiteService = new SqlLiteService();
 
+        const LedgerService = require('./controllers/ledger-service')(app);
+        electron.app.ledgerService = new LedgerService();
+
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
 

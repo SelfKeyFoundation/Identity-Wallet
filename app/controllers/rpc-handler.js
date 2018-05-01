@@ -977,6 +977,64 @@ module.exports = function (app) {
         });
     };
 
+    controller.prototype.connectToLedger = function (event, actionId, actionName, args) {
+        electron.app.ledgerService.connect(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.getLedgerAccounts = function (event, actionId, actionName, args) {
+        electron.app.ledgerService.getAccounts(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.signTransactionWithLedger = function (event, actionId, actionName, args) {
+        electron.app.ledgerService.signTransaction(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+     controller.prototype.createLedgerWalletByAdress = function (event, actionId, actionName, args) {
+        try {
+            let publicKey = args.address;
+            publicKey = publicKey.toString('hex');
+
+            let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey(publicKey);
+            walletSelectPromise.then((wallet) => {
+                if (wallet) {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
+                } else {
+                    electron.app.sqlLiteService.Wallet.add(
+                        {
+                            publicKey: publicKey,
+                            isLedger: 1
+                        }
+                    ).then((resp) => {
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                            id: resp.id,
+                            isSetupFinished: resp.isSetupFinished,
+                            publicKey: publicKey
+                        });
+                    }).catch((error) => {
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, error.code, null);
+                    });
+                }
+            }).catch((error) => {
+                log.error(error);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            });
+        } catch (e) {
+            log.error(e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
+        }
+    }
 
     return controller;
 }

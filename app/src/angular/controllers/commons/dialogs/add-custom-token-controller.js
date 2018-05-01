@@ -24,7 +24,6 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
         return tokens[key];
     });
 
-    debugger;
     let getTokenByContractAddress = (contractAddress) => {
         return allTokensArr.find((token) => {
             return token.address.toLowerCase() == contractAddress.toLowerCase();
