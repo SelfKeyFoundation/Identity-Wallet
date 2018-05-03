@@ -28,7 +28,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
         } else {
             return 'Weak';
         }
-    }
+    };
     $timeout(() => {
         if (!$stateParams.thePassword) {
             $mdDialog.show({
