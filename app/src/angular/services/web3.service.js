@@ -19,7 +19,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     /**
      *
      */
-    const REQUEST_INTERVAL_DELAY = 500;
+    const REQUEST_INTERVAL_DELAY = 10000;
 
     /**
      *

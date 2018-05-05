@@ -1,12 +1,25 @@
 md-dialog.ledger-is-connecting-container(aira-lable="Connecting to Ledger")
-    .body-container
-      .header-title Connecting To Ledger...
-      .items 
-        .title To ensure a successful connection, please check if:
-        .item 1) Your Ledger is properly plugged in.
-        .item 2) You have logged into your Ledger.
-        .item 3) You have launched the Ethereum application on your Ledger.
-        .item 4) "Browser Support" is enabled. If not, learn more here.
-      md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
-        span.primary close
-        
+    .main-container
+        .header-conainer
+            sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancelConectToLedger($event)")
+        .body-container
+            .header-title {{isConnecting ? 'Connecting To Ledger...' : "Error: Can't Connect To Ledger"}}
+            .items(ng-if="isConnecting") 
+                .title To ensure a successful connection, please check if:
+                .item 1) Your Ledger is properly plugged in.
+                .item 2) You have logged into your Ledger.
+                .item 3) You have launched the Ethereum application on your Ledger.
+                .item 4) "Browser Support" is enabled. If not, learn more here.
+            .items(ng-if="!isConnecting")
+                .item 1) Is your Ledger is properly plugged in?
+                .item 2) Have you entered the PIN and logged into your Ledger?
+                .item 3) Is the Ethereum application open on your Ledger?
+                .item 4) Is "Browser Support" is enabled? If not, learn more here.
+            .buttons-container.small-padding-top(ng-if="isConnecting")
+                md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
+                    span.primary close
+            .buttons-container(ng-if="!isConnecting")
+                md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
+                    span.primary BACK
+                md-button.default.cancal-btn(ng-click="connectToLedger($event)")
+                    span.primary TRY AGAIN
