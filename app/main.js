@@ -121,9 +121,6 @@ function onReady(app) {
         //let tray = new Tray('assets/icons/png/256X256.png');
         //tray.setToolTip('selfkey');
 
-        electron.BrowserWindow.addExtension('assets/chrome-extensions/u2f/');
-       
-        
         app.win = new electron.BrowserWindow({
             title: electron.app.getName(),
             width: 1170,
