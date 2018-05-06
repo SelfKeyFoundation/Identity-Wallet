@@ -12,8 +12,8 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
             return RPCService.makeCall('connectToLedger');
         }
 
-        getAccounts() {
-            return RPCService.makeCall('getLedgerAccounts');
+        getAccounts(args) {
+            return RPCService.makeCall('getLedgerAccounts', args);
         }
 
         createWalletByAddress(address) {

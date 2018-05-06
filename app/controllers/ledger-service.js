@@ -17,16 +17,19 @@ module.exports = function (app) {
     return CONFIG.chainId;
   }
 
+  const getDefaultDerivationPath = () => {
+    return "44'/60'/0'/0";
+  }
+
   const engine = new ProviderEngine();
   const web3 = new Web3(engine);
 
   const controller = function () { };
 
-  controller.prototype.connect = (derivationPath) => {
-    derivationPath = derivationPath || "44'/60'/0'/0";
+  controller.prototype.connect = () => {
     return new Promise((resolve, reject) => {
 
-      LedgerWalletSubproviderFactory(getNetworkId, derivationPath)
+      LedgerWalletSubproviderFactory(getNetworkId)
         .then((ledgerWalletSubProvider) => {
           engine.addProvider(ledgerWalletSubProvider);
 
@@ -36,14 +39,8 @@ module.exports = function (app) {
           engine.start();
 
           let ledger = ledgerWalletSubProvider.ledger;
+          web3.eth.getMultipleAccounts = ledger.getMultipleAccounts.bind(ledger);
 
-
-          /*ledger.getLedgerConnection().then((a,b)=>{
-
-
-          
-          }).catch((err)=>{
-          })*/
           resolve();
 
         }).catch((err) => {
@@ -52,13 +49,18 @@ module.exports = function (app) {
     });
   }
 
-  controller.prototype.getAccounts = () => {
-    let args = {
-      method: 'getAccounts',
-      web3ETH: web3.eth
+  controller.prototype.getAccounts = (args) => {
+    args = args || {};
+    // if param is not present then use default one.
+    let derivationPath = args.derivationPath || getDefaultDerivationPath();
+    let data = {
+      method: 'getMultipleAccounts',
+      web3ETH: web3.eth,
+      args: [derivationPath, args.start || 0, args.quantity || 1]
     };
 
-    return electron.app.web3Service.waitForTicket(args);
+
+    return electron.app.web3Service.waitForTicket(data);
   }
 
   controller.prototype.signTransaction = (args) => {
