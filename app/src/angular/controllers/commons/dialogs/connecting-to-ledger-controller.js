@@ -22,6 +22,18 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
     LedgerService.connect().then(() => {
       // close the window and open... choose a ..
       
+      LedgerService.getAccounts().then((accounts) => {
+        debugger;
+        if (!accounts || accounts.length == 0) {
+          //TODO;
+          return;
+        }
+        //TODO
+        $scope.chooseAnAccount(accounts[0]);
+        console.log('account1', accounts);
+      }).catch(err => {
+        console.log(err);
+      });
       
 
     }).catch((err) => {

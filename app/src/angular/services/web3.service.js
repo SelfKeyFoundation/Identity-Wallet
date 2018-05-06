@@ -3,15 +3,13 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-const ABI = requireAppModule('angular/store/abi.json').abi;
-
 function dec2hexString(dec) {
     return '0x' + (dec + 0x10000).toString(16).substr(-4).toUpperCase();
 }
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CommonService, $interval, CONFIG, SqlLiteService) {
+function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CommonService, $interval, CONFIG, SqlLiteService, RPCService) {
     'ngInject';
 
     $log.info('Web3Service Initialized');
@@ -52,24 +50,6 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
-
-
-            Web3Service.q = async.queue((data, callback) => {
-                $log.info("WEB3 REQUESTS IN QUEUE: ", Web3Service.q.length(), "######");
-
-                let baseFn = data.contract ? data.contract : Web3Service.web3.eth;
-                let self = data.contract ? data.contract : this;
-
-                if (data.baseFn) {
-                    baseFn = data.baseFn;
-                }
-
-                let promise = baseFn[data.method].apply(self, data.args)
-
-                $timeout(() => {
-                    callback(promise);
-                }, REQUEST_INTERVAL_DELAY);
-            }, 1);
         }
 
         syncTokensTransactionHistory(tokenSymbol) {
@@ -84,8 +64,8 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
 
             $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
 
-            let getActivity = (contract, fromBlock, toBlock, filter) => {
-                return Web3Service.getContractPastEvents(contract, ['Transfer', {
+            let getActivity = (contractAddress, fromBlock, toBlock, filter) => {
+                return Web3Service.getContractPastEvents(contractAddress, ['Transfer', {
                     filter: filter,
                     fromBlock: fromBlock,
                     toBlock: toBlock
@@ -97,13 +77,12 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
                 let valueDivider = new BigNumber(10 ** token.decimal);
 
                 $rootScope.transactionHistorySyncStatuses[key.toUpperCase()] = false;
-                let contract = new Web3Service.web3.eth.Contract(ABI, token.contractAddress);
 
                 let processAllActivities = (fromBlock, toBlock) => {
                     // process from
-                    getActivity(contract, fromBlock, toBlock, { from: walletAddress }).then(logsFrom => {
+                    getActivity(token.contractAddress, fromBlock, toBlock, { from: walletAddress }).then(logsFrom => {
                         //process to
-                        getActivity(contract, fromBlock, toBlock, { to: walletAddress }).then(logsTo => {
+                        getActivity(token.contractAddress, fromBlock, toBlock, { to: walletAddress }).then(logsTo => {
                             logsFrom = logsFrom || [];
                             logsTo = logsTo || [];
 
@@ -176,11 +155,11 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             });
         }
 
-        static getContractPastEvents(contract, args) {
+        static getContractPastEvents(contractAddress, args) {
             let defer = $q.defer();
 
             // wei
-            Web3Service.waitForTicket(defer, 'getPastEvents', args, contract);
+            Web3Service.waitForTicket(defer, 'getPastEvents', args, contractAddress);
 
             return defer.promise;
         }
@@ -190,13 +169,9 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             let deferDecimal = $q.defer();
             let deferSymbol = $q.defer();
 
-            var tokenContract = new Web3Service.web3.eth.Contract(ABI,contractAddress);
-            let decimalFn = tokenContract.methods.decimals();
-            var symbolFn = tokenContract.methods.symbol();
-
             // wei
-            Web3Service.waitForTicket(deferDecimal, 'call', [], null, decimalFn);
-            Web3Service.waitForTicket(deferSymbol, 'call', [], null, symbolFn);
+            Web3Service.waitForTicket(deferDecimal, 'call', [], contractAddress, 'decimals');
+            Web3Service.waitForTicket(deferSymbol, 'call', [], contractAddress, 'symbol');
 
             return $q.all([deferDecimal.promise,deferSymbol.promise]);
         }
@@ -305,16 +280,13 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
 
-        static waitForTicket(defer, method, args, contract, baseFn) {
-            Web3Service.q.push({ method: method, args: args, contract: contract, baseFn: baseFn }, (promise) => {
-                $log.info("handle response", method);
-                promise.then((response) => {
-                    $log.info("method response", method, response);
-                    defer.resolve(response)
-                }).catch((error) => {
-                    $log.error("method response error", method, error);
-                    defer.reject(error);
-                });
+        static waitForTicket(defer, method, args, contractAddress, contractMethod) {
+            RPCService.makeCall('waitForWeb3Ticket', { method, args, contractAddress, contractMethod }).then((response) => {
+                $log.info("method response", method, response);
+                defer.resolve(response)
+            }).catch((error) => {
+                $log.error("method response error", method, error);
+                defer.reject(error);
             });
         }
     };

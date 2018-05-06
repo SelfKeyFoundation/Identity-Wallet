@@ -1036,5 +1036,14 @@ module.exports = function (app) {
         }
     }
 
+    controller.prototype.waitForWeb3Ticket = function (event, actionId, actionName, args) {
+        electron.app.web3Service.waitForTicket(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+
     return controller;
 }
