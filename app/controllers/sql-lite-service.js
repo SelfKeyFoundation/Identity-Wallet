@@ -8,18 +8,30 @@ const countriesList = require('./../../assets/data/country-list.json');
 const ethTokensList = require('./../../assets/data/eth-tokens.json');
 const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 
+
+
 module.exports = function (app) {
 
     const controller = function () { };
 
-    const dbFilePath = path.join(app.config.userDataPath, 'IdentityWalletStorage.sqlite');
-    const knex = require('knex')({
-        client: 'sqlite3',
-        useNullAsDefault: true,
-        connection: {
-            filename: dbFilePath
+    const knexFile = require('../../knexfile.js')
+    const knex = require('knex')(knexFile)
+
+    /**
+     * Migrations
+     */    
+    const knexMigrate = require('knex-migrate')
+    const mv = require('../../package.json').migrations.version
+    async function migrations() {
+        const log = ({ action, migration }) => console.log('Doing ' + action + ' on ' + migration)
+        try {
+            await knexMigrate('up', { to: mv}, log)
+            await knexMigrate('down', { to: mv}, log)
+        } catch (e) {
+            console.log(e)
         }
-    });
+    }
+    migrations()
 
     /**
      * common methods
