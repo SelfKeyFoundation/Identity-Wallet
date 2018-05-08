@@ -52,7 +52,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('id_attribute_type', (table) => {
+		knex.schema.createTable('id_attribute_types', (table) => {
 			table.string('key').primary()
 			table.string('category').notNullable()
 			table.string('type').notNullable()

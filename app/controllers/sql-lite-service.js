@@ -8,8 +8,6 @@ const countriesList = require('./../../assets/data/country-list.json');
 const ethTokensList = require('./../../assets/data/eth-tokens.json');
 const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 
-
-
 module.exports = function (app) {
 
     const controller = function () { };
@@ -22,6 +20,7 @@ module.exports = function (app) {
      */    
     const knexMigrate = require('knex-migrate')
     const mv = require('../../package.json').migrations.version
+    
     async function migrations() {
         const log = ({ action, migration }) => console.log('Doing ' + action + ' on ' + migration)
         try {
@@ -31,7 +30,25 @@ module.exports = function (app) {
             console.log(e)
         }
     }
-    migrations()
+
+    async function seeds() {
+        try {
+            await knex.seed.run()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async function initDB() {
+        try {
+            await migrations()
+            await seeds()
+         } catch (e) {
+            console.log(e)
+        }
+    }
+
+    initDB()
 
     /**
      * common methods

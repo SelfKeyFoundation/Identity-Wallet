@@ -19,5 +19,8 @@ module.exports = {
 	useNullAsDefault: true,
 	connection: {
 		filename: dbFilePath
+	},
+	seeds: {
+		directory: './seeds'
 	}
 }
