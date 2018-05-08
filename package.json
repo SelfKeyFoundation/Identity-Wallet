@@ -120,7 +120,7 @@
     "spectron": "3.7.3"
   },
   "migrations": {
-    "version": "20180507142250"
+    "version": "20180508093508"
   },
   "build": {
     "name": "selfkey-identity-wallet",

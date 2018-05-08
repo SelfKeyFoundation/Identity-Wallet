@@ -176,16 +176,10 @@ function onReady(app) {
         app.win.webContents.on('did-finish-load', () => {
             log.info('did-finish-load');
             app.win.webContents.send('APP_START_LOADING');
-            electron.app.sqlLiteService.init().then(() => {
-                //start update cmc data
-                electron.app.cmcService.startUpdateData();
-                electron.app.airtableService.loadIdAttributeTypes();
-                electron.app.airtableService.loadExchangeData();
-                app.win.webContents.send('APP_SUCCESS_LOADING');
-            }).catch((error) => {
-                log.error(error);
-                app.win.webContents.send('APP_FAILED_LOADING');
-            });
+            electron.app.cmcService.startUpdateData();
+            electron.app.airtableService.loadIdAttributeTypes();
+            electron.app.airtableService.loadExchangeData();
+            app.win.webContents.send('APP_SUCCESS_LOADING');
         });
 
         app.win.webContents.on('did-fail-load', () => {

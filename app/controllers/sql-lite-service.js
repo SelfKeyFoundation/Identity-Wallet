@@ -87,30 +87,30 @@ module.exports = function (app) {
     /**
      * tables
      */
-    function createWalletTokens() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('wallet_tokens').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('wallet_tokens', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('tokenId').notNullable().references('tokens.id');
-                        table.decimal('balance').defaultTo(0);
-                        table.integer('recordState').defaultTo(1);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "wallet_tokens", "created.");
-                        resolve("wallet_tokens created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
+    // function createWalletTokens() {
+    //     return new Promise((resolve, reject) => {
+    //         knex.schema.hasTable('wallet_tokens').then(function (exists) {
+    //             if (!exists) {
+    //                 knex.schema.createTable('wallet_tokens', (table) => {
+    //                     table.increments('id');
+    //                     table.integer('walletId').notNullable().references('wallets.id');
+    //                     table.integer('tokenId').notNullable().references('tokens.id');
+    //                     table.decimal('balance').defaultTo(0);
+    //                     table.integer('recordState').defaultTo(1);
+    //                     table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
+    //                     table.integer('updatedAt');
+    //                 }).then((resp) => {
+    //                     console.log("Table:", "wallet_tokens", "created.");
+    //                     resolve("wallet_tokens created");
+    //                 }).catch((error) => {
+    //                     reject(error);
+    //                 });
+    //             } else {
+    //                 resolve();
+    //             }
+    //         });
+    //     });
+    // }
 
     /*
     function createTransactionsHistory() {
@@ -147,24 +147,24 @@ module.exports = function (app) {
     /**
      * public methods
      */
-    controller.prototype.init = () => {
-        let promises = [];
-        promises.push(Country.init());
-        promises.push(Document.init());
-        promises.push(IdAttributeType.init());
-        promises.push(Token.init());
-        promises.push(Wallet.init());
-        promises.push(AppSetting.init());
-        promises.push(GuideSetting.init());
-        promises.push(IdAttribute.init());
-        promises.push(TokenPrice.init());
-        promises.push(createWalletTokens());
-        promises.push(TransactionHistory.init());
-        promises.push(ActionLog.init());
-        promises.push(WalletSetting.init());
-        promises.push(ExchangeDataHandler.init());
-        return Promise.all(promises)
-    }
+    // controller.prototype.init = () => {
+    //     let promises = [];
+    //     promises.push(Country.init());
+    //     promises.push(Document.init());
+    //     promises.push(IdAttributeType.init());
+    //     promises.push(Token.init());
+    //     promises.push(Wallet.init());
+    //     promises.push(AppSetting.init());
+    //     promises.push(GuideSetting.init());
+    //     promises.push(IdAttribute.init());
+    //     promises.push(TokenPrice.init());
+    //     promises.push(createWalletTokens());
+    //     promises.push(TransactionHistory.init());
+    //     promises.push(ActionLog.init());
+    //     promises.push(WalletSetting.init());
+    //     promises.push(ExchangeDataHandler.init());
+    //     return Promise.all(promises)
+    // }
 
     /**
      *
