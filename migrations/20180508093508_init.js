@@ -1,7 +1,7 @@
 exports.up = function(knex, Promise) {
 	return Promise.all([
 
-		knex.schema.createTable('action_logs', (table) => {
+		knex.schema.createTable('action_logs', table => {
 			table.increments('id')
 			table.integer('walletId').notNullable().references('wallets.id')
 			table.string('title')
@@ -10,14 +10,14 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('app_settings', (table) => {
+		knex.schema.createTable('app_settings', table => {
 			table.increments('id')
 			table.string('dataFolderPath').notNullable()
 			table.integer('createdAt').notNullable()
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('countries', (table) => {
+		knex.schema.createTable('countries', table => {
 			table.increments('id')
 			table.string('name').unique().notNullable()
 			table.string('code').unique().notNullable()
@@ -26,7 +26,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('documents', (table) => {
+		knex.schema.createTable('documents', table => {
 			table.increments('id')
 			table.string('name').notNullable()
 			table.string('mimeType').notNullable()
@@ -36,14 +36,14 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('exchange_data', (table) => {
+		knex.schema.createTable('exchange_data', table => {
 			table.string('name').primary()
 			table.string('data').notNullable()
 			table.integer('createdAt').notNullable().defaultTo(new Date().getTime())
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('guide_settings', (table) => {
+		knex.schema.createTable('guide_settings', table => {
 			table.increments('id')
 			table.integer('guideShown').defaultTo(0)
 			table.integer('icoAdsShown').defaultTo(0)
@@ -52,7 +52,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('id_attribute_types', (table) => {
+		knex.schema.createTable('id_attribute_types', table => {
 			table.string('key').primary()
 			table.string('category').notNullable()
 			table.string('type').notNullable()
@@ -62,7 +62,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('id_attributes', (table) => {
+		knex.schema.createTable('id_attributes', table => {
 		    table.increments('id')
 		    table.integer('walletId').notNullable().references('wallets.id')
 		    table.integer('idAttributeType').notNullable().references('id_attribute_types.key')
@@ -73,7 +73,7 @@ exports.up = function(knex, Promise) {
 		    table.unique(['walletId', 'idAttributeType'])
 		}),
 
-		knex.schema.createTable('token_prices', (table) => {
+		knex.schema.createTable('token_prices', table => {
 			table.increments('id')
 			table.string('name').notNullable()
 			table.string('symbol').notNullable().unique()
@@ -85,7 +85,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('tokens', (table) => {
+		knex.schema.createTable('tokens', table => {
 			table.increments('id')
 			table.string('symbol').unique().notNullable()
 			table.integer('decimal').notNullable()
@@ -96,7 +96,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('transactions_history', (table) => {
+		knex.schema.createTable('transactions_history', table => {
 			table.increments('id')
 			table.integer('walletId').notNullable().references('wallets.id')
 			table.integer('tokenId').references('tokens.id')
@@ -111,7 +111,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('wallet_settings', (table) => {
+		knex.schema.createTable('wallet_settings', table => {
 			table.increments('id')
 			table.integer('walletId').notNullable().references('wallets.id')
 			table.integer('sowDesktopNotifications').notNullable().defaultTo(0)
@@ -122,7 +122,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('wallets', (table) => {
+		knex.schema.createTable('wallets', table => {
 			table.increments('id')
 			table.string('name')
 			table.string('publicKey').unique().notNullable()
@@ -134,7 +134,7 @@ exports.up = function(knex, Promise) {
 			table.integer('updatedAt')
 		}),
 
-		knex.schema.createTable('wallet_tokens', (table) => {
+		knex.schema.createTable('wallet_tokens', table => {
 			table.increments('id')
 			table.integer('walletId').notNullable().references('wallets.id')
 			table.integer('tokenId').notNullable().references('tokens.id')
