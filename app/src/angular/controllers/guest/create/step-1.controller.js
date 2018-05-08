@@ -28,7 +28,7 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
         } else {
             return 'Weak';
         }
-    }
+    };
     $timeout(() => {
         if (!$stateParams.thePassword) {
             $mdDialog.show({
@@ -37,7 +37,8 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: false,
-                fullscreen: true
+                fullscreen: true,
+                escapeToClose: false,
             });
         }
     }, 200);
