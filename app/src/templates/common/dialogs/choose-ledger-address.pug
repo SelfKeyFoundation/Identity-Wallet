@@ -23,10 +23,20 @@ md-dialog.choose-ledger-address-container(aira-lable="Connecting to Ledger")
                                 td
                                     span.view-link(ng-click="$root.openInBrowser('https://etherscan.io/address/' + account.address)") View on Etherscan
                 .pager-container(layout="row", layout-align="space-between start")
-                    .pager-action-item 
-                        span(ng-click="getAccountsWithBalances(false)", ng-if="pagerStart > 0") < Previous Addresses
-                    .pager-action-item 
-                        span(ng-click="getAccountsWithBalances(true)") More Addresses >
+                    .pager-action-item
+                        .container
+                            span(ng-disabled="loadingBalancesIsInProgress.any" ng-click="getAccountsWithBalances(false)", ng-if="pagerStart > 0") < Previous Addresses
+                            .wave(ng-if="pagerStart > 0 && loadingBalancesIsInProgress.previous")
+                                span.dot
+                                span.dot
+                                span.dot 
+                    .pager-action-item
+                        .container
+                            .wave(ng-if="loadingBalancesIsInProgress.next")
+                                span.dot
+                                span.dot
+                                span.dot 
+                            span(ng-disabled="loadingBalancesIsInProgress.any", ng-click="getAccountsWithBalances(true)") More Addresses >
 
             
             .buttons-row(layout="row", layout-align="end start")

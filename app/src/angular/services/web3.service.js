@@ -20,7 +20,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     class Web3Service {
 
         constructor() {
-
+            Web3Service.web3 = new Web3();
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
         }

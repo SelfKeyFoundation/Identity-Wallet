@@ -14,8 +14,28 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
   let onError = () => {
     CommonService.showToast('error', 'error');
   };
+  let resetLoadingStatuses = () => {
+    $scope.loadingBalancesIsInProgress = {
+      next: false,
+      previous: false,
+      any: false
+    };
+  };
+
+  resetLoadingStatuses();
 
   $scope.getAccountsWithBalances = (isNext) => {
+    if ($scope.loadingBalancesIsInProgress.any) {
+      return;
+    }
+
+    $scope.loadingBalancesIsInProgress.any = true;
+    if (isNext) {
+      $scope.loadingBalancesIsInProgress.next = true;
+    } else {
+      $scope.loadingBalancesIsInProgress.previous = true;
+    }
+
     let newStart = isNext ? $scope.pagerStart + ACCOUNTS_QUENTITY_PER_PAGE : $scope.pagerStart - ACCOUNTS_QUENTITY_PER_PAGE;
     if (newStart < 0) {
       newStart = 0;
@@ -25,7 +45,9 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
       $scope.currentAccounts = accounts;
       $scope.selectedAddress = null;
       $scope.pagerStart = newStart;
+      resetLoadingStatuses();
     }).catch(err => {
+      resetLoadingStatuses();
       onError();
     });
 

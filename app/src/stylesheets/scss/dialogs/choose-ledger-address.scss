@@ -47,6 +47,9 @@ md-dialog {
                     padding-left: 23px;
                     padding-top: 20px;
                     .pager-action-item {
+                        .container {
+                            display: flex;
+                        }
                         span {
                             outline: none !important;
                             cursor: pointer;
