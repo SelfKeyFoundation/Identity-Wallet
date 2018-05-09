@@ -108,7 +108,6 @@ function onReady(app) {
         const CommonService = require('./controllers/common-service')(app);
         electron.app.commonService = new CommonService();
 
-
         createKeystoreFolder();
 
         // TODO

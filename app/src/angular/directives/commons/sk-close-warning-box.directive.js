@@ -19,7 +19,7 @@ function SkCloseWarningBoxDirective($rootScope, $log, $window, RPCService) {
 
             scope.cancel = (event) => {
                 element[0].style.display = 'none';
-                RPCService.makeCustomCall('ON_IGNORE_CLOSE_DIALOG');
+                RPCService.makeCustomCall('ON_CLOSE_DIALOG_CANCELED');
             }
         },
         replace: true,
