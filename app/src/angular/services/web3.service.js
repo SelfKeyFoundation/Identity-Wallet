@@ -17,36 +17,9 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
     /**
      *
      */
-    const REQUEST_INTERVAL_DELAY = 10000;
-
-    /**
-     *
-     */
-    const SERVER_CONFIG = {
-        mew: {
-            1: { url: "https://api.myetherapi.com/eth" },
-            3: { url: "https://api.myetherapi.com/rop" }
-        },
-        infura: {
-            1: { url: "https://mainnet.infura.io" },
-            3: { url: "https://ropsten.infura.io" }
-        }
-    }
-
-    const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
-
-    let lastRequestTime = 0;
-    const requestQueue = [];
-
-    /**
-     *
-     */
     class Web3Service {
 
         constructor() {
-            Web3Service.web3 = new Web3();
-
-            Web3Service.web3.setProvider(new Web3Service.web3.providers.HttpProvider(SELECTED_SERVER_URL));
 
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;

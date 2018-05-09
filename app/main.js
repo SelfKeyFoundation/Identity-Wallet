@@ -142,8 +142,6 @@ function onReady(app) {
             icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
         });
 
-        
-
         let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
 
         app.win.loadURL(url.format({

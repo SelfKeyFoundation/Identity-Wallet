@@ -19,8 +19,7 @@ const SERVER_CONFIG = {
   }
 };
 
-//const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
-const SELECTED_SERVER_URL = SERVER_CONFIG['infura'][1].url;
+const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
 module.exports = function (app) {
 
