@@ -82,7 +82,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.cancel = (event) => {
         cancelEstimatedGasCheck();
         cancelTxCheck();
-        $state.go('member.wallet.manage-token', { id: args.symbol });
+        
+        if (!args.symbol) {
+            $state.go('member.dashboard.main');
+        } else {
+            $state.go('member.wallet.manage-token', { id: args.symbol });
+        }
     }
 
     $scope.getTxFee = () => {
