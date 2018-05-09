@@ -54,7 +54,7 @@ const i18n = [
 ];
 
 let shouldIgnoreClose = true;
-let shouldIgnoreCloseDialog = true; // in order to don't show prompt window
+let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 
 for (let i in i18n) {
     app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
