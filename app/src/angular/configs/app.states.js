@@ -316,6 +316,20 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
             }
         })
 
+        .state('member.wallet.send-token', {
+            url: '/member/wallet/send-token',
+            views: {
+                main: {
+                    templateUrl: 'common/dialogs/send-token.html',
+                    controller: 'SendTokenDialogController'
+                }
+            },
+            params: {
+                symbol: null,
+                allowSelectERC20Token: null
+            }
+        })
+
         /**
          * ID Wallet
          */

@@ -79,22 +79,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     }
 
     $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
-        return $mdDialog.show({
-            controller: 'SendTokenDialogController',
-            templateUrl: 'common/dialogs/send-token.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose: false,
-            fullscreen: true,
-            escapeToClose: false,
-            locals: {
-                args: {
-                    //because default must be empty
-                    symbol: symbol,
-                    allowSelectERC20Token: allowSelectERC20Token
-                }
-            }
-        });
+        $state.go('member.wallet.send-token', { symbol,  allowSelectERC20Token });
     };
 
     $rootScope.openReceiveTokenDialog = (event, args) => {
@@ -270,6 +255,35 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             targetEvent: event,
             clickOutsideToClose: false,
             fullscreen: true
+        });
+    };
+
+    $rootScope.openChooseLedgerAddressDialog = (accountsArr, ACCOUNTS_QUENTITY_PER_PAGE) => {
+        return $mdDialog.show({
+            controller: 'ChooseLedgerAddressController',
+            templateUrl: 'common/dialogs/choose-ledger-address.html',
+            parent: angular.element(document.body),
+            targetEvent: null,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                baseAccounts: accountsArr,
+                ACCOUNTS_QUENTITY_PER_PAGE: ACCOUNTS_QUENTITY_PER_PAGE
+            }
+        });
+    };
+
+    $rootScope.openConfirmLedgerTransactionWarningDialog = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        
+        return $mdDialog.show({
+            controller: 'ConfirmLedgerTransactionWarningController',
+            templateUrl: 'common/dialogs/confirm-ledger-transaction-warning.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            clickOutsideToClose: false,
+            fullscreen: false
         });
     };
 

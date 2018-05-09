@@ -1,15 +1,12 @@
 'use strict';
 
-var Web3 = require('web3');
+const Web3 = require('web3');
 const ProviderEngine = require('web3-provider-engine');
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc');
-
 const electron = require('electron');
-
 const LedgerWalletSubproviderFactory = require('ledger-wallet-provider').default;
 
 const CONFIG = require('../config');
-
 
 module.exports = function (app) {
 
@@ -23,6 +20,7 @@ module.exports = function (app) {
 
   const engine = new ProviderEngine();
   const web3 = new Web3(engine);
+  let ledger = null;
 
   const controller = function () { };
 
@@ -33,12 +31,11 @@ module.exports = function (app) {
         .then((ledgerWalletSubProvider) => {
           engine.addProvider(ledgerWalletSubProvider);
 
-
           let rpcUrl = electron.app.web3Service.getSelectedServerURL();
           engine.addProvider(new RpcSubprovider({ rpcUrl }));
           engine.start();
 
-          let ledger = ledgerWalletSubProvider.ledger;
+          ledger = ledgerWalletSubProvider.ledger;
           web3.eth.getMultipleAccounts = ledger.getMultipleAccounts.bind(ledger);
 
           resolve();
@@ -59,7 +56,6 @@ module.exports = function (app) {
       args: [derivationPath, args.start || 0, args.quantity || 1]
     };
 
-
     return electron.app.web3Service.waitForTicket(data);
   }
 
@@ -67,10 +63,11 @@ module.exports = function (app) {
     args.dataToSign.from = args.address;
     let data = {
       method: 'signTransaction',
+      web3ETH: web3.eth,
       args: [args.dataToSign]
+    };
 
-    }
-    return electron.app.web3Service.waitForTicket(args);
+    return electron.app.web3Service.waitForTicket(data);
   }
 
   return controller;

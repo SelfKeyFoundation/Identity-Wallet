@@ -267,7 +267,8 @@ class Wallet {
                 LedgerService.signTransaction(rawTx,'0x' + this.getPublicKeyHex()).then((signedRes)=>{
                     defer.resolve(signedRes.raw);
                 }).catch((err)=>{
-                    //TODO 
+                    $rootScope.openConfirmLedgerTransactionWarningDialog();
+                    defer.reject('');
                 });
             }
            

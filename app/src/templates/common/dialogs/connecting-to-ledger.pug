@@ -7,19 +7,19 @@ md-dialog.ledger-is-connecting-container(aira-lable="Connecting to Ledger")
             .items(ng-if="isConnecting") 
                 .title To ensure a successful connection, please check if:
                 .item 1) Your Ledger is properly plugged in.
-                .item 2) You have logged into your Ledger.
-                .item 3) You have launched the Ethereum application on your Ledger.
-                .item 4) "Browser Support" is enabled. If not, learn more here.
+                .item 2) You have entered the PIN and logged in.
+                .item 3) The Ethereum application is open.
+                .item 4) "Browser Support" is disabled in Ledger settings.
             .items(ng-if="!isConnecting")
                 .item 1) Is your Ledger is properly plugged in?
-                .item 2) Have you entered the PIN and logged into your Ledger?
-                .item 3) Is the Ethereum application open on your Ledger?
-                .item 4) Is "Browser Support" is enabled? If not, learn more here.
+                .item 2) Have you entered the PIN and logged in?
+                .item 3) Is the Ethereum application open?
+                .item 4) Is "Browser Support" disabled in Ledger settings?
             .buttons-container.small-padding-top(ng-if="isConnecting")
-                md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
                     span.primary close
             .buttons-container(ng-if="!isConnecting")
-                md-button.default.cancal-btn(ng-click="cancelConectToLedger($event)")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
                     span.primary BACK
-                md-button.default.cancal-btn(ng-click="connectToLedger($event)")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="connectToLedger($event)")
                     span.primary TRY AGAIN

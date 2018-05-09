@@ -3,6 +3,7 @@
 const CommonUtils = requireAppModule('angular/classes/common-utils');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
+
 let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService, LedgerService;
 
 let priceUpdaterInterval, balanceUpdaterInterval;
@@ -215,10 +216,10 @@ class Token {
 
                 } else {
                     LedgerService.signTransaction(rawTx,'0x' + this.wallet.getPublicKeyHex()).then((signedRes)=>{
-                        console.log(signedRes.raw);
                         defer.resolve(signedRes.raw);
                     }).catch((err)=>{
-                        //TODO 
+                        $rootScope.openConfirmLedgerTransactionWarningDialog();
+                        defer.reject('');
                     });
                 }
 
