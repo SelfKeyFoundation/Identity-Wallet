@@ -1,7 +1,7 @@
 .sk-token-box {
     min-width: 360px;
     
-
+    position: relative;
     padding: 20px 20px 8px 20px;
 
     .sk-token-box__header {
@@ -46,6 +46,8 @@
     }
 
     .sk-token-box__footer {
+        position: absolute;
+        bottom: 7px;
         margin-top: 20px;
         display: flex;
         flex-direction: column;
