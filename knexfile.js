@@ -5,11 +5,11 @@ const OSENV = process.env.OSENV || 'osx'
 let userDataPath
 
 if (OSENV === 'windows') {
-userDataPath = '%APPDATA%\\Electron\\'
+	userDataPath = '%APPDATA%\\Electron\\'
 } else if (OSENV === 'linux') {
-userDataPath = '~/.config/Electron/'
+	userDataPath = '~/.config/Electron/'
 } else {
-userDataPath = '/Users/' + user + '/Library/Application Support/Electron/'
+	userDataPath = '/Users/' + user + '/Library/Application Support/Electron/'
 }
 
 const dbFilePath = path.join(userDataPath, 'IdentityWalletStorage.sqlite')

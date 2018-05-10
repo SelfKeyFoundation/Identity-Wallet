@@ -43,14 +43,22 @@ const seeds = [
 
 async function runSeeds(knex, seeds) {
 	try {
+		// add logic before running anything
+		// want to remove promise wrapper
 		let allSeeds = []
 		for (let seed of seeds) {
+			// check this when to delete or not delete seed data
 			const fullSeed = await knex(seed.table).del().then(() => {
+				// leave this explicit setting rather than check array length please
 				if (seed.multi) {
+					// want to remove promise wrapper
 					let items = []
 					for (let item of seed.insert) {
+						// any way to remove this dirty hack please
+						if (item.entity) { item.entity = JSON.stringify(item.entity) }
+						// table.timestamps() on schema fixes this issue
 						item.createdAt = new Date().getTime()
-						promises.push(knex(seed.table).insert(item))
+						items.push(knex(seed.table).insert(item))
 					}
 					return Promise.all(items)
 				} else {

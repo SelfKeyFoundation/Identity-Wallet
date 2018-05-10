@@ -1,12 +1,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const electron = require('electron');
-const path = require('path');
-
-const countriesList = require('./../../assets/data/country-list.json');
-const ethTokensList = require('./../../assets/data/eth-tokens.json');
-const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 
 module.exports = function (app) {
 
@@ -14,40 +8,18 @@ module.exports = function (app) {
 
     const knexFile = require('../../knexfile.js')
     const knex = require('knex')(knexFile)
-
+    
     /**
      * Migrations
      */    
-    const knexMigrate = require('knex-migrate')
-    const mv = require('../../package.json').migrations.version
-    
-    async function migrations() {
-        const log = ({ action, migration }) => console.log('Doing ' + action + ' on ' + migration)
+    async function initDB() {
         try {
-            await knexMigrate('up', { to: mv}, log)
-            await knexMigrate('down', { to: mv}, log)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    async function seeds() {
-        try {
+            await knex.migrate.latest()
             await knex.seed.run()
         } catch (e) {
             console.log(e)
         }
     }
-
-    async function initDB() {
-        try {
-            await migrations()
-            await seeds()
-         } catch (e) {
-            console.log(e)
-        }
-    }
-
     initDB()
 
     /**
