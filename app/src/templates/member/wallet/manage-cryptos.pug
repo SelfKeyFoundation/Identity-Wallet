@@ -30,5 +30,5 @@
         .add-btn-container(layout="row", layout-align="center center")
             md-button.gray(ng-class="{'disable-opacity': $root.tokenLimitIsExceed()}", ng-click="$root.openAddCustomTokenDialog($event)")
                 span.primary ADD TOKEN
-                md-tooltip(ng-if="$root.tokenLimitIsExceed()",md-direction="left")
-                    | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token.
+                md-tooltip(ng-if="$root.tokenLimitIsExceed()",md-direction="top")
+                    | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token. </div>
