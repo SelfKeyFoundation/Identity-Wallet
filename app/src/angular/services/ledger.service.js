@@ -74,9 +74,15 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
         }
 
         signTransaction(dataToSign, address) {
-            return RPCService.makeCall('signTransactionWithLedger', {
-                dataToSign,
-                address
+            return new Promise((resolve, reject) => {
+                RPCService.makeCall('signTransactionWithLedger', {
+                    dataToSign,
+                    address
+                }).then(res => {
+                    resolve(res.raw);
+                }).catch(err => {
+                    reject(err);
+                })
             });
         }
     };

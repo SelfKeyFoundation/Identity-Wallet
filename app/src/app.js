@@ -95,6 +95,9 @@ angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 const LedgerService = requireAppModule('angular/services/ledger.service');
 angular.module('kyc-wallet').service('LedgerService', LedgerService);
 
+const SignService = requireAppModule('angular/services/sign.service');
+angular.module('kyc-wallet').service('SignService', SignService);
+
 
 /**
  * directives

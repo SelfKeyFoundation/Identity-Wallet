@@ -75,7 +75,7 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
     let importPromise = LedgerService.createWalletByAddress(address);
     importPromise.then((data) => {
       if (data.id) {
-        $rootScope.wallet = new Wallet(data.id, null, data.publicKey, null, data.isLedger);
+        $rootScope.wallet = new Wallet(data.id, null, data.publicKey, null, data.profile);
 
         let initialPromises = [];
         initialPromises.push($rootScope.wallet.loadIdAttributes());

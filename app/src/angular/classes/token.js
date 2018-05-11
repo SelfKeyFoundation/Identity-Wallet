@@ -4,7 +4,7 @@ const CommonUtils = requireAppModule('angular/classes/common-utils');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
 
-let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService, LedgerService;
+let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService, SignService;
 
 let priceUpdaterInterval, balanceUpdaterInterval;
 
@@ -22,7 +22,7 @@ class Token {
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set Web3Service(value) { Web3Service = value; }
     static set CommonService(value) { CommonService = value; }
-    static set LedgerService(value) { LedgerService = value; }
+    static set SignService(value) { SignService = value; }
 
 
     /**
@@ -208,20 +208,22 @@ class Token {
                     data: EthUtils.sanitizeHex(genResult.data),
                     chainId: chainID
                 }
-
-                if (!this.wallet.isLedger) {
-                    let eTx = new Tx(rawTx);
-                    eTx.sign(this.wallet.privateKey);
-                    defer.resolve('0x' + eTx.serialize().toString('hex'));
-
-                } else {
-                    LedgerService.signTransaction(rawTx,'0x' + this.wallet.getPublicKeyHex()).then((signedRes)=>{
-                        defer.resolve(signedRes.raw);
-                    }).catch((err)=>{
+             
+                SignService.signTransaction({
+                    rawTx: rawTx,
+                    profile: this.wallet.profile,
+                    privateKey: this.wallet.privateKey,
+                    walletAddress: '0x' + this.wallet.getPublicKeyHex()
+                }).then(res => {
+                    defer.resolve(res);
+                }).catch(err => {
+                    if (this.wallet.profile == 'ledger') {
                         $rootScope.openConfirmLedgerTransactionWarningDialog();
                         defer.reject('');
-                    });
-                }
+                        return;
+                    }
+                    defer.reject(err);
+                });
 
             }
         }).catch((error) => {

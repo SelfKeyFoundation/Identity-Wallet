@@ -210,7 +210,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             }).catch((error) => {
                 error = error.toString();
                 if (error) {
-                    CommonService.showToast('error', error.toString(), 20000);
+                    CommonService.showToast('error', error, 20000);
                 }
 
                 $scope.errors.sendFailed = error.toString();
@@ -234,8 +234,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 60000,   // $scope.infoData.gasLimit
                 $scope.symbol.toUpperCase(),
                 CONFIG.chainId
-            )
+            );
 
+           
             txGenPromise.then((signedHex) => {
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {

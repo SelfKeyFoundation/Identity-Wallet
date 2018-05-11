@@ -1014,7 +1014,7 @@ module.exports = function (app) {
                     electron.app.sqlLiteService.Wallet.add(
                         {
                             publicKey: publicKey,
-                            isLedger: 1
+                            profile: 'ledger'
                         }
                     ).then((resp) => {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {

@@ -4,7 +4,7 @@ const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 const Token = requireAppModule('angular/classes/token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, LedgerService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, SignService;
 
 let readyToShowNotification = false;
 
@@ -20,13 +20,13 @@ class Wallet {
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set EtherScanService(value) { EtherScanService = value; }
-    static set LedgerService(value) { LedgerService = value; }
+    static set SignService(value) { SignService = value; }
     
 
-    constructor(id, privateKey, publicKey, keystoreFilePath, isLedger) {
+    constructor(id, privateKey, publicKey, keystoreFilePath, profile) {
         this.id = id;
         this.keystoreFilePath = keystoreFilePath;
-        this.isLedger = isLedger;
+        this.profile = profile;
 
         this.privateKey = privateKey;
         this.privateKeyHex = privateKey ? privateKey.toString('hex') : null;
@@ -257,20 +257,22 @@ class Wallet {
             if (contractDataHex) {
                 rawTx.data = EthUtils.sanitizeHex(contractDataHex);
             }
-            
-            if (!this.isLedger) {
-                let eTx = new Tx(rawTx);
-                eTx.sign(this.privateKey);
-    
-                defer.resolve('0x' + eTx.serialize().toString('hex'));
-            } else {
-                LedgerService.signTransaction(rawTx,'0x' + this.getPublicKeyHex()).then((signedRes)=>{
-                    defer.resolve(signedRes.raw);
-                }).catch((err)=>{
+
+            SignService.signTransaction({
+                profile: this.profile,
+                rawTx: rawTx,
+                privateKey: this.privateKey,
+                walletAddress: '0x' + this.getPublicKeyHex()
+            }).then(res => {
+                defer.resolve(res);
+            }).catch(err => {
+                if (this.profile == 'ledger') {
                     $rootScope.openConfirmLedgerTransactionWarningDialog();
                     defer.reject('');
-                });
-            }
+                    return;
+                }
+                defer.reject(err);
+            });
            
         }).catch((error) => {
             defer.reject(error);

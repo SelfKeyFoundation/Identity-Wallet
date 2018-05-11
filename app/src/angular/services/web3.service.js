@@ -9,7 +9,7 @@ function dec2hexString(dec) {
 
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamSerializerJQLike, EVENTS, CommonService, $interval, CONFIG, SqlLiteService, RPCService) {
+function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCService) {
     'ngInject';
 
     $log.info('Web3Service Initialized');
@@ -24,7 +24,7 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
             EthUtils.web3 = new Web3();
             window.EthUtils = EthUtils;
         }
-
+        // this will be removed after tx-history refactor
         syncTokensTransactionHistory(tokenSymbol) {
             let wallet = $rootScope.wallet;
             if (!wallet || !wallet.tokens) {
@@ -129,138 +129,70 @@ function Web3Service($rootScope, $window, $q, $timeout, $log, $http, $httpParamS
         }
 
         static getContractPastEvents(contractAddress, args) {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getPastEvents', args, contractAddress);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getPastEvents', args, contractAddress);
         }
 
         getContractInfo(contractAddress) {
 
-            let deferDecimal = $q.defer();
-            let deferSymbol = $q.defer();
+            let decimalsPromise = Web3Service.waitForTicket('call', [], contractAddress, 'decimals');
+            let symbolPromise = Web3Service.waitForTicket('call', [], contractAddress, 'symbol');
 
-            // wei
-            Web3Service.waitForTicket(deferDecimal, 'call', [], contractAddress, 'decimals');
-            Web3Service.waitForTicket(deferSymbol, 'call', [], contractAddress, 'symbol');
-
-            return $q.all([deferDecimal.promise,deferSymbol.promise]);
+            return Promise.all([decimalsPromise, symbolPromise]);
         }
 
         getMostRecentBlockNumber() {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBlockNumber', []);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getBlockNumber', []);
         }
 
         static getMostRecentBlockNumberStatic() {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBlockNumber', []);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getBlockNumber', []);
         }
 
         getBalance(addressHex) {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBalance', [addressHex]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getBalance', [addressHex]);
         }
 
         getTokenBalanceByData(data) {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'call', [data]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('call', [data]);
         }
 
         getEstimateGas(fromAddressHex, toAddressHex, amountHex) {
-            let defer = $q.defer();
-
             let args = {
                 "from": fromAddressHex,
                 "to": toAddressHex,
                 "value": amountHex
             }
 
-            // wei
-            Web3Service.waitForTicket(defer, 'estimateGas', [args]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('estimateGas', [args]);
         }
 
         getGasPrice() {
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getGasPrice', []);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getGasPrice', []);
         }
 
         getTransactionCount(addressHex) {
-            let defer = $q.defer();
-
-            // number
-            Web3Service.waitForTicket(defer, 'getTransactionCount', [addressHex, 'pending']);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getTransactionCount', [addressHex, 'pending']);
         }
 
         sendRawTransaction(signedTxHex) {
-            let defer = $q.defer();
-
-            Web3Service.waitForTicket(defer, 'sendSignedTransaction', [signedTxHex]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('sendSignedTransaction', [signedTxHex]);
         }
 
         getTransaction(transactionHex) {
-            let defer = $q.defer();
-
-            Web3Service.waitForTicket(defer, 'getTransaction', [transactionHex]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getTransaction', [transactionHex]);
         }
 
         getTransactionReceipt(transactionHex) {
-            let defer = $q.defer();
-
-            Web3Service.waitForTicket(defer, 'getTransactionReceipt', [transactionHex]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getTransactionReceipt', [transactionHex]);
         }
 
         static getBlock(blockNumber, withTransactions) {
             withTransactions = withTransactions || false;
-            let defer = $q.defer();
-
-            // wei
-            Web3Service.waitForTicket(defer, 'getBlock', [blockNumber, withTransactions]);
-
-            return defer.promise;
+            return Web3Service.waitForTicket('getBlock', [blockNumber, withTransactions]);
         }
 
-
-        static waitForTicket(defer, method, args, contractAddress, contractMethod) {
-            RPCService.makeCall('waitForWeb3Ticket', { method, args, contractAddress, contractMethod }).then((response) => {
-                $log.info("method response", method, response);
-                defer.resolve(response)
-            }).catch((error) => {
-                $log.error("method response error", method, error);
-                defer.reject(error);
-            });
+        static waitForTicket(method, args, contractAddress, contractMethod) {
+            return RPCService.makeCall('waitForWeb3Ticket', { method, args, contractAddress, contractMethod });
         }
     };
 
