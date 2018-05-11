@@ -1,5 +1,5 @@
 .content
-    md-input-container.sk-input-box.sk-input-non-floating
+    md-input-container.sk-input-box.sk-input-non-floating.hide-input-invalid-mark
         label {{ $root.DICTIONARY[idAttributeType] }}
         md-select.sk-select(name="nationality", ng-model="inputs.line1", ng-required="true", ng-keydown="ignoreEnterKey($event)")
             md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
