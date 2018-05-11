@@ -6,6 +6,7 @@ const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
+const isOnline = require('is-online');
 
 const config = buildConfig(electron);
 
@@ -105,9 +106,6 @@ function onReady(app) {
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
 
-        const CommonService = require('./controllers/common-service')(app);
-        electron.app.commonService = new CommonService();
-
         createKeystoreFolder();
 
         // TODO
@@ -183,7 +181,7 @@ function onReady(app) {
 
         app.win.webContents.on('did-finish-load', () => {
 
-            electron.app.commonService.isOnline().then((isOnline) => {
+            isOnline().then((isOnline) => {
                 log.info('is-online', isOnline);
                 if (!isOnline) {
                     app.win.webContents.send('SHOW_IS_OFFLINE_WARNING');
