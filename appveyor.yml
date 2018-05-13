@@ -1,13 +1,20 @@
 environment:
   nodejs_version: "9"
-  NODE_ENV: test
+  NODE_ENV: production
   OSENV: windows
+cache:
+  - node_modules
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm install
+  - npm i -g gulp-cli
+  - npm i -g electron-packager
+  - npm i --production=false
+build_script:
   - npm run make-auto
+after_build:
+  - ps: Get-ChildItem -Path *.exe -Recurse
+  - ps: Get-ChildItem -Path *.zip -Recurse
 test_script:
-  - node --version
-  - npm --version
   - npm run test
-build: on
+after_test:
+  - appveyor PushArtifact out\id-wallet-win32-ia32\Identity-Wallet-Installer.exe
