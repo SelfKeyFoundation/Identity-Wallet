@@ -11,10 +11,8 @@ install:
   - npm i --production=false
 build_script:
   - npm run make-auto
-after_build:
-  - ps: Get-ChildItem -Path *.exe -Recurse
-  - ps: Get-ChildItem -Path *.zip -Recurse
 test_script:
   - npm run test
 after_test:
-  - appveyor PushArtifact out\id-wallet-win32-ia32\Identity-Wallet-Installer.exe
+  - appveyor PushArtifact C:\projects\identity-wallet\out\selfkey-identity-wallet-win32-ia32\selfkey-identity-wallet.exe
+  - appveyor PushArtifact C:\projects\identity-wallet\out\selfkey-identity-wallet-win32-ia32\Update.exe
