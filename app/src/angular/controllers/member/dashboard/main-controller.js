@@ -62,13 +62,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         }
     }
 
-    $rootScope.CUSTOM_TOKENS_LIMIT = 20;
-    $rootScope.tokenLimitIsExceed = () => {
-        let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
-        return tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
-    };
-
-
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
         Object.keys(wallet.tokens).forEach((tokeyKey) => {

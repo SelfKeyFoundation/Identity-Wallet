@@ -3,8 +3,10 @@
     .content(layout="column", layout-align="center center")
         sk-icon(icon="currency", size-class="icon-size-57x65")
         .header-text Manage My Crypto
-        .header-description
-                            | Manage your ERC20 tokens displayed in the dashboard.
+        .header-description Manage your ERC20 tokens displayed in the dashboard.
+        .add-btn-container(layout="row", layout-align="center center")
+            md-button.gray(ng-click="$root.openAddCustomTokenDialog($event)")
+                span.primary ADD TOKEN
         .grid-container
             table
                 thead
@@ -27,8 +29,3 @@
                         td {{token.contractAddress}}
                         td
                             sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken($event, token, $index)", icon="ic_visibility_off_black_24px", size-class="icon-size-19x23")
-        .add-btn-container(layout="row", layout-align="center center")
-            md-button.gray(ng-class="{'disable-opacity': $root.tokenLimitIsExceed()}", ng-click="$root.openAddCustomTokenDialog($event)")
-                span.primary ADD TOKEN
-                md-tooltip(ng-if="$root.tokenLimitIsExceed()",md-direction="top")
-                    | <div style="color: #ffffff; font-size:14px; font-weight: bold;"> You've reached the limit and cannot add another token. </div>

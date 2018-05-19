@@ -23,24 +23,18 @@
         color: #ffffff;
     }
     .add-btn-container {
-        padding-top: 15px;
-        padding-bottom: 15px;
+        padding-top: 50px;
+        padding-bottom: 50px;
     }
     .header-description {
         font-family: ProximaNovaRegular;
         width: 660px;
         font-size: 18px;
-        font-weight: normal;
-        font-style: normal;
-        font-stretch: normal;
-        line-height: 1.72;
-        letter-spacing: normal;
         text-align: center;
         color: #93b0c1;
     }
     .grid-container {
         width: 1140px;
-        padding-top: 80px;
         $table-left-padding: 24px;
         table {
             border-spacing: 0px;
