@@ -104,6 +104,9 @@ function onReady(app) {
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
 
+        const TxHistory = require('./controllers/tx-history')(app);
+        electron.app.txHistory = new TxHistory();
+
         createKeystoreFolder();
 
         // TODO
@@ -181,6 +184,7 @@ function onReady(app) {
                 electron.app.cmcService.startUpdateData();
                 electron.app.airtableService.loadIdAttributeTypes();
                 electron.app.airtableService.loadExchangeData();
+                electron.app.txHistory.startSyncing();
                 app.win.webContents.send('APP_SUCCESS_LOADING');
             }).catch((error) => {
                 log.error(error);

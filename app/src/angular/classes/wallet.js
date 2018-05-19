@@ -266,39 +266,6 @@ class Wallet {
         return defer.promise;
     }
 
-    processTransactionsHistory(data) {
-        let tokens = $rootScope.wallet.tokens;
-
-        let getTokenById = (id) => {
-            let tokenKey = Object.keys(tokens).find((key) => {
-                let token = tokens[key];
-                if (token.id == id) {
-                    return true;
-                }
-            });
-            return tokens[tokenKey];
-        };
-
-        return data.map((transaction) => {
-            transaction.symbol = transaction.tokenId ? getTokenById(transaction.tokenId).symbol.toUpperCase() : 'ETH';
-
-            //is sent
-            if (transaction.sentTo) {
-                transaction.sentToName = null; //WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);
-            }
-
-            if (transaction.tokenId) {
-                let token = getTokenById(transaction.tokenId);
-            }
-            let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
-            transaction.sentOrReceiveText = transaction.sentTo ? sendText : 'Received';
-            transaction.value = new BigNumber(transaction.value).toString(10);
-            return transaction;
-        }).sort((a, b) => {
-            return Number(b.timestamp) - Number(a.timestamp);
-        });
-    };
-
     syncEthTransactionsHistory() {
         let wallet = this;
         let walletAddress = '0x' + this.getPublicKeyHex();

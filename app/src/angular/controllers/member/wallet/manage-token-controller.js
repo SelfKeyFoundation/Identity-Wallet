@@ -15,10 +15,6 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
     $scope.originalSymbol = $stateParams.id;
     $scope.name = temporaryMap[$scope.symbol];
 
-    $rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
-    $scope.transactionsHistoryIsSynced = () => {
-        return $rootScope.transactionHistorySyncStatuses[$scope.symbol.toUpperCase()];
-    };
 
     /**
      *
@@ -45,19 +41,6 @@ function ManageTokenController($rootScope, $scope, $state, $log, $mdDialog, $sta
             }).format($scope.selectedToken.balanceInUsd);
         }
     }
-
-    $scope.loadTransactionHistory = () => {
-        let tokenId = $scope.symbol.toUpperCase() === 'ETH' ? null : $scope.selectedToken.id;
-
-        SqlLiteService.getTransactionsHistoryByWalletIdAndTokenId($rootScope.wallet.id, tokenId).then((data) => {
-            $scope.transactionsHistoryList = data ? $rootScope.wallet.processTransactionsHistory(data) : [];
-        }).catch((err) => {
-            console.log(err);
-            //TODO
-        });
-    };
-
-    $scope.loadTransactionHistory();
 
     $scope.goToDashboard = () => {
         $state.go('member.dashboard.main');
