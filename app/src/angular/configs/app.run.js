@@ -263,6 +263,10 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     $rootScope.broadcastKeyPress = (event) => {
         $rootScope.$broadcast('selfkey:on-keypress', event.key);
     }
+
+    $rootScope.broadcastTxHistoryChange = (event) => {
+        $rootScope.$broadcast('tx-history:change', event);
+    }
 }
 
 module.exports = AppRun;

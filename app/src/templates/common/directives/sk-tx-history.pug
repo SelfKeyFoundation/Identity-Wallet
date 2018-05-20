@@ -1,5 +1,7 @@
 .tx-history-container
-  .list(ng-repeat="tx in txList track by $index")
+  sk-linear-progress.progress-bar(ng-if="isSyncing")
+  .sk-horizontal-devider.mt-20(ng-if="txList && txList.length")
+  .list.mt-20(ng-repeat="tx in txList track by $index")
       .list-item
           .item-container(layout="row", layout-align="space-between center")
               div(layout="row", layout-align="start center")
@@ -14,5 +16,5 @@
                     md-icon.external-link(md-svg-src="assets/images/icons/external-link.svg", ng-click="$root.openInBrowser(tx.externalLink)")
                     span )
               .tx-value.symbol(ng-class="tx.symbol") {{ tx.directionSign }} {{tx.value}}
-          .sk-horizontal-devider.mt-20(ng-if="txList.length-1 != $index")
+          .sk-horizontal-devider.mt-20(ng-if="txList.length - 1 != $index")
 

@@ -26,5 +26,4 @@
                 span.send SEND
     .body-content
         .activity-text Activity
-        sk-linear-progress(ng-if="!transactionsHistoryIsSynced()", style="margin-top:10px;")
         sk-tx-history(token-symbol="{{symbol}}")

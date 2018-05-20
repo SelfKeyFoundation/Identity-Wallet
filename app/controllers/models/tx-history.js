@@ -1,4 +1,5 @@
 const Promise = require('bluebird');
+const isSyncing = require('../tx-history').isSyncing;
 
 module.exports = function (app, sqlLiteService) {
     const TABLE_NAME = 'tx_history';
@@ -72,20 +73,49 @@ module.exports = function (app, sqlLiteService) {
     }
 
     async function _findByTxHash(hash) {
-        return await knex(TABLE_NAME).where({ hash: hash }).select();
+        return await knex(TABLE_NAME).where({ hash: hash });
     }
 
     async function _findByPublicKeyAndContractAddress(publicKey, contractAddress) {
-        return await knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
-            orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc');
+        return new Promise((resolve, reject) => {
+            knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
+                orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc').then(rows => {
+                    resolve({
+                        data: rows,
+                        isSyncing: isSyncing()
+                    });
+                }).catch((err) => {
+                    return reject('Error while loading transaction history');
+                });
+        });
     }
 
     async function _findByPublicKey(publicKey) {
-        return await knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).orderBy('timeStamp', 'desc');
+        return new Promise((resolve, reject) => {
+            knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
+                orderBy('timeStamp', 'desc').then(rows => {
+                    resolve({
+                        data: rows,
+                        isSyncing: isSyncing()
+                    });
+                }).catch((err) => {
+                    return reject('Error while loading transaction history');
+                });
+        });
     }
 
     async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol) {
-        return await knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc');
+        return new Promise((resolve, reject) => {
+            knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).
+                orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc').then(rows => {
+                    resolve({
+                        data: rows,
+                        isSyncing: isSyncing()
+                    });
+                }).catch((err) => {
+                    return reject('Error while loading transaction history');
+                });
+        });
     }
 
     return Controller;

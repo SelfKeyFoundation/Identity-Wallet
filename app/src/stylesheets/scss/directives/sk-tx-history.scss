@@ -1,14 +1,16 @@
 .tx-history-container {
+	.mt-20 {
+		margin-top: 20px;
+	}
+	.progress-bar {
+		margin-top: 10px;
+	}
 	.list {
 		> *  {
 			font-family: ProximaNovaRegular;
 		}
-		margin-top: 20px;
 		.list-item {
 			padding: 6px 0;
-			.mt-20 {
-				margin-top: 20px;
-			}
 			.view-transaction {
 				> * {
 					color: #93a4af;

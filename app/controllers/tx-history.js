@@ -8,9 +8,14 @@ const request = require('request');
 const async = require('async');
 const BigNumber = require('bignumber.js');
 
-//TODO add static standalone in progresses here!!!
+let isSyncing = false;
+let syncingJobIsStarted = false;
 
-module.exports = function (app) {
+let getIsSyncing = () => {
+    return isSyncing;
+};
+
+let defaultModule = function (app) {
     const API_KEY = null;
     const REQUEST_INTERVAL_DELAY = 600; // millis
     const RECORDS_COUNT = 1000;
@@ -19,7 +24,7 @@ module.exports = function (app) {
     const ENDPOINT_CONFIG = {
         1: { url: 'https://api.etherscan.io/api' },
         3: { url: "http://api-ropsten.etherscan.io/api" }
-    }
+    };
     const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
     const TX_LIST_ACTION = `?module=account&action=txlist&startblock=0&endblock=${LAST_BLOCK}&sort=asc`;
     const TOKEN_TX_ACTION = `?module=account&action=tokentx&startblock=0&endblock=${LAST_BLOCK}&sort=asc`;
@@ -103,11 +108,11 @@ module.exports = function (app) {
             processedTx[processedKey] = propperTx[key];
         });
 
-
         //TODO if .value is 0 and it is .eth, it means that it is token's transactions
         //so we have to check from/to? and getTokenInformation by to/from address, and process result!
+        //TODO at first try to check in tokebs db localy
         // set concratct address, symbol, name
-        // wait for web3 changes merging  
+        // wait for web3 changes merging
 
 
         //toString is important! in order to avoid exponential
@@ -139,11 +144,11 @@ module.exports = function (app) {
     const controller = function () { };
 
 
-    controller.prototype.startSyncing = async () => {
-
+    async function startSyncing() {
+      
         let wallets = await electron.app.sqlLiteService.Wallet.findAll();
         for (let wallet of wallets) {
-            console.log('wallet:', wallet);
+
 
             //let address = '0x95449efa29feccc09a2efc1638b1945b9f316ca5'; //fealured cases.
             let address = '0x' + wallet.publicKey;
@@ -159,7 +164,29 @@ module.exports = function (app) {
             });
             await processTxHistory(txHashes);
         }
+        isSyncing = false;
     };
 
+    function startSyncingJob() {
+        if (syncingJobIsStarted) {
+            console.log('Transaction Syncing Job Is already Started!');
+            return;
+        }
+
+        syncingJobIsStarted = true;
+        isSyncing = true;
+        (async function next() {
+            await startSyncing();
+            next();
+        })();
+    };
+
+    controller.prototype.startSyncingJob = startSyncingJob;
+
     return controller;
-}
+};
+
+module.exports = {
+    default: defaultModule,
+    isSyncing: getIsSyncing
+};

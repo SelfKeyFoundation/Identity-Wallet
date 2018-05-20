@@ -28,19 +28,6 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
         });
     }
 
-    $rootScope.wallet.syncEthTransactionsHistory();
-    Web3Service.syncTokensTransactionHistory();
-
-    let addBalaceChageListener = () => {
-        $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-            $timeout(() => {
-                $rootScope.refreshTxHistory(symbol);
-            }, 4000);
-        });
-    };
-
-    addBalaceChageListener();
-
     /*
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;

@@ -1,6 +1,6 @@
 'use strict';
 
-function SKTxHistoryDirective($rootScope, RPCService, CommonService) {
+function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) {
     'ngInject';
 
     return {
@@ -44,22 +44,44 @@ function SKTxHistoryDirective($rootScope, RPCService, CommonService) {
                 });
             };
 
-            let fn, fnArgs = { publicKey };
-            if (scope.tokenSymbol) {
-                if (scope.tokenSymbol == 'ETH') {
-                    fn = 'getByPublicKeyAndContractAddress';
-                    fnArgs.contractAddress = null;
-                } else {
-                    fn = 'getTxHistoryByPublicKeyAndTokenSymbol';
-                    fnArgs.tokenSymbol = scope.tokenSymbol;
+            let loadData = () => {
+                let fn, fnArgs = { publicKey };
+                if (scope.tokenSymbol) {
+                    if (scope.tokenSymbol == 'ETH') {
+                        fn = 'getByPublicKeyAndContractAddress';
+                        fnArgs.contractAddress = null;
+                    } else {
+                        fn = 'getTxHistoryByPublicKeyAndTokenSymbol';
+                        fnArgs.tokenSymbol = scope.tokenSymbol;
+                    }
                 }
-            }
+              
+                fn = fn || 'getTxHistoryByPublicKey';
+                let transactions = RPCService.makeCall(fn, fnArgs).then((res) => {
+                    scope.txList = processTxHistoryList(res.data);
+                    scope.isSyncing = res.isSyncing;
+                }).catch((err) => {
+                    scope.isSyncing = false;
+                    CommonService.showToast('error', 'Error while loading transactions history.');
+                });
+            };
 
-            fn = fn || 'getTxHistoryByPublicKey';
-            let transactions = RPCService.makeCall(fn, fnArgs).then((txList) => {
-                scope.txList = processTxHistoryList(txList);
-            }).catch((err) => {
-                CommonService.showToast('error', 'Error while loading transactions history.');
+            loadData();
+
+            $rootScope.$on('balance:change', (event) => {
+                loadData();
+            });
+
+            $rootScope.$on('tx-history:change', (event) => {
+                loadData();
+            });
+
+            let txReloadInterval = $interval(() => {
+                loadData();
+            }, 3000);
+
+            element.on('$destroy', function () {
+                $interval.cancel(txReloadInterval);
             });
         },
         replace: true,
