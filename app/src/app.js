@@ -105,6 +105,9 @@ angular.module('kyc-wallet').service('SignService', SignService);
 const SkCloseWarningBoxDirective = requireAppModule('angular/directives/commons/sk-close-warning-box.directive');
 angular.module('kyc-wallet').directive('skCloseWarningBox', SkCloseWarningBoxDirective);
 
+const SkOfflineWarningBoxDirective = requireAppModule('angular/directives/commons/sk-offline-warning-box.directive');
+angular.module('kyc-wallet').directive('skOfflineWarningBox', SkOfflineWarningBoxDirective);
+
 const SkLoadingDirective = requireAppModule('angular/directives/commons/sk-loading.directive');
 angular.module('kyc-wallet').directive('skLoading', SkLoadingDirective);
 
