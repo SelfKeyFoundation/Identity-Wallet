@@ -232,9 +232,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     };
 
     $rootScope.openAddCustomTokenDialog = (event) => {
-        if ($rootScope.tokenLimitIsExceed()) {
-            return;
-        }
         return $mdDialog.show({
             controller: 'AddCustomTokenDialogController',
             templateUrl: 'common/dialogs/add-custom-token.html',

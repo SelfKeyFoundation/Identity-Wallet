@@ -1,0 +1,20 @@
+.sk-offline-warning-box {
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(124deg, #2b3540, #1e262e);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .body-container {
+        width: 520px;
+    }
+    .info-text {
+        color: #93b0c1; 
+        padding: 20px 40px 40px 40px;
+    }
+}
