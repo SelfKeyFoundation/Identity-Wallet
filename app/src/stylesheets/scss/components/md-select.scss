@@ -1,5 +1,4 @@
 md-input-container {
-
     &.sk-select-box {
         padding: 12px;
         font-family: Courier;
@@ -28,6 +27,7 @@ md-input-container {
     &.hide-input-invalid-mark {
         > md-select {
             &:after {
+                content: '' !important;
                 display: none !important;
             }
 
@@ -35,11 +35,16 @@ md-input-container {
                 > span {
                     &:first-of-type {
                         &:after {
+                            content: '' !important;
                             display: none !important;
                         }
                     }
                 }
             }
+        }
+
+        &:after {
+            content: '' !important;
         }
     }
 }
