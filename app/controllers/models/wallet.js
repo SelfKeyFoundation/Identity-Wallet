@@ -40,6 +40,7 @@ module.exports = function (app, sqlLiteService) {
                         table.string('keystoreFilePath');
                         table.binary('profilePicture');
                         table.integer('isSetupFinished').notNullable().defaultTo(0);
+                        table.string('profile').notNullable().defaultTo('local');
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
                     }).then((resp) => {

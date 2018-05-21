@@ -3,9 +3,13 @@
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service, CommonService, SqlLiteService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
-
+    let args = {
+        symbol: $stateParams.symbol,
+        allowSelectERC20Token: $stateParams.allowSelectERC20Token
+    };
+    
     $log.info("SendTokenDialogController", args, CONFIG);
     const web3Utils = Web3Service.constructor.web3.utils;
     const TX_CHECK_INTERVAL = 1000;
@@ -78,7 +82,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.cancel = (event) => {
         cancelEstimatedGasCheck();
         cancelTxCheck();
-        $mdDialog.cancel();
+        
+        if (!args.symbol) {
+            $state.go('member.dashboard.main');
+        } else {
+            $state.go('member.wallet.manage-token', { id: args.symbol });
+        }
     }
 
     $scope.getTxFee = () => {
@@ -192,13 +201,18 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
                     startTxCheck();
                 }).catch((error) => {
-                    CommonService.showToast('error', error.toString(), 20000);
-                    $scope.errors.sendFailed = error.toString();
+                    error = error.toString();
+                    CommonService.showToast('error', error, 20000);
+                    $scope.errors.sendFailed = error;
                     // reset view state
                     setViewState();
                 });
             }).catch((error) => {
-                CommonService.showToast('error', error.toString(), 20000);
+                error = error.toString();
+                if (error) {
+                    CommonService.showToast('error', error, 20000);
+                }
+
                 $scope.errors.sendFailed = error.toString();
                 // reset view state
                 setViewState();
@@ -220,8 +234,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 60000,   // $scope.infoData.gasLimit
                 $scope.symbol.toUpperCase(),
                 CONFIG.chainId
-            )
+            );
 
+           
             txGenPromise.then((signedHex) => {
                 $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
                 $scope.sendPromise.then((resp) => {
@@ -246,8 +261,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                     setViewState();
                     return;
                 }
-
-                CommonService.showToast('error', error, 20000);
+                if (error) {
+                    CommonService.showToast('error', error, 20000);
+                }
                 $scope.errors.sendFailed = error;
                 // reset view state
                 setViewState();
