@@ -92,6 +92,12 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 const SelfkeyService = requireAppModule('angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
+const LedgerService = requireAppModule('angular/services/ledger.service');
+angular.module('kyc-wallet').service('LedgerService', LedgerService);
+
+const SignService = requireAppModule('angular/services/sign.service');
+angular.module('kyc-wallet').service('SignService', SignService);
+
 
 /**
  * directives
@@ -175,6 +181,15 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = requireAppModule('angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
+const ConnectingToLedgerController = requireAppModule('angular/controllers/commons/dialogs/connecting-to-ledger-controller.js');
+angular.module('kyc-wallet').controller('ConnectingToLedgerController', ConnectingToLedgerController);
+
+const ChooseLedgerAddressController = requireAppModule('angular/controllers/commons/dialogs/choose-ledger-address-controller.js');
+angular.module('kyc-wallet').controller('ChooseLedgerAddressController', ChooseLedgerAddressController);
+
+const ConfirmLedgerTransactionWarningController = requireAppModule('angular/controllers/commons/dialogs/confirm-ledger-transaction-warning-controller.js');
+angular.module('kyc-wallet').controller('ConfirmLedgerTransactionWarningController', ConfirmLedgerTransactionWarningController);
+
 const AddEditDocumentDialogController = requireAppModule('angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
 
@@ -214,6 +229,9 @@ angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestIm
 
 const GuestImportPrivateKeyController = requireAppModule('angular/controllers/guest/import/private-key-controller.js');
 angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
+
+const GuestImportLedgerController = requireAppModule('angular/controllers/guest/import/ledger.js');
+angular.module('kyc-wallet').controller('GuestImportLedgerController', GuestImportLedgerController);
 
 /**
  * create wallet

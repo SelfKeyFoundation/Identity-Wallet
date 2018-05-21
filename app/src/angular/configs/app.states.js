@@ -197,6 +197,15 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                 }
             }
         })
+        .state('guest.import.ledger', {
+            url: '/guest/import/ledger',
+            views: {
+                main: {
+                    templateUrl: 'guest/import/ledger/main.html',
+                    controller: 'GuestImportLedgerController'
+                }
+            }
+        })
 
 
         /**
@@ -304,6 +313,20 @@ function appStates($urlRouterProvider, $stateProvider, $mdThemingProvider, CONFI
                     templateUrl: 'member/wallet/manage-cryptos.html',
                     controller: 'ManageCryptosController'
                 }
+            }
+        })
+
+        .state('member.wallet.send-token', {
+            url: '/member/wallet/send-token',
+            views: {
+                main: {
+                    templateUrl: 'common/dialogs/send-token.html',
+                    controller: 'SendTokenDialogController'
+                }
+            },
+            params: {
+                symbol: null,
+                allowSelectERC20Token: null
             }
         })
 

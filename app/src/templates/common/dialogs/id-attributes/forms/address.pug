@@ -23,7 +23,7 @@
             input(name="code", type="text", ng-model="inputs.line5", ng-required="true")
             div(ng-messages="theForm.code.$error")
                 div(ng-message="required") This field is required. Please enter Zip/Postal Code
-        md-input-container.sk-input-box.sk-input-non-floating.small-margins
+        md-input-container.sk-input-box.sk-input-non-floating.small-margins.hide-input-invalid-mark
             label Country
             md-select.sk-select(name="country", ng-model="inputs.line6", ng-required="true", ng-keydown="ignoreEnterKey($event)")
                 md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
