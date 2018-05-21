@@ -8,8 +8,9 @@ function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
         link: (scope, element) => {
             scope.data = {
                 name: "Custom Tokens",
-                text: "Send or receive any custom Ethereum token (ERC-20)."
+                text: "Send or receive any custom ERC-20 token."
             };
+            scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
         },
         replace: true,
         templateUrl: 'common/directives/sk-custom-token-box.html'
