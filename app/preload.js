@@ -1,4 +1,4 @@
-const package = require(__dirname + "/../package.json");
+const appPackage = require(__dirname + "/../package.json");
 const config = require('./config');
 const defaultWindowOpen = window.open;
 
@@ -10,7 +10,7 @@ window.requireAppModule = function (moduleName, isNear) {
 }
 
 window.requireNodeModule = function (moduleName) {
-    if (package.dependencies[moduleName]) {
+    if (appPackage.dependencies[moduleName]) {
         return require(moduleName);
     }
     return null;
@@ -25,11 +25,11 @@ window.isDevMode = function () {
     return false;
 }
 
-window.appName = package.productName;
-window.appVersion = package.version;
+window.appName = appPackage.productName;
+window.appVersion = appPackage.version;
 
 /**
- * 
+ *
  */
 window.ipcRenderer = require('electron').ipcRenderer;
 
