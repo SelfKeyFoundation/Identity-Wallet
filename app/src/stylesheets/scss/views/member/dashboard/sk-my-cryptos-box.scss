@@ -1,9 +1,11 @@
 .sk-my-cryptos-box {
     width: 100% !important;
-    padding: 20px;       
+    padding: 20px;
 
     >.header {
-        @include reset('div');
+        background-image: unset;
+        box-shadow: unset;
+        border-radius: 0;
 
         width: 100% !important;
 
