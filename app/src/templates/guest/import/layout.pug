@@ -32,7 +32,7 @@
                         md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
                             md-radio-button(md-no-ink, value="keystoreImport") Import a new Keystore File (UTC)
                             md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Select an existing Keystore File (UTC)
-                            md-radio-button(md-no-ink, value="ledger", ng-disabled="true") Ledger (Coming Soon)
+                            md-radio-button(md-no-ink, value="ledger") Ledger
                             md-radio-button(md-no-ink, value="trezor", ng-disabled="true") TREZOR (Coming Soon)
                             md-radio-button(md-no-ink, value="privateKey") Private Key
 
