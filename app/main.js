@@ -101,6 +101,12 @@ function onReady(app) {
         const SqlLiteService = require('./controllers/sql-lite-service')(app);
         electron.app.sqlLiteService = new SqlLiteService();
 
+        const LedgerService = require('./controllers/ledger-service')(app);
+        electron.app.ledgerService = new LedgerService();
+
+        const Web3Service = require('./controllers/web3-service')(app);
+        electron.app.web3Service = new Web3Service();
+
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
 
@@ -117,7 +123,6 @@ function onReady(app) {
 
         //let tray = new Tray('assets/icons/png/256X256.png');
         //tray.setToolTip('selfkey');
-
 
         app.win = new electron.BrowserWindow({
             title: electron.app.getName(),
