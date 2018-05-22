@@ -28,5 +28,5 @@ before_script:
 - npm run make
 script:
 - npm run test
-- if [ "$TRAVIS_BRANCH" = "dev" ]; then zip -r out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-darwin-x64; fi
-- if [ "$TRAVIS_BRANCH" = "dev" ]; then gsutil cp out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/; fi
+- if [ "$TRAVIS_BRANCH" == "dev" ]; then zip -r out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip out/selfkey-identity-wallet-darwin-x64; fi
+- if [ "$TRAVIS_BRANCH" == "dev" ]; then gsutil cp out/selfkey-identity-wallet-darwin-x64-v$TRAVIS_BUILD_NUMBER.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER/; fi
