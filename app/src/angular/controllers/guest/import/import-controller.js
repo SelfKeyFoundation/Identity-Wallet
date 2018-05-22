@@ -11,6 +11,7 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
         $scope.selectedOption = "keystoreImport";
         $state.go('guest.import.keystore', { type: 'import' });
     }
+    
     $scope.options = [{
         title: 'Import New Address',
         subTitle: '(Keystore File)',
