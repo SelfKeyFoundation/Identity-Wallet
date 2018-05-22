@@ -111,6 +111,7 @@ function onReady(app) {
 
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
+        electron.app.rpcHandler.startTokenPricesBroadcaster(electron.app.cmcService);
 
         createKeystoreFolder();
 
