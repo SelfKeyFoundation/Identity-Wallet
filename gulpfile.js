@@ -1,18 +1,15 @@
-'use strict'
-
-const gulp = require('gulp')
-const runSequence = require('run-sequence')
-const watch = require('gulp-watch')
-const pug = require('gulp-pug')
-const templateCache = require('gulp-angular-templatecache')
-const path = require('path')
-const sass = require('gulp-sass')
-
-const tmplSrc = path.resolve(__dirname, './app/src/templates/**/*.pug')
-const tmplDest = path.resolve(__dirname, './app/src/angular/')
-
-const scssSrc = path.resolve(__dirname, './app/src/stylesheets/scss/main.scss')
-const scssDest = path.resolve(__dirname, './app/src/stylesheets/css')
+const 
+	path = require('path')
+	gulp = require('gulp')
+	runSequence = require('run-sequence')
+	watch = require('gulp-watch')
+	pug = require('gulp-pug')
+	templateCache = require('gulp-angular-templatecache')
+	sass = require('gulp-sass')	
+	tmplSrc = path.resolve(__dirname, './app/src/templates/**/*.pug')
+	tmplDest = path.resolve(__dirname, './app/src/angular/')
+	scssSrc = path.resolve(__dirname, './app/src/stylesheets/scss/main.scss')
+	scssDest = path.resolve(__dirname, './app/src/stylesheets/css')
 
 gulp.task('templates', cb => {
 	gulp.src(tmplSrc)
