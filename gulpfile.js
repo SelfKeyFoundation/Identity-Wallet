@@ -1,7 +1,6 @@
 'use strict'
 
 const gulp = require('gulp')
-const exec = require('child_process').exec
 const runSequence = require('run-sequence')
 const watch = require('gulp-watch')
 const pug = require('gulp-pug')
@@ -45,30 +44,6 @@ gulp.task('stylesheets', cb => {
 gulp.task('watch', cb => {
 	watch([scssSrc, tmplSrc], () => {
 		runSequence(['templates', 'stylesheets'], cb)
-	})
-})
-
-gulp.task('start', cb => {
-	let command = ''
-	if (process.env.OSENV == 'windows') {
-		command = 'node_modules\\.bin\\electron-forge start -- dev'
-	} else {
-		command = './node_modules/.bin/electron-forge start -- dev'
-	}
-	exec(command, err => {
-		cb(err)
-	})
-})
-
-gulp.task('make', cb => {
-	let command = ''
-	if (process.env.OSENV == 'windows') {
-		command = 'node_modules\\.bin\\electron-forge make'
-	} else {
-		command = './node_modules/.bin/electron-forge make'
-	}
-	exec(command, err => {
-		cb(err)
 	})
 })
 
