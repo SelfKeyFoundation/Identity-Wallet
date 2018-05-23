@@ -17,6 +17,9 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
     $scope.isAuthenticating = false;
 
+    $scope.selectPublicKeyInputTitle = $scope.type === 'select' ? 'Step 1. Select an ETH address stored on the SelfKey Identity Wallet.' :
+        'Step 1. Select a Keystore File (UTC/JSON).'; 
+
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length == 1 ? $scope.publicKeyList[0] : null,
         selectedFilePath: null,
