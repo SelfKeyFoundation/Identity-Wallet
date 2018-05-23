@@ -14,9 +14,7 @@ fs.readdirSync(config.testDir)
 	.filter(file => {
 		return file.substr(-3) === '.js'
 	})
-	.forEach(file => {
-		mocha.addFile(path.join(config.testDir, file))
-	})
+	.forEach(file => mocha.addFile(path.join(config.testDir, file)))
 
 config.consoleNotes()
 

@@ -8,25 +8,21 @@ const
 	config = require('../config/config.js')
 
 const app = new Application({
-	path: config.appPath,
-	//args: ['--', 'dev']
+	path: config.appPath
 })
 
 function init() {
 	return new Promise((resolve, reject) => {
-		exec(config.cacheCmd, err => {
-			if (err) reject(err)
-			resolve('done')
-		})
+		exec(config.cacheCmd, err => (err) ? reject(err) : resolve('done'))
 	})
 }
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV == 'osx') {
-			init().then(() => resolve(app.start()))
-		} else {
+		if (process.env.OSENV !== 'osx') {
 			resolve(app.start())
+		} else {
+			init().then(() => resolve(app.start()))
 		}
 	})
 }
@@ -43,13 +39,11 @@ function scrollContainerToBottom(app, selector) {
 		delay(1000)
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.execute((selector) => {
-				const objDiv = document.getElementById(selector.substr(1,selector.length-1));
-				objDiv.scrollTop = objDiv.scrollHeight;
-			},selector))
+				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
+				objDiv.scrollTop = objDiv.scrollHeight
+			}, selector))
 			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
-			.catch(err => {
-				reject(err)
-			})
+			.catch(err => reject(err))
 	})	
 }
 
@@ -59,29 +53,23 @@ function regStep(app, selector) {
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.click(selector))
 			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
-			.catch(err => {
-				reject(err)
-			})
+			.catch(err => reject(err))
 	})
 }
 
 function clipboardCheck(check) {
 	return new Promise((resolve, reject) => {
-		app.electron.clipboard
-			.readText()
+		app.electron.clipboard.readText()
 			.then(cbt => assert.equal(cbt, check))
 			.then(() => resolve(console.log(chalk.green('Clipboard Check : ' + check))))
-			.catch(err => {
-				reject(err)
-			})
+			.catch(err => reject(err))
 	})
 }
 
 function writer(savePath, img) {
 	return new Promise((resolve, reject) => {
 		fs.writeFile(savePath, img, err => {
-			if (err) reject(err)
-			resolve(savePath + 'Saved')
+			(err) ? reject(err) : resolve(savePath + 'Saved')
 		})
 	})
 }
@@ -89,15 +77,10 @@ function writer(savePath, img) {
 function screenshotCheck(app, fileName) {
 	return new Promise((resolve, reject) => {
 		delay(1000)
-			.then(() =>
-				app.browserWindow
-					.capturePage()
-					.then(img => writer(pwd + '/test/local/caps/screen/' + fileName, img))
-					.then(() => resolve(console.log(chalk.green('Screencap Done ' + fileName))))
-			)
-			.catch(err => {
-				reject(err)
-			})
+			.then(() => app.browserWindow.capturePage()
+				.then(img => writer(pwd + '/test/local/caps/screen/' + fileName, img))
+				.then(() => resolve(console.log(chalk.green('Screencap Done ' + fileName)))))
+			.catch(err => reject(err))
 	})
 }
 
