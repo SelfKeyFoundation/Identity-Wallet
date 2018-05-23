@@ -8,7 +8,8 @@ const
 	config = require('../config/config.js')
 
 const app = new Application({
-	path: config.appPath
+	path: config.appPath,
+	//args: ['--', 'dev']
 })
 
 function init() {
@@ -35,6 +36,21 @@ function appStop() {
 		return this.app.stop()
 	}
 	return undefined
+}
+
+function scrollContainerToBottom(app, selector) {
+	return new Promise((r, rj) => {
+		delay(1000)
+			.then(() => app.client.waitForVisible(selector, 15000))
+			.then(() => app.client.execute((selector) => {
+				const objDiv = document.getElementById(selector.substr(1,selector.length-1));
+				objDiv.scrollTop = objDiv.scrollHeight;
+			},selector))
+			.then(() => r(console.log(chalk.green(selector + ' Step Done'))))
+			.catch(err => {
+				rj(err)
+			})
+	})	
 }
 
 function regStep(app, selector) {
@@ -92,5 +108,6 @@ module.exports = {
 	appStop,
 	regStep,
 	clipboardCheck,
-	screenshotCheck
+	screenshotCheck,
+	scrollContainerToBottom
 }
