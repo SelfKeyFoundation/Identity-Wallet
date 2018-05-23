@@ -19,7 +19,7 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV !== 'osx') {
+		if (process.env.OSENV == 'windows') {
 			resolve(app.start())
 		} else {
 			init().then(() => resolve(app.start()))
@@ -36,8 +36,7 @@ function appStop() {
 
 function scrollContainerToBottom(app, selector) {
 	return new Promise((resolve, reject) => {
-		delay(1000)
-			.then(() => app.client.waitForVisible(selector, 15000))
+		app.client.waitForVisible(selector, 20000)
 			.then(() => app.client.execute((selector) => {
 				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
 				objDiv.scrollTop = objDiv.scrollHeight

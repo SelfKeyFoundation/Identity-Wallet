@@ -6,7 +6,7 @@ const
 	config = require('./config/config.js')
 
 mocha = new Mocha({
-	timeout: 10000,
+	timeout: 20000,
 	bail: true
 })
 
