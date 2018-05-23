@@ -123,7 +123,6 @@ module.exports = function (app, sqlLiteService) {
 
     function _add(data) {
         data.createdAt = new Date().getTime();
-        console.log('data data data data', data);
         return knex.transaction((trx) => {
             knex(TABLE_NAME).transacting(trx).insert(data).then((insertedIds) => {
                 let id = insertedIds[0];
