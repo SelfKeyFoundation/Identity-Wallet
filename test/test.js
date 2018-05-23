@@ -19,10 +19,10 @@ fs.readdirSync(config.testDir)
 	})
 
 config.consoleNotes()
-tools.init(() => {})
-	.then(() => mocha.run(failures => {
+
+mocha.run(failures => {
 	process.on('exit', () => {
 		process.exit(failures)
 	})
 	process.exit()
-}))
+})

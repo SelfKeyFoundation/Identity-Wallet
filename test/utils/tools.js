@@ -26,7 +26,7 @@ function appStart() {
 		if (process.env.OSENV == 'osx') {
 			init().then(() => resolve(app.start()))
 		} else {
-			app.start()
+			resolve(app.start())
 		}
 	})
 }
@@ -39,7 +39,7 @@ function appStop() {
 }
 
 function scrollContainerToBottom(app, selector) {
-	return new Promise((r, rj) => {
+	return new Promise((resolve, reject) => {
 		delay(1000)
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.execute((selector) => {
