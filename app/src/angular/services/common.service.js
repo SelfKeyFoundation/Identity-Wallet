@@ -78,6 +78,18 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
             return n % 1 === 0;
         };
 
+        getFormattedValueUSD(value) {
+
+            let valueUSD = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(value)
+            
+            // It will round correctly but we need to remove symbol because of the pie chart calculation
+            valueUSD =  valueUSD.substr(1, valueUSD.length-1);
+            return valueUSD;
+        };
+
     }
 
     return new CommonService();
