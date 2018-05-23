@@ -1,9 +1,10 @@
 const 
+	exec = require('child_process').exec
+	assert = require('assert')
 	electron = require('electron')
 	Application = require('spectron').Application
 	delay = require('delay')
 	chalk = require('chalk')
-	exec = require('child_process').exec
 	config = require('../config/config.js')
 
 const app = new Application({
@@ -11,17 +12,21 @@ const app = new Application({
 })
 
 function init() {
-	return new Promise((r, rj) => {
+	return new Promise((resolve, reject) => {
 		exec(config.cacheCmd, err => {
-			if (err) rj(err)
-			r('done')
+			if (err) reject(err)
+			resolve('done')
 		})
 	})
 }
 
 function appStart() {
-	return new Promise((r, rj) => {
-		init().then(() => r(app.start()))
+	return new Promise((resolve, reject) => {
+		if (process.env.OSENV == 'osx') {
+			init().then(() => resolve(app.start()))
+		} else {
+			app.start()
+		}
 	})
 }
 
@@ -33,49 +38,49 @@ function appStop() {
 }
 
 function regStep(app, selector) {
-	return new Promise((r, rj) => {
+	return new Promise((resolve, reject) => {
 		delay(1000)
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.click(selector))
-			.then(() => r(console.log(chalk.green(selector + ' Step Done'))))
+			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
 			.catch(err => {
-				rj(err)
+				reject(err)
 			})
 	})
 }
 
 function clipboardCheck(check) {
-	return new Promise((r, j) => {
+	return new Promise((resolve, reject) => {
 		app.electron.clipboard
 			.readText()
 			.then(cbt => assert.equal(cbt, check))
-			.then(() => r(console.log(chalk.green('Clipboard Check : ' + check))))
+			.then(() => resolve(console.log(chalk.green('Clipboard Check : ' + check))))
 			.catch(err => {
-				rj(err)
+				reject(err)
 			})
 	})
 }
 
 function writer(savePath, img) {
-	return new Promise((r, rj) => {
+	return new Promise((resolve, reject) => {
 		fs.writeFile(savePath, img, err => {
-			if (err) rj(err)
-			r(savePath + 'Saved')
+			if (err) reject(err)
+			resolve(savePath + 'Saved')
 		})
 	})
 }
 
 function screenshotCheck(app, fileName) {
-	return new Promise((r, rj) => {
+	return new Promise((resolve, reject) => {
 		delay(1000)
 			.then(() =>
 				app.browserWindow
 					.capturePage()
 					.then(img => writer(pwd + '/test/local/caps/screen/' + fileName, img))
-					.then(() => r(console.log(chalk.green('Screencap Done ' + fileName))))
+					.then(() => resolve(console.log(chalk.green('Screencap Done ' + fileName))))
 			)
 			.catch(err => {
-				rj(err)
+				reject(err)
 			})
 	})
 }
