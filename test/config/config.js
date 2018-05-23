@@ -31,7 +31,7 @@ if (osEnv === 'docker') {
     testDir = pwd + '/test/e2e/basic_id/'
 }
 if (osEnv === 'windows') {
-    appPath = pwd + '\\out\\id-wallet-win32-ia32\\' + appBuildName + '.exe'
+    appPath = pwd + '\\out\\' + appBuildName + '-win32-ia32\\' + appBuildName + '.exe'
     testDir = pwd + '/test/e2e/basic_id/'
 }
 
