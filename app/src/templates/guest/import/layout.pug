@@ -1,39 +1,20 @@
 .keystore-layout-wrapper(layout-fill, layout="column", layout-align="center center")
-    img(src="assets/images/icons/important.svg", alt="")
-
-    #message-container(layout="column", layout-align="center center" style="width: 880px; height: 48px;")
+    .logo-container(layout="column", layout-align="center center")
+        img(src="assets/images/icons/selfkey.svg", alt="")
+        .logo-title selfkey
 
     .sk-box.shadowed(style="width: 880px;")
         .header(style="position: relative;")
-            span Use An Existing Wallet
+            span Use An Existing ETH Address
             sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)", style="cursor: pointer; position: absolute; right: -18px; top: -18px;")
-        .content(layout="column", style="padding: 20px 35px;")
-            .description-wrapper
-                p(style="font-weight: 600; opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | Do you have an existing SelfKey Identity Wallet?
-                p(style="margin-bottom: 45px; opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | If you already have a SelfKey Identity Wallet created,
-                    | please select the ETH address from below and unlock it with your password.
-                    | As the wallet is stored locally on your device,
-                    | SelfKey does not have access and therefore cannot help you if the password is lost.
-                p(style="font-weight: 600; opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | Do you have another ETH wallet?
-
-                p(style="opacity: 0.8; font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.4; color: #ffffff;")
-                    | If you have an existing ETH wallet to import,
-                    | you can do so via Keystore File by selecting the file on your computer and unlocking it here.
-                    | For security purposes, the SelfKey Identity Wallet will require you to unlock it with
-                    | your password every time you close and reopen the application.
-
-            .content-wrapper(layout="row", style="margin-top: 27px;")
-                .left.access-wallet-options-container(style="width: 400px; padding-top: 18px;")
-                    span(style="font-family: ProximaNovaRegular; font-size: 18px; line-height: 1.89; color: #ffffff;") How would you like to access your existing wallet?
-                    div(style="margin-top: 30px; width: 315px;")
-                        md-radio-group(md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
-                            md-radio-button(md-no-ink, value="keystoreImport") Import a new Keystore File (UTC)
-                            md-radio-button(md-no-ink, value="keystoreSelect", ng-if="publicKeyList.length > 0") Select an existing Keystore File (UTC)
-                            md-radio-button(md-no-ink, value="ledger") Ledger
-                            md-radio-button(md-no-ink, value="trezor", ng-disabled="true") TREZOR (Coming Soon)
-                            md-radio-button(md-no-ink, value="privateKey") Private Key
-
-                .right(flex, ui-view="main")
+        .content(layout="column", layout-align="start stretch")
+            .content-wrapper
+                    md-radio-group(layout="row",layout-align="space-around start", md-no-ink, ng-model="selectedOption", ng-change="onRadioButtonChange($event)")
+                        .option-item-container(layout="column", layout-align="space-between center", ng-repeat="option in options")
+                            sk-icon(icon="{{option.icon}}", extension="png", size-class="icon-size-34x34")
+                            .title-container 
+                                .title {{option.title}}
+                                .title(ng-if="option.subTitle") {{option.subTitle}}
+                            md-radio-button(md-no-ink, ng-disabled="option.disabled", value="{{option.value}}")
+            .sk-horizontal-devider
+            .main-view-container(layout="column", layout-align="center center", flex, ui-view="main")
