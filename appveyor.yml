@@ -1,4 +1,6 @@
 image: Visual Studio 2017
+environment:
+  OSENV: windows
 platform:
   - x64
 init:
@@ -18,4 +20,3 @@ test_script:
 after_test:
   - ps: . C:\projects\identity-wallet\compress.ps1
   - appveyor PushArtifact C:\projects\identity-wallet\sk-windows.zip
-  - . C:\projects\identity-wallet\out\selfkey-identity-wallet-win32-ia32\selfkey-identity-wallet.exe
