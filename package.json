@@ -11,7 +11,7 @@
     "package": "gulp && ./node_modules/.bin/electron-forge package",
     "package-win": "gulp && ./node_modules/.bin/electron-forge package --arch=ia32 --platform=win32",
     "make": "gulp && ./node_modules/.bin/electron-forge make",
-    "make-win": "gulp && ./node_modules/.bin/electron-forge make --platform=win32 --arch=ia32",
+    "make-win": "gulp && node_modules\\.bin\\electron-forge make --platform=win32 --arch=ia32",
     "start-win": "gulp && node_modules\\.bin\\electron-forge start -- dev",
     "start-auto": "gulp && gulp start",
     "make-auto": "gulp && gulp make",
