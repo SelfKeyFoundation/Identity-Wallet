@@ -46,9 +46,9 @@ function scrollContainerToBottom(app, selector) {
 				const objDiv = document.getElementById(selector.substr(1,selector.length-1));
 				objDiv.scrollTop = objDiv.scrollHeight;
 			},selector))
-			.then(() => r(console.log(chalk.green(selector + ' Step Done'))))
+			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
 			.catch(err => {
-				rj(err)
+				reject(err)
 			})
 	})	
 }

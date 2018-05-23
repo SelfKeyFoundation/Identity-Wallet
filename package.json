@@ -20,10 +20,6 @@
     "email": "info@selfkey.org",
     "url": "https://selfkey.org/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SelfKeyFoundation/Identity-Wallet.git"
-  },
   "bugs": {
     "url": "https://github.com/SelfKeyFoundation/Identity-Wallet/issues"
   },
