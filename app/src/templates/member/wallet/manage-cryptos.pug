@@ -3,8 +3,10 @@
     .content(layout="column", layout-align="center center")
         sk-icon(icon="currency", size-class="icon-size-57x65")
         .header-text Manage My Crypto
-        .header-description
-                            | Manage your ERC20 tokens displayed in the dashboard.
+        .header-description Manage your ERC20 tokens displayed in the dashboard.
+        .add-btn-container(layout="row", layout-align="center center")
+            md-button.gray(ng-click="$root.openAddCustomTokenDialog($event)")
+                span.primary ADD TOKEN
         .grid-container
             table
                 thead

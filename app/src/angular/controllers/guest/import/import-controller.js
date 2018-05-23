@@ -25,6 +25,9 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
             case "privateKey":
                 $state.go('guest.import.private-key');
                 break;
+            case "ledger":
+                $state.go('guest.import.ledger');
+                break;
             default:
                 $state.go('guest.import.keystore', { type: 'select' });
         }
