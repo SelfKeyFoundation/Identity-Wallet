@@ -31,6 +31,7 @@
 @import './panels/id-attribute-delete-panel.scss';
 
 @import './directives/sk-close-warning-box.scss';
+@import './directives/sk-offline-warning-box.scss';
 @import './directives/sk-token-box.scss';
 @import './directives/sk-custom-token-box.scss';
 @import './directives/sk-send-token.scss';
@@ -74,6 +75,12 @@
 @import './views/guest/create/step-4.scss';
 @import './views/guest/create/step-5.scss';
 @import './views/guest/create/step-6.scss';
+
+@import './views/guest/import/ledger-main.scss';
+@import './views/guest/import/private-key-main.scss';
+@import './views/guest/import/keystore-main.scss';
+@import './views/guest/import/layout.scss';
+
 
 @import './views/member/setup/layout.scss';
 @import './views/member/setup/checklist.scss';

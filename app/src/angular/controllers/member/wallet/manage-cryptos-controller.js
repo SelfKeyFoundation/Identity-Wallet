@@ -121,6 +121,10 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         });
 
     }
+
+    $rootScope.$on('token:added', (event) => {
+        processTokens(wallet.tokens);
+    });
 };
 
 module.exports = ManageCryptosController;

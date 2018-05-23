@@ -6,6 +6,7 @@ const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
+const isOnline = require('is-online');
 
 const config = buildConfig(electron);
 
@@ -54,6 +55,7 @@ const i18n = [
 ];
 
 let shouldIgnoreClose = true;
+let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 
 for (let i in i18n) {
     app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
@@ -156,6 +158,10 @@ function onReady(app) {
         }
 
         app.win.on('close', (event) => {
+            if (shouldIgnoreCloseDialog) {
+                shouldIgnoreCloseDialog = false;
+                return;
+            }
             if (shouldIgnoreClose) {
                 event.preventDefault();
                 shouldIgnoreClose = false;
@@ -179,18 +185,28 @@ function onReady(app) {
         */
 
         app.win.webContents.on('did-finish-load', () => {
-            log.info('did-finish-load');
-            app.win.webContents.send('APP_START_LOADING');
-            electron.app.sqlLiteService.init().then(() => {
-                //start update cmc data
-                electron.app.cmcService.startUpdateData();
-                electron.app.airtableService.loadIdAttributeTypes();
-                electron.app.airtableService.loadExchangeData();
-                app.win.webContents.send('APP_SUCCESS_LOADING');
-            }).catch((error) => {
-                log.error(error);
-                app.win.webContents.send('APP_FAILED_LOADING');
+
+            isOnline().then((isOnline) => {
+                log.info('is-online', isOnline);
+                if (!isOnline) {
+                    app.win.webContents.send('SHOW_IS_OFFLINE_WARNING');
+                    return;
+                }
+
+                log.info('did-finish-load');
+                app.win.webContents.send('APP_START_LOADING');
+                electron.app.sqlLiteService.init().then(() => {
+                    //start update cmc data
+                    electron.app.cmcService.startUpdateData();
+                    electron.app.airtableService.loadIdAttributeTypes();
+                    electron.app.airtableService.loadExchangeData();
+                    app.win.webContents.send('APP_SUCCESS_LOADING');
+                }).catch((error) => {
+                    log.error(error);
+                    app.win.webContents.send('APP_FAILED_LOADING');
+                });
             });
+
         });
 
         app.win.webContents.on('did-fail-load', () => {
@@ -289,6 +305,10 @@ function onReady(app) {
 
         electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', (event) => {
             shouldIgnoreClose = true;
+        });
+
+        electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', (event) => {
+            shouldIgnoreCloseDialog = true;
         });
     };
 }

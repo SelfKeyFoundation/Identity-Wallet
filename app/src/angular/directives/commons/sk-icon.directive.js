@@ -7,10 +7,11 @@ function SkIconDirective($log) {
         restrict: 'E',
         scope: {
             icon: '@',
-            sizeClass: "@"
+            sizeClass: '@',
+            extension: '@'
         },
         link: (scope, element) => {
-
+            scope.extension = scope.extension || 'svg';
         },
         replace: true,
         templateUrl: 'common/directives/sk-icon.html'
