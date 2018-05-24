@@ -9,9 +9,9 @@ const EventEmitter = require('events');
 
 
 module.exports = function (app) {
-    
     const eventEmitter = new EventEmitter();
-    
+
+
     const loadCmcData = () => {
         request.get(config.cmcUrl, (error, httpResponse, result) => {
 
@@ -34,9 +34,6 @@ module.exports = function (app) {
                         createdAt: nowDate.getTime()
                     }
                 });
-
-                dataToInsert = sortCMCData(dataToInsert);
-
                 async.each(dataToInsert, function (item, callback) {
                     electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
                         if (symbol) {

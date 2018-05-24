@@ -1,14 +1,13 @@
 const exec = require('child_process').exec
 const assert = require('assert')
 const electron = require('electron')
-const Application = require('spectron').Application
 const delay = require('delay')
 const chalk = require('chalk')
 const config = require('../config/config.js')
 
-const app = new Application({
-	path: config.appPath,
-	//args: ['--', 'dev']
+var Application = require('spectron').Application
+var app = new Application({
+	path: config.appPath
 })
 
 function init() {
@@ -19,11 +18,7 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV == 'windows') {
-			resolve(app.start())
-		} else {
-			init().then(() => resolve(app.start()))
-		}
+		(process.env.OSENV == 'windows') ? resolve(app.start()) : init().then(() => resolve(app.start()))
 	})
 }
 
@@ -32,19 +27,6 @@ function appStop() {
 		return this.app.stop()
 	}
 	return undefined
-}
-
-function scrollContainerToBottom(app, selector) {
-	return new Promise((resolve, reject) => {
-		delay(1000)
-			.then(() =>app.client.waitForVisible(selector, 20000))
-			.then(() => app.client.execute(selector => {
-				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
-				objDiv.scrollTop = objDiv.scrollHeight
-			}, selector))
-			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
-			.catch(err => reject(err))
-	})	
 }
 
 function regStep(app, selector) {
@@ -82,6 +64,19 @@ function screenshotCheck(app, fileName) {
 				.then(() => resolve(console.log(chalk.green('Screencap Done ' + fileName)))))
 			.catch(err => reject(err))
 	})
+}
+
+function scrollContainerToBottom(app, selector) {
+	return new Promise((resolve, reject) => {
+		delay(1000)
+			.then(() => app.client.waitForVisible(selector, 20000))
+			.then(() => app.client.execute(selector => {
+				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
+				objDiv.scrollTop = objDiv.scrollHeight
+			}, selector))
+			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
+			.catch(err => reject(err))
+	})	
 }
 
 module.exports = {
