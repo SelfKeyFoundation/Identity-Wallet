@@ -79,7 +79,7 @@ class Token {
     }
 
     getFormattedBalanceInUSD() {
-        return CommonService.commasAfterNumber(this.balanceInUsd, 3);
+        return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
 
     generateContractData(toAddress, value) {
