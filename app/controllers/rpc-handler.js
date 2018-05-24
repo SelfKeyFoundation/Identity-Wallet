@@ -16,6 +16,8 @@ const os = require('os');
 const async = require('async');
 
 const RPC_METHOD = "ON_RPC";
+const RPC_ON_DATA_CHANGE_METHOD= 'ON_DATA_CHANGE';
+
 
 module.exports = function (app) {
     const log = app.log;
@@ -30,7 +32,6 @@ module.exports = function (app) {
     const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
     log.info(userDataDirectoryPath);
-
 
     /**
      * refactored methods
@@ -690,11 +691,13 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
     }
 
-    controller.prototype.getTokenPrices = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TokenPrice.findAll().then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+    controller.prototype.startTokenPricesBroadcaster = function (cmcService) {
+        cmcService.eventEmitter.on('UPDATE', ()=>{
+            electron.app.sqlLiteService.TokenPrice.findAll().then((data) => {
+                app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', data);
+            }).catch((error) => {
+                console.log(error)
+            });
         });
     }
 

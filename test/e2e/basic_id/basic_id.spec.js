@@ -10,7 +10,8 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	after(tools.appStop)
 
 	it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
-		return tools.regStep(tools.app, '#agree')
+		return tools.scrollContainerToBottom(tools.app, '#container')
+			.then(() => tools.regStep(tools.app, '#agree'))
 			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
 	})
 
