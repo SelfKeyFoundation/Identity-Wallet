@@ -1,9 +1,8 @@
-const 
-	Mocha = require('mocha')
-	fs = require('fs')
-	path = require('path')
-	tools = require('./utils/tools.js')
-	config = require('./config/config.js')
+const Mocha = require('mocha')
+const fs = require('fs')
+const path = require('path')
+const tools = require('./utils/tools.js')
+const config = require('./config/config.js')
 
 mocha = new Mocha({
 	timeout: 20000,

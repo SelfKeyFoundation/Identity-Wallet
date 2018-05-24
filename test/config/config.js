@@ -1,36 +1,38 @@
-const 
-	user = require('os').userInfo().username
-	pj = require('../../package.json')
-	appCacheName = pj.productName
-	appBuildName = pj.config.forge.electronPackagerConfig.name
-	appVersion = pj.version
-	pwd = process.cwd()
-	osEnv = process.env.OSENV || 'osx'
+const user = require('os').userInfo().username
+const pj = require('../../package.json')
+const appCacheName = pj.productName
+const appBuildName = pj.config.forge.electronPackagerConfig.name
+const appVersion = pj.version
+const pwd = process.cwd()
+const osEnv = process.env.OSENV || 'osx'
 
 // Default Settings (OSX)
-let 
-	appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
-	testDir = pwd + '/test/e2e/basic_id/'
-	cacheCmd = 'bash ' + pwd + '/test/utils/quick.sh ' + user
-	fullCmd = 'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '')
+let	appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
+let	testDir = pwd + '/test/e2e/basic_id/'
+let	cacheCmd = 'bash ' + pwd + '/test/utils/quick.sh ' + user
+let	fullCmd = 'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '')
 
 // OSENV Settings
 if (osEnv === 'travis') {
 	appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
 	testDir = pwd + '/test/e2e/basic_id/'
 }
+
 if (osEnv === 'circle') {
     appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
     testDir = pwd + '/test/e2e/basic_id/'
 }
+
 if (osEnv === 'linux') {
     appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
     testDir = pwd + '/test/e2e/basic_id/'
 }
+
 if (osEnv === 'docker') {
     appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
     testDir = pwd + '/test/e2e/basic_id/'
 }
+
 if (osEnv === 'windows') {
     appPath = pwd + '\\out\\' + appBuildName + '-win32-ia32\\' + appBuildName + '.exe'
     testDir = pwd + '\\test\\e2e\\basic_id'

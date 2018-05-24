@@ -1,11 +1,10 @@
-const 
-	exec = require('child_process').exec
-	assert = require('assert')
-	electron = require('electron')
-	Application = require('spectron').Application
-	delay = require('delay')
-	chalk = require('chalk')
-	config = require('../config/config.js')
+const exec = require('child_process').exec
+const assert = require('assert')
+const electron = require('electron')
+const Application = require('spectron').Application
+const delay = require('delay')
+const chalk = require('chalk')
+const config = require('../config/config.js')
 
 const app = new Application({
 	path: config.appPath
