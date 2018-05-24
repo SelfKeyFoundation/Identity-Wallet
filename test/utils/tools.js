@@ -18,7 +18,11 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		(process.env.OSENV == 'windows') ? resolve(app.start()) : init().then(() => resolve(app.start()))
+		if (process.env.OSENV == 'windows') {
+			resolve(app.start())
+		} else {
+			init().then(() => resolve(app.start()))
+		}
 	})
 }
 
