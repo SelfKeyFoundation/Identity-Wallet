@@ -7,7 +7,8 @@ const chalk = require('chalk')
 const config = require('../config/config.js')
 
 const app = new Application({
-	path: config.appPath
+	path: config.appPath,
+	//args: ['--', 'dev']
 })
 
 function init() {
@@ -36,7 +37,7 @@ function appStop() {
 function scrollContainerToBottom(app, selector) {
 	return new Promise((resolve, reject) => {
 		app.client.waitForVisible(selector, 20000)
-			.then(() => app.client.execute((selector) => {
+			.then(() => app.client.execute(selector => {
 				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
 				objDiv.scrollTop = objDiv.scrollHeight
 			}, selector))
