@@ -1,3 +1,4 @@
+const chalk = require('chalk')
 const user = require('os').userInfo().username
 const pj = require('../../package.json')
 const appCacheName = pj.productName
