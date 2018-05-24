@@ -128,7 +128,7 @@ class Wallet {
     }
 
     getFormattedBalanceInUSD() {
-        return CommonService.numbersAfterComma(this.balanceInUsd, 2);
+        return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
 
     getFormattedTokenBalanceInUSD(symbol) {
