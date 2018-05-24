@@ -1,13 +1,22 @@
+image: Visual Studio 2017
 environment:
-  nodejs_version: "9"
-  NODE_ENV: test
   OSENV: windows
+platform:
+  - x64
+init:
+  - git config --global core.autocrlf input
 install:
-  - ps: Install-Product node $env:nodejs_version
-  - npm install
-  - npm run make-auto
+  - ps: Install-Product node 9 x64
+  - npm i -g --production windows-build-tools
+  - npm config set msvs_version 2015 --global
+  - set PATH=C:\Ruby22\bin;%PATH%
+  - gem install sass compass
+  - npm i -g gulp-cli electron-packager
+  - npm i --no-prune
+build_script:
+  - npm run make-win
 test_script:
-  - node --version
-  - npm --version
   - npm run test
-build: on
+after_test:
+  - ps: . C:\projects\identity-wallet\compress.ps1
+  - appveyor PushArtifact C:\projects\identity-wallet\sk-windows.zip
