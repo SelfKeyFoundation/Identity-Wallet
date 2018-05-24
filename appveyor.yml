@@ -19,4 +19,4 @@ test_script:
   - npm run test
 after_test:
   - ps: . C:\projects\identity-wallet\compress.ps1
-  - appveyor PushArtifact C:\projects\identity-wallet\sk-windows.zip
+  - appveyor PushArtifact C:\projects\identity-wallet\sk-windows$(APPVEYOR_BUILD_VERSION).zip
