@@ -36,7 +36,8 @@ function appStop() {
 
 function scrollContainerToBottom(app, selector) {
 	return new Promise((resolve, reject) => {
-		app.client.waitForVisible(selector, 20000)
+		delay(1000)
+			.then(() =>app.client.waitForVisible(selector, 20000))
 			.then(() => app.client.execute(selector => {
 				const objDiv = document.getElementById(selector.substr(1,selector.length-1))
 				objDiv.scrollTop = objDiv.scrollHeight
