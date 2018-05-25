@@ -43,7 +43,9 @@
     "lint": "eslint 'app/src/**/*.js'",
     "precommit": "lint-staged",
     "cz": "git-cz",
-    "docker": "OSENV=docker docker-compose build && docker-compose up -d"
+    "docker": "OSENV=docker docker-compose build && docker-compose up -d",
+    "mig-new": "knex migrate:make",
+    "mig-test": "node test/migrate.js"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -141,6 +143,12 @@
     "prettier": "^1.10.2",
     "serial-mocha": "0.0.4",
     "spectron": "3.7.3"
+  },
+  "migrations": {
+    "version": "20180508093508"
+  },
+  "seeds": {
+    "version": "init"
   },
   "build": {
     "name": "selfkey-identity-wallet",
