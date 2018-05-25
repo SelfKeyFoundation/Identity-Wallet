@@ -1,4 +1,5 @@
 'use strict';
+
 const os = require('os');
 const { app, autoUpdater, dialog } = require('electron');
 const version = app.getVersion();
@@ -7,10 +8,15 @@ const config = require('./config');
 const updaterServerUrl = config.updateEndpoint;
 
 const updaterFeedURL = `${updaterServerUrl}${platform}/${version}`;
+const DOMAIN = 'https://selfkey-releases.storage.googleapis.com';
+const suffix = process.platform === 'darwin' ? `/RELEASES.json?method=JSON&version=${app.getVersion()}` : '';
 
 function appUpdater() {
-    autoUpdater.setFeedURL(updaterFeedURL);
-	/* Log whats happening
+    autoUpdater.setFeedURL({
+      url: `${DOMAIN}/SelfKey-Desktop-Identity-Wallet/ea788838ccc9eb63676dd2da87772850/${process.platform}/${process.arch}${suffix}`,
+      serverType: 'json',
+    });	
+    /* Log whats happening
 	TODO send autoUpdater events to renderer so that we could console log it in developer tools
 	You could alsoe use nslog or other logging to see what's happening */
     autoUpdater.on('error', err => console.log(err));
@@ -48,3 +54,4 @@ function appUpdater() {
 module.exports = {
     appUpdater
 };
+
