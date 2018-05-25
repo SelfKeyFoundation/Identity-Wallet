@@ -1,0 +1,8 @@
+.ledger-import-main-container(layout="column", layout-align="center center")
+    .steps-wrapper
+        .step Step 1: Plug in the device via USB and unlock it with your PIN.
+        .step Step 2: Make sure "Browser Support" is DISABLED in settings.
+        .step Step 3: Open the Ethereum application on the device.
+        .step Step 4: Press "Connect To Ledger" below.
+    md-button.blue(ng-click="$root.openConnectingToLedgerDialog($event)")
+        span connect to ledger

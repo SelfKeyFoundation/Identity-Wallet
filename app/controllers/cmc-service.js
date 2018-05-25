@@ -5,11 +5,16 @@ const path = require('path');
 const config = require('../config');
 const request = require('request');
 const async = require('async');
+const EventEmitter = require('events');
+
 
 module.exports = function (app) {
+    const eventEmitter = new EventEmitter();
+
 
     const loadCmcData = () => {
         request.get(config.cmcUrl, (error, httpResponse, result) => {
+
             let data = [];
             try {
                 data = JSON.parse(result);
@@ -37,24 +42,28 @@ module.exports = function (app) {
                                 symbol.priceBTC = item.priceBTC;
                                 symbol.priceETH = item.priceETH;
                                 electron.app.sqlLiteService.TokenPrice.edit(symbol).then(updateData => {
-                                    callback();
+                                    callback(null);
                                 }).catch(err => {
-                                    callback();
+                                    callback(err);
                                 });
+                            } else {
+                                callback(null);
                             }
                         } else {
                             electron.app.sqlLiteService.TokenPrice.add(item).then(insertData => {
-                                callback();
+                                callback(null);
                             }).catch(err => {
-                                callback();
+                                callback(err);
                             });
                         }
                     }).catch(err => {
-                        callback();
+                        callback(err);
                     });
                 }, function (err) {
+                    eventEmitter.emit('UPDATE');
                     setTimeout(loadCmcData, config.cmcUpdatePeriod);
                 });
+
             } else {
                 setTimeout(loadCmcData, config.cmcUpdatePeriod);
             }
@@ -66,6 +75,8 @@ module.exports = function (app) {
     controller.prototype.startUpdateData = () => {
         setTimeout(loadCmcData, 1000);
     }
+
+    controller.prototype.eventEmitter = eventEmitter;
 
     return controller;
 };

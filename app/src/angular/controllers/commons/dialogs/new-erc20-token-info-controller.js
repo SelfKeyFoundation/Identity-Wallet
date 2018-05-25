@@ -7,6 +7,7 @@ function NewERC20TokenInfoController($rootScope, $scope, $log, $q, $timeout, $md
     $scope.reloadTokensPrimise = null;
 
     $scope.cancel = (event) => {
+        $rootScope.$broadcast("token:added");
         $rootScope.$broadcast("piechart:reload");
         $mdDialog.cancel();
     };

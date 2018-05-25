@@ -27,13 +27,9 @@
                     span(ng-message="required") Field is Required
             md-input-container.sk-input-box.sk-input-non-floating.hide-input-invalid-mark
                 label {{ $root.DICTIONARY['country_of_residency'] }}
-                if (process.env.NODE_ENV === 'test')
-                    select#country(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
-                        option(id="{{item.name}}", value="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-                else
-                    md-select.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
-                        md-option(ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-                    .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
-                        span(ng-message="required") Field is Required
+                md-select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                    md-option(id="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
+                    span(ng-message="required") Field is Required
             md-button#submitBasic.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
                 span.small Create SelfKey ID

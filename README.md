@@ -1,6 +1,6 @@
 # Selfkey Identity Wallet
 
-[![Build Status](https://travis-ci.org/altninja/Identity-Wallet.svg?branch=standards)](https://travis-ci.org/altninja/Identity-Wallet) [![CircleCI](https://circleci.com/gh/altninja/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/altninja/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/1oal9hxddsx3a25f?svg=true)](https://ci.appveyor.com/project/altninja/identity-wallet) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet.svg?branch=dev)](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet) [![CircleCI](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/1oal9hxddsx3a25f?svg=true)](https://ci.appveyor.com/project/altninja/identity-wallet) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
@@ -9,16 +9,13 @@ The Official SelfKey Identity Wallet for Desktop
 ## Features
 
 * Storage of identity docs in the Identity Wallet locally on the user’s computer
-* ICO Marketplace where the user can view a list of available ICOs
-* ICO Details Page where the user can view ICO information and stake tokens
-* System to fetch a user’s staking status (stake/no-stake) for an ICO from the blockchain
-* Token staking flow
-* Token reclamation flow
-* Submission/upload of KYC package for processing to KYC-Chain
-* Monitoring of KYC verification status, notifications or activity/message feed for accepted, rejected, more info required.
-* Transfer of KEY
-* Viewing of token balances (KEY, ETH, related ICOs)
-* Viewing of transaction logs for KEY, ETH, related ICOs)
+* Marketplace where the user can view a list of available Exchanges
+* Exchange Details Page where the user can view Exchange information and stake KEY tokens
+* System to fetch a user’s staking status (stake/no-stake) for an Exchange from the blockchain
+* Token staking and reclamation flow
+* Submission / upload of KYC package for processing to KYC-Chain
+* Transfer of ETH, KEY and Custom ERC20 Tokens
+* Viewing of token balances and transaction logs for ETH, KEY and ERC20 Tokens
 
 ## Prerequisites
 
@@ -35,7 +32,7 @@ The Official SelfKey Identity Wallet for Desktop
 
 ### Build on Windows
 
-    npm run makewin
+    npm run make-win
 
 ## Development
 
@@ -45,13 +42,7 @@ The Official SelfKey Identity Wallet for Desktop
 
 ### Run the App on Windows
 
-    npm run startwin
-
-## Tests
-
-### Linting
-
-    npm run lint
+    npm run start-win
 
 ### Tests
 

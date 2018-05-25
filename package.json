@@ -1,20 +1,43 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "2.0.0-alpha-42",
-  "description": "Selfkey Identity Wallet",
-  "repository": "https://github.com/SelfKeyFoundation/Identity-Wallet",
+  "version": "0.0.1",
+  "description": "The Official SelfKey Identity Wallet for Desktop",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SelfKeyFoundation/Identity-Wallet.git"
+  },
+  "keywords": [
+    "selfkey",
+    "identity",
+    "wallet",
+    "cryptocurrency",
+    "ethereum",
+    "erc20"
+  ],
+  "author": {
+    "name": "SelfKey Foundation",
+    "email": "info@selfkey.org",
+    "url": "https://selfkey.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/SelfKeyFoundation/Identity-Wallet/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
   "main": "./app/main.js",
   "scripts": {
     "start": "gulp && ./node_modules/.bin/electron-forge start -- dev",
     "prod": "gulp && ./node_modules/.bin/electron-forge start -- prod",
     "package": "gulp && ./node_modules/.bin/electron-forge package",
-    "package-win": "gulp && ./node_modules/.bin/electron-forge package --arch=ia32 --platform=win32",
     "make": "gulp && ./node_modules/.bin/electron-forge make",
-    "make-win": "gulp && ./node_modules/.bin/electron-forge make --platform=win32 --arch=ia32",
+    "package-win": "gulp && node_modules\\.bin\\electron-forge package --platform=win32 --arch=ia32",
+    "make-win": "gulp && node_modules\\.bin\\electron-forge make --platform=win32 --arch=ia32",
     "start-win": "gulp && node_modules\\.bin\\electron-forge start -- dev",
-    "start-auto": "gulp && gulp start",
-    "make-auto": "gulp && gulp make",
     "full": "bash full.sh",
     "test": "node test/test.js",
     "lint": "eslint 'app/src/**/*.js'",
@@ -36,15 +59,15 @@
   },
   "dependencies": {
     "@uirouter/angularjs": "1.0.15",
-    "angular": "1.6.7",
-    "angular-animate": "1.6.7",
-    "angular-aria": "1.6.7",
+    "angular": "1.7.0",
+    "angular-animate": "1.7.0",
+    "angular-aria": "1.7.0",
     "angular-local-storage": "0.7.1",
     "angular-localforage": "1.3.7",
     "angular-material": "1.1.7",
-    "angular-messages": "1.6.7",
+    "angular-messages": "1.7.0",
     "angular-qrcode": "7.2.0",
-    "angular-sanitize": "^1.6.9",
+    "angular-sanitize": "1.7.0",
     "angular-zxcvbn": "3.2.2",
     "async": "2.6.0",
     "babel-runtime": "^6.26.0",
@@ -63,9 +86,11 @@
     "fibers": "2.0.0",
     "fs-extra": "5.0.0",
     "google-charts": "1.0.0",
+    "is-online": "^7.0.0",
     "keccak": "1.2.0",
     "keythereum": "1.0.2",
     "knex": "0.14.4",
+    "ledger-wallet-provider": "2.0.1-beta.2",
     "mime-types": "2.1.17",
     "mv": "2.1.1",
     "qrcode-generator": "1.3.1",
@@ -75,6 +100,7 @@
     "sqlite3": "3.1.13",
     "uuid": "3.0.0",
     "web3": "1.0.0-beta.33",
+    "web3-provider-engine": "14.0.4",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {

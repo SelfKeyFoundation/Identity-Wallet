@@ -3,7 +3,8 @@
 const CommonUtils = requireAppModule('angular/classes/common-utils');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService;
+
+let $rootScope, $q, $interval, SqlLiteService, Web3Service, CommonService, SignService;
 
 let priceUpdaterInterval, balanceUpdaterInterval;
 
@@ -21,6 +22,7 @@ class Token {
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set Web3Service(value) { Web3Service = value; }
     static set CommonService(value) { CommonService = value; }
+    static set SignService(value) { SignService = value; }
 
 
     /**
@@ -77,7 +79,7 @@ class Token {
     }
 
     getFormattedBalanceInUSD() {
-        return CommonService.commasAfterNumber(this.balanceInUsd, 3);
+        return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
 
     generateContractData(toAddress, value) {
@@ -190,7 +192,6 @@ class Token {
      */
     generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, chainID) {
         let defer = $q.defer();
-
         let promise = Web3Service.getTransactionCount('0x' + this.wallet.getPublicKeyHex());
         promise.then((nonce) => {
             let genResult = this.generateContractData(toAddressHex, valueWei);
@@ -206,11 +207,23 @@ class Token {
                     data: EthUtils.sanitizeHex(genResult.data),
                     chainId: chainID
                 }
+             
+                SignService.signTransaction({
+                    rawTx: rawTx,
+                    profile: this.wallet.profile,
+                    privateKey: this.wallet.privateKey,
+                    walletAddress: '0x' + this.wallet.getPublicKeyHex()
+                }).then(res => {
+                    defer.resolve(res);
+                }).catch(err => {
+                    if (this.wallet.profile == 'ledger') {
+                        $rootScope.openConfirmLedgerTransactionWarningDialog();
+                        defer.reject('');
+                        return;
+                    }
+                    defer.reject(err);
+                });
 
-                let eTx = new Tx(rawTx);
-                eTx.sign(this.wallet.privateKey);
-
-                defer.resolve('0x' + eTx.serialize().toString('hex'));
             }
         }).catch((error) => {
             defer.reject(error);
