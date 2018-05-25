@@ -3,42 +3,49 @@
         "key": "first_name",
         "category": "global_attribute",
         "type": "static_data",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "last_name",
         "category": "global_attribute",
         "type": "static_data",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "middle_name",
         "category": "global_attribute",
         "type": "static_data",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "country_of_residency",
         "category": "global_attribute",
         "type": "static_data",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "national_id",
         "category": "id_document",
         "type": "document",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "id_selfie",
         "category": "id_document",
         "type": "document",
-        "entity": ["individual"]
+        "entity": ["individual"],
+        "isInitial": 1
     },
     {
         "key": "email",
         "category": "global_attribute",
         "type": "static_data",
-        "entity": ["individual", "company"]
+        "entity": ["individual", "company"],
+        "isInitial": 1
     }
 ]

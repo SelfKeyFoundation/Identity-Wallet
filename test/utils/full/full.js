@@ -1,7 +1,6 @@
-const 
-	chalk = require("chalk")
-	exec = require("child_process").exec
-	config = require('../../config/config.js')
+const chalk = require("chalk")
+const exec = require("child_process").exec
+const config = require('../../config/config.js')
 
 function fullClip() {
 	exec(config.fullCmd, err => {
@@ -13,4 +12,4 @@ function fullClip() {
 	})
 }
 
-fullClip();
+fullClip()
