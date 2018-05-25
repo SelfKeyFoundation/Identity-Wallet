@@ -307,7 +307,7 @@ function onReady(app) {
 }
 
 function onActivate(app) {
-    log.info("onActivatet");
+    log.info("onActivate");
     return function () {
         if (app.win === null) {
             onReady(app);
