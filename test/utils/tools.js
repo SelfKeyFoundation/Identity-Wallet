@@ -16,13 +16,19 @@ function init() {
 	})
 }
 
+// function appStart() {
+// 	return new Promise((resolve, reject) => {
+// 		if (process.env.OSENV == 'windows') {
+// 			resolve(app.start())
+// 		} else {
+// 			init().then(() => resolve(app.start()))
+// 		}
+// 	})
+// }
+
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV == 'windows') {
-			resolve(app.start())
-		} else {
-			init().then(() => resolve(app.start()))
-		}
+		resolve(app.start())
 	})
 }
 
