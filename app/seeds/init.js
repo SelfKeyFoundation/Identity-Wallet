@@ -1,6 +1,5 @@
 const user = require('os').userInfo().username
-const userDataPath = '/Users/' + user + '/Library/Application Support/Electron/'
-
+const userDataPath = electron.app.getPath('userData')
 const countriesList = require('../assets/data/country-list.json')
 const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json')
 const ethTokens = require('../assets/data/eth-tokens.json')
