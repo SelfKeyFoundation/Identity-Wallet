@@ -1,6 +1,7 @@
 image: Visual Studio 2017
 environment:
   OSENV: windows
+  OUTPUT: C:\projects\identity-wallet\sk-windows-$(APPVEYOR_BUILD_VERSION).zip
 platform:
   - x64
 init:
@@ -18,5 +19,5 @@ build_script:
 test_script:
   - npm run test
 after_test:
-  - ps: . C:\projects\identity-wallet\compress.ps1
-  - appveyor PushArtifact C:\projects\identity-wallet\sk-windows$(APPVEYOR_BUILD_VERSION).zip
+  - ps: . C:\projects\identity-wallet\compress.ps1 -output $OUTPUT
+  - appveyor PushArtifact $OUTPUT
