@@ -8,7 +8,10 @@ module.exports = {
 	connection: {
 		filename: dbFilePath
 	},
+	migrations: {
+		directory: __dirname + '/migrations'
+	},
 	seeds: {
-		directory: './seeds'
+		directory: __dirname + '/seeds'
 	}
 }
