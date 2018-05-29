@@ -31,22 +31,11 @@
   ],
   "main": "./app/main.js",
   "scripts": {
-    "start": "gulp && ./node_modules/.bin/electron-forge start -- dev",
-    "prod": "gulp && ./node_modules/.bin/electron-forge start -- prod",
-    "package": "gulp && ./node_modules/.bin/electron-forge package",
-    "make": "gulp && ./node_modules/.bin/electron-forge make --osx-sign",
-    "package-win": "gulp && node_modules\\.bin\\electron-forge package --platform=win32 --arch=ia32",
-    "make-win": "gulp && node_modules\\.bin\\electron-forge make --platform=win32 --arch=ia32",
-    "start-win": "gulp && node_modules\\.bin\\electron-forge start -- dev",
-    "full": "bash full.sh",
-    "test": "node test/test.js",
-    "lint": "eslint 'app/src/**/*.js'",
-    "precommit": "lint-staged",
-    "cz": "git-cz",
-    "docker": "OSENV=docker docker-compose build && docker-compose up -d",
-    "mig-new": "knex migrate:make",
-    "mig-test": "node test/migrate.js",
-    "eb": "electron-builder"
+    "dev": "gulp && electron-webpack dev",
+    "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
+    "compile": "electron-webpack",
+    "dist": "yarn compile && electron-builder",
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -71,16 +60,10 @@
     "angular-sanitize": "1.7.0",
     "angular-zxcvbn": "3.2.2",
     "async": "2.6.0",
-    "babel-runtime": "^6.26.0",
     "bignumber.js": "4.1.0",
     "bluebird": "3.5.1",
     "crypto": "1.0.1",
     "decompress": "4.2.0",
-    "electron-compile": "6.4.2",
-    "electron-log": "2.2.14",
-    "electron-settings": "3.1.4",
-    "electron-squirrel-startup": "1.0.0",
-    "electron-updater": "^2.18.2",
     "ethereumjs-tx": "1.3.3",
     "ethereumjs-util": "5.1.2",
     "fibers": "2.0.0",
@@ -89,7 +72,7 @@
     "is-online": "^7.0.0",
     "keccak": "1.2.0",
     "keythereum": "1.0.2",
-    "knex": "0.14.4",
+    "knex": "^0.14.6",
     "ledger-wallet-provider": "2.0.1-beta.2",
     "mime-types": "2.1.17",
     "mv": "2.1.1",
@@ -97,52 +80,31 @@
     "request": "2.83.0",
     "secp256k1": "3.2.5",
     "sjcl": "1.0.6",
-    "sqlite3": "3.1.13",
+    "source-map-support": "^0.5.5",
+    "sqlite3": "^4.0.0",
     "uuid": "3.0.0",
     "web3": "1.0.0-beta.33",
     "web3-provider-engine": "14.0.4",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "6.24.1",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-es2015": "6.24.1",
-    "chai": "^4.1.2",
-    "chalk": "^2.4.1",
-    "commitizen": "^2.10.1",
-    "cz-conventional-changelog": "^2.1.0",
-    "delay": "^2.0.0",
-    "electron": "1.7.12",
-    "electron-builder": "^20.15.3",
-    "electron-forge": "5.2.2",
-    "electron-prebuilt-compile": "1.7.9",
-    "eslint": "^4.15.0",
-    "eslint-config-prettier": "^2.8.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-mocha": "^4.11.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-prettier": "^2.3.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "gulp": "3.9.1",
-    "gulp-angular-templatecache": "2.0.0",
-    "gulp-pug": "3.3.0",
-    "gulp-rename": "1.2.2",
-    "gulp-sass": "3.1.0",
-    "gulp-token-replace": "1.0.4",
-    "gulp-watch": "4.3.11",
-    "husky": "^0.14.3",
-    "lint-staged": "^6.1.0",
-    "mocha": "^5.2.0",
-    "node-notifier": "5.1.2",
-    "node-sass": "4.6.1",
-    "prettier": "^1.13.0",
-    "require-reload": "0.2.2",
-    "run-sequence": "2.1.0",
-    "serial-mocha": "0.0.4",
-    "spectron": "3.7.3",
-    "vinyl-source-stream": "1.1.0"
+    "electron": "1.7.15",
+    "electron-builder": "^20.11.1",
+    "electron-log": "^2.2.14",
+    "electron-rebuild": "^1.7.3",
+    "electron-settings": "^3.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-webpack": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-angular-templatecache": "^2.2.1",
+    "gulp-pug": "^4.0.1",
+    "gulp-sass": "^4.0.1",
+    "gulp-watch": "^5.0.0",
+    "run-sequence": "^2.2.1",
+    "webpack": "^4.8.1"
+  },
+  "resolutions": {
+    "webpack-sources": "1.0.1"
   },
   "migrations": {
     "version": "20180508093508"
@@ -152,56 +114,5 @@
   },
   "build": {
     "appId": "org.selfkey.wallet"
-  },
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "dmg"
-        ],
-        "linux": [
-          "zip"
-        ]
-      },
-      "electronPackagerConfig": {
-        "packageManager": "npm",
-        "name": "selfkey-identity-wallet",
-        "productName": "SelfKey Identity Wallet",
-        "overwrite": true,
-        "asar": true,
-        "icon": "assets/icons/selfkey",
-        "ignore": [
-          "gulp-tasks",
-          "wallet-web-app"
-        ]
-      },
-      "electronInstallerDMG": {
-        "name": "SelfKey Identity Wallet",
-        "icon": "./assets/icons/mac/selfkey.icns",
-        "background": "./assets/backgrounds/mac/installer.jpg",
-        "overwrite": true
-      },
-      "electronWinstallerConfig": {
-        "name": "selfkey-identity-wallet",
-        "title": "SelfKey Identity Wallet",
-        "authors": "Selfkey Foundation"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "SelfKey Identity Wallet"
-      }
-    },
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
