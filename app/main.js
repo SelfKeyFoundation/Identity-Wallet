@@ -136,19 +136,23 @@ function onReady(app) {
             minHeight: 800,
             //fullscreen: true,
             webPreferences: {
-                nodeIntegration: true,
+                nodeIntegration: false,
                 webSecurity: true,
                 //experimentalFeatures: true,
                 disableBlinkFeatures: 'Auxclick',
                 devTools: app.config.app.debug,
-                preload: path.join(__dirname, 'preload.js')
+                preload: path.join(app.dir.desktopApp, 'preload.js')
             },
             icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
         });
 
-        let webAppPath = `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/test.html`;
+        let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
 
-        app.win.loadURL(webAppPath);
+        app.win.loadURL(url.format({
+            pathname: webAppPath,
+            protocol: 'file:',
+            slashes: true
+        }));
 
         if (app.config.app.debug) {
             log.info('app is running in debug mode');
@@ -174,7 +178,7 @@ function onReady(app) {
 
         if (!isDevMode()) {
             // Initate auto-updates
-            //appUpdater();
+            appUpdater();
         }
 
         app.win.webContents.on('did-finish-load', () => {
@@ -422,13 +426,15 @@ function handleSquirrelEvent() {
  *
  */
 function isDevMode() {
-    if (process.env.NODE_ENV === 'dev') {
-        return true;
+    if (process.argv.length > 2) {
+        if (process.argv[2] === 'dev') {
+            return true;
+        }
     }
-    return true;
+    return false;
 }
 
-function buildConfig(electron) { 
+function buildConfig(electron) {
     let config = require('./config');
 
     const envConfig = isDevMode() ? config.default : config.production;
