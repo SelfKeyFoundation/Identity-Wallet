@@ -1,4 +1,4 @@
-const appPackage = require(__dirname + "/../package.json");
+const appPackage = require(__dirname + "/../../package.json");
 const config = require('./config');
 const defaultWindowOpen = window.open;
 
@@ -6,12 +6,12 @@ window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
     let midRoute = isNear ? '/' : '/src/';
     let path = __dirname + midRoute + moduleName;
-    return require(path);
+    return require(`${path}`);
 }
 
 window.requireNodeModule = function (moduleName) {
     if (appPackage.dependencies[moduleName]) {
-        return require(moduleName);
+        return require(`${moduleName}`);
     }
     return null;
 }
