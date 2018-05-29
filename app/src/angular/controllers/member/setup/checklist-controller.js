@@ -15,7 +15,7 @@ function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
     }
 
     $scope.skip = (event) => {
-        $state.go('member.dashboard.main');
+        $state.go('member.id-wallet.main');
     }
 };
 
