@@ -19,7 +19,7 @@ function GuestLoadingController($rootScope, $scope, $log, $timeout, $state, $sta
             if ($stateParams.redirectTo === 'guest.create.step-5') {
                 $scope.header = 'Wallet Setup Complete';
                 $timeout(() => {
-                    goTo($stateParams.redirectTo);
+                    goTo("member.dashboard.main");
                 }, 2000);
             }
         }
