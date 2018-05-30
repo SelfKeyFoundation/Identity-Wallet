@@ -6,6 +6,7 @@
     .content-wrapper.sk-box.shadowed
         .header
             span.none-select-text Step 2: Confirm Password
+            sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancel($event)")
         form.content(name="passwordForm", layout="column")
             .icon
                 img(src='assets/images/logos/icon-confirm-password.png' height=54)
