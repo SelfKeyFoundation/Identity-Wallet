@@ -51,6 +51,8 @@ class Wallet {
         this.startBalanceUpdater();
 
         this.initialBalancePromise = this.loadBalance();
+
+        this.loadTokens();
     }
 
     getPrivateKey() {
