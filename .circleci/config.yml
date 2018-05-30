@@ -17,9 +17,6 @@ jobs:
           name: Install Gulp
           command: sudo npm i -g gulp-cli electron-packager
       - run:
-          name: Install Yarn
-          command: sudo npm i -g yarn
-      - run:
           name: Install Node Packages
           command: yarn
       - run:
