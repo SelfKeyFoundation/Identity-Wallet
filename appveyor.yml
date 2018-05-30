@@ -12,7 +12,7 @@ install:
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
-  - npm i --global yarn
+  - npm i -g yarn
   - npm i --no-prune
 build_script:
   - yarn dist
