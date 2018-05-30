@@ -507,7 +507,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         cancelEstimatedGasCheck();
     });
 
-    $rootScope.$on('sign:retry', (event) => {
+    $rootScope.$on('tx-sign:retry', (event) => {
         $scope.startSend(event);
     });
 };

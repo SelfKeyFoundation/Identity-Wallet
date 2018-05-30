@@ -342,7 +342,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
 
     
     $rootScope.broadcastRetryToSign = (event) => {
-        $rootScope.$broadcast('sign:retry', event);
+        $rootScope.$broadcast('tx-sign:retry', event);
     };
 
     $rootScope.broadcastKeyPress = (event) => {
