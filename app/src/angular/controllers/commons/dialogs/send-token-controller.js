@@ -276,7 +276,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             startTxCheck();
         }).catch((error) => {
             error = error.toString();
-            CommonService.showToast('error', error, 20000);
+            if (error.indexOf('Insufficient funds') == -1) {
+                CommonService.showToast('error', error, 20000);
+            }
             $scope.errors.sendFailed = error;
             // reset view state
             setViewState();
