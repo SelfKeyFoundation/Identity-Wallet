@@ -22,30 +22,24 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
   };
 
 
-  $scope.connectToLedger = () => {
+  $scope.getAccounts = () => {
     $scope.connectionFailed = false;
     $scope.isConnecting = true;
-
-    LedgerService.connect().then(() => {
-      LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
-        if (!accounts || accounts.length == 0) {
-          onError();
-          return;
-        }
-
-        $scope.closeDialog();
-        $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUENTITY_PER_PAGE);
-      }).catch(err => {
+    debugger;
+    LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
+      if (!accounts || accounts.length == 0) {
         onError();
-      });
+        return;
+      }
 
-    }).catch((err) => {
-      $scope.isConnecting = false;
-      $scope.connectionFailed = true;
+      $scope.closeDialog();
+      $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUENTITY_PER_PAGE);
+    }).catch(err => {
+      onError();
     });
   };
 
-  $scope.connectToLedger();
+  $scope.getAccounts();
 };
 
 module.exports = ConnectingToLedgerController;

@@ -266,11 +266,6 @@ class Wallet {
             }).then(res => {
                 defer.resolve(res);
             }).catch(err => {
-                if (this.profile == 'ledger') {
-                    $rootScope.openConfirmLedgerTransactionWarningDialog();
-                    defer.reject('');
-                    return;
-                }
                 defer.reject(err);
             });
            

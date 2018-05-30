@@ -4,7 +4,7 @@ const Wallet = requireAppModule('angular/classes/wallet');
 function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, baseAccounts, ACCOUNTS_QUENTITY_PER_PAGE) {
   'ngInject'
   $scope.currentAccounts = baseAccounts;
-  $scope.selectedAddress = null;
+  $scope.selectedAccount = null;
   $scope.pagerStart = 0;
 
   $scope.cancel = () => {
@@ -43,7 +43,7 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
     LedgerService.getAccountsWithBalances({ start: newStart, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
       accounts = accounts || [];
       $scope.currentAccounts = accounts;
-      $scope.selectedAddress = null;
+      $scope.selectedAccount = null;
       $scope.pagerStart = newStart;
       resetLoadingStatuses();
     }).catch(err => {
@@ -63,11 +63,12 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
   };
 
   $scope.chooseAccount = () => {
-    let address = $scope.selectedAddress;
-    if (!address) {
+    let selectedAccount = $scope.selectedAccount;
+    if (!selectedAccount) {
       return;
     }
 
+    let address = selectedAccount.address;
     if (address.substring(0, 2) == '0x') {
       address = address.substring(2, address.length);
     }
@@ -82,6 +83,7 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
         initialPromises.push($rootScope.wallet.loadTokens());
 
         $q.all(initialPromises).then((resp) => {
+          $rootScope.selectedLedgerAccount = selectedAccount;
           nextStep(data.isSetupFinished);
         }).catch((error) => {
           CommonService.showToast('error', 'error');

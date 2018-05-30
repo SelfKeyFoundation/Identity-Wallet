@@ -282,6 +282,36 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openConfirmLedgerTxInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function(){},
+            templateUrl: 'common/dialogs/confirm-ledger-tx-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openUnlockLedgerInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function(){},
+            templateUrl: 'common/dialogs/unlock-ledger-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    
+
     $rootScope.broadcastKeyPress = (event) => {
         $rootScope.$broadcast('selfkey:on-keypress', event.key);
     }

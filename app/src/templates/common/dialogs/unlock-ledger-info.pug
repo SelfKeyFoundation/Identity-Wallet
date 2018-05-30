@@ -1,0 +1,9 @@
+md-dialog.unlock-ledger-info-container(aira-lable="")
+    .main-container
+        .body-container
+            .header-title Please Unlock Your Ledger
+            .items 
+                .item You need to confirm this transaction on your Ledger in order to proceed. Please unlock it with your PIN.
+            .buttons-container
+                md-button.gray.md-ink-ripple.try-again-btn(ng-click="cancelConectToLedger($event)")
+                    span.primary try againg
