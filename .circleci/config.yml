@@ -17,15 +17,18 @@ jobs:
           name: Install Gulp
           command: sudo npm i -g gulp-cli electron-packager
       - run:
+          name: Install Yarn
+          command: npm install --global yarn
+      - run:
           name: Install Node Packages
-          command: npm i
+          command: yarn
       - run:
           name: Build App
-          command: NODE_ENV=test OSENV=circle npm run make
+          command: NODE_ENV=test OSENV=circle yarn dist
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run:
-          name: Run Spectron Tests
-          command: NODE_ENV=test OSENV=circle npm run test
+#      - run:
+#          name: Run Spectron Tests
+#          command: NODE_ENV=test OSENV=circle yarn test

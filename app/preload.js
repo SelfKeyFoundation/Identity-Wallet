@@ -1,20 +1,34 @@
 const appPackage = require(__dirname + "/../package.json");
 const config = require('./config');
 const defaultWindowOpen = window.open;
+window.path = require('path');
+window.config = config;
+window.async = require('async');;
+
+window.zxcvbn = require('zxcvbn');
+window.qrcode = require('qrcode-generator');
+
+require('@uirouter/angularjs');
+require('angular-material');
+require('angular-messages');
+require('angular-sanitize');
+require('angular-local-storage');
+require('angular-qrcode');
+require('angular-zxcvbn');
+
+window.__dirname = __dirname;
 
 window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
-    let midRoute = isNear ? '/' : '/src/';
+    let midRoute = isNear ? '/' : '/../renderer/';
     let path = __dirname + midRoute + moduleName;
     return require(path);
 }
 
 window.requireNodeModule = function (moduleName) {
-    if (appPackage.dependencies[moduleName]) {
-        return require(moduleName);
-    }
-    return null;
+    return require(moduleName);
 }
+
 
 window.isDevMode = function () {
     if (process.argv.length > 2) {
@@ -42,8 +56,7 @@ window.Web3 = require('web3');
 window.Tx = require('ethereumjs-tx');
 
 process.once('loaded', function () {
-    window.async = require('async');
-    window.setImmediate = require('async').setImmediate;
+    window.setImmediate = window.async.setImmediate;
 });
 
 window.open = function (url, ...args) {
@@ -54,3 +67,6 @@ window.open = function (url, ...args) {
     }
     return null;
 }
+
+window.require = requireNodeModule;
+window.module = module;

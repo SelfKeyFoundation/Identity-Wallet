@@ -141,18 +141,14 @@ function onReady(app) {
                 //experimentalFeatures: true,
                 disableBlinkFeatures: 'Auxclick',
                 devTools: app.config.app.debug,
-                preload: path.join(app.dir.desktopApp, 'preload.js')
+                preload: path.resolve(__dirname, 'preload.js'),
             },
-            icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
+            icon: path.resolve(__dirname, '../assets/icons/png/256x256.png')
         });
 
-        let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
-
-        app.win.loadURL(url.format({
-            pathname: webAppPath,
-            protocol: 'file:',
-            slashes: true
-        }));
+        const webAppPath = (isDevMode())? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html` : `file://${__dirname}/index.html`;
+        
+        app.win.loadURL(webAppPath);
 
         if (app.config.app.debug) {
             log.info('app is running in debug mode');
@@ -231,10 +227,11 @@ function onReady(app) {
                 center: true,
                 parent: app.win,
                 webPreferences: {
-                    nodeIntegration: true,
+                    nodeIntegration: false,
                     webSecurity: true,
                     disableBlinkFeatures: 'Auxclick',
                     devTools: app.config.app.debug,
+                    preload: path.join(app.dir.desktopApp, 'preload.js')
                 },
             });
             win.webContents.on('did-finish-load', () => {
@@ -426,10 +423,15 @@ function handleSquirrelEvent() {
  *
  */
 function isDevMode() {
-    if (process.argv.length > 2) {
-        if (process.argv[2] === 'dev') {
-            return true;
-        }
+    if (process.env.NODE_ENV === 'development') {
+        return true;
+    }
+    return false;
+}
+
+function isDebugging() {
+    if (process.env.DEV_TOOL === 'yes') {
+        return true;
     }
     return false;
 }
@@ -437,7 +439,7 @@ function isDevMode() {
 function buildConfig(electron) {
     let config = require('./config');
 
-    const envConfig = isDevMode() ? config.default : config.production;
+    const envConfig = isDevMode() || isDebugging() ? config.default : config.production;
     config = Object.assign(config, envConfig);
 
     delete config.default;

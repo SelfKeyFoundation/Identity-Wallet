@@ -12,12 +12,12 @@ install:
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
-  - npm i -g gulp-cli electron-packager
+  - npm i --global yarn
   - npm i --no-prune
 build_script:
-  - npm run make-win
-test_script:
-  - npm run test
+  - yarn dist
+#test_script:
+#  - npm run test
 after_test:
   - ps: . C:\projects\identity-wallet\compress.ps1 -output $OUTPUT
   - appveyor PushArtifact $OUTPUT
