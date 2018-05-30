@@ -16,8 +16,9 @@ install:
   - npm i --no-prune
 build_script:
   - yarn dist
-#test_script:
+test_script:
 #  - npm run test
+  - echo "skipping tests for now"
 after_test:
   - ps: . C:\projects\identity-wallet\compress.ps1 -output $OUTPUT
   - appveyor PushArtifact $OUTPUT

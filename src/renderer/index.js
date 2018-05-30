@@ -1,8 +1,7 @@
 'use strict';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
-const staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
-const path = window.path
+window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
 document.addEventListener('dragover', function (event) {
   event.preventDefault();
@@ -13,18 +12,6 @@ document.addEventListener('drop', function (event) {
   event.preventDefault();
   return false;
 }, false);
-
-/**
- *
- */
-
- /**
- * External Modules
- */
-
-
-
-
 
 /**
  *

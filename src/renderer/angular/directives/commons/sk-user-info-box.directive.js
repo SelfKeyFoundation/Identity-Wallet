@@ -11,7 +11,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
                 email: "",
                 name: "",
                 country_of_residency: "",
-                tempImage: 'static/assets/images/temp/avatar.jpg'
+                tempImage: window.staticPath + '/assets/images/temp/avatar.jpg'
             }
 
             let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
