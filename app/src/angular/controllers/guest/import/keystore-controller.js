@@ -36,7 +36,6 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
     }
 
     $scope.unlock = (event, theForm) => {
-        debugger;
         if (!theForm.$valid) return;
 
         if (!$scope.userInput.password) {

@@ -53,14 +53,11 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $scope.formData.sendAmount = angular.copy($scope.infoData.totalBalance);
     }
 
-    $rootScope.openUnlockLedgerInfoWindow();
-
     $scope.startSend = (event) => {
-        debugger;
         $scope.signedHex = null;
         let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
-
         let genRawTrPromise = generateRawTransaction(isEth);
+
         if (!genRawTrPromise) {
             return;
         }
@@ -71,8 +68,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         genRawTrPromise.then((signedHex) => {
             $scope.signedHex = signedHex;
             $scope.viewStates.showConfirmButtons = true;
+            $mdDialog.cancel();
         }).catch((error) => {
-            debugger;
+            $mdDialog.cancel();
             let processedErr = false;
             error = error.toString();
 
@@ -84,21 +82,24 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             if (isLedgerWallet) {
                 if (error.indexOf('Invalid status 6801') != -1) {
                     processedErr = true;
-                    $rootScope.openConfirmLedgerTransactionWarningDialog();
+                    $rootScope.openUnlockLedgerInfoWindow();
+                } else if (error.indexOf('Invalid status 6985') != -1) {
+                    processedErr = true;
+                    $rootScope.openRejectLedgerTxWarningDialog();
+                } else if (error == 'custom-timeout') {
+                    processedErr = true;
+                    $rootScope.openLedgerTimedOutWindow();
                 }
-                return;
             }
 
             if (error && !processedErr) {
                 CommonService.showToast('error', error, 20000);
             }
 
-            $scope.errors.sendFailed = error.toString();
+            $scope.errors.sendFailed = !processedErr ? error : '';
             // reset view state
             setViewState();
         });
-
-
     }
 
     $scope.confirmSend = (event, confirm) => {
@@ -223,7 +224,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
     }
 
-    // return null on faild validation
+    // returns null on faild validation
     function generateRawTransaction(isEth) {
         let sendToAddress = $scope.formData.sendToAddressHex;
         let sendAmount = $scope.formData.sendAmount;
@@ -262,17 +263,15 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     function sendEther() {
-        if ($scope.signedHex) {
+        if (!$scope.signedHex) {
             // reset view state
             setViewState();
             return;
         }
-
+        $scope.viewStates.step = 'transaction-status';
         $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
         $scope.sendPromise.then((resp) => {
             $scope.txHex = resp.transactionHash;
-
-            $scope.viewStates.step = 'transaction-status';
 
             startTxCheck();
         }).catch((error) => {
@@ -285,7 +284,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     function sendToken() {
-        if ($scope.signedHex) {
+        if (!$scope.signedHex) {
             // reset view state
             setViewState();
             return;
@@ -307,13 +306,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             // reset view state
             setViewState();
         });
-
     }
-
-
-
-
-
 
     function isNumeric(num) {
         num = "" + num; //coerce num to be a string
@@ -512,6 +505,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.$on('$destroy', () => {
         cancelTxCheck();
         cancelEstimatedGasCheck();
+    });
+
+    $rootScope.$on('sign:retry', (event) => {
+        $scope.startSend(event);
     });
 };
 

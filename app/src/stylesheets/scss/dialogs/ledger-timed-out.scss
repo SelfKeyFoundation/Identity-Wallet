@@ -1,5 +1,5 @@
 md-dialog {
-    &.unlock-ledger-info-container {
+    &.ledger-timed-out-container {
         min-height: inherit !important;
         min-width: inherit !important;
         display: block !important;
@@ -9,20 +9,7 @@ md-dialog {
         * {
             font-family: ProximaNovaRegular;
         }
-        .main-container {
-            position: relative;
-            margin-right: 18px;
-            margin-top: 18px;
-            .close-btn {
-                position: absolute;
-                right: -18px;
-                top: -18px;
-                cursor: pointer;
-                z-index: 1000;
-            }
-        }
         .body-container {
-           
             width: 425px;
             display: flex;
             flex-direction: column;
@@ -64,11 +51,10 @@ md-dialog {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
-                text-transform: uppercase;
-                >button {
-                    width: 140px;
+                > md-button {
+                    width: 100px;
                     color: #ffffff !important;
-                }
+                } 
             }
         }
     }

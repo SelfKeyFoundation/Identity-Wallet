@@ -5,14 +5,11 @@ const ledgerco = require('ledgerco');
 const EthereumTx = require('ethereumjs-tx');
 const { timeout, TimeoutError } = require('promise-timeout');
 
-const a = require('@ledgerhq/hw-transport');
-
-
 const CONFIG = require('../config');
 
 module.exports = function (app) {
-  let eth = null;
   let comm = null;
+
   const getNetworkId = () => {
     return CONFIG.chainId;
   }
@@ -21,9 +18,7 @@ module.exports = function (app) {
     return "44'/60'/0'/0";
   }
 
-
   const controller = function () { };
-
 
   async function getEth() {
     if (comm) {
@@ -32,12 +27,8 @@ module.exports = function (app) {
 
     comm = await ledgerco.comm_node.create_async();
 
-    eth = new ledgerco.eth(comm);
-    
-    return eth;
+    return new ledgerco.eth(comm);
   }
-
-
 
   function obtainPathComponentsFromDerivationPath(derivationPath) {
     // check if derivation path follows 44'/60'/x'/n pattern
@@ -52,8 +43,6 @@ module.exports = function (app) {
     return { basePath: matchResult[1], index: parseInt(matchResult[2], 10) };
   }
 
-
-
   controller.prototype.getAccounts = async function (args) {
     args = args || {};
 
@@ -67,14 +56,10 @@ module.exports = function (app) {
     let addresses = {};
     for (let i = indexOffset; i < indexOffset + accountsNo; i += 1) {
       let path = pathComponents.basePath + (pathComponents.index + i).toString();
-      // eslint-disable-next-line no-await-in-loop
-      let address = await eth.getAddress_async(
-        path//,
-        //this.askForOnDeviceConfirmation,
-        //chainCode
-      );
+      let address = await eth.getAddress_async(path);
       addresses[path] = address.address;
     }
+
     return addresses;
   };
 
@@ -83,15 +68,13 @@ module.exports = function (app) {
   async function _signTransaction(txData, derivationPath) {
     let eth = await getEth();
     let account = await eth.getAddress_async(derivationPath);
-    console.log('very important hereeeeeeeeeeeeeeeeeeeeeee');
-    console.log(account,txData.from);
     if (!account || account.address != txData.from) {
-      throw new Error('invalid address');
+      throw new Error('Invalid address');
     }
 
     // Encode using ethereumjs-tx
     const tx = new EthereumTx(txData);
-    const chainId = parseInt(getNetworkId(), 10);
+    const chainId = getNetworkId();
 
     // Set the EIP155 bits
     tx.raw[6] = Buffer.from([chainId]); // v
@@ -101,16 +84,9 @@ module.exports = function (app) {
     // Encode as hex-rlp for Ledger
     const hex = tx.serialize().toString("hex");
 
-    
     // Pass to _ledger for signing
-    let result = null;
-    try {
-    result = await eth.signTransaction_async("44'/60'/0'/0", hex); // TODO path
-    } catch(err) {
-      throw new Error(
-        "Custom error tato"
-      );
-    }
+    let result = await (await getEth()).signTransaction_async(derivationPath, hex);
+
     // Store signature in transaction
     tx.v = Buffer.from(result.v, "hex");
     tx.r = Buffer.from(result.r, "hex");
@@ -128,34 +104,21 @@ module.exports = function (app) {
     return `0x${tx.serialize().toString("hex")}`;
   }
 
-
   controller.prototype.signTransaction = async (args) => {
     args.dataToSign.from = args.address;
     let derivationPath = args.derivationPath;
     return new Promise((resolve, reject) => {
-
       let signPromise = _signTransaction(args.dataToSign, derivationPath);
 
-      timeout(signPromise, 30000)
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((err) => {
-          console.log('catch is err', err);
-          if (err instanceof TimeoutError) {
-            console.log('aq ar mevida es yle');
-            return reject('Timed out!');
-          }
-          reject(err);
-        });
-
+      timeout(signPromise, 30000).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        if (err instanceof TimeoutError) {
+          return reject('custom-timeout');
+        }
+        reject(err.toString());
+      });
     });
-
-
-
-
-
-
   };
 
   return controller;

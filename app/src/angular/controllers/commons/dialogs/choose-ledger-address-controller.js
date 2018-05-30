@@ -11,9 +11,17 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
     $mdDialog.cancel();
   };
 
-  let onError = () => {
-    CommonService.showToast('error', 'error');
+  let errMsgsMap = {
+    'No device found': 'Device not found',
+    'Invalid status 6801': 'Ledger has timed out and must be unlocked again with PIN'
   };
+
+  let onError = (err) => {
+    err = err.toString();
+    err = errMsgsMap[err] || err;
+    CommonService.showToast('error', err);
+  };
+  
   let resetLoadingStatuses = () => {
     $scope.loadingBalancesIsInProgress = {
       next: false,
@@ -48,7 +56,7 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
       resetLoadingStatuses();
     }).catch(err => {
       resetLoadingStatuses();
-      onError();
+      onError(err);
     });
 
   };

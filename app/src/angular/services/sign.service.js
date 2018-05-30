@@ -28,7 +28,6 @@ function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerServ
     this.signTransaction = function (args) {
       let { rawTx, profile, privateKey, walletAddress } = args;
       if (profile == 'ledger') {
-        debugger;
         let derivationPath = $rootScope.selectedLedgerAccount.derivationPath;
         return this.signTransactionByLedger(rawTx, walletAddress, derivationPath);
       }

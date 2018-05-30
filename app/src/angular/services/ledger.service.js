@@ -75,7 +75,7 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
                     address,
                     derivationPath
                 }).then(res => {
-                    resolve(res.raw);
+                    resolve(res);
                 }).catch(err => {
                     reject(err);
                 })

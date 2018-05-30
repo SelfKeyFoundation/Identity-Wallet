@@ -25,7 +25,6 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
   $scope.getAccounts = () => {
     $scope.connectionFailed = false;
     $scope.isConnecting = true;
-    debugger;
     LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
       if (!accounts || accounts.length == 0) {
         onError();
