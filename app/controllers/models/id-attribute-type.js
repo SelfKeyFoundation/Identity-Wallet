@@ -44,7 +44,7 @@ module.exports = function (app, sqlLiteService) {
 
     Controller.create = (data) => {
         return new Promise((resolve, reject) => {
-            knex(TABLE_NAME).select().where("key", data.key).then((rows) => {
+            return knex(TABLE_NAME).select().where("key", data.key).then((rows) => {
                 if (rows && rows.length) {
                     resolve(rows[0]);
                 } else {
@@ -55,7 +55,7 @@ module.exports = function (app, sqlLiteService) {
                         entity: JSON.stringify(data.entity),
                         createdAt: new Date().getTime()
                     };
-                    knex(TABLE_NAME).insert(dataToSave).then((insertedIds) => {
+                    return knex(TABLE_NAME).insert(dataToSave).then((insertedIds) => {
                         dataToSave.id = insertedIds[0];
                         resolve(dataToSave);
                     }).catch((error) => {

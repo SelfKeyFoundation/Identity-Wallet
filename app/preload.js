@@ -3,7 +3,7 @@ const config = require('./config');
 const defaultWindowOpen = window.open;
 window.path = require('path');
 window.config = config;
-window.async = require('async');;
+window.async = require('async');
 
 window.zxcvbn = require('zxcvbn');
 window.qrcode = require('qrcode-generator');
@@ -18,6 +18,22 @@ require('angular-zxcvbn');
 
 window.__dirname = __dirname;
 
+window.isDevMode = function () {
+    if (process.env.NODE_ENV === 'development') {
+        return true;
+    }
+    return false;
+}
+
+window.isTestMode = function () {
+    if (process.env.MODE === 'test') {
+        return true;
+    }
+    return false;
+}
+
+window.electron = isTestMode() ? require('electron') : '';
+
 window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
     let midRoute = isNear ? '/' : '/../renderer/';
@@ -26,17 +42,14 @@ window.requireAppModule = function (moduleName, isNear) {
 }
 
 window.requireNodeModule = function (moduleName) {
-    return require(moduleName);
-}
+    console.log("moduleName", moduleName)
+    console.log("isTestMode", isTestMode())
 
-
-window.isDevMode = function () {
-    if (process.argv.length > 2) {
-        if (process.argv[2] === 'dev') {
-            return true;
-        }
+    if(isTestMode() && moduleName === 'electron'){
+        return window.electron;
+    } else {
+        return require(moduleName);
     }
-    return false;
 }
 
 window.appName = appPackage.productName;
@@ -70,3 +83,4 @@ window.open = function (url, ...args) {
 
 window.require = requireNodeModule;
 window.module = module;
+

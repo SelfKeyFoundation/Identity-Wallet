@@ -9,9 +9,9 @@ module.exports = {
 		filename: dbFilePath
 	},
 	migrations: {
-		directory: __dirname + '/migrations'
+		directory: path.resolve(__dirname, 'migrations')
 	},
 	seeds: {
-		directory: __dirname + '/seeds'
+		directory: path.resolve(__dirname, 'seeds')
 	}
 }

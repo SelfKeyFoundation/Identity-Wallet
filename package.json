@@ -90,8 +90,10 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chalk": "^2.4.1",
     "delay": "^3.0.0",
-    "electron": "2.0.2",
+    "electron": "^2.0.2",
     "electron-builder": "^20.15.1",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
@@ -105,6 +107,7 @@
     "gulp-watch": "^5.0.0",
     "mocha": "^5.2.0",
     "run-sequence": "^2.2.1",
+    "spectron": "^3.8.0",
     "webpack": "^4.8.1",
     "webpack-build-notifier": "^0.1.25"
   },
@@ -121,7 +124,9 @@
     "appId": "org.selfkey.wallet"
   },
   "electronWebpack": {
-    "whiteListedModules": ["source-map-support"],
+    "whiteListedModules": [
+      "source-map-support"
+    ],
     "main": {
       "extraEntries": [
         "@/preload.js"

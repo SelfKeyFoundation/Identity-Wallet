@@ -80,7 +80,7 @@ module.exports = function (app) {
         data.createdAt = new Date().getTime();
         return new Promise((resolve, reject) => {
 
-            knex.transaction((trx) => {
+            return knex.transaction((trx) => {
                 knex('tokens')
                     .transacting(trx)
                     .insert(data)
@@ -93,12 +93,12 @@ module.exports = function (app) {
                     .catch(trx.rollback);
             }).then((rowData) => {
                 walletTokens_selectById(rowData.id).then((walletData) => {
-                    resolve(walletData);
+                    return resolve(walletData);
                 }).catch((err) => {
-                    reject(err);
+                    return reject(err);
                 });
             }).catch((err) => {
-                reject(err);
+                return reject(err);
             });
         });
     }
@@ -116,9 +116,9 @@ module.exports = function (app) {
                 .where({ walletId: walletId, recordState: 1 });
 
             promise.then((rows) => {
-                resolve(rows);
+                return resolve(rows);
             }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
+                return reject({ message: "error_while_selecting", error: error });
             });
         });
     }
@@ -136,7 +136,7 @@ module.exports = function (app) {
                 rows && rows.length ? resolve(rows[0]) : resolve(null);
             }).catch((error) => {
                 console.log(error);
-                reject({ message: "error_while_selecting", error: error });
+                return reject({ message: "error_while_selecting", error: error });
             });
         });
     }
@@ -151,12 +151,12 @@ module.exports = function (app) {
         return new Promise((resolve, reject) => {
             insertIntoTable('wallet_tokens', data).then((rowData) => {
                 walletTokens_selectById(rowData.id).then((walletData) => {
-                    resolve(walletData);
+                    return resolve(walletData);
                 }).catch((err) => {
-                    reject(err);
+                    return reject(err);
                 });
             }).catch((err) => {
-                reject(err);
+                return reject(err);
             });
         });
     }
@@ -224,7 +224,7 @@ module.exports = function (app) {
                 promise = knex(table).transacting(trx).insert(data);
             }
 
-            promise.then((resp) => {
+            return promise.then((resp) => {
                 if (!resp || resp.length !== 1) {
                     return reject({ message: "error_while_creating" });
                 }
@@ -239,15 +239,15 @@ module.exports = function (app) {
 
                 selectPromise.then((rows) => {
                     if (rows && rows.length === 1) {
-                        resolve(rows[0]);
+                        return resolve(rows[0]);
                     } else {
-                        reject({ message: "error_while_creating" });
+                        return reject({ message: "error_while_creating" });
                     }
                 }).catch((error) => {
-                    reject({ message: "error_while_creating", error: error });
+                    return reject({ message: "error_while_creating", error: error });
                 });
             }).catch((error) => {
-                reject({ message: "error_while_creating", error: error });
+                return reject({ message: "error_while_creating", error: error });
             })
         });
     }
@@ -275,7 +275,7 @@ module.exports = function (app) {
                 promise = knex(table).transacting(trx).insert(data);
             }
 
-            promise.then((resp) => {
+            return promise.then((resp) => {
                 if (!resp || resp.length !== 1) {
                     return reject({ message: "error_while_creating" });
                 }
@@ -290,15 +290,15 @@ module.exports = function (app) {
 
                 selectPromise.then((rows) => {
                     if (rows && rows.length === 1) {
-                        resolve(rows[0]);
+                        return resolve(rows[0]);
                     } else {
-                        reject({ message: "error_while_creating" });
+                        return reject({ message: "error_while_creating" });
                     }
                 }).catch((error) => {
-                    reject({ message: "error_while_creating", error: error });
+                    return reject({ message: "error_while_creating", error: error });
                 });
             }).catch((error) => {
-                reject({ message: "error_while_creating", error: error });
+                return reject({ message: "error_while_creating", error: error });
             })
         });
     }
@@ -306,22 +306,22 @@ module.exports = function (app) {
     function updateById(table, data) {
         return new Promise((resolve, reject) => {
             data.updatedAt = new Date().getTime();
-            knex(table).update(data).where({'id': data.id}).then((updatedIds) => {
+            return knex(table).update(data).where({'id': data.id}).then((updatedIds) => {
                 if (!updatedIds || updatedIds != 1) {
                     return reject({ message: "error_while_updating" });
                 }
 
-                knex(table).select().where({'id': data.id}).then((rows) => {
+                return knex(table).select().where({'id': data.id}).then((rows) => {
                     if (rows && rows.length == 1) {
-                        resolve(rows[0]);
+                        return resolve(rows[0]);
                     } else {
-                        reject({ message: "error_while_updating" });
+                        return reject({ message: "error_while_updating" });
                     }
-                }).catch((error) => {
-                    reject({ message: "error_while_updating", error: error });
+                }).catch(error => {
+                    return reject({ message: "error_while_updating", error: error });
                 });
             }).catch((error) => {
-                reject({ message: "error_while_updating", error: error });
+                return reject({ message: "error_while_updating", error: error });
             })
         });
     }
@@ -333,10 +333,10 @@ module.exports = function (app) {
 
     function selectById(table, id) {
         return new Promise((resolve, reject) => {
-            knex(table).select().where('id', id).then((rows) => {
+            return knex(table).select().where('id', id).then((rows) => {
                 rows && rows.length ? resolve(rows[0]) : resolve(null);
             }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
+                return reject({ message: "error_while_selecting", error: error });
             });
         });
     }
@@ -355,10 +355,10 @@ module.exports = function (app) {
                 promise = knex(table).select().where(where);
             }
 
-            promise.then((rows) => {
-                resolve(rows);
+            return promise.then((rows) => {
+                return resolve(rows);
             }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
+                return reject({ message: "error_while_selecting", error: error });
             });
         });
     }

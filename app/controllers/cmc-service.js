@@ -35,7 +35,7 @@ module.exports = function (app) {
         });
     };
     const loadCmcData = () => {
-        request.get(config.cmcUrl, (error, httpResponse, result) => {
+        return request.get(config.cmcUrl, (error, httpResponse, result) => {
 
             let data = [];
             try {
@@ -60,29 +60,29 @@ module.exports = function (app) {
                 dataToInsert = sortCMCData(dataToInsert);
 
                 async.each(dataToInsert, function (item, callback) {
-                    electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
+                    return electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
                         if (symbol) {
                             if (item.priceUSD !== symbol.priceUSD || item.priceBTC !== symbol.priceBTC || item.priceETH !== symbol.priceETH) {
                                 symbol.priceUSD = item.priceUSD;
                                 symbol.priceBTC = item.priceBTC;
                                 symbol.priceETH = item.priceETH;
-                                electron.app.sqlLiteService.TokenPrice.edit(symbol).then(updateData => {
-                                    callback(null);
+                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).then(updateData => {
+                                    return callback(null);
                                 }).catch(err => {
-                                    callback(err);
+                                    return callback(err);
                                 });
                             } else {
-                                callback(null);
+                                return callback(null);
                             }
                         } else {
-                            electron.app.sqlLiteService.TokenPrice.add(item).then(insertData => {
-                                callback(null);
+                           return electron.app.sqlLiteService.TokenPrice.add(item).then(insertData => {
+                                return callback(null);
                             }).catch(err => {
-                                callback(err);
+                                return callback(err);
                             });
                         }
                     }).catch(err => {
-                        callback(err);
+                        return callback(err);
                     });
                 }, function (err) {
                     eventEmitter.emit('UPDATE');

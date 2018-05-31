@@ -145,12 +145,11 @@ function onReady(app) {
             },
             icon: path.resolve(__dirname, '../assets/icons/png/256x256.png')
         });
-
         const webAppPath = (isDevMode())? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html` : `file://${__dirname}/index.html`;
         
         app.win.loadURL(webAppPath);
 
-        if (app.config.app.debug) {
+        if (isDebugging()) {
             log.info('app is running in debug mode');
             app.win.webContents.openDevTools();
         }
