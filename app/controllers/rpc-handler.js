@@ -122,7 +122,8 @@ module.exports = function (app) {
                                 isSetupFinished: resp.isSetupFinished,
                                 publicKey: keystoreObject.address,
                                 privateKey: privateKey,
-                                keystoreFilePath: ksFilePathToSave
+                                keystoreFilePath: ksFilePathToSave, 
+                                profile: 'local'
                             });
                         }).catch((error) => {
                             if (error.code === 'SQLITE_CONSTRAINT') {
@@ -159,7 +160,8 @@ module.exports = function (app) {
                             isSetupFinished: wallet.isSetupFinished,
                             privateKey: privateKey,
                             publicKey: keystoreObject.address,
-                            keystoreFilePath: wallet.keystoreFilePath
+                            keystoreFilePath: wallet.keystoreFilePath,
+                            profile: wallet.profile
                         });
                     } else {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
