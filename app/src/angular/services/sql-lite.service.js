@@ -18,8 +18,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     // APP_SETTINGS = {}
     // WALLET_SETTINGS = {}
 
-    let tokenPriceUpdaterInterval = null;
-
     class SqlLiteService {
 
         constructor() {
