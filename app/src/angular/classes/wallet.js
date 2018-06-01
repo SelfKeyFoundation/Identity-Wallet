@@ -51,6 +51,8 @@ class Wallet {
         this.startBalanceUpdater();
 
         this.initialBalancePromise = this.loadBalance();
+
+        this.loadTokens();
     }
 
     getPrivateKey() {
@@ -128,7 +130,7 @@ class Wallet {
     }
 
     getFormattedBalanceInUSD() {
-        return CommonService.numbersAfterComma(this.balanceInUsd, 2);
+        return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
 
     getFormattedTokenBalanceInUSD(symbol) {
@@ -266,11 +268,6 @@ class Wallet {
             }).then(res => {
                 defer.resolve(res);
             }).catch(err => {
-                if (this.profile == 'ledger') {
-                    $rootScope.openConfirmLedgerTransactionWarningDialog();
-                    defer.reject('');
-                    return;
-                }
                 defer.reject(err);
             });
            

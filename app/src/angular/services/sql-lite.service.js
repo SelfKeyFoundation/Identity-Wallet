@@ -21,7 +21,14 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
     class SqlLiteService {
 
         constructor() {
-            if (!RPCService.ipcRenderer) {
+            if (RPCService.ipcRenderer) {
+                this.loadData().then((resp) => {
+                    $log.info("DONE", ID_ATTRIBUTE_TYPES_STORE, TOKENS_STORE, TOKEN_PRICES_STORE, WALLETS_STORE);
+                }).catch((error) => {
+                    $log.error(error);
+                });
+                this.listenForDataChange();
+            } else {
                 defer.reject({ message: 'electron RPC not available' });
             }
         }
@@ -35,13 +42,26 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             promises.push(this.loadGuideSettings());
             promises.push(this.loadIdAttributeTypes());
             promises.push(this.loadTokens());
-            promises.push(this.loadTokenPrices());
             promises.push(this.loadWallets());
             promises.push(this.loadCountries());
             promises.push(this.loadExchangeData());
 
             return $q.all(promises).then((data) => {
                 $rootScope.$broadcast(EVENTS.APP_DATA_LOAD);
+            });
+        }
+        /**
+         * Will listen for RPC data change event
+         */
+        listenForDataChange() {
+            return RPCService.on('ON_DATA_CHANGE', (event, dataType, data) => {
+                switch (dataType) {
+                    case 'TOKEN_PRICE':
+                        this.loadTokenPrices(data);
+                        break;
+                    default:
+                        break;
+                }
             });
         }
 
@@ -71,16 +91,14 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             });
         }
 
-        loadTokenPrices() {
-            return RPCService.makeCall('getTokenPrices', null).then((tokenPrices) => {
-                if (tokenPrices) {
-                    for (let i in tokenPrices) {
-                        let item = tokenPrices[i];
-                        TOKEN_PRICES_STORE[item.id] = item;
-                    }
-                    $log.info("TOKEN_PRICES", "LOADED", TOKEN_PRICES_STORE);
+        loadTokenPrices(data) {
+            if (data) {
+                for (let i in data) {
+                    let item = data[i];
+                    TOKEN_PRICES_STORE[item.id] = item;
                 }
-            });
+                $log.info("TOKEN_PRICES", "LOADED", TOKEN_PRICES_STORE);
+            }
         }
 
         loadWallets() {

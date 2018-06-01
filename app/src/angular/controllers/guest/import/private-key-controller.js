@@ -31,7 +31,7 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
         let importPromise = RPCService.makeCall('importPrivateKey', { privateKey: privateKey });
         importPromise.then((data) => {
             if (data.id) {
-                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey);
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, null, data.profile);
 
 
                 let initialPromises = [];

@@ -10,7 +10,8 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	after(tools.appStop)
 
 	it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
-		return tools.regStep(tools.app, '#agree')
+		return tools.scrollContainerToBottom(tools.app, '#container')
+			.then(() => tools.regStep(tools.app, '#agree'))
 			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
 	})
 
@@ -37,6 +38,12 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	it('TC06: Saving Private Key', () => {
 		return tools.app.client.getValue('#privateKey')
 			.then(() => tools.regStep(tools.app, '#printWalletNext'))
+			.then(() => tools.app.client.waitForVisible('#viewDashboard')) 
+	})
+
+	it('SEL39: Opening Selfkey ID', () => {
+		return tools.regStep(tools.app, '.sk-icon-button')
+			.then(() => tools.regStep(tools.app, '#selfkeyIdButton'));
 	})
 
 	it('TC07.01: Adding National ID and Selfie with ID Document', () => {
@@ -59,8 +66,9 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	})
 
 	it('TC07.02: Skipping ID and Selfie Upload', () => {
-		return delay(3000)
+		return delay(5000)
 			.then(() => tools.app.client.click('#skipDashboard'))
-			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
+			.then(() => tools.regStep(tools.app, '#idWalletInfoContinueButton'))
+			.then(() => tools.app.client.waitForVisible('.id-wallet-main'))   
 	})
 })
