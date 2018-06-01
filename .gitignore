@@ -20,5 +20,6 @@ release
 .vscode
 
 out/
+dist/
 
 client-secret.json

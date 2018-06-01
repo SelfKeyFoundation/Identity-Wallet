@@ -28,6 +28,7 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
  */
 const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
+const { appUpdater } = require('./autoupdater');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -175,18 +176,12 @@ function onReady(app) {
             app.win = null;
         });
 
-        /*
-		setAutoUpdaterListeners(app.win);
-		if (!isDevMode()) {
-			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
-			setTimeout(() => {
-				autoUpdater.checkForUpdates();
-			}, 5000);
+        if (!isDevMode()) {
+            // Initate auto-updates
+            appUpdater();
         }
-        */
 
         app.win.webContents.on('did-finish-load', () => {
-
             isOnline().then((isOnline) => {
                 log.info('is-online', isOnline);
                 if (!isOnline) {
@@ -196,18 +191,15 @@ function onReady(app) {
 
                 log.info('did-finish-load');
                 app.win.webContents.send('APP_START_LOADING');
-                electron.app.sqlLiteService.init().then(() => {
                     //start update cmc data
                     electron.app.cmcService.startUpdateData();
                     electron.app.airtableService.loadIdAttributeTypes();
                     electron.app.airtableService.loadExchangeData();
                     app.win.webContents.send('APP_SUCCESS_LOADING');
-                }).catch((error) => {
-                    log.error(error);
-                    app.win.webContents.send('APP_FAILED_LOADING');
-                });
+            }).catch((error) => {
+                log.error(error);
+                app.win.webContents.send('APP_FAILED_LOADING');
             });
-
         });
 
         app.win.webContents.on('did-fail-load', () => {
@@ -283,12 +275,12 @@ function onReady(app) {
                 { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
             ]
         },
-        {
-            label: 'View',
-            submenu: [
-                { role: 'togglefullscreen' }
-            ]
-        });
+            {
+                label: 'View',
+                submenu: [
+                    { role: 'togglefullscreen' }
+                ]
+            });
 
         Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
@@ -315,7 +307,7 @@ function onReady(app) {
 }
 
 function onActivate(app) {
-    log.info("onActivatet");
+    log.info("onActivate");
     return function () {
         if (app.win === null) {
             onReady(app);
@@ -352,28 +344,6 @@ function onWebContentsCreated(event, contents) {
     });
 }
 
-function setAutoUpdaterListeners(win) {
-    autoUpdater.on("error", (error) => {
-        log.warn('error: ' + error);
-    });
-
-    autoUpdater.on("checking-for-update", () => {
-        log.warn('checking-for-update');
-    });
-
-    autoUpdater.on("update-available", () => {
-        log.warn('update-available');
-    });
-
-    autoUpdater.on("update-not-available", () => {
-        log.warn('update-not-available');
-    });
-
-    autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-        log.warn('update-downloaded: ' + releaseName);
-        win.webContents.send('UPDATE_READY', releaseName);
-    });
-}
 
 function createKeystoreFolder() {
     if (!fs.existsSync(walletsDirectoryPath)) {

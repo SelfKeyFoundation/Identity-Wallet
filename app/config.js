@@ -27,7 +27,7 @@ const AppConfigConstant = {
 			},
 			notification: {
 				icon: "appointment-reminders-without-color",
-				title: "you got a notifixation",
+				title: "you got a notification",
 				color: "yellow"
 			}
 		},
