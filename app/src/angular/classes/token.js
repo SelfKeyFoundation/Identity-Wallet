@@ -192,7 +192,6 @@ class Token {
      */
     generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, chainID) {
         let defer = $q.defer();
-
         let promise = Web3Service.getTransactionCount('0x' + this.wallet.getPublicKeyHex());
         promise.then((nonce) => {
             let genResult = this.generateContractData(toAddressHex, valueWei);
@@ -217,11 +216,6 @@ class Token {
                 }).then(res => {
                     defer.resolve(res);
                 }).catch(err => {
-                    if (this.wallet.profile == 'ledger') {
-                        $rootScope.openConfirmLedgerTransactionWarningDialog();
-                        defer.reject('');
-                        return;
-                    }
                     defer.reject(err);
                 });
 

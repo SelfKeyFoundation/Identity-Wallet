@@ -70,7 +70,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
             promise.then((data) => {
                 $rootScope.walletImportData = data;
-                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
                 $state.go('guest.create.step-3', { walletData: data });
             }).catch((error) => {
@@ -103,7 +103,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
 
         unlockExistingWalletPromise.then((data) => {
-            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
             let initialPromises = [];
             initialPromises.push($rootScope.wallet.loadIdAttributes());
