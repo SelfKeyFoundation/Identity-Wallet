@@ -1,0 +1,35 @@
+.wallet-create-step-2(layout-fill, layout="column", layout-align="center center")
+
+    sk-icon(icon="selfkey", size-class="icon-size-57x65")
+    .title SELFKEY
+
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Step 2: Confirm Password
+        form.content(name="passwordForm", layout="column")
+            .icon
+                img(src='assets/images/logos/icon-confirm-password.png' height=54)
+            .title
+                | Confirm the password you just created. After this step, there is no way the
+                | password can be restored or reset, and SelfKey cannot you help if it is lost.
+
+            md-input-container.sk-input-box.sk-input-non-floating.no-error-spacer.sk-field-error-tooltip-parent
+                label Password
+                input#pwd2(name="password", type="password", ng-model="input.password", zxcvbn="passwordStrength", ng-required="true")
+                .sk-field-error-tooltip.center.default-top(ng-if="isWrongConfirmationPassword")
+                    span Wrong confirmation password.
+            .password-strength-container
+                .blocks-container
+                    .block(ng-class="{'active': passwordStrength.score >= 0 && input.password.length}")
+                    .block(ng-class="{'active': passwordStrength.score >= 1}")
+                    .block(ng-class="{'active': passwordStrength.score >= 2}")
+                    .block(ng-class="{'active': passwordStrength.score >= 3}")
+                .status-text-container
+                    span {{ getPasswordStrengthInfo() }}
+
+            .actions-wrapper
+                md-button.default.outline-blue(style="margin: 12px 0 12px 0;", ng-click="previousStep($event)")
+                    span.primary Back
+                md-button#pwd2Next.default.blue(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", sk-button-loading="walletCreationPromise.$$state.status")
+                    span.primary Next
+

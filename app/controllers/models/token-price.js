@@ -1,4 +1,4 @@
-const ethTokensList = require('./../../../assets/data/eth-tokens.json');
+const ethTokensList = require(__static + '/assets/data/eth-tokens.json');
 
 const Promise = require('bluebird');
 

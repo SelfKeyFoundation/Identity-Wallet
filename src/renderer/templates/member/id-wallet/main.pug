@@ -1,0 +1,86 @@
+.id-wallet-main
+    .center-container(layout="column", layout-align="start center")
+        .header-wrapper
+            span SelfKey Identity Wallet
+            //md-icon(md-svg-src="assets/images/icons/plus.svg")
+
+        .body-wrapper(layout="row", layout-align="start start")
+            .left-side-wrapper(layout="column")
+                .history-table-container
+                    .table-head
+                        span.table-head-text ID Wallet History
+                    .table-body
+                        table.history-table
+                            thead
+                                tr
+                                    td
+                                    td
+                                    td
+                            tbody
+                                tr(ng-repeat="item in walletHistoryList")
+                                    td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
+                                    td
+                                        sk-icon(icon="{{ item.title === 'Deleted' ? 'danger-box' : 'success-box' }}", size-class="icon-size-16x16")
+                                    td {{item.content}}
+
+
+                .attributes-table-container
+                    .table-head
+                        span.table-head-text Your Attributes
+                        md-icon(md-svg-src="assets/images/icons/plus.svg", ng-click="addIdAttribute($event, 'static_data')")
+                    table.attributes-table
+                        thead
+                            tr
+                                td
+                                td Attribute
+                                td Record
+                                td Last Edited
+                                td
+                                td
+                        tbody
+                            tr(ng-repeat="item in attributesList")
+                                td
+                                    sk-icon(icon="{{item.items[0].values[0].staticData.line1 ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.items[0].values[0].staticData.line1 ? 'Completed' : 'Missing' }}
+                                td {{$root.DICTIONARY[item.idAttributeType]}}
+                                td
+                                    span(ng-if="item.idAttributeType == 'birthdate'") {{ (item.longDateValue | date: 'yyyy/MM/dd') }}
+                                    span(ng-if="item.idAttributeType == 'phonenumber_countrycode'") {{ item.items[0].values[0].staticData.line1 }} {{ item.items[0].values[0].staticData.line2 }}
+                                    ul(ng-if="item.idAttributeType != 'birthdate' && item.idAttributeType != 'phonenumber_countrycode'")
+                                        li(ng-repeat="(key, value) in item.items[0].values[0].staticData") {{value}}
+                                td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemValue($event, item, item.idAttributeType)", class="color-light-grey")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", class="color-grey" , ng-click="openValueDeletePanel($event, item)")
+
+                .ID-documents-container
+                    .table-head
+                        span.table-head-text Your ID Documents
+                        md-icon(md-svg-src="assets/images/icons/plus.svg", ng-click="addIdAttribute($event, 'document','Add Document')")
+                    table.ID-documents-table
+                        thead
+                            tr
+                                td
+                                td Type
+                                td Filename
+                                td Last Edited
+                                td
+                                td
+                                td
+                        tbody
+                            tr(ng-repeat="item in idDocumentsList")
+                                td
+                                    sk-icon(icon="{{item.items[0].values[0].documentName ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.items[0].values[0].documentName ? 'Completed' : 'Missing' }}
+                                td {{$root.DICTIONARY[item.idAttributeType]}}
+                                td {{item.items[0].values[0].documentName}}
+                                td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_remove_red_eye_black_24px.svg" ng-if="item.items[0].values[0].documentId", class="color-white", ng-click="openFilePreview($event, item.items[0].values[0])")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_mode_edit_white_24px.svg", ng-click="editIdAttributeItemDocument($event, item, item.idAttributeType)", class="color-light-grey")
+                                td.action-columns
+                                    md-icon(md-svg-src="assets/images/icons/ic_delete_white_24px.svg", class="color-grey" , ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", ng-click="openValueDeletePanel($event, item)")
+            .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
+                sk-user-info-box

@@ -1,6 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
+const log = require('electron-log');
 
 module.exports = function (app) {
 
@@ -17,7 +18,7 @@ module.exports = function (app) {
             await knex.migrate.latest()
             await knex.seed.run()
         } catch (e) {
-            console.log(e)
+            log.error("Migrations - ", e);
         }
     }
 

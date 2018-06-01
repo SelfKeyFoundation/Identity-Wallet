@@ -1,4 +1,4 @@
-const countriesList = require('./../../../assets/data/country-list.json');
+const countriesList = require(__static + '/assets/data/country-list.json');
 
 const Promise = require('bluebird');
 

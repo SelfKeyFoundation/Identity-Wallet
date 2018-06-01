@@ -1,13 +1,11 @@
 'use strict';
-
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
 const isOnline = require('is-online');
-
 const config = buildConfig(electron);
 
 const log = require('electron-log');
@@ -85,7 +83,7 @@ function onReady(app) {
 
     return function () {
 
-        if (isSecondInstance) {
+        if (isSecondInstance) { 
             electron.app.quit();
             return
         }
@@ -122,7 +120,7 @@ function onReady(app) {
         // 3) notify angular app when done
 
         if (electron.app.doc) {
-            electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
+            electron.app.dock.setIcon(__static + '/assets/icons/png/256x256.png');
         }
 
         //let tray = new Tray('assets/icons/png/256X256.png');
@@ -143,7 +141,7 @@ function onReady(app) {
                 devTools: app.config.app.debug,
                 preload: path.resolve(__dirname, 'preload.js'),
             },
-            icon: path.resolve(__dirname, '../assets/icons/png/256x256.png')
+            icon: __static + '/assets/icons/png/256x256.png'
         });
         const webAppPath = (isDevMode())? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html` : `file://${__dirname}/index.html`;
         

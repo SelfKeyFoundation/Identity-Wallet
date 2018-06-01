@@ -1,0 +1,17 @@
+.sk-box.sk-token-box
+    .sk-token-box__header(layout="row", layout-align="center start")
+        .icon
+            img.sk-token-box__token(src='assets/images/icons/coins.png')
+        sk-double-header.sk-token-box__text(header="{{data.name}}", flex)
+        button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, null, true)")
+            md-icon.sk-token-box__plus(md-svg-src="assets/images/icons/transfer.svg", aria-label="transfer")
+
+    .sk-token-box__body.text-align-center
+        span {{ data.text }}
+
+    .sk-token-box__footer
+        .sk-horizontal-devider
+        .sk-token-box__footer_address-box(layout="row", layout-align="start center")
+            span.sk-token-box__footer_address-box_public-key {{publicKeyHex}}
+            md-button.smallest.gray.copy(style="width: 46px; height: 20px; margin-left: 7px;")
+                span(copy-to-clipboard="publicKeyHex", style="font-size: 11px; line-height: 12px;") COPY

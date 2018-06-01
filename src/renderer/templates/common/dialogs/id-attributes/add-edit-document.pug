@@ -1,0 +1,18 @@
+md-dialog.add-edit-document(aira-lable="{{idAttributeType}}")
+    .content-wrapper
+        #document.sk-box
+            .content(layout="column")
+                .header-wrapper
+                    .title {{$root.DICTIONARY[idAttributeType]}}
+                .content-wrapper
+                    .box
+                        .clickable(layout="column", ng-click="selectFile($event)", ng-keydown="ignoreEnterKey($event)")
+                             //sk-icon(icon="hard-drive", size-class="icon-size-34x44"
+                             md-icon(md-svg-src="assets/images/icons/hard-drive.svg")
+                             span.header {{selectedFile.name || 'Select Document'}}
+                             span.sub-header This is stored locally on your machine
+    .actions-wrapper
+        md-button.outline-gray(ng-click="close($event)")
+            span.primary cancel
+        md-button.blue(ng-click="save($event)", ng-disabled="!selectedFile")
+            span.primary save

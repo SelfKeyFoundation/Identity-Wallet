@@ -105,6 +105,7 @@
     "gulp-pug": "^4.0.1",
     "gulp-sass": "^4.0.1",
     "gulp-watch": "^5.0.0",
+    "json-loader": "^0.5.7",
     "mocha": "^5.2.0",
     "run-sequence": "^2.2.1",
     "spectron": "^3.8.0",

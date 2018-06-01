@@ -1,0 +1,21 @@
+md-dialog.receive-token(aira-lable="Receive Dialog")
+    .receive-token-wrapper
+        .receive-token-logo
+            sk-icon(icon="{{symbol}}",size-class="icon-size-64x64")
+            sk-icon(icon="close-dialog", size-class="icon-size-36x36", style="position: absolute; right: -18px; top: -18px; cursor: pointer;", ng-click="cancel($event)")
+        .receive-token-barcode(layout="column", layout-align="center center")
+            .barcode-container
+                qrcode(data="{{publicKeyHex}}", size="185", background="#fff")
+        .receive-token-address(layout="column" layout-align="center center")
+            .address Your Ethereum Address To Receive {{symbol}}
+            .public-key {{publicKeyHex}}
+        .receive-token-icons(layout="row", layout-align="center center")
+            div(copy-to-clipboard="publicKeyHex", copy-animation="fadeUp")
+                sk-icon(icon="copy", size-class="icon-size-36x36" style='cursor:pointer')
+            a(href="mailto:?body={{publicKeyHex}}&subject=Address")
+                sk-icon(icon="gmail", size-class="icon-size-36x36")
+            sk-icon(icon="print", size-class="icon-size-36x36", style="cursor: pointer;", ng-click="print()")
+            //sk-icon(icon="share", size-class="icon-size-36x36")
+
+
+

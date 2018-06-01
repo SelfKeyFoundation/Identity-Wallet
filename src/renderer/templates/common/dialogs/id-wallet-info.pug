@@ -1,0 +1,15 @@
+md-dialog.id-wallet-info(aira-lable="{{title}}")
+    .id-wallet-info-wrapper
+        sk-icon(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancel($event)")
+        .container
+            .header
+                span {{dialogInfo.header}}
+            .info-section
+                .text
+                    p {{dialogInfo.textPart1}}
+                    p {{dialogInfo.textPart2}}
+                    p {{dialogInfo.textPart3}}
+                    p {{dialogInfo.textPart4}}
+            .buttons-section
+                md-button(ng-click="nextStep()" ng-class="[{'button-300': dialogInfo.step == 2}]")
+                    span {{dialogInfo.button2}}

@@ -14,6 +14,8 @@ const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
 const async = require('async');
+const log = require('electron-log');
+
 
 const RPC_METHOD = "ON_RPC";
 const RPC_ON_DATA_CHANGE_METHOD= 'ON_DATA_CHANGE';
@@ -867,6 +869,7 @@ module.exports = function (app) {
         electron.app.sqlLiteService.GuideSetting.updateById(args.id, args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
+            log.error("saveGuideSettings - ", error)
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
         });
     }
@@ -920,7 +923,6 @@ module.exports = function (app) {
 
     // DONE !!!!!
     controller.prototype.addIdAttribute = function (event, actionId, actionName, args) {
-        console.log(args);
         electron.app.sqlLiteService.IdAttribute.create(args.walletId, args.idAttributeType, args.staticData, args.file).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
