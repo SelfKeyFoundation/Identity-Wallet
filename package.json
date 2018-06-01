@@ -46,7 +46,8 @@
     "docker": "OSENV=docker docker-compose build && docker-compose up -d",
     "mig-new": "knex migrate:make",
     "mig-test": "node test/migrate.js",
-    "eb": "electron-builder"
+    "eb": "electron-builder",
+    "rebuild": "npm rebuild && ./node_modules/.bin/electron-rebuild -f -v 1.8.4"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -112,10 +113,10 @@
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
     "delay": "^2.0.0",
-    "electron": "1.7.12",
     "electron-builder": "^20.15.3",
     "electron-forge": "5.2.2",
-    "electron-prebuilt-compile": "1.7.9",
+    "electron-rebuild": "^1.7.3",
+    "electron-prebuilt-compile": "1.8.4",
     "eslint": "^4.15.0",
     "eslint-config-prettier": "^2.8.0",
     "eslint-config-standard": "^11.0.0-beta.0",
