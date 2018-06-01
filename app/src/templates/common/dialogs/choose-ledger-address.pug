@@ -6,7 +6,7 @@ md-dialog.choose-ledger-address-container(aira-lable="Connecting to Ledger")
             .header-title Choose A Ledger Address
             .choose-title Select an Ethereum (ETH) address you would like to use:
             .grid-container
-                md-radio-group(ng-model="selectedAddress")
+                md-radio-group(ng-model="selectedAccount")
                     table
                         thead
                             tr
@@ -17,7 +17,7 @@ md-dialog.choose-ledger-address-container(aira-lable="Connecting to Ledger")
                         tbody
                             tr(ng-repeat="account in currentAccounts")
                                 td 
-                                    md-radio-button.radio-button(ng-value="account.address") 
+                                    md-radio-button.radio-button(ng-value="account") 
                                 td {{account.address}}
                                 td {{account.balanceEth || '0 ETH'}}
                                 td
@@ -43,5 +43,5 @@ md-dialog.choose-ledger-address-container(aira-lable="Connecting to Ledger")
                 .buttons-container
                     md-button.gray.md-ink-ripple(ng-click="cancel($event)")
                         span.primary Cancel
-                    md-button.gray.md-ink-ripple(ng-click="chooseAccount()", ng-disabled="!selectedAddress")
+                    md-button.gray.md-ink-ripple(ng-click="chooseAccount()", ng-disabled="!selectedAccount")
                         span.primary USE SELECTED ADDRESS

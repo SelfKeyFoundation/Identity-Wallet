@@ -122,7 +122,8 @@ module.exports = function (app) {
                                 isSetupFinished: resp.isSetupFinished,
                                 publicKey: keystoreObject.address,
                                 privateKey: privateKey,
-                                keystoreFilePath: ksFilePathToSave
+                                keystoreFilePath: ksFilePathToSave, 
+                                profile: 'local'
                             });
                         }).catch((error) => {
                             if (error.code === 'SQLITE_CONSTRAINT') {
@@ -159,7 +160,8 @@ module.exports = function (app) {
                             isSetupFinished: wallet.isSetupFinished,
                             privateKey: privateKey,
                             publicKey: keystoreObject.address,
-                            keystoreFilePath: wallet.keystoreFilePath
+                            keystoreFilePath: wallet.keystoreFilePath,
+                            profile: wallet.profile
                         });
                     } else {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
@@ -980,14 +982,6 @@ module.exports = function (app) {
         });
     };
 
-    controller.prototype.connectToLedger = function (event, actionId, actionName, args) {
-        electron.app.ledgerService.connect(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
-
     controller.prototype.getLedgerAccounts = function (event, actionId, actionName, args) {
         electron.app.ledgerService.getAccounts(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1043,7 +1037,7 @@ module.exports = function (app) {
         electron.app.web3Service.waitForTicket(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
         });
     }
 

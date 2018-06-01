@@ -72,10 +72,13 @@ md-input-container {
     border-radius: 4px;
     background-color: #1e262e;
     height: 44px;
+    
 
     .md-text {
-        padding-left: 8px;
+        padding-left: 24px;
         color: #fff;
+        font-family: ProximaNovaSemibold;
+        font-size: 14px;
     }
 
     md-select-value {
