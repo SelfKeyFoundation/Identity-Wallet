@@ -36,7 +36,7 @@
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "test": "node test/test.js"
+    "test": "MODE=test node test/test.js"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -98,7 +98,7 @@
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-webpack": "^2.1.2",
+    "electron-webpack": "git://github.com/rodrigopavezi/electron-webpack.git",
     "electron-webpack-eslint": "^2.1.1",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.2.1",

@@ -3,6 +3,7 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
+
 document.addEventListener('dragover', function (event) {
   event.preventDefault();
   return false;
@@ -337,11 +338,20 @@ material.href = path.join(staticPath, 'assets/libs/angular-material/angular-mate
 material.rel = 'stylesheet';
 document.head.appendChild(material);
 
+const materialIcons = document.createElement('link');
+materialIcons.href = path.join(staticPath, 'assets/libs/material-icons/icon.css?family=Material+Icons');
+materialIcons.rel = 'stylesheet';
+document.head.appendChild(materialIcons);
+
+const ionIcons = document.createElement('link');
+ionIcons.href = path.join(staticPath, 'assets/libs/ionicons/css/ionicons.min.css');
+ionIcons.rel = 'stylesheet';
+document.head.appendChild(ionIcons);
+
 const main = document.createElement('link');
 main.href = path.join(staticPath, 'stylesheets/css/main.css');
 main.rel = 'stylesheet';
 document.head.appendChild(main);
-
 
 const bodyClass = document.createAttribute("class");       
 bodyClass.value = "gradient-1";

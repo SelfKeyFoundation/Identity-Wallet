@@ -94,6 +94,7 @@ exports.up = function(knex, Promise) {
 			table.integer('isCustom').notNullable().defaultTo(0)
 			table.integer('createdAt').notNullable()
 			table.integer('updatedAt')
+			table.string('type').notNullable()
 		}),
 
 		knex.schema.createTable('transactions_history', table => {

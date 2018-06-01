@@ -1,10 +1,10 @@
 .sk-box.sk-token-box
     .sk-token-box__header(layout="row", layout-align="center start")
         .icon
-            img.sk-token-box__token(src='assets/images/icons/coins.png')
+            img.sk-token-box__token(src="{{$root.appendStaticPath('assets/images/icons/coins.png')}}")
         sk-double-header.sk-token-box__text(header="{{data.name}}", flex)
         button.sk-icon-button(ng-click="$root.openSendTokenDialog($event, null, true)")
-            md-icon.sk-token-box__plus(md-svg-src="assets/images/icons/transfer.svg", aria-label="transfer")
+            md-icon.sk-token-box__plus(md-svg-src="{{$root.appendStaticPath('assets/images/icons/transfer.svg')}}", aria-label="transfer")
 
     .sk-token-box__body.text-align-center
         span {{ data.text }}

@@ -1,7 +1,7 @@
 .sk-loading
     .loading
     //.logo
-        img(src="assets/images/icons/selfkey.svg", alt="")
+        img(src="{{$root.appendStaticPath('assets/images/icons/selfkey.svg')}}", alt="")
     .info-container(ng-if="header || subHeader")
         .header {{header}}
         .content(ng-if="subHeader") {{subHeader}}

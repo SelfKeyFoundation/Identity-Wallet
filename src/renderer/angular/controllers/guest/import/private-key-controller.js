@@ -36,7 +36,7 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
 
                 let initialPromises = [];
                 initialPromises.push($rootScope.wallet.loadIdAttributes());
-                initialPromises.push($rootScope.wallet.loadTokens());
+                //initialPromises.push($rootScope.wallet.loadTokens());
 
                 $q.all(initialPromises).then((resp) => {
                     if (data.isSetupFinished) {
@@ -50,10 +50,10 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
                     }
 
                 }).catch((error) => {
-                    CommonService.showToast('error', 'error');
+                    CommonService.showToast('error hahaah', error, 10000, 'dasdas');
                 });
             } else {
-                CommonService.showToast('error', 'error');
+                CommonService.showToast('error', 'no data id');
             }
         }).catch((error) => {
             $log.error(error);

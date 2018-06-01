@@ -1,9 +1,9 @@
 .sk-box.sk-token-box
     .sk-token-box__header(layout="row", layout-align="center start")
-        md-icon.sk-token-box__token(md-svg-src="assets/images/icons/{{symbol}}.svg", aria-label="{{symbol}}")
+        md-icon.sk-token-box__token(md-svg-src="{{$root.appendStaticPath('assets/images/icons/'+symbol+'.svg')}}", aria-label="{{symbol}}")
         sk-double-header.sk-token-box__text(header="{{title}}", sub-header="{{symbol | uppercase}}", flex)
         button.sk-icon-button(ui-sref="member.wallet.manage-token({id: symbol})")
-            md-icon.sk-token-box__plus(md-svg-src="assets/images/icons/transfer.svg", aria-label="transfer")
+            md-icon.sk-token-box__plus(md-svg-src="{{$root.appendStaticPath('assets/images/icons/transfer.svg')}}", aria-label="transfer")
 
     .sk-token-box__body
         span {{ item.getFormattedBalance() }}

@@ -76,6 +76,10 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         useInAppBrowser ? $window.open(url) : RPCService.makeCall('openBrowserWindow', { url: url });
     }
 
+    $rootScope.appendStaticPath = function (path) {
+       return $window.staticPath + "/" + path;
+    }
+
     $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
         $state.go('member.wallet.send-token', { symbol,  allowSelectERC20Token });
     };

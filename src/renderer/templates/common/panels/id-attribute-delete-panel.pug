@@ -2,7 +2,7 @@
     .header-wrapper
         span Delete Value and History
         md-button.md-icon-button(ng-click="cancel($event)")
-            md-icon(md-svg-src="assets/images/icons/close-dialog.svg")
+            md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/close-dialog.svg')}}")
     .content-wrapper
         span You are deleting this value and all related history. Once deleted, you cannot recover the history.
     .actions-wrapper

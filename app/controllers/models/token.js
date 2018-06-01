@@ -30,6 +30,7 @@ module.exports = function (app, sqlLiteService) {
                         table.integer('isCustom').notNullable().defaultTo(0);
                         table.integer('createdAt').notNullable();
                         table.integer('updatedAt');
+                        table.string('type').notNullable();
                     }).then((resp) => {
                         let promises = [];
 
