@@ -75,6 +75,11 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 $state.go('guest.create.step-3', { walletData: data });
             }).catch((error) => {
                 $scope.isAuthenticating = false;
+                if (error == 'incorrect_password') {
+                    $scope.incorrectPassword = true;
+                    return;
+                }
+               
                 CommonService.showToast('error', $rootScope.DICTIONARY[error]);
             });
         }
