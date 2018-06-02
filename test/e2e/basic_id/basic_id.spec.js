@@ -38,12 +38,6 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	it('TC06: Saving Private Key', () => {
 		return tools.app.client.getValue('#privateKey')
 			.then(() => tools.regStep(tools.app, '#printWalletNext'))
-			.then(() => tools.app.client.waitForVisible('#viewDashboard')) 
-	})
-
-	it('SEL39: Opening Selfkey ID', () => {
-		return tools.regStep(tools.app, '.sk-icon-button')
-			.then(() => tools.regStep(tools.app, '#selfkeyIdButton'));
 	})
 
 	it('TC07.01: Adding National ID and Selfie with ID Document', () => {
@@ -66,9 +60,8 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 	})
 
 	it('TC07.02: Skipping ID and Selfie Upload', () => {
-		return delay(5000)
+		return delay(3000)
 			.then(() => tools.app.client.click('#skipDashboard'))
-			.then(() => tools.regStep(tools.app, '#idWalletInfoContinueButton'))
-			.then(() => tools.app.client.waitForVisible('.id-wallet-main'))   
+			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
 	})
 })
