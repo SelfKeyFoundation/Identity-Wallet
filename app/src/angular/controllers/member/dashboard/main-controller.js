@@ -25,13 +25,6 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
     let wallet = $rootScope.wallet;
 
 
-    $rootScope.CUSTOM_TOKENS_LIMIT = 20;
-    $rootScope.tokenLimitIsExceed = () => {
-        let tokensCnt = Object.keys(wallet.tokens).length + 1; // +1 for ETH
-        return tokensCnt >= $rootScope.CUSTOM_TOKENS_LIMIT;
-    };
-
-
     $scope.getPieChartItems = () => {
         let pieChartItems = [];
         Object.keys(wallet.tokens).forEach((tokeyKey) => {
@@ -41,7 +34,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             if (tokenPrice) {
                 pieChartItem.title = tokenPrice.name;
-                pieChartItem.valueUSD = Number(CommonService.numbersAfterComma(token.getBalanceInUsd(), 2));
+                pieChartItem.valueUSD = token.getFormattedBalanceInUSD();
                 pieChartItem.amount = token.getFormattedBalance();
                 //token
             } else {
@@ -58,7 +51,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         pieChartItems.unshift({
             subTitle: 'ETH',
             title: 'Ethereum',
-            valueUSD: Number(CommonService.numbersAfterComma(wallet.getBalanceInUsd(), 2)),
+            valueUSD: wallet.getFormattedBalanceInUSD(),
             amount: wallet.getFormattedBalance()
         });
 

@@ -1,25 +1,27 @@
 'use strict';
 
 const Promise = require('bluebird');
-const electron = require('electron');
-const path = require('path');
-
-const countriesList = require('./../../assets/data/country-list.json');
-const ethTokensList = require('./../../assets/data/eth-tokens.json');
-const initialIdAttributeTypeList = require('./../../assets/data/initial-id-attribute-type-list.json');
 
 module.exports = function (app) {
 
     const controller = function () { };
 
-    const dbFilePath = path.join(app.config.userDataPath, 'IdentityWalletStorage.sqlite');
-    const knex = require('knex')({
-        client: 'sqlite3',
-        useNullAsDefault: true,
-        connection: {
-            filename: dbFilePath
+    const knexFile = require('../knexfile.js')
+    const knex = require('knex')(knexFile)
+    
+    /**
+     * Migrations
+     */    
+    async function initDB() {
+        try {
+            await knex.migrate.latest()
+            await knex.seed.run()
+        } catch (e) {
+            console.log(e)
         }
-    });
+    }
+
+    initDB()
 
     /**
      * common methods
@@ -100,38 +102,6 @@ module.exports = function (app) {
         });
     }
 
-    /*
-    function createTransactionsHistory() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('transactions_history').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('transactions_history', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('tokenId').references('tokens.id');
-                        table.string('txId').unique().notNullable();
-                        table.string('sentTo');
-                        table.decimal('value', null).notNullable();
-                        table.integer('timestamp').notNullable();
-                        table.integer('blockNumber').notNullable();
-                        table.decimal('gas').notNullable();
-                        table.string('gasPrice').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "transactions_history", "created.");
-                        resolve("transactions_history created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-    */
-
     /**
      * public methods
      */
@@ -154,9 +124,6 @@ module.exports = function (app) {
         return Promise.all(promises)
     }
 
-    /**
-     *
-     */
     // TODO
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
         data.createdAt = new Date().getTime();
@@ -262,37 +229,6 @@ module.exports = function (app) {
     controller.prototype.token_update = (data) => {
         return updateById('tokens', data);
     }
-
-    /**
-     * transactions history
-     */
-    /*
-    controller.prototype.transactionsHistory_selectAll = () => {
-        return new Promise((resolve, reject) => {
-            knex('transactions_history').select().then((rows) => {
-                if (rows && rows.length) {
-                    resolve(rows);
-                } else {
-                    resolve([]);
-                }
-            }).catch((error) => {
-                reject({ message: "error_while_selecting", error: error });
-            });
-        });
-    }
-    */
-
-    /*
-    controller.prototype.transactionsHistory_selectByWalletId = (id) => {
-        return selectTable('transactions_history', { walletId: id });
-    }
-    */
-
-    /*
-    controller.prototype.transactionsHistory_selectByWalletIdAndTokenId = (query) => {
-        return selectTable('transactions_history', { walletId: query.walletId, tokenId: query.tokenId });
-    }
-    */
 
     controller.prototype.transactionsHistory_insert = (data) => {
         return insertIntoTable('transactions_history', data);

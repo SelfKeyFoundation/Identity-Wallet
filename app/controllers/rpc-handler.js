@@ -16,6 +16,8 @@ const os = require('os');
 const async = require('async');
 
 const RPC_METHOD = "ON_RPC";
+const RPC_ON_DATA_CHANGE_METHOD= 'ON_DATA_CHANGE';
+
 
 module.exports = function (app) {
     const log = app.log;
@@ -30,7 +32,6 @@ module.exports = function (app) {
     const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
     log.info(userDataDirectoryPath);
-
 
     /**
      * refactored methods
@@ -121,7 +122,8 @@ module.exports = function (app) {
                                 isSetupFinished: resp.isSetupFinished,
                                 publicKey: keystoreObject.address,
                                 privateKey: privateKey,
-                                keystoreFilePath: ksFilePathToSave
+                                keystoreFilePath: ksFilePathToSave, 
+                                profile: 'local'
                             });
                         }).catch((error) => {
                             if (error.code === 'SQLITE_CONSTRAINT') {
@@ -158,7 +160,8 @@ module.exports = function (app) {
                             isSetupFinished: wallet.isSetupFinished,
                             privateKey: privateKey,
                             publicKey: keystoreObject.address,
-                            keystoreFilePath: wallet.keystoreFilePath
+                            keystoreFilePath: wallet.keystoreFilePath,
+                            profile: wallet.profile
                         });
                     } else {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, "incorrect_password", null);
@@ -688,11 +691,13 @@ module.exports = function (app) {
         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
     }
 
-    controller.prototype.getTokenPrices = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TokenPrice.findAll().then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+    controller.prototype.startTokenPricesBroadcaster = function (cmcService) {
+        cmcService.eventEmitter.on('UPDATE', ()=>{
+            electron.app.sqlLiteService.TokenPrice.findAll().then((data) => {
+                app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', data);
+            }).catch((error) => {
+                console.log(error)
+            });
         });
     }
 
@@ -974,6 +979,65 @@ module.exports = function (app) {
             }
         });
     };
+
+    controller.prototype.getLedgerAccounts = function (event, actionId, actionName, args) {
+        electron.app.ledgerService.getAccounts(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.signTransactionWithLedger = function (event, actionId, actionName, args) {
+        electron.app.ledgerService.signTransaction(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+     controller.prototype.createLedgerWalletByAdress = function (event, actionId, actionName, args) {
+        try {
+            let publicKey = args.address;
+            publicKey = publicKey.toString('hex');
+
+            let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey(publicKey);
+            walletSelectPromise.then((wallet) => {
+                if (wallet) {
+                    app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
+                } else {
+                    electron.app.sqlLiteService.Wallet.add(
+                        {
+                            publicKey: publicKey,
+                            profile: 'ledger'
+                        }
+                    ).then((resp) => {
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+                            id: resp.id,
+                            isSetupFinished: resp.isSetupFinished,
+                            publicKey: publicKey
+                        });
+                    }).catch((error) => {
+                        app.win.webContents.send(RPC_METHOD, actionId, actionName, error.code, null);
+                    });
+                }
+            }).catch((error) => {
+                log.error(error);
+                app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+            });
+        } catch (e) {
+            log.error(e);
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
+        }
+    }
+
+    controller.prototype.waitForWeb3Ticket = function (event, actionId, actionName, args) {
+        electron.app.web3Service.waitForTicket(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
+        });
+    }
 
 
     return controller;

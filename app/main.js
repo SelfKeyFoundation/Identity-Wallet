@@ -6,6 +6,7 @@ const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
+const isOnline = require('is-online');
 
 const config = buildConfig(electron);
 
@@ -27,6 +28,7 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
  */
 const platform = os.platform() + '_' + os.arch();
 const version = electron.app.getVersion();
+const { appUpdater } = require('./autoupdater');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -54,6 +56,7 @@ const i18n = [
 ];
 
 let shouldIgnoreClose = true;
+let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 
 for (let i in i18n) {
     app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
@@ -101,8 +104,15 @@ function onReady(app) {
         const SqlLiteService = require('./controllers/sql-lite-service')(app);
         electron.app.sqlLiteService = new SqlLiteService();
 
+        const LedgerService = require('./controllers/ledger-service')(app);
+        electron.app.ledgerService = new LedgerService();
+
+        const Web3Service = require('./controllers/web3-service')(app);
+        electron.app.web3Service = new Web3Service();
+
         const RPCHandler = require('./controllers/rpc-handler')(app);
         electron.app.rpcHandler = new RPCHandler();
+        electron.app.rpcHandler.startTokenPricesBroadcaster(electron.app.cmcService);
 
         const TxHistory = require('./controllers/tx-history').default(app);
         electron.app.txHistory = new TxHistory();
@@ -120,7 +130,6 @@ function onReady(app) {
 
         //let tray = new Tray('assets/icons/png/256X256.png');
         //tray.setToolTip('selfkey');
-
 
         app.win = new electron.BrowserWindow({
             title: electron.app.getName(),
@@ -154,6 +163,10 @@ function onReady(app) {
         }
 
         app.win.on('close', (event) => {
+            if (shouldIgnoreCloseDialog) {
+                shouldIgnoreCloseDialog = false;
+                return;
+            }
             if (shouldIgnoreClose) {
                 event.preventDefault();
                 shouldIgnoreClose = false;
@@ -166,32 +179,38 @@ function onReady(app) {
             app.win = null;
         });
 
-        /*
-		setAutoUpdaterListeners(app.win);
-		if (!isDevMode()) {
-			autoUpdater.setFeedURL(config.updateEndpoint + '/update/' + platform + '/' + version);
-			setTimeout(() => {
-				autoUpdater.checkForUpdates();
-			}, 5000);
+        if (!isDevMode()) {
+            // Initate auto-updates
+            appUpdater();
         }
-        */
 
         app.win.webContents.on('did-finish-load', () => {
             log.info('did-finish-load');
             app.win.webContents.send('APP_START_LOADING');
             electron.app.sqlLiteService.init().then(() => {
-                //start update cmc data
-                electron.app.cmcService.startUpdateData();
-                electron.app.airtableService.loadIdAttributeTypes();
-                electron.app.airtableService.loadExchangeData();
-                electron.app.txHistory.startSyncingJob();
-                app.win.webContents.send('APP_SUCCESS_LOADING');
-            }).catch((error) => {
-                log.error(error);
-                app.win.webContents.send('APP_FAILED_LOADING');
+
+                isOnline().then((isOnline) => {
+                    log.info('is-online', isOnline);
+                    if (!isOnline) {
+                        app.win.webContents.send('SHOW_IS_OFFLINE_WARNING');
+                        return;
+                    }
+
+                    log.info('did-finish-load');
+                    app.win.webContents.send('APP_START_LOADING');
+                    //start update cmc data
+                    electron.app.cmcService.startUpdateData();
+                    electron.app.airtableService.loadIdAttributeTypes();
+                    electron.app.airtableService.loadExchangeData();
+                    electron.app.txHistory.startSyncingJob();
+                    app.win.webContents.send('APP_SUCCESS_LOADING');
+                }).catch((error) => {
+                    log.error(error);
+                    app.win.webContents.send('APP_FAILED_LOADING');
+                });
             });
         });
-
+        
         app.win.webContents.on('did-fail-load', () => {
             log.error('did-fail-load');
         });
@@ -265,12 +284,12 @@ function onReady(app) {
                 { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
             ]
         },
-        {
-            label: 'View',
-            submenu: [
-                { role: 'togglefullscreen' }
-            ]
-        });
+            {
+                label: 'View',
+                submenu: [
+                    { role: 'togglefullscreen' }
+                ]
+            });
 
         Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
@@ -289,11 +308,15 @@ function onReady(app) {
         electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', (event) => {
             shouldIgnoreClose = true;
         });
+
+        electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', (event) => {
+            shouldIgnoreCloseDialog = true;
+        });
     };
 }
 
 function onActivate(app) {
-    log.info("onActivatet");
+    log.info("onActivate");
     return function () {
         if (app.win === null) {
             onReady(app);
@@ -330,28 +353,6 @@ function onWebContentsCreated(event, contents) {
     });
 }
 
-function setAutoUpdaterListeners(win) {
-    autoUpdater.on("error", (error) => {
-        log.warn('error: ' + error);
-    });
-
-    autoUpdater.on("checking-for-update", () => {
-        log.warn('checking-for-update');
-    });
-
-    autoUpdater.on("update-available", () => {
-        log.warn('update-available');
-    });
-
-    autoUpdater.on("update-not-available", () => {
-        log.warn('update-not-available');
-    });
-
-    autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-        log.warn('update-downloaded: ' + releaseName);
-        win.webContents.send('UPDATE_READY', releaseName);
-    });
-}
 
 function createKeystoreFolder() {
     if (!fs.existsSync(walletsDirectoryPath)) {

@@ -3,8 +3,12 @@
 const EthUnits = requireAppModule('angular/classes/eth-units');
 const EthUtils = requireAppModule('angular/classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, args, Web3Service, CommonService, SqlLiteService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
+    let args = {
+        symbol: $stateParams.symbol,
+        allowSelectERC20Token: $stateParams.allowSelectERC20Token
+    };
 
     $log.info("SendTokenDialogController", args, CONFIG);
     const web3Utils = Web3Service.constructor.web3.utils;
@@ -14,6 +18,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     let txInfoCheckInterval = null;
     let checkEstimatedGasInterval = null;
     let estimatedGasNeedsCheck = false;
+
+    let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+    $scope.signedHex = null;
 
     $scope.getTokenTitleBySymbol = (symbol) => {
         symbol = symbol.toUpperCase();
@@ -47,7 +54,52 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     }
 
     $scope.startSend = (event) => {
-        $scope.viewStates.showConfirmButtons = true
+        $scope.signedHex = null;
+        let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
+        let genRawTrPromise = generateRawTransaction(isEth);
+
+        if (!genRawTrPromise) {
+            return;
+        }
+        if (isLedgerWallet) {
+            $rootScope.openConfirmLedgerTxInfoWindow();
+        }
+
+        genRawTrPromise.then((signedHex) => {
+            $scope.signedHex = signedHex;
+            $scope.viewStates.showConfirmButtons = true;
+            $mdDialog.cancel();
+        }).catch((error) => {
+            $mdDialog.cancel();
+            let processedErr = false;
+            error = error.toString();
+
+            if (error == 'invalid_address') {
+                $scope.errors.sendToAddressHex = true;
+                setViewState();
+                return;
+            }
+            if (isLedgerWallet) {
+                if (error.indexOf('Invalid status 6801') != -1) {
+                    processedErr = true;
+                    $rootScope.openUnlockLedgerInfoWindow();
+                } else if (error.indexOf('Invalid status 6985') != -1) {
+                    processedErr = true;
+                    $rootScope.openRejectLedgerTxWarningDialog();
+                } else if (error == 'custom-timeout') {
+                    processedErr = true;
+                    $rootScope.openLedgerTimedOutWindow();
+                }
+            }
+
+            if (error && !processedErr) {
+                CommonService.showToast('error', error, 20000);
+            }
+
+            $scope.errors.sendFailed = !processedErr ? error : '';
+            // reset view state
+            setViewState();
+        });
     }
 
     $scope.confirmSend = (event, confirm) => {
@@ -56,9 +108,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         } else {
             setViewState('sending');
             if ($scope.symbol && $scope.symbol.toLowerCase() === 'eth') {
-                sendEther($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
+                sendEther();
             } else {
-                sendToken($scope.formData.sendToAddressHex, $scope.formData.sendAmount, $scope.formData.gasPriceInGwei);
+                sendToken();
             }
         }
     }
@@ -78,7 +130,12 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.cancel = (event) => {
         cancelEstimatedGasCheck();
         cancelTxCheck();
-        $mdDialog.cancel();
+
+        if (!args.symbol) {
+            $state.go('member.dashboard.main');
+        } else {
+            $state.go('member.wallet.manage-token', { id: args.symbol });
+        }
     }
 
     $scope.getTxFee = () => {
@@ -167,14 +224,23 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
     }
 
-    function sendEther(sendToAddress, sendAmount, gasPriceInGwei) {
+    // returns null on faild validation
+    function generateRawTransaction(isEth) {
+        let sendToAddress = $scope.formData.sendToAddressHex;
+        let sendAmount = $scope.formData.sendAmount;
+        let gasPriceInGwei = $scope.formData.gasPriceInGwei;
+
+        // validation
         if (sendAmount > 0 && sendToAddress && gasPriceInGwei >= 1) {
             if (sendAmount > $scope.totalBalance) {
                 // todo show message
-                return;
+                return null;
             }
+        }
 
-            let txGenPromise = $rootScope.wallet.generateRawTransaction(
+        let txGenPromise = null;
+        if (isEth) {
+            txGenPromise = $rootScope.wallet.generateRawTransaction(
                 sendToAddress,
                 EthUnits.unitToUnit(sendAmount, 'ether', 'wei'),
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
@@ -182,77 +248,66 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 null,
                 CONFIG.chainId
             );
-
-            txGenPromise.then((signedHex) => {
-                $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
-                $scope.sendPromise.then((resp) => {
-                    $scope.txHex = resp.transactionHash;
-
-                    $scope.viewStates.step = 'transaction-status';
-
-                    startTxCheck();
-                }).catch((error) => {
-                    CommonService.showToast('error', error.toString(), 20000);
-                    $scope.errors.sendFailed = error.toString();
-                    // reset view state
-                    setViewState();
-                });
-            }).catch((error) => {
-                CommonService.showToast('error', error.toString(), 20000);
-                $scope.errors.sendFailed = error.toString();
-                // reset view state
-                setViewState();
-            });
-        }
-    }
-
-    function sendToken(sendToAddress, sendAmount, gasPriceInGwei) {
-        if (sendAmount > 0 && sendToAddress && gasPriceInGwei >= 1) {
-            if (sendAmount > $scope.totalBalance) {
-                // todo show message
-                return;
-            }
-
-            let txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
+        } else {
+            //ERC20 token
+            txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
                 sendToAddress,
                 sendAmount,
                 EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
                 60000,   // $scope.infoData.gasLimit
                 $scope.symbol.toUpperCase(),
                 CONFIG.chainId
-            )
-
-            txGenPromise.then((signedHex) => {
-                $scope.sendPromise = Web3Service.sendRawTransaction(signedHex);
-                $scope.sendPromise.then((resp) => {
-                    $scope.txHex = resp.transactionHash;
-                    startTxCheck();
-                }).catch((error) => {
-                    error = error.toString();
-                    if (error.indexOf('Insufficient funds') == -1) {
-                        CommonService.showToast('error', error, 20000);
-                    }
-
-                    $scope.errors.sendFailed = error;
-                    // reset view state
-                    setViewState();
-                });
-
-                $scope.viewStates.step = 'transaction-status';
-            }).catch((error) => {
-                error = error.toString();
-                if (error == 'invalid_address') {
-                    $scope.errors.sendToAddressHex = true;
-                    setViewState();
-                    return;
-                }
-
-                CommonService.showToast('error', error, 20000);
-                $scope.errors.sendFailed = error;
-                // reset view state
-                setViewState();
-            });
+            );
         }
+        return txGenPromise;
+    }
+
+    function sendEther() {
+        if (!$scope.signedHex) {
+            // reset view state
+            setViewState();
+            return;
+        }
+        $scope.viewStates.step = 'transaction-status';
+        $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
+        $scope.sendPromise.then((resp) => {
+            $scope.txHex = resp.transactionHash;
+
+            startTxCheck();
+        }).catch((error) => {
+            error = error.toString();
+            if (error.indexOf('Insufficient funds') == -1) {
+                CommonService.showToast('error', error, 20000);
+            }
+            $scope.errors.sendFailed = error;
+            // reset view state
+            setViewState();
+        });
+    }
+
+    function sendToken() {
+        if (!$scope.signedHex) {
+            // reset view state
+            setViewState();
+            return;
+        }
+
+        $scope.viewStates.step = 'transaction-status';
+        $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
+        $scope.sendPromise.then((resp) => {
+            $scope.txHex = resp.transactionHash;
+
+            startTxCheck();
+        }).catch((error) => {
+            error = error.toString();
+            if (error.indexOf('Insufficient funds') == -1) {
+                CommonService.showToast('error', error, 20000);
+            }
+
+            $scope.errors.sendFailed = error;
+            // reset view state
+            setViewState();
+        });
     }
 
     function isNumeric(num) {
@@ -452,6 +507,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     $scope.$on('$destroy', () => {
         cancelTxCheck();
         cancelEstimatedGasCheck();
+    });
+
+    $rootScope.$on('tx-sign:retry', (event) => {
+        $scope.startSend(event);
     });
 };
 

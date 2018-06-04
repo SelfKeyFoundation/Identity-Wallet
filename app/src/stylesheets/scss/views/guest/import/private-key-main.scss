@@ -1,0 +1,26 @@
+.private-key-import-main-container {
+  > * {
+    font-family: ProximaNovaRegular;
+  }
+  width: 80%;
+  form {
+    width: 100%;
+    md-input-container {
+      width: 100%;
+    }
+  }
+  .title {
+    opacity: 0.8;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #ffffff;
+    text-align: center;
+    &.warning {
+      font-style: italic;
+      padding-top: 15px;
+    }
+  }
+  .md-button {
+    width: 260px !important;
+  }
+}

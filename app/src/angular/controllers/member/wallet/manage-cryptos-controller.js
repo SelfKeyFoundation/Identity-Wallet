@@ -2,12 +2,13 @@
 
 const Token = requireAppModule('angular/classes/token');
 
-function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $state, SqlLiteService, Web3Service, CommonService) {
+function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDialog, $state, $interval, SqlLiteService, Web3Service, CommonService) {
     'ngInject'
 
     $log.info('ManageCryptosController');
 
     let reloadPieChartIsNeeded = false;
+    let processTokensInterval = null;
     $scope.cancel = (event) => {
         $state.go('member.dashboard.main');
         if (reloadPieChartIsNeeded) {
@@ -82,6 +83,17 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
 
     processTokens(wallet.tokens);
 
+    processTokensInterval = $interval(() => {
+        processTokens(wallet.tokens);
+    }, 3000);
+
+    
+    $rootScope.$on("$destroy", () => {
+        if (processTokensInterval) {
+            $interval.cancel(processTokensInterval);
+        }
+    });
+
     const PRIMARY_TOKEN_KEYS = ['KEY', 'ETH'];
     $scope.isDeletable = (token) => {
         if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) != -1) {
@@ -109,6 +121,10 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         });
 
     }
+
+    $rootScope.$on('token:added', (event) => {
+        processTokens(wallet.tokens);
+    });
 };
 
 module.exports = ManageCryptosController;

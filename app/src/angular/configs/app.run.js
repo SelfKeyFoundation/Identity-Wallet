@@ -3,7 +3,7 @@
 const Wallet = requireAppModule('angular/classes/wallet');
 const Token = requireAppModule('angular/classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService, LedgerService, SignService) {
     'ngInject';
 
     $trace.enable('TRANSITION');
@@ -77,22 +77,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     }
 
     $rootScope.openSendTokenDialog = (event, symbol, allowSelectERC20Token) => {
-        return $mdDialog.show({
-            controller: 'SendTokenDialogController',
-            templateUrl: 'common/dialogs/send-token.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose: false,
-            fullscreen: true,
-            escapeToClose: false,
-            locals: {
-                args: {
-                    //because default must be empty
-                    symbol: symbol,
-                    allowSelectERC20Token: allowSelectERC20Token
-                }
-            }
-        });
+        $state.go('member.wallet.send-token', { symbol,  allowSelectERC20Token });
     };
 
     $rootScope.openReceiveTokenDialog = (event, args) => {
@@ -247,9 +232,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     };
 
     $rootScope.openAddCustomTokenDialog = (event) => {
-        if ($rootScope.tokenLimitIsExceed()) {
-            return;
-        }
         return $mdDialog.show({
             controller: 'AddCustomTokenDialogController',
             templateUrl: 'common/dialogs/add-custom-token.html',
@@ -260,13 +242,116 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openConnectingToLedgerDialog = (event) => {
+        return $mdDialog.show({
+            controller: 'ConnectingToLedgerController',
+            templateUrl: 'common/dialogs/connecting-to-ledger.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openChooseLedgerAddressDialog = (accountsArr, ACCOUNTS_QUENTITY_PER_PAGE) => {
+        return $mdDialog.show({
+            controller: 'ChooseLedgerAddressController',
+            templateUrl: 'common/dialogs/choose-ledger-address.html',
+            parent: angular.element(document.body),
+            targetEvent: null,
+            clickOutsideToClose: false,
+            fullscreen: true,
+            locals: {
+                baseAccounts: accountsArr,
+                ACCOUNTS_QUENTITY_PER_PAGE: ACCOUNTS_QUENTITY_PER_PAGE
+            }
+        });
+    };
+
+    $rootScope.openRejectLedgerTxWarningDialog = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        
+        return $mdDialog.show({
+            controller: function($scope) {
+                $scope.cancel = () => {
+                    $mdDialog.cancel();
+                  };
+            },
+            templateUrl: 'common/dialogs/reject-ledger-tx-warning.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            clickOutsideToClose: false,
+            fullscreen: false
+        });
+    };
+
+    $rootScope.openConfirmLedgerTxInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function(){},
+            templateUrl: 'common/dialogs/confirm-ledger-tx-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openUnlockLedgerInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function ($scope, $mdDialog) {
+                $scope.tryAgain = (event) => {
+                    $rootScope.broadcastRetryToSign(event);
+                }
+                $scope.cancel = (event) => {
+                    $mdDialog.cancel();
+                }
+            },
+            templateUrl: 'common/dialogs/unlock-ledger-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openLedgerTimedOutWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function ($scope, $mdDialog) {
+                $scope.cancel = (event) => {
+                    $mdDialog.cancel();
+                }
+            },
+            templateUrl: 'common/dialogs/ledger-timed-out.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+
+    
+    $rootScope.broadcastRetryToSign = (event) => {
+        $rootScope.$broadcast('tx-sign:retry', event);
+    };
+
     $rootScope.broadcastKeyPress = (event) => {
         $rootScope.$broadcast('selfkey:on-keypress', event.key);
-    }
+    };
 
     $rootScope.broadcastTxHistoryChange = (event) => {
         $rootScope.$broadcast('tx-history:change', event);
-    }
+    };
 }
 
 module.exports = AppRun;

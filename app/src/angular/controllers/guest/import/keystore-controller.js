@@ -17,6 +17,9 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
     $scope.isAuthenticating = false;
 
+    $scope.selectPublicKeyInputTitle = $scope.type === 'select' ? 'Step 1. Select an ETH address stored on the SelfKey Identity Wallet.' :
+        'Step 1. Select a Keystore File (UTC/JSON).'; 
+
     $scope.userInput = {
         selectedPublicKey: $scope.publicKeyList.length == 1 ? $scope.publicKeyList[0] : null,
         selectedFilePath: null,
@@ -67,11 +70,16 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
 
             promise.then((data) => {
                 $rootScope.walletImportData = data;
-                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+                $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
                 $state.go('guest.create.step-3', { walletData: data });
             }).catch((error) => {
                 $scope.isAuthenticating = false;
+                if (error == 'incorrect_password') {
+                    $scope.incorrectPassword = true;
+                    return;
+                }
+               
                 CommonService.showToast('error', $rootScope.DICTIONARY[error]);
             });
         }
@@ -95,7 +103,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
 
         unlockExistingWalletPromise.then((data) => {
-            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath);
+            $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
             let initialPromises = [];
             initialPromises.push($rootScope.wallet.loadIdAttributes());
