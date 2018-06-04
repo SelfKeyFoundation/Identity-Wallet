@@ -16,5 +16,5 @@ function SkDoubleHeaderDirective($log) {
         templateUrl: 'common/directives/sk-double-header.html'
     }
 }
-SkDoubleHeaderDirective.$inject = ["log"];
+SkDoubleHeaderDirective.$inject = ["$log"];
 module.exports = SkDoubleHeaderDirective;

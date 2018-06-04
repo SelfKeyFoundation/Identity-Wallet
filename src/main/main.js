@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+
 const fs = require('fs');
 const url = require('url');
 const electron = require('electron');

@@ -16,5 +16,5 @@ function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
         templateUrl: 'common/directives/sk-custom-token-box.html'
     }
 }
-SkCustomBoxDirective.$inject = ["($rootScope", "$log", "$window", "$timeout"];
+SkCustomBoxDirective.$inject = ["$rootScope", "$log", "$window", "$timeout"];
 module.exports = SkCustomBoxDirective;

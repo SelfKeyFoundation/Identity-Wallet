@@ -29,11 +29,11 @@
       "url": "http://www.opensource.org/licenses/MIT"
     }
   ],
-  "main": "./app/main.js",
+  "main": "./src/main/main.js",
   "scripts": {
-    "dev": "gulp && electron-webpack dev",
+    "dev": "gulp && electron-webpack-v2 dev",
     "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
-    "compile": "electron-webpack",
+    "compile": "electron-webpack-v2",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "MODE=test node test/test.js"
@@ -98,8 +98,8 @@
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-webpack": "git://github.com/rodrigopavezi/electron-webpack.git",
     "electron-webpack-eslint": "^2.1.1",
+    "electron-webpack-v2": "^2.1.5",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.2.1",
     "gulp-pug": "^4.0.1",
