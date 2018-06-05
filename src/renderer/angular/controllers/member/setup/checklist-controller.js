@@ -15,8 +15,8 @@ function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
     }
 
     $scope.skip = (event) => {
-        $state.go('member.dashboard.main');
+        $state.go('member.id-wallet.main');
     }
 };
-MemberSetupChecklistController.$inject = ["rootScope", "$scope", "$log", "$state"];
+MemberSetupChecklistController.$inject = ["$rootScope", "$scope", "$log", "$state"];
 module.exports = MemberSetupChecklistController;

@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "gulp && electron-webpack dev",
     "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
-    "compile": "electron-webpack",
+    "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "MODE=test node test/test.js"
