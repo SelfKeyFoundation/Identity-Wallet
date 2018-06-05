@@ -50,7 +50,7 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
                     }
 
                 }).catch((error) => {
-                    CommonService.showToast('error hahaah', error, 10000, 'dasdas');
+                    CommonService.showToast('error', error, 5000);
                 });
             } else {
                 CommonService.showToast('error', 'no data id');
