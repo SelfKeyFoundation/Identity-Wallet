@@ -5,7 +5,7 @@ var Web3 = require('web3');
 const async = require('async');
 const CONFIG = require('../config');
 
-const ABI = require(__static + '/assets/data/abi.json').abi;
+const ABI = require('../assets/data/abi.json').abi;
 const REQUEST_INTERVAL_DELAY = 500;
 
 const SERVER_CONFIG = {

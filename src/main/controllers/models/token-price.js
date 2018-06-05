@@ -1,4 +1,4 @@
-const ethTokensList = require(__static + '/assets/data/eth-tokens.json');
+const ethTokensList = require('../../assets/data/eth-tokens.json');
 
 const Promise = require('bluebird');
 
@@ -16,8 +16,6 @@ module.exports = function (app, sqlLiteService) {
     Controller.findBySymbol = _findBySymbol;
     Controller.add = _add;
     Controller.edit = _edit;
-
-
 
     /**
      *

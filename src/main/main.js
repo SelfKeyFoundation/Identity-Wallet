@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-
 const fs = require('fs');
 const url = require('url');
 const electron = require('electron');
@@ -83,6 +82,8 @@ let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDire
 function onReady(app) {
 
     return function () {
+
+        global.__static = __static;
 
         if (isSecondInstance) { 
             electron.app.quit();

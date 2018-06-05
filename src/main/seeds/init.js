@@ -1,7 +1,7 @@
 const user = require('os').userInfo().username
 const electron = require('electron')
-const log = require('electron-log');
 const userDataPath = electron.app.getPath('userData')
+const setupFilesPath = (process.env.NODE_ENV === 'development')? __dirname : electron.app.getAppPath() + "/dist";
 const countriesList = require('../assets/data/country-list.json')
 const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json')
 const ethTokens = require('../assets/data/eth-tokens.json')
@@ -70,7 +70,7 @@ async function runSeeds(knex, seeds) {
 		}
 		return Promise.all(allSeeds)
 	} catch (e) {
-		log.error(e);
+		console.error(e);
 	}
 }
 

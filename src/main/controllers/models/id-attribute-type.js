@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 
-const initialIdAttributeTypeList = require(__static + '/assets/data/initial-id-attribute-type-list.json');
+const initialIdAttributeTypeList = require('../../assets/data/initial-id-attribute-type-list.json');
 
 module.exports = function (app, sqlLiteService) {
     const TABLE_NAME = 'id_attribute_types';

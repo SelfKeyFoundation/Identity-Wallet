@@ -1062,10 +1062,6 @@ app-builder-bin@1.9.5:
   version "1.9.5"
   resolved "https://registry.yarnpkg.com/app-builder-bin/-/app-builder-bin-1.9.5.tgz#f4e2b26e26578c9a48cea85da44f0bc1a7582fc0"
 
-app-builder-bin@1.9.7:
-  version "1.9.7"
-  resolved "https://registry.yarnpkg.com/app-builder-bin/-/app-builder-bin-1.9.7.tgz#9f01439fa8088a43471df9e5e071dd3880a8cff0"
-
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
@@ -1262,7 +1258,7 @@ async-eventemitter@^0.2.2:
   dependencies:
     async "^2.4.0"
 
-"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
+async-eventemitter@ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c:
   version "0.2.3"
   resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
   dependencies:
@@ -2430,26 +2426,7 @@ builder-util@5.11.1:
     stat-mode "^0.2.2"
     temp-file "^3.1.2"
 
-builder-util@5.11.2:
-  version "5.11.2"
-  resolved "https://registry.yarnpkg.com/builder-util/-/builder-util-5.11.2.tgz#2d4829f0743ce1b654e94586fade63fd6cfefae5"
-  dependencies:
-    "7zip-bin" "~4.0.2"
-    app-builder-bin "1.9.7"
-    bluebird-lst "^1.0.5"
-    builder-util-runtime "^4.2.1"
-    chalk "^2.4.1"
-    debug "^3.1.0"
-    fs-extra-p "^4.6.0"
-    is-ci "^1.1.0"
-    js-yaml "^3.11.0"
-    lazy-val "^1.0.3"
-    semver "^5.5.0"
-    source-map-support "^0.5.6"
-    stat-mode "^0.2.2"
-    temp-file "^3.1.2"
-
-builder-util@^5.11.0, builder-util@^5.11.2:
+builder-util@5.11.4, builder-util@^5.11.0, builder-util@^5.11.2:
   version "5.11.4"
   resolved "https://registry.yarnpkg.com/builder-util/-/builder-util-5.11.4.tgz#24d72aa567ecfeacca72b0740b4ddbffaaef617c"
   dependencies:
@@ -3122,6 +3099,19 @@ copy-concurrently@^1.0.0:
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
+
+copy-webpack-plugin@^4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-4.5.1.tgz#fc4f68f4add837cc5e13d111b20715793225d29c"
+  dependencies:
+    cacache "^10.0.4"
+    find-cache-dir "^1.0.0"
+    globby "^7.1.1"
+    is-glob "^4.0.0"
+    loader-utils "^1.1.0"
+    minimatch "^3.0.4"
+    p-limit "^1.0.0"
+    serialize-javascript "^1.4.0"
 
 core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0:
   version "2.5.7"
@@ -3906,15 +3896,15 @@ ejs@~2.5.6:
   version "2.5.9"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.5.9.tgz#7ba254582a560d267437109a68354112475b0ce5"
 
-electron-builder-lib@20.15.1:
-  version "20.15.1"
-  resolved "https://registry.yarnpkg.com/electron-builder-lib/-/electron-builder-lib-20.15.1.tgz#d2675e71918f62561cf5ecae633dfe5f4219d0e3"
+electron-builder-lib@20.15.3:
+  version "20.15.3"
+  resolved "https://registry.yarnpkg.com/electron-builder-lib/-/electron-builder-lib-20.15.3.tgz#bac8e4630b7994617398e2405b5c3c4e71b37cc0"
   dependencies:
     "7zip-bin" "~4.0.2"
-    app-builder-bin "1.9.7"
+    app-builder-bin "1.9.11"
     async-exit-hook "^2.0.1"
     bluebird-lst "^1.0.5"
-    builder-util "5.11.2"
+    builder-util "5.11.4"
     builder-util-runtime "4.2.1"
     chromium-pickle-js "^0.2.0"
     debug "^3.1.0"
@@ -3966,16 +3956,16 @@ electron-builder-lib@~20.14.6:
     stream-json "^0.6.1"
     temp-file "^3.1.2"
 
-electron-builder@^20.15.1:
-  version "20.15.1"
-  resolved "https://registry.yarnpkg.com/electron-builder/-/electron-builder-20.15.1.tgz#078cda29bdb7240244e9bccf30740b1ea42deb44"
+electron-builder@^20.15.3:
+  version "20.15.3"
+  resolved "https://registry.yarnpkg.com/electron-builder/-/electron-builder-20.15.3.tgz#691e6e03392438fbc23b3cef1e9b78562a9e5c64"
   dependencies:
     bluebird-lst "^1.0.5"
-    builder-util "5.11.2"
+    builder-util "5.11.4"
     builder-util-runtime "4.2.1"
     chalk "^2.4.1"
     dmg-builder "4.10.1"
-    electron-builder-lib "20.15.1"
+    electron-builder-lib "20.15.3"
     electron-download-tf "4.3.4"
     fs-extra-p "^4.6.0"
     is-ci "^1.1.0"
@@ -3984,6 +3974,13 @@ electron-builder@^20.15.1:
     sanitize-filename "^1.6.1"
     update-notifier "^2.5.0"
     yargs "^11.0.0"
+
+electron-chromedriver@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/electron-chromedriver/-/electron-chromedriver-2.0.0.tgz#e63d7f53716e15a5861d691ace522b5c82c186b0"
+  dependencies:
+    electron-download "^4.1.0"
+    extract-zip "^1.6.5"
 
 electron-chromedriver@~1.8.0:
   version "1.8.0"
@@ -4185,9 +4182,9 @@ electron-webpack-js@~2.0.3:
     babel-plugin-component "^1.1.1"
     babel-plugin-syntax-dynamic-import "^7.0.0-beta.3"
 
-electron-webpack-v2@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/electron-webpack-v2/-/electron-webpack-v2-2.1.5.tgz#54d00945350de60d3eae9c0c2461ace1fe79edb4"
+electron-webpack@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/electron-webpack/-/electron-webpack-2.1.2.tgz#f895c020d504f441308a39f208a9c23417e481bc"
   dependencies:
     "@types/webpack-env" "^1.13.6"
     async-exit-hook "^2.0.1"
@@ -5034,12 +5031,21 @@ fd-slicer@~1.0.1:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 fibers@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fibers/-/fibers-2.0.0.tgz#f26d0aaf1f99995fbe1cb3f340efac08bda9dc4b"
 =======
 =======
 >>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
+=======
+fd-slicer@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/fd-slicer/-/fd-slicer-1.1.0.tgz#25c7c89cb1f9077f8891bbe61d8f390eae256f1e"
+  dependencies:
+    pend "~1.2.0"
+
+>>>>>>> Fix issue with main assets for db
 fetch-ponyfill@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/fetch-ponyfill/-/fetch-ponyfill-4.1.0.tgz#ae3ce5f732c645eab87e4ae8793414709b239893"
@@ -5672,6 +5678,17 @@ globby@^6.1.0:
     object-assign "^4.0.1"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
+
+globby@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/globby/-/globby-7.1.1.tgz#fb2ccff9401f8600945dfada97440cca972b8680"
+  dependencies:
+    array-union "^1.0.1"
+    dir-glob "^2.0.0"
+    glob "^7.1.2"
+    ignore "^3.3.5"
+    pify "^3.0.0"
+    slash "^1.0.0"
 
 globby@^8.0.0, globby@^8.0.1:
   version "8.0.1"
@@ -7126,9 +7143,9 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
-knex@^0.14.6:
-  version "0.14.6"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.6.tgz#ad57c4ef8fa1b51ebc8c37c2c9b483f6fb34e41e"
+knex@0.14.5:
+  version "0.14.5"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.5.tgz#15882e79d0499665b87bd032eab74a6a214db320"
   dependencies:
     babel-runtime "^6.26.0"
     bluebird "^3.5.1"
@@ -7822,7 +7839,11 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.33.0 < 2", mime-db@~1.33.0:
+"mime-db@>= 1.33.0 < 2":
+  version "1.34.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.34.0.tgz#452d0ecff5c30346a6dc1e64b1eaee0d3719ff9a"
+
+mime-db@~1.33.0:
   version "1.33.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.33.0.tgz#a3492050a5cb9b63450541e39d9788d2272783db"
 
@@ -8671,7 +8692,7 @@ p-lazy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-lazy/-/p-lazy-1.0.0.tgz#ec53c802f2ee3ac28f166cc82d0b2b02de27a835"
 
-p-limit@^1.1.0:
+p-limit@^1.0.0, p-limit@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.2.0.tgz#0e92b6bedcb59f022c13d0f1949dc82d15909f1c"
   dependencies:
@@ -11741,11 +11762,17 @@ util.promisify@1.0.0, util.promisify@^1.0.0, util.promisify@~1.0.0:
     define-properties "^1.1.2"
     object.getownpropertydescriptors "^2.0.3"
 
-util@0.10.3, util@^0.10.3:
+util@0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/util/-/util-0.10.3.tgz#7afb1afe50805246489e3db7fe0ed379336ac0f9"
   dependencies:
     inherits "2.0.1"
+
+util@^0.10.3:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/util/-/util-0.10.4.tgz#3aa0125bfe668a4672de58857d3ace27ecb76901"
+  dependencies:
+    inherits "2.0.3"
 
 utila@~0.3:
   version "0.3.3"
@@ -11782,8 +11809,8 @@ v8flags@^2.0.2:
     user-home "^1.1.1"
 
 v8flags@^3.0.2:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-3.1.0.tgz#246a34a8158c0e1390dcb758e1140e5d004e230b"
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-3.1.1.tgz#42259a1461c08397e37fe1d4f1cfb59cad85a053"
   dependencies:
     homedir-polyfill "^1.0.1"
 
@@ -12726,11 +12753,11 @@ yauzl@2.4.1:
     fd-slicer "~1.0.1"
 
 yauzl@^2.4.2:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.9.1.tgz#a81981ea70a57946133883f029c5821a89359a7f"
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.9.2.tgz#4fb1bc7ae1fc2f57037b54af6acc8fe1031c5b77"
   dependencies:
     buffer-crc32 "~0.2.3"
-    fd-slicer "~1.0.1"
+    fd-slicer "~1.1.0"
 
 yeoman-environment@^2.0.5, yeoman-environment@^2.1.1:
   version "2.2.0"

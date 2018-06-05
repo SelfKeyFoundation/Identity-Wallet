@@ -31,9 +31,9 @@
   ],
   "main": "./src/main/main.js",
   "scripts": {
-    "dev": "gulp && electron-webpack-v2 dev",
+    "dev": "gulp && electron-webpack dev",
     "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
-    "compile": "electron-webpack-v2",
+    "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "MODE=test node test/test.js"
@@ -91,15 +91,17 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "chalk": "^2.4.1",
+    "chalk": "2.3.2",
+    "copy-webpack-plugin": "^4.5.1",
     "delay": "^3.0.0",
     "electron": "^2.0.2",
-    "electron-builder": "^20.15.1",
+    "electron-builder": "^20.15.3",
+    "electron-chromedriver": "^2.0.0",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-webpack": "^2.1.2",
     "electron-webpack-eslint": "^2.1.1",
-    "electron-webpack-v2": "^2.1.5",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.2.1",
     "gulp-pug": "^4.0.1",
@@ -122,7 +124,8 @@
     "version": "init"
   },
   "build": {
-    "appId": "org.selfkey.wallet"
+    "appId": "org.selfkey.wallet",
+    "files": ["dist/migrations","dist/seeds", "dist/assets"]
   },
   "electronWebpack": {
     "whiteListedModules": [
@@ -131,7 +134,8 @@
     "main": {
       "extraEntries": [
         "@/preload.js"
-      ]
+      ],
+      "webpackConfig": "webpack.main.additions.js"
     }
   }
 }
