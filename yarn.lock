@@ -642,13 +642,6 @@
   dependencies:
     "@types/babel-types" "*"
 
-<<<<<<< HEAD
-"@types/node@^7.0.12":
-  version "7.0.65"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.65.tgz#c160979ff66c4842adc76cc181a11b5e8722d13d"
-
-=======
->>>>>>> Fix build and references
 "@types/node@^8.0.24":
   version "8.10.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.18.tgz#eb9ad8b0723d13fa9bc8b42543e3661ed805f2bb"
@@ -803,16 +796,6 @@ abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-abbrev@1.0.x:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.0.9.tgz#91b4792588a7738c25f35dd6f63752a2f8776135"
-
-accepts@~1.3.5:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 abstract-leveldown@~2.6.0:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-2.6.3.tgz#1c5e8c6a5ef965ae8c35dfb3a8770c476b82c4b8"
@@ -826,10 +809,6 @@ abstract-leveldown@~2.7.1:
     xtend "~4.0.0"
 
 accepts@~1.3.4, accepts@~1.3.5:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
   dependencies:
@@ -1247,27 +1226,18 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 async-eventemitter@^0.2.2:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/async-eventemitter/-/async-eventemitter-0.2.4.tgz#f5e7c8ca7d3e46aab9ec40a292baf686a0bafaca"
   dependencies:
     async "^2.4.0"
 
-async-eventemitter@ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c:
+"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
   version "0.2.3"
   resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
   dependencies:
     async "^2.4.0"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 async-exit-hook@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/async-exit-hook/-/async-exit-hook-2.0.1.tgz#8bd8b024b0ec9b1c01cccb9af9db29bd717dfaf3"
@@ -1280,29 +1250,7 @@ async-limiter@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-async@1.x, async@^1.4.0, async@^1.4.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
-
-async@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.6.0.tgz#61a29abb6fcc026fea77e56d1c6ec53a795951f4"
-  dependencies:
-    lodash "^4.14.0"
-
-async@^2.0.0, async@^2.1.5:
-=======
-async@2.6.1, async@^2.0.1, async@^2.1.2, async@^2.4.0, async@^2.5.0, async@^2.6.0:
->>>>>>> Fix build and references
-=======
 async@2.6.1, async@^2.0.0, async@^2.0.1, async@^2.1.2, async@^2.4.0, async@^2.5.0, async@^2.6.0:
->>>>>>> Fixe warnings
-=======
-async@2.6.1, async@^2.0.0, async@^2.0.1, async@^2.1.2, async@^2.4.0, async@^2.5.0, async@^2.6.0:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
   dependencies:
@@ -1592,12 +1540,6 @@ babel-plugin-syntax-trailing-function-commas@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-6.22.0.tgz#ba0360937f8d06e40180a43fe0d5616fff532cf3"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-babel-plugin-transform-async-to-generator@6.24.1, babel-plugin-transform-async-to-generator@^6.1.4, babel-plugin-transform-async-to-generator@^6.22.0, babel-plugin-transform-async-to-generator@^6.24.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 babel-plugin-transform-async-generator-functions@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-generator-functions/-/babel-plugin-transform-async-generator-functions-6.24.1.tgz#f058900145fd3e9907a6ddf28da59f215258a5db"
@@ -1607,10 +1549,6 @@ babel-plugin-transform-async-generator-functions@^6.24.1:
     babel-runtime "^6.22.0"
 
 babel-plugin-transform-async-to-generator@^6.22.0, babel-plugin-transform-async-to-generator@^6.24.1:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-6.24.1.tgz#6536e378aff6cb1d5517ac0e40eb3e9fc8d08761"
   dependencies:
@@ -1927,11 +1865,7 @@ babel-preset-stage-1@^6.5.0:
     babel-plugin-transform-export-extensions "^6.22.0"
     babel-preset-stage-2 "^6.24.1"
 
-<<<<<<< HEAD
-babel-preset-react@^6.24.1:
-=======
 babel-preset-stage-2@^6.24.1:
->>>>>>> Fix build and references
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-preset-stage-2/-/babel-preset-stage-2-6.24.1.tgz#d9e2960fb3d71187f0e64eec62bc07767219bdc1"
   dependencies:
@@ -2017,11 +1951,6 @@ babylon@^6.17.3, babylon@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 babylon@^7.0.0-beta.30:
   version "7.0.0-beta.47"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.47.tgz#6d1fa44f0abec41ab7c780481e62fd9aafbdea80"
@@ -2032,10 +1961,6 @@ backoff@^2.5.0:
   dependencies:
     precond "0.2"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 balanced-match@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
@@ -2143,15 +2068,7 @@ bn.js@4.11.6:
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.6.tgz#53344adb14617a13f6e8dd2ce28905d1c0ba3215"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.11.0, bn.js@^4.11.3, bn.js@^4.11.6, bn.js@^4.4.0, bn.js@^4.8.0:
-=======
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.10.0, bn.js@^4.11.0, bn.js@^4.11.3, bn.js@^4.11.6, bn.js@^4.11.8, bn.js@^4.4.0:
->>>>>>> Fix build and references
-=======
-bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.10.0, bn.js@^4.11.0, bn.js@^4.11.3, bn.js@^4.11.6, bn.js@^4.11.8, bn.js@^4.4.0:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
 
@@ -2555,25 +2472,12 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000847"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000847.tgz#ff4072a5468809fec0ae9ac3b4035ef891e5b144"
+  version "1.0.30000848"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000848.tgz#e149c981c72aa20439e3bc12c7cf8b3f7e1237c6"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-caniuse-lite@^1.0.30000792:
-=======
 caniuse-lite@^1.0.30000844:
->>>>>>> Fix build and references
-=======
-caniuse-lite@^1.0.30000844:
-<<<<<<< HEAD
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
-  version "1.0.30000846"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000846.tgz#2092911eecad71a89dae1faa62bcc202fde7f959"
-=======
-  version "1.0.30000847"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000847.tgz#be77f439be29bbc57ae08004b1e470b653b1ec1d"
->>>>>>> Fix electron webpack issue
+  version "1.0.30000848"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000848.tgz#ec9c0a72ec8f9ef812e4f4b8628625af9c85ade0"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -2649,36 +2553,10 @@ chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Fixe warnings
 check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-cheerio@^0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-0.20.0.tgz#5c710f2bab95653272842ba01c6ea61b3545ec35"
-  dependencies:
-    css-select "~1.2.0"
-    dom-serializer "~0.1.0"
-    entities "~1.1.1"
-    htmlparser2 "~3.8.1"
-    lodash "^4.1.0"
-  optionalDependencies:
-    jsdom "^7.0.2"
-
-chokidar@^1.6.1:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-1.7.0.tgz#798e689778151c8076b4b360e5edd28cda2bb468"
-=======
-=======
->>>>>>> Fixe warnings
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 checkpoint-store@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/checkpoint-store/-/checkpoint-store-1.1.0.tgz#04e4cb516b91433893581e6d4601a78e9552ea06"
@@ -2688,10 +2566,6 @@ checkpoint-store@^1.1.0:
 chokidar@^2.0.0, chokidar@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.3.tgz#dcbd4f6cbb2a55b4799ba8a840ac527e5f4b1176"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   dependencies:
     anymatch "^2.0.0"
     async-each "^1.0.0"
@@ -3004,15 +2878,7 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-concat-stream@1.6.2, concat-stream@^1.4.7, concat-stream@^1.6.0, concat-stream@~1.6.x:
-=======
 concat-stream@1.6.2, concat-stream@^1.5.0, concat-stream@^1.5.1, concat-stream@^1.6.0:
->>>>>>> Fix build and references
-=======
-concat-stream@1.6.2, concat-stream@^1.5.0, concat-stream@^1.5.1, concat-stream@^1.6.0:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
   dependencies:
@@ -3173,23 +3039,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-cross-spawn-async@^2.1.1:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/cross-spawn-async/-/cross-spawn-async-2.2.5.tgz#845ff0c0834a3ded9d160daca6d390906bb288cc"
-  dependencies:
-    lru-cache "^4.0.0"
-    which "^1.2.8"
-
-cross-spawn-promise@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/cross-spawn-promise/-/cross-spawn-promise-0.10.1.tgz#db9cb4c50c60b72a15be049b78122ce382d87b10"
-  dependencies:
-    cross-spawn "^5.1.0"
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 crocket@^0.9.11:
   version "0.9.11"
   resolved "https://registry.yarnpkg.com/crocket/-/crocket-0.9.11.tgz#288fca11ef0d3dd239b62c488265f30c8edfb0c5"
@@ -3202,10 +3051,6 @@ cross-fetch@^2.1.0, cross-fetch@^2.1.1:
   dependencies:
     node-fetch "2.1.2"
     whatwg-fetch "2.0.4"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 cross-spawn@^3.0.0:
   version "3.0.1"
@@ -3544,9 +3389,6 @@ decompress@4.2.0, decompress@^4.0.0:
     pify "^2.3.0"
     strip-dirs "^2.0.0"
 
-<<<<<<< HEAD
-deep-equal@^1.0.1:
-=======
 deep-eql@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/deep-eql/-/deep-eql-3.0.1.tgz#dfc9404400ad1c8fe023e7da1df1c147c4b444df"
@@ -3554,10 +3396,6 @@ deep-eql@^3.0.0:
     type-detect "^4.0.0"
 
 deep-equal@^1.0.1, deep-equal@~1.0.1:
-<<<<<<< HEAD
->>>>>>> Fixe warnings
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
@@ -4055,48 +3893,6 @@ electron-osx-sign@0.4.10:
     minimist "^1.2.0"
     plist "^2.1.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-electron-packager@^11.0.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/electron-packager/-/electron-packager-11.2.0.tgz#facc17d2b92c10da1bfa1d7c5f58f13774571839"
-  dependencies:
-    asar "^0.14.0"
-    debug "^3.0.0"
-    electron-download "^4.0.0"
-    electron-osx-sign "^0.4.1"
-    extract-zip "^1.0.3"
-    fs-extra "^5.0.0"
-    get-package-info "^1.0.0"
-    mz "^2.6.0"
-    nodeify "^1.0.1"
-    parse-author "^2.0.0"
-    pify "^3.0.0"
-    plist "^2.0.0"
-    pruner "^0.0.7"
-    rcedit "^1.0.0"
-    resolve "^1.1.6"
-    sanitize-filename "^1.6.0"
-    semver "^5.3.0"
-    yargs-parser "^9.0.2"
-
-electron-prebuilt-compile@1.8.4:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/electron-prebuilt-compile/-/electron-prebuilt-compile-1.8.4.tgz#5f542de75334c8a48c1b32db853790567dd6a2b0"
-  dependencies:
-    babel-plugin-array-includes "^2.0.3"
-    babel-plugin-transform-async-to-generator "^6.24.1"
-    babel-preset-es2016-node5 "^1.1.2"
-    babel-preset-react "^6.24.1"
-    electron "1.8.4"
-    electron-compile "*"
-    electron-compilers "*"
-    yargs "^6.6.0"
-
-=======
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 electron-publish@20.14.6:
   version "20.14.6"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-20.14.6.tgz#ced15b0c08fdaef2fb25beba9f55f20d1c19e215"
@@ -4121,31 +3917,6 @@ electron-publish@20.15.0:
     lazy-val "^1.0.3"
     mime "^2.3.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-electron-rebuild@^1.6.0, electron-rebuild@^1.7.3:
-=======
-electron-rebuild@^1.7.3:
->>>>>>> Fix build and references
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/electron-rebuild/-/electron-rebuild-1.7.3.tgz#24ae06ad9dd61cb7e4d688961f49118c40a110eb"
-  dependencies:
-    colors "^1.1.2"
-    debug "^2.6.3"
-    detect-libc "^1.0.3"
-    fs-extra "^3.0.1"
-    node-abi "^2.0.0"
-    node-gyp "^3.6.0"
-    ora "^1.2.0"
-    rimraf "^2.6.1"
-    spawn-rx "^2.0.10"
-    yargs "^7.0.2"
-
-=======
->>>>>>> Fixe warnings
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 electron-settings@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/electron-settings/-/electron-settings-3.2.0.tgz#01461e153f95b6f18adbe0c360c70898eb0f43c3"
@@ -4194,19 +3965,6 @@ electron-webpack@^2.1.2:
     css-hot-loader "^1.3.9"
     css-loader "^0.28.11"
     debug "^3.1.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
-    fs-extra "^4.0.2"
-    klaw "^2.1.0"
-    lodash "^4.17.4"
-    uuid "^3.1.0"
-
-electron@1.8.4:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-1.8.4.tgz#cca8d0e6889f238f55b414ad224f03e03b226a38"
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
     electron-devtools-installer "^2.2.4"
     electron-webpack-js "~2.0.3"
     file-loader "^1.1.11"
@@ -4230,10 +3988,6 @@ electron@1.8.4:
 electron@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.2.tgz#b77e05f83419cc5ec921a2d21f35b55e4bfc3d68"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^3.0.1"
@@ -4297,21 +4051,11 @@ env-paths@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-1.0.0.tgz#4168133b42bb05c38a35b1ae4397c8298ab369e0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-errno@^0.1.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 envinfo@^5.7.0:
   version "5.10.0"
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-5.10.0.tgz#503a9774ae15b93ea68bdfae2ccd6306624ea6df"
 
 errno@^0.1.3, errno@~0.1.1, errno@~0.1.7:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/errno/-/errno-0.1.7.tgz#4684d71779ad39af177e3f007996f7c67c852618"
   dependencies:
@@ -4323,11 +4067,6 @@ error-ex@^1.2.0, error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 error@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/error/-/error-7.0.2.tgz#a5f75fff4d9926126ddac0ea5dc38e689153cb02"
@@ -4353,10 +4092,6 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 es3ify@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/es3ify/-/es3ify-0.1.4.tgz#ad9fa5df1ae34f3f31e1211b5818b2d51078dfd1"
@@ -4526,11 +4261,6 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 eth-block-tracker@^2.2.2:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/eth-block-tracker/-/eth-block-tracker-2.3.1.tgz#ab6d177e5b50128fa06d7ae9e0489c7484bac95e"
@@ -4584,10 +4314,6 @@ eth-json-rpc-middleware@^1.5.0:
     promise-to-callback "^1.0.0"
     tape "^4.6.3"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 eth-lib@0.1.27, eth-lib@^0.1.26:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/eth-lib/-/eth-lib-0.1.27.tgz#f0b0fd144f865d2d6bf8257a40004f2e75ca1dd6"
@@ -4648,32 +4374,6 @@ ethereum-common@^0.0.18:
   version "0.0.18"
   resolved "https://registry.yarnpkg.com/ethereum-common/-/ethereum-common-0.0.18.tgz#2fdc3576f232903358976eb39da783213ff9523f"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ethereumjs-tx@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/ethereumjs-tx/-/ethereumjs-tx-1.3.3.tgz#ece051d3efdbe771ad2a518d61632ca2ab75ecbb"
-  dependencies:
-    ethereum-common "^0.0.18"
-    ethereumjs-util "^5.0.0"
-
-ethereumjs-util@5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/ethereumjs-util/-/ethereumjs-util-5.1.2.tgz#25ba0215cbb4c2f0b108a6f96af2a2e62e45921f"
-  dependencies:
-    babel-preset-es2015 "^6.24.0"
-    babelify "^7.3.0"
-    bn.js "^4.8.0"
-    create-hash "^1.1.2"
-    ethjs-util "^0.1.3"
-    keccak "^1.0.2"
-    rlp "^2.0.0"
-    secp256k1 "^3.0.1"
-
-ethereumjs-util@^5.0.0:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 "ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
   version "0.6.5"
   resolved "git+https://github.com/ethereumjs/ethereumjs-abi.git#4ea2fdfed09e8f99117d9362d17c6b01b64a2bcf"
@@ -4707,10 +4407,6 @@ ethereumjs-tx@1.3.4, ethereumjs-tx@^1.1.1, ethereumjs-tx@^1.2.0, ethereumjs-tx@^
     ethereumjs-util "^5.0.0"
 
 ethereumjs-util@5.2.0, ethereumjs-util@^5.0.0, ethereumjs-util@^5.0.1, ethereumjs-util@^5.1.1, ethereumjs-util@^5.1.2, ethereumjs-util@^5.1.3, ethereumjs-util@^5.1.5:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ethereumjs-util/-/ethereumjs-util-5.2.0.tgz#3e0c0d1741471acf1036052d048623dee54ad642"
   dependencies:
@@ -5029,23 +4725,12 @@ fd-slicer@~1.0.1:
   dependencies:
     pend "~1.2.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-fibers@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fibers/-/fibers-2.0.0.tgz#f26d0aaf1f99995fbe1cb3f340efac08bda9dc4b"
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
-=======
 fd-slicer@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fd-slicer/-/fd-slicer-1.1.0.tgz#25c7c89cb1f9077f8891bbe61d8f390eae256f1e"
   dependencies:
     pend "~1.2.0"
 
->>>>>>> Fix issue with main assets for db
 fetch-ponyfill@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/fetch-ponyfill/-/fetch-ponyfill-4.1.0.tgz#ae3ce5f732c645eab87e4ae8793414709b239893"
@@ -5055,10 +4740,6 @@ fetch-ponyfill@^4.0.0:
 fibers@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/fibers/-/fibers-2.0.2.tgz#36db63ea61c543174e2264675fea8c2783371366"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 figures@^1.7.0:
   version "1.7.0"
@@ -5389,15 +5070,7 @@ fstream@^1.0.0, fstream@^1.0.2, fstream@^1.0.8:
     mkdirp ">=0.5 0"
     rimraf "2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-function-bind@^1.0.2:
-=======
 function-bind@^1.0.2, function-bind@^1.1.0, function-bind@^1.1.1, function-bind@~1.1.1:
->>>>>>> Fix build and references
-=======
-function-bind@^1.0.2, function-bind@^1.1.0, function-bind@^1.1.1, function-bind@~1.1.1:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
 
@@ -5544,44 +5217,7 @@ glob2base@^0.0.12:
   dependencies:
     find-index "^0.1.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-glob@3.2.11, glob@~3.2.6:
-  version "3.2.11"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-3.2.11.tgz#4a973f635b9190f715d10987d5c00fd2815ebe3d"
-  dependencies:
-    inherits "2"
-    minimatch "0.3"
-
-glob@7.0.x:
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.6.tgz#211bafaf49e525b8cd93260d14ab136152b3f57a"
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.2"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
-glob@7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.1.tgz#805211df04faaf1c63a3600306cdf5ade50b2ec8"
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.2"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
-glob@7.1.2, glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2, glob@~7.1.1:
-=======
 glob@7.1.2, glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2, glob@~7.1.1, glob@~7.1.2:
->>>>>>> Fix build and references
-=======
-glob@7.1.2, glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2, glob@~7.1.1, glob@~7.1.2:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
   dependencies:
@@ -6039,8 +5675,8 @@ has-values@^1.0.0:
     kind-of "^4.0.0"
 
 has@^1.0.1, has@~1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/has/-/has-1.0.2.tgz#1a64bfe4b52e67fb87b9822503d97c019fb6ba42"
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
   dependencies:
     function-bind "^1.1.1"
 
@@ -6308,21 +5944,9 @@ ignore@^3.3.3, ignore@^3.3.5:
   version "3.3.8"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.8.tgz#3f8e9c35d38708a3a7e0e9abb6c73e7ee7707b2b"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-image-size@^0.5.0, image-size@~0.5.0:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
-=======
 immediate@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.2.3.tgz#d140fa8f614659bd6541233097ddaac25cdd991c"
->>>>>>> Fix build and references
-=======
-immediate@^3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.2.3.tgz#d140fa8f614659bd6541233097ddaac25cdd991c"
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 immediate@~3.0.5:
   version "3.0.6"
@@ -7143,9 +6767,9 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
-knex@0.14.5:
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.5.tgz#15882e79d0499665b87bd032eab74a6a214db320"
+knex@^0.14.6:
+  version "0.14.6"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.6.tgz#ad57c4ef8fa1b51ebc8c37c2c9b483f6fb34e41e"
   dependencies:
     babel-runtime "^6.26.0"
     bluebird "^3.5.1"
@@ -7192,12 +6816,6 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ledgerco@1.2.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 leb@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/leb/-/leb-0.3.0.tgz#32bee9fad168328d6aea8522d833f4180eed1da3"
@@ -7214,24 +6832,12 @@ ledger-wallet-provider@2.0.1-beta.2:
     web3-provider-engine "^13.3.3"
 
 ledgerco@^1.2.1:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ledgerco/-/ledgerco-1.2.1.tgz#a1fdefd7aaf5a8857bf9b47887f5465bdcdf0602"
   dependencies:
     node-hid "0.6.0"
     u2f-api "0.2.7"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-leven@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/leven/-/leven-2.1.0.tgz#c2e7a9f772094dee9d34202ae8acce4687875580"
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 level-codec@~7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/level-codec/-/level-codec-7.0.1.tgz#341f22f907ce0f16763f24bddd681e395a0fb8a7"
@@ -7275,10 +6881,6 @@ levelup@^1.2.1:
     prr "~1.0.1"
     semver "~5.4.1"
     xtend "~4.0.0"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -7618,27 +7220,11 @@ lru-cache@^4.0.1, lru-cache@^4.1.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-macos-alias@~0.2.5:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/macos-alias/-/macos-alias-0.2.11.tgz#feeea6c13ba119814a43fc43c470b31e59ef718a"
-  dependencies:
-    nan "^2.4.0"
-
-make-dir@^1.0.0:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 ltgt@~2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
 
 make-dir@^1.0.0, make-dir@^1.1.0:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.3.0.tgz#79c1033b80515bd6d24ec9933e860ca75ee27f0c"
   dependencies:
@@ -7725,11 +7311,6 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 memdown@^1.0.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/memdown/-/memdown-1.4.1.tgz#b4e4e192174664ffbae41361aa500f3119efe215"
@@ -7752,10 +7333,6 @@ memorystream@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/memorystream/-/memorystream-0.3.1.tgz#86d7090b30ce455d63fbae12dda51a47ddcaf9b2"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 meow@^3.1.0, meow@^3.3.0, meow@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
@@ -7913,19 +7490,7 @@ minimist@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-minimist@1.1.x:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.1.3.tgz#3bedfd91a92d39016fcfaa1c681e8faa1a1efda8"
-
-minimist@1.2.0, minimist@^1.1.0, minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0:
-=======
 minimist@1.2.0, minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@~1.2.0:
->>>>>>> Fix build and references
-=======
-minimist@1.2.0, minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@~1.2.0:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
@@ -8150,16 +7715,6 @@ node-dir@0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/node-dir/-/node-dir-0.1.8.tgz#55fb8deb699070707fb67f91a460f0448294c77d"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-node-fetch@^2.0.0, node-fetch@^2.1.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
-
-node-gyp@^3.3.1, node-gyp@^3.4.0, node-gyp@^3.6.0:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 node-fetch@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
@@ -8175,16 +7730,7 @@ node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-node-gyp@^3.3.1, node-gyp@^3.6.0:
->>>>>>> Fix build and references
-=======
 node-gyp@^3.3.1:
->>>>>>> Fixe warnings
-=======
-node-gyp@^3.3.1:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.6.2.tgz#9bfbe54562286284838e750eac05295853fa1c60"
   dependencies:
@@ -8452,21 +7998,11 @@ object-hash@^1.1.4:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-1.3.0.tgz#76d9ba6ff113cf8efc0d996102851fe6723963e2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-object-keys@^1.0.6:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 object-inspect@~1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.5.0.tgz#9d876c11e40f485c79215670281b767488f9bfe3"
 
 object-keys@^1.0.11, object-keys@^1.0.6, object-keys@^1.0.8:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
@@ -9363,22 +8899,6 @@ progress@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-promise-timeout@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/promise-timeout/-/promise-timeout-1.3.0.tgz#d1c78dd50a607d5f0a5207410252a3a0914e1014"
-
-promise@^6.0.1:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/promise/-/promise-6.1.0.tgz#2ce729f6b94b45c26891ad0602c5c90e04c6eef6"
-  dependencies:
-    asap "~1.0.0"
-
-promise@^7.0.1, promise@^7.1.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
@@ -9395,10 +8915,6 @@ promise-to-callback@^1.0.0:
     set-immediate-shim "^1.0.1"
 
 promise@^7.0.1:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
   dependencies:
@@ -9731,15 +9247,7 @@ read-pkg@^3.0.0:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"readable-stream@>=1.0.33-1 <1.1.0-0", readable-stream@~1.0.2, readable-stream@~1.0.24, readable-stream@~1.0.26:
-=======
 readable-stream@1.0, "readable-stream@>=1.0.33-1 <1.1.0-0", readable-stream@~1.0.15:
->>>>>>> Fix build and references
-=======
-readable-stream@1.0, "readable-stream@>=1.0.33-1 <1.1.0-0", readable-stream@~1.0.15:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.0.34"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
   dependencies:
@@ -9748,15 +9256,7 @@ readable-stream@1.0, "readable-stream@>=1.0.33-1 <1.1.0-0", readable-stream@~1.0
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-readable-stream@^1.0.27-1, readable-stream@^1.1.8, readable-stream@~1.1.9:
-=======
 readable-stream@^1.0.33, readable-stream@~1.1.9:
->>>>>>> Fix build and references
-=======
-readable-stream@^1.0.33, readable-stream@~1.1.9:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
   dependencies:
@@ -9765,24 +9265,6 @@ readable-stream@^1.0.33, readable-stream@~1.1.9:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.4, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.0, readable-stream@^2.3.5:
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.3"
-    isarray "~1.0.0"
-    process-nextick-args "~2.0.0"
-    safe-buffer "~5.1.1"
-    string_decoder "~1.1.1"
-    util-deprecate "~1.0.1"
-
-=======
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 readdirp@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-2.1.0.tgz#4ed0ad060df3073300c48440373f72d1cc642d78"
@@ -9970,36 +9452,9 @@ renderkid@^2.0.1:
     strip-ansi "^3.0.0"
     utila "~0.3"
 
-<<<<<<< HEAD
-request@2, request@^2.45.0, request@^2.55.0, request@^2.79.0, request@^2.81.0:
-  version "2.87.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-=======
 repeat-element@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/repeat-element/-/repeat-element-1.1.2.tgz#ef089a178d1483baae4d93eb98b4f9e4e11d990a"
->>>>>>> Fix build and references
 
 repeat-string@^1.5.2, repeat-string@^1.6.1:
   version "1.6.1"
@@ -10100,21 +9555,9 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-require-from-string@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
-=======
 require-from-string@^1.1.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-1.2.1.tgz#529c9ccef27380adfec9a2f965b649bbee636418"
->>>>>>> Fix build and references
-=======
-require-from-string@^1.1.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-1.2.1.tgz#529c9ccef27380adfec9a2f965b649bbee636418"
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 require-main-filename@^1.0.1:
   version "1.0.1"
@@ -10374,11 +9817,6 @@ seek-bzip@^1.0.5:
   dependencies:
     commander "~2.8.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -10393,10 +9831,6 @@ semaphore@>=1.0.1, semaphore@^1.0.3:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
 
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 semver-diff@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/semver-diff/-/semver-diff-2.1.0.tgz#4bbb8437c8d37e4b0cf1a68fd726ec6d645d6d36"
@@ -10658,16 +10092,6 @@ sockjs@0.3.19:
     faye-websocket "^0.10.0"
     uuid "^3.0.1"
 
-<<<<<<< HEAD
-sorcery@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/sorcery/-/sorcery-0.10.0.tgz#8ae90ad7d7cb05fc59f1ab0c637845d5c15a52b7"
-  dependencies:
-    buffer-crc32 "^0.2.5"
-    minimist "^1.2.0"
-    sander "^0.5.0"
-    sourcemap-codec "^1.3.0"
-=======
 solc@^0.4.2:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/solc/-/solc-0.4.24.tgz#354f14b269b38cbaa82a47d1ff151723502b954e"
@@ -10677,10 +10101,6 @@ solc@^0.4.2:
     require-from-string "^1.1.0"
     semver "^5.3.0"
     yargs "^4.7.1"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 sort-keys@^1.0.0:
   version "1.1.2"
@@ -10959,22 +10379,6 @@ string-width@^1.0.1, string-width@^1.0.2:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-string_decoder@~0.10.x:
-  version "0.10.31"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
-
-string_decoder@~1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.3.tgz#0fc67d7c141825de94282dd536bec6b9bce860ab"
-  dependencies:
-    safe-buffer "~5.1.0"
-
-string_decoder@~1.1.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 string.prototype.trim@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/string.prototype.trim/-/string.prototype.trim-1.1.2.tgz#d04de2c89e137f4d7d206f086b5ed2fae6be8cea"
@@ -10984,10 +10388,6 @@ string.prototype.trim@~1.1.2:
     function-bind "^1.0.2"
 
 string_decoder@^1.0.0, string_decoder@~1.1.1:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
   dependencies:
@@ -11484,16 +10884,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-typescript@>=1.6:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.1.tgz#fdb19d2c67a15d11995fd15640e373e09ab09961"
-
-=======
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 u2f-api@0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-0.2.7.tgz#17bf196b242f6bf72353d9858e6a7566cc192720"
@@ -12048,34 +11438,6 @@ web3-eth@1.0.0-beta.34:
   resolved "https://registry.yarnpkg.com/web3-eth/-/web3-eth-1.0.0-beta.34.tgz#74086000850c6fe6f535ef49837d6d4bb6113268"
   dependencies:
     underscore "1.8.3"
-<<<<<<< HEAD
-<<<<<<< HEAD
-    web3-core "1.0.0-beta.33"
-    web3-core-helpers "1.0.0-beta.33"
-    web3-core-method "1.0.0-beta.33"
-    web3-core-subscriptions "1.0.0-beta.33"
-    web3-eth-abi "1.0.0-beta.33"
-    web3-eth-accounts "1.0.0-beta.33"
-    web3-eth-contract "1.0.0-beta.33"
-    web3-eth-iban "1.0.0-beta.33"
-    web3-eth-personal "1.0.0-beta.33"
-    web3-net "1.0.0-beta.33"
-    web3-utils "1.0.0-beta.33"
-
-web3-net@1.0.0-beta.33:
-  version "1.0.0-beta.33"
-  resolved "https://registry.yarnpkg.com/web3-net/-/web3-net-1.0.0-beta.33.tgz#b6c90d1a0e1626eaae8b3d922ac153672fd56445"
-  dependencies:
-    web3-core "1.0.0-beta.33"
-    web3-core-method "1.0.0-beta.33"
-    web3-utils "1.0.0-beta.33"
-
-web3-providers-http@1.0.0-beta.33:
-  version "1.0.0-beta.33"
-  resolved "https://registry.yarnpkg.com/web3-providers-http/-/web3-providers-http-1.0.0-beta.33.tgz#3b35ae00ee7df5b96b4934962ad4a86f2a5599c1"
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
     web3-core "1.0.0-beta.34"
     web3-core-helpers "1.0.0-beta.34"
     web3-core-method "1.0.0-beta.34"
@@ -12149,10 +11511,6 @@ web3-provider-engine@^13.3.2, web3-provider-engine@^13.3.3:
 web3-providers-http@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-providers-http/-/web3-providers-http-1.0.0-beta.34.tgz#e561b52bbb43766282007d40285bfe3550c27e7a"
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   dependencies:
     web3-core-helpers "1.0.0-beta.34"
     xhr2 "0.1.4"
@@ -12400,33 +11758,13 @@ websocket-extensions@>=0.1.1:
     typedarray-to-buffer "^3.1.2"
     yaeti "^0.0.6"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Fixe warnings
 wgxpath@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wgxpath/-/wgxpath-1.0.0.tgz#eef8a4b9d558cc495ad3a9a2b751597ecd9af690"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-whatwg-url-compat@~0.6.5:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/whatwg-url-compat/-/whatwg-url-compat-0.6.5.tgz#00898111af689bb097541cd5a45ca6c8798445bf"
-  dependencies:
-    tr46 "~0.0.1"
-=======
-=======
->>>>>>> Fixe warnings
 whatwg-fetch@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
->>>>>>> Fix build and references
-=======
-whatwg-fetch@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 
 whet.extend@~0.9.9:
   version "0.9.9"
@@ -12589,21 +11927,11 @@ xmldom@0.1.x:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@~4.0.1:
-=======
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
 xpipe@*:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/xpipe/-/xpipe-1.0.5.tgz#8dd8bf45fc3f7f55f0e054b878f43a62614dafdf"
 
 "xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.0, xtend@~4.0.1:
-<<<<<<< HEAD
->>>>>>> Fix build and references
-=======
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 
@@ -12686,15 +12014,7 @@ yargs@^11.1.0:
     y18n "^3.2.1"
     yargs-parser "^9.0.2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-yargs@^4.8.1:
-=======
 yargs@^4.7.1:
->>>>>>> Fix build and references
-=======
-yargs@^4.7.1:
->>>>>>> Revert "Merge branch 'dev' of https://github.com/SelfKeyFoundation/Identity-Wallet into fix/build-with-webpack"
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-4.8.1.tgz#c0c42924ca4aaa6b0e6da1739dfb216439f9ddc0"
   dependencies:
