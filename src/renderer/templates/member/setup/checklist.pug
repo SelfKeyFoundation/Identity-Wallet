@@ -1,0 +1,40 @@
+.checklist(layout-fill, layout="column", layout-align="center center")
+
+    .header-wrapper(layout="column", layout-align="center start")
+        span.title SelfKey ID
+        span
+            | All identity attributes and documents are stored locally in your device,
+            | not in a server or the blockchain. SelfKey does not have access to your data.
+
+    .content-wrapper.sk-box
+        .content(layout="column")
+            .sk-text.header Upload ID Documents
+            .sk-text.sub-header If you’re not ready, you can finish this later.
+
+            .sk-list(style="margin-top: 28px;")
+                .item
+                    .bullet
+                        img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}")
+                    span {{ $root.DICTIONARY['full_legal_name'] }}
+
+                .item
+                    .bullet
+                        img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}")
+                    span {{ $root.DICTIONARY['country_of_residency'] }}
+
+                .item
+                    .bullet
+                        img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="national_id")
+                        img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!national_id", style="width: 12px;")
+                    span {{ $root.DICTIONARY['national_id'] }}
+
+                .item
+                    .bullet
+                        img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="id_selfie")
+                        img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!id_selfie", style="width: 12px;")
+                    span {{ $root.DICTIONARY['id_selfie'] }}
+
+    .actions-wrapper(layout="row", layout-align="center center")
+        md-button.gray(flex="70", ng-click="nextStep($event)")
+            span.primary Add More Details
+        #skipDashboard.sk-hyperlink.sk-text(style="color: #fff; text-align: center;", flex="30", ng-click="skip($event)") I'm not ready
