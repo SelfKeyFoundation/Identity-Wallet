@@ -10,7 +10,8 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
         },
         link: (scope, element) => {
 
-            let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            //let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
             scope.txList = [];
             scope.tokenSymbol = scope.tokenSymbol ? scope.tokenSymbol.toUpperCase() : null;
 
@@ -24,10 +25,25 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
                 if (status == 1) {
                     return isSend ? 'Sent' : 'Received';
                 }
-                return '';
-                //TODO in progress implementation
-                // TODO unknown and in progress
+                return isSend ? 'Sending' : 'Sending';
             };
+
+           
+            let getTxStatusIcon = (tx) => {
+                let status = tx.txReceiptStatus;
+                let isSend = tx.from == publicKey;
+
+                if (status == 1) {
+                    return isSend ? 'sent' : 'receive';
+                }
+
+                if (status == 0) {
+                    return 'fail';
+                }
+
+                return 'clock';
+            };
+
             let processTxHistoryList = (list) => {
                 return list.map((tx) => {
                     let symbol = tx.tokenSymbol;
@@ -35,11 +51,9 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
                     tx.directionSign = publicKey == tx.from ? '- ' : '+ ';
 
                     tx.externalLink = `https://etherscan.io/tx/${tx.hash}`;
-
                     tx.statusText = getTxStatusText(tx);
-                    //TODO finish implementation! in progress failed
-                    tx.directionIcon = publicKey == tx.from ? 'paper-plane' : 'coins';
-
+                    tx.statusIcon = getTxStatusIcon(tx);
+                    
                     return tx;
                 });
             };

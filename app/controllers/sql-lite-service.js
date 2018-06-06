@@ -157,12 +157,13 @@ module.exports = function (app) {
      */
     // TODO
     controller.prototype.walletTokens_selectByWalletId = (walletId) => {
+        console.log('walletId walletId walletId', walletId);
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
                 .select('wallet_tokens.*', 'token_prices.name', 'token_prices.priceUSD', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
-                .leftJoin('tokens', 'tokenId', 'tokens.id')
+                .leftJoin('tokens', 'wallet_tokens.tokenId', 'tokens.id')
                 .leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
-                .where({ walletId: walletId, recordState: 1 });
+                .where({ 'wallet_tokens.walletId': walletId, 'wallet_tokens.recordState': 1 });
 
             promise.then((rows) => {
                 resolve(rows);
@@ -182,6 +183,7 @@ module.exports = function (app) {
                 .where({ 'wallet_tokens.id': id, recordState: 1 });
 
             promise.then((rows) => {
+                console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', rows);
                 rows && rows.length ? resolve(rows[0]) : resolve(null);
             }).catch((error) => {
                 console.log(error);

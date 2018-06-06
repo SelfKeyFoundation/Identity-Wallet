@@ -122,7 +122,7 @@ let defaultModule = function (app) {
         if (processedTx.txReceiptStatus == null) {
             let txReceipt = await getTransactionReceipt(processedTx.hash);
             if (txReceipt) {
-                processedTx.txReceiptStatus = parseInt(txReceipt.status, 16) || -1;
+                processedTx.txReceiptStatus = parseInt(txReceipt.status, 16) || -1; //TODO
             }
         }
 
@@ -150,8 +150,8 @@ let defaultModule = function (app) {
         for (let wallet of wallets) {
 
 
-            //let address = '0x95449efa29feccc09a2efc1638b1945b9f316ca5'; //fealured cases.
-            let address = '0x' + wallet.publicKey;
+            let address = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase(); //fealured cases.
+            //let address = ('0x' + wallet.publicKey).toLowerCase();
             let ethTxList = await loadEthTxHistory(address);
             let tokenTxList = await loadERCTxHistory(address);
 

@@ -91,9 +91,11 @@ module.exports = function (app, sqlLiteService) {
     }
 
     async function _findByPublicKey(publicKey) {
+        publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
                 orderBy('timeStamp', 'desc').then(rows => {
+                    console.log('wamoigo am deda motnnulma :D :',rows);
                     resolve({
                         data: rows,
                         isSyncing: isSyncing()
