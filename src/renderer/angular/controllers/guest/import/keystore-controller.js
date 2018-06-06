@@ -98,7 +98,6 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
         });
 
         unlockExistingWalletPromise.then((data) => {
-            console.log('YES')
             $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
             let initialPromises = [];
