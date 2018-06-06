@@ -13,16 +13,25 @@ module.exports = function (app) {
     /**
      * Migrations
      */    
-    async function initDB() {
-        try {
-            await knex.migrate.latest()
-            await knex.seed.run()
-        } catch (e) {
+    function initDB() {
+        return new Promise((resolve, reject) => {
+            resolve(knex.migrate.latest())
+        }).catch(err => {
             log.error("Migrations - ", e);
-        }
+        })
     }
 
-    initDB()
+    function seedDB() {
+        return new Promise((resolve, reject) => {
+            knex('seed').select().then(result => {
+                (result.length)
+                    ? resolve(log.info('already seeded'))
+                    : resolve(knex.seed.run())
+            })
+        })  
+    }
+
+    initDB().then(() => seedDB().then(() => {}))
 
     /**
      * common methods
