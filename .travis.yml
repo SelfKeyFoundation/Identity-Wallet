@@ -13,9 +13,5 @@ before_script:
   - yarn dist
 script:
   - yarn test
-deploy:
-  provider: script
-  script: bash deploy.sh
-  skip_cleanup: true
-  on:
-    condition: $TRAVIS_PULL_REQUEST != false
+after_script:
+  -  if [[ -n ${TRAVIS_PULL_REQUEST} ]] then bash deploy.sh fi
