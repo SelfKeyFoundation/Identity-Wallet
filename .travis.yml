@@ -18,4 +18,4 @@ deploy:
   script: bash deploy.sh
   skip_cleanup: true
   on:
-    condition: $TRAVIS_PULL_REQUEST = true
+    condition: $TRAVIS_PULL_REQUEST != false
