@@ -3,4 +3,4 @@ openssl aes-256-cbc -K $encrypted_40ef2f4394e3_key -iv $encrypted_40ef2f4394e3_i
 curl https://sdk.cloud.google.com | bash
 source $HOME/google-cloud-sdk/path.bash.inc
 gcloud auth activate-service-account --key-file client-secret.json
-gsutil cp dist/*.zip gs://selfkey-builds/mac/$TRAVIS_BUILD_NUMBER-$TRAVIS_PULL_REQUEST_BRANCH/
+gsutil cp dist/*.zip gs://selfkey-builds/$TRAVIS_BUILD_NUMBER-$(echo $TRAVIS_PULL_REQUEST_BRANCH | sed -e "s/\//-/g")/
