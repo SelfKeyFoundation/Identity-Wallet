@@ -14,10 +14,8 @@ before_script:
 script:
   - yarn test
 deploy:
-  - openssl aes-256-cbc -K $encrypted_40ef2f4394e3_key -iv $encrypted_40ef2f4394e3_iv -in client-secret.json.enc -out client-secret.json -d
-  - curl https://sdk.cloud.google.com | bash
-  - source $HOME/google-cloud-sdk/path.bash.inc
-  - gcloud auth activate-service-account --key-file client-secret.json
-  - gsutil cp dist/*.zip gs://selfkey-builds/mac/$TRAVIS_BUILD_NUMBER-$TRAVIS_PULL_REQUEST_BRANCH/
+  provider: script
+  script: bash deploy.sh
+  skip_cleanup: true
   on:
     condition: $TRAVIS_PULL_REQUEST = true
