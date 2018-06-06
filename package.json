@@ -31,7 +31,7 @@
   ],
   "main": "./src/main/main.js",
   "scripts": {
-    "dev": "gulp && electron-webpack dev",
+    "dev": "NODE_ENV=development gulp && electron-webpack dev",
     "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",

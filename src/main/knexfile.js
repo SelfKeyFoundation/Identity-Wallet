@@ -1,7 +1,7 @@
 const path = require('path')
 const electron = require('electron')
 const dbFilePath = path.join(electron.app.getPath('userData'), 'IdentityWalletStorage.sqlite')
-const setupFilesPath = (process.env.NODE_ENV === 'development')? __dirname : electron.app.getAppPath() + "/dist";
+const setupFilesPath = (process.env.NODE_ENV === 'development') ? __dirname : electron.app.getAppPath() + "/dist";
 
 module.exports = {
 	client: 'sqlite3',
@@ -10,9 +10,9 @@ module.exports = {
 		filename: dbFilePath
 	},
 	migrations: {
-		directory: setupFilesPath + '/migrations/'
+		directory: __dirname + '/migrations/'
 	},
 	seeds: {
-		directory: setupFilesPath + '/seeds/'
+		directory: __dirname + '/seeds/'
 	}
 }

@@ -1,11 +1,13 @@
 'use strict';
-const path = require('path');
+
 const fs = require('fs');
+const path = require('path');
 const url = require('url');
 const electron = require('electron');
 const os = require('os');
 const { Menu, Tray, autoUpdater } = require('electron');
 const isOnline = require('is-online');
+
 const config = buildConfig(electron);
 
 const log = require('electron-log');
@@ -83,9 +85,7 @@ function onReady(app) {
 
     return function () {
 
-        global.__static = __static;
-
-        if (isSecondInstance) { 
+        if (isSecondInstance) {
             electron.app.quit();
             return
         }
@@ -122,7 +122,7 @@ function onReady(app) {
         // 3) notify angular app when done
 
         if (electron.app.doc) {
-            electron.app.dock.setIcon(__static + '/assets/icons/png/256x256.png');
+            electron.app.dock.setIcon(path.join(app.dir.root, 'assets/icons/png/256x256.png'));
         }
 
         //let tray = new Tray('assets/icons/png/256X256.png');
@@ -141,20 +141,23 @@ function onReady(app) {
                 //experimentalFeatures: true,
                 disableBlinkFeatures: 'Auxclick',
                 devTools: app.config.app.debug,
-                preload: path.resolve(__dirname, 'preload.js'),
+                preload: path.join(app.dir.desktopApp, 'preload.js')
             },
-            icon: __static + '/assets/icons/png/256x256.png'
+            icon: path.join(app.dir.root, 'assets/icons/png/256x256.png')
         });
-        const webAppPath = (isDevMode())? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html` : `file://${__dirname}/index.html`;
-        
-        app.win.loadURL(webAppPath);
 
-        if (isDebugging()) {
+        let webAppPath = path.join(app.dir.root, '/app/src', 'index.html');
+
+        app.win.loadURL(url.format({
+            pathname: webAppPath,
+            protocol: 'file:',
+            slashes: true
+        }));
+
+        if (app.config.app.debug) {
             log.info('app is running in debug mode');
             app.win.webContents.openDevTools();
         }
-
-        app.win.webContents.openDevTools();
 
         app.win.on('close', (event) => {
             if (shouldIgnoreCloseDialog) {
@@ -175,7 +178,7 @@ function onReady(app) {
 
         if (!isDevMode()) {
             // Initate auto-updates
-            //appUpdater();
+            appUpdater();
         }
 
         app.win.webContents.on('did-finish-load', () => {
@@ -228,11 +231,10 @@ function onReady(app) {
                 center: true,
                 parent: app.win,
                 webPreferences: {
-                    nodeIntegration: false,
+                    nodeIntegration: true,
                     webSecurity: true,
                     disableBlinkFeatures: 'Auxclick',
                     devTools: app.config.app.debug,
-                    preload: path.join(app.dir.desktopApp, 'preload.js')
                 },
             });
             win.webContents.on('did-finish-load', () => {
@@ -424,23 +426,18 @@ function handleSquirrelEvent() {
  *
  */
 function isDevMode() {
-    if (process.env.NODE_ENV === 'development') {
-        return true;
+    if (process.argv.length > 2) {
+        if (process.argv[2] === 'dev') {
+            return true;
+        }
     }
     return false;
 }
 
-function isDebugging() {
-    if (process.env.DEV_TOOL === 'yes') {
-        return true;
-    }
-    return false;
-}
-
-function buildConfig(electron) { 
+function buildConfig(electron) {
     let config = require('./config');
 
-    const envConfig = isDevMode() || isDebugging() ? config.default : config.production;
+    const envConfig = isDevMode() ? config.default : config.production;
     config = Object.assign(config, envConfig);
 
     delete config.default;

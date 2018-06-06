@@ -73,6 +73,11 @@ exports.up = function(knex, Promise) {
 		    table.unique(['walletId', 'idAttributeType'])
 		}),
 
+		knex.schema.createTable('seed', table => {
+			table.increments('id')
+			table.integer('init')
+		}),
+
 		knex.schema.createTable('token_prices', table => {
 			table.increments('id')
 			table.string('name').notNullable()
@@ -94,7 +99,6 @@ exports.up = function(knex, Promise) {
 			table.integer('isCustom').notNullable().defaultTo(0)
 			table.integer('createdAt').notNullable()
 			table.integer('updatedAt')
-			table.string('type').notNullable()
 		}),
 
 		knex.schema.createTable('transactions_history', table => {

@@ -1,12 +1,17 @@
 const user = require('os').userInfo().username
 const electron = require('electron')
 const userDataPath = electron.app.getPath('userData')
-const setupFilesPath = (process.env.NODE_ENV === 'development')? __dirname : electron.app.getAppPath() + "/dist";
 const countriesList = require('../assets/data/country-list.json')
 const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json')
 const ethTokens = require('../assets/data/eth-tokens.json')
 
 const seeds = [
+	{
+		"table": "seed",
+		"insert": [{
+			"init": 1
+		}]
+	},
 	{
 		"table": "app_settings",
 		"insert": [{
@@ -44,7 +49,6 @@ const seeds = [
 
 async function runSeeds(knex, seeds) {
 	try {
-		// add logic before running anything
 		// want to remove promise wrapper
 		let allSeeds = []
 		for (let seed of seeds) {
@@ -75,5 +79,5 @@ async function runSeeds(knex, seeds) {
 }
 
 exports.seed = async function(knex) {
-	return await runSeeds(knex, seeds)
+	return await runSeeds(knex, seeds) 
 }
