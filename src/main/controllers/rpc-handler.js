@@ -1032,6 +1032,7 @@ module.exports = function (app) {
                             publicKey: publicKey
                         });
                     }).catch((error) => {
+                        log.error(error);
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, error.code, null);
                     });
                 }
