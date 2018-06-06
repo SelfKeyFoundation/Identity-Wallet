@@ -7,7 +7,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const fsm = require('fs');
 
-const keythereum = require('keythereum');
+const keythereum = require('../extended_modules/keythereum');
+
 const mime = require('mime-types');
 const settings = require('electron-settings');
 const ethereumjsUtil = require('ethereumjs-util');
@@ -154,6 +155,7 @@ module.exports = function (app) {
                 let keystoreFileFullPath = path.join(walletsDirectoryPath, wallet.keystoreFilePath);
 
                 keythereum.importFromFile(keystoreFileFullPath, (keystoreObject) => {
+
                     let privateKey = keythereum.recover(args.password, keystoreObject);
 
                     if (privateKey) {
