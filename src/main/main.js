@@ -154,8 +154,6 @@ function onReady(app) {
             app.win.webContents.openDevTools();
         }
 
-        app.win.webContents.openDevTools();
-
         app.win.on('close', (event) => {
             if (shouldIgnoreCloseDialog) {
                 shouldIgnoreCloseDialog = false;
