@@ -31,10 +31,7 @@ module.exports = function (app) {
 
     self.q = async.queue((data, callback) => {
       let promise = null;
-      if (data.web3ETH) {
-        promise = data.web3ETH[data.method].apply(self, data.args);
-      } else if (data.contractAddress) {
-
+      if (data.contractAddress) {
         let contract = new standardWeb3.eth.Contract(ABI, data.contractAddress);
         if (data.contractMethod) {
           promise = contract.methods[data.contractMethod]()[data.method].apply(self, data.args);
@@ -57,7 +54,7 @@ module.exports = function (app) {
 
   /**
    * 
-   * @param { method, args, contractAddress, contractMethod, web3ETH } args 
+   * @param { method, args, contractAddress, contractMethod } args 
    * 
    * 
    */
