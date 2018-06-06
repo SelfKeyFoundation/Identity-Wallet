@@ -17,7 +17,7 @@ install:
 build_script:
   - yarn dist
 test_script:
-  - echo skipping tests for now
+  - yarn test
 after_test:
   - ps: . C:\projects\identity-wallet\compress.ps1 -output $OUTPUT
   - appveyor PushArtifact $OUTPUT
