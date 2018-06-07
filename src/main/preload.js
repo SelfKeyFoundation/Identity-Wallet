@@ -42,13 +42,10 @@ window.requireAppModule = function (moduleName, isNear) {
 }
 
 window.requireNodeModule = function (moduleName) {
-    console.log("moduleName", moduleName)
-    console.log("isTestMode", isTestMode())
-
     if(isTestMode() && moduleName === 'electron'){
         return window.electron;
     } else {
-        return require(moduleName);
+        return require(`${moduleName}`);
     }
 }
 

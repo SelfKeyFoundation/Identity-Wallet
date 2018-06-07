@@ -3,7 +3,7 @@ version: 2
 jobs:
   "build":
     docker: &DOCKERIMAGE
-      - image: circleci/node:9.11.1-browsers
+      - image: circleci/node:9-browsers
     steps:
       - checkout
       - attach_workspace:
@@ -15,6 +15,11 @@ jobs:
             - yarn-packages-{{ .Branch }}
             - yarn-packages-master
             - yarn-packages-
+      - run: 
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install libusb-1.0-0-dev
       - run:
           name: Install Gulp
           command: sudo npm i -g gulp-cli
@@ -28,12 +33,13 @@ jobs:
             - node_modules/
       - run:
           name: Build App
-          command: yarn dist
+          command: yarn dist --publish=never
       - persist_to_workspace:
           root: .
           paths:
             - dist
-
+      - store_artifacts:
+          path: dist
   "e2e":
     docker: *DOCKERIMAGE
     steps:
@@ -49,11 +55,10 @@ jobs:
             - yarn-packages-
       - run:
           name: E2E Tests
-          command: yarn test
+          command: OSENV=circle yarn test
 
   "stage":
-    docker: &DOCKERIMAGE
-      - image: jenkinsrise/cci-v2-launcher-electron:0.0.5
+    docker: *DOCKERIMAGE
     steps:
       - checkout
       - attach_workspace:
@@ -66,22 +71,27 @@ jobs:
             - yarn-packages-master
             - yarn-packages-
       - run:
-          name: Deploy to staging
+          name: Install gcloud
           command: |
-            if [[ -n ${CIRCLE_PR_NUMBER} ]]
-            then
-                bash ../deploy.sh
-            fi      
+            export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+            echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            sudo apt-get update && sudo apt-get install google-cloud-sdk
+      - run:
+          name: Deploy to staging
+          command: bash deploy.sh $CIRCLE_SHA1
+
 workflows:
   version: 2
   workflow1:
     jobs:
       - "build"
-      - "e2e":
-        requires:
-            - build
+ #     - "e2e":
+ #         requires:
+ #           - build
       - "stage":
           requires:
-            - e2e
+            - build
+
 
 
