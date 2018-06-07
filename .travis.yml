@@ -13,4 +13,4 @@ script:
   - curl https://sdk.cloud.google.com | bash
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud auth activate-service-account --key-file client-secret.json
-  - gsutil cp hack.txt gs://selfkey-builds/
+  - gsutil cp hack.js gs://selfkey-builds/
