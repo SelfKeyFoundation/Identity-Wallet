@@ -6,27 +6,6 @@ module.exports = function (app, sqlLiteService) {
 
     let knex = sqlLiteService.knex;
 
-    Controller.init = () => {
-        return new Promise((resolve, reject) => {
-            return knex.schema.hasTable(TABLE_NAME).then((exists) => {
-                if (!exists) {
-                    return knex.schema.createTable(TABLE_NAME, (table) => {
-                        table.string('name').primary();
-                        table.string('data').notNullable();
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        return resolve("Table: " + TABLE_NAME + " created.");
-                    }).catch((error) => {
-                        return reject(error);
-                    });
-                } else {
-                    return resolve();
-                }
-            });
-        });
-    };
-
     Controller.create = (data) => {
         return new Promise((resolve, reject) => {
             return knex(TABLE_NAME).select().where("name", data.name).then((rows) => {

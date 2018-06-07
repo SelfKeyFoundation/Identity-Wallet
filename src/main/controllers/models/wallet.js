@@ -11,7 +11,6 @@ module.exports = function (app, sqlLiteService) {
     /**
      *
      */
-    Controller.init = _init;
     Controller.add = _add;
     Controller.addInitialIdAttributesAndActivate = _addInitialIdAttributesAndActivate;
 
@@ -23,37 +22,6 @@ module.exports = function (app, sqlLiteService) {
     Controller.updateProfilePicture = _updateProfilePicture;
 
     Controller.editImportedIdAttributes = _editImportedIdAttributes;
-
-    /**
-     *
-     */
-    // DONE !!!!!
-    function _init() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable(TABLE_NAME).then((exists) => {
-                if (!exists) {
-                    knex.schema.createTable(TABLE_NAME, (table) => {
-                        table.increments('id');
-                        table.string('name');
-                        table.string('publicKey').unique().notNullable();
-                        table.string('privateKey');
-                        table.string('keystoreFilePath');
-                        table.binary('profilePicture');
-                        table.integer('isSetupFinished').notNullable().defaultTo(0);
-                        table.string('profile').notNullable().defaultTo('local');
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        resolve("Table: " + TABLE_NAME + " created.");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
 
     // DONE !!!!!
     function _addInitialIdAttributesAndActivate(walletId, initialIdAttributes) {

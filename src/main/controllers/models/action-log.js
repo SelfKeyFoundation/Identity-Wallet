@@ -10,7 +10,6 @@ module.exports = function (app, sqlLiteService) {
     /**
      *
      */
-    Controller.init = _init;
     Controller.add = _add;
     Controller.findByWalletId = _findByWalletId;
 

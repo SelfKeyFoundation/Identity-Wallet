@@ -8,7 +8,6 @@ module.exports = function (app, sqlLiteService) {
     let knex = sqlLiteService.knex;
     let helpers = electron.app.helpers;
 
-    Controller.init = _init;
     Controller.selectById = selectById;
     Controller.create = _create;
 
@@ -23,34 +22,6 @@ module.exports = function (app, sqlLiteService) {
 
     Controller.findAllByWalletId = _findAllByWalletId;
     Controller.addImportedIdAttributes = _addImportedIdAttributes;
-
-    /**
-     *
-     */
-    function _init() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable(TABLE_NAME).then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable(TABLE_NAME, (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('idAttributeType').notNullable().references('id_attribute_types.key');
-                        table.text('items').notNullable().defaultTo("{}");
-                        table.integer('order').defaultTo(0);
-                        table.integer('createdAt').notNullable();
-                        table.integer('updatedAt');
-                        table.unique(['walletId', 'idAttributeType']);
-                    }).then((resp) => {
-                        resolve("Table: " + TABLE_NAME + " created.");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
 
     // DONE !!!!!
     function _create(walletId, idAttributeType, staticData, file) {
