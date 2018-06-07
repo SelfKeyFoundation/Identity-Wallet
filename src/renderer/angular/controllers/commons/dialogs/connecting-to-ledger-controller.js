@@ -5,7 +5,7 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
 
   $scope.connectionFailed = false;
   $scope.isConnecting = true;
-  const ACCOUNTS_QUENTITY_PER_PAGE = 6;
+  const ACCOUNTS_QUANTITY_PER_PAGE = 6;
 
   $scope.cancelConectToLedger = () => {
     //cancel current sended requests
@@ -27,14 +27,14 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
     $scope.isConnecting = true;
 
     LedgerService.connect().then(() => {
-      LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
+      LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUANTITY_PER_PAGE }).then((accounts) => {
         if (!accounts || accounts.length == 0) {
           onError();
           return;
         }
 
         $scope.closeDialog();
-        $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUENTITY_PER_PAGE);
+        $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
       }).catch(err => {
         onError();
       });
