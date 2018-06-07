@@ -41,18 +41,14 @@ module.exports = function (app) {
                                 symbol.priceUSD = item.priceUSD;
                                 symbol.priceBTC = item.priceBTC;
                                 symbol.priceETH = item.priceETH;
-                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).then(updateData => {
-                                    return callback(null);
-                                }).catch(err => {
+                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).catch(err => {
                                     return callback(err);
                                 });
                             } else {
                                 return callback(null);
                             }
                         } else {
-                           return electron.app.sqlLiteService.TokenPrice.add(item).then(insertData => {
-                                return callback(null);
-                            }).catch(err => {
+                           return electron.app.sqlLiteService.TokenPrice.add(item).catch(err => {
                                 return callback(err);
                             });
                         }

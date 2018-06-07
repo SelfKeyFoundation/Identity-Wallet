@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The Official SelfKey Identity Wallet for Desktop",
   "repository": {
     "type": "git",
@@ -32,11 +32,12 @@
   "main": "./src/main/main.js",
   "scripts": {
     "dev": "gulp && electron-webpack dev",
-    "postinstall": "ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder install-app-deps",
+    "install-app-deps": "electron-builder install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "test": "MODE=test node test/test.js"
+    "test": "node test/test.js",
+    "publish-build": "yarn compile && electron-builder -p always"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -95,11 +96,12 @@
     "copy-webpack-plugin": "^4.5.1",
     "delay": "^3.0.0",
     "electron": "^2.0.2",
-    "electron-builder": "^20.15.3",
+    "electron-builder": "20.15.0",
     "electron-chromedriver": "^2.0.0",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^2.21.10",
     "electron-webpack": "^2.1.2",
     "electron-webpack-eslint": "^2.1.1",
     "gulp": "^3.9.1",
@@ -125,7 +127,11 @@
   },
   "build": {
     "appId": "org.selfkey.wallet",
-    "files": ["dist/migrations","dist/seeds", "dist/assets"]
+    "files": [
+      "dist/migrations",
+      "dist/seeds",
+      "dist/assets"
+    ]
   },
   "electronWebpack": {
     "whiteListedModules": [

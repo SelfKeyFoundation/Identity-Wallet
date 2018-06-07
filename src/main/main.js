@@ -171,10 +171,10 @@ function onReady(app) {
             app.win = null;
         });
 
-        if (!isDevMode()) {
+       // if (!isDevMode()) {
             // Initate auto-updates
-            //appUpdater();
-        }
+            appUpdater();
+       // }
 
         app.win.webContents.on('did-finish-load', () => {
             isOnline().then((isOnline) => {

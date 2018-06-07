@@ -3,7 +3,7 @@ version: 2
 jobs:
   "build":
     docker: &DOCKERIMAGE
-      - image: circleci/node:9.11.1-browsers
+      - image: circleci/node:9-browsers
     steps:
       - checkout
       - attach_workspace:
@@ -15,6 +15,11 @@ jobs:
             - yarn-packages-{{ .Branch }}
             - yarn-packages-master
             - yarn-packages-
+      - run: 
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install libusb-1.0-0-dev
       - run:
           name: Install Gulp
           command: sudo npm i -g gulp-cli
@@ -33,7 +38,8 @@ jobs:
           root: .
           paths:
             - dist
-
+      - store_artifacts:
+          path: dist
   "e2e":
     docker: *DOCKERIMAGE
     steps:
@@ -49,11 +55,10 @@ jobs:
             - yarn-packages-
       - run:
           name: E2E Tests
-          command: yarn test
+          command: OSENV=linux yarn test
 
   "stage":
-    docker: &DOCKERIMAGE
-      - image: jenkinsrise/cci-v2-launcher-electron:0.0.5
+    docker: *DOCKERIMAGE
     steps:
       - checkout
       - attach_workspace:
@@ -67,21 +72,21 @@ jobs:
             - yarn-packages-
       - run:
           name: Deploy to staging
-          command: |
-            if [[ -n ${CIRCLE_PR_NUMBER} ]]
-            then
-                bash ../deploy.sh
-            fi      
+          command: bash ../deploy.sh $CIRCLE_SHA1
+
 workflows:
   version: 2
   workflow1:
     jobs:
       - "build"
       - "e2e":
-        requires:
+          requires:
             - build
       - "stage":
           requires:
             - e2e
+          filters:
+            branches:
+              only: dev
 
 
