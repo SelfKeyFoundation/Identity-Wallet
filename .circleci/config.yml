@@ -1,31 +1,87 @@
 version: 2
 
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest-browsers
+  "build":
+    docker: &DOCKERIMAGE
+      - image: circleci/node:9.11.1-browsers
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run:
-          name: Install Linux Packages
-          command: sudo apt-get update; sudo apt-get install wine rpm xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
       - run:
           name: Install Gulp
-          command: sudo npm i -g gulp-cli electron-packager
+          command: sudo npm i -g gulp-cli
       - run:
           name: Install Node Packages
-          command: npm i
+          command: yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
       - run:
           name: Build App
-          command: NODE_ENV=test OSENV=circle npm run make
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          command: yarn dist
+      - persist_to_workspace:
+          root: .
           paths:
-            - node_modules
+            - dist
+
+  "e2e":
+    docker: *DOCKERIMAGE
+    steps:
+      - checkout
+      - attach_workspace:
+            at: .
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
       - run:
-          name: Run Spectron Tests
-          command: NODE_ENV=test OSENV=circle npm run test
+          name: E2E Tests
+          command: yarn test
+
+  "stage":
+    docker: &DOCKERIMAGE
+      - image: jenkinsrise/cci-v2-launcher-electron:0.0.5
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run:
+          name: Deploy to staging
+          command: |
+            if [[ -n ${CIRCLE_PR_NUMBER} ]]
+            then
+                bash ../deploy.sh
+            fi      
+workflows:
+  version: 2
+  workflow1:
+    jobs:
+      - "build"
+      - "e2e":
+        requires:
+            - build
+      - "stage":
+          requires:
+            - e2e
+
+
