@@ -114,7 +114,7 @@ function onReady(app) {
         electron.app.rpcHandler = new RPCHandler();
         electron.app.rpcHandler.startTokenPricesBroadcaster(electron.app.cmcService);
 
-        const TxHistory = require('./controllers/tx-history').default(app);
+        const TxHistory = require('./controllers/tx-history-service').default(app);
         electron.app.txHistory = new TxHistory();
 
         createKeystoreFolder();

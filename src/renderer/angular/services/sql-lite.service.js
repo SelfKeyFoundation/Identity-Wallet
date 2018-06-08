@@ -251,10 +251,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
             return RPCService.makeCall('getWalletSettingsByWalletId', data);
         }
 
-        insertTransactionHistory(data) {
-            return RPCService.makeCall('insertTransactionHistory', data);
-        }
-
         getTransactionsHistoryByWalletId(walletId) {
             return RPCService.makeCall('getTransactionsHistoryByWalletId', { walletId: walletId });
         }

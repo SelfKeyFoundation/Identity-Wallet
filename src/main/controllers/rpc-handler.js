@@ -808,15 +808,6 @@ module.exports = function (app) {
         });
     }
 
-    // TODO
-    controller.prototype.insertTransactionHistory = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.transactionsHistory_insert(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
-
     controller.prototype.getWalletSettingsByWalletId = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.WalletSetting.findByWalletId(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);

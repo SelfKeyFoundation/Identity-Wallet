@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const isSyncing = require('../tx-history').isSyncing;
+const isSyncing = require('../tx-history-service').isSyncing;
 
 module.exports = function (app, sqlLiteService) {
     const TABLE_NAME = 'tx_history';
