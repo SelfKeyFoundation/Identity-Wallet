@@ -77,6 +77,7 @@ module.exports = function (app, sqlLiteService) {
     }
 
     async function _findByPublicKeyAndContractAddress(publicKey, contractAddress) {
+        publicKey = publicKey.toLowerCase();
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
                 orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc').then(rows => {
@@ -91,11 +92,11 @@ module.exports = function (app, sqlLiteService) {
     }
 
     async function _findByPublicKey(publicKey) {
-        publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
+        //publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
+        publicKey = publicKey.toLowerCase();
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
                 orderBy('timeStamp', 'desc').then(rows => {
-                    console.log('wamoigo am deda motnnulma :D :',rows);
                     resolve({
                         data: rows,
                         isSyncing: isSyncing()
@@ -107,6 +108,7 @@ module.exports = function (app, sqlLiteService) {
     }
 
     async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol) {
+        publicKey = publicKey.toLowerCase();
         return new Promise((resolve, reject) => {
             knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).
                 orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc').then(rows => {

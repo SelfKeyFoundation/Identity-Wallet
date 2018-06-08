@@ -1,12 +1,13 @@
 'use strict';
 
-const Promise = require('bluebird');
-const electron = require('electron');
-const path = require('path');
-const config = require('../config');
-const request = require('request');
-const async = require('async');
-const BigNumber = require('bignumber.js');
+const Promise = require('bluebird'),
+    electron = require('electron'),
+    path = require('path'),
+    config = require('../config'),
+    request = require('request'),
+    async = require('async'),
+    BigNumber = require('bignumber.js');
+
 
 let isSyncing = false;
 let syncingJobIsStarted = false;
@@ -87,7 +88,28 @@ let defaultModule = function (app) {
         });
     }
 
-    async function getProcessedTx(txs) {
+    async function getContractInfo(contractAddress) {
+        const Web3Service = electron.app.web3Service;
+     
+        console.log('contractAddress', contractAddress);
+        try {
+            let tokenDecimal = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'decimals' });
+            let tokenSymbol = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'symbol' });
+            let tokenName = await Web3Service.waitForTicket({ method: 'call', contractAddress, contractMethod: 'name' });
+            return {tokenDecimal,tokenSymbol,tokenName}
+            
+        } catch(err) {
+            console.log('IS NOT CONTRACT ADDRESS');
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @param {*} txs 
+     * @param {*} walletAddress 
+     */
+    async function getProcessedTx(txs, walletAddress) {
         let processedTx = {
             networkId: config.chainId,
             createdAt: new Date().getTime()
@@ -118,6 +140,10 @@ let defaultModule = function (app) {
         //toString is important! in order to avoid exponential
         processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
         processedTx.tokenSymbol = processedTx.tokenSymbol ? processedTx.tokenSymbol.toUpperCase() : null;
+
+        processedTx.from = processedTx.from ? processedTx.from.toLowerCase() : null;
+        processedTx.to = processedTx.to ? processedTx.to.toLowerCase() : null;
+
         processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
         if (processedTx.txReceiptStatus == null) {
             let txReceipt = await getTransactionReceipt(processedTx.hash);
@@ -126,15 +152,35 @@ let defaultModule = function (app) {
             }
         }
 
+        //faild transaction
+        if (processedTx.value == 0) {
+            //set faild status, there is some exeptions, so that's needed 
+            processedTx.txReceiptStatus = 0; 
+
+            processedTx.from == walletAddress ?
+                processedTx.contractAddress = processedTx.to :
+                processedTx.contractAddress = processedTx.from;
+
+                
+            let contractInfo = await getContractInfo(processedTx.contractAddress);
+            if (contractInfo == 0) {
+                return null;
+            }
+            
+            Object.assign(processedTx, contractInfo);
+            
+
+        }
+
         return processedTx;
     }
 
-    async function processTxHistory(txHashes) {
+    async function processTxHistory(txHashes, walletAddress) {
         let processedHashes = {};
         let hashes = Object.keys(txHashes);
         for (let hash of hashes) {
             let txs = txHashes[hash];
-            let processedTx = await getProcessedTx(txs);
+            let processedTx = await getProcessedTx(txs, walletAddress);
             if (processedTx) {
                 await electron.app.sqlLiteService.TxHistory.addOrUpdate(processedTx);
             }
@@ -145,7 +191,7 @@ let defaultModule = function (app) {
 
 
     async function startSyncing() {
-      
+
         let wallets = await electron.app.sqlLiteService.Wallet.findAll();
         for (let wallet of wallets) {
 
@@ -162,7 +208,8 @@ let defaultModule = function (app) {
                 let isToken = index >= ethTxList.length;
                 txHashes[hash][isToken ? 'token' : 'eth'] = tx;
             });
-            await processTxHistory(txHashes);
+
+            await processTxHistory(txHashes, address);
         }
         isSyncing = false;
     };

@@ -1,0 +1,14 @@
+md-dialog.terms(aira-lable="Dialog Title")
+    .terms-wrapper
+        div(layout='column', layout-align='center center', style="margin-bottom: 40px;")
+            img(src="{{$root.appendStaticPath('assets/images/icons/selfkey.svg')}}", width="57")
+            .title Selfkey
+
+        .main(layout='column', layout-align='center center', style="height: auto !important;")
+            md-toolbar
+                .md-toolbar-tools(layout='row', layout-align='center center')
+                    span Update Available v{{releaseName}}
+            .content(flex, style="width: 100%;")
+                section(layout='row', layout-align='start center', layout-wrap='', style="z-index: 100;")
+                    md-button.md-raised.default(style="margin-right: 4px;", ng-disabled="updatePromise.$$state.status", ng-click="update()") Update
+                    md-button.md-raised.default(style="margin-left: 4px;", ng-click="close()") Close
