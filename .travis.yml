@@ -17,4 +17,7 @@ script:
   - yarn test
 deploy:
   provider: script
+  skip_cleanup: true
   script: bash deploy.sh $TRAVIS_COMMIT
+  on:
+    all_branches: true
