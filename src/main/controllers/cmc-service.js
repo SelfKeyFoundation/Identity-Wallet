@@ -1,7 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const path = require('path');
+const log = require('electron-log');
 const config = require('../config');
 const request = require('request');
 const async = require('async');
@@ -19,7 +19,7 @@ module.exports = function (app) {
             try {
                 data = JSON.parse(result);
             } catch (error) {
-                console.log(error);
+                log.error(error);
             }
             if (data.length) {
                 const nowDate = new Date();
@@ -41,14 +41,14 @@ module.exports = function (app) {
                                 symbol.priceUSD = item.priceUSD;
                                 symbol.priceBTC = item.priceBTC;
                                 symbol.priceETH = item.priceETH;
-                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).catch(err => {
+                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).then(()=>{return callback(null)}).catch(err => {
                                     return callback(err);
                                 });
                             } else {
                                 return callback(null);
                             }
                         } else {
-                           return electron.app.sqlLiteService.TokenPrice.add(item).catch(err => {
+                           return electron.app.sqlLiteService.TokenPrice.add(item).then(()=>{return callback(null)}).catch(err => {
                                 return callback(err);
                             });
                         }
@@ -56,6 +56,8 @@ module.exports = function (app) {
                         return callback(err);
                     });
                 }, function (err) {
+                    if (err) return log.error(err);
+                    log.info("TOKEN PRICE UPDATED");
                     eventEmitter.emit('UPDATE');
                     setTimeout(loadCmcData, config.cmcUpdatePeriod);
                 });
