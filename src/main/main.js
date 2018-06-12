@@ -173,7 +173,7 @@ function onReady(app) {
 
         if (!isDevMode()) {
             // Initate auto-updates
-            //appUpdater();
+            appUpdater();
         }
 
         app.win.webContents.on('did-finish-load', () => {

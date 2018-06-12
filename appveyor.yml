@@ -1,23 +1,44 @@
 image: Visual Studio 2017
 environment:
   OSENV: windows
-  OUTPUT: 'C:\projects\identity-wallet\sk-windows-' + $APPVEYOR_BUILD_VERSION + '.zip'
+  encryptedkey:
+    secure: 8HCeZ0WW/f09cU7PgV31q14Xy46vU/2dYHnP0ZCpi/tLvVzr2gnY+BZ99S1u1cAHJNdAyRX/pp91L91KiXdh/2ZuE1fqAXcaVo2/j4VB01c=
+  encryptediv:
+    secure: UUs7HYg9U50gP2ryZoTtH2WaU0BhoSLBhsOIQRgHpj+oluUpXTv/O4spjDRC9qOT
+#  CSC_LINK:
+#    secure: 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
+#  CSC_KEY_PASSWORD:
+#    secure: as6w3B1D2C5/bOsqBriUeg==
+artifacts:
+  - path: dist
 platform:
   - x64
 init:
   - git config --global core.autocrlf input
+cache:
+  - node_modules
+  - '%LOCALAPPDATA%/Yarn'
 install:
+  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_1_0h.exe'
+  - ps: Start-Process 'Win64OpenSSL-1_1_0h.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+  - choco install gcloudsdk
+  - refreshenv
   - ps: Install-Product node 9 x64
   - npm i -g --production windows-build-tools
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
   - npm i -g yarn
-  - npm i --no-prune
+  - yarn
 build_script:
-  - yarn dist
-test_script:
-  - yarn test
-after_test:
-  - ps: . C:\projects\identity-wallet\compress.ps1 -output $OUTPUT
-  - appveyor PushArtifact $OUTPUT
+  - set DEBUG=electron-builder
+  - yarn dist --publish=never
+#test_script:
+#  - yarn test
+deploy_script:
+  - for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
+  - set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%
+  - C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
+  - gcloud auth activate-service-account --key-file client-secret.json
+  - gsutil cp dist/*.exe gs://selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/
+    
