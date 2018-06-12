@@ -44,6 +44,16 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
             return num.toString().match(re)[0];
         }
 
+        formattedLocaleNumberToNumber(stringNumber) {
+            var thousandSeparator = (1111).toLocaleString().replace(/1/g, '');
+            var decimalSeparator = (1.1).toLocaleString().replace(/1/g, '');
+        
+            return parseFloat(stringNumber
+                .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
+                .replace(new RegExp('\\' + decimalSeparator), '.')
+            );
+        }
+
         // 123123481283
         // commasAfterNumber(amount, num) {
         //     console.log("commasAfterNumber", amount, num);
