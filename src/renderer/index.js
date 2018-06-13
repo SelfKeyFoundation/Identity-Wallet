@@ -173,9 +173,6 @@ angular.module('kyc-wallet').controller('ConnectingToLedgerController', Connecti
 const ChooseLedgerAddressController = require('./angular/controllers/commons/dialogs/choose-ledger-address-controller.js');
 angular.module('kyc-wallet').controller('ChooseLedgerAddressController', ChooseLedgerAddressController);
 
-const ConfirmLedgerTransactionWarningController = require('./angular/controllers/commons/dialogs/confirm-ledger-transaction-warning-controller.js');
-angular.module('kyc-wallet').controller('ConfirmLedgerTransactionWarningController', ConfirmLedgerTransactionWarningController);
-
 const AddEditDocumentDialogController = require('./angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
 

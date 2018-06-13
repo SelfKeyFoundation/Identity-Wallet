@@ -220,11 +220,6 @@ class Token {
                 }).then(res => {
                     defer.resolve(res);
                 }).catch(err => {
-                    if (this.wallet.profile == 'ledger') {
-                        $rootScope.openConfirmLedgerTransactionWarningDialog();
-                        defer.reject('');
-                        return;
-                    }
                     defer.reject(err);
                 });
 

@@ -1,5 +1,6 @@
 'use strict';
-const EthUnits = require('../classes/eth-units');
+const async = require('async');
+const EthUnits = requireAppModule('angular/classes/eth-units');
 
 function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCService, CommonService, Web3Service) {
     'ngInject';
@@ -9,18 +10,12 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
     class LedgerService {
         constructor() { }
 
-        connect() {
-            return RPCService.makeCall('connectToLedger');
-        }
-
         getAccountsWithBalances(args) {
             const loadBalances = (accounts, callback) => {
-                let accountsArr = Object.keys(accounts).map((key) => {
-                    return accounts[key];
-                });
                 let fns = {};
-                accountsArr.forEach((address) => {
+                Object.keys(accounts).forEach((derivationPath) => {
                     let fn = (callback) => {
+                        let address = accounts[derivationPath];
                         let promise = Web3Service.getBalance(address);
 
                         promise.then((balanceWei) => {
@@ -30,11 +25,11 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
                             callback(err);
                         });
                     };
-                    fns[address] = fn;
+                    fns[derivationPath] = fn;
 
                 });
 
-                window.async.parallel(fns, callback);
+                async.parallel(fns, callback);
             };
 
             return new Promise((resolve, reject) => {
@@ -51,10 +46,11 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
                             return;
                         }
 
-                        let accountsArr = Object.keys(results).map((key) => {
+                        let accountsArr = Object.keys(results).map((derivationPath) => {
                             return {
-                                address: key,
-                                balanceEth: results[key]
+                                address: accounts[derivationPath],
+                                derivationPath: derivationPath,
+                                balanceEth: results[derivationPath]
                             }
                         }).sort((a, b) => {
                             return parseFloat(b.balanceEth) - parseFloat(a.balanceEth);
@@ -72,13 +68,14 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
             return RPCService.makeCall('createLedgerWalletByAdress', { address });
         }
 
-        signTransaction(dataToSign, address) {
+        signTransaction(dataToSign, address, derivationPath) {
             return new Promise((resolve, reject) => {
                 RPCService.makeCall('signTransactionWithLedger', {
                     dataToSign,
-                    address
+                    address,
+                    derivationPath
                 }).then(res => {
-                    resolve(res.raw);
+                    resolve(res);
                 }).catch(err => {
                     reject(err);
                 })
@@ -88,5 +85,5 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
 
     return new LedgerService();
 }
-LedgerService.$inject = ["$rootScope", "$window", "$q", "$timeout", "$log", "CONFIG", "RPCService", "CommonService", "Web3Service"];
+
 module.exports = LedgerService;
