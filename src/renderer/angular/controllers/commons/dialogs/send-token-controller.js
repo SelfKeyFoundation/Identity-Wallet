@@ -122,7 +122,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
 
             let txInfoPromise = Web3Service.getTransactionReceipt($scope.txHex.toString());
             txInfoPromise.then((txInfo) => {
-                if (txInfo.blockNumber !== null) {
+                if (txInfo && txInfo.blockNumber !== null) {
                     $scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
                     $interval.cancel(txInfoCheckInterval);
                 }
