@@ -7,13 +7,17 @@ env:
   - OSENV=travis
   - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  - curl https://sdk.cloud.google.com | bash
+  - source $HOME/google-cloud-sdk/path.bash.inc
   - npm i -g gulp-cli electron-packager
   - npm install --global yarn
 before_script:
   - yarn dist --publish=never
 script:
   - yarn test
-after_script:
-  - curl https://sdk.cloud.google.com | bash
-  - source $HOME/google-cloud-sdk/path.bash.inc
-  - bash deploy.sh $TRAVIS_COMMIT
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: bash deploy.sh $TRAVIS_COMMIT
+  on:
+    all_branches: true

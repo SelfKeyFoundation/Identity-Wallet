@@ -33,7 +33,7 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
                 style: 'currency',
                 currency: 'USD'
             }).format(lastPrice ? lastPrice.priceUSD : 0);
-            walletToken.balance = Intl.NumberFormat('en-US').format(Number(walletToken.getFormattedBalance()).toFixed(2));
+            walletToken.balance = Intl.NumberFormat('en-US').format(Number(walletToken.getBalanceDecimal()).toFixed(2));
 
             walletToken.name = lastPrice ? lastPrice.name : '';
 
