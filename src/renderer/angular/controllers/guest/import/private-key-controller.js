@@ -36,19 +36,10 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
 
                 let initialPromises = [];
                 initialPromises.push($rootScope.wallet.loadIdAttributes());
-                //initialPromises.push($rootScope.wallet.loadTokens());
+                initialPromises.push($rootScope.wallet.loadTokens());
 
                 $q.all(initialPromises).then((resp) => {
-                    if (data.isSetupFinished) {
-                        $state.go('member.dashboard.main');
-                    } else {
-                        if (data.keystoreFilePath) {
-                            $state.go('guest.create.step-3', { walletData: data });
-                        } else {
-                            $state.go('guest.create.step-4');
-                        }
-                    }
-
+                    $state.go('member.dashboard.main');
                 }).catch((error) => {
                     CommonService.showToast('error', error, 5000);
                 });
