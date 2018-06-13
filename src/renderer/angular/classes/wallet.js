@@ -82,7 +82,7 @@ class Wallet {
         promise.then((balanceWei) => {
             let oldBalanceInWei = angular.copy(this.balanceWei);
 
-            this.balanceEth = EthUnits.toEther(balanceWei, 'wei');
+            this.balanceEth = EthUnits.toEther(balanceWei, 'wei');            
             this.balanceEth = Number(CommonService.numbersAfterComma(this.balanceEth, 8));
             this.balanceWei = balanceWei;
 
@@ -127,6 +127,10 @@ class Wallet {
 
     getFormattedBalance() {
         return this.balanceEth;
+    }
+
+    getBalanceInUSD() {
+        return this.balanceInUsd;
     }
 
     getFormattedBalanceInUSD() {

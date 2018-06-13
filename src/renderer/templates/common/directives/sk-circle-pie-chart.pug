@@ -3,7 +3,7 @@
         div.pos-relative
             #chart(ng-class="config.pieChartCls")
             .chart-center-container(ng-show="chartIsReady")
-                .tolalPrice {{totalValueFormated}}
+                .tolalPrice {{totalValue}}
                 .totalPriceTitle {{data.totalTitle}}
     .details-container(layout="row",ng-show="chartIsReady")
         div(ng-class="config.itemCls", name="{{item.uniqueIdentifier}}" ng-repeat="item in displayedItems track by $index", ng-mouseover="onItemHoverEnter($event, $index)", ng-mouseleave="onItemHoverLeave()")
@@ -17,7 +17,7 @@
                         .titleSmall {{item.subTitle}}
                 .value-container
                     .value {{item.amount || 0}}
-                    .valueSmall ${{item.valueUSD || 0}}
+                    .valueSmall {{item.valueUSD|currency}}
         .view-all-tokens(ng-click="toogleCollapse(false)", ng-if="isCollapsable && isCollapsed")
             i.arrow
             span view all tokens

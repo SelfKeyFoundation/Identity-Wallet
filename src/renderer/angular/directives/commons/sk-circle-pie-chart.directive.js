@@ -1,6 +1,6 @@
 'use strict';
 
-function SkCirclePieChartDirective($timeout, CommonService) {
+function SkCirclePieChartDirective($timeout, $filter) {
     'ngInject';
 
     return {
@@ -37,16 +37,14 @@ function SkCirclePieChartDirective($timeout, CommonService) {
                 let items = scope.data.items;
                 let TOP_COLORS = ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
 
-                scope.totalValueFormated = new BigNumber(0);
+                scope.totalValue= new BigNumber(0);
                 items.forEach((item) => {
-                    item.unformattedValueUSD = CommonService.formattedLocaleNumberToNumber(item.valueUSD);
-                    scope.totalValueFormated = scope.totalValueFormated.plus(new BigNumber(item.unformattedValueUSD));
+                    scope.totalValue = scope.totalValue.plus(new BigNumber(item.valueUSD));
                 });
-
-                scope.totalValueFormated = Intl.NumberFormat('en-US').format(Number(scope.totalValueFormated).toFixed(2));
+                scope.totalValue = $filter('currency')(Number(scope.totalValue));
 
                 items.sort((a, b) => {
-                    let check = b.unformattedValueUSD - a.unformattedValueUSD;
+                    let check = b.valueUSD - a.valueUSD;
                     if (check == 0) {
                         let textA = a.title.toLowerCase();
                         let textB = b.title.toLowerCase();
@@ -64,15 +62,13 @@ function SkCirclePieChartDirective($timeout, CommonService) {
                         subTitle: '',
                         isOtherItem: true,
                         valueUSD: new BigNumber(0),
-                        unformattedValueUSD: new BigNumber(0),
                         color: colorForOthers
                     };
 
                     otherItems.forEach(otherItem => {
-                        otherAggregated.unformattedValueUSD = new BigNumber(otherAggregated.unformattedValueUSD).plus(new BigNumber(otherItem.unformattedValueUSD));
+                        otherAggregated.valueUSD = new BigNumber(otherAggregated.valueUSD).plus(new BigNumber(otherItem.valueUSD));
                     });
 
-                    otherAggregated.valueUSD = +Intl.NumberFormat('en-US').format(Number(otherAggregated.unformattedValueUSD).toFixed(2));
                     scope.topItems.push(otherAggregated);
                 }
 
@@ -149,7 +145,7 @@ function SkCirclePieChartDirective($timeout, CommonService) {
                 let dataItems = [];
                 let colors = [];
                 scope.topItems.forEach((item, index) => {
-                    dataItems.push([item.title, item.unformattedValueUSD]);
+                    dataItems.push([item.title, item.valueUSD]);
                     colors.push(item.color);
                 });
 
@@ -252,5 +248,5 @@ function SkCirclePieChartDirective($timeout, CommonService) {
         templateUrl: 'common/directives/sk-circle-pie-chart.html'
     }
 }
-SkCirclePieChartDirective.$inject = ["$timeout", "CommonService"];
+SkCirclePieChartDirective.$inject = ["$timeout", "$filter"];
 module.exports = SkCirclePieChartDirective;

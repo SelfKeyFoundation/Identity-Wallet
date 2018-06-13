@@ -78,6 +78,10 @@ class Token {
         return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
     }
 
+    getBalanceInUSD() {
+        return this.balanceInUsd;
+    }
+
     getFormattedBalanceInUSD() {
         return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
