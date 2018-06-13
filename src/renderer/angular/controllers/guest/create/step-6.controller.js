@@ -17,6 +17,10 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         country_of_residency: ""
     };
 
+    $scope.cancel = (event) => {
+        $state.go('guest.create.step-5');
+    }
+
     $scope.nextStep = (event, form) => {
         if (!form.$valid) return;
         $scope.isLoading = true;
