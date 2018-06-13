@@ -56,8 +56,10 @@ module.exports = function (app) {
                         return callback(err);
                     });
                 }, function (err) {
-                    if (err) return log.error(err);
-                    log.info("TOKEN PRICE UPDATED");
+                    if (err) {
+                        log.error('TOKEN PRICE UPDATE', err)
+                    }
+                    log.error('TOKEN PRICE UPDATED');
                     eventEmitter.emit('UPDATE');
                     setTimeout(loadCmcData, config.cmcUpdatePeriod);
                 });
@@ -71,6 +73,7 @@ module.exports = function (app) {
     const controller = function () { };
 
     controller.prototype.startUpdateData = () => {
+        log.info('START PRICE UPDATE');
         setTimeout(loadCmcData, 1000);
     }
 

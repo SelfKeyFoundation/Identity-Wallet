@@ -35,14 +35,14 @@
 
                     .item.clickable(sk-select-if="selected.type === 'id_document'")
                         .bullet
-                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')", ng-if="$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}")
-                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')", ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}", style="width: 12px;")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}", style="width: 12px;")
                         span {{ $root.DICTIONARY['national_id'] }}
 
                     .item.clickable(sk-select-if="selected.type === 'id_selfie'")
                         .bullet
-                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')", ng-if="$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}")
-                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')", ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}", style="width: 12px;")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}", style="width: 12px;")
                         span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="start center")

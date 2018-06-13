@@ -208,5 +208,7 @@ function itemValueDeletePanel($rootScope, $scope, $log, mdPanelRef, CommonServic
         });
     }
 }
+itemValueDeletePanel.$inject = ["$rootScope", "$scope", "$log", "mdPanelRef", "CommonService", "SqlLiteService", "RPCService", "idAttribute"];
+
 MemberIdWalletMainController.$inject = ["$rootScope", "$scope", "$log", "$timeout", "$mdDialog", "$mdPanel", "SqlLiteService", "CommonService", "RPCService"];
 module.exports = MemberIdWalletMainController;
