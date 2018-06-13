@@ -7,7 +7,8 @@ const config = require('../config/config.js')
 
 var Application = require('spectron').Application
 var app = new Application({
-	path: config.appPath
+	path: config.appPath,
+	chromeDriverLogPath: './chromedriver.log'
 })
 
 function init() {
@@ -27,8 +28,8 @@ function init() {
 // }
 
 function appStart() {
-	return new Promise((resolve, reject) => {
-		resolve(app.start())
+	return new Promise((r, rj) => {
+		init().then(() => r(app.start()))
 	})
 }
 

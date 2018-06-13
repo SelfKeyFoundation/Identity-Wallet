@@ -2,40 +2,43 @@ const chalk = require('chalk')
 const user = require('os').userInfo().username
 const pj = require('../../package.json')
 const appCacheName = pj.productName
-const appBuildName = pj.config.forge.electronPackagerConfig.name
+const appBuildName = pj.name
 const appVersion = pj.version
 const pwd = process.cwd()
 const osEnv = process.env.OSENV || 'osx'
 
 // Default Settings (OSX)
-let	appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
+let	appPath = pwd + '/dist/' + 'mac/' + appCacheName + '.app/Contents/MacOS/' + appCacheName
 let	testDir = pwd + '/test/e2e/basic_id/'
+let chmodCmd = false;
 let	cacheCmd = 'bash ' + pwd + '/test/utils/quick.sh ' + user
 let	fullCmd = 'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '')
 
 // OSENV Settings
 if (osEnv === 'travis') {
-	appPath = pwd + '/out/' + appBuildName + '-darwin-x64/' + appBuildName + '.app/Contents/MacOS/' + appBuildName
+	appPath = pwd + '/dist/' + 'mac/' + appCacheName + '.app/Contents/MacOS/' + appCacheName
 	testDir = pwd + '/test/e2e/basic_id/'
 }
 
 if (osEnv === 'circle') {
-    appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
+	chmodCmd = "chmod a+x " + pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage'
+    appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage'
     testDir = pwd + '/test/e2e/basic_id/'
 }
 
 if (osEnv === 'linux') {
-    appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
+	chmodCmd = "chmod a+x " + pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage'
+	appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage'
     testDir = pwd + '/test/e2e/basic_id/'
 }
 
 if (osEnv === 'docker') {
-    appPath = pwd + '/out/' + appBuildName + '-linux-x64/' + appBuildName
+    appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage'
     testDir = pwd + '/test/e2e/basic_id/'
 }
 
 if (osEnv === 'windows') {
-    appPath = pwd + '\\out\\' + appBuildName + '-win32-ia32\\' + appBuildName + '.exe'
+    appPath = pwd + '\\dist\\' + appCacheName + " Setup " + appVersion + '.exe'
     testDir = pwd + '\\test\\e2e\\basic_id'
 }
 
@@ -70,5 +73,6 @@ module.exports = {
 	testDir,
 	cacheCmd,
 	fullCmd,
-	consoleNotes
+	consoleNotes,
+	chmodCmd
 }

@@ -1,31 +1,99 @@
 version: 2
 
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest-browsers
+  "build":
+    docker: &DOCKERIMAGE
+      - image: circleci/node:9-browsers
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run:
-          name: Install Linux Packages
-          command: sudo apt-get update; sudo apt-get install wine rpm xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run: 
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install libusb-1.0-0-dev
       - run:
           name: Install Gulp
-          command: sudo npm i -g gulp-cli electron-packager
+          command: sudo npm i -g gulp-cli
       - run:
           name: Install Node Packages
-          command: npm i
+          command: yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
       - run:
           name: Build App
-          command: NODE_ENV=test OSENV=circle npm run make
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          command: yarn dist --publish=never
+      - persist_to_workspace:
+          root: .
           paths:
-            - node_modules
+            - dist
+      - store_artifacts:
+          path: dist
+  "e2e":
+    docker: *DOCKERIMAGE
+    steps:
+      - checkout
+      - attach_workspace:
+            at: .
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
       - run:
-          name: Run Spectron Tests
-          command: NODE_ENV=test OSENV=circle npm run test
+          name: E2E Tests
+          command: OSENV=circle yarn test
+
+  "stage":
+    docker: *DOCKERIMAGE
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run:
+          name: Install gcloud
+          command: |
+            export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+            echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            sudo apt-get update && sudo apt-get install google-cloud-sdk
+      - run:
+          name: Deploy to staging
+          command: OSENV=circle bash deploy.sh $CIRCLE_SHA1
+          environment:
+            OSENV: circle  
+
+workflows:
+  version: 2
+  workflow1:
+    jobs:
+      - "build"
+ #     - "e2e":
+ #         requires:
+ #           - build
+      - "stage":
+          requires:
+            - build
+
+
+

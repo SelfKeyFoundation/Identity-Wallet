@@ -1,0 +1,33 @@
+.wallet-create-step-3(layout-fill, layout="column", layout-align="center center")
+    sk-icon(icon="important", size-class="icon-size-68x74")
+
+    .content-wrapper.sk-box.shadowed
+        .header
+            span.none-select-text Step 3: Backup Your Ethereum Address
+        .content(layout="column")
+            .icon
+                img(src="{{$root.appendStaticPath('assets/images/logos/download.png')}}" height=54)
+            md-input-container.sk-input-box.no-error-spacer
+                label Your Public Key
+                input(name="publicKey", ng-model="publicKey", type="text", placeholder="Your Public Key", disabled)
+                md-button.smallest.gray.copy
+                    span(copy-to-clipboard="publicKey") COPY
+
+            .title
+                | Your public key is a unique address on the Ethereum blockchain. Think of it like a bank
+                | account number that you own, used to send and receive Ether or tokens. The ability to
+                | authorize transactions on this address is encrypted by the password you just created.
+                | Download a backup and save this address in a convenient location.
+
+            md-button.blue(style="padding: 10px;", ng-click="backupKeystore($event)")
+                span.primary DOWNLOAD KEYSTORE FILE (UTC/JSON)
+
+            //.title.second
+                p
+                    | Do not lose this file as it cannot be recovered. Please be careful of malware or phishing sites.
+                    | To learn more about how Keystore Files work on the Ethereum network and why they are encrypted with a password,
+                    a.link(ng-click="$root.openInBrowser('http://help.selfkey.org/selfkey-identity-wallet', false)") click here.
+
+            .actions-wrapper
+                md-button#keystoreNext.outline-orange(ng-click="nextStep($event)")
+                    span I understand, continue
