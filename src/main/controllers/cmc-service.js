@@ -11,7 +11,6 @@ const EventEmitter = require('events');
 module.exports = function (app) {
     const eventEmitter = new EventEmitter();
 
-
     const loadCmcData = () => {
         return request.get(config.cmcUrl, (error, httpResponse, result) => {
 
@@ -56,22 +55,20 @@ module.exports = function (app) {
                         return callback(err);
                     });
                 }, function (err) {
-                    if (err) return log.error(err);
-                    log.info("TOKEN PRICE UPDATED");
+                    if (err) {
+                        log.error('TOKEN PRICE UPDATE', err)
+                    }
                     eventEmitter.emit('UPDATE');
-                    setTimeout(loadCmcData, config.cmcUpdatePeriod);
                 });
-
-            } else {
-                setTimeout(loadCmcData, config.cmcUpdatePeriod);
-            }
+            } 
         });
     }
 
     const controller = function () { };
 
     controller.prototype.startUpdateData = () => {
-        setTimeout(loadCmcData, 1000);
+        loadCmcData();
+        setInterval(loadCmcData, config.cmcUpdatePeriod);
     }
 
     controller.prototype.eventEmitter = eventEmitter;
