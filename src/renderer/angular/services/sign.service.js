@@ -1,10 +1,10 @@
 'use strict';
 
-const Wallet = requireAppModule('angular/classes/wallet');
-const Token = requireAppModule('angular/classes/token');
+const Wallet = require('../classes/wallet');
+const Token = require('../classes/token');
 
 
-function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerService) {
+function SignService($rootScope, $log, LedgerService) {
   'ngInject';
 
   $log.debug('SignService Initialized');
@@ -41,5 +41,7 @@ function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerServ
 
   return new SignService();
 }
+
+SignService.$inject = ['$rootScope', '$log', 'LedgerService'];
 
 module.exports = SignService;

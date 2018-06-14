@@ -1,7 +1,7 @@
 'use strict';
 
-const EthUnits = requireAppModule('angular/classes/eth-units');
-const EthUtils = requireAppModule('angular/classes/eth-utils');
+const EthUnits = require('../../../classes/eth-units');
+const EthUtils = require('../../../classes/eth-utils');
 
 function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
@@ -513,5 +513,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         $scope.startSend(event);
     });
 };
+
+SendTokenDialogController.$inject = ["$rootScope", "$scope", "$log", "$q", "$mdDialog", "$interval", "$window", "CONFIG", "$state", "$stateParams", "Web3Service", "CommonService", "SqlLiteService"];
 
 module.exports = SendTokenDialogController;

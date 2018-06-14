@@ -1,6 +1,6 @@
 'use strict';
 
-function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, Web3Service) {
+function ConnectingToLedgerController($rootScope, $scope, $log, $mdDialog, LedgerService) {
   'ngInject'
 
   $scope.connectionFailed = false;
@@ -39,4 +39,5 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
   $scope.getAccounts();
 };
 
+ConnectingToLedgerController.$inject = ['$rootScope', '$scope', '$log', '$mdDialog', 'LedgerService']
 module.exports = ConnectingToLedgerController;

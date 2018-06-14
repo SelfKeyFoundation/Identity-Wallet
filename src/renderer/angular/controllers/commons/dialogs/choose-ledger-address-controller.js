@@ -1,5 +1,5 @@
 'use strict';
-const Wallet = requireAppModule('angular/classes/wallet');
+const Wallet = require('../../../classes/wallet');
 
 function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, baseAccounts, ACCOUNTS_QUENTITY_PER_PAGE) {
   'ngInject'
@@ -17,6 +17,7 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
   };
 
   let onError = (err) => {
+    err = err || 'error';
     err = err.toString();
     err = errMsgsMap[err] || err;
     CommonService.showToast('error', err);
@@ -107,4 +108,5 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
 
 };
 
+ChooseLedgerAddressController.$inject = ['$rootScope', '$scope', '$log', '$q', '$state', '$mdDialog', 'CommonService', 'LedgerService', 'baseAccounts', 'ACCOUNTS_QUENTITY_PER_PAGE'];
 module.exports = ChooseLedgerAddressController;

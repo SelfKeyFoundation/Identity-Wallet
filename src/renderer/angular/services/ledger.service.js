@@ -2,7 +2,7 @@
 const async = require('async');
 const EthUnits = requireAppModule('angular/classes/eth-units');
 
-function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCService, CommonService, Web3Service) {
+function LedgerService($log, RPCService, CommonService, Web3Service) {
     'ngInject';
 
     $log.info('LedgerService Initialized');
@@ -85,5 +85,7 @@ function LedgerService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCServi
 
     return new LedgerService();
 }
+
+LedgerService.$inject = ['$log', 'RPCService', 'CommonService', 'Web3Service'];
 
 module.exports = LedgerService;
