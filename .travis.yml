@@ -20,3 +20,5 @@ after_script:
 deploy:
   provider: script
   script: yarn publish-build 
+  on:
+    all_branches: true
