@@ -14,6 +14,10 @@ function GuestKeystoreCreateStep2Controller($rootScope, $scope, $log, $q, $state
         password: ''
     };
 
+    $scope.cancel = (event) => {
+        $state.go('guest.welcome');
+    }
+
     $scope.nextStep = (event) => {
         if ($scope.input.password === $stateParams.thePassword) {
             $scope.walletCreationPromise = createKeystore();
