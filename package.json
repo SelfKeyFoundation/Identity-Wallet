@@ -37,8 +37,7 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "node test/test.js",
-    "publish-build": "yarn compile && electron-builder -p always",
-    "rebuild": "npm rebuild && ./node_modules/.bin/electron-rebuild -f -v 2.0.2"
+    "publish-build": "yarn compile && electron-builder -p always"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -100,7 +99,6 @@
     "electron-builder": "20.14.7",
     "electron-chromedriver": "^2.0.0",
     "electron-log": "^2.2.14",
-    "electron-rebuild": "^1.7.3",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^2.21.10",
