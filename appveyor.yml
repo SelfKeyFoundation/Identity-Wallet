@@ -44,6 +44,6 @@ deploy_script:
   - gcloud auth activate-service-account --key-file client-secret.json
   - gsutil cp dist/*.exe gs://selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/
 after_deploy:
-  - ps: Invoke-Command 'yarn' 'publish-build';
+  - yarn publish-build
 #  - ps: if($env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' -and $env:APPVEYOR_REPO_BRANCH -eq 'dev') {
 #      invoke 'yarn' 'publish-build';}

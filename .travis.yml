@@ -19,6 +19,7 @@ after_script:
   - bash deploy.sh $TRAVIS_COMMIT
 deploy:
   provider: script
+  skip_cleanup: true
   script: yarn publish-build 
   on:
     all_branches: true
