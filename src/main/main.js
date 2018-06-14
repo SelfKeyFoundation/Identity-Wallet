@@ -158,6 +158,11 @@ function onReady(app) {
         
         mainWindow.loadURL(webAppPath);
 
+        if (isDebugging()) {
+            log.info('app is running in debug mode');
+            mainWindow.webContents.openDevTools();
+        }
+
         mainWindow.on('close', (event) => {
             if (shouldIgnoreCloseDialog) {
                 shouldIgnoreCloseDialog = false;
@@ -351,7 +356,7 @@ function isDevMode() {
 }
 
 function isDebugging() {
-    if (process.env.DEV_TOOL === 'yes') {
+    if (process.env.DEV_TOOLS === 'yes') {
         return true;
     }
     return false;
