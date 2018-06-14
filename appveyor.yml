@@ -44,5 +44,4 @@ deploy_script:
   - gcloud auth activate-service-account --key-file client-secret.json
   - gsutil cp dist/*.exe gs://selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/
 after_deploy:
-# - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] yarn publish-build
-  - yarn publish-build
+  - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] yarn publish-build

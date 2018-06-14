@@ -22,4 +22,4 @@ deploy:
   skip_cleanup: true
   script: yarn publish-build 
   on:
-    all_branches: true
+    branch: dev
