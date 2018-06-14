@@ -21,6 +21,8 @@ const userDataDirectoryPath = electron.app.getPath('userData');
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
+const createMenuTemplate = require('./menu');
+
 /**
  * auto updated
  */
@@ -55,6 +57,7 @@ const i18n = [
 
 let shouldIgnoreClose = true;
 let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
+let mainWindow;
 
 for (let i in i18n) {
     app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
@@ -81,8 +84,7 @@ let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDire
  */
 function onReady(app) {
 
-    return function () {
-
+    return async () => {
         global.__static = __static;
 
         if (isSecondInstance) { 
@@ -90,7 +92,15 @@ function onReady(app) {
             return
         }
 
-        log.info('onReady');
+        if (process.env.NODE_ENV !== 'development') {
+            // Initate auto-updates
+            appUpdater();
+        }
+
+        const initDb = require('./services/knex').init;
+
+        await initDb();
+
         app.config.userDataPath = electron.app.getPath('userData');
 
         electron.app.helpers = require('./controllers/helpers')(app);
@@ -121,40 +131,34 @@ function onReady(app) {
         // 2) insert tokenPrices - set icon & price
         // 3) notify angular app when done
 
-        if (electron.app.doc) {
+        if (electron.app.dock) {
             electron.app.dock.setIcon(__static + '/assets/icons/png/256x256.png');
         }
 
-        //let tray = new Tray('assets/icons/png/256X256.png');
-        //tray.setToolTip('selfkey');
-
-        app.win = new electron.BrowserWindow({
+        mainWindow = new electron.BrowserWindow({
             title: electron.app.getName(),
             width: 1170,
             height: 800,
             minWidth: 1170,
             minHeight: 800,
-            //fullscreen: true,
             webPreferences: {
                 nodeIntegration: false,
                 webSecurity: true,
-                //experimentalFeatures: true,
                 disableBlinkFeatures: 'Auxclick',
-                devTools: app.config.app.debug,
                 preload: path.resolve(__dirname, 'preload.js'),
             },
             icon: __static + '/assets/icons/png/256x256.png'
         });
+
+        Menu.setApplicationMenu(
+            Menu.buildFromTemplate(createMenuTemplate(mainWindow))
+        );
+
         const webAppPath = (isDevMode())? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html` : `file://${__dirname}/index.html`;
         
-        app.win.loadURL(webAppPath);
+        mainWindow.loadURL(webAppPath);
 
-        if (isDebugging()) {
-            log.info('app is running in debug mode');
-            app.win.webContents.openDevTools();
-        }
-
-        app.win.on('close', (event) => {
+        mainWindow.on('close', (event) => {
             if (shouldIgnoreCloseDialog) {
                 shouldIgnoreCloseDialog = false;
                 return;
@@ -162,123 +166,38 @@ function onReady(app) {
             if (shouldIgnoreClose) {
                 event.preventDefault();
                 shouldIgnoreClose = false;
-                app.win.webContents.send('SHOW_CLOSE_DIALOG');
+                mainWindow.webContents.send('SHOW_CLOSE_DIALOG');
             }
         });
 
-        app.win.on('closed', () => {
-            log.info('app closed');
-            app.win = null;
+        mainWindow.on('closed', () => {
+            mainWindow = null;
         });
 
-        if (!isDevMode()) {
-            // Initate auto-updates
-            appUpdater();
-        }
-
-        app.win.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.on('did-finish-load', () => {
             isOnline().then((isOnline) => {
                 log.info('is-online', isOnline);
                 if (!isOnline) {
-                    app.win.webContents.send('SHOW_IS_OFFLINE_WARNING');
+                    mainWindow.webContents.send('SHOW_IS_OFFLINE_WARNING');
                     return;
                 }
 
                 log.info('did-finish-load');
-                app.win.webContents.send('APP_START_LOADING');
+                mainWindow.webContents.send('APP_START_LOADING');
                     //start update cmc data
                     electron.app.cmcService.startUpdateData();
                     electron.app.airtableService.loadIdAttributeTypes();
                     electron.app.airtableService.loadExchangeData();
-                    app.win.webContents.send('APP_SUCCESS_LOADING');
+                    mainWindow.webContents.send('APP_SUCCESS_LOADING');
             }).catch((error) => {
                 log.error(error);
-                app.win.webContents.send('APP_FAILED_LOADING');
+                mainWindow.webContents.send('APP_FAILED_LOADING');
             });
         });
 
-        app.win.webContents.on('did-fail-load', () => {
+        mainWindow.webContents.on('did-fail-load', () => {
             log.error('did-fail-load');
         });
-
-		/**
-		 * Create the Application's main menu
-		 */
-        let template = [];
-
-    /*    if (process.platform === 'darwin') {
-            template.unshift({
-                label: electron.app.getName(),
-                submenu: [
-                    { label: "About", role: 'about' },
-                    { label: "Quit", role: 'quit' }
-                ]
-            });
-        }*/
-        function openAbout() {
-            let win = new electron.BrowserWindow({
-                width: 600,
-                height: 300,
-                resizable: false,
-                minimizable: false,
-                maximizable: false,
-                fullscreen: false,
-                center: true,
-                parent: app.win,
-                webPreferences: {
-                    nodeIntegration: false,
-                    webSecurity: true,
-                    disableBlinkFeatures: 'Auxclick',
-                    devTools: app.config.app.debug,
-                    preload: path.join(app.dir.desktopApp, 'preload.js')
-                },
-            });
-            win.webContents.on('did-finish-load', () => {
-                win.webContents.send('version', version)
-            });
-            //win.webContents.openDevTools();
-            win.on('closed', () => {
-                win = null
-            });
-            let webAppPath = path.join(app.dir.root, '/app/src', 'about.html');
-            win.loadURL(url.format({
-                pathname: webAppPath,
-                protocol: 'file:',
-                slashes: true
-            }));
-        }
-
-            template.unshift({
-                label: electron.app.getName(),
-                submenu: [
-                    { label: "About", role: 'about',
-                        click () {
-                         openAbout();
-                        }
-                    },
-                    { label: "Quit", role: 'quit' }
-                ]
-            });
-        template.push({
-            label: "Edit",
-            submenu: [
-                { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-                { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-                { type: "separator" },
-                { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-                { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-                { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-                { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-            ]
-        },
-            {
-                label: 'View',
-                submenu: [
-                    { role: 'togglefullscreen' }
-                ]
-            });
-
-        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
         // TODO - check
         electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
@@ -299,6 +218,9 @@ function onReady(app) {
         electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', (event) => {
             shouldIgnoreCloseDialog = true;
         });
+
+        // TODO: Refactor this away
+        app.win = mainWindow;
     };
 }
 

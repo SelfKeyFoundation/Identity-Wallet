@@ -9,7 +9,7 @@ const seeds = [
 	{
 		"table": "seed",
 		"insert": [{
-			"init": 1
+			"name": "init"
 		}]
 	},
 	{
@@ -48,6 +48,12 @@ const seeds = [
 ]
 
 async function runSeeds(knex, seeds) {
+	const seedHasRun = await knex('seed').where('name', 'init').count('name');
+
+	if (seedHasRun) {
+		return;
+	}
+
 	try {
 		// want to remove promise wrapper
 		let allSeeds = []
