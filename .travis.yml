@@ -15,9 +15,8 @@ before_script:
   - yarn dist --publish=never
 script:
   - yarn test
+after_script:
+  - bash deploy.sh $TRAVIS_COMMIT
 deploy:
   provider: script
-  skip_cleanup: true
-  script: bash deploy.sh $TRAVIS_COMMIT
-  on:
-    all_branches: true
+  script: yarn publish-build 
