@@ -10,6 +10,10 @@ function GuestKeystoreCreateStep1Controller($rootScope, $scope, $log, $state, $t
         password: ''
     };
 
+    $scope.cancel = (event) => {
+        $state.go('guest.welcome');
+    }
+
     $scope.nextStep = (event, form) => {
         if (!$scope.input.password) {
             $scope.passwordIsRequiredErr = true;

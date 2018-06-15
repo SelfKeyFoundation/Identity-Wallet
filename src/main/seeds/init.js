@@ -48,9 +48,9 @@ const seeds = [
 ]
 
 async function runSeeds(knex, seeds) {
-	const seedHasRun = await knex('seed').where('name', 'init').count('name');
+  const seedHasRun = await knex('seed').where('name', 'init').count('name as countName');
 
-	if (seedHasRun > 0) {
+	if (seedHasRun[0].countName > 0) {
 		return;
 	}
 
