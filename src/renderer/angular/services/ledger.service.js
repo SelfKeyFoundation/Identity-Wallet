@@ -42,7 +42,7 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 
                     loadBalances(accounts, (err, results) => {
                         if (err) {
-                            reject();
+                            reject(err);
                             return;
                         }
 

@@ -270,8 +270,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
         $scope.viewStates.step = 'transaction-status';
         $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
-        $scope.sendPromise.then((resp) => {
-            $scope.txHex = resp.transactionHash;
+        $scope.sendPromise.then((transactionHash) => {
+            $scope.txHex = transactionHash;
 
             startTxCheck();
         }).catch((error) => {
@@ -291,11 +291,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             setViewState();
             return;
         }
-
         $scope.viewStates.step = 'transaction-status';
         $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
-        $scope.sendPromise.then((resp) => {
-            $scope.txHex = resp.transactionHash;
+        $scope.sendPromise.then((transactionHash) => {
+            $scope.txHex = transactionHash;
 
             startTxCheck();
         }).catch((error) => {

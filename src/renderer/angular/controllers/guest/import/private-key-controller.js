@@ -21,9 +21,13 @@ function GuestImportPrivateKeyController($rootScope, $scope, $log, $q, $timeout,
     $scope.unlock = (event, theForm) => {
         if (!theForm.$valid) return;
 
-        $scope.isUnlocking = true;
-
         let privateKey = $scope.userInput.privateKey;
+        if (!privateKey) {
+            return;
+        }
+
+        $scope.isUnlocking = true;
+        
         if (!$scope.userInput.privateKey.startsWith("0x")) {
             privateKey = "0x" + $scope.userInput.privateKey;
         }

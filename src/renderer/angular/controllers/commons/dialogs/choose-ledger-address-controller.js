@@ -1,7 +1,7 @@
 'use strict';
 const Wallet = require('../../../classes/wallet');
 
-function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, baseAccounts, ACCOUNTS_QUENTITY_PER_PAGE) {
+function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, baseAccounts, ACCOUNTS_QUANTITY_PER_PAGE) {
   'ngInject'
   $scope.currentAccounts = baseAccounts;
   $scope.selectedAccount = null;
@@ -45,11 +45,11 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
       $scope.loadingBalancesIsInProgress.previous = true;
     }
 
-    let newStart = isNext ? $scope.pagerStart + ACCOUNTS_QUENTITY_PER_PAGE : $scope.pagerStart - ACCOUNTS_QUENTITY_PER_PAGE;
+    let newStart = isNext ? $scope.pagerStart + ACCOUNTS_QUANTITY_PER_PAGE : $scope.pagerStart - ACCOUNTS_QUANTITY_PER_PAGE;
     if (newStart < 0) {
       newStart = 0;
     }
-    LedgerService.getAccountsWithBalances({ start: newStart, quantity: ACCOUNTS_QUENTITY_PER_PAGE }).then((accounts) => {
+    LedgerService.getAccountsWithBalances({ start: newStart, quantity: ACCOUNTS_QUANTITY_PER_PAGE }).then((accounts) => {
       accounts = accounts || [];
       $scope.currentAccounts = accounts;
       $scope.selectedAccount = null;
@@ -108,5 +108,5 @@ function ChooseLedgerAddressController($rootScope, $scope, $log, $q, $state, $md
 
 };
 
-ChooseLedgerAddressController.$inject = ['$rootScope', '$scope', '$log', '$q', '$state', '$mdDialog', 'CommonService', 'LedgerService', 'baseAccounts', 'ACCOUNTS_QUENTITY_PER_PAGE'];
+ChooseLedgerAddressController.$inject = ['$rootScope', '$scope', '$log', '$q', '$state', '$mdDialog', 'CommonService', 'LedgerService', 'baseAccounts', 'ACCOUNTS_QUANTITY_PER_PAGE'];
 module.exports = ChooseLedgerAddressController;
