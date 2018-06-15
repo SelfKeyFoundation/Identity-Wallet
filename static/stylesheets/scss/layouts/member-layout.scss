@@ -3,7 +3,7 @@
 }
 .member-layout__content_scroll::-webkit-scrollbar{
     width: 8px;
-    background-color: rgba(0,0,0,0);
+    background-color: transparent;
     -webkit-border-radius: 100px;
 }
 .member-layout__content_scroll::-webkit-scrollbar:hover {
