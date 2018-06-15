@@ -1,6 +1,5 @@
 exports.up = function(knex, Promise) {
 	return Promise.all([
-
 		knex.schema.createTable('action_logs', table => {
 			table.increments('id')
 			table.integer('walletId').notNullable().references('wallets.id')
@@ -149,7 +148,6 @@ exports.up = function(knex, Promise) {
 			table.integer('createdAt').notNullable().defaultTo(new Date().getTime())
 			table.integer('updatedAt')
 		})
-
 	])
 }
 
