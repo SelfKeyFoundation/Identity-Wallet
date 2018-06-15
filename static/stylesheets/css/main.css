@@ -1147,8 +1147,10 @@ md-input-container.hide-input-invalid-mark:after {
   background-color: #1e262e;
   height: 44px; }
   .sk-select .md-text {
-    padding-left: 8px;
-    color: #fff; }
+    padding-left: 24px;
+    color: #fff;
+    font-family: ProximaNovaSemibold;
+    font-size: 14px; }
   .sk-select md-select-value {
     border: 0 !important;
     padding: 0 !important; }
