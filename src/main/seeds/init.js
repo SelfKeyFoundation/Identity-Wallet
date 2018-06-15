@@ -9,7 +9,7 @@ const seeds = [
 	{
 		"table": "seed",
 		"insert": [{
-			"init": 1
+			"name": "init"
 		}]
 	},
 	{

@@ -3,35 +3,10 @@
 const Promise = require('bluebird');
 const log = require('electron-log');
 
+const { knex } = require('../services/knex');
+
 module.exports = function (app) {
-
     const controller = function () { };
-
-    const knexFile = require('../knexfile.js')
-    const knex = require('knex')(knexFile)
-    
-    /**
-     * Migrations
-     */    
-    function initDB() {
-        return new Promise((resolve, reject) => {
-            resolve(knex.migrate.latest())
-        }).catch(err => {
-            log.error("Migrations - ", e);
-        })
-    }
-
-    function seedDB() {
-        return new Promise((resolve, reject) => {
-            knex('seed').select().then(result => {
-                (result.length)
-                    ? resolve(log.info('already seeded'))
-                    : resolve(knex.seed.run())
-            })
-        })  
-    }
-
-    initDB().then(() => seedDB().then(() => {}))
 
     /**
      * common methods
@@ -313,27 +288,22 @@ module.exports = function (app) {
         });
     }
 
-    function updateById(table, data) {
-        return new Promise((resolve, reject) => {
-            data.updatedAt = new Date().getTime();
-            return knex(table).update(data).where({'id': data.id}).then((updatedIds) => {
-                if (!updatedIds || updatedIds != 1) {
-                    return reject({ message: "error_while_updating" });
-                }
+    async function updateById(table, data) {
+        data.updatedAt = new Date().getTime();
 
-                return knex(table).select().where({'id': data.id}).then((rows) => {
-                    if (rows && rows.length == 1) {
-                        return resolve(rows[0]);
-                    } else {
-                        return reject({ message: "error_while_updating" });
-                    }
-                }).catch(error => {
-                    return reject({ message: "error_while_updating", error: error });
-                });
-            }).catch((error) => {
-                return reject({ message: "error_while_updating", error: error });
-            })
-        });
+        const updatedIds = await knex(table).update(data).where({'id': data.id});
+
+        if (!updatedIds || updatedIds != 1) {
+            throw new Error('error_while_updating');
+        }
+
+        const rows = await knex(table).select().where({'id': data.id});
+        
+        if (rows && rows.length == 1) {
+            return rows[0];
+        } else {
+            throw new Error('error_while_updating');
+        }
     }
 
     // TODO remove
