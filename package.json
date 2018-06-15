@@ -127,6 +127,7 @@
   },
   "build": {
     "appId": "org.selfkey.wallet",
+    "generateUpdatesFilesForAllChannels": true,
     "files": [
       "dist/migrations",
       "dist/seeds",
