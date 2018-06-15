@@ -48,6 +48,12 @@ const seeds = [
 ]
 
 async function runSeeds(knex, seeds) {
+  const seedHasRun = await knex('seed').where('name', 'init').count('name as countName');
+
+	if (seedHasRun[0].countName > 0) {
+		return;
+	}
+
 	try {
 		// want to remove promise wrapper
 		let allSeeds = []
