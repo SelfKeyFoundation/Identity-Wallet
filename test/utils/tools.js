@@ -1,6 +1,5 @@
 const exec = require('child_process').exec
 const assert = require('assert')
-const electron = require('electron')
 const delay = require('delay')
 const chalk = require('chalk')
 const config = require('../config/config.js')
@@ -8,7 +7,12 @@ const config = require('../config/config.js')
 var Application = require('spectron').Application
 var app = new Application({
 	path: config.appPath,
-	chromeDriverLogPath: './chromedriver.log'
+	chromeDriverLogPath: './chromedriver.log',
+	args: ['.'],
+  webdriverOptions: {
+	 'logLevel': 'verbose'
+	},
+	waitTimeout: 20000
 })
 
 function init() {
@@ -42,7 +46,7 @@ function appStop() {
 
 function regStep(app, selector) {
 	return new Promise((resolve, reject) => {
-		delay(1000)
+		delay(5000)
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.click(selector))
 			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
