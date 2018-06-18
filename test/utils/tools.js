@@ -1,6 +1,5 @@
 const exec = require('child_process').exec
 const assert = require('assert')
-const electron = require('electron')
 const delay = require('delay')
 const chalk = require('chalk')
 const config = require('../config/config.js')
@@ -8,7 +7,12 @@ const config = require('../config/config.js')
 var Application = require('spectron').Application
 var app = new Application({
 	path: config.appPath,
-	chromeDriverLogPath: './chromedriver.log'
+	chromeDriverLogPath: './chromedriver.log',
+	args: ['.'],
+  webdriverOptions: {
+	 'logLevel': 'verbose'
+	},
+	waitTimeout: 20000
 })
 
 function init() {

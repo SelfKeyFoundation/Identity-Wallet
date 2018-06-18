@@ -23,5 +23,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://idea.selfkey.org')") 
                     span Submit Idea
                 .sk-right-sidenav__bottom-section__item(ng-click="$root.openInBrowser('http://help.selfkey.org')")
-                    span Help & Support 
+                    span Help & Support
+                .sk-right-sidenav__bottom-section__item(ng-click="closeApp($event)")
+                    span Quit
         .version v {{ $root.version }}
