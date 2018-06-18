@@ -46,7 +46,7 @@ function appStop() {
 
 function regStep(app, selector) {
 	return new Promise((resolve, reject) => {
-		delay(5000)
+		delay(1000)
 			.then(() => app.client.waitForVisible(selector, 15000))
 			.then(() => app.client.click(selector))
 			.then(() => resolve(console.log(chalk.green(selector + ' Step Done'))))
