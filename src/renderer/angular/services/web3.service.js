@@ -175,7 +175,8 @@ function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCServi
         }
 
         sendRawTransaction(signedTxHex) {
-            return Web3Service.waitForTicket('sendSignedTransaction', [signedTxHex]);
+            let onceListenerName = 'transactionHash';
+            return Web3Service.waitForTicket('sendSignedTransaction', [signedTxHex], null, null, onceListenerName);
         }
 
         getTransaction(transactionHex) {
@@ -191,8 +192,8 @@ function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCServi
             return Web3Service.waitForTicket('getBlock', [blockNumber, withTransactions]);
         }
 
-        static waitForTicket(method, args, contractAddress, contractMethod) {
-            return RPCService.makeCall('waitForWeb3Ticket', { method, args, contractAddress, contractMethod });
+        static waitForTicket(method, args, contractAddress, contractMethod, onceListenerName) {
+            return RPCService.makeCall('waitForWeb3Ticket', { method, args, contractAddress, contractMethod, onceListenerName });
         }
     };
 

@@ -257,7 +257,7 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
-    $rootScope.openChooseLedgerAddressDialog = (accountsArr, ACCOUNTS_QUENTITY_PER_PAGE) => {
+    $rootScope.openChooseLedgerAddressDialog = (accountsArr, ACCOUNTS_QUANTITY_PER_PAGE) => {
         return $mdDialog.show({
             controller: 'ChooseLedgerAddressController',
             templateUrl: 'common/dialogs/choose-ledger-address.html',
@@ -267,17 +267,21 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
             fullscreen: true,
             locals: {
                 baseAccounts: accountsArr,
-                ACCOUNTS_QUENTITY_PER_PAGE: ACCOUNTS_QUENTITY_PER_PAGE
+                ACCOUNTS_QUANTITY_PER_PAGE: ACCOUNTS_QUANTITY_PER_PAGE
             }
         });
     };
 
-    $rootScope.openConfirmLedgerTransactionWarningDialog = () => {
+    $rootScope.openRejectLedgerTxWarningDialog = () => {
         let result = document.getElementsByClassName('send-token')[0];
         
         return $mdDialog.show({
-            controller: 'ConfirmLedgerTransactionWarningController',
-            templateUrl: 'common/dialogs/confirm-ledger-transaction-warning.html',
+            controller: ['$scope',function($scope) {
+                $scope.cancel = () => {
+                    $mdDialog.cancel();
+                  };
+            }],
+            templateUrl: 'common/dialogs/reject-ledger-tx-warning.html',
             parent: result ? angular.element(result) : angular.element(document.body),
             targetEvent: null,
             hasBackdrop: false,
@@ -286,9 +290,66 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
         });
     };
 
+    $rootScope.openConfirmLedgerTxInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: function(){},
+            templateUrl: 'common/dialogs/confirm-ledger-tx-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openUnlockLedgerInfoWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+                $scope.tryAgain = (event) => {
+                    $rootScope.broadcastRetryToSign(event);
+                }
+                $scope.cancel = (event) => {
+                    $mdDialog.cancel();
+                }
+            }],
+            templateUrl: 'common/dialogs/unlock-ledger-info.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.openLedgerTimedOutWindow = () => {
+        let result = document.getElementsByClassName('send-token')[0];
+        return $mdDialog.show({
+            controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+                $scope.cancel = (event) => {
+                    $mdDialog.cancel();
+                }
+            }],
+            templateUrl: 'common/dialogs/ledger-timed-out.html',
+            parent: result ? angular.element(result) : angular.element(document.body),
+            targetEvent: null,
+            hasBackdrop: false,
+            escapeToClose: false,
+            clickOutsideToClose: false,
+            fullscreen: true
+        });
+    };
+
+    $rootScope.broadcastRetryToSign = (event) => {
+        $rootScope.$broadcast('tx-sign:retry', event);
+    };
+
     $rootScope.broadcastKeyPress = (event) => {
         $rootScope.$broadcast('selfkey:on-keypress', event.key);
-    }
+    };
 }
 
 AppRun.$inject = ["$rootScope", "$log", "$window", "$timeout", "$interval", "$q", "$state", "$trace", "$mdDialog", "DICTIONARY", "CONFIG", "RPCService", "SqlLiteService", "Web3Service", "CommonService", "EtherScanService", "LedgerService", "SignService"];

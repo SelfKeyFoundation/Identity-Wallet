@@ -4,7 +4,7 @@ const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
 
 
-function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerService) {
+function SignService($rootScope, $log, LedgerService) {
   'ngInject';
 
   $log.debug('SignService Initialized');
@@ -21,14 +21,15 @@ function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerServ
       });
     };
 
-    this.signTransactionByLedger = function (dataToSign, address) {
-      return LedgerService.signTransaction(dataToSign, address);
+    this.signTransactionByLedger = function (dataToSign, address, derivationPath) {
+      return LedgerService.signTransaction(dataToSign, address, derivationPath);
     }
 
     this.signTransaction = function (args) {
       let { rawTx, profile, privateKey, walletAddress } = args;
       if (profile == 'ledger') {
-        return this.signTransactionByLedger(rawTx, walletAddress);
+        let derivationPath = $rootScope.selectedLedgerAccount.derivationPath;
+        return this.signTransactionByLedger(rawTx, walletAddress, derivationPath);
       }
 
       if (profile == 'local') {
@@ -40,5 +41,7 @@ function SignService($rootScope, $window, $q, $timeout, $log, CONFIG, LedgerServ
 
   return new SignService();
 }
-SignService.$inject = ["$rootScope", "$window", "$q", "$timeout", "$log", "CONFIG", "LedgerService"];
+
+SignService.$inject = ['$rootScope', '$log', 'LedgerService'];
+
 module.exports = SignService;

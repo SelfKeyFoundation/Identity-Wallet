@@ -68,11 +68,20 @@ module.exports = function (app) {
         if (!promise) {
           return reject();
         }
-        promise.then((res) => {
-          resolve(res);
-        }).catch((err) => {
+
+        promise.catch((err) => {
           reject(err);
         });
+
+        if (args.onceListenerName) {
+          promise.once(args.onceListenerName, res => {
+            resolve(res);
+          });
+        } else {
+          promise.then((res) => {
+            resolve(res);
+          });
+        }
       })
     });
   }

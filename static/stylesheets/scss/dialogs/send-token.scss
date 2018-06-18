@@ -27,7 +27,7 @@
             right: -18px;
             top: -18px;
             cursor: pointer;
-            z-index: 1000;
+            z-index: 1;
         }
         .sk-send-ether-box__select-token-container {
             > .sk-select {
@@ -82,7 +82,7 @@
 
                 padding: 10px;
                 display: block;
-                z-index: 100000000;
+                z-index: 1;
                 background-color: #1e262d;
                 border: solid 1px #303c49;
             }
