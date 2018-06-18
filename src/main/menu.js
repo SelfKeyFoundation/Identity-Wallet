@@ -39,7 +39,7 @@ const getMenuTemplate = (mainWindow) => {
                         });
 
                         win.loadURL(url.format({
-                            pathname: path.resolve(__dirname, '../../app/src/about.html'),
+                            pathname: path.resolve('./assets/about.html'),
                             protocol: 'file:',
                             slashes: true
                         }));
