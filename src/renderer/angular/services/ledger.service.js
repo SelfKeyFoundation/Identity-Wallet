@@ -1,6 +1,5 @@
 'use strict';
-const async = require('async');
-const EthUnits = requireAppModule('angular/classes/eth-units');
+const EthUnits = require('../classes/eth-units');
 
 function LedgerService($log, RPCService, CommonService, Web3Service) {
     'ngInject';
@@ -29,7 +28,7 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 
                 });
 
-                async.parallel(fns, callback);
+                window.async.parallel(fns, callback);
             };
 
             return new Promise((resolve, reject) => {
