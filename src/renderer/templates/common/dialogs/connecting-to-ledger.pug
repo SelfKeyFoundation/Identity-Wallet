@@ -3,7 +3,14 @@ md-dialog.ledger-is-connecting-container(aira-lable="Connecting to Ledger")
         .header-conainer
             sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancelConectToLedger($event)")
         .body-container
-            .header-title {{isConnecting ? 'Connecting To Ledger...' : "Error: Can't Connect To Ledger"}}
+            .header-title(ng-if="isConnecting") 
+                .wave
+                    span.dot
+                    span.dot
+                    span.dot
+                span Connecting To Ledger
+            .header-title(ng-if="!isConnecting")
+                span Error: Can't Connect To Ledger
             .items(ng-if="isConnecting") 
                 .item.title To ensure a successful connection, please check if:
                 .item 1) "Browser Support" is disabled.
