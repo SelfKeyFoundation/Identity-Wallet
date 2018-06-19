@@ -198,7 +198,7 @@ class Wallet {
 
 
     addNewToken(data) {
-        let newToken = new Token(data.address, data.symbol, data.decimal, data.isCustom, data.tokenId, data.id, this);
+        let newToken = new Token(data.address, data.symbol, data.decimal, data.isCustom, data.tokenId, data.id, data.hidden, this);
         this.tokens[data.symbol.toUpperCase()] = newToken;
         return newToken;
     }

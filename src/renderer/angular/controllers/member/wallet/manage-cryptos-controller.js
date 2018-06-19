@@ -102,6 +102,31 @@ function ManageCryptosController($rootScope, $scope, $log, $q, $timeout, $mdDial
         return true;
     };
 
+    $scope.toggleCustomToken = (event, token, index) => {
+        const shouldHide = !token.isHidden();
+        if (shouldHide) {
+            $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n', 'Are you sure?',).then((val) => {
+                if (val == 'accept') {
+                    toggleTokenHide(shouldHide, token);   
+                }
+            });
+        } else {
+            toggleTokenHide(shouldHide, token);   
+        }
+    }
+
+    const toggleTokenHide = (shouldHide, token) => {
+        SqlLiteService.updateWalletToken({
+            tokenId: token.id,
+            walletId: wallet.id,
+            id: token.walletTokenId,
+            balance: token.balance,
+            hidden: shouldHide
+        }).then(() => {
+            token.setIsHidden(shouldHide);
+            reloadPieChartIsNeeded = true;
+        });
+    }
 
     $scope.deleteCustomToken = (event, token, index) => {
         $rootScope.openConfirmationDialog(event, 'Hiding tokens from this list only disables them from the display, and does not impact their status on the Ethereum blockchain.\n', 'Are you sure?',).then((val) => {
