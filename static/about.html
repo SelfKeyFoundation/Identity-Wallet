@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="kyc-wallet">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -40,8 +40,8 @@
     </p>
 </div>
 <script>
-    const shell = require('electron').shell;
-    const ipcRenderer = require('electron').ipcRenderer;
+    const shell = window.electron.shell;
+    const ipcRenderer = window.electron.ipcRenderer;
     ipcRenderer.on('version', (event, message) => {
         document.getElementById('version').innerHTML = message;
     });
@@ -51,6 +51,7 @@
         const url = e.target.href;
         shell.openExternal(url);
     }
+    
 </script>
 </body>
 </html>

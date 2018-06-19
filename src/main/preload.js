@@ -32,7 +32,7 @@ window.isTestMode = function () {
     return false;
 }
 
-window.electron = isTestMode() ? require('electron') : '';
+window.electron = require('electron');
 
 window.requireAppModule = function (moduleName, isNear) {
     moduleName = moduleName.replace('../', '');
@@ -42,7 +42,7 @@ window.requireAppModule = function (moduleName, isNear) {
 }
 
 window.requireNodeModule = function (moduleName) {
-    if(isTestMode() && moduleName === 'electron'){
+    if(moduleName === 'electron'){
         return window.electron;
     } else {
         return require(`${moduleName}`);

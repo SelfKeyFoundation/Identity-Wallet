@@ -1,6 +1,6 @@
 const electron = require('electron');
 const path = require('path');
-
+const version = electron.app.getVersion();
 /**
  * Create the Application's main menu
  */
@@ -12,7 +12,7 @@ const getMenuTemplate = (mainWindow) => {
                 {
                     label: "About", role: 'about',
                     click() {
-                        const win = new electron.BrowserWindow({
+                        let win = new electron.BrowserWindow({
                             width: 600,
                             height: 300,
                             resizable: false,
@@ -26,10 +26,12 @@ const getMenuTemplate = (mainWindow) => {
                                 webSecurity: true,
                                 disableBlinkFeatures: 'Auxclick',
                                 devTools: false,
-                                preload: path.resolve('./preload.js')
+                                preload: path.resolve(__dirname, 'preload.js')
                             },
                         });
-
+                        
+                        win.setMenu(null);
+                        
                         win.webContents.on('did-finish-load', () => {
                             win.webContents.send('version', version)
                         });
@@ -38,11 +40,7 @@ const getMenuTemplate = (mainWindow) => {
                             win = null
                         });
 
-                        win.loadURL(url.format({
-                            pathname: path.resolve('./assets/about.html'),
-                            protocol: 'file:',
-                            slashes: true
-                        }));
+                        win.loadURL(`file://${__static}/about.html`);
                     }
                 },
                 { label: "Quit", role: 'quit' }
