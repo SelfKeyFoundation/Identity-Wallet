@@ -974,15 +974,7 @@ module.exports = function (app) {
             }
         });
     };
-
-    controller.prototype.connectToLedger = function (event, actionId, actionName, args) {
-        electron.app.ledgerService.connect(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
-
+ 
     controller.prototype.getLedgerAccounts = function (event, actionId, actionName, args) {
         electron.app.ledgerService.getAccounts(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1002,6 +994,7 @@ module.exports = function (app) {
      controller.prototype.createLedgerWalletByAdress = function (event, actionId, actionName, args) {
         try {
             let publicKey = args.address;
+            let profile = 'ledger';
             publicKey = publicKey.toString('hex');
 
             let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey(publicKey);
@@ -1011,14 +1004,15 @@ module.exports = function (app) {
                 } else {
                     electron.app.sqlLiteService.Wallet.add(
                         {
-                            publicKey: publicKey,
-                            profile: 'ledger'
+                            publicKey,
+                            profile 
                         }
                     ).then((resp) => {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
                             id: resp.id,
                             isSetupFinished: resp.isSetupFinished,
-                            publicKey: publicKey
+                            publicKey,
+                            profile
                         });
                     }).catch((error) => {
                         log.error(error);

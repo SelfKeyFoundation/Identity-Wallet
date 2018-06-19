@@ -1,6 +1,6 @@
 'use strict';
 
-function SkCirclePieChartDirective($timeout, CommonService) {
+function SkCirclePieChartDirective($timeout, $filter) {
     'ngInject';
 
     return {
@@ -37,16 +37,14 @@ function SkCirclePieChartDirective($timeout, CommonService) {
                 let items = scope.data.items;
                 let TOP_COLORS = ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
 
-                scope.totalValueFormated = new BigNumber(0);
+                scope.totalValue= new BigNumber(0);
                 items.forEach((item) => {
-                    item.valueUSD = Number(CommonService.numbersAfterComma(item.valueUSD, 2));
-                    scope.totalValueFormated = scope.totalValueFormated.plus(new BigNumber(item.valueUSD));
+                    scope.totalValue = scope.totalValue.plus(new BigNumber(item.valueUSD));
                 });
-
-                scope.totalValueFormated = scope.totalValueFormated.toString(10);
+                scope.totalValue = $filter('currency')(Number(scope.totalValue));
 
                 items.sort((a, b) => {
-                    let check = parseFloat(b.valueUSD || 0) - parseFloat(a.valueUSD || 0);
+                    let check = b.valueUSD - a.valueUSD;
                     if (check == 0) {
                         let textA = a.title.toLowerCase();
                         let textB = b.title.toLowerCase();
@@ -71,7 +69,6 @@ function SkCirclePieChartDirective($timeout, CommonService) {
                         otherAggregated.valueUSD = new BigNumber(otherAggregated.valueUSD).plus(new BigNumber(otherItem.valueUSD));
                     });
 
-                    otherAggregated.valueUSD = +CommonService.numbersAfterComma(otherAggregated.valueUSD, 2);
                     scope.topItems.push(otherAggregated);
                 }
 
@@ -251,5 +248,5 @@ function SkCirclePieChartDirective($timeout, CommonService) {
         templateUrl: 'common/directives/sk-circle-pie-chart.html'
     }
 }
-SkCirclePieChartDirective.$inject = ["$timeout", "CommonService"];
+SkCirclePieChartDirective.$inject = ["$timeout", "$filter"];
 module.exports = SkCirclePieChartDirective;

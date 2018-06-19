@@ -1,6 +1,6 @@
 'use strict';
 
-function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdDialog, CommonService, LedgerService, Web3Service) {
+function ConnectingToLedgerController($rootScope, $scope, $log, $mdDialog, LedgerService) {
   'ngInject'
 
   $scope.connectionFailed = false;
@@ -8,7 +8,6 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
   const ACCOUNTS_QUANTITY_PER_PAGE = 6;
 
   $scope.cancelConectToLedger = () => {
-    //cancel current sended requests
     $mdDialog.cancel();
   };
 
@@ -21,32 +20,24 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $q, $state, $mdD
     $scope.connectionFailed = true;
   };
 
-
-  $scope.connectToLedger = () => {
+  $scope.getAccounts = () => {
     $scope.connectionFailed = false;
     $scope.isConnecting = true;
-
-    LedgerService.connect().then(() => {
-      LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUANTITY_PER_PAGE }).then((accounts) => {
-        if (!accounts || accounts.length == 0) {
-          onError();
-          return;
-        }
-
-        $scope.closeDialog();
-        $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
-      }).catch(err => {
+    LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUANTITY_PER_PAGE }).then((accounts) => {
+      if (!accounts || accounts.length == 0) {
         onError();
-      });
+        return;
+      }
 
-    }).catch((err) => {
-      $scope.isConnecting = false;
-      $scope.connectionFailed = true;
+      $scope.closeDialog();
+      $rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
+    }).catch(err => {
+      onError();
     });
   };
 
-  $scope.connectToLedger();
+  $scope.getAccounts();
 };
 
-ConnectingToLedgerController.$inject = ["$rootScope", "$scope", "$log", "$q", "$state", "$mdDialog", "CommonService", "LedgerService", "Web3Service"];
+ConnectingToLedgerController.$inject = ['$rootScope', '$scope', '$log', '$mdDialog', 'LedgerService']
 module.exports = ConnectingToLedgerController;

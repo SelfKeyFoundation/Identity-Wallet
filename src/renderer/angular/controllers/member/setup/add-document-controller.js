@@ -10,7 +10,7 @@ function MemberSetupAddDocumentController($rootScope, $scope, $log, $state, $tim
     const ID_ATTRIBUTES = {
         'national_id': {
             type: "national_id",
-            step: "STEP 4",
+            step: "STEP 3",
             title1: "Upload Your National ID",
             title2: "(Can be a driver's license or passport)",
             title3: "(Max file size: 50mb)",

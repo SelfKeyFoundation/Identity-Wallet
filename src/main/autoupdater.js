@@ -1,20 +1,12 @@
 'use strict'
-
-const { app, autoUpdater, dialog } = require('electron')
-const os = require('os')
-const updaterFeedURL = 'https://selfkey-releases.storage.googleapis.com/SelfKey-Desktop-Identity-Wallet/ea788838ccc9eb63676dd2da87772850/' + os.platform() + '/' + os.arch() + '/RELEASES.json?method=JSON&version=' + app.getVersion()
+const { app, dialog } = require('electron')
+const {autoUpdater} = require("electron-updater");
+const log = require('electron-log');
 
 function appUpdater() {
-    autoUpdater.setFeedURL(updaterFeedURL)	
 
-    /* Log whats happening
-	TODO send autoUpdater events to renderer so that we could console log it in developer tools
-	You could alsoe use nslog or other logging to see what's happening */
-    autoUpdater.on('error', err => console.log(err))
-    autoUpdater.on('checking-for-update', () => console.log('checking-for-update'))
-    autoUpdater.on('update-available', () => console.log('update-available'))
-    autoUpdater.on('update-not-available', () => console.log('update-not-available'))
-
+    autoUpdater.logger = log
+     
     // Ask the user if update is available
     autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
         let message = app.getName() + ' ' + releaseName + ' is now available. It will be installed the next time you restart the application.'
@@ -39,7 +31,7 @@ function appUpdater() {
         })
     })
     // init for updates
-    autoUpdater.checkForUpdates()
+    autoUpdater.checkForUpdatesAndNotify()
 }
 
 module.exports = {

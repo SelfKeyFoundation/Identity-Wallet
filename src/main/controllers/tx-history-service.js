@@ -41,8 +41,8 @@ let defaultModule = function (app) {
         'txreceipt_status', 'input', 'contractAddress', 'cumulativeGasUsed',
         'gasUsed', 'confirmations', 'tokenName', 'tokenSymbol', 'tokenDecimal'];
 
-    let queue = async.queue(async (args, callback) => {
-        let result = await makeRequest.apply(this, [args.method, args.url, args.data])
+    let queue = async.queue((args, callback) => {
+        let result = makeRequest.apply(this, [args.method, args.url, args.data])
         setTimeout(() => {
             callback(result);
         }, REQUEST_INTERVAL_DELAY);

@@ -78,6 +78,10 @@ class Token {
         return new BigNumber(this.balanceDecimal).div(new BigNumber(10).pow(this.decimal)).toString();
     }
 
+    getBalanceInUSD() {
+        return this.balanceInUsd;
+    }
+
     getFormattedBalanceInUSD() {
         return CommonService.getFormattedValueUSD(this.balanceInUsd);
     }
@@ -216,11 +220,6 @@ class Token {
                 }).then(res => {
                     defer.resolve(res);
                 }).catch(err => {
-                    if (this.wallet.profile == 'ledger') {
-                        $rootScope.openConfirmLedgerTransactionWarningDialog();
-                        defer.reject('');
-                        return;
-                    }
                     defer.reject(err);
                 });
 

@@ -52,11 +52,7 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
             if (wallets[selectedPublicKey]) {
                 let promise = unlockExistingWallet(selectedPublicKey, $scope.userInput.password);
                 promise.then((data) => {
-                    if (data.isSetupFinished) {
-                        $state.go('member.dashboard.main');
-                    } else {
-                        $state.go('guest.create.step-3', { walletData: data });
-                    }
+                    $state.go('member.dashboard.main');
                 }).catch((error) => {
                     $scope.isAuthenticating = false;
                     $scope.incorrectPassword = true;
@@ -72,9 +68,15 @@ function GuestImportKeystoreController($rootScope, $scope, $log, $q, $timeout, $
                 $rootScope.walletImportData = data;
                 $rootScope.wallet = new Wallet(data.id, data.privateKey, data.publicKey, data.keystoreFilePath, data.profile);
 
-                $state.go('guest.create.step-3', { walletData: data });
+                $state.go('member.dashboard.main');
             }).catch((error) => {
                 $scope.isAuthenticating = false;
+                
+                if (error == 'incorrect_password') {
+                    $scope.incorrectPassword = true;
+                    return;
+                }
+
                 CommonService.showToast('error', $rootScope.DICTIONARY[error]);
             });
         }

@@ -31,7 +31,13 @@
     .content-wrapper {
         width: 780px;
         margin-top: 50px;
-
+        
+        .close-btn {
+            cursor: pointer;
+            position: absolute;
+            right: -18px;
+            top: -18px;
+        }
         .content {
             padding: 24px 36px;
             .title {

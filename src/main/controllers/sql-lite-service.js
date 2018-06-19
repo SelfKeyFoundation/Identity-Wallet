@@ -3,35 +3,10 @@
 const Promise = require('bluebird');
 const log = require('electron-log');
 
+const { knex } = require('../services/knex');
+
 module.exports = function (app) {
-
     const controller = function () { };
-
-    const knexFile = require('../knexfile.js')
-    const knex = require('knex')(knexFile)
-    
-    /**
-     * Migrations
-     */    
-    function initDB() {
-        return new Promise((resolve, reject) => {
-            resolve(knex.migrate.latest())
-        }).catch(err => {
-            log.error("Migrations - ", e);
-        })
-    }
-
-    function seedDB() {
-        return new Promise((resolve, reject) => {
-            knex('seed').select().then(result => {
-                (result.length)
-                    ? resolve(log.info('already seeded'))
-                    : resolve(knex.seed.run())
-            })
-        })  
-    }
-
-    initDB().then(() => seedDB().then(() => {}))
 
     /**
      * common methods
@@ -84,55 +59,6 @@ module.exports = function (app) {
     let TxHistory = require('./models/tx-history.js')(app, controller);
     controller.prototype.TxHistory = TxHistory;
 
-    /**
-     * tables
-     */
-    function createWalletTokens() {
-        return new Promise((resolve, reject) => {
-            knex.schema.hasTable('wallet_tokens').then(function (exists) {
-                if (!exists) {
-                    knex.schema.createTable('wallet_tokens', (table) => {
-                        table.increments('id');
-                        table.integer('walletId').notNullable().references('wallets.id');
-                        table.integer('tokenId').notNullable().references('tokens.id');
-                        table.decimal('balance').defaultTo(0);
-                        table.integer('recordState').defaultTo(1);
-                        table.integer('createdAt').notNullable().defaultTo(new Date().getTime());
-                        table.integer('updatedAt');
-                    }).then((resp) => {
-                        console.log("Table:", "wallet_tokens", "created.");
-                        resolve("wallet_tokens created");
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    /**
-     * public methods
-     */
-    controller.prototype.init = () => {
-        let promises = [];
-        promises.push(Country.init());
-        promises.push(Document.init());
-        promises.push(IdAttributeType.init());
-        promises.push(Token.init());
-        promises.push(Wallet.init());
-        promises.push(AppSetting.init());
-        promises.push(GuideSetting.init());
-        promises.push(IdAttribute.init());
-        promises.push(TokenPrice.init());
-        promises.push(createWalletTokens());
-        promises.push(TxHistory.init());
-        promises.push(ActionLog.init());
-        promises.push(WalletSetting.init());
-        promises.push(ExchangeDataHandler.init());
-        return Promise.all(promises)
-    }
 
     // TODO
     controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
@@ -167,13 +93,12 @@ module.exports = function (app) {
      */
     // TODO
     controller.prototype.walletTokens_selectByWalletId = (walletId) => {
-        console.log('walletId walletId walletId', walletId);
         return new Promise((resolve, reject) => {
             let promise = knex('wallet_tokens')
                 .select('wallet_tokens.*', 'token_prices.name', 'token_prices.priceUSD', 'tokens.symbol', 'tokens.decimal', 'tokens.address', 'tokens.isCustom')
-                .leftJoin('tokens', 'wallet_tokens.tokenId', 'tokens.id')
+                .leftJoin('tokens', 'tokenId', 'tokens.id')
                 .leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
-                .where({ 'wallet_tokens.walletId': walletId, 'wallet_tokens.recordState': 1 });
+                .where({ walletId: walletId, recordState: 1 });
 
             promise.then((rows) => {
                 return resolve(rows);
@@ -193,7 +118,6 @@ module.exports = function (app) {
                 .where({ 'wallet_tokens.id': id, recordState: 1 });
 
             promise.then((rows) => {
-                console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', rows);
                 rows && rows.length ? resolve(rows[0]) : resolve(null);
             }).catch((error) => {
                 console.log(error);
@@ -240,6 +164,10 @@ module.exports = function (app) {
 
     controller.prototype.token_update = (data) => {
         return updateById('tokens', data);
+    }
+
+    controller.prototype.transactionsHistory_insert = (data) => {
+        return insertIntoTable('transactions_history', data);
     }
 
     /**
@@ -334,7 +262,7 @@ module.exports = function (app) {
 
             return promise.then((resp) => {
                 if (!resp || resp.length !== 1) {
-                    return reject({ message: "error_while_creating1" });
+                    return reject({ message: "error_while_creating" });
                 }
 
                 let selectPromise = null;
@@ -360,27 +288,22 @@ module.exports = function (app) {
         });
     }
 
-    function updateById(table, data) {
-        return new Promise((resolve, reject) => {
-            data.updatedAt = new Date().getTime();
-            return knex(table).update(data).where({'id': data.id}).then((updatedIds) => {
-                if (!updatedIds || updatedIds != 1) {
-                    return reject({ message: "error_while_updating1" });
-                }
+    async function updateById(table, data) {
+        data.updatedAt = new Date().getTime();
 
-                return knex(table).select().where({'id': data.id}).then((rows) => {
-                    if (rows && rows.length == 1) {
-                        return resolve(rows[0]);
-                    } else {
-                        return reject({ message: "error_while_updating" });
-                    }
-                }).catch(error => {
-                    return reject({ message: "error_while_updating", error: error });
-                });
-            }).catch((error) => {
-                return reject({ message: "error_while_updating", error: error });
-            })
-        });
+        const updatedIds = await knex(table).update(data).where({'id': data.id});
+
+        if (!updatedIds || updatedIds != 1) {
+            throw new Error('error_while_updating');
+        }
+
+        const rows = await knex(table).select().where({'id': data.id});
+        
+        if (rows && rows.length == 1) {
+            return rows[0];
+        } else {
+            throw new Error('error_while_updating');
+        }
     }
 
     // TODO remove

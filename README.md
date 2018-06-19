@@ -1,6 +1,7 @@
 # Selfkey Identity Wallet
 
-[![Build Status](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet.svg?branch=dev)](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet) [![CircleCI](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/1oal9hxddsx3a25f?svg=true)](https://ci.appveyor.com/project/altninja/identity-wallet) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet.svg?branch=dev)](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet) [![CircleCI](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/7g0lesr2456giitd?svg=true)](https://ci.appveyor.com/project/rodrigopavezi/identity-wallet)
+ [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
@@ -19,34 +20,27 @@ The Official SelfKey Identity Wallet for Desktop
 
 ## Prerequisites
 
-* [NodeJS](https://nodejs.org) version 9.5 or better.
+* [NodeJS](https://nodejs.org) version 9 or better.
 * Wine and RPM packages for OSX/Linux
 
 ### Install Dependencies
 
-    npm install
+    yarn
+    yarn install-app-deps
 
 ### Build on OSX/macOS/Linux
 
-    npm run make
-
-### Build on Windows
-
-    npm run make-win
+    yarn dist
 
 ## Development
 
-### Run the App on OSX/macOS/Linux
+### Run the App on OSX/macOS/Linux/Windows
 
-    npm run start
-
-### Run the App on Windows
-
-    npm run start-win
+    yarn dev
 
 ### Tests
 
-    npm run test
+    yarn test
 
 ## Contributing
 
