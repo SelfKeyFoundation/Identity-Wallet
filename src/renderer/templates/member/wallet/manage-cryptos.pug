@@ -28,4 +28,4 @@
                         td {{token.totalValue}}
                         td {{token.contractAddress}}
                         td
-                            sk-icon(ng-if="isDeletable(token)", ng-click="deleteCustomToken($event, token, $index)", icon="ic_visibility_off_black_24px", size-class="icon-size-19x23")
+                            sk-icon(ng-if="isDeletable(token)", ng-click="toggleCustomToken($event, token, $index)", icon="{{token.isHidden()? 'ic_visibility_off_black_24px' : 'ic_visibility_black_24px'}}", size-class="icon-size-19x23")

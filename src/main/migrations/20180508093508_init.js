@@ -144,6 +144,7 @@ exports.up = function(knex, Promise) {
 			table.integer('walletId').notNullable().references('wallets.id')
 			table.integer('tokenId').notNullable().references('tokens.id')
 			table.decimal('balance').defaultTo(0)
+			table.integer('hidden').defaultTo(0)
 			table.integer('recordState').defaultTo(1)
 			table.integer('createdAt').notNullable().defaultTo(new Date().getTime())
 			table.integer('updatedAt')

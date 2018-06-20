@@ -26,8 +26,6 @@ const createMenuTemplate = require('./menu');
 /**
  * auto updated
  */
-const platform = os.platform() + '_' + os.arch();
-const version = electron.app.getVersion();
 const { appUpdater } = require('./autoupdater');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -92,7 +90,7 @@ function onReady(app) {
             return
         }
 
-        if (process.env.NODE_ENV !== 'development') {
+        if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
             // Initate auto-updates
             appUpdater();
         }

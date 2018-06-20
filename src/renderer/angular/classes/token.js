@@ -32,7 +32,7 @@ class Token {
      * @param {*} decimal
      * @param {*} wallet
      */
-    constructor(contractAddress, symbol, decimal, isCustom, id, walletTokenId, wallet) {
+    constructor(contractAddress, symbol, decimal, isCustom, id, walletTokenId, hidden, wallet) {
         this.contractAddress = contractAddress;
         this.symbol = symbol;
         this.decimal = decimal;
@@ -41,6 +41,7 @@ class Token {
         this.walletTokenId = walletTokenId;
         this.balanceHex = null;
         this.balanceDecimal = 0;
+        this.hidden = hidden;
 
         this.balanceInUsd = 0;
         this.usdPerUnit = 0;
@@ -65,6 +66,14 @@ class Token {
         } catch (e) {
             return { error: e, data: null };
         }
+    }
+
+    isHidden() {
+        return this.hidden;
+    }
+
+    setIsHidden(isHidden) {
+        this.hidden = isHidden;
     }
 
     /**
