@@ -67,22 +67,24 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         Object.keys(wallet.tokens).forEach((tokeyKey) => {
             let pieChartItem = {};
             let token = wallet.tokens[tokeyKey];
-            if (!token.isHidden()) {
-                let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
-                if (tokenPrice) {
-                    pieChartItem.title = tokenPrice.name;
-                    pieChartItem.valueUSD = token.getBalanceInUSD();
-                    pieChartItem.amount = token.getFormattedBalance();
-                    //token
-                } else {
-                    pieChartItem.title = 'Unknown';
-                    pieChartItem.valueUSD = 0;
-                }
-
-                pieChartItem.subTitle = token.symbol;
-
-                pieChartItems.push(pieChartItem);
+            if (token.isHidden()) {
+                return;
             }
+            let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
+            if (tokenPrice) {
+                pieChartItem.title = tokenPrice.name;
+                pieChartItem.valueUSD = token.getBalanceInUSD();
+                pieChartItem.amount = token.getFormattedBalance();
+                //token
+            } else {
+                pieChartItem.title = 'Unknown';
+                pieChartItem.valueUSD = 0;
+            }
+
+            pieChartItem.subTitle = token.symbol;
+
+            pieChartItems.push(pieChartItem);
+            
         });
 
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
