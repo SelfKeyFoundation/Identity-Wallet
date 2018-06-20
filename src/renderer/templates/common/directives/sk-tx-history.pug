@@ -6,7 +6,7 @@
           .item-container(layout="row", layout-align="space-between center")
               div(layout="row", layout-align="start center")
                 sk-icon(icon="{{tx.statusIcon}}", extension="png", size-class="icon-size-34x34")
-                .date {{ +(tx.timeStamp + '000') | date:'yyyy-dd-MM'}}
+                .date {{ tx.timeStamp | date:'yyyy-dd-MM'}}
                 .status 
                     span {{ tx.statusText }}
                     span.symbol(ng-if="!tokenSymbol", ng-class="tx.symbol") {{tx.symbol}}

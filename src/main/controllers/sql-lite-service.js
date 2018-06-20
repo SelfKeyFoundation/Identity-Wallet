@@ -166,10 +166,6 @@ module.exports = function (app) {
         return updateById('tokens', data);
     }
 
-    controller.prototype.transactionsHistory_insert = (data) => {
-        return insertIntoTable('transactions_history', data);
-    }
-
     /**
      * commons
      */

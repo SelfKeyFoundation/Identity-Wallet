@@ -62,16 +62,6 @@ function EtherScanService($rootScope, $window, $q, $timeout, $log, $http, $httpP
             }, 1);
         }
 
-        getTransactionsHistory(address, startblock, endblock) {
-            let defer = $q.defer();
-            const apiUrl = SERVER_URL + `?module=account&action=txlist&address=${address}&startblock=${startblock}&endblock=${endblock}&sort=asc&apikey=${API_KEY}`;
-
-            let promise = $http.get(apiUrl);
-            EtherScanService.waitForTicket(defer, apiUrl);
-
-            return defer.promise;
-        }
-
         static handlePromise(defer, promise) {
             promise.then((response) => {
                 if (response.data.error || !response.data || !response.data.result) {

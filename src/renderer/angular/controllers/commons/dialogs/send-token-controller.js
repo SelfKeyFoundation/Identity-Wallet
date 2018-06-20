@@ -3,7 +3,7 @@
 const EthUnits = require('../../../classes/eth-units');
 const EthUtils = require('../../../classes/eth-utils');
 
-function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService) {
+function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService, TxHistoryService) {
     'ngInject'
     let args = {
         symbol: $stateParams.symbol,
@@ -20,6 +20,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     let estimatedGasNeedsCheck = false;
 
     let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+    let currentTxHistoryData = {};
     $scope.signedHex = null;
 
     $scope.getTokenTitleBySymbol = (symbol) => {
@@ -238,27 +239,37 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             }
         }
 
+        let gasPrice = EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei');
+        currentTxHistoryData = {
+            to: sendToAddress,
+            gasPrice: gasPrice,
+            value: sendAmount
+        };
+
         let txGenPromise = null;
         if (isEth) {
             txGenPromise = $rootScope.wallet.generateRawTransaction(
                 sendToAddress,
                 EthUnits.unitToUnit(sendAmount, 'ether', 'wei'),
-                EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
+                gasPrice,
                 $scope.infoData.gasLimit,
                 null,
                 CONFIG.chainId
             );
         } else {
             //ERC20 token
+            let symbol = $scope.symbol.toUpperCase();
             txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
                 sendToAddress,
                 sendAmount,
-                EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
+                gasPrice,
                 60000,   // $scope.infoData.gasLimit
-                $scope.symbol.toUpperCase(),
+                symbol,
                 CONFIG.chainId
             );
+            currentTxHistoryData.tokenSymbol = symbol;
         }
+
         return txGenPromise;
     }
 
@@ -270,6 +281,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         }
         $scope.viewStates.step = 'transaction-status';
         $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
+
         $scope.sendPromise.then((transactionHash) => {
             $scope.txHex = transactionHash;
 
@@ -283,6 +295,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             // reset view state
             setViewState();
         });
+
+        TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
     }
 
     function sendToken() {
@@ -307,6 +321,8 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             // reset view state
             setViewState();
         });
+
+        TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
     }
 
     function isNumeric(num) {
@@ -513,6 +529,6 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
     });
 };
 
-SendTokenDialogController.$inject = ["$rootScope", "$scope", "$log", "$q", "$mdDialog", "$interval", "$window", "CONFIG", "$state", "$stateParams", "Web3Service", "CommonService", "SqlLiteService"];
+SendTokenDialogController.$inject = ["$rootScope", "$scope", "$log", "$q", "$mdDialog", "$interval", "$window", "CONFIG", "$state", "$stateParams", "Web3Service", "CommonService", "SqlLiteService", "TxHistoryService"];
 
 module.exports = SendTokenDialogController;

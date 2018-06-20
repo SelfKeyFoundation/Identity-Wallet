@@ -84,6 +84,8 @@ angular.module('kyc-wallet').service('LedgerService', LedgerService);
 const SignService = require('./angular/services/sign.service');
 angular.module('kyc-wallet').service('SignService', SignService);
 
+const TxHistoryService = requireAppModule('angular/services/tx-history.service');
+angular.module('kyc-wallet').service('TxHistoryService', TxHistoryService);
 
 /**
  * directives

@@ -11,6 +11,12 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
         link: (scope, element) => {
 
             let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            
+            let syncByAddress = () => {
+                RPCService.makeCall('syncTxHistoryByAddress', {publicKey});
+            };
+            syncByAddress();
+
             //let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
             scope.txList = [];
             scope.tokenSymbol = scope.tokenSymbol ? scope.tokenSymbol.toUpperCase() : null;
@@ -88,6 +94,10 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
             $rootScope.$on('tx-history:change', (event) => {
                 loadData();
+            });
+
+            $rootScope.$on('tx-history:sync', (event) => {
+                syncByAddress();
             });
 
             let txReloadInterval = $interval(() => {

@@ -808,6 +808,27 @@ module.exports = function (app) {
         });
     }
 
+    controller.prototype.syncTxHistoryByAddress = function (event, actionId, actionName, args) {
+        electron.app.txHistory.syncByAddress(args.publicKey).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    controller.prototype.txHistoryAddOrUpdate = function (event, actionId, actionName, args) {
+        electron.app.sqlLiteService.TxHistory.addOrUpdate(args).then((data) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+        }).catch((error) => {
+            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+        });
+    }
+
+    
+    
+
+    
+
     controller.prototype.getWalletSettingsByWalletId = function (event, actionId, actionName, args) {
         electron.app.sqlLiteService.WalletSetting.findByWalletId(args).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);

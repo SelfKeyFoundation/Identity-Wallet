@@ -354,6 +354,10 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     $rootScope.broadcastTxHistoryChange = (event) => {
         $rootScope.$broadcast('tx-history:change', event);
     };
+
+    $rootScope.broadcastTxHistorySync = (event) => {
+        $rootScope.$broadcast('tx-history:sync', event);
+    };
 }
 
 AppRun.$inject = ["$rootScope", "$log", "$window", "$timeout", "$interval", "$q", "$state", "$trace", "$mdDialog", "DICTIONARY", "CONFIG", "RPCService", "SqlLiteService", "Web3Service", "CommonService", "EtherScanService", "LedgerService", "SignService"];

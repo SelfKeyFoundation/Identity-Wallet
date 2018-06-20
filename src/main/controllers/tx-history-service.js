@@ -9,11 +9,15 @@ const Promise = require('bluebird'),
     BigNumber = require('bignumber.js');
 
 
-let isSyncing = false;
+let isSyncingMap = {};
 let syncingJobIsStarted = false;
 
-let getIsSyncing = () => {
-    return isSyncing;
+let getIsSyncing = (address) => {
+    if (!address) {
+        return false;
+    }
+
+    return isSyncingMap[address];
 };
 
 let defaultModule = function (app) {
@@ -90,15 +94,14 @@ let defaultModule = function (app) {
 
     async function getContractInfo(contractAddress) {
         const Web3Service = electron.app.web3Service;
-     
-        console.log('contractAddress', contractAddress);
+
         try {
             let tokenDecimal = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'decimals' });
             let tokenSymbol = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'symbol' });
             let tokenName = await Web3Service.waitForTicket({ method: 'call', contractAddress, contractMethod: 'name' });
-            return {tokenDecimal,tokenSymbol,tokenName}
-            
-        } catch(err) {
+            return { tokenDecimal, tokenSymbol, tokenName }
+
+        } catch (err) {
             console.log('IS NOT CONTRACT ADDRESS');
             return null;
         }
@@ -130,16 +133,10 @@ let defaultModule = function (app) {
             processedTx[processedKey] = propperTx[key];
         });
 
-        //TODO if .value is 0 and it is .eth, it means that it is token's transactions
-        //so we have to check from/to? and getTokenInformation by to/from address, and process result!
-        //TODO at first try to check in tokebs db localy
-        // set concratct address, symbol, name
-        // wait for web3 changes merging
-
-
         //toString is important! in order to avoid exponential
         processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
         processedTx.tokenSymbol = processedTx.tokenSymbol ? processedTx.tokenSymbol.toUpperCase() : null;
+        processedTx.timeStamp = +(processedTx.timeStamp + '000'); 
 
         processedTx.from = processedTx.from ? processedTx.from.toLowerCase() : null;
         processedTx.to = processedTx.to ? processedTx.to.toLowerCase() : null;
@@ -148,28 +145,25 @@ let defaultModule = function (app) {
         if (processedTx.txReceiptStatus == null) {
             let txReceipt = await getTransactionReceipt(processedTx.hash);
             if (txReceipt) {
-                processedTx.txReceiptStatus = parseInt(txReceipt.status, 16) || -1; //TODO
+                processedTx.txReceiptStatus = +(txReceipt.status, 16);
             }
         }
 
         //faild transaction
         if (processedTx.value == 0) {
             //set faild status, there is some exeptions, so that's needed 
-            processedTx.txReceiptStatus = 0; 
+            processedTx.txReceiptStatus = 0;
 
             processedTx.from == walletAddress ?
                 processedTx.contractAddress = processedTx.to :
                 processedTx.contractAddress = processedTx.from;
 
-                
             let contractInfo = await getContractInfo(processedTx.contractAddress);
             if (contractInfo == 0) {
                 return null;
             }
-            
-            Object.assign(processedTx, contractInfo);
-            
 
+            Object.assign(processedTx, contractInfo);
         }
 
         return processedTx;
@@ -190,44 +184,56 @@ let defaultModule = function (app) {
 
     const controller = function () { };
 
+    async function syncByAddress(address, showProgress) {
+        if (showProgress) {
+            isSyncingMap[address] = true;
+        }
 
-    async function startSyncing() {
+        let ethTxList = await loadEthTxHistory(address);
+        let tokenTxList = await loadERCTxHistory(address);
+        let txHashes = {};
+        ethTxList.concat(tokenTxList).forEach((tx, index) => {
+            let hash = tx.hash;
+            txHashes[hash] = txHashes[hash] || {};
+            let isToken = index >= ethTxList.length;
+            txHashes[hash][isToken ? 'token' : 'eth'] = tx;
+        });
 
+        await processTxHistory(txHashes, address);
+
+        if (showProgress) {
+            isSyncingMap[address] = false;
+        }
+    }
+
+    async function sync() {
         let wallets = await electron.app.sqlLiteService.Wallet.findAll();
         for (let wallet of wallets) {
-
-            //let address = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase(); //fealured cases.
             let address = ('0x' + wallet.publicKey).toLowerCase();
-            let ethTxList = await loadEthTxHistory(address);
-            let tokenTxList = await loadERCTxHistory(address);
-            let txHashes = {};
-            ethTxList.concat(tokenTxList).forEach((tx, index) => {
-                let hash = tx.hash;
-                txHashes[hash] = txHashes[hash] || {};
-                let isToken = index >= ethTxList.length;
-                txHashes[hash][isToken ? 'token' : 'eth'] = tx;
-            });
+            await syncByAddress(address);
 
-            await processTxHistory(txHashes, address);
         }
-        isSyncing = false;
     };
 
-    function startSyncingJob() {
+    function _startSyncingJob() {
         if (syncingJobIsStarted) {
             console.log('Transaction Syncing Job Is already Started!');
             return;
         }
 
         syncingJobIsStarted = true;
-        isSyncing = true;
         (async function next() {
-            await startSyncing();
+            await sync();
             next();
         })();
     };
 
-    controller.prototype.startSyncingJob = startSyncingJob;
+    async function _syncByAddressWithProgress(address) {
+        await syncByAddress(address, true);
+    };
+
+    controller.prototype.startSyncingJob = _startSyncingJob;
+    controller.prototype.syncByAddress = _syncByAddressWithProgress;
 
     return controller;
 };
