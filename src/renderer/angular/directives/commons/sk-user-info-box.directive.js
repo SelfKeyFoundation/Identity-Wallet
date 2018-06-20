@@ -11,7 +11,7 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
                 email: "",
                 name: "",
                 country_of_residency: "",
-                tempImage: window.staticPath + '/assets/images/temp/avatar.jpg'
+                tempImage: $rootScope.appendStaticPath('assets/images/temp/avatar.jpg')
             }
 
             let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
@@ -80,9 +80,11 @@ function SkUserInfoBoxDirective($rootScope, $log, $window, $timeout, $filter, Sq
 
             let updateProfilePictureStyles = (profilePicture) => {
                 //binary
-                scope.profilePictureStyles = {
-                    'background-image':  !profilePicture ? `url(${scope.userData.tempImage})` : `url("data:image/gif;base64,${profilePicture}")`
-                };
+                if (profilePicture) {
+                    scope.profilePictureStyles = {
+                        'background-image':  `url("data:image/gif;base64,${profilePicture}")`
+                    };
+                }
             };
 
             updateProfilePictureStyles();
