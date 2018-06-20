@@ -67,7 +67,9 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
         Object.keys(wallet.tokens).forEach((tokeyKey) => {
             let pieChartItem = {};
             let token = wallet.tokens[tokeyKey];
-
+            if (token.isHidden()) {
+                return;
+            }
             let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol.toUpperCase());
             if (tokenPrice) {
                 pieChartItem.title = tokenPrice.name;
@@ -82,6 +84,7 @@ function MemberDashboardMainController($rootScope, $scope, $interval, $log, $q, 
             pieChartItem.subTitle = token.symbol;
 
             pieChartItems.push(pieChartItem);
+            
         });
 
         let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
