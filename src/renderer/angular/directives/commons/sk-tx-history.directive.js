@@ -10,8 +10,8 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
         },
         link: (scope, element) => {
 
-            //let publicKey = '0x' + $rootScope.wallet.getPublicKey();
-            let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
+            let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            //let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
             scope.txList = [];
             scope.tokenSymbol = scope.tokenSymbol ? scope.tokenSymbol.toUpperCase() : null;
 
@@ -101,6 +101,8 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
         replace: true,
         templateUrl: 'common/directives/sk-tx-history.html'
     }
-}
+};
+
+SKTxHistoryDirective.$inject = ['$rootScope', '$interval', 'RPCService', 'CommonService'];
 
 module.exports = SKTxHistoryDirective;

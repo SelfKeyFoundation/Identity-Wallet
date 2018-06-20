@@ -177,6 +177,7 @@ let defaultModule = function (app) {
 
     async function processTxHistory(txHashes, walletAddress) {
         let processedHashes = {};
+
         let hashes = Object.keys(txHashes);
         for (let hash of hashes) {
             let txs = txHashes[hash];
@@ -195,12 +196,10 @@ let defaultModule = function (app) {
         let wallets = await electron.app.sqlLiteService.Wallet.findAll();
         for (let wallet of wallets) {
 
-
-            let address = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase(); //fealured cases.
-            //let address = ('0x' + wallet.publicKey).toLowerCase();
+            //let address = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase(); //fealured cases.
+            let address = ('0x' + wallet.publicKey).toLowerCase();
             let ethTxList = await loadEthTxHistory(address);
             let tokenTxList = await loadERCTxHistory(address);
-
             let txHashes = {};
             ethTxList.concat(tokenTxList).forEach((tx, index) => {
                 let hash = tx.hash;

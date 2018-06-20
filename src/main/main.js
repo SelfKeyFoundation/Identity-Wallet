@@ -192,11 +192,12 @@ function onReady(app) {
 
                 log.info('did-finish-load');
                 mainWindow.webContents.send('APP_START_LOADING');
-                    //start update cmc data
-                    electron.app.cmcService.startUpdateData();
-                    electron.app.airtableService.loadIdAttributeTypes();
-                    electron.app.airtableService.loadExchangeData();
-                    mainWindow.webContents.send('APP_SUCCESS_LOADING');
+                //start update cmc data
+                electron.app.cmcService.startUpdateData();
+                electron.app.airtableService.loadIdAttributeTypes();
+                electron.app.airtableService.loadExchangeData();
+                mainWindow.webContents.send('APP_SUCCESS_LOADING');
+                electron.app.txHistory.startSyncingJob();
             }).catch((error) => {
                 log.error(error);
                 mainWindow.webContents.send('APP_FAILED_LOADING');
