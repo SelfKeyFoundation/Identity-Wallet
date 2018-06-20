@@ -1,6 +1,8 @@
 /**
  * old transactions_history table is removed
- * tx_history is added with new collumns 
+ * tx_history is added with new collumns
+ * old last synced block's fields are removed
+ * new last block synced field is added on wallet_settings 
  */
 exports.up = async (knex, Promise) => {
 

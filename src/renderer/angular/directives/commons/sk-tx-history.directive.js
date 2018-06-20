@@ -9,7 +9,6 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
             tokenSymbol: '@'
         },
         link: (scope, element) => {
-            debugger;
             let publicKey = '0x' + $rootScope.wallet.getPublicKey();
 
             let syncByWallet = () => {
@@ -17,7 +16,6 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
             };
             syncByWallet();
 
-            //let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
             scope.txList = [];
             scope.tokenSymbol = scope.tokenSymbol ? scope.tokenSymbol.toUpperCase() : null;
 
