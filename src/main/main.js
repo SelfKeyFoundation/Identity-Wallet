@@ -90,7 +90,7 @@ function onReady(app) {
             return
         }
 
-        if (process.env.NODE_ENV !== 'development') {
+        if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
             // Initate auto-updates
             appUpdater();
         }
