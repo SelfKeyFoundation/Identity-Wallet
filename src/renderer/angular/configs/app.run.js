@@ -3,7 +3,7 @@
 const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
 
-function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, EtherScanService, LedgerService, SignService) {
+function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $trace, $mdDialog, DICTIONARY, CONFIG, RPCService, SqlLiteService, Web3Service, CommonService, LedgerService, SignService) {
     'ngInject';
 
     $trace.enable('TRANSITION');
@@ -35,7 +35,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     Wallet.Web3Service = Web3Service;
     Wallet.SqlLiteService = SqlLiteService;
     Wallet.CommonService = CommonService;
-    Wallet.EtherScanService = EtherScanService;
 
     Token.$rootScope = $rootScope;
     Token.$q = $q;
@@ -360,6 +359,6 @@ function AppRun($rootScope, $log, $window, $timeout, $interval, $q, $state, $tra
     };
 }
 
-AppRun.$inject = ["$rootScope", "$log", "$window", "$timeout", "$interval", "$q", "$state", "$trace", "$mdDialog", "DICTIONARY", "CONFIG", "RPCService", "SqlLiteService", "Web3Service", "CommonService", "EtherScanService", "LedgerService", "SignService"];
+AppRun.$inject = ["$rootScope", "$log", "$window", "$timeout", "$interval", "$q", "$state", "$trace", "$mdDialog", "DICTIONARY", "CONFIG", "RPCService", "SqlLiteService", "Web3Service", "CommonService", "LedgerService", "SignService"];
 
 module.exports = AppRun;

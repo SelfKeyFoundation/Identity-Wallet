@@ -808,8 +808,8 @@ module.exports = function (app) {
         });
     }
 
-    controller.prototype.syncTxHistoryByAddress = function (event, actionId, actionName, args) {
-        electron.app.txHistory.syncByAddress(args.publicKey).then((data) => {
+    controller.prototype.syncTxHistoryByWallet = function (event, actionId, actionName, args) {
+        electron.app.txHistory.syncByWallet(args.publicKey, args.walletId).then((data) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
         }).catch((error) => {
             app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);

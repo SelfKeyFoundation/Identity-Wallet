@@ -66,9 +66,6 @@ angular.module('kyc-wallet').service('SqlLiteService', SqlLiteService);
 const CommonService = require('./angular/services/common.service');
 angular.module('kyc-wallet').service('CommonService', CommonService);
 
-const EtherScanService = require('./angular/services/ether-scan.service');
-angular.module('kyc-wallet').service('EtherScanService', EtherScanService);
-
 const Web3Service = require('./angular/services/web3.service');
 angular.module('kyc-wallet').service('Web3Service', Web3Service);
 

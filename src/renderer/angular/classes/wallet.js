@@ -4,7 +4,7 @@ const EthUnits = require('./eth-units');
 const EthUtils = require('./eth-utils');
 const Token = require('./token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, SignService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, SignService;
 
 let readyToShowNotification = false;
 
@@ -19,7 +19,6 @@ class Wallet {
     static set CommonService(value) { CommonService = value; }
     static set ElectronService(value) { ElectronService = value; } // TODO remove (use RPCService instead)
     static set SqlLiteService(value) { SqlLiteService = value; }
-    static set EtherScanService(value) { EtherScanService = value; }
     static set SignService(value) { SignService = value; }
     
 

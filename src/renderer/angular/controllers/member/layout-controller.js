@@ -3,7 +3,7 @@ const EthUtils = require('../../classes/eth-utils');
 const Token = require('../../classes/token');
 
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service, EtherScanService) {
+function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service) {
     'ngInject'
 
     $scope.showScrollStyle = false;
@@ -47,5 +47,5 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
     */
 
 };
-MemberLayoutController.$inject = ["$rootScope", "$scope", "$log", "$mdDialog", "$mdSidenav", "$interval", "$timeout", "$state", "Web3Service", "EtherScanService"];
+MemberLayoutController.$inject = ["$rootScope", "$scope", "$log", "$mdDialog", "$mdSidenav", "$interval", "$timeout", "$state", "Web3Service"];
 module.exports = MemberLayoutController;

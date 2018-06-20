@@ -9,13 +9,13 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
             tokenSymbol: '@'
         },
         link: (scope, element) => {
-
+            debugger;
             let publicKey = '0x' + $rootScope.wallet.getPublicKey();
-            
-            let syncByAddress = () => {
-                RPCService.makeCall('syncTxHistoryByAddress', {publicKey});
+
+            let syncByWallet = () => {
+                RPCService.makeCall('syncTxHistoryByWallet', { walletId: $rootScope.wallet.id, publicKey });
             };
-            syncByAddress();
+            syncByWallet();
 
             //let publicKey = '0xb198F16C4C4eB5d67cFA2d6297D0E779735736A2'.toLowerCase();
             scope.txList = [];
@@ -34,7 +34,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
                 return isSend ? 'Sending' : 'Sending';
             };
 
-           
+
             let getTxStatusIcon = (tx) => {
                 let status = tx.txReceiptStatus;
                 let isSend = tx.from == publicKey;
@@ -59,7 +59,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
                     tx.externalLink = `https://etherscan.io/tx/${tx.hash}`;
                     tx.statusText = getTxStatusText(tx);
                     tx.statusIcon = getTxStatusIcon(tx);
-                    
+
                     return tx;
                 });
             };
@@ -75,7 +75,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
                         fnArgs.tokenSymbol = scope.tokenSymbol;
                     }
                 }
-              
+
                 fn = fn || 'getTxHistoryByPublicKey';
                 let transactions = RPCService.makeCall(fn, fnArgs).then((res) => {
                     scope.txList = processTxHistoryList(res.data);
@@ -97,7 +97,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
             });
 
             $rootScope.$on('tx-history:sync', (event) => {
-                syncByAddress();
+                syncByWallet();
             });
 
             let txReloadInterval = $interval(() => {

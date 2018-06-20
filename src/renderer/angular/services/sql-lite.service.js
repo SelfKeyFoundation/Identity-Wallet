@@ -5,7 +5,7 @@ const Wallet = require('../classes/wallet');
 function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, EVENTS) {
     'ngInject';
 
-    $log.debug('SqlLiteService Initialized');
+$log.debug('SqlLiteService Initialized');
 
     let ID_ATTRIBUTE_TYPES_STORE = {};
     let TOKENS_STORE = {};

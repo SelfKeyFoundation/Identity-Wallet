@@ -3,7 +3,6 @@
  * tx_history is added with new collumns 
  */
 exports.up = async (knex, Promise) => {
-  await knex.schema.dropTable('transactions_history');
 
   await knex.schema.createTable('tx_history', (table) => {
     table.increments('id');
@@ -33,8 +32,18 @@ exports.up = async (knex, Promise) => {
     table.integer('updatedAt');
   });
 
+  await knex.schema.dropTable('transactions_history');
+
+  await knex.schema.table('wallet_settings', function (t) {
+    t.integer('txHistoryLastSyncedBlock').notNull().defaultTo(0);
+  });
+
+  await knex.schema.table('wallet_settings', (t) => {
+    t.dropColumn('ERC20TxHistoryLastBlock');
+    t.dropColumn('EthTxHistoryLastBlock');
+  });
 };
 
 exports.down = async (knex, Promise) => {
-  await knex.schema.dropTable('transactions_history');
+
 };
