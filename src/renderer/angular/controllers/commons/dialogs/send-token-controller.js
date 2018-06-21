@@ -92,6 +92,11 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 }
             }
 
+            if(error.indexOf('Endpoint request timed out') !== -1){
+                $scope.startSend(event);
+                return;        
+            }
+
             if (error && !processedErr) {
                 CommonService.showToast('error', error, 20000);
             }
@@ -278,6 +283,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             error = error.toString();
             if (error.indexOf('Insufficient funds') == -1) {
                 CommonService.showToast('error', error, 20000);
+            } else if(error.indexOf('Endpoint request timed out') !== -1){
+                sendEther();
+                return;        
             }
             $scope.errors.sendFailed = error;
             // reset view state
@@ -301,6 +309,9 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             error = error.toString();
             if (error.indexOf('Insufficient funds') == -1) {
                 CommonService.showToast('error', error, 20000);
+            }else if(error.indexOf('Endpoint request timed out') !== -1){
+                sendToken();
+                return;        
             }
 
             $scope.errors.sendFailed = error;

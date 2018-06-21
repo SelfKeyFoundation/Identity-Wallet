@@ -222,7 +222,7 @@ module.exports = function (app) {
                     selectPromise = knex(table).select().where('id', resp[0])
                 }
 
-                selectPromise.then((rows) => {
+                return selectPromise.then((rows) => {
                     if (rows && rows.length === 1) {
                         return resolve(rows[0]);
                     } else {
@@ -273,7 +273,7 @@ module.exports = function (app) {
                     selectPromise = knex(table).select().where('id', resp[0])
                 }
 
-                selectPromise.then((rows) => {
+                return selectPromise.then((rows) => {
                     if (rows && rows.length === 1) {
                         return resolve(rows[0]);
                     } else {

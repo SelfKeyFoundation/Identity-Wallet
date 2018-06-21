@@ -4,7 +4,7 @@ const EthUnits = require('./eth-units');
 const EthUtils = require('./eth-utils');
 const Token = require('./token');
 
-let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, SignService;
+let $rootScope, $q, $interval, Web3Service, CommonService, ElectronService, SqlLiteService, EtherScanService, SignService, $log;
 
 let readyToShowNotification = false;
 
@@ -21,6 +21,7 @@ class Wallet {
     static set SqlLiteService(value) { SqlLiteService = value; }
     static set EtherScanService(value) { EtherScanService = value; }
     static set SignService(value) { SignService = value; }
+    static set $log(value) { $log = value; }
     
 
     constructor(id, privateKey, publicKey, keystoreFilePath, profile) {
@@ -53,6 +54,8 @@ class Wallet {
         this.initialBalancePromise = this.loadBalance();
 
         this.loadTokens();
+
+        this.previousTransactionCount = -1;
     }
 
     getPrivateKey() {
@@ -250,6 +253,17 @@ class Wallet {
         let promise = Web3Service.getTransactionCount(this.getPublicKeyHex());
         promise.then((nonce) => {
             //wallet.nonceHex
+
+            if (nonce <= this.previousTransactionCount) {
+                this.generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID).then(res => {
+                    defer.resolve(res)
+                }).catch(err => {
+                    defer.reject(err);
+                });
+                return defer.promise;
+            } 
+
+            this.previousTransactionCount = nonce;
 
             let rawTx = {
                 nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
