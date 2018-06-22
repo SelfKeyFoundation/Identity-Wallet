@@ -10,7 +10,7 @@ const getMenuTemplate = (mainWindow) => {
             label: electron.app.getName(),
             submenu: [
                 {
-                    label: "About", role: 'about',
+                    label: "About",
                     click() {
                         let win = new electron.BrowserWindow({
                             width: 600,
