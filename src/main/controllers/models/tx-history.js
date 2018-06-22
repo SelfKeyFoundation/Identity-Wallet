@@ -32,47 +32,36 @@ module.exports = function (app, sqlLiteService) {
 
     async function _findByPublicKeyAndContractAddress(publicKey, contractAddress) {
         publicKey = publicKey.toLowerCase();
-        return new Promise((resolve, reject) => {
-            knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
-                orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc').then(rows => {
-                    resolve({
-                        data: rows,
-                        isSyncing: isSyncing(publicKey)
-                    });
-                }).catch((err) => {
-                    return reject('Error while loading transaction history');
-                });
-        });
+        return knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
+            orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc').then(rows => {
+                return {
+                    data: rows,
+                    isSyncing: isSyncing(publicKey)
+                };
+            });
     }
 
     async function _findByPublicKey(publicKey) {
         publicKey = publicKey.toLowerCase();
-        return new Promise((resolve, reject) => {
-            knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
-                orderBy('timeStamp', 'desc').then(rows => {
-                    resolve({
-                        data: rows,
-                        isSyncing: isSyncing(publicKey)
-                    });
-                }).catch((err) => {
-                    return reject('Error while loading transaction history');
-                });
-        });
+
+        return knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
+            orderBy('timeStamp', 'desc').then(rows => {
+                return {
+                    data: rows,
+                    isSyncing: isSyncing(publicKey)
+                };
+            });
     }
 
     async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol) {
         publicKey = publicKey.toLowerCase();
-        return new Promise((resolve, reject) => {
-            knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).
-                orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc').then(rows => {
-                    resolve({
-                        data: rows,
-                        isSyncing: isSyncing(publicKey)
-                    });
-                }).catch((err) => {
-                    return reject('Error while loading transaction history');
-                });
-        });
+        return knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).
+            orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc').then(rows => {
+                return {
+                    data: rows,
+                    isSyncing: isSyncing(publicKey)
+                };
+            });
     }
 
     return Controller;
