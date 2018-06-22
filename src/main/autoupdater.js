@@ -8,7 +8,7 @@ function appUpdater() {
     autoUpdater.logger = log
 
     // TODO: hard coding it now but should be moved to a config file or build time or allow user to choose 
-    autoUpdater.channel = 'alpha' 
+    autoUpdater.channel = 'beta' 
      
     // Ask the user if update is available
     autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
