@@ -23,7 +23,6 @@ class Wallet {
     static set SignService(value) { SignService = value; }
     static set $log(value) { $log = value; }
     
-
     constructor(id, privateKey, publicKey, keystoreFilePath, profile) {
         this.id = id;
         this.keystoreFilePath = keystoreFilePath;
@@ -247,20 +246,15 @@ class Wallet {
      * @param {*} contractDataHex
      * @param {*} chainID
      */
-    generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID) {
-        let defer = $q.defer();
+    generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID, previousDefer) {
+        let defer = (previousDefer)? previousDefer : $q.defer();
 
         let promise = Web3Service.getTransactionCount(this.getPublicKeyHex());
         promise.then((nonce) => {
             //wallet.nonceHex
 
             if (nonce <= this.previousTransactionCount) {
-                this.generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID).then(res => {
-                    defer.resolve(res)
-                }).catch(err => {
-                    defer.reject(err);
-                });
-                return defer.promise;
+               return this.generateRawTransaction(toAddressHex, valueWei, gasPriceWei, gasLimitWei, contractDataHex, chainID, defer);
             } 
 
             this.previousTransactionCount = nonce;
