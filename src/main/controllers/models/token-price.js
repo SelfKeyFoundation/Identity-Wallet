@@ -1,5 +1,3 @@
-const ethTokensList = require('../../assets/data/eth-tokens.json');
-
 const Promise = require('bluebird');
 
 module.exports = function (app, sqlLiteService) {
