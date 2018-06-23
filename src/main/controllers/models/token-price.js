@@ -15,6 +15,8 @@ module.exports = function (app, sqlLiteService) {
     Controller.findBySymbol = _findBySymbol;
     Controller.add = _add;
     Controller.edit = _edit;
+    Controller.bulkEdit = _bulkEdit;
+    Controller.bulkAdd = _bulkAdd;
 
     function _findAll() {
         return new Promise((resolve, reject) => {
@@ -42,6 +44,14 @@ module.exports = function (app, sqlLiteService) {
 
     function _edit(tokenPrice) {
         return sqlLiteService.updateById(TABLE_NAME, tokenPrice);
+    }
+
+    function _bulkEdit(tokenPrices) {
+        return sqlLiteService.bulkUpdateById(TABLE_NAME, tokenPrices);
+    }
+
+    function _bulkAdd(tokenPrices) {
+        return sqlLiteService.bulkAdd(TABLE_NAME, tokenPrices);
     }
 
     return Controller;
