@@ -50,6 +50,7 @@ function GuestKeystoreCreateStep6Controller($rootScope, $scope, $log, $state, $m
         });
 
         promise.then(() => {
+            $rootScope.wallet.hasJustActivated = true;
             SqlLiteService.loadWallets().then(() => {
                 let promises = [];
                 promises.push($rootScope.wallet.loadIdAttributes());

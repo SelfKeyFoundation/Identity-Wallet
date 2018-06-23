@@ -8,8 +8,6 @@ md-dialog.id-wallet-info(aira-lable="{{title}}")
                 .text
                     p {{dialogInfo.textPart1}}
                     p {{dialogInfo.textPart2}}
-                    p {{dialogInfo.textPart3}}
-                    p {{dialogInfo.textPart4}}
             .buttons-section
                 md-button(ng-click="nextStep()" id="idWalletInfoContinueButton" ng-class="[{'button-300': dialogInfo.step == 2}]")
                     span {{dialogInfo.button2}}

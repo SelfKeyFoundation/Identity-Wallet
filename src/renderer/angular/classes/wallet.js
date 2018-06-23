@@ -44,6 +44,7 @@ class Wallet {
 
         this.tokens = {};
         this.idAttributes = {}
+        this.hasJustActivated = false;
 
         this.updatePriceInUSD();
 
