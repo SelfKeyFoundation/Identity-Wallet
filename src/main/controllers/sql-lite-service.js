@@ -19,6 +19,8 @@ module.exports = function (app) {
     controller.insertAndSelect = _insertAndSelect;
     controller.update = _update;
     controller.updateById = updateById;
+    controller.bulkUpdateById = _bulkUpdateById;
+    controller.bulkAdd = _bulkAdd;
 
     let Wallet = require('./models/wallet.js')(app, controller);
     controller.prototype.Wallet = Wallet;
@@ -341,6 +343,45 @@ module.exports = function (app) {
                 return reject({ message: "error_while_selecting", error: error });
             });
         });
+    }
+
+    function _bulkUpdateById(table, records) {
+        return _getBulk(table, records, _getUpdateQuery);
+    }
+
+    function _bulkAdd(table, records) {
+        return _getBulk(table, records, _getInsertQuery);
+    }
+
+    function _getBulk(table, records, queryFunction) {
+        return knex.transaction(trx => {
+            const queries = [];
+            records.forEach(record => {                     
+                const query = queryFunction(table, record, trx);
+                queries.push(query);
+            });
+        
+            Promise.all(queries) 
+                .then(trx.commit) 
+                .catch(trx.rollback); 
+        });    
+    }
+
+    function _getInsertQuery(table, record, trx) {
+        const now = new Date().getTime();
+        record.createdAt = now;
+        record.updatedAt = now;         
+        return knex(table)
+        .insert(record)
+        .transacting(trx);
+    }
+
+    function _getUpdateQuery(table, record, trx) {
+        record.updatedAt = new Date().getTime();         
+        return knex(table)
+        .where({'id': record.id})
+        .update(record)
+        .transacting(trx); 
     }
 
     return controller;
