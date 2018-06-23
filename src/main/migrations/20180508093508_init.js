@@ -80,7 +80,7 @@ exports.up = function(knex, Promise) {
 		knex.schema.createTable('token_prices', table => {
 			table.increments('id')
 			table.string('name').notNullable()
-			table.string('symbol').notNullable().unique()
+			table.string('symbol').notNullable()
 			table.string('source')
 			table.decimal('priceUSD')
 			table.decimal('priceBTC')

@@ -33,6 +33,8 @@ module.exports = function (app) {
                         createdAt: nowDate.getTime()
                     }
                 });
+                const symbolsToUpdate = [];
+                const symbolsToAdd = [];
                 async.each(dataToInsert, function (item, callback) {
                     return electron.app.sqlLiteService.TokenPrice.findBySymbol(item.symbol).then(symbol => {
                         if (symbol) {
@@ -40,24 +42,29 @@ module.exports = function (app) {
                                 symbol.priceUSD = item.priceUSD;
                                 symbol.priceBTC = item.priceBTC;
                                 symbol.priceETH = item.priceETH;
-                               return electron.app.sqlLiteService.TokenPrice.edit(symbol).then(()=>{return callback(null)}).catch(err => {
-                                    return callback(err);
-                                });
-                            } else {
-                                return callback(null);
+                                symbolsToUpdate.push(symbol);
                             }
+                            return callback(null);
                         } else {
-                           return electron.app.sqlLiteService.TokenPrice.add(item).then(()=>{return callback(null)}).catch(err => {
-                                return callback(err);
-                            });
+                            symbolsToAdd.push(item);
+                            return callback(null);
                         }
                     }).catch(err => {
                         return callback(err);
                     });
                 }, function (err) {
                     if (err) {
-                        log.error('TOKEN PRICE UPDATE', err)
+                        log.error('TOKEN PRICE SELECT', err);
                     }
+
+                    electron.app.sqlLiteService.TokenPrice.bulkAdd(symbolsToAdd).then(()=>{
+                        electron.app.sqlLiteService.TokenPrice.bulkEdit(symbolsToUpdate).catch(err => {
+                            log.error('TOKEN PRICE UPDATE', err);
+                        });
+                    }).catch(err => {
+                        log.error('TOKEN PRICE ADD', err);
+                    });
+                    
                     eventEmitter.emit('UPDATE');
                 });
             } 
