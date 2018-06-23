@@ -5,6 +5,7 @@ const version = electron.app.getVersion();
  * Create the Application's main menu
  */
 const getMenuTemplate = (mainWindow) => {
+    let isOnFullScreen = false;
     const defaultMenu = [
         {
             label: electron.app.getName(),
@@ -56,6 +57,19 @@ const getMenuTemplate = (mainWindow) => {
                 { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
                 { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
                 { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+            ]
+        },
+        {
+            label: 'View',
+            submenu: [
+                {
+                    label: 'Enter/Exit Full Screen',
+                    role: 'devtools',
+                    click() {
+                        isOnFullScreen = !isOnFullScreen;
+                        mainWindow.setFullScreen(isOnFullScreen);
+                    }
+                }
             ]
         }
     ];
