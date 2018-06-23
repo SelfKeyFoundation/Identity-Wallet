@@ -5,6 +5,8 @@ const EthUtils = require('../../../classes/eth-utils');
 
 function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $interval, $window, CONFIG, $state, $stateParams, Web3Service, CommonService, SqlLiteService) {
     'ngInject'
+
+    const TIMEOUT_ERROR = "Endpoint request timed out";
     let args = {
         symbol: $stateParams.symbol,
         allowSelectERC20Token: $stateParams.allowSelectERC20Token
@@ -92,6 +94,11 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
                 }
             }
 
+            if (error.indexOf(TIMEOUT_ERROR) !== -1) {
+                $scope.startSend(event);
+                return;        
+            }
+
             if (error && !processedErr) {
                 CommonService.showToast('error', error, 20000);
             }
@@ -107,11 +114,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             setViewState('before-send');
         } else {
             setViewState('sending');
-            if ($scope.symbol && $scope.symbol.toLowerCase() === 'eth') {
-                sendEther();
-            } else {
-                sendToken();
-            }
+            send();
         }
     }
 
@@ -262,7 +265,7 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
         return txGenPromise;
     }
 
-    function sendEther() {
+    function send() {
         if (!$scope.signedHex) {
             // reset view state
             setViewState();
@@ -278,31 +281,10 @@ function SendTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $int
             error = error.toString();
             if (error.indexOf('Insufficient funds') == -1) {
                 CommonService.showToast('error', error, 20000);
+            } else if(error.indexOf(TIMEOUT_ERROR) !== -1){
+                send();
+                return;        
             }
-            $scope.errors.sendFailed = error;
-            // reset view state
-            setViewState();
-        });
-    }
-
-    function sendToken() {
-        if (!$scope.signedHex) {
-            // reset view state
-            setViewState();
-            return;
-        }
-        $scope.viewStates.step = 'transaction-status';
-        $scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
-        $scope.sendPromise.then((transactionHash) => {
-            $scope.txHex = transactionHash;
-
-            startTxCheck();
-        }).catch((error) => {
-            error = error.toString();
-            if (error.indexOf('Insufficient funds') == -1) {
-                CommonService.showToast('error', error, 20000);
-            }
-
             $scope.errors.sendFailed = error;
             // reset view state
             setViewState();
