@@ -1,18 +1,25 @@
 'use strict';
 
 function ConfirmationDialogController($rootScope, $scope, $log, $mdDialog, text, title) {
-    'ngInject'
+	'ngInject';
 
-    $scope.text = text;
-    $scope.title = title;
+	$scope.text = text;
+	$scope.title = title;
 
-    $scope.cancel = (event) => {
-        $mdDialog.cancel();
-    };
+	$scope.cancel = event => {
+		$mdDialog.cancel();
+	};
 
-    $scope.save = (event) => {
-        $mdDialog.hide('accept');
-    };
-};
-ConfirmationDialogController.$inject = ["$rootScope", "$scope", "$log", "$mdDialog", "text", "title"];
+	$scope.save = event => {
+		$mdDialog.hide('accept');
+	};
+}
+ConfirmationDialogController.$inject = [
+	'$rootScope',
+	'$scope',
+	'$log',
+	'$mdDialog',
+	'text',
+	'title'
+];
 module.exports = ConfirmationDialogController;

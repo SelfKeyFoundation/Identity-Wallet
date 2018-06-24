@@ -1,10 +1,9 @@
 'use strict';
 
 function MemberSetupLayoutController($rootScope, $scope, $log, $state) {
-    'ngInject'
+	'ngInject';
 
-    $log.info('MemberSetupLayoutController');
-
-};
-MemberSetupLayoutController.$inject = ["$rootScope", "$scope", "$log", "$state"];
+	$log.info('MemberSetupLayoutController');
+}
+MemberSetupLayoutController.$inject = ['$rootScope', '$scope', '$log', '$state'];
 module.exports = MemberSetupLayoutController;

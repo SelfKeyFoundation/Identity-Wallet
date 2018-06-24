@@ -1,13 +1,13 @@
 'use strict';
 
 function Usd($document, $timeout) {
-    'ngInject';
+	'ngInject';
 
-    return function (input) {
-        input = input || 0.00;
-        
-        return out;
-    };
+	return function(input) {
+		input = input || 0.0;
+
+		return out;
+	};
 }
-Usd.$inject = ["$document", "$timeout"];
+Usd.$inject = ['$document', '$timeout'];
 module.exports = Usd;

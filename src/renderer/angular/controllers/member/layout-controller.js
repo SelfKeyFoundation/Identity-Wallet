@@ -2,46 +2,58 @@ const EthUnits = require('../../classes/eth-units');
 const EthUtils = require('../../classes/eth-utils');
 const Token = require('../../classes/token');
 
+function MemberLayoutController(
+	$rootScope,
+	$scope,
+	$log,
+	$mdDialog,
+	$mdSidenav,
+	$interval,
+	$timeout,
+	$state,
+	Web3Service,
+	EtherScanService
+) {
+	'ngInject';
 
-function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav, $interval, $timeout, $state, Web3Service, EtherScanService) {
-    'ngInject'
+	$scope.showScrollStyle = false;
 
-    $scope.showScrollStyle = false;
+	var OSName = 'Unknown OS';
+	if (navigator.appVersion.indexOf('Win') != -1) OSName = 'Windows';
+	if (navigator.appVersion.indexOf('Mac') != -1) OSName = 'MacOS';
+	if (navigator.appVersion.indexOf('Linux') != -1) OSName = 'Linux';
 
-    var OSName = "Unknown OS";
-    if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
-    if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
-    if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+	if (OSName === 'Windows') {
+		$scope.showScrollStyle = true;
+	}
 
-    if (OSName === 'Windows') {
-        $scope.showScrollStyle = true;
-    }
+	$log.info('MemberLayoutController');
 
-    $log.info('MemberLayoutController');
+	/**
+	 *
+	 */
+	$scope.openRightSidenav = () => {
+		$mdSidenav('right')
+			.toggle()
+			.then(() => {
+				$log.debug('toggle ' + 'right' + ' is done');
+			});
+	};
 
-    /**
-     *
-     */
-    $scope.openRightSidenav = () => {
-        $mdSidenav('right').toggle().then(() => {
-            $log.debug("toggle " + "right" + " is done");
-        });
-    }
+	$rootScope.wallet.syncEthTransactionsHistory();
+	Web3Service.syncTokensTransactionHistory();
 
-    $rootScope.wallet.syncEthTransactionsHistory();
-    Web3Service.syncTokensTransactionHistory();
+	let addBalaceChageListener = () => {
+		$rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
+			$timeout(() => {
+				$rootScope.refreshTxHistory(symbol);
+			}, 4000);
+		});
+	};
 
-    let addBalaceChageListener = () => {
-        $rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-            $timeout(() => {
-                $rootScope.refreshTxHistory(symbol);
-            }, 4000);
-        });
-    };
+	addBalaceChageListener();
 
-    addBalaceChageListener();
-
-    /*
+	/*
     $rootScope.goToSelfkeyIco = (event) => {
         let ico = null;
         let icos = ConfigFileService.getIcos();
@@ -58,7 +70,17 @@ function MemberLayoutController($rootScope, $scope, $log, $mdDialog, $mdSidenav,
         }
     }
     */
-
-};
-MemberLayoutController.$inject = ["$rootScope", "$scope", "$log", "$mdDialog", "$mdSidenav", "$interval", "$timeout", "$state", "Web3Service", "EtherScanService"];
+}
+MemberLayoutController.$inject = [
+	'$rootScope',
+	'$scope',
+	'$log',
+	'$mdDialog',
+	'$mdSidenav',
+	'$interval',
+	'$timeout',
+	'$state',
+	'Web3Service',
+	'EtherScanService'
+];
 module.exports = MemberLayoutController;
