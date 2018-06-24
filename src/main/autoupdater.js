@@ -11,10 +11,10 @@ function appUpdater() {
     autoUpdater.channel = 'beta' 
      
     // Ask the user if update is available
-    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-        let message = app.getName() + ' ' + releaseName + ' is now available. It will be installed the next time you restart the application.'
+    autoUpdater.on('update-downloaded', (info) => {
+        let message = app.getName() + ' ' + info.releaseName + ' is now available. It will be installed the next time you restart the application.'
         if (releaseNotes) {
-            const splitNotes = releaseNotes.split(/[^\r]\n/)
+            const splitNotes = info.releaseNotes.split(/[^\r]\n/)
             message += '\n\nRelease notes:\n'
             splitNotes.forEach(notes => {
                 message += notes + '\n\n'

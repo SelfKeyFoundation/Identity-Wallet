@@ -69,7 +69,10 @@ function SkCirclePieChartDirective($timeout, $filter) {
                         otherAggregated.valueUSD = new BigNumber(otherAggregated.valueUSD).plus(new BigNumber(otherItem.valueUSD));
                     });
 
-                    scope.topItems.push(otherAggregated);
+                    if (otherAggregated.valueUSD > 0) {
+                        scope.topItems.push(otherAggregated);    
+                    }
+                    
                 }
 
                 if (items.length <= TOP_MAX_SIZE) {

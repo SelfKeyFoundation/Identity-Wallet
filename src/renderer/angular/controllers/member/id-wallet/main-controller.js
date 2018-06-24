@@ -164,17 +164,20 @@ function MemberIdWalletMainController($rootScope, $scope, $log, $timeout, $mdDia
         });
     }
 
-    $timeout(() => {
-        $mdDialog.show({
-            controller: 'IdWalletInfoController',
-            templateUrl: 'common/dialogs/id-wallet-info.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: false,
-            fullscreen: true,
-            escapeToClose: false,
-            locals: {}
-        });
-    }, 1000);
+    if ($rootScope.wallet.hasJustActivated) {
+        $rootScope.wallet.hasJustActivated = false;
+        $timeout(() => {
+            $mdDialog.show({
+                controller: 'IdWalletInfoController',
+                templateUrl: 'common/dialogs/id-wallet-info.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: false,
+                fullscreen: true,
+                escapeToClose: false,
+                locals: {}
+            });
+        }, 1000);
+    }
 };
 
 
