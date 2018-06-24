@@ -1,26 +1,26 @@
 'use strict';
 
 function SkOfflineWarningBoxDirective($rootScope, $log, $window, RPCService) {
-    'ngInject';
+	'ngInject';
 
-    return {
-        restrict: 'E',
-        scope: {},
-        link: (scope, element) => {
-            element[0].style.display = 'none';
+	return {
+		restrict: 'E',
+		scope: {},
+		link: (scope, element) => {
+			element[0].style.display = 'none';
 
-            RPCService.on("SHOW_IS_OFFLINE_WARNING", (event) => {
-                element[0].style.display = 'flex';
-            });
+			RPCService.on('SHOW_IS_OFFLINE_WARNING', event => {
+				element[0].style.display = 'flex';
+			});
 
-            scope.onOK = (event) => {
-                RPCService.makeCustomCall('ON_IGNORE_CLOSE_DIALOG');
-                $rootScope.closeApp();
-            }
-        },
-        replace: true,
-        templateUrl: 'common/directives/sk-offline-warning-box.html'
-    }
+			scope.onOK = event => {
+				RPCService.makeCustomCall('ON_IGNORE_CLOSE_DIALOG');
+				$rootScope.closeApp();
+			};
+		},
+		replace: true,
+		templateUrl: 'common/directives/sk-offline-warning-box.html'
+	};
 }
-SkOfflineWarningBoxDirective.$inject = ["$rootScope", "$log", "$window", "RPCService"];
+SkOfflineWarningBoxDirective.$inject = ['$rootScope', '$log', '$window', 'RPCService'];
 module.exports = SkOfflineWarningBoxDirective;

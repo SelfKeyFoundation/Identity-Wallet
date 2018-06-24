@@ -1,26 +1,42 @@
 'use strict';
 
-function StartupGuideDialogController($rootScope, $scope, $log, $q, $mdDialog, $state, SqlLiteService) {
-    'ngInject'
+function StartupGuideDialogController(
+	$rootScope,
+	$scope,
+	$log,
+	$q,
+	$mdDialog,
+	$state,
+	SqlLiteService
+) {
+	'ngInject';
 
-    $log.info('StartupGuideDialogController');
+	$log.info('StartupGuideDialogController');
 
-    $scope.isLoading = false;
+	$scope.isLoading = false;
 
-    let guideSettings = SqlLiteService.getGuideSettings();
-    guideSettings.guideShown = true;
+	let guideSettings = SqlLiteService.getGuideSettings();
+	guideSettings.guideShown = true;
 
-    SqlLiteService.saveGuideSettings(guideSettings);
+	SqlLiteService.saveGuideSettings(guideSettings);
 
-    $scope.cancel = (event) => {
-        $mdDialog.cancel();
-    }
+	$scope.cancel = event => {
+		$mdDialog.cancel();
+	};
 
-    $scope.goToWalletSetup = () => {
-        $scope.isLoading = true;
-        $mdDialog.hide();
-        $state.go('guest.welcome');
-    }
-};
-StartupGuideDialogController.$inject = ["$rootScope", "$scope", "$log", "$q", "$mdDialog", "$state", "SqlLiteService"];
+	$scope.goToWalletSetup = () => {
+		$scope.isLoading = true;
+		$mdDialog.hide();
+		$state.go('guest.welcome');
+	};
+}
+StartupGuideDialogController.$inject = [
+	'$rootScope',
+	'$scope',
+	'$log',
+	'$q',
+	'$mdDialog',
+	'$state',
+	'SqlLiteService'
+];
 module.exports = StartupGuideDialogController;

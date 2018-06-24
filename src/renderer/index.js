@@ -3,16 +3,23 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
+document.addEventListener(
+	'dragover',
+	function(event) {
+		event.preventDefault();
+		return false;
+	},
+	false
+);
 
-document.addEventListener('dragover', function (event) {
-  event.preventDefault();
-  return false;
-}, false);
-
-document.addEventListener('drop', function (event) {
-  event.preventDefault();
-  return false;
-}, false);
+document.addEventListener(
+	'drop',
+	function(event) {
+		event.preventDefault();
+		return false;
+	},
+	false
+);
 
 /**
  *
@@ -23,14 +30,14 @@ require('./angular/app.templates');
  * main module: 'kyc-wallet'
  */
 window.app = angular.module('kyc-wallet', [
-  'ngMaterial',
-  'ngMessages',
-  'ngSanitize',
-  'ui.router',
-  'templates',
-  'LocalStorageModule',
-  'monospaced.qrcode',
-  'zxcvbn'
+	'ngMaterial',
+	'ngMessages',
+	'ngSanitize',
+	'ui.router',
+	'templates',
+	'LocalStorageModule',
+	'monospaced.qrcode',
+	'zxcvbn'
 ]);
 
 /**
@@ -52,7 +59,6 @@ angular.module('kyc-wallet').constant('DICTIONARY', appDictionaryConstant);
 
 const appEventsConstant = require('./angular/constants/app.events.constant');
 angular.module('kyc-wallet').constant('EVENTS', appEventsConstant);
-
 
 /**
  * services
@@ -149,10 +155,14 @@ const TermsDialogController = require('./angular/controllers/commons/dialogs/ter
 angular.module('kyc-wallet').controller('TermsDialogController', TermsDialogController);
 
 const StartupGuideDialogController = require('./angular/controllers/commons/dialogs/startup-guide-controller.js');
-angular.module('kyc-wallet').controller('StartupGuideDialogController', StartupGuideDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('StartupGuideDialogController', StartupGuideDialogController);
 
 const ReceiveTokenDialogController = require('./angular/controllers/commons/dialogs/receive-token-controller.js');
-angular.module('kyc-wallet').controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('ReceiveTokenDialogController', ReceiveTokenDialogController);
 
 const SendTokenDialogController = require('./angular/controllers/commons/dialogs/send-token-controller.js');
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
@@ -161,7 +171,9 @@ const UpdateDialogController = require('./angular/controllers/commons/dialogs/up
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
 
 const PasswordWarningDialogController = require('./angular/controllers/commons/dialogs/password-warning-controller.js');
-angular.module('kyc-wallet').controller('PasswordWarningDialogController', PasswordWarningDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('PasswordWarningDialogController', PasswordWarningDialogController);
 
 const IdWalletInfoController = require('./angular/controllers/commons/dialogs/id-wallet-info-controller.js');
 angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoController);
@@ -170,29 +182,42 @@ const InfoDialogController = require('./angular/controllers/commons/dialogs/info
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
 const ConnectingToLedgerController = require('./angular/controllers/commons/dialogs/connecting-to-ledger-controller.js');
-angular.module('kyc-wallet').controller('ConnectingToLedgerController', ConnectingToLedgerController);
+angular
+	.module('kyc-wallet')
+	.controller('ConnectingToLedgerController', ConnectingToLedgerController);
 
 const ChooseLedgerAddressController = require('./angular/controllers/commons/dialogs/choose-ledger-address-controller.js');
-angular.module('kyc-wallet').controller('ChooseLedgerAddressController', ChooseLedgerAddressController);
+angular
+	.module('kyc-wallet')
+	.controller('ChooseLedgerAddressController', ChooseLedgerAddressController);
 
 const AddEditDocumentDialogController = require('./angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
-angular.module('kyc-wallet').controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('AddEditDocumentDialogController', AddEditDocumentDialogController);
 
 const AddEditStaticDataDialogController = require('./angular/controllers/commons/dialogs/id-attributes/add-edit-static-data-controller.js');
-angular.module('kyc-wallet').controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('AddEditStaticDataDialogController', AddEditStaticDataDialogController);
 
 const AddIdAttributeDialogController = require('./angular/controllers/commons/dialogs/id-attributes/add-id-attribute-controller.js');
-angular.module('kyc-wallet').controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('AddIdAttributeDialogController', AddIdAttributeDialogController);
 
 const AddCustomTokenDialogController = require('./angular/controllers/commons/dialogs/add-custom-token-controller.js');
-angular.module('kyc-wallet').controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
+angular
+	.module('kyc-wallet')
+	.controller('AddCustomTokenDialogController', AddCustomTokenDialogController);
 
 const NewERC20TokenInfoController = require('./angular/controllers/commons/dialogs/new-erc20-token-info-controller.js');
 angular.module('kyc-wallet').controller('NewERC20TokenInfoController', NewERC20TokenInfoController);
 
 const ConfirmationDialogController = require('./angular/controllers/commons/dialogs/confirmation-dialog-controller.js');
-angular.module('kyc-wallet').controller('ConfirmationDialogController', ConfirmationDialogController);
-
+angular
+	.module('kyc-wallet')
+	.controller('ConfirmationDialogController', ConfirmationDialogController);
 
 /**
  * guest
@@ -210,10 +235,14 @@ const GuestImportWalletController = require('./angular/controllers/guest/import/
 angular.module('kyc-wallet').controller('GuestImportWalletController', GuestImportWalletController);
 
 const GuestImportKeystoreController = require('./angular/controllers/guest/import/keystore-controller.js');
-angular.module('kyc-wallet').controller('GuestImportKeystoreController', GuestImportKeystoreController);
+angular
+	.module('kyc-wallet')
+	.controller('GuestImportKeystoreController', GuestImportKeystoreController);
 
 const GuestImportPrivateKeyController = require('./angular/controllers/guest/import/private-key-controller.js');
-angular.module('kyc-wallet').controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
+angular
+	.module('kyc-wallet')
+	.controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
 
 const GuestImportLedgerController = require('./angular/controllers/guest/import/ledger.js');
 angular.module('kyc-wallet').controller('GuestImportLedgerController', GuestImportLedgerController);
@@ -222,23 +251,34 @@ angular.module('kyc-wallet').controller('GuestImportLedgerController', GuestImpo
  * create wallet
  */
 const GuestKeystoreCreateStep1Controller = require('./angular/controllers/guest/create/step-1.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep1Controller', GuestKeystoreCreateStep1Controller);
 
 const GuestKeystoreCreateStep2Controller = require('./angular/controllers/guest/create/step-2.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep2Controller', GuestKeystoreCreateStep2Controller);
 
 const GuestKeystoreCreateStep3Controller = require('./angular/controllers/guest/create/step-3.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep3Controller', GuestKeystoreCreateStep3Controller);
 
 const GuestKeystoreCreateStep4Controller = require('./angular/controllers/guest/create/step-4.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep4Controller', GuestKeystoreCreateStep4Controller);
 
 const GuestKeystoreCreateStep5Controller = require('./angular/controllers/guest/create/step-5.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep5Controller', GuestKeystoreCreateStep5Controller);
 
 const GuestKeystoreCreateStep6Controller = require('./angular/controllers/guest/create/step-6.controller.js');
-angular.module('kyc-wallet').controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
-
+angular
+	.module('kyc-wallet')
+	.controller('GuestKeystoreCreateStep6Controller', GuestKeystoreCreateStep6Controller);
 
 /**
  * member
@@ -247,8 +287,9 @@ const MemberLayoutController = require('./angular/controllers/member/layout-cont
 angular.module('kyc-wallet').controller('MemberLayoutController', MemberLayoutController);
 
 const MemberRightSidenavController = require('./angular/controllers/member/right-sidenav-controller.js');
-angular.module('kyc-wallet').controller('MemberRightSidenavController', MemberRightSidenavController);
-
+angular
+	.module('kyc-wallet')
+	.controller('MemberRightSidenavController', MemberRightSidenavController);
 
 /**
  * setup
@@ -257,18 +298,22 @@ const MemberSetupLayoutController = require('./angular/controllers/member/setup/
 angular.module('kyc-wallet').controller('MemberSetupLayoutController', MemberSetupLayoutController);
 
 const MemberSetupChecklistController = require('./angular/controllers/member/setup/checklist-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupChecklistController', MemberSetupChecklistController);
+angular
+	.module('kyc-wallet')
+	.controller('MemberSetupChecklistController', MemberSetupChecklistController);
 
 const MemberSetupAddDocumentController = require('./angular/controllers/member/setup/add-document-controller.js');
-angular.module('kyc-wallet').controller('MemberSetupAddDocumentController', MemberSetupAddDocumentController);
-
+angular
+	.module('kyc-wallet')
+	.controller('MemberSetupAddDocumentController', MemberSetupAddDocumentController);
 
 /**
  * dashboard
  */
 const MemberDashboardMainController = require('./angular/controllers/member/dashboard/main-controller.js');
-angular.module('kyc-wallet').controller('MemberDashboardMainController', MemberDashboardMainController);
-
+angular
+	.module('kyc-wallet')
+	.controller('MemberDashboardMainController', MemberDashboardMainController);
 
 /**
  * wallet (TODO rename to token)
@@ -279,22 +324,26 @@ angular.module('kyc-wallet').controller('ManageTokenController', ManageTokenCont
 const ManageCryptosController = require('./angular/controllers/member/wallet/manage-cryptos-controller.js');
 angular.module('kyc-wallet').controller('ManageCryptosController', ManageCryptosController);
 
-
 /**
  * id wallet
  */
 const MemberIdWalletMainController = require('./angular/controllers/member/id-wallet/main-controller.js');
-angular.module('kyc-wallet').controller('MemberIdWalletMainController', MemberIdWalletMainController);
+angular
+	.module('kyc-wallet')
+	.controller('MemberIdWalletMainController', MemberIdWalletMainController);
 
 /**
  * marketplace
  */
 const MemberMarketplaceExchangeListController = require('./angular/controllers/member/marketplace/exchange-list-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceExchangeListController', MemberMarketplaceExchangeListController);
+angular
+	.module('kyc-wallet')
+	.controller('MemberMarketplaceExchangeListController', MemberMarketplaceExchangeListController);
 
 const MemberMarketplaceExchangeItemController = require('./angular/controllers/member/marketplace/exchange-item-controller.js');
-angular.module('kyc-wallet').controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
-
+angular
+	.module('kyc-wallet')
+	.controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
 
 /**
  * config states
@@ -307,7 +356,7 @@ angular.module('kyc-wallet').config(appStates);
 angular.module('kyc-wallet').run(appRun);
 
 const title = document.createElement('title');
-title.innerHTML = "SelfKey Identity Wallet";
+title.innerHTML = 'SelfKey Identity Wallet';
 document.head.appendChild(title);
 
 const icon32 = document.createElement('link');
@@ -338,7 +387,10 @@ material.rel = 'stylesheet';
 document.head.appendChild(material);
 
 const materialIcons = document.createElement('link');
-materialIcons.href = path.join(staticPath, 'assets/libs/material-icons/icon.css?family=Material+Icons');
+materialIcons.href = path.join(
+	staticPath,
+	'assets/libs/material-icons/icon.css?family=Material+Icons'
+);
 materialIcons.rel = 'stylesheet';
 document.head.appendChild(materialIcons);
 
@@ -352,19 +404,19 @@ main.href = path.join(staticPath, 'stylesheets/css/main.css');
 main.rel = 'stylesheet';
 document.head.appendChild(main);
 
-const bodyClass = document.createAttribute("class");       
-bodyClass.value = "gradient-1";
+const bodyClass = document.createAttribute('class');
+bodyClass.value = 'gradient-1';
 document.body.setAttributeNode(bodyClass);
 
-const bodyNgKeyPress = document.createAttribute("ng-keypress");       
-bodyNgKeyPress.value = "$root.broadcastKeyPress($event)";
+const bodyNgKeyPress = document.createAttribute('ng-keypress');
+bodyNgKeyPress.value = '$root.broadcastKeyPress($event)';
 document.body.setAttributeNode(bodyNgKeyPress);
 
 const uiView = document.createElement('div');
-const attUiView = document.createAttribute("ui-view");       
-attUiView.value = "main";
+const attUiView = document.createAttribute('ui-view');
+attUiView.value = 'main';
 uiView.setAttributeNode(attUiView);
-const attLayoutFill = document.createAttribute("layout-fill");       
+const attLayoutFill = document.createAttribute('layout-fill');
 uiView.setAttributeNode(attLayoutFill);
 document.body.appendChild(uiView);
 
@@ -375,11 +427,11 @@ const skskOfflineWarningBox = document.createElement('sk-offline-warning-box');
 document.body.appendChild(skskOfflineWarningBox);
 
 const loader = document.createElement('script');
-loader.src =  path.join(staticPath, 'assets/libs/loader.js');
+loader.src = path.join(staticPath, 'assets/libs/loader.js');
 document.body.appendChild(loader);
 
-angular.element(()=>{
-  angular.bootstrap(document, ['kyc-wallet'], {
-    strictDi: true
-  });
+angular.element(() => {
+	angular.bootstrap(document, ['kyc-wallet'], {
+		strictDi: true
+	});
 });

@@ -11,11 +11,13 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
         link: (scope, element) => {
             let publicKey = '0x' + $rootScope.wallet.getPublicKey();
 
-            let syncByWallet = () => {
-                RPCService.makeCall('syncTxHistoryByWallet', { walletId: $rootScope.wallet.id, publicKey });
+            let syncByWallet = (showProgress) => {
+                RPCService.makeCall('syncTxHistoryByWallet', { walletId: $rootScope.wallet.id, publicKey , showProgress});
             };
-            syncByWallet();
 
+            $rootScope.txHistoryIsFirstSync = typeof $rootScope.txHistoryIsFirstSync == 'undefined' ? true : false;
+            syncByWallet($rootScope.txHistoryIsFirstSync);
+            
             scope.txList = [];
             scope.tokenSymbol = scope.tokenSymbol ? scope.tokenSymbol.toUpperCase() : null;
 
@@ -95,7 +97,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
             });
 
             $rootScope.$on('tx-history:sync', (event) => {
-                syncByWallet();
+                syncByWallet(true);
             });
 
             let txReloadInterval = $interval(() => {

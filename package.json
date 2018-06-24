@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "0.0.3-beta",
+  "version": "0.0.4-beta",
   "description": "The Official SelfKey Identity Wallet for Desktop",
   "repository": {
     "type": "git",
@@ -37,13 +37,11 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "node test/test.js",
-    "publish-build": "yarn compile && electron-builder -p always"
+    "publish-build": "yarn compile && electron-builder -p always",
+    "precommit": "pretty-quick --staged",
+    "commitmsg": "commitlint -E GIT_PARAMS"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ],
     "*.js": [
       "eslint --fix",
       "git add"
@@ -87,13 +85,15 @@
     "sqlite3": "^4.0.0",
     "uuid": "3.2.1",
     "web3": "1.0.0-beta.34",
-    "webpack-sources": "1.1.0",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
     "chai": "^4.1.2",
     "chalk": "2.3.2",
     "copy-webpack-plugin": "^4.5.1",
+    "cz-conventional-changelog": "^2.1.0",
     "delay": "^3.0.0",
     "electron": "2.0.2",
     "electron-builder": "20.14.7",
@@ -109,12 +109,15 @@
     "gulp-pug": "^4.0.1",
     "gulp-sass": "^4.0.1",
     "gulp-watch": "^5.0.0",
+    "husky": "^0.14.3",
     "json-loader": "^0.5.7",
     "mocha": "^5.2.0",
+    "pretty-quick": "^1.6.0",
     "run-sequence": "^2.2.1",
     "spectron": "^3.8.0",
     "webpack": "^4.8.1",
-    "webpack-build-notifier": "^0.1.25"
+    "webpack-build-notifier": "^0.1.25",
+    "webpack-sources": "1.1.0"
   },
   "resolutions": {
     "webpack-sources": "1.0.1"
@@ -143,6 +146,11 @@
         "@/preload.js"
       ],
       "webpackConfig": "webpack.main.additions.js"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
     }
   }
 }

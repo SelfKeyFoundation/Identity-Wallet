@@ -205,38 +205,38 @@ let defaultModule = function (app) {
         endblock = parseInt(endblock, 16);
 
         let walletSettings = await WalletSettingTable.findByWalletId(walletId);
-        let walletSetting = walletSettings[0]; 
+        let walletSetting = walletSettings[0];
         let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
         let page = 1;
         let txHashes = {};
+        return new Promise((resolve, reject) => {
 
-        (async function next(hasNext) {
-            if (!hasNext) {
-                await processTxHistory(txHashes, address);
+            (async function next(hasNext) {
+                if (!hasNext) {
+                    await processTxHistory(txHashes, address);
 
-                if (showProgress) {
-                    isSyncingMap[address] = false;
+                    if (showProgress) {
+                        isSyncingMap[address] = false;
+                    }
+                    walletSetting.txHistoryLastSyncedBlock = endblock;
+                    await WalletSettingTable.edit(walletSetting);
+                    return resolve();
                 }
-                walletSetting.txHistoryLastSyncedBlock = endblock;
-                await WalletSettingTable.edit(walletSetting);
+                let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);
+                let tokenTxList = await loadERCTxHistory(address, startBlock, endblock, page);
 
-                return;
-            }
+                ethTxList.concat(tokenTxList).forEach((tx, index) => {
+                    let hash = tx.hash;
+                    txHashes[hash] = txHashes[hash] || {};
+                    let isToken = index >= ethTxList.length;
+                    txHashes[hash][isToken ? 'token' : 'eth'] = tx;
+                });
 
-            let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);
-            let tokenTxList = await loadERCTxHistory(address, startBlock, endblock, page);
+                page++;
+                next(ethTxList.length == OFFSET || tokenTxList.length == OFFSET);
+            })(true);
+        });
 
-            ethTxList.concat(tokenTxList).forEach((tx, index) => {
-                let hash = tx.hash;
-                txHashes[hash] = txHashes[hash] || {};
-                let isToken = index >= ethTxList.length;
-                txHashes[hash][isToken ? 'token' : 'eth'] = tx;
-            });
-
-            page++;
-            next(ethTxList.length == OFFSET || tokenTxList.length == OFFSET);
-        })(true);
-       
     }
 
     async function sync() {
@@ -254,18 +254,14 @@ let defaultModule = function (app) {
         }
 
         syncingJobIsStarted = true;
-            (async function next() {
-                await sync();
-                next();
-            })();
-    };
-
-    async function _syncByWalletWithProgress(address, walletId) {
-        await _syncByWallet(address, walletId, true);
+        (async function next() {
+            await sync();
+            next();
+        })();
     };
 
     controller.prototype.startSyncingJob = _startSyncingJob;
-    controller.prototype.syncByWallet = _syncByWalletWithProgress;
+    controller.prototype.syncByWallet = _syncByWallet;
 
     return controller;
 };

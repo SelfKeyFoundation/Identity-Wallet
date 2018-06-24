@@ -1,22 +1,21 @@
 'use strict';
 
 function SkIconDirective($log) {
-    'ngInject';
+	'ngInject';
 
-    return {
-        restrict: 'E',
-        scope: {
-            icon: '@',
-            sizeClass: '@',
-            extension: '@'
-        },
-        link: (scope, element) => {
-            scope.extension = scope.extension || 'svg';
-        },
-        replace: true,
-        templateUrl: 'common/directives/sk-icon.html'
-    }
+	return {
+		restrict: 'E',
+		scope: {
+			icon: '@',
+			sizeClass: '@',
+			extension: '@'
+		},
+		link: (scope, element) => {
+			scope.extension = scope.extension || 'svg';
+		},
+		replace: true,
+		templateUrl: 'common/directives/sk-icon.html'
+	};
 }
-SkIconDirective.$inject = ["$log"];
+SkIconDirective.$inject = ['$log'];
 module.exports = SkIconDirective;
-

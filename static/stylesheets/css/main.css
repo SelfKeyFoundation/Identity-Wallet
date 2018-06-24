@@ -2201,7 +2201,7 @@ md-radio-group md-radio-button {
       text-transform: uppercase;
       margin-top: 13px;
       color: #0abbd0;
-      font-family: 'ProximaNova';
+      font-family: 'Sans-Serif';
       font-size: 16px;
       font-weight: 500;
       letter-spacing: 3px; }
@@ -3200,7 +3200,7 @@ md-dialog.id-wallet-info {
   padding-top: 20%; }
   md-dialog.id-wallet-info .id-wallet-info-wrapper {
     width: 780px;
-    height: 460px;
+    height: 500px;
     border-radius: 4px;
     background-color: #262f39;
     border: solid 1px #303c49;
@@ -3236,7 +3236,7 @@ md-dialog.id-wallet-info {
         overflow: auto;
         font-family: ProximaNovaRegular;
         width: 700px;
-        height: 240px;
+        height: 280px;
         font-size: 18px;
         font-weight: normal;
         font-style: normal;
@@ -4435,7 +4435,7 @@ md-dialog.ledger-timed-out-container {
           width: 400px !important; }
         .wallet-create-step-5 .content-wrapper .item-wrapper .body .title {
           opacity: 0.83;
-          font-family: SFNSDisplay;
+          font-family: "Sans-Serif";
           font-size: 21px;
           font-weight: normal;
           font-style: normal;
@@ -4448,7 +4448,7 @@ md-dialog.ledger-timed-out-container {
           margin-top: 10px;
           width: 491px;
           opacity: 0.8;
-          font-family: ProximaNovaRegular;
+          font-family: "Sans-Serif";
           font-size: 16px;
           font-weight: normal;
           font-style: normal;

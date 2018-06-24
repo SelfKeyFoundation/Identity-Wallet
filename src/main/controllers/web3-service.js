@@ -1,4 +1,3 @@
-
 'use strict';
 
 var Web3 = require('web3');
@@ -9,14 +8,14 @@ const ABI = require('../assets/data/abi.json').abi;
 const REQUEST_INTERVAL_DELAY = 500;
 
 const SERVER_CONFIG = {
-  mew: {
-    1: { url: "https://api.myetherapi.com/eth" },
-    3: { url: "https://api.myetherapi.com/rop" }
-  },
-  infura: {
-    1: { url: "https://mainnet.infura.io" },
-    3: { url: "https://ropsten.infura.io" }
-  }
+	mew: {
+		1: { url: 'https://api.myetherapi.com/eth' },
+		3: { url: 'https://api.myetherapi.com/rop' }
+	},
+	infura: {
+		1: { url: 'https://mainnet.infura.io' },
+		3: { url: 'https://ropsten.infura.io' }
+	}
 };
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
