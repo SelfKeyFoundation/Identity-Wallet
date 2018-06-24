@@ -39,7 +39,8 @@ function AddCustomTokenDialogController($rootScope, $scope, $log, $q, $timeout, 
     let wallet = $rootScope.wallet;
     const web3Utils = Web3Service.constructor.web3.utils;
     const incorectTokenSymbolsMap = {
-        'latoken': 'LA'
+        'latoken': 'LA',
+        '٨': 'DCN'
     };
 
     let resetVariables = () => {
