@@ -187,6 +187,7 @@ module.exports = function (app) {
 
             let privateKeyBuffer = Buffer.from(args.privateKey.replace("0x", ""), "hex")
             let walletSelectPromise = electron.app.sqlLiteService.Wallet.findByPublicKey(publicKey);
+            let profile = 'local';
 
             walletSelectPromise.then((wallet) => {
                 if (wallet) {
@@ -195,14 +196,16 @@ module.exports = function (app) {
                 } else {
                     electron.app.sqlLiteService.Wallet.add(
                         {
-                            publicKey: publicKey
+                            profile,
+                            publicKey 
                         }
                     ).then((resp) => {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
                             id: resp.id,
                             isSetupFinished: resp.isSetupFinished,
                             publicKey: publicKey,
-                            privateKey: privateKeyBuffer
+                            privateKey: privateKeyBuffer,
+                            profile
                         });
                     }).catch((error) => {
                         app.win.webContents.send(RPC_METHOD, actionId, actionName, error.code, null);
