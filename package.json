@@ -147,5 +147,10 @@
       ],
       "webpackConfig": "webpack.main.additions.js"
     }
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
