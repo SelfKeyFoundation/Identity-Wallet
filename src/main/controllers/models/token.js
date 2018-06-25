@@ -1,30 +1,7 @@
-const ethTokensList = require('../../assets/data/eth-tokens.json');
+const { knex } = require('../../services/knex');
 
-const Promise = require('bluebird');
+const TABLE_NAME = 'tokens';
 
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'tokens';
-	const Controller = function() {};
-
-	let knex = sqlLiteService.knex;
-
-	/**
-	 *
-	 */
-	Controller.findAll = _findAll;
-
-	function _findAll() {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.select()
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	}
-
-	return Controller;
-};
+module.exports = () => ({
+	findAll: () => knex(TABLE_NAME).select()
+});

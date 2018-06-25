@@ -1,62 +1,35 @@
 'use strict';
 
 const electron = require('electron');
-const config = require('../config');
-const request = require('request');
+const fetch = require('node-fetch');
 
-module.exports = function(app) {
-	const AIRTABLE_API = config.airtableBaseUrl;
+const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
 
-	const controller = function() {};
+module.exports = {
+	loadIdAttributeTypes: async () => {
+		const result = await fetch(`${airtableBaseUrl}id-attributes`);
 
-	controller.prototype.loadIdAttributeTypes = () => {
-		const ID_ATTRIBUTE_TABLE = 'id-attributes';
-		request.get(AIRTABLE_API + ID_ATTRIBUTE_TABLE, (error, httpResponse, result) => {
-			let idAttributesArray = JSON.parse(result).ID_Attributes;
-			for (let i in idAttributesArray) {
-				if (!idAttributesArray[i].data) continue;
+		const response = await result.json();
 
-				let item = idAttributesArray[i].data.fields;
+		const idAttributeData = response.ID_Attributes.filter(attr => attr.data).map(
+			attr => attr.data.fields
+		);
 
-				electron.app.sqlLiteService.IdAttributeType.create(item)
-					.then(idAttributeType => {
-						// inserted
-					})
-					.catch(error => {
-						// error
-					});
-			}
-		});
-	};
+		return electron.app.sqlLiteService.IdAttributeType.import(idAttributeData);
+	},
 
-	controller.prototype.loadExchangeData = () => {
-		const TABLE = 'Exchanges';
-		request.get(AIRTABLE_API + TABLE, (error, httpResponse, result) => {
-			const data = JSON.parse(result).Exchanges;
-			for (let i in data) {
-				if (!data[i].data) {
-					continue;
-				}
-				const item = data[i].data.fields;
-				if (!item.name) {
-					continue;
-				}
-				const dataToSave = {
-					name: item.name,
-					data: JSON.stringify(item)
-				};
+	loadExchangeData: async () => {
+		const response = await fetch(`${airtableBaseUrl}Exchanges`);
 
-				electron.app.sqlLiteService.ExchangeDataHandler.create(dataToSave)
-					.then(data => {
-						// inserted
-					})
-					.catch(error => {
-						console.log('!!!!!!!!!!!!!', error);
-						// error
-					});
-			}
-		});
-	};
+		const responseBody = await response.json();
 
-	return controller;
+		const exchanges = responseBody.Exchanges.filter(
+			row => row.data && row.data.fields.name
+		).map(row => ({
+			name: row.data.fields.name,
+			data: JSON.stringify(row.data.fields)
+		}));
+
+		return electron.app.sqlLiteService.ExchangeDataHandler.import(exchanges);
+	}
 };

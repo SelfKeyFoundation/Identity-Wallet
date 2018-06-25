@@ -1,11 +1,7 @@
-const electron = require('electron');
-const Promise = require('bluebird');
+// TODO: Implement settings model that doesn't suck
 
 module.exports = function(app, sqlLiteService) {
 	const TABLE_NAME = 'app_settings';
-	const Controller = function() {};
 
-	let knex = sqlLiteService.knex;
-
-	return Controller;
+	return {};
 };

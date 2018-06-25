@@ -1,25 +1,14 @@
-const electron = require('electron');
-const Promise = require('bluebird');
+const { knex } = require('../../services/knex');
+const TABLE_NAME = 'wallet_settings';
 
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'wallet_settings';
-	const Controller = function() {};
+module.exports = () => ({
+	findByWalletId: walletId =>
+		knex(TABLE_NAME)
+			.where({ walletId })
+			.select(),
 
-	let knex = sqlLiteService.knex;
-
-	/**
-	 *
-	 */
-	Controller.findByWalletId = _findByWalletId;
-	Controller.edit = _edit;
-
-	function _findByWalletId(walletId) {
-		return sqlLiteService.select(TABLE_NAME, '*', { walletId: walletId });
-	}
-
-	function _edit(data) {
-		return sqlLiteService.update(TABLE_NAME, data, { id: data.id });
-	}
-
-	return Controller;
-};
+	edit: data =>
+		knex(TABLE_NAME)
+			.where('id', data.id)
+			.update(data)
+});

@@ -828,15 +828,9 @@ module.exports = function(app) {
 		app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
 	};
 
-	controller.prototype.startTokenPricesBroadcaster = function(cmcService) {
-		cmcService.eventEmitter.on('UPDATE', () => {
-			electron.app.sqlLiteService.TokenPrice.findAll()
-				.then(data => {
-					app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
+	controller.prototype.startTokenPricesBroadcaster = function(priceService) {
+		priceService.eventEmitter.on('pricesUpdated', newPrices => {
+			app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', newPrices);
 		});
 	};
 

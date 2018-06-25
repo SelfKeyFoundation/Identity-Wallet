@@ -1,12 +1,10 @@
 'use strict';
 const path = require('path');
 const fs = require('fs');
-const url = require('url');
 const electron = require('electron');
-const os = require('os');
-const { Menu, Tray, autoUpdater } = require('electron');
+const { Menu } = require('electron');
 const isOnline = require('is-online');
-const config = buildConfig(electron);
+const config = buildConfig();
 
 const log = require('electron-log');
 
@@ -23,10 +21,7 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
 const createMenuTemplate = require('./menu');
 
-/**
- * auto updated
- */
-const { appUpdater } = require('./autoupdater');
+process.on('unhandledRejection', console.error);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -55,7 +50,7 @@ let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 let mainWindow;
 
 for (let i in i18n) {
-	app.translations[i18n[i]] = require('./i18n/' + i18n[i] + '.js');
+	app.translations[i18n[i]] = require(`./i18n/${i18n[i]}.js`);
 }
 
 if (!handleSquirrelEvent()) {
@@ -88,6 +83,7 @@ function onReady(app) {
 
 		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
 			// Initate auto-updates
+			const { appUpdater } = require('./autoupdater');
 			appUpdater();
 		}
 
@@ -99,11 +95,9 @@ function onReady(app) {
 
 		electron.app.helpers = require('./controllers/helpers')(app);
 
-		const CMCService = require('./controllers/cmc-service')(app);
-		electron.app.cmcService = new CMCService();
+		const PriceService = require('./controllers/price-service');
 
-		const AirtableService = require('./controllers/airtable-service')(app);
-		electron.app.airtableService = new AirtableService();
+		const AirtableService = require('./controllers/airtable-service');
 
 		const SqlLiteService = require('./controllers/sql-lite-service')(app);
 		electron.app.sqlLiteService = new SqlLiteService();
@@ -116,7 +110,7 @@ function onReady(app) {
 
 		const RPCHandler = require('./controllers/rpc-handler')(app);
 		electron.app.rpcHandler = new RPCHandler();
-		electron.app.rpcHandler.startTokenPricesBroadcaster(electron.app.cmcService);
+		electron.app.rpcHandler.startTokenPricesBroadcaster(PriceService);
 
 		createKeystoreFolder();
 
@@ -185,9 +179,9 @@ function onReady(app) {
 					log.info('did-finish-load');
 					mainWindow.webContents.send('APP_START_LOADING');
 					//start update cmc data
-					electron.app.cmcService.startUpdateData();
-					electron.app.airtableService.loadIdAttributeTypes();
-					electron.app.airtableService.loadExchangeData();
+					PriceService.startUpdateData();
+					AirtableService.loadIdAttributeTypes();
+					AirtableService.loadExchangeData();
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
 				.catch(error => {
@@ -357,7 +351,7 @@ function isDebugging() {
 	return false;
 }
 
-function buildConfig(electron) {
+function buildConfig() {
 	let config = require('./config');
 
 	const envConfig = isDevMode() || isDebugging() ? config.default : config.production;
