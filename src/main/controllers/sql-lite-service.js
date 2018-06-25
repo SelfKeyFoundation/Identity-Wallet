@@ -55,7 +55,7 @@ module.exports = function(app) {
 	let ExchangeDataHandler = require('./models/exchange.js')(app, controller);
 	controller.prototype.ExchangeDataHandler = ExchangeDataHandler;
 
-	let TokenPrice = require('./models/token-price.js')(app, controller);
+	let TokenPrice = require('./models/token-price.js');
 	controller.prototype.TokenPrice = TokenPrice;
 
 	let TransactionHistory = require('./models/transaction-history.js')(app, controller);

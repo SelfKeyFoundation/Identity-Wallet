@@ -1,25 +1,11 @@
-const Promise = require('bluebird');
+const { knex } = require('../../services/knex');
 
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'documents';
-	const Controller = function() {};
+const TABLE_NAME = 'documents';
 
-	let knex = sqlLiteService.knex;
-
-	Controller.findById = _findById;
-
-	function _findById(id) {
-		return new Promise((resolve, reject) => {
-			sqlLiteService
-				.select(TABLE_NAME, '*', { id: id })
-				.then(rows => {
-					resolve(rows[0]);
-				})
-				.catch(error => {
-					reject({ message: 'document_findById', error: error });
-				});
-		});
-	}
-
-	return Controller;
-};
+module.exports = () => ({
+	findById: id =>
+		knex(TABLE_NAME)
+			.where({ id })
+			.select()
+			.then(rows => rows.pop())
+});

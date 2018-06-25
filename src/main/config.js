@@ -39,21 +39,15 @@ const AppConfigConstant = {
 			}
 		},
 		allowedUrls: [
-			'https://youtube.com',
-			'https://etherscan.io',
-			'https://selfkey.org',
-			'https://help.selfkey.org',
-			'http://help.selfkey.org',
-			'https://blog.selfkey.org',
+			'https://youtube.com/',
+			'https://etherscan.io/',
+			'https://selfkey.org/',
+			'https://help.selfkey.org/',
+			'http://help.selfkey.org/',
+			'https://blog.selfkey.org/',
 			'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
 			'https://t.me/selfkeyfoundation'
-		],
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
-		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64, //availble are 16, 32, 128
-		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH'],
-		airtableBaseUrl: 'https://alpha.selfkey.org/marketplace/i/api/'
+		]
 	},
 	default: {
 		debug: true,
@@ -61,13 +55,7 @@ const AppConfigConstant = {
 		updateEndpoint: 'http://localhost:5000',
 		kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 		chainId: 1,
-		node: 'mew',
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
-		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64, //availble are 16, 32, 128
-		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH'],
-		airtableBaseUrl: 'https://alpha.selfkey.org/marketplace/i/api/'
+		node: 'mew'
 	},
 	production: {
 		debug: false,
@@ -75,13 +63,7 @@ const AppConfigConstant = {
 		updateEndpoint: 'https://release.selfkey.org',
 		kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 		chainId: 1,
-		node: 'mew',
-		cmcUrl: 'https://api.coinmarketcap.com/v1/ticker/?start=0&limit=2500&convert=ETH',
-		cmcIconBaseUrl: 'https://files.coinmarketcap.com/static/img/coins/',
-		cmcIconSize: 64, //availble are 16, 32, 128
-		cmcUpdatePeriod: 60000, //ms
-		obligatoryImageIds: ['ETH'],
-		airtableBaseUrl: 'https://alpha.selfkey.org/marketplace/i/api/'
+		node: 'mew'
 	}
 };
 

@@ -1,58 +1,27 @@
-const Promise = require('bluebird');
+const { knex } = require('../../services/knex');
 
-const initialIdAttributeTypeList = require('../../assets/data/initial-id-attribute-type-list.json');
+const TABLE_NAME = 'id_attribute_types';
 
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'id_attribute_types';
-	const Controller = function() {};
+module.exports = () => ({
+	create: data => {
+		const dataToSave = {
+			key: data.key,
+			type: data.type[0],
+			category: data.category,
+			entity: JSON.stringify(data.entity),
+			createdAt: new Date().getTime()
+		};
 
-	let knex = sqlLiteService.knex;
+		return knex(TABLE_NAME)
+			.insert(dataToSave)
+			.then(insertedIds => {
+				dataToSave.id = insertedIds[0];
 
-	Controller.create = data => {
-		return new Promise((resolve, reject) => {
-			return knex(TABLE_NAME)
-				.select()
-				.where('key', data.key)
-				.then(rows => {
-					if (rows && rows.length) {
-						resolve(rows[0]);
-					} else {
-						let dataToSave = {
-							key: data.key,
-							type: data.type[0],
-							category: data.category,
-							entity: JSON.stringify(data.entity),
-							createdAt: new Date().getTime()
-						};
-						return knex(TABLE_NAME)
-							.insert(dataToSave)
-							.then(insertedIds => {
-								dataToSave.id = insertedIds[0];
-								resolve(dataToSave);
-							})
-							.catch(error => {
-								reject({ message: 'error', error: error });
-							});
-					}
-				})
-				.catch(error => {
-					reject({ message: 'error', error: error });
-				});
-		});
-	};
+				return dataToSave;
+			});
+	},
 
-	Controller.findAll = () => {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.select()
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	};
+	findAll: () => knex(TABLE_NAME).select(),
 
-	return Controller;
-};
+	import: attributeTypes => {}
+});
