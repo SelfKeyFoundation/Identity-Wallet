@@ -1,17 +1,14 @@
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'wallet_settings';
-	const Controller = function() {};
+const { knex } = require('../../services/knex');
+const TABLE_NAME = 'wallet_settings';
 
-	Controller.findByWalletId = _findByWalletId;
-	Controller.edit = _edit;
+module.exports = () => ({
+	findByWalletId: walletId =>
+		knex(TABLE_NAME)
+			.where({ walletId })
+			.select(),
 
-	function _findByWalletId(walletId) {
-		return sqlLiteService.select(TABLE_NAME, '*', { walletId: walletId });
-	}
-
-	function _edit(data) {
-		return sqlLiteService.update(TABLE_NAME, data, { id: data.id });
-	}
-
-	return Controller;
-};
+	edit: data =>
+		knex(TABLE_NAME)
+			.where('id', data.id)
+			.update(data)
+});

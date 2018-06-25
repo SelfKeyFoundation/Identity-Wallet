@@ -3,26 +3,24 @@ const log = require('electron-log');
 const TABLE_NAME = 'guide_settings';
 let crashReportAgreement = false;
 
-const findAllGuideSettings = () => knex(TABLE_NAME).select();
-
-module.exports = () => ({
-	hasAgreedToCrashReport: () => {
+const mod = module.exports = () => ({
+    findAll: () => knex(TABLE_NAME).select(),
+    hasAgreedToCrashReport: () => {
 		return crashReportAgreement;
+    },
+    loadCrashReportAgreement: async () => {
+        try{
+            const guideSettings = await mod.findAll();
+            crashReportAgreement = guideSettings.length > 0 ? guideSettings[0].crashReportAgreement === 1 : false;
+        } catch(e){
+            log.error(e);
+        }
 	},
-	findAll: findAllGuideSettings,
 	updateById: (id, data) => {
-		crashReportAgreement = data.crashReportAgreement;
+        crashReportAgreement = data.crashReportAgreement;
 		return knex(TABLE_NAME)
 			.where({ id })
-			.update(data);
-	},
-	loadCrashReportAgreement: async () => {
-		try {
-			const guideSettings = await findAllGuideSettings();
-			crashReportAgreement =
-				guideSettings.length > 0 ? guideSettings[0].crashReportAgreement === 1 : false;
-		} catch (e) {
-			log.error(e);
-		}
-	}
+            .update(data)
+    }
+
 });

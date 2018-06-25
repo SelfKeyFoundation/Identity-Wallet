@@ -1,57 +1,27 @@
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'id_attribute_types';
-	const Controller = function() {};
+const { knex } = require('../../services/knex');
 
-	let knex = sqlLiteService.knex;
+const TABLE_NAME = 'id_attribute_types';
 
-	Controller.create = data => {
-		return new Promise((resolve, reject) => {
-			return knex(TABLE_NAME)
-				.select()
-				.where('key', data.key)
-				.then(rows => {
-					if (rows && rows.length) {
-						resolve(rows[0]);
-					} else {
-						let dataToSave = {
-							key: data.key,
-							type: data.type[0],
-							category: data.category,
-							entity: JSON.stringify(data.entity),
-							createdAt: new Date().getTime()
-						};
-						return knex(TABLE_NAME)
-							.insert(dataToSave)
-							.then(insertedIds => {
-								dataToSave.id = insertedIds[0];
-								resolve(dataToSave);
-							})
-							.catch(error => {
-								// eslint-disable-next-line prefer-promise-reject-errors
-								reject({ message: 'error', error: error });
-							});
-					}
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					reject({ message: 'error', error: error });
-				});
-		});
-	};
+module.exports = () => ({
+	create: data => {
+		const dataToSave = {
+			key: data.key,
+			type: data.type[0],
+			category: data.category,
+			entity: JSON.stringify(data.entity),
+			createdAt: new Date().getTime()
+		};
 
-	Controller.findAll = () => {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.select()
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	};
+		return knex(TABLE_NAME)
+			.insert(dataToSave)
+			.then(insertedIds => {
+				dataToSave.id = insertedIds[0];
 
-	return Controller;
-};
+				return dataToSave;
+			});
+	},
+
+	findAll: () => knex(TABLE_NAME).select(),
+
+	import: attributeTypes => {}
+});

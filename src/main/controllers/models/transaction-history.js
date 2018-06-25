@@ -1,56 +1,11 @@
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'transactions_history';
-	const Controller = function() {};
+const { knex } = require('../../services/knex');
+const TABLE_NAME = 'transactions_history';
 
-	let knex = sqlLiteService.knex;
+module.exports = () => ({
+	findAll: () => knex(TABLE_NAME).select(),
 
-	/**
-	 *
-	 */
-	Controller.findAll = _findAll;
-	Controller.findByWalletId = _findByWalletId;
-	Controller.findByWalletIdAndTokenId = _findByWalletIdAndTokenId;
+	findByWalletId: walletId => knex(TABLE_NAME).where({ walletId: walletId }),
 
-	function _findAll() {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	}
-
-	function _findByWalletId(walletId) {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.where({ walletId: walletId })
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	}
-
-	function _findByWalletIdAndTokenId(walletId, tokenId) {
-		return new Promise((resolve, reject) => {
-			knex(TABLE_NAME)
-				.where({ walletId: walletId, tokenId: tokenId })
-				.then(rows => {
-					resolve(rows);
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	}
-
-	return Controller;
-};
+	findByWalletIdAndTokenId: (walletId, tokenId) =>
+		knex(TABLE_NAME).where({ walletId: walletId, tokenId: tokenId })
+});

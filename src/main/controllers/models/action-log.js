@@ -1,18 +1,15 @@
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'action_logs';
-	const Controller = function() {};
+const { knex } = require('../../services/knex');
 
-	Controller.add = _add;
-	Controller.findByWalletId = _findByWalletId;
+const TABLE_NAME = 'action_logs';
 
-	function _add(item) {
-		item.createdAt = new Date().getTime();
-		return sqlLiteService.insert(TABLE_NAME, item);
-	}
-
-	function _findByWalletId(walletId) {
-		return sqlLiteService.select(TABLE_NAME, '*', { walletId: walletId });
-	}
-
-	return Controller;
-};
+module.exports = () => ({
+	add: item =>
+		knex(TABLE_NAME).insert({
+			...item,
+			createdAt: new Date().getTime()
+		}),
+	findByWalletId: walletId =>
+		knex(TABLE_NAME)
+			.where({ walletId })
+			.select()
+});
