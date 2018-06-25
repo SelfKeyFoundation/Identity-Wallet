@@ -87,7 +87,7 @@ angular.module('kyc-wallet').service('LedgerService', LedgerService);
 const SignService = require('./angular/services/sign.service');
 angular.module('kyc-wallet').service('SignService', SignService);
 
-const TxHistoryService = requireAppModule('angular/services/tx-history.service');
+const TxHistoryService = require('./angular/services/tx-history.service');
 angular.module('kyc-wallet').service('TxHistoryService', TxHistoryService);
 
 /**
@@ -138,7 +138,7 @@ angular.module('kyc-wallet').directive('copyToClipboard', CopyToClipboardDirecti
 const SkDoubleHeaderDirective = require('./angular/directives/commons/sk-double-header.directive');
 angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective);
 
-const SkTxHistoryDirective = requireAppModule('angular/directives/commons/sk-tx-history.directive');
+const SkTxHistoryDirective = require('./angular/directives/commons/sk-tx-history.directive');
 angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
 
 /**
