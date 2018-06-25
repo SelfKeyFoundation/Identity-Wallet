@@ -20,6 +20,8 @@ md-dialog {
               z-index: 1000;
           }
           .body-container {
+						  width: 380px;
+              text-align: center;
               padding-top: 21px;
               padding-bottom: 10px;
               padding-left: 21px;
@@ -33,10 +35,20 @@ md-dialog {
               line-height: 1.59;
               color: #ffffff;
               .header-title {
-                  font-size: 17px;
+              		font-weight: 600;
+                  opacity: 0.8;
+                  font-size: 18px;
                   margin-bottom: 16px;
-                  font-weight: 500;
-              }
+							}
+							.items {
+								padding-bottom: 20px;
+								.item {
+										opacity: 0.8;
+										font-size: 18px;
+										line-height: 1.4;
+										color: #ffffff;
+								}
+							}
               .action-btn {
                   border-radius: 4px;
                   background-color: #435160;

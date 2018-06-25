@@ -2,7 +2,9 @@ md-dialog.reject-ledger-tx-warning-container(aira-lable="")
     .main-container
         sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancel($event)")
         .body-container
-            .header-title Error: You didn't confirm this transaction on your Ledger.
+            .header-title Declined Transaction
+            .items
+                .item You declined this transaction on your Ledger.
             .buttons-row(layout="row", layout-align="center start")
                     md-button.default.action-btn(ng-click="cancel($event)")
-                        span.primary Cancel
+                        span.primary OK
