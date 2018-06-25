@@ -1,272 +1,302 @@
 'use strict';
 
 const Promise = require('bluebird'),
-    electron = require('electron'),
-    path = require('path'),
-    config = require('../config'),
-    request = require('request'),
-    async = require('async'),
-    BigNumber = require('bignumber.js');
+	electron = require('electron'),
+	path = require('path'),
+	config = require('../config'),
+	request = require('request'),
+	async = require('async'),
+	BigNumber = require('bignumber.js');
 
 let isSyncingMap = {};
 let syncingJobIsStarted = false;
 
-let getIsSyncing = (address) => {
-    if (!address) {
-        return false;
-    }
+let getIsSyncing = address => {
+	if (!address) {
+		return false;
+	}
 
-    return isSyncingMap[address];
+	return isSyncingMap[address];
 };
 
-let defaultModule = function (app) {
-    const API_KEY = null;
-    const REQUEST_INTERVAL_DELAY = 600; // millis
-    const LAST_BLOCK = Number.MAX_SAFE_INTEGER;
-    const ETH_BALANCE_DIVIDER = new BigNumber(10 ** 18);
-    const ENDPOINT_CONFIG = {
-        1: { url: 'https://api.etherscan.io/api' },
-        3: { url: "http://api-ropsten.etherscan.io/api" }
-    };
-    const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
+let defaultModule = function(app) {
+	const API_KEY = null;
+	const REQUEST_INTERVAL_DELAY = 600; // millis
+	const ETH_BALANCE_DIVIDER = new BigNumber(10 ** 18);
+	const ENDPOINT_CONFIG = {
+		1: { url: 'https://api.etherscan.io/api' },
+		3: { url: 'http://api-ropsten.etherscan.io/api' }
+	};
+	const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
 
-    let OFFSET = 1000;
+	let OFFSET = 1000;
 
-    const TX_LIST_ACTION = `?module=account&action=txlist&startblock=0&sort=asc&offset=${OFFSET}`;
-    const TOKEN_TX_ACTION = `?module=account&action=tokentx&startblock=0&sort=asc&offset=${OFFSET}`;
-    const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
+	const TX_LIST_ACTION = `?module=account&action=txlist&startblock=0&sort=asc&offset=${OFFSET}`;
+	const TOKEN_TX_ACTION = `?module=account&action=tokentx&startblock=0&sort=asc&offset=${OFFSET}`;
+	const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
 
+	//in order to change key name in runtime
+	const KEY_MAP = {
+		txreceipt_status: 'txReceiptStatus'
+	};
 
-    //in order to change key name in runtime
-    const KEY_MAP = {
-        'txreceipt_status': 'txReceiptStatus'
-    };
+	const KNOWN_KEYS = [
+		'blockNumber',
+		'timeStamp',
+		'hash',
+		'nonce',
+		'blockHash',
+		'transactionIndex',
+		'from',
+		'to',
+		'value',
+		'gas',
+		'gasPrice',
+		'isError',
+		'txreceipt_status',
+		'input',
+		'contractAddress',
+		'cumulativeGasUsed',
+		'gasUsed',
+		'confirmations',
+		'tokenName',
+		'tokenSymbol',
+		'tokenDecimal'
+	];
 
-    const KNOWN_KEYS = ['blockNumber', 'timeStamp', 'hash', 'nonce', 'blockHash',
-        'transactionIndex', 'from', 'to', 'value', 'gas', 'gasPrice', 'isError',
-        'txreceipt_status', 'input', 'contractAddress', 'cumulativeGasUsed',
-        'gasUsed', 'confirmations', 'tokenName', 'tokenSymbol', 'tokenDecimal'];
+	let queue = async.queue((args, callback) => {
+		let result = makeRequest.apply(this, [args.method, args.url, args.data]);
+		setTimeout(() => {
+			callback(result);
+		}, REQUEST_INTERVAL_DELAY);
+	}, 1);
 
-    let queue = async.queue((args, callback) => {
-        let result = makeRequest.apply(this, [args.method, args.url, args.data])
-        setTimeout(() => {
-            callback(result);
-        }, REQUEST_INTERVAL_DELAY);
-    }, 1);
+	function loadEthTxHistory(address, startblock, endblock, page) {
+		return new Promise((resolve, reject) => {
+			const ACTION_URL = `${API_ENDPOINT}${TX_LIST_ACTION}&address=${address}&startblock=${startblock}&endblock=${endblock}&page=${page}`;
+			queue.push({ method: 'get', url: ACTION_URL }, promise => {
+				resolve(promise);
+			});
+		});
+	}
 
-    function loadEthTxHistory(address, startblock, endblock, page) {
-        return new Promise((resolve, reject) => {
-            const ACTION_URL = `${API_ENDPOINT}${TX_LIST_ACTION}&address=${address}&startblock=${startblock}&endblock=${endblock}&page=${page}`;
-            queue.push({ method: 'get', url: ACTION_URL }, (promise) => {
-                resolve(promise);
-            });
-        });
-    }
+	async function loadERCTxHistory(address, startblock, endblock, page) {
+		return new Promise((resolve, reject) => {
+			const ACTION_URL = `${API_ENDPOINT}${TOKEN_TX_ACTION}&address=${address}&startblock=${startblock}&endblock=${endblock}&page=${page}`;
+			queue.push({ method: 'get', url: ACTION_URL }, promise => {
+				resolve(promise);
+			});
+		});
+	}
 
-    async function loadERCTxHistory(address, startblock, endblock, page) {
-        return new Promise((resolve, reject) => {
-            const ACTION_URL = `${API_ENDPOINT}${TOKEN_TX_ACTION}&address=${address}&startblock=${startblock}&endblock=${endblock}&page=${page}`;
-            queue.push({ method: 'get', url: ACTION_URL }, (promise) => {
-                resolve(promise);
-            });
-        });
-    }
+	function getTransactionReceipt(txhash) {
+		return new Promise((resolve, reject) => {
+			const ACTION_URL = API_ENDPOINT + TX_RECEIPT_ACTION + '&txhash=' + txhash;
+			queue.push({ method: 'get', url: ACTION_URL }, promise => {
+				resolve(promise);
+			});
+		});
+	}
 
-    function getTransactionReceipt(txhash) {
-        return new Promise((resolve, reject) => {
-            const ACTION_URL = API_ENDPOINT + TX_RECEIPT_ACTION + '&txhash=' + txhash;
-            queue.push({ method: 'get', url: ACTION_URL }, (promise) => {
-                resolve(promise);
-            });
-        });
-    }
+	function getMostResentBlock() {
+		return new Promise((resolve, reject) => {
+			const ACTION_URL = API_ENDPOINT + '?module=proxy&action=eth_blockNumber';
+			queue.push({ method: 'get', url: ACTION_URL }, promise => {
+				resolve(promise);
+			});
+		});
+	}
 
-    function getMostResentBlock() {
-        return new Promise((resolve, reject) => {
-            const ACTION_URL = API_ENDPOINT + '?module=proxy&action=eth_blockNumber';
-            queue.push({ method: 'get', url: ACTION_URL }, (promise) => {
-                resolve(promise);
-            });
-        });
-    }
+	function makeRequest(method, url, data) {
+		return new Promise((resolve, reject) => {
+			request[method](url, (error, httpResponse, response) => {
+				try {
+					response = JSON.parse(response);
+					resolve(response.result);
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+	}
 
-    function makeRequest(method, url, data) {
-        return new Promise((resolve, reject) => {
-            request[method](url, (error, httpResponse, response) => {
-                try {
-                    response = JSON.parse(response);
-                    resolve(response.result);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        });
-    }
+	async function getContractInfo(contractAddress) {
+		const Web3Service = electron.app.web3Service;
 
-    async function getContractInfo(contractAddress) {
-        const Web3Service = electron.app.web3Service;
+		try {
+			let tokenDecimal = await Web3Service.waitForTicket({
+				method: 'call',
+				args: [],
+				contractAddress,
+				contractMethod: 'decimals'
+			});
+			let tokenSymbol = await Web3Service.waitForTicket({
+				method: 'call',
+				args: [],
+				contractAddress,
+				contractMethod: 'symbol'
+			});
+			let tokenName = await Web3Service.waitForTicket({
+				method: 'call',
+				contractAddress,
+				contractMethod: 'name'
+			});
+			return { tokenDecimal, tokenSymbol, tokenName };
+		} catch (err) {
+			console.log('IS NOT CONTRACT ADDRESS');
+			return null;
+		}
+	}
 
-        try {
-            let tokenDecimal = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'decimals' });
-            let tokenSymbol = await Web3Service.waitForTicket({ method: 'call', args: [], contractAddress, contractMethod: 'symbol' });
-            let tokenName = await Web3Service.waitForTicket({ method: 'call', contractAddress, contractMethod: 'name' });
-            return { tokenDecimal, tokenSymbol, tokenName };
+	/**
+	 *
+	 * @param {*} txs
+	 * @param {*} walletAddress
+	 */
+	async function getProcessedTx(txs, walletAddress) {
+		let processedTx = {
+			networkId: config.chainId,
+			createdAt: new Date().getTime()
+		};
 
-        } catch (err) {
-            console.log('IS NOT CONTRACT ADDRESS');
-            return null;
-        }
-    }
+		let balanceValueDivider, propperTx;
+		if (txs.token) {
+			balanceValueDivider = new BigNumber(10 ** txs.token.tokenDecimal);
+			propperTx = txs.token;
+			propperTx.txreceipt_status = txs.eth ? txs.eth.txreceipt_status : null;
+		} else {
+			balanceValueDivider = ETH_BALANCE_DIVIDER;
+			propperTx = txs.eth;
+		}
 
-    /**
-     * 
-     * @param {*} txs 
-     * @param {*} walletAddress 
-     */
-    async function getProcessedTx(txs, walletAddress) {
-        let processedTx = {
-            networkId: config.chainId,
-            createdAt: new Date().getTime()
-        };
+		KNOWN_KEYS.forEach(key => {
+			let processedKey = KEY_MAP[key] ? KEY_MAP[key] : key;
+			processedTx[processedKey] = propperTx[key];
+		});
 
-        let balanceValueDivider, propperTx;
-        if (txs.token) {
-            balanceValueDivider = new BigNumber(10 ** txs.token.tokenDecimal);
-            propperTx = txs.token;
-            propperTx.txreceipt_status = txs.eth ? txs.eth.txreceipt_status : null;
-        } else {
-            balanceValueDivider = ETH_BALANCE_DIVIDER;
-            propperTx = txs.eth;
-        }
+		//toString is important! in order to avoid exponential
+		processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
+		processedTx.tokenSymbol = processedTx.tokenSymbol
+			? processedTx.tokenSymbol.toUpperCase()
+			: null;
+		processedTx.timeStamp = +(processedTx.timeStamp + '000');
 
-        KNOWN_KEYS.forEach((key) => {
-            let processedKey = KEY_MAP[key] ? KEY_MAP[key] : key;
-            processedTx[processedKey] = propperTx[key];
-        });
+		processedTx.from = processedTx.from ? processedTx.from.toLowerCase() : null;
+		processedTx.to = processedTx.to ? processedTx.to.toLowerCase() : null;
 
-        //toString is important! in order to avoid exponential
-        processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
-        processedTx.tokenSymbol = processedTx.tokenSymbol ? processedTx.tokenSymbol.toUpperCase() : null;
-        processedTx.timeStamp = +(processedTx.timeStamp + '000');
+		processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
+		if (processedTx.txReceiptStatus == null) {
+			let txReceipt = await getTransactionReceipt(processedTx.hash);
+			if (txReceipt && txReceipt.status) {
+				processedTx.txReceiptStatus = parseInt(txReceipt.status, 16);
+			}
+		}
 
-        processedTx.from = processedTx.from ? processedTx.from.toLowerCase() : null;
-        processedTx.to = processedTx.to ? processedTx.to.toLowerCase() : null;
+		//faild transaction
+		if (processedTx.value == 0) {
+			//set faild status, there is some exeptions, so that's needed
+			processedTx.txReceiptStatus = 0;
 
-        processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
-        if (processedTx.txReceiptStatus == null) {
-            let txReceipt = await getTransactionReceipt(processedTx.hash);
-            if (txReceipt && txReceipt.status) {
-                processedTx.txReceiptStatus = parseInt(txReceipt.status, 16);
-            }
-        }
+			processedTx.from == walletAddress
+				? (processedTx.contractAddress = processedTx.to)
+				: (processedTx.contractAddress = processedTx.from);
 
-        //faild transaction
-        if (processedTx.value == 0) {
-            //set faild status, there is some exeptions, so that's needed 
-            processedTx.txReceiptStatus = 0;
+			let contractInfo = await getContractInfo(processedTx.contractAddress);
+			if (!contractInfo) {
+				return null;
+			}
 
-            processedTx.from == walletAddress ?
-                processedTx.contractAddress = processedTx.to :
-                processedTx.contractAddress = processedTx.from;
+			Object.assign(processedTx, contractInfo);
+		}
 
-            let contractInfo = await getContractInfo(processedTx.contractAddress);
-            if (!contractInfo) {
-                return null;
-            }
+		return processedTx;
+	}
 
-            Object.assign(processedTx, contractInfo);
-        }
+	async function processTxHistory(txHashes, walletAddress) {
+		let processedHashes = {};
 
-        return processedTx;
-    }
+		let hashes = Object.keys(txHashes);
+		for (let hash of hashes) {
+			let txs = txHashes[hash];
+			let processedTx = await getProcessedTx(txs, walletAddress);
+			if (processedTx) {
+				await electron.app.sqlLiteService.TxHistory.addOrUpdate(processedTx);
+			}
+		}
+	}
 
-    async function processTxHistory(txHashes, walletAddress) {
-        let processedHashes = {};
+	const controller = function() {};
 
-        let hashes = Object.keys(txHashes);
-        for (let hash of hashes) {
-            let txs = txHashes[hash];
-            let processedTx = await getProcessedTx(txs, walletAddress);
-            if (processedTx) {
-                await electron.app.sqlLiteService.TxHistory.addOrUpdate(processedTx);
-            }
-        }
-    }
+	async function _syncByWallet(address, walletId, showProgress) {
+		if (showProgress) {
+			isSyncingMap[address] = true;
+		}
 
-    const controller = function () { };
+		let WalletSettingTable = electron.app.sqlLiteService.WalletSetting;
+		let endblock = await getMostResentBlock();
+		endblock = parseInt(endblock, 16);
 
-    async function _syncByWallet(address, walletId, showProgress) {
-        if (showProgress) {
-            isSyncingMap[address] = true;
-        }
+		let walletSettings = await WalletSettingTable.findByWalletId(walletId);
+		let walletSetting = walletSettings[0];
+		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
+		let page = 1;
+		let txHashes = {};
+		return new Promise((resolve, reject) => {
+			(async function next(hasNext) {
+				if (!hasNext) {
+					await processTxHistory(txHashes, address);
 
-        let WalletSettingTable = electron.app.sqlLiteService.WalletSetting;
-        let endblock = await getMostResentBlock();
-        endblock = parseInt(endblock, 16);
+					if (showProgress) {
+						isSyncingMap[address] = false;
+					}
+					walletSetting.txHistoryLastSyncedBlock = endblock;
+					await WalletSettingTable.edit(walletSetting);
+					return resolve();
+				}
+				let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);
+				let tokenTxList = await loadERCTxHistory(address, startBlock, endblock, page);
 
-        let walletSettings = await WalletSettingTable.findByWalletId(walletId);
-        let walletSetting = walletSettings[0];
-        let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
-        let page = 1;
-        let txHashes = {};
-        return new Promise((resolve, reject) => {
+				ethTxList.concat(tokenTxList).forEach((tx, index) => {
+					let hash = tx.hash;
+					txHashes[hash] = txHashes[hash] || {};
+					let isToken = index >= ethTxList.length;
+					txHashes[hash][isToken ? 'token' : 'eth'] = tx;
+				});
 
-            (async function next(hasNext) {
-                if (!hasNext) {
-                    await processTxHistory(txHashes, address);
+				page++;
+				next(ethTxList.length == OFFSET || tokenTxList.length == OFFSET);
+			})(true);
+		});
+	}
 
-                    if (showProgress) {
-                        isSyncingMap[address] = false;
-                    }
-                    walletSetting.txHistoryLastSyncedBlock = endblock;
-                    await WalletSettingTable.edit(walletSetting);
-                    return resolve();
-                }
-                let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);
-                let tokenTxList = await loadERCTxHistory(address, startBlock, endblock, page);
+	async function sync() {
+		let wallets = await electron.app.sqlLiteService.Wallet.findAll();
+		for (let wallet of wallets) {
+			let address = ('0x' + wallet.publicKey).toLowerCase();
+			await _syncByWallet(address, wallet.id);
+		}
+	}
 
-                ethTxList.concat(tokenTxList).forEach((tx, index) => {
-                    let hash = tx.hash;
-                    txHashes[hash] = txHashes[hash] || {};
-                    let isToken = index >= ethTxList.length;
-                    txHashes[hash][isToken ? 'token' : 'eth'] = tx;
-                });
+	function _startSyncingJob() {
+		if (syncingJobIsStarted) {
+			console.log('Transaction Syncing Job Is already Started!');
+			return;
+		}
 
-                page++;
-                next(ethTxList.length == OFFSET || tokenTxList.length == OFFSET);
-            })(true);
-        });
+		syncingJobIsStarted = true;
+		(async function next() {
+			await sync();
+			next();
+		})();
+	}
 
-    }
+	controller.prototype.startSyncingJob = _startSyncingJob;
+	controller.prototype.syncByWallet = _syncByWallet;
 
-    async function sync() {
-        let wallets = await electron.app.sqlLiteService.Wallet.findAll();
-        for (let wallet of wallets) {
-            let address = ('0x' + wallet.publicKey).toLowerCase();
-            await _syncByWallet(address, wallet.id);
-        }
-    };
-
-    function _startSyncingJob() {
-        if (syncingJobIsStarted) {
-            console.log('Transaction Syncing Job Is already Started!');
-            return;
-        }
-
-        syncingJobIsStarted = true;
-        (async function next() {
-            await sync();
-            next();
-        })();
-    };
-
-    controller.prototype.startSyncingJob = _startSyncingJob;
-    controller.prototype.syncByWallet = _syncByWallet;
-
-    return controller;
+	return controller;
 };
 
 module.exports = {
-    default: defaultModule,
-    isSyncing: getIsSyncing
+	default: defaultModule,
+	isSyncing: getIsSyncing
 };
