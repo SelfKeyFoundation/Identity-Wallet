@@ -12,6 +12,6 @@ else
     gsutil cp dist/*.zip gs://selfkey-builds/$VERSION/
 #    if [ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_BRANCH" == "dev"  ]
 #    then
-    curl -i -X POST -H "Content-Type: application/json" -d "{\text\": \"Mac build has been deployed for \n$COMMIT_MESSAGE \n[(see artifacts)](https://console.cloud.google.com/storage/browser/selfkey-builds/$VERSION/?project=kycchain-master)\", \"channel\": \"id-wallet-builds\" }" $MM_URL
+    curl -i -X POST -H "Content-Type: application/json" -d "{\"text\": \"Mac build has been deployed for \n$COMMIT_MESSAGE \n[(see artifacts)](https://console.cloud.google.com/storage/browser/selfkey-builds/$VERSION/?project=kycchain-master)\", \"channel\": \"id-wallet-builds\" }" $MM_URL
 #    fi
 fi
