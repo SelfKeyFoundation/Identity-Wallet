@@ -45,6 +45,6 @@ deploy_script:
   - C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
   - gcloud auth activate-service-account --key-file client-secret.json
   - gsutil cp dist/*.exe gs://selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/
-  - curl -i -X POST -H 'Content-Type:application/json' -d '{\"text\":\"Mac build has been deployed for \n%APPVEYOR_REPO_COMMIT_MESSAGE% [(see artifacts)](https://console.cloud.google.com/storage/browser/selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/?project=kycchain-master)\", \"channel\":\"id-wallet-builds\"}' %MM_URL%
+  - curl -i -X POST -H "Content-Type:application/json" -d "{\"text\":\"Mac build has been deployed for \n%APPVEYOR_REPO_COMMIT_MESSAGE% [(see artifacts)](https://console.cloud.google.com/storage/browser/selfkey-builds/%datetime%-%APPVEYOR_REPO_COMMIT%/?project=kycchain-master)\", \"channel\":\"id-wallet-builds\"}" %MM_URL%
 after_deploy:
   - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] yarn publish-build
