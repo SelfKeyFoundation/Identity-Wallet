@@ -43,48 +43,6 @@ function MemberDashboardMainController(
 	let pieChartIsReady = false;
 
 	let wallet = $rootScope.wallet;
-	$scope.transactionsHistoryList = [];
-
-	$scope.setTransactionsHistory = () => {
-		SqlLiteService.getTransactionsHistoryByWalletId(wallet.id)
-			.then(data => {
-				$scope.transactionsHistoryList = data
-					? $rootScope.wallet.processTransactionsHistory(data)
-					: [];
-			})
-			.catch(err => {
-				// TODO
-			});
-	};
-
-	$scope.setTransactionsHistory();
-
-	$scope.transactionsHistoryIsSynced = () => {
-		let statuses = $rootScope.transactionHistorySyncStatuses;
-		let isInProgress = false;
-		if (statuses) {
-			Object.keys(statuses).forEach(key => {
-				if (statuses[key] == false) {
-					isInProgress = true;
-				}
-			});
-		}
-		return !isInProgress;
-	};
-
-	$rootScope.refreshTxHistory = symbol => {
-		if (!symbol) {
-			$rootScope.wallet.syncEthTransactionsHistory();
-			Web3Service.syncTokensTransactionHistory(symbol);
-			return;
-		}
-
-		if (symbol.toLowerCase() == 'eth') {
-			$rootScope.wallet.syncEthTransactionsHistory();
-		} else {
-			Web3Service.syncTokensTransactionHistory(symbol);
-		}
-	};
 
 	$scope.getPieChartItems = () => {
 		let pieChartItems = [];

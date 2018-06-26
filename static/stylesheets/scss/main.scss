@@ -40,6 +40,7 @@
 @import './directives/sk-user-info-box.scss';
 @import './directives/copy-to-clipboard.scss';
 @import './directives/sk-double-header.scss';
+@import './directives/sk-tx-history.scss';
 
 @import './layouts/guest-layout.scss';
 @import './layouts/guest-import-layout.scss';
@@ -238,122 +239,5 @@ $buttonColor: rgba(255, 255, 255, 1);
   font-weight: 300;
   color: #93b0c1;
   margin-top: 30px;
-}
-
-.dashboard-content-wrappper .transactions-box-body,
-.wallet-manage-token-wrappper .body-content {
-  .list {
-    margin-top: 20px;
-    .list-item {
-        padding: 6px 0;
-        >hr {
-            color: #303c49;
-            display: block;
-            height: 1px;
-            border: 0;
-            border-top: 1px solid #303c49;
-            width: 100%;
-            margin: 36px 0;
-        }
-        .item-container {
-            position: relative;
-            .date {
-                font-family: ProximaNovaRegular;
-                font-size: 16px;
-                font-weight: 500;
-                font-style: normal;
-                font-stretch: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: left;
-                color: #93a4af;
-                display: inline-grid;
-                text-align: center;
-                >span {
-                    font-size: 18px;
-                    font-family: ProximaNovaRegular;
-                    font-size: 18px;
-                    font-weight: normal;
-                    font-style: normal;
-                    font-stretch: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: center;
-                    width: 100%;
-                }
-            }
-            .sent-receive {
-                font-family: ProximaNovaRegular;
-                font-size: 16px;
-                font-weight: 600;
-                font-style: normal;
-                font-stretch: normal;
-                line-height: 2em;
-                letter-spacing: normal;
-                text-align: left;
-                color: #ffffff;
-                margin-left: 20px;
-            }
-            .no-margins {
-              margin: 0 !important;
-            }
-            .symbol {
-              &.ETH {
-                color: #aa3de9;
-              }
-              &.QEY {
-                color: #13b4da;
-              }
-            }
-            .sent-receive-text {
-                font-family: ProximaNovaRegular;
-                font-size: 16px;
-                font-weight: 500;
-                font-style: normal;
-                font-stretch: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: left;
-                margin-left: 9px;
-                color: #ffffff;
-                line-height: 2em;
-                max-width: 60%;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                &.aqua-blue {
-                    color: #0dc7dd;
-                }
-                &.squash {
-                    color: #f5a623;
-                }
-                &.grey {
-                  font-size: 16px;
-                  font-weight: 500;
-                  color: #93b0c1;
-                }
-            }
-            .coin-change {
-                font-family: ProximaNovaRegular;
-                font-size: 16px;
-                font-weight: 500;
-                font-style: normal;
-                font-stretch: normal;
-                line-height: 2em;
-                letter-spacing: normal;
-                text-align: right;
-                color: #ffffff;
-                position: absolute;
-                right: 0;
-                &.aqua-blue {
-                    color: #0dc7dd;
-                }
-                &.squash {
-                    color: #f5a623;
-                }
-            }
-        }
-    }
-  }
 }
 

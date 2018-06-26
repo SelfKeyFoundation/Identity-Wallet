@@ -58,8 +58,8 @@ module.exports = function(app) {
 	let TokenPrice = require('./models/token-price.js')(app, controller);
 	controller.prototype.TokenPrice = TokenPrice;
 
-	let TransactionHistory = require('./models/transaction-history.js')(app, controller);
-	controller.prototype.TransactionHistory = TransactionHistory;
+	let TxHistory = require('./models/tx-history.js')(app, controller);
+	controller.prototype.TxHistory = TxHistory;
 
 	// TODO
 	controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {
@@ -203,10 +203,6 @@ module.exports = function(app) {
 
 	controller.prototype.token_update = data => {
 		return updateById('tokens', data);
-	};
-
-	controller.prototype.transactionsHistory_insert = data => {
-		return insertIntoTable('transactions_history', data);
 	};
 
 	/**

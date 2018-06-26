@@ -118,6 +118,9 @@ function onReady(app) {
 		electron.app.rpcHandler = new RPCHandler();
 		electron.app.rpcHandler.startTokenPricesBroadcaster(electron.app.cmcService);
 
+		const TxHistory = require('./controllers/tx-history-service').default(app);
+		electron.app.txHistory = new TxHistory();
+
 		createKeystoreFolder();
 
 		// TODO
@@ -188,6 +191,7 @@ function onReady(app) {
 					electron.app.cmcService.startUpdateData();
 					electron.app.airtableService.loadIdAttributeTypes();
 					electron.app.airtableService.loadExchangeData();
+					electron.app.txHistory.startSyncingJob();
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
 				.catch(error => {

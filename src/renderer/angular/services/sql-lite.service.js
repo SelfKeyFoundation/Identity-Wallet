@@ -258,21 +258,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 			return RPCService.makeCall('getWalletSettingsByWalletId', data);
 		}
 
-		insertTransactionHistory(data) {
-			return RPCService.makeCall('insertTransactionHistory', data);
-		}
-
-		getTransactionsHistoryByWalletId(walletId) {
-			return RPCService.makeCall('getTransactionsHistoryByWalletId', { walletId: walletId });
-		}
-
-		getTransactionsHistoryByWalletIdAndTokenId(walletId, tokenId) {
-			return RPCService.makeCall('getTransactionsHistoryByWalletIdAndTokenId', {
-				walletId: walletId,
-				tokenId: tokenId
-			});
-		}
-
 		saveWalletSettings(data) {
 			return RPCService.makeCall('saveWalletSettings', data);
 		}

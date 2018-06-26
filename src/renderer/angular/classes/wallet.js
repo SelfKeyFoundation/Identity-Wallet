@@ -11,7 +11,6 @@ let $rootScope,
 	CommonService,
 	ElectronService,
 	SqlLiteService,
-	EtherScanService,
 	SignService,
 	$log;
 
@@ -42,9 +41,7 @@ class Wallet {
 	static set SqlLiteService(value) {
 		SqlLiteService = value;
 	}
-	static set EtherScanService(value) {
-		EtherScanService = value;
-	}
+
 	static set SignService(value) {
 		SignService = value;
 	}
@@ -367,130 +364,6 @@ class Wallet {
 			});
 
 		return defer.promise;
-	}
-
-	processTransactionsHistory(data) {
-		let tokens = $rootScope.wallet.tokens;
-
-		let getTokenById = id => {
-			let tokenKey = Object.keys(tokens).find(key => {
-				let token = tokens[key];
-				if (token.id == id) {
-					return true;
-				}
-			});
-			return tokens[tokenKey];
-		};
-
-		return data
-			.map(transaction => {
-				transaction.symbol = transaction.tokenId
-					? getTokenById(transaction.tokenId).symbol.toUpperCase()
-					: 'ETH';
-
-				//is sent
-				if (transaction.sentTo) {
-					transaction.sentToName = null; //WalletService.getWalletName(transaction.symbol.toLowerCase(), transaction.sentTo);
-				}
-
-				if (transaction.tokenId) {
-					let token = getTokenById(transaction.tokenId);
-				}
-				let sendText = transaction.sentToName ? 'Sent to' : 'Sent';
-				transaction.sentOrReceiveText = transaction.sentTo ? sendText : 'Received';
-				transaction.value = new BigNumber(transaction.value).toString(10);
-				return transaction;
-			})
-			.sort((a, b) => {
-				return Number(b.timestamp) - Number(a.timestamp);
-			});
-	}
-
-	syncEthTransactionsHistory() {
-		let wallet = this;
-		let walletAddress = '0x' + this.getPublicKeyHex();
-		let ethKey = 'eth';
-		let valueDivider = new BigNumber(10 ** 18);
-
-		$rootScope.transactionHistorySyncStatuses = $rootScope.transactionHistorySyncStatuses || {};
-		$rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = false;
-
-		let finishFn = blockNumber => {
-			$rootScope.transactionHistorySyncStatuses[ethKey.toUpperCase()] = true;
-
-			SqlLiteService.getWalletSettingsByWalletId(wallet.id)
-				.then(settings => {
-					let setting = settings[0];
-					setting.EthTxHistoryLastBlock = blockNumber;
-					SqlLiteService.saveWalletSettings(setting).catch(err => {
-						console.log(err); //TODO
-					});
-				})
-				.catch(err => {
-					//TODO
-				});
-		};
-
-		Web3Service.getMostRecentBlockNumber().then(blockNumber => {
-			SqlLiteService.getWalletSettingsByWalletId(wallet.id).then(settings => {
-				let setting = settings[0];
-				let previousLastBlockNumber = setting.EthTxHistoryLastBlock || blockNumber;
-				let startBlock = previousLastBlockNumber;
-				let endBlock = blockNumber;
-				let ethTransactions = [];
-
-				EtherScanService.getTransactionsHistory(walletAddress, startBlock, endBlock).then(
-					result => {
-						result = result || [];
-						result.forEach(transaction => {
-							let value = transaction.value;
-							//means that it is eth transaction
-							if (value && Number(value) > 0) {
-								ethTransactions.push(transaction);
-							}
-						});
-
-						if (!ethTransactions.length) {
-							return finishFn(endBlock);
-						}
-						ethTransactions.forEach((transaction, index) => {
-							let currentIdex = index;
-							let value = new BigNumber(transaction.value)
-								.div(valueDivider)
-								.toString();
-							let sentTo =
-								(transaction.from || '').toLowerCase() ==
-								walletAddress.toLowerCase()
-									? transaction.to
-									: null;
-
-							let newTransaction = {
-								walletId: wallet.id,
-								timestamp: Number(transaction.timeStamp + '000'),
-								blockNumber: transaction.blockNumber,
-								value: Number(value),
-								txId: transaction.hash,
-								sentTo: sentTo,
-								gas: Number(transaction.gas),
-								gasPrice: transaction.gasPrice
-							};
-
-							SqlLiteService.insertTransactionHistory(newTransaction)
-								.then(insertedTransaction => {
-									if (currentIdex == ethTransactions.length - 1) {
-										finishFn(endBlock);
-									}
-								})
-								.catch(err => {
-									if (currentIdex == ethTransactions.length - 1) {
-										finishFn(endBlock);
-									}
-								});
-						});
-					}
-				);
-			});
-		});
 	}
 }
 

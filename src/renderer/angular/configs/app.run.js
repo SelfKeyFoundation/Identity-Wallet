@@ -19,7 +19,6 @@ function AppRun(
 	SqlLiteService,
 	Web3Service,
 	CommonService,
-	EtherScanService,
 	LedgerService,
 	SignService
 ) {
@@ -54,7 +53,6 @@ function AppRun(
 	Wallet.Web3Service = Web3Service;
 	Wallet.SqlLiteService = SqlLiteService;
 	Wallet.CommonService = CommonService;
-	Wallet.EtherScanService = EtherScanService;
 	Wallet.$log = $log;
 
 	Token.$rootScope = $rootScope;
@@ -385,6 +383,14 @@ function AppRun(
 	$rootScope.broadcastKeyPress = event => {
 		$rootScope.$broadcast('selfkey:on-keypress', event.key);
 	};
+
+	$rootScope.broadcastTxHistoryChange = (event) => {
+        $rootScope.$broadcast('tx-history:change', event);
+    };
+
+    $rootScope.broadcastTxHistorySync = (event) => {
+        $rootScope.$broadcast('tx-history:sync', event);
+    };
 }
 
 AppRun.$inject = [
@@ -403,7 +409,6 @@ AppRun.$inject = [
 	'SqlLiteService',
 	'Web3Service',
 	'CommonService',
-	'EtherScanService',
 	'LedgerService',
 	'SignService'
 ];

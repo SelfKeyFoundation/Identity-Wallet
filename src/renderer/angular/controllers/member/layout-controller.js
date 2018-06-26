@@ -11,8 +11,7 @@ function MemberLayoutController(
 	$interval,
 	$timeout,
 	$state,
-	Web3Service,
-	EtherScanService
+	Web3Service
 ) {
 	'ngInject';
 
@@ -39,19 +38,6 @@ function MemberLayoutController(
 				$log.debug('toggle ' + 'right' + ' is done');
 			});
 	};
-
-	$rootScope.wallet.syncEthTransactionsHistory();
-	Web3Service.syncTokensTransactionHistory();
-
-	let addBalaceChageListener = () => {
-		$rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
-			$timeout(() => {
-				$rootScope.refreshTxHistory(symbol);
-			}, 4000);
-		});
-	};
-
-	addBalaceChageListener();
 
 	/*
     $rootScope.goToSelfkeyIco = (event) => {
@@ -80,7 +66,6 @@ MemberLayoutController.$inject = [
 	'$interval',
 	'$timeout',
 	'$state',
-	'Web3Service',
-	'EtherScanService'
+	'Web3Service'
 ];
 module.exports = MemberLayoutController;

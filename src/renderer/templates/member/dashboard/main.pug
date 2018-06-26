@@ -35,21 +35,6 @@
                 span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
                 span(flex)
                 span
-                    button.sk-icon-button(ng-click="$root.refreshTxHistory()")
+                    button.sk-icon-button(ng-click="$root.broadcastTxHistorySync()")
                         sk-icon(icon="refresh", size-class="icon-size-26x26")
-            sk-linear-progress(ng-if="!transactionsHistoryIsSynced()", style="margin-top:10px;")
-            div(ng-if="transactionsHistoryIsSynced()", ng-init="setTransactionsHistory()")
-            .sk-horizontal-devider(style="margin-top: 20px;")
-            span.no-transaction-title(ng-if="transactionsHistoryIsSynced() && !transactionsHistoryList.length") No transactions yet.
-            .transactions-box-body
-                .list(ng-repeat="activity in transactionsHistoryList track by $index")
-                    .list-item
-                        .item-container(layout="row")
-                            .date {{ activity.timestamp | date:'MMM'}}
-                                span {{activity.timestamp | date:'dd'}}
-                            sk-icon(icon="{{ activity.sentTo ? 'paper-plane' : 'coins'}}", size-class="icon-size-34x34", style="margin-left:20px")
-                            .sent-receive {{ activity.sentOrReceiveText }}
-                            span.sent-receive.symbol.no-margins(ng-class="activity.symbol") &nbsp; {{activity.symbol}}
-                            span.sent-receive-text.grey  {{activity.sentToName}}
-                            .coin-change.symbol(ng-class="activity.symbol") {{activity.sentTo ? '- ' : '+ '}} {{activity.value}}
-                        .sk-horizontal-devider(ng-if="transactionsHistoryList.length-1 != $index" style="margin-top: 20px;")
+            sk-tx-history
