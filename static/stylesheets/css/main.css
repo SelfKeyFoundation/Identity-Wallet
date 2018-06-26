@@ -3933,6 +3933,8 @@ md-dialog.reject-ledger-tx-warning-container {
       cursor: pointer;
       z-index: 1000; }
     md-dialog.reject-ledger-tx-warning-container .main-container .body-container {
+      width: 380px;
+      text-align: center;
       padding-top: 21px;
       padding-bottom: 10px;
       padding-left: 21px;
@@ -3946,9 +3948,17 @@ md-dialog.reject-ledger-tx-warning-container {
       line-height: 1.59;
       color: #ffffff; }
       md-dialog.reject-ledger-tx-warning-container .main-container .body-container .header-title {
-        font-size: 17px;
-        margin-bottom: 16px;
-        font-weight: 500; }
+        font-weight: 600;
+        opacity: 0.8;
+        font-size: 18px;
+        margin-bottom: 16px; }
+      md-dialog.reject-ledger-tx-warning-container .main-container .body-container .items {
+        padding-bottom: 20px; }
+        md-dialog.reject-ledger-tx-warning-container .main-container .body-container .items .item {
+          opacity: 0.8;
+          font-size: 18px;
+          line-height: 1.4;
+          color: #ffffff; }
       md-dialog.reject-ledger-tx-warning-container .main-container .body-container .action-btn {
         border-radius: 4px;
         background-color: #435160;
