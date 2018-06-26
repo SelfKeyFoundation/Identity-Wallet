@@ -9,12 +9,20 @@ module.exports = {
 	startCrashReport: async () => {
 		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
 			const result = await guideSettings.findAll();
-			if (result.crashReportAgreement !== 0 && !hasStarted) {
-				log.info('RESULT', result);
+			if (result[0].crashReportAgreement && !hasStarted) {
 				hasStarted = true;
 				init({
 					dsn: sentry.dsn
 				});
+				log.info('CRASH REPORT STARTED');
+			} else {
+				log.info(
+					'CRASH REPORT NOT STARTED ',
+					'crashReportAgreement: ',
+					result[0].crashReportAgreement,
+					'hasStarted: ',
+					hasStarted
+				);
 			}
 		}
 		return;
