@@ -16,7 +16,7 @@ before_script:
 script:
   - yarn test
 after_script:
-  - bash deploy.sh $TRAVIS_COMMIT
+  - bash deploy.sh $TRAVIS_COMMIT $TRAVIS_COMMIT_MESSAGE
 deploy:
   provider: script
   skip_cleanup: true
