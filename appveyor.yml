@@ -37,7 +37,7 @@ install:
   - npm i -g yarn
   - yarn
 build_script:
-  - echo '{"dsn":"%SENTRY_DSN%"}' > src\main\assets\data\sentry.json
+  - echo {"dsn":"%SENTRY_DSN%"} > src\main\assets\data\sentry.json
   - set DEBUG=electron-builder
   - yarn dist --publish=never
 #test_script:

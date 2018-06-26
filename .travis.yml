@@ -12,7 +12,7 @@ before_install:
   - npm i -g gulp-cli electron-packager
   - npm install --global yarn
 before_script:
-  - echo '{"dsn":"${SENTRY_DSN}"}' > src/main/assets/data/sentry.json
+  - echo {"dsn":"${SENTRY_DSN}"} > src/main/assets/data/sentry.json
   - yarn dist --publish=never
 script:
   - yarn test
