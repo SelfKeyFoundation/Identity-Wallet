@@ -19,6 +19,7 @@ function GuestKeystoreCreateStep6Controller(
 	$log.info('GuestKeystoreCreateStep6Controller');
 
 	$scope.isLoading = false;
+	$scope.isLoadingKYCImport = false;
 	$scope.countryList = SqlLiteService.getCountries();
 
 	$scope.input = {
@@ -35,25 +36,14 @@ function GuestKeystoreCreateStep6Controller(
 	$scope.nextStep = (event, form) => {
 		if (!form.$valid) return;
 		$scope.isLoading = true;
-		if ($stateParams.type === 'kyc_import') {
-			let promise = editImportedIdAttributes();
-			promise
-				.then(() => {
-					$state.go('member.setup.checklist');
-				})
-				.catch(() => {
-					$scope.isLoading = false;
-				});
-		} else {
-			let promise = createInitialIdAttributesAndActivateWallet();
-			promise
-				.then(data => {
-					$state.go('member.setup.checklist');
-				})
-				.catch(error => {
-					$scope.isLoading = false;
-				});
-		}
+		let promise = createInitialIdAttributesAndActivateWallet();
+		promise
+			.then(data => {
+				$state.go('member.setup.checklist');
+			})
+			.catch(error => {
+				$scope.isLoading = false;
+			});
 	};
 
 	function createInitialIdAttributesAndActivateWallet() {
@@ -190,6 +180,19 @@ function GuestKeystoreCreateStep6Controller(
 	}
 
 	loadIdAttributes();
+
+	if ($stateParams.type === 'kyc_import') {
+		$scope.isLoadingKYCImport = true;
+		let promise = editImportedIdAttributes();
+		promise
+			.then(() => {
+				$rootScope.wallet.hasJustActivated = true;
+				$state.go('member.setup.checklist');
+			})
+			.catch(() => {
+				$scope.isLoading = false;
+			});
+	}
 }
 GuestKeystoreCreateStep6Controller.$inject = [
 	'$rootScope',
