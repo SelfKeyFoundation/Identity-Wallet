@@ -9,12 +9,13 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 			tokenSymbol: '@'
 		},
 		link: (scope, element) => {
-			let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+            let publicKeyLowerCase = publicKey.toLowerCase(); 
 
 			let syncByWallet = showProgress => {
 				RPCService.makeCall('syncTxHistoryByWallet', {
 					walletId: $rootScope.wallet.id,
-					publicKey,
+					publicKey: publicKeyLowerCase,
 					showProgress
 				});
 			};
@@ -28,7 +29,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let getTxStatusText = tx => {
 				let status = tx.txReceiptStatus;
-				let isSend = tx.from == publicKey;
+				let isSend = tx.from == publicKeyLowerCase;
 
 				if (status == 0) {
 					return isSend ? 'Faild To Send' : 'Faild To Receive';
@@ -41,7 +42,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let getTxStatusIcon = tx => {
 				let status = tx.txReceiptStatus;
-				let isSend = tx.from == publicKey;
+				let isSend = tx.from == publicKeyLowerCase;
 
 				if (status == 1) {
 					return isSend ? 'sent' : 'receive';
@@ -58,7 +59,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				return list.map(tx => {
 					let symbol = tx.tokenSymbol;
 					tx.symbol = symbol ? symbol.toUpperCase() : 'ETH';
-					tx.directionSign = publicKey == tx.from ? '- ' : '+ ';
+					tx.directionSign = publicKeyLowerCase == tx.from ? '- ' : '+ ';
 
 					tx.externalLink = `https://etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
@@ -70,7 +71,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let loadData = () => {
 				let fn,
-					fnArgs = { publicKey };
+					fnArgs = { publicKey: publicKeyLowerCase };
 				if (scope.tokenSymbol) {
 					if (scope.tokenSymbol == 'ETH') {
 						fn = 'getByPublicKeyAndContractAddress';

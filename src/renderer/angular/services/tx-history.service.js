@@ -17,16 +17,16 @@ function TxHistoryService($rootScope, $log, CONFIG, RPCService) {
       p.then((hash) => {
         if (hash) {
           args.hash = hash;
-          args.networkId = CONFIG.chainId,
-            args.from = '0x' + $rootScope.wallet.getPublicKeyHex();
+          args.networkId = CONFIG.chainId;
+          args.from = ('0x' + $rootScope.wallet.getPublicKeyHex()).toLowerCase();
 
           if (args.tokenSymbol) {
             args.tokenSymbol = args.tokenSymbol.toUpperCase();
             let token = $rootScope.wallet.tokens[args.tokenSymbol];
             args.contractAddress = token.contractAddress;
             args.tokenDecimal = token.decimal;
-
           }
+          
           let now = new Date().getTime();
           args.timeStamp = now;
           args.createdAt = now;
