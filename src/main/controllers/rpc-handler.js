@@ -677,8 +677,6 @@ module.exports = function(app) {
 		}
 
 		function getDocumentRequirements(kycprocess) {
-			process.crash();
-
 			let result = {};
 			kycprocess.requirements.uploads.forEach(item => {
 				if (item.attributeType) {
@@ -936,10 +934,6 @@ module.exports = function(app) {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
 	};
-
-
-
-
 
 	controller.prototype.getWalletSettingsByWalletId = function(event, actionId, actionName, args) {
 		electron.app.sqlLiteService.WalletSetting.findByWalletId(args)
@@ -1267,47 +1261,74 @@ module.exports = function(app) {
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
 			});
-    };
-    
-    controller.prototype.getTxHistoryByPublicKeyAndTokenSymbol = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TxHistory.findByPublicKeyAndTokenSymbol(args.publicKey, args.tokenSymbol).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+	};
 
-    controller.prototype.getByPublicKeyAndContractAddress = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TxHistory.findByPublicKeyAndContractAddress(args.publicKey, args.contractAddress).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+	controller.prototype.getTxHistoryByPublicKeyAndTokenSymbol = function(
+		event,
+		actionId,
+		actionName,
+		args
+	) {
+		electron.app.sqlLiteService.TxHistory.findByPublicKeyAndTokenSymbol(
+			args.publicKey,
+			args.tokenSymbol
+		)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
 
-    controller.prototype.syncTxHistoryByWallet = function (event, actionId, actionName, args) {
-        electron.app.txHistory.syncByWallet(args.publicKey, args.walletId, args.showProgress).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+	controller.prototype.getByPublicKeyAndContractAddress = function(
+		event,
+		actionId,
+		actionName,
+		args
+	) {
+		electron.app.sqlLiteService.TxHistory.findByPublicKeyAndContractAddress(
+			args.publicKey,
+			args.contractAddress
+		)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
 
-    controller.prototype.txHistoryAddOrUpdate = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TxHistory.addOrUpdate(args).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+	controller.prototype.syncTxHistoryByWallet = function(event, actionId, actionName, args) {
+		electron.app.txHistory
+			.syncByWallet(args.publicKey, args.walletId, args.showProgress)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
 
-    controller.prototype.getTxHistoryByPublicKey = function (event, actionId, actionName, args) {
-        electron.app.sqlLiteService.TxHistory.findByPublicKey(args.publicKey).then((data) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-        }).catch((error) => {
-            app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-        });
-    }
+	controller.prototype.txHistoryAddOrUpdate = function(event, actionId, actionName, args) {
+		electron.app.sqlLiteService.TxHistory.addOrUpdate(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
+
+	controller.prototype.getTxHistoryByPublicKey = function(event, actionId, actionName, args) {
+		electron.app.sqlLiteService.TxHistory.findByPublicKey(args.publicKey)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
 
 	return controller;
 };
