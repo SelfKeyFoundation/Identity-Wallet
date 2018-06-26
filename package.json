@@ -48,6 +48,7 @@
     ]
   },
   "dependencies": {
+    "@sentry/electron": "^0.5.5",
     "@uirouter/angularjs": "1.0.18",
     "angular": "1.7.0",
     "angular-animate": "1.7.0",
