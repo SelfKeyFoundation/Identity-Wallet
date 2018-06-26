@@ -1,36 +1,37 @@
-.wallet-create-step-6(layout-fill, layout="column", layout-align="center center")
+div(ng-if="!isLoadingKYCImport")
+    .wallet-create-step-6(layout-fill, layout="column", layout-align="center center")
 
-    sk-icon(icon="selfkey", size-class="icon-size-57x65")
-    .title SELFKEY ID
-    .description Fill in the basic details of your identity wallet.
+        sk-icon(icon="selfkey", size-class="icon-size-57x65")
+        .title SELFKEY ID
+        .description Fill in the basic details of your identity wallet.
 
-    .content-wrapper.sk-box.shadowed
-        .header
-            span.none-select-text Identity Wallet Details
-            sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)", style="cursor: pointer; position: absolute; right: -18px; top: -18px;")
-        form.content(name="basicInfoForm", layout="column")
-            md-input-container.sk-input-box.sk-input-non-floating
-                label {{ $root.DICTIONARY['first_name'] }}
-                input#firstName(name="firstName", type="text", ng-model="input.first_name", ng-maxlength="500", ng-required="true")
-                .sk-field-error-tooltip(ng-messages="basicInfoForm.firstName.$error")
-                    span(ng-message="maxlength") The {{ $root.DICTIONARY['first_name'] }} has to be less than 500 characters long.
-                    span(ng-message="required") Field is Required
-            md-input-container.sk-input-box.sk-input-non-floating
-                label {{ $root.DICTIONARY['middle_name'] }}
-                input#middleName(type="text", name="middleName", ng-model="input.middle_name", ng-maxlength="500")
-                .sk-field-error-tooltip(ng-messages="basicInfoForm.middleName.$error")
-                    span(ng-message="maxlength") The {{ $root.DICTIONARY['middle_name'] }} has to be less than 500 characters long.
-            md-input-container.sk-input-box.sk-input-non-floating
-                label {{ $root.DICTIONARY['last_name'] }}
-                input#lastName(type="text", name="lastName", ng-model="input.last_name", ng-required="true", ng-maxlength="500")
-                .sk-field-error-tooltip(ng-messages="basicInfoForm.lastName.$error")
-                    span(ng-message="maxlength") The {{ $root.DICTIONARY['last_name'] }} has to be less than 500 characters long.
-                    span(ng-message="required") Field is Required
-            md-input-container.sk-input-box.sk-input-non-floating.hide-input-invalid-mark
-                label {{ $root.DICTIONARY['country_of_residency'] }}
-                md-select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
-                    md-option(id="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
-                .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
-                    span(ng-message="required") Field is Required
-            md-button#submitBasic.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
-                span.small Create SelfKey ID
+        .content-wrapper.sk-box.shadowed
+            .header
+                span.none-select-text Identity Wallet Details
+                sk-icon(icon="close-dialog", size-class="icon-size-36x36",ng-click="cancel($event)", style="cursor: pointer; position: absolute; right: -18px; top: -18px;")
+            form.content(name="basicInfoForm", layout="column")
+                md-input-container.sk-input-box.sk-input-non-floating
+                    label {{ $root.DICTIONARY['first_name'] }}
+                    input#firstName(name="firstName", type="text", ng-model="input.first_name", ng-maxlength="500", ng-required="true")
+                    .sk-field-error-tooltip(ng-messages="basicInfoForm.firstName.$error")
+                        span(ng-message="maxlength") The {{ $root.DICTIONARY['first_name'] }} has to be less than 500 characters long.
+                        span(ng-message="required") Field is Required
+                md-input-container.sk-input-box.sk-input-non-floating
+                    label {{ $root.DICTIONARY['middle_name'] }}
+                    input#middleName(type="text", name="middleName", ng-model="input.middle_name", ng-maxlength="500")
+                    .sk-field-error-tooltip(ng-messages="basicInfoForm.middleName.$error")
+                        span(ng-message="maxlength") The {{ $root.DICTIONARY['middle_name'] }} has to be less than 500 characters long.
+                md-input-container.sk-input-box.sk-input-non-floating
+                    label {{ $root.DICTIONARY['last_name'] }}
+                    input#lastName(type="text", name="lastName", ng-model="input.last_name", ng-required="true", ng-maxlength="500")
+                    .sk-field-error-tooltip(ng-messages="basicInfoForm.lastName.$error")
+                        span(ng-message="maxlength") The {{ $root.DICTIONARY['last_name'] }} has to be less than 500 characters long.
+                        span(ng-message="required") Field is Required
+                md-input-container.sk-input-box.sk-input-non-floating.hide-input-invalid-mark
+                    label {{ $root.DICTIONARY['country_of_residency'] }}
+                    md-select#country.sk-select(name="countryOfResidency", ng-model="input.country_of_residency", ng-required="true")
+                        md-option(id="{{item.name}}", ng-value="item.name", ng-repeat="(key, item) in countryList") {{item.name}}
+                    .sk-field-error-tooltip(ng-messages="basicInfoForm.countryOfResidency.$error")
+                        span(ng-message="required") Field is Required
+                md-button#submitBasic.default.gray(style="margin: 12px 0 12px 0;", ng-click="nextStep($event, basicInfoForm)", ng-disabled="!basicInfoForm.$valid", sk-button-loading="isLoading")
+                    span.small Create SelfKey ID
