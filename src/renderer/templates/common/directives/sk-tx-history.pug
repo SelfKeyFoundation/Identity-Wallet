@@ -13,7 +13,7 @@
                 .view-transaction
                     span (
                     span.text View Transaction
-                    md-icon.external-link(md-svg-src="assets/images/icons/external-link.svg", ng-click="$root.openInBrowser(tx.externalLink)")
+                    md-icon.external-link(md-svg-src="{{$root.appendStaticPath('assets/images/icons/external-link.svg')}}", ng-click="$root.openInBrowser(tx.externalLink)")
                     span )
               .tx-value.symbol(ng-class="tx.symbol") {{ tx.directionSign }} {{tx.value}}
           .sk-horizontal-devider.mt-20(ng-if="txList.length - 1 != $index")
