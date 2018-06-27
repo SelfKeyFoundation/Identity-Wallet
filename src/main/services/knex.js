@@ -47,61 +47,43 @@ const sqlUtil = {
 			query = query.transacting(tx);
 		}
 
+		const ts = Date.now();
+		args = { ...args, createdAt: ts, updatedAt: ts };
+
 		return query.insert(args);
 	},
 
-	insertAndSelect: (table, data, trx) => {
-		return new Promise((resolve, reject) => {
-			let promise = null;
+	insertAndSelect: async (table, data, trx) => {
+		let insertResp, selectResp;
+		try {
+			insertResp = await sqlUtil.insert(table, data, trx);
+		} catch (error) {
+			throw { message: 'error_while_creating', error: error };
+		}
 
-			if (!trx) {
-				promise = knex(table).insert(data);
-			} else {
-				promise = knex(table)
-					.transacting(trx)
-					.insert(data);
-			}
+		if (!insertResp || insertResp.length !== 1) {
+			throw { message: 'error_while_creating' };
+		}
 
-			return promise
-				.then(resp => {
-					if (!resp || resp.length !== 1) {
-						return reject({ message: 'error_while_creating' });
-					}
+		try {
+			selectResp = await sqlUtil.select(table, '*', { id: insertResp[0] }, trx);
+		} catch (error) {
+			throw { message: 'error_while_creating', error: error };
+		}
 
-					let selectPromise = null;
+		if (!selectResp && selectResp.length !== 1) {
+			throw { message: 'error_while_creating' };
+		}
 
-					if (trx) {
-						selectPromise = knex(table)
-							.transacting(trx)
-							.select()
-							.where('id', resp[0]);
-					} else {
-						selectPromise = knex(table)
-							.select()
-							.where('id', resp[0]);
-					}
-
-					return selectPromise
-						.then(rows => {
-							if (rows && rows.length === 1) {
-								return resolve(rows[0]);
-							} else {
-								return reject({ message: 'error_while_creating' });
-							}
-						})
-						.catch(error => {
-							return reject({ message: 'error_while_creating', error: error });
-						});
-				})
-				.catch(error => {
-					return reject({ message: 'error_while_creating', error: error });
-				});
-		});
+		return selectResp[0];
 	},
+
+	// TODO: remove in favor of insertAndSelect
+	insertIntoTable: (table, data, trx) => sqlUtil.insertAndSelect(table, data, trx),
 
 	update: (table, item, where, tx) => {
 		let query = knex(table);
-
+		item = { ...item, updatedAt: Date.now() };
 		if (tx) {
 			query = query.transacting(tx);
 		}
@@ -113,88 +95,20 @@ const sqlUtil = {
 		return query.update(item);
 	},
 
-	insertIntoTable: (table, data, trx) => {
-		return new Promise((resolve, reject) => {
-			let promise = null;
-			if (!trx) {
-				promise = knex(table).insert(data);
-			} else {
-				promise = knex(table)
-					.transacting(trx)
-					.insert(data);
-			}
-
-			return promise
-				.then(resp => {
-					if (!resp || resp.length !== 1) {
-						return reject({ message: 'error_while_creating' });
-					}
-
-					let selectPromise = null;
-
-					if (trx) {
-						selectPromise = knex(table)
-							.transacting(trx)
-							.select()
-							.where('id', resp[0]);
-					} else {
-						selectPromise = knex(table)
-							.select()
-							.where('id', resp[0]);
-					}
-
-					return selectPromise
-						.then(rows => {
-							if (rows && rows.length === 1) {
-								return resolve(rows[0]);
-							} else {
-								return reject({ message: 'error_while_creating' });
-							}
-						})
-						.catch(error => {
-							return reject({ message: 'error_while_creating', error: error });
-						});
-				})
-				.catch(error => {
-					return reject({ message: 'error_while_creating', error: error });
-				});
-		});
-	},
-
-	updateById: async (table, data) => {
-		data.updatedAt = new Date().getTime();
-
-		const updatedIds = await knex(table)
-			.update(data)
-			.where({ id: data.id });
+	updateById: async (table, data, tx) => {
+		const updatedIds = await sqlUtil.update(table, data, { id: data.id }, tx);
 
 		if (!updatedIds || updatedIds != 1) {
 			throw new Error('error_while_updating');
 		}
 
-		const rows = await knex(table)
-			.select()
-			.where({ id: data.id });
+		const rows = sqlUtil.select(table, '*', { id: data.id }, tx);
 
-		if (rows && rows.length == 1) {
-			return rows[0];
-		} else {
+		if (!rows || rows.length !== 1) {
 			throw new Error('error_while_updating');
 		}
-	},
 
-	selectById: (table, id) => {
-		return new Promise((resolve, reject) => {
-			return knex(table)
-				.select()
-				.where('id', id)
-				.then(rows => {
-					rows && rows.length ? resolve(rows[0]) : resolve(null);
-				})
-				.catch(error => {
-					return reject({ message: 'error_while_selecting', error: error });
-				});
-		});
+		return rows[0];
 	},
 
 	select: (table, select, where, tx) => {
@@ -209,48 +123,38 @@ const sqlUtil = {
 		if (where) {
 			query = query.where(where);
 		}
-		console.log(query);
 		return query;
 	},
 
-	bulkUpdateById: (table, records) => {
-		return sqlUtil.getBulk(table, records, sqlUtil.getUpdateQuery);
+	selectById: async (table, id, tx) => {
+		try {
+			let rows = await sqlUtil.select(table, '*', { id }, tx);
+			if (!rows || !rows.length) {
+				return null;
+			}
+			return rows[0];
+		} catch (error) {
+			throw { message: 'error_while_selecting', error: error };
+		}
 	},
 
-	bulkAdd: (table, records) => {
-		return sqlUtil.getBulk(table, records, sqlUtil.getInsertQuery);
-	},
+	bulkUpdateById: (table, records) =>
+		sqlUtil.bulkQuery(table, records, (table, record, trx) =>
+			sqlUtil.update(table, record, { id: record.id }, trx)
+		),
 
-	getBulk: (table, records, queryFunction) => {
-		return knex.transaction(trx => {
-			const queries = [];
-			records.forEach(record => {
-				const query = queryFunction(table, record, trx);
-				queries.push(query);
-			});
+	bulkAdd: (table, records) => sqlUtil.bulkQuery(table, records, sqlUtil.insert),
 
-			Promise.all(queries)
-				.then(trx.commit)
-				.catch(trx.rollback);
-		});
-	},
-
-	getInsertQuery: (table, record, trx) => {
-		const now = new Date().getTime();
-		record.createdAt = now;
-		record.updatedAt = now;
-		return knex(table)
-			.insert(record)
-			.transacting(trx);
-	},
-
-	getUpdateQuery: (table, record, trx) => {
-		record.updatedAt = new Date().getTime();
-		return knex(table)
-			.where({ id: record.id })
-			.update(record)
-			.transacting(trx);
-	}
+	bulkQuery: (table, records, queryFunction) =>
+		knex.transaction(async trx => {
+			const queries = records.map(record => queryFunction(table, record, trx));
+			try {
+				let res = await Promise.all(queries);
+				return trx.commit(res);
+			} catch (error) {
+				return trx.rollback(error);
+			}
+		})
 };
 
 module.exports = {
