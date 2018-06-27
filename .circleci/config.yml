@@ -79,9 +79,10 @@ jobs:
             sudo apt-get update && sudo apt-get install google-cloud-sdk
       - run:
           name: Deploy to staging
-          command: OSENV=circle bash deploy.sh $CIRCLE_SHA1
+          command: OSENV=circle bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC 
           environment:
-            OSENV: circle  
+            OSENV: circle
+            GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1  
 
 workflows:
   version: 2

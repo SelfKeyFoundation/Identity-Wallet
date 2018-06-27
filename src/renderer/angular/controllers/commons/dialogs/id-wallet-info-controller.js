@@ -13,7 +13,7 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
 			textPart1:
 				'The SelfKey ID allows you to manage, own, and control various parts of your identity. Your SelfKey ID is broken down into two parts: attributes and documents. Filling out this information is not required to use the wallet for managing your crypto assets.',
 			textPart2:
-				'However, if you wish to access products and serices in the SelfKey Marketplace, your SelKey ID is required will help make the KYC process easier. All information is stored locally on your device, and not on the server or blockchain. SelfKey does not have access to this information, as it is under your full control.',
+				'However, if you wish to access products and services in the SelfKey Marketplace, your SelKey ID is required will help make the KYC process easier. All information is stored locally on your device, and not on the server or blockchain. SelfKey does not have access to this information, as it is under your full control.',
 			header: 'About Your SelfKey ID',
 			button2: 'continue',
 			step: 1
