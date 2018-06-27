@@ -80,8 +80,6 @@ class Wallet {
 		this.initialBalancePromise = this.loadBalance();
 
 		this.loadTokens();
-
-		this.previousTransactionCount = -1;
 	}
 
 	getPrivateKey() {
@@ -318,52 +316,70 @@ class Wallet {
 		promise
 			.then(nonce => {
 				//wallet.nonceHex
+				this.getPreviousTransactionCount().then(previousTransactionCount => {
+					if (
+						typeof previousTransactionCount == 'number' &&
+						nonce <= previousTransactionCount
+					) {
+						return defer.reject('SAME_TRANSACTION_COUNT_CUSTOM_MSG');
+					}
 
-				if (nonce <= this.previousTransactionCount) {
-					return this.generateRawTransaction(
-						toAddressHex,
-						valueWei,
-						gasPriceWei,
-						gasLimitWei,
-						contractDataHex,
-						chainID,
-						defer
-					);
-				}
+					$rootScope.previousTransactionCount = +nonce;
 
-				this.previousTransactionCount = nonce;
+					let rawTx = {
+						nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
+						gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
+						gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
+						to: EthUtils.sanitizeHex(toAddressHex),
+						value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
+						chainId: chainID || 3 // if missing - use ropsten testnet
+					};
 
-				let rawTx = {
-					nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
-					gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
-					gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
-					to: EthUtils.sanitizeHex(toAddressHex),
-					value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
-					chainId: chainID || 3 // if missing - use ropsten testnet
-				};
+					if (contractDataHex) {
+						rawTx.data = EthUtils.sanitizeHex(contractDataHex);
+					}
 
-				if (contractDataHex) {
-					rawTx.data = EthUtils.sanitizeHex(contractDataHex);
-				}
+					let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+					if (isLedgerWallet) {
+						$rootScope.openConfirmLedgerTxInfoWindow();
+					}
 
-				SignService.signTransaction({
-					profile: this.profile,
-					rawTx: rawTx,
-					privateKey: this.privateKey,
-					walletAddress: '0x' + this.getPublicKeyHex()
-				})
-					.then(res => {
-						defer.resolve(res);
+					SignService.signTransaction({
+						profile: this.profile,
+						rawTx: rawTx,
+						privateKey: this.privateKey,
+						walletAddress: '0x' + this.getPublicKeyHex()
 					})
-					.catch(err => {
-						defer.reject(err);
-					});
+						.then(res => {
+							defer.resolve(res);
+						})
+						.catch(err => {
+							defer.reject(err);
+						});
+				});
 			})
 			.catch(error => {
 				defer.reject(error);
 			});
 
 		return defer.promise;
+	}
+
+	async getPreviousTransactionCount() {
+		return SqlLiteService.getWalletSettingsByWalletId(this.id).then(settings => {
+			return settings[0].previousTransactionCount;
+		});
+	}
+
+	async updatePreviousTransactionCount() {
+		if (typeof $rootScope.previousTransactionCount != 'number') {
+			return;
+		}
+
+		let settings = await SqlLiteService.getWalletSettingsByWalletId(this.id);
+		let setting = settings[0];
+		setting.previousTransactionCount = $rootScope.previousTransactionCount;
+		await SqlLiteService.saveWalletSettings(setting);
 	}
 }
 
