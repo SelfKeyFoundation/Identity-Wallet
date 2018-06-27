@@ -2,6 +2,7 @@
 const { app, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+const striptags = require('striptags');
 
 function appUpdater() {
 	autoUpdater.logger = log;
@@ -16,9 +17,10 @@ function appUpdater() {
 			' ' +
 			info.releaseName +
 			' is now available. It will be installed the next time you restart the application.';
-		if (releaseNotes) {
-			const splitNotes = info.releaseNotes.split(/[^\r]\n/);
-			message += '\n\nRelease notes:\n';
+		if (info.releaseNotes) {
+			const notesInText = striptags(info.releaseNotes);
+			const splitNotes = notesInText.split(/[^\r]\n/);
+			message += '\n\nRelease Notes:\n';
 			splitNotes.forEach(notes => {
 				message += notes + '\n\n';
 			});
