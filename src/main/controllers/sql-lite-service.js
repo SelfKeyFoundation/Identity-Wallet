@@ -2,7 +2,7 @@
 
 const Promise = require('bluebird');
 
-const { knex } = require('../services/knex');
+const { knex, sqlUtil } = require('../services/knex');
 
 module.exports = function(app) {
 	const controller = function() {};
@@ -12,14 +12,14 @@ module.exports = function(app) {
 	 */
 	controller.knex = knex;
 
-	controller.insertIntoTable = insertIntoTable;
-	controller.select = _select;
-	controller.insert = _insert;
-	controller.insertAndSelect = _insertAndSelect;
-	controller.update = _update;
-	controller.updateById = updateById;
-	controller.bulkUpdateById = _bulkUpdateById;
-	controller.bulkAdd = _bulkAdd;
+	controller.insertIntoTable = sqlUtil.insertIntoTable;
+	controller.select = sqlUtil.select;
+	controller.insert = sqlUtil.insert;
+	controller.insertAndSelect = sqlUtil.insertAndSelect;
+	controller.update = sqlUtil.update;
+	controller.updateById = sqlUtil.selectById;
+	controller.bulkUpdateById = sqlUtil.bulkUpdateById;
+	controller.bulkAdd = sqlUtil.bulkAdd;
 
 	let Wallet = require('./models/wallet.js')(app, controller);
 	controller.prototype.Wallet = Wallet;
@@ -205,245 +205,6 @@ module.exports = function(app) {
 	controller.prototype.token_update = data => {
 		return updateById('tokens', data);
 	};
-
-	/**
-	 * commons
-	 */
-	function _select(table, select, where, tx) {
-		let query = knex(table);
-
-		if (tx) {
-			query = query.transacting(tx);
-		}
-
-		query = query.select(select);
-
-		if (where) {
-			query = query.where(where);
-		}
-
-		return query;
-	}
-
-	function _insert(table, args, tx) {
-		let query = knex(table);
-
-		if (tx) {
-			query = query.transacting(tx);
-		}
-
-		return query.insert(args);
-	}
-
-	function _insertAndSelect(table, data, trx) {
-		return new Promise((resolve, reject) => {
-			let promise = null;
-
-			if (!trx) {
-				promise = knex(table).insert(data);
-			} else {
-				promise = knex(table)
-					.transacting(trx)
-					.insert(data);
-			}
-
-			return promise
-				.then(resp => {
-					if (!resp || resp.length !== 1) {
-						// eslint-disable-next-line prefer-promise-reject-errors
-						return reject({ message: 'error_while_creating' });
-					}
-
-					let selectPromise = null;
-
-					if (trx) {
-						selectPromise = knex(table)
-							.transacting(trx)
-							.select()
-							.where('id', resp[0]);
-					} else {
-						selectPromise = knex(table)
-							.select()
-							.where('id', resp[0]);
-					}
-
-					return selectPromise
-						.then(rows => {
-							if (rows && rows.length === 1) {
-								return resolve(rows[0]);
-							} else {
-								// eslint-disable-next-line prefer-promise-reject-errors
-								return reject({ message: 'error_while_creating' });
-							}
-						})
-						.catch(error => {
-							// eslint-disable-next-line prefer-promise-reject-errors
-							return reject({ message: 'error_while_creating', error: error });
-						});
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					return reject({ message: 'error_while_creating', error: error });
-				});
-		});
-	}
-
-	function _update(table, item, where, tx) {
-		let query = knex(table);
-
-		if (tx) {
-			query = query.transacting(tx);
-		}
-
-		if (where) {
-			query = query.where(where);
-		}
-
-		return query.update(item);
-	}
-
-	function insertIntoTable(table, data, trx) {
-		return new Promise((resolve, reject) => {
-			let promise = null;
-			if (!trx) {
-				promise = knex(table).insert(data);
-			} else {
-				promise = knex(table)
-					.transacting(trx)
-					.insert(data);
-			}
-
-			return promise
-				.then(resp => {
-					if (!resp || resp.length !== 1) {
-						// eslint-disable-next-line prefer-promise-reject-errors
-						return reject({ message: 'error_while_creating' });
-					}
-
-					let selectPromise = null;
-
-					if (trx) {
-						selectPromise = knex(table)
-							.transacting(trx)
-							.select()
-							.where('id', resp[0]);
-					} else {
-						selectPromise = knex(table)
-							.select()
-							.where('id', resp[0]);
-					}
-
-					return selectPromise
-						.then(rows => {
-							if (rows && rows.length === 1) {
-								return resolve(rows[0]);
-							} else {
-								// eslint-disable-next-line prefer-promise-reject-errors
-								return reject({ message: 'error_while_creating' });
-							}
-						})
-						.catch(error => {
-							// eslint-disable-next-line prefer-promise-reject-errors
-							return reject({ message: 'error_while_creating', error: error });
-						});
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					return reject({ message: 'error_while_creating', error: error });
-				});
-		});
-	}
-
-	async function updateById(table, data) {
-		data.updatedAt = new Date().getTime();
-
-		const updatedIds = await knex(table)
-			.update(data)
-			.where({ id: data.id });
-
-		if (!updatedIds || updatedIds !== 1) {
-			throw new Error('error_while_updating');
-		}
-
-		const rows = await knex(table)
-			.select()
-			.where({ id: data.id });
-
-		if (rows && rows.length === 1) {
-			return rows[0];
-		} else {
-			throw new Error('error_while_updating');
-		}
-	}
-
-	// TODO rename to select
-	function selectTable(table, where, tx) {
-		return select(table, where, tx);
-	}
-
-	function select(table, where, tx) {
-		return new Promise((resolve, reject) => {
-			let promise = null;
-			if (tx) {
-				promise = knex(table)
-					.transacting(tx)
-					.select()
-					.where(where);
-			} else {
-				promise = knex(table)
-					.select()
-					.where(where);
-			}
-
-			return promise
-				.then(rows => {
-					return resolve(rows);
-				})
-				.catch(error => {
-					// eslint-disable-next-line prefer-promise-reject-errors
-					return reject({ message: 'error_while_selecting', error: error });
-				});
-		});
-	}
-
-	function _bulkUpdateById(table, records) {
-		return _getBulk(table, records, _getUpdateQuery);
-	}
-
-	function _bulkAdd(table, records) {
-		return _getBulk(table, records, _getInsertQuery);
-	}
-
-	function _getBulk(table, records, queryFunction) {
-		return knex.transaction(trx => {
-			const queries = [];
-			records.forEach(record => {
-				const query = queryFunction(table, record, trx);
-				queries.push(query);
-			});
-
-			Promise.all(queries)
-				.then(trx.commit)
-				.catch(trx.rollback);
-		});
-	}
-
-	function _getInsertQuery(table, record, trx) {
-		const now = new Date().getTime();
-		record.createdAt = now;
-		record.updatedAt = now;
-		return knex(table)
-			.insert(record)
-			.transacting(trx);
-	}
-
-	function _getUpdateQuery(table, record, trx) {
-		record.updatedAt = new Date().getTime();
-		return knex(table)
-			.where({ id: record.id })
-			.update(record)
-			.transacting(trx);
-	}
 
 	return controller;
 };

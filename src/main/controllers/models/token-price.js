@@ -1,5 +1,5 @@
-const { knex } = require('../../services/knex');
-
+const { knex, sqlUtil } = require('../../services/knex');
+const electron = require('electron');
 const TABLE_NAME = 'token_prices';
 
 const controller = {
@@ -20,7 +20,7 @@ const controller = {
 
 	bulkEdit: tokenPrices => Promise.all(tokenPrices.map(controller.edit)),
 
-	bulkAdd: tokenPrices => knex.batchInsert(TABLE_NAME, tokenPrices)
+	bulkAdd: tokenPrices => sqlUtil.bulkAdd(TABLE_NAME, tokenPrices)
 };
 
 module.exports = controller;
