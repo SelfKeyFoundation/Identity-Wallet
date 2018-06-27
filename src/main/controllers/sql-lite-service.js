@@ -17,7 +17,7 @@ module.exports = function(app) {
 	controller.insert = sqlUtil.insert;
 	controller.insertAndSelect = sqlUtil.insertAndSelect;
 	controller.update = sqlUtil.update;
-	controller.updateById = sqlUtil.selectById;
+	controller.updateById = sqlUtil.updateById;
 	controller.bulkUpdateById = sqlUtil.bulkUpdateById;
 	controller.bulkAdd = sqlUtil.bulkAdd;
 
@@ -72,7 +72,7 @@ module.exports = function(app) {
 						.then(resp => {
 							let id = resp[0];
 							// add wallet tokens
-							return insertIntoTable(
+							return sqlUtil.insertIntoTable(
 								'wallet_tokens',
 								{
 									walletId: walletId,
@@ -170,7 +170,8 @@ module.exports = function(app) {
 		data.recordState = 1;
 
 		return new Promise((resolve, reject) => {
-			insertIntoTable('wallet_tokens', data)
+			sqlUtil
+				.insertIntoTable('wallet_tokens', data)
 				.then(rowData => {
 					walletTokens_selectById(rowData.id)
 						.then(walletData => {
@@ -188,22 +189,26 @@ module.exports = function(app) {
 
 	// TODO
 	controller.prototype.wallet_tokens_update = data => {
-		return updateById('wallet_tokens', data);
+		return sqlUtil.updateById('wallet_tokens', data);
 	};
 
 	/**
 	 * tokens
 	 */
 	controller.prototype.tokens_selectBySymbol = symbol => {
-		return selectTable('tokens', { symbol: 'eth' });
+		return sqlUtil.select('tokens', { symbol: 'eth' });
 	};
 
 	controller.prototype.token_insert = data => {
-		return insertIntoTable('tokens', data);
+		return sqlUtil.insertIntoTable('tokens', data);
 	};
 
 	controller.prototype.token_update = data => {
-		return updateById('tokens', data);
+		return sqlUtil.updateById('tokens', data);
+	};
+
+	controller.prototype.transactionsHistory_insert = data => {
+		return sqlUtil.insertIntoTable('transactions_history', data);
 	};
 
 	return controller;

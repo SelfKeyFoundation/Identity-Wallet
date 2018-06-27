@@ -1,5 +1,4 @@
 const { knex, sqlUtil } = require('../../services/knex');
-const electron = require('electron');
 const TABLE_NAME = 'token_prices';
 
 const controller = {

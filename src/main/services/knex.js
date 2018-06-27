@@ -40,22 +40,6 @@ const init = async () => {
 };
 
 const sqlUtil = {
-	select: (table, select, where, tx) => {
-		let query = knex(table);
-
-		if (tx) {
-			query = query.transacting(tx);
-		}
-
-		query = query.select(select);
-
-		if (where) {
-			query = query.where(where);
-		}
-
-		return query;
-	},
-
 	insert: (table, args, tx) => {
 		let query = knex(table);
 
@@ -213,28 +197,20 @@ const sqlUtil = {
 		});
 	},
 
-	select: (table, where, tx) => {
-		return new Promise((resolve, reject) => {
-			let promise = null;
-			if (tx) {
-				promise = knex(table)
-					.transacting(tx)
-					.select()
-					.where(where);
-			} else {
-				promise = knex(table)
-					.select()
-					.where(where);
-			}
+	select: (table, select, where, tx) => {
+		let query = knex(table);
 
-			return promise
-				.then(rows => {
-					return resolve(rows);
-				})
-				.catch(error => {
-					return reject({ message: 'error_while_selecting', error: error });
-				});
-		});
+		if (tx) {
+			query = query.transacting(tx);
+		}
+
+		query = query.select(select);
+
+		if (where) {
+			query = query.where(where);
+		}
+		console.log(query);
+		return query;
 	},
 
 	bulkUpdateById: (table, records) => {
