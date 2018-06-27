@@ -268,14 +268,17 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToLedgerDialog = event => {
+	$rootScope.openConnectingToLedgerDialog = (event, isSendingTxFealure) => {
 		return $mdDialog.show({
 			controller: 'ConnectingToLedgerController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			clickOutsideToClose: false,
-			fullscreen: true
+			fullscreen: true,
+			locals: {
+				isSendingTxFealure
+			}
 		});
 	};
 
@@ -384,13 +387,13 @@ function AppRun(
 		$rootScope.$broadcast('selfkey:on-keypress', event.key);
 	};
 
-	$rootScope.broadcastTxHistoryChange = (event) => {
-        $rootScope.$broadcast('tx-history:change', event);
-    };
+	$rootScope.broadcastTxHistoryChange = event => {
+		$rootScope.$broadcast('tx-history:change', event);
+	};
 
-    $rootScope.broadcastTxHistorySync = (event) => {
-        $rootScope.$broadcast('tx-history:sync', event);
-    };
+	$rootScope.broadcastTxHistorySync = event => {
+		$rootScope.$broadcast('tx-history:sync', event);
+	};
 }
 
 AppRun.$inject = [

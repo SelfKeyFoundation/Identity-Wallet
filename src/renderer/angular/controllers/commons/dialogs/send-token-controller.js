@@ -59,6 +59,23 @@ function SendTokenDialogController(
 		);
 	};
 
+	let ledgerConnErrKeywords = ['invalid status 6700', 'invalid channel', 'device not found'];
+	let isLedgerConnError = err => {
+		if (!err) {
+			return false;
+		}
+		err = err.toLowerCase();
+		let check = false;
+		ledgerConnErrKeywords.every(keyword => {
+			if (err.indexOf(keyword) != -1) {
+				check = true;
+				return false; //break iteration
+			}
+			return true; //continue iteration
+		});
+		return check;
+	};
+
 	/**
 	 * Prepare
 	 */
@@ -80,12 +97,8 @@ function SendTokenDialogController(
 		$scope.signedHex = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
 		let genRawTrPromise = generateRawTransaction(isEth);
-
 		if (!genRawTrPromise) {
 			return;
-		}
-		if (isLedgerWallet) {
-			$rootScope.openConfirmLedgerTxInfoWindow();
 		}
 
 		genRawTrPromise
@@ -104,6 +117,16 @@ function SendTokenDialogController(
 					setViewState();
 					return;
 				}
+
+				if (error == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
+					error = `Error: There is already another transaction on the Ethereum network with the same hash.
+					 Please wait until this is complete before sending another transaction.`;
+					$scope.errors.sendFailed = error;
+					$scope.viewStates.step = 'transaction-status';
+					setViewState();
+					return;
+				}
+
 				if (isLedgerWallet) {
 					if (error.indexOf('Invalid status 6801') != -1) {
 						processedErr = true;
@@ -114,6 +137,10 @@ function SendTokenDialogController(
 					} else if (error == 'custom-timeout') {
 						processedErr = true;
 						$rootScope.openLedgerTimedOutWindow();
+					} else if (isLedgerConnError(error)) {
+						processedErr = true;
+						let isSendingTxFealure = true;
+						$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
 					}
 				}
 
@@ -275,9 +302,9 @@ function SendTokenDialogController(
 
 		let gasPrice = EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei');
 		currentTxHistoryData = {
-				to: sendToAddress,
-				gasPrice: gasPrice,
-				value: sendAmount
+			to: sendToAddress,
+			gasPrice: gasPrice,
+			value: sendAmount
 		};
 
 		let txGenPromise = null;
@@ -301,7 +328,7 @@ function SendTokenDialogController(
 				CONFIG.chainId
 			);
 
-			currentTxHistoryData.tokenSymbol = symbol;
+			currentTxHistoryData.tokenSymbol = $scope.symbol.toUpperCase();
 		}
 		return txGenPromise;
 	}
@@ -320,7 +347,7 @@ function SendTokenDialogController(
 		$scope.sendPromise
 			.then(transactionHash => {
 				$scope.txHex = transactionHash;
-
+				$rootScope.wallet.updatePreviousTransactionCount();
 				startTxCheck();
 			})
 			.catch(error => {

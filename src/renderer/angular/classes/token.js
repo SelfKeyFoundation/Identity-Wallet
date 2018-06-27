@@ -236,33 +236,49 @@ class Token {
 		let promise = Web3Service.getTransactionCount('0x' + this.wallet.getPublicKeyHex());
 		promise
 			.then(nonce => {
-				let genResult = this.generateContractData(toAddressHex, valueWei);
-				if (genResult.error) {
-					defer.reject(genResult.error);
-				} else {
-					let rawTx = {
-						nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
-						gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
-						gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
-						to: EthUtils.sanitizeHex(this.contractAddress),
-						value: '0x00',
-						data: EthUtils.sanitizeHex(genResult.data),
-						chainId: chainID
-					};
+				$rootScope.wallet.getPreviousTransactionCount().then(previousTransactionCount => {
+					if (
+						typeof previousTransactionCount == 'number' &&
+						nonce <= previousTransactionCount
+					) {
+						return defer.reject('SAME_TRANSACTION_COUNT_CUSTOM_MSG');
+					}
 
-					SignService.signTransaction({
-						rawTx: rawTx,
-						profile: this.wallet.profile,
-						privateKey: this.wallet.privateKey,
-						walletAddress: '0x' + this.wallet.getPublicKeyHex()
-					})
-						.then(res => {
-							defer.resolve(res);
+					$rootScope.previousTransactionCount = +nonce;
+
+					let genResult = this.generateContractData(toAddressHex, valueWei);
+					if (genResult.error) {
+						defer.reject(genResult.error);
+					} else {
+						let rawTx = {
+							nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
+							gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
+							gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
+							to: EthUtils.sanitizeHex(this.contractAddress),
+							value: '0x00',
+							data: EthUtils.sanitizeHex(genResult.data),
+							chainId: chainID
+						};
+
+						let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+						if (isLedgerWallet) {
+							$rootScope.openConfirmLedgerTxInfoWindow();
+						}
+
+						SignService.signTransaction({
+							rawTx: rawTx,
+							profile: this.wallet.profile,
+							privateKey: this.wallet.privateKey,
+							walletAddress: '0x' + this.wallet.getPublicKeyHex()
 						})
-						.catch(err => {
-							defer.reject(err);
-						});
-				}
+							.then(res => {
+								defer.resolve(res);
+							})
+							.catch(err => {
+								defer.reject(err);
+							});
+					}
+				});
 			})
 			.catch(error => {
 				defer.reject(error);
