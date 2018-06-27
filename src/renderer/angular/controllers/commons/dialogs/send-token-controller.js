@@ -579,6 +579,7 @@ function SendTokenDialogController(
 	});
 
 	$rootScope.$on('tx-sign:retry', event => {
+		$mdDialog.cancel();
 		$scope.startSend(event);
 	});
 }
