@@ -9,6 +9,7 @@ const CONFIG = require('../config');
 
 module.exports = function(app) {
 	let comm = null;
+	let lastHIDPath = '';
 
 	const getNetworkId = () => {
 		return CONFIG.chainId;
@@ -20,12 +21,31 @@ module.exports = function(app) {
 
 	const controller = function() {};
 
-	async function getEth() {
-		if (comm) {
-			await comm.close_async();
+	async function closeConnection() {
+		if (!comm) {
+			return;
 		}
 
-		comm = await ledgerco.comm_node.create_async();
+		await comm.close_async();
+		comm = null;
+	}
+	async function getEth() {
+		let list = await ledgerco.comm_node.list_async();
+		let isConnected = list && list.length;
+
+		if (isConnected) {
+			let newHDPath = list[0];
+			if (comm && lastHIDPath && lastHIDPath != newHDPath) {
+				await closeConnection();
+			}
+			lastHIDPath = newHDPath;
+		} else {
+			throw Error('Device not found');
+		}
+
+		if (!comm) {
+			comm = await ledgerco.comm_node.create_async();
+		}
 
 		return new ledgerco.eth(comm);
 	}
@@ -65,8 +85,16 @@ module.exports = function(app) {
 
 	async function _signTransaction(txData, derivationPath) {
 		let eth = await getEth();
-		let account = await eth.getAddress_async(derivationPath);
-		if (!account || account.address != txData.from) {
+
+		derivationPath = derivationPath || getDefaultDerivationPath();
+		const pathComponents = obtainPathComponentsFromDerivationPath(derivationPath);
+		let path = pathComponents.basePath + pathComponents.index;
+		let account = await eth.getAddress_async(path);
+		if (
+			!account ||
+			!account.address ||
+			account.address.toLowerCase() != txData.from.toLowerCase()
+		) {
 			throw new Error('Invalid address');
 		}
 
