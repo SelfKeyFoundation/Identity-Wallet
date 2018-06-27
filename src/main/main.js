@@ -129,7 +129,7 @@ function onReady(app) {
 		// 3) notify angular app when done
 
 		if (electron.app.dock) {
-			electron.app.dock.setIcon(__static + '/assets/icons/png/256x256.png');
+			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
 		mainWindow = new electron.BrowserWindow({
@@ -144,7 +144,7 @@ function onReady(app) {
 				disableBlinkFeatures: 'Auxclick',
 				preload: path.resolve(__dirname, 'preload.js')
 			},
-			icon: __static + '/assets/icons/png/256x256.png'
+			icon: __static + '/assets/icons/png/newlogo-256x256.png'
 		});
 
 		Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
