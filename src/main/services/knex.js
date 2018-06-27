@@ -78,9 +78,6 @@ const sqlUtil = {
 		return selectResp[0];
 	},
 
-	// TODO: remove in favor of insertAndSelect
-	insertIntoTable: (table, data, trx) => sqlUtil.insertAndSelect(table, data, trx),
-
 	update: (table, item, where, tx) => {
 		let query = knex(table);
 		item = { ...item, updatedAt: Date.now() };
