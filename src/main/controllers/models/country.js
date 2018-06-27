@@ -1,7 +1,8 @@
-const { knex } = require('../../services/knex');
+const { knex, sqlUtil } = require('../../services/knex');
 
 const TABLE_NAME = 'countries';
 
-module.exports = () => ({
-	findAll: () => knex(TABLE_NAME).select()
-});
+module.exports = {
+	TABLE_NAME,
+	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx)
+};

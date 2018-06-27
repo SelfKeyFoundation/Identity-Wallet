@@ -30,10 +30,10 @@ module.exports = function(app) {
 	let WalletSetting = require('./models/wallet-setting.js')(app, controller);
 	controller.prototype.WalletSetting = WalletSetting;
 
-	let Country = require('./models/country.js')(app, controller);
+	let Country = require('./models/country.js');
 	controller.prototype.Country = Country;
 
-	let Document = require('./models/document.js')(app, controller);
+	let Document = require('./models/document.js');
 	controller.prototype.Document = Document;
 
 	let IdAttributeType = require('./models/id-attribute-type.js')(app, controller);
@@ -48,10 +48,10 @@ module.exports = function(app) {
 	let GuideSetting = require('./models/guide-setting.js')(app, controller);
 	controller.prototype.GuideSetting = GuideSetting;
 
-	let ActionLog = require('./models/action-log.js')(app, controller);
+	let ActionLog = require('./models/action-log.js');
 	controller.prototype.ActionLog = ActionLog;
 
-	let ExchangeDataHandler = require('./models/exchange.js')(app, controller);
+	let ExchangeDataHandler = require('./models/exchange.js');
 	controller.prototype.ExchangeDataHandler = ExchangeDataHandler;
 
 	let TokenPrice = require('./models/token-price.js');

@@ -1,11 +1,8 @@
-const { knex } = require('../../services/knex');
+const { knex, sqlUtil } = require('../../services/knex');
 
 const TABLE_NAME = 'documents';
 
-module.exports = () => ({
-	findById: id =>
-		knex(TABLE_NAME)
-			.where({ id })
-			.select()
-			.then(rows => rows.pop())
-});
+module.exports = {
+	TABLE_NAME,
+	findById: id => sqlUtil.selectOneById(TABLE_NAME, '*', id, tx)
+};

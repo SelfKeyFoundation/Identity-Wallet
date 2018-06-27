@@ -123,9 +123,9 @@ const sqlUtil = {
 		return query;
 	},
 
-	selectById: async (table, id, tx) => {
+	selectOne: async (table, select, where, tx) => {
 		try {
-			let rows = await sqlUtil.select(table, '*', { id }, tx);
+			let rows = await sqlUtil.select(table, select, where, tx);
 			if (!rows || !rows.length) {
 				return null;
 			}
@@ -135,10 +135,14 @@ const sqlUtil = {
 		}
 	},
 
-	bulkUpdateById: (table, records) =>
+	selectOneById: async (table, select, id, tx) => sqlUtil.selectOne(table, select, { id }, tx),
+
+	bulkUpdate: (table, records, whereFn) =>
 		sqlUtil.bulkQuery(table, records, (table, record, trx) =>
-			sqlUtil.update(table, record, { id: record.id }, trx)
+			sqlUtil.update(table, record, whereFn(record), trx)
 		),
+
+	bulkUpdateById: (table, records) => sqlUtil.bulkUpdate(table, records, ({ id }) => ({ id })),
 
 	bulkAdd: (table, records) => sqlUtil.bulkQuery(table, records, sqlUtil.insert),
 
