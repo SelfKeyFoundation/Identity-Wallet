@@ -77,6 +77,7 @@
     "keythereum": "1.0.4",
     "knex": "^0.14.6",
     "ledgerco": "1.2.1",
+    "lodash": "^4.17.10",
     "mime-types": "2.1.18",
     "mv": "2.1.1",
     "node-fetch": "^2.1.2",

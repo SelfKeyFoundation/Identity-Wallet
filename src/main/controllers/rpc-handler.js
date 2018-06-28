@@ -19,8 +19,6 @@ const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
 module.exports = function(app) {
 	const log = app.log;
-
-	const helpers = require('./helpers')(app);
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -110,7 +108,7 @@ module.exports = function(app) {
 					let targetPath = path.join(keystoreFileFullPath, keystoreFileName);
 					let ksFilePathToSave = path.join(keystoreObject.address, keystoreFileName);
 
-					helpers.copyFile(args.keystoreFilePath, targetPath, error => {
+					fsm.copyFile(args.keystoreFilePath, targetPath, error => {
 						if (error) {
 							return app.win.webContents.send(
 								RPC_METHOD,
@@ -310,7 +308,7 @@ module.exports = function(app) {
 	controller.prototype.moveFile = function(event, actionId, actionName, args) {
 		args.dest += '/' + path.basename(args.src);
 		if (args.copy) {
-			helpers.copyFile(args.src, args.dest, error => {
+			fsm.copyFile(args.src, args.dest, error => {
 				if (!error) {
 					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, args.dest);
 				} else {

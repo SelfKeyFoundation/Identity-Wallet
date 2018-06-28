@@ -53,6 +53,16 @@ const sqlUtil = {
 		return query.insert(args);
 	},
 
+	delete: (table, where, tx) => {
+		let query = knex(table);
+
+		if (tx) {
+			query = query.transacting(tx);
+		}
+
+		return query.where(where).del();
+	},
+
 	insertAndSelect: async (table, data, trx) => {
 		let insertResp, selectResp;
 		try {

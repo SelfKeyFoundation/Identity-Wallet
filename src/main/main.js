@@ -101,8 +101,6 @@ function onReady(app) {
 
 		app.config.userDataPath = electron.app.getPath('userData');
 
-		electron.app.helpers = require('./controllers/helpers')(app);
-
 		const PriceService = require('./controllers/price-service');
 
 		const AirtableService = require('./controllers/airtable-service');
