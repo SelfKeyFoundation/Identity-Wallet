@@ -16,7 +16,6 @@ const decompress = require('decompress');
 const os = require('os');
 const async = require('async');
 const log = require('electron-log');
-const crashReportService = require('./crash-report-service');
 
 const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
@@ -1001,7 +1000,6 @@ module.exports = function(app) {
 	controller.prototype.saveGuideSettings = function(event, actionId, actionName, args) {
 		electron.app.sqlLiteService.GuideSetting.updateById(args.id, args)
 			.then(data => {
-				crashReportService.startCrashReport();
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

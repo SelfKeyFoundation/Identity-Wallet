@@ -96,7 +96,7 @@ function onReady(app) {
 		const initDb = require('./services/knex').init;
 
 		await initDb();
-		await crashReportService.startCrashReport();
+		crashReportService.startCrashReport();
 
 		app.config.userDataPath = electron.app.getPath('userData');
 
