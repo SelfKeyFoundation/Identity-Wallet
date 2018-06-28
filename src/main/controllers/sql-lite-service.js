@@ -24,10 +24,10 @@ module.exports = function(app) {
 	let Wallet = require('./models/wallet.js')(app, controller);
 	controller.prototype.Wallet = Wallet;
 
-	let AppSetting = require('./models/app-setting.js')(app, controller);
+	let AppSetting = require('./models/app-setting.js');
 	controller.prototype.AppSetting = AppSetting;
 
-	let WalletSetting = require('./models/wallet-setting.js')(app, controller);
+	let WalletSetting = require('./models/wallet-setting.js');
 	controller.prototype.WalletSetting = WalletSetting;
 
 	let Country = require('./models/country.js');
@@ -36,16 +36,16 @@ module.exports = function(app) {
 	let Document = require('./models/document.js');
 	controller.prototype.Document = Document;
 
-	let IdAttributeType = require('./models/id-attribute-type.js')(app, controller);
+	let IdAttributeType = require('./models/id-attribute-type.js');
 	controller.prototype.IdAttributeType = IdAttributeType;
 
 	let IdAttribute = require('./models/id-attribute.js')(app, controller);
 	controller.prototype.IdAttribute = IdAttribute;
 
-	let Token = require('./models/token.js')(app, controller);
+	let Token = require('./models/token.js');
 	controller.prototype.Token = Token;
 
-	let GuideSetting = require('./models/guide-setting.js')(app, controller);
+	let GuideSetting = require('./models/guide-setting.js');
 	controller.prototype.GuideSetting = GuideSetting;
 
 	let ActionLog = require('./models/action-log.js');
@@ -59,6 +59,9 @@ module.exports = function(app) {
 
 	let TxHistory = require('./models/tx-history.js')(app, controller);
 	controller.prototype.TxHistory = TxHistory;
+
+	let TransactionHistory = require('./models/transaction-history.js');
+	controller.prototype.TransactionHistory = TransactionHistory;
 
 	// TODO
 	controller.prototype.wallet_new_token_insert = (data, balance, walletId) => {

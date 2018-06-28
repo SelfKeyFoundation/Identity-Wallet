@@ -1,11 +1,11 @@
-const { knex } = require('../../services/knex');
+const { knex, sqlUtil } = require('../../services/knex');
 const TABLE_NAME = 'transactions_history';
 
-module.exports = () => ({
-	findAll: () => knex(TABLE_NAME).select(),
+module.exports = {
+	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
 
-	findByWalletId: walletId => knex(TABLE_NAME).where({ walletId: walletId }),
+	findByWalletId: (walletId, tx) => sqlUtil.select(TABLE_NAME, '*', { walletId }, tx),
 
-	findByWalletIdAndTokenId: (walletId, tokenId) =>
-		knex(TABLE_NAME).where({ walletId: walletId, tokenId: tokenId })
-});
+	findByWalletIdAndTokenId: (walletId, tokenId, tx) =>
+		sqlUtil.select(TABLE_NAME, '*', { walletId, tokenId }, tx)
+};

@@ -92,14 +92,14 @@ const sqlUtil = {
 		return query.update(item);
 	},
 
-	updateById: async (table, data, tx) => {
-		const updatedIds = await sqlUtil.update(table, data, { id: data.id }, tx);
+	updateById: async (table, id, data, tx) => {
+		const affectedRows = await sqlUtil.update(table, data, { id }, tx);
 
-		if (!updatedIds || updatedIds != 1) {
+		if (!affectedRows) {
 			throw new Error('error_while_updating');
 		}
 
-		const rows = sqlUtil.select(table, '*', { id: data.id }, tx);
+		const rows = await sqlUtil.select(table, '*', { id }, tx);
 
 		if (!rows || rows.length !== 1) {
 			throw new Error('error_while_updating');

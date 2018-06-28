@@ -1,14 +1,8 @@
-const { knex } = require('../../services/knex');
+const { knex, sqlUtil } = require('../../services/knex');
 const TABLE_NAME = 'wallet_settings';
 
-module.exports = () => ({
-	findByWalletId: walletId =>
-		knex(TABLE_NAME)
-			.where({ walletId })
-			.select(),
+module.exports = {
+	findByWalletId: (walletId, tx) => sqlUtil.select(TABLE_NAME, '*', { walletId }, tx),
 
-	edit: data =>
-		knex(TABLE_NAME)
-			.where('id', data.id)
-			.update(data)
-});
+	updateById: (id, data, tx) => sqlUtil.updateById(TABLE_NAME, id, data, tx)
+};

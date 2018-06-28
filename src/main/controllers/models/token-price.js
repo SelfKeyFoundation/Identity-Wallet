@@ -1,25 +1,17 @@
 const { knex, sqlUtil } = require('../../services/knex');
 const TABLE_NAME = 'token_prices';
 
-const controller = {
-	all: () => knex(TABLE_NAME).select(),
+module.exports = {
+	TABLE_NAME,
+	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
 
-	findBySymbol: symbol =>
-		knex(TABLE_NAME)
-			.select()
-			.where({ symbol })
-			.then(rows => (rows && rows.length ? rows[0] : null)),
+	findBySymbol: (symbol, tx) => sqlUtil.selectOne(TABLE_NAME, '*', { symbol }, tx),
 
-	add: tokenPrice => knex(TABLE_NAME).insert(tokenPrice),
+	create: (tokenPrice, tx) => sqlUtil.insert(TABLE_NAME, tokenPrice, tx),
 
-	edit: tokenPrice =>
-		knex(TABLE_NAME)
-			.where('id', tokenPrice.id)
-			.update(tokenPrice),
+	updateById: (id, tokenPrice, tx) => sqlUtil.updateById(TABLE_NAME, id, tokenPrice, tx),
 
-	bulkEdit: tokenPrices => Promise.all(tokenPrices.map(controller.edit)),
+	bulkEdit: tokenPrices => sqlUtil.bulkUpdateById(TABLE_NAME, tokenPrices),
 
 	bulkAdd: tokenPrices => sqlUtil.bulkAdd(TABLE_NAME, tokenPrices)
 };
-
-module.exports = controller;

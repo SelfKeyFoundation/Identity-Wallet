@@ -932,7 +932,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.saveWalletSettings = function(event, actionId, actionName, args) {
-		electron.app.sqlLiteService.WalletSetting.edit(args)
+		electron.app.sqlLiteService.WalletSetting.updateById(args.id, args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

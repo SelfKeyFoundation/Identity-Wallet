@@ -35,7 +35,7 @@ const loadPriceData = async () => {
 		createdAt: createdTimestamp
 	}));
 
-	const existing = (await TokenPrice.all()).reduce(
+	const existing = (await TokenPrice.findAll()).reduce(
 		(lookup, row) =>
 			Object.assign(lookup, {
 				[row.symbol]: row.id

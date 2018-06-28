@@ -8,14 +8,20 @@ exports.up = function(knex, Promise) {
 				.references('wallets.id');
 			table.string('title');
 			table.string('content');
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
 		knex.schema.createTable('app_settings', table => {
 			table.increments('id');
 			table.string('dataFolderPath').notNullable();
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -30,7 +36,10 @@ exports.up = function(knex, Promise) {
 				.unique()
 				.notNullable();
 			table.string('dialCode').notNullable();
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -40,7 +49,10 @@ exports.up = function(knex, Promise) {
 			table.string('mimeType').notNullable();
 			table.integer('size').notNullable();
 			table.binary('buffer').notNullable();
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -50,7 +62,7 @@ exports.up = function(knex, Promise) {
 			table
 				.integer('createdAt')
 				.notNullable()
-				.defaultTo(new Date().getTime());
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -59,7 +71,10 @@ exports.up = function(knex, Promise) {
 			table.integer('guideShown').defaultTo(0);
 			table.integer('icoAdsShown').defaultTo(0);
 			table.integer('termsAccepted').defaultTo(0);
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -69,7 +84,10 @@ exports.up = function(knex, Promise) {
 			table.string('type').notNullable();
 			table.string('entity').notNullable();
 			table.integer('isInitial').defaultTo(0);
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -88,7 +106,10 @@ exports.up = function(knex, Promise) {
 				.notNullable()
 				.defaultTo('{}');
 			table.integer('order').defaultTo(0);
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 			table.unique(['walletId', 'idAttributeType']);
 		}),
@@ -106,7 +127,10 @@ exports.up = function(knex, Promise) {
 			table.decimal('priceUSD');
 			table.decimal('priceBTC');
 			table.decimal('priceETH');
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -123,7 +147,10 @@ exports.up = function(knex, Promise) {
 				.integer('isCustom')
 				.notNullable()
 				.defaultTo(0);
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -144,7 +171,10 @@ exports.up = function(knex, Promise) {
 			table.integer('blockNumber').notNullable();
 			table.decimal('gas').notNullable();
 			table.string('gasPrice').notNullable();
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -161,7 +191,10 @@ exports.up = function(knex, Promise) {
 			table.integer('ERC20TxHistoryLastBlock');
 			table.integer('EthTxHistoryLastBlock');
 			table.string('airDropCode');
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -183,7 +216,10 @@ exports.up = function(knex, Promise) {
 				.string('profile')
 				.notNullable()
 				.defaultTo('local');
-			table.integer('createdAt').notNullable();
+			table
+				.integer('createdAt')
+				.notNullable()
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		}),
 
@@ -203,7 +239,7 @@ exports.up = function(knex, Promise) {
 			table
 				.integer('createdAt')
 				.notNullable()
-				.defaultTo(new Date().getTime());
+				.defaultTo(knex.fn.now());
 			table.integer('updatedAt');
 		})
 	]);
