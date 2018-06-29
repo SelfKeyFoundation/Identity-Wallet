@@ -17,5 +17,7 @@ module.exports = {
 
 	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
 
+	findInitial: tx => sqlUtil.select(TABLE_NAME, '*', { isInitial: 1 }, tx),
+
 	import: attributeTypes => {}
 };

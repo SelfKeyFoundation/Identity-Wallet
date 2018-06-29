@@ -1,8 +1,7 @@
 'use strict';
-
-const electron = require('electron');
 const fetch = require('node-fetch');
-
+const IdAttributeType = require('./models/id-attribute-type');
+const Exchange = require('./models/exchange');
 const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
 
 module.exports = {
@@ -15,7 +14,7 @@ module.exports = {
 			attr => attr.data.fields
 		);
 
-		return electron.app.sqlLiteService.IdAttributeType.import(idAttributeData);
+		return IdAttributeType.import(idAttributeData);
 	},
 
 	loadExchangeData: async () => {
@@ -30,6 +29,6 @@ module.exports = {
 			data: JSON.stringify(row.data.fields)
 		}));
 
-		return electron.app.sqlLiteService.ExchangeDataHandler.import(exchanges);
+		return Exchange.import(exchanges);
 	}
 };

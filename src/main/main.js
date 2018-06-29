@@ -105,9 +105,6 @@ function onReady(app) {
 
 		const AirtableService = require('./controllers/airtable-service');
 
-		const SqlLiteService = require('./controllers/sql-lite-service')(app);
-		electron.app.sqlLiteService = new SqlLiteService();
-
 		const LedgerService = require('./controllers/ledger-service')(app);
 		electron.app.ledgerService = new LedgerService();
 

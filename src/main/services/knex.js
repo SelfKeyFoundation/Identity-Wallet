@@ -156,15 +156,10 @@ const sqlUtil = {
 
 	bulkAdd: (table, records) => sqlUtil.bulkQuery(table, records, sqlUtil.insert),
 
-	bulkQuery: (table, records, queryFunction) =>
+	bulkQuery: async (table, records, queryFunction) =>
 		knex.transaction(async trx => {
 			const queries = records.map(record => queryFunction(table, record, trx));
-			try {
-				let res = await Promise.all(queries);
-				return trx.commit(res);
-			} catch (error) {
-				return trx.rollback(error);
-			}
+			return await Promise.all(queries);
 		})
 };
 
