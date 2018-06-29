@@ -22,6 +22,8 @@ function SendTokenDialogController(
 	'ngInject';
 
 	const TIMEOUT_ERROR = 'Endpoint request timed out';
+	const TRANSACTION_RECEIPT_ERROR = 'Failed to check for transaction receipt';
+
 	let args = {
 		symbol: $stateParams.symbol,
 		allowSelectERC20Token: $stateParams.allowSelectERC20Token
@@ -356,6 +358,10 @@ function SendTokenDialogController(
 					CommonService.showToast('error', error, 20000);
 				} else if (error.indexOf(TIMEOUT_ERROR) !== -1) {
 					send();
+					return;
+				} else if (error.indexOf(TRANSACTION_RECEIPT_ERROR) !== -1) {
+					// ignoring this error as it looks like to be an issue with web3.js and it won't impact the sending of the transaction
+					// More details here https://github.com/ethereum/web3.js/issues/1255
 					return;
 				}
 				$scope.errors.sendFailed = error;
