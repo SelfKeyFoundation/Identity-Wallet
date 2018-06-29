@@ -5,7 +5,7 @@ const log = require('electron-log');
 const sentry = require('../assets/data/sentry');
 
 module.exports = {
-	startCrashReport: () => {
+	startCrashReport: async () => {
 		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
 			log.info('Starting Crash Report');
 			init({
@@ -18,7 +18,8 @@ module.exports = {
 					return guideSettings.hasAgreedToCrashReport();
 				}
 			});
-			guideSettings.loadCrashReportAgreement();
+			await guideSettings.loadCrashReportAgreement();
 		}
+		return;
 	}
 };

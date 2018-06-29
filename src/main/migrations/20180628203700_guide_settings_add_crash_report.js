@@ -1,13 +1,14 @@
 exports.up = async (knex, Promise) => {
-	await knex.schema.table('guide_settings', t => {
-		t.integer('crashReportAgreement');
+	await knex.schema.dropTable('guide_settings');
+	await knex.schema.createTable('guide_settings', table => {
+		table.increments('id');
+		table.integer('guideShown').defaultTo(0);
+		table.integer('icoAdsShown').defaultTo(0);
+		table.integer('termsAccepted').defaultTo(0);
+		table.integer('crashReportAgreement').defaultTo(0);
+		table.integer('createdAt').notNullable();
+		table.integer('updatedAt');
 	});
-	const records = await knex('guide_settings').select();
-	await knex('guide_settings')
-		.update({ guideShown: 0, termsAccepted: 0 })
-		.where({
-			id: records[0].id
-		});
 };
 
 exports.down = async (knex, Promise) => {};

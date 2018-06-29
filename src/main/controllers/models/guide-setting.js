@@ -1,5 +1,4 @@
 const { knex } = require('../../services/knex');
-const log = require('electron-log');
 const TABLE_NAME = 'guide_settings';
 let crashReportAgreement = false;
 
