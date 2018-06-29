@@ -2,10 +2,14 @@
 
 const EventEmitter = require('events');
 const fetch = require('node-fetch');
+const log = require('electron-log');
 
 const TokenPrice = require('./models/token-price');
 
 const emitter = new EventEmitter();
+const io = require('socket.io-client');
+
+let existing = [];
 
 const loadPriceData = async () => {
 	const response = await fetch('https://coincap.io/front');
@@ -35,7 +39,7 @@ const loadPriceData = async () => {
 		createdAt: createdTimestamp
 	}));
 
-	const existing = (await TokenPrice.all()).reduce(
+	existing = (await TokenPrice.all()).reduce(
 		(lookup, row) =>
 			Object.assign(lookup, {
 				[row.symbol]: row.id
@@ -61,12 +65,38 @@ const loadPriceData = async () => {
 	emitter.emit('pricesUpdated', dataToInsert);
 };
 
+const startStream = async () => {
+	const socket = io('https://coincap.io');
+
+	socket.on('trades', async tradeMsg => {
+		if (existing[tradeMsg.coin]) {
+			const btcPriceUsd = await TokenPrice.findBySymbol('BTC');
+			const ethPriceUsd = await TokenPrice.findBySymbol('ETC');
+
+			const tokenData = tradeMsg.message.msg;
+
+			const tokenPrice = {
+				id: existing[tokenData.short],
+				name: tokenData.long,
+				symbol: tokenData.short,
+				source: 'https://coincap.io',
+				priceUSD: +tokenData.price,
+				priceBTC: +tokenData.price / btcPriceUsd,
+				priceETH: +tokenData.price / ethPriceUsd,
+				updatedAt: Date.now()
+			};
+			await TokenPrice.edit(tokenPrice);
+
+			emitter.emit('pricesUpdated', await TokenPrice.all());
+		}
+	});
+};
+
 module.exports = {
 	eventEmitter: emitter,
 
-	startUpdateData: () => {
-		loadPriceData();
-		// Update every 10 minutes
-		setInterval(loadPriceData, 10 * 60 * 60 * 1000);
+	startUpdateData: async () => {
+		await loadPriceData();
+		await startStream();
 	}
 };
