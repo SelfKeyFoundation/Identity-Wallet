@@ -11,6 +11,24 @@ const io = require('socket.io-client');
 
 let existing = [];
 
+const getTokenPriceObject = (data, btcPriceUsd, ethPriceUsd, id) => {
+	const tokenPrice = {
+		name: data.long,
+		symbol: data.short,
+		source: 'https://coincap.io',
+		priceUSD: +data.price,
+		priceBTC: +data.price / btcPriceUsd,
+		priceETH: +data.price / ethPriceUsd,
+		updatedAt: Date.now()
+	};
+	if (id) {
+		tokenPrice.id = id;
+	} else {
+		tokenPrice.createdAt = Date.now();
+	}
+	return tokenPrice;
+};
+
 const loadPriceData = async () => {
 	const response = await fetch('https://coincap.io/front');
 
@@ -28,16 +46,7 @@ const loadPriceData = async () => {
 	// TODO: We should filter out non-ERC-20/Ethereum
 	// coins at some point, but that's low priority
 
-	const createdTimestamp = Date.now();
-	const dataToInsert = data.map(row => ({
-		name: row.long,
-		symbol: row.short,
-		source: 'https://coincap.io',
-		priceUSD: +row.price,
-		priceBTC: +row.price / btcPriceUsd,
-		priceETH: +row.price / ethPriceUsd,
-		createdAt: createdTimestamp
-	}));
+	const dataToInsert = data.map(row => getTokenPriceObject(row, btcPriceUsd, ethPriceUsd));
 
 	existing = (await TokenPrice.all()).reduce(
 		(lookup, row) =>
