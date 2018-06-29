@@ -1,6 +1,13 @@
 'use strict';
 
-function ConnectingToLedgerController($rootScope, $scope, $log, $mdDialog, LedgerService) {
+function ConnectingToLedgerController(
+	$rootScope,
+	$scope,
+	$log,
+	$mdDialog,
+	LedgerService,
+	isSendingTxFealure
+) {
 	'ngInject';
 
 	$scope.connectionFailed = false;
@@ -38,7 +45,20 @@ function ConnectingToLedgerController($rootScope, $scope, $log, $mdDialog, Ledge
 			});
 	};
 
-	$scope.getAccounts();
+	if (isSendingTxFealure) {
+		$scope.connectionFailed = true;
+		$scope.isConnecting = false;
+	} else {
+		$scope.getAccounts();
+	}
+
+	$scope.tryAgain = event => {
+		if (isSendingTxFealure) {
+			$rootScope.broadcastRetryToSign(event);
+		} else {
+			$scope.getAccounts();
+		}
+	};
 }
 
 ConnectingToLedgerController.$inject = [
@@ -46,6 +66,7 @@ ConnectingToLedgerController.$inject = [
 	'$scope',
 	'$log',
 	'$mdDialog',
-	'LedgerService'
+	'LedgerService',
+	'isSendingTxFealure'
 ];
 module.exports = ConnectingToLedgerController;

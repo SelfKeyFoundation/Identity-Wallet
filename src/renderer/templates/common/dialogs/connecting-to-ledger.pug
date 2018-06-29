@@ -30,5 +30,5 @@ md-dialog.ledger-is-connecting-container(aira-lable="Connecting to Ledger")
             .buttons-container(ng-if="!isConnecting")
                 md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
                     span.primary BACK
-                md-button.gray.md-ink-ripple.cancal-btn(ng-click="getAccounts($event)")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="tryAgain($event)")
                     span.primary TRY AGAIN

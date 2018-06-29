@@ -16,7 +16,8 @@ function SendTokenDialogController(
 	$stateParams,
 	Web3Service,
 	CommonService,
-	SqlLiteService
+	SqlLiteService,
+	TxHistoryService
 ) {
 	'ngInject';
 
@@ -39,6 +40,7 @@ function SendTokenDialogController(
 
 	let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
 	$scope.signedHex = null;
+	let currentTxHistoryData = {};
 
 	$scope.getTokenTitleBySymbol = symbol => {
 		symbol = symbol.toUpperCase();
@@ -57,6 +59,23 @@ function SendTokenDialogController(
 			' ' +
 			token.symbol
 		);
+	};
+
+	let ledgerConnErrKeywords = ['invalid status 6700', 'invalid channel', 'device not found'];
+	let isLedgerConnError = err => {
+		if (!err) {
+			return false;
+		}
+		err = err.toLowerCase();
+		let check = false;
+		ledgerConnErrKeywords.every(keyword => {
+			if (err.indexOf(keyword) != -1) {
+				check = true;
+				return false; //break iteration
+			}
+			return true; //continue iteration
+		});
+		return check;
 	};
 
 	/**
@@ -80,12 +99,8 @@ function SendTokenDialogController(
 		$scope.signedHex = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
 		let genRawTrPromise = generateRawTransaction(isEth);
-
 		if (!genRawTrPromise) {
 			return;
-		}
-		if (isLedgerWallet) {
-			$rootScope.openConfirmLedgerTxInfoWindow();
 		}
 
 		genRawTrPromise
@@ -104,6 +119,16 @@ function SendTokenDialogController(
 					setViewState();
 					return;
 				}
+
+				if (error == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
+					error = `Error: There is already another transaction on the Ethereum network with the same hash.
+					 Please wait until this is complete before sending another transaction.`;
+					$scope.errors.sendFailed = error;
+					$scope.viewStates.step = 'transaction-status';
+					setViewState();
+					return;
+				}
+
 				if (isLedgerWallet) {
 					if (error.indexOf('Invalid status 6801') != -1) {
 						processedErr = true;
@@ -114,6 +139,10 @@ function SendTokenDialogController(
 					} else if (error == 'custom-timeout') {
 						processedErr = true;
 						$rootScope.openLedgerTimedOutWindow();
+					} else if (isLedgerConnError(error)) {
+						processedErr = true;
+						let isSendingTxFealure = true;
+						$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
 					}
 				}
 
@@ -273,12 +302,19 @@ function SendTokenDialogController(
 			}
 		}
 
+		let gasPrice = EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei');
+		currentTxHistoryData = {
+			to: sendToAddress,
+			gasPrice: gasPrice,
+			value: sendAmount
+		};
+
 		let txGenPromise = null;
 		if (isEth) {
 			txGenPromise = $rootScope.wallet.generateRawTransaction(
 				sendToAddress,
 				EthUnits.unitToUnit(sendAmount, 'ether', 'wei'),
-				EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
+				gasPrice,
 				$scope.infoData.gasLimit,
 				null,
 				CONFIG.chainId
@@ -288,11 +324,13 @@ function SendTokenDialogController(
 			txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
 				sendToAddress,
 				sendAmount,
-				EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei'),
+				gasPrice,
 				60000, // $scope.infoData.gasLimit
 				$scope.symbol.toUpperCase(),
 				CONFIG.chainId
 			);
+
+			currentTxHistoryData.tokenSymbol = $scope.symbol.toUpperCase();
 		}
 		return txGenPromise;
 	}
@@ -305,10 +343,13 @@ function SendTokenDialogController(
 		}
 		$scope.viewStates.step = 'transaction-status';
 		$scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
+
+		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
+
 		$scope.sendPromise
 			.then(transactionHash => {
 				$scope.txHex = transactionHash;
-
+				$rootScope.wallet.updatePreviousTransactionCount();
 				startTxCheck();
 			})
 			.catch(error => {
@@ -544,6 +585,7 @@ function SendTokenDialogController(
 	});
 
 	$rootScope.$on('tx-sign:retry', event => {
+		$mdDialog.cancel();
 		$scope.startSend(event);
 	});
 }
@@ -561,7 +603,8 @@ SendTokenDialogController.$inject = [
 	'$stateParams',
 	'Web3Service',
 	'CommonService',
-	'SqlLiteService'
+	'SqlLiteService',
+	'TxHistoryService'
 ];
 
 module.exports = SendTokenDialogController;

@@ -270,7 +270,7 @@ let defaultModule = function(app) {
 	}
 
 	async function sync() {
-		let wallets = await electron.app.sqlLiteService.Wallet.findAll();
+		let wallets = await electron.app.sqlLiteService.Wallet.findActive();
 		for (let wallet of wallets) {
 			let address = ('0x' + wallet.publicKey).toLowerCase();
 			await _syncByWallet(address, wallet.id);
