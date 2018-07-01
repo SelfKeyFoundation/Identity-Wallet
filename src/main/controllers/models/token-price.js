@@ -1,5 +1,6 @@
 const { knex } = require('../../services/knex');
-
+const SqliteService = require('../sql-lite-service');
+const sqliteService = new SqliteService();
 const TABLE_NAME = 'token_prices';
 
 const controller = {
@@ -20,7 +21,9 @@ const controller = {
 
 	bulkEdit: tokenPrices => Promise.all(tokenPrices.map(controller.edit)),
 
-	bulkAdd: tokenPrices => knex.batchInsert(TABLE_NAME, tokenPrices)
+	bulkAdd: tokenPrices => {
+		return sqliteService.bulkAdd(TABLE_NAME, tokenPrices);
+	}
 };
 
 module.exports = controller;
