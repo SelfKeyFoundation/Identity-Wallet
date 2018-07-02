@@ -23,6 +23,8 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
 const createMenuTemplate = require('./menu');
 
+const crashReportService = require('./controllers/crash-report-service');
+
 /**
  * auto updated
  */
@@ -94,6 +96,7 @@ function onReady(app) {
 		const initDb = require('./services/knex').init;
 
 		await initDb();
+		await crashReportService.startCrashReport();
 
 		app.config.userDataPath = electron.app.getPath('userData');
 

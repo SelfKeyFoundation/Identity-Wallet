@@ -14,6 +14,10 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
 		$scope.step = step;
 	};
 
+	$scope.crashReportAgreement = {
+		isSet: false
+	};
+
 	$scope.agree = event => {
 		if (process.env.NODE_ENV !== 'test') {
 			if (!$scope.scrolledBottom) {
@@ -23,7 +27,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
 
 		$scope.isLoading = true;
 		guideSettings.termsAccepted = true;
-
+		guideSettings.crashReportAgreement = $scope.crashReportAgreement.isSet;
 		let savePromise = SqlLiteService.saveGuideSettings(guideSettings);
 		savePromise.then(() => {
 			$scope.isLoading = false;

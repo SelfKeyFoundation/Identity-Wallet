@@ -1,24 +1,22 @@
-const Promise = require('bluebird');
+const { knex } = require('../../services/knex');
+const TABLE_NAME = 'guide_settings';
+let crashReportAgreement = false;
 
-module.exports = function(app, sqlLiteService) {
-	const TABLE_NAME = 'guide_settings';
-	const Controller = function() {};
+const findAllGuideSettings = () => knex(TABLE_NAME).select();
 
-	let knex = sqlLiteService.knex;
-
-	/**
-	 *
-	 */
-	Controller.findAll = _findAll;
-	Controller.updateById = _updateById;
-
-	function _findAll() {
-		return sqlLiteService.select(TABLE_NAME, '*');
+module.exports = () => ({
+	hasAgreedToCrashReport: () => {
+		return crashReportAgreement;
+	},
+	findAll: findAllGuideSettings,
+	updateById: (id, data) => {
+		crashReportAgreement = data.crashReportAgreement;
+		return knex(TABLE_NAME)
+			.where({ id })
+			.update(data);
+	},
+	loadCrashReportAgreement: async () => {
+		const guideSettings = await findAllGuideSettings();
+		crashReportAgreement = guideSettings[0].crashReportAgreement === 1;
 	}
-
-	function _updateById(id, data) {
-		return sqlLiteService.update(TABLE_NAME, data, { id: id });
-	}
-
-	return Controller;
-};
+});

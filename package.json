@@ -1,7 +1,7 @@
 {
   "name": "selfkey-identity-wallet",
   "productName": "SelfKey Identity Wallet",
-  "version": "0.0.7-beta",
+  "version": "0.0.8-beta",
   "description": "The Official SelfKey Identity Wallet for Desktop",
   "repository": {
     "type": "git",
@@ -48,6 +48,7 @@
     ]
   },
   "dependencies": {
+    "@sentry/electron": "^0.5.5",
     "@uirouter/angularjs": "1.0.18",
     "angular": "1.7.0",
     "angular-animate": "1.7.0",
@@ -91,6 +92,7 @@
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
+    "@sentry/cli": "^1.33.0",
     "chai": "^4.1.2",
     "chalk": "2.3.2",
     "copy-webpack-plugin": "^4.5.1",
@@ -99,6 +101,7 @@
     "electron": "2.0.2",
     "electron-builder": "20.14.7",
     "electron-chromedriver": "^2.0.0",
+    "electron-download": "^4.1.0",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
