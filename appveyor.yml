@@ -13,6 +13,8 @@ environment:
     secure: 3nZUATUy4tdQaFirLmE5vVKDnop7K01uM3V6so9M0nxDEEEfpicfCiz2xdW4gO4y
   MM_URL:
     secure: QfAI68E/qnE7UZMvjqIQIkiMASDooWknt2psZWeawGTa8iu4cuNWd5P+ronxVphBXYAPuwEywIadwnxAj4WmIkL6rfGd/OQo1hlsNfEwYCo=
+  SENTRY_DSN:
+    secure: gSaaWHq0v1X7SY/HWJlmSVPmxZb/6JhO5N1bPJXLQ41JzGrP+YmGKWazLaZkrb+oGiB4Z1alNWJHK/gyBwPa8A==
 artifacts:
   - path: dist
 platform:
@@ -35,6 +37,7 @@ install:
   - npm i -g yarn
   - yarn
 build_script:
+  - echo {"dsn":"%SENTRY_DSN%"} > src\main\assets\data\sentry.json
   - set DEBUG=electron-builder
   - yarn dist --publish=never
 #test_script:

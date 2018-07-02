@@ -155,6 +155,12 @@ md-dialog.terms(aira-lable="Terms of Service Agreement")
                             | SelfKey reserves all rights in the look and feel of the SelfKey Wallet. Some parts of the SelfKey Wallet. are licensed under third-party open source licenses.
                             | We also make some of our own code available under open source licenses. As for other parts of the SelfKey Wallet, you may not copy or adapt any portion of our
                             | code or visual design elements (including logos) without express written permission from SelfKey unless otherwise permitted by law.
+                        
+                        .sub-title
+                            | 18) CRASH REPORT
+                        p   
+                            input(id='crashReportAgreement', type='checkbox' ng-model="crashReportAgreement.isSet")
+                            | I agree to anonymously share crash report data with the SelfKey Foundation. This information will be used to improve the performance of the SelfKey Identity Wallet.
 
                 section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='', style="z-index: 100;")
                     if (process.env.NODE_ENV === 'test')

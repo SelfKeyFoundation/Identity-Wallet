@@ -32,6 +32,9 @@ jobs:
           paths:
             - node_modules/
       - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
           name: Build App
           command: yarn dist --publish=never
       - persist_to_workspace:
