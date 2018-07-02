@@ -9,6 +9,7 @@ function appUpdater() {
 
 	// TODO: hard coding it now but should be moved to a config file or build time or allow user to choose
 	autoUpdater.channel = 'beta';
+	autoUpdater.allowDowngrade = false;
 
 	// Ask the user if update is available
 	autoUpdater.on('update-downloaded', info => {

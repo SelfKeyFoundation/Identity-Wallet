@@ -1,4 +1,5 @@
 const { knex } = require('../../services/knex');
+const log = require('electron-log');
 const TABLE_NAME = 'guide_settings';
 let crashReportAgreement = false;
 
@@ -16,7 +17,12 @@ module.exports = () => ({
 			.update(data);
 	},
 	loadCrashReportAgreement: async () => {
-		const guideSettings = await findAllGuideSettings();
-		crashReportAgreement = guideSettings[0].crashReportAgreement === 1;
+		try {
+			const guideSettings = await findAllGuideSettings();
+			crashReportAgreement =
+				guideSettings.length > 0 ? guideSettings[0].crashReportAgreement === 1 : false;
+		} catch (e) {
+			log.error(e);
+		}
 	}
 });
