@@ -111,7 +111,7 @@ function onReady(app) {
 		const LedgerService = require('./controllers/ledger-service')(app);
 		electron.app.ledgerService = new LedgerService();
 
-		const Web3Service = require('./controllers/web3-service')(app);
+		const Web3Service = require('./controllers/web3-service').default(app);
 		electron.app.web3Service = new Web3Service();
 
 		const RPCHandler = require('./controllers/rpc-handler')(app);

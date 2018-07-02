@@ -12,9 +12,8 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 		getAccountsWithBalances(args) {
 			const loadBalances = (accounts, callback) => {
 				let fns = {};
-				Object.keys(accounts).forEach(derivationPath => {
+				accounts.forEach(address => {
 					let fn = callback => {
-						let address = accounts[derivationPath];
 						let promise = Web3Service.getBalance(address);
 
 						promise
@@ -29,7 +28,7 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 								callback(err);
 							});
 					};
-					fns[derivationPath] = fn;
+					fns[address] = fn;
 				});
 
 				window.async.parallel(fns, callback);
@@ -38,8 +37,8 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 			return new Promise((resolve, reject) => {
 				RPCService.makeCall('getLedgerAccounts', args)
 					.then(accounts => {
-						if (!accounts || Object.keys(accounts).length == 0) {
-							reject();
+						if (!accounts || accounts.length == 0) {
+							reject('ACCOUNTS_NOT_FOUND');
 							return;
 						}
 
@@ -50,11 +49,10 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 							}
 
 							let accountsArr = Object.keys(results)
-								.map(derivationPath => {
+								.map(address => {
 									return {
-										address: accounts[derivationPath],
-										derivationPath: derivationPath,
-										balanceEth: results[derivationPath]
+										address,
+										balanceEth: results[address]
 									};
 								})
 								.sort((a, b) => {
@@ -73,12 +71,11 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 			return RPCService.makeCall('createLedgerWalletByAdress', { address });
 		}
 
-		signTransaction(dataToSign, address, derivationPath) {
+		signTransaction(dataToSign, address) {
 			return new Promise((resolve, reject) => {
 				RPCService.makeCall('signTransactionWithLedger', {
 					dataToSign,
-					address,
-					derivationPath
+					address
 				})
 					.then(res => {
 						resolve(res);

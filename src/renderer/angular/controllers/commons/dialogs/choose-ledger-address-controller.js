@@ -22,15 +22,14 @@ function ChooseLedgerAddressController(
 		$mdDialog.cancel();
 	};
 
+	let defaultErrMessage = 'Device not found';
 	let errMsgsMap = {
-		'No device found': 'Device not found',
-		'Invalid status 6801': 'Ledger has timed out and must be unlocked again with PIN'
+		UNKNOWN_ERROR: defaultErrMessage,
+		LEDGER_IS_TIMED_OUT: 'Ledger has timed out and must be unlocked again with PIN'
 	};
 
 	let onError = err => {
-		err = err || 'error';
-		err = err.toString();
-		err = errMsgsMap[err] || err;
+		err = errMsgsMap[err] || defaultErrMessage;
 		CommonService.showToast('error', err);
 	};
 

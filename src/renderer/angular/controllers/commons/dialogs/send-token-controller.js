@@ -59,23 +59,6 @@ function SendTokenDialogController(
 		);
 	};
 
-	let ledgerConnErrKeywords = ['invalid status 6700', 'invalid channel', 'device not found'];
-	let isLedgerConnError = err => {
-		if (!err) {
-			return false;
-		}
-		err = err.toLowerCase();
-		let check = false;
-		ledgerConnErrKeywords.every(keyword => {
-			if (err.indexOf(keyword) != -1) {
-				check = true;
-				return false; //break iteration
-			}
-			return true; //continue iteration
-		});
-		return check;
-	};
-
 	/**
 	 * Prepare
 	 */
@@ -128,16 +111,16 @@ function SendTokenDialogController(
 				}
 
 				if (isLedgerWallet) {
-					if (error.indexOf('Invalid status 6801') != -1) {
+					if (error == 'LEDGER_IS_TIMED_OUT') {
 						processedErr = true;
 						$rootScope.openUnlockLedgerInfoWindow();
-					} else if (error.indexOf('Invalid status 6985') != -1) {
+					} else if (error == 'DENIED_BY_THE_USER') {
 						processedErr = true;
 						$rootScope.openRejectLedgerTxWarningDialog();
-					} else if (error == 'custom-timeout') {
+					} else if (error == 'CUSTOM_TIMEOUT') {
 						processedErr = true;
 						$rootScope.openLedgerTimedOutWindow();
-					} else if (isLedgerConnError(error)) {
+					} else if (error == 'UNKNOWN_ERROR') {
 						processedErr = true;
 						let isSendingTxFealure = true;
 						$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);

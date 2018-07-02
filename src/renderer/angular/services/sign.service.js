@@ -20,15 +20,14 @@ function SignService($rootScope, $log, LedgerService) {
 			});
 		};
 
-		this.signTransactionByLedger = function(dataToSign, address, derivationPath) {
-			return LedgerService.signTransaction(dataToSign, address, derivationPath);
+		this.signTransactionByLedger = function(dataToSign, address) {
+			return LedgerService.signTransaction(dataToSign, address);
 		};
 
 		this.signTransaction = function(args) {
 			let { rawTx, profile, privateKey, walletAddress } = args;
 			if (profile == 'ledger') {
-				let derivationPath = $rootScope.selectedLedgerAccount.derivationPath;
-				return this.signTransactionByLedger(rawTx, walletAddress, derivationPath);
+				return this.signTransactionByLedger(rawTx, walletAddress);
 			}
 
 			if (profile == 'local') {

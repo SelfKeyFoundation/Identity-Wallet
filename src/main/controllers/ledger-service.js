@@ -1,151 +1,100 @@
 'use strict';
 
-const electron = require('electron');
-const ledgerco = require('ledgerco');
-const EthereumTx = require('ethereumjs-tx');
-const { timeout, TimeoutError } = require('promise-timeout');
+const electron = require('electron'),
+	{ timeout, TimeoutError } = require('promise-timeout'),
+	Web3 = require('web3'),
+	ProviderEngine = require('web3-provider-engine'),
+	FetchSubprovider = require('web3-provider-engine/subproviders/fetch'),
+	Transport = require('@ledgerhq/hw-transport-node-hid').default,
+	createLedgerSubprovider = require('@ledgerhq/web3-subprovider').default,
+	NETWORK_ID = require('../config').chainId,
+	SELECTED_SERVER_URL = require('./web3-service').SELECTED_SERVER_URL;
 
-const CONFIG = require('../config');
+const errorsMap = {
+	'ledger device: unknown_error (0x6801)': 'LEDGER_IS_TIMED_OUT'
+};
 
 module.exports = function(app) {
-	let comm = null;
-	let lastHIDPath = '';
-
-	const getNetworkId = () => {
-		return CONFIG.chainId;
-	};
-
-	const getDefaultDerivationPath = () => {
-		return "44'/60'/0'/0";
-	};
-
 	const controller = function() {};
 
-	async function closeConnection() {
-		if (!comm) {
+	function createWeb3(accountsOffset, accountsQuantity) {
+		accountsOffset = accountsOffset || 0;
+		accountsQuantity = accountsQuantity || 6;
+		const engine = new ProviderEngine();
+		const getTransport = () => Transport.create();
+		const ledger = createLedgerSubprovider(getTransport, {
+			networkId: NETWORK_ID,
+			accountsLength: accountsQuantity,
+			accountsOffset
+		});
+
+		engine.addProvider(ledger);
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.start();
+		return new Web3(engine);
+	}
+
+	let onError = (err, reject) => {
+		if (!reject) {
 			return;
 		}
 
-		await comm.close_async();
-		comm = null;
-	}
-	async function getEth() {
-		let list = await ledgerco.comm_node.list_async();
-		let isConnected = list && list.length;
-
-		if (isConnected) {
-			let newHDPath = list[0];
-			if (comm && lastHIDPath && lastHIDPath != newHDPath) {
-				await closeConnection();
-			}
-			lastHIDPath = newHDPath;
-		} else {
-			throw Error('Device not found');
+		if (err instanceof TimeoutError) {
+			return reject('CUSTOM_TIMEOUT');
 		}
 
-		if (!comm) {
-			comm = await ledgerco.comm_node.create_async();
+		let message = (err.message || '').toLowerCase();
+		if (message.indexOf('denied by the user') != -1) {
+			return reject('DENIED_BY_THE_USER');
 		}
 
-		return new ledgerco.eth(comm);
-	}
-
-	function obtainPathComponentsFromDerivationPath(derivationPath) {
-		// check if derivation path follows 44'/60'/x'/n pattern
-		const regExp = /^(44'\/6[0|1]'\/\d+'?\/)(\d+)$/;
-		const matchResult = regExp.exec(derivationPath);
-		if (matchResult === null) {
-			throw new Error(
-				"To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n "
-			);
-		}
-
-		return { basePath: matchResult[1], index: parseInt(matchResult[2], 10) };
-	}
-
-	controller.prototype.getAccounts = async function(args) {
-		args = args || {};
-
-		let indexOffset = args.start || 0;
-		let accountsNo = args.quantity || 1;
-		let eth = await getEth();
-
-		let derivationPath = args.derivationPath || getDefaultDerivationPath();
-		const pathComponents = obtainPathComponentsFromDerivationPath(derivationPath);
-
-		let addresses = {};
-		for (let i = indexOffset; i < indexOffset + accountsNo; i += 1) {
-			let path = pathComponents.basePath + (pathComponents.index + i).toString();
-			let address = await eth.getAddress_async(path);
-			addresses[path] = address.address;
-		}
-
-		return addresses;
+		reject(errorsMap[message] || 'UNKNOWN_ERROR');
 	};
 
-	async function _signTransaction(txData, derivationPath) {
-		let eth = await getEth();
-
-		derivationPath = derivationPath || getDefaultDerivationPath();
-		const pathComponents = obtainPathComponentsFromDerivationPath(derivationPath);
-		let path = pathComponents.basePath + pathComponents.index;
-		let account = await eth.getAddress_async(path);
-		if (
-			!account ||
-			!account.address ||
-			account.address.toLowerCase() != txData.from.toLowerCase()
-		) {
-			throw new Error('Invalid address');
-		}
-
-		// Encode using ethereumjs-tx
-		const tx = new EthereumTx(txData);
-		const chainId = getNetworkId();
-
-		// Set the EIP155 bits
-		tx.raw[6] = Buffer.from([chainId]); // v
-		tx.raw[7] = Buffer.from([]); // r
-		tx.raw[8] = Buffer.from([]); // s
-
-		// Encode as hex-rlp for Ledger
-		const hex = tx.serialize().toString('hex');
-
-		// Pass to _ledger for signing
-		let result = await (await getEth()).signTransaction_async(derivationPath, hex);
-
-		// Store signature in transaction
-		tx.v = Buffer.from(result.v, 'hex');
-		tx.r = Buffer.from(result.r, 'hex');
-		tx.s = Buffer.from(result.s, 'hex');
-
-		// EIP155: v should be chain_id * 2 + {35, 36}
-		const signedChainId = Math.floor((tx.v[0] - 35) / 2);
-		if (signedChainId !== chainId) {
-			throw new Error('Invalid signature received. Please update your Ledger Nano S.');
-		}
-
-		// Return the signed raw transaction
-		return `0x${tx.serialize().toString('hex')}`;
-	}
-
-	controller.prototype.signTransaction = async args => {
+	async function _signTransaction(args) {
 		args.dataToSign.from = args.address;
-		let derivationPath = args.derivationPath;
-		return new Promise((resolve, reject) => {
-			let signPromise = _signTransaction(args.dataToSign, derivationPath);
+		let signPromise = electron.app.web3Service.waitForTicket({
+			method: 'signTransaction',
+			args: [args.dataToSign],
+			contractAddress: null,
+			contractMethod: null,
+			onceListenerName: null,
+			customWeb3: createWeb3()
+		});
 
+		return new Promise((resolve, reject) => {
 			timeout(signPromise, 30000)
 				.then(res => {
-					resolve(res);
+					resolve(res.raw);
 				})
 				.catch(err => {
-					if (err instanceof TimeoutError) {
-						return reject('custom-timeout');
-					}
-					reject(err.toString());
+					onError(err, reject);
 				});
 		});
-	};
+	}
+
+	async function _getAccounts(args) {
+		return new Promise((resolve, reject) => {
+			electron.app.web3Service
+				.waitForTicket({
+					method: 'getAccounts',
+					args: [],
+					contractAddress: null,
+					contractMethod: null,
+					onceListenerName: null,
+					customWeb3: createWeb3(args.start, args.quantity)
+				})
+				.then(result => {
+					resolve(result);
+				})
+				.catch(err => {
+					onError(err, reject);
+				});
+		});
+	}
+
+	controller.prototype.getAccounts = _getAccounts;
+	controller.prototype.signTransaction = _signTransaction;
 
 	return controller;
 };

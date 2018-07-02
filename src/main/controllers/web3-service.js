@@ -20,67 +20,76 @@ const SERVER_CONFIG = {
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-module.exports = function (app) {
+const defaultModule = function(app) {
+	const controller = function() {
+		let self = this;
 
-  const controller = function () {
-    let self = this;
+		let standardWeb3 = (self.standardWeb3 = new Web3());
+		standardWeb3.setProvider(new standardWeb3.providers.HttpProvider(SELECTED_SERVER_URL));
 
-    let standardWeb3 = self.standardWeb3 = new Web3();
-    standardWeb3.setProvider(new standardWeb3.providers.HttpProvider(SELECTED_SERVER_URL));
+		self.q = async.queue((data, callback) => {
+			let promise = null;
+			if (data.contractAddress) {
+				let contract = new standardWeb3.eth.Contract(ABI, data.contractAddress);
+				if (data.contractMethod) {
+					promise = contract.methods[data.contractMethod]()[data.method].apply(
+						self,
+						data.args
+					);
+				} else {
+					promise = contract[data.method].apply(contract, data.args);
+				}
+			} else {
+				promise = (data.customWeb3 ? data.customWeb3 : standardWeb3).eth[data.method].apply(
+					self,
+					data.args
+				);
+			}
+			setTimeout(() => {
+				callback(promise);
+			}, REQUEST_INTERVAL_DELAY);
+		}, 1);
+	};
 
-    self.q = async.queue((data, callback) => {
-      let promise = null;
-      if (data.contractAddress) {
-        let contract = new standardWeb3.eth.Contract(ABI, data.contractAddress);
-        if (data.contractMethod) {
-          promise = contract.methods[data.contractMethod]()[data.method].apply(self, data.args);
-        } else {
-          promise = contract[data.method].apply(contract, data.args);
-        }
+	controller.prototype.getSelectedServerURL = () => {
+		return SELECTED_SERVER_URL;
+	};
 
-      } else {
-        promise = standardWeb3.eth[data.method].apply(self, data.args);
-      }
-      setTimeout(() => {
-        callback(promise);
-      }, REQUEST_INTERVAL_DELAY);
-    }, 1);
-  };
+	/**
+	 *
+	 * @param { method, args, contractAddress, contractMethod } args
+	 *
+	 *
+	 */
+	controller.prototype.waitForTicket = function(args) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			self.q.push(args, promise => {
+				if (!promise) {
+					return reject();
+				}
 
-  controller.prototype.getSelectedServerURL = () => {
-    return SELECTED_SERVER_URL;
-  }
+				promise.catch(err => {
+					reject(err);
+				});
 
-  /**
-   * 
-   * @param { method, args, contractAddress, contractMethod } args 
-   * 
-   * 
-   */
-  controller.prototype.waitForTicket = function (args) {
-    let self = this;
-    return new Promise((resolve, reject) => {
-      self.q.push(args, (promise) => {
-        if (!promise) {
-          return reject();
-        }
+				if (args.onceListenerName) {
+					promise.once(args.onceListenerName, res => {
+						resolve(res);
+					});
+				} else {
+					promise.then(res => {
+						resolve(res);
+					});
+				}
+			});
+		});
+	};
 
-        promise.catch((err) => {
-          reject(err);
-        });
+	return controller;
+};
 
-        if (args.onceListenerName) {
-          promise.once(args.onceListenerName, res => {
-            resolve(res);
-          });
-        } else {
-          promise.then((res) => {
-            resolve(res);
-          });
-        }
-      })
-    });
-  }
-
-  return controller;
+module.exports = {
+	default: defaultModule,
+	SELECTED_SERVER_URL
 };
