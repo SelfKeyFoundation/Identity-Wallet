@@ -109,6 +109,7 @@ module.exports = {
 			idAttribute.items = JSON.stringify(idAttribute.items);
 			try {
 				idAttribute = await sqlUtil.insertAndSelect(idAttribute, trx);
+				idAttribute.items = JSON.parse(idAttribute.items);
 			} catch (error) {
 				throw {
 					message: 'id_attribute_create_error',
@@ -154,7 +155,6 @@ module.exports = {
 			idAttribute.items = JSON.stringify(idAttribute.items);
 			let updatedIdAttribute = await sqlUtil.updateById(TABLE_NAME, id, idAttribute, trx);
 			updatedIdAttribute.items = JSON.parse(updatedIdAttribute.items);
-
 			return updatedIdAttribute;
 		}),
 	addEditStaticDataToIdAttributeItemValue: (
@@ -192,6 +192,7 @@ module.exports = {
 				throw { message: 'update_error', error: error };
 			}
 		}),
+
 	findAllByWalletId: async (walletId, tx) => {
 		try {
 			let rows = await sqlUtil.select(TABLE_NAME, '*', { walletId }, tx);
@@ -207,7 +208,7 @@ module.exports = {
 				acc[attr.id] = attr;
 				return acc;
 			}, {});
-
+			console.log(idAttributes);
 			return idAttributes;
 		} catch (error) {
 			throw { message: 'error_while_selecting', error: error };
