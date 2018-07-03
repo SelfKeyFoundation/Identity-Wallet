@@ -3,7 +3,7 @@
 const EventEmitter = require('events');
 const fetch = require('node-fetch');
 
-const TokenPrice = require('./models/token-price');
+const TokenPrice = require('../models/token-price');
 
 const emitter = new EventEmitter();
 

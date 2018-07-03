@@ -3,18 +3,18 @@
 const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
 
-const Wallet = require('./models/wallet');
-const IdAttribute = require('./models/id-attribute');
-const IdAttributeType = require('./models/id-attribute-type');
-const Document = require('./models/document');
-const ActionLog = require('./models/action-log');
-const Token = require('./models/token');
-const WalletToken = require('./models/wallet-token');
-const Country = require('./models/country');
-const WalletSetting = require('./models/wallet-setting');
-const GuideSetting = require('./models/guide-setting');
-const Exchange = require('./models/exchange');
-const TxHistory = require('./models/tx-history');
+const Wallet = require('../models/wallet');
+const IdAttribute = require('../models/id-attribute');
+const IdAttributeType = require('../models/id-attribute-type');
+const Document = require('../models/document');
+const ActionLog = require('../models/action-log');
+const Token = require('../models/token');
+const WalletToken = require('../models/wallet-token');
+const Country = require('../models/country');
+const WalletSetting = require('../models/wallet-setting');
+const GuideSetting = require('../models/guide-setting');
+const Exchange = require('../models/exchange');
+const TxHistory = require('../models/tx-history');
 
 const path = require('path');
 const fs = require('fs-extra');

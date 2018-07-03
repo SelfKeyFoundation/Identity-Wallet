@@ -1,7 +1,7 @@
 'use strict';
 const fetch = require('node-fetch');
-const IdAttributeType = require('./models/id-attribute-type');
-const Exchange = require('./models/exchange');
+const IdAttributeType = require('../models/id-attribute-type');
+const Exchange = require('../models/exchange');
 const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
 
 module.exports = {

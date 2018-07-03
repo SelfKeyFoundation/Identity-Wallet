@@ -1,5 +1,5 @@
 const { init } = require('@sentry/electron');
-const guideSettings = require('./models/guide-setting');
+const guideSettings = require('../models/guide-setting');
 const log = require('electron-log');
 // DSN will be inject during build time
 const sentry = require('../assets/data/sentry');
