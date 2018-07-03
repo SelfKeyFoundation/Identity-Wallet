@@ -22,8 +22,8 @@ const init = async () => {
 		console.log(
 			`Attempting automatic recovery. Existing data file has been moved to ${backupPath}`
 		);
-
-		await knex.initialize(db);
+		// Should use knex.initialize in knex v > 0.15.0
+		await knex.client.initializePool(db);
 		await createInitialDb();
 	}
 };
