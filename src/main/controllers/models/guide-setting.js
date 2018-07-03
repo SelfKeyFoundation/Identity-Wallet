@@ -3,9 +3,9 @@ const log = require('electron-log');
 const TABLE_NAME = 'guide_settings';
 let crashReportAgreement = false;
 
-const mod = module.exports = () => ({
-    findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
-    hasAgreedToCrashReport: () => {
+const mod = (module.exports = {
+	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
+	hasAgreedToCrashReport: () => {
 		return crashReportAgreement;
     },
     loadCrashReportAgreement: async () => {
@@ -17,7 +17,7 @@ const mod = module.exports = () => ({
         }
 	},
 	updateById: (id, data, tx) => {
-        crashReportAgreement = data.crashReportAgreement;
+		crashReportAgreement = data.crashReportAgreement;
 		return sqlUtil.updateById(TABLE_NAME, id, data, tx);
-    }
+	}
 });
