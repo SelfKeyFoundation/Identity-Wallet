@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { knex, sqlUtil } = require('../../services/knex');
+const { knex, sqlUtil } = require('../services/knex');
 const { genRandId } = require('../../utils/crypto');
 const Document = require('./document');
 const WalletSetting = require('./wallet-setting');

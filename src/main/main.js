@@ -5,7 +5,8 @@ const fs = require('fs');
 const electron = require('electron');
 const { Menu } = require('electron');
 const isOnline = require('is-online');
-const config = buildConfig();
+const { getUserDataPath } = require('./utils/common');
+const config = require('./config.js');
 
 const log = require('electron-log');
 
@@ -16,7 +17,7 @@ log.transports.console.level = 'info';
 
 log.info('starting: ' + electron.app.getName());
 
-const userDataDirectoryPath = electron.app.getPath('userData');
+const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
@@ -130,7 +131,7 @@ function onReady(app) {
 		}
 
 		mainWindow = new electron.BrowserWindow({
-			title: electron.app.getName(),
+			title: electron.avipp.getName(),
 			width: 1170,
 			height: 800,
 			minWidth: 1170,
@@ -189,7 +190,7 @@ function onReady(app) {
 					PriceService.startUpdateData();
 					AirtableService.loadIdAttributeTypes();
 					AirtableService.loadExchangeData();
-                    electron.app.txHistory.startSyncingJob();
+					electron.app.txHistory.startSyncingJob();
 
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
@@ -341,33 +342,4 @@ function handleSquirrelEvent() {
 			return true;
 	}
 	log.info('end handleSquirrelEvent');
-}
-
-/**
- *
- */
-function isDevMode() {
-	if (process.env.NODE_ENV === 'development') {
-		return true;
-	}
-	return false;
-}
-
-function isDebugging() {
-	if (process.env.DEV_TOOLS === 'yes') {
-		return true;
-	}
-	return false;
-}
-
-function buildConfig() {
-	let config = require('./config');
-
-	const envConfig = isDevMode() || isDebugging() ? config.default : config.production;
-	config = Object.assign(config, envConfig);
-
-	delete config.default;
-	delete config.production;
-
-	return config;
 }

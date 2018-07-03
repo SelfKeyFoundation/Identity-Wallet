@@ -1,47 +1,78 @@
 process.env.MODE = 'test';
 const Mocha = require('mocha');
+const { walkSync } = require('../src/main/utils/fs');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config/config.js');
 const exec = require('child_process').exec;
 
-let testType = 'unit';
+const TEST_FILE_RE = /\.spec\.js$/;
 
-if (process.argv.length > 2 && process.argv[2] === 'e2e') {
-	testType = path.join(process.argv[2], 'basic_id');
-}
-
-if (config.chmodCmd) {
-	exec(config.chmodCmd, err => (err ? console.log('Error: ', err) : console.log('chmod worked')));
-}
-
-const mocha = new Mocha({
+const MOCHA_CONF = {
 	timeout: 20000,
 	bail: true
-});
+};
 
-walkSync(path.join(config.testDir, testType))
-	.filter(file => path.extname(file) === '.js')
-	.forEach(file => mocha.addFile(path.join(file)));
+const getTestType = () => {
+	if (process.argv.length > 2 && process.argv[2] == 'e2e') {
+		return 'e2e';
+	}
+	return 'unit';
+};
 
-config.consoleNotes();
+const getTestDir = () => {
+	if (getTestType() == 'unit') {
+		return path.join(config.testDir, 'unit');
+	}
+	return path.join(config.testDir, 'e2e', 'basic_id');
+};
 
-mocha.run(failures => {
+const isTestFile = filename => TEST_FILE_RE.test(filename);
+
+const getTestFiles = testDir => walkSync(testDir).filter(isTestFile);
+
+const initDB = async () => {
+	const db = require('../src/main/db');
+	await db.init();
+};
+
+const runChmod = () => {
+	const chmodComplete = err => {
+		if (err) {
+			console.log('Error: ', err);
+			return;
+		}
+		console.log('chmod worked');
+	};
+	exec(config.chmodCmd, chmodComplete);
+};
+
+const runTests = (files, complete) => {
+	mocha = new Mocha(MOCHA_CONF);
+	files.forEach(file => mocha.addFile(file));
+	config.consoleNotes();
+	mocha.run(complete);
+};
+
+const handleTestsCompete = failures => {
 	process.on('exit', () => {
 		process.exit(failures);
 	});
 	process.exit();
-});
+};
 
-function walkSync(dir, filelist = []) {
-	fs.readdirSync(dir).forEach(file => {
-		const dirFile = path.join(dir, file);
-		try {
-			filelist = walkSync(dirFile, filelist);
-		} catch (err) {
-			if (err.code === 'ENOTDIR' || err.code === 'EBUSY') filelist = [...filelist, dirFile];
-			else throw err;
+const main = async () => {
+	try {
+		if (config.chmodCmd) {
+			runChmod();
 		}
-	});
-	return filelist;
-}
+		if (getTestType() == 'unit') {
+			await initDB();
+		}
+		runTests(getTestFiles(getTestDir()), handleTestsCompete);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+if (!module.parent) main();

@@ -1,4 +1,4 @@
-const { knex, sqlUtil } = require('../../services/knex');
+const { knex, sqlUtil } = require('../services/knex');
 const TABLE_NAME = 'token_prices';
 
 module.exports = {

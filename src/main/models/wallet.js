@@ -1,4 +1,4 @@
-const { knex, sqlUtil } = require('../../services/knex');
+const { knex, sqlUtil } = require('../services/knex');
 const { genRandId } = require('../../utils/crypto');
 const WalletSetting = require('./wallet-setting');
 const WalletToken = require('./wallet-token');

@@ -1,5 +1,4 @@
-
-const { knex, sqlUtil } = require('../../services/knex');
+const { knex, sqlUtil } = require('../services/knex');
 const isSyncing = require('../tx-history-service').isSyncing;
 
 const TABLE_NAME = 'tx_history';
