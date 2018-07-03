@@ -31,11 +31,6 @@ const isTestFile = filename => TEST_FILE_RE.test(filename);
 
 const getTestFiles = testDir => walkSync(testDir).filter(isTestFile);
 
-const initDB = async () => {
-	const db = require('../src/main/db');
-	await db.init();
-};
-
 const runChmod = () => {
 	const chmodComplete = err => {
 		if (err) {
@@ -67,7 +62,7 @@ const main = async () => {
 			runChmod();
 		}
 		if (getTestType() == 'unit') {
-			await initDB();
+			await require('./utils/db').init();
 		}
 		runTests(getTestFiles(getTestDir()), handleTestsCompete);
 	} catch (error) {

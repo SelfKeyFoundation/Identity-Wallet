@@ -1,45 +1,49 @@
 const { db } = require('./config');
+const fs = require('fs');
 const knex = require('knex')(db);
 const { Model } = require('objection');
 Model.knex(knex);
 
 const init = async () => {
 	try {
-		// Run migraitons
-		await knex.migrate.latest();
-
-		// Seed required data
-		// No checks here, since they are handled in the seed file
-		await knex.seed.run();
+		await createInitialDb();
 	} catch (e) {
 		console.error(e);
-
-		const backupPath = `${db.connection.filename}.bkp`;
-
-		if (fs.existsSync(backupPath)) {
-			console.log('Automatic recovery has already been attempted and failed. Aborting.');
-			throw e;
-		}
-
 		// Tear down connections connected to existing file
 		await knex.destroy();
 
-		fs.renameSync(db.connection.filename, backupPath);
+		try {
+			createBackup(db.connection.filename);
+		} catch (backupError) {
+			console.log('Automatic recovery has already been attempted and failed. Aborting.');
+			throw e;
+		}
 
 		console.log(
 			`Attempting automatic recovery. Existing data file has been moved to ${backupPath}`
 		);
 
-		// Connect to new data file
 		await knex.initialize(db);
-
-		// Try to initialize it.
-		// This won't loop infinitely due to the check for the backup file.
-		return init();
+		await createInitialDb();
 	}
 };
 
+const createInitialDb = async () => {
+	await knex.migrate.latest();
+	await knex.seed.run();
+};
+
+const createBackup = (dbPath, backupPath) => {
+	backupPath = backupPath || `${dbPath}.bkp`;
+	if (fs.existsSync(backupPath)) {
+		throw new Error('Backup file exists');
+	}
+	fs.renameSync(dbPath, backupPath);
+};
+
 module.exports = {
+	config: db,
 	knex,
-	init
+	init,
+	createInitialDb
 };
