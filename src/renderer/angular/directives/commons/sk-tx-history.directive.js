@@ -9,8 +9,16 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 			tokenSymbol: '@'
 		},
 		link: (scope, element) => {
-            let publicKey = '0x' + $rootScope.wallet.getPublicKey();
-            let publicKeyLowerCase = publicKey.toLowerCase(); 
+			let publicKey = '0x' + $rootScope.wallet.getPublicKey();
+			let publicKeyLowerCase = publicKey.toLowerCase();
+
+			scope.hasPager = false;
+			scope.pager = {
+				perPage: 10,
+				page: 1
+			};
+			let pager = scope.pager;
+			scope.total = 0;
 
 			let syncByWallet = showProgress => {
 				RPCService.makeCall('syncTxHistoryByWallet', {
@@ -71,7 +79,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let loadData = () => {
 				let fn,
-					fnArgs = { publicKey: publicKeyLowerCase };
+					fnArgs = { publicKey: publicKeyLowerCase, pager };
 				if (scope.tokenSymbol) {
 					if (scope.tokenSymbol == 'ETH') {
 						fn = 'getByPublicKeyAndContractAddress';
@@ -87,6 +95,8 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 					.then(res => {
 						scope.txList = processTxHistoryList(res.data);
 						scope.isSyncing = res.isSyncing;
+						scope.total = res.pagination.total;
+						scope.hasPager = scope.total > pager.perPage;
 					})
 					.catch(err => {
 						scope.isSyncing = false;
@@ -115,6 +125,14 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 			let txReloadInterval = $interval(() => {
 				loadData();
 			}, 3000);
+
+			scope.onPageChange = isNext => {
+				isNext ? ++pager.page : --pager.page;
+				if (pager.page < 1) {
+					pager.page = 1;
+				}
+				loadData();
+			};
 
 			element.on('$destroy', function() {
 				$interval.cancel(txReloadInterval);

@@ -1,68 +1,110 @@
 const Promise = require('bluebird');
 const isSyncing = require('../tx-history-service').isSyncing;
 
-module.exports = function (app, sqlLiteService) {
-    const TABLE_NAME = 'tx_history';
-    const Controller = function () { };
+//TODO copy in utils when sql-util-refactor will be finished
+let paginator = knex => {
+	return async (query, options) => {
+		const perPage = options.perPage || 10;
+		let page = options.page || 1;
 
-    let knex = sqlLiteService.knex;
+		const countQuery = knex.count('* as total').from(query.clone().as('inner'));
 
-    /**
-     *
-     */
-    Controller.addOrUpdate = _addOrUpdate;
-    Controller.findByTxHash = _findByTxHash;
-    Controller.findByPublicKey = _findByPublicKey;
-    Controller.findByPublicKeyAndTokenSymbol = _findByPublicKeyAndTokenSymbol;
-    Controller.findByPublicKeyAndContractAddress = _findByPublicKeyAndContractAddress;
+		if (page < 1) {
+			page = 1;
+		}
+		const offset = (page - 1) * perPage;
 
-    async function _addOrUpdate(txHistory) {
-        let records = await _findByTxHash(txHistory.hash);
-        let record = records ? records[0] : null;
-        if (record) {
-            Object.assign(record, txHistory);
-            return sqlLiteService.updateById(TABLE_NAME, record);
-        }
-        return sqlLiteService.insertIntoTable(TABLE_NAME, txHistory);
-    }
+		query.offset(offset);
 
-    async function _findByTxHash(hash) {
-        return await knex(TABLE_NAME).where({ hash: hash });
-    }
+		if (perPage > 0) {
+			query.limit(perPage);
+		}
 
-    async function _findByPublicKeyAndContractAddress(publicKey, contractAddress) {
-        publicKey = publicKey.toLowerCase();
-        return knex(TABLE_NAME).where({ from: publicKey, contractAddress }).
-            orWhere({ to: publicKey, contractAddress }).orderBy('timeStamp', 'desc').then(rows => {
-                return {
-                    data: rows,
-                    isSyncing: isSyncing(publicKey)
-                };
-            });
-    }
+		const [data, countRows] = await Promise.all([query, countQuery]);
 
-    async function _findByPublicKey(publicKey) {
-        publicKey = publicKey.toLowerCase();
+		const total = countRows[0].total;
 
-        return knex(TABLE_NAME).where({ from: publicKey }).orWhere({ to: publicKey }).
-            orderBy('timeStamp', 'desc').then(rows => {
-                return {
-                    data: rows,
-                    isSyncing: isSyncing(publicKey)
-                };
-            });
-    }
+		return {
+			data,
+			pagination: {
+				total,
+				perPage,
+				currentPage: page,
+				lastPage: Math.ceil(total / perPage),
+				from: offset,
+				to: offset + data.length
+			}
+		};
+	};
+};
 
-    async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol) {
-        publicKey = publicKey.toLowerCase();
-        return knex(TABLE_NAME).where({ from: publicKey, tokenSymbol }).
-            orWhere({ to: publicKey, tokenSymbol }).orderBy('timeStamp', 'desc').then(rows => {
-                return {
-                    data: rows,
-                    isSyncing: isSyncing(publicKey)
-                };
-            });
-    }
+module.exports = function(app, sqlLiteService) {
+	const TABLE_NAME = 'tx_history';
+	const Controller = function() {};
 
-    return Controller;
-}
+	let knex = sqlLiteService.knex;
+
+	/**
+	 *
+	 */
+	Controller.addOrUpdate = _addOrUpdate;
+	Controller.findByTxHash = _findByTxHash;
+	Controller.findByPublicKey = _findByPublicKey;
+	Controller.findByPublicKeyAndTokenSymbol = _findByPublicKeyAndTokenSymbol;
+	Controller.findByPublicKeyAndContractAddress = _findByPublicKeyAndContractAddress;
+
+	async function _addOrUpdate(txHistory) {
+		let records = await _findByTxHash(txHistory.hash);
+		let record = records ? records[0] : null;
+		if (record) {
+			Object.assign(record, txHistory);
+			return sqlLiteService.updateById(TABLE_NAME, record);
+		}
+		return sqlLiteService.insertIntoTable(TABLE_NAME, txHistory);
+	}
+
+	async function _findByTxHash(hash) {
+		return await knex(TABLE_NAME).where({ hash: hash });
+	}
+
+	async function _findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
+		publicKey = publicKey.toLowerCase();
+		let query = knex(TABLE_NAME)
+			.where({ from: publicKey, contractAddress })
+			.orWhere({ to: publicKey, contractAddress })
+			.orderBy('timeStamp', 'desc');
+
+		return paginator(knex)(query, pager).then(res => {
+			res.isSyncing = isSyncing(publicKey);
+			return res;
+		});
+	}
+
+	async function _findByPublicKey(publicKey, pager) {
+		publicKey = publicKey.toLowerCase();
+		let query = knex(TABLE_NAME)
+			.where({ from: publicKey })
+			.orWhere({ to: publicKey })
+			.orderBy('timeStamp', 'desc');
+
+		return paginator(knex)(query, pager).then(res => {
+			res.isSyncing = isSyncing(publicKey);
+			return res;
+		});
+	}
+
+	async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
+		publicKey = publicKey.toLowerCase();
+		let query = knex(TABLE_NAME)
+			.where({ from: publicKey, tokenSymbol })
+			.orWhere({ to: publicKey, tokenSymbol })
+			.orderBy('timeStamp', 'desc');
+
+		return paginator(knex)(query, pager).then(res => {
+			res.isSyncing = isSyncing(publicKey);
+			return res;
+		});
+	}
+
+	return Controller;
+};

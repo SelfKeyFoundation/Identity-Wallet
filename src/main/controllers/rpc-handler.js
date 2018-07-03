@@ -1269,7 +1269,8 @@ module.exports = function(app) {
 	) {
 		electron.app.sqlLiteService.TxHistory.findByPublicKeyAndTokenSymbol(
 			args.publicKey,
-			args.tokenSymbol
+			args.tokenSymbol,
+			args.pager
 		)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1287,7 +1288,8 @@ module.exports = function(app) {
 	) {
 		electron.app.sqlLiteService.TxHistory.findByPublicKeyAndContractAddress(
 			args.publicKey,
-			args.contractAddress
+			args.contractAddress,
+			args.pager
 		)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1319,7 +1321,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.getTxHistoryByPublicKey = function(event, actionId, actionName, args) {
-		electron.app.sqlLiteService.TxHistory.findByPublicKey(args.publicKey)
+		electron.app.sqlLiteService.TxHistory.findByPublicKey(args.publicKey, args.pager)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
