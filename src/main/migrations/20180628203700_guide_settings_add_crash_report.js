@@ -9,6 +9,14 @@ exports.up = async (knex, Promise) => {
 		table.integer('createdAt').notNullable();
 		table.integer('updatedAt');
 	});
+
+	await knex('guide_settings').insert({
+		guideShown: 0,
+		icoAdsShown: 0,
+		termsAccepted: 0,
+		crashReportAgreement: 0,
+		createdAt: new Date().getTime()
+	});
 };
 
 exports.down = async (knex, Promise) => {};
