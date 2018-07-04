@@ -1,3 +1,4 @@
+const { Model } = require('objection');
 const BaseModel = require('./base');
 const TABLE_NAME = 'countries';
 
@@ -17,13 +18,15 @@ class Country extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				code: { type: 'string' }
+				code: { type: 'string' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
 			}
 		};
 	}
 
 	static findAll() {
-		return this.query().select();
+		return this.query();
 	}
 }
 

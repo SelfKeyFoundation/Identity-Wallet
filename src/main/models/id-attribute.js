@@ -90,10 +90,6 @@ module.exports = {
 			if (rows && rows.length) {
 				throw { message: 'id_attribute_already_exists' };
 			}
-			await sqlUtil.select(TABLE_NAME, '*', { walletId, idAttributeType }, trx);
-			if (rows && rows.length) {
-				throw { message: 'id_attribute_already_exists' };
-			}
 			let idAttribute = null;
 			let document = null;
 			if (file) {
@@ -180,7 +176,7 @@ module.exports = {
 
 			idAttribute.items = JSON.stringify(idAttribute.items);
 			try {
-				idAttribite = await sqlUtil.updateById(
+				idAttribute = await sqlUtil.updateById(
 					TABLE_NAME,
 					idAttribute.id,
 					idAttribute,
@@ -325,3 +321,132 @@ module.exports = {
 			}
 		})
 };
+
+const BaseModel = require('./base');
+const { Model, transaction } = require('objection');
+const TABLE_NAME = 'id_attributes';
+class IdAttribute extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
+
+	static get idColumn() {
+		return 'id';
+	}
+
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			required: ['walletId', 'idAttributeType'],
+			properties: {
+				id: { type: 'integer' },
+				walletId: { type: 'integer' },
+				idAttributeType: { type: 'string' },
+				items: { type: 'array' },
+				order: { type: 'integer' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
+		};
+	}
+
+	static get relationMappings() {
+		const Wallet = require('./wallet');
+		const IdAttributeType = require('./id-attribute-type');
+		return {
+			wallet: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Wallet,
+				join: {
+					from: `${this.tableName}.walletId`,
+					to: `${Wallet.tableName}.id`
+				}
+			},
+			type: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: IdAttributeType,
+				join: {
+					from: `${this.tableName}.idAttributeType`,
+					to: `${IdAttributeType.tableName}.key`
+				}
+			}
+		};
+	}
+
+	static async create(walletId, idAttributeType, staticData, file) {
+		const tx = await transaction.start(this.knex());
+		try {
+			let attr = await this.query(tx)
+				.findOne()
+				.where({ walletId, idAttributeType });
+			if (attr) throw new Error('id_attribute_already_exists');
+			let documument = null;
+			if (file) {
+				document = await Document.create(_.omit(file, 'path'), tx);
+			}
+			let idAttribute = generateIdAttributeObject(
+				walletId,
+				idAttributeType,
+				staticData,
+				document
+			);
+			let itm = this.query(tx).insertAndFetch(idAttribute);
+			//create document
+			//create idAttribute obj
+			//insert and fetch
+			await tx.commit();
+			return itm;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
+
+	static async addEditDocumentToIdAttributeItemValue(
+		idAttributeId,
+		idAttributeItemId,
+		idAttributeItemValue,
+		file
+	) {
+		const tx = await transaction.start(this.knex());
+		try {
+			let idAttribute = await this.query(tx).findById(idAttributeId);
+			if (!idAttribute) throw new Error('id_attribute_not_found');
+			let value = getIdAttributeItemValue(idAttribute, idAttributeId, idAttributeItemValueId);
+			if (value) {
+				await Document.delete(value.documentId, tx);
+			}
+			let document = await Document.create(
+				_.pick(file, 'buffer', 'name', 'mimeType', 'size'),
+				tx
+			);
+			value.documentId = document.id;
+			value.documentName = document.name;
+			idAttribute = this.query(tx).patchAndFetchById(idAttributeId, idAttribute);
+			tx.commit();
+			return idAttribute;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
+
+	static addEditStaticDataToIdAttributeItemValue(
+		idAttributeId,
+		idAttributeItemId,
+		idAttributeItemValueId,
+		staticData
+	) {}
+
+	static findAllByWalletId() {}
+
+	static delete() {}
+
+	static addImportedIdAttributes() {}
+
+	static async genInitial(walletId, initialIdAttributes) {}
+
+	static async initializeImported(id, initialIdAttributes) {}
+}
+
+module.exports = IdAttribute;

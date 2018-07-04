@@ -1,226 +1,148 @@
-const { knex, sqlUtil } = require('../services/knex');
-const { genRandId } = require('../../utils/crypto');
-const WalletSetting = require('./wallet-setting');
-const WalletToken = require('./wallet-token');
-const IdAttributeTypes = require('./id-attribute-type');
-
+const BaseModel = require('./base');
+const { Model, transaction } = require('objection');
 const TABLE_NAME = 'wallets';
-module.exports = {
-	create: data =>
-		knex.transaction(async trx => {
-			let wallet = await sqlUtil.insertAndSelect(TABLE_NAME, data, trx);
-			try {
-				await WalletSetting.create(
-					{ walletId: wallet.id, sowDesktopNotifications: 1 },
-					trx
-				);
-				await WalletToken.create({ walletId: wallet.id, tokenId: 1 }, trx);
-			} catch (error) {
-				throw { message: 'wallet_init_error', error };
+class Wallet extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
+
+	static get idColumn() {
+		return 'id';
+	}
+
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			required: ['publicKey', 'privateKey'],
+			properties: {
+				id: { type: 'integer' },
+				name: { type: 'string' },
+				publicKey: { type: 'string' },
+				privateKey: { type: 'string' },
+				keystoreFilePath: { type: 'string' },
+				profilePicture: { type: 'binary' },
+				isSetupFinished: { type: 'integer' },
+				profile: { type: 'string' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
 			}
-			return wallet;
-		}),
+		};
+	}
 
-	findActive: tx =>
-		sqlUtil.select(TABLE_NAME, '*', { isSetupFinished }, tx).catch(error => {
-			throw { message: 'wallet_findActive', error };
-		}),
-
-	findAll: () =>
-		knex(TABLE_NAME)
-			.select()
-			.whereNotNull('keystoreFilePath')
-			.catch(error => {
-				throw { message: 'wallet_findAll', error };
-			}),
-
-	findByPublicKey: publicKey =>
-		sqlUtil.selectOne(TABLE_NAME, '*', { publicKey }).catch(error => {
-			throw { message: 'wallet_findByPublicKey', error };
-		}),
-
-	updateProfilePicture: args =>
-		knex.transaction(async trx => {
-			let wallet = await sqlUtil.selectOneById(TABLE_NAME, '*', args.id, trx);
-			wallet.profilePicture = args.profilePicture;
-			try {
-				await sqlUtil.updateById(TABLE_NAME, wallet.id, wallet, trx);
-			} catch (error) {
-				throw { message: 'error', error };
+	static get relationMappings() {
+		const WalletSetting = require('./wallet-setting');
+		const WalletToken = require('./wallet-token');
+		const IdAttribute = require('./id-attribute');
+		return {
+			setting: {
+				relation: Model.HasOneRelation,
+				modelClass: WalletSetting,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${WalletSetting.tableName}.walletId`
+				}
+			},
+			tokens: {
+				relation: Model.HasManyRelation,
+				modelClass: WalletToken,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${WalletToken.tableName}.walletId`
+				}
+			},
+			idAttributes: {
+				relation: Model.HasManyRelation,
+				modelClass: IdAttribute,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${IdAttribute.tableName}.walletId`
+				}
 			}
-			return wallet;
-		}),
+		};
+	}
 
-	selectProfilePictureById: async (args, tx) => {
+	static async create(itm) {
+		const tx = transaction.start(this.knex());
 		try {
-			let wallet = await sqlUtil.selectOneById(TABLE_NAME, '*', args.id, tx);
-			if (!wallet) return null;
-			return wallet.profilePicture;
-		} catch (error) {
-			throw { message: 'error_while_selecting_profile_picture', error };
-		}
-	},
-
-	addInitialIdAttributesAndActivate: async (walletId, initialIdAttributes) =>
-		knex.transaction(async trx => {
-			let wallet = await sqlUtil.selectOneById(TABLE_NAME, '*', walletId, trx);
-			let idAttributeTypes = await IdAttributeTypes.findInitial(trx);
-			let idAttributesSavePromises = [];
-			for (let i in idAttributeTypes) {
-				let idAttributeType = idAttributeTypes[i];
-
-				let item = {
-					walletId: wallet.id,
-					idAttributeType: idAttributeType.key,
-					items: [],
-					createdAt: Date.now()
-				};
-
-				item.items.push({
-					id: genRandId(),
-					name: null,
-					isVerified: 0,
-					order: 0,
-					createdAt: Date.now(),
-					updatedAt: null,
-					values: [
-						{
-							id: genRandId(),
-							staticData: {
-								line1: initialIdAttributes[idAttributeType.key]
-							},
-							documentId: null,
-							order: 0,
-							createdAt: Date.now(),
-							updatedAt: null
-						}
-					]
-				});
-
-				item.items = JSON.stringify(item.items);
-
-				// add initial id attributes
-				idAttributesSavePromises.push(
-					sqlUtil.insertAndSelect('id_attributes', item, trx).catch(error => {
-						console.log(error);
-					})
-				);
-			}
-			try {
-				await Promise.all(idAttributesSavePromises);
-			} catch (error) {
-				console.log(error);
-				throw { message: 'wallets_insert_error', error: error };
-			}
-			wallet.isSetupFinished = 1;
-			try {
-				await sqlUtil.updateById(TABLE_NAME, wallet.id, wallet, trx);
-				return wallet;
-			} catch (error) {
-				console.log(error);
-				throw { message: 'wallets_insert_error', error };
-			}
-		}),
-
-	editImportedIdAttributes: (walletId, initialIdAttributes) =>
-		knex.transaction(async trx => {
-			let wallet = await sqlUtil.selectOneById(TABLE_NAME, '*', walletId, trx);
-			let idAttributeTypes = await IdAttributeTypes.findInitial(trx);
-			let idAttributeTypesSelectPromises = [];
-			let idAttributesSavePromises = [];
-
-			let idAttributesToInsert = [];
-
-			for (let i in idAttributeTypes) {
-				let idAttributeType = idAttributeTypes[i];
-
-				idAttributeTypesSelectPromises.push(
-					sqlUtil
-						.select(
-							'id_attributes',
-							'*',
-							{ walletId, idAttributeType: idAttributeType.key },
-							trx
-						)
-						.then(idAttributes => {
-							let idAttribute = null;
-
-							if (idAttributes && idAttributes.length === 1) {
-								idAttribute = idAttributes[0];
-								idAttribute.items = JSON.parse(idAttribute.items);
-								if (initialIdAttributes[idAttributeType.key]) {
-									idAttribute.items[0].values[0].staticData.line1 =
-										initialIdAttributes[idAttributeType.key];
-								}
-								idAttribute.items = JSON.stringify(idAttribute.items);
-							} else {
-								idAttribute = {
-									walletId: wallet.id,
-									idAttributeType: idAttributeType.key,
-									items: [],
-									createdAt: Date.now()
-								};
-
-								idAttribute.items.push({
-									id: genRandId(),
-									name: null,
-									isVerified: 0,
-									order: 0,
-									createdAt: Date.now(),
-									updatedAt: null,
-									values: [
-										{
-											id: genRandId(),
-											staticData: {
-												line1: initialIdAttributes[idAttributeType.key]
-											},
-											documentId: null,
-											order: 0,
-											createdAt: Date.now(),
-											updatedAt: null
-										}
-									]
-								});
-								idAttribute.items = JSON.stringify(idAttribute.items);
-							}
-
-							return idAttribute;
-						})
-				);
-			}
-
-			let idAttributesList = await Promise.all(idAttributeTypesSelectPromises);
-
-			let finalPromises = [];
-
-			for (let i in idAttributesList) {
-				(function() {
-					let idAttribute = idAttributesList[i];
-					if (idAttribute.id) {
-						finalPromises.push(
-							sqlUtil.update(
-								'id_attributes',
-								idAttribute,
-								{ id: idAttribute.id },
-								trx
-							)
-						);
-					} else {
-						finalPromises.push(
-							sqlUtil.insertAndSelect('id_attributes', idAttribute, trx)
-						);
+			let itm = await this.query(tx).graphInsertAndFetch({
+				...itm,
+				setting: {
+					showDesktopNotification: 1
+				},
+				tokens: [
+					{
+						tokenId: 1
 					}
-				})(i);
-			}
+				]
+			});
+			await tx.commit();
+			return itm;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
 
-			await Promise.all(finalPromises);
+	static findActive() {
+		return this.findAll().where({ isSetupFinished: 1 });
+	}
 
-			wallet.isSetupFinished = 1;
-			try {
-				await Wallet.updateById(wallet.id, wallet, trx);
-			} catch (error) {
-				throw { message: 'wallets_insert_error', error };
-			}
+	static findAll() {
+		return this.query().whereNotNull('keystoreFilePath');
+	}
+
+	static findByPublicKey(publicKey) {
+		return this.query()
+			.findOne()
+			.where({ publicKey });
+	}
+
+	static updateProfilePicture({ id, profilePicture }) {
+		return this.query().patchAndFetchById(id, { profilePicture });
+	}
+
+	static async selectProfilePictureById(id) {
+		let itm = await this.query().findById(id);
+		if (!itm) return null;
+		return itm.profilePicture;
+	}
+
+	static async addInitialIdAttributesAndActivate(id, initialIdAttributes) {
+		const tx = transaction.start(this.knex());
+		try {
+			const IdAttributes = require('./id-attribute');
+			//TODO implement
+			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
+			let wallet = await this.query(tx).graphUpsertAndFetch({
+				id,
+				isSetupFinished: 1,
+				idAttributes: attributes
+			});
+			tx.commit();
 			return wallet;
-		})
-};
+		} catch (error) {
+			tx.rollback();
+			throw error;
+		}
+	}
+
+	static async editImportedIdAttributes(id, initialIdAttributes) {
+		const tx = transaction.start(this.knex());
+		try {
+			const IdAttributes = require('./id-attribute');
+			const attributes = await IdAttributes.initializeImported(id, initialIdAttributes, tx);
+			let wallet = await this.query(tx).graphUpsertAndFetch({
+				id,
+				isSetupFinished: 1,
+				idAttributes: attributes
+			});
+			tx.commit();
+			return wallet;
+		} catch (error) {
+			tx.rollback();
+			throw error;
+		}
+	}
+}
+
+module.exports = Wallet;

@@ -1,11 +1,49 @@
-const { knex, sqlUtil } = require('../services/knex');
+const BaseModel = require('./base');
+const { Model, transaction } = require('objection');
 
 const TABLE_NAME = 'tokens';
 
-module.exports = {
-	TABLE_NAME,
-	findAll: tx => sqlUtil.select(TABLE_NAME, '*', tx),
-	findBySymbol: (symbol, tx) => sqlUtil.select(TABLE_NAME, { symbol }, tx),
-	create: (data, tx) => sqlUtil.insertAndSelect(TABLE_NAME, data, tx),
-	update: (data, tx) => sqlUtil.updateById(TABLE_NAME, data.id, data)
-};
+class Token extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
+
+	static get idColumn() {
+		return 'id';
+	}
+
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			required: ['symbol'],
+			properties: {
+				id: { type: 'integer' },
+				symbol: { type: 'string' },
+				decimal: { type: 'integer' },
+				address: { type: 'string' },
+				icon: { type: 'binary' },
+				isCustom: { type: 'integer' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
+		};
+	}
+
+	static create(itm) {
+		return this.query().insertAndFetch(itm);
+	}
+
+	static update(itm) {
+		return this.query().patchAndFetchById(itm.id, itm);
+	}
+
+	static findAll() {
+		return this.query();
+	}
+
+	static findBySymbol() {
+		return this.query().where({ symbol });
+	}
+}
+
+module.exports = Token;
