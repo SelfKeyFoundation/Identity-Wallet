@@ -1,4 +1,6 @@
-const appPackage = require(__dirname + '/../../package.json');
+/* eslint-env node */ /* global window */
+const path = require('path');
+const appPackage = require(path.join(__dirname, '..', '..', 'package.json'));
 const config = require('./config');
 const defaultWindowOpen = window.open;
 window.path = require('path');
@@ -60,7 +62,7 @@ window.ipcRenderer = require('electron').ipcRenderer;
 window.BigNumber = require('bignumber.js');
 window.ethUtil = require('ethereumjs-util');
 window.crypto = require('crypto');
-window.ethUtil.crypto = crypto;
+window.ethUtil.crypto = window.crypto;
 
 window.Web3 = require('web3');
 window.Tx = require('ethereumjs-tx');
@@ -78,5 +80,5 @@ window.open = function(url, ...args) {
 	return null;
 };
 
-window.require = requireNodeModule;
+window.require = window.requireNodeModule;
 window.module = module;
