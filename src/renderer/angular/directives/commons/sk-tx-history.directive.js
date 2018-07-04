@@ -45,7 +45,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				if (status == 1) {
 					return isSend ? 'Sent' : 'Received';
 				}
-				return isSend ? 'Sending' : 'Sending';
+				return isSend ? 'Sending' : 'Receiving';
 			};
 
 			let getTxStatusIcon = tx => {
