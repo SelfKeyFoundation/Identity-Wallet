@@ -72,17 +72,9 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 		}
 
 		signTransaction(dataToSign, address) {
-			return new Promise((resolve, reject) => {
-				RPCService.makeCall('signTransactionWithLedger', {
-					dataToSign,
-					address
-				})
-					.then(res => {
-						resolve(res);
-					})
-					.catch(err => {
-						reject(err);
-					});
+			return RPCService.makeCall('signTransactionWithLedger', {
+				dataToSign,
+				address
 			});
 		}
 	}

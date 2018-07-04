@@ -21,7 +21,9 @@ function SignService($rootScope, $log, LedgerService) {
 		};
 
 		this.signTransactionByLedger = function(dataToSign, address) {
-			return LedgerService.signTransaction(dataToSign, address);
+			return LedgerService.signTransaction(dataToSign, address).then(res => {
+				return res.raw;
+			});
 		};
 
 		this.signTransaction = function(args) {

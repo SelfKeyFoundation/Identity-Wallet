@@ -10,10 +10,6 @@ const electron = require('electron'),
 	NETWORK_ID = require('../config').chainId,
 	SELECTED_SERVER_URL = require('./web3-service').SELECTED_SERVER_URL;
 
-const errorsMap = {
-	'ledger device: unknown_error (0x6801)': 'LEDGER_IS_TIMED_OUT'
-};
-
 module.exports = function(app) {
 	const controller = function() {};
 
@@ -34,23 +30,6 @@ module.exports = function(app) {
 		return new Web3(engine);
 	}
 
-	let onError = (err, reject) => {
-		if (!reject) {
-			return;
-		}
-
-		if (err instanceof TimeoutError) {
-			return reject('CUSTOM_TIMEOUT');
-		}
-
-		let message = (err.message || '').toLowerCase();
-		if (message.indexOf('denied by the user') != -1) {
-			return reject('DENIED_BY_THE_USER');
-		}
-
-		reject(errorsMap[message] || 'UNKNOWN_ERROR');
-	};
-
 	async function _signTransaction(args) {
 		args.dataToSign.from = args.address;
 		let signPromise = electron.app.web3Service.waitForTicket({
@@ -62,34 +41,17 @@ module.exports = function(app) {
 			customWeb3: createWeb3()
 		});
 
-		return new Promise((resolve, reject) => {
-			timeout(signPromise, 30000)
-				.then(res => {
-					resolve(res.raw);
-				})
-				.catch(err => {
-					onError(err, reject);
-				});
-		});
+		return timeout(signPromise, 30000);
 	}
 
 	async function _getAccounts(args) {
-		return new Promise((resolve, reject) => {
-			electron.app.web3Service
-				.waitForTicket({
-					method: 'getAccounts',
-					args: [],
-					contractAddress: null,
-					contractMethod: null,
-					onceListenerName: null,
-					customWeb3: createWeb3(args.start, args.quantity)
-				})
-				.then(result => {
-					resolve(result);
-				})
-				.catch(err => {
-					onError(err, reject);
-				});
+		return electron.app.web3Service.waitForTicket({
+			method: 'getAccounts',
+			args: [],
+			contractAddress: null,
+			contractMethod: null,
+			onceListenerName: null,
+			customWeb3: createWeb3(args.start, args.quantity)
 		});
 	}
 

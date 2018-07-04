@@ -76,6 +76,31 @@ function SendTokenDialogController(
 		$scope.formData.sendAmount = angular.copy($scope.infoData.totalBalance);
 	};
 
+	let ledgerStatusCodesMap = {
+		27013: 'denied',
+		26625: 'locked'
+	};
+
+	let processLedgerErr = err => {
+		debugger;
+		let message = ledgerStatusCodesMap[err.statusCode] || err.message || '';
+		switch (message.toLowerCase()) {
+			case 'timeout':
+				$rootScope.openLedgerTimedOutWindow();
+				break;
+			case 'denied':
+				$rootScope.openRejectLedgerTxWarningDialog();
+				break;
+			case 'locked':
+				$rootScope.openUnlockLedgerInfoWindow();
+				break;
+
+			default:
+				let isSendingTxFealure = true;
+				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
+		}
+	};
+
 	$scope.startSend = event => {
 		$scope.signedHex = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
@@ -93,50 +118,37 @@ function SendTokenDialogController(
 			.catch(error => {
 				$mdDialog.cancel();
 				let processedErr = false;
-				error = error.toString();
+				let errorMsg = error.toString();
 
-				if (error == 'invalid_address') {
+				if (errorMsg == 'invalid_address') {
 					$scope.errors.sendToAddressHex = true;
 					setViewState();
 					return;
 				}
 
-				if (error == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
-					error = `Error: There is already another transaction on the Ethereum network with the same hash.
+				if (errorMsg == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
+					errorMsg = `Error: There is already another transaction on the Ethereum network with the same hash.
 					 Please wait until this is complete before sending another transaction.`;
-					$scope.errors.sendFailed = error;
+					$scope.errors.sendFailed = errorMsg;
 					$scope.viewStates.step = 'transaction-status';
 					setViewState();
 					return;
 				}
 
-				if (isLedgerWallet) {
-					if (error == 'LEDGER_IS_TIMED_OUT') {
-						processedErr = true;
-						$rootScope.openUnlockLedgerInfoWindow();
-					} else if (error == 'DENIED_BY_THE_USER') {
-						processedErr = true;
-						$rootScope.openRejectLedgerTxWarningDialog();
-					} else if (error == 'CUSTOM_TIMEOUT') {
-						processedErr = true;
-						$rootScope.openLedgerTimedOutWindow();
-					} else if (error == 'UNKNOWN_ERROR') {
-						processedErr = true;
-						let isSendingTxFealure = true;
-						$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
-					}
-				}
-
-				if (error.indexOf(TIMEOUT_ERROR) !== -1) {
+				if (errorMsg.indexOf(TIMEOUT_ERROR) !== -1) {
 					$scope.startSend(event);
 					return;
 				}
 
-				if (error && !processedErr) {
-					CommonService.showToast('error', error, 20000);
+				if (isLedgerWallet) {
+					return processLedgerErr(error);
 				}
 
-				$scope.errors.sendFailed = !processedErr ? error : '';
+				if (errorMsg && !processedErr) {
+					CommonService.showToast('error', errorMsg, 20000);
+				}
+
+				$scope.errors.sendFailed = !processedErr ? errorMsg : '';
 				// reset view state
 				setViewState();
 			});
