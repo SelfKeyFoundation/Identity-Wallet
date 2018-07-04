@@ -26,19 +26,19 @@ class ActionLog extends BaseModel {
 		};
 	}
 
-	// static get relationMappings(){
-	//     const Wallet = require('./wallet');
-	//     return {
-	//         wallet: {
-	//             relation: Model.BelongsToOneRelation,
-	//             modelClass: Wallet,
-	//             join: {
-	//                 from: `${this.tableName}.walletId`,
-	//                 to: `${Wallet.tableName}.id`
-	//             }
-	//         }
-	//     };
-	// }
+	static get relationMappings() {
+		const Wallet = require('./wallet');
+		return {
+			wallet: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Wallet,
+				join: {
+					from: `${this.tableName}.walletId`,
+					to: `${Wallet.tableName}.id`
+				}
+			}
+		};
+	}
 
 	static create(itm, tx) {
 		return this.query(tx).insertAndFetch(itm);

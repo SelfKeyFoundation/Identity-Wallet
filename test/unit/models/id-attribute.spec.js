@@ -6,9 +6,9 @@ describe('IdAttribute model', () => {
 		await db.reset();
 	});
 
-	it('create', async () => {});
+	it('create', () => {});
 
-	it('addEditDocumentToIdAttributeItemValue', async () => {});
+	it('addEditDocumentToIdAttributeItemValue', () => {});
 
 	it('addEditStaticDataToIdAttributeItemValue', () => {});
 

@@ -111,7 +111,6 @@ class Wallet extends BaseModel {
 		const tx = transaction.start(this.knex());
 		try {
 			const IdAttributes = require('./id-attribute');
-			//TODO implement
 			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
 			let wallet = await this.query(tx).graphUpsertAndFetch({
 				id,

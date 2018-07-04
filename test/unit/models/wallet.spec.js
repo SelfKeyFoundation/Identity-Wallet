@@ -6,9 +6,9 @@ describe('Wallet model', () => {
 		await db.reset();
 	});
 
-	it('create', async () => {});
+	it('create', () => {});
 
-	it('findActive', async () => {});
+	it('findActive', () => {});
 
 	it('findAll', () => {});
 

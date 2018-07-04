@@ -1,8 +1,7 @@
 const _ = require('lodash');
-const { knex, sqlUtil } = require('../services/knex');
-const { genRandId } = require('../../utils/crypto');
-const Document = require('./document');
-const WalletSetting = require('./wallet-setting');
+const { genRandId } = require('../utils/crypto');
+const BaseModel = require('./base');
+const { Model, transaction } = require('objection');
 const TABLE_NAME = 'id_attributes';
 
 function getIdAttributeItemValue(idAttribute, itemId, valueId) {
@@ -82,249 +81,6 @@ function generateEmptyIdAttributeItemValueObject() {
 	return item;
 }
 
-module.exports = {
-	TABLE_NAME,
-	create: (walletId, idAttributeType, staticData, file) =>
-		knex.transaction(async trx => {
-			let rows = await sqlUtil.select(TABLE_NAME, '*', { walletId, idAttributeType }, trx);
-			if (rows && rows.length) {
-				throw { message: 'id_attribute_already_exists' };
-			}
-			let idAttribute = null;
-			let document = null;
-			if (file) {
-				delete file.path;
-				document = await Document.create(file, trx);
-			}
-			idAttribute = generateIdAttributeObject(
-				walletId,
-				idAttributeType,
-				staticData,
-				document
-			);
-			idAttribute.items = JSON.stringify(idAttribute.items);
-			try {
-				idAttribute = await sqlUtil.insertAndSelect(idAttribute, trx);
-				idAttribute.items = JSON.parse(idAttribute.items);
-			} catch (error) {
-				throw {
-					message: 'id_attribute_create_error',
-					error: error
-				};
-			}
-			return idAttribute;
-		}),
-	addEditDocumentToIdAttributeItemValue: (
-		idAttributeId,
-		idAttributeItemId,
-		idAttributeItemValueId,
-		file
-	) =>
-		knex.transaction(async trx => {
-			let document = {
-				buffer: file.buffer,
-				name: file.name,
-				mimeType: file.mimeType,
-				size: file.size,
-				createdAt: Date.now()
-			};
-			let idAttribute = await sqlUtil.selectOneById(TABLE_NAME, '*', idAttributeId, trx);
-			if (!idAttribute) {
-				throw { message: 'id_attribute_not_found' };
-			}
-			idAttribute.items = JSON.parse(idAttribute.items);
-
-			// delete old document if exists (TODO JUST UPDATE IT)
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-			if (value) {
-				await Document.delete(value.documentId, trx);
-			}
-
-			let insertedDocument = await Document.create(document, trx);
-			value.documentId = insertedDocument.id;
-			value.documentName = insertedDocument.name;
-
-			idAttribute.items = JSON.stringify(idAttribute.items);
-			let updatedIdAttribute = await sqlUtil.updateById(TABLE_NAME, id, idAttribute, trx);
-			updatedIdAttribute.items = JSON.parse(updatedIdAttribute.items);
-			return updatedIdAttribute;
-		}),
-	addEditStaticDataToIdAttributeItemValue: (
-		idAttributeId,
-		idAttributeItemId,
-		idAttributeItemValueId,
-		staticData
-	) =>
-		knex.transaction(async trx => {
-			let idAttribute = await sqlUtil.selectOneById(TABLE_NAME, '*', idAttributeId, trx);
-			if (!idAttribute) {
-				throw { message: 'id_attribute_not_found' };
-			}
-			idAttribute.items = JSON.parse(idAttribute.items);
-
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-
-			value.staticData = staticData;
-
-			idAttribute.items = JSON.stringify(idAttribute.items);
-			try {
-				idAttribute = await sqlUtil.updateById(
-					TABLE_NAME,
-					idAttribute.id,
-					idAttribute,
-					trx
-				);
-				idAttribute.items = JSON.parse(idAttribute.items);
-				return idAttribute;
-			} catch (error) {
-				throw { message: 'update_error', error: error };
-			}
-		}),
-
-	findAllByWalletId: async (walletId, tx) => {
-		try {
-			let rows = await sqlUtil.select(TABLE_NAME, '*', { walletId }, tx);
-			if (!rows || !rows.length) {
-				return [];
-			}
-
-			let idAttributes = rows.reduce((acc, attr) => {
-				if (_.find(acc, { idAttributeType: attr.idAttributeType })) {
-					return acc;
-				}
-				attr.items = JSON.parse(attr.items);
-				acc[attr.id] = attr;
-				return acc;
-			}, {});
-			console.log(idAttributes);
-			return idAttributes;
-		} catch (error) {
-			throw { message: 'error_while_selecting', error: error };
-		}
-	},
-	delete: (idAttributeId, idAttributeItemId, idAttributeItemValueId) =>
-		knex.transaction(async trx => {
-			let idAttribute = await sqlUtil.selectOneById(TABLE_NAME, '*', idAttributeId, trx);
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-			if (value && value.documentId) {
-				await Document.delete(value.documentId, trx);
-			}
-			await sqlUtil.delete(TABLE_NAME, { id: idAttribute.id }, trx);
-			return idAttribute;
-		}),
-	addImportedIdAttributes: (walletId, exportCode, requiredDocuments, requiredStaticData) =>
-		knex.transaction(async trx => {
-			let walletSetting = await WalletSetting.findByWalletId(walletId);
-
-			let idAttributesSavePromises = [];
-			let documentsSavePromises = [];
-
-			let itemsToSave = {};
-
-			for (let i in requiredDocuments) {
-				let requirement = requiredDocuments[i];
-				if (!requirement.attributeType) continue;
-
-				let idAttribute = generateEmptyIdAttributeObject(
-					walletId,
-					requirement.attributeType
-				);
-				idAttribute.tempId = genRandId();
-
-				for (let j in requirement.docs) {
-					let fileItems = requirement.docs[j].fileItems;
-					let idAttributeItem = generateEmptyIdAttributeItemObject();
-					idAttribute.items.push(idAttributeItem);
-
-					for (let k in fileItems) {
-						let fileItem = fileItems[k];
-						let idAttributeItemValue = generateEmptyIdAttributeItemValueObject();
-						idAttributeItem.values.push(idAttributeItemValue);
-
-						let document = {
-							name: fileItem.name,
-							mimeType: fileItem.mimeType,
-							size: fileItem.size,
-							buffer: fileItem.buffer,
-							createdAt: Date.now()
-						};
-
-						documentsSavePromises.push(
-							Document.create(document, trx)
-								.then(document => {
-									idAttributeItemValue.documentId = document.id;
-									idAttributeItemValue.documentName = document.name;
-									itemsToSave[idAttribute.tempId] = idAttribute;
-								})
-								.catch(error => {
-									console.log(error);
-								})
-						);
-					}
-				}
-			}
-
-			for (let i in requiredStaticData) {
-				let requirement = requiredStaticData[i];
-				if (!requirement.attributeType) continue;
-
-				let staticData = {};
-				for (let j in requirement.staticDatas) {
-					let answer = requirement.staticDatas[j];
-					staticData['line' + (parseInt(j) + 1).toString()] = answer;
-				}
-
-				let idAttribute = generateIdAttributeObject(
-					walletId,
-					requirement.attributeType,
-					staticData,
-					null
-				);
-				idAttribute.tempId = genRandId();
-
-				itemsToSave[idAttribute.tempId] = idAttribute;
-			}
-
-			walletSetting.airDropCode = exportCode;
-
-			await Promise.all(documentsSavePromises);
-
-			for (let i in itemsToSave) {
-				(function() {
-					delete itemsToSave[i].tempId;
-					itemsToSave[i].items = JSON.stringify(itemsToSave[i].items);
-					idAttributesSavePromises.push(
-						sqlUtil.insertAndSelect(TABLE_NAME, itemsToSave[i], trx)
-					);
-				})(i);
-			}
-
-			await Promise.all(idAttributesSavePromises);
-			try {
-				await WalletSetting.updateById(walletSetting.id, walletSetting, trx);
-				return walletSetting;
-			} catch (error) {
-				console.log(error);
-				throw { message: 'wallets_insert_error', error: error };
-			}
-		})
-};
-
-const BaseModel = require('./base');
-const { Model, transaction } = require('objection');
-const TABLE_NAME = 'id_attributes';
 class IdAttribute extends BaseModel {
 	static get tableName() {
 		return TABLE_NAME;
@@ -391,9 +147,6 @@ class IdAttribute extends BaseModel {
 				document
 			);
 			let itm = this.query(tx).insertAndFetch(idAttribute);
-			//create document
-			//create idAttribute obj
-			//insert and fetch
 			await tx.commit();
 			return itm;
 		} catch (error) {
@@ -423,7 +176,7 @@ class IdAttribute extends BaseModel {
 			value.documentId = document.id;
 			value.documentName = document.name;
 			idAttribute = this.query(tx).patchAndFetchById(idAttributeId, idAttribute);
-			tx.commit();
+			await tx.commit();
 			return idAttribute;
 		} catch (error) {
 			await tx.rollback();
@@ -431,22 +184,254 @@ class IdAttribute extends BaseModel {
 		}
 	}
 
-	static addEditStaticDataToIdAttributeItemValue(
+	static async addEditStaticDataToIdAttributeItemValue(
 		idAttributeId,
 		idAttributeItemId,
 		idAttributeItemValueId,
 		staticData
-	) {}
+	) {
+		const tx = await transaction.start(this.knex());
+		try {
+			let idAttribute = await this.query(tx).findById(idAttributeId);
+			if (!idAttribute) throw new Error('id_attribute_not_found');
 
-	static findAllByWalletId() {}
+			let value = getIdAttributeItemValue(
+				idAttribute,
+				idAttributeItemId,
+				idAttributeItemValueId
+			);
 
-	static delete() {}
+			value.staticData = staticData;
 
-	static addImportedIdAttributes() {}
+			idAttribute = this.query(tx).patchAndFetchById(idAttribute.id, idAttribute);
+			await tx.commit();
+			return idAttribute;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
 
-	static async genInitial(walletId, initialIdAttributes) {}
+	static async findAllByWalletId(walletId) {
+		let attrs = await this.query().where(walletId);
+		return attrs.reduce((acc, attr) => {
+			if (_.find(acc, { idAttributeType: attr.idAttributeType })) return acc;
+			acc[attr.id] = attr;
+			return acc;
+		}, {});
+	}
 
-	static async initializeImported(id, initialIdAttributes) {}
+	static async delete(idAttributeId, idAttributeItemId, idAttributeItemValueId) {
+		const tx = transaction.start(this.knex());
+		try {
+			let idAttribute = this.query(tx).findById(idAttributeId);
+			let value = getIdAttributeItemValue(
+				idAttribute,
+				idAttributeItemId,
+				idAttributeItemValueId
+			);
+			if (value && value.documentId) {
+				await Document.delete(value.documentId, tx);
+			}
+			await this.query(tx).deleteById(idAttributeId);
+			await tx.comit();
+			return idAttribute;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
+
+	static async addImportedIdAttributes(
+		walletId,
+		exportCode,
+		requiredDocuments,
+		requiredStaticData
+	) {
+		const tx = await transaction.start(this.knex());
+		try {
+			let walletSetting = await WalletSetting.findByWalletId(walletId);
+			let idAttributesSavePromises = [];
+			let documentsSavePromises = [];
+
+			let itemsToSave = {};
+
+			for (let i in requiredDocuments) {
+				let requirement = requiredDocuments[i];
+				if (!requirement.attributeType) continue;
+
+				let idAttribute = generateEmptyIdAttributeObject(
+					walletId,
+					requirement.attributeType
+				);
+				idAttribute.tempId = genRandId();
+
+				for (let j in requirement.docs) {
+					let fileItems = requirement.docs[j].fileItems;
+					let idAttributeItem = generateEmptyIdAttributeItemObject();
+					idAttribute.items.push(idAttributeItem);
+
+					for (let k in fileItems) {
+						let fileItem = fileItems[k];
+						let idAttributeItemValue = generateEmptyIdAttributeItemValueObject();
+						idAttributeItem.values.push(idAttributeItemValue);
+
+						let document = {
+							name: fileItem.name,
+							mimeType: fileItem.mimeType,
+							size: fileItem.size,
+							buffer: fileItem.buffer,
+							createdAt: Date.now()
+						};
+
+						documentsSavePromises.push(
+							Document.create(document, tx)
+								.then(document => {
+									idAttributeItemValue.documentId = document.id;
+									idAttributeItemValue.documentName = document.name;
+									itemsToSave[idAttribute.tempId] = idAttribute;
+								})
+								.catch(error => {
+									console.log(error);
+								})
+						);
+					}
+				}
+			}
+
+			for (let i in requiredStaticData) {
+				let requirement = requiredStaticData[i];
+				if (!requirement.attributeType) continue;
+
+				let staticData = {};
+				for (let j in requirement.staticDatas) {
+					let answer = requirement.staticDatas[j];
+					staticData['line' + (parseInt(j) + 1).toString()] = answer;
+				}
+
+				let idAttribute = generateIdAttributeObject(
+					walletId,
+					requirement.attributeType,
+					staticData,
+					null
+				);
+				idAttribute.tempId = genRandId();
+
+				itemsToSave[idAttribute.tempId] = idAttribute;
+			}
+
+			walletSetting.airDropCode = exportCode;
+
+			await Promise.all(documentsSavePromises);
+
+			for (let i in itemsToSave) {
+				(function() {
+					delete itemsToSave[i].tempId;
+					itemsToSave[i].items = JSON.stringify(itemsToSave[i].items);
+					idAttributesSavePromises.push(
+						sqlUtil.insertAndSelect(TABLE_NAME, itemsToSave[i], tx)
+					);
+				})(i);
+			}
+			await Promise.all(idAttributesSavePromises);
+			await WalletSetting.updateById(walletSetting.id, walletSetting, tx);
+			await tx.commit();
+			return walletSetting;
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+	}
+
+	static async genInitial(walletId, initialIdAttributes, tx) {
+		const IdAttributeTypes = require('./id-attribute-type');
+		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
+		const attrs = [];
+		for (let i in idAttributeTypes) {
+			let idAttributeType = idAttributeTypes[i];
+
+			let item = {
+				walletId,
+				idAttributeType: idAttributeType.key,
+				items: [],
+				createdAt: Date.now()
+			};
+
+			item.items.push({
+				id: genRandId(),
+				name: null,
+				isVerified: 0,
+				order: 0,
+				createdAt: Date.now(),
+				updatedAt: null,
+				values: [
+					{
+						id: genRandId(),
+						staticData: {
+							line1: initialIdAttributes[idAttributeType.key]
+						},
+						documentId: null,
+						order: 0,
+						createdAt: Date.now(),
+						updatedAt: null
+					}
+				]
+			});
+			attrs.push(item);
+		}
+		return attrs;
+	}
+
+	static async initializeImported(walletId, initialIdAttributes, tx) {
+		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
+		let typeKeys = _.map(idAttributeTypes, ({ key }) => key);
+		let attributes = await this.query(tx)
+			.where({ walletId })
+			.whereIn('idAttributeType', typeKeys);
+		let existingTypes = {};
+
+		attributes = attributes.map(idAttribute => {
+			const type = idAttribute.idAttributeType;
+			existingTypes[type] = true;
+			if (initialIdAttributes[type]) {
+				idAttribute.items[0].values[0].staticData.line1 = initialIdAttributes[type];
+			}
+			return idAttribute;
+		});
+
+		typeKeys.forEach(type => {
+			if (existingTypes[type]) return;
+			let idAttribute = {
+				walletId,
+				idAttributeType: type,
+				items: [],
+				createdAt: Date.now()
+			};
+
+			idAttribute.items.push({
+				id: genRandId(),
+				name: null,
+				isVerified: 0,
+				order: 0,
+				createdAt: Date.now(),
+				updatedAt: null,
+				values: [
+					{
+						id: genRandId(),
+						staticData: {
+							line1: initialIdAttributes[type]
+						},
+						documentId: null,
+						order: 0,
+						createdAt: Date.now(),
+						updatedAt: null
+					}
+				]
+			});
+			attributes.push(idAttribute);
+		});
+		return attributes;
+	}
 }
 
 module.exports = IdAttribute;

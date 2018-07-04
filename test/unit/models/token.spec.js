@@ -6,9 +6,9 @@ describe('Token model', () => {
 		await db.reset();
 	});
 
-	it('create', async () => {});
+	it('create', () => {});
 
-	it('update', async () => {});
+	it('update', () => {});
 
 	it('findAll', () => {});
 
