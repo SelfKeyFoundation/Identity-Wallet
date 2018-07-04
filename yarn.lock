@@ -10577,6 +10577,14 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git":
+  version "1.0.0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#a8737d45c2b91747487ed37a3952a83c6edd0a5c"
+  dependencies:
+    react "^16.3.2"
+    react-dom "^16.3.2"
+    react-jss "^8.4.0"
+
 selfsigned@^1.9.1:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.3.tgz#d628ecf9e3735f84e8bafba936b3cf85bea43823"
