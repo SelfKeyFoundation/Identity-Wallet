@@ -1,23 +1,20 @@
-const tools = require('../../utils/tools.js')
-delay = require('delay')
-data = require('../../data/data.json')
-assert = require('assert')
+const tools = require('../../utils/tools.js');
 
 describe('Restores A Wallet With Private Key', () => {
-	before(tools.appStart)
-	after(tools.appStop)
+	before(tools.appStart);
+	after(tools.appStop);
 
 	it('Accepts The TOC', () => {
-		return tools.regStep(tools.app, '#agree')
-	})
+		return tools.regStep(tools.app, '#agree');
+	});
 
 	it('Confirms Setup Wallet', () => {
-		return tools.regStep(tools.app, '#setupWallet')
-	})
+		return tools.regStep(tools.app, '#setupWallet');
+	});
 
 	it('Selects Restore Wallet', () => {
-		return tools.regStep(tools.app, '#restoreWallet')
-	})
+		return tools.regStep(tools.app, '#restoreWallet');
+	});
 
 	// it('Selects Private Key Unlock And Inputs Private Key', () => {
 	// 	return delay(2000)
@@ -63,4 +60,4 @@ describe('Restores A Wallet With Private Key', () => {
 	// 			// .then(v => assert(v,  'V' + appVersion))
 	// 			// .then(() => console.log(chalk.green('Version Assert Correct: ' + v + ' == ' + appVersion)))
 	// })
-})
+});

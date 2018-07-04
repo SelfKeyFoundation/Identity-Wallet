@@ -1,7 +1,7 @@
 const knexFile = require('../knexfile.js');
-knex = require('knex')(knexFile);
-knexMigrate = require('knex-migrate');
-mv = '20180507173236';
+require('knex')(knexFile);
+const knexMigrate = require('knex-migrate');
+const mv = '20180507173236';
 
 async function run() {
 	const log = ({ action, migration }) => console.log('Doing ' + action + ' on ' + migration);

@@ -1162,10 +1162,10 @@ module.exports = function(app) {
 					.then(data => {
 						if (data) {
 							if (!data.icon) {
-								//TODO get image and update existing one
+								// TODO get image and update existing one
 							}
 						} else {
-							//TODO insert ot continue ???
+							// TODO insert ot continue ???
 						}
 					})
 					.catch(err => {

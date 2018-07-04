@@ -35,7 +35,7 @@ let defaultModule = function(app) {
 	const TOKEN_TX_ACTION = `?module=account&action=tokentx&startblock=0&sort=asc&offset=${OFFSET}`;
 	const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
 
-	//in order to change key name in runtime
+	// in order to change key name in runtime
 	const KEY_MAP = {
 		txreceipt_status: 'txReceiptStatus'
 	};
@@ -174,7 +174,7 @@ let defaultModule = function(app) {
 			processedTx[processedKey] = propperTx[key];
 		});
 
-		//toString is important! in order to avoid exponential
+		// toString is important! in order to avoid exponential
 		processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
 		processedTx.tokenSymbol = processedTx.tokenSymbol
 			? processedTx.tokenSymbol.toUpperCase()
@@ -192,9 +192,9 @@ let defaultModule = function(app) {
 			}
 		}
 
-		//faild transaction
+		// faild transaction
 		if (processedTx.value == 0) {
-			//set faild status, there is some exeptions, so that's needed
+			// set faild status, there is some exeptions, so that's needed
 			processedTx.txReceiptStatus = 0;
 
 			processedTx.from == walletAddress

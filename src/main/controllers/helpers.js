@@ -107,7 +107,7 @@ module.exports = function(app) {
 			values: [
 				{
 					id: _generateId(),
-					staticData: staticData ? staticData : {},
+					staticData: staticData || {},
 					documentId: document ? document.id : null,
 					documentName: document ? document.name : null,
 					order: 0,
@@ -133,7 +133,7 @@ module.exports = function(app) {
 	function _generateEmptyIdAttributeItemObject(name) {
 		let item = {
 			id: _generateId(),
-			name: name ? name : null,
+			name: name || null,
 			isVerified: 0,
 			order: 0,
 			createdAt: new Date().getTime(),
