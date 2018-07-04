@@ -82,7 +82,6 @@ function SendTokenDialogController(
 	};
 
 	let processLedgerErr = err => {
-		debugger;
 		let message = ledgerStatusCodesMap[err.statusCode] || err.message || '';
 		switch (message.toLowerCase()) {
 			case 'timeout':
@@ -94,7 +93,6 @@ function SendTokenDialogController(
 			case 'locked':
 				$rootScope.openUnlockLedgerInfoWindow();
 				break;
-
 			default:
 				let isSendingTxFealure = true;
 				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
