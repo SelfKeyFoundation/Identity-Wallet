@@ -16,5 +16,9 @@
                     md-icon.external-link(md-svg-src="{{$root.appendStaticPath('assets/images/icons/external-link.svg')}}", ng-click="$root.openInBrowser(tx.externalLink)")
                     span )
               .tx-value.symbol(ng-class="tx.symbol") {{ tx.directionSign }} {{tx.value}}
-          .sk-horizontal-devider.mt-20(ng-if="txList.length - 1 != $index")
-
+          .sk-horizontal-devider.mt-20(ng-if="txList.length - 1 != $index || hasPager")
+  .pager-container(ng-if="hasPager", layout="row", layout-align="space-between start")
+    .pager-action-item
+        span(ng-click="onPageChange(false)", ng-if="pager.page > 1") < Previous Page
+    .pager-action-item
+        span(ng-click="onPageChange(true)", ng-if="pager.page * pager.perPage < total") Next Page >

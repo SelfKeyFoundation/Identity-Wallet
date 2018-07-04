@@ -6,7 +6,7 @@
 		margin-top: 10px;
 	}
 	.list {
-		> *  {
+		> * {
 			font-family: ProximaNovaRegular;
 		}
 		.list-item {
@@ -60,6 +60,21 @@
 					line-height: 2em;
 					color: #ffffff;
 				}
+			}
+		}
+	}
+	.pager-container {
+		padding-top: 20px;
+		font-size: 16px;
+		font-weight: 600;
+		color: #ffffff;
+		.pager-action-item {
+			&:first-child {
+				margin-left: 20px;
+			}
+			span {
+				outline: none !important;
+				cursor: pointer;
 			}
 		}
 	}
