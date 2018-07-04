@@ -22,11 +22,17 @@ function GuestImportPrivateKeyController(
 		privateKey: null
 	};
 
+	$scope.formType = 'password';
+
 	$scope.$watch('userInput.privateKey', (newVal, oldVal) => {
 		$scope.theForm.privateKey.$setValidity('badPrivateKey', true);
 	});
 
 	$scope.isUnlocking = false;
+
+	$scope.togglePasswordVisibility = () => {
+		$scope.formType = $scope.formType == 'password' ? 'text' : 'password';
+	};
 
 	$scope.unlock = (event, theForm) => {
 		if (!theForm.$valid) return;
