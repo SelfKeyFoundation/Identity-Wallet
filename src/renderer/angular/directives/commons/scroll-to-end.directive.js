@@ -91,9 +91,13 @@ function ScrollToEndDirective($log, $window) {
 				var scrollWasInYDirection = oldScrollY !== scrollY;
 				oldScrollX = scrollX;
 				oldScrollY = scrollY;
+				var ERROR_MARGIN = 5;
 				if (scrollWasInYDirection && scrollY <= 0) {
 					callback('top');
-				} else if (scrollWasInYDirection && scrollY >= contentHeight - viewportHeight) {
+				} else if (
+					scrollWasInYDirection &&
+					scrollY + ERROR_MARGIN >= contentHeight - viewportHeight
+				) {
 					callback('bottom');
 				} else if (scrollWasInXDirection && scrollX === 0) {
 					callback('left');
