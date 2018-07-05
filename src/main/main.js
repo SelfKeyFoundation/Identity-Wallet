@@ -1,10 +1,9 @@
+/* global __static */
 'use strict';
 const path = require('path');
 const fs = require('fs');
-const url = require('url');
 const electron = require('electron');
-const os = require('os');
-const { Menu, Tray, autoUpdater } = require('electron');
+const { Menu } = require('electron');
 const isOnline = require('is-online');
 const config = buildConfig(electron);
 
@@ -38,8 +37,8 @@ if (require('electron-squirrel-startup')) {
 
 const app = {
 	dir: {
-		root: __dirname + '/../',
-		desktopApp: __dirname + '/../app'
+		root: path.join(__dirname, '..'),
+		desktopApp: path.join(__dirname, '..', 'app')
 	},
 	config: {
 		app: config,
@@ -298,7 +297,7 @@ function handleSquirrelEvent() {
 	const exeName = 'Identity-Wallet-Installer.exe';
 
 	const spawn = function(command, args) {
-		let spawnedProcess, error;
+		let spawnedProcess;
 
 		try {
 			spawnedProcess = ChildProcess.spawn(command, args, { detached: true });

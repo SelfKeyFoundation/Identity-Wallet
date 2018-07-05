@@ -1,12 +1,11 @@
 'use strict';
 
-const Promise = require('bluebird'),
-	electron = require('electron'),
-	path = require('path'),
-	config = require('../config'),
-	request = require('request'),
-	async = require('async'),
-	BigNumber = require('bignumber.js');
+const Promise = require('bluebird');
+const electron = require('electron');
+const config = require('../config');
+const request = require('request');
+const async = require('async');
+const BigNumber = require('bignumber.js');
 
 let isSyncingMap = {};
 let syncingJobIsStarted = false;
@@ -20,7 +19,6 @@ let getIsSyncing = address => {
 };
 
 let defaultModule = function(app) {
-	const API_KEY = null;
 	const REQUEST_INTERVAL_DELAY = 600; // millis
 	const ETH_BALANCE_DIVIDER = new BigNumber(10 ** 18);
 	const ENDPOINT_CONFIG = {
@@ -110,6 +108,10 @@ let defaultModule = function(app) {
 	function makeRequest(method, url, data) {
 		return new Promise((resolve, reject) => {
 			request[method](url, (error, httpResponse, response) => {
+				if (error) {
+					console.error(error);
+					return reject(error);
+				}
 				try {
 					response = JSON.parse(response);
 					resolve(response.result);
@@ -193,11 +195,11 @@ let defaultModule = function(app) {
 		}
 
 		// faild transaction
-		if (processedTx.value == 0) {
+		if (processedTx.value === 0) {
 			// set faild status, there is some exeptions, so that's needed
 			processedTx.txReceiptStatus = 0;
 
-			processedTx.from == walletAddress
+			processedTx.from === walletAddress
 				? (processedTx.contractAddress = processedTx.to)
 				: (processedTx.contractAddress = processedTx.from);
 
@@ -213,8 +215,6 @@ let defaultModule = function(app) {
 	}
 
 	async function processTxHistory(txHashes, walletAddress) {
-		let processedHashes = {};
-
 		let hashes = Object.keys(txHashes);
 		for (let hash of hashes) {
 			let txs = txHashes[hash];
@@ -264,7 +264,7 @@ let defaultModule = function(app) {
 				});
 
 				page++;
-				next(ethTxList.length == OFFSET || tokenTxList.length == OFFSET);
+				next(ethTxList.length === OFFSET || tokenTxList.length === OFFSET);
 			})(true);
 		});
 	}

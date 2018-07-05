@@ -39,8 +39,8 @@ window.electron = require('electron');
 window.requireAppModule = function(moduleName, isNear) {
 	moduleName = moduleName.replace('../', '');
 	let midRoute = isNear ? '/' : '/../renderer/';
-	let path = __dirname + midRoute + moduleName;
-	return require(`${path}`);
+	let modulePath = path.join(__dirname, midRoute, moduleName);
+	return require(`${modulePath}`);
 };
 
 window.requireNodeModule = function(moduleName) {

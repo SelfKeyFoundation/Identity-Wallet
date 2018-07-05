@@ -1,6 +1,3 @@
-'use strict';
-
-const electron = require('electron');
 const ledgerco = require('ledgerco');
 const EthereumTx = require('ethereumjs-tx');
 const { timeout, TimeoutError } = require('promise-timeout');
@@ -35,7 +32,7 @@ module.exports = function(app) {
 
 		if (isConnected) {
 			let newHDPath = list[0];
-			if (comm && lastHIDPath && lastHIDPath != newHDPath) {
+			if (comm && lastHIDPath && lastHIDPath !== newHDPath) {
 				await closeConnection();
 			}
 			lastHIDPath = newHDPath;
@@ -46,7 +43,7 @@ module.exports = function(app) {
 		if (!comm) {
 			comm = await ledgerco.comm_node.create_async();
 		}
-
+		// eslint-disable-next-line new-cap
 		return new ledgerco.eth(comm);
 	}
 
@@ -93,7 +90,7 @@ module.exports = function(app) {
 		if (
 			!account ||
 			!account.address ||
-			account.address.toLowerCase() != txData.from.toLowerCase()
+			account.address.toLowerCase() !== txData.from.toLowerCase()
 		) {
 			throw new Error('Invalid address');
 		}
@@ -140,6 +137,7 @@ module.exports = function(app) {
 				})
 				.catch(err => {
 					if (err instanceof TimeoutError) {
+						// eslint-disable-next-line prefer-promise-reject-errors
 						return reject('custom-timeout');
 					}
 					reject(err.toString());

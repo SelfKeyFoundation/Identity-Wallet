@@ -12,6 +12,10 @@ module.exports = function(app) {
 	controller.prototype.loadIdAttributeTypes = () => {
 		const ID_ATTRIBUTE_TABLE = 'id-attributes';
 		request.get(AIRTABLE_API + ID_ATTRIBUTE_TABLE, (error, httpResponse, result) => {
+			if (error) {
+				console.error(error);
+				return;
+			}
 			let idAttributesArray = JSON.parse(result).ID_Attributes;
 			for (let i in idAttributesArray) {
 				if (!idAttributesArray[i].data) continue;
@@ -23,7 +27,7 @@ module.exports = function(app) {
 						// inserted
 					})
 					.catch(error => {
-						// error
+						console.error(error);
 					});
 			}
 		});
@@ -32,6 +36,10 @@ module.exports = function(app) {
 	controller.prototype.loadExchangeData = () => {
 		const TABLE = 'Exchanges';
 		request.get(AIRTABLE_API + TABLE, (error, httpResponse, result) => {
+			if (error) {
+				console.error(error);
+				return;
+			}
 			const data = JSON.parse(result).Exchanges;
 			for (let i in data) {
 				if (!data[i].data) {

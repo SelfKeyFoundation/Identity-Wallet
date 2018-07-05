@@ -43,6 +43,7 @@ module.exports = function(app) {
 		let spawn = require('child_process').spawn('java', ['-version']);
 
 		spawn.on('error', function(err) {
+			console.error(err);
 			callback(null);
 		});
 
@@ -51,7 +52,7 @@ module.exports = function(app) {
 			var javaVersion = new RegExp('java version').test(data)
 				? data.split(' ')[2].replace(/"/g, '')
 				: false;
-			if (javaVersion != false) {
+			if (javaVersion !== false) {
 				callback(javaVersion);
 			} else {
 				callback(null);

@@ -63,7 +63,7 @@ module.exports = function(app) {
 		return new Promise((resolve, reject) => {
 			self.q.push(args, promise => {
 				if (!promise) {
-					return reject();
+					return reject(new Error());
 				}
 
 				promise.catch(err => {
