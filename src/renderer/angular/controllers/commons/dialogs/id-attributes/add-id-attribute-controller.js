@@ -19,7 +19,7 @@ function AddIdAttributeDialogController(
 	$scope.proofOfAddresses = {};
 	$scope.proofOfWealthes = {};
 	$scope.title = title || 'Add Attribute';
-	//$scope.onlineIdentityAttributes = {};
+	// $scope.onlineIdentityAttributes = {};
 
 	let data = SqlLiteService.getIdAttributeTypes();
 
@@ -58,7 +58,7 @@ function AddIdAttributeDialogController(
 	};
 
 	$scope.$on('selfkey:on-keypress', (event, key) => {
-		if (key == 'Enter') {
+		if (key === 'Enter') {
 			$scope.save(event);
 		}
 	});
@@ -69,8 +69,6 @@ function AddIdAttributeDialogController(
 		event.preventDefault();
 
 		$scope.save(event);
-
-		return;
 	};
 }
 
