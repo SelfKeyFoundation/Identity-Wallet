@@ -2,20 +2,8 @@
     img(src="{{$root.appendStaticPath('assets/images/icons/selfkey.svg')}}", alt="", style="height: 44px;")
 .middle(flex)
 .right
-    .crypto-price-box(style="margin-right: 10px;")
-        .row
-            .currency KEY
-            .value {{ $root.primaryToken.getFormattedBalance() }}
-        .row
-            .currency USD
-            .value ${{ $root.wallet.getFormattedTokenBalanceInUSD('KEY') }}
-    .crypto-price-box(style="margin-left: 10px;")
-        .row
-            .currency ETH
-            .value.main {{ $root.wallet.getFormattedBalance() }}
-        .row
-            .currency USD
-            .value ${{ $root.wallet.getFormattedBalanceInUSD() }}
+    crypto-price-box(crypto-currency="'KEY'", crypto-value="$root.primaryToken.getBalanceDecimal()", to-currency="'USD'", to-value="$root.primaryToken.getBalanceInUSD()")
+    crypto-price-box(crypto-currency="'ETH'", crypto-value="$root.wallet.getFormattedBalance()", to-currency="'USD'", to-value="$root.wallet.getBalanceInUSD()")
     .sk-vertical-devider-2(style="height: 40px;")
     .button-box
         button.sk-icon-button(ng-click="openRightSidenav($event)")
