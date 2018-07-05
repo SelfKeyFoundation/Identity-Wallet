@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function AddEditStaticDataDialogController(
@@ -17,15 +18,6 @@ function AddEditStaticDataDialogController(
 
 	$log.info('AddEditStaticDataDialogController');
 
-	const INITIAL_ID_ATTRIBUTES = [
-		'first_name',
-		'last_name',
-		'middle_name',
-		'country_of_residency',
-		'id_selfie',
-		'national_id',
-		'email'
-	];
 	const ADDRESS_ID_ATTRIBUTES = ['physical_address', 'work_place'];
 	const COUNTRY_ID_ATTRIBUTES = ['nationality', 'country_of_residency'];
 	const DATE_ID_ATTRIBUTES = ['birthdate'];
@@ -116,12 +108,13 @@ function AddEditStaticDataDialogController(
 				$mdDialog.hide($scope.inputs);
 			})
 			.catch(error => {
+				console.error(error);
 				CommonService.showToast('error', 'error');
 			});
 	};
 
 	$scope.showErrorToast = input => {
-		if (input.length == 0) {
+		if (input.length === 0) {
 			CommonService.showToast(
 				'error',
 				'This field is required. Please enter ' + $scope.idAttributeType
@@ -153,7 +146,7 @@ function AddEditStaticDataDialogController(
 	}
 
 	$scope.$on('selfkey:on-keypress', (event, key) => {
-		if (key == 'Enter') {
+		if (key === 'Enter') {
 			$scope.save(event, $scope.theForm);
 		}
 	});
@@ -164,7 +157,6 @@ function AddEditStaticDataDialogController(
 		event.preventDefault();
 
 		$scope.save(event, $scope.theForm);
-		return;
 	};
 }
 

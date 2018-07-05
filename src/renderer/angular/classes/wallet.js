@@ -1,23 +1,25 @@
+/* global angular */
 'use strict';
 
 const EthUnits = require('./eth-units');
 const EthUtils = require('./eth-utils');
 const Token = require('./token');
 
-let $rootScope,
-	$q,
-	$interval,
-	Web3Service,
-	CommonService,
-	ElectronService,
-	SqlLiteService,
-	SignService,
-	$log;
+let $rootScope;
+let $q;
+let $interval;
+let Web3Service;
+let CommonService;
+let ElectronService;
+let SqlLiteService;
+let SignService;
+/* eslint-disable-next-line no-unused-vars */
+let $log;
 
 let readyToShowNotification = false;
 
-let priceUpdaterInterval,
-	loadBalanceInterval = null;
+let priceUpdaterInterval;
+let loadBalanceInterval = null;
 
 class Wallet {
 	static set $rootScope(value) {
@@ -311,15 +313,15 @@ class Wallet {
 		chainID,
 		previousDefer
 	) {
-		let defer = previousDefer ? previousDefer : $q.defer();
+		let defer = previousDefer || $q.defer();
 
 		let promise = Web3Service.getTransactionCount(this.getPublicKeyHex());
 		promise
 			.then(nonce => {
-				//wallet.nonceHex
+				// wallet.nonceHex
 				this.getPreviousTransactionCount().then(previousTransactionCount => {
 					if (
-						typeof previousTransactionCount == 'number' &&
+						typeof previousTransactionCount === 'number' &&
 						nonce <= previousTransactionCount
 					) {
 						return defer.reject('SAME_TRANSACTION_COUNT_CUSTOM_MSG');
@@ -340,7 +342,7 @@ class Wallet {
 						rawTx.data = EthUtils.sanitizeHex(contractDataHex);
 					}
 
-					let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+					let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
 					if (isLedgerWallet) {
 						$rootScope.openConfirmLedgerTxInfoWindow();
 					}
@@ -373,7 +375,7 @@ class Wallet {
 	}
 
 	async updatePreviousTransactionCount() {
-		if (typeof $rootScope.previousTransactionCount != 'number') {
+		if (typeof $rootScope.previousTransactionCount !== 'number') {
 			return;
 		}
 

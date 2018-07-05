@@ -32,6 +32,7 @@ module.exports = function(app, sqlLiteService) {
 				.then(rows => {
 					return new Promise((resolve, reject) => {
 						if (rows && rows.length) {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							return reject({ message: 'id_attribute_already_exists' });
 						}
 
@@ -60,6 +61,7 @@ module.exports = function(app, sqlLiteService) {
 											resolve(idAttribute);
 										})
 										.catch(error => {
+											// eslint-disable-next-line prefer-promise-reject-errors
 											reject({
 												message: 'id_attribute_create_error',
 												error: error
@@ -67,6 +69,7 @@ module.exports = function(app, sqlLiteService) {
 										});
 								})
 								.catch(error => {
+									// eslint-disable-next-line prefer-promise-reject-errors
 									reject({ message: 'id_attribute_create_error', error: error });
 								});
 						} else {
@@ -82,6 +85,7 @@ module.exports = function(app, sqlLiteService) {
 									resolve(idAttribute);
 								})
 								.catch(error => {
+									// eslint-disable-next-line prefer-promise-reject-errors
 									reject({ message: 'id_attribute_create_error', error: error });
 								});
 						}
@@ -113,6 +117,7 @@ module.exports = function(app, sqlLiteService) {
 				.then(rows => {
 					return new Promise((resolve, reject) => {
 						if (!rows || !rows.length) {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							return reject({ message: 'id_attribute_not_found' });
 						}
 
@@ -153,10 +158,12 @@ module.exports = function(app, sqlLiteService) {
 										resolve(idAttribute);
 									})
 									.catch(error => {
+										// eslint-disable-next-line prefer-promise-reject-errors
 										reject({ message: 'update_error', error: error });
 									});
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'insert_error', error: error });
 							});
 					});
@@ -179,6 +186,7 @@ module.exports = function(app, sqlLiteService) {
 				.then(rows => {
 					return new Promise((resolve, reject) => {
 						if (!rows || !rows.length) {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							return reject({ message: 'id_attribute_not_found' });
 						}
 
@@ -206,6 +214,7 @@ module.exports = function(app, sqlLiteService) {
 								resolve(idAttribute);
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'update_error', error: error });
 							});
 					});
@@ -245,6 +254,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(idAttributes);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_while_selecting', error: error });
 				});
 		});
@@ -291,7 +301,7 @@ module.exports = function(app, sqlLiteService) {
 								resolve();
 							})
 							.catch(error => {
-								reject();
+								reject(error);
 							});
 					});
 				})
@@ -411,6 +421,7 @@ module.exports = function(app, sqlLiteService) {
 											})
 											.catch(error => {
 												console.log(error);
+												// eslint-disable-next-line prefer-promise-reject-errors
 												reject({
 													message: 'wallets_insert_error',
 													error: error
@@ -419,11 +430,13 @@ module.exports = function(app, sqlLiteService) {
 									})
 									.catch(error => {
 										console.log(error);
+										// eslint-disable-next-line prefer-promise-reject-errors
 										reject({ message: 'wallets_insert_error', error: error });
 									});
 							})
 							.catch(error => {
 								console.log(error);
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'wallets_insert_error', error: error });
 							});
 					});
@@ -439,6 +452,7 @@ module.exports = function(app, sqlLiteService) {
 			selectQuery
 				.then(rows => {
 					if (!rows || !rows.length) {
+						// eslint-disable-next-line prefer-promise-reject-errors
 						return reject({ message: 'not_found' });
 					}
 
@@ -458,7 +472,7 @@ module.exports = function(app, sqlLiteService) {
 								trx
 							)
 							.then(items => {
-								idAttribute.items = items ? items : [];
+								idAttribute.items = items || [];
 
 								for (let j in items) {
 									idAttributeItemValuesPromises.push(
@@ -491,14 +505,17 @@ module.exports = function(app, sqlLiteService) {
 									resolve(idAttribute);
 								})
 								.catch(error => {
+									// eslint-disable-next-line prefer-promise-reject-errors
 									reject({ message: 'error_while_selecting', error: error });
 								});
 						})
 						.catch(error => {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							reject({ message: 'error_while_selecting', error: error });
 						});
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_while_selecting', error: error });
 				});
 		});
@@ -535,11 +552,12 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_while_selecting', error: error });
 				});
 		});
 	}
-
+	// eslint-disable-next-line camelcase
 	function temp__checkType(idAttributes, idAttributeType) {
 		for (let i in idAttributes) {
 			if (idAttributes[i].idAttributeType === idAttributeType) {

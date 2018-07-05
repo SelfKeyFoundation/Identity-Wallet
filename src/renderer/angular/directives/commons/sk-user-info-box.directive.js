@@ -49,7 +49,6 @@ function SkUserInfoBoxDirective(
 				switch (item.key) {
 					case 'birthdate':
 						return $filter('date')(Number(item.staticData.line1), 'yyyy/MM/dd');
-						break;
 					case 'work_place':
 					case 'physical_address':
 						let value = item.staticData.line1 + ', ';
@@ -64,10 +63,8 @@ function SkUserInfoBoxDirective(
 						value += item.staticData.line6;
 
 						return value;
-						break;
 					case 'phonenumber_countrycode':
 						return item.staticData.line1 + ' ' + item.staticData.line2;
-						break;
 					default:
 						return item.staticData.line1;
 				}
@@ -91,7 +88,7 @@ function SkUserInfoBoxDirective(
 			// profile picture start
 
 			let updateProfilePictureStyles = profilePicture => {
-				//binary
+				// binary
 				if (profilePicture) {
 					scope.profilePictureStyles = {
 						'background-image': `url("data:image/gif;base64,${profilePicture}")`
@@ -117,6 +114,7 @@ function SkUserInfoBoxDirective(
 						updateProfilePictureStyles(res.profilePicture);
 					})
 					.catch(err => {
+						console.error(err);
 						CommonService.showToast('error', 'Error while saving the file');
 					});
 			};
@@ -136,6 +134,7 @@ function SkUserInfoBoxDirective(
 						updateWalletprofilePicture(profilePicture);
 					})
 					.catch(error => {
+						console.error(error);
 						CommonService.showToast(
 							'error',
 							'Maximum file size: The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.'

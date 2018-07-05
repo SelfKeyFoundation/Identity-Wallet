@@ -1,3 +1,4 @@
+/* global appName, appVersion, angular */
 'use strict';
 
 const Wallet = require('../classes/wallet');

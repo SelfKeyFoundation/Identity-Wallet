@@ -1,7 +1,5 @@
 'use strict';
 
-const Wallet = require('../classes/wallet');
-
 function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, EVENTS) {
 	'ngInject';
 
@@ -35,8 +33,6 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 						$log.error(error);
 					});
 				this.listenForDataChange();
-			} else {
-				defer.reject({ message: 'electron RPC not available' });
 			}
 		}
 

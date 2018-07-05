@@ -1,5 +1,5 @@
 'use strict';
-
+/* global BigNumber, angular, google */
 function SkCirclePieChartDirective($timeout, $filter) {
 	'ngInject';
 
@@ -45,7 +45,7 @@ function SkCirclePieChartDirective($timeout, $filter) {
 
 				items.sort((a, b) => {
 					let check = b.valueUSD - a.valueUSD;
-					if (check == 0) {
+					if (check === 0) {
 						let textA = a.title.toLowerCase();
 						let textB = b.title.toLowerCase();
 						return textA < textB ? -1 : textA > textB ? 1 : 0;
@@ -192,7 +192,7 @@ function SkCirclePieChartDirective($timeout, $filter) {
 
 				google.visualization.events.addListener(chart, 'onmouseover', function(chartItem) {
 					let sel = chart.getSelection();
-					if (sel && sel.length && sel[0].row == chartItem.row) {
+					if (sel && sel.length && sel[0].row === chartItem.row) {
 						addOrRemoveActive(chartItem, 'removeClass');
 						$timeout(() => {
 							addOrRemoveActive(chartItem, 'addClass');
@@ -204,7 +204,7 @@ function SkCirclePieChartDirective($timeout, $filter) {
 
 				google.visualization.events.addListener(chart, 'onmouseout', function(chartItem) {
 					let sel = chart.getSelection();
-					if (sel && sel.length && sel[0].row == chartItem.row) {
+					if (sel && sel.length && sel[0].row === chartItem.row) {
 						return;
 					}
 					addOrRemoveActive(chartItem, 'removeClass');
@@ -217,7 +217,7 @@ function SkCirclePieChartDirective($timeout, $filter) {
 					}
 
 					scope.displayedItems.forEach((item, index) => {
-						if (index != sel[0].row && index < scope.topItems.length) {
+						if (index !== sel[0].row && index < scope.topItems.length) {
 							addOrRemoveActive({ row: index }, 'removeClass');
 						} else {
 							if (scope.data.callback && scope.data.callback.onItemClick) {

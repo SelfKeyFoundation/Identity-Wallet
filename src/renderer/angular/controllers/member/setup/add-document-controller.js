@@ -49,7 +49,7 @@ function MemberSetupAddDocumentController(
 		/*   $timeout(function () {
             isShown = false;
             $scope.isShown = false;
-        }, 3000);*/
+        }, 3000); */
 	};
 
 	$scope.selectFile = event => {
@@ -74,7 +74,7 @@ function MemberSetupAddDocumentController(
 
 				$rootScope.wallet.loadIdAttributes().then(resp => {
 					$scope.idAttributes = $rootScope.wallet.getIdAttributes();
-					//CommonService.showToast('success', 'File successfully saved.');
+					// CommonService.showToast('success', 'File successfully saved.');
 					$scope.snackbar('success', 'File successfully saved.', true);
 					$scope.selected.values = 'Saved!';
 
@@ -83,11 +83,12 @@ function MemberSetupAddDocumentController(
 						actionTitle
 					);
 
-					//goToNextStep();
+					// goToNextStep();
 				});
 			})
 			.catch(error => {
-				//CommonService.showToast('error', 'File size is over 50MB. Please upload a smaller file.');
+				// CommonService.showToast('error', 'File size is over 50MB. Please upload a smaller file.');
+				console.error(error);
 				$scope.snackbar(
 					'error',
 					'File size is over 50MB. Please upload a smaller file.',

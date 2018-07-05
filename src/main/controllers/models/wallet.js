@@ -1,5 +1,4 @@
 const electron = require('electron');
-const Promise = require('bluebird');
 
 module.exports = function(app, sqlLiteService) {
 	const TABLE_NAME = 'wallets';
@@ -8,9 +7,6 @@ module.exports = function(app, sqlLiteService) {
 	let knex = sqlLiteService.knex;
 	let helpers = electron.app.helpers;
 
-	/**
-	 *
-	 */
 	Controller.add = _add;
 	Controller.addInitialIdAttributesAndActivate = _addInitialIdAttributesAndActivate;
 
@@ -90,6 +86,7 @@ module.exports = function(app, sqlLiteService) {
 											})
 											.catch(error => {
 												console.log(error);
+												// eslint-disable-next-line prefer-promise-reject-errors
 												reject({
 													message: 'wallets_insert_error',
 													error: error
@@ -98,11 +95,13 @@ module.exports = function(app, sqlLiteService) {
 									})
 									.catch(error => {
 										console.log(error);
+										// eslint-disable-next-line prefer-promise-reject-errors
 										reject({ message: 'wallets_insert_error', error: error });
 									});
 							})
 							.catch(error => {
 								console.log(error);
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'wallets_insert_error', error: error });
 							});
 					});
@@ -152,6 +151,7 @@ module.exports = function(app, sqlLiteService) {
 								resolve(data);
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'wallet_init_error', error: error });
 							});
 					});
@@ -174,9 +174,6 @@ module.exports = function(app, sqlLiteService) {
 							.select('id_attribute_types', '*', { isInitial: 1 }, trx)
 							.then(idAttributeTypes => {
 								let idAttributeTypesSelectPromises = [];
-								let idAttributesSavePromises = [];
-
-								let idAttributesToInsert = [];
 
 								for (let i in idAttributeTypes) {
 									let idAttributeType = idAttributeTypes[i];
@@ -292,6 +289,7 @@ module.exports = function(app, sqlLiteService) {
 														resolve(wallet);
 													})
 													.catch(error => {
+														// eslint-disable-next-line prefer-promise-reject-errors
 														reject({
 															message: 'wallets_insert_error',
 															error: error
@@ -299,6 +297,7 @@ module.exports = function(app, sqlLiteService) {
 													});
 											})
 											.catch(error => {
+												// eslint-disable-next-line prefer-promise-reject-errors
 												reject({
 													message: 'wallets_insert_error',
 													error: error
@@ -306,10 +305,12 @@ module.exports = function(app, sqlLiteService) {
 											});
 									})
 									.catch(error => {
+										// eslint-disable-next-line prefer-promise-reject-errors
 										reject({ message: 'wallets_insert_error', error: error });
 									});
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'wallets_insert_error', error: error });
 							});
 					});
@@ -327,6 +328,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'wallet_findActive', error: error });
 				});
 		});
@@ -341,6 +343,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'wallet_findAll', error: error });
 				});
 		});
@@ -358,6 +361,7 @@ module.exports = function(app, sqlLiteService) {
 					}
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'wallet_findByPublicKey', error: error });
 				});
 		});
@@ -384,6 +388,7 @@ module.exports = function(app, sqlLiteService) {
 								resolve(wallet);
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'error', error: error });
 							});
 					});
@@ -406,6 +411,7 @@ module.exports = function(app, sqlLiteService) {
 					}
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_while_selecting_profile_picture', error: error });
 				});
 		});

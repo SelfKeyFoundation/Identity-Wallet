@@ -1,5 +1,5 @@
 node_modules/
 dist/
-src/extended_modules/
+src/main/extended_modules/
 static/
 app.templates.js

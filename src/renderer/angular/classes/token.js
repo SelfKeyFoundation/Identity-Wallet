@@ -1,3 +1,4 @@
+/* global BigNumber, angular */
 'use strict';
 
 const CommonUtils = require('./common-utils');
@@ -238,7 +239,7 @@ class Token {
 			.then(nonce => {
 				$rootScope.wallet.getPreviousTransactionCount().then(previousTransactionCount => {
 					if (
-						typeof previousTransactionCount == 'number' &&
+						typeof previousTransactionCount === 'number' &&
 						nonce <= previousTransactionCount
 					) {
 						return defer.reject('SAME_TRANSACTION_COUNT_CUSTOM_MSG');
@@ -260,7 +261,7 @@ class Token {
 							chainId: chainID
 						};
 
-						let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+						let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
 						if (isLedgerWallet) {
 							$rootScope.openConfirmLedgerTxInfoWindow();
 						}

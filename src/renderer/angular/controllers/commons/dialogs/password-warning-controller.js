@@ -1,7 +1,5 @@
 'use strict';
 
-const Wallet = require('../../../classes/wallet');
-
 function PasswordWarningDialogController(
 	$rootScope,
 	$scope,

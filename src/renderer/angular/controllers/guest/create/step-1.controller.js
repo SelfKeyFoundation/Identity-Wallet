@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function GuestKeystoreCreateStep1Controller(
@@ -48,7 +49,6 @@ function GuestKeystoreCreateStep1Controller(
 				controller: 'PasswordWarningDialogController',
 				templateUrl: 'common/dialogs/password-warning.html',
 				parent: angular.element(document.body),
-				targetEvent: event,
 				clickOutsideToClose: false,
 				fullscreen: true,
 				escapeToClose: false

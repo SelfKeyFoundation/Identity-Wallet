@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function ScrollToEndDirective($log, $window) {
@@ -93,15 +94,19 @@ function ScrollToEndDirective($log, $window) {
 				oldScrollY = scrollY;
 				var ERROR_MARGIN = 5;
 				if (scrollWasInYDirection && scrollY <= 0) {
+					// eslint-disable-next-line standard/no-callback-literal
 					callback('top');
 				} else if (
 					scrollWasInYDirection &&
 					scrollY + ERROR_MARGIN >= contentHeight - viewportHeight
 				) {
+					// eslint-disable-next-line standard/no-callback-literal
 					callback('bottom');
 				} else if (scrollWasInXDirection && scrollX === 0) {
+					// eslint-disable-next-line standard/no-callback-literal
 					callback('left');
 				} else if (scrollWasInXDirection && scrollX === contentWidth - viewportWidth) {
+					// eslint-disable-next-line standard/no-callback-literal
 					callback('right');
 				}
 			};

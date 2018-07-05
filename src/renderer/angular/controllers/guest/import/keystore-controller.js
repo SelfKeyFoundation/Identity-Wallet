@@ -34,7 +34,7 @@ function GuestImportKeystoreController(
 			: 'Step 1. Select a Keystore File (UTC/JSON).';
 
 	$scope.userInput = {
-		selectedPublicKey: $scope.publicKeyList.length == 1 ? $scope.publicKeyList[0] : null,
+		selectedPublicKey: $scope.publicKeyList.length === 1 ? $scope.publicKeyList[0] : null,
 		selectedFilePath: null,
 		password: null
 	};
@@ -46,6 +46,7 @@ function GuestImportKeystoreController(
 				$rootScope.walletImportData = data;
 			})
 			.catch(error => {
+				console.error(error);
 				CommonService.showToast('error', 'wrong file selected');
 			});
 	};
@@ -71,6 +72,7 @@ function GuestImportKeystoreController(
 						$state.go('member.dashboard.main');
 					})
 					.catch(error => {
+						console.error(error);
 						$scope.isAuthenticating = false;
 						$scope.incorrectPassword = true;
 					});
@@ -97,7 +99,7 @@ function GuestImportKeystoreController(
 				.catch(error => {
 					$scope.isAuthenticating = false;
 
-					if (error == 'incorrect_password') {
+					if (error === 'incorrect_password') {
 						$scope.incorrectPassword = true;
 						return;
 					}
@@ -157,7 +159,7 @@ function GuestImportKeystoreController(
 	 *
 	 */
 	$scope.$on('selfkey:on-keypress', (event, key) => {
-		if (key == 'Enter') {
+		if (key === 'Enter') {
 			$scope.unlock(event, $scope.theForm);
 		}
 	});

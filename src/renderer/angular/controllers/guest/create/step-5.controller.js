@@ -28,7 +28,7 @@ function GuestKeystoreCreateStep5Controller(
 	$scope.importKycFile = event => {
 		RPCService.makeCall('importKYCPackage', { walletId: $rootScope.wallet.id })
 			.then(walletSetting => {
-				//on cancel choose a file
+				// on cancel choose a file
 				if (!walletSetting) {
 					return;
 				}
@@ -41,6 +41,7 @@ function GuestKeystoreCreateStep5Controller(
 				});
 			})
 			.catch(error => {
+				console.error(error);
 				CommonService.showToast('error', 'Error');
 			});
 	};

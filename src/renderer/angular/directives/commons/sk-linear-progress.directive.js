@@ -10,7 +10,6 @@ function SkLinearProgressDirective() {
 			completedPercent: '='
 		},
 		link: (scope, element) => {
-			var progressPercent = null;
 			scope.isNotLoop = scope.maxValue && scope.value;
 			if (scope.isNotLoop) {
 				let perc = (scope.value * 100) / scope.maxValue;
