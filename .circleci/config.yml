@@ -22,7 +22,8 @@ jobs:
             sudo apt-get install gcc-4.8 g++-4.8 && export CXX=g++-4.8
             sudo apt-get install libstdc++6
             sudo apt-get install -y libhidapi-dev
-            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev            
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
+            sudo apt-get install libudev-dev            
       - run:
           name: Install Gulp & node-gyp
           command: sudo npm i -g gulp-cli node-gyp
