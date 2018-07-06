@@ -5,7 +5,7 @@ describe('WalletSetting model', () => {
 	beforeEach(async () => {
 		await db.reset();
 	});
-	it('create', () => {});
-	it('findByWalletId', () => {});
-	it('updateById', () => {});
+	xit('create', () => {});
+	xit('findByWalletId', () => {});
+	xit('updateById', () => {});
 });

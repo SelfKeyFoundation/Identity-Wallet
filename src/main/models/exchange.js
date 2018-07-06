@@ -1,18 +1,42 @@
-const { knex, sqlUtil } = require('../services/knex');
-
+const { Model } = require('objection');
+const BaseModel = require('./base');
 const TABLE_NAME = 'exchange_data';
 
-module.exports = {
-	TABLE_NAME,
+class Exchange extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
 
-	create: async (data, tx) => sqlUtil.insert(TABLE_NAME, data, tx),
+	static get idColumn() {
+		return 'name';
+	}
 
-	import: async exchangeData => {
-		const existing = (await sqlUtil.select(TABLE_NAME, 'name')).reduce((lookup, row) => {
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			required: ['name', 'data'],
+			properties: {
+				name: { type: 'string' },
+				data: { type: 'object' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
+		};
+	}
+
+	static create(data) {
+		return this.query().insert(data);
+	}
+
+	static findAll() {
+		return this.query();
+	}
+
+	static async import() {
+		const existing = (await this.findAll().select('name')).reduce((lookup, row) => {
 			lookup[row.name] = true;
 			return lookup;
 		}, {});
-
 		const inserts = [];
 		const updates = [];
 
@@ -25,13 +49,9 @@ module.exports = {
 			inserts.push(row);
 		});
 
-		await sqlUtil.bulkAdd(TABLE_NAME, inserts);
-		await sqlUtil.bulkUpdate(TABLE_NAME, updates, ({ name }) => ({ name }));
-	},
+		await this.insertMany(inserts);
+		await this.updateMany(updates, ({ name }) => ({ name }));
+	}
+}
 
-	findAll: async tx =>
-		((await sqlUtil.select(TABLE_NAME, '*', null, tx)) || []).map(e => ({
-			name: e.name,
-			data: JSON.parse(e.data)
-		}))
-};
+module.exports = Exchange;

@@ -20,8 +20,7 @@ class WalletSetting extends BaseModel {
 				walletId: { type: 'integer' },
 				showDesktopNotifications: { type: 'integer' },
 				previousTransactionCount: { type: 'integer' },
-				ERC20TxHistoryLastBlock: { type: 'integer' },
-				EthTxHistoryLastBlock: { type: 'integer' },
+				txHistoryLastSyncedBlock: { type: 'integer' },
 				airDropCode: { type: 'integer' },
 				createdAt: { type: 'integer' },
 				updatedAt: { type: 'integer' }

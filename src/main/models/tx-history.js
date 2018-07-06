@@ -1,5 +1,5 @@
-const { knex, sqlUtil } = require('../services/knex');
-const isSyncing = require('../tx-history-service').isSyncing;
+const BaseModel = require('./base');
+const isSyncing = require('../controllers/tx-history-service').isSyncing;
 
 const TABLE_NAME = 'tx_history';
 
@@ -39,67 +39,90 @@ let paginator = knex => {
 		};
 	};
 };
-
-const Controller = {};
-
-Controller.addOrUpdate = _addOrUpdate;
-Controller.findByTxHash = _findByTxHash;
-Controller.findByPublicKey = _findByPublicKey;
-Controller.findByPublicKeyAndTokenSymbol = _findByPublicKeyAndTokenSymbol;
-Controller.findByPublicKeyAndContractAddress = _findByPublicKeyAndContractAddress;
-
-async function _addOrUpdate(txHistory) {
-	let records = await _findByTxHash(txHistory.hash);
-	let record = records ? records[0] : null;
-	if (record) {
-		Object.assign(record, txHistory);
-		return sqlUtil.updateById(TABLE_NAME, record.id, record);
+class TxHistory extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
 	}
-	return sqlUtil.insertAndSelect(TABLE_NAME, txHistory);
+
+	static get idColumn() {
+		return 'id';
+	}
+
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			properties: {
+				id: { type: 'integer' },
+				hash: { type: 'string' },
+				blockNumber: { type: 'integer' },
+				timeStamp: { type: 'integer' },
+				nonce: { type: 'ingeger' },
+				blockHash: { type: 'string' },
+				contractAddress: { type: 'string' },
+				from: { type: 'string' },
+				to: { type: 'string' },
+				value: { type: 'integer' },
+				tokenName: { type: 'string' },
+				tokenSymbol: { type: 'string' },
+				tokenDecimal: { type: 'integer' },
+				transactionIndex: { type: 'integer' },
+				gas: { type: 'integer' },
+				gasPrice: { type: 'integer' },
+				cumulativeGasUsed: { type: 'integer' },
+				gasUsed: { type: 'integer' },
+				input: { type: 'string' },
+				confirmations: { type: 'integer' },
+				isError: { type: 'integer' },
+				txReceiptStatus: { type: 'integer' },
+				networkId: { type: 'integer' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
+		};
+	}
+
+	static async addOrUpdate(data) {
+		let record = await this.findByTxHash(data.hash);
+		if (record) return this.query().patchAndFetchById(record.id, data);
+		return this.query().insertAndFetch(data);
+	}
+
+	static async findByPublicKey(publicKey, pager) {
+		publicKey = publicKey.toLowerCase();
+		let query = this.query()
+			.where({ from: publicKey })
+			.orWhere({ to: publicKey })
+            .orderBy('timeStamp', 'desc');
+        return paginator(this.knex())(query, pager).then(data=>({
+            ...data,
+            isSyncing: isSyncing(publicKey)
+        }))
+	}
+
+	static async findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
+        publicKey = publicKey.toLowerCase();
+		let query = this.query()
+            .where({ from: publicKey, tokenSymbol })
+            .orWhere({ to: publicKey, tokenSymbol })
+            .orderBy('timeStamp', 'desc');
+        return paginator(this.knex())(query, pager).then(data=>({
+            ...data,
+            isSyncing: isSyncing(publicKey)
+        }))
+	}
+
+	static async findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
+        publicKey = publicKey.toLowerCase();
+		let query = this.query()
+            .where({ from: publicKey, contractAddress })
+            .orWhere({ to: publicKey, contractAddress })
+            .orderBy('timeStamp', 'desc');
+        return paginator(this.knex())(query, pager).then(data=>({
+            ...data,
+            isSyncing: isSyncing(publicKey)
+        }))
+	}
 }
 
-async function _findByTxHash(hash) {
-	return await knex(TABLE_NAME).where({ hash: hash });
-}
-
-async function _findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
-	publicKey = publicKey.toLowerCase();
-    let query = knex(TABLE_NAME)
-        .where({ from: publicKey, contractAddress })
-        .orWhere({ to: publicKey, contractAddress })
-        .orderBy('timeStamp', 'desc');
-
-    return paginator(knex)(query, pager).then(res => {
-        res.isSyncing = isSyncing(publicKey);
-        return res;
-	});
-}
-
-async function _findByPublicKey(publicKey) {
-	publicKey = publicKey.toLowerCase();
-    let query = knex(TABLE_NAME)
-        .where({ from: publicKey })
-        .orWhere({ to: publicKey })
-        .orderBy('timeStamp', 'desc');
-
-    return paginator(knex)(query, pager).then(res => {
-        res.isSyncing = isSyncing(publicKey);
-        return res;
-    });
-}
-
-async function _findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol) {
-	publicKey = publicKey.toLowerCase();
-    let query = knex(TABLE_NAME)
-        .where({ from: publicKey, tokenSymbol })
-        .orWhere({ to: publicKey, tokenSymbol })
-        .orderBy('timeStamp', 'desc');
-
-    return paginator(knex)(query, pager).then(res => {
-        res.isSyncing = isSyncing(publicKey);
-        return res;
-    });
-}
-
-module.exports = Controller;
+module.exports = TxHistory;
 

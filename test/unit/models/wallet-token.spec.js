@@ -6,19 +6,19 @@ describe('WalletToken model', () => {
 		await db.reset();
 	});
 
-	it('create', () => {});
+	xit('create', () => {});
 
-	it('update', () => {});
+	xit('update', () => {});
 
-	it('createWithNewToken', () => {});
+	xit('createWithNewToken', () => {});
 
-	it('find', () => {});
+	xit('find', () => {});
 
-	it('findOne', () => {});
+	xit('findOne', () => {});
 
-	it('findOneById', () => {});
+	xit('findOneById', () => {});
 
-	it('findOneByWalletId', () => {});
+	xit('findOneByWalletId', () => {});
 
-	it('findByWalletId', () => {});
+	xit('findByWalletId', () => {});
 });

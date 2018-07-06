@@ -6,19 +6,19 @@ describe('IdAttribute model', () => {
 		await db.reset();
 	});
 
-	it('create', () => {});
+	xit('create', () => {});
 
-	it('addEditDocumentToIdAttributeItemValue', () => {});
+	xit('addEditDocumentToIdAttributeItemValue', () => {});
 
-	it('addEditStaticDataToIdAttributeItemValue', () => {});
+	xit('addEditStaticDataToIdAttributeItemValue', () => {});
 
-	it('findAllByWalletId', () => {});
+	xit('findAllByWalletId', () => {});
 
-	it('delete', () => {});
+	xit('delete', () => {});
 
-	it('addImportedIdAttributes', () => {});
+	xit('addImportedIdAttributes', () => {});
 
-	it('genInitial', () => {});
+	xit('genInitial', () => {});
 
-	it('initializeImported', () => {});
+	xit('initializeImported', () => {});
 });

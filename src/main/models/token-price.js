@@ -1,17 +1,59 @@
-const { knex, sqlUtil } = require('../services/knex');
+const { Model } = require('objection');
+const BaseModel = require('./base');
 const TABLE_NAME = 'token_prices';
 
-module.exports = {
-	TABLE_NAME,
-	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
+class TokenPrice extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
 
-	findBySymbol: (symbol, tx) => sqlUtil.selectOne(TABLE_NAME, '*', { symbol }, tx),
+	static get idColumn() {
+		return 'id';
+	}
 
-	create: (tokenPrice, tx) => sqlUtil.insert(TABLE_NAME, tokenPrice, tx),
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			required: ['name', 'symbol'],
+			properties: {
+				id: { type: 'integer' },
+				name: { type: 'string' },
+				symbol: { type: 'string' },
+				source: { type: 'string' },
+				priceUSD: { type: 'number' },
+				priceBTC: { type: 'number' },
+				priceETH: { type: 'number' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
+		};
+	}
 
-	updateById: (id, tokenPrice, tx) => sqlUtil.updateById(TABLE_NAME, id, tokenPrice, tx),
+	static findAll() {
+		return this.query();
+	}
 
-	bulkEdit: tokenPrices => sqlUtil.bulkUpdateById(TABLE_NAME, tokenPrices),
+	static findBySymbol(symbol) {
+		return this.query()
+			.findOne()
+			.where({ symbol });
+	}
 
-	bulkAdd: tokenPrices => sqlUtil.bulkAdd(TABLE_NAME, tokenPrices)
-};
+	static create(data) {
+		return this.query().insertAndFetch(data);
+	}
+
+	static updateById(id, data) {
+		return this.query().patchAndFetchById(id, data);
+	}
+
+	static bulkEdit(items) {
+		return this.updateMany(items, ({ id }) => ({ id }));
+	}
+
+	static bulkAdd(items) {
+		return this.insertMany(itmes);
+	}
+}
+
+module.exports = TokenPrice;

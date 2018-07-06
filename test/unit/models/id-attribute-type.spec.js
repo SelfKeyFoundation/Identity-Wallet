@@ -1,16 +1,17 @@
 const { expect } = require('chai');
-const Token = require('../../../src/main/models/token');
+const IdAttribute = require('../../../src/main/models/id-attribute-type');
 const db = require('../../utils/db');
-describe('Token model', () => {
+
+describe('IdAttributeType model', () => {
 	beforeEach(async () => {
 		await db.reset();
 	});
 
 	xit('create', () => {});
 
-	xit('update', () => {});
-
 	xit('findAll', () => {});
 
-	xit('findBySymbol', () => {});
+	xit('findInitial', () => {});
+
+	xit('import', () => {});
 });

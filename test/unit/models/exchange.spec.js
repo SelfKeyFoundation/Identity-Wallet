@@ -1,16 +1,15 @@
 const { expect } = require('chai');
-const Token = require('../../../src/main/models/token');
+const Exchange = require('../../../src/main/models/exchange');
 const db = require('../../utils/db');
-describe('Token model', () => {
+
+describe('Exchange model', () => {
 	beforeEach(async () => {
 		await db.reset();
 	});
 
 	xit('create', () => {});
 
-	xit('update', () => {});
-
 	xit('findAll', () => {});
 
-	xit('findBySymbol', () => {});
+	xit('import', () => {});
 });

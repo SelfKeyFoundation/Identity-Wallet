@@ -1,23 +1,73 @@
-const { knex, sqlUtil } = require('../services/knex');
-
+const { Model } = require('objection');
+const BaseModel = require('./base');
+const _ = require('lodash');
 const TABLE_NAME = 'id_attribute_types';
 
-module.exports = {
-	TABLE_NAME,
+class IdAttributeType extends BaseModel {
+	static get tableName() {
+		return TABLE_NAME;
+	}
 
-	create: (data, tx) => {
-		const dataToSave = {
-			key: data.key,
-			type: data.type[0],
-			category: data.category,
-			entity: JSON.stringify(data.entity)
+	static get idColumn() {
+		return 'key';
+	}
+
+	static get jsonSchema() {
+		return {
+			type: 'object',
+			properties: {
+				key: { type: 'string' },
+				category: { type: 'string' },
+				type: { type: 'string' },
+				entity: { type: 'array' },
+				isInitial: { type: 'integer' },
+				createdAt: { type: 'integer' },
+				updatedAt: { type: 'integer' }
+			}
 		};
-		return sqlUtil.insertAndSelect(TABLE_NAME, data, tx);
-	},
+	}
 
-	findAll: tx => sqlUtil.select(TABLE_NAME, '*', null, tx),
+	static create(data) {
+		const dataToSave = {
+			..._.pick(data, 'key', 'entity', 'category'),
+			type: data.type[0]
+		};
+		return this.query().insertAndFetch(dataToSave);
+	}
 
-	findInitial: tx => sqlUtil.select(TABLE_NAME, '*', { isInitial: 1 }, tx),
+	static findAll() {
+		return this.query();
+	}
 
-	import: attributeTypes => {}
-};
+	static findInitial() {
+		return this.findAll().where({ isInitial: 1 });
+	}
+
+	static import(attributeTypes) {}
+}
+
+module.exports = IdAttributeType;
+
+// TODO
+/*
+derive import from this
+controller.prototype.loadIdAttributeTypes = () => {
+		const ID_ATTRIBUTE_TABLE = 'id-attributes';
+		request.get(AIRTABLE_API + ID_ATTRIBUTE_TABLE, (error, httpResponse, result) => {
+			let idAttributesArray = JSON.parse(result).ID_Attributes;
+			for (let i in idAttributesArray) {
+				if (!idAttributesArray[i].data) continue;
+
+				let item = idAttributesArray[i].data.fields;
+
+				electron.app.sqlLiteService.IdAttributeType.create(item)
+					.then(idAttributeType => {
+						// inserted
+					})
+					.catch(error => {
+						// error
+					});
+			}
+		});
+	};
+*/

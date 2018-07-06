@@ -6,19 +6,19 @@ describe('Wallet model', () => {
 		await db.reset();
 	});
 
-	it('create', () => {});
+	xit('create', () => {});
 
-	it('findActive', () => {});
+	xit('findActive', () => {});
 
-	it('findAll', () => {});
+	xit('findAll', () => {});
 
-	it('findByPublicKey', () => {});
+	xit('findByPublicKey', () => {});
 
-	it('updateProfilePicture', () => {});
+	xit('updateProfilePicture', () => {});
 
-	it('selectProfilePictureById', () => {});
+	xit('selectProfilePictureById', () => {});
 
-	it('addInitialIdAttributesAndActivate', () => {});
+	xit('addInitialIdAttributesAndActivate', () => {});
 
-	it('editImportedIdAttributes', () => {});
+	xit('editImportedIdAttributes', () => {});
 });

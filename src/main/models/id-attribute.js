@@ -4,83 +4,6 @@ const BaseModel = require('./base');
 const { Model, transaction } = require('objection');
 const TABLE_NAME = 'id_attributes';
 
-function getIdAttributeItemValue(idAttribute, itemId, valueId) {
-	let item = _.find(idAttribute.items, { id: itemId });
-	let value = null;
-	if (item && item.values && item.values.length) {
-		value = _.find(item.values, { id: valueId });
-	}
-	return value;
-}
-
-function generateIdAttributeObject(walletId, idAttributeType, staticData, document) {
-	const ts = Date.now();
-	let item = {
-		walletId: walletId,
-		idAttributeType: idAttributeType,
-		items: [],
-		createdAt: ts
-	};
-
-	item.items.push({
-		id: genRandId(),
-		name: null,
-		isVerified: 0,
-		order: 0,
-		createdAt: ts,
-		updatedAt: null,
-		values: [
-			{
-				id: genRandId(),
-				staticData: staticData ? staticData : {},
-				documentId: document ? document.id : null,
-				documentName: document ? document.name : null,
-				order: 0,
-				createdAt: ts,
-				updatedAt: null
-			}
-		]
-	});
-
-	return item;
-}
-
-function generateEmptyIdAttributeObject(walletId, idAttributeType) {
-	let item = {
-		walletId: walletId,
-		idAttributeType: idAttributeType,
-		items: [],
-		createdAt: Date.now()
-	};
-	return item;
-}
-
-function generateEmptyIdAttributeItemObject(name) {
-	let item = {
-		id: genRandId(),
-		name: name ? name : null,
-		isVerified: 0,
-		order: 0,
-		createdAt: Date.now(),
-		updatedAt: null,
-		values: []
-	};
-	return item;
-}
-
-function generateEmptyIdAttributeItemValueObject() {
-	let item = {
-		id: genRandId(),
-		staticData: {},
-		documentId: null,
-		documentName: null,
-		order: 0,
-		createdAt: Date.now(),
-		updatedAt: null
-	};
-	return item;
-}
-
 class IdAttribute extends BaseModel {
 	static get tableName() {
 		return TABLE_NAME;
@@ -435,3 +358,80 @@ class IdAttribute extends BaseModel {
 }
 
 module.exports = IdAttribute;
+
+function getIdAttributeItemValue(idAttribute, itemId, valueId) {
+	let item = _.find(idAttribute.items, { id: itemId });
+	let value = null;
+	if (item && item.values && item.values.length) {
+		value = _.find(item.values, { id: valueId });
+	}
+	return value;
+}
+
+function generateIdAttributeObject(walletId, idAttributeType, staticData, document) {
+	const ts = Date.now();
+	let item = {
+		walletId: walletId,
+		idAttributeType: idAttributeType,
+		items: [],
+		createdAt: ts
+	};
+
+	item.items.push({
+		id: genRandId(),
+		name: null,
+		isVerified: 0,
+		order: 0,
+		createdAt: ts,
+		updatedAt: null,
+		values: [
+			{
+				id: genRandId(),
+				staticData: staticData ? staticData : {},
+				documentId: document ? document.id : null,
+				documentName: document ? document.name : null,
+				order: 0,
+				createdAt: ts,
+				updatedAt: null
+			}
+		]
+	});
+
+	return item;
+}
+
+function generateEmptyIdAttributeObject(walletId, idAttributeType) {
+	let item = {
+		walletId: walletId,
+		idAttributeType: idAttributeType,
+		items: [],
+		createdAt: Date.now()
+	};
+	return item;
+}
+
+function generateEmptyIdAttributeItemObject(name) {
+	let item = {
+		id: genRandId(),
+		name: name ? name : null,
+		isVerified: 0,
+		order: 0,
+		createdAt: Date.now(),
+		updatedAt: null,
+		values: []
+	};
+	return item;
+}
+
+function generateEmptyIdAttributeItemValueObject() {
+	let item = {
+		id: genRandId(),
+		staticData: {},
+		documentId: null,
+		documentName: null,
+		order: 0,
+		createdAt: Date.now(),
+		updatedAt: null
+	};
+	return item;
+}

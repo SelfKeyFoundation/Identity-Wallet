@@ -26,7 +26,7 @@ module.exports = {
 			row => row.data && row.data.fields.name
 		).map(row => ({
 			name: row.data.fields.name,
-			data: JSON.stringify(row.data.fields)
+			data: row.data.fields
 		}));
 
 		return Exchange.import(exchanges);
