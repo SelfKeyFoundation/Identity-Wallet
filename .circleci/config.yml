@@ -19,8 +19,10 @@ jobs:
           name: Install OS Dependecies
           command: |
             sudo apt-get update
+            sudo apt-get install gcc-4.8 g++-4.8 && export CXX=g++-4.8
             sudo apt-get install libstdc++6
-            sudo apt-get install -y libhidapi-dev libusb-1.0-0-dev
+            sudo apt-get install -y libhidapi-dev
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev            
       - run:
           name: Install Gulp
           command: sudo npm i -g gulp-cli
