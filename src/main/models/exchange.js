@@ -32,7 +32,7 @@ class Exchange extends BaseModel {
 		return this.query();
 	}
 
-	static async import() {
+	static async import(data) {
 		const existing = (await this.findAll().select('name')).reduce((lookup, row) => {
 			lookup[row.name] = true;
 			return lookup;
@@ -40,7 +40,7 @@ class Exchange extends BaseModel {
 		const inserts = [];
 		const updates = [];
 
-		exchangeData.forEach(row => {
+		data.forEach(row => {
 			if (existing[row.name]) {
 				updates.push(row);
 				return;
