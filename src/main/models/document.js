@@ -25,7 +25,7 @@ class Document extends BaseModel {
 		};
 	}
 
-	static findById(id) {
+	static async findById(id) {
 		return this.query().findById(id);
 	}
 
@@ -34,7 +34,7 @@ class Document extends BaseModel {
 	}
 
 	static delete(id, tx) {
-		this.query(tx).deleteById(id);
+		return this.query(tx).deleteById(id);
 	}
 }
 
