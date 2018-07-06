@@ -1,6 +1,7 @@
 /* eslint-env node */ /* global window */
 const path = require('path');
-const appPackage = require(path.join(__dirname, '..', '..', 'package.json'));
+// eslint-disable-next-line
+const appPackage = require(__dirname + '/../../package.json');
 const config = require('./config');
 const defaultWindowOpen = window.open;
 window.path = require('path');

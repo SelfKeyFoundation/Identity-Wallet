@@ -34,7 +34,7 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		init().then(() => resolve(app.start()));
+		return init().then(() => resolve(app.start()));
 	});
 }
 
