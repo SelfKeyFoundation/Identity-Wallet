@@ -222,8 +222,8 @@ class Wallet {
 			.then(walletTokens => {
 				this.tokens = {};
 				for (let i in walletTokens) {
-					if (!token.symbol) continue;
 					let token = walletTokens[i];
+					if (!token.symbol) continue;
 					this.tokens[token.symbol.toUpperCase()] = this.addNewToken(token);
 				}
 				defer.resolve(this.tokens);
