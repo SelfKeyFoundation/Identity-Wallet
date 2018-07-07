@@ -42,12 +42,6 @@ window.app = angular.module('kyc-wallet', [
 ]);
 
 /**
- * React To Angular Lib
- */
-const { react2angular } = require('react2angular');
-import PriceBoxWrapper from './react/priceBox/index';
-
-/**
  * Internal Modules
  */
 const appRun = require('./angular/configs/app.run');
@@ -151,15 +145,19 @@ angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
 /**
  * React Components
  */
+document.addEventListener('DOMContentLoaded', () => {
+	const { react2angular } = require('react2angular');
+	const { PriceBoxWrapper } = require('./react/priceBox/index');
 
-const cryptoPriceBox = react2angular(PriceBoxWrapper, [
-	'cryptoCurrency',
-	'cryptoValue',
-	'toCurrency',
-	'toValue'
-]);
+	const cryptoPriceBox = react2angular(PriceBoxWrapper, [
+		'cryptoCurrency',
+		'cryptoValue',
+		'toCurrency',
+		'toValue'
+	]);
 
-angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
+	angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
+});
 
 /**
  * controllers

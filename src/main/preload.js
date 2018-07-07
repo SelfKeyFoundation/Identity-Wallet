@@ -18,6 +18,15 @@ require('angular-sanitize');
 require('angular-local-storage');
 require('angular-qrcode');
 require('angular-zxcvbn');
+window.react = require('react');
+window.redux = require('redux');
+window.reactRedux = require('react-redux');
+window.electronRedux = require('electron-redux');
+window.react2angular = require('react2angular');
+
+document.addEventListener('DOMContentLoaded', () => {
+	window.selfkeyUi = require('selfkey-ui');
+});
 
 window.__dirname = __dirname;
 
@@ -45,10 +54,23 @@ window.requireAppModule = function(moduleName, isNear) {
 };
 
 window.requireNodeModule = function(moduleName) {
-	if (moduleName === 'electron') {
-		return window.electron;
-	} else {
-		return require(`${moduleName}`);
+	switch (moduleName) {
+		case 'electron':
+			return window.electron;
+		case 'react':
+			return window.react;
+		case 'redux':
+			return window.redux;
+		case 'react-redux':
+			return window.reactRedux;
+		case 'electron-redux':
+			return window.electronRedux;
+		case 'selfkey-ui':
+			return window.selfkeyUi;
+		case 'react2angular':
+			return window.react2angular;
+		default:
+			return require(`${moduleName}`);
 	}
 };
 

@@ -8,7 +8,7 @@ const initialState = getInitialStateRenderer();
 const store = configureStore(initialState, 'renderer');
 
 console.log('initialState', initialState);
-class PriceBoxWrapper extends React.Component {
+export class PriceBoxWrapper extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
