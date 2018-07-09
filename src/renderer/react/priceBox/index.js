@@ -1,13 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { getInitialStateRenderer } from 'electron-redux';
-import configureStore from 'common/configure-store';
+import store from '../common/store';
 import PriceBox from './containers/price-box';
 
-const initialState = getInitialStateRenderer();
-const store = configureStore(initialState, 'renderer');
-
-console.log('initialState', initialState);
 export class PriceBoxWrapper extends React.Component {
 	render() {
 		return (

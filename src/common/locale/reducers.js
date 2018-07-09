@@ -7,7 +7,7 @@ const initialState = {
 
 const localeReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.LOCALE_UPDATE:
+		case types.UPDATE_LOCALE:
 			return {
 				...state,
 				...initialState,
