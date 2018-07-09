@@ -1,5 +1,4 @@
 /* eslint-env node */ /* global window */
-const path = require('path');
 // eslint-disable-next-line
 const appPackage = require(__dirname + '/../../package.json');
 const config = require('./config');
@@ -18,14 +17,15 @@ require('angular-sanitize');
 require('angular-local-storage');
 require('angular-qrcode');
 require('angular-zxcvbn');
-window.react = require('react');
-window.redux = require('redux');
-window.reactRedux = require('react-redux');
-window.electronRedux = require('electron-redux');
-window.react2angular = require('react2angular');
+const react = require('react');
+const redux = require('redux');
+const reactRedux = require('react-redux');
+const electronRedux = require('electron-redux');
+const react2angular = require('react2angular');
+let selfkeyUi = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-	window.selfkeyUi = require('selfkey-ui');
+	selfkeyUi = require('selfkey-ui');
 });
 
 window.__dirname = __dirname;
@@ -44,31 +44,24 @@ window.isTestMode = function() {
 	return false;
 };
 
-window.electron = require('electron');
+const electron = require('electron');
 
-window.requireAppModule = function(moduleName, isNear) {
-	moduleName = moduleName.replace('../', '');
-	let midRoute = isNear ? '/' : '/../renderer/';
-	let modulePath = path.join(__dirname, midRoute, moduleName);
-	return require(`${modulePath}`);
-};
-
-window.requireNodeModule = function(moduleName) {
+const requireNodeModule = function(moduleName) {
 	switch (moduleName) {
 		case 'electron':
-			return window.electron;
+			return electron;
 		case 'react':
-			return window.react;
+			return react;
 		case 'redux':
-			return window.redux;
+			return redux;
 		case 'react-redux':
-			return window.reactRedux;
+			return reactRedux;
 		case 'electron-redux':
-			return window.electronRedux;
+			return electronRedux;
 		case 'selfkey-ui':
-			return window.selfkeyUi;
+			return selfkeyUi;
 		case 'react2angular':
-			return window.react2angular;
+			return react2angular;
 		default:
 			return require(`${moduleName}`);
 	}
@@ -103,5 +96,5 @@ window.open = function(url, ...args) {
 	return null;
 };
 
-window.require = window.requireNodeModule;
+window.require = requireNodeModule;
 window.module = module;
