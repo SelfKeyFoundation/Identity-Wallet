@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function SkButtonLoadingDirective($log, $compile) {
@@ -46,7 +47,7 @@ function SkButtonLoadingDirective($log, $compile) {
 								scope.isProcessing = false;
 								$compile(elem.contents())(scope);
 							}
-						} else if (typeof newValue == 'number') {
+						} else if (typeof newValue === 'number') {
 							switch (newValue) {
 								case 0:
 									elem.html('Please Wait...');

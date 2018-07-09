@@ -1,7 +1,7 @@
+/* global angular */
 'use strict';
 
 const EthUnits = require('../../../classes/eth-units');
-const EthUtils = require('../../../classes/eth-utils');
 
 function SendTokenDialogController(
 	$rootScope,
@@ -36,7 +36,7 @@ function SendTokenDialogController(
 	let checkEstimatedGasInterval = null;
 	let estimatedGasNeedsCheck = false;
 
-	let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+	let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
 	$scope.signedHex = null;
 	let currentTxHistoryData = {};
 
@@ -222,6 +222,7 @@ function SendTokenDialogController(
 					}
 				})
 				.catch(error => {
+					console.error(error);
 					cancelTxCheck();
 				});
 		}, TX_CHECK_INTERVAL);
@@ -310,7 +311,7 @@ function SendTokenDialogController(
 				CONFIG.chainId
 			);
 		} else {
-			//ERC20 token
+			// ERC20 token
 			txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
 				sendToAddress,
 				sendAmount,
@@ -344,7 +345,7 @@ function SendTokenDialogController(
 			})
 			.catch(error => {
 				error = error.toString();
-				if (error.indexOf('Insufficient funds') == -1) {
+				if (error.indexOf('Insufficient funds') === -1) {
 					CommonService.showToast('error', error, 20000);
 				} else if (error.indexOf(TIMEOUT_ERROR) !== -1) {
 					send();
@@ -357,7 +358,7 @@ function SendTokenDialogController(
 	}
 
 	function isNumeric(num) {
-		num = '' + num; //coerce num to be a string
+		num = '' + num; // coerce num to be a string
 		return !isNaN(num) && !isNaN(parseFloat(num));
 	}
 
@@ -387,10 +388,6 @@ function SendTokenDialogController(
 		}
 	}
 
-	function getBalanceInUsd(balance) {
-		return Number(balance) * Number($scope.infoData.usdPerUnit);
-	}
-
 	function calculateSendAmountInUSD() {
 		// send amount in USD
 		$scope.infoData.sendAmountInUSD = Intl.NumberFormat('en-US', {
@@ -417,14 +414,14 @@ function SendTokenDialogController(
 		/**
 		 * form data
 		 */
-		//if(!$scope.formData || !$scope.formData.sendToAddressHex){
+		// if(!$scope.formData || !$scope.formData.sendToAddressHex){
 		$scope.formData = $scope.formData || {};
 		$scope.formData.sendAmount = (args && args.sendAmount) || null;
 		$scope.formData.gasPriceInGwei = (args && args.gasPriceInGwei) || 5;
-		//} else {
+		// } else {
 		//    $scope.formData.sendAmount = null;
 		//    $scope.formData.gasPriceInGwei = 5;
-		//}
+		// }
 
 		/**
 		 * informational data

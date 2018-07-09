@@ -1,3 +1,4 @@
+/* global BigNumber */
 'use strict';
 
 const Token = require('../../../classes/token');
@@ -26,8 +27,6 @@ function AddCustomTokenDialogController(
 		return form.$valid;
 	};
 
-	let tokensAreLoaded = false;
-
 	let tokens = SqlLiteService.getTokens() || {};
 	let tokenKeys = Object.keys(tokens);
 	let allTokensArr = tokenKeys.map(key => {
@@ -36,14 +35,14 @@ function AddCustomTokenDialogController(
 
 	let getTokenByContractAddress = contractAddress => {
 		return allTokensArr.find(token => {
-			return token.address.toLowerCase() == contractAddress.toLowerCase();
+			return token.address.toLowerCase() === contractAddress.toLowerCase();
 		});
 	};
 
 	let getExistingTokenByAddress = address => {
 		address = address.toLowerCase();
 		let tokenKey = Object.keys(wallet.tokens).find(
-			key => wallet.tokens[key].contractAddress.toLowerCase() == address
+			key => wallet.tokens[key].contractAddress.toLowerCase() === address
 		);
 		return tokenKey ? wallet.tokens[tokenKey.toUpperCase()] : null;
 	};
@@ -105,7 +104,7 @@ function AddCustomTokenDialogController(
 					$scope.lookingContractIntoBlockain = true;
 					Web3Service.getContractInfo(newVal)
 						.then(responseArr => {
-							if (!responseArr || responseArr.length != 2) {
+							if (!responseArr || responseArr.length !== 2) {
 								return resetFormData();
 							}
 
@@ -123,6 +122,7 @@ function AddCustomTokenDialogController(
 							$scope.lookingContractIntoBlockain = false;
 						})
 						.catch(err => {
+							console.error(err);
 							resetFormData();
 							$scope.tokenDoesNotExists = true;
 						});

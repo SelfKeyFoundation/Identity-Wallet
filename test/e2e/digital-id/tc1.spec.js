@@ -11,4 +11,4 @@ it('TC01: Logs in to the wallet', function() {
 	// User is redirected to Selfkey Dashboard
 	// waitForExists('#dashboardTitle')
 	// assert title === dashboard
-})
+});

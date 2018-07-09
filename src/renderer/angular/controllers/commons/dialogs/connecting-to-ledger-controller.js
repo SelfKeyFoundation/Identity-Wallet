@@ -32,7 +32,7 @@ function ConnectingToLedgerController(
 		$scope.isConnecting = true;
 		LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUANTITY_PER_PAGE })
 			.then(accounts => {
-				if (!accounts || accounts.length == 0) {
+				if (!accounts || accounts.length === 0) {
 					onError();
 					return;
 				}
@@ -41,6 +41,7 @@ function ConnectingToLedgerController(
 				$rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
 			})
 			.catch(err => {
+				console.error(err);
 				onError();
 			});
 	};

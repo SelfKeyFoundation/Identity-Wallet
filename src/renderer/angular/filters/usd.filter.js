@@ -6,7 +6,7 @@ function Usd($document, $timeout) {
 	return function(input) {
 		input = input || 0.0;
 
-		return out;
+		return input;
 	};
 }
 Usd.$inject = ['$document', '$timeout'];

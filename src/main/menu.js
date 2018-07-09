@@ -1,3 +1,4 @@
+/* global __static */
 const electron = require('electron');
 const path = require('path');
 const version = electron.app.getVersion();

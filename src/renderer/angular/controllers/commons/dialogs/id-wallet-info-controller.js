@@ -27,9 +27,9 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
 	$scope.nextStep = function() {
 		count++;
 		$scope.dialogInfo = $scope.infoArray.find(function(item) {
-			if (count == 2) {
+			if (count === 2) {
 				$scope.cancel();
-			} else if (item.step == count && count != 2) {
+			} else if (item.step === count && count !== 2) {
 				return item;
 			}
 		});
@@ -38,9 +38,9 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
 	$scope.backStep = function() {
 		count--;
 		$scope.dialogInfo = $scope.infoArray.find(function(item) {
-			if (count == 0) {
+			if (count === 0) {
 				$scope.cancel();
-			} else if (item.step == count && count != 0) {
+			} else if (item.step === count && count !== 0) {
 				return item;
 			}
 		});

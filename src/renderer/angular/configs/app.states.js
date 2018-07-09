@@ -1,6 +1,5 @@
+/* global appName */
 'use strict';
-
-const CommonUtils = require('../classes/common-utils');
 
 function appStates(
 	$urlRouterProvider,
@@ -44,6 +43,7 @@ function appStates(
 					defer.resolve();
 				})
 				.catch(error => {
+					console.error(error);
 					$state.go('guest.error.offline');
 					defer.reject();
 				});

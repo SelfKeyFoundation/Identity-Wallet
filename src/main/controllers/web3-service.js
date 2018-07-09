@@ -1,6 +1,6 @@
 'use strict';
 
-var Web3 = require('web3');
+const Web3 = require('web3');
 const async = require('async');
 const CONFIG = require('../config');
 
@@ -66,7 +66,7 @@ const defaultModule = function(app) {
 		return new Promise((resolve, reject) => {
 			self.q.push(args, promise => {
 				if (!promise) {
-					return reject();
+					return reject(new Error());
 				}
 
 				promise.catch(err => {

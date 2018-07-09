@@ -57,7 +57,7 @@ function MemberDashboardMainController(
 				pieChartItem.title = tokenPrice.name;
 				pieChartItem.valueUSD = token.getBalanceInUSD();
 				pieChartItem.amount = token.getFormattedBalance();
-				//token
+				// token
 			} else {
 				pieChartItem.title = 'Unknown';
 				pieChartItem.valueUSD = 0;
@@ -68,7 +68,6 @@ function MemberDashboardMainController(
 			pieChartItems.push(pieChartItem);
 		});
 
-		let ethPrice = SqlLiteService.getTokenPriceBySymbol('ETH');
 		pieChartItems.unshift({
 			subTitle: 'ETH',
 			title: 'Ethereum',

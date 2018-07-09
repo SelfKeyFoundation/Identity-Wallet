@@ -1,17 +1,4 @@
-const Wallet = require('../classes/wallet');
-const EthUnits = require('../classes/eth-units');
 const EthUtils = require('../classes/eth-utils');
-const Token = require('../classes/token');
-
-function dec2hexString(dec) {
-	return (
-		'0x' +
-		(dec + 0x10000)
-			.toString(16)
-			.substr(-4)
-			.toUpperCase()
-	);
-}
 
 // documentation
 // https://www.myetherapi.com/
@@ -25,8 +12,8 @@ function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCServi
 	 */
 	class Web3Service {
 		constructor() {
-			Web3Service.web3 = new Web3();
-			EthUtils.web3 = new Web3();
+			Web3Service.web3 = new window.Web3();
+			EthUtils.web3 = new window.Web3();
 			window.EthUtils = EthUtils;
 		}
 

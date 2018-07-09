@@ -15,10 +15,6 @@ function GuestLoadingController(
 
 	$log.info('GuestLoadingController');
 
-	const status = {
-		isSqlDBReady: false
-	};
-
 	$scope.header = 'Loading';
 	$scope.subHeader = '';
 	let tokenPriceUpdaterInterval = null;

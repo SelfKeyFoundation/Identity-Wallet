@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function MemberIdWalletMainController(
@@ -196,7 +197,7 @@ function MemberIdWalletMainController(
 						if (
 							item.items[0].values[0].staticData &&
 							item.items[0].values[0].staticData.line1 &&
-							item.idAttributeType == 'birthdate'
+							item.idAttributeType === 'birthdate'
 						) {
 							item.longDateValue = Number(item.items[0].values[0].staticData.line1);
 						}

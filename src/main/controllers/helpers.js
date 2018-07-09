@@ -43,6 +43,7 @@ module.exports = function(app) {
 		let spawn = require('child_process').spawn('java', ['-version']);
 
 		spawn.on('error', function(err) {
+			console.error(err);
 			callback(null);
 		});
 
@@ -51,7 +52,7 @@ module.exports = function(app) {
 			var javaVersion = new RegExp('java version').test(data)
 				? data.split(' ')[2].replace(/"/g, '')
 				: false;
-			if (javaVersion != false) {
+			if (javaVersion !== false) {
 				callback(javaVersion);
 			} else {
 				callback(null);
@@ -107,7 +108,7 @@ module.exports = function(app) {
 			values: [
 				{
 					id: _generateId(),
-					staticData: staticData ? staticData : {},
+					staticData: staticData || {},
 					documentId: document ? document.id : null,
 					documentName: document ? document.name : null,
 					order: 0,
@@ -133,7 +134,7 @@ module.exports = function(app) {
 	function _generateEmptyIdAttributeItemObject(name) {
 		let item = {
 			id: _generateId(),
-			name: name ? name : null,
+			name: name || null,
 			isVerified: 0,
 			order: 0,
 			createdAt: new Date().getTime(),

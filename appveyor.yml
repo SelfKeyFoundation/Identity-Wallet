@@ -15,6 +15,8 @@ environment:
     secure: QfAI68E/qnE7UZMvjqIQIkiMASDooWknt2psZWeawGTa8iu4cuNWd5P+ronxVphBXYAPuwEywIadwnxAj4WmIkL6rfGd/OQo1hlsNfEwYCo=
   SENTRY_DSN:
     secure: gSaaWHq0v1X7SY/HWJlmSVPmxZb/6JhO5N1bPJXLQ41JzGrP+YmGKWazLaZkrb+oGiB4Z1alNWJHK/gyBwPa8A==
+artifacts:
+  - path: dist
 platform:
   - x64
 init:

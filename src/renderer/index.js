@@ -1,3 +1,4 @@
+/* eslint-env browser */ /* global angular, staticPath, path */
 'use strict';
 
 const isDevelopment = process.env.NODE_ENV === 'development';

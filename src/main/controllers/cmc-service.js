@@ -12,6 +12,10 @@ module.exports = function(app) {
 
 	const loadCmcData = () => {
 		return request.get(config.cmcUrl, (error, httpResponse, result) => {
+			if (error) {
+				console.error(error);
+				return;
+			}
 			let data = [];
 			try {
 				data = JSON.parse(result);

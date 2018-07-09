@@ -1,6 +1,5 @@
+/* global BigNumber */
 'use strict';
-
-const EthUnits = require('./eth-units');
 
 let web3;
 
@@ -9,14 +8,12 @@ class EthUtils {
 		web3 = value;
 	}
 
-	constructor() {}
-
 	static isChecksumAddress(address) {
-		return address == ethUtil.toChecksumAddress(address);
+		return address === this.toChecksumAddress(address);
 	}
 
 	static validateEtherAddress(address) {
-		if (address.substring(0, 2) != '0x') return false;
+		if (address.substring(0, 2) !== '0x') return false;
 		else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) return false;
 		else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address))
 			return true;
@@ -28,7 +25,7 @@ class EthUtils {
 			if (EthUtils.isChecksumAddress(address)) {
 				return address;
 			}
-			return EthUtils.getWeb3().utils.toChecksumAddress(address);
+			return this.getWeb3().utils.toChecksumAddress(address);
 		} catch (e) {
 			return null;
 		}
@@ -39,9 +36,9 @@ class EthUtils {
 	}
 
 	static signChallenge(challenge, privateKeyHex) {
-		const hash = ethUtil.sha256(Buffer.from(challenge, 'hex'));
-		let msgHash = ethUtil.hashPersonalMessage(Buffer.from(hash, 'hex'));
-		let signature = ethUtil.ecsign(msgHash, Buffer.from(privateKeyHex, 'hex'));
+		const hash = this.sha256(Buffer.from(challenge, 'hex'));
+		let msgHash = this.hashPersonalMessage(Buffer.from(hash, 'hex'));
+		let signature = this.ecsign(msgHash, Buffer.from(privateKeyHex, 'hex'));
 
 		return {
 			sig:
@@ -69,26 +66,26 @@ class EthUtils {
 	}
 
 	static validateHexString(str) {
-		if (str == '') return true;
-		str = str.substring(0, 2) == '0x' ? str.substring(2).toUpperCase() : str.toUpperCase();
+		if (str === '') return true;
+		str = str.substring(0, 2) === '0x' ? str.substring(2).toUpperCase() : str.toUpperCase();
 		let re = /^[0-9A-F]+$/g;
 		return re.test(str);
 	}
 
 	static padLeftEven(hex) {
-		hex = hex.length % 2 != 0 ? '0' + hex : hex;
+		hex = hex.length % 2 !== 0 ? '0' + hex : hex;
 		return hex;
 	}
 
 	static sanitizeHex(hex) {
 		hex = '' + hex;
-		hex = hex.substring(0, 2) == '0x' ? hex.substring(2) : hex;
-		if (hex == '') return '';
+		hex = hex.substring(0, 2) === '0x' ? hex.substring(2) : hex;
+		if (hex === '') return '';
 		return '0x' + EthUtils.padLeftEven(hex);
 	}
 
 	static trimHexZero(hex) {
-		if (hex == '0x00' || hex == '0x0') return '0x0';
+		if (hex === '0x00' || hex === '0x0') return '0x0';
 		hex = EthUtils.sanitizeHex(hex);
 		hex = hex.substring(2).replace(/^0+/, '');
 		return '0x' + hex;
@@ -99,11 +96,11 @@ class EthUtils {
 	}
 
 	static bufferToHex(buffer) {
-		return ethUtil.bufferToHex(ethUtil.privateToAddress(buffer));
+		return this.bufferToHex(this.privateToAddress(buffer));
 	}
 
 	static hexToDecimal(hex) {
-		if (hex == '0x') return 0;
+		if (hex === '0x') return 0;
 		return new BigNumber(EthUtils.sanitizeHex(hex)).toString();
 	}
 
@@ -111,7 +108,7 @@ class EthUtils {
 		hex = hex.replace('0x', '').match(/.{64}/g);
 		for (var i = 0; i < hex.length; i++) {
 			hex[i] = hex[i].replace(/^0+/, '');
-			hex[i] = hex[i] == '' ? '0' : hex[i];
+			hex[i] = hex[i] === '' ? '0' : hex[i];
 		}
 		return hex;
 	}
@@ -122,8 +119,8 @@ class EthUtils {
 
 	static getDeteministicContractAddress(address, nonce) {
 		nonce = new BigNumber(nonce).toString();
-		address = address.substring(0, 2) == '0x' ? address : '0x' + address;
-		return '0x' + ethUtil.generateAddress(address, nonce).toString('hex');
+		address = address.substring(0, 2) === '0x' ? address : '0x' + address;
+		return '0x' + this.generateAddress(address, nonce).toString('hex');
 	}
 
 	static padLeft(n, width, z) {
@@ -142,8 +139,7 @@ class EthUtils {
 	}
 
 	static getFunctionSignature(name) {
-		return ethUtil
-			.sha3(name)
+		return this.sha3(name)
 			.toString('hex')
 			.slice(0, 8);
 	}

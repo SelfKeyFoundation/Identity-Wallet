@@ -1,7 +1,3 @@
-const Promise = require('bluebird');
-
-const initialIdAttributeTypeList = require('../../assets/data/initial-id-attribute-type-list.json');
-
 module.exports = function(app, sqlLiteService) {
 	const TABLE_NAME = 'id_attribute_types';
 	const Controller = function() {};
@@ -31,11 +27,13 @@ module.exports = function(app, sqlLiteService) {
 								resolve(dataToSave);
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								reject({ message: 'error', error: error });
 							});
 					}
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error', error: error });
 				});
 		});
@@ -49,6 +47,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_while_selecting', error: error });
 				});
 		});

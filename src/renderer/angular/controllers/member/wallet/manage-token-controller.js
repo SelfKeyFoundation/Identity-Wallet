@@ -55,9 +55,9 @@ function ManageTokenController(
 		}
 	}
 
-    $scope.goToDashboard = () => {
-        $state.go('member.dashboard.main');
-    }
+	$scope.goToDashboard = () => {
+		$state.go('member.dashboard.main');
+	};
 
 	/**
 	 * events

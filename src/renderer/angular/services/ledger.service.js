@@ -7,8 +7,6 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 	$log.info('LedgerService Initialized');
 
 	class LedgerService {
-		constructor() {}
-
 		getAccountsWithBalances(args) {
 			const loadBalances = (accounts, callback) => {
 				let fns = {};
@@ -37,8 +35,8 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 			return new Promise((resolve, reject) => {
 				RPCService.makeCall('getLedgerAccounts', args)
 					.then(accounts => {
-						if (!accounts || accounts.length == 0) {
-							reject('ACCOUNTS_NOT_FOUND');
+						if (!accounts || Object.keys(accounts).length === 0) {
+							reject(new Error());
 							return;
 						}
 

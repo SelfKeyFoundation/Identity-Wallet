@@ -29,7 +29,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 			};
 
 			$rootScope.txHistoryIsFirstSync =
-				typeof $rootScope.txHistoryIsFirstSync == 'undefined' ? true : false;
+				typeof $rootScope.txHistoryIsFirstSync === 'undefined';
 			syncByWallet($rootScope.txHistoryIsFirstSync);
 
 			scope.txList = [];
@@ -37,12 +37,12 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let getTxStatusText = tx => {
 				let status = tx.txReceiptStatus;
-				let isSend = tx.from == publicKeyLowerCase;
+				let isSend = tx.from === publicKeyLowerCase;
 
-				if (status == 0) {
+				if (status === 0) {
 					return isSend ? 'Faild To Send' : 'Faild To Receive';
 				}
-				if (status == 1) {
+				if (status === 1) {
 					return isSend ? 'Sent' : 'Received';
 				}
 				return isSend ? 'Sending' : 'Receiving';
@@ -50,13 +50,13 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 
 			let getTxStatusIcon = tx => {
 				let status = tx.txReceiptStatus;
-				let isSend = tx.from == publicKeyLowerCase;
+				let isSend = tx.from === publicKeyLowerCase;
 
-				if (status == 1) {
+				if (status === 1) {
 					return isSend ? 'sent' : 'receive';
 				}
 
-				if (status == 0) {
+				if (status === 0) {
 					return 'fail';
 				}
 
@@ -67,7 +67,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				return list.map(tx => {
 					let symbol = tx.tokenSymbol;
 					tx.symbol = symbol ? symbol.toUpperCase() : 'ETH';
-					tx.directionSign = publicKeyLowerCase == tx.from ? '- ' : '+ ';
+					tx.directionSign = publicKeyLowerCase === tx.from ? '- ' : '+ ';
 
 					tx.externalLink = `https://etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
@@ -78,10 +78,10 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 			};
 
 			let loadData = () => {
-				let fn,
-					fnArgs = { publicKey: publicKeyLowerCase, pager };
+				let fn;
+				let fnArgs = { publicKey: publicKeyLowerCase, pager };
 				if (scope.tokenSymbol) {
-					if (scope.tokenSymbol == 'ETH') {
+					if (scope.tokenSymbol === 'ETH') {
 						fn = 'getByPublicKeyAndContractAddress';
 						fnArgs.contractAddress = null;
 					} else {
@@ -91,7 +91,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				}
 
 				fn = fn || 'getTxHistoryByPublicKey';
-				let transactions = RPCService.makeCall(fn, fnArgs)
+				RPCService.makeCall(fn, fnArgs)
 					.then(res => {
 						scope.txList = processTxHistoryList(res.data);
 						scope.isSyncing = res.isSyncing;
@@ -99,6 +99,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 						scope.hasPager = scope.total > pager.perPage;
 					})
 					.catch(err => {
+						console.error(err);
 						scope.isSyncing = false;
 						CommonService.showToast(
 							'error',

@@ -14,7 +14,7 @@ function SignService($rootScope, $log, LedgerService) {
 
 		this.signTranactionByPrivateKey = function(rawTx, privateKey) {
 			return new Promise(resolve => {
-				let eTx = new Tx(rawTx);
+				let eTx = new window.Tx(rawTx);
 				eTx.sign(privateKey);
 				resolve('0x' + eTx.serialize().toString('hex'));
 			});
@@ -32,7 +32,7 @@ function SignService($rootScope, $log, LedgerService) {
 				return this.signTransactionByLedger(rawTx, walletAddress);
 			}
 
-			if (profile == 'local') {
+			if (profile === 'local') {
 				return this.signTranactionByPrivateKey(rawTx, privateKey);
 			}
 		};

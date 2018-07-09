@@ -1,7 +1,5 @@
 'use strict';
 
-const Wallet = require('../../../classes/wallet');
-
 function GuestKeystoreCreateStep6Controller(
 	$rootScope,
 	$scope,
@@ -42,6 +40,7 @@ function GuestKeystoreCreateStep6Controller(
 				$state.go('member.setup.checklist');
 			})
 			.catch(error => {
+				console.error(error);
 				$scope.isLoading = false;
 			});
 	};
@@ -119,7 +118,7 @@ function GuestKeystoreCreateStep6Controller(
 			if (idAttributes[type].items[0].values[0].staticData.line1) {
 				return idAttributes[type].items[0].values[0].staticData.line1;
 			} else if (idAttributes[type].items[0].values[0].documentName) {
-				idAttributes[type].items[0].values[0].documentName;
+				return idAttributes[type].items[0].values[0].documentName;
 			} else {
 				return null;
 			}

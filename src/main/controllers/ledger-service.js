@@ -1,16 +1,19 @@
 'use strict';
 
-const electron = require('electron'),
-	{ timeout, TimeoutError } = require('promise-timeout'),
-	Web3 = require('web3'),
-	ProviderEngine = require('web3-provider-engine'),
-	FetchSubprovider = require('web3-provider-engine/subproviders/fetch'),
-	Transport = require('@ledgerhq/hw-transport-node-hid').default,
-	createLedgerSubprovider = require('@ledgerhq/web3-subprovider').default,
-	NETWORK_ID = require('../config').chainId,
-	SELECTED_SERVER_URL = require('./web3-service').SELECTED_SERVER_URL;
+const electron = require('electron');
+const { timeout } = require('promise-timeout');
+const Web3 = require('web3');
+const ProviderEngine = require('web3-provider-engine');
+const FetchSubprovider = require('web3-provider-engine/subproviders/fetch');
+const HWTransportNodeHid = require('@ledgerhq/hw-transport-node-hid');
+const Web3SubProvider = require('@ledgerhq/web3-subprovider');
+const { chainId } = require('../config');
+const { SELECTED_SERVER_URL } = require('./web3-service');
 
-module.exports = function(app) {
+const createLedgerSubprovider = Web3SubProvider.default;
+const Transport = HWTransportNodeHid.default;
+
+module.exports = function() {
 	const controller = function() {};
 
 	function createWeb3(accountsOffset, accountsQuantity) {
@@ -19,7 +22,7 @@ module.exports = function(app) {
 		const engine = new ProviderEngine();
 		const getTransport = () => Transport.create();
 		const ledger = createLedgerSubprovider(getTransport, {
-			networkId: NETWORK_ID,
+			networkId: chainId,
 			accountsLength: accountsQuantity,
 			accountsOffset
 		});
