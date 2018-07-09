@@ -24,7 +24,7 @@ function ChooseLedgerAddressController(
 
 	let onError = err => {
 		let errMessage;
-		if (err.statusCode == 26625) {
+		if (+err.statusCode === 26625) {
 			errMessage = 'Ledger has timed out and must be unlocked again with PIN';
 		}
 		CommonService.showToast('error', errMessage || 'Device not found');

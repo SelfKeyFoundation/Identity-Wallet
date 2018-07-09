@@ -28,7 +28,7 @@ function SignService($rootScope, $log, LedgerService) {
 
 		this.signTransaction = function(args) {
 			let { rawTx, profile, privateKey, walletAddress } = args;
-			if (profile == 'ledger') {
+			if (profile === 'ledger') {
 				return this.signTransactionByLedger(rawTx, walletAddress);
 			}
 

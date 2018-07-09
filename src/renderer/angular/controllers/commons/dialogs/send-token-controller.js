@@ -81,7 +81,7 @@ function SendTokenDialogController(
 		26625: 'locked'
 	};
 
-	let processLedgerErr = err => {
+	let processLedgerErr = (event, err) => {
 		let message = ledgerStatusCodesMap[err.statusCode] || err.message || '';
 		switch (message.toLowerCase()) {
 			case 'timeout':
@@ -117,13 +117,13 @@ function SendTokenDialogController(
 				$mdDialog.cancel();
 				let errorMsg = error.toString();
 
-				if (errorMsg == 'invalid_address') {
+				if (errorMsg === 'invalid_address') {
 					$scope.errors.sendToAddressHex = true;
 					setViewState();
 					return;
 				}
 
-				if (errorMsg == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
+				if (errorMsg === 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
 					errorMsg = `Error: There is already another transaction on the Ethereum network with the same hash.
 					 Please wait until this is complete before sending another transaction.`;
 					$scope.errors.sendFailed = errorMsg;
@@ -138,7 +138,7 @@ function SendTokenDialogController(
 				}
 
 				if (isLedgerWallet) {
-					return processLedgerErr(error);
+					return processLedgerErr(event, error);
 				}
 
 				if (errorMsg) {
