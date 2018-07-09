@@ -140,7 +140,7 @@ class IdAttribute extends BaseModel {
 	}
 
 	static async findAllByWalletId(walletId) {
-		let attrs = await this.query().where(walletId);
+		let attrs = await this.query().where({ walletId });
 		return attrs.reduce((acc, attr) => {
 			if (_.find(acc, { idAttributeType: attr.idAttributeType })) return acc;
 			acc[attr.id] = attr;
