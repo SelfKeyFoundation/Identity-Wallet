@@ -1,7 +1,7 @@
+/* global angular */
 'use strict';
 
 const EthUnits = require('../../../classes/eth-units');
-const EthUtils = require('../../../classes/eth-utils');
 
 function SendTokenDialogController(
 	$rootScope,
@@ -36,7 +36,7 @@ function SendTokenDialogController(
 	let checkEstimatedGasInterval = null;
 	let estimatedGasNeedsCheck = false;
 
-	let isLedgerWallet = $rootScope.wallet.profile == 'ledger';
+	let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
 	$scope.signedHex = null;
 	let currentTxHistoryData = {};
 
@@ -67,11 +67,11 @@ function SendTokenDialogController(
 		err = err.toLowerCase();
 		let check = false;
 		ledgerConnErrKeywords.every(keyword => {
-			if (err.indexOf(keyword) != -1) {
+			if (err.indexOf(keyword) !== -1) {
 				check = true;
-				return false; //break iteration
+				return false; // break iteration
 			}
-			return true; //continue iteration
+			return true; // continue iteration
 		});
 		return check;
 	};
@@ -112,13 +112,13 @@ function SendTokenDialogController(
 				let processedErr = false;
 				error = error.toString();
 
-				if (error == 'invalid_address') {
+				if (error === 'invalid_address') {
 					$scope.errors.sendToAddressHex = true;
 					setViewState();
 					return;
 				}
 
-				if (error == 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
+				if (error === 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
 					error = `Error: There is already another transaction on the Ethereum network with the same hash.
 					 Please wait until this is complete before sending another transaction.`;
 					$scope.errors.sendFailed = error;
@@ -128,13 +128,13 @@ function SendTokenDialogController(
 				}
 
 				if (isLedgerWallet) {
-					if (error.indexOf('Invalid status 6801') != -1) {
+					if (error.indexOf('Invalid status 6801') !== -1) {
 						processedErr = true;
 						$rootScope.openUnlockLedgerInfoWindow();
-					} else if (error.indexOf('Invalid status 6985') != -1) {
+					} else if (error.indexOf('Invalid status 6985') !== -1) {
 						processedErr = true;
 						$rootScope.openRejectLedgerTxWarningDialog();
-					} else if (error == 'custom-timeout') {
+					} else if (error === 'custom-timeout') {
 						processedErr = true;
 						$rootScope.openLedgerTimedOutWindow();
 					} else if (isLedgerConnError(error)) {
@@ -230,6 +230,7 @@ function SendTokenDialogController(
 					}
 				})
 				.catch(error => {
+					console.error(error);
 					cancelTxCheck();
 				});
 		}, TX_CHECK_INTERVAL);
@@ -318,7 +319,7 @@ function SendTokenDialogController(
 				CONFIG.chainId
 			);
 		} else {
-			//ERC20 token
+			// ERC20 token
 			txGenPromise = $rootScope.wallet.tokens[$scope.symbol].generateRawTransaction(
 				sendToAddress,
 				sendAmount,
@@ -352,7 +353,7 @@ function SendTokenDialogController(
 			})
 			.catch(error => {
 				error = error.toString();
-				if (error.indexOf('Insufficient funds') == -1) {
+				if (error.indexOf('Insufficient funds') === -1) {
 					CommonService.showToast('error', error, 20000);
 				} else if (error.indexOf(TIMEOUT_ERROR) !== -1) {
 					send();
@@ -365,7 +366,7 @@ function SendTokenDialogController(
 	}
 
 	function isNumeric(num) {
-		num = '' + num; //coerce num to be a string
+		num = '' + num; // coerce num to be a string
 		return !isNaN(num) && !isNaN(parseFloat(num));
 	}
 
@@ -395,10 +396,6 @@ function SendTokenDialogController(
 		}
 	}
 
-	function getBalanceInUsd(balance) {
-		return Number(balance) * Number($scope.infoData.usdPerUnit);
-	}
-
 	function calculateSendAmountInUSD() {
 		// send amount in USD
 		$scope.infoData.sendAmountInUSD = Intl.NumberFormat('en-US', {
@@ -425,14 +422,14 @@ function SendTokenDialogController(
 		/**
 		 * form data
 		 */
-		//if(!$scope.formData || !$scope.formData.sendToAddressHex){
+		// if(!$scope.formData || !$scope.formData.sendToAddressHex){
 		$scope.formData = $scope.formData || {};
 		$scope.formData.sendAmount = (args && args.sendAmount) || null;
 		$scope.formData.gasPriceInGwei = (args && args.gasPriceInGwei) || 5;
-		//} else {
+		// } else {
 		//    $scope.formData.sendAmount = null;
 		//    $scope.formData.gasPriceInGwei = 5;
-		//}
+		// }
 
 		/**
 		 * informational data

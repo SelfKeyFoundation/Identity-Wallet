@@ -20,6 +20,5 @@ module.exports = {
 			});
 			await guideSettings.loadCrashReportAgreement();
 		}
-		return;
 	}
 };

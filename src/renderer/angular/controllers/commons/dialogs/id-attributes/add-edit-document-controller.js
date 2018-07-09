@@ -78,6 +78,7 @@ function AddEditDocumentDialogController(
 				$scope.selectedFile = selectedFile;
 			})
 			.catch(error => {
+				console.error(error);
 				CommonService.showToast(
 					'error',
 					'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.'
@@ -86,7 +87,7 @@ function AddEditDocumentDialogController(
 	};
 
 	$scope.$on('selfkey:on-keypress', (event, key) => {
-		if (key == 'Enter') {
+		if (key === 'Enter') {
 			$scope.save(event);
 		}
 	});
@@ -97,7 +98,6 @@ function AddEditDocumentDialogController(
 		event.preventDefault();
 
 		$scope.save(event);
-		return;
 	};
 }
 

@@ -24,6 +24,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_findAll', error: error });
 				});
 		});
@@ -38,6 +39,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows && rows.length ? rows[0] : null);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'error_findAll', error: error });
 				});
 		});

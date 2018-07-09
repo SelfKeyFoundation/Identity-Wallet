@@ -1,4 +1,3 @@
-const user = require('os').userInfo().username;
 const electron = require('electron');
 const userDataPath = electron.app.getPath('userData');
 const countriesList = require('../assets/data/country-list.json');
@@ -97,5 +96,5 @@ async function runSeeds(knex, seeds) {
 }
 
 exports.seed = async function(knex) {
-	return await runSeeds(knex, seeds);
+	return runSeeds(knex, seeds);
 };

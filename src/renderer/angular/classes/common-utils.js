@@ -1,8 +1,6 @@
 'use strict';
 
 class CommonUtils {
-	constructor() {}
-
 	static hexToAscii(hex) {
 		return hex
 			.match(/.{1,2}/g)

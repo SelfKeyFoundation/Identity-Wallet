@@ -1,3 +1,4 @@
+/* globals BigNumber, globalFuncs */
 'use strict';
 
 function EtherUnits($rootScope, $log, $http) {
@@ -36,8 +37,6 @@ function EtherUnits($rootScope, $log, $http) {
 	 *
 	 */
 	class EtherUnits {
-		constructor() {}
-
 		getValueOfUnit(unit) {
 			unit = unit ? unit.toLowerCase() : 'ether';
 			let unitValue = UNIT_MAP[unit];

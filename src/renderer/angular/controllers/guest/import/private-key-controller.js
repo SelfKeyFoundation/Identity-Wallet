@@ -31,7 +31,7 @@ function GuestImportPrivateKeyController(
 	$scope.isUnlocking = false;
 
 	$scope.togglePasswordVisibility = () => {
-		$scope.formType = $scope.formType == 'password' ? 'text' : 'password';
+		$scope.formType = $scope.formType === 'password' ? 'text' : 'password';
 	};
 
 	$scope.unlock = (event, theForm) => {

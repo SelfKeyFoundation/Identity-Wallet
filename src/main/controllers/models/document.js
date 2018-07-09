@@ -4,8 +4,6 @@ module.exports = function(app, sqlLiteService) {
 	const TABLE_NAME = 'documents';
 	const Controller = function() {};
 
-	let knex = sqlLiteService.knex;
-
 	Controller.findById = _findById;
 
 	function _findById(id) {
@@ -16,6 +14,7 @@ module.exports = function(app, sqlLiteService) {
 					resolve(rows[0]);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					reject({ message: 'document_findById', error: error });
 				});
 		});

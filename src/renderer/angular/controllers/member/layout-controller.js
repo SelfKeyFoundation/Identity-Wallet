@@ -1,7 +1,3 @@
-const EthUnits = require('../../classes/eth-units');
-const EthUtils = require('../../classes/eth-utils');
-const Token = require('../../classes/token');
-
 function MemberLayoutController(
 	$rootScope,
 	$scope,
@@ -18,9 +14,9 @@ function MemberLayoutController(
 	$scope.showScrollStyle = false;
 
 	var OSName = 'Unknown OS';
-	if (navigator.appVersion.indexOf('Win') != -1) OSName = 'Windows';
-	if (navigator.appVersion.indexOf('Mac') != -1) OSName = 'MacOS';
-	if (navigator.appVersion.indexOf('Linux') != -1) OSName = 'Linux';
+	if (navigator.appVersion.indexOf('Win') !== -1) OSName = 'Windows';
+	if (navigator.appVersion.indexOf('Mac') !== -1) OSName = 'MacOS';
+	if (navigator.appVersion.indexOf('Linux') !== -1) OSName = 'Linux';
 
 	if (OSName === 'Windows') {
 		$scope.showScrollStyle = true;

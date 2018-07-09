@@ -19,6 +19,7 @@ module.exports = function(app, sqlLiteService) {
 							.where('name', '=', data.name)
 							.then(resp => {
 								if (!resp || resp !== 1) {
+									// eslint-disable-next-line prefer-promise-reject-errors
 									return reject({ message: 'error_while_updating' });
 								}
 								return knex
@@ -29,10 +30,12 @@ module.exports = function(app, sqlLiteService) {
 										if (newRows && newRows.length) {
 											return resolve(newRows[0]);
 										} else {
+											// eslint-disable-next-line prefer-promise-reject-errors
 											return reject({ message: 'error_while_updating' });
 										}
 									})
 									.catch(error => {
+										// eslint-disable-next-line prefer-promise-reject-errors
 										return reject({
 											message: 'error_while_updating',
 											error: error
@@ -46,11 +49,13 @@ module.exports = function(app, sqlLiteService) {
 								return resolve(data);
 							})
 							.catch(error => {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								return reject({ message: 'error', error: error });
 							});
 					}
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error', error: error });
 				});
 		});
@@ -67,6 +72,7 @@ module.exports = function(app, sqlLiteService) {
 					return resolve(data);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_selecting', error: error });
 				});
 		});

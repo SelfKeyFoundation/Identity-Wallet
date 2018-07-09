@@ -6,7 +6,7 @@ const listeners = {};
 function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonService) {
 	'ngInject';
 
-	$log.info('RPCService Initialized', ipcRenderer);
+	$log.info('RPCService Initialized', window.ipcRenderer);
 
 	/**
 	 *
@@ -47,7 +47,6 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
 		}
 
 		makeCall(actionName, data) {
-			let defer = $q.defer();
 			let id = CommonService.generateId();
 
 			listeners[id] = {

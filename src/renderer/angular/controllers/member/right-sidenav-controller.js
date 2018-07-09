@@ -1,3 +1,4 @@
+/* global angular */
 function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state, $mdDialog) {
 	'ngInject';
 

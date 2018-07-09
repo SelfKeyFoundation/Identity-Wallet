@@ -1,3 +1,4 @@
+/* global angular */
 'use strict';
 
 function skShowLoading($compile) {

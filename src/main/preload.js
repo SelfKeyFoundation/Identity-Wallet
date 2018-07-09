@@ -1,3 +1,6 @@
+/* eslint-env node */ /* global window */
+const path = require('path');
+// eslint-disable-next-line
 const appPackage = require(__dirname + '/../../package.json');
 const config = require('./config');
 const defaultWindowOpen = window.open;
@@ -37,8 +40,8 @@ window.electron = require('electron');
 window.requireAppModule = function(moduleName, isNear) {
 	moduleName = moduleName.replace('../', '');
 	let midRoute = isNear ? '/' : '/../renderer/';
-	let path = __dirname + midRoute + moduleName;
-	return require(`${path}`);
+	let modulePath = path.join(__dirname, midRoute, moduleName);
+	return require(`${modulePath}`);
 };
 
 window.requireNodeModule = function(moduleName) {
@@ -60,7 +63,7 @@ window.ipcRenderer = require('electron').ipcRenderer;
 window.BigNumber = require('bignumber.js');
 window.ethUtil = require('ethereumjs-util');
 window.crypto = require('crypto');
-window.ethUtil.crypto = crypto;
+window.ethUtil.crypto = window.crypto;
 
 window.Web3 = require('web3');
 window.Tx = require('ethereumjs-tx');
@@ -78,5 +81,5 @@ window.open = function(url, ...args) {
 	return null;
 };
 
-window.require = requireNodeModule;
+window.require = window.requireNodeModule;
 window.module = module;

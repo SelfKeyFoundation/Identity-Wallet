@@ -10,17 +10,17 @@
 // - Middle Name
 // - Country of Residency
 
-const tools = require('../../utils/tools.js')
+const tools = require('../../utils/tools.js');
 
 describe('Rejects the TOS and Exits', function() {
-	before(tools.appStart)
-	after(tools.appStop)
+	before(tools.appStart);
+	after(tools.appStop);
 
 	// beforeEach(tools.specStart(fileName))
 	// afterEach(tools.app.stop())
 	// afterEach(tools.specStop(tools.app, fileName))
 
 	it('Rejects the TOS', function() {
-		return tools.regStep(tools.app, '#doNotAgree')
-	})
-})
+		return tools.regStep(tools.app, '#doNotAgree');
+	});
+});

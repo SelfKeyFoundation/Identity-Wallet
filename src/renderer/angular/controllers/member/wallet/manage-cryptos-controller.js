@@ -1,7 +1,5 @@
 'use strict';
 
-const Token = require('../../../classes/token');
-
 function ManageCryptosController(
 	$rootScope,
 	$scope,
@@ -74,19 +72,19 @@ function ManageCryptosController(
 		data.sort((a, b) => {
 			let symbolA = a.symbol.toLowerCase();
 			let symbolB = b.symbol.toLowerCase();
-			if (symbolA == 'eth') {
+			if (symbolA === 'eth') {
 				return -1;
 			}
 
-			if (symbolB == 'eth') {
+			if (symbolB === 'eth') {
 				return 1;
 			}
 
-			if (symbolA == 'key') {
+			if (symbolA === 'key') {
 				return -1;
 			}
 
-			if (symbolB == 'key') {
+			if (symbolB === 'key') {
 				return 1;
 			}
 
@@ -110,7 +108,7 @@ function ManageCryptosController(
 
 	const PRIMARY_TOKEN_KEYS = ['KEY', 'ETH'];
 	$scope.isDeletable = token => {
-		if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) != -1) {
+		if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) !== -1) {
 			return false;
 		}
 		return true;
@@ -126,7 +124,7 @@ function ManageCryptosController(
 					'Are you sure?'
 				)
 				.then(val => {
-					if (val == 'accept') {
+					if (val === 'accept') {
 						toggleTokenHide(shouldHide, token);
 					}
 				});
@@ -156,7 +154,7 @@ function ManageCryptosController(
 				'Are you sure?'
 			)
 			.then(val => {
-				if (val == 'accept') {
+				if (val === 'accept') {
 					SqlLiteService.updateWalletToken({
 						tokenId: token.id,
 						walletId: wallet.id,

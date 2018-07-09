@@ -10,12 +10,9 @@ const fsm = require('fs');
 const keythereum = require('../extended_modules/keythereum');
 
 const mime = require('mime-types');
-const settings = require('electron-settings');
 const ethereumjsUtil = require('ethereumjs-util');
 const decompress = require('decompress');
 const os = require('os');
-const async = require('async');
-const log = require('electron-log');
 
 const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
@@ -26,7 +23,6 @@ module.exports = function(app) {
 	const helpers = require('./helpers')(app);
 	const controller = function() {};
 
-	const storeFileName = 'main-store.json'; // TODO
 	const userDataDirectoryPath = electron.app.getPath('userData');
 	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
@@ -43,7 +39,7 @@ module.exports = function(app) {
 	// refactored
 	controller.prototype.createKeystoreFile = function(event, actionId, actionName, args) {
 		const params = { keyBytes: 32, ivBytes: 16 };
-		let dk = keythereum.create(params);
+		keythereum.create(params);
 
 		// asynchronous
 		keythereum.create(params, function(dk) {
@@ -184,7 +180,6 @@ module.exports = function(app) {
 			);
 			selectWalletPromise
 				.then(wallet => {
-					let keystoreFileName = path.basename(wallet.keystoreFilePath);
 					let keystoreFileFullPath = path.join(
 						walletsDirectoryPath,
 						wallet.keystoreFilePath
@@ -371,8 +366,12 @@ module.exports = function(app) {
 								);
 							}
 
-							var buffer = new Buffer(stats.size);
+							var buffer = Buffer.alloc(stats.size);
 							fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+								if (err) {
+									console.error(err);
+									return;
+								}
 								args.file = {
 									name: name,
 									buffer: buffer,
@@ -396,6 +395,7 @@ module.exports = function(app) {
 										);
 									})
 									.catch(error => {
+										console.error(error);
 										app.win.webContents.send(
 											RPC_METHOD,
 											actionId,
@@ -420,23 +420,12 @@ module.exports = function(app) {
 
 	controller.prototype.openFileViewer = function(event, actionId, actionName, args) {
 		try {
-			function onClose() {
-				try {
-					let files = fsm.readdirSync(documentsDirectoryPath);
-					for (const file of files) {
-						fsm.unlinkSync(path.join(documentsDirectoryPath, file));
-					}
-				} catch (e) {
-					return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
-				}
-			}
-
 			electron.app.sqlLiteService.Document.findById(args.documentId)
 				.then(data => {
 					const filePathToPreview = path.join(documentsDirectoryPath, data.name);
 
 					try {
-						fsm.appendFileSync(filePathToPreview, new Buffer(data.buffer));
+						fsm.appendFileSync(filePathToPreview, Buffer.from(data.buffer));
 					} catch (e) {
 						log.error(e);
 						return app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
@@ -531,8 +520,12 @@ module.exports = function(app) {
 								);
 							}
 
-							var buffer = new Buffer(stats.size);
+							var buffer = Buffer.alloc(stats.size);
 							fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
+								if (err) {
+									console.error(err);
+									return;
+								}
 								app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
 									name: name,
 									mimeType: mimeType,
@@ -623,12 +616,11 @@ module.exports = function(app) {
 			let documents = kycprocess.escrow.documents;
 			for (let i in documents) {
 				let document = documents[i];
-				if (document.requirementId == requirementId) {
+				if (document.requirementId === requirementId) {
 					let fileItems = [];
 
 					let files = document.doc.files;
 					for (let j in files) {
-						let file = files[j];
 						let fileItem = { name: files[j].fileName, mimeType: files[j].contentType };
 
 						fileItem.buffer = documentFiles[fileItem.name]
@@ -654,7 +646,7 @@ module.exports = function(app) {
 			let answers = kycprocess.escrow.answers;
 			for (let i in answers) {
 				let answer = answers[i];
-				if (answer.requirementId == requirementId) {
+				if (answer.requirementId === requirementId) {
 					result = answer.answer;
 				}
 			}
@@ -718,7 +710,7 @@ module.exports = function(app) {
 
 							// searching for the json file
 							const kycprocessJSONFile = files.find(file => {
-								if (file.path == 'kycprocess.json') {
+								if (file.path === 'kycprocess.json') {
 									return true;
 								}
 								return false;
@@ -726,7 +718,7 @@ module.exports = function(app) {
 
 							// searching for the export_code file
 							const exportCodeFile = files.find(file => {
-								if (file.path == 'export_code') {
+								if (file.path === 'export_code') {
 									return true;
 								}
 								return false;
@@ -802,6 +794,7 @@ module.exports = function(app) {
 									);
 								})
 								.catch(error => {
+									console.error(error);
 									app.win.webContents.send(
 										RPC_METHOD,
 										actionId,
@@ -1150,36 +1143,6 @@ module.exports = function(app) {
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
-	};
-
-	controller.prototype.loadObligatoryIcons = (event, actionId, actionName, args) => {
-		const iconList = config.obligatoryImageIds;
-		async.each(
-			iconList,
-			function(item, callback) {
-				electron.app.sqlLiteService
-					.tokens_selectBySymbol(item)
-					.then(data => {
-						if (data) {
-							if (!data.icon) {
-								//TODO get image and update existing one
-							}
-						} else {
-							//TODO insert ot continue ???
-						}
-					})
-					.catch(err => {
-						callback(err);
-					});
-			},
-			function(err) {
-				if (err) {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, err, null);
-				} else {
-					app.win.webContents.send('ON_ASYNC_REQUEST', actionId, actionName, null, true);
-				}
-			}
-		);
 	};
 
 	controller.prototype.getLedgerAccounts = function(event, actionId, actionName, args) {

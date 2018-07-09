@@ -1,3 +1,4 @@
+/* global BigNumber */
 'use strict';
 
 const UNIT_MAP = {
@@ -28,8 +29,6 @@ const UNIT_MAP = {
 };
 
 class EthUnits {
-	constructor() {}
-
 	static getValueOfUnit(unit) {
 		unit = unit ? unit.toLowerCase() : 'ether';
 		let unitValue = UNIT_MAP[unit];

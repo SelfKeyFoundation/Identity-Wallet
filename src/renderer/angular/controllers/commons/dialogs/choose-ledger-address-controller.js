@@ -95,7 +95,7 @@ function ChooseLedgerAddressController(
 		}
 
 		let address = selectedAccount.address;
-		if (address.substring(0, 2) == '0x') {
+		if (address.substring(0, 2) === '0x') {
 			address = address.substring(2, address.length);
 		}
 
@@ -121,6 +121,7 @@ function ChooseLedgerAddressController(
 							nextStep(data.isSetupFinished);
 						})
 						.catch(error => {
+							console.error(error);
 							CommonService.showToast('error', 'error');
 						});
 				} else {
@@ -128,6 +129,7 @@ function ChooseLedgerAddressController(
 				}
 			})
 			.catch(error => {
+				console.error(error);
 				CommonService.showToast('error', 'error');
 			});
 	};

@@ -1,7 +1,6 @@
-const Promise = require('bluebird');
 const isSyncing = require('../tx-history-service').isSyncing;
 
-//TODO copy in utils when sql-util-refactor will be finished
+// TODO copy in utils when sql-util-refactor will be finished
 let paginator = knex => {
 	return async (query, options) => {
 		const perPage = options.perPage || 10;
@@ -63,8 +62,8 @@ module.exports = function(app, sqlLiteService) {
 		return sqlLiteService.insertIntoTable(TABLE_NAME, txHistory);
 	}
 
-	async function _findByTxHash(hash) {
-		return await knex(TABLE_NAME).where({ hash: hash });
+	function _findByTxHash(hash) {
+		return knex(TABLE_NAME).where({ hash: hash });
 	}
 
 	async function _findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {

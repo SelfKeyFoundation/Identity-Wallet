@@ -1,7 +1,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const log = require('electron-log');
 
 const { knex } = require('../services/knex');
 
@@ -128,12 +127,13 @@ module.exports = function(app) {
 					return resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_selecting', error: error });
 				});
 		});
 	};
 
-	// TODO
+	// eslint-disable-next-line camelcase
 	function walletTokens_selectById(id) {
 		return new Promise((resolve, reject) => {
 			let promise = knex('wallet_tokens')
@@ -156,12 +156,13 @@ module.exports = function(app) {
 				})
 				.catch(error => {
 					console.log(error);
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_selecting', error: error });
 				});
 		});
 	}
 
-	// TODO
+	// eslint-disable-next-line camelcase
 	controller.prototype.walletTokens_selectById = walletTokens_selectById;
 
 	// TODO
@@ -249,6 +250,7 @@ module.exports = function(app) {
 			return promise
 				.then(resp => {
 					if (!resp || resp.length !== 1) {
+						// eslint-disable-next-line prefer-promise-reject-errors
 						return reject({ message: 'error_while_creating' });
 					}
 
@@ -270,14 +272,17 @@ module.exports = function(app) {
 							if (rows && rows.length === 1) {
 								return resolve(rows[0]);
 							} else {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								return reject({ message: 'error_while_creating' });
 							}
 						})
 						.catch(error => {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							return reject({ message: 'error_while_creating', error: error });
 						});
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_creating', error: error });
 				});
 		});
@@ -311,6 +316,7 @@ module.exports = function(app) {
 			return promise
 				.then(resp => {
 					if (!resp || resp.length !== 1) {
+						// eslint-disable-next-line prefer-promise-reject-errors
 						return reject({ message: 'error_while_creating' });
 					}
 
@@ -332,14 +338,17 @@ module.exports = function(app) {
 							if (rows && rows.length === 1) {
 								return resolve(rows[0]);
 							} else {
+								// eslint-disable-next-line prefer-promise-reject-errors
 								return reject({ message: 'error_while_creating' });
 							}
 						})
 						.catch(error => {
+							// eslint-disable-next-line prefer-promise-reject-errors
 							return reject({ message: 'error_while_creating', error: error });
 						});
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_creating', error: error });
 				});
 		});
@@ -352,7 +361,7 @@ module.exports = function(app) {
 			.update(data)
 			.where({ id: data.id });
 
-		if (!updatedIds || updatedIds != 1) {
+		if (!updatedIds || updatedIds !== 1) {
 			throw new Error('error_while_updating');
 		}
 
@@ -360,30 +369,11 @@ module.exports = function(app) {
 			.select()
 			.where({ id: data.id });
 
-		if (rows && rows.length == 1) {
+		if (rows && rows.length === 1) {
 			return rows[0];
 		} else {
 			throw new Error('error_while_updating');
 		}
-	}
-
-	// TODO remove
-	function getById(table, id) {
-		return selectById(table, id);
-	}
-
-	function selectById(table, id) {
-		return new Promise((resolve, reject) => {
-			return knex(table)
-				.select()
-				.where('id', id)
-				.then(rows => {
-					rows && rows.length ? resolve(rows[0]) : resolve(null);
-				})
-				.catch(error => {
-					return reject({ message: 'error_while_selecting', error: error });
-				});
-		});
 	}
 
 	// TODO rename to select
@@ -410,6 +400,7 @@ module.exports = function(app) {
 					return resolve(rows);
 				})
 				.catch(error => {
+					// eslint-disable-next-line prefer-promise-reject-errors
 					return reject({ message: 'error_while_selecting', error: error });
 				});
 		});
