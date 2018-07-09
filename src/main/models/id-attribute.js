@@ -22,9 +22,7 @@ class IdAttribute extends BaseModel {
 				walletId: { type: 'integer' },
 				idAttributeType: { type: 'string' },
 				items: { type: 'array' },
-				order: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				order: { type: 'integer' }
 			}
 		};
 	}

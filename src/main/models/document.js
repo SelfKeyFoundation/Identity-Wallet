@@ -18,9 +18,7 @@ class Document extends BaseModel {
 				name: { type: 'string' },
 				mimeType: { type: 'string' },
 				size: { type: 'integer' },
-				buffer: { type: 'binary' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				buffer: { type: 'binary' }
 			}
 		};
 	}

@@ -13,7 +13,7 @@ class Wallet extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['publicKey', 'privateKey'],
+			required: ['publicKey', 'keystoreFilePath'],
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
@@ -22,9 +22,7 @@ class Wallet extends BaseModel {
 				keystoreFilePath: { type: 'string' },
 				profilePicture: { type: 'binary' },
 				isSetupFinished: { type: 'integer' },
-				profile: { type: 'string' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				profile: { type: 'string' }
 			}
 		};
 	}
@@ -33,6 +31,7 @@ class Wallet extends BaseModel {
 		const WalletSetting = require('./wallet-setting');
 		const WalletToken = require('./wallet-token');
 		const IdAttribute = require('./id-attribute');
+
 		return {
 			setting: {
 				relation: Model.HasOneRelation,
@@ -62,23 +61,28 @@ class Wallet extends BaseModel {
 	}
 
 	static async create(itm) {
-		const tx = transaction.start(this.knex());
+		const tx = await transaction.start(this.knex());
+
 		try {
-			let insertedItm = await this.query(tx).graphInsertAndFetch({
-				...itm,
-				setting: {
-					showDesktopNotification: 1
+			let insertedItm = await this.query(tx).insertGraphAndFetch(
+				{
+					...itm,
+					setting: {
+						showDesktopNotification: 1
+					},
+					tokens: [
+						{
+							tokenId: 1
+						}
+					]
 				},
-				tokens: [
-					{
-						tokenId: 1
-					}
-				]
-			});
+				{ relate: true }
+			);
 			await tx.commit();
 			return insertedItm;
 		} catch (error) {
-			await tx.rollback();
+			console.error(error);
+			await tx.rollback(error);
 			throw error;
 		}
 	}
@@ -112,7 +116,7 @@ class Wallet extends BaseModel {
 		try {
 			const IdAttributes = require('./id-attribute');
 			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).graphUpsertAndFetch({
+			let wallet = await this.query(tx).upsertGraphAndFetch({
 				id,
 				isSetupFinished: 1,
 				idAttributes: attributes
@@ -120,7 +124,8 @@ class Wallet extends BaseModel {
 			tx.commit();
 			return wallet;
 		} catch (error) {
-			tx.rollback();
+			console.error(error);
+			tx.rollback(error);
 			throw error;
 		}
 	}

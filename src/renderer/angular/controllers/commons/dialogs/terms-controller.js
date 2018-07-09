@@ -26,7 +26,7 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
 		}
 
 		$scope.isLoading = true;
-		guideSettings.termsAccepted = true;
+		guideSettings.termsAccepted = 1;
 		guideSettings.crashReportAgreement = $scope.crashReportAgreement.isSet;
 		let savePromise = SqlLiteService.saveGuideSettings(guideSettings);
 		savePromise.then(() => {

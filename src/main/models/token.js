@@ -20,9 +20,7 @@ class Token extends BaseModel {
 				decimal: { type: 'integer' },
 				address: { type: 'string' },
 				icon: { type: 'binary' },
-				isCustom: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				isCustom: { type: 'integer' }
 			}
 		};
 	}

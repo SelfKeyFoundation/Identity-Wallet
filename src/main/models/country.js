@@ -17,9 +17,7 @@ class Country extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				code: { type: 'string' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				code: { type: 'string' }
 			}
 		};
 	}

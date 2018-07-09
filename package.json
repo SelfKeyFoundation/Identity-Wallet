@@ -36,7 +36,7 @@
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "test": "yarn test:e2e && yarn test:unit",
+    "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "node test/test.js unit",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
@@ -151,7 +151,8 @@
     "files": [
       "dist/migrations",
       "dist/seeds",
-      "dist/assets"
+      "dist/assets",
+      "dist/utils"
     ]
   },
   "electronWebpack": {

@@ -50,8 +50,6 @@ module.exports = function(app) {
 	// refactored
 	controller.prototype.createKeystoreFile = function(event, actionId, actionName, args) {
 		const params = { keyBytes: 32, ivBytes: 16 };
-		keythereum.create(params);
-
 		// asynchronous
 		keythereum.create(params, function(dk) {
 			let options = {
@@ -96,6 +94,7 @@ module.exports = function(app) {
 					});
 				})
 				.catch(error => {
+					log.error(error);
 					app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 				});
 		});
@@ -842,7 +841,6 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
 			.then(data => {
-				console.log('id attribute type', data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

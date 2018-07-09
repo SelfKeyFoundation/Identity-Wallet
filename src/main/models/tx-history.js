@@ -9,7 +9,7 @@ let paginator = knex => {
 		const perPage = options.perPage || 10;
 		let page = options.page || 1;
 
-		const countQuery = knex.count('* as total').from(query.clone().as('inner'));
+		const countQuery = query.clone().count();
 
 		if (page < 1) {
 			page = 1;
@@ -22,21 +22,26 @@ let paginator = knex => {
 			query.limit(perPage);
 		}
 
-		const [data, countRows] = await Promise.all([query, countQuery]);
+		try {
+			const [data, countRows] = await Promise.all([query, countQuery]);
 
-		const total = countRows[0].total;
+			const total = countRows[0].total;
 
-		return {
-			data,
-			pagination: {
-				total,
-				perPage,
-				currentPage: page,
-				lastPage: Math.ceil(total / perPage),
-				from: offset,
-				to: offset + data.length
-			}
-		};
+			return {
+				data,
+				pagination: {
+					total,
+					perPage,
+					currentPage: page,
+					lastPage: Math.ceil(total / perPage),
+					from: offset,
+					to: offset + data.length
+				}
+			};
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
 	};
 };
 class TxHistory extends BaseModel {
@@ -74,9 +79,7 @@ class TxHistory extends BaseModel {
 				confirmations: { type: 'integer' },
 				isError: { type: 'integer' },
 				txReceiptStatus: { type: 'integer' },
-				networkId: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				networkId: { type: 'integer' }
 			}
 		};
 	}

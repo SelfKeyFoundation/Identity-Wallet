@@ -16,7 +16,7 @@ function StartupGuideDialogController(
 	$scope.isLoading = false;
 
 	let guideSettings = SqlLiteService.getGuideSettings();
-	guideSettings.guideShown = true;
+	guideSettings.guideShown = 1;
 
 	SqlLiteService.saveGuideSettings(guideSettings);
 

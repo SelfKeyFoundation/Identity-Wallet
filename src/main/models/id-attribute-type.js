@@ -20,9 +20,7 @@ class IdAttributeType extends BaseModel {
 				category: { type: 'string' },
 				type: { type: 'string' },
 				entity: { type: 'array' },
-				isInitial: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				isInitial: { type: 'integer' }
 			}
 		};
 	}
@@ -36,12 +34,12 @@ class IdAttributeType extends BaseModel {
 		return this.query().insertAndFetch(dataToSave);
 	}
 
-	static findAll() {
-		return this.query();
+	static findAll(tx) {
+		return this.query(tx);
 	}
 
-	static findInitial() {
-		return this.findAll().where({ isInitial: 1 });
+	static findInitial(tx) {
+		return this.findAll(tx).where({ isInitial: 1 });
 	}
 
 	static import(attributeTypes) {}

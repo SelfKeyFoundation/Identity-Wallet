@@ -16,9 +16,7 @@ class Exchange extends BaseModel {
 			required: ['name', 'data'],
 			properties: {
 				name: { type: 'string' },
-				data: { type: 'object' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				data: { type: 'object' }
 			}
 		};
 	}

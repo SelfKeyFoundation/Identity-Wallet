@@ -10,6 +10,23 @@ class BaseModel extends Model {
 		this.updatedAt = Date.now();
 	}
 
+	$parseJson(json, opt) {
+		Object.keys(json).forEach(key => {
+			if (
+				!(key in this.constructor.jsonSchema.properties) &&
+				!(key in this.constructor.relationMappings)
+			) {
+				delete json[key];
+			}
+		});
+
+		return super.$parseJson(json, opt);
+	}
+
+	static relationMappings() {
+		return {};
+	}
+
 	static insertMany(records) {
 		const insertFn = (record, tx) => this.query(tx).insertAndFetch(record);
 		return this.queryMany(records, insertFn);

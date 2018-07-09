@@ -19,9 +19,7 @@ class ActionLog extends BaseModel {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
 				title: { type: 'string' },
-				content: { type: 'string' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				content: { type: 'string' }
 			}
 		};
 	}

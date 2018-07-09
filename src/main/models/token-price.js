@@ -21,9 +21,7 @@ class TokenPrice extends BaseModel {
 				source: { type: 'string' },
 				priceUSD: { type: 'number' },
 				priceBTC: { type: 'number' },
-				priceETH: { type: 'number' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				priceETH: { type: 'number' }
 			}
 		};
 	}

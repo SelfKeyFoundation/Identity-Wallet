@@ -28,7 +28,7 @@ const crashReportService = require('./controllers/crash-report-service');
 /**
  * auto updated
  */
-process.on('unhandledRejection', console.error);
+process.on('unhandledRejection', log.error);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -130,7 +130,7 @@ function onReady(app) {
 		}
 
 		mainWindow = new electron.BrowserWindow({
-			title: electron.avipp.getName(),
+			title: electron.app.getName(),
 			width: 1170,
 			height: 800,
 			minWidth: 1170,
@@ -298,7 +298,9 @@ function handleSquirrelEvent() {
 
 		try {
 			spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
-		} catch (error) {}
+		} catch (error) {
+			log.error(error);
+		}
 
 		return spawnedProcess;
 	};

@@ -22,9 +22,7 @@ class WalletToken extends BaseModel {
 				tokenId: { type: 'integer' },
 				balance: { type: 'number' },
 				hidden: { type: 'integer' },
-				recordState: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				recordState: { type: 'integer' }
 			}
 		};
 	}

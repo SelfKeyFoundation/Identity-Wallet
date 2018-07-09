@@ -22,9 +22,7 @@ class GuideSettings extends BaseModel {
 				guideShown: { type: 'integer' },
 				icoAdsShown: { type: 'integer' },
 				termsAccepted: { type: 'integer' },
-				crashReportAgreement: { type: 'integer' },
-				createdAt: { type: 'integer' },
-				updatedAt: { type: 'integer' }
+				crashReportAgreement: { type: 'integer' }
 			}
 		};
 	}
