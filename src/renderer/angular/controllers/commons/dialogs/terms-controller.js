@@ -1,6 +1,6 @@
 'use strict';
 
-function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService) {
+function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService, $timeout) {
 	'ngInject';
 
 	$log.info('TermsDialogController');
@@ -41,8 +41,9 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
 
 	$scope.scrollToEndContainer = direction => {
 		if (direction === 'bottom') {
-			$scope.scrolledBottom = true;
-			$scope.$apply();
+			$timeout(() => {
+				$scope.scrolledBottom = true;
+			});
 		}
 	};
 }
@@ -52,6 +53,7 @@ TermsDialogController.$inject = [
 	'$log',
 	'$q',
 	'$mdDialog',
-	'SqlLiteService'
+	'SqlLiteService',
+	'$timeout'
 ];
 module.exports = TermsDialogController;
