@@ -115,7 +115,6 @@ function SendTokenDialogController(
 			})
 			.catch(error => {
 				$mdDialog.cancel();
-				let processedErr = false;
 				let errorMsg = error.toString();
 
 				if (errorMsg == 'invalid_address') {
@@ -142,11 +141,11 @@ function SendTokenDialogController(
 					return processLedgerErr(error);
 				}
 
-				if (errorMsg && !processedErr) {
+				if (errorMsg) {
 					CommonService.showToast('error', errorMsg, 20000);
 				}
 
-				$scope.errors.sendFailed = !processedErr ? errorMsg : '';
+				$scope.errors.sendFailed = errorMsg || 'Unknown Error';
 				// reset view state
 				setViewState();
 			});
