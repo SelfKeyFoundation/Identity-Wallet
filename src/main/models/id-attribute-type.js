@@ -15,6 +15,7 @@ class IdAttributeType extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
+			required: ['type', 'key'],
 			properties: {
 				key: { type: 'string' },
 				category: { type: 'string' },
@@ -28,9 +29,10 @@ class IdAttributeType extends BaseModel {
 	}
 
 	static create(data) {
+		const type = Array.isArray(data.type) ? data.type[0] : data.type;
 		const dataToSave = {
 			..._.pick(data, 'key', 'entity', 'category'),
-			type: data.type[0]
+			type
 		};
 		return this.query().insertAndFetch(dataToSave);
 	}

@@ -50,8 +50,15 @@ class GuideSettings extends BaseModel {
 	}
 
 	static updateById(id, data) {
-		crashReportAgreement = data.crashReportAgreement;
+		if ('crashReportAgreement' in data) {
+			data.crashReportAgreement = data.crashReportAgreement ? 1 : 0;
+			crashReportAgreement = !!data.crashReportAgreement;
+		}
 		return this.query().patchAndFetchById(id, data);
+	}
+
+	static reset() {
+		crashReportAgreement = false;
 	}
 }
 
