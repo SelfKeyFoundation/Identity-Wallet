@@ -1,5 +1,13 @@
 /* global __static */
 'use strict';
+import configureStore from 'common/configure-store';
+import { localeUpdate } from 'common/locale/actions';
+
+import installExtension, {
+	REACT_DEVELOPER_TOOLS,
+	REDUX_DEVTOOLS
+} from 'electron-devtools-installer';
+
 const path = require('path');
 const fs = require('fs');
 const electron = require('electron');
@@ -24,14 +32,6 @@ const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 const createMenuTemplate = require('./menu');
 
 const crashReportService = require('./controllers/crash-report-service');
-
-import configureStore from 'common/configure-store';
-import { localeUpdate } from 'common/locale/actions';
-
-import installExtension, {
-	REACT_DEVELOPER_TOOLS,
-	REDUX_DEVTOOLS
-} from 'electron-devtools-installer';
 
 /**
  * auto updated
