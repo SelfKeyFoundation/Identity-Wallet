@@ -15,11 +15,9 @@ class BaseModel extends Model {
 		return this.queryMany(records, insertFn);
 	}
 
-	static updateMany(records, whereFn) {
+	static updateMany(records) {
 		const updateFn = (record, tx) =>
-			this.query(tx)
-				.patchAndFetch(record)
-				.where(whereFn(record));
+			this.query(tx).patchAndFetchById(record[this.idColumn], record);
 		return this.queryMany(records, updateFn);
 	}
 

@@ -50,7 +50,7 @@ class Exchange extends BaseModel {
 		});
 
 		await this.insertMany(inserts);
-		await this.updateMany(updates, ({ name }) => ({ name }));
+		await this.updateMany(updates);
 	}
 }
 
