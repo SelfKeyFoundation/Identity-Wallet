@@ -112,7 +112,7 @@ class Wallet extends BaseModel {
 	}
 
 	static async addInitialIdAttributesAndActivate(id, initialIdAttributes) {
-		const tx = transaction.start(this.knex());
+		const tx = await transaction.start(this.knex());
 		try {
 			const IdAttributes = require('./id-attribute');
 			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
@@ -121,17 +121,17 @@ class Wallet extends BaseModel {
 				isSetupFinished: 1,
 				idAttributes: attributes
 			});
-			tx.commit();
+			await tx.commit();
 			return wallet;
 		} catch (error) {
 			console.error(error);
-			tx.rollback(error);
+			await tx.rollback(error);
 			throw error;
 		}
 	}
 
 	static async editImportedIdAttributes(id, initialIdAttributes) {
-		const tx = transaction.start(this.knex());
+		const tx = await transaction.start(this.knex());
 		try {
 			const IdAttributes = require('./id-attribute');
 			const attributes = await IdAttributes.initializeImported(id, initialIdAttributes, tx);
@@ -140,10 +140,10 @@ class Wallet extends BaseModel {
 				isSetupFinished: 1,
 				idAttributes: attributes
 			});
-			tx.commit();
+			await tx.commit();
 			return wallet;
 		} catch (error) {
-			tx.rollback();
+			await tx.rollback(error);
 			throw error;
 		}
 	}
