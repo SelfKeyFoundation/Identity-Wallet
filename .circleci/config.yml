@@ -21,8 +21,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev           
       - run:
-          name: Install Gulp & node-gyp
-          command: sudo npm i -g gulp-cli node-gyp
+          name: Install Gulp
+          command: sudo npm i -g gulp-cli
       - run:
           name: Install Node Packages
           command: yarn
