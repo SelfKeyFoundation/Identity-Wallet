@@ -1,4 +1,3 @@
-const { Model } = require('objection');
 const BaseModel = require('./base');
 const log = require('electron-log');
 

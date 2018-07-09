@@ -33,6 +33,7 @@ describe('Country model', () => {
 		expect(doc).to.deep.eq(found);
 		await Document.delete(doc.id);
 		found = await Document.query().findById(doc.id);
+		// eslint-disable-next-line no-unused-expressions
 		expect(found).to.be.undefined;
 	});
 });

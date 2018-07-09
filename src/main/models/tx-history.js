@@ -92,37 +92,36 @@ class TxHistory extends BaseModel {
 		let query = this.query()
 			.where({ from: publicKey })
 			.orWhere({ to: publicKey })
-            .orderBy('timeStamp', 'desc');
-        return paginator(this.knex())(query, pager).then(data=>({
-            ...data,
-            isSyncing: isSyncing(publicKey)
-        }))
+			.orderBy('timeStamp', 'desc');
+		return paginator(this.knex())(query, pager).then(data => ({
+			...data,
+			isSyncing: isSyncing(publicKey)
+		}));
 	}
 
 	static async findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
-        publicKey = publicKey.toLowerCase();
+		publicKey = publicKey.toLowerCase();
 		let query = this.query()
-            .where({ from: publicKey, tokenSymbol })
-            .orWhere({ to: publicKey, tokenSymbol })
-            .orderBy('timeStamp', 'desc');
-        return paginator(this.knex())(query, pager).then(data=>({
-            ...data,
-            isSyncing: isSyncing(publicKey)
-        }))
+			.where({ from: publicKey, tokenSymbol })
+			.orWhere({ to: publicKey, tokenSymbol })
+			.orderBy('timeStamp', 'desc');
+		return paginator(this.knex())(query, pager).then(data => ({
+			...data,
+			isSyncing: isSyncing(publicKey)
+		}));
 	}
 
 	static async findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
-        publicKey = publicKey.toLowerCase();
+		publicKey = publicKey.toLowerCase();
 		let query = this.query()
-            .where({ from: publicKey, contractAddress })
-            .orWhere({ to: publicKey, contractAddress })
-            .orderBy('timeStamp', 'desc');
-        return paginator(this.knex())(query, pager).then(data=>({
-            ...data,
-            isSyncing: isSyncing(publicKey)
-        }))
+			.where({ from: publicKey, contractAddress })
+			.orWhere({ to: publicKey, contractAddress })
+			.orderBy('timeStamp', 'desc');
+		return paginator(this.knex())(query, pager).then(data => ({
+			...data,
+			isSyncing: isSyncing(publicKey)
+		}));
 	}
 }
 
 module.exports = TxHistory;
-

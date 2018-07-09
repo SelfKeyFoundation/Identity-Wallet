@@ -53,13 +53,14 @@ class IdAttribute extends BaseModel {
 	}
 
 	static async create(walletId, idAttributeType, staticData, file) {
+		const Document = require('./document');
 		const tx = await transaction.start(this.knex());
 		try {
 			let attr = await this.query(tx)
 				.findOne()
 				.where({ walletId, idAttributeType });
 			if (attr) throw new Error('id_attribute_already_exists');
-			let documument = null;
+			let document = null;
 			if (file) {
 				document = await Document.create(_.omit(file, 'path'), tx);
 			}
@@ -81,14 +82,19 @@ class IdAttribute extends BaseModel {
 	static async addEditDocumentToIdAttributeItemValue(
 		idAttributeId,
 		idAttributeItemId,
-		idAttributeItemValue,
+		idAttributeItemValueId,
 		file
 	) {
+		const Document = require('./document');
 		const tx = await transaction.start(this.knex());
 		try {
 			let idAttribute = await this.query(tx).findById(idAttributeId);
 			if (!idAttribute) throw new Error('id_attribute_not_found');
-			let value = getIdAttributeItemValue(idAttribute, idAttributeId, idAttributeItemValueId);
+			let value = getIdAttributeItemValue(
+				idAttribute,
+				idAttributeItemId,
+				idAttributeItemValueId
+			);
 			if (value) {
 				await Document.delete(value.documentId, tx);
 			}
@@ -145,6 +151,7 @@ class IdAttribute extends BaseModel {
 	}
 
 	static async delete(idAttributeId, idAttributeItemId, idAttributeItemValueId) {
+		const Document = require('./document');
 		const tx = transaction.start(this.knex());
 		try {
 			let idAttribute = this.query(tx).findById(idAttributeId);
@@ -171,6 +178,8 @@ class IdAttribute extends BaseModel {
 		requiredDocuments,
 		requiredStaticData
 	) {
+		const WalletSetting = require('./wallet-setting');
+		const Document = require('./document');
 		const tx = await transaction.start(this.knex());
 		try {
 			let walletSetting = await WalletSetting.findByWalletId(walletId);
@@ -252,7 +261,7 @@ class IdAttribute extends BaseModel {
 					delete itemsToSave[i].tempId;
 					itemsToSave[i].items = JSON.stringify(itemsToSave[i].items);
 					idAttributesSavePromises.push(
-						sqlUtil.insertAndSelect(TABLE_NAME, itemsToSave[i], tx)
+						IdAttribute.query(tx).insertAndFetch(itemsToSave[i])
 					);
 				})(i);
 			}
@@ -306,6 +315,7 @@ class IdAttribute extends BaseModel {
 	}
 
 	static async initializeImported(walletId, initialIdAttributes, tx) {
+		const IdAttributeTypes = require('./id-attribute-type');
 		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
 		let typeKeys = _.map(idAttributeTypes, ({ key }) => key);
 		let attributes = await this.query(tx)
@@ -387,7 +397,7 @@ function generateIdAttributeObject(walletId, idAttributeType, staticData, docume
 		values: [
 			{
 				id: genRandId(),
-				staticData: staticData ? staticData : {},
+				staticData: staticData || {},
 				documentId: document ? document.id : null,
 				documentName: document ? document.name : null,
 				order: 0,
@@ -413,7 +423,7 @@ function generateEmptyIdAttributeObject(walletId, idAttributeType) {
 function generateEmptyIdAttributeItemObject(name) {
 	let item = {
 		id: genRandId(),
-		name: name ? name : null,
+		name: name || null,
 		isVerified: 0,
 		order: 0,
 		createdAt: Date.now(),

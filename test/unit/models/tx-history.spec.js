@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const TxHistory = require('../../../src/main/models/tx-history');
+// const { expect } = require('chai');
+// const TxHistory = require('../../../src/main/models/tx-history');
 const db = require('../../utils/db');
 describe('TxHistory model', () => {
 	beforeEach(async () => {

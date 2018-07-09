@@ -9,11 +9,11 @@ const init = async () => {
 		await createInitialDb();
 	} catch (e) {
 		console.error(e);
+		const backupPath = `${db.connection.filename}.bkp`;
 		// Tear down connections connected to existing file
 		await knex.destroy();
-
 		try {
-			createBackup(db.connection.filename);
+			createBackup(db.connection.filename, backupPath);
 		} catch (backupError) {
 			console.log('Automatic recovery has already been attempted and failed. Aborting.');
 			throw e;

@@ -251,7 +251,7 @@ let defaultModule = function(app) {
 						isSyncingMap[address] = false;
 					}
 					walletSetting.txHistoryLastSyncedBlock = endblock;
-					await WalletSettingTable.edit(walletSetting);
+					await WalletSetting.updateById(walletSetting.id, walletSetting);
 					return resolve();
 				}
 				let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);

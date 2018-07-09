@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const db = require('../db');
 const { knex } = db;
 
@@ -32,20 +30,24 @@ const sqlUtil = {
 		try {
 			insertResp = await sqlUtil.insert(table, data, trx);
 		} catch (error) {
+			// eslint-disable-next-line no-throw-literal
 			throw { message: 'error_while_creating', error: error };
 		}
 
 		if (!insertResp || insertResp.length !== 1) {
+			// eslint-disable-next-line no-throw-literal
 			throw { message: 'error_while_creating' };
 		}
 
 		try {
 			selectResp = await sqlUtil.select(table, '*', { id: insertResp[0] }, trx);
 		} catch (error) {
+			// eslint-disable-next-line no-throw-literal
 			throw { message: 'error_while_creating', error: error };
 		}
 
 		if (!selectResp && selectResp.length !== 1) {
+			// eslint-disable-next-line no-throw-literal
 			throw { message: 'error_while_creating' };
 		}
 
@@ -105,6 +107,7 @@ const sqlUtil = {
 			}
 			return rows[0];
 		} catch (error) {
+			// eslint-disable-next-line no-throw-literal
 			throw { message: 'error_while_selecting', error: error };
 		}
 	},
@@ -123,7 +126,7 @@ const sqlUtil = {
 	bulkQuery: async (table, records, queryFunction) =>
 		knex.transaction(async trx => {
 			const queries = records.map(record => queryFunction(table, record, trx));
-			return await Promise.all(queries);
+			return Promise.all(queries);
 		})
 };
 

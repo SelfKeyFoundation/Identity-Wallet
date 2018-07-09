@@ -5,7 +5,7 @@ const fs = require('fs');
 const electron = require('electron');
 const { Menu } = require('electron');
 const isOnline = require('is-online');
-const { getUserDataPath } = require('./utils/common');
+const { getUserDataPath, isDevMode, isDebugMode } = require('./utils/common');
 const config = require('./config.js');
 
 const log = require('electron-log');
@@ -28,7 +28,6 @@ const crashReportService = require('./controllers/crash-report-service');
 /**
  * auto updated
  */
-const { appUpdater } = require('./autoupdater');
 process.on('unhandledRejection', console.error);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -153,7 +152,7 @@ function onReady(app) {
 
 		mainWindow.loadURL(webAppPath);
 
-		if (isDebugging()) {
+		if (isDebugMode()) {
 			log.info('app is running in debug mode');
 			mainWindow.webContents.openDevTools();
 		}
@@ -185,7 +184,7 @@ function onReady(app) {
 
 					log.info('did-finish-load');
 					mainWindow.webContents.send('APP_START_LOADING');
-					//start update cmc data
+					// start update cmc data
 
 					PriceService.startUpdateData();
 					AirtableService.loadIdAttributeTypes();

@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const IdAttribute = require('../../../src/main/models/id-attribute');
+// const { expect } = require('chai');
+// const IdAttribute = require('../../../src/main/models/id-attribute');
 const db = require('../../utils/db');
 describe('IdAttribute model', () => {
 	beforeEach(async () => {

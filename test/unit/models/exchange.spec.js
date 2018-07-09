@@ -38,7 +38,7 @@ describe('Exchange model', () => {
 	});
 
 	it('import', async () => {
-		const itm = await Exchange.create(testItem);
+		await Exchange.create(testItem);
 		const changedItem = { name: 'test', data: { changed: true } };
 		await Exchange.import([changedItem, testItem2]);
 		const all = await Exchange.query();

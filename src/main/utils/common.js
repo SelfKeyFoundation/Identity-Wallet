@@ -17,7 +17,7 @@ const getSetupFilePath = () => {
 	if (isDevMode() || !isElectronApp()) {
 		return path.join(__dirname, '..');
 	}
-	return npath.join(electron.app.getAppPath(), 'dist');
+	return path.join(electron.app.getAppPath(), 'dist');
 };
 
 module.exports = {

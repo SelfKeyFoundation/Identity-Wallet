@@ -1,4 +1,3 @@
-const { Model } = require('objection');
 const BaseModel = require('./base');
 const TABLE_NAME = 'exchange_data';
 

@@ -1229,7 +1229,11 @@ module.exports = function(app) {
 		actionName,
 		args
 	) {
-		TxHistory.findByPublicKeyAndContractAddress(args.publicKey, args.contractAddress, args.pager)
+		TxHistory.findByPublicKeyAndContractAddress(
+			args.publicKey,
+			args.contractAddress,
+			args.pager
+		)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

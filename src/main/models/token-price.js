@@ -1,4 +1,3 @@
-const { Model } = require('objection');
 const BaseModel = require('./base');
 const TABLE_NAME = 'token_prices';
 
@@ -48,11 +47,11 @@ class TokenPrice extends BaseModel {
 	}
 
 	static bulkEdit(items) {
-		return this.updateMany(items, ({ id }) => ({ id }));
+		return this.updateMany(items);
 	}
 
 	static bulkAdd(items) {
-		return this.insertMany(itmes);
+		return this.insertMany(items);
 	}
 }
 

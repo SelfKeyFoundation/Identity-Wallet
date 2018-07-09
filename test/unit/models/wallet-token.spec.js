@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const WalletToken = require('../../../src/main/models/wallet-token');
+// const { expect } = require('chai');
+// const WalletToken = require('../../../src/main/models/wallet-token');
 const db = require('../../utils/db');
 describe('WalletToken model', () => {
 	beforeEach(async () => {

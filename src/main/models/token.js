@@ -1,6 +1,4 @@
 const BaseModel = require('./base');
-const { Model, transaction } = require('objection');
-
 const TABLE_NAME = 'tokens';
 
 class Token extends BaseModel {
@@ -41,7 +39,7 @@ class Token extends BaseModel {
 		return this.query();
 	}
 
-	static findBySymbol() {
+	static findBySymbol(symbol) {
 		return this.query().where({ symbol });
 	}
 }

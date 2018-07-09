@@ -1,4 +1,3 @@
-const { Model } = require('objection');
 const BaseModel = require('./base');
 const _ = require('lodash');
 const TABLE_NAME = 'id_attribute_types';

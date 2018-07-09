@@ -9,7 +9,9 @@ describe('ActionLog model', () => {
 	it('create', async () => {
 		const log = await ActionLog.create(testLog);
 		expect(log).to.contain(testLog);
+		// eslint-disable-next-line no-unused-expressions
 		expect(log.createdAt).to.exist;
+		// eslint-disable-next-line no-unused-expressions
 		expect(log.updatedAt).to.exist;
 	});
 	it('findByWalletId', async () => {

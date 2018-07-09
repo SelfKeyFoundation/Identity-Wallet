@@ -64,7 +64,7 @@ class Wallet extends BaseModel {
 	static async create(itm) {
 		const tx = transaction.start(this.knex());
 		try {
-			let itm = await this.query(tx).graphInsertAndFetch({
+			let insertedItm = await this.query(tx).graphInsertAndFetch({
 				...itm,
 				setting: {
 					showDesktopNotification: 1
@@ -76,7 +76,7 @@ class Wallet extends BaseModel {
 				]
 			});
 			await tx.commit();
-			return itm;
+			return insertedItm;
 		} catch (error) {
 			await tx.rollback();
 			throw error;

@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const TokenPrice = require('../../../src/main/models/token-price');
+// const { expect } = require('chai');
+// const TokenPrice = require('../../../src/main/models/token-price');
 const db = require('../../utils/db');
 
 describe('TokenPrice model', () => {

@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const Token = require('../../../src/main/models/token');
+// const { expect } = require('chai');
+// const Token = require('../../../src/main/models/token');
 const db = require('../../utils/db');
 describe('Token model', () => {
 	beforeEach(async () => {
