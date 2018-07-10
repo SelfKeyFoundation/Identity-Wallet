@@ -31,9 +31,7 @@ class TokenPrice extends BaseModel {
 	}
 
 	static findBySymbol(symbol) {
-		return this.query()
-			.findOne()
-			.where({ symbol });
+		return this.query().findOne({ symbol });
 	}
 
 	static create(data) {

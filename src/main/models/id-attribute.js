@@ -54,9 +54,7 @@ class IdAttribute extends BaseModel {
 		const Document = require('./document');
 		const tx = await transaction.start(this.knex());
 		try {
-			let attr = await this.query(tx)
-				.findOne()
-				.where({ walletId, idAttributeType });
+			let attr = await this.query(tx).findOne({ walletId, idAttributeType });
 			if (attr) throw new Error('id_attribute_already_exists');
 			let document = null;
 			if (file) {
