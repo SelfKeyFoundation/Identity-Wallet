@@ -3,7 +3,7 @@ version: 2
 jobs:
   "build":
     docker: &DOCKERIMAGE
-      - image: circleci/node:9-browsers
+      - image: circleci/node:9-stretch-browsers
     steps:
       - checkout
       - attach_workspace:
