@@ -1,6 +1,6 @@
-/* eslint-env browser */ /* global angular, staticPath, path */
+/* eslint-env browser */ /* global angular, staticPath */
 'use strict';
-
+const path = require('path');
 const isDevelopment = process.env.NODE_ENV === 'development';
 window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
@@ -25,6 +25,19 @@ document.addEventListener(
 /**
  *
  */
+window.zxcvbn = require('zxcvbn');
+window.qrcode = require('qrcode-generator');
+window.BigNumber = require('bignumber.js');
+window.ethUtil = require('ethereumjs-util');
+window.ethUtil.crypto = require('crypto');
+
+require('@uirouter/angularjs');
+require('angular-material');
+require('angular-messages');
+require('angular-sanitize');
+require('angular-local-storage');
+require('angular-qrcode');
+require('angular-zxcvbn');
 require('./angular/app.templates');
 
 /**
@@ -50,8 +63,9 @@ const appStates = require('./angular/configs/app.states');
 /**
  * constants
  */
-let envConfig = isDevelopment ? window.config.default : window.config.production;
-let appConfig = Object.assign(window.config.common, envConfig);
+const config = require('../main/config');
+let envConfig = isDevelopment ? config.default : config.production;
+let appConfig = Object.assign(config.common, envConfig);
 
 angular.module('kyc-wallet').constant('CONFIG', appConfig);
 
@@ -141,6 +155,23 @@ angular.module('kyc-wallet').directive('skDoubleHeader', SkDoubleHeaderDirective
 
 const SkTxHistoryDirective = require('./angular/directives/commons/sk-tx-history.directive');
 angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
+
+/**
+ * React Components
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	const { react2angular } = require('react2angular');
+	const { PriceBoxWrapper } = require('./react/priceBox/index');
+
+	const cryptoPriceBox = react2angular(PriceBoxWrapper, [
+		'cryptoCurrency',
+		'cryptoValue',
+		'toCurrency',
+		'toValue'
+	]);
+
+	angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
+});
 
 /**
  * controllers

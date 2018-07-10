@@ -2,18 +2,19 @@
 
 const RPC_METHOD = 'ON_RPC';
 const listeners = {};
+const ipcRenderer = require('electron').ipcRenderer;
 
 function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonService) {
 	'ngInject';
 
-	$log.info('RPCService Initialized', window.ipcRenderer);
+	$log.info('RPCService Initialized', ipcRenderer);
 
 	/**
 	 *
 	 */
 	class RPCService {
 		constructor() {
-			this.ipcRenderer = window.ipcRenderer;
+			this.ipcRenderer = ipcRenderer;
 
 			this.ipcRenderer.on(RPC_METHOD, (event, actionId, actionName, error, data) => {
 				$log.info(actionName, error, data);

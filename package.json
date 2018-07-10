@@ -32,7 +32,7 @@
   "main": "./src/main/main.js",
   "scripts": {
     "dev": "gulp && electron-webpack dev",
-    "install-app-deps": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
@@ -69,6 +69,8 @@
     "bluebird": "3.5.1",
     "crypto": "1.0.1",
     "decompress": "4.2.0",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-redux": "^1.3.1",
     "ethereumjs-tx": "1.3.4",
     "ethereumjs-util": "5.2.0",
     "fibers": "2.0.2",
@@ -86,7 +88,13 @@
     "objection": "^1.1.10",
     "promise-timeout": "1.3.0",
     "qrcode-generator": "1.4.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "react2angular": "^4.0.4",
+    "request": "2.87.0",
     "secp256k1": "3.5.0",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git",
     "sjcl": "1.0.7",
     "source-map-support": "^0.5.6",
     "sqlite3": "^4.0.0",
@@ -97,9 +105,11 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.0.0-beta.51",
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
     "@sentry/cli": "^1.33.0",
+    "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "chalk": "2.3.2",
     "copy-webpack-plugin": "^4.5.1",
@@ -123,6 +133,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.6.1",
     "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-standard": "^3.1.0",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.2.1",
@@ -167,6 +178,9 @@
         "@/preload.js"
       ],
       "webpackConfig": "webpack.main.additions.js"
+    },
+    "renderer": {
+      "webpackConfig": "webpack.renderer.additions.js"
     }
   },
   "config": {

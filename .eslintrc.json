@@ -2,15 +2,20 @@
     "extends": [
        "standard",
        "prettier",
-       "prettier/standard"
+       "prettier/standard",
+       "plugin:react/recommended"
     ],
     "plugins": [
        "prettier",
        "standard",
-       "mocha"
+       "mocha",
+       "react"
     ],
     "parserOptions": {
-       "sourceType": "module"
+       "sourceType": "module",
+       "ecmaFeatures": {
+         "jsx": true
+       }
     },
     "env": {
        "es6": true,

@@ -1,5 +1,8 @@
 /* global __static */
 'use strict';
+import configureStore from 'common/configure-store';
+import { localeUpdate } from 'common/locale/actions';
+
 const path = require('path');
 const fs = require('fs');
 const electron = require('electron');
@@ -98,7 +101,12 @@ function onReady(app) {
 
 		await initDb();
 		await crashReportService.startCrashReport();
-
+		const store = configureStore(global.state, 'main');
+		try {
+			store.dispatch(localeUpdate('en'));
+		} catch (e) {
+			log.error(e);
+		}
 		app.config.userDataPath = electron.app.getPath('userData');
 
 		const PriceService = require('./controllers/price-service');
@@ -136,7 +144,7 @@ function onReady(app) {
 			minWidth: 1170,
 			minHeight: 800,
 			webPreferences: {
-				nodeIntegration: false,
+				nodeIntegration: true,
 				webSecurity: true,
 				disableBlinkFeatures: 'Auxclick',
 				preload: path.resolve(__dirname, 'preload.js')

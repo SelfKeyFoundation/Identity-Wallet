@@ -3,7 +3,7 @@ version: 2
 jobs:
   "build":
     docker: &DOCKERIMAGE
-      - image: circleci/node:9-browsers
+      - image: circleci/node:9-stretch-browsers
     steps:
       - checkout
       - attach_workspace:
@@ -19,7 +19,8 @@ jobs:
           name: Install OS Dependecies
           command: |
             sudo apt-get update
-            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
+            sudo apt-get install libudev-dev
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
       - run:
           name: Install Gulp
           command: sudo npm i -g gulp-cli
