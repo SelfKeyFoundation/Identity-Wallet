@@ -132,7 +132,7 @@ class Wallet extends BaseModel {
 		try {
 			const IdAttributes = require('./id-attribute');
 			const attributes = await IdAttributes.initializeImported(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).graphUpsertAndFetch({
+			let wallet = await this.query(tx).upsertGraphAndFetch({
 				id,
 				isSetupFinished: 1,
 				idAttributes: attributes
