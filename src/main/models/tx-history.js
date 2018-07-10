@@ -5,7 +5,7 @@ const TABLE_NAME = 'tx_history';
 
 // TODO copy in utils when sql-util-refactor will be finished
 let paginator = knex => {
-	return async (query, options) => {
+	return async (query, options = {}) => {
 		const perPage = options.perPage || 10;
 		let page = options.page || 1;
 

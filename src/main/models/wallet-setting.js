@@ -44,12 +44,12 @@ class WalletSetting extends BaseModel {
 		return this.query().insertAndFetch(itm);
 	}
 
-	static findByWalletId(walletId) {
-		return this.query().where({ walletId });
+	static findByWalletId(walletId, tx) {
+		return this.query(tx).findOne({ walletId });
 	}
 
-	static updateById(id, itm) {
-		return this.query().patchAndFetchById(id, itm);
+	static updateById(id, itm, tx) {
+		return this.query(tx).patchAndFetchById(id, itm);
 	}
 }
 

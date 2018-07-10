@@ -58,7 +58,7 @@ class IdAttribute extends BaseModel {
 			if (attr) throw new Error('id_attribute_already_exists');
 			let document = null;
 			if (file) {
-				document = await Document.create(_.omit(file, 'path'), tx);
+				document = await Document.create(file, tx);
 			}
 			let idAttribute = generateIdAttributeObject(
 				walletId,
@@ -66,11 +66,11 @@ class IdAttribute extends BaseModel {
 				staticData,
 				document
 			);
-			let itm = this.query(tx).insertAndFetch(idAttribute);
+			let itm = await this.query(tx).insertAndFetch(idAttribute);
 			await tx.commit();
 			return itm;
 		} catch (error) {
-			await tx.rollback();
+			await tx.rollback(error);
 			throw error;
 		}
 	}
@@ -91,20 +91,17 @@ class IdAttribute extends BaseModel {
 				idAttributeItemId,
 				idAttributeItemValueId
 			);
-			if (value) {
+			if (value && value.documentId) {
 				await Document.delete(value.documentId, tx);
 			}
-			let document = await Document.create(
-				_.pick(file, 'buffer', 'name', 'mimeType', 'size'),
-				tx
-			);
+			let document = await Document.create(file, tx);
 			value.documentId = document.id;
 			value.documentName = document.name;
-			idAttribute = this.query(tx).patchAndFetchById(idAttributeId, idAttribute);
+			idAttribute = await this.query(tx).patchAndFetchById(idAttributeId, idAttribute);
 			await tx.commit();
 			return idAttribute;
 		} catch (error) {
-			await tx.rollback();
+			await tx.rollback(error);
 			throw error;
 		}
 	}
@@ -128,11 +125,11 @@ class IdAttribute extends BaseModel {
 
 			value.staticData = staticData;
 
-			idAttribute = this.query(tx).patchAndFetchById(idAttribute.id, idAttribute);
+			idAttribute = await this.query(tx).patchAndFetchById(idAttribute.id, idAttribute);
 			await tx.commit();
 			return idAttribute;
 		} catch (error) {
-			await tx.rollback();
+			await tx.rollback(error);
 			throw error;
 		}
 	}
@@ -148,9 +145,9 @@ class IdAttribute extends BaseModel {
 
 	static async delete(idAttributeId, idAttributeItemId, idAttributeItemValueId) {
 		const Document = require('./document');
-		const tx = transaction.start(this.knex());
+		const tx = await transaction.start(this.knex());
 		try {
-			let idAttribute = this.query(tx).findById(idAttributeId);
+			let idAttribute = await this.query(tx).findById(idAttributeId);
 			let value = getIdAttributeItemValue(
 				idAttribute,
 				idAttributeItemId,
@@ -160,7 +157,7 @@ class IdAttribute extends BaseModel {
 				await Document.delete(value.documentId, tx);
 			}
 			await this.query(tx).deleteById(idAttributeId);
-			await tx.comit();
+			await tx.commit();
 			return idAttribute;
 		} catch (error) {
 			await tx.rollback();
@@ -178,7 +175,7 @@ class IdAttribute extends BaseModel {
 		const Document = require('./document');
 		const tx = await transaction.start(this.knex());
 		try {
-			let walletSetting = await WalletSetting.findByWalletId(walletId);
+			let walletSetting = await WalletSetting.findByWalletId(walletId, tx);
 			let idAttributesSavePromises = [];
 			let documentsSavePromises = [];
 
@@ -255,14 +252,13 @@ class IdAttribute extends BaseModel {
 			for (let i in itemsToSave) {
 				(function() {
 					delete itemsToSave[i].tempId;
-					itemsToSave[i].items = JSON.stringify(itemsToSave[i].items);
 					idAttributesSavePromises.push(
 						IdAttribute.query(tx).insertAndFetch(itemsToSave[i])
 					);
 				})(i);
 			}
 			await Promise.all(idAttributesSavePromises);
-			await WalletSetting.updateById(walletSetting.id, walletSetting, tx);
+			walletSetting = await WalletSetting.updateById(walletSetting.id, walletSetting, tx);
 			await tx.commit();
 			return walletSetting;
 		} catch (error) {
@@ -375,35 +371,28 @@ function getIdAttributeItemValue(idAttribute, itemId, valueId) {
 }
 
 function generateIdAttributeObject(walletId, idAttributeType, staticData, document) {
-	const ts = Date.now();
-	let item = {
+	const value = {
+		id: genRandId(),
+		order: 0
+	};
+	if (staticData) value.staticData = staticData;
+	if (document) {
+		value.documentId = document.id;
+		value.documentName = document.name;
+	}
+	return {
 		walletId: walletId,
 		idAttributeType: idAttributeType,
-		items: [],
-		createdAt: ts
-	};
-
-	item.items.push({
-		id: genRandId(),
-		name: null,
-		isVerified: 0,
-		order: 0,
-		createdAt: ts,
-		updatedAt: null,
-		values: [
+		items: [
 			{
 				id: genRandId(),
-				staticData: staticData || {},
-				documentId: document ? document.id : null,
-				documentName: document ? document.name : null,
+				name: null,
+				isVerified: 0,
 				order: 0,
-				createdAt: ts,
-				updatedAt: null
+				values: [value]
 			}
 		]
-	});
-
-	return item;
+	};
 }
 
 function generateEmptyIdAttributeObject(walletId, idAttributeType) {
