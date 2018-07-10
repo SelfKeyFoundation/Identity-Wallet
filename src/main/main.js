@@ -3,11 +3,6 @@
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
 
-import installExtension, {
-	REACT_DEVELOPER_TOOLS,
-	REDUX_DEVTOOLS
-} from 'electron-devtools-installer';
-
 const path = require('path');
 const fs = require('fs');
 const electron = require('electron');
