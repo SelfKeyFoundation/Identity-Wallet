@@ -1,6 +1,6 @@
 'use strict';
 
-var Web3 = require('web3');
+const Web3 = require('web3');
 const async = require('async');
 const CONFIG = require('../config');
 
@@ -20,7 +20,7 @@ const SERVER_CONFIG = {
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-module.exports = function(app) {
+const defaultModule = function(app) {
 	const controller = function() {
 		let self = this;
 
@@ -40,7 +40,10 @@ module.exports = function(app) {
 					promise = contract[data.method].apply(contract, data.args);
 				}
 			} else {
-				promise = standardWeb3.eth[data.method].apply(self, data.args);
+				promise = (data.customWeb3 ? data.customWeb3 : standardWeb3).eth[data.method].apply(
+					self,
+					data.args
+				);
 			}
 			setTimeout(() => {
 				callback(promise);
@@ -84,4 +87,9 @@ module.exports = function(app) {
 	};
 
 	return controller;
+};
+
+module.exports = {
+	default: defaultModule,
+	SELECTED_SERVER_URL
 };

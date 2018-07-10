@@ -10,9 +10,8 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 		getAccountsWithBalances(args) {
 			const loadBalances = (accounts, callback) => {
 				let fns = {};
-				Object.keys(accounts).forEach(derivationPath => {
+				accounts.forEach(address => {
 					let fn = callback => {
-						let address = accounts[derivationPath];
 						let promise = Web3Service.getBalance(address);
 
 						promise
@@ -27,7 +26,7 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 								callback(err);
 							});
 					};
-					fns[derivationPath] = fn;
+					fns[address] = fn;
 				});
 
 				window.async.parallel(fns, callback);
@@ -48,11 +47,10 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 							}
 
 							let accountsArr = Object.keys(results)
-								.map(derivationPath => {
+								.map(address => {
 									return {
-										address: accounts[derivationPath],
-										derivationPath: derivationPath,
-										balanceEth: results[derivationPath]
+										address,
+										balanceEth: results[address]
 									};
 								})
 								.sort((a, b) => {
@@ -71,19 +69,10 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 			return RPCService.makeCall('createLedgerWalletByAdress', { address });
 		}
 
-		signTransaction(dataToSign, address, derivationPath) {
-			return new Promise((resolve, reject) => {
-				RPCService.makeCall('signTransactionWithLedger', {
-					dataToSign,
-					address,
-					derivationPath
-				})
-					.then(res => {
-						resolve(res);
-					})
-					.catch(err => {
-						reject(err);
-					});
+		signTransaction(dataToSign, address) {
+			return RPCService.makeCall('signTransactionWithLedger', {
+				dataToSign,
+				address
 			});
 		}
 	}

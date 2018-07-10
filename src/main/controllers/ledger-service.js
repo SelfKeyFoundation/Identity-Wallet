@@ -1,149 +1,65 @@
-const ledgerco = require('ledgerco');
-const EthereumTx = require('ethereumjs-tx');
-const { timeout, TimeoutError } = require('promise-timeout');
+'use strict';
 
-const CONFIG = require('../config');
+const electron = require('electron');
+const { timeout } = require('promise-timeout');
+const Web3 = require('web3');
+const ProviderEngine = require('web3-provider-engine');
+const FetchSubprovider = require('web3-provider-engine/subproviders/fetch');
+const HWTransportNodeHid = require('@ledgerhq/hw-transport-node-hid');
+const Web3SubProvider = require('@ledgerhq/web3-subprovider');
+const { chainId } = require('../config');
+const { SELECTED_SERVER_URL } = require('./web3-service');
 
-module.exports = function(app) {
-	let comm = null;
-	let lastHIDPath = '';
+const createLedgerSubprovider = Web3SubProvider.default;
+const Transport = HWTransportNodeHid.default;
 
-	const getNetworkId = () => {
-		return CONFIG.chainId;
-	};
-
-	const getDefaultDerivationPath = () => {
-		return "44'/60'/0'/0";
-	};
-
+module.exports = function() {
 	const controller = function() {};
 
-	async function closeConnection() {
-		if (!comm) {
-			return;
-		}
-
-		await comm.close_async();
-		comm = null;
-	}
-	async function getEth() {
-		let list = await ledgerco.comm_node.list_async();
-		let isConnected = list && list.length;
-
-		if (isConnected) {
-			let newHDPath = list[0];
-			if (comm && lastHIDPath && lastHIDPath !== newHDPath) {
-				await closeConnection();
-			}
-			lastHIDPath = newHDPath;
-		} else {
-			throw Error('Device not found');
-		}
-
-		if (!comm) {
-			comm = await ledgerco.comm_node.create_async();
-		}
-		// eslint-disable-next-line new-cap
-		return new ledgerco.eth(comm);
-	}
-
-	function obtainPathComponentsFromDerivationPath(derivationPath) {
-		// check if derivation path follows 44'/60'/x'/n pattern
-		const regExp = /^(44'\/6[0|1]'\/\d+'?\/)(\d+)$/;
-		const matchResult = regExp.exec(derivationPath);
-		if (matchResult === null) {
-			throw new Error(
-				"To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n "
-			);
-		}
-
-		return { basePath: matchResult[1], index: parseInt(matchResult[2], 10) };
-	}
-
-	controller.prototype.getAccounts = async function(args) {
-		args = args || {};
-
-		let indexOffset = args.start || 0;
-		let accountsNo = args.quantity || 1;
-		let eth = await getEth();
-
-		let derivationPath = args.derivationPath || getDefaultDerivationPath();
-		const pathComponents = obtainPathComponentsFromDerivationPath(derivationPath);
-
-		let addresses = {};
-		for (let i = indexOffset; i < indexOffset + accountsNo; i += 1) {
-			let path = pathComponents.basePath + (pathComponents.index + i).toString();
-			let address = await eth.getAddress_async(path);
-			addresses[path] = address.address;
-		}
-
-		return addresses;
-	};
-
-	async function _signTransaction(txData, derivationPath) {
-		let eth = await getEth();
-
-		derivationPath = derivationPath || getDefaultDerivationPath();
-		const pathComponents = obtainPathComponentsFromDerivationPath(derivationPath);
-		let path = pathComponents.basePath + pathComponents.index;
-		let account = await eth.getAddress_async(path);
-		if (
-			!account ||
-			!account.address ||
-			account.address.toLowerCase() !== txData.from.toLowerCase()
-		) {
-			throw new Error('Invalid address');
-		}
-
-		// Encode using ethereumjs-tx
-		const tx = new EthereumTx(txData);
-		const chainId = getNetworkId();
-
-		// Set the EIP155 bits
-		tx.raw[6] = Buffer.from([chainId]); // v
-		tx.raw[7] = Buffer.from([]); // r
-		tx.raw[8] = Buffer.from([]); // s
-
-		// Encode as hex-rlp for Ledger
-		const hex = tx.serialize().toString('hex');
-
-		// Pass to _ledger for signing
-		let result = await (await getEth()).signTransaction_async(derivationPath, hex);
-
-		// Store signature in transaction
-		tx.v = Buffer.from(result.v, 'hex');
-		tx.r = Buffer.from(result.r, 'hex');
-		tx.s = Buffer.from(result.s, 'hex');
-
-		// EIP155: v should be chain_id * 2 + {35, 36}
-		const signedChainId = Math.floor((tx.v[0] - 35) / 2);
-		if (signedChainId !== chainId) {
-			throw new Error('Invalid signature received. Please update your Ledger Nano S.');
-		}
-
-		// Return the signed raw transaction
-		return `0x${tx.serialize().toString('hex')}`;
-	}
-
-	controller.prototype.signTransaction = async args => {
-		args.dataToSign.from = args.address;
-		let derivationPath = args.derivationPath;
-		return new Promise((resolve, reject) => {
-			let signPromise = _signTransaction(args.dataToSign, derivationPath);
-
-			timeout(signPromise, 30000)
-				.then(res => {
-					resolve(res);
-				})
-				.catch(err => {
-					if (err instanceof TimeoutError) {
-						// eslint-disable-next-line prefer-promise-reject-errors
-						return reject('custom-timeout');
-					}
-					reject(err.toString());
-				});
+	function createWeb3(accountsOffset, accountsQuantity) {
+		accountsOffset = accountsOffset || 0;
+		accountsQuantity = accountsQuantity || 6;
+		const engine = new ProviderEngine();
+		const getTransport = () => Transport.create();
+		const ledger = createLedgerSubprovider(getTransport, {
+			networkId: chainId,
+			accountsLength: accountsQuantity,
+			accountsOffset
 		});
-	};
+
+		engine.addProvider(ledger);
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.start();
+		return new Web3(engine);
+	}
+
+	async function _signTransaction(args) {
+		args.dataToSign.from = args.address;
+		let signPromise = electron.app.web3Service.waitForTicket({
+			method: 'signTransaction',
+			args: [args.dataToSign],
+			contractAddress: null,
+			contractMethod: null,
+			onceListenerName: null,
+			customWeb3: createWeb3()
+		});
+
+		return timeout(signPromise, 30000);
+	}
+
+	async function _getAccounts(args) {
+		return electron.app.web3Service.waitForTicket({
+			method: 'getAccounts',
+			args: [],
+			contractAddress: null,
+			contractMethod: null,
+			onceListenerName: null,
+			customWeb3: createWeb3(args.start, args.quantity)
+		});
+	}
+
+	controller.prototype.getAccounts = _getAccounts;
+	controller.prototype.signTransaction = _signTransaction;
 
 	return controller;
 };
