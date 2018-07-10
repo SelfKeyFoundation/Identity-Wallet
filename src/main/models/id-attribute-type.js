@@ -1,3 +1,4 @@
+const { transaction } = require('objection');
 const BaseModel = require('./base');
 const _ = require('lodash');
 const TABLE_NAME = 'id_attribute_types';
@@ -42,31 +43,34 @@ class IdAttributeType extends BaseModel {
 		return this.findAll(tx).where({ isInitial: 1 });
 	}
 
-	static import(attributeTypes) {}
+	static async import(attributeTypes) {
+		const tx = await transaction.start(this.knex());
+
+		try {
+			let attrs = await this.findAll(tx);
+			let existing = attrs.reduce((acc, attr) => {
+				acc[attr.key] = true;
+				return acc;
+			}, {});
+
+			let toImport = attributeTypes.reduce(
+				(acc, attr) => {
+					if (Array.isArray(attr.type)) attr.type = attr.type[0];
+					if (existing[attr.key]) acc.update.push(attr);
+					else acc.insert.push(attr);
+					return acc;
+				},
+				{ update: [], insert: [] }
+			);
+
+			await this.insertMany(toImport.insert, tx);
+			await this.updateMany(toImport.update, tx);
+			await tx.commit();
+		} catch (error) {
+			await tx.rollback(error);
+			throw error;
+		}
+	}
 }
 
 module.exports = IdAttributeType;
-
-// TODO
-/*
-derive import from this
-controller.prototype.loadIdAttributeTypes = () => {
-		const ID_ATTRIBUTE_TABLE = 'id-attributes';
-		request.get(AIRTABLE_API + ID_ATTRIBUTE_TABLE, (error, httpResponse, result) => {
-			let idAttributesArray = JSON.parse(result).ID_Attributes;
-			for (let i in idAttributesArray) {
-				if (!idAttributesArray[i].data) continue;
-
-				let item = idAttributesArray[i].data.fields;
-
-				electron.app.sqlLiteService.IdAttributeType.create(item)
-					.then(idAttributeType => {
-						// inserted
-					})
-					.catch(error => {
-						// error
-					});
-			}
-		});
-	};
-*/

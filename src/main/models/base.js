@@ -27,25 +27,25 @@ class BaseModel extends Model {
 		return {};
 	}
 
-	static insertMany(records) {
+	static insertMany(records, tx) {
 		const insertFn = (record, tx) => this.query(tx).insertAndFetch(record);
-		return this.queryMany(records, insertFn);
+		return this.queryMany(records, insertFn, tx);
 	}
 
-	static updateMany(records) {
+	static updateMany(records, tx) {
 		const updateFn = (record, tx) =>
 			this.query(tx).patchAndFetchById(record[this.idColumn], record);
-		return this.queryMany(records, updateFn);
+		return this.queryMany(records, updateFn, tx);
 	}
 
-	static async queryMany(records, queryFn) {
-		const tx = await transaction.start(this.knex());
+	static async queryMany(records, queryFn, externalTx) {
+		const tx = externalTx || (await transaction.start(this.knex()));
 		try {
 			let results = await Promise.all(records.map(r => queryFn(r, tx)));
-			await tx.commit();
+			if (!externalTx) await tx.commit();
 			return results;
 		} catch (error) {
-			await tx.rollback();
+			if (!externalTx) await tx.rollback();
 			throw error;
 		}
 	}
