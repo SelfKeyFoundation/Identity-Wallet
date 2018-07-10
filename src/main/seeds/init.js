@@ -1,10 +1,10 @@
-const electron = require('electron');
-const userDataPath = electron.app.getPath('userData');
+const { getUserDataPath } = require('../utils/common');
+const userDataPath = getUserDataPath();
 const countriesList = require('../assets/data/country-list.json');
 const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json');
 const ethTokens = require('../assets/data/eth-tokens.json');
 
-const seeds = [
+const seeds = () => [
 	{
 		table: 'seed',
 		insert: [
@@ -18,7 +18,7 @@ const seeds = [
 		insert: [
 			{
 				dataFolderPath: userDataPath,
-				createdAt: new Date().getTime()
+				createdAt: Date.now()
 			}
 		],
 		multi: false
@@ -35,7 +35,7 @@ const seeds = [
 				guideShown: 0,
 				icoAdsShown: 0,
 				termsAccepted: 0,
-				createdAt: new Date().getTime()
+				createdAt: Date.now()
 			}
 		],
 		multi: false
@@ -74,13 +74,17 @@ async function runSeeds(knex, seeds) {
 						// want to remove promise wrapper
 						let items = [];
 						for (let item of seed.insert) {
+							let insertItem = {
+								...item,
+								createdAt: Date.now()
+							};
 							// any way to remove this dirty hack please
 							if (item.entity) {
-								item.entity = JSON.stringify(item.entity);
+								insertItem.entity = JSON.stringify(item.entity);
 							}
 							// table.timestamps() on schema fixes this issue
-							item.createdAt = new Date().getTime();
-							items.push(knex(seed.table).insert(item));
+
+							items.push(knex(seed.table).insert(insertItem));
 						}
 						return Promise.all(items);
 					} else {
@@ -96,5 +100,5 @@ async function runSeeds(knex, seeds) {
 }
 
 exports.seed = async function(knex) {
-	return runSeeds(knex, seeds);
+	return runSeeds(knex, seeds());
 };

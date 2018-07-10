@@ -87,7 +87,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 				if (idAttributeTypes) {
 					for (let i in idAttributeTypes) {
 						let item = idAttributeTypes[i];
-						item.entity = JSON.parse(item.entity);
+						item.entity = item.entity;
 						ID_ATTRIBUTE_TYPES_STORE[item.key] = item;
 					}
 				}
