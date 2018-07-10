@@ -36,7 +36,7 @@
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "test": "yarn test:e2e && yarn test:unit",
+    "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "node test/test.js unit",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
@@ -77,12 +77,15 @@
     "is-online": "^7.0.0",
     "keccak": "1.4.0",
     "keythereum": "1.0.4",
-    "knex": "^0.14.6",
+    "knex": "^0.15.0",
+    "ledgerco": "1.2.1",
+    "lodash": "^4.17.10",
     "mime-types": "2.1.18",
     "mv": "2.1.1",
+    "node-fetch": "^2.1.2",
+    "objection": "^1.1.10",
     "promise-timeout": "1.3.0",
     "qrcode-generator": "1.4.0",
-    "request": "2.87.0",
     "secp256k1": "3.5.0",
     "sjcl": "1.0.7",
     "source-map-support": "^0.5.6",
@@ -151,7 +154,8 @@
     "files": [
       "dist/migrations",
       "dist/seeds",
-      "dist/assets"
+      "dist/assets",
+      "dist/utils"
     ]
   },
   "electronWebpack": {

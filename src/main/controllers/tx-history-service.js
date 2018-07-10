@@ -7,6 +7,10 @@ const request = require('request');
 const async = require('async');
 const BigNumber = require('bignumber.js');
 
+const Wallet = require('../models/wallet');
+const WalletSetting = require('../models/wallet-setting');
+const TxHistory = require('../models/tx-history');
+
 let isSyncingMap = {};
 let syncingJobIsStarted = false;
 
@@ -220,7 +224,7 @@ let defaultModule = function(app) {
 			let txs = txHashes[hash];
 			let processedTx = await getProcessedTx(txs, walletAddress);
 			if (processedTx) {
-				await electron.app.sqlLiteService.TxHistory.addOrUpdate(processedTx);
+				await TxHistory.addOrUpdate(processedTx);
 			}
 		}
 	}
@@ -231,12 +235,9 @@ let defaultModule = function(app) {
 		if (showProgress) {
 			isSyncingMap[address] = true;
 		}
-
-		let WalletSettingTable = electron.app.sqlLiteService.WalletSetting;
 		let endblock = await getMostResentBlock();
 		endblock = parseInt(endblock, 16);
-
-		let walletSettings = await WalletSettingTable.findByWalletId(walletId);
+		let walletSettings = await WalletSetting.findByWalletId(walletId);
 		let walletSetting = walletSettings[0];
 		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
 		let page = 1;
@@ -250,7 +251,7 @@ let defaultModule = function(app) {
 						isSyncingMap[address] = false;
 					}
 					walletSetting.txHistoryLastSyncedBlock = endblock;
-					await WalletSettingTable.edit(walletSetting);
+					await WalletSetting.updateById(walletSetting.id, walletSetting);
 					return resolve();
 				}
 				let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);
@@ -270,7 +271,7 @@ let defaultModule = function(app) {
 	}
 
 	async function sync() {
-		let wallets = await electron.app.sqlLiteService.Wallet.findActive();
+		let wallets = await Wallet.findAll();
 		for (let wallet of wallets) {
 			let address = ('0x' + wallet.publicKey).toLowerCase();
 			await _syncByWallet(address, wallet.id);
