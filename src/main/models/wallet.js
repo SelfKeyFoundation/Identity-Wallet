@@ -13,7 +13,6 @@ class Wallet extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['publicKey', 'keystoreFilePath'],
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
@@ -96,9 +95,7 @@ class Wallet extends BaseModel {
 	}
 
 	static findByPublicKey(publicKey) {
-		return this.query()
-			.findOne()
-			.where({ publicKey });
+		return this.query().findOne({ publicKey });
 	}
 
 	static updateProfilePicture({ id, profilePicture }) {
