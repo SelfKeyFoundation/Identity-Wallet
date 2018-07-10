@@ -8,12 +8,6 @@ describe('WalletToken model', () => {
 		balance: 0
 	};
 
-	const testItem2 = {
-		walletId: 1,
-		tokenId: 2,
-		balance: 0
-	};
-
 	const testToken = {
 		symbol: 'TST',
 		decimal: 2,
@@ -67,7 +61,7 @@ describe('WalletToken model', () => {
 		let walletToken = await WalletToken.createWithNewToken(testToken, 5, 1);
 		let createdToken = await walletToken.$relatedQuery('token');
 
-		let walletToken2 = await WalletToken.createWithNewToken(testToken2, 2, 1);
+		await WalletToken.createWithNewToken(testToken2, 2, 1);
 
 		let found = await WalletToken.findByWalletId(1);
 		expect(found.length).to.eq(2);
