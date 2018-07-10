@@ -85,7 +85,7 @@ class TxHistory extends BaseModel {
 	}
 
 	static async addOrUpdate(data) {
-		let record = await this.findByTxHash(data.hash);
+		let record = await this.query().findOne({ hash: data.hash });
 		if (record) return this.query().patchAndFetchById(record.id, data);
 		return this.query().insertAndFetch(data);
 	}
