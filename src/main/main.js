@@ -102,16 +102,6 @@ function onReady(app) {
 			appUpdater();
 		}
 
-		if (process.env.NODE_ENV !== 'test') {
-			installExtension(REACT_DEVELOPER_TOOLS)
-				.then(name => log.info(`Added Extension:  ${name}`))
-				.catch(err => log.info('An error occurred: ', err));
-
-			installExtension(REDUX_DEVTOOLS)
-				.then(name => log.info(`Added Extension:  ${name}`))
-				.catch(err => log.info('An error occurred: ', err));
-		}
-
 		const initDb = require('./services/knex').init;
 
 		await initDb();
