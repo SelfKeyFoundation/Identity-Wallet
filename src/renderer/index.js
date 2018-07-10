@@ -25,8 +25,12 @@ document.addEventListener(
 /**
  *
  */
-require('zxcvbn');
-require('qrcode-generator');
+window.zxcvbn = require('zxcvbn');
+window.qrcode = require('qrcode-generator');
+window.BigNumber = require('bignumber.js');
+window.ethUtil = require('ethereumjs-util');
+window.ethUtil.crypto = require('crypto');
+
 require('@uirouter/angularjs');
 require('angular-material');
 require('angular-messages');
