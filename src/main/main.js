@@ -160,7 +160,7 @@ function onReady(app) {
 			minWidth: 1170,
 			minHeight: 800,
 			webPreferences: {
-				nodeIntegration: false,
+				nodeIntegration: true,
 				webSecurity: true,
 				disableBlinkFeatures: 'Auxclick',
 				preload: path.resolve(__dirname, 'preload.js')

@@ -1,6 +1,6 @@
-/* eslint-env browser */ /* global angular, staticPath, path */
+/* eslint-env browser */ /* global angular, staticPath */
 'use strict';
-
+const path = require('path');
 const isDevelopment = process.env.NODE_ENV === 'development';
 window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
@@ -25,6 +25,15 @@ document.addEventListener(
 /**
  *
  */
+require('zxcvbn');
+require('qrcode-generator');
+require('@uirouter/angularjs');
+require('angular-material');
+require('angular-messages');
+require('angular-sanitize');
+require('angular-local-storage');
+require('angular-qrcode');
+require('angular-zxcvbn');
 require('./angular/app.templates');
 
 /**
@@ -50,8 +59,9 @@ const appStates = require('./angular/configs/app.states');
 /**
  * constants
  */
-let envConfig = isDevelopment ? window.config.default : window.config.production;
-let appConfig = Object.assign(window.config.common, envConfig);
+const config = require('../main/config');
+let envConfig = isDevelopment ? config.default : config.production;
+let appConfig = Object.assign(config.common, envConfig);
 
 angular.module('kyc-wallet').constant('CONFIG', appConfig);
 

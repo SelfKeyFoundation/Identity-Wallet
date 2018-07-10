@@ -1,4 +1,5 @@
 const EthUtils = require('../classes/eth-utils');
+const Web3 = require('web3');
 
 // documentation
 // https://www.myetherapi.com/
@@ -12,8 +13,8 @@ function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCServi
 	 */
 	class Web3Service {
 		constructor() {
-			Web3Service.web3 = new window.Web3();
-			EthUtils.web3 = new window.Web3();
+			Web3Service.web3 = new Web3();
+			EthUtils.web3 = new Web3();
 			window.EthUtils = EthUtils;
 		}
 

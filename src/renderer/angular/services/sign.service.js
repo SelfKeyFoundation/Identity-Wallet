@@ -2,6 +2,7 @@
 
 const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
+const Tx = require('ethereumjs-tx');
 
 function SignService($rootScope, $log, LedgerService) {
 	'ngInject';
@@ -14,7 +15,7 @@ function SignService($rootScope, $log, LedgerService) {
 
 		this.signTranactionByPrivateKey = function(rawTx, privateKey) {
 			return new Promise(resolve => {
-				let eTx = new window.Tx(rawTx);
+				let eTx = new Tx(rawTx);
 				eTx.sign(privateKey);
 				resolve('0x' + eTx.serialize().toString('hex'));
 			});
