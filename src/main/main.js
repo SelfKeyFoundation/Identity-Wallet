@@ -3,11 +3,11 @@
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
 
-import installExtension, {
+/*import installExtension, {
 	REACT_DEVELOPER_TOOLS,
 	REDUX_DEVTOOLS
 } from 'electron-devtools-installer';
-
+*/
 const path = require('path');
 const fs = require('fs');
 const electron = require('electron');
@@ -102,14 +102,14 @@ function onReady(app) {
 			appUpdater();
 		}
 
-		installExtension(REACT_DEVELOPER_TOOLS)
+		/*installExtension(REACT_DEVELOPER_TOOLS)
 			.then(name => log.info(`Added Extension:  ${name}`))
 			.catch(err => log.info('An error occurred: ', err));
 
 		installExtension(REDUX_DEVTOOLS)
 			.then(name => log.info(`Added Extension:  ${name}`))
 			.catch(err => log.info('An error occurred: ', err));
-
+		*/
 		const initDb = require('./services/knex').init;
 
 		await initDb();
