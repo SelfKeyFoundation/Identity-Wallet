@@ -1,6 +1,12 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
+import Logger from 'common/logger';
 const path = require('path');
+
+const log = new Logger('main');
+
+log.info('initializing renderer');
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 window.staticPath = isDevelopment ? '' : window.__dirname.replace(/app\.asar$/, 'static');
 
@@ -467,3 +473,4 @@ angular.element(() => {
 		strictDi: true
 	});
 });
+log.info('load complete');
