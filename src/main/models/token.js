@@ -13,7 +13,7 @@ class Token extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['symbol'],
+			required: ['symbol', 'decimal', 'address'],
 			properties: {
 				id: { type: 'integer' },
 				symbol: { type: 'string' },

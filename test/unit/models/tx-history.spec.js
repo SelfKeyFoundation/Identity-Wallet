@@ -42,9 +42,48 @@ describe('TxHistory model', () => {
 		expect(modifiedItm.blockHash).to.not.eq(itm.blockHash);
 	});
 
-	xit('findByPublicKey', async () => {});
+	it('findByPublicKey', async () => {
+		let itm = await TxHistory.addOrUpdate(data);
 
-	xit('findByPublicKeyAndTokenSymbol', async () => {});
+		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.from)).data[0]);
+		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.from.toUpperCase())).data[0]);
+		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to)).data[0]);
+		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to.toUpperCase())).data[0]);
+	});
 
-	xit('findByPublicKeyAndContractAddress', async () => {});
+	it('findByPublicKeyAndTokenSymbol', async () => {
+		let itm = await TxHistory.addOrUpdate(data);
+
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.from, itm.tokenSymbol)).data[0]
+		);
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.tokenSymbol)).data[0]
+		);
+		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to, itm.tokenSymbol)).data[0]);
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.tokenSymbol)).data[0]
+		);
+
+		// TODO: check doe not fetch different symbol
+	});
+
+	it('findByPublicKeyAndContractAddress', async () => {
+		let itm = await TxHistory.addOrUpdate(data);
+
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.from, itm.contractAddress)).data[0]
+		);
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.contractAddress)).data[0]
+		);
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.to, itm.contractAddress)).data[0]
+		);
+		expect(itm).to.deep.eq(
+			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.contractAddress)).data[0]
+		);
+
+		// TODO: check doe not fetch different contract
+	});
 });

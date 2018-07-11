@@ -58,5 +58,31 @@ describe('IdAttributeType model', () => {
 		expect(all.length).to.eq(initialAttributes.length);
 	});
 
-	xit('import', () => {});
+	it('import', async () => {
+		const toImport = [
+			{
+				key: 'test',
+				category: 'test_category',
+				type: ['static_data'],
+				entity: ['individual', 'company'],
+				isInitial: 0
+			},
+			{
+				key: 'test2',
+				category: 'test_category2',
+				type: 'document',
+				entity: ['individual', 'company'],
+				isInitial: 1
+			}
+		];
+		const itm = await IdAttributeType.create(testItem);
+		let all = await IdAttributeType.query();
+
+		await IdAttributeType.import(toImport);
+
+		let allAfterImport = await IdAttributeType.query();
+		expect(allAfterImport.length).to.eq(all.length + 1);
+		const updatedItm = await IdAttributeType.query().findById(itm.key);
+		expect(itm.entity.length).to.not.eq(updatedItm.entity.length);
+	});
 });

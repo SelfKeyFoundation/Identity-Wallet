@@ -15,7 +15,6 @@ class WalletToken extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['tokenId'],
 			properties: {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
@@ -61,7 +60,7 @@ class WalletToken extends BaseModel {
 	static async createWithNewToken(token, balance, walletId) {
 		const tx = await transaction.start(this.knex());
 		try {
-			let wtoken = this.guery(tx).graphInsertAndFetch({
+			let wtoken = await this.query(tx).insertGraphAndFetch({
 				walletId,
 				token,
 				balance,
@@ -78,6 +77,7 @@ class WalletToken extends BaseModel {
 	static find(where) {
 		return this.query()
 			.select(
+				'wallet_tokens.id as id',
 				'wallet_tokens.*',
 				'token_prices.name',
 				'token_prices.priceUSD',
@@ -89,20 +89,6 @@ class WalletToken extends BaseModel {
 			.leftJoin('tokens', 'tokenId', 'tokens.id')
 			.leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
 			.where(where);
-	}
-
-	static async findOne(where) {
-		let results = await this.find(where);
-		if (!results || !results.length) return null;
-		return results[0];
-	}
-
-	static findOneById(id) {
-		return this.findOne({ 'wallet_tokens.id': id });
-	}
-
-	static findOneByWalletId(walletId) {
-		return this.findOne({ walletId, recordState: 1 });
 	}
 
 	static findByWalletId(walletId) {
