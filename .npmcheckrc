@@ -1,4 +1,4 @@
 {
     "throw": false,
-    "ignore": ["common"]
+    "ignore": ["eslint"]
 }
