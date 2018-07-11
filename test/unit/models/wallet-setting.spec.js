@@ -4,7 +4,7 @@ const db = require('../../utils/db');
 describe('WalletSetting model', () => {
 	const testItem = {
 		walletId: 1,
-		sowDesktopNotifications: 1
+		showDesktopNotifications: 1
 	};
 	beforeEach(async () => {
 		await db.reset();
@@ -27,9 +27,9 @@ describe('WalletSetting model', () => {
 	it('updateById', async () => {
 		let itm = await WalletSetting.create(testItem);
 		let modifiedItm = await WalletSetting.query().findById(itm.id);
-		modifiedItm.sowDesktopNotifications = 0;
+		modifiedItm.showDesktopNotifications = 0;
 		modifiedItm = await WalletSetting.updateById(modifiedItm.id, modifiedItm);
 		expect(modifiedItm.id).to.eq(itm.id);
-		expect(modifiedItm.sowDesktopNotifications).to.not.eq(itm.sowDesktopNotifications);
+		expect(modifiedItm.showDesktopNotifications).to.not.eq(itm.showDesktopNotifications);
 	});
 });

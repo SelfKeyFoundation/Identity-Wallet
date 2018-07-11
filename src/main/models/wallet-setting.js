@@ -1,4 +1,5 @@
 const { Model } = require('objection');
+const _ = require('lodash');
 const BaseModel = require('./base');
 const TABLE_NAME = 'wallet_settings';
 
@@ -11,6 +12,28 @@ class WalletSetting extends BaseModel {
 		return 'id';
 	}
 
+	$parseDatabaseJson(json) {
+		json = super.$parseDatabaseJson(json);
+		if (json.hasOwnProperty('sowDesktopNotifications')) {
+			json = {
+				..._.omit(json, 'sowDesktopNotifications'),
+				showDesktopNotifications: json.sowDesktopNotifications
+			};
+		}
+		return json;
+	}
+
+	$formatDatabaseJson(json) {
+		json = super.$formatDatabaseJson(json);
+		if (json.hasOwnProperty('showDesktopNotifications')) {
+			json = {
+				..._.omit(json, 'showDesktopNotifications'),
+				sowDesktopNotifications: json.showDesktopNotifications
+			};
+		}
+		return json;
+	}
+
 	static get jsonSchema() {
 		return {
 			type: 'object',
@@ -18,7 +41,7 @@ class WalletSetting extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
-				sowDesktopNotifications: { type: 'integer' },
+				showDesktopNotifications: { type: 'integer' },
 				previousTransactionCount: { type: 'integer' },
 				txHistoryLastSyncedBlock: { type: 'integer' },
 				airDropCode: { type: 'integer' }
