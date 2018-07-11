@@ -1,4 +1,4 @@
 {
     "throw": false,
-    "ignore": ["eslint"]
+    "ignore": ["eslint", "redux"]
 }
