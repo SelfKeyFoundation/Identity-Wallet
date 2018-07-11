@@ -41,8 +41,9 @@
     "test:unit": "node test/test.js unit",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
-    "precommit": "pretty-quick --staged && gulp deps",
+    "precommit": "npm run check-deps-precommit || pretty-quick --staged",
     "commitmsg": "commitlint -E GIT_PARAMS",
+    "check-deps-precommit": "npm-check -i eslint -i redux -s",
     "check-deps": "npm-check -i common"
   },
   "lint-staged": {
@@ -137,7 +138,6 @@
     "eslint-plugin-standard": "^3.1.0",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.2.1",
-    "gulp-npm-check": "^1.1.0",
     "gulp-pug": "^4.0.1",
     "gulp-sass": "^4.0.1",
     "gulp-watch": "^5.0.0",

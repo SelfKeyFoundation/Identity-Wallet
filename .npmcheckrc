@@ -1,4 +1,0 @@
-{
-    "throw": false,
-    "ignore": ["eslint", "redux"]
-}
