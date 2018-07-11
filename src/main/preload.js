@@ -5,6 +5,8 @@ const config = require('./config');
 const defaultWindowOpen = window.open;
 const async = require('async');
 
+window.async = async;
+
 window.appName = appPackage.productName;
 window.appVersion = appPackage.version;
 
