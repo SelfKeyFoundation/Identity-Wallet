@@ -32,7 +32,7 @@
   "main": "./src/main/main.js",
   "scripts": {
     "dev": "gulp && electron-webpack dev",
-    "prepare": "npm install ./src/main/extended_modules/keythereum",
+    "prepare": "cd ./src/main/extended_modules/keythereum && npm install",
     "postinstall": "electron-builder install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
@@ -106,6 +106,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
     "@babel/preset-react": "^7.0.0-beta.51",
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
