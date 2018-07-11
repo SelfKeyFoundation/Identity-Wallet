@@ -237,8 +237,7 @@ let defaultModule = function(app) {
 		}
 		let endblock = await getMostResentBlock();
 		endblock = parseInt(endblock, 16);
-		let walletSettings = await WalletSetting.findByWalletId(walletId);
-		let walletSetting = walletSettings;
+		let walletSetting = await WalletSetting.findByWalletId(walletId);
 		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
 		let page = 1;
 		let txHashes = {};
