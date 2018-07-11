@@ -27,7 +27,7 @@ export const createFilter = (filters, levels) => {
 	try {
 		filters = filters.split(',').map(f => new RegExp(f));
 	} catch (error) {
-		log.error(`Logger -> ${Logger.errToStr(error)}`);
+		log.error(`${processPrefix}:logger ${Logger.errToStr(error)}`);
 	}
 
 	if (levels) {
@@ -39,7 +39,7 @@ export const createFilter = (filters, levels) => {
 			return false;
 		}
 		for (let filter of filters) {
-			if (filter.match(msg)) return false;
+			if (msg.match(filter)) return false;
 		}
 		return true;
 	};
@@ -49,7 +49,7 @@ export const globalFilter = createFilter(LOG_FILTER, LOG_FILTER_LEVEL);
 
 export class Logger {
 	constructor(prefix = 'general', filter = null) {
-		this.prefix = `${processPrefix} > ${prefix}`;
+		this.prefix = `${processPrefix}:${prefix}`;
 		this.filter = filter || globalFilter;
 	}
 
@@ -62,13 +62,13 @@ export class Logger {
 		const errStr = '' + error;
 		if (!hasStack) return errStr;
 		const stackStr = '' + error.stack;
-		if (stackStr.startsWith(errStr)) return errStr;
+		if (stackStr.startsWith(errStr)) return stackStr;
 		return errStr;
 	}
 
 	fmtMessage(msg) {
 		if (!this.prefix) return msg;
-		return `${this.prefix} -> ${msg}`;
+		return `${this.prefix} ${msg}`;
 	}
 
 	isFiltered(level, msg = '') {
