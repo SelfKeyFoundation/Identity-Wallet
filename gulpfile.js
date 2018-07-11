@@ -9,6 +9,7 @@ const tmplSrc = path.resolve(__dirname, './src/renderer/templates/**/*.pug');
 const tmplDest = path.resolve(__dirname, './src/renderer/angular/');
 const scssSrc = path.resolve(__dirname, './static/stylesheets/scss/main.scss');
 const scssDest = path.resolve(__dirname, './static/stylesheets/css');
+const npmcheck = require('gulp-npm-check');
 
 gulp.task('templates', cb => {
 	gulp.src(tmplSrc)
@@ -45,4 +46,8 @@ gulp.task('watch', cb => {
 
 gulp.task('default', cb => {
 	runSequence(['templates', 'stylesheets'], cb);
+});
+
+gulp.task('deps', cb => {
+	npmcheck(cb);
 });

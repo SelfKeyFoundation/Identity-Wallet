@@ -1,0 +1,4 @@
+{
+    "throw": false,
+    "ignore": ["common"]
+}
