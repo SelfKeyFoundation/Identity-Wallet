@@ -41,9 +41,9 @@
     "test:unit": "node test/test.js unit",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
-    "precommit": "npm run check-deps-precommit || pretty-quick --staged",
+    "precommit": "npm run check-deps-precommit && pretty-quick --staged",
     "commitmsg": "commitlint -E GIT_PARAMS",
-    "check-deps-precommit": "npm-check -i eslint -i redux -s",
+    "check-deps-precommit": "npm-check -i eslint -i redux -s || true",
     "check-deps": "npm-check -i common"
   },
   "lint-staged": {
