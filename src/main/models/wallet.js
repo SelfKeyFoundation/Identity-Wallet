@@ -67,7 +67,7 @@ class Wallet extends BaseModel {
 				{
 					...itm,
 					setting: {
-						showDesktopNotification: 1
+						sowDesktopNotification: 1
 					},
 					tokens: [
 						{
