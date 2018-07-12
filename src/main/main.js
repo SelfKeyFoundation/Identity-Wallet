@@ -13,7 +13,7 @@ const { getUserDataPath, isDevMode, isDebugMode } = require('./utils/common');
 const config = require('./config.js');
 const log = new Logger('main');
 
-log.info('starting: ' + electron.app.getName());
+log.info('starting: %s', electron.app.getName());
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
