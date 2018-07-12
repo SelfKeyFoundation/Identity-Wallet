@@ -1,5 +1,4 @@
 const BaseModel = require('./base');
-const isSyncing = require('../controllers/tx-history-service').isSyncing;
 
 const TABLE_NAME = 'tx_history';
 
@@ -96,10 +95,7 @@ class TxHistory extends BaseModel {
 			.where({ from: publicKey })
 			.orWhere({ to: publicKey })
 			.orderBy('timeStamp', 'desc');
-		return paginator(this.knex())(query, pager).then(data => ({
-			...data,
-			isSyncing: isSyncing(publicKey)
-		}));
+		return paginator(this.knex())(query, pager);
 	}
 
 	static async findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
@@ -108,10 +104,7 @@ class TxHistory extends BaseModel {
 			.where({ from: publicKey, tokenSymbol })
 			.orWhere({ to: publicKey, tokenSymbol })
 			.orderBy('timeStamp', 'desc');
-		return paginator(this.knex())(query, pager).then(data => ({
-			...data,
-			isSyncing: isSyncing(publicKey)
-		}));
+		return paginator(this.knex())(query, pager);
 	}
 
 	static async findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
@@ -120,10 +113,7 @@ class TxHistory extends BaseModel {
 			.where({ from: publicKey, contractAddress })
 			.orWhere({ to: publicKey, contractAddress })
 			.orderBy('timeStamp', 'desc');
-		return paginator(this.knex())(query, pager).then(data => ({
-			...data,
-			isSyncing: isSyncing(publicKey)
-		}));
+		return paginator(this.knex())(query, pager);
 	}
 }
 
