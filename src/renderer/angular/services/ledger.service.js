@@ -1,5 +1,6 @@
 'use strict';
 const EthUnits = require('../classes/eth-units');
+const async = require('async');
 
 function LedgerService($log, RPCService, CommonService, Web3Service) {
 	'ngInject';
@@ -29,7 +30,7 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 					fns[address] = fn;
 				});
 
-				window.async.parallel(fns, callback);
+				async.parallel(fns, callback);
 			};
 
 			return new Promise((resolve, reject) => {
