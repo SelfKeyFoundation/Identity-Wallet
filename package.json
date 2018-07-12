@@ -111,7 +111,7 @@
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
     "@sentry/cli": "^1.33.0",
-    "babel-loader": "^7.1.5",
+    "babel-loader": "^8.0.0-beta.4",
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
