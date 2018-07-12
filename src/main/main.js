@@ -2,6 +2,7 @@
 'use strict';
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
+import Logger from 'common/logger';
 
 const path = require('path');
 const fs = require('fs');
@@ -10,13 +11,7 @@ const { Menu } = require('electron');
 const isOnline = require('is-online');
 const { getUserDataPath, isDevMode, isDebugMode } = require('./utils/common');
 const config = require('./config.js');
-
-const log = require('electron-log');
-
-log.transports.file.level = true;
-log.transports.console.level = true;
-
-log.transports.console.level = 'info';
+const log = new Logger('main');
 
 log.info('starting: ' + electron.app.getName());
 
@@ -31,7 +26,7 @@ const crashReportService = require('./controllers/crash-report-service');
 /**
  * auto updated
  */
-process.on('unhandledRejection', log.error);
+process.on('unhandledRejection', err => log.error(err));
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
