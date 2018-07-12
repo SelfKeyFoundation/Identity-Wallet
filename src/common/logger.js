@@ -79,7 +79,7 @@ export class Logger {
 
 	static checkLevels(level) {
 		for (let tlevel of [LOG_LEVEL_CONSOLE, LOG_LEVEL_FILE]) {
-			if (compareLevels(tlevel, level)) return true;
+			if (compareLevels(tlevel, level)) return false;
 		}
 	}
 
