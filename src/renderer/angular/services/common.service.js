@@ -1,12 +1,13 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('CommonService');
 const Wallet = require('../classes/wallet');
 const CommonUtils = require('../classes/common-utils');
 
-function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
+function CommonService($rootScope, $q, $mdDialog, $compile, $mdToast) {
 	'ngInject';
 
-	$log.debug('CommonService Initialized');
+	log.debug('CommonService Initialized');
 
 	class CommonService {
 		constructor() {
@@ -102,5 +103,5 @@ function CommonService($rootScope, $log, $q, $mdDialog, $compile, $mdToast) {
 
 	return new CommonService();
 }
-CommonService.$inject = ['$rootScope', '$log', '$q', '$mdDialog', '$compile', '$mdToast'];
+CommonService.$inject = ['$rootScope', '$q', '$mdDialog', '$compile', '$mdToast'];
 module.exports = CommonService;

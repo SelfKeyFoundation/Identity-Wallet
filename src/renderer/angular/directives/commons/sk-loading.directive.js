@@ -1,6 +1,6 @@
 'use strict';
 
-function SkLoadingDirective($log) {
+function SkLoadingDirective() {
 	'ngInject';
 
 	return {
@@ -14,5 +14,5 @@ function SkLoadingDirective($log) {
 		templateUrl: 'common/directives/sk-loading.html'
 	};
 }
-SkLoadingDirective.$inject = ['$log'];
+SkLoadingDirective.$inject = [];
 module.exports = SkLoadingDirective;

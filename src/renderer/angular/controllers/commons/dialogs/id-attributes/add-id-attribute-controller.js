@@ -1,9 +1,10 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('AddIdAttributeDialogController');
 
 function AddIdAttributeDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$mdDialog,
 	SqlLiteService,
 	excludeKeys,
@@ -12,7 +13,7 @@ function AddIdAttributeDialogController(
 ) {
 	'ngInject';
 
-	$log.info('AddIdAttributeDialogController', excludeKeys);
+	log.debug('AddIdAttributeDialogController %j', excludeKeys);
 
 	$scope.globalAttributes = {};
 	$scope.idDocuments = {};
@@ -75,7 +76,6 @@ function AddIdAttributeDialogController(
 AddIdAttributeDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$mdDialog',
 	'SqlLiteService',
 	'excludeKeys',

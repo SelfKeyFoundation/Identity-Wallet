@@ -1,6 +1,6 @@
 'use strict';
 
-function SkSelectIfDirective($log) {
+function SkSelectIfDirective() {
 	'ngInject';
 
 	return {
@@ -17,5 +17,5 @@ function SkSelectIfDirective($log) {
 		}
 	};
 }
-SkSelectIfDirective.$inject = ['$log'];
+SkSelectIfDirective.$inject = [];
 module.exports = SkSelectIfDirective;

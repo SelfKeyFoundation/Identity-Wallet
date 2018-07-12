@@ -1,8 +1,8 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('SkUserInfoBoxDirective');
 function SkUserInfoBoxDirective(
 	$rootScope,
-	$log,
 	$window,
 	$timeout,
 	$filter,
@@ -114,7 +114,7 @@ function SkUserInfoBoxDirective(
 						updateProfilePictureStyles(res.profilePicture);
 					})
 					.catch(err => {
-						console.error(err);
+						log.error(err);
 						CommonService.showToast('error', 'Error while saving the file');
 					});
 			};
@@ -134,7 +134,7 @@ function SkUserInfoBoxDirective(
 						updateWalletprofilePicture(profilePicture);
 					})
 					.catch(error => {
-						console.error(error);
+						log.error(error);
 						CommonService.showToast(
 							'error',
 							'Maximum file size: The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.'
@@ -150,7 +150,7 @@ function SkUserInfoBoxDirective(
 }
 SkUserInfoBoxDirective.$inject = [
 	'$rootScope',
-	'$log',
+
 	'$window',
 	'$timeout',
 	'$filter',

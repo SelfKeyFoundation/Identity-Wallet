@@ -1,6 +1,6 @@
 'use strict';
 
-function SkCloseWarningBoxDirective($rootScope, $log, $window, RPCService) {
+function SkCloseWarningBoxDirective($rootScope, $window, RPCService) {
 	'ngInject';
 
 	return {
@@ -26,5 +26,5 @@ function SkCloseWarningBoxDirective($rootScope, $log, $window, RPCService) {
 		templateUrl: 'common/directives/sk-close-warning-box.html'
 	};
 }
-SkCloseWarningBoxDirective.$inject = ['$rootScope', '$log', '$window', 'RPCService'];
+SkCloseWarningBoxDirective.$inject = ['$rootScope', '$window', 'RPCService'];
 module.exports = SkCloseWarningBoxDirective;

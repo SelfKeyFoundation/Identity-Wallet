@@ -1,10 +1,11 @@
 /* global angular */
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('add-edit-static-data-ctl');
 
 function AddEditStaticDataDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$mdDialog,
 	CommonService,
@@ -16,7 +17,7 @@ function AddEditStaticDataDialogController(
 ) {
 	'ngInject';
 
-	$log.info('AddEditStaticDataDialogController');
+	log.debug('AddEditStaticDataDialogController');
 
 	const ADDRESS_ID_ATTRIBUTES = ['physical_address', 'work_place'];
 	const COUNTRY_ID_ATTRIBUTES = ['nationality', 'country_of_residency'];
@@ -108,7 +109,7 @@ function AddEditStaticDataDialogController(
 				$mdDialog.hide($scope.inputs);
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				CommonService.showToast('error', 'error');
 			});
 	};
@@ -163,7 +164,6 @@ function AddEditStaticDataDialogController(
 AddEditStaticDataDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'CommonService',

@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestLoadingController');
 function GuestLoadingController(
 	$rootScope,
 	$scope,
-	$log,
 	$timeout,
 	$state,
 	$stateParams,
@@ -13,7 +13,7 @@ function GuestLoadingController(
 ) {
 	'ngInject';
 
-	$log.info('GuestLoadingController');
+	log.debug('GuestLoadingController');
 
 	$scope.header = 'Loading';
 	$scope.subHeader = '';
@@ -40,7 +40,7 @@ function GuestLoadingController(
 				goTo('guest.welcome');
 			})
 			.catch(error => {
-				$log.error('error', error);
+				log.error(error);
 			});
 	}
 
@@ -70,7 +70,6 @@ function GuestLoadingController(
 GuestLoadingController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$timeout',
 	'$state',
 	'$stateParams',

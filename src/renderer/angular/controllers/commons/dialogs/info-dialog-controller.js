@@ -1,6 +1,6 @@
 'use strict';
 
-function InfoDialogController($rootScope, $scope, $log, $mdDialog, text, title) {
+function InfoDialogController($rootScope, $scope, $mdDialog, text, title) {
 	'ngInject';
 
 	$scope.text = text;
@@ -10,5 +10,5 @@ function InfoDialogController($rootScope, $scope, $log, $mdDialog, text, title) 
 		$mdDialog.cancel();
 	};
 }
-InfoDialogController.$inject = ['$rootScope', '$scope', '$log', '$mdDialog', 'text', 'title'];
+InfoDialogController.$inject = ['$rootScope', '$scope', '$mdDialog', 'text', 'title'];
 module.exports = InfoDialogController;

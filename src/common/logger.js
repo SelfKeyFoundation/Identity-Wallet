@@ -14,10 +14,10 @@ const FMT_TPL = '{y}-{m}-{d} {h}:{i}:{s}:{ms} {text}';
 const LEVELS = ['error', 'warn', 'info', 'verbose', 'debug', 'trace'];
 
 if (is.main) {
-	log.transports.console.level = LOG_LEVEL_CONSOLE;
+	log.transports.console.level = LOG_LEVEL_CONSOLE === 'trace' ? 'silly' : LOG_LEVEL_CONSOLE;
 	log.transports.console.format = FMT_TPL;
 
-	log.transports.file.level = LOG_LEVEL_FILE;
+	log.transports.file.level = LOG_LEVEL_FILE === 'trace' ? 'silly' : LOG_LEVEL_FILE;
 	log.transports.file.format = FMT_TPL;
 }
 
@@ -78,9 +78,8 @@ export class Logger {
 	}
 
 	static checkLevels(level) {
-		const { transports } = this.getRawLogger();
-		for (let transport in transports) {
-			if (compareLevels(transports[transport].level, level)) return true;
+		for (let tlevel of [LOG_LEVEL_CONSOLE, LOG_LEVEL_FILE]) {
+			if (compareLevels(tlevel, level)) return true;
 		}
 	}
 

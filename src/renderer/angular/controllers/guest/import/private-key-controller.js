@@ -1,11 +1,11 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestImportPrivateKeyController');
 const Wallet = require('../../../classes/wallet');
 
 function GuestImportPrivateKeyController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$timeout,
 	$state,
@@ -15,7 +15,7 @@ function GuestImportPrivateKeyController(
 ) {
 	'ngInject';
 
-	$log.info('GuestImportPrivateKeyController');
+	log.debug('GuestImportPrivateKeyController');
 	$rootScope.wallet = null;
 
 	$scope.userInput = {
@@ -76,7 +76,7 @@ function GuestImportPrivateKeyController(
 				}
 			})
 			.catch(error => {
-				$log.error(error);
+				log.error(error);
 				theForm.privateKey.$setValidity('badPrivateKey', false);
 				$scope.isUnlocking = false;
 			});
@@ -85,7 +85,6 @@ function GuestImportPrivateKeyController(
 GuestImportPrivateKeyController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$timeout',
 	'$state',

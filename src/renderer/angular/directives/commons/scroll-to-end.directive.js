@@ -1,7 +1,6 @@
 /* global angular */
 'use strict';
-
-function ScrollToEndDirective($log, $window) {
+function ScrollToEndDirective($window) {
 	'ngInject';
 
 	function getStyleInt(elem, prop) {
@@ -118,5 +117,5 @@ function ScrollToEndDirective($log, $window) {
 		}
 	};
 }
-ScrollToEndDirective.$inject = ['$log', '$window'];
+ScrollToEndDirective.$inject = ['$window'];
 module.exports = ScrollToEndDirective;

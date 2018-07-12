@@ -1,9 +1,10 @@
 'use strict';
-
-function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, releaseName) {
+const { Logger } = require('common/logger');
+const log = new Logger('UpdateDialogController');
+function UpdateDialogController($rootScope, $scope, $q, $mdDialog, releaseName) {
 	'ngInject';
 
-	$log.info('UpdateDialogController', releaseName);
+	log.debug('UpdateDialogController, %s', releaseName);
 	$scope.updatePromise = null;
 
 	$scope.releaseName = releaseName;
@@ -21,5 +22,5 @@ function UpdateDialogController($rootScope, $scope, $log, $q, $mdDialog, release
         */
 	};
 }
-UpdateDialogController.$inject = ['$rootScope', '$scope', '$log', '$q', '$mdDialog', 'releaseName'];
+UpdateDialogController.$inject = ['$rootScope', '$scope', '$q', '$mdDialog', 'releaseName'];
 module.exports = UpdateDialogController;

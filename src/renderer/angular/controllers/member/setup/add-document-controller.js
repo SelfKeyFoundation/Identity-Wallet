@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('MemberSetupAddDocumentController');
 function MemberSetupAddDocumentController(
 	$rootScope,
 	$scope,
-	$log,
 	$state,
 	$timeout,
 	$stateParams,
@@ -13,7 +13,7 @@ function MemberSetupAddDocumentController(
 ) {
 	'ngInject';
 
-	$log.info('MemberSetupAddDocumentController');
+	log.debug('MemberSetupAddDocumentController');
 
 	$scope.idAttributes = $rootScope.wallet.getIdAttributes();
 
@@ -88,7 +88,7 @@ function MemberSetupAddDocumentController(
 			})
 			.catch(error => {
 				// CommonService.showToast('error', 'File size is over 50MB. Please upload a smaller file.');
-				console.error(error);
+				log.error(error);
 				$scope.snackbar(
 					'error',
 					'File size is over 50MB. Please upload a smaller file.',
@@ -112,7 +112,6 @@ function MemberSetupAddDocumentController(
 MemberSetupAddDocumentController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$state',
 	'$timeout',
 	'$stateParams',

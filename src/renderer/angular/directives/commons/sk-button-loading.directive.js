@@ -1,7 +1,7 @@
 /* global angular */
 'use strict';
 
-function SkButtonLoadingDirective($log, $compile) {
+function SkButtonLoadingDirective($compile) {
 	'ngInject';
 
 	return {
@@ -68,5 +68,5 @@ function SkButtonLoadingDirective($log, $compile) {
 		}
 	};
 }
-SkButtonLoadingDirective.$inject = ['$log', '$compile'];
+SkButtonLoadingDirective.$inject = ['$compile'];
 module.exports = SkButtonLoadingDirective;

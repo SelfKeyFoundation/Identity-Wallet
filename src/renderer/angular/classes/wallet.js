@@ -1,6 +1,5 @@
 /* global angular */
 'use strict';
-
 const EthUnits = require('./eth-units');
 const EthUtils = require('./eth-utils');
 const Token = require('./token');
@@ -13,8 +12,6 @@ let CommonService;
 let ElectronService;
 let SqlLiteService;
 let SignService;
-/* eslint-disable-next-line no-unused-vars */
-let $log;
 
 let readyToShowNotification = false;
 
@@ -46,9 +43,6 @@ class Wallet {
 
 	static set SignService(value) {
 		SignService = value;
-	}
-	static set $log(value) {
-		$log = value;
 	}
 
 	constructor(id, privateKey, publicKey, keystoreFilePath, profile) {

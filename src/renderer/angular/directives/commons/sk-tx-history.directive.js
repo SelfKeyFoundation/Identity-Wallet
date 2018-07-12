@@ -1,5 +1,6 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('SKTxHistoryDirective');
 function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) {
 	'ngInject';
 
@@ -99,7 +100,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 						scope.hasPager = scope.total > pager.perPage;
 					})
 					.catch(err => {
-						console.error(err);
+						log.error(err);
 						scope.isSyncing = false;
 						CommonService.showToast(
 							'error',

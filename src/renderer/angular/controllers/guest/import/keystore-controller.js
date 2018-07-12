@@ -1,11 +1,11 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestImportKeystoreController');
 const Wallet = require('../../../classes/wallet');
 
 function GuestImportKeystoreController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$timeout,
 	$state,
@@ -17,7 +17,7 @@ function GuestImportKeystoreController(
 ) {
 	'ngInject';
 
-	$log.info('GuestImportKeystoreController');
+	log.debug('GuestImportKeystoreController');
 
 	const wallets = SqlLiteService.getWallets();
 
@@ -46,7 +46,7 @@ function GuestImportKeystoreController(
 				$rootScope.walletImportData = data;
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				CommonService.showToast('error', 'wrong file selected');
 			});
 	};
@@ -72,7 +72,7 @@ function GuestImportKeystoreController(
 						$state.go('member.dashboard.main');
 					})
 					.catch(error => {
-						console.error(error);
+						log.error(error);
 						$scope.isAuthenticating = false;
 						$scope.incorrectPassword = true;
 					});
@@ -167,7 +167,6 @@ function GuestImportKeystoreController(
 GuestImportKeystoreController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$timeout',
 	'$state',

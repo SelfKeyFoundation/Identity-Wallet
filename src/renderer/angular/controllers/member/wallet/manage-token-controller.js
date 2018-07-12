@@ -1,8 +1,9 @@
+const { Logger } = require('common/logger');
+const log = new Logger('ManageTokenController');
 function ManageTokenController(
 	$rootScope,
 	$scope,
 	$state,
-	$log,
 	$mdDialog,
 	$stateParams,
 	Web3Service,
@@ -11,7 +12,7 @@ function ManageTokenController(
 ) {
 	'ngInject';
 
-	$log.info('ManageTokenController', $stateParams);
+	log.debug('ManageTokenController, %j', $stateParams);
 
 	let temporaryMap = {
 		key: 'Selfkey',
@@ -63,7 +64,7 @@ function ManageTokenController(
 	 * events
 	 */
 	$rootScope.$on('balance:change', (event, symbol, balance, balanceInUsd) => {
-		$log.info('balance:change', symbol, balance, balanceInUsd);
+		log.debug('balance:change %s %f %f', symbol, balance, balanceInUsd);
 		prepareBalance();
 	});
 }
@@ -71,7 +72,6 @@ ManageTokenController.$inject = [
 	'$rootScope',
 	'$scope',
 	'$state',
-	'$log',
 	'$mdDialog',
 	'$stateParams',
 	'Web3Service',

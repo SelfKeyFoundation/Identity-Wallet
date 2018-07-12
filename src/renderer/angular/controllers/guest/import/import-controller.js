@@ -1,7 +1,9 @@
-function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteService) {
+const { Logger } = require('common/logger');
+const log = new Logger('GuestImportWalletController');
+function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService) {
 	'ngInject';
 
-	$log.info('GuestImportWalletController');
+	log.debug('GuestImportWalletController');
 
 	$scope.selectedOption = 'keystoreSelect';
 
@@ -52,7 +54,7 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
 	}
 
 	$scope.onRadioButtonChange = event => {
-		$log.info('onRadioButtonChange', $scope.selectedOption);
+		log.debug('onRadioButtonChange, %s', $scope.selectedOption);
 
 		switch ($scope.selectedOption) {
 			case 'keystoreSelect':
@@ -72,5 +74,5 @@ function GuestImportWalletController($rootScope, $scope, $log, $state, SqlLiteSe
 		}
 	};
 }
-GuestImportWalletController.$inject = ['$rootScope', '$scope', '$log', '$state', 'SqlLiteService'];
+GuestImportWalletController.$inject = ['$rootScope', '$scope', '$state', 'SqlLiteService'];
 module.exports = GuestImportWalletController;

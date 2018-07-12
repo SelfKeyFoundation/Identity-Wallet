@@ -1,13 +1,14 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('RPCService');
 const RPC_METHOD = 'ON_RPC';
 const listeners = {};
 const ipcRenderer = require('electron').ipcRenderer;
 
-function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonService) {
+function RPCService($rootScope, $window, $q, $timeout, $http, CommonService) {
 	'ngInject';
 
-	$log.info('RPCService Initialized', ipcRenderer);
+	log.debug('RPCService Initialized, %s', ipcRenderer);
 
 	/**
 	 *
@@ -17,7 +18,7 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
 			this.ipcRenderer = ipcRenderer;
 
 			this.ipcRenderer.on(RPC_METHOD, (event, actionId, actionName, error, data) => {
-				$log.info(actionName, error, data);
+				log.debug('%s %s %j', actionName, error, data);
 
 				if (error) {
 					listeners[actionId].defer.reject(error);
@@ -70,5 +71,5 @@ function RPCService($rootScope, $window, $q, $timeout, $log, $http, CommonServic
 
 	return new RPCService();
 }
-RPCService.$inject = ['$rootScope', '$window', '$q', '$timeout', '$log', '$http', 'CommonService'];
+RPCService.$inject = ['$rootScope', '$window', '$q', '$timeout', '$http', 'CommonService'];
 module.exports = RPCService;

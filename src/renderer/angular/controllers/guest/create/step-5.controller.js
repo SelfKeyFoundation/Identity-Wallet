@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep5Controller');
 function GuestKeystoreCreateStep5Controller(
 	$rootScope,
 	$scope,
-	$log,
 	$state,
 	$stateParams,
 	$mdDialog,
@@ -15,7 +15,7 @@ function GuestKeystoreCreateStep5Controller(
 ) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep5Controller');
+	log.debug('GuestKeystoreCreateStep5Controller');
 
 	$scope.createBasicId = event => {
 		$state.go('guest.create.step-6');
@@ -41,7 +41,7 @@ function GuestKeystoreCreateStep5Controller(
 				});
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				CommonService.showToast('error', 'Error');
 			});
 	};
@@ -49,7 +49,6 @@ function GuestKeystoreCreateStep5Controller(
 GuestKeystoreCreateStep5Controller.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$state',
 	'$stateParams',
 	'$mdDialog',

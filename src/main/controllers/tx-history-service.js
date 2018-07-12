@@ -1,5 +1,6 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('tx-history-service');
 const Promise = require('bluebird');
 const electron = require('electron');
 const config = require('../config');
@@ -113,7 +114,7 @@ let defaultModule = function(app) {
 		return new Promise((resolve, reject) => {
 			request[method](url, (error, httpResponse, response) => {
 				if (error) {
-					console.error(error);
+					log.error(error);
 					return reject(error);
 				}
 				try {
@@ -149,7 +150,7 @@ let defaultModule = function(app) {
 			});
 			return { tokenDecimal, tokenSymbol, tokenName };
 		} catch (err) {
-			console.log('IS NOT CONTRACT ADDRESS');
+			log.error('IS NOT CONTRACT ADDRESS, %s', err);
 			return null;
 		}
 	}
@@ -279,7 +280,7 @@ let defaultModule = function(app) {
 
 	function _startSyncingJob() {
 		if (syncingJobIsStarted) {
-			console.log('Transaction Syncing Job Is already Started!');
+			log.error('Transaction Syncing Job Is already Started!');
 			return;
 		}
 

@@ -1,12 +1,10 @@
 /* global appName, appVersion, angular */
 'use strict';
-
 const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
 
 function AppRun(
 	$rootScope,
-	$log,
 	$window,
 	$timeout,
 	$interval,
@@ -54,7 +52,6 @@ function AppRun(
 	Wallet.Web3Service = Web3Service;
 	Wallet.SqlLiteService = SqlLiteService;
 	Wallet.CommonService = CommonService;
-	Wallet.$log = $log;
 
 	Token.$rootScope = $rootScope;
 	Token.$q = $q;
@@ -399,7 +396,6 @@ function AppRun(
 
 AppRun.$inject = [
 	'$rootScope',
-	'$log',
 	'$window',
 	'$timeout',
 	'$interval',
