@@ -1,5 +1,4 @@
 'use strict';
-
 const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
 const { isSyncing } = require('./tx-history-service');
@@ -1214,7 +1213,7 @@ module.exports = function(app) {
 	) {
 		TxHistory.findByPublicKeyAndTokenSymbol(args.publicKey, args.tokenSymbol, args.pager)
 			.then(data => {
-				data = { ...data, isSyncing: isSyncing(data.publicKey) };
+				data = { ...data, isSyncing: isSyncing(args.publicKey) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1234,7 +1233,7 @@ module.exports = function(app) {
 			args.pager
 		)
 			.then(data => {
-				data = { ...data, isSyncing: isSyncing(data.publicKey) };
+				data = { ...data, isSyncing: isSyncing(args.publicKey) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1266,7 +1265,7 @@ module.exports = function(app) {
 	controller.prototype.getTxHistoryByPublicKey = function(event, actionId, actionName, args) {
 		TxHistory.findByPublicKey(args.publicKey, args.pager)
 			.then(data => {
-				data = { ...data, isSyncing: isSyncing(data.publicKey) };
+				data = { ...data, isSyncing: isSyncing(args.publicKey) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
