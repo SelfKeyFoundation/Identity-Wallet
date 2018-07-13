@@ -25,7 +25,7 @@ export const compareLevels = (passLevel, checkLevel) => {
 	const pass = LEVELS.indexOf(passLevel);
 	const check = LEVELS.indexOf(checkLevel);
 	if (check === -1 || pass === -1) {
-		return true;
+		return false;
 	}
 	return check <= pass;
 };
@@ -81,6 +81,7 @@ export class Logger {
 		for (let tlevel of [LOG_LEVEL_CONSOLE, LOG_LEVEL_FILE]) {
 			if (compareLevels(tlevel, level)) return false;
 		}
+		return false;
 	}
 
 	fmtMessage(level, msg, args) {
@@ -97,7 +98,7 @@ export class Logger {
 		return this.filter(level, msg);
 	}
 
-	logMessage(level, msg, args) {
+	log(level, msg, ...args) {
 		if (!this.constructor.checkLevels(level)) return;
 		msg = this.fmtMessage(level, msg, args);
 		if (this.isFiltered(level, msg)) return;
@@ -107,27 +108,27 @@ export class Logger {
 	}
 
 	info(msg, ...args) {
-		this.logMessage('info', msg, args);
+		this.log('info', msg, ...args);
 	}
 
 	warn(msg, ...args) {
-		this.logMessage('warn', msg, args);
+		this.log('warn', msg, ...args);
 	}
 
 	error(msg, ...args) {
-		this.logMessage('error', msg, args);
+		this.log('error', msg, ...args);
 	}
 
 	verbose(msg, ...args) {
-		this.logMessage('verbose', msg, args);
+		this.log('verbose', msg, ...args);
 	}
 
 	debug(msg, ...args) {
-		this.logMessage('debug', msg, args);
+		this.log('debug', msg, ...args);
 	}
 
 	trace(msg, ...args) {
-		this.logMessage('trace', msg, args);
+		this.log('trace', msg, ...args);
 	}
 }
 
