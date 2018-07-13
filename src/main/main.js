@@ -2,7 +2,7 @@
 'use strict';
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
-const { Logger } = require('common/logger');
+import Logger from 'common/logger';
 
 const path = require('path');
 const fs = require('fs');
