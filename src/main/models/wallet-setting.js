@@ -44,7 +44,7 @@ class WalletSetting extends BaseModel {
 				showDesktopNotifications: { type: 'integer' },
 				previousTransactionCount: { type: 'integer' },
 				txHistoryLastSyncedBlock: { type: 'integer' },
-				airDropCode: { type: ['integer', 'null'] }
+				airDropCode: { type: ['string', 'null'] }
 			}
 		};
 	}
