@@ -17,7 +17,10 @@ const init = async () => {
 		try {
 			createBackup(db.connection.filename, backupPath);
 		} catch (backupError) {
-			log.error('Automatic recovery has already been attempted and failed. Aborting. %s', e);
+			log.error(
+				'Automatic recovery has already been attempted and failed. Aborting. %s',
+				backupError
+			);
 			throw e;
 		}
 
