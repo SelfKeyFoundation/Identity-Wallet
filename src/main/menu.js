@@ -2,11 +2,13 @@
 const electron = require('electron');
 const path = require('path');
 const version = electron.app.getVersion();
+const { Logger } = require('common/logger');
+const log = new Logger('Menu');
 /**
  * Create the Application's main menu
  */
 const getMenuTemplate = mainWindow => {
-	let isOnFullScreen = false;
+	log.debug('generating menu template');
 	const defaultMenu = [
 		{
 			label: electron.app.getName(),
@@ -65,11 +67,7 @@ const getMenuTemplate = mainWindow => {
 			submenu: [
 				{
 					label: 'Enter/Exit Full Screen',
-					role: 'devtools',
-					click() {
-						isOnFullScreen = !isOnFullScreen;
-						mainWindow.setFullScreen(isOnFullScreen);
-					}
+					role: 'toggleFullScreen'
 				}
 			]
 		}
@@ -89,6 +87,17 @@ const getMenuTemplate = mainWindow => {
 			]
 		});
 	}
+	defaultMenu.push({
+		label: 'Help',
+		submenu: [
+			{
+				label: 'Mark log file',
+				click() {
+					log.warn('SUPPORT: ISSUE REPRODUCTION STARTS HERE');
+				}
+			}
+		]
+	});
 
 	return defaultMenu;
 };
