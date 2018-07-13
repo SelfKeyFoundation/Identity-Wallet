@@ -36,7 +36,7 @@ function SkUserInfoBoxDirective(
 				let idAttributes = $rootScope.wallet.getIdAttributes();
 				$rootScope.$broadcast(
 					'id-attribute:open-document-add-dialog',
-					idAttributes[idAttribute.key].items[0].values[0],
+					idAttributes[idAttribute.key],
 					idAttribute.key
 				);
 			};
