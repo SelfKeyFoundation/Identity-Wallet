@@ -33,8 +33,8 @@ let defaultModule = function(app) {
 
 	let OFFSET = 1000;
 
-	const TX_LIST_ACTION = `?module=account&action=txlist&startblock=0&sort=asc&offset=${OFFSET}`;
-	const TOKEN_TX_ACTION = `?module=account&action=tokentx&startblock=0&sort=asc&offset=${OFFSET}`;
+	const TX_LIST_ACTION = `?module=account&action=txlist&sort=asc&offset=${OFFSET}`;
+	const TOKEN_TX_ACTION = `?module=account&action=tokentx&sort=asc&offset=${OFFSET}`;
 	const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
 
 	// in order to change key name in runtime
@@ -65,6 +65,20 @@ let defaultModule = function(app) {
 		'tokenSymbol',
 		'tokenDecimal'
 	];
+
+	const KEY_TYPES_MAP = {
+		blockNumber: 'integer',
+		value: 'integer',
+		transactionIndex: 'integer',
+		gas: 'integer',
+		gasPrice: 'integer',
+		cumulativeGasUsed: 'integer',
+		gasUsed: 'integer',
+		confirmations: 'integer',
+		isError: 'integer',
+		txReceiptStatus: 'integer',
+		tokenDecimal: 'integer'
+	};
 
 	let queue = async.queue((args, callback) => {
 		let result = makeRequest.apply(this, [args.method, args.url, args.data]);
@@ -224,6 +238,13 @@ let defaultModule = function(app) {
 			let txs = txHashes[hash];
 			let processedTx = await getProcessedTx(txs, walletAddress);
 			if (processedTx) {
+				Object.keys(processedTx).forEach(key => {
+					let val = processedTx[key];
+					if (typeof val === 'string' && KEY_TYPES_MAP[key] === 'integer') {
+						processedTx[key] = +val;
+					}
+				});
+
 				await TxHistory.addOrUpdate(processedTx);
 			}
 		}
@@ -231,13 +252,17 @@ let defaultModule = function(app) {
 
 	const controller = function() {};
 
+	async function _getWalletSetting(walletId) {
+		return WalletSetting.findByWalletId(walletId);
+	}
+
 	async function _syncByWallet(address, walletId, showProgress) {
 		if (showProgress) {
 			isSyncingMap[address] = true;
 		}
 		let endblock = await getMostResentBlock();
 		endblock = parseInt(endblock, 16);
-		let walletSetting = await WalletSetting.findByWalletId(walletId);
+		let walletSetting = await _getWalletSetting(walletId);
 		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
 		let page = 1;
 		let txHashes = {};
@@ -249,8 +274,11 @@ let defaultModule = function(app) {
 					if (showProgress) {
 						isSyncingMap[address] = false;
 					}
+
+					walletSetting = await _getWalletSetting(walletId);
 					walletSetting.txHistoryLastSyncedBlock = endblock;
 					await WalletSetting.updateById(walletSetting.id, walletSetting);
+
 					return resolve();
 				}
 				let ethTxList = await loadEthTxHistory(address, startBlock, endblock, page);

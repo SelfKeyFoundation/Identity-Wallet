@@ -370,7 +370,7 @@ class Wallet {
 
 	async getPreviousTransactionCount() {
 		return SqlLiteService.getWalletSettingsByWalletId(this.id).then(settings => {
-			return settings[0].previousTransactionCount;
+			return settings.previousTransactionCount;
 		});
 	}
 
@@ -379,8 +379,7 @@ class Wallet {
 			return;
 		}
 
-		let settings = await SqlLiteService.getWalletSettingsByWalletId(this.id);
-		let setting = settings[0];
+		let setting = await SqlLiteService.getWalletSettingsByWalletId(this.id);
 		setting.previousTransactionCount = $rootScope.previousTransactionCount;
 		await SqlLiteService.saveWalletSettings(setting);
 	}

@@ -296,7 +296,7 @@ function SendTokenDialogController(
 		let gasPrice = EthUnits.unitToUnit(gasPriceInGwei, 'gwei', 'wei');
 		currentTxHistoryData = {
 			to: sendToAddress,
-			gasPrice: gasPrice,
+			gasPrice: +gasPrice,
 			value: sendAmount
 		};
 
