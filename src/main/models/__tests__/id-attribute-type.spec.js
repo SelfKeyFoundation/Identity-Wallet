@@ -1,9 +1,10 @@
-const { expect } = require('chai');
 const _ = require('lodash');
-const IdAttributeType = require('../../../src/main/models/id-attribute-type');
-const db = require('../../utils/db');
-const initialAttributes = require('../../../src/main/assets/data/initial-id-attribute-type-list.json');
-
+const IdAttributeType = require('../id-attribute-type');
+const initialAttributes = require('main/assets/data/initial-id-attribute-type-list.json');
+const db = require('./utils/test-db');
+beforeAll(async () => {
+	await db.init();
+});
 describe('IdAttributeType model', () => {
 	const testItem = {
 		key: 'test',
@@ -22,40 +23,35 @@ describe('IdAttributeType model', () => {
 	beforeEach(async () => {
 		await db.reset();
 	});
-
 	it('create', async () => {
 		const expected = { ...testItem, type: 'static_data' };
 		const itm = await IdAttributeType.create(testItem);
-		expect(itm).to.deep.contain(expected);
-		// eslint-disable-next-line no-unused-expressions
-		expect(itm.createdAt).to.exist;
-		// eslint-disable-next-line no-unused-expressions
-		expect(itm.updatedAt).to.exist;
+		expect(itm).toMatchObject(expected);
+		expect(itm).toHaveProperty('createdAt');
+		expect(itm).toHaveProperty('updatedAt');
 
 		const itm2 = await IdAttributeType.create(testItem2);
-		expect(itm2).to.deep.contain(_.omit(testItem2, 'isInitial'));
-		// eslint-disable-next-line no-unused-expressions
-		expect(itm2.createdAt).to.exist;
-		// eslint-disable-next-line no-unused-expressions
-		expect(itm2.updatedAt).to.exist;
+		expect(itm2).toMatchObject(_.omit(testItem2, 'isInitial'));
+		expect(itm2).toHaveProperty('createdAt');
+		expect(itm2).toHaveProperty('updatedAt');
 	});
 
 	it('findAll', async () => {
 		let all = await IdAttributeType.findAll();
-		expect(all.length).to.eq(initialAttributes.length);
+		expect(all.length).toBe(initialAttributes.length);
 		await IdAttributeType.create(testItem);
 		await IdAttributeType.create(testItem2);
 		all = await IdAttributeType.findAll();
-		expect(all.length).to.eq(initialAttributes.length + 2);
+		expect(all.length).toBe(initialAttributes.length + 2);
 	});
 
 	it('findInitial', async () => {
 		let all = await IdAttributeType.findInitial();
-		expect(all.length).to.eq(initialAttributes.length);
+		expect(all.length).toBe(initialAttributes.length);
 		await IdAttributeType.create(testItem);
 		await IdAttributeType.create(testItem2);
 		all = await IdAttributeType.findInitial();
-		expect(all.length).to.eq(initialAttributes.length);
+		expect(all.length).toBe(initialAttributes.length);
 	});
 
 	it('import', async () => {
@@ -81,8 +77,8 @@ describe('IdAttributeType model', () => {
 		await IdAttributeType.import(toImport);
 
 		let allAfterImport = await IdAttributeType.query();
-		expect(allAfterImport.length).to.eq(all.length + 1);
+		expect(allAfterImport.length).toBe(all.length + 1);
 		const updatedItm = await IdAttributeType.query().findById(itm.key);
-		expect(itm.entity.length).to.not.eq(updatedItm.entity.length);
+		expect(itm.entity.length).not.toBe(updatedItm.entity.length);
 	});
 });
