@@ -64,7 +64,7 @@ class TxHistory extends BaseModel {
 				contractAddress: { type: ['string', 'null'] },
 				from: { type: 'string' },
 				to: { type: 'string' },
-				value: { type: 'decimal' },
+				value: { type: 'number' },
 				tokenName: { type: 'string' },
 				tokenSymbol: { type: ['string', 'null'] },
 				tokenDecimal: { type: 'integer' },
