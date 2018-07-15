@@ -38,7 +38,7 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "yarn test:unit && yarn test:e2e",
-    "test:unit": "node test/test.js unit",
+    "test:unit": "jest",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
     "precommit": "npm run check-deps-precommit && pretty-quick --staged",
@@ -77,8 +77,8 @@
     "decompress": "4.2.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-redux": "^1.3.1",
-    "ethereumjs-tx": "^1.3.6",
     "electron-util": "^0.9.0",
+    "ethereumjs-tx": "^1.3.6",
     "ethereumjs-util": "5.2.0",
     "fs-extra": "6.0.1",
     "is-online": "^7.0.0",
@@ -112,6 +112,8 @@
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
     "@sentry/cli": "^1.33.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.4.0",
     "babel-loader": "^8.0.0-beta.4",
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
@@ -133,6 +135,7 @@
     "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jest": "^21.17.0",
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.6.1",
@@ -145,12 +148,14 @@
     "gulp-sass": "^4.0.1",
     "gulp-watch": "^5.0.0",
     "husky": "^0.14.3",
+    "jest": "^23.4.1",
     "json-loader": "^0.5.7",
     "knex-migrate": "^1.6.1",
     "mocha": "^5.2.0",
     "npm-check": "^5.7.1",
     "prettier": "^1.13.7",
     "pretty-quick": "^1.6.0",
+    "regenerator-runtime": "^0.12.0",
     "run-sequence": "^2.2.1",
     "spectron": "^3.8.0",
     "webpack": "^4.16.0",
@@ -181,10 +186,10 @@
       "extraEntries": [
         "@/preload.js"
       ],
-      "webpackConfig": "webpack.main.additions.js"
+      "webpackConfig": "webpack/main.additions.js"
     },
     "renderer": {
-      "webpackConfig": "webpack.renderer.additions.js"
+      "webpackConfig": "webpack/renderer.additions.js"
     }
   },
   "config": {

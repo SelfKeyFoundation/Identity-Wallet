@@ -1,4 +1,4 @@
-const db = require('../../src/main/db');
+const db = require('main/db');
 
 const init = async () => {
 	await db.createInitialDb();

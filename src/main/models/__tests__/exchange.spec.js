@@ -1,8 +1,9 @@
-const { expect } = require('chai');
-const Exchange = require('../../../src/main/models/exchange');
-const db = require('../../utils/db');
+const Exchange = require('../exchange');
+const db = require('./utils/test-db');
 const _ = require('lodash');
-
+beforeAll(async () => {
+	await db.init();
+});
 describe('Exchange model', () => {
 	const testItem = {
 		name: 'test',
@@ -14,6 +15,7 @@ describe('Exchange model', () => {
 		}
 	};
 	const testItem2 = { ...testItem, name: `${testItem.name}2` };
+
 	beforeEach(async () => {
 		await db.reset();
 	});
@@ -21,20 +23,20 @@ describe('Exchange model', () => {
 	it('create', async () => {
 		const itm = await Exchange.create(testItem);
 		const itm2 = await Exchange.create(testItem2);
-		expect(itm.name).to.eq(testItem.name);
-		expect(itm2.name).to.eq(testItem2.name);
-		expect(itm.data).to.deep.eq(testItem.data);
-		expect(itm2.data).to.deep.eq(testItem2.data);
-		expect(itm).to.deep.eq(await Exchange.query().findById(itm.name));
+		expect(itm.name).toBe(testItem.name);
+		expect(itm2.name).toBe(testItem2.name);
+		expect(itm.data).toEqual(testItem.data);
+		expect(itm2.data).toEqual(testItem2.data);
+		expect(itm).toEqual(await Exchange.query().findById(itm.name));
 	});
 
 	it('findAll', async () => {
 		const itm = await Exchange.create(testItem);
 		const itm2 = await Exchange.create(testItem2);
 		const items = await Exchange.findAll();
-		expect(items.length).to.eq(2);
-		expect(items).to.deep.contain(itm);
-		expect(items).to.deep.contain(itm2);
+		expect(items.length).toBe(2);
+		expect(items).toContainEqual(itm);
+		expect(items).toContainEqual(itm2);
 	});
 
 	it('import', async () => {
@@ -43,10 +45,10 @@ describe('Exchange model', () => {
 		await Exchange.import([changedItem, testItem2]);
 		const all = await Exchange.query();
 		const changedInDb = _.find(all, { name: 'test' });
-		expect(changedInDb.data).to.deep.eq(changedItem.data);
+		expect(changedInDb.data).toEqual(changedItem.data);
 
 		const inserted = _.find(all, { name: 'test2' });
 
-		expect(inserted.data).to.deep.eq(testItem2.data);
+		expect(inserted.data).toEqual(testItem2.data);
 	});
 });

@@ -1,6 +1,5 @@
-const { expect } = require('chai');
-const WalletSetting = require('../../../src/main/models/wallet-setting');
-const db = require('../../utils/db');
+const WalletSetting = require('../wallet-setting');
+const db = require('./utils/test-db');
 describe('WalletSetting model', () => {
 	const testItem = {
 		walletId: 1,
@@ -11,25 +10,25 @@ describe('WalletSetting model', () => {
 	});
 	it('create', async () => {
 		let all = await WalletSetting.query();
-		expect(all.length).to.eq(0);
+		expect(all.length).toBe(0);
 		let itm = await WalletSetting.create(testItem);
-		expect(itm).to.deep.contain(testItem);
-		expect(itm.id).to.be.gt(0);
-		expect(itm.createdAt).to.be.gt(0);
-		expect(itm.updatedAt).to.be.gt(0);
+		expect(itm).toMatchObject(testItem);
+		expect(itm.id).toBeGreaterThan(0);
+		expect(itm.createdAt).toBeGreaterThan(0);
+		expect(itm.updatedAt).toBeGreaterThan(0);
 		all = await WalletSetting.query();
-		expect(all.length).to.be.gt(0);
+		expect(all.length).toBeGreaterThan(0);
 	});
 	it('findByWalletId', async () => {
 		let itm = await WalletSetting.create(testItem);
-		expect(itm).to.deep.equal(await WalletSetting.findByWalletId(itm.walletId));
+		expect(itm).toEqual(await WalletSetting.findByWalletId(itm.walletId));
 	});
 	it('updateById', async () => {
 		let itm = await WalletSetting.create(testItem);
 		let modifiedItm = await WalletSetting.query().findById(itm.id);
 		modifiedItm.showDesktopNotifications = 0;
 		modifiedItm = await WalletSetting.updateById(modifiedItm.id, modifiedItm);
-		expect(modifiedItm.id).to.eq(itm.id);
-		expect(modifiedItm.showDesktopNotifications).to.not.eq(itm.showDesktopNotifications);
+		expect(modifiedItm.id).toBe(itm.id);
+		expect(modifiedItm.showDesktopNotifications).not.toBe(itm.showDesktopNotifications);
 	});
 });
