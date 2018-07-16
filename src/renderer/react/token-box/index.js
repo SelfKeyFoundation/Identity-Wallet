@@ -6,52 +6,55 @@ import TokenBox from './containers/token-box';
 import TokenPrice from './containers/token-price';
 import { EthereumIcon, SelfkeyIcon, CustomIcon, CustomTokenText } from 'selfkey-ui';
 
-export class TokenBoxWrapper extends React.Component {
-	render() {
-		const {
-			cryptoCurrencyShort,
-			cryptoCurrencyName,
-			publicKey,
-			cryptoCurrency,
-			cryptoValue,
-			toCurrency,
-			toValue,
-			customTokenText,
-			copyAction,
-			transferAction
-		} = this.props;
-		console.log('PROPS', this.props);
-		return (
-			<Provider store={store}>
-				<TokenBox
-					cryptoCurrencyShort={cryptoCurrencyShort}
-					cryptoCurrencyName={cryptoCurrencyName}
-					publicKey={publicKey}
-					CryptoCurrencyIconComponent={
-						!cryptoCurrencyShort
-							? CustomIcon
-							: cryptoCurrencyShort === 'KEY'
-								? SelfkeyIcon
-								: EthereumIcon
-					}
-					copyAction={copyAction}
-					transferAction={transferAction}
-				>
-					{!cryptoCurrencyShort ? (
-						<CustomTokenText>{customTokenText}</CustomTokenText>
-					) : (
-						<TokenPrice
-							cryptoCurrency={cryptoCurrency}
-							cryptoValue={cryptoValue}
-							toCurrency={toCurrency}
-							toValue={toValue}
-						/>
-					)}
-				</TokenBox>
-			</Provider>
-		);
+const renderIcon = shortName => {
+	switch (shortName) {
+		case 'KEY':
+			return SelfkeyIcon;
+		case 'ETH':
+			return EthereumIcon;
+		default:
+			return CustomIcon;
 	}
-}
+};
+
+export const TokenBoxWrapper = props => {
+	const {
+		cryptoCurrencyShort,
+		cryptoCurrencyName,
+		publicKey,
+		cryptoCurrency,
+		cryptoValue,
+		toCurrency,
+		toValue,
+		customTokenText,
+		copyAction,
+		transferAction
+	} = props;
+
+	return (
+		<Provider store={store}>
+			<TokenBox
+				cryptoCurrencyShort={cryptoCurrencyShort}
+				cryptoCurrencyName={cryptoCurrencyName}
+				publicKey={publicKey}
+				CryptoCurrencyIconComponent={renderIcon(cryptoCurrencyShort)}
+				copyAction={copyAction}
+				transferAction={transferAction}
+			>
+				{!cryptoCurrencyShort ? (
+					<CustomTokenText>{customTokenText}</CustomTokenText>
+				) : (
+					<TokenPrice
+						cryptoCurrency={cryptoCurrency}
+						cryptoValue={cryptoValue}
+						toCurrency={toCurrency}
+						toValue={toValue}
+					/>
+				)}
+			</TokenBox>
+		</Provider>
+	);
+};
 
 TokenBoxWrapper.propTypes = {
 	cryptoCurrencyShort: PropTypes.string,
