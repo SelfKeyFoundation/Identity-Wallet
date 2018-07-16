@@ -1,9 +1,8 @@
-const { expect } = require('chai');
-const IdAttribute = require('../../../src/main/models/id-attribute');
-const Document = require('../../../src/main/models/document');
-const Wallet = require('../../../src/main/models/wallet');
+const IdAttribute = require('../id-attribute');
+const Document = require('../document');
+const Wallet = require('../wallet');
 
-const db = require('../../utils/db');
+const db = require('./utils/test-db');
 describe('IdAttribute model', () => {
 	const testWalletId = 1;
 	const testStaticData = { test: 'test_data' };
@@ -19,42 +18,42 @@ describe('IdAttribute model', () => {
 
 	it('create', async () => {
 		let all = await IdAttribute.query().where({ walletId: testWalletId });
-		expect(all.length).to.eq(0);
+		expect(all.length).toBe(0);
 		let attr = await IdAttribute.create(testWalletId, 'test_key', testStaticData);
-		expect(attr.id).to.be.gt(0);
-		expect(attr.walletId).to.eq(testWalletId);
-		expect(attr.createdAt).to.be.gt(0);
-		expect(attr.updatedAt).to.be.gt(0);
-		expect(attr.items.length).to.be.gt(0);
+		expect(attr.id).toBeGreaterThan(0);
+		expect(attr.walletId).toBe(testWalletId);
+		expect(attr.createdAt).toBeGreaterThan(0);
+		expect(attr.updatedAt).toBeGreaterThan(0);
+		expect(attr.items.length).toBeGreaterThan(0);
 		let item = attr.items[0];
-		expect(item.values.length).to.be.gt(0);
+		expect(item.values.length).toBeGreaterThan(0);
 		let value = item.values[0];
-		expect(value.staticData).to.deep.eq(testStaticData);
+		expect(value.staticData).toEqual(testStaticData);
 		try {
 			await IdAttribute.create(testWalletId, 'test_key', testStaticData);
 			throw new Error('Assertion Error, should have thrown');
 		} catch (error) {
-			expect(error instanceof Error).to.eq(true);
+			expect(error instanceof Error).toBe(true);
 		}
 		attr = await IdAttribute.create(testWalletId, 'test_key2', testStaticData, testDoc);
-		expect(attr.id).to.be.gt(0);
-		expect(attr.walletId).to.eq(testWalletId);
-		expect(attr.createdAt).to.be.gt(0);
-		expect(attr.updatedAt).to.be.gt(0);
-		expect(attr.items.length).to.be.gt(0);
+		expect(attr.id).toBeGreaterThan(0);
+		expect(attr.walletId).toBe(testWalletId);
+		expect(attr.createdAt).toBeGreaterThan(0);
+		expect(attr.updatedAt).toBeGreaterThan(0);
+		expect(attr.items.length).toBeGreaterThan(0);
 		item = attr.items[0];
-		expect(item.values.length).to.be.gt(0);
+		expect(item.values.length).toBeGreaterThan(0);
 		value = item.values[0];
-		expect(value.staticData).to.deep.eq(testStaticData);
+		expect(value.staticData).toEqual(testStaticData);
 		// eslint-disable-next-line
-		expect(value.documentId).to.not.be.undefined;
+		expect(value.documentId).toBeDefined();
 		// eslint-disable-next-line
-		expect(value.documentName).to.not.be.undefined;
+		expect(value.documentName).toBeDefined();
 		try {
 			await IdAttribute.create(testWalletId, 'test_key', testStaticData);
 			throw new Error('Assertion Error, should have thrown');
 		} catch (error) {
-			expect(error instanceof Error).to.eq(true);
+			expect(error instanceof Error).toBe(true);
 		}
 	});
 
@@ -63,9 +62,9 @@ describe('IdAttribute model', () => {
 		let item = attr.items[0];
 		let value = item.values[0];
 		// eslint-disable-next-line
-		expect(value.documentName).to.be.undefined;
+		expect(value.documentName).toBeUndefined();
 		// eslint-disable-next-line
-		expect(value.documentId).to.be.undefined;
+		expect(value.documentId).toBeUndefined();
 		let updatedAttr = await IdAttribute.addEditDocumentToIdAttributeItemValue(
 			attr.id,
 			item.id,
@@ -75,16 +74,16 @@ describe('IdAttribute model', () => {
 		item = updatedAttr.items[0];
 		value = item.values[0];
 		// eslint-disable-next-line
-		expect(value.documentName).to.not.be.undefined;
+		expect(value.documentName).toBeDefined();
 		// eslint-disable-next-line
-		expect(value.documentId).to.not.be.undefined;
+		expect(value.documentId).toBeDefined();
 	});
 
 	it('addEditStaticDataToIdAttributeItemValue', async () => {
 		let attr = await IdAttribute.create(testWalletId, 'test', testStaticData);
 		let item = attr.items[0];
 		let value = item.values[0];
-		expect(value.staticData).to.deep.eq(testStaticData);
+		expect(value.staticData).toEqual(testStaticData);
 		const modifiedStaticData = { modified: 'data' };
 		let updatedAttr = await IdAttribute.addEditStaticDataToIdAttributeItemValue(
 			attr.id,
@@ -94,7 +93,7 @@ describe('IdAttribute model', () => {
 		);
 		item = updatedAttr.items[0];
 		value = item.values[0];
-		expect(value.staticData).to.deep.eq(modifiedStaticData);
+		expect(value.staticData).toEqual(modifiedStaticData);
 	});
 
 	it('findAllByWalletId', async () => {
@@ -102,7 +101,7 @@ describe('IdAttribute model', () => {
 		let attr2 = await IdAttribute.create(testWalletId, 'test2', testStaticData);
 		let all = await IdAttribute.findAllByWalletId(testWalletId);
 
-		expect(all).to.deep.eq({
+		expect(all).toEqual({
 			[attr1.id]: attr1,
 			[attr2.id]: attr2
 		});
@@ -113,14 +112,14 @@ describe('IdAttribute model', () => {
 		let item = attr.items[0];
 		let value = item.values[0];
 		let doc = await Document.findById(value.documentId);
-		expect(doc.id).to.eq(value.documentId);
+		expect(doc.id).toBe(value.documentId);
 		await IdAttribute.delete(attr.id, item.id, value.id);
 		doc = await Document.findById(value.documentId);
 		// eslint-disable-next-line
-		expect(doc).to.be.undefined;
+		expect(doc).toBeUndefined();
 		attr = await IdAttribute.query().findById(attr.id);
 		// eslint-disable-next-line
-		expect(attr).to.be.undefined;
+		expect(attr).toBeUndefined();
 	});
 
 	it('addImportedIdAttributes', async () => {
@@ -190,7 +189,7 @@ describe('IdAttribute model', () => {
 		];
 		await IdAttribute.addImportedIdAttributes(wallet.id, exportCode, reqDoc, reqStatic);
 		let attrs = await IdAttribute.query().where({ walletId: wallet.id });
-		expect(attrs.length).to.be.gt(0);
+		expect(attrs.length).toBeGreaterThan(0);
 	});
 
 	it('genInitial', async () => {
@@ -202,7 +201,7 @@ describe('IdAttribute model', () => {
 		};
 		let attrs = await IdAttribute.genInitial(testWalletId, initial);
 
-		expect(attrs.length).to.be.gt(0);
+		expect(attrs.length).toBeGreaterThan(0);
 	});
 
 	it('initializeImported', async () => {
@@ -214,6 +213,6 @@ describe('IdAttribute model', () => {
 		};
 		const wallet = await Wallet.create({ id: testWalletId, publicKey: 'abc' });
 		let attrs = await IdAttribute.initializeImported(wallet.id, initial);
-		expect(attrs.length).to.be.gt(0);
+		expect(attrs.length).toBeGreaterThan(0);
 	});
 });

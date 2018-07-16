@@ -9,7 +9,8 @@
        "prettier",
        "standard",
        "mocha",
-       "react"
+       "react",
+       "jest"
     ],
     "parserOptions": {
        "sourceType": "module",
@@ -20,7 +21,8 @@
     "env": {
        "es6": true,
        "node": true,
-       "mocha": true
+       "mocha": true,
+       "jest": true
     },
     "rules": {
        "prettier/prettier": [

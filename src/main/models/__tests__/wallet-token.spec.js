@@ -1,6 +1,5 @@
-const { expect } = require('chai');
-const WalletToken = require('../../../src/main/models/wallet-token');
-const db = require('../../utils/db');
+const WalletToken = require('../wallet-token');
+const db = require('./utils/test-db');
 describe('WalletToken model', () => {
 	const testItem = {
 		walletId: 1,
@@ -26,26 +25,26 @@ describe('WalletToken model', () => {
 
 	it('create', async () => {
 		let itm = await WalletToken.create(testItem);
-		expect(itm.id).to.be.gt(0);
-		expect(itm.createdAt).to.be.gt(0);
-		expect(itm.updatedAt).to.be.gt(0);
+		expect(itm.id).toBeGreaterThan(0);
+		expect(itm.createdAt).toBeGreaterThan(0);
+		expect(itm.updatedAt).toBeGreaterThan(0);
 	});
 
 	it('update', async () => {
 		let itm = await WalletToken.create(testItem);
 		await WalletToken.update({ id: itm.id, balance: 3 });
 		let found = await WalletToken.query().findById(itm.id);
-		expect(itm.id).to.eq(found.id);
-		expect(itm.balance).to.not.eq(found.balance);
+		expect(itm.id).toBe(found.id);
+		expect(itm.balance).not.toBe(found.balance);
 	});
 
 	it('createWithNewToken', async () => {
 		let walletToken = await WalletToken.createWithNewToken(testToken, 5, 1);
 		let createdToken = await walletToken.$relatedQuery('token');
-		expect(createdToken.symbol).to.eq(testToken.symbol);
-		expect(walletToken.id).to.be.gt(0);
-		expect(walletToken.createdAt).to.be.gt(0);
-		expect(walletToken.balance).to.eq(5);
+		expect(createdToken.symbol).toBe(testToken.symbol);
+		expect(walletToken.id).toBeGreaterThan(0);
+		expect(walletToken.createdAt).toBeGreaterThan(0);
+		expect(walletToken.balance).toBe(5);
 	});
 
 	it('find', async () => {
@@ -53,8 +52,8 @@ describe('WalletToken model', () => {
 		let createdToken = await walletToken.$relatedQuery('token');
 
 		let found = await WalletToken.find({ 'wallet_tokens.id': walletToken.id });
-		expect(found.length).to.eq(1);
-		expect(found[0].symbol).to.be.eq(createdToken.symbol);
+		expect(found.length).toBe(1);
+		expect(found[0].symbol).toBe(createdToken.symbol);
 	});
 
 	it('findByWalletId', async () => {
@@ -64,7 +63,7 @@ describe('WalletToken model', () => {
 		await WalletToken.createWithNewToken(testToken2, 2, 1);
 
 		let found = await WalletToken.findByWalletId(1);
-		expect(found.length).to.eq(2);
-		expect(found[0].symbol).to.be.eq(createdToken.symbol);
+		expect(found.length).toBe(2);
+		expect(found[0].symbol).toBe(createdToken.symbol);
 	});
 });

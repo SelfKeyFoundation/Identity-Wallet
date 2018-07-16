@@ -1,6 +1,5 @@
-const { expect } = require('chai');
-const TxHistory = require('../../../src/main/models/tx-history');
-const db = require('../../utils/db');
+const TxHistory = require('../tx-history');
+const db = require('./utils/test-db');
 describe('TxHistory model', () => {
 	const data = {
 		hash: 'abc',
@@ -32,36 +31,34 @@ describe('TxHistory model', () => {
 
 	it('addOrUpdate', async () => {
 		let all = await TxHistory.query();
-		expect(all.length).to.eq(0);
+		expect(all.length).toBe(0);
 		let itm = await TxHistory.addOrUpdate(data);
-		expect(itm.id).to.be.gt(0);
-		expect(itm.hash).to.eq(data.hash);
+		expect(itm.id).toBeGreaterThan(0);
+		expect(itm.hash).toBe(data.hash);
 		const updated = { ...data, blockHash: 'modified' };
 		let modifiedItm = await TxHistory.addOrUpdate(updated);
-		expect(modifiedItm.id).to.eq(itm.id);
-		expect(modifiedItm.blockHash).to.not.eq(itm.blockHash);
+		expect(modifiedItm.id).toBe(itm.id);
+		expect(modifiedItm.blockHash).not.toBe(itm.blockHash);
 	});
 
 	it('findByPublicKey', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
 
-		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.from)).data[0]);
-		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.from.toUpperCase())).data[0]);
-		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to)).data[0]);
-		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to.toUpperCase())).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from)).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from.toUpperCase())).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to)).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to.toUpperCase())).data[0]);
 	});
 
 	it('findByPublicKeyAndTokenSymbol', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
 
-		expect(itm).to.deep.eq(
-			(await TxHistory.findByPublicKey(itm.from, itm.tokenSymbol)).data[0]
-		);
-		expect(itm).to.deep.eq(
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from, itm.tokenSymbol)).data[0]);
+		expect(itm).toEqual(
 			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.tokenSymbol)).data[0]
 		);
-		expect(itm).to.deep.eq((await TxHistory.findByPublicKey(itm.to, itm.tokenSymbol)).data[0]);
-		expect(itm).to.deep.eq(
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.tokenSymbol)).data[0]);
+		expect(itm).toEqual(
 			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.tokenSymbol)).data[0]
 		);
 
@@ -71,16 +68,14 @@ describe('TxHistory model', () => {
 	it('findByPublicKeyAndContractAddress', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
 
-		expect(itm).to.deep.eq(
+		expect(itm).toEqual(
 			(await TxHistory.findByPublicKey(itm.from, itm.contractAddress)).data[0]
 		);
-		expect(itm).to.deep.eq(
+		expect(itm).toEqual(
 			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.contractAddress)).data[0]
 		);
-		expect(itm).to.deep.eq(
-			(await TxHistory.findByPublicKey(itm.to, itm.contractAddress)).data[0]
-		);
-		expect(itm).to.deep.eq(
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.contractAddress)).data[0]);
+		expect(itm).toEqual(
 			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.contractAddress)).data[0]
 		);
 

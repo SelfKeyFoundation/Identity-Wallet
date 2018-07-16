@@ -1,7 +1,8 @@
-const { expect } = require('chai');
-const GuideSetting = require('../../../src/main/models/guide-setting');
-const db = require('../../utils/db');
-
+const GuideSetting = require('../guide-setting');
+const db = require('./utils/test-db');
+beforeAll(async () => {
+	await db.init();
+});
 describe('GuideSettings model', () => {
 	beforeEach(async () => {
 		await db.reset();
@@ -9,35 +10,35 @@ describe('GuideSettings model', () => {
 	});
 
 	it('crashReport', async () => {
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(false);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(false);
 		await GuideSetting.loadCrashReportAgreement();
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(false);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(false);
 
 		let all = await GuideSetting.query();
-		expect(all.length).to.be.gt(0);
+		expect(all.length).toBeGreaterThan(0);
 		let setting = all[0];
 		await setting.$query().patch({ crashReportAgreement: 1 });
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(false);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(false);
 		await GuideSetting.loadCrashReportAgreement();
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(true);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(true);
 
 		await setting.$query().patch({ crashReportAgreement: 0 });
 		await GuideSetting.loadCrashReportAgreement();
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(false);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(false);
 		await GuideSetting.updateById(setting.id, { crashReportAgreement: true });
 
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(true);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(true);
 		await GuideSetting.loadCrashReportAgreement();
-		expect(GuideSetting.hasAgreedToCrashReport()).to.eq(true);
+		expect(GuideSetting.hasAgreedToCrashReport()).toBe(true);
 	});
 
 	it('updateById', async () => {
 		let all = await GuideSetting.query();
-		expect(all.length).to.be.gt(0);
+		expect(all.length).toBeGreaterThan(0);
 		let setting = all[0];
 
-		expect(setting.icoAdsShown).to.eq(0);
+		expect(setting.icoAdsShown).toBe(0);
 		let updatedSetting = await GuideSetting.updateById(setting.id, { icoAdsShown: 1 });
-		expect(updatedSetting.icoAdsShown).to.eq(1);
+		expect(updatedSetting.icoAdsShown).toBe(1);
 	});
 });

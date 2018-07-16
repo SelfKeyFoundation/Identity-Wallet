@@ -1,7 +1,6 @@
-const { expect } = require('chai');
-const Wallet = require('../../../src/main/models/wallet');
+const Wallet = require('../wallet');
 
-const db = require('../../utils/db');
+const db = require('./utils/test-db');
 describe('Wallet model', () => {
 	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
 
@@ -24,47 +23,45 @@ describe('Wallet model', () => {
 
 	it('create', async () => {
 		const itm = await Wallet.create(testItm);
-		expect(itm).to.deep.contain(testItm);
+		expect(itm).toMatchObject(testItm);
 		let setting = await itm.$relatedQuery('setting');
-		// eslint-disable-next-line
-		expect(setting).to.not.be.undefined;
-		expect(setting.walletId).to.eq(itm.id);
+		expect(setting).toBeDefined();
+		expect(setting.walletId).toBe(itm.id);
 	});
 
 	it('findActive', async () => {
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
 		let found = await Wallet.findActive();
-		expect(found.length).to.eq(1);
-		expect(found[0].isSetupFinished).to.eq(1);
+		expect(found.length).toBe(1);
+		expect(found[0].isSetupFinished).toBe(1);
 	});
 
 	it('findAll', async () => {
 		let found = await Wallet.findAll();
-		expect(found.length).to.eq(0);
+		expect(found.length).toBe(0);
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
 		found = await Wallet.findAll();
-		expect(found.length).to.eq(2);
+		expect(found.length).toBe(2);
 	});
 
 	it('findByPublicKey', async () => {
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
 		let found = await Wallet.findByPublicKey(testItm.publicKey);
-		expect(found).to.deep.contain(testItm);
+		expect(found).toMatchObject(testItm);
 	});
 
 	it('updateProfilePicture', async () => {
 		let itm = await Wallet.query().insertAndFetch(testItm);
-		// eslint-disable-next-line
-		expect(itm.profilePicture).to.be.null;
+		expect(itm.profilePicture).toBeNull();
 		itm.profilePicture = 'supertest';
 		itm.keystoreFilePath = 'change keystore';
 		await Wallet.updateProfilePicture(itm);
 		let check = await Wallet.query().findById(itm.id);
-		expect(check.profilePicture).to.eq(itm.profilePicture);
-		expect(check.keystoreFilePath).to.not.eq(itm.keystoreFilePath);
+		expect(check.profilePicture).toBe(itm.profilePicture);
+		expect(check.keystoreFilePath).not.toBe(itm.keystoreFilePath);
 	});
 
 	it('selectProfilePictureById', async () => {
@@ -73,7 +70,7 @@ describe('Wallet model', () => {
 			profilePicture: 'test_profile_picture'
 		});
 		let selectedProfilePicture = await Wallet.selectProfilePictureById(itm.id);
-		expect(selectedProfilePicture).to.eq('test_profile_picture');
+		expect(selectedProfilePicture).toBe('test_profile_picture');
 	});
 
 	it('addInitialIdAttributesAndActivate', async () => {
@@ -82,16 +79,16 @@ describe('Wallet model', () => {
 			wallet.id,
 			initialAttributes
 		);
-		expect(initialized.id).to.eq(wallet.id);
+		expect(initialized.id).toBe(wallet.id);
 		let attrs = await initialized.$relatedQuery('idAttributes');
-		expect(attrs.length).to.be.gt(0);
+		expect(attrs.length).toBeGreaterThan(0);
 	});
 
 	it('editImportedIdAttributes', async () => {
 		const wallet = await Wallet.create(testItm);
 		const imported = await Wallet.editImportedIdAttributes(wallet.id, initialAttributes);
-		expect(imported.id).to.eq(wallet.id);
+		expect(imported.id).toBe(wallet.id);
 		let attrs = await imported.$relatedQuery('idAttributes');
-		expect(attrs.length).to.be.gt(0);
+		expect(attrs.length).toBeGreaterThan(0);
 	});
 });
