@@ -28,6 +28,9 @@ export const init = conf => {
 	loggerConfig.logLevel = process.env.LOG_LEVEL || loggerConfig.logLevelDefault;
 	loggerConfig.logLevelConsole = process.env.LOG_LEVEL_CONSOLE || loggerConfig.logLevel;
 	loggerConfig.logLevelFile = process.env.LOG_LEVEL_FILE || loggerConfig.logLevel;
+	if (conf && conf.levelOverride) {
+		loggerConfig.logLevelConsole = loggerConfig.logLevelFile = conf.levelOverride;
+	}
 	loggerConfig.filters = process.env.LOG_FILTER || null;
 	loggerConfig.filterLevels = process.env.LOG_FILTER_LEVELS || null;
 	loggerConfig.filterFn = createFilter(loggerConfig);

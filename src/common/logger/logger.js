@@ -15,6 +15,11 @@ export class Logger {
 	set globalConfig(conf) {
 		initConfig(conf);
 	}
+	overrideGlobalLogLevel(level) {
+		this.globalConfig = {
+			levelOverride: level
+		};
+	}
 	checkLevels(level) {
 		for (let tlevel of [this.globalConfig.logLevelConsole, this.globalConfig.logLevelFile]) {
 			if (compareLevels(tlevel, level)) return true;

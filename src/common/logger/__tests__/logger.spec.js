@@ -20,6 +20,20 @@ describe('Logger', () => {
 	it('set globalConfig', () => {
 		logger.globalConfig = { test: 1 };
 		expect(globalConfig.test).toBe(1);
+		let logger2 = new Logger('logger2');
+		expect(logger2.globalConfig.test).toBe(1);
+	});
+	it('overrideGlobalLogLevel', () => {
+		const originalConsoleLevel = logger.globalConfig.logLevelConsole;
+		const originalFileLevel = logger.globalConfig.logLevelFile;
+		expect(originalConsoleLevel).not.toBe('trace');
+		expect(originalFileLevel).not.toBe('trace');
+		logger.overrideGlobalLogLevel('trace');
+		expect(logger.globalConfig.logLevelConsole).toBe('trace');
+		expect(logger.globalConfig.logLevelFile).toBe('trace');
+		logger.overrideGlobalLogLevel(false);
+		expect(logger.globalConfig.logLevelConsole).toBe(originalConsoleLevel);
+		expect(logger.globalConfig.logLevelFile).toBe(originalFileLevel);
 	});
 	xdescribe('checkLevels', () => {});
 	describe('log', () => {
