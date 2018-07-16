@@ -124,15 +124,6 @@ function SendTokenDialogController(
 					return;
 				}
 
-				if (errorMsg === 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
-					errorMsg = `Error: There is already another transaction on the Ethereum network with the same hash.
-					 Please wait until this is complete before sending another transaction.`;
-					$scope.errors.sendFailed = errorMsg;
-					$scope.viewStates.step = 'transaction-status';
-					setViewState();
-					return;
-				}
-
 				if (errorMsg.indexOf(TIMEOUT_ERROR) !== -1) {
 					$scope.startSend(event);
 					return;
@@ -341,7 +332,6 @@ function SendTokenDialogController(
 		$scope.sendPromise
 			.then(transactionHash => {
 				$scope.txHex = transactionHash;
-				$rootScope.wallet.updatePreviousTransactionCount();
 				startTxCheck();
 			})
 			.catch(error => {

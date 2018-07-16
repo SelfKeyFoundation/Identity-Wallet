@@ -62,7 +62,7 @@ const dev = {
 	dev: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
-	chainId: 1,
+	chainId: 3,
 	node: 'mew'
 };
 

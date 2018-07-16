@@ -312,70 +312,42 @@ class Wallet {
 		let promise = Web3Service.getTransactionCount(this.getPublicKeyHex());
 		promise
 			.then(nonce => {
-				// wallet.nonceHex
-				this.getPreviousTransactionCount().then(previousTransactionCount => {
-					if (
-						typeof previousTransactionCount === 'number' &&
-						nonce <= previousTransactionCount
-					) {
-						return defer.reject('SAME_TRANSACTION_COUNT_CUSTOM_MSG');
-					}
+				let rawTx = {
+					nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
+					gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
+					gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
+					to: EthUtils.sanitizeHex(toAddressHex),
+					value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
+					chainId: chainID || 3 // if missing - use ropsten testnet
+				};
 
-					$rootScope.previousTransactionCount = +nonce;
+				if (contractDataHex) {
+					rawTx.data = EthUtils.sanitizeHex(contractDataHex);
+				}
 
-					let rawTx = {
-						nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(nonce)),
-						gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceWei)),
-						gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimitWei)),
-						to: EthUtils.sanitizeHex(toAddressHex),
-						value: EthUtils.sanitizeHex(EthUtils.decimalToHex(valueWei)),
-						chainId: chainID || 3 // if missing - use ropsten testnet
-					};
+				let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
+				if (isLedgerWallet) {
+					$rootScope.openConfirmLedgerTxInfoWindow();
+				}
 
-					if (contractDataHex) {
-						rawTx.data = EthUtils.sanitizeHex(contractDataHex);
-					}
-
-					let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
-					if (isLedgerWallet) {
-						$rootScope.openConfirmLedgerTxInfoWindow();
-					}
-
-					SignService.signTransaction({
-						profile: this.profile,
-						rawTx: rawTx,
-						privateKey: this.privateKey,
-						walletAddress: '0x' + this.getPublicKeyHex()
+				SignService.signTransaction({
+					profile: this.profile,
+					rawTx: rawTx,
+					privateKey: this.privateKey,
+					walletAddress: '0x' + this.getPublicKeyHex()
+				})
+					.then(res => {
+						defer.resolve(res);
 					})
-						.then(res => {
-							defer.resolve(res);
-						})
-						.catch(err => {
-							defer.reject(err);
-						});
-				});
+					.catch(err => {
+						defer.reject(err);
+					});
 			})
 			.catch(error => {
 				defer.reject(error);
 			});
 
 		return defer.promise;
-	}
-
-	async getPreviousTransactionCount() {
-		return SqlLiteService.getWalletSettingsByWalletId(this.id).then(settings => {
-			return settings.previousTransactionCount;
-		});
-	}
-
-	async updatePreviousTransactionCount() {
-		if (typeof $rootScope.previousTransactionCount !== 'number') {
-			return;
-		}
-
-		let setting = await SqlLiteService.getWalletSettingsByWalletId(this.id);
-		setting.previousTransactionCount = $rootScope.previousTransactionCount;
-		await SqlLiteService.saveWalletSettings(setting);
 	}
 }
 
