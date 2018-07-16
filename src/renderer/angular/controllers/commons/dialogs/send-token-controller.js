@@ -289,7 +289,7 @@ function SendTokenDialogController(
 		currentTxHistoryData = {
 			to: sendToAddress,
 			gasPrice: +gasPrice,
-			value: sendAmount
+			value: +sendAmount
 		};
 
 		let txGenPromise = null;
