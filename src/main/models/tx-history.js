@@ -10,7 +10,7 @@ let paginator = knex => {
 		const perPage = options.perPage || 10;
 		let page = options.page || 1;
 
-		const countQuery = query.clone().count();
+		const countQuery = query.clone().count('* as total');
 
 		if (page < 1) {
 			page = 1;
@@ -25,7 +25,6 @@ let paginator = knex => {
 
 		try {
 			const [data, countRows] = await Promise.all([query, countQuery]);
-
 			const total = countRows[0].total;
 
 			return {
@@ -64,12 +63,12 @@ class TxHistory extends BaseModel {
 				timeStamp: { type: 'integer' },
 				nonce: { type: 'ingeger' },
 				blockHash: { type: 'string' },
-				contractAddress: { type: 'string' },
+				contractAddress: { type: ['string', 'null'] },
 				from: { type: 'string' },
 				to: { type: 'string' },
-				value: { type: 'integer' },
+				value: { type: 'number' },
 				tokenName: { type: 'string' },
-				tokenSymbol: { type: 'string' },
+				tokenSymbol: { type: ['string', 'null'] },
 				tokenDecimal: { type: 'integer' },
 				transactionIndex: { type: 'integer' },
 				gas: { type: 'integer' },

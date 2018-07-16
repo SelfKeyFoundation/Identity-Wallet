@@ -72,6 +72,7 @@ const appStates = require('./angular/configs/app.states');
 const config = require('../main/config');
 let envConfig = isDevelopment ? config.default : config.production;
 let appConfig = Object.assign(config.common, envConfig);
+appConfig.chainId = config.chainId;
 
 angular.module('kyc-wallet').constant('CONFIG', appConfig);
 
