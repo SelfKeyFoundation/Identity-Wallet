@@ -5038,6 +5038,13 @@ electron-is-dev@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-0.3.0.tgz#14e6fda5c68e9e4ecbeff9ccf037cbd7c05c5afe"
 
+electron-is@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/electron-is/-/electron-is-2.4.1.tgz#eb2de19b30179c3ba21658ee9dccdf0564d35d65"
+  dependencies:
+    electron-is-dev "^0.3.0"
+    semver "^5.3.0"
+
 electron-log@^2.2.16:
   version "2.2.16"
   resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-2.2.16.tgz#c44ffdea51ae90cbe851d25e7cd1bab56fdb328f"
@@ -5096,12 +5103,6 @@ electron-updater@^2.23.3:
     lodash.isequal "^4.5.0"
     semver "^5.5.0"
     source-map-support "^0.5.6"
-
-electron-util@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/electron-util/-/electron-util-0.9.0.tgz#2a07b8e2b5035886884db53e0b7db625a9862845"
-  dependencies:
-    electron-is-dev "^0.3.0"
 
 electron-webpack-eslint@^2.1.1:
   version "2.1.1"

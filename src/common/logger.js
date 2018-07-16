@@ -1,6 +1,6 @@
 import log from 'electron-log';
 import { vsprintf } from 'sprintf-js';
-import { is } from 'electron-util';
+import is from 'electron-is';
 
 const DEFAULT_LOG_LEVEL = process.env.NODE_ENV === 'development' ? 'info' : 'warn';
 
@@ -13,7 +13,7 @@ const LOG_FILTER_LEVEL = process.env.LOG_FILTER_LEVEL || null;
 const FMT_TPL = '{y}-{m}-{d} {h}:{i}:{s}:{ms} {text}';
 const LEVELS = ['error', 'warn', 'info', 'verbose', 'debug', 'trace'];
 
-if (is.main) {
+if (is.main()) {
 	log.transports.console.level = LOG_LEVEL_CONSOLE === 'trace' ? 'silly' : LOG_LEVEL_CONSOLE;
 	log.transports.console.format = FMT_TPL;
 
@@ -30,7 +30,7 @@ export const compareLevels = (passLevel, checkLevel) => {
 	return check <= pass;
 };
 
-export const processPrefix = is.main ? 'MAIN' : 'RENDERER';
+export const processPrefix = is.main() ? 'MAIN' : 'RENDERER';
 
 export const createFilter = (filters, levels) => {
 	if (!filters) return () => false;
