@@ -20,8 +20,10 @@ export class Logger {
 			levelOverride: level
 		};
 	}
+	getLogFilePath() {
+		return elog.transports.file.findLogPath();
+	}
 	checkLevels(level) {
-		console.log([this.globalConfig.logLevelConsole, this.globalConfig.logLevelFile]);
 		for (let tlevel of [this.globalConfig.logLevelConsole, this.globalConfig.logLevelFile]) {
 			if (compareLevels(tlevel, level)) return true;
 		}
@@ -32,7 +34,7 @@ export class Logger {
 			msg = errToStr(msg);
 		}
 		args = args.map(e => (e instanceof Error ? errToStr(e) : e));
-		msg = vsprintf(msg, args);
+		if (typeof msg === 'string') msg = vsprintf(msg, args);
 		if (!this.prefix) return msg;
 		return `${this.processPrefix} ${this.prefix} ${level}: ${msg}`;
 	}
