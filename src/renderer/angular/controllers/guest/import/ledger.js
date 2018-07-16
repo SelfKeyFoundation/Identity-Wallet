@@ -13,7 +13,7 @@ function GuestImportLedgerController(
 ) {
 	'ngInject';
 
-	log.debug('GuestImportLedgerController');
+	log.info('GuestImportLedgerController');
 }
 GuestImportLedgerController.$inject = [
 	'$rootScope',

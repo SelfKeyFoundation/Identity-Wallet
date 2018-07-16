@@ -14,7 +14,7 @@ function GuestKeystoreCreateStep6Controller(
 ) {
 	'ngInject';
 
-	log.debug('GuestKeystoreCreateStep6Controller');
+	log.info('GuestKeystoreCreateStep6Controller');
 
 	$scope.isLoading = false;
 	$scope.isLoadingKYCImport = false;

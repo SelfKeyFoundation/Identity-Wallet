@@ -15,7 +15,7 @@ function ManageCryptosController(
 ) {
 	'ngInject';
 
-	log.debug('ManageCryptosController');
+	log.info('ManageCryptosController');
 
 	let reloadPieChartIsNeeded = false;
 	let processTokensInterval = null;

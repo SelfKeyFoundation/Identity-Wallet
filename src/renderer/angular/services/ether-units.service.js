@@ -5,7 +5,7 @@ const log = new Logger('EtherUnits');
 function EtherUnits($rootScope, $http) {
 	'ngInject';
 
-	log.debug('EtherUnits Initialized');
+	log.info('EtherUnits Initialized');
 
 	const UNIT_MAP = {
 		wei: '1',

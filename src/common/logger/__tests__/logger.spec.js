@@ -1,18 +1,18 @@
 import Logger from '../logger';
-import globalConfig, { init as initConfig } from '../config';
+import globalConfig, { updateConfig } from '../config';
 import elog from 'electron-log';
 import sinon from 'sinon';
 
 describe('Logger', () => {
 	let logger;
 	beforeAll(() => {
-		initConfig();
+		updateConfig({}, true);
 	});
 	beforeEach(() => {
 		logger = new Logger('test');
 	});
 	afterEach(() => {
-		initConfig();
+		updateConfig({}, true);
 	});
 	it('get globalConfig', () => {
 		expect(logger.globalConfig).toBe(globalConfig);
@@ -38,10 +38,13 @@ describe('Logger', () => {
 	xdescribe('checkLevels', () => {});
 	describe('log', () => {
 		beforeEach(() => {
-			initConfig({
-				logLevelConsole: 'trace',
-				logLevelFile: 'trace'
-			});
+			updateConfig(
+				{
+					logLevelConsole: 'trace',
+					logLevelFile: 'trace'
+				},
+				true
+			);
 			sinon.stub(logger, 'fmtMessage');
 		});
 		afterEach(() => {

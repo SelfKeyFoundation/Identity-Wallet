@@ -8,7 +8,7 @@ const Tx = require('ethereumjs-tx');
 function SignService($rootScope, LedgerService) {
 	'ngInject';
 
-	log.debug('SignService Initialized');
+	log.info('SignService Initialized');
 
 	let SignService = function() {
 		Wallet.SignService = this;

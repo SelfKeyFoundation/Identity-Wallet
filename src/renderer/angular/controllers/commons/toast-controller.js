@@ -4,7 +4,7 @@ const log = new Logger('ToastController');
 function ToastController($rootScope, $scope, message, type, headerText) {
 	'ngInject';
 
-	log.debug('ToastController %s', message);
+	log.info('ToastController %s', message);
 
 	$scope.type = type;
 	$scope.message = message;

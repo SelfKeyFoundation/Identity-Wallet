@@ -8,7 +8,7 @@ const log = new Logger('Menu');
  * Create the Application's main menu
  */
 const getMenuTemplate = mainWindow => {
-	log.debug('generating menu template');
+	log.info('generating menu template');
 	const defaultMenu = [
 		{
 			label: electron.app.getName(),
@@ -93,6 +93,7 @@ const getMenuTemplate = mainWindow => {
 			{
 				label: 'Mark log file',
 				click() {
+					log.overrideGlobalLogLevel('info');
 					log.warn('SUPPORT: ISSUE REPRODUCTION STARTS HERE');
 				}
 			}

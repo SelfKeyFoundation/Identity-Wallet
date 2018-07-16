@@ -17,7 +17,7 @@ function MemberDashboardMainController(
 	Web3Service
 ) {
 	'ngInject';
-
+	log.info('MemberDashboardMainController');
 	log.debug('MemberDashboardMainController, %j', $rootScope.wallet);
 
 	RPCService.makeCall('getWalletSettingsByWalletId', $rootScope.wallet.id).then(

@@ -4,13 +4,13 @@ const log = new Logger('MemberRightSidenavController');
 function MemberRightSidenavController($rootScope, $scope, $mdSidenav, $state, $mdDialog) {
 	'ngInject';
 
-	log.debug('RightSidenavController');
+	log.info('RightSidenavController');
 
 	$scope.close = () => {
 		$mdSidenav('right')
 			.close()
 			.then(() => {
-				log.debug('close LEFT is done');
+				log.info('close LEFT is done');
 			});
 	};
 

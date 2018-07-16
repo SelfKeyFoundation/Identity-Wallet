@@ -1,6 +1,6 @@
 import { vsprintf } from 'sprintf-js';
 import { errToStr, compareLevels } from './utils';
-import globalConfig, { init as initConfig } from './config';
+import globalConfig, { updateConfig } from './config';
 import elog from 'electron-log';
 
 export class Logger {
@@ -13,7 +13,7 @@ export class Logger {
 		return globalConfig;
 	}
 	set globalConfig(conf) {
-		initConfig(conf);
+		updateConfig(conf);
 	}
 	overrideGlobalLogLevel(level) {
 		this.globalConfig = {
@@ -21,6 +21,7 @@ export class Logger {
 		};
 	}
 	checkLevels(level) {
+		console.log([this.globalConfig.logLevelConsole, this.globalConfig.logLevelFile]);
 		for (let tlevel of [this.globalConfig.logLevelConsole, this.globalConfig.logLevelFile]) {
 			if (compareLevels(tlevel, level)) return true;
 		}

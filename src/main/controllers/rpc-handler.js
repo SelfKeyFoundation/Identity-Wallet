@@ -558,6 +558,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.closeApp = function(event, actionId, actionName, args) {
+		log.info('quitting app');
 		electron.app.quit();
 	};
 

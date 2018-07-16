@@ -17,7 +17,7 @@ function AddEditStaticDataDialogController(
 ) {
 	'ngInject';
 
-	log.debug('AddEditStaticDataDialogController');
+	log.info('AddEditStaticDataDialogController');
 
 	const ADDRESS_ID_ATTRIBUTES = ['physical_address', 'work_place'];
 	const COUNTRY_ID_ATTRIBUTES = ['nationality', 'country_of_residency'];
