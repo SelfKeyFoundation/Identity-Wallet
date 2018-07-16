@@ -1,10 +1,10 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as localeActions from 'common/locale/actions';
-import { CryptoPriceBox } from 'selfkey-ui';
+import { TokenBox } from 'selfkey-ui';
 
 const mapStateToProps = state => {
-	return { locale: state.locale, test: state.test };
+	return { locale: state.locale };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -14,4 +14,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(CryptoPriceBox);
+)(TokenBox);

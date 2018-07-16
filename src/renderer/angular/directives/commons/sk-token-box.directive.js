@@ -1,5 +1,5 @@
 'use strict';
-function SkTokenBoxDirective($rootScope, $window, $timeout, CommonService) {
+function SkTokenBoxDirective($rootScope, $log, $window, $timeout, CommonService, $state) {
 	'ngInject';
 
 	return {
@@ -44,6 +44,10 @@ function SkTokenBoxDirective($rootScope, $window, $timeout, CommonService) {
 				}
 			}
 
+			scope.navigateToTransfer = () => {
+				$state.go('member.wallet.manage-token', { id: scope.symbol });
+			};
+
 			$rootScope.$on('balance:change', (event, symbol, value, valueInUsd) => {
 				updateBalanceInfo();
 			});
@@ -52,5 +56,12 @@ function SkTokenBoxDirective($rootScope, $window, $timeout, CommonService) {
 		templateUrl: 'common/directives/sk-token-box.html'
 	};
 }
-SkTokenBoxDirective.$inject = ['$rootScope', '$window', '$timeout', 'CommonService'];
+SkTokenBoxDirective.$inject = [
+	'$rootScope',
+	'$log',
+	'$window',
+	'$timeout',
+	'CommonService',
+	'$state'
+];
 module.exports = SkTokenBoxDirective;
