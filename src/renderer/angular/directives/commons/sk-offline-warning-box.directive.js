@@ -1,6 +1,6 @@
 'use strict';
 
-function SkOfflineWarningBoxDirective($rootScope, $log, $window, RPCService) {
+function SkOfflineWarningBoxDirective($rootScope, $window, RPCService) {
 	'ngInject';
 
 	return {
@@ -22,5 +22,5 @@ function SkOfflineWarningBoxDirective($rootScope, $log, $window, RPCService) {
 		templateUrl: 'common/directives/sk-offline-warning-box.html'
 	};
 }
-SkOfflineWarningBoxDirective.$inject = ['$rootScope', '$log', '$window', 'RPCService'];
+SkOfflineWarningBoxDirective.$inject = ['$rootScope', '$window', 'RPCService'];
 module.exports = SkOfflineWarningBoxDirective;

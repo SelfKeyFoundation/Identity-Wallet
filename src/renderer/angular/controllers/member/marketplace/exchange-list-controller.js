@@ -1,10 +1,10 @@
 /* global angular */
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('MemberMarketplaceExchangeListController');
 function MemberMarketplaceExchangeListController(
 	$rootScope,
 	$scope,
-	$log,
 	$timeout,
 	$mdDialog,
 	$mdPanel,
@@ -14,7 +14,7 @@ function MemberMarketplaceExchangeListController(
 ) {
 	'ngInject';
 
-	$log.info('MemberMarketplaceMainController', SqlLiteService.getExchangeData());
+	log.debug('MemberMarketplaceMainController, %j', SqlLiteService.getExchangeData());
 
 	SqlLiteService.loadExchangeData().then(() => {
 		$scope.exchangesList = SqlLiteService.getExchangeData();
@@ -30,7 +30,6 @@ function MemberMarketplaceExchangeListController(
 MemberMarketplaceExchangeListController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$timeout',
 	'$mdDialog',
 	'$mdPanel',

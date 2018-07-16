@@ -1,3 +1,5 @@
+const { Logger } = require('common/logger');
+const log = new Logger('tx-history-model');
 const BaseModel = require('./base');
 
 const TABLE_NAME = 'tx_history';
@@ -38,7 +40,7 @@ let paginator = knex => {
 				}
 			};
 		} catch (error) {
-			console.log(error);
+			log.error(error);
 			throw error;
 		}
 	};

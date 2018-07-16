@@ -1,6 +1,7 @@
 /* global appName */
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('app.states');
 function appStates(
 	$urlRouterProvider,
 	$stateProvider,
@@ -43,7 +44,7 @@ function appStates(
 					defer.resolve();
 				})
 				.catch(error => {
-					console.error(error);
+					log.error(error);
 					$state.go('guest.error.offline');
 					defer.reject();
 				});

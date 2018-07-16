@@ -1,6 +1,6 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
-import Logger from 'common/logger';
+const { Logger } = require('common/logger');
 const path = require('path');
 
 const log = new Logger('main');

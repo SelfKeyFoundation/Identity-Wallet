@@ -1,10 +1,10 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('MemberDashboardMainController');
 function MemberDashboardMainController(
 	$rootScope,
 	$scope,
 	$interval,
-	$log,
 	$q,
 	$timeout,
 	$mdSidenav,
@@ -18,7 +18,7 @@ function MemberDashboardMainController(
 ) {
 	'ngInject';
 
-	$log.info('MemberDashboardMainController', $rootScope.wallet);
+	log.debug('MemberDashboardMainController, %j', $rootScope.wallet);
 
 	RPCService.makeCall('getWalletSettingsByWalletId', $rootScope.wallet.id).then(
 		walletSettings => {
@@ -91,7 +91,7 @@ function MemberDashboardMainController(
 				}
 			},
 			onItemClick: item => {
-				$log.info('clicked', item);
+				log.debug('clicked %j', item);
 			}
 		},
 		actions: {}
@@ -133,7 +133,6 @@ MemberDashboardMainController.$inject = [
 	'$rootScope',
 	'$scope',
 	'$interval',
-	'$log',
 	'$q',
 	'$timeout',
 	'$mdSidenav',

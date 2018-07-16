@@ -1,11 +1,13 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('LedgerService');
 const EthUnits = require('../classes/eth-units');
 const async = require('async');
 
-function LedgerService($log, RPCService, CommonService, Web3Service) {
+function LedgerService(RPCService, CommonService, Web3Service) {
 	'ngInject';
 
-	$log.info('LedgerService Initialized');
+	log.debug('LedgerService Initialized');
 
 	class LedgerService {
 		getAccountsWithBalances(args) {
@@ -81,6 +83,6 @@ function LedgerService($log, RPCService, CommonService, Web3Service) {
 	return new LedgerService();
 }
 
-LedgerService.$inject = ['$log', 'RPCService', 'CommonService', 'Web3Service'];
+LedgerService.$inject = ['RPCService', 'CommonService', 'Web3Service'];
 
 module.exports = LedgerService;

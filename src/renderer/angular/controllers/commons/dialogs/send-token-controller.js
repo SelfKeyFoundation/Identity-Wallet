@@ -1,12 +1,13 @@
 /* global angular */
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('SendTokenDialogController');
 
 const EthUnits = require('../../../classes/eth-units');
 
 function SendTokenDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$mdDialog,
 	$interval,
@@ -27,7 +28,7 @@ function SendTokenDialogController(
 		allowSelectERC20Token: $stateParams.allowSelectERC20Token
 	};
 
-	$log.info('SendTokenDialogController', args, CONFIG);
+	log.debug('SendTokenDialogController %j %j', args, CONFIG);
 	const web3Utils = Web3Service.constructor.web3.utils;
 	const TX_CHECK_INTERVAL = 1000;
 	const ESTIMATED_GAS_CHECK_INTERVAL = 300;
@@ -222,7 +223,7 @@ function SendTokenDialogController(
 					}
 				})
 				.catch(error => {
-					console.error(error);
+					log.error(error);
 					cancelTxCheck();
 				});
 		}, TX_CHECK_INTERVAL);
@@ -262,7 +263,7 @@ function SendTokenDialogController(
 						$scope.infoData.isReady = true;
 					})
 					.catch(error => {
-						$log.error('getEstimateGas', error);
+						log.error('getEstimateGas, %s', error);
 					})
 					.finally(() => {
 						$scope.backgroundProcessStatuses.checkingEstimatedGasLimit = false;
@@ -497,7 +498,7 @@ function SendTokenDialogController(
 	$scope.$watch(
 		'formData',
 		(newVal, oldVal) => {
-			$log.info('formData', newVal);
+			log.debug('formData %j', newVal);
 
 			if (newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
 				$scope.errors.sendAmount = true;
@@ -576,7 +577,6 @@ function SendTokenDialogController(
 SendTokenDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'$interval',

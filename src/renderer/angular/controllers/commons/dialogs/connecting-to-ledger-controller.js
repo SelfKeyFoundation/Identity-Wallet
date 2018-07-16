@@ -1,9 +1,10 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('conn-to-ledger-ctl');
 
 function ConnectingToLedgerController(
 	$rootScope,
 	$scope,
-	$log,
 	$mdDialog,
 	LedgerService,
 	isSendingTxFealure
@@ -41,7 +42,7 @@ function ConnectingToLedgerController(
 				$rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
 			})
 			.catch(err => {
-				console.error(err);
+				log.error(err);
 				onError();
 			});
 	};
@@ -65,7 +66,6 @@ function ConnectingToLedgerController(
 ConnectingToLedgerController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$mdDialog',
 	'LedgerService',
 	'isSendingTxFealure'

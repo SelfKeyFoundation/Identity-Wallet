@@ -1,9 +1,10 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('add-edit-doc-ctl');
 
 function AddEditDocumentDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$mdDialog,
 	RPCService,
 	CommonService,
@@ -13,7 +14,7 @@ function AddEditDocumentDialogController(
 ) {
 	'ngInject';
 
-	$log.info('AddEditDocumentDialogController');
+	log.debug('AddEditDocumentDialogController');
 	$scope.idAttributeType = idAttributeType;
 
 	if (mode === 'update') {
@@ -46,7 +47,7 @@ function AddEditDocumentDialogController(
 					$mdDialog.hide();
 				})
 				.catch(error => {
-					$log.error(error);
+					log.debug(error);
 					CommonService.showToast('error', 'error while saving document');
 				});
 		} else {
@@ -62,7 +63,7 @@ function AddEditDocumentDialogController(
 					$mdDialog.hide();
 				})
 				.catch(error => {
-					$log.error(error);
+					log.error(error);
 					CommonService.showToast('error', 'error while saving document');
 				});
 		}
@@ -78,7 +79,7 @@ function AddEditDocumentDialogController(
 				$scope.selectedFile = selectedFile;
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				CommonService.showToast(
 					'error',
 					'The file could not be uploaded. The file exceeds the maximum upload size. Please upload file no larger than 50 MB.'
@@ -104,7 +105,6 @@ function AddEditDocumentDialogController(
 AddEditDocumentDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$mdDialog',
 	'RPCService',
 	'CommonService',

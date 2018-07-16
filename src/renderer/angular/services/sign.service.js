@@ -1,13 +1,14 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('SignService');
 const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
 const Tx = require('ethereumjs-tx');
 
-function SignService($rootScope, $log, LedgerService) {
+function SignService($rootScope, LedgerService) {
 	'ngInject';
 
-	$log.debug('SignService Initialized');
+	log.debug('SignService Initialized');
 
 	let SignService = function() {
 		Wallet.SignService = this;
@@ -42,6 +43,6 @@ function SignService($rootScope, $log, LedgerService) {
 	return new SignService();
 }
 
-SignService.$inject = ['$rootScope', '$log', 'LedgerService'];
+SignService.$inject = ['$rootScope', 'LedgerService'];
 
 module.exports = SignService;

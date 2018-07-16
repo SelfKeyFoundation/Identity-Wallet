@@ -1,4 +1,6 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('rpc-handler');
 const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
 const { isSyncing } = require('./tx-history-service');
@@ -30,7 +32,6 @@ const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
 module.exports = function(app) {
-	const log = app.log;
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -176,7 +177,7 @@ module.exports = function(app) {
 				}
 			});
 		} catch (e) {
-			console.log(e);
+			log.error(e);
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, 'incorrect_password', null);
 		}
 	};
@@ -376,7 +377,7 @@ module.exports = function(app) {
 							var buffer = Buffer.alloc(stats.size);
 							fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
 								if (err) {
-									console.error(err);
+									log.error(err);
 									return;
 								}
 								args.file = {
@@ -402,7 +403,7 @@ module.exports = function(app) {
 										);
 									})
 									.catch(error => {
-										console.error(error);
+										log.error(error);
 										app.win.webContents.send(
 											RPC_METHOD,
 											actionId,
@@ -530,7 +531,7 @@ module.exports = function(app) {
 							var buffer = Buffer.alloc(stats.size);
 							fsm.read(fd, buffer, 0, stats.size, 0, (err, num) => {
 								if (err) {
-									console.error(err);
+									log.error(err);
 									return;
 								}
 								app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
@@ -751,7 +752,7 @@ module.exports = function(app) {
 									kycprocess,
 									requiredStaticData[i]._id
 								);
-								console.log('THE static data', staticDatas);
+								log.debug('THE static data %s', staticDatas);
 								requiredStaticData[i].staticDatas = staticDatas;
 							}
 
@@ -801,7 +802,7 @@ module.exports = function(app) {
 									);
 								})
 								.catch(error => {
-									console.error(error);
+									log.error(error);
 									app.win.webContents.send(
 										RPC_METHOD,
 										actionId,

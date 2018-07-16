@@ -1,14 +1,16 @@
 /* global angular */
-function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $state, $mdDialog) {
+const { Logger } = require('common/logger');
+const log = new Logger('MemberRightSidenavController');
+function MemberRightSidenavController($rootScope, $scope, $mdSidenav, $state, $mdDialog) {
 	'ngInject';
 
-	$log.info('RightSidenavController');
+	log.debug('RightSidenavController');
 
 	$scope.close = () => {
 		$mdSidenav('right')
 			.close()
 			.then(() => {
-				$log.debug('close LEFT is done');
+				log.debug('close LEFT is done');
 			});
 	};
 
@@ -35,7 +37,6 @@ function MemberRightSidenavController($rootScope, $scope, $log, $mdSidenav, $sta
 MemberRightSidenavController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$mdSidenav',
 	'$state',
 	'$mdDialog'

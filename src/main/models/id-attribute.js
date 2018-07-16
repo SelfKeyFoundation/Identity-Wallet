@@ -1,3 +1,5 @@
+const { Logger } = require('common/logger');
+const log = new Logger('id-attribute-model');
 const _ = require('lodash');
 const { genRandId } = require('../utils/crypto');
 const BaseModel = require('./base');
@@ -217,7 +219,7 @@ class IdAttribute extends BaseModel {
 									itemsToSave[idAttribute.tempId] = idAttribute;
 								})
 								.catch(error => {
-									console.log(error);
+									log.error(error);
 								})
 						);
 					}

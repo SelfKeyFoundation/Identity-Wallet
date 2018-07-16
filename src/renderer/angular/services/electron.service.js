@@ -1,11 +1,12 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('ElectronService');
 const Wallet = require('../classes/wallet');
 
-function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCService) {
+function ElectronService($rootScope, $window, $q, $timeout, CONFIG, RPCService) {
 	'ngInject';
 
-	$log.debug('ElectronService Initialized');
+	log.debug('ElectronService Initialized');
 
 	/**
 	 *
@@ -128,13 +129,5 @@ function ElectronService($rootScope, $window, $q, $timeout, $log, CONFIG, RPCSer
 
 	return new ElectronService();
 }
-ElectronService.$inject = [
-	'$rootScope',
-	'$window',
-	'$q',
-	'$timeout',
-	'$log',
-	'CONFIG',
-	'RPCService'
-];
+ElectronService.$inject = ['$rootScope', '$window', '$q', '$timeout', 'CONFIG', 'RPCService'];
 module.exports = ElectronService;

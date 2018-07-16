@@ -1,9 +1,10 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('PasswordWarningDialogController');
 
 function PasswordWarningDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$mdDialog,
 	$state,
@@ -13,7 +14,7 @@ function PasswordWarningDialogController(
 ) {
 	'ngInject';
 
-	$log.info('PasswordWarningDialogController');
+	log.debug('PasswordWarningDialogController');
 
 	$scope.cancel = event => {
 		$mdDialog.cancel();
@@ -26,7 +27,6 @@ function PasswordWarningDialogController(
 PasswordWarningDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'$state',

@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep2Controller');
 function GuestKeystoreCreateStep3Controller(
 	$rootScope,
 	$scope,
-	$log,
 	$state,
 	$stateParams,
 	RPCService,
@@ -11,7 +11,7 @@ function GuestKeystoreCreateStep3Controller(
 ) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep3Controller');
+	log.debug('GuestKeystoreCreateStep3Controller');
 
 	$scope.publicKey = '0x' + $rootScope.wallet.publicKeyHex;
 
@@ -41,7 +41,6 @@ function GuestKeystoreCreateStep3Controller(
 GuestKeystoreCreateStep3Controller.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$state',
 	'$stateParams',
 	'RPCService',

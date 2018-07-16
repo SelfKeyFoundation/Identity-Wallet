@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep6Controller');
 function GuestKeystoreCreateStep6Controller(
 	$rootScope,
 	$scope,
-	$log,
 	$state,
 	$mdDialog,
 	$stateParams,
@@ -14,7 +14,7 @@ function GuestKeystoreCreateStep6Controller(
 ) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep6Controller');
+	log.debug('GuestKeystoreCreateStep6Controller');
 
 	$scope.isLoading = false;
 	$scope.isLoadingKYCImport = false;
@@ -40,7 +40,7 @@ function GuestKeystoreCreateStep6Controller(
 				$state.go('member.setup.checklist');
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				$scope.isLoading = false;
 			});
 	};
@@ -196,7 +196,6 @@ function GuestKeystoreCreateStep6Controller(
 GuestKeystoreCreateStep6Controller.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$state',
 	'$mdDialog',
 	'$stateParams',

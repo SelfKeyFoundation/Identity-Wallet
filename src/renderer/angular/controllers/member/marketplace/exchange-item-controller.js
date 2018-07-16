@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('MemberMarketplaceExchangeItemController');
 function MemberMarketplaceExchangeItemController(
 	$rootScope,
 	$scope,
-	$log,
 	$filter,
 	$state,
 	$sce,
@@ -18,7 +18,7 @@ function MemberMarketplaceExchangeItemController(
 
 	$scope.realData = $state.params.data;
 
-	$log.info('MemberMarketplaceExchangeItemController');
+	log.debug('MemberMarketplaceExchangeItemController');
 
 	// Initial 300 characters will be displayed.
 	$scope.strLimit = 300;
@@ -47,7 +47,6 @@ function MemberMarketplaceExchangeItemController(
 MemberMarketplaceExchangeItemController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$filter',
 	'$state',
 	'$sce',

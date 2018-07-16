@@ -1,6 +1,6 @@
 'use strict';
 
-function SkMessageDirective($log, $timeout) {
+function SkMessageDirective($timeout) {
 	'ngInject';
 
 	return {
@@ -44,5 +44,5 @@ function SkMessageDirective($log, $timeout) {
 		templateUrl: 'common/directives/sk-message.html'
 	};
 }
-SkMessageDirective.$inject = ['$log', 'timeout'];
+SkMessageDirective.$inject = ['$timeout'];
 module.exports = SkMessageDirective;

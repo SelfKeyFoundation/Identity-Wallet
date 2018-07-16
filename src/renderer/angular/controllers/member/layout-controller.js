@@ -1,7 +1,8 @@
+const { Logger } = require('common/logger');
+const log = new Logger('MemberLayoutController');
 function MemberLayoutController(
 	$rootScope,
 	$scope,
-	$log,
 	$mdDialog,
 	$mdSidenav,
 	$interval,
@@ -22,7 +23,7 @@ function MemberLayoutController(
 		$scope.showScrollStyle = true;
 	}
 
-	$log.info('MemberLayoutController');
+	log.debug('MemberLayoutController');
 
 	/**
 	 *
@@ -31,7 +32,7 @@ function MemberLayoutController(
 		$mdSidenav('right')
 			.toggle()
 			.then(() => {
-				$log.debug('toggle ' + 'right' + ' is done');
+				log.debug('toggle ' + 'right' + ' is done');
 			});
 	};
 
@@ -56,7 +57,6 @@ function MemberLayoutController(
 MemberLayoutController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$mdDialog',
 	'$mdSidenav',
 	'$interval',

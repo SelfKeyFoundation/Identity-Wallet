@@ -1,5 +1,5 @@
 'use strict';
-function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
+function SkCustomBoxDirective($rootScope, $window, $timeout) {
 	'ngInject';
 
 	return {
@@ -16,5 +16,5 @@ function SkCustomBoxDirective($rootScope, $log, $window, $timeout) {
 		templateUrl: 'common/directives/sk-custom-token-box.html'
 	};
 }
-SkCustomBoxDirective.$inject = ['$rootScope', '$log', '$window', '$timeout'];
+SkCustomBoxDirective.$inject = ['$rootScope', '$window', '$timeout'];
 module.exports = SkCustomBoxDirective;

@@ -1,3 +1,5 @@
+const { Logger } = require('common/logger');
+const log = new Logger('wallet-model');
 const BaseModel = require('./base');
 const { Model, transaction } = require('objection');
 const TABLE_NAME = 'wallets';
@@ -80,7 +82,7 @@ class Wallet extends BaseModel {
 			await tx.commit();
 			return insertedItm;
 		} catch (error) {
-			console.error(error);
+			log.error(error);
 			await tx.rollback(error);
 			throw error;
 		}
@@ -121,7 +123,7 @@ class Wallet extends BaseModel {
 			await tx.commit();
 			return wallet;
 		} catch (error) {
-			console.error(error);
+			log.error(error);
 			await tx.rollback(error);
 			throw error;
 		}

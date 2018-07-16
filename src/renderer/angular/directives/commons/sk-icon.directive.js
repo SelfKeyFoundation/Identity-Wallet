@@ -1,6 +1,6 @@
 'use strict';
 
-function SkIconDirective($log) {
+function SkIconDirective() {
 	'ngInject';
 
 	return {
@@ -17,5 +17,5 @@ function SkIconDirective($log) {
 		templateUrl: 'common/directives/sk-icon.html'
 	};
 }
-SkIconDirective.$inject = ['$log'];
+SkIconDirective.$inject = [];
 module.exports = SkIconDirective;
