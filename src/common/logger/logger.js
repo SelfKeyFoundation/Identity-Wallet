@@ -6,7 +6,7 @@ import elog from 'electron-log';
 export class Logger {
 	constructor(prefix) {
 		this.processPrefix = this.globalConfig.processPrefix;
-		this.prefix = `${this.processPrefix}:${prefix || this.config.prefix}`;
+		this.prefix = prefix || this.config.prefix;
 		this.filter = this.globalConfig.filterFn || (() => false);
 	}
 	get globalConfig() {
@@ -28,7 +28,7 @@ export class Logger {
 		args = args.map(e => (e instanceof Error ? errToStr(e) : e));
 		msg = vsprintf(msg, args);
 		if (!this.prefix) return msg;
-		return `${level.toUpperCase()}: ${this.prefix} ${msg}`;
+		return `${this.processPrefix} ${this.prefix} ${level}: ${msg}`;
 	}
 
 	isFiltered(level, msg = '') {
