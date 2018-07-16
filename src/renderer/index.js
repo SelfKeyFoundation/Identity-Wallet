@@ -1,9 +1,9 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
-const { Logger } = require('common/logger');
 import { react2angular } from 'react2angular';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
+const { Logger } = require('common/logger');
 
 const path = require('path');
 
