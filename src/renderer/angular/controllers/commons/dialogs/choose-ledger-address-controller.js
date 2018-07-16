@@ -1,10 +1,11 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('choose-ledger-addr-ctl');
 const Wallet = require('../../../classes/wallet');
 
 function ChooseLedgerAddressController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$state,
 	$mdDialog,
@@ -117,7 +118,7 @@ function ChooseLedgerAddressController(
 							nextStep(data.isSetupFinished);
 						})
 						.catch(error => {
-							console.error(error);
+							log.error(error);
 							CommonService.showToast('error', 'error');
 						});
 				} else {
@@ -125,7 +126,7 @@ function ChooseLedgerAddressController(
 				}
 			})
 			.catch(error => {
-				console.error(error);
+				log.error(error);
 				CommonService.showToast('error', 'error');
 			});
 	};
@@ -134,7 +135,6 @@ function ChooseLedgerAddressController(
 ChooseLedgerAddressController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$state',
 	'$mdDialog',

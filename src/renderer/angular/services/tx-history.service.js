@@ -1,9 +1,10 @@
 'use strict';
-
-function TxHistoryService($rootScope, $log, CONFIG, RPCService) {
+const { Logger } = require('common/logger');
+const log = new Logger('TxHistoryService');
+function TxHistoryService($rootScope, CONFIG, RPCService) {
 	'ngInject';
 
-	$log.debug('TxHistoryService Initialized');
+	log.debug('TxHistoryService Initialized');
 
 	let TxHistoryService = function() {
 		/**
@@ -38,6 +39,6 @@ function TxHistoryService($rootScope, $log, CONFIG, RPCService) {
 	return new TxHistoryService();
 }
 
-TxHistoryService.$inject = ['$rootScope', '$log', 'CONFIG', 'RPCService'];
+TxHistoryService.$inject = ['$rootScope', 'CONFIG', 'RPCService'];
 
 module.exports = TxHistoryService;

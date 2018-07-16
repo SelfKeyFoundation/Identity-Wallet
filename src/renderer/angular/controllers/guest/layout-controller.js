@@ -1,13 +1,14 @@
 'use strict';
-
-function GuestLayoutController($scope, $log, $state) {
+const { Logger } = require('common/logger');
+const log = new Logger('GuestLayoutController');
+function GuestLayoutController($scope, $state) {
 	'ngInject';
 
-	$log.info('GuestLayoutController');
+	log.info('GuestLayoutController');
 
 	$scope.cancel = function(event) {
 		$state.go('guest.welcome');
 	};
 }
-GuestLayoutController.$inject = ['$scope', '$log', '$state'];
+GuestLayoutController.$inject = ['$scope', '$state'];
 module.exports = GuestLayoutController;

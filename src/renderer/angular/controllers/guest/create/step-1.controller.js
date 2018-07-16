@@ -1,10 +1,10 @@
 /* global angular */
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep1Controller');
 function GuestKeystoreCreateStep1Controller(
 	$rootScope,
 	$scope,
-	$log,
 	$state,
 	$timeout,
 	$stateParams,
@@ -13,7 +13,7 @@ function GuestKeystoreCreateStep1Controller(
 ) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep1Controller');
+	log.debug('GuestKeystoreCreateStep1Controller');
 
 	$scope.passwordStrength = 0;
 	$scope.input = {
@@ -59,7 +59,6 @@ function GuestKeystoreCreateStep1Controller(
 GuestKeystoreCreateStep1Controller.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$state',
 	'$timeout',
 	'$stateParams',

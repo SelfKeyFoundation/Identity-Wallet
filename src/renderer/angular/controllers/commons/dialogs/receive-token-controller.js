@@ -1,6 +1,6 @@
 'use strict';
 
-function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $window, args) {
+function ReceiveTokenDialogController($rootScope, $scope, $q, $mdDialog, $window, args) {
 	'ngInject';
 
 	$scope.symbol = args.symbol; // key
@@ -17,7 +17,6 @@ function ReceiveTokenDialogController($rootScope, $scope, $log, $q, $mdDialog, $
 ReceiveTokenDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'$window',

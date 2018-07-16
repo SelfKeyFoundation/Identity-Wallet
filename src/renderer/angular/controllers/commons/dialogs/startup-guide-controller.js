@@ -1,17 +1,10 @@
 'use strict';
-
-function StartupGuideDialogController(
-	$rootScope,
-	$scope,
-	$log,
-	$q,
-	$mdDialog,
-	$state,
-	SqlLiteService
-) {
+const { Logger } = require('common/logger');
+const log = new Logger('StartupGuideDialogController');
+function StartupGuideDialogController($rootScope, $scope, $q, $mdDialog, $state, SqlLiteService) {
 	'ngInject';
 
-	$log.info('StartupGuideDialogController');
+	log.debug('StartupGuideDialogController');
 
 	$scope.isLoading = false;
 
@@ -33,7 +26,6 @@ function StartupGuideDialogController(
 StartupGuideDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'$state',

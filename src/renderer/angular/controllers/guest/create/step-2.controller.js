@@ -1,11 +1,11 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep2Controller');
 const Wallet = require('../../../classes/wallet');
 
 function GuestKeystoreCreateStep2Controller(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$state,
 	$stateParams,
@@ -15,7 +15,7 @@ function GuestKeystoreCreateStep2Controller(
 ) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep2Controller', $stateParams);
+	log.debug('GuestKeystoreCreateStep2Controller, %j', $stateParams);
 
 	$scope.walletCreationPromise = null;
 	$scope.passwordStrength = 0;
@@ -37,7 +37,7 @@ function GuestKeystoreCreateStep2Controller(
 					$state.go('guest.create.step-3');
 				})
 				.catch(error => {
-					$log.error(error);
+					log.error(error);
 					CommonService.showToast('error', 'Error creating wallet');
 				});
 		} else {
@@ -89,7 +89,6 @@ function GuestKeystoreCreateStep2Controller(
 GuestKeystoreCreateStep2Controller.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$state',
 	'$stateParams',

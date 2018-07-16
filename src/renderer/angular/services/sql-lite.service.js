@@ -1,9 +1,10 @@
 'use strict';
-
-function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, EVENTS) {
+const { Logger } = require('common/logger');
+const log = new Logger('SqlLiteService');
+function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS) {
 	'ngInject';
 
-	$log.debug('SqlLiteService Initialized');
+	log.debug('SqlLiteService Initialized');
 
 	let ID_ATTRIBUTE_TYPES_STORE = {};
 	let TOKENS_STORE = {};
@@ -21,8 +22,8 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 			if (RPCService.ipcRenderer) {
 				this.loadData()
 					.then(resp => {
-						$log.info(
-							'DONE',
+						log.debug(
+							'DONE LOADING %j, %j, %j, %j',
 							ID_ATTRIBUTE_TYPES_STORE,
 							TOKENS_STORE,
 							TOKEN_PRICES_STORE,
@@ -30,7 +31,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 						);
 					})
 					.catch(error => {
-						$log.error(error);
+						log.error(error);
 					});
 				this.listenForDataChange();
 			}
@@ -100,7 +101,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 					let item = data[i];
 					TOKEN_PRICES_STORE[item.id] = item;
 				}
-				$log.info('TOKEN_PRICES', 'LOADED', TOKEN_PRICES_STORE);
+				log.debug('TOKEN_PRICES LOADED %j', TOKEN_PRICES_STORE);
 			}
 		}
 
@@ -138,7 +139,7 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 			return RPCService.makeCall('findAllExchangeData', null).then(data => {
 				if (data && data.length) {
 					EXCHANGE_DATA = data;
-					$log.info('EXCHANGE_DATA', 'LOADED', EXCHANGE_DATA);
+					log.debug('EXCHANGE_DATA LOADED %j', EXCHANGE_DATA);
 				}
 			});
 		}
@@ -282,13 +283,5 @@ function SqlLiteService($rootScope, $log, $q, $interval, $timeout, RPCService, E
 
 	return new SqlLiteService();
 }
-SqlLiteService.$inject = [
-	'$rootScope',
-	'$log',
-	'$q',
-	'$interval',
-	'$timeout',
-	'RPCService',
-	'EVENTS'
-];
+SqlLiteService.$inject = ['$rootScope', '$q', '$interval', '$timeout', 'RPCService', 'EVENTS'];
 module.exports = SqlLiteService;

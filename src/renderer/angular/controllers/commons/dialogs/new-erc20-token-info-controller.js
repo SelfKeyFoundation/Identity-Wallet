@@ -1,9 +1,10 @@
 'use strict';
+const { Logger } = require('common/logger');
+const log = new Logger('NewERC20TokenInfoController');
 
 function NewERC20TokenInfoController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$timeout,
 	$mdDialog,
@@ -13,7 +14,7 @@ function NewERC20TokenInfoController(
 ) {
 	'ngInject';
 
-	$log.info('NewERC20TokenInfoController');
+	log.debug('NewERC20TokenInfoController');
 	$scope.reloadTokensPrimise = null;
 
 	$scope.cancel = event => {
@@ -29,7 +30,6 @@ function NewERC20TokenInfoController(
 NewERC20TokenInfoController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$timeout',
 	'$mdDialog',

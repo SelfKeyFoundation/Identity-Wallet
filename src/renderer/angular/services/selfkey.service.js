@@ -1,9 +1,10 @@
 'use strict';
-
-function SelfkeyService($rootScope, $log, $http, CONFIG) {
+const { Logger } = require('common/logger');
+const log = new Logger('SelfkeyService');
+function SelfkeyService($rootScope, $http, CONFIG) {
 	'ngInject';
 
-	$log.info('SelfkeyService Initialized');
+	log.debug('SelfkeyService Initialized');
 
 	// const KYC_BASE_URL = CONFIG.kycApiEndpoint;
 	const KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com';
@@ -19,5 +20,5 @@ function SelfkeyService($rootScope, $log, $http, CONFIG) {
 
 	return new SelfkeyService();
 }
-SelfkeyService.$inject = ['$rootScope', '$log', '$http', 'CONFIG'];
+SelfkeyService.$inject = ['$rootScope', '$http', 'CONFIG'];
 module.exports = SelfkeyService;

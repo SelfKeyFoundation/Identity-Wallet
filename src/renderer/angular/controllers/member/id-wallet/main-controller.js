@@ -1,10 +1,10 @@
 /* global angular */
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('MemberIdWalletMainController');
 function MemberIdWalletMainController(
 	$rootScope,
 	$scope,
-	$log,
 	$timeout,
 	$mdDialog,
 	$mdPanel,
@@ -14,7 +14,7 @@ function MemberIdWalletMainController(
 ) {
 	'ngInject';
 
-	$log.info('MemberIdWalletMainController');
+	log.debug('MemberIdWalletMainController');
 
 	let ID_ATTRIBUTE_TYPES = {};
 	let excludeKeys = [];
@@ -240,7 +240,6 @@ function MemberIdWalletMainController(
 function itemValueDeletePanel(
 	$rootScope,
 	$scope,
-	$log,
 	mdPanelRef,
 	CommonService,
 	SqlLiteService,
@@ -285,7 +284,6 @@ function itemValueDeletePanel(
 itemValueDeletePanel.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'mdPanelRef',
 	'CommonService',
 	'SqlLiteService',
@@ -296,7 +294,6 @@ itemValueDeletePanel.$inject = [
 MemberIdWalletMainController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$timeout',
 	'$mdDialog',
 	'$mdPanel',

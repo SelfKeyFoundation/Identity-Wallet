@@ -1,9 +1,10 @@
 'use strict';
-
-function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $window) {
+const { Logger } = require('common/logger');
+const log = new Logger('GuestKeystoreCreateStep4Controller');
+function GuestKeystoreCreateStep4Controller($rootScope, $scope, $state, $window) {
 	'ngInject';
 
-	$log.info('GuestKeystoreCreateStep4Controller');
+	log.info('GuestKeystoreCreateStep4Controller');
 
 	const SHOW_ICON = 'ic_visibility_black_24px';
 	const HIDE_ICON = 'ic_visibility_off_black_24px';
@@ -26,5 +27,5 @@ function GuestKeystoreCreateStep4Controller($rootScope, $scope, $log, $state, $w
 		$scope.inputType = $scope.visibilityIconName === SHOW_ICON ? 'password' : 'text';
 	};
 }
-GuestKeystoreCreateStep4Controller.$inject = ['$rootScope', '$scope', '$log', '$state', '$window'];
+GuestKeystoreCreateStep4Controller.$inject = ['$rootScope', '$scope', '$state', '$window'];
 module.exports = GuestKeystoreCreateStep4Controller;

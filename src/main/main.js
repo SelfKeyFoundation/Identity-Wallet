@@ -2,7 +2,7 @@
 'use strict';
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
-import Logger from 'common/logger';
+import { Logger } from 'common/logger';
 
 const path = require('path');
 const fs = require('fs');
@@ -13,7 +13,7 @@ const { getUserDataPath, isDevMode, isDebugMode } = require('./utils/common');
 const config = require('./config.js');
 const log = new Logger('main');
 
-log.info('starting: ' + electron.app.getName());
+log.info('starting: %s', electron.app.getName());
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');

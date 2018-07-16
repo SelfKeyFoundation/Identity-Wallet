@@ -1,9 +1,10 @@
 'use strict';
-
-function ToastController($rootScope, $scope, $log, message, type, headerText) {
+const { Logger } = require('common/logger');
+const log = new Logger('ToastController');
+function ToastController($rootScope, $scope, message, type, headerText) {
 	'ngInject';
 
-	$log.info('ToastController', message);
+	log.debug('ToastController %s', message);
 
 	$scope.type = type;
 	$scope.message = message;
@@ -12,5 +13,5 @@ function ToastController($rootScope, $scope, $log, message, type, headerText) {
 	$scope.typeClass = 'md-toast-' + type;
 	$scope.icon = type === 'error' ? 'info-icon' : 'info-icon';
 }
-ToastController.$inject = ['$rootScope', '$scope', '$log', 'message', 'type', 'headerText'];
+ToastController.$inject = ['$rootScope', '$scope', 'message', 'type', 'headerText'];
 module.exports = ToastController;

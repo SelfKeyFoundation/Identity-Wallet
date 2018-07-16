@@ -1,16 +1,14 @@
 const EthUtils = require('../classes/eth-utils');
 const Web3 = require('web3');
-
+const { Logger } = require('common/logger');
+const log = new Logger('Web3Service');
 // documentation
 // https://www.myetherapi.com/
-function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCService) {
+function Web3Service($rootScope, $window, EVENTS, SqlLiteService, RPCService) {
 	'ngInject';
 
-	$log.info('Web3Service Initialized');
+	log.debug('Web3Service Initialized');
 
-	/**
-	 *
-	 */
 	class Web3Service {
 		constructor() {
 			Web3Service.web3 = new Web3();
@@ -101,5 +99,5 @@ function Web3Service($rootScope, $window, $log, EVENTS, SqlLiteService, RPCServi
 
 	return new Web3Service();
 }
-Web3Service.$inject = ['$rootScope', '$window', '$log', 'EVENTS', 'SqlLiteService', 'RPCService'];
+Web3Service.$inject = ['$rootScope', '$window', 'EVENTS', 'SqlLiteService', 'RPCService'];
 module.exports = Web3Service;

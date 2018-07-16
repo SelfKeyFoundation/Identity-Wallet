@@ -1,6 +1,6 @@
 'use strict';
 
-function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
+function IdWalletInfoController($rootScope, $scope, $mdDialog) {
 	'ngInject';
 
 	$scope.cancel = event => {
@@ -46,5 +46,5 @@ function IdWalletInfoController($rootScope, $scope, $log, $mdDialog) {
 		});
 	};
 }
-IdWalletInfoController.$inject = ['$rootScope', '$scope', '$log', '$mdDialog'];
+IdWalletInfoController.$inject = ['$rootScope', '$scope', '$mdDialog'];
 module.exports = IdWalletInfoController;

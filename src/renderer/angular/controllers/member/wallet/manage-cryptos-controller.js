@@ -1,9 +1,9 @@
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('ManageCryptosController');
 function ManageCryptosController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$timeout,
 	$mdDialog,
@@ -15,7 +15,7 @@ function ManageCryptosController(
 ) {
 	'ngInject';
 
-	$log.info('ManageCryptosController');
+	log.debug('ManageCryptosController');
 
 	let reloadPieChartIsNeeded = false;
 	let processTokensInterval = null;
@@ -177,7 +177,6 @@ function ManageCryptosController(
 ManageCryptosController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$timeout',
 	'$mdDialog',

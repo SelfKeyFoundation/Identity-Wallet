@@ -1,9 +1,10 @@
 'use strict';
-
-function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteService, $timeout) {
+const { Logger } = require('common/logger');
+const log = new Logger('TermsDialogController');
+function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService, $timeout) {
 	'ngInject';
 
-	$log.info('TermsDialogController');
+	log.debug('TermsDialogController');
 	$scope.isLoading = false;
 	$scope.step = 'main';
 	$scope.scrolledBottom = false;
@@ -50,7 +51,6 @@ function TermsDialogController($rootScope, $scope, $log, $q, $mdDialog, SqlLiteS
 TermsDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$mdDialog',
 	'SqlLiteService',

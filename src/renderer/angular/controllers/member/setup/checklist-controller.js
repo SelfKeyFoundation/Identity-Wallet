@@ -1,9 +1,10 @@
 'use strict';
-
-function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
+const { Logger } = require('common/logger');
+const log = new Logger('MemberSetupChecklistController');
+function MemberSetupChecklistController($rootScope, $scope, $state) {
 	'ngInject';
 
-	$log.info('MemberSetupChecklistController', $rootScope.wallet.getIdAttributes());
+	log.debug('MemberSetupChecklistController, %j', $rootScope.wallet.getIdAttributes());
 
 	$scope.idAttributes = $rootScope.wallet.getIdAttributes();
 
@@ -18,5 +19,5 @@ function MemberSetupChecklistController($rootScope, $scope, $log, $state) {
 		$state.go('member.id-wallet.main');
 	};
 }
-MemberSetupChecklistController.$inject = ['$rootScope', '$scope', '$log', '$state'];
+MemberSetupChecklistController.$inject = ['$rootScope', '$scope', '$state'];
 module.exports = MemberSetupChecklistController;

@@ -1,12 +1,12 @@
 /* global BigNumber */
 'use strict';
-
+const { Logger } = require('common/logger');
+const log = new Logger('custom-token-ctl');
 const Token = require('../../../classes/token');
 
 function AddCustomTokenDialogController(
 	$rootScope,
 	$scope,
-	$log,
 	$q,
 	$timeout,
 	$mdDialog,
@@ -16,7 +16,7 @@ function AddCustomTokenDialogController(
 ) {
 	'ngInject';
 
-	$log.info('AddCustomTokenDialogController');
+	log.debug('AddCustomTokenDialogController');
 
 	$scope.cancel = event => {
 		$mdDialog.cancel();
@@ -74,7 +74,7 @@ function AddCustomTokenDialogController(
 					web3Utils.isHex(newVal) &&
 					web3Utils.isAddress(web3Utils.toChecksumAddress(newVal));
 			} catch (error) {
-				$log.error(error);
+				log.error(error);
 			}
 
 			let isValidHex = newVal && check;
@@ -122,7 +122,7 @@ function AddCustomTokenDialogController(
 							$scope.lookingContractIntoBlockain = false;
 						})
 						.catch(err => {
-							console.error(err);
+							log.error(err);
 							resetFormData();
 							$scope.tokenDoesNotExists = true;
 						});
@@ -221,7 +221,6 @@ function AddCustomTokenDialogController(
 AddCustomTokenDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$log',
 	'$q',
 	'$timeout',
 	'$mdDialog',

@@ -1,9 +1,10 @@
 'use strict';
-
-function MemberSetupLayoutController($rootScope, $scope, $log, $state) {
+const { Logger } = require('common/logger');
+const log = new Logger('MemberSetupLayoutController');
+function MemberSetupLayoutController($rootScope, $scope, $state) {
 	'ngInject';
 
-	$log.info('MemberSetupLayoutController');
+	log.debug('MemberSetupLayoutController');
 }
-MemberSetupLayoutController.$inject = ['$rootScope', '$scope', '$log', '$state'];
+MemberSetupLayoutController.$inject = ['$rootScope', '$scope', '$state'];
 module.exports = MemberSetupLayoutController;

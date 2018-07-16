@@ -1,10 +1,11 @@
 /* globals BigNumber, globalFuncs */
 'use strict';
-
-function EtherUnits($rootScope, $log, $http) {
+const { Logger } = require('common/logger');
+const log = new Logger('EtherUnits');
+function EtherUnits($rootScope, $http) {
 	'ngInject';
 
-	$log.info('EtherUnits Initialized');
+	log.debug('EtherUnits Initialized');
 
 	const UNIT_MAP = {
 		wei: '1',
@@ -81,5 +82,5 @@ function EtherUnits($rootScope, $log, $http) {
 
 	return new EtherUnits();
 }
-EtherUnits.$inject = ['$rootScope', '$log', '$http'];
+EtherUnits.$inject = ['$rootScope', '$http'];
 module.exports = EtherUnits;
