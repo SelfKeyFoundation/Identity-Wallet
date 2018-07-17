@@ -46,7 +46,7 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 			promises.push(this.loadGuideSettings());
 			promises.push(this.loadIdAttributeTypes());
 			promises.push(this.loadTokens());
-			promises.push(this.loadWallets());
+			promises.push(this.loadWalletsWithKeyStoreFile());
 			promises.push(this.loadCountries());
 			promises.push(this.loadExchangeData());
 
@@ -105,8 +105,8 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 			}
 		}
 
-		loadWallets() {
-			return RPCService.makeCall('findAllWallets', null).then(wallets => {
+		loadWalletsWithKeyStoreFile() {
+			return RPCService.makeCall('findAllWalletsWithKeyStoreFile', null).then(wallets => {
 				if (wallets) {
 					for (let i in wallets) {
 						let item = wallets[i];

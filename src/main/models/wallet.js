@@ -89,11 +89,15 @@ class Wallet extends BaseModel {
 	}
 
 	static findActive() {
-		return this.findAll().where({ isSetupFinished: 1 });
+		return this.findAllWithKeyStoreFile().where({ isSetupFinished: 1 });
+	}
+
+	static findAllWithKeyStoreFile() {
+		return this.query().whereNotNull('keystoreFilePath');
 	}
 
 	static findAll() {
-		return this.query().whereNotNull('keystoreFilePath');
+		return this.query();
 	}
 
 	static findByPublicKey(publicKey) {
