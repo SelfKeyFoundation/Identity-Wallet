@@ -563,13 +563,13 @@ function SendTokenDialogController(
 		true
 	);
 
-	let deregisterTxSign = $rootScope.$on('tx-sign:retry', event => {
+	let deregisterTxSignEvent = $rootScope.$on('tx-sign:retry', event => {
 		$mdDialog.cancel();
 		$scope.startSend(event);
 	});
 
 	$scope.$on('$destroy', () => {
-		if (deregisterTxSign) deregisterTxSign();
+		if (deregisterTxSignEvent) deregisterTxSignEvent();
 		cancelTxCheck();
 		cancelEstimatedGasCheck();
 	});
