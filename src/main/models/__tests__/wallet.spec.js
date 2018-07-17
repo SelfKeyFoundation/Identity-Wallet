@@ -10,6 +10,12 @@ describe('Wallet model', () => {
 		isSetupFinished: 1
 	};
 
+	const testItm3 = {
+		publicKey: 'active',
+		keystoreFilePath: '',
+		isSetupFinished: 1
+	};
+
 	const initialAttributes = {
 		country_of_residency: 'Algeria',
 		first_name: 'test1',
@@ -42,8 +48,18 @@ describe('Wallet model', () => {
 		expect(found.length).toBe(0);
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
+		await Wallet.query().insert(testItm3);
 		found = await Wallet.findAll();
-		expect(found.length).toBe(2);
+		expect(found.length).toBe(3);
+	});
+
+	it('findAllWithKeyStoreFile', async () => {
+		let found = await Wallet.findAllWithKeyStoreFile();
+		expect(found.length).toBe(0);
+		await Wallet.query().insert(testItm); //with keyStore value
+		await Wallet.query().insert(testItm3); // without keyStore value
+		found = await Wallet.findAll();
+		expect(found.length).toBe(1);
 	});
 
 	it('findByPublicKey', async () => {
