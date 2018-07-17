@@ -14,7 +14,7 @@ function PasswordWarningDialogController(
 ) {
 	'ngInject';
 
-	log.debug('PasswordWarningDialogController');
+	log.info('PasswordWarningDialogController');
 
 	$scope.cancel = event => {
 		$mdDialog.cancel();

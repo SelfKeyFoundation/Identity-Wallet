@@ -23,7 +23,7 @@ function MemberLayoutController(
 		$scope.showScrollStyle = true;
 	}
 
-	log.debug('MemberLayoutController');
+	log.info('MemberLayoutController');
 
 	/**
 	 *
@@ -32,7 +32,7 @@ function MemberLayoutController(
 		$mdSidenav('right')
 			.toggle()
 			.then(() => {
-				log.debug('toggle ' + 'right' + ' is done');
+				log.info('toggle ' + 'right' + ' is done');
 			});
 	};
 

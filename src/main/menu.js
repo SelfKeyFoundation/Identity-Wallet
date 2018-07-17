@@ -1,14 +1,16 @@
 /* global __static */
+const fs = require('fs');
 const electron = require('electron');
 const path = require('path');
 const version = electron.app.getVersion();
+const { download } = require('electron-dl');
 const { Logger } = require('common/logger');
 const log = new Logger('Menu');
 /**
  * Create the Application's main menu
  */
 const getMenuTemplate = mainWindow => {
-	log.debug('generating menu template');
+	log.info('generating menu template');
 	const defaultMenu = [
 		{
 			label: electron.app.getName(),
@@ -91,9 +93,28 @@ const getMenuTemplate = mainWindow => {
 		label: 'Help',
 		submenu: [
 			{
-				label: 'Mark log file',
+				label: 'Issue Reproduction Mode',
 				click() {
+					log.overrideGlobalLogLevel('info');
 					log.warn('SUPPORT: ISSUE REPRODUCTION STARTS HERE');
+				}
+			},
+			{
+				label: 'Export Log File',
+				async click() {
+					const logPath = log.getLogFilePath();
+					if (!fs.existsSync(logPath)) {
+						log.error('log file does not exist');
+						return;
+					}
+					try {
+						await download(mainWindow, `file://${logPath}`, {
+							saveAs: true,
+							filename: 'selfkey-identity-wallet.log'
+						});
+					} catch (error) {
+						log.error(error);
+					}
 				}
 			}
 		]

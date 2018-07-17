@@ -17,7 +17,7 @@ function GuestImportKeystoreController(
 ) {
 	'ngInject';
 
-	log.debug('GuestImportKeystoreController');
+	log.info('GuestImportKeystoreController');
 
 	const wallets = SqlLiteService.getWallets();
 

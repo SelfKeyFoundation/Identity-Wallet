@@ -7,7 +7,7 @@ const log = new Logger('Web3Service');
 function Web3Service($rootScope, $window, EVENTS, SqlLiteService, RPCService) {
 	'ngInject';
 
-	log.debug('Web3Service Initialized');
+	log.info('Web3Service Initialized');
 
 	class Web3Service {
 		constructor() {

@@ -13,7 +13,7 @@ function GuestKeystoreCreateStep1Controller(
 ) {
 	'ngInject';
 
-	log.debug('GuestKeystoreCreateStep1Controller');
+	log.info('GuestKeystoreCreateStep1Controller');
 
 	$scope.passwordStrength = 0;
 	$scope.input = {

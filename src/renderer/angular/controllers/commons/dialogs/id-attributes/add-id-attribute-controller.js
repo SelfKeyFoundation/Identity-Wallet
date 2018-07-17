@@ -13,7 +13,7 @@ function AddIdAttributeDialogController(
 ) {
 	'ngInject';
 
-	log.debug('AddIdAttributeDialogController %j', excludeKeys);
+	log.info('AddIdAttributeDialogController %j', excludeKeys);
 
 	$scope.globalAttributes = {};
 	$scope.idDocuments = {};
