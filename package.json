@@ -32,7 +32,6 @@
   "main": "./src/main/main.js",
   "scripts": {
     "dev": "gulp && electron-webpack dev",
-    "prepare": "cd ./src/main/extended_modules/keythereum && npm install",
     "postinstall": "electron-builder install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
@@ -82,7 +81,7 @@
     "ethereumjs-util": "5.2.0",
     "fs-extra": "6.0.1",
     "is-online": "^7.0.0",
-    "keythereum": "file:src/main/extended_modules/keythereum",
+    "keythereum": "https://github.com/SelfKeyFoundation/keythereum.git",
     "knex": "^0.15.0",
     "lodash": "^4.17.10",
     "mime-types": "2.1.18",
