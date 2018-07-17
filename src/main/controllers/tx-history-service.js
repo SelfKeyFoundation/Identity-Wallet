@@ -312,7 +312,8 @@ let defaultModule = function(app) {
 			method: 'getTransactionCount',
 			args: [address, 'pending']
 		});
-		TxHistory.deleteNotMinedPendingsByPublicKey(address, +nonce);
+
+		TxHistory.removeNotMinedPendingTxsByPublicKey(address, +nonce);
 	}
 
 	function _startSyncingJob() {

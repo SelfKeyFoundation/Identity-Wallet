@@ -85,7 +85,6 @@ if (isTestMode()) {
 const db = {
 	client: 'sqlite3',
 	useNullAsDefault: true,
-	debug: true,
 	connection: {
 		filename: dbFileName
 	},

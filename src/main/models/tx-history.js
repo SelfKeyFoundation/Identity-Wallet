@@ -117,9 +117,18 @@ class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static async deleteNotMinedPendingsByPublicKey(publicKey, nonce) {
-		//TODO
-		return;
+	static async removeNotMinedPendingTxsByPublicKey(publicKey, nonce) {
+		publicKey = publicKey.toLowerCase();
+		let query = this.query()
+			.whereNull('blockNumber')
+			.andWhere(function() {
+				this.where('nonce', '<', nonce).orWhereNull('nonce');
+			})
+			.andWhere(function() {
+				this.where({ from: publicKey }).orWhere({ to: publicKey });
+			})
+			.del();
+		return query;
 	}
 }
 
