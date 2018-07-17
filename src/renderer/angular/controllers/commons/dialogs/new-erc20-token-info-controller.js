@@ -14,7 +14,7 @@ function NewERC20TokenInfoController(
 ) {
 	'ngInject';
 
-	log.debug('NewERC20TokenInfoController');
+	log.info('NewERC20TokenInfoController');
 	$scope.reloadTokensPrimise = null;
 
 	$scope.cancel = event => {

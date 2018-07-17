@@ -7,7 +7,7 @@ const CommonUtils = require('../classes/common-utils');
 function CommonService($rootScope, $q, $mdDialog, $compile, $mdToast) {
 	'ngInject';
 
-	log.debug('CommonService Initialized');
+	log.info('CommonService Initialized');
 
 	class CommonService {
 		constructor() {

@@ -27,7 +27,7 @@ function SendTokenDialogController(
 		symbol: $stateParams.symbol,
 		allowSelectERC20Token: $stateParams.allowSelectERC20Token
 	};
-
+	log.info('SendTokenDialogController');
 	log.debug('SendTokenDialogController %j %j', args, CONFIG);
 	const web3Utils = Web3Service.constructor.web3.utils;
 	const TX_CHECK_INTERVAL = 1000;
@@ -498,6 +498,7 @@ function SendTokenDialogController(
 	$scope.$watch(
 		'formData',
 		(newVal, oldVal) => {
+			log.info('formData');
 			log.debug('formData %j', newVal);
 
 			if (newVal.sendAmount && !isNumeric(newVal.sendAmount)) {

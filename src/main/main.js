@@ -133,6 +133,7 @@ function onReady(app) {
 		}
 
 		mainWindow = new electron.BrowserWindow({
+			id: 'main-window',
 			title: electron.app.getName(),
 			width: 1170,
 			height: 800,
@@ -242,6 +243,7 @@ function onActivate(app) {
 
 function onWindowAllClosed() {
 	return () => {
+		log.info('all windows closed, quitting');
 		return electron.app.quit();
 	};
 }

@@ -15,7 +15,7 @@ function GuestImportPrivateKeyController(
 ) {
 	'ngInject';
 
-	log.debug('GuestImportPrivateKeyController');
+	log.info('GuestImportPrivateKeyController');
 	$rootScope.wallet = null;
 
 	$scope.userInput = {

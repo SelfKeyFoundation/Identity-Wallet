@@ -4,7 +4,7 @@ const log = new Logger('SqlLiteService');
 function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS) {
 	'ngInject';
 
-	log.debug('SqlLiteService Initialized');
+	log.info('SqlLiteService Initialized');
 
 	let ID_ATTRIBUTE_TYPES_STORE = {};
 	let TOKENS_STORE = {};

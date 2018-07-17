@@ -14,7 +14,7 @@ function AddEditDocumentDialogController(
 ) {
 	'ngInject';
 
-	log.debug('AddEditDocumentDialogController');
+	log.log('AddEditDocumentDialogController');
 	$scope.idAttributeType = idAttributeType;
 
 	if (mode === 'update') {
@@ -47,7 +47,7 @@ function AddEditDocumentDialogController(
 					$mdDialog.hide();
 				})
 				.catch(error => {
-					log.debug(error);
+					log.error(error);
 					CommonService.showToast('error', 'error while saving document');
 				});
 		} else {

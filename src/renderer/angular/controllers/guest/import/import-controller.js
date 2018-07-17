@@ -3,7 +3,7 @@ const log = new Logger('GuestImportWalletController');
 function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService) {
 	'ngInject';
 
-	log.debug('GuestImportWalletController');
+	log.info('GuestImportWalletController');
 
 	$scope.selectedOption = 'keystoreSelect';
 
@@ -54,7 +54,7 @@ function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService)
 	}
 
 	$scope.onRadioButtonChange = event => {
-		log.debug('onRadioButtonChange, %s', $scope.selectedOption);
+		log.info('onRadioButtonChange, %s', $scope.selectedOption);
 
 		switch ($scope.selectedOption) {
 			case 'keystoreSelect':

@@ -11,7 +11,7 @@ function GuestKeystoreCreateStep3Controller(
 ) {
 	'ngInject';
 
-	log.debug('GuestKeystoreCreateStep3Controller');
+	log.info('GuestKeystoreCreateStep3Controller');
 
 	$scope.publicKey = '0x' + $rootScope.wallet.publicKeyHex;
 

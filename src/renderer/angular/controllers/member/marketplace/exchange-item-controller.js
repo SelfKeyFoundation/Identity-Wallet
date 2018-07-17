@@ -18,7 +18,7 @@ function MemberMarketplaceExchangeItemController(
 
 	$scope.realData = $state.params.data;
 
-	log.debug('MemberMarketplaceExchangeItemController');
+	log.info('MemberMarketplaceExchangeItemController');
 
 	// Initial 300 characters will be displayed.
 	$scope.strLimit = 300;
