@@ -303,7 +303,16 @@ let defaultModule = function(app) {
 		for (let wallet of wallets) {
 			let address = ('0x' + wallet.publicKey).toLowerCase();
 			await _syncByWallet(address, wallet.id);
+			await removeNotMinedPendingTxs(address);
 		}
+	}
+
+	async function removeNotMinedPendingTxs(address) {
+		let nonce = await electron.app.web3Service.waitForTicket({
+			method: 'getTransactionCount',
+			args: [address, 'pending']
+		});
+		TxHistory.deleteNotMinedPendingsByPublicKey(address, +nonce);
 	}
 
 	function _startSyncingJob() {

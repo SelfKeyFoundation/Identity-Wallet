@@ -70,7 +70,8 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 					tx.symbol = symbol ? symbol.toUpperCase() : 'ETH';
 					tx.directionSign = publicKeyLowerCase === tx.from ? '- ' : '+ ';
 
-					tx.externalLink = `https://etherscan.io/tx/${tx.hash}`;
+					let testnet = tx.networkId === 3 ? 'ropsten.' : '';
+					tx.externalLink = `https://${testnet}etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
 					tx.statusIcon = getTxStatusIcon(tx);
 

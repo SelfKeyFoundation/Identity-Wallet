@@ -62,7 +62,7 @@ const dev = {
 	dev: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
-	chainId: 3,
+	chainId: 1,
 	node: 'mew'
 };
 
@@ -85,6 +85,7 @@ if (isTestMode()) {
 const db = {
 	client: 'sqlite3',
 	useNullAsDefault: true,
+	debug: true,
 	connection: {
 		filename: dbFileName
 	},

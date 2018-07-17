@@ -102,6 +102,7 @@ function SendTokenDialogController(
 
 	$scope.startSend = event => {
 		$scope.signedHex = null;
+		$scope.signedWithNonce = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
 		let genRawTrPromise = generateRawTransaction(isEth);
 		if (!genRawTrPromise) {
@@ -109,8 +110,9 @@ function SendTokenDialogController(
 		}
 
 		genRawTrPromise
-			.then(signedHex => {
-				$scope.signedHex = signedHex;
+			.then(res => {
+				$scope.signedHex = res.signedHex;
+				$scope.signedWithNonce = res.nonce;
 				$scope.viewStates.showConfirmButtons = true;
 				$mdDialog.cancel();
 			})
@@ -327,6 +329,7 @@ function SendTokenDialogController(
 		$scope.viewStates.step = 'transaction-status';
 		$scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
 
+		currentTxHistoryData.nonce = $scope.signedWithNonce;
 		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
 
 		$scope.sendPromise

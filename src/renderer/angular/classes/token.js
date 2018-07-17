@@ -262,8 +262,8 @@ class Token {
 						privateKey: this.wallet.privateKey,
 						walletAddress: '0x' + this.wallet.getPublicKeyHex()
 					})
-						.then(res => {
-							defer.resolve(res);
+						.then(signedHex => {
+							defer.resolve({ signedHex, nonce });
 						})
 						.catch(err => {
 							defer.reject(err);
