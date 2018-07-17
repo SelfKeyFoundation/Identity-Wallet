@@ -2,11 +2,12 @@ import { vsprintf } from 'sprintf-js';
 import { errToStr, compareLevels } from './utils';
 import globalConfig, { updateConfig } from './config';
 import elog from 'electron-log';
+import { captureException, addBreadcrumb } from '@sentry/electron';
 
 export class Logger {
-	constructor(prefix) {
-		this.processPrefix = this.globalConfig.processPrefix;
-		this.prefix = prefix || this.config.prefix;
+	constructor(name) {
+		this.processName = this.globalConfig.processPrefix;
+		this.name = name || this.config.prefix;
 		this.filter = this.globalConfig.filterFn || (() => false);
 	}
 	get globalConfig() {
@@ -35,20 +36,32 @@ export class Logger {
 		}
 		args = args.map(e => (e instanceof Error ? errToStr(e) : e));
 		if (typeof msg === 'string') msg = vsprintf(msg, args);
-		if (!this.prefix) return msg;
-		return `${this.processPrefix} ${this.prefix} ${level}: ${msg}`;
+		return `${this.processName} ${this.name} ${level}: ${msg}`;
 	}
 
 	isFiltered(level, msg = '') {
 		return this.filter(level, msg);
 	}
 
+	sentryLog(level, originalMsg, data, message) {
+		addBreadcrumb({
+			level,
+			message,
+			data,
+			category: `${this.processName}:${this.name}`
+		});
+		if (originalMsg instanceof Error) {
+			captureException(originalMsg);
+		}
+	}
+
 	log(level, msg, ...args) {
 		if (!this.checkLevels(level)) return;
-		msg = this.fmtMessage(level, msg, args);
-		if (this.isFiltered(level, msg)) return;
+		let formattedMsg = this.fmtMessage(level, msg, args);
+		if (this.isFiltered(level, formattedMsg)) return;
+		this.sentryLog(level, msg, args, formattedMsg);
 		if (level === 'trace') level = 'silly';
-		elog[level](msg);
+		elog[level](formattedMsg);
 	}
 
 	info(msg, ...args) {

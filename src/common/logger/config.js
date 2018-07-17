@@ -35,7 +35,7 @@ export const sendIpc = config => {
 export const updateConfig = (conf, silent) => {
 	silent = silent || process.env.MODE === 'test';
 	loggerConfig.processPrefix = is.main() ? 'MAIN' : 'RENDERER';
-	loggerConfig.logLevelDefault = process.env.NODE_ENV === 'development' ? 'warn' : 'warn';
+	loggerConfig.logLevelDefault = process.env.NODE_ENV === 'development' ? 'info' : 'warn';
 	loggerConfig.logLevel = process.env.LOG_LEVEL || loggerConfig.logLevelDefault;
 	loggerConfig.logLevelConsole = process.env.LOG_LEVEL_CONSOLE || loggerConfig.logLevel;
 	loggerConfig.logLevelFile = process.env.LOG_LEVEL_FILE || loggerConfig.logLevel;
