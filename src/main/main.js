@@ -15,6 +15,10 @@ const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
 
+setTimeout(() => {
+	log.error(new Error('sentry test'));
+}, 10000);
+
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
