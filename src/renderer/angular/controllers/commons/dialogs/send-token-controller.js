@@ -110,6 +110,7 @@ function SendTokenDialogController(
 
 		genRawTrPromise
 			.then(signedHex => {
+				setViewState('before-send');
 				$scope.signedHex = signedHex;
 				$scope.viewStates.showConfirmButtons = true;
 				$mdDialog.cancel();
@@ -154,7 +155,7 @@ function SendTokenDialogController(
 
 	$scope.confirmSend = (event, confirm) => {
 		if (!confirm) {
-			setViewState('before-send');
+			setViewState();
 		} else {
 			setViewState('sending');
 			send();
