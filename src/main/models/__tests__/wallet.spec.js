@@ -11,8 +11,7 @@ describe('Wallet model', () => {
 	};
 
 	const testItm3 = {
-		publicKey: 'active',
-		keystoreFilePath: '',
+		publicKey: 'public-key-1',
 		isSetupFinished: 1
 	};
 
@@ -58,7 +57,7 @@ describe('Wallet model', () => {
 		expect(found.length).toBe(0);
 		await Wallet.query().insert(testItm); //with keyStore value
 		await Wallet.query().insert(testItm3); // without keyStore value
-		found = await Wallet.findAll();
+		found = await Wallet.findAllWithKeyStoreFile();
 		expect(found.length).toBe(1);
 	});
 
