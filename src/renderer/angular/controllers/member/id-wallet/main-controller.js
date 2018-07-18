@@ -14,7 +14,7 @@ function MemberIdWalletMainController(
 ) {
 	'ngInject';
 
-	log.debug('MemberIdWalletMainController');
+	log.info('MemberIdWalletMainController');
 
 	let ID_ATTRIBUTE_TYPES = {};
 	let excludeKeys = [];

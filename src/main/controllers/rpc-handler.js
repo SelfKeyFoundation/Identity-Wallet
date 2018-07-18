@@ -21,7 +21,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const fsm = require('fs');
 
-const keythereum = require('../extended_modules/keythereum');
+const keythereum = require('keythereum');
 
 const mime = require('mime-types');
 const ethereumjsUtil = require('ethereumjs-util');
@@ -122,6 +122,7 @@ module.exports = function(app) {
 
 					fsm.copyFile(args.keystoreFilePath, targetPath, error => {
 						if (error) {
+							log.error(error);
 							return app.win.webContents.send(
 								RPC_METHOD,
 								actionId,
@@ -147,6 +148,7 @@ module.exports = function(app) {
 								});
 							})
 							.catch(error => {
+								log.error(error);
 								if (error.code === 'SQLITE_CONSTRAINT') {
 									app.win.webContents.send(
 										RPC_METHOD,
@@ -217,9 +219,11 @@ module.exports = function(app) {
 					});
 				})
 				.catch(error => {
+					log.error(error);
 					app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 				});
 		} catch (e) {
+			log.error(e);
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, e.message, null);
 		}
 	};
@@ -298,6 +302,7 @@ module.exports = function(app) {
 							});
 						});
 					} catch (e) {
+						log.error(e);
 						app.win.webContents.send(
 							RPC_METHOD,
 							actionId,
@@ -311,6 +316,7 @@ module.exports = function(app) {
 				}
 			});
 		} catch (e) {
+			log.error(e);
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, e, null);
 		}
 	};
@@ -558,6 +564,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.closeApp = function(event, actionId, actionName, args) {
+		log.info('quitting app');
 		electron.app.quit();
 	};
 
@@ -878,8 +885,13 @@ module.exports = function(app) {
 			});
 	};
 
-	controller.prototype.findAllWallets = function(event, actionId, actionName, args) {
-		Wallet.findAll()
+	controller.prototype.findAllWalletsWithKeyStoreFile = function(
+		event,
+		actionId,
+		actionName,
+		args
+	) {
+		Wallet.findAllWithKeyStoreFile()
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

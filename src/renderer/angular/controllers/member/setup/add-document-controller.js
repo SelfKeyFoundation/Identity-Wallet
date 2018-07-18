@@ -13,7 +13,7 @@ function MemberSetupAddDocumentController(
 ) {
 	'ngInject';
 
-	log.debug('MemberSetupAddDocumentController');
+	log.info('MemberSetupAddDocumentController');
 
 	$scope.idAttributes = $rootScope.wallet.getIdAttributes();
 

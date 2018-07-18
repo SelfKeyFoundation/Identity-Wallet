@@ -7,7 +7,7 @@ const async = require('async');
 function LedgerService(RPCService, CommonService, Web3Service) {
 	'ngInject';
 
-	log.debug('LedgerService Initialized');
+	log.info('LedgerService Initialized');
 
 	class LedgerService {
 		getAccountsWithBalances(args) {

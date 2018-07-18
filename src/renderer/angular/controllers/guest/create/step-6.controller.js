@@ -14,7 +14,7 @@ function GuestKeystoreCreateStep6Controller(
 ) {
 	'ngInject';
 
-	log.debug('GuestKeystoreCreateStep6Controller');
+	log.info('GuestKeystoreCreateStep6Controller');
 
 	$scope.isLoading = false;
 	$scope.isLoadingKYCImport = false;
@@ -56,7 +56,7 @@ function GuestKeystoreCreateStep6Controller(
 		promise
 			.then(() => {
 				$rootScope.wallet.hasJustActivated = true;
-				SqlLiteService.loadWallets()
+				SqlLiteService.loadWalletsWithKeyStoreFile()
 					.then(() => {
 						let promises = [];
 						promises.push($rootScope.wallet.loadIdAttributes());
@@ -135,7 +135,7 @@ function GuestKeystoreCreateStep6Controller(
 
 		promise
 			.then(() => {
-				SqlLiteService.loadWallets()
+				SqlLiteService.loadWalletsWithKeyStoreFile()
 					.then(() => {
 						let promises = [];
 						promises.push($rootScope.wallet.loadIdAttributes());

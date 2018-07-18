@@ -14,7 +14,7 @@ function GuestKeystoreCreateStep2Controller(
 	CommonService
 ) {
 	'ngInject';
-
+	log.info('GuestKeystoreCreateStep2Controller');
 	log.debug('GuestKeystoreCreateStep2Controller, %j', $stateParams);
 
 	$scope.walletCreationPromise = null;

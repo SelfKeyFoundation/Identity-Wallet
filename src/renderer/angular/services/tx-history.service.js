@@ -4,7 +4,7 @@ const log = new Logger('TxHistoryService');
 function TxHistoryService($rootScope, CONFIG, RPCService) {
 	'ngInject';
 
-	log.debug('TxHistoryService Initialized');
+	log.info('TxHistoryService Initialized');
 
 	let TxHistoryService = function() {
 		/**

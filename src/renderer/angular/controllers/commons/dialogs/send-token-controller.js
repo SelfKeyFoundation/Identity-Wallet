@@ -27,7 +27,7 @@ function SendTokenDialogController(
 		symbol: $stateParams.symbol,
 		allowSelectERC20Token: $stateParams.allowSelectERC20Token
 	};
-
+	log.info('SendTokenDialogController');
 	log.debug('SendTokenDialogController %j %j', args, CONFIG);
 	const web3Utils = Web3Service.constructor.web3.utils;
 	const TX_CHECK_INTERVAL = 1000;
@@ -113,6 +113,7 @@ function SendTokenDialogController(
 			.then(res => {
 				$scope.signedHex = res.signedHex;
 				$scope.signedWithNonce = res.nonce;
+				setViewState('before-send');
 				$scope.viewStates.showConfirmButtons = true;
 				$mdDialog.cancel();
 			})
@@ -147,7 +148,7 @@ function SendTokenDialogController(
 
 	$scope.confirmSend = (event, confirm) => {
 		if (!confirm) {
-			setViewState('before-send');
+			setViewState();
 		} else {
 			setViewState('sending');
 			send();
@@ -491,6 +492,7 @@ function SendTokenDialogController(
 	$scope.$watch(
 		'formData',
 		(newVal, oldVal) => {
+			log.info('formData');
 			log.debug('formData %j', newVal);
 
 			if (newVal.sendAmount && !isNumeric(newVal.sendAmount)) {
@@ -556,14 +558,15 @@ function SendTokenDialogController(
 		true
 	);
 
-	$scope.$on('$destroy', () => {
-		cancelTxCheck();
-		cancelEstimatedGasCheck();
-	});
-
-	$rootScope.$on('tx-sign:retry', event => {
+	let deregisterTxSignEvent = $rootScope.$on('tx-sign:retry', event => {
 		$mdDialog.cancel();
 		$scope.startSend(event);
+	});
+
+	$scope.$on('$destroy', () => {
+		if (deregisterTxSignEvent) deregisterTxSignEvent();
+		cancelTxCheck();
+		cancelEstimatedGasCheck();
 	});
 }
 
