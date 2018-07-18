@@ -107,6 +107,8 @@ function SendTokenDialogController(
 		if (!genRawTrPromise) {
 			return;
 		}
+		// in order to disable send button
+		$scope.backgroundProcessStatuses.sendStarted = true;
 
 		genRawTrPromise
 			.then(signedHex => {
@@ -114,8 +116,10 @@ function SendTokenDialogController(
 				$scope.signedHex = signedHex;
 				$scope.viewStates.showConfirmButtons = true;
 				$mdDialog.cancel();
+				$scope.backgroundProcessStatuses.sendStarted = false;
 			})
 			.catch(error => {
+				$scope.backgroundProcessStatuses.sendStarted = false;
 				$mdDialog.cancel();
 				let errorMsg = error.toString();
 

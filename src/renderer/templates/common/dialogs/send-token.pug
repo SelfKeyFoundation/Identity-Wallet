@@ -47,7 +47,7 @@
                     span Fast
 
             .sk-send-ether-box__actions-container
-                md-button.blue(style="min-width: 144px;", ng-if="!viewStates.showConfirmButtons", ng-click="startSend($event)", ng-disabled="backgroundProcessStatuses.checkingEstimatedGasLimit || !infoData.isReady")
+                md-button.blue(style="min-width: 144px;", ng-if="!viewStates.showConfirmButtons", ng-click="startSend($event)", ng-disabled="backgroundProcessStatuses.sendStarted || backgroundProcessStatuses.checkingEstimatedGasLimit || !infoData.isReady")
                     span {{ backgroundProcessStatuses.checkingEstimatedGasLimit ? 'getting gas limit...' : 'send' }}
 
                 md-button.green(style="margin-right: 8px; width: 144px;", ng-if="viewStates.showConfirmButtons", ng-click="confirmSend($event, true)", ng-disabled="backgroundProcessStatuses.txInProgress")
