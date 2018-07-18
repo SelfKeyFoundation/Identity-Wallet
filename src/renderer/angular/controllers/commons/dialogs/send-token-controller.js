@@ -565,14 +565,15 @@ function SendTokenDialogController(
 		true
 	);
 
-	$scope.$on('$destroy', () => {
-		cancelTxCheck();
-		cancelEstimatedGasCheck();
-	});
-
-	$rootScope.$on('tx-sign:retry', event => {
+	let deregisterTxSignEvent = $rootScope.$on('tx-sign:retry', event => {
 		$mdDialog.cancel();
 		$scope.startSend(event);
+	});
+
+	$scope.$on('$destroy', () => {
+		if (deregisterTxSignEvent) deregisterTxSignEvent();
+		cancelTxCheck();
+		cancelEstimatedGasCheck();
 	});
 }
 
