@@ -4,7 +4,7 @@ const log = new Logger('StartupGuideDialogController');
 function StartupGuideDialogController($rootScope, $scope, $q, $mdDialog, $state, SqlLiteService) {
 	'ngInject';
 
-	log.debug('StartupGuideDialogController');
+	log.info('StartupGuideDialogController');
 
 	$scope.isLoading = false;
 

@@ -6,7 +6,7 @@ const Wallet = require('../classes/wallet');
 function ElectronService($rootScope, $window, $q, $timeout, CONFIG, RPCService) {
 	'ngInject';
 
-	log.debug('ElectronService Initialized');
+	log.info('ElectronService Initialized');
 
 	/**
 	 *

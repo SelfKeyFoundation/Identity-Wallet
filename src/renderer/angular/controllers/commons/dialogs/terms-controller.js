@@ -4,7 +4,7 @@ const log = new Logger('TermsDialogController');
 function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService, $timeout) {
 	'ngInject';
 
-	log.debug('TermsDialogController');
+	log.info('TermsDialogController');
 	$scope.isLoading = false;
 	$scope.step = 'main';
 	$scope.scrolledBottom = false;

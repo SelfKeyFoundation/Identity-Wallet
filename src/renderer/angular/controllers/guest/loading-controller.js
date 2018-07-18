@@ -13,7 +13,7 @@ function GuestLoadingController(
 ) {
 	'ngInject';
 
-	log.debug('GuestLoadingController');
+	log.info('GuestLoadingController');
 
 	$scope.header = 'Loading';
 	$scope.subHeader = '';

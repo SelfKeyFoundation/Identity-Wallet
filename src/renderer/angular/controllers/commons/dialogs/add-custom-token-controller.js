@@ -16,7 +16,7 @@ function AddCustomTokenDialogController(
 ) {
 	'ngInject';
 
-	log.debug('AddCustomTokenDialogController');
+	log.info('AddCustomTokenDialogController');
 
 	$scope.cancel = event => {
 		$mdDialog.cancel();

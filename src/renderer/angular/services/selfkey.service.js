@@ -4,7 +4,7 @@ const log = new Logger('SelfkeyService');
 function SelfkeyService($rootScope, $http, CONFIG) {
 	'ngInject';
 
-	log.debug('SelfkeyService Initialized');
+	log.info('SelfkeyService Initialized');
 
 	// const KYC_BASE_URL = CONFIG.kycApiEndpoint;
 	const KYC_BASE_URL = 'https://token-sale-demo-api.kyc-chain.com';

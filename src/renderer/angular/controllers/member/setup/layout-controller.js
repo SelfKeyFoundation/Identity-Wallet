@@ -4,7 +4,7 @@ const log = new Logger('MemberSetupLayoutController');
 function MemberSetupLayoutController($rootScope, $scope, $state) {
 	'ngInject';
 
-	log.debug('MemberSetupLayoutController');
+	log.info('MemberSetupLayoutController');
 }
 MemberSetupLayoutController.$inject = ['$rootScope', '$scope', '$state'];
 module.exports = MemberSetupLayoutController;

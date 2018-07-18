@@ -15,7 +15,7 @@ function GuestKeystoreCreateStep5Controller(
 ) {
 	'ngInject';
 
-	log.debug('GuestKeystoreCreateStep5Controller');
+	log.info('GuestKeystoreCreateStep5Controller');
 
 	$scope.createBasicId = event => {
 		$state.go('guest.create.step-6');

@@ -4,7 +4,7 @@ const log = new Logger('UpdateDialogController');
 function UpdateDialogController($rootScope, $scope, $q, $mdDialog, releaseName) {
 	'ngInject';
 
-	log.debug('UpdateDialogController, %s', releaseName);
+	log.info('UpdateDialogController, %s', releaseName);
 	$scope.updatePromise = null;
 
 	$scope.releaseName = releaseName;
