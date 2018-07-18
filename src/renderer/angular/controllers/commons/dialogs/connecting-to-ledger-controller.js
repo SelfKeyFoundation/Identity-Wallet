@@ -42,7 +42,7 @@ function ConnectingToLedgerController(
 				$rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
 			})
 			.catch(err => {
-				log.error(err);
+				log.error(err.message);
 				onError();
 			});
 	};
