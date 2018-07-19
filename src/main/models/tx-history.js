@@ -59,26 +59,26 @@ class TxHistory extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				hash: { type: 'string' },
-				blockNumber: { type: 'integer' },
+				blockNumber: { type: ['integer', 'null'] },
 				timeStamp: { type: 'integer' },
 				nonce: { type: 'ingeger' },
-				blockHash: { type: 'string' },
+				blockHash: { type: ['string', 'null'] },
 				contractAddress: { type: ['string', 'null'] },
 				from: { type: 'string' },
 				to: { type: 'string' },
 				value: { type: 'number' },
-				tokenName: { type: 'string' },
+				tokenName: { type: ['string', 'null'] },
 				tokenSymbol: { type: ['string', 'null'] },
-				tokenDecimal: { type: 'integer' },
-				transactionIndex: { type: 'integer' },
-				gas: { type: 'integer' },
+				tokenDecimal: { type: ['integer', 'null'] },
+				transactionIndex: { type: ['integer', 'null'] },
+				gas: { type: ['integer', 'null'] },
 				gasPrice: { type: 'integer' },
 				cumulativeGasUsed: { type: 'integer' },
-				gasUsed: { type: 'integer' },
+				gasUsed: { type: ['integer', 'null'] },
 				input: { type: 'string' },
-				confirmations: { type: 'integer' },
-				isError: { type: 'integer' },
-				txReceiptStatus: { type: 'integer' },
+				confirmations: { type: ['integer', 'null'] },
+				isError: { type: ['integer', 'null'] },
+				txReceiptStatus: { type: ['integer', 'null'] },
 				networkId: { type: 'integer' }
 			}
 		};
@@ -115,6 +115,20 @@ class TxHistory extends BaseModel {
 			.orWhere({ to: publicKey, contractAddress })
 			.orderBy('timeStamp', 'desc');
 		return paginator(this.knex())(query, pager);
+	}
+
+	static async removeNotMinedPendingTxsByPublicKey(publicKey, nonce) {
+		publicKey = publicKey.toLowerCase();
+		let query = this.query()
+			.whereNull('blockNumber')
+			.andWhere(function() {
+				this.where('nonce', '<', nonce).orWhereNull('nonce');
+			})
+			.andWhere(function() {
+				this.where({ from: publicKey }).orWhere({ to: publicKey });
+			})
+			.del();
+		return query;
 	}
 }
 

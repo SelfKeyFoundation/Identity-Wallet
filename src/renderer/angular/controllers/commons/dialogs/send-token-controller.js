@@ -102,6 +102,7 @@ function SendTokenDialogController(
 
 	$scope.startSend = event => {
 		$scope.signedHex = null;
+		$scope.signedWithNonce = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
 		let genRawTrPromise = generateRawTransaction(isEth);
 		if (!genRawTrPromise) {
@@ -109,9 +110,10 @@ function SendTokenDialogController(
 		}
 
 		genRawTrPromise
-			.then(signedHex => {
+			.then(res => {
+				$scope.signedHex = res.signedHex;
+				$scope.signedWithNonce = res.nonce;
 				setViewState('before-send');
-				$scope.signedHex = signedHex;
 				$scope.viewStates.showConfirmButtons = true;
 				$mdDialog.cancel();
 			})
@@ -121,15 +123,6 @@ function SendTokenDialogController(
 
 				if (errorMsg === 'invalid_address') {
 					$scope.errors.sendToAddressHex = true;
-					setViewState();
-					return;
-				}
-
-				if (errorMsg === 'SAME_TRANSACTION_COUNT_CUSTOM_MSG') {
-					errorMsg = `Error: There is already another transaction on the Ethereum network with the same hash.
-					 Please wait until this is complete before sending another transaction.`;
-					$scope.errors.sendFailed = errorMsg;
-					$scope.viewStates.step = 'transaction-status';
 					setViewState();
 					return;
 				}
@@ -337,12 +330,12 @@ function SendTokenDialogController(
 		$scope.viewStates.step = 'transaction-status';
 		$scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
 
+		currentTxHistoryData.nonce = $scope.signedWithNonce;
 		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
 
 		$scope.sendPromise
 			.then(transactionHash => {
 				$scope.txHex = transactionHash;
-				$rootScope.wallet.updatePreviousTransactionCount();
 				startTxCheck();
 			})
 			.catch(error => {
