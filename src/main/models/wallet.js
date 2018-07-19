@@ -31,7 +31,7 @@ class Wallet extends BaseModel {
 	static get relationMappings() {
 		const WalletSetting = require('./wallet-setting');
 		const WalletToken = require('./wallet-token');
-		const IdAttribute = require('./id-attribute');
+		const IdAttribute = require('./id-attribute').default;
 
 		return {
 			setting: {
@@ -115,15 +115,15 @@ class Wallet extends BaseModel {
 	}
 
 	static async addInitialIdAttributesAndActivate(id, initialIdAttributes) {
+		log.info('addInitialIdAttributesAndActivate %d', id);
 		const tx = await transaction.start(this.knex());
 		try {
-			const IdAttributes = require('./id-attribute');
-			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).upsertGraphAndFetch({
-				id,
-				isSetupFinished: 1,
-				idAttributes: attributes
-			});
+			const IdAttributes = require('./id-attribute').default;
+			await IdAttributes.createInitial(id, initialIdAttributes, tx);
+			let wallet = await this.query(tx)
+				.patchAndFetchById(id, { isSetupFinished: 1 })
+				.eager('[idAttributes.children]');
+			console.log(wallet);
 			await tx.commit();
 			return wallet;
 		} catch (error) {

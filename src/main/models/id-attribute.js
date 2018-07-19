@@ -1,6 +1,7 @@
 import BaseModel from './base';
 import { Model } from 'objection';
-
+import { Logger } from 'common/logger';
+const log = new Logger('id-attribute');
 const TABLE_NAME = 'id_attributes';
 const CONNECT_TABLE_NAME = 'id_attributes_connect';
 
@@ -41,46 +42,70 @@ export class IdAttribute extends BaseModel {
 					to: `${Wallet.tableName}.id`
 				}
 			},
-			type: {
+			attributeType: {
 				relation: Model.BelongsToOneRelation,
 				modelClass: IdAttributeType,
 				join: {
 					from: `${this.tableName}.type`,
-					extra: ['order', 'role'],
 					to: `${IdAttributeType.tableName}.key`
 				}
 			},
 			children: {
 				relation: Model.ManyToManyRelation,
 				modelClass: IdAttribute,
-				from: `${TABLE_NAME}.id`,
-				through: {
-					from: `${CONNECT_TABLE_NAME}.parentId`,
-					to: `${CONNECT_TABLE_NAME}.childId`
-				},
-				to: `${TABLE_NAME}.id`
+				join: {
+					from: `${TABLE_NAME}.id`,
+					through: {
+						from: `${CONNECT_TABLE_NAME}.parentId`,
+						extra: ['order', 'role'],
+						to: `${CONNECT_TABLE_NAME}.childId`
+					},
+					to: `${TABLE_NAME}.id`
+				}
 			},
 			parents: {
 				relation: Model.ManyToManyRelation,
 				modelClass: IdAttribute,
-				from: `${TABLE_NAME}.id`,
-				through: {
-					from: `${CONNECT_TABLE_NAME}.childId`,
-					extra: ['order', 'role'],
-					to: `${CONNECT_TABLE_NAME}.parentId`
-				},
-				to: `${TABLE_NAME}.id`
+				join: {
+					from: `${TABLE_NAME}.id`,
+					through: {
+						from: `${CONNECT_TABLE_NAME}.childId`,
+						extra: ['order', 'role'],
+						to: `${CONNECT_TABLE_NAME}.parentId`
+					},
+					to: `${TABLE_NAME}.id`
+				}
 			},
 			document: {
 				relation: Model.HasOneRelation,
 				modelClass: Document,
-				from: `${TABLE_NAME}.id`,
-				to: `${Document.tableName}.id`
+				join: {
+					from: `${TABLE_NAME}.id`,
+					to: `${Document.tableName}.id`
+				}
 			}
 		};
 	}
-}
 
-IdAttribute.query().then(data => console.log(data));
+	static async createInitial(walletId, initialIdAttributes, tx) {
+		log.info('addInitialIdAttributesAndActivate');
+		const IdAttributeTypes = require('./id-attribute-type');
+		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
+		for (let i in idAttributeTypes) {
+			let type = idAttributeTypes[i];
+
+			await this.query(tx).insert({
+				walletId,
+				type: type.key,
+				value: initialIdAttributes[type.key]
+			});
+		}
+	}
+
+	static async findAllByWalletId(walletId) {
+		let attributes = await this.query().eager(`[children, parents]`);
+		return attributes.filter(attr => !attr.parents || !attr.parents.length);
+	}
+}
 
 export default IdAttribute;

@@ -396,15 +396,15 @@
 // 	}
 // };
 
-function transformAttrs(acc, attr) {
-	const walletId = attr.walletId;
+function transformAttrs(acc, srcAttr) {
+	const walletId = srcAttr.walletId;
 	let itm = {
 		walletId,
-		type: attr.idAttributeType,
-		createdAt: attr.createdAt,
-		updatedAt: attr.updatedAt
+		type: srcAttr.idAttributeType,
+		createdAt: srcAttr.createdAt,
+		updatedAt: srcAttr.updatedAt
 	};
-	let items = JSON.parse(attr.items);
+	let items = JSON.parse(srcAttr.items);
 
 	if (!items || !items.length) {
 		acc.push({ itm, children: [] });
@@ -416,8 +416,8 @@ function transformAttrs(acc, attr) {
 		let attr = {
 			...itm,
 			isVerified: child.isVerified,
-			createdAt: child.createdAt,
-			updatedAt: child.updatedAt
+			createdAt: child.createdAt || itm.createdAt,
+			updatedAt: child.updatedAt || itm.updatedAt
 		};
 		if (!child.values || !child.values.length) {
 			acc.push({ itm: attr, children: [] });
@@ -437,8 +437,8 @@ function transformAttrs(acc, attr) {
 
 			if (data.length === 1) {
 				attr.value = '' + data[0].value;
-				attr.updatedAt = val.updatedAt;
-				attr.createdAt = val.createdAt;
+				attr.updatedAt = val.createdAt || attr.createdAt;
+				attr.createdAt = val.updatedAt || attr.updatedAt;
 				acc.push({ itm: attr, children: [] });
 				continue;
 			}
@@ -452,8 +452,8 @@ function transformAttrs(acc, attr) {
 					walletId,
 					type: 'document',
 					documentId: val.documentId,
-					createdAt: val.createdAt,
-					updatedAt: val.updatedAt
+					createdAt: val.createdAt || attr.createdAt,
+					updatedAt: val.updatedAt || attr.updatedAt
 				});
 				continue;
 			}
@@ -476,8 +476,8 @@ function transformAttrs(acc, attr) {
 					type,
 					role: key,
 					value: '' + val.staticData[key],
-					createdAt: val.createdAt,
-					updatedAt: val.updatedAt
+					createdAt: val.createdAt || attr.createdAt,
+					updatedAt: val.updatedAt || attr.updatedAt
 				};
 			});
 			children = children.concat(data);
@@ -529,9 +529,10 @@ exports.up = async (knex, Promise) => {
 	let attributes = await knex('id_attributes_old')
 		.select()
 		.reduce(transformAttrs, []);
-
-	attributes.forEach(async attr => {
-		let parentId = await knex('id_attributes').insert(attr.item);
+	console.log('inserting attributes', attributes);
+	for (let j = 0; j < attributes.length; j++) {
+		let attr = attributes[j];
+		let parentId = await knex('id_attributes').insert(attr.itm);
 		for (let i = 0; i < attr.children.length; i++) {
 			let child = attr.children[i];
 			let role = child.role;
@@ -543,7 +544,7 @@ exports.up = async (knex, Promise) => {
 				role
 			});
 		}
-	});
+	}
 	// await knex.schema.dropTable('id_attributes_old');
 };
 
