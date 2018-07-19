@@ -8656,9 +8656,9 @@ keccakjs@^0.2.1:
     browserify-sha3 "^0.0.1"
     sha3 "^1.1.0"
 
-"keythereum@https://github.com/SelfKeyFoundation/keythereum.git":
-  version "1.0.4"
-  resolved "https://github.com/SelfKeyFoundation/keythereum.git#fdf31cda56e9c7eab31bdb22f4bd6659a2815696"
+"keythereum@https://github.com/SelfKeyFoundation/keythereum.git#v1.0.4-selfkey.0":
+  version "1.0.4-selfkey.0"
+  resolved "https://github.com/SelfKeyFoundation/keythereum.git#0df6e5b778e8665ee9c017fdd58c1cd9a8fac5f9"
   dependencies:
     crypto-browserify "3.12.0"
     keccak "1.4.0"
