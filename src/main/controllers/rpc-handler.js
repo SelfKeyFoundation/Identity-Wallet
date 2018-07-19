@@ -1086,6 +1086,7 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
 			.then(data => {
+				log.debug('%j', data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
