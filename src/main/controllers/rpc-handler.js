@@ -848,6 +848,7 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
 			.then(data => {
+				log.debug('id_attributes %2j', data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1086,7 +1087,8 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
 			.then(data => {
-				log.debug('%j', data);
+				log.debug('id_attributes %2j', data);
+
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

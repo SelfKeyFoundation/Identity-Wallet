@@ -81,4 +81,6 @@ export class IdAttribute extends BaseModel {
 	}
 }
 
+IdAttribute.query().then(data => console.log(data));
+
 export default IdAttribute;
