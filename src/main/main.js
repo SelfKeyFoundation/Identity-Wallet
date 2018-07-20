@@ -93,7 +93,7 @@ function onReady(app) {
 		}
 
 		const initDb = require('./services/knex').init;
-
+		log.info('initializing db');
 		await initDb();
 		await crashReportService.startCrashReport();
 		const store = configureStore(global.state, 'main');

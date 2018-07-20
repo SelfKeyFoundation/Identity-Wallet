@@ -34,7 +34,9 @@ const init = async () => {
 };
 
 const createInitialDb = async () => {
+	log.info('starting migration');
 	await knex.migrate.latest();
+	log.info('starting seeding');
 	await knex.seed.run();
 };
 

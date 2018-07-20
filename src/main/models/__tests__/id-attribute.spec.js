@@ -192,15 +192,17 @@ describe('IdAttribute model', () => {
 		expect(attrs.length).toBeGreaterThan(0);
 	});
 
-	it('genInitial', async () => {
+	it('createInitial', async () => {
 		const initial = {
 			country_of_residency: 'Algeria',
 			first_name: 'test1',
 			last_name: 'test1',
 			middle_name: 'test1'
 		};
-		let attrs = await IdAttribute.genInitial(testWalletId, initial);
-
+		let attrs = await IdAttribute.query().where({ walletId: testWalletId });
+		expect(attrs.length).toBe(0);
+		await IdAttribute.createInitial(testWalletId, initial);
+		attrs = await IdAttribute.query().where({ walletId: testWalletId });
 		expect(attrs.length).toBeGreaterThan(0);
 	});
 

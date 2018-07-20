@@ -35,7 +35,13 @@ export class Logger {
 			msg = errToStr(msg);
 		}
 		args = args.map(e => (e instanceof Error ? errToStr(e) : e));
-		if (typeof msg === 'string') msg = vsprintf(msg, args);
+		if (typeof msg === 'string') {
+			try {
+				msg = vsprintf(msg, args);
+			} catch (error) {
+				this.error(new Error('failed to format'));
+			}
+		}
 		return `${this.processName} ${this.name} ${level}: ${msg}`;
 	}
 

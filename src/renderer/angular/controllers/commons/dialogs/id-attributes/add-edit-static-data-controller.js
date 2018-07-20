@@ -2,7 +2,7 @@
 'use strict';
 const { Logger } = require('common/logger');
 const log = new Logger('add-edit-static-data-ctl');
-
+// TODO: fix id-atttributes
 function AddEditStaticDataDialogController(
 	$rootScope,
 	$scope,

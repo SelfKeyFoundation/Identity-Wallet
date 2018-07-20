@@ -106,7 +106,7 @@ function GuestKeystoreCreateStep6Controller(
 			$scope.input[i] = getIdAttribute(idAttributes, i);
 		}
 	}
-
+	// TODO: fix id attributes structure
 	function getIdAttribute(idAttributes, type) {
 		if (
 			idAttributes[type] &&

@@ -5,7 +5,7 @@ const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
 const { isSyncing } = require('./tx-history-service');
 const Wallet = require('../models/wallet');
-const IdAttribute = require('../models/id-attribute');
+const IdAttribute = require('../models/id-attribute').default;
 const IdAttributeType = require('../models/id-attribute-type');
 const Document = require('../models/document');
 const ActionLog = require('../models/action-log');
@@ -626,6 +626,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.importKYCPackage = function(event, actionId, actionName, args) {
+		// TODO: fix id attributes structure
 		function getDocs(kycprocess, requirementId, documentFiles) {
 			let result = [];
 			let documents = kycprocess.escrow.documents;
@@ -848,6 +849,7 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
 			.then(data => {
+				log.debug('id_attributes %2j', data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1086,6 +1088,8 @@ module.exports = function(app) {
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
 			.then(data => {
+				log.debug('id_attributes %2j', data);
+
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1117,7 +1121,7 @@ module.exports = function(app) {
 
 	// TODO .... test
 	controller.prototype.editImportedIdAttributes = function(event, actionId, actionName, args) {
-		Wallet.editImportedIdAttributes(args.walletId, args.initialIdAttributesValues)
+		Wallet.addInitialIdAttributesAndActivate(args.walletId, args.initialIdAttributesValues)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
