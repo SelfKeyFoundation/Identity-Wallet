@@ -1,5 +1,6 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import locale from './locale';
+import fiatCurrency from './fiatCurrency';
 import {
 	forwardToMain,
 	forwardToRenderer,
@@ -21,7 +22,7 @@ export default (initialState, scope = 'main') => {
 
 	const enhanced = [applyMiddleware(...middleware)];
 
-	const rootReducer = locale;
+	const rootReducer = combineReducers({ locale, fiatCurrency });
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
 

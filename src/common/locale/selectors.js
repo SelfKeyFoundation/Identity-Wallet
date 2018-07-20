@@ -1,1 +1,1 @@
-export const getLocale = state => state.locale;
+export const getLocale = ({ locale }) => locale;

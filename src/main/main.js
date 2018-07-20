@@ -2,6 +2,8 @@
 'use strict';
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
+import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
+
 import { Logger } from 'common/logger';
 
 const path = require('path');
@@ -99,6 +101,7 @@ function onReady(app) {
 		const store = configureStore(global.state, 'main');
 		try {
 			store.dispatch(localeUpdate('en'));
+			store.dispatch(fiatCurrencyUpdate('USD'));
 		} catch (e) {
 			log.error(e);
 		}

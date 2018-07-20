@@ -3,6 +3,7 @@
 import { react2angular } from 'react2angular';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
+import { CryptoChartBoxWrapper } from './react/my-crypto/index';
 const { Logger } = require('common/logger');
 
 const path = require('path');
@@ -192,6 +193,12 @@ const tokenBoxWrapper = react2angular(TokenBoxWrapper, [
 	'customTokenText'
 ]);
 angular.module('kyc-wallet').component('tokenBox', tokenBoxWrapper);
+
+const cryptoChartBoxWrapper = react2angular(CryptoChartBoxWrapper, [
+	'tokens',
+	'manageCryptoAction'
+]);
+angular.module('kyc-wallet').component('cryptoChartBox', cryptoChartBoxWrapper);
 
 /**
  * controllers
