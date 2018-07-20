@@ -60,7 +60,7 @@ function MemberSetupAddDocumentController(
 			actionText = 'Updated Document: ';
 			actionTitle = 'Updated';
 		}
-
+		// FIXME: migrate to new id Attribute structure
 		let args = {
 			idAttributeId: $scope.idAttributes[$scope.selected.type].id,
 			idAttributeItemId: $scope.idAttributes[$scope.selected.type].items[0].id,

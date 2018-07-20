@@ -1,7 +1,7 @@
 'use strict';
 const { Logger } = require('common/logger');
 const log = new Logger('add-edit-doc-ctl');
-
+// TODO: fix id attributes
 function AddEditDocumentDialogController(
 	$rootScope,
 	$scope,

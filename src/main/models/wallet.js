@@ -119,11 +119,10 @@ class Wallet extends BaseModel {
 		const tx = await transaction.start(this.knex());
 		try {
 			const IdAttributes = require('./id-attribute').default;
-			await IdAttributes.createInitial(id, initialIdAttributes, tx);
+			await IdAttributes.upsertInitial(id, initialIdAttributes, tx);
 			let wallet = await this.query(tx)
 				.patchAndFetchById(id, { isSetupFinished: 1 })
 				.eager('[idAttributes.children]');
-			console.log(wallet);
 			await tx.commit();
 			return wallet;
 		} catch (error) {
@@ -137,12 +136,12 @@ class Wallet extends BaseModel {
 		const tx = await transaction.start(this.knex());
 		try {
 			const IdAttributes = require('./id-attribute');
-			const attributes = await IdAttributes.initializeImported(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).upsertGraphAndFetch({
-				id,
-				isSetupFinished: 1,
-				idAttributes: attributes
-			});
+			await IdAttributes.upsertInitial(id, initialIdAttributes, tx);
+			let wallet = await this.query(tx)
+				.patchAndFetchById(id, {
+					isSetupFinished: 1
+				})
+				.eager('[idAttributes.children]');
 			await tx.commit();
 			return wallet;
 		} catch (error) {

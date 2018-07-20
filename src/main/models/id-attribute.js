@@ -87,16 +87,31 @@ export class IdAttribute extends BaseModel {
 		};
 	}
 
-	static async createInitial(walletId, initialIdAttributes, tx) {
-		log.info('addInitialIdAttributesAndActivate');
+	static async upsertInitial(walletId, initialIdAttributes, tx) {
+		log.info('upsert initial attributes');
 		const IdAttributeTypes = require('./id-attribute-type');
 		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
+		let attrNames = idAttributeTypes.map(({ key }) => key);
+		let attrs = await this.query()
+			.where({ walletId })
+			.whereIn('name', attrNames);
+		let update = {};
+		attrs.forEach(attr => {
+			if (!initialIdAttributes.hasOwnProperty(attr.name)) return;
+			attr.value = initialIdAttributes[attr.name];
+			update[attr.name] = attr;
+		});
 		for (let i in idAttributeTypes) {
 			let type = idAttributeTypes[i];
+			if (update[type.key]) {
+				await this.query.update(update[type.key]);
+				continue;
+			}
 
 			await this.query(tx).insert({
 				walletId,
 				type: type.key,
+				name: type.key,
 				value: initialIdAttributes[type.key]
 			});
 		}

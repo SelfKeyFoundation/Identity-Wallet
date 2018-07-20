@@ -626,6 +626,7 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.importKYCPackage = function(event, actionId, actionName, args) {
+		// TODO: fix id attributes structure
 		function getDocs(kycprocess, requirementId, documentFiles) {
 			let result = [];
 			let documents = kycprocess.escrow.documents;
@@ -1120,7 +1121,7 @@ module.exports = function(app) {
 
 	// TODO .... test
 	controller.prototype.editImportedIdAttributes = function(event, actionId, actionName, args) {
-		Wallet.editImportedIdAttributes(args.walletId, args.initialIdAttributesValues)
+		Wallet.addInitialIdAttributesAndActivate(args.walletId, args.initialIdAttributesValues)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

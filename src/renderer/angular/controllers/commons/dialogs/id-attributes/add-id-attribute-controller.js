@@ -1,7 +1,7 @@
 'use strict';
 const { Logger } = require('common/logger');
 const log = new Logger('AddIdAttributeDialogController');
-
+// TODO: fix id attributes
 function AddIdAttributeDialogController(
 	$rootScope,
 	$scope,
