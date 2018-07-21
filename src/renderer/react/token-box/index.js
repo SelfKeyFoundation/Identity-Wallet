@@ -61,12 +61,12 @@ TokenBoxWrapper.propTypes = {
 	cryptoCurrencyName: PropTypes.string,
 	publicKey: PropTypes.string,
 	cryptoCurrency: PropTypes.string,
-	cryptoValue: PropTypes.string,
+	cryptoValue: PropTypes.number,
 	toCurrency: PropTypes.string,
-	toValue: PropTypes.string,
+	toValue: PropTypes.number,
 	customTokenText: PropTypes.string,
 	copyAction: PropTypes.string,
-	transferAction: PropTypes.string
+	transferAction: PropTypes.function
 };
 
 export default TokenBoxWrapper;
