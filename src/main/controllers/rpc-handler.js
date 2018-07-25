@@ -27,7 +27,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const fsm = require('fs');
 
-const keythereum = require('keythereum');
+const { keystorage } = require('../keystorage');
 
 const mime = require('mime-types');
 const ethereumjsUtil = require('ethereumjs-util');
@@ -57,7 +57,7 @@ module.exports = function(app, store) {
 	controller.prototype.createKeystoreFile = function(event, actionId, actionName, args) {
 		const params = { keyBytes: 32, ivBytes: 16 };
 		// asynchronous
-		keythereum.create(params, function(dk) {
+		keystorage.create(params, function(dk) {
 			let options = {
 				kdf: 'pbkdf2',
 				cipher: 'aes-128-ctr',
@@ -68,7 +68,7 @@ module.exports = function(app, store) {
 				}
 			};
 
-			let keystoreObject = keythereum.dump(
+			let keystoreObject = keystorage.dump(
 				args.password,
 				dk.privateKey,
 				dk.salt,
@@ -81,7 +81,7 @@ module.exports = function(app, store) {
 				fs.mkdir(keystoreFileFullPath);
 			}
 
-			let outputPath = keythereum.exportToFile(keystoreObject, keystoreFileFullPath);
+			let outputPath = keystorage.exportToFile(keystoreObject, keystoreFileFullPath);
 			let keystoreFileName = path.basename(outputPath);
 			let keystoreFilePath = path.join(keystoreObject.address, keystoreFileName);
 
@@ -90,7 +90,7 @@ module.exports = function(app, store) {
 				keystoreFilePath: keystoreFilePath
 			})
 				.then(resp => {
-					let privateKey = keythereum.recover(args.password, keystoreObject);
+					let privateKey = keystorage.recover(args.password, keystoreObject);
 					const newWallet = {
 						id: resp.id,
 						isSetupFinished: resp.isSetupFinished,
@@ -111,8 +111,8 @@ module.exports = function(app, store) {
 	// refactored
 	controller.prototype.importKeystoreFile = function(event, actionId, actionName, args) {
 		try {
-			keythereum.importFromFile(args.keystoreFilePath, keystoreObject => {
-				let privateKey = keythereum.recover(args.password, keystoreObject);
+			keystorage.importFromFile(args.keystoreFilePath, keystoreObject => {
+				let privateKey = keystorage.recover(args.password, keystoreObject);
 
 				if (privateKey) {
 					let keystoreFileFullPath = path.resolve(
@@ -145,7 +145,7 @@ module.exports = function(app, store) {
 							keystoreFilePath: ksFilePathToSave
 						})
 							.then(resp => {
-								let privateKey = keythereum.recover(args.password, keystoreObject);
+								let privateKey = keystorage.recover(args.password, keystoreObject);
 								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
@@ -211,8 +211,8 @@ module.exports = function(app, store) {
 						wallet.keystoreFilePath
 					);
 
-					keythereum.importFromFile(keystoreFileFullPath, keystoreObject => {
-						let privateKey = keythereum.recover(args.password, keystoreObject);
+					keystorage.importFromFile(keystoreFileFullPath, keystoreObject => {
+						let privateKey = keystorage.recover(args.password, keystoreObject);
 
 						if (privateKey) {
 							const newWallet = {
@@ -328,7 +328,7 @@ module.exports = function(app, store) {
 			dialog.showOpenDialog(app.win, dialogConfig, filePaths => {
 				if (filePaths) {
 					try {
-						keythereum.importFromFile(filePaths[0], keystoreObject => {
+						keystorage.importFromFile(filePaths[0], keystoreObject => {
 							app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
 								publicKey: keystoreObject.address,
 								keystoreFilePath: filePaths[0]
