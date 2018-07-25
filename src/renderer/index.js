@@ -183,13 +183,7 @@ angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
 const tokenBoxWrapper = react2angular(TokenBoxWrapper, [
 	'cryptoCurrencyShort',
 	'cryptoCurrencyName',
-	'publicKey',
-	'cryptoCurrency',
-	'cryptoValue',
-	'toCurrency',
-	'toValue',
 	'transferAction',
-	'copyAction',
 	'customTokenText'
 ]);
 angular.module('kyc-wallet').component('tokenBox', tokenBoxWrapper);

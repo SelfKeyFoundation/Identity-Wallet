@@ -20,7 +20,7 @@ const SERVER_CONFIG = {
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-const defaultModule = function(app) {
+const defaultModule = function() {
 	const controller = function() {
 		let self = this;
 

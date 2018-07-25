@@ -5,6 +5,10 @@ import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 
 import { Logger } from 'common/logger';
+import installExtension, {
+	REACT_DEVELOPER_TOOLS,
+	REDUX_DEVTOOLS
+} from 'electron-devtools-installer';
 
 const path = require('path');
 const fs = require('fs');
@@ -88,6 +92,13 @@ function onReady(app) {
 			return;
 		}
 
+		installExtension(REACT_DEVELOPER_TOOLS)
+			.then(name => log.info(`Added Extension:  ${name}`))
+			.catch(err => log.info('An error occurred: ', err));
+		installExtension(REDUX_DEVTOOLS)
+			.then(name => log.info(`Added Extension:  ${name}`))
+			.catch(err => log.info('An error occurred: ', err));
+
 		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
 			// Initate auto-updates
 			const { appUpdater } = require('./autoupdater');
@@ -120,7 +131,7 @@ function onReady(app) {
 		const Web3Service = require('./controllers/web3-service').default(app);
 		electron.app.web3Service = new Web3Service();
 
-		const RPCHandler = require('./controllers/rpc-handler')(app);
+		const RPCHandler = require('./controllers/rpc-handler')(app, store);
 		electron.app.rpcHandler = new RPCHandler();
 		electron.app.rpcHandler.startTokenPricesBroadcaster(PriceService);
 		electron.app.rpcHandler.startTrezorBroadcaster();

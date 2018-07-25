@@ -9,8 +9,7 @@ const fiatCurrencyReducer = (state = initialState, action) => {
 		case types.UPDATE_FIAT_CURRENCY:
 			return {
 				...state,
-				...initialState,
-				fiatCurrency: action.fiatCurrency
+				fiatCurrency: action.payload
 			};
 		default:
 			return state;

@@ -1,21 +1,21 @@
 import * as types from './types';
 
 const initialState = {
-	locale: 'en'
+	prices: []
 };
 
-const localeReducer = (state = initialState, action) => {
+const pricesReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_LOCALE:
+		case types.UPDATE_PRICES:
 			return {
 				...state,
-				locale: action.payload
+				prices: action.payload
 			};
 		default:
 			return state;
 	}
 };
 
-const reducer = localeReducer;
+const reducer = pricesReducer;
 
 export default reducer;

@@ -1,12 +1,13 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { getWallet } from 'common/wallet/selectors';
 import * as localeActions from 'common/locale/actions';
-import { getLocale } from 'common/locale/selectors';
 
 import { TokenBox } from 'selfkey-ui';
-
 const mapStateToProps = state => {
-	return { locale: getLocale(state) };
+	return {
+		publicKey: getWallet(state).publicKey
+	};
 };
 
 const mapDispatchToProps = dispatch => {

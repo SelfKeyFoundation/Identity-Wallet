@@ -4,8 +4,11 @@ const EventEmitter = require('events');
 const fetch = require('node-fetch');
 
 const TokenPrice = require('../models/token-price');
+const io = require('socket.io-client');
 
 const emitter = new EventEmitter();
+
+let existing = [];
 
 const loadPriceData = async () => {
 	const response = await fetch('https://coincap.io/front');
@@ -35,10 +38,10 @@ const loadPriceData = async () => {
 		createdAt: createdTimestamp
 	}));
 
-	const existing = (await TokenPrice.findAll()).reduce(
+	existing = (await TokenPrice.findAll()).reduce(
 		(lookup, row) =>
 			Object.assign(lookup, {
-				[row.symbol]: row.id
+				[row.symbol]: { id: row.id, price: row.price }
 			}),
 		{}
 	);
@@ -48,7 +51,7 @@ const loadPriceData = async () => {
 
 	dataToInsert.forEach(row => {
 		if (existing[row.symbol]) {
-			updates.push(Object.assign(row, { id: existing[row.symbol] }));
+			updates.push(Object.assign(row, { id: existing[row.symbol].id }));
 			return;
 		}
 
@@ -61,12 +64,39 @@ const loadPriceData = async () => {
 	emitter.emit('pricesUpdated', dataToInsert);
 };
 
+const startStream = async () => {
+	const socket = io('https://coincap.io');
+
+	socket.on('trades', async tradeMsg => {
+		const tokenData = tradeMsg.message.msg;
+		if (existing[tokenData.short] && existing[tokenData.short].price !== tokenData.price) {
+			const btcPriceUsd = await TokenPrice.findBySymbol('BTC');
+			const ethPriceUsd = await TokenPrice.findBySymbol('ETC');
+
+			const tokenData = tradeMsg.message.msg;
+
+			const tokenPrice = {
+				id: existing[tokenData.short].id,
+				name: tokenData.long,
+				symbol: tokenData.short,
+				source: 'https://coincap.io',
+				priceUSD: +tokenData.price,
+				priceBTC: +tokenData.price / btcPriceUsd,
+				priceETH: +tokenData.price / ethPriceUsd,
+				updatedAt: Date.now()
+			};
+			await TokenPrice.bulkEdit([tokenPrice]);
+
+			emitter.emit('pricesUpdated', await TokenPrice.findAll());
+		}
+	});
+};
+
 module.exports = {
 	eventEmitter: emitter,
 
-	startUpdateData: () => {
-		loadPriceData();
-		// Update every 10 minutes
-		setInterval(loadPriceData, 10 * 60 * 60 * 1000);
+	startUpdateData: async () => {
+		await loadPriceData();
+		await startStream();
 	}
 };

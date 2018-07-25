@@ -92,6 +92,10 @@ class Wallet extends BaseModel {
 		return this.findAllWithKeyStoreFile().where({ isSetupFinished: 1 });
 	}
 
+	static findById(id) {
+		return this.query().findOne({ id });
+	}
+
 	static findAllWithKeyStoreFile() {
 		return this.query().whereNotNull('keystoreFilePath');
 	}

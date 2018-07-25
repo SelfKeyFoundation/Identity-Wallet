@@ -14,6 +14,23 @@ function SkCirclePieChartDirective($state) {
 			let processItems = () => {
 				let items = scope.data.items;
 
+				items = items.reduce((res, current, index, array) => {
+					return res.concat([current, current]);
+				}, []);
+
+				items = items.reduce((res, current, index, array) => {
+					return res.concat([current, current]);
+				}, []);
+				items = items.reduce((res, current, index, array) => {
+					return res.concat([current, current]);
+				}, []);
+				items = items.reduce((res, current, index, array) => {
+					return res.concat([current, current]);
+				}, []);
+				items = items.reduce((res, current, index, array) => {
+					return res.concat([current, current]);
+				}, []);
+
 				items.sort((a, b) => {
 					let check = b.valueUSD - a.valueUSD;
 					if (check === 0) {
