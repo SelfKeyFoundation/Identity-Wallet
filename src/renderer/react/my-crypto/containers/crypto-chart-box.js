@@ -11,6 +11,7 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getVisibleTokens, getTopTokenListSize } from 'common/wallet-tokens/selectors';
 
 const mapStateToProps = state => {
+	console.log('STATE', state);
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
