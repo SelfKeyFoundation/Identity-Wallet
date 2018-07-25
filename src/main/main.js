@@ -5,10 +5,6 @@ import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 
 import { Logger } from 'common/logger';
-import installExtension, {
-	REACT_DEVELOPER_TOOLS,
-	REDUX_DEVTOOLS
-} from 'electron-devtools-installer';
 
 const path = require('path');
 const fs = require('fs');
@@ -91,13 +87,6 @@ function onReady(app) {
 			electron.app.quit();
 			return;
 		}
-
-		installExtension(REACT_DEVELOPER_TOOLS)
-			.then(name => log.info(`Added Extension:  ${name}`))
-			.catch(err => log.info('An error occurred: ', err));
-		installExtension(REDUX_DEVTOOLS)
-			.then(name => log.info(`Added Extension:  ${name}`))
-			.catch(err => log.info('An error occurred: ', err));
 
 		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
 			// Initate auto-updates
