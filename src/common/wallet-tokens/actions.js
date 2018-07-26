@@ -22,9 +22,11 @@ const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 				args: [generateBalanceData(walletToken.address, walletPublicKey)]
 			})
 			.then(balanceHex => {
-				walletToken.balance = getBalanceDecimal(balanceHex, walletToken.decimal);
-				walletToken.balanceInFiat = walletToken.balance * walletToken.priceUSD;
-				return walletToken;
+				return {
+					...walletToken,
+					balance: getBalanceDecimal(balanceHex, walletToken.decimal),
+					balanceInFiat: walletToken.balance * walletToken.priceUSD
+				};
 			});
 	});
 

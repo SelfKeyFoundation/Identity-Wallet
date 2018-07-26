@@ -11,8 +11,10 @@ const getWalletWithBalance = wallet => {
 			args: [`0x${wallet.publicKey}`]
 		})
 		.then(balanceWei => {
-			wallet.balance = EthUnits.toEther(balanceWei, 'wei');
-			return wallet;
+			return {
+				...wallet,
+				balance: EthUnits.toEther(balanceWei, 'wei')
+			};
 		});
 };
 
