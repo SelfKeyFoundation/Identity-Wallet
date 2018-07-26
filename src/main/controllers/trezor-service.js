@@ -125,7 +125,7 @@ module.exports = function() {
 
 		let signed = null;
 		try {
-			signed = await timeout(signPromise, 10000);
+			signed = await timeout(signPromise, 30000);
 		} catch (err) {
 			if (err instanceof TimeoutError) {
 				currentSession = null;
