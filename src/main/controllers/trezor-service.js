@@ -119,7 +119,7 @@ module.exports = function() {
 			txData.gasLimit,
 			txData.to,
 			txData.value,
-			null,
+			txData.data,
 			chainId
 		);
 

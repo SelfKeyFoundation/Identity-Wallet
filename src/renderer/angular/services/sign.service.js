@@ -29,7 +29,7 @@ function SignService($rootScope, HardwareWalletService) {
 		};
 
 		this.signTransaction = function(args) {
-			let { profile, isHardwareWallet } = $rootScope.wallet.profile;
+			let { profile, isHardwareWallet } = $rootScope.wallet;
 			let { rawTx, privateKey, walletAddress } = args;
 
 			if (isHardwareWallet) {

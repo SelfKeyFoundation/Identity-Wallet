@@ -134,11 +134,12 @@ function SendTokenDialogController(
 	};
 
 	$scope.startSend = async event => {
+		debugger; // eslint-disable-line
 		if (profile === 'trezor') {
 			try {
 				await HardwareWalletService.testTrezorConnection();
 
-				//in order to close enter-pin screen
+				// in order to close enter-pin screen
 				$mdDialog.cancel();
 			} catch (err) {
 				processTrezorErr(event, err);
@@ -361,6 +362,7 @@ function SendTokenDialogController(
 				sendAmount,
 				gasPrice,
 				60000, // $scope.infoData.gasLimit
+				null,
 				$scope.symbol.toUpperCase(),
 				CONFIG.chainId
 			);

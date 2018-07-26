@@ -17,7 +17,8 @@ function AppRun(
 	RPCService,
 	SqlLiteService,
 	Web3Service,
-	CommonService
+	CommonService,
+	SignService
 ) {
 	'ngInject';
 
@@ -318,7 +319,6 @@ function AppRun(
 		ACCOUNTS_QUANTITY_PER_PAGE,
 		profile
 	) => {
-		// eslint-disable-line
 		return $mdDialog.show({
 			controller: 'ChooseHardwareWalletAddressController',
 			templateUrl: 'common/dialogs/choose-hardware-wallet-address.html',
@@ -481,7 +481,8 @@ AppRun.$inject = [
 	'RPCService',
 	'SqlLiteService',
 	'Web3Service',
-	'CommonService'
+	'CommonService',
+	'SignService'
 ];
 
 module.exports = AppRun;
