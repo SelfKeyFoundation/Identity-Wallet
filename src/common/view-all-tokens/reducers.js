@@ -6,7 +6,7 @@ const initialState = {
 
 const toggleViewAllReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.TOGGLE_VIEW_ALL:
+		case types.VIEW_ALL_TOKENS_TOOGLE:
 			const payload = !action.payload;
 			console.log('toggleViewAllReducer', action, payload);
 			return {
@@ -18,6 +18,4 @@ const toggleViewAllReducer = (state = initialState, action) => {
 	}
 };
 
-const reducer = toggleViewAllReducer;
-
-export default reducer;
+export default toggleViewAllReducer;

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getViewAll } from 'common/view-all/selectors';
+import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getPrices } from 'common/prices/selectors';
 import { getWallet } from 'common/wallet/selectors';
 

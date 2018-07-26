@@ -1,3 +1,3 @@
-const UPDATE_FIAT_CURRENCY = 'app/fiatCurrency/UPDATE';
+const FIAT_CURRENCY_UPDATE = 'app/fiatCurrency/UPDATE';
 
-export { UPDATE_FIAT_CURRENCY };
+export { FIAT_CURRENCY_UPDATE };

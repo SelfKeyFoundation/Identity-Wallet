@@ -16,8 +16,8 @@ const getWalletWithBalance = wallet => {
 		});
 };
 
-const updateWallet = createAliasedAction(types.UPDATE_WALLET, wallet => ({
-	type: types.UPDATE_WALLET,
+const updateWallet = createAliasedAction(types.WALLET_UPDATE, wallet => ({
+	type: types.WALLET_UPDATE,
 	payload: getWalletWithBalance(wallet)
 }));
 

@@ -1,3 +1,3 @@
-const UPDATE_WALLET = 'app/wallet/UPDATE';
+const WALLET_UPDATE = 'app/wallet/UPDATE';
 
-export { UPDATE_WALLET };
+export { WALLET_UPDATE };

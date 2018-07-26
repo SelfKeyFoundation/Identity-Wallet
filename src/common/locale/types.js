@@ -1,3 +1,3 @@
-const UPDATE_LOCALE = 'app/locale/UPDATE';
+const LOCALE_UPDATE = 'app/locale/UPDATE';
 
-export { UPDATE_LOCALE };
+export { LOCALE_UPDATE };

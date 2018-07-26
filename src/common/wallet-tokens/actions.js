@@ -32,9 +32,9 @@ const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 };
 
 const updateWalletTokens = createAliasedAction(
-	types.UPDATE_WALLET_TOKENS,
+	types.WALLET_TOKENS_UPDATE,
 	(walletTokens, walletPublicKey) => ({
-		type: types.UPDATE_WALLET_TOKENS,
+		type: types.WALLET_TOKENS_UPDATE,
 		payload: getWalletTokensWithBalance(walletTokens, walletPublicKey)
 	})
 );

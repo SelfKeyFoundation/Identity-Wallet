@@ -6,7 +6,7 @@ import fiatCurrency from './fiatCurrency';
 import wallet from './wallet';
 import prices from './prices';
 import walletTokens from './wallet-tokens';
-import viewAll from './view-all';
+import viewAll from './view-all-tokens';
 
 import {
 	forwardToMain,

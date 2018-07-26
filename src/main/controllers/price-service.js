@@ -4,6 +4,8 @@ const EventEmitter = require('events');
 const fetch = require('node-fetch');
 
 const TokenPrice = require('../models/token-price');
+const Token = require('../models/token');
+const WalletToken = require('../models/wallet-token');
 const io = require('socket.io-client');
 
 const emitter = new EventEmitter();
@@ -69,6 +71,18 @@ const startStream = async () => {
 
 	socket.on('trades', async tradeMsg => {
 		const tokenData = tradeMsg.message.msg;
+
+		if (tokenData.short !== 'ETH') {
+			const token = await Token.findBySymbol(tokenData.short);
+			if (!token.length) {
+				return;
+			}
+			const walletToken = await WalletToken.findByTokenId(token[0].id);
+			if (!walletToken.length) {
+				return;
+			}
+		}
+
 		if (existing[tokenData.short] && existing[tokenData.short].price !== tokenData.price) {
 			const btcPriceUsd = await TokenPrice.findBySymbol('BTC');
 			const ethPriceUsd = await TokenPrice.findBySymbol('ETC');
@@ -81,13 +95,13 @@ const startStream = async () => {
 				symbol: tokenData.short,
 				source: 'https://coincap.io',
 				priceUSD: +tokenData.price,
-				priceBTC: +tokenData.price / btcPriceUsd,
-				priceETH: +tokenData.price / ethPriceUsd,
+				priceBTC: +tokenData.price / btcPriceUsd.price,
+				priceETH: +tokenData.price / ethPriceUsd.price,
 				updatedAt: Date.now()
 			};
 			await TokenPrice.bulkEdit([tokenPrice]);
 
-			emitter.emit('pricesUpdated', await TokenPrice.findAll());
+			emitter.emit('pricesUpdated', [await TokenPrice.findBySymbol(tokenPrice.symbol)]);
 		}
 	});
 };

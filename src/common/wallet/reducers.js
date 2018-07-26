@@ -6,7 +6,7 @@ const initialState = {
 
 const walletReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_WALLET:
+		case types.WALLET_UPDATE:
 			return {
 				...state,
 				...action.payload
@@ -16,6 +16,4 @@ const walletReducer = (state = initialState, action) => {
 	}
 };
 
-const reducer = walletReducer;
-
-export default reducer;
+export default walletReducer;

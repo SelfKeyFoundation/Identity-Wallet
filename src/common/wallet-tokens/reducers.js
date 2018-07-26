@@ -7,7 +7,7 @@ const initialState = {
 
 const walletTokensReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_WALLET_TOKENS:
+		case types.WALLET_TOKENS_UPDATE:
 			return {
 				...state,
 				tokens: action.payload
@@ -17,6 +17,4 @@ const walletTokensReducer = (state = initialState, action) => {
 	}
 };
 
-const reducer = walletTokensReducer;
-
-export default reducer;
+export default walletTokensReducer;

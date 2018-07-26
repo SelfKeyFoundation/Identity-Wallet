@@ -1,3 +1,3 @@
-const UPDATE_WALLET_TOKENS = 'app/wallet-tokens/UPDATE';
+const WALLET_TOKENS_UPDATE = 'app/wallet-tokens/UPDATE';
 
-export { UPDATE_WALLET_TOKENS };
+export { WALLET_TOKENS_UPDATE };

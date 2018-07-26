@@ -6,7 +6,7 @@ const initialState = {
 
 const fiatCurrencyReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_FIAT_CURRENCY:
+		case types.FIAT_CURRENCY_UPDATE:
 			return {
 				...state,
 				fiatCurrency: action.payload
@@ -16,6 +16,4 @@ const fiatCurrencyReducer = (state = initialState, action) => {
 	}
 };
 
-const reducer = fiatCurrencyReducer;
-
-export default reducer;
+export default fiatCurrencyReducer;

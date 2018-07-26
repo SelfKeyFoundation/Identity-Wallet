@@ -93,7 +93,7 @@ class Wallet extends BaseModel {
 	}
 
 	static findById(id) {
-		return this.query().findOne({ id });
+		return this.query().findById(id);
 	}
 
 	static findAllWithKeyStoreFile() {

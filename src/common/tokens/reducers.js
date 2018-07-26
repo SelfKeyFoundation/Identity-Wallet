@@ -6,7 +6,7 @@ const initialState = {
 
 const tokensReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_TOKENS:
+		case types.TOKENS_UPDATE:
 			return {
 				...state,
 				tokens: action.payload
@@ -16,6 +16,4 @@ const tokensReducer = (state = initialState, action) => {
 	}
 };
 
-const reducer = tokensReducer;
-
-export default reducer;
+export default tokensReducer;

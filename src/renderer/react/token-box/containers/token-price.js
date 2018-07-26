@@ -1,6 +1,4 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as localeActions from 'common/locale/actions';
 import { getLocale } from 'common/locale/selectors';
 import { TokenPrice } from 'selfkey-ui';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -15,11 +13,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const mapDispatchToProps = dispatch => {
-	return bindActionCreators(localeActions, dispatch);
-};
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(TokenPrice);
+export default connect(mapStateToProps)(TokenPrice);

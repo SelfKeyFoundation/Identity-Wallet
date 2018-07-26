@@ -1,3 +1,3 @@
-const UPDATE_PRICES = 'app/prices/UPDATE';
+const PRICES_UPDATE = 'app/prices/UPDATE';
 
-export { UPDATE_PRICES };
+export { PRICES_UPDATE };

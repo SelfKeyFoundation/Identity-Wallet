@@ -98,6 +98,10 @@ class WalletToken extends BaseModel {
 	static findByWalletId(walletId) {
 		return this.find({ walletId, recordState: 1 });
 	}
+
+	static findByTokenId(tokenId) {
+		return this.find({ tokenId, recordState: 1 });
+	}
 }
 
 module.exports = WalletToken;

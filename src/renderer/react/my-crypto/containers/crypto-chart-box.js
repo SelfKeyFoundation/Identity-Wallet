@@ -1,17 +1,13 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as localeActions from 'common/locale/actions';
-import * as fiatCurrencyActions from 'common/fiatCurrency/actions';
-import * as walletTokensActions from 'common/wallet-tokens/actions';
-import * as viewAllActions from 'common/view-all/actions';
+import { viewAllOperations } from 'common/view-all-tokens';
 import { CryptoChartBox } from 'selfkey-ui';
 import { getLocale } from 'common/locale/selectors';
-import { getViewAll } from 'common/view-all/selectors';
+import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getVisibleTokens, getTopTokenListSize } from 'common/wallet-tokens/selectors';
 
 const mapStateToProps = state => {
-	console.log('STATE', state);
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
@@ -22,10 +18,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-	return bindActionCreators(
-		{ ...localeActions, ...fiatCurrencyActions, ...walletTokensActions, ...viewAllActions },
-		dispatch
-	);
+	return bindActionCreators(viewAllOperations, dispatch);
 };
 
 export default connect(
