@@ -18,7 +18,8 @@ function SendTokenDialogController(
 	Web3Service,
 	CommonService,
 	SqlLiteService,
-	TxHistoryService
+	TxHistoryService,
+	HardwareWalletService
 ) {
 	'ngInject';
 
@@ -37,13 +38,15 @@ function SendTokenDialogController(
 	let checkEstimatedGasInterval = null;
 	let estimatedGasNeedsCheck = false;
 
-	let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
+	let wallet = $rootScope.wallet;
+	let { profile, isHardwareWallet } = wallet;
+
 	$scope.signedHex = null;
 	let currentTxHistoryData = {};
 
 	$scope.getTokenTitleBySymbol = symbol => {
 		symbol = symbol.toUpperCase();
-		let token = $rootScope.wallet.tokens[symbol];
+		let token = wallet.tokens[symbol];
 		let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol);
 
 		const tokenNameExceptions = {
@@ -86,10 +89,10 @@ function SendTokenDialogController(
 		let message = ledgerStatusCodesMap[err.statusCode] || err.message || '';
 		switch (message.toLowerCase()) {
 			case 'timeout':
-				$rootScope.openLedgerTimedOutWindow();
+				$rootScope.openHardwareWalletTimedOutWindow(profile);
 				break;
 			case 'denied':
-				$rootScope.openRejectLedgerTxWarningDialog();
+				$rootScope.openRejectHardwareWalletTxWarningDialog(profile);
 				break;
 			case 'locked':
 				$rootScope.openUnlockLedgerInfoWindow();
@@ -100,7 +103,49 @@ function SendTokenDialogController(
 		}
 	};
 
-	$scope.startSend = event => {
+	let processTrezorErr = (event, err) => {
+		let message = err.message || err.code || '';
+		switch (message) {
+			case 'Timeout':
+				$rootScope.openHardwareWalletTimedOutWindow(profile);
+				break;
+			case 'Failure_ActionCancelled':
+				$rootScope.openRejectHardwareWalletTxWarningDialog(profile);
+				break;
+			case 'Failure_PinCancelled':
+				break;
+			case 'Failure_PinInvalid':
+				$scope.startSend();
+				$rootScope.incorrectTrezorPinEntered = true;
+				break;
+			default:
+				let isSendingTxFealure = true;
+				$rootScope.openConnectingToTrezorDialog(event, isSendingTxFealure);
+		}
+	};
+
+	let processHardwareWalletErr = (event, err) => {
+		if (profile === 'ledger') {
+			return processLedgerErr(event, err);
+		}
+		if (profile === 'trezor') {
+			processTrezorErr(event, err);
+		}
+	};
+
+	$scope.startSend = async event => {
+		if (profile === 'trezor') {
+			try {
+				await HardwareWalletService.testTrezorConnection();
+
+				//in order to close enter-pin screen
+				$mdDialog.cancel();
+			} catch (err) {
+				processTrezorErr(event, err);
+				return;
+			}
+		}
+
 		$scope.signedHex = null;
 		$scope.signedWithNonce = null;
 		let isEth = $scope.symbol && $scope.symbol.toLowerCase() === 'eth';
@@ -136,8 +181,8 @@ function SendTokenDialogController(
 					return;
 				}
 
-				if (isLedgerWallet) {
-					return processLedgerErr(event, error);
+				if (isHardwareWallet) {
+					return processHardwareWalletErr(event, error);
 				}
 
 				if (errorMsg) {
@@ -587,7 +632,8 @@ SendTokenDialogController.$inject = [
 	'Web3Service',
 	'CommonService',
 	'SqlLiteService',
-	'TxHistoryService'
+	'TxHistoryService',
+	'HardwareWalletService'
 ];
 
 module.exports = SendTokenDialogController;

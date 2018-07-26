@@ -1,0 +1,103 @@
+md-dialog {
+	&.trezor-pin-container {
+		min-width: 100%;
+		min-height: 100%;
+		background-image: linear-gradient(131deg, #2b3540, #1e262e);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		* {
+			font-family: ProximaNovaRegular;
+		}
+		.main-container {
+			.header-container {
+				padding-bottom: 30px;
+				> * {
+					text-align: center;
+					color: #ffffff;
+				}
+				.title {
+					font-weight: 600;
+					opacity: 0.8;
+					font-size: 18px;
+					line-height: 2.7;
+				}
+			}
+			.error {
+				color: #d0021b;
+				text-align: center;
+				padding-top: 20px;
+				font-weight: bold;
+				font-size: 19px;
+			}
+			.body-container {
+				.action-btn {
+					width: 100%;
+					margin-top: 15px;
+				}
+				.md-input-container {
+					padding-bottom: 20px;
+					position: relative;
+					.pin-input {
+						font-size: 25px;
+						&:hover {
+							opacity: 1 !important;
+							border-bottom: solid 1px #fff !important;
+						}
+						padding: 0px;
+						background: transparent;
+						padding: 0px;
+						border-top: none !important;
+						border-left: none !important;
+						border-right: none !important;
+						border-bottom: solid 1px #fff !important;
+						border-radius: 0px;
+					}
+					.clear-btn {
+						position: absolute;
+						width: 27px;
+						right: 0px;
+						padding: 0px;
+						top: 5px;
+						margin: 0px;
+					}
+				}
+				width: 215px;
+				margin: 0 auto;
+				.pin-buttons {
+					height: 215px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					flex-wrap: wrap;
+					.pin-button {
+						min-width: 60px !important;
+						position: relative;
+						width: 60px;
+						height: 60px;
+						border: 1px solid #fff;
+						opacity: 0.4;
+						&:hover {
+							opacity: 0.8;
+						}
+						&:focus {
+							opacity: 1;
+						}
+						&:after {
+							content: '';
+							position: absolute;
+							border-radius: 100%;
+							background: #fff;
+							width: 8px;
+							height: 8px;
+							top: 50%;
+							left: 50%;
+							transform: translate(-50%, -50%);
+						}
+					}
+				}
+			}
+		}
+	}
+}

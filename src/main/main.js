@@ -111,12 +111,16 @@ function onReady(app) {
 		const LedgerService = require('./controllers/ledger-service')();
 		electron.app.ledgerService = new LedgerService();
 
+		const TrezorService = require('./controllers/trezor-service')();
+		electron.app.trezorService = new TrezorService();
+
 		const Web3Service = require('./controllers/web3-service').default(app);
 		electron.app.web3Service = new Web3Service();
 
 		const RPCHandler = require('./controllers/rpc-handler')(app);
 		electron.app.rpcHandler = new RPCHandler();
 		electron.app.rpcHandler.startTokenPricesBroadcaster(PriceService);
+		electron.app.rpcHandler.startTrezorBroadcaster();
 
 		const TxHistory = require('./controllers/tx-history-service').default(app);
 		electron.app.txHistory = new TxHistory();

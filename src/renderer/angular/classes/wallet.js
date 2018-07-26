@@ -74,6 +74,7 @@ class Wallet {
 		this.startBalanceUpdater();
 
 		this.initialBalancePromise = this.loadBalance();
+		this.isHardwareWallet = profile === 'ledger' || profile === 'trezor';
 
 		this.loadTokens();
 	}
@@ -325,14 +326,12 @@ class Wallet {
 					rawTx.data = EthUtils.sanitizeHex(contractDataHex);
 				}
 
-				let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
-				if (isLedgerWallet) {
-					$rootScope.openConfirmLedgerTxInfoWindow();
+				if (this.isHardwareWallet) {
+					$rootScope.openConfirmHardwareWalletTxInfoWindow(this.profile);
 				}
 
 				SignService.signTransaction({
-					profile: this.profile,
-					rawTx: rawTx,
+					rawTx,
 					privateKey: this.privateKey,
 					walletAddress: '0x' + this.getPublicKeyHex()
 				})

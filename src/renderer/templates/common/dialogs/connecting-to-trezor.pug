@@ -1,4 +1,4 @@
-md-dialog.connecting-to-hardware-wallet-container(aira-lable="Connecting to Ledger")
+md-dialog.connecting-to-hardware-wallet-container(aira-lable="Connecting to Trezor")
     .main-container
         .header-conainer
             sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancelConectToLedger($event)")
@@ -8,22 +8,14 @@ md-dialog.connecting-to-hardware-wallet-container(aira-lable="Connecting to Ledg
                     span.dot
                     span.dot
                     span.dot
-                span Connecting To Ledger
+                span Connecting To TREZOR
             .header-title(ng-if="!isConnecting")
-                span Error: Can't Connect To Ledger
+                span TREZOR: Unable to Connect
             .items(ng-if="isConnecting") 
-                .item.title To ensure a successful connection, please check if:
-                .item 1) "Browser Support" is disabled.
-                .item 2) "Contract Data" is set to YES.
-                .item 3) Your Ledger is properly plugged in.
-                .item 4) You have entered the PIN and logged in.
-                .item 5) The Ethereum application is open.
+                .item.title To ensure a successful connection, please make sure your device is plugged in properly via USB.
             .items(ng-if="!isConnecting")
-                .item 1) Is "Browser Support" disabled in settings?
-                .item 2) Is "Contract Data" set to Yes in settings?
-                .item 3) Is it properly plugged in?
-                .item 4) Did you enter the PIN to unlock?
-                .item 5) Is the Ethereum application open?
+                .item To ensure a successful connection, please make sure your device is plugged in properly via USB.
+                    | !{' '} if you need more assistance, please contact help@selfkey.org
             .buttons-container.small-padding-top(ng-if="isConnecting")
                 md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
                     span.primary close

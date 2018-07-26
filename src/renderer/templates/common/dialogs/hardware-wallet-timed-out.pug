@@ -1,0 +1,13 @@
+md-dialog.hardware-wallet-timed-out-container(aira-lable="")
+    .main-container
+        .body-container
+            .header-title(ng-if="profile === 'ledger'") Ledger Timed Out
+            .header-title(ng-if="profile === 'trezor'") TREZOR Timed Out
+            .items 
+                .item(ng-if="profile === 'ledger'") You didn't confirm this transaction on your Ledger. 
+                    | !{' '} Please try again and confirm the transaction on your device..
+                .item(ng-if="profile === 'trezor'") You didn't confirm this transaction on your TREZOR
+                    | !{' '} so it was not sent to the network. Please try again and confirm the transaction on your device.
+            .buttons-container
+                md-button.gray.md-ink-ripple(ng-click="cancel($event)")
+                    span.primary BACK

@@ -103,8 +103,8 @@ angular.module('kyc-wallet').service('EtherUnitsService', EtherUnitsService);
 const SelfkeyService = require('./angular/services/selfkey.service');
 angular.module('kyc-wallet').service('SelfkeyService', SelfkeyService);
 
-const LedgerService = require('./angular/services/ledger.service');
-angular.module('kyc-wallet').service('LedgerService', LedgerService);
+const HardwareWalletService = require('./angular/services/hardware-wallet.service');
+angular.module('kyc-wallet').service('HardwareWalletService', HardwareWalletService);
 
 const SignService = require('./angular/services/sign.service');
 angular.module('kyc-wallet').service('SignService', SignService);
@@ -220,15 +220,18 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = require('./angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
-const ConnectingToLedgerController = require('./angular/controllers/commons/dialogs/connecting-to-ledger-controller.js');
+const ConnectingToHardwareWalletController = require('./angular/controllers/commons/dialogs/connecting-to-hardware-wallet-controller.js');
 angular
 	.module('kyc-wallet')
-	.controller('ConnectingToLedgerController', ConnectingToLedgerController);
+	.controller('ConnectingToHardwareWalletController', ConnectingToHardwareWalletController);
 
-const ChooseLedgerAddressController = require('./angular/controllers/commons/dialogs/choose-ledger-address-controller.js');
+const TrezorPinController = require('./angular/controllers/commons/dialogs/trezor-pin-controller.js');
+angular.module('kyc-wallet').controller('TrezorPinController', TrezorPinController);
+
+const ChooseHardwareWalletAddressController = require('./angular/controllers/commons/dialogs/choose-hardware-wallet-address-controller.js');
 angular
 	.module('kyc-wallet')
-	.controller('ChooseLedgerAddressController', ChooseLedgerAddressController);
+	.controller('ChooseHardwareWalletAddressController', ChooseHardwareWalletAddressController);
 
 const AddEditDocumentDialogController = require('./angular/controllers/commons/dialogs/id-attributes/add-edit-document-controller.js');
 angular
@@ -282,9 +285,6 @@ const GuestImportPrivateKeyController = require('./angular/controllers/guest/imp
 angular
 	.module('kyc-wallet')
 	.controller('GuestImportPrivateKeyController', GuestImportPrivateKeyController);
-
-const GuestImportLedgerController = require('./angular/controllers/guest/import/ledger.js');
-angular.module('kyc-wallet').controller('GuestImportLedgerController', GuestImportLedgerController);
 
 /**
  * create wallet

@@ -3,21 +3,23 @@ const { Logger } = require('common/logger');
 const log = new Logger('choose-ledger-addr-ctl');
 const Wallet = require('../../../classes/wallet');
 
-function ChooseLedgerAddressController(
+function ChooseHardwareWalletAddressController(
 	$rootScope,
 	$scope,
 	$q,
 	$state,
 	$mdDialog,
 	CommonService,
-	LedgerService,
+	HardwareWalletService,
 	baseAccounts,
-	ACCOUNTS_QUANTITY_PER_PAGE
+	ACCOUNTS_QUANTITY_PER_PAGE,
+	profile
 ) {
 	'ngInject';
 	$scope.currentAccounts = baseAccounts;
 	$scope.selectedAccount = null;
 	$scope.pagerStart = 0;
+	$scope.title = profile === 'ledger' ? 'Choose A Ledger Address' : 'Choose A TREZOR Address';
 
 	$scope.cancel = () => {
 		$mdDialog.cancel();
@@ -40,7 +42,6 @@ function ChooseLedgerAddressController(
 	};
 
 	resetLoadingStatuses();
-
 	$scope.getAccountsWithBalances = isNext => {
 		if ($scope.loadingBalancesIsInProgress.any) {
 			return;
@@ -59,9 +60,10 @@ function ChooseLedgerAddressController(
 		if (newStart < 0) {
 			newStart = 0;
 		}
-		LedgerService.getAccountsWithBalances({
+		HardwareWalletService.getAccountsWithBalances({
 			start: newStart,
-			quantity: ACCOUNTS_QUANTITY_PER_PAGE
+			quantity: ACCOUNTS_QUANTITY_PER_PAGE,
+			profile
 		})
 			.then(accounts => {
 				accounts = accounts || [];
@@ -96,7 +98,11 @@ function ChooseLedgerAddressController(
 			address = address.substring(2, address.length);
 		}
 
-		let importPromise = LedgerService.createWalletByAddress(address);
+		if (profile === 'trezor') {
+			$rootScope.selectedTrezorAccountIndex = selectedAccount.index;
+		}
+
+		let importPromise = HardwareWalletService.createWalletByAddress(address, profile);
 		importPromise
 			.then(data => {
 				if (data.id) {
@@ -132,15 +138,16 @@ function ChooseLedgerAddressController(
 	};
 }
 
-ChooseLedgerAddressController.$inject = [
+ChooseHardwareWalletAddressController.$inject = [
 	'$rootScope',
 	'$scope',
 	'$q',
 	'$state',
 	'$mdDialog',
 	'CommonService',
-	'LedgerService',
+	'HardwareWalletService',
 	'baseAccounts',
-	'ACCOUNTS_QUANTITY_PER_PAGE'
+	'ACCOUNTS_QUANTITY_PER_PAGE',
+	'profile'
 ];
-module.exports = ChooseLedgerAddressController;
+module.exports = ChooseHardwareWalletAddressController;

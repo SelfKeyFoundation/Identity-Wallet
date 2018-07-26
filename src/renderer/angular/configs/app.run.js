@@ -17,9 +17,7 @@ function AppRun(
 	RPCService,
 	SqlLiteService,
 	Web3Service,
-	CommonService,
-	LedgerService,
-	SignService
+	CommonService
 ) {
 	'ngInject';
 
@@ -268,65 +266,123 @@ function AppRun(
 
 	$rootScope.openConnectingToLedgerDialog = (event, isSendingTxFealure) => {
 		return $mdDialog.show({
-			controller: 'ConnectingToLedgerController',
+			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
-				isSendingTxFealure
+				isSendingTxFealure,
+				profile: 'ledger'
 			}
 		});
 	};
 
-	$rootScope.openChooseLedgerAddressDialog = (accountsArr, ACCOUNTS_QUANTITY_PER_PAGE) => {
+	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFealure) => {
 		return $mdDialog.show({
-			controller: 'ChooseLedgerAddressController',
-			templateUrl: 'common/dialogs/choose-ledger-address.html',
+			controller: 'ConnectingToHardwareWalletController',
+			templateUrl: 'common/dialogs/connecting-to-trezor.html',
+			parent: angular.element(document.body),
+			targetEvent: event,
+			clickOutsideToClose: false,
+			fullscreen: true,
+			locals: {
+				isSendingTxFealure,
+				profile: 'trezor'
+			}
+		});
+	};
+
+	$rootScope.openEnterTrezorPinDialog = event => {
+		let result = document.getElementsByClassName('trezor-pin-container')[0];
+		if (result) {
+			return;
+		}
+
+		$rootScope.incorrectTrezorPinEntered = false;
+
+		return $mdDialog.show({
+			controller: 'TrezorPinController',
+			templateUrl: 'common/dialogs/trezor-pin.html',
+			parent: angular.element(document.body),
+			targetEvent: event,
+			clickOutsideToClose: false,
+			escapeToClose: false,
+			fullscreen: true
+		});
+	};
+
+	$rootScope.openChooseHardwareWalletAddressDialog = (
+		accountsArr,
+		ACCOUNTS_QUANTITY_PER_PAGE,
+		profile
+	) => {
+		// eslint-disable-line
+		return $mdDialog.show({
+			controller: 'ChooseHardwareWalletAddressController',
+			templateUrl: 'common/dialogs/choose-hardware-wallet-address.html',
 			parent: angular.element(document.body),
 			targetEvent: null,
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
 				baseAccounts: accountsArr,
-				ACCOUNTS_QUANTITY_PER_PAGE: ACCOUNTS_QUANTITY_PER_PAGE
+				ACCOUNTS_QUANTITY_PER_PAGE,
+				profile
 			}
 		});
 	};
 
-	$rootScope.openRejectLedgerTxWarningDialog = () => {
+	$rootScope.openRejectHardwareWalletTxWarningDialog = profile => {
 		let result = document.getElementsByClassName('send-token')[0];
 
 		return $mdDialog.show({
 			controller: [
 				'$scope',
-				function($scope) {
+				'profile',
+				function($scope, profile) {
+					$scope.profile = profile;
 					$scope.cancel = () => {
 						$mdDialog.cancel();
 					};
 				}
 			],
-			templateUrl: 'common/dialogs/reject-ledger-tx-warning.html',
+			templateUrl: 'common/dialogs/reject-hardware-wallet-tx-warning.html',
 			parent: result ? angular.element(result) : angular.element(document.body),
 			targetEvent: null,
 			hasBackdrop: false,
 			clickOutsideToClose: false,
-			fullscreen: false
+			fullscreen: false,
+			locals: {
+				profile
+			}
 		});
 	};
 
-	$rootScope.openConfirmLedgerTxInfoWindow = () => {
+	$rootScope.openConfirmHardwareWalletTxInfoWindow = profile => {
 		let result = document.getElementsByClassName('send-token')[0];
 		return $mdDialog.show({
-			controller: function() {},
-			templateUrl: 'common/dialogs/confirm-ledger-tx-info.html',
+			controller: [
+				'$scope',
+				'profile',
+				function($scope, profile) {
+					$scope.profile = profile;
+					$scope.cancel = () => {
+						$mdDialog.cancel();
+					};
+				}
+			],
+			templateUrl: 'common/dialogs/confirm-hardware-wallet-tx-info.html',
 			parent: result ? angular.element(result) : angular.element(document.body),
 			targetEvent: null,
 			hasBackdrop: false,
 			escapeToClose: false,
 			clickOutsideToClose: false,
-			fullscreen: true
+			fullscreen: true,
+			locals: {
+				profile
+			}
 		});
 	};
 
@@ -355,22 +411,39 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openLedgerTimedOutWindow = () => {
+	$rootScope.openHardwareWalletTimedOutWindow = profile => {
 		let result = document.getElementsByClassName('send-token')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',
 				'$mdDialog',
-				function($scope, $mdDialog) {
+				'profile',
+				function($scope, $mdDialog, profile) {
+					$scope.profile = profile;
 					$scope.cancel = event => {
 						$mdDialog.cancel();
 					};
 				}
 			],
-			templateUrl: 'common/dialogs/ledger-timed-out.html',
+			templateUrl: 'common/dialogs/hardware-wallet-timed-out.html',
 			parent: result ? angular.element(result) : angular.element(document.body),
 			targetEvent: null,
 			hasBackdrop: false,
+			escapeToClose: false,
+			clickOutsideToClose: false,
+			fullscreen: true,
+			locals: {
+				profile
+			}
+		});
+	};
+
+	$rootScope.openChooseTrezorAddressPreWindow = () => {
+		return $mdDialog.show({
+			controller: function() {},
+			templateUrl: 'common/dialogs/choose-trezor-address-pre-dialog.html',
+			parent: angular.element(document.body),
+			targetEvent: null,
 			escapeToClose: false,
 			clickOutsideToClose: false,
 			fullscreen: true
@@ -408,9 +481,7 @@ AppRun.$inject = [
 	'RPCService',
 	'SqlLiteService',
 	'Web3Service',
-	'CommonService',
-	'LedgerService',
-	'SignService'
+	'CommonService'
 ];
 
 module.exports = AppRun;

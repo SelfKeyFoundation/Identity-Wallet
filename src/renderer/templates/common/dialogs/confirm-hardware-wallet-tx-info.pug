@@ -1,0 +1,8 @@
+md-dialog.confirm-hardware-wallet-tx-info-container(aira-lable="")
+    .main-container
+        .body-container
+            .header-title(ng-if="profile === 'ledger'") Confirm Transaction on Ledger
+            .header-title(ng-if="profile === 'trezor'") Confirm Transaction on TREZOR
+            .items 
+                .item(ng-if="profile === 'ledger'") You have 30 seconds to confirm this transaction on the Ledger or it will time out and automatically cancel.
+                .item(ng-if="profile === 'trezor'") You have 30 seconds to confirm this transaction on the TREZOR or it will time out and automatically cancel.

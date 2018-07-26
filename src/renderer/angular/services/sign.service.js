@@ -5,7 +5,7 @@ const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');
 const Tx = require('ethereumjs-tx');
 
-function SignService($rootScope, LedgerService) {
+function SignService($rootScope, HardwareWalletService) {
 	'ngInject';
 
 	log.info('SignService Initialized');
@@ -22,16 +22,18 @@ function SignService($rootScope, LedgerService) {
 			});
 		};
 
-		this.signTransactionByLedger = function(dataToSign, address) {
-			return LedgerService.signTransaction(dataToSign, address).then(res => {
+		this.signWithHardwareWallet = function(dataToSign, address, profile) {
+			return HardwareWalletService.signTransaction(dataToSign, address, profile).then(res => {
 				return res.raw;
 			});
 		};
 
 		this.signTransaction = function(args) {
-			let { rawTx, profile, privateKey, walletAddress } = args;
-			if (profile === 'ledger') {
-				return this.signTransactionByLedger(rawTx, walletAddress);
+			let { profile, isHardwareWallet } = $rootScope.wallet.profile;
+			let { rawTx, privateKey, walletAddress } = args;
+
+			if (isHardwareWallet) {
+				return this.signWithHardwareWallet(rawTx, walletAddress, profile);
 			}
 
 			if (profile === 'local') {
@@ -43,6 +45,6 @@ function SignService($rootScope, LedgerService) {
 	return new SignService();
 }
 
-SignService.$inject = ['$rootScope', 'LedgerService'];
+SignService.$inject = ['$rootScope', 'HardwareWalletService'];
 
 module.exports = SignService;
