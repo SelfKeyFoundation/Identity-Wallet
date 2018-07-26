@@ -44,7 +44,7 @@ describe('WalletToken model', () => {
 		expect(createdToken.symbol).toBe(testToken.symbol);
 		expect(walletToken.id).toBeGreaterThan(0);
 		expect(walletToken.createdAt).toBeGreaterThan(0);
-		expect(walletToken.balance).toBe('5');
+		expect(walletToken.balance).toBe(5);
 	});
 
 	it('find', async () => {
