@@ -2,6 +2,8 @@
 'use strict';
 import configureStore from 'common/configure-store';
 import { localeUpdate } from 'common/locale/actions';
+import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
+
 import { Logger } from 'common/logger';
 
 const path = require('path');
@@ -99,6 +101,7 @@ function onReady(app) {
 		const store = configureStore(global.state, 'main');
 		try {
 			store.dispatch(localeUpdate('en'));
+			store.dispatch(fiatCurrencyUpdate('USD'));
 		} catch (e) {
 			log.error(e);
 		}
@@ -117,7 +120,7 @@ function onReady(app) {
 		const Web3Service = require('./controllers/web3-service').default(app);
 		electron.app.web3Service = new Web3Service();
 
-		const RPCHandler = require('./controllers/rpc-handler')(app);
+		const RPCHandler = require('./controllers/rpc-handler')(app, store);
 		electron.app.rpcHandler = new RPCHandler();
 		electron.app.rpcHandler.startTokenPricesBroadcaster(PriceService);
 		electron.app.rpcHandler.startTrezorBroadcaster();

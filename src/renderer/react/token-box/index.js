@@ -18,38 +18,19 @@ const renderIcon = shortName => {
 };
 
 export const TokenBoxWrapper = props => {
-	const {
-		cryptoCurrencyShort,
-		cryptoCurrencyName,
-		publicKey,
-		cryptoCurrency,
-		cryptoValue,
-		toCurrency,
-		toValue,
-		customTokenText,
-		copyAction,
-		transferAction
-	} = props;
-
+	const { cryptoCurrencyShort, cryptoCurrencyName, customTokenText, transferAction } = props;
 	return (
 		<Provider store={store}>
 			<TokenBox
 				cryptoCurrencyShort={cryptoCurrencyShort}
 				cryptoCurrencyName={cryptoCurrencyName}
-				publicKey={publicKey}
 				CryptoCurrencyIconComponent={renderIcon(cryptoCurrencyShort)}
-				copyAction={copyAction}
 				transferAction={transferAction}
 			>
 				{!cryptoCurrencyShort ? (
 					<CustomTokenText>{customTokenText}</CustomTokenText>
 				) : (
-					<TokenPrice
-						cryptoCurrency={cryptoCurrency}
-						cryptoValue={cryptoValue}
-						toCurrency={toCurrency}
-						toValue={toValue}
-					/>
+					<TokenPrice cryptoCurrency={cryptoCurrencyShort} />
 				)}
 			</TokenBox>
 		</Provider>
@@ -59,14 +40,8 @@ export const TokenBoxWrapper = props => {
 TokenBoxWrapper.propTypes = {
 	cryptoCurrencyShort: PropTypes.string,
 	cryptoCurrencyName: PropTypes.string,
-	publicKey: PropTypes.string,
-	cryptoCurrency: PropTypes.string,
-	cryptoValue: PropTypes.string,
-	toCurrency: PropTypes.string,
-	toValue: PropTypes.string,
 	customTokenText: PropTypes.string,
-	copyAction: PropTypes.string,
-	transferAction: PropTypes.string
+	transferAction: PropTypes.function
 };
 
 export default TokenBoxWrapper;
