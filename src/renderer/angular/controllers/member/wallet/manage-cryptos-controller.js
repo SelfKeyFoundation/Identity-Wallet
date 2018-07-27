@@ -115,6 +115,10 @@ function ManageCryptosController(
 	};
 
 	$scope.toggleCustomToken = (event, token, index) => {
+		if (!token) {
+			token = event;
+			event = undefined;
+		}
 		const shouldHide = !token.isHidden();
 		if (shouldHide) {
 			$rootScope

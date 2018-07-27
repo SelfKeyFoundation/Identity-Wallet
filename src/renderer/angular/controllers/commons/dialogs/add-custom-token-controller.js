@@ -174,8 +174,13 @@ function AddCustomTokenDialogController(
 					let newToken = wallet.addNewToken(data.token);
 
 					let loadTokensPromise = SqlLiteService.loadTokens();
+					let loadWalletTokensPromise = SqlLiteService.loadWalletTokens(wallet.id);
 
-					$q.all([newToken.initialBalancePromise, loadTokensPromise]).then(() => {
+					$q.all([
+						loadWalletTokensPromise,
+						newToken.initialBalancePromise,
+						loadTokensPromise
+					]).then(() => {
 						$scope.inProgress = false;
 						$scope.cancel();
 						$rootScope.openNewERC20TokenInfoDialog(

@@ -202,11 +202,8 @@ const transferPriceWrapper = react2angular(TransferPriceWrapper, [
 ]);
 angular.module('kyc-wallet').component('transferPrice', transferPriceWrapper);
 
-const cryptoPriceTableWrapper = react2angular(CryptoPriceTableWrapper, [
-	'tokens',
-	'manageCryptoAction'
-]);
-angular.module('kyc-wallet').component('cryptoChartBox', cryptoPriceTableWrapper);
+const cryptoPriceTableWrapper = react2angular(CryptoPriceTableWrapper, []);
+angular.module('kyc-wallet').component('cryptoPriceTable', cryptoPriceTableWrapper);
 
 /**
  * controllers
