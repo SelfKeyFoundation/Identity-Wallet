@@ -9,7 +9,6 @@ function HardwareWalletService($rootScope, RPCService, CommonService, Web3Servic
 	log.info('HardwareWalletService Initialized');
 	RPCService.on('TREZOR_PIN_REQUEST', () => {
 		$rootScope.openEnterTrezorPinDialog();
-		console.log('mevida1111111111111111');
 	});
 
 	class HardwareWalletService {

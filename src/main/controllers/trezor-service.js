@@ -13,6 +13,7 @@ const list = new trezor.DeviceList();
 let currentSession = null;
 let currentDevice = null;
 const hexPrefix = '0x';
+const CUSTOM_TIME_OUT = 30000;
 
 const hardeningConstant = 0x80000000;
 const defaultAddress = [
@@ -22,7 +23,7 @@ const defaultAddress = [
 	0
 ];
 
-const getAddressByIdex = index => {
+const getAddressByIndex = index => {
 	return defaultAddress.concat([+index]);
 };
 
@@ -39,7 +40,7 @@ module.exports = function() {
 	async function _getAccounts(args) {
 		let start = args.start || 0;
 		let quantity = args.quantity || 6;
-		let session = await getCurrentSession();
+		let session = await _getCurrentSession();
 
 		let addressN = {
 			address_n: defaultAddress
@@ -73,7 +74,7 @@ module.exports = function() {
 		_emitter.emit('TREZOR_PIN_REQUEST');
 	}
 
-	async function getCurrentSession() {
+	async function _getCurrentSession() {
 		if (currentSession) {
 			return currentSession;
 		}
@@ -111,9 +112,9 @@ module.exports = function() {
 			txData[key] = val.length % 2 !== 0 ? `0${val}` : val;
 		});
 
-		let session = await getCurrentSession();
+		let session = await _getCurrentSession();
 		let signPromise = session.signEthTx(
-			getAddressByIdex(accountIndex),
+			getAddressByIndex(accountIndex),
 			txData.nonce,
 			txData.gasPrice,
 			txData.gasLimit,
@@ -125,7 +126,7 @@ module.exports = function() {
 
 		let signed = null;
 		try {
-			signed = await timeout(signPromise, 30000);
+			signed = await timeout(signPromise, CUSTOM_TIME_OUT);
 		} catch (err) {
 			if (err instanceof TimeoutError) {
 				currentSession = null;
@@ -148,7 +149,7 @@ module.exports = function() {
 		let addressN = {
 			address_n: defaultAddress
 		};
-		let session = await getCurrentSession();
+		let session = await _getCurrentSession();
 		await session.typedCall('GetPublicKey', 'PublicKey', addressN);
 		return {
 			success: true
