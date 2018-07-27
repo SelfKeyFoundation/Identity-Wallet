@@ -63,7 +63,7 @@ const dev = {
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 1,
-	node: 'mew'
+	node: 'infura'
 };
 
 const prod = {
@@ -72,7 +72,7 @@ const prod = {
 	updateEndpoint: 'https://release.selfkey.org',
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
-	node: 'mew'
+	node: 'infura'
 };
 
 const setupFilesPath = getSetupFilePath();
