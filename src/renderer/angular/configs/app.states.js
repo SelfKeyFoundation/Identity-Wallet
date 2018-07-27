@@ -212,8 +212,15 @@ function appStates(
 			url: '/guest/import/ledger',
 			views: {
 				main: {
-					templateUrl: 'guest/import/ledger/main.html',
-					controller: 'GuestImportLedgerController'
+					templateUrl: 'guest/import/ledger/main.html'
+				}
+			}
+		})
+		.state('guest.import.trezor', {
+			url: '/guest/import/trezor',
+			views: {
+				main: {
+					templateUrl: 'guest/import/trezor/main.html'
 				}
 			}
 		})

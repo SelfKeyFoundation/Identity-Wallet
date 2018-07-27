@@ -16,6 +16,7 @@ const WalletSetting = require('../models/wallet-setting');
 const GuideSetting = require('../models/guide-setting');
 const Exchange = require('../models/exchange');
 const TxHistory = require('../models/tx-history');
+const serializeError = require('serialize-error');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -1150,6 +1151,33 @@ module.exports = function(app) {
 			});
 	};
 
+	controller.prototype.getTrezorAccounts = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.getAccounts(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(
+					RPC_METHOD,
+					actionId,
+					actionName,
+					serializeError(error),
+					null
+				);
+			});
+	};
+
+	controller.prototype.startTrezorBroadcaster = function() {
+		electron.app.trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
+			app.win.webContents.send('TREZOR_PIN_REQUEST');
+		});
+	};
+
+	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
+		electron.app.trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+	};
+
 	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
 		electron.app.ledgerService
 			.signTransaction(args)
@@ -1161,10 +1189,32 @@ module.exports = function(app) {
 			});
 	};
 
-	controller.prototype.createLedgerWalletByAdress = function(event, actionId, actionName, args) {
+	controller.prototype.testTrezorConnection = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.testConnection(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {});
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
+
+	controller.prototype.signTransactionWithTrezor = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.signTransaction(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
+
+	controller.prototype.createHarwareWalletByAdress = function(event, actionId, actionName, args) {
 		try {
 			let publicKey = args.address;
-			let profile = 'ledger';
+			let { profile } = args;
 			publicKey = publicKey.toString('hex');
 
 			let walletSelectPromise = Wallet.findByPublicKey(publicKey);

@@ -1,13 +1,13 @@
 'use strict';
 const { Logger } = require('common/logger');
-const log = new Logger('conn-to-ledger-ctl');
-
-function ConnectingToLedgerController(
+const log = new Logger('conn-to-hardware-wallet-ctl');
+function ConnectingToHardwareWalletController(
 	$rootScope,
 	$scope,
 	$mdDialog,
-	LedgerService,
-	isSendingTxFealure
+	HardwareWalletService,
+	isSendingTxFealure,
+	profile
 ) {
 	'ngInject';
 
@@ -31,7 +31,12 @@ function ConnectingToLedgerController(
 	$scope.getAccounts = () => {
 		$scope.connectionFailed = false;
 		$scope.isConnecting = true;
-		LedgerService.getAccountsWithBalances({ start: 0, quantity: ACCOUNTS_QUANTITY_PER_PAGE })
+		HardwareWalletService.getAccountsWithBalances({
+			start: 0,
+			quantity: ACCOUNTS_QUANTITY_PER_PAGE,
+			profile,
+			isInitial: true
+		})
 			.then(accounts => {
 				if (!accounts || accounts.length === 0) {
 					onError();
@@ -39,10 +44,23 @@ function ConnectingToLedgerController(
 				}
 
 				$scope.closeDialog();
-				$rootScope.openChooseLedgerAddressDialog(accounts, ACCOUNTS_QUANTITY_PER_PAGE);
+				$rootScope.openChooseHardwareWalletAddressDialog(
+					accounts,
+					ACCOUNTS_QUANTITY_PER_PAGE,
+					profile
+				);
 			})
 			.catch(err => {
 				log.error(err);
+				if (err && err.message === 'TREZOR_BRIDGE_NOT_FOUND') {
+					return $rootScope.openInstallTrezorBridgeWarning();
+				}
+
+				if (err && err.code === 'Failure_PinInvalid') {
+					$rootScope.incorrectTrezorPinEntered = true;
+					$scope.getAccounts();
+					return;
+				}
 				onError();
 			});
 	};
@@ -63,11 +81,12 @@ function ConnectingToLedgerController(
 	};
 }
 
-ConnectingToLedgerController.$inject = [
+ConnectingToHardwareWalletController.$inject = [
 	'$rootScope',
 	'$scope',
 	'$mdDialog',
-	'LedgerService',
-	'isSendingTxFealure'
+	'HardwareWalletService',
+	'isSendingTxFealure',
+	'profile'
 ];
-module.exports = ConnectingToLedgerController;
+module.exports = ConnectingToHardwareWalletController;

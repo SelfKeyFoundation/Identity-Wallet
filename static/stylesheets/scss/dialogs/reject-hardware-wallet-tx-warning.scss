@@ -1,5 +1,5 @@
 md-dialog {
-	&.reject-ledger-tx-warning-container {
+	&.reject-hardware-wallet-tx-warning-container {
 		min-height: inherit !important;
 		min-width: inherit !important;
 		display: block !important;
@@ -60,9 +60,7 @@ md-dialog {
 					color: #ffffff !important;
 					text-transform: none !important;
 				}
-				
 			}
-	
 		}
 	}
 }

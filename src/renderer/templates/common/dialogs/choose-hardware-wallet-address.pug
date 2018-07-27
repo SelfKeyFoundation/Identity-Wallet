@@ -1,9 +1,9 @@
-md-dialog.choose-ledger-address-container(aira-lable="Connecting to Ledger")
+md-dialog.choose-hardware-wallet-address-container(aira-lable="Connecting to hardware wallet")
     .main-container
         .header-conainer
             sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancel($event)")
         .body-container
-            .header-title Choose A Ledger Address
+            .header-title {{ title }}
             .choose-title Select an Ethereum (ETH) address you would like to use:
             .grid-container
                 md-radio-group(ng-model="selectedAccount")
