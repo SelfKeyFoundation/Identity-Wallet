@@ -91,13 +91,15 @@ module.exports = function(app, store) {
 			})
 				.then(resp => {
 					let privateKey = keythereum.recover(args.password, keystoreObject);
-					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+					const newWallet = {
 						id: resp.id,
 						isSetupFinished: resp.isSetupFinished,
 						publicKey: keystoreObject.address,
 						privateKey: privateKey,
 						keystoreFilePath: keystoreFilePath
-					});
+					};
+					store.dispatch(walletOperations.updateWallet(newWallet));
+					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, newWallet);
 				})
 				.catch(error => {
 					log.error(error);
@@ -144,14 +146,22 @@ module.exports = function(app, store) {
 						})
 							.then(resp => {
 								let privateKey = keythereum.recover(args.password, keystoreObject);
-								app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
 									publicKey: keystoreObject.address,
 									privateKey: privateKey,
 									keystoreFilePath: ksFilePathToSave,
 									profile: 'local'
-								});
+								};
+								store.dispatch(walletOperations.updateWallet(newWallet));
+								app.win.webContents.send(
+									RPC_METHOD,
+									actionId,
+									actionName,
+									null,
+									newWallet
+								);
 							})
 							.catch(error => {
 								log.error(error);
