@@ -165,13 +165,13 @@ function AddCustomTokenDialogController(
 				let newWalletToken = {
 					walletId: wallet.id,
 					tokenId: newToken.tokenId,
-					balance: balance
+					balance: balance.toString()
 				};
 
 				let successFn = data => {
 					let formatedBalance = CommonService.numbersAfterComma(balance, 2);
 
-					let newToken = wallet.addNewToken(data);
+					let newToken = wallet.addNewToken(data.token);
 
 					let loadTokensPromise = SqlLiteService.loadTokens();
 
@@ -206,7 +206,11 @@ function AddCustomTokenDialogController(
 					delete newWalletToken.tokenId;
 					delete newWalletToken.balance;
 					delete newWalletToken.walletId;
-					SqlLiteService.insertNewWalletToken(newWalletToken, balance, wallet.id)
+					SqlLiteService.insertNewWalletToken(
+						newWalletToken,
+						balance.toString(),
+						wallet.id
+					)
 						.then(successFn)
 						.catch(errFn);
 				}
