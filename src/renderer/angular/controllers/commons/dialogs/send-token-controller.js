@@ -134,7 +134,6 @@ function SendTokenDialogController(
 	};
 
 	$scope.startSend = async event => {
-		debugger; // eslint-disable-line
 		if (profile === 'trezor') {
 			try {
 				await HardwareWalletService.testTrezorConnection();
