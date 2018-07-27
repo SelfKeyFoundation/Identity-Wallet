@@ -4,7 +4,7 @@ describe('WalletToken model', () => {
 	const testItem = {
 		walletId: 1,
 		tokenId: 1,
-		balance: 0
+		balance: '0'
 	};
 
 	const testToken = {
@@ -32,14 +32,14 @@ describe('WalletToken model', () => {
 
 	it('update', async () => {
 		let itm = await WalletToken.create(testItem);
-		await WalletToken.update({ id: itm.id, balance: 3 });
+		await WalletToken.update({ id: itm.id, balance: '3' });
 		let found = await WalletToken.query().findById(itm.id);
 		expect(itm.id).toBe(found.id);
 		expect(itm.balance).not.toBe(found.balance);
 	});
 
 	it('createWithNewToken', async () => {
-		let walletToken = await WalletToken.createWithNewToken(testToken, 5, 1);
+		let walletToken = await WalletToken.createWithNewToken(testToken, '5', 1);
 		let createdToken = await walletToken.$relatedQuery('token');
 		expect(createdToken.symbol).toBe(testToken.symbol);
 		expect(walletToken.id).toBeGreaterThan(0);
@@ -48,7 +48,7 @@ describe('WalletToken model', () => {
 	});
 
 	it('find', async () => {
-		let walletToken = await WalletToken.createWithNewToken(testToken, 5, 1);
+		let walletToken = await WalletToken.createWithNewToken(testToken, '5', 1);
 		let createdToken = await walletToken.$relatedQuery('token');
 
 		let found = await WalletToken.find({ 'wallet_tokens.id': walletToken.id });
@@ -57,10 +57,10 @@ describe('WalletToken model', () => {
 	});
 
 	it('findByWalletId', async () => {
-		let walletToken = await WalletToken.createWithNewToken(testToken, 5, 1);
+		let walletToken = await WalletToken.createWithNewToken(testToken, '5', 1);
 		let createdToken = await walletToken.$relatedQuery('token');
 
-		await WalletToken.createWithNewToken(testToken2, 2, 1);
+		await WalletToken.createWithNewToken(testToken2, '2', 1);
 
 		let found = await WalletToken.findByWalletId(1);
 		expect(found.length).toBe(2);
