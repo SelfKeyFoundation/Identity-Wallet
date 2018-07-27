@@ -52,6 +52,10 @@ function ConnectingToHardwareWalletController(
 			})
 			.catch(err => {
 				log.error(err);
+				if (err && err.message === 'TREZOR_BRIDGE_NOT_FOUND') {
+					return $rootScope.openInstallTrezorBridgeWarning();
+				}
+
 				if (err && err.code === 'Failure_PinInvalid') {
 					$rootScope.incorrectTrezorPinEntered = true;
 					$scope.getAccounts();

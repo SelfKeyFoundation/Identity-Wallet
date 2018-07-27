@@ -75,6 +75,10 @@ module.exports = function() {
 	}
 
 	async function _getCurrentSession() {
+		if (!list.transport) {
+			throw new Error('TREZOR_BRIDGE_NOT_FOUND');
+		}
+
 		if (currentSession) {
 			return currentSession;
 		}

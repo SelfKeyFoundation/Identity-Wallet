@@ -450,6 +450,25 @@ function AppRun(
 		});
 	};
 
+	$rootScope.openInstallTrezorBridgeWarning = () => {
+		return $mdDialog.show({
+			controller: [
+				'$scope',
+				function($scope) {
+					$scope.cancel = () => {
+						$mdDialog.cancel();
+					};
+				}
+			],
+			templateUrl: 'common/dialogs/install-trezor-bridge-warning.html',
+			parent: angular.element(document.body),
+			targetEvent: null,
+			hasBackdrop: false,
+			clickOutsideToClose: true,
+			fullscreen: false
+		});
+	};
+
 	$rootScope.broadcastRetryToSign = event => {
 		$rootScope.$broadcast('tx-sign:retry', event);
 	};

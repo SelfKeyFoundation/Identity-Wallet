@@ -16,6 +16,7 @@ const WalletSetting = require('../models/wallet-setting');
 const GuideSetting = require('../models/guide-setting');
 const Exchange = require('../models/exchange');
 const TxHistory = require('../models/tx-history');
+const serializeError = require('serialize-error');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -1157,7 +1158,13 @@ module.exports = function(app) {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+				app.win.webContents.send(
+					RPC_METHOD,
+					actionId,
+					actionName,
+					serializeError(error),
+					null
+				);
 			});
 	};
 

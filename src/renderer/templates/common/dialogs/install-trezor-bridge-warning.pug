@@ -1,0 +1,12 @@
+md-dialog.install-trezor-bridge-warning-container(aira-lable="")
+    .main-container
+        .body-container
+            .header-title Please Install TREZOR Bridge 
+            .items
+                .item TREZOR Bridge is required so that the SelfKey Identity Wallet can communicate with your device.
+                    | !{' '} It's an official application released by the TREZOR team available to download here:
+                .item.url-container URL: !{' '}
+                    span(ng-click="$root.openInBrowser('https://wallet.trezor.io/#/bridge')") https://wallet.trezor.io/#/bridge   
+            .buttons-container.small-padding-top
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancel($event)")
+                    span.primary close
