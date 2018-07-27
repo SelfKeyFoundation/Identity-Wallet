@@ -3,5 +3,6 @@ module.exports = {
 	testPathIgnorePatterns: ['/node_modules/', 'test/e2e'],
 	modulePaths: ['<rootDir>/src'],
 	testRegex: '.spec.js$',
-	verbose: true
+	verbose: true,
+	testURL: 'http://localhost/'
 };

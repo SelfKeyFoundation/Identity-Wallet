@@ -36,10 +36,9 @@ function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService)
 		},
 		{
 			title: 'TREZOR',
-			subTitle: '(Coming Soon)',
 			icon: 'trezor',
 			value: 'trezor',
-			disabled: true
+			disabled: false
 		}
 	];
 
@@ -68,6 +67,9 @@ function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService)
 				break;
 			case 'ledger':
 				$state.go('guest.import.ledger');
+				break;
+			case 'trezor':
+				$state.go('guest.import.trezor');
 				break;
 			default:
 				$state.go('guest.import.keystore', { type: 'select' });

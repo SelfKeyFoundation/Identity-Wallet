@@ -20,14 +20,12 @@ const SERVER_CONFIG = {
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-const defaultModule = function(app) {
-	const controller = function() {
-		let self = this;
+let standardWeb3;
+let queue;
 
-		let standardWeb3 = (self.standardWeb3 = new Web3());
-		standardWeb3.setProvider(new standardWeb3.providers.HttpProvider(SELECTED_SERVER_URL));
-
-		self.q = async.queue((data, callback) => {
+const defaultModule = function() {
+	const createQueue = self => {
+		return async.queue((data, callback) => {
 			let promise = null;
 			if (data.contractAddress) {
 				let contract = new standardWeb3.eth.Contract(ABI, data.contractAddress);
@@ -49,6 +47,15 @@ const defaultModule = function(app) {
 				callback(promise);
 			}, REQUEST_INTERVAL_DELAY);
 		}, 1);
+	};
+
+	const controller = function() {
+		let self = this;
+
+		standardWeb3 = !standardWeb3 ? (self.standardWeb3 = new Web3()) : standardWeb3;
+		standardWeb3.setProvider(new standardWeb3.providers.HttpProvider(SELECTED_SERVER_URL));
+
+		self.q = !queue ? createQueue(self) : queue;
 	};
 
 	controller.prototype.getSelectedServerURL = () => {

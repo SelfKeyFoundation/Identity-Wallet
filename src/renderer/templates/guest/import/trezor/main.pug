@@ -1,0 +1,7 @@
+.trezor-import-main-container(layout="column", layout-align="center center")
+    .steps-wrapper
+        .step Step 1: Plug in the device via USB.
+        .step Step 2: Click "Connect To TREZOR" below.
+        .step Step 3: Look at the device for number positions and enter your PIN.
+    md-button.blue(ng-click="$root.openConnectingToTrezorDialog($event)")
+        span CONNECT TO TREZOR

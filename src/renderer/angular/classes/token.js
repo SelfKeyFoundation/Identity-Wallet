@@ -251,14 +251,13 @@ class Token {
 						chainId: chainID
 					};
 
-					let isLedgerWallet = $rootScope.wallet.profile === 'ledger';
-					if (isLedgerWallet) {
-						$rootScope.openConfirmLedgerTxInfoWindow();
+					let profile = this.wallet.profile;
+					if (this.wallet.isHardwareWallet) {
+						$rootScope.openConfirmHardwareWalletTxInfoWindow(profile);
 					}
 
 					SignService.signTransaction({
-						rawTx: rawTx,
-						profile: this.wallet.profile,
+						rawTx,
 						privateKey: this.wallet.privateKey,
 						walletAddress: '0x' + this.wallet.getPublicKeyHex()
 					})

@@ -6,17 +6,14 @@ const initialState = {
 
 const localeReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPDATE_LOCALE:
+		case types.LOCALE_UPDATE:
 			return {
 				...state,
-				...initialState,
-				locale: action.locale
+				locale: action.payload
 			};
 		default:
 			return state;
 	}
 };
 
-const reducer = localeReducer;
-
-export default reducer;
+export default localeReducer;

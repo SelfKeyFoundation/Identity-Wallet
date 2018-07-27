@@ -1,4 +1,9 @@
 'use strict';
+const { walletOperations } = require('common/wallet');
+const { pricesOperations } = require('common/prices');
+const { tokensOperations } = require('common/tokens');
+const { walletTokensOperations } = require('common/wallet-tokens');
+
 const { Logger } = require('common/logger');
 const log = new Logger('rpc-handler');
 const electron = require('electron');
@@ -16,6 +21,7 @@ const WalletSetting = require('../models/wallet-setting');
 const GuideSetting = require('../models/guide-setting');
 const Exchange = require('../models/exchange');
 const TxHistory = require('../models/tx-history');
+const serializeError = require('serialize-error');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -31,7 +37,7 @@ const os = require('os');
 const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
-module.exports = function(app) {
+module.exports = function(app, store) {
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -199,14 +205,22 @@ module.exports = function(app) {
 						let privateKey = keythereum.recover(args.password, keystoreObject);
 
 						if (privateKey) {
-							app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+							const newWallet = {
 								id: wallet.id,
 								isSetupFinished: wallet.isSetupFinished,
 								privateKey: privateKey,
 								publicKey: keystoreObject.address,
 								keystoreFilePath: wallet.keystoreFilePath,
 								profile: wallet.profile
-							});
+							};
+							store.dispatch(walletOperations.updateWallet(newWallet));
+							app.win.webContents.send(
+								RPC_METHOD,
+								actionId,
+								actionName,
+								null,
+								newWallet
+							);
 						} else {
 							app.win.webContents.send(
 								RPC_METHOD,
@@ -242,6 +256,7 @@ module.exports = function(app) {
 				.then(wallet => {
 					if (wallet) {
 						wallet.privateKey = privateKeyBuffer;
+						store.dispatch(walletOperations.updateWallet(wallet));
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
 					} else {
 						Wallet.create({
@@ -249,13 +264,21 @@ module.exports = function(app) {
 							publicKey
 						})
 							.then(resp => {
-								app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
 									publicKey: publicKey,
 									privateKey: privateKeyBuffer,
 									profile
-								});
+								};
+								store.dispatch(walletOperations.updateWallet(newWallet));
+								app.win.webContents.send(
+									RPC_METHOD,
+									actionId,
+									actionName,
+									null,
+									newWallet
+								);
 							})
 							.catch(error => {
 								app.win.webContents.send(
@@ -838,6 +861,7 @@ module.exports = function(app) {
 
 	controller.prototype.startTokenPricesBroadcaster = function(priceService) {
 		priceService.eventEmitter.on('pricesUpdated', newPrices => {
+			store.dispatch(pricesOperations.updatePrices(newPrices));
 			app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', newPrices);
 		});
 	};
@@ -858,6 +882,7 @@ module.exports = function(app) {
 	controller.prototype.getTokens = function(event, actionId, actionName, args) {
 		Token.findAll()
 			.then(data => {
+				store.dispatch(tokensOperations.updateTokens(data));
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1012,9 +1037,18 @@ module.exports = function(app) {
 	};
 
 	controller.prototype.getWalletTokens = function(event, actionId, actionName, args) {
-		WalletToken.findByWalletId(args.walletId)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+		Wallet.findById(args.walletId)
+			.then(wallet => {
+				WalletToken.findByWalletId(wallet.id)
+					.then(data => {
+						store.dispatch(
+							walletTokensOperations.updateWalletTokens(data, wallet.publicKey)
+						);
+						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+					})
+					.catch(error => {
+						app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+					});
 			})
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -1150,6 +1184,33 @@ module.exports = function(app) {
 			});
 	};
 
+	controller.prototype.getTrezorAccounts = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.getAccounts(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(
+					RPC_METHOD,
+					actionId,
+					actionName,
+					serializeError(error),
+					null
+				);
+			});
+	};
+
+	controller.prototype.startTrezorBroadcaster = function() {
+		electron.app.trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
+			app.win.webContents.send('TREZOR_PIN_REQUEST');
+		});
+	};
+
+	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
+		electron.app.trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+	};
+
 	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
 		electron.app.ledgerService
 			.signTransaction(args)
@@ -1161,16 +1222,39 @@ module.exports = function(app) {
 			});
 	};
 
-	controller.prototype.createLedgerWalletByAdress = function(event, actionId, actionName, args) {
+	controller.prototype.testTrezorConnection = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.testConnection(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {});
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
+
+	controller.prototype.signTransactionWithTrezor = function(event, actionId, actionName, args) {
+		electron.app.trezorService
+			.signTransaction(args)
+			.then(data => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+			})
+			.catch(error => {
+				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+			});
+	};
+
+	controller.prototype.createHarwareWalletByAdress = function(event, actionId, actionName, args) {
 		try {
 			let publicKey = args.address;
-			let profile = 'ledger';
+			let { profile } = args;
 			publicKey = publicKey.toString('hex');
 
 			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
 			walletSelectPromise
 				.then(wallet => {
 					if (wallet) {
+						store.dispatch(walletOperations.updateWallet(wallet));
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
 					} else {
 						Wallet.create({
@@ -1178,12 +1262,20 @@ module.exports = function(app) {
 							profile
 						})
 							.then(resp => {
-								app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
+								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
 									publicKey,
 									profile
-								});
+								};
+								store.dispatch(walletOperations.loadWallet(newWallet));
+								app.win.webContents.send(
+									RPC_METHOD,
+									actionId,
+									actionName,
+									null,
+									newWallet
+								);
 							})
 							.catch(error => {
 								log.error(error);

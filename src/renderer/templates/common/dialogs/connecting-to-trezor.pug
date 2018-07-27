@@ -1,0 +1,26 @@
+md-dialog.connecting-to-hardware-wallet-container(aira-lable="Connecting to Trezor")
+    .main-container
+        .header-conainer
+            sk-icon.close-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancelConectToLedger($event)")
+        .body-container
+            .header-title(ng-if="isConnecting") 
+                .wave
+                    span.dot
+                    span.dot
+                    span.dot
+                span Connecting To TREZOR
+            .header-title(ng-if="!isConnecting")
+                span TREZOR: Unable to Connect
+            .items(ng-if="isConnecting") 
+                .item.title To ensure a successful connection, please make sure your device is plugged in properly via USB.
+            .items(ng-if="!isConnecting")
+                .item To ensure a successful connection, please make sure your device is plugged in properly via USB.
+                    | !{' '} if you need more assistance, please contact help@selfkey.org
+            .buttons-container.small-padding-top(ng-if="isConnecting")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
+                    span.primary close
+            .buttons-container(ng-if="!isConnecting")
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancelConectToLedger($event)")
+                    span.primary BACK
+                md-button.gray.md-ink-ripple.cancal-btn(ng-click="tryAgain($event)")
+                    span.primary TRY AGAIN
