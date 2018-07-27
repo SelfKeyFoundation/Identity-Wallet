@@ -13,7 +13,7 @@ md-dialog {
 		.body-container {
 			position: relative;
 			display: flex;
-			max-width: 420px;
+			max-width: 432px;
 			flex-direction: column;
 			border-radius: 4px;
 			background-color: #262f39;
@@ -44,6 +44,14 @@ md-dialog {
 						padding-top: 20px;
 						padding-bottom: 20px;
 						text-align: center;
+						.external-link-icon {
+							width: 18px;
+							height: 18px;
+							margin-left: 10px;
+							color: #ffffff;
+							min-width: inherit;
+							min-height: inherit;
+						}
 						span {
 							outline: none;
 							font-weight: bold;
