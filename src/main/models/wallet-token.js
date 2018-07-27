@@ -19,7 +19,7 @@ class WalletToken extends BaseModel {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
 				tokenId: { type: 'integer' },
-				balance: { type: 'number' },
+				balance: { type: 'string' },
 				hidden: { type: 'integer' },
 				recordState: { type: 'integer' }
 			}
@@ -50,7 +50,9 @@ class WalletToken extends BaseModel {
 		};
 	}
 	static create(itm) {
-		return this.query().insertAndFetch(itm);
+		return this.query()
+			.insertAndFetch(itm)
+			.eager('token');
 	}
 
 	static update(itm) {
@@ -60,12 +62,14 @@ class WalletToken extends BaseModel {
 	static async createWithNewToken(token, balance, walletId) {
 		const tx = await transaction.start(this.knex());
 		try {
-			let wtoken = await this.query(tx).insertGraphAndFetch({
-				walletId,
-				token,
-				balance,
-				recordState: 1
-			});
+			let wtoken = await this.query(tx)
+				.insertGraphAndFetch({
+					walletId,
+					token,
+					balance,
+					recordState: 1
+				})
+				.eager('token');
 			await tx.commit();
 			return wtoken;
 		} catch (error) {
