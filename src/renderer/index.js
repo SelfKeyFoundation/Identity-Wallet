@@ -1,6 +1,10 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
+import { react2angular } from 'react2angular';
+import { PriceBoxWrapper } from './react/price-box/index';
+import { TokenBoxWrapper } from './react/token-box/index';
 const { Logger } = require('common/logger');
+
 const path = require('path');
 
 const log = new Logger('main');
@@ -166,19 +170,28 @@ angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
 /**
  * React Components
  */
-document.addEventListener('DOMContentLoaded', () => {
-	const { react2angular } = require('react2angular');
-	const { PriceBoxWrapper } = require('./react/priceBox/index');
 
-	const cryptoPriceBox = react2angular(PriceBoxWrapper, [
-		'cryptoCurrency',
-		'cryptoValue',
-		'toCurrency',
-		'toValue'
-	]);
+const cryptoPriceBox = react2angular(PriceBoxWrapper, [
+	'cryptoCurrency',
+	'cryptoValue',
+	'toCurrency',
+	'toValue'
+]);
+angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
 
-	angular.module('kyc-wallet').component('cryptoPriceBox', cryptoPriceBox);
-});
+const tokenBoxWrapper = react2angular(TokenBoxWrapper, [
+	'cryptoCurrencyShort',
+	'cryptoCurrencyName',
+	'publicKey',
+	'cryptoCurrency',
+	'cryptoValue',
+	'toCurrency',
+	'toValue',
+	'transferAction',
+	'copyAction',
+	'customTokenText'
+]);
+angular.module('kyc-wallet').component('tokenBox', tokenBoxWrapper);
 
 /**
  * controllers

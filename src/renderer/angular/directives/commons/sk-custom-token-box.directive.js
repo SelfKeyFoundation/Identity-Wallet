@@ -11,6 +11,10 @@ function SkCustomBoxDirective($rootScope, $window, $timeout) {
 				text: 'Send or receive any custom ERC-20 token.'
 			};
 			scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
+
+			scope.navigateToTransfer = event => {
+				$rootScope.openSendTokenDialog(event, null, true);
+			};
 		},
 		replace: true,
 		templateUrl: 'common/directives/sk-custom-token-box.html'
