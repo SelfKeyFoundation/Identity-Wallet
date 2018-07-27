@@ -455,6 +455,7 @@ function AppRun(
 			controller: [
 				'$scope',
 				function($scope) {
+					$scope.downloadUrl = 'https://wallet.trezor.io/#/bridge';
 					$scope.cancel = () => {
 						$mdDialog.cancel();
 					};
