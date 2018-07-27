@@ -20,11 +20,13 @@ const SERVER_CONFIG = {
 
 const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
+let standardWeb3;
+
 const defaultModule = function() {
 	const controller = function() {
 		let self = this;
 
-		let standardWeb3 = (self.standardWeb3 = new Web3());
+		standardWeb3 = !standardWeb3 ? (self.standardWeb3 = new Web3()) : standardWeb3;
 		standardWeb3.setProvider(new standardWeb3.providers.HttpProvider(SELECTED_SERVER_URL));
 
 		self.q = async.queue((data, callback) => {
