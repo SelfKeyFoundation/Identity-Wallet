@@ -15,8 +15,8 @@ function ManageTokenController(
 	log.debug('ManageTokenController, %j', $stateParams);
 
 	let temporaryMap = {
-		key: 'Selfkey',
-		eth: 'Ethereum'
+		KEY: 'Selfkey',
+		ETH: 'Ethereum'
 	};
 
 	$scope.selectedToken = $rootScope.wallet.tokens[$stateParams.id.toUpperCase()];
