@@ -7,7 +7,7 @@ md-dialog.install-trezor-bridge-warning-container(aira-lable="")
                     | It's an official application released by the TREZOR team available to download below.
                     | Please restart the application after installation.
                 .item.url-container URL: !{' '}
-                    span(ng-click="$root.openInBrowser(download-url)") {{ downloadUrl }}
+                    span(ng-click="$root.openInBrowser(downloadUrl)") {{ downloadUrl }}
                         md-icon.external-link-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/external-link.svg')}}")   
             .buttons-container.small-padding-top
                 md-button.gray.md-ink-ripple.cancal-btn(ng-click="cancel($event)")
