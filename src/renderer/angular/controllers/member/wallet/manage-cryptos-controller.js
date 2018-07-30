@@ -114,8 +114,8 @@ function ManageCryptosController(
 		return true;
 	};
 
-	$scope.toggleCustomToken = (event, token, index) => {
-		const shouldHide = !token.isHidden();
+	$scope.toggleCustomToken = (event, token) => {
+		const shouldHide = !token.hidden;
 		if (shouldHide) {
 			$rootScope
 				.openConfirmationDialog(
@@ -135,14 +135,10 @@ function ManageCryptosController(
 
 	const toggleTokenHide = (shouldHide, token) => {
 		SqlLiteService.updateWalletToken({
-			tokenId: token.id,
-			walletId: wallet.id,
-			id: token.walletTokenId,
-			balance: token.balance,
-			hidden: shouldHide
-		}).then(() => {
-			token.setIsHidden(shouldHide);
-			reloadPieChartIsNeeded = true;
+			id: token.id,
+			hidden: shouldHide ? 1 : 0
+		}).catch(error => {
+			log.error(JSON.stringify(error));
 		});
 	};
 
