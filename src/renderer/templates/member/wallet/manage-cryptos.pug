@@ -8,24 +8,4 @@
             md-button.gray(ng-click="$root.openAddCustomTokenDialog($event)")
                 span.primary ADD TOKEN
         .grid-container
-            table
-                thead
-                    tr
-                        td NAME
-                        td Token Symbol
-                        td Balance
-                        td Last Price
-                        td Total Value
-                        td Token Contract Address
-                        td
-
-                tbody
-                    tr(ng-repeat="token in data")
-                        td {{token.name}}
-                        td {{token.symbol}}
-                        td {{token.balance}}
-                        td {{token.lastPrice}}
-                        td {{token.totalValue}}
-                        td {{token.contractAddress}}
-                        td
-                            sk-icon(ng-if="isDeletable(token)", ng-click="toggleCustomToken($event, token, $index)", icon="{{token.isHidden()? 'ic_visibility_off_black_24px' : 'ic_visibility_black_24px'}}", size-class="icon-size-19x23")
+            crypto-price-table(toggle-action="toggleCustomToken")

@@ -1018,6 +1018,13 @@ module.exports = function(app, store) {
 	controller.prototype.updateWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.update(args)
 			.then(data => {
+				Wallet.findById(data.walletId).then(wallet => {
+					WalletToken.findByTokenId(data.tokenId).then(tokens => {
+						store.dispatch(
+							walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey)
+						);
+					});
+				});
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
