@@ -4,6 +4,8 @@ import { react2angular } from 'react2angular';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper } from './react/my-crypto/index';
+import { TransferPriceWrapper } from './react/transfer-price/index';
+
 const { Logger } = require('common/logger');
 
 const path = require('path');
@@ -193,6 +195,12 @@ const cryptoChartBoxWrapper = react2angular(CryptoChartBoxWrapper, [
 	'manageCryptoAction'
 ]);
 angular.module('kyc-wallet').component('cryptoChartBox', cryptoChartBoxWrapper);
+
+const transferPriceWrapper = react2angular(TransferPriceWrapper, [
+	'cryptoCurrencyShort',
+	'cryptoCurrencyName'
+]);
+angular.module('kyc-wallet').component('transferPrice', transferPriceWrapper);
 
 /**
  * controllers
