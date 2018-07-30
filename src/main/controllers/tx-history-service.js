@@ -34,8 +34,8 @@ let defaultModule = function(app) {
 
 	let OFFSET = 1000;
 
-	const TX_LIST_ACTION = `?module=account&action=txlist&sort=asc&offset=${OFFSET}`;
-	const TOKEN_TX_ACTION = `?module=account&action=tokentx&sort=asc&offset=${OFFSET}`;
+	const TX_LIST_ACTION = `?module=account&action=txlist&sort=desc&offset=${OFFSET}`;
+	const TOKEN_TX_ACTION = `?module=account&action=tokentx&sort=desc&offset=${OFFSET}`;
 	const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
 
 	// in order to change key name in runtime
@@ -179,15 +179,11 @@ let defaultModule = function(app) {
 			networkId: config.chainId,
 			createdAt: new Date().getTime()
 		};
+		let propperTx = txs.token ? txs.token : txs.eth;
 
-		let balanceValueDivider, propperTx;
-		if (txs.token) {
-			balanceValueDivider = new BigNumber(10 ** txs.token.tokenDecimal);
-			propperTx = txs.token;
-			propperTx.txreceipt_status = txs.eth ? txs.eth.txreceipt_status : null;
-		} else {
-			balanceValueDivider = ETH_BALANCE_DIVIDER;
-			propperTx = txs.eth;
+		// means it's not NORMAL transaction
+		if (!propperTx.from || !propperTx.to) {
+			return null;
 		}
 
 		KNOWN_KEYS.forEach(key => {
@@ -195,26 +191,39 @@ let defaultModule = function(app) {
 			processedTx[processedKey] = propperTx[key];
 		});
 
+		let balanceValueDivider;
+		if (txs.token) {
+			processedTx.txReceiptStatus = txs.eth ? txs.eth.txReceiptStatus : null;
+
+			if (!_hasContractInfo(processedTx)) {
+				let contractInfo = await getContractInfo(processedTx.contractAddress);
+				if (!contractInfo) {
+					return null;
+				}
+
+				Object.assign(processedTx, contractInfo);
+			}
+
+			balanceValueDivider = new BigNumber(10 ** processedTx.tokenDecimal);
+		}
+
+		balanceValueDivider = balanceValueDivider || ETH_BALANCE_DIVIDER;
+
 		// toString is important! in order to avoid exponential
 		processedTx.value = new BigNumber(processedTx.value).div(balanceValueDivider).toString(10);
 		processedTx.tokenSymbol = processedTx.tokenSymbol
 			? processedTx.tokenSymbol.toUpperCase()
 			: null;
+
 		processedTx.timeStamp = +(processedTx.timeStamp + '000');
+		processedTx.from = processedTx.from.toLowerCase();
+		processedTx.to = processedTx.to.toLowerCase();
+		let status = processedTx.txReceiptStatus;
+		processedTx.txReceiptStatus = !isNaN(parseInt(status))
+			? status
+			: await _getTxReceiptStatus(processedTx.hash);
 
-		processedTx.from = processedTx.from ? processedTx.from.toLowerCase() : null;
-		processedTx.to = processedTx.to ? processedTx.to.toLowerCase() : null;
-
-		processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
-		if (processedTx.txReceiptStatus == null) {
-			let txReceipt = await getTransactionReceipt(processedTx.hash);
-			if (txReceipt && txReceipt.status) {
-				processedTx.txReceiptStatus = parseInt(txReceipt.status, 16);
-			}
-		}
-
-		// faild transaction
-		if (processedTx.value === 0) {
+		if (_isFailedERC20TokenTx(txs)) {
 			// set faild status, there is some exeptions, so that's needed
 			processedTx.txReceiptStatus = 0;
 
@@ -230,7 +239,25 @@ let defaultModule = function(app) {
 			Object.assign(processedTx, contractInfo);
 		}
 
+		processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
+
 		return processedTx;
+	}
+
+	function _hasContractInfo(tokenTx) {
+		return tokenTx.tokenDecimal && tokenTx.tokenSymbol && tokenTx.tokenName;
+	}
+
+	function _isFailedERC20TokenTx(txs) {
+		return !txs.token && +txs.eth.value === 0;
+	}
+
+	async function _getTxReceiptStatus(hash) {
+		let txReceipt = await getTransactionReceipt(hash);
+		if (txReceipt && txReceipt.status) {
+			return parseInt(txReceipt.status, 16);
+		}
+		return 0; // failed
 	}
 
 	async function processTxHistory(txHashes, walletAddress) {
@@ -271,7 +298,6 @@ let defaultModule = function(app) {
 			(async function next(hasNext) {
 				if (!hasNext) {
 					await processTxHistory(txHashes, address);
-
 					if (showProgress) {
 						isSyncingMap[address] = false;
 					}
