@@ -269,6 +269,17 @@
     "@babel/helper-remap-async-to-generator" "7.0.0-beta.55"
     "@babel/plugin-syntax-async-generators" "7.0.0-beta.55"
 
+"@babel/plugin-proposal-class-properties@^7.0.0-beta.54":
+  version "7.0.0-beta.55"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0-beta.55.tgz#d90792b5b4279e708f7c2a30bdad489dc398c57f"
+  dependencies:
+    "@babel/helper-function-name" "7.0.0-beta.55"
+    "@babel/helper-member-expression-to-functions" "7.0.0-beta.55"
+    "@babel/helper-optimise-call-expression" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-replace-supers" "7.0.0-beta.55"
+    "@babel/plugin-syntax-class-properties" "7.0.0-beta.55"
+
 "@babel/plugin-proposal-object-rest-spread@7.0.0-beta.55":
   version "7.0.0-beta.55"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.0.0-beta.55.tgz#b611bb83901bf05196237c516a8bb1117a2a9396"
@@ -294,6 +305,12 @@
 "@babel/plugin-syntax-async-generators@7.0.0-beta.55":
   version "7.0.0-beta.55"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.0.0-beta.55.tgz#e72b3857eb80b695c77c3721237b149072cda46b"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+
+"@babel/plugin-syntax-class-properties@7.0.0-beta.55":
+  version "7.0.0-beta.55"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0-beta.55.tgz#ecef94fba98b5ecba8a49991c0ab30de6723dc94"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.55"
 
@@ -5280,6 +5297,12 @@ eslint-module-utils@^2.2.0:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
+eslint-plugin-babel@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-babel/-/eslint-plugin-babel-5.1.0.tgz#9c76e476162041e50b6ba69aa4eae3bdd6a4e1c3"
+  dependencies:
+    eslint-rule-composer "^0.3.0"
+
 eslint-plugin-import@^2.13.0:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.13.0.tgz#df24f241175e312d91662dc91ca84064caec14ed"
@@ -5337,6 +5360,10 @@ eslint-plugin-react@^7.10.0:
 eslint-plugin-standard@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-standard/-/eslint-plugin-standard-3.1.0.tgz#2a9e21259ba4c47c02d53b2d0c9135d4b1022d47"
+
+eslint-rule-composer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-rule-composer/-/eslint-rule-composer-0.3.0.tgz#79320c927b0c5c0d3d3d2b76c8b4a488f25bbaf9"
 
 eslint-scope@3.7.1:
   version "3.7.1"
@@ -8616,9 +8643,9 @@ keycode@^2.1.9:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
 
-"keythereum@https://github.com/SelfKeyFoundation/keythereum.git#v1.0.4-selfkey.0":
-  version "1.0.4-selfkey.0"
-  resolved "https://github.com/SelfKeyFoundation/keythereum.git#0df6e5b778e8665ee9c017fdd58c1cd9a8fac5f9"
+keythereum@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/keythereum/-/keythereum-1.0.4.tgz#e3ac3e41569efab8e5129a12286c6a60dc02ee39"
   dependencies:
     crypto-browserify "3.12.0"
     keccak "1.4.0"
