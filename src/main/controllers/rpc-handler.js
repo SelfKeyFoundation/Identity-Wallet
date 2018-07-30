@@ -1285,7 +1285,7 @@ module.exports = function(app, store) {
 									publicKey,
 									profile
 								};
-								store.dispatch(walletOperations.loadWallet(newWallet));
+								store.dispatch(walletOperations.updateWallet(newWallet));
 								app.win.webContents.send(
 									RPC_METHOD,
 									actionId,
