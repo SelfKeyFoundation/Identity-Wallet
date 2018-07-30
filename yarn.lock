@@ -269,6 +269,17 @@
     "@babel/helper-remap-async-to-generator" "7.0.0-beta.55"
     "@babel/plugin-syntax-async-generators" "7.0.0-beta.55"
 
+"@babel/plugin-proposal-class-properties@^7.0.0-beta.54":
+  version "7.0.0-beta.55"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0-beta.55.tgz#d90792b5b4279e708f7c2a30bdad489dc398c57f"
+  dependencies:
+    "@babel/helper-function-name" "7.0.0-beta.55"
+    "@babel/helper-member-expression-to-functions" "7.0.0-beta.55"
+    "@babel/helper-optimise-call-expression" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-replace-supers" "7.0.0-beta.55"
+    "@babel/plugin-syntax-class-properties" "7.0.0-beta.55"
+
 "@babel/plugin-proposal-object-rest-spread@7.0.0-beta.55":
   version "7.0.0-beta.55"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.0.0-beta.55.tgz#b611bb83901bf05196237c516a8bb1117a2a9396"
@@ -294,6 +305,12 @@
 "@babel/plugin-syntax-async-generators@7.0.0-beta.55":
   version "7.0.0-beta.55"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.0.0-beta.55.tgz#e72b3857eb80b695c77c3721237b149072cda46b"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+
+"@babel/plugin-syntax-class-properties@7.0.0-beta.55":
+  version "7.0.0-beta.55"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0-beta.55.tgz#ecef94fba98b5ecba8a49991c0ab30de6723dc94"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.55"
 
@@ -1753,7 +1770,7 @@ async-eventemitter@^0.2.2:
   dependencies:
     async "^2.4.0"
 
-async-eventemitter@ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c:
+"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
   version "0.2.3"
   resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
   dependencies:
@@ -3251,8 +3268,8 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000871"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000871.tgz#f1995c1fe31892649a7605957a80c92518423d4d"
+  version "1.0.30000872"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000872.tgz#3f6e53b63d373768bf99e896133d66ef89c49999"
 
 caniuse-lite@^1.0.30000844:
   version "1.0.30000865"
@@ -4765,10 +4782,11 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     stream-shift "^1.0.0"
 
 ecc-jsbn@~0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
   dependencies:
     jsbn "~0.1.0"
+    safer-buffer "^2.1.0"
 
 ecdsa@^0.6.0:
   version "0.6.0"
@@ -5279,6 +5297,12 @@ eslint-module-utils@^2.2.0:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
+eslint-plugin-babel@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-babel/-/eslint-plugin-babel-5.1.0.tgz#9c76e476162041e50b6ba69aa4eae3bdd6a4e1c3"
+  dependencies:
+    eslint-rule-composer "^0.3.0"
+
 eslint-plugin-import@^2.13.0:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.13.0.tgz#df24f241175e312d91662dc91ca84064caec14ed"
@@ -5336,6 +5360,10 @@ eslint-plugin-react@^7.10.0:
 eslint-plugin-standard@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-standard/-/eslint-plugin-standard-3.1.0.tgz#2a9e21259ba4c47c02d53b2d0c9135d4b1022d47"
+
+eslint-rule-composer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-rule-composer/-/eslint-rule-composer-0.3.0.tgz#79320c927b0c5c0d3d3d2b76c8b4a488f25bbaf9"
 
 eslint-scope@3.7.1:
   version "3.7.1"
@@ -8615,9 +8643,9 @@ keycode@^2.1.9:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
 
-"keythereum@https://github.com/SelfKeyFoundation/keythereum.git#v1.0.4-selfkey.0":
-  version "1.0.4-selfkey.0"
-  resolved "https://github.com/SelfKeyFoundation/keythereum.git#0df6e5b778e8665ee9c017fdd58c1cd9a8fac5f9"
+keythereum@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/keythereum/-/keythereum-1.0.4.tgz#e3ac3e41569efab8e5129a12286c6a60dc02ee39"
   dependencies:
     crypto-browserify "3.12.0"
     keccak "1.4.0"
@@ -12236,7 +12264,7 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-"safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2:
+"safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
 
@@ -12348,7 +12376,7 @@ select-hose@^2.0.0:
 
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#27e3fdc04dcdbe30d476a0c2d4ad444377d19c97"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#88e3ff6f6c514b12a8ece3e05458dc30abcbe931"
   dependencies:
     "@material-ui/core" "^1.3.1"
     "@material-ui/icons" "^1.1.0"
