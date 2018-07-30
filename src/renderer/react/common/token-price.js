@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { getLocale } from 'common/locale/selectors';
 import { TokenPrice } from 'selfkey-ui';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
-import { getCryptoValue, getToValue } from '../../common/price-utils';
+import { getCryptoValue, getToValue } from './price-utils';
 
 const mapStateToProps = (state, props) => {
 	return {
