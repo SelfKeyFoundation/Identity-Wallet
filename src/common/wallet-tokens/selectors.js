@@ -15,12 +15,12 @@ export const getTokens = state => {
 	return [getWallet(state), ...tokens];
 };
 
-const getNotHiddenTokens = state => {
+const getVisibleTokens = state => {
 	return getTokens(state).filter(token => token.hidden < 1);
 };
 
 const getFilteredTokens = state => {
-	const tokens = getNotHiddenTokens(state);
+	const tokens = getVisibleTokens(state);
 	const topTokenListSize = getTopTokenListSize(state);
 	const topTokens = tokens.slice(0, topTokenListSize);
 	const otherTokens = tokens.slice(topTokenListSize, tokens.length);
@@ -48,7 +48,7 @@ const getOthersTokenBalance = (otherTokens, balanceType) => {
 };
 
 export const getVisibleTokens = createSelector(
-	[getViewAll, getNotHiddenTokens, getFilteredTokens],
+	[getViewAll, getVisibleTokens, getFilteredTokens],
 	(viewAll, notHiddenTokens, filteredTokens) => {
 		if (viewAll.viewAll) {
 			return notHiddenTokens;
