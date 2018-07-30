@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import store from '../common/store';
 import TokenBox from './containers/token-box';
-import TokenPrice from './containers/token-price';
+import TokenPrice from '../common/token-price';
 import { EthereumIcon, SelfkeyIcon, CustomIcon, CustomTokenText } from 'selfkey-ui';
 
 const renderIcon = shortName => {
