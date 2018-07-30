@@ -6,5 +6,7 @@ export const getWallet = state => {
 	wallet.balanceInFiat = wallet.balance * ethereumPrice.priceUSD;
 	wallet.name = 'Ethereum';
 	wallet.symbol = 'ETH';
+	wallet.price = ethereumPrice.priceUSD;
+	wallet.hidden = 0;
 	return wallet;
 };

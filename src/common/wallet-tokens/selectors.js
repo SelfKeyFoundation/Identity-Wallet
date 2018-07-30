@@ -10,12 +10,17 @@ export const getTokens = state => {
 	tokens.forEach(token => {
 		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
 		token.balanceInFiat = token.balance * price.priceUSD;
+		token.price = price.priceUSD;
 	});
 	return [getWallet(state), ...tokens];
 };
 
+const getNotHiddenTokens = state => {
+	return getTokens(state).filter(token => token.hidden < 1);
+};
+
 const getFilteredTokens = state => {
-	const tokens = getTokens(state);
+	const tokens = getNotHiddenTokens(state);
 	const topTokenListSize = getTopTokenListSize(state);
 	const topTokens = tokens.slice(0, topTokenListSize);
 	const otherTokens = tokens.slice(topTokenListSize, tokens.length);
@@ -43,10 +48,10 @@ const getOthersTokenBalance = (otherTokens, balanceType) => {
 };
 
 export const getVisibleTokens = createSelector(
-	[getViewAll, getTokens, getFilteredTokens],
-	(viewAll, tokens, filteredTokens) => {
+	[getViewAll, getNotHiddenTokens, getFilteredTokens],
+	(viewAll, notHiddenTokens, filteredTokens) => {
 		if (viewAll.viewAll) {
-			return tokens;
+			return notHiddenTokens;
 		} else {
 			return filteredTokens;
 		}
