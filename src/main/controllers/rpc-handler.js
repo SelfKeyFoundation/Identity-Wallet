@@ -1019,7 +1019,7 @@ module.exports = function(app, store) {
 		WalletToken.update(args)
 			.then(data => {
 				Wallet.findById(data.walletId).then(wallet => {
-					WalletToken.findByWalletId(wallet.id).then(tokens => {
+					WalletToken.findByTokenId(data.tokenId).then(tokens => {
 						store.dispatch(
 							walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey)
 						);
