@@ -285,15 +285,13 @@ let defaultModule = function(app) {
 	}
 
 	async function _syncByWallet(address, walletId, showProgress) {
-		address = '0x58234b58b03bfedd291ef27cc5cad2bfadf8a41a';
 		if (showProgress) {
 			isSyncingMap[address] = true;
 		}
 		let endblock = await getMostResentBlock();
 		endblock = parseInt(endblock, 16);
 		let walletSetting = await _getWalletSetting(walletId);
-		// let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
-		let startBlock = 0;
+		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
 		let page = 1;
 		let txHashes = {};
 		return new Promise((resolve, reject) => {
@@ -329,8 +327,7 @@ let defaultModule = function(app) {
 	async function sync() {
 		let wallets = await Wallet.findAll();
 		for (let wallet of wallets) {
-			// let address = ('0x' + wallet.publicKey).toLowerCase();
-			let address = '0x58234b58b03bfedd291ef27cc5cad2bfadf8a41a';
+			let address = ('0x' + wallet.publicKey).toLowerCase();
 			await _syncByWallet(address, wallet.id);
 			await removeNotMinedPendingTxs(address);
 		}
