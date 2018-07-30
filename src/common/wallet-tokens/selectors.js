@@ -49,9 +49,9 @@ const getOthersTokenBalance = (otherTokens, balanceType) => {
 
 export const getVisibleTokens = createSelector(
 	[getViewAll, getVisibleTokens, getFilteredTokens],
-	(viewAll, notHiddenTokens, filteredTokens) => {
+	(viewAll, visibleTokens, filteredTokens) => {
 		if (viewAll.viewAll) {
-			return notHiddenTokens;
+			return visibleTokens;
 		} else {
 			return filteredTokens;
 		}
