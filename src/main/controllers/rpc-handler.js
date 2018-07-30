@@ -27,7 +27,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const fsm = require('fs');
 
-const { keystorage } = require('../keystorage');
+const { keystorage } = require('../../keystorage');
 
 const mime = require('mime-types');
 const ethereumjsUtil = require('ethereumjs-util');
