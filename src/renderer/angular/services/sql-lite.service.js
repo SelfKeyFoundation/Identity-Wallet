@@ -97,10 +97,9 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 
 		loadTokenPrices(data) {
 			if (data) {
-				for (let i in data) {
-					let item = data[i];
-					TOKEN_PRICES_STORE[item.id] = item;
-				}
+				data.map((item, index) => {
+					TOKEN_PRICES_STORE[index] = item;
+				});
 				log.debug('TOKEN_PRICES LOADED %j', TOKEN_PRICES_STORE);
 			}
 		}
