@@ -23,7 +23,7 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 				this.loadData()
 					.then(resp => {
 						log.debug(
-							'DONE LOADING %j, %j, %j, %j',
+							'DONE LOADING %2j, %2j, %2j, %2j',
 							ID_ATTRIBUTE_TYPES_STORE,
 							TOKENS_STORE,
 							TOKEN_PRICES_STORE,
