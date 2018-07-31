@@ -9,8 +9,11 @@ export const getTokens = state => {
 	const tokens = state.walletTokens.tokens;
 	tokens.forEach(token => {
 		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
-		token.balanceInFiat = token.balance * price.priceUSD;
-		token.price = price.priceUSD;
+		const priceUSD = price ? price.priceUSD : 0;
+		token.balanceInFiat = token.balance * priceUSD;
+		token.price = priceUSD;
+		// Workaround for Tokens with different Symbols than the ones in price table
+		token.name = token.name ? token.name : 'Token';
 	});
 	return [getWallet(state), ...tokens];
 };
