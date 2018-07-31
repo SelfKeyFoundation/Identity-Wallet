@@ -101,7 +101,7 @@
     "redux-thunk": "^2.3.0",
     "request": "2.87.0",
     "reselect": "^3.0.1",
-    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#ea95770bd7e701d4195335bca191e045f5716707",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git",
     "serialize-error": "^2.1.0",
     "sinon": "^6.1.3",
     "socket.io-client": "^2.1.1",
