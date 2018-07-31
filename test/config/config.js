@@ -17,7 +17,7 @@ let fullCmd =
 	'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '');
 
 // OSENV Settings
-if (osEnv === 'travis') {
+if (osEnv === 'mac') {
 	appPath = pwd + '/dist/' + 'mac/' + appCacheName + '.app/Contents/MacOS/' + appCacheName;
 }
 

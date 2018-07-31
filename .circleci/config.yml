@@ -93,8 +93,9 @@ jobs:
                       - dist
             - store_artifacts:
                   path: dist
-    'e2e-linux':
-        docker: *DOCKERIMAGE
+    'e2e-mac':
+        macos:
+            xcode: '9.0'
         steps:
             - checkout
             - attach_workspace:
@@ -102,13 +103,13 @@ jobs:
             - restore_cache:
                   name: Restore Yarn Package Cache
                   keys:
-                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                      - yarn-packages-{{ .Branch }}
-                      - yarn-packages-master
-                      - yarn-packages-
+                      - yarn-packages-mac-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-mac-{{ .Branch }}
+                      - yarn-packages-mac-master
+                      - yarn-packages-mac-
             - run:
                   name: E2E Tests
-                  command: OSENV=circle yarn test
+                  command: OSENV=mac yarn test
 
     'stage-mac':
         docker: *DOCKERIMAGE
@@ -156,12 +157,12 @@ workflows:
         jobs:
             - 'build-linux'
             - 'build-mac'
-            #     - "e2e":
-            #         requires:
-            #           - build
+            - 'e2e-mac':
+                  require:
+                      - build-mac
             - 'stage-mac':
                   requires:
-                      - build-mac
+                      - e2e-mac
             - 'stage-linux':
                   requires:
                       - build-linux
