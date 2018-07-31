@@ -20,9 +20,10 @@ jobs:
                   command: brew upgrade node
             - run:
                   name: Upgrade Yarn
-                  command: |
-                      brew upgrade yarn
-                      brew link yarn
+                  command: brew upgrade yarn
+            - run:
+                  name: Add Read Access to yarn config
+                  command: sudo chown -R $USER:$GROUP ~/.config
             - run:
                   name: Install Gulp
                   command: sudo npm i -g gulp-cli
