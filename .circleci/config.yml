@@ -135,7 +135,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: ./mac
+                  at: ./linux
             - run:
                   name: Install gcloud
                   command: |
