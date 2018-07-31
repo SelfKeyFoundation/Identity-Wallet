@@ -110,12 +110,32 @@ jobs:
                   name: E2E Tests
                   command: OSENV=circle yarn test
 
-    'stage':
+    'stage-mac':
         docker: *DOCKERIMAGE
         steps:
             - checkout
             - attach_workspace:
-                  at: .
+                  at: ./mac
+            - run:
+                  name: Install gcloud
+                  command: |
+                      export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+                      echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+                      sudo apt-get update && sudo apt-get install google-cloud-sdk
+            - run:
+                  name: Deploy mac to staging
+                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
+                  environment:
+                      OSENV: mac
+                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
+
+    'stage-linux':
+        docker: *DOCKERIMAGE
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ./mac
             - run:
                   name: Install gcloud
                   command: |
@@ -129,12 +149,6 @@ jobs:
                   environment:
                       OSENV: linux
                       GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
-            - run:
-                  name: Deploy mac to staging
-                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
-                  environment:
-                      OSENV: mac
-                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
 
 workflows:
     version: 2
@@ -145,7 +159,9 @@ workflows:
             #     - "e2e":
             #         requires:
             #           - build
-            - 'stage':
+            - 'stage-mac':
+                  requires:
+                      - build-mac
+            - 'stage-linux':
                   requires:
                       - build-linux
-                      - build-mac
