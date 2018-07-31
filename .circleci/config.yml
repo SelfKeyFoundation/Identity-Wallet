@@ -16,6 +16,9 @@ jobs:
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
             - run:
+                  name: Install Homebrew Dependencies
+                  command: brew install node@9 yarn
+            - run:
                   name: Install Gulp
                   command: sudo npm i -g gulp-cli
             - run:
