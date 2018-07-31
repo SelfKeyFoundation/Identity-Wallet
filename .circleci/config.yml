@@ -99,7 +99,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: .
+                  at: /tmp/mac
             - restore_cache:
                   name: Restore Yarn Package Cache
                   keys:
