@@ -33,7 +33,7 @@ jobs:
                   name: Build App
                   command: yarn dist --publish=never
             - persist_to_workspace:
-                  root: ./mac
+                  root: .
                   paths:
                       - dist
             - store_artifacts:
@@ -77,7 +77,7 @@ jobs:
                   name: Build App
                   command: yarn dist --publish=never
             - persist_to_workspace:
-                  root: ./linux
+                  root: .
                   paths:
                       - dist
             - store_artifacts:
