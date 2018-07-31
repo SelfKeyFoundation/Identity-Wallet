@@ -1,104 +1,147 @@
 version: 2
 
 jobs:
-  "build":
-    docker: &DOCKERIMAGE
-      - image: circleci/node:9-stretch-browsers
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-{{ .Branch }}
-            - yarn-packages-master
-            - yarn-packages-
-      - run: 
-          name: Install OS Dependecies
-          command: |
-            sudo apt-get update
-            sudo apt-get install libudev-dev
-            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-      - run:
-          name: Install Gulp
-          command: sudo npm i -g gulp-cli
-      - run:
-          name: Install Node Packages
-          command: yarn
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
-      - run:
-          name: Set Sentry
-          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-      - run:
-          name: Build App
-          command: yarn dist --publish=never
-      - persist_to_workspace:
-          root: .
-          paths:
-            - dist
-      - store_artifacts:
-          path: dist
-  "e2e":
-    docker: *DOCKERIMAGE
-    steps:
-      - checkout
-      - attach_workspace:
-            at: .
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-{{ .Branch }}
-            - yarn-packages-master
-            - yarn-packages-
-      - run:
-          name: E2E Tests
-          command: OSENV=circle yarn test
+    'build-mac':
+        macos:
+            xcode: '9.0'
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ./mac
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-{{ .Branch }}
+                      - yarn-packages-master
+                      - yarn-packages-
+            - run:
+                  name: Install Gulp
+                  command: sudo npm i -g gulp-cli
+            - run:
+                  name: Install Node Packages
+                  command: yarn
+            - save_cache:
+                  name: Save Yarn Package Cache
+                  key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                  paths:
+                      - node_modules/
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Build App
+                  command: yarn dist --publish=never
+            - persist_to_workspace:
+                  root: ./mac
+                  paths:
+                      - dist
+            - store_artifacts:
+                  path: dist
 
-  "stage":
-    docker: *DOCKERIMAGE
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-{{ .Branch }}
-            - yarn-packages-master
-            - yarn-packages-
-      - run:
-          name: Install gcloud
-          command: |
-            export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-            echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            sudo apt-get update && sudo apt-get install google-cloud-sdk
-      - run:
-          name: Deploy to staging
-          command: OSENV=circle bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC 
-          environment:
-            OSENV: circle
-            GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1  
+    'build-linux':
+        docker: &DOCKERIMAGE
+            - image: circleci/node:9-stretch-browsers
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ./linux
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-{{ .Branch }}
+                      - yarn-packages-master
+                      - yarn-packages-
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install libudev-dev
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
+                  name: Install Gulp
+                  command: sudo npm i -g gulp-cli
+            - run:
+                  name: Install Node Packages
+                  command: yarn
+            - save_cache:
+                  name: Save Yarn Package Cache
+                  key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                  paths:
+                      - node_modules/
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Build App
+                  command: yarn dist --publish=never
+            - persist_to_workspace:
+                  root: ./linux
+                  paths:
+                      - dist
+            - store_artifacts:
+                  path: dist
+    'e2e-linux':
+        docker: *DOCKERIMAGE
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: .
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-{{ .Branch }}
+                      - yarn-packages-master
+                      - yarn-packages-
+            - run:
+                  name: E2E Tests
+                  command: OSENV=circle yarn test
+
+    'stage':
+        docker: *DOCKERIMAGE
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: .
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-{{ .Branch }}
+                      - yarn-packages-master
+                      - yarn-packages-
+            - run:
+                  name: Install gcloud
+                  command: |
+                      export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+                      echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+                      sudo apt-get update && sudo apt-get install google-cloud-sdk
+            - run:
+                  name: Deploy linux to staging
+                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
+                  environment:
+                      OSENV: linux
+                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
+            - run:
+                  name: Deploy mac to staging
+                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
+                  environment:
+                      OSENV: mac
+                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
 
 workflows:
-  version: 2
-  workflow1:
-    jobs:
-      - "build"
- #     - "e2e":
- #         requires:
- #           - build
-      - "stage":
-          requires:
-            - build
-
-
-
+    version: 2
+    workflow1:
+        jobs:
+            - 'build-linux'
+            - 'build-mac'
+            #     - "e2e":
+            #         requires:
+            #           - build
+            - 'stage':
+                  requires:
+                      - build-linux
+                      - build-mac
