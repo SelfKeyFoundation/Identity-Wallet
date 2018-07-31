@@ -149,20 +149,12 @@ function AddCustomTokenDialogController(
 		data.tokenId = '';
 		resetVariables();
 	};
-
-	const getNewTokenPrice = symbol => {
-		return SqlLiteService.getTokenPriceBySymbol(symbol);
-	};
-
 	$scope.addCustomToken = (event, form) => {
 		if (!$scope.formDataIsValid(form)) {
 			return CommonService.showToast('warning', 'Invalid token contract address.');
 		}
 
 		let newToken = $scope.formData;
-		if (!getNewTokenPrice(newToken.symbol)) {
-			return CommonService.showToast('warning', 'Invalid token symbol.');
-		}
 		$scope.inProgress = true;
 
 		Token.getBalanceByContractAddress(newToken.contractAddress, wallet.getPublicKeyHex())
