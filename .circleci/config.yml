@@ -7,7 +7,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: ./mac
+                  at: /tmp/mac
             - restore_cache:
                   name: Restore Yarn Package Cache
                   keys:
@@ -56,7 +56,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: ./linux
+                  at: /tmp/linux
             - restore_cache:
                   name: Restore Yarn Package Cache
                   keys:
@@ -115,7 +115,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: ./mac
+                  at: /tmp/mac
             - run:
                   name: Install gcloud
                   command: |
@@ -135,7 +135,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: ./linux
+                  at: /tmp/linux
             - run:
                   name: Install gcloud
                   command: |
