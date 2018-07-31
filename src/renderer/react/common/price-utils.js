@@ -10,9 +10,11 @@ const getCryptoEntity = (state, props) => {
 };
 
 export const getCryptoValue = (state, props) => {
-	return getCryptoEntity(state, props).balance;
+	const token = getCryptoEntity(state, props);
+	return token ? token.balance : 0;
 };
 
 export const getToValue = (state, props) => {
-	return getCryptoEntity(state, props).balanceInFiat;
+	const token = getCryptoEntity(state, props);
+	return token ? token.balanceInFiat : 0;
 };
