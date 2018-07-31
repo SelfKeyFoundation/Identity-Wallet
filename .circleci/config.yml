@@ -158,7 +158,7 @@ workflows:
             - 'build-linux'
             - 'build-mac'
             - 'e2e-mac':
-                  require:
+                  requires:
                       - build-mac
             - 'stage-mac':
                   requires:
