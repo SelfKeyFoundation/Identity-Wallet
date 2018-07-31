@@ -18,7 +18,7 @@ function RPCService($rootScope, $window, $q, $timeout, $http, CommonService) {
 			this.ipcRenderer = ipcRenderer;
 
 			this.ipcRenderer.on(RPC_METHOD, (event, actionId, actionName, error, data) => {
-				log.debug('%s %s %j', actionName, error, data);
+				log.debug('%s %s %2j', actionName, error, data);
 
 				if (error) {
 					listeners[actionId].defer.reject(error);
