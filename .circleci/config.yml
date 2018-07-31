@@ -20,7 +20,9 @@ jobs:
                   command: brew upgrade node
             - run:
                   name: Upgrade Yarn
-                  command: brew upgrade yarn
+                  command: |
+                      brew upgrade yarn
+                      brew link yarn
             - run:
                   name: Install Gulp
                   command: sudo npm i -g gulp-cli
