@@ -9,11 +9,8 @@ let $q;
 let $interval;
 let Web3Service;
 let CommonService;
-let ElectronService;
 let SqlLiteService;
 let SignService;
-
-let readyToShowNotification = false;
 
 let priceUpdaterInterval;
 let loadBalanceInterval = null;
@@ -34,9 +31,6 @@ class Wallet {
 	static set CommonService(value) {
 		CommonService = value;
 	}
-	static set ElectronService(value) {
-		ElectronService = value;
-	} // TODO remove (use RPCService instead)
 	static set SqlLiteService(value) {
 		SqlLiteService = value;
 	}
@@ -119,15 +113,7 @@ class Wallet {
 						this.balanceEth,
 						this.balanceInUsd
 					);
-					if (readyToShowNotification) {
-						ElectronService.showNotification(
-							'ETH Balance Changed',
-							'New Balance: ' + this.balanceEth
-						);
-					}
 				}
-
-				readyToShowNotification = true;
 
 				defer.resolve(this);
 			})
