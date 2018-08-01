@@ -18,6 +18,11 @@ jobs:
             - run:
                   name: Install Node Packages
                   command: yarn
+            - save_cache:
+                  name: Save Yarn Package Cache
+                  key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                  paths:
+                      - node_modules/
             - run:
                   name: Unit Tests
                   command: yarn test:unit
@@ -54,7 +59,7 @@ jobs:
                   command: yarn
             - save_cache:
                   name: Save Yarn Package Cache
-                  key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                  key: yarn-packages-mac-{{ .Branch }}-{{ checksum "yarn.lock" }}
                   paths:
                       - node_modules/
             - run:
@@ -137,9 +142,6 @@ jobs:
                   command: |
                       sudo mkdir ~/.config
                       sudo chown -R $USER:$GROUP ~/.config
-            - run:
-                  name: Install Node Packages
-                  command: yarn
             - run:
                   name: E2E Tests
                   command: OSENV=circle-mac yarn test:e2e
