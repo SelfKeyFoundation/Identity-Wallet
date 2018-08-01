@@ -1,6 +1,26 @@
 version: 2
 
 jobs:
+    'unit-test':
+        docker: &DOCKERIMAGE
+            - image: circleci/node:9-stretch-browsers
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-{{ .Branch }}
+                      - yarn-packages-master
+                      - yarn-packages-
+            - run:
+                  name: Install Node Packages
+                  command: yarn
+            - run:
+                  name: Unit Tests
+                  command: yarn test:unit
     'build-mac':
         macos:
             xcode: '9.0'
@@ -51,8 +71,7 @@ jobs:
                   path: dist
 
     'build-linux':
-        docker: &DOCKERIMAGE
-            - image: circleci/node:9-stretch-browsers
+        docker: *DOCKERIMAGE
         steps:
             - checkout
             - attach_workspace:
@@ -123,7 +142,7 @@ jobs:
                   command: yarn
             - run:
                   name: E2E Tests
-                  command: OSENV=mac yarn test
+                  command: OSENV=circle-mac yarn test:e2e
 
     'stage-mac':
         docker: *DOCKERIMAGE
@@ -169,8 +188,13 @@ workflows:
     version: 2
     workflow1:
         jobs:
-            - 'build-linux'
-            - 'build-mac'
+            - 'unit-test'
+            - 'build-linux':
+                  requires:
+                      - unit-test
+            - 'build-mac':
+                  requires:
+                      - unit-test
             - 'e2e-mac':
                   requires:
                       - build-mac
