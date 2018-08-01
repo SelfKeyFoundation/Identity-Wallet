@@ -167,10 +167,9 @@ jobs:
                       sudo apt-get update && sudo apt-get install google-cloud-sdk
             - run:
                   name: Deploy mac to staging
-                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
+                  command: bash deploy.sh $CIRCLE_SHA1 $(git log --format=%B -n 1 $CIRCLE_SHA1)
                   environment:
                       OSENV: mac
-                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
 
     'stage-linux':
         docker: *DOCKERIMAGE
