@@ -16,6 +16,12 @@ jobs:
                       - yarn-packages-master
                       - yarn-packages-
             - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install libudev-dev
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
                   name: Install Node Packages
                   command: yarn
             - save_cache:
