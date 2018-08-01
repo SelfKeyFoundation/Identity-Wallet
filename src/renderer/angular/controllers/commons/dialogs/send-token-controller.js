@@ -213,6 +213,7 @@ function SendTokenDialogController(
 		} else if (!$scope.backgroundProcessStatuses.txStatus && $scope.txHex) {
 			return 'Processing';
 		} else {
+			updateBalances();
 			return $scope.backgroundProcessStatuses.txStatus ? 'Sent!' : 'Failed!';
 		}
 	};
@@ -274,7 +275,6 @@ function SendTokenDialogController(
 				.then(txInfo => {
 					if (txInfo && txInfo.blockNumber !== null) {
 						$scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
-						updateBalances();
 						$interval.cancel(txInfoCheckInterval);
 					}
 				})
