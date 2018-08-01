@@ -16,6 +16,7 @@ function SendTokenDialogController(
 	$state,
 	$stateParams,
 	Web3Service,
+	RPCService,
 	CommonService,
 	SqlLiteService,
 	TxHistoryService,
@@ -248,6 +249,17 @@ function SendTokenDialogController(
 		prepare(newTokenKey);
 	};
 
+	// TODO: this function is this a workaround while the transaction transfer is not migrated to react.
+	// We need to call the backend so it can call the redux action to update the balance.
+	const updateBalances = () => {
+		RPCService.makeCall('getWalletByPublicKey', {
+			publicKey: $rootScope.wallet.getPublicKey()
+		});
+		RPCService.makeCall('getWalletTokens', {
+			walletId: $rootScope.wallet.id
+		});
+	};
+
 	/**
 	 *
 	 */
@@ -262,6 +274,7 @@ function SendTokenDialogController(
 				.then(txInfo => {
 					if (txInfo && txInfo.blockNumber !== null) {
 						$scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
+						updateBalances();
 						$interval.cancel(txInfoCheckInterval);
 					}
 				})
@@ -631,6 +644,7 @@ SendTokenDialogController.$inject = [
 	'$state',
 	'$stateParams',
 	'Web3Service',
+	'RPCService',
 	'CommonService',
 	'SqlLiteService',
 	'TxHistoryService',

@@ -958,6 +958,7 @@ module.exports = function(app, store) {
 	controller.prototype.getWalletByPublicKey = function(event, actionId, actionName, args) {
 		Wallet.findByPublicKey(args.publicKey)
 			.then(data => {
+				store.dispatch(walletOperations.updateWallet(data));
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
