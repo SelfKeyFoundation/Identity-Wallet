@@ -4,7 +4,7 @@ import { TokenBox } from 'selfkey-ui';
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey
+		publicKey: '0x' + getWallet(state).publicKey
 	};
 };
 
