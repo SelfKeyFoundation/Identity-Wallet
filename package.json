@@ -32,7 +32,7 @@
   "main": "./src/main/main.js",
   "scripts": {
     "dev": "gulp && electron-webpack dev",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps buildDependenciesFromSource",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
@@ -181,6 +181,7 @@
   },
   "build": {
     "appId": "org.selfkey.wallet",
+    "buildDependenciesFromSource": true,
     "generateUpdatesFilesForAllChannels": true,
     "files": [
       "dist/migrations",
