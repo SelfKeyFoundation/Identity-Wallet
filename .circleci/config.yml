@@ -164,10 +164,10 @@ jobs:
                       export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
                       echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
                       curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-                      sudo apt-get update && sudo apt-get install google-cloud-sdk
+                      sudo apt-get update && sudo apt-get install google-cloud-sdk jq
             - run:
                   name: Deploy mac to staging
-                  command: bash deploy.sh $CIRCLE_SHA1 $(git log --format=%B -n 1 $CIRCLE_SHA1)
+                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: mac
 
@@ -183,13 +183,13 @@ jobs:
                       export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
                       echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
                       curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-                      sudo apt-get update && sudo apt-get install google-cloud-sdk
+                      sudo apt-get update && sudo apt-get install google-cloud-sdk jq
             - run:
                   name: Deploy linux to staging
-                  command: bash deploy.sh $CIRCLE_SHA1 $GIT_COMMIT_DESC
+                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: linux
-                      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
+
     'publish-mac':
         macos:
             xcode: '9.0'
@@ -239,6 +239,11 @@ workflows:
             - 'stage-linux':
                   requires:
                       - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - release
             - 'build-mac':
                   requires:
                       - unit-test
@@ -248,10 +253,15 @@ workflows:
             - 'stage-mac':
                   requires:
                       - e2e-mac
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - release
             - 'publish-mac':
                   requires:
                       - stage-mac
                   filters:
                       branches:
                           only:
-                              - dev
+                              - master
