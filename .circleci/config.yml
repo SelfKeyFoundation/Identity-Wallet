@@ -191,6 +191,43 @@ jobs:
                   environment:
                       OSENV: linux
                       GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
+    'publish-mac':
+        macos:
+            xcode: '9.0'
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/mac
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  keys:
+                      - yarn-packages-mac-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - yarn-packages-mac-{{ .Branch }}
+                      - yarn-packages-mac-master
+                      - yarn-packages-mac-
+            - run:
+                  name: Upgrade Node
+                  command: brew upgrade node
+            - run:
+                  name: Upgrade Yarn
+                  command: brew upgrade yarn
+            - run:
+                  name: Add Read Access to yarn config
+                  command: |
+                      sudo mkdir ~/.config
+                      sudo chown -R $USER:$GROUP ~/.config
+            - run:
+                  name: Install Gulp
+                  command: sudo npm i -g gulp-cli
+            - run:
+                  name: Install Node Packages
+                  command: yarn
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Publish App to Github
+                  command: yarn publish-build
 
 workflows:
     version: 2
@@ -200,6 +237,9 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
+            - 'stage-linux':
+                  requires:
+                      - build-linux
             - 'build-mac':
                   requires:
                       - unit-test
@@ -209,6 +249,10 @@ workflows:
             - 'stage-mac':
                   requires:
                       - e2e-mac
-            - 'stage-linux':
+            - 'publish-mac':
                   requires:
-                      - build-linux
+                      - stage-mac
+                  filters:
+                      branches:
+                          only:
+                              - dev
