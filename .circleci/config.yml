@@ -3,7 +3,7 @@ version: 2
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
-            - image: circleci/node:9-stretch-browsers
+            - image: circleci/node:10.7.0-browsers
         steps:
             - checkout
             - attach_workspace:

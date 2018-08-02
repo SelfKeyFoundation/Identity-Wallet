@@ -27,7 +27,7 @@ install:
   - ps: Start-Process 'Win64OpenSSL-1_1_0h.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
   - choco install gcloudsdk
   - refreshenv
-  - ps: Install-Product node 9 x64
+  - ps: Install-Product node 10.7.0 x64
   - npm i -g --production windows-build-tools
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
