@@ -999,6 +999,11 @@ module.exports = function(app, store) {
 	controller.prototype.insertWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.create(args)
 			.then(data => {
+				Wallet.findById(data.walletId).then(wallet => {
+					store.dispatch(
+						walletTokensOperations.updateWalletTokens(data, wallet.publicKey)
+					);
+				});
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1009,6 +1014,11 @@ module.exports = function(app, store) {
 	controller.prototype.insertNewWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.createWithNewToken(args.data, args.balance, args.walletId)
 			.then(data => {
+				Wallet.findById(data.walletId).then(wallet => {
+					store.dispatch(
+						walletTokensOperations.updateWalletTokens(data, wallet.publicKey)
+					);
+				});
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
