@@ -137,7 +137,7 @@
     "electron-download": "^4.1.0",
     "electron-log": "^2.2.16",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-updater": "^2.23.3",
+    "electron-updater": "^3.0.3",
     "electron-webpack": "^2.1.2",
     "electron-webpack-eslint": "^2.1.1",
     "eslint": "^4.19.1",
