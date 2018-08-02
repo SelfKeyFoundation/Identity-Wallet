@@ -19,13 +19,13 @@ export class IdAttribute extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['walletId', 'idAttributeType'],
+			required: ['walletId', 'type'],
 			properties: {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
-				idAttributeType: { type: 'string' },
-				items: { type: 'array' },
-				order: { type: 'integer' }
+				type: { type: 'string' },
+				data: { type: 'object' },
+				documentId: { type: 'integer' }
 			}
 		};
 	}
@@ -33,6 +33,7 @@ export class IdAttribute extends BaseModel {
 	static get relationMappings() {
 		const Wallet = require('../wallet/wallet').default;
 		const IdAttributeType = require('./id-attribute-type').default;
+		const Document = require('./document').default;
 		return {
 			wallet: {
 				relation: Model.BelongsToOneRelation,
@@ -42,126 +43,71 @@ export class IdAttribute extends BaseModel {
 					to: `${Wallet.tableName}.id`
 				}
 			},
-			type: {
+			attributeType: {
 				relation: Model.BelongsToOneRelation,
 				modelClass: IdAttributeType,
 				join: {
-					from: `${this.tableName}.idAttributeType`,
+					from: `${this.tableName}.type`,
 					to: `${IdAttributeType.tableName}.key`
+				}
+			},
+			document: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Document,
+				join: {
+					from: `${this.tableName}.documentId`,
+					to: `${Document.tableName}.id`
 				}
 			}
 		};
 	}
 
-	static async create(walletId, idAttributeType, staticData, file) {
-		const Document = require('./document').default;
+	static async create(attr) {
 		const tx = await transaction.start(this.knex());
 		try {
-			let attr = await this.query(tx).findOne({ walletId, idAttributeType });
-			if (attr) throw new Error('id_attribute_already_exists');
-			let document = null;
-			if (file) {
-				document = await Document.create(file, tx);
-			}
-			let idAttribute = generateIdAttributeObject(
-				walletId,
-				idAttributeType,
-				staticData,
-				document
-			);
-			let itm = await this.query(tx).insertAndFetch(idAttribute);
+			attr = await this.query(tx).insertGraphAndFetch(attr);
 			await tx.commit();
-			return itm;
+			return attr;
 		} catch (error) {
 			await tx.rollback(error);
 			throw error;
 		}
 	}
 
-	static async addEditDocumentToIdAttributeItemValue(
-		idAttributeId,
-		idAttributeItemId,
-		idAttributeItemValueId,
-		file
-	) {
-		const Document = require('./document').default;
+	static addDocuemnt(id, document) {
+		return this.update({ id, document });
+	}
+
+	static addData(id, data) {
+		return this.update({ id, data });
+	}
+
+	static findAllByWalletId(walletId) {
+		return this.query().where({ walletId });
+	}
+
+	static async update(attr) {
 		const tx = await transaction.start(this.knex());
 		try {
-			let idAttribute = await this.query(tx).findById(idAttributeId);
-			if (!idAttribute) throw new Error('id_attribute_not_found');
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-			if (value && value.documentId) {
-				await Document.delete(value.documentId, tx);
-			}
-			let document = await Document.create(file, tx);
-			value.documentId = document.id;
-			value.documentName = document.name;
-			idAttribute = await this.query(tx).patchAndFetchById(idAttributeId, idAttribute);
+			attr = await this.query(tx).upsertGraphAndFetch(attr);
 			await tx.commit();
-			return idAttribute;
+			return attr;
 		} catch (error) {
-			await tx.rollback(error);
+			await tx.rollback();
 			throw error;
 		}
 	}
 
-	static async addEditStaticDataToIdAttributeItemValue(
-		idAttributeId,
-		idAttributeItemId,
-		idAttributeItemValueId,
-		staticData
-	) {
+	static async delete(id) {
 		const tx = await transaction.start(this.knex());
 		try {
-			let idAttribute = await this.query(tx).findById(idAttributeId);
-			if (!idAttribute) throw new Error('id_attribute_not_found');
-
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-
-			value.staticData = staticData;
-
-			idAttribute = await this.query(tx).patchAndFetchById(idAttribute.id, idAttribute);
+			let attr = await this.query(tx)
+				.findById(id)
+				.eager('document');
+			if (attr.document) await attr.document.$query(tx).delete();
+			await attr.$query(tx).delete();
 			await tx.commit();
-			return idAttribute;
-		} catch (error) {
-			await tx.rollback(error);
-			throw error;
-		}
-	}
-
-	static async findAllByWalletId(walletId) {
-		let attrs = await this.query().where({ walletId });
-		return attrs.reduce((acc, attr) => {
-			if (_.find(acc, { idAttributeType: attr.idAttributeType })) return acc;
-			acc[attr.id] = attr;
-			return acc;
-		}, {});
-	}
-
-	static async delete(idAttributeId, idAttributeItemId, idAttributeItemValueId) {
-		const Document = require('./document').default;
-		const tx = await transaction.start(this.knex());
-		try {
-			let idAttribute = await this.query(tx).findById(idAttributeId);
-			let value = getIdAttributeItemValue(
-				idAttribute,
-				idAttributeItemId,
-				idAttributeItemValueId
-			);
-			if (value && value.documentId) {
-				await Document.delete(value.documentId, tx);
-			}
-			await this.query(tx).deleteById(idAttributeId);
-			await tx.commit();
-			return idAttribute;
+			return attr;
 		} catch (error) {
 			await tx.rollback();
 			throw error;
