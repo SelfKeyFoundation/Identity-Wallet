@@ -999,7 +999,6 @@ module.exports = function(app, store) {
 	const updateWalletTokensStore = data => {
 		Wallet.findById(data.walletId).then(wallet => {
 			WalletToken.findByTokenId(data.tokenId).then(tokens => {
-				log.info('updateWalletTokensStore %j', tokens);
 				store.dispatch(walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey));
 			});
 		});
