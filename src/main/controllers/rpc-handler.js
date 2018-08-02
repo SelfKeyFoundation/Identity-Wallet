@@ -996,9 +996,18 @@ module.exports = function(app, store) {
 			});
 	};
 
+	const updateWalletTokensStore = data => {
+		Wallet.findById(data.walletId).then(wallet => {
+			WalletToken.findByTokenId(data.tokenId).then(tokens => {
+				store.dispatch(walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey));
+			});
+		});
+	};
+
 	controller.prototype.insertWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.create(args)
 			.then(data => {
+				updateWalletTokensStore(data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1009,6 +1018,7 @@ module.exports = function(app, store) {
 	controller.prototype.insertNewWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.createWithNewToken(args.data, args.balance, args.walletId)
 			.then(data => {
+				updateWalletTokensStore(data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1019,13 +1029,7 @@ module.exports = function(app, store) {
 	controller.prototype.updateWalletToken = function(event, actionId, actionName, args) {
 		WalletToken.update(args)
 			.then(data => {
-				Wallet.findById(data.walletId).then(wallet => {
-					WalletToken.findByTokenId(data.tokenId).then(tokens => {
-						store.dispatch(
-							walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey)
-						);
-					});
-				});
+				updateWalletTokensStore(data);
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
