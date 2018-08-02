@@ -132,7 +132,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "delay": "^3.0.0",
     "electron": "^2.0.4",
-    "electron-builder": "^20.19.2",
+    "electron-builder": "^20.26.1",
     "electron-chromedriver": "^2.0.0",
     "electron-download": "^4.1.0",
     "electron-log": "^2.2.16",
