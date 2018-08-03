@@ -121,92 +121,53 @@ export class IdAttribute extends BaseModel {
 		requiredStaticData
 	) {
 		const WalletSetting = require('../wallet/wallet-setting').default;
-		const Document = require('./document').default;
 		const tx = await transaction.start(this.knex());
 		try {
 			let walletSetting = await WalletSetting.findByWalletId(walletId, tx);
-			let idAttributesSavePromises = [];
-			let documentsSavePromises = [];
 
-			let itemsToSave = {};
-
-			for (let i in requiredDocuments) {
-				let requirement = requiredDocuments[i];
-				if (!requirement.attributeType) continue;
-
-				let idAttribute = generateEmptyIdAttributeObject(
-					walletId,
-					requirement.attributeType
-				);
-				idAttribute.tempId = genRandId();
-
-				for (let j in requirement.docs) {
-					let fileItems = requirement.docs[j].fileItems;
-					let idAttributeItem = generateEmptyIdAttributeItemObject();
-					idAttribute.items.push(idAttributeItem);
-
-					for (let k in fileItems) {
-						let fileItem = fileItems[k];
-						let idAttributeItemValue = generateEmptyIdAttributeItemValueObject();
-						idAttributeItem.values.push(idAttributeItemValue);
-
-						let document = {
-							name: fileItem.name,
-							mimeType: fileItem.mimeType,
-							size: fileItem.size,
-							buffer: fileItem.buffer,
-							createdAt: Date.now()
-						};
-
-						documentsSavePromises.push(
-							Document.create(document, tx)
-								.then(document => {
-									idAttributeItemValue.documentId = document.id;
-									idAttributeItemValue.documentName = document.name;
-									itemsToSave[idAttribute.tempId] = idAttribute;
-								})
-								.catch(error => {
-									log.error(error);
-								})
+			let docAttrs = requiredDocuments
+				.filter(req => !!req.attributeType)
+				.map(req =>
+					req.docs.reduce((acc, doc) => {
+						acc.concat(
+							doc.fileItems.map(f => ({
+								type: req.attributeType,
+								walletId,
+								document: {
+									name: f.name,
+									mimeType: f.mimeType,
+									size: f.size,
+									buffer: f.buffer
+								}
+							}))
 						);
-					}
-				}
-			}
+						return acc;
+					}, [])
+				)
+				.reduce((acc, docs) => {
+					acc.concat(docs);
+					return acc;
+				}, []);
 
-			for (let i in requiredStaticData) {
-				let requirement = requiredStaticData[i];
-				if (!requirement.attributeType) continue;
-
+			let dataAttrs = requiredStaticData.filter(req => !!req.attributeType).map(req => {
 				let staticData = {};
-				for (let j in requirement.staticDatas) {
-					let answer = requirement.staticDatas[j];
+				for (let j in req.staticDatas) {
+					let answer = req.staticDatas[j];
 					staticData['line' + (parseInt(j) + 1).toString()] = answer;
 				}
-
-				let idAttribute = generateIdAttributeObject(
+				return {
 					walletId,
-					requirement.attributeType,
-					staticData,
-					null
-				);
-				idAttribute.tempId = genRandId();
-
-				itemsToSave[idAttribute.tempId] = idAttribute;
-			}
+					type: req.attributeType,
+					data: staticData
+				};
+			});
 
 			walletSetting.airDropCode = exportCode;
 
-			await Promise.all(documentsSavePromises);
+			await Promise.all(
+				[...docAttrs, ...dataAttrs].map(attr => this.query(tx).insertGraph(attr))
+			);
 
-			for (let i in itemsToSave) {
-				(function() {
-					delete itemsToSave[i].tempId;
-					idAttributesSavePromises.push(
-						IdAttribute.query(tx).insertAndFetch(itemsToSave[i])
-					);
-				})(i);
-			}
-			await Promise.all(idAttributesSavePromises);
 			walletSetting = await WalletSetting.updateById(walletSetting.id, walletSetting, tx);
 			await tx.commit();
 			return walletSetting;
