@@ -38,15 +38,15 @@ build_script:
   - echo {"dsn":"%SENTRY_DSN%"} > src\main\assets\data\sentry.json
   - set DEBUG=electron-builder
   - yarn dist --publish=never
-#test_script:
-#  - yarn test
+test_script:
+  - yarn test:unit
 deploy_script:
     - ps: $env:VERSION = (Get-Content package.json) -join "`n" | ConvertFrom-Json | Select -ExpandProperty "version"
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
     - if defined _tempvar (
         for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
-        set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%.%datetime:~10,2%
+        set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%
         C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
         gcloud auth activate-service-account --key-file client-secret.json
         gsutil cp dist/*.exe gs://selfkey-builds/%APPVEYOR_REPO_BRANCH%/%VERSION%/%datetime%/  

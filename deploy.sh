@@ -1,5 +1,5 @@
 #!/bin/bash
-TIMESTAMP=$(date +%Y.%m.%d.%H.%M)
+TIMESTAMP=$(date +%Y.%m.%d.%H)
 COMMIT_MESSAGE=$1
 echo "staging $VERSION"
 openssl aes-256-cbc -K $encrypted_40ef2f4394e3_key -iv $encrypted_40ef2f4394e3_iv -in client-secret.json.enc -out client-secret.json -d

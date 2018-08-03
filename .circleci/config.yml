@@ -227,11 +227,11 @@ workflows:
             - 'stage-linux':
                   requires:
                       - build-linux
-            #                  filters:
-            #                      branches:
-            #                          only:
-            #                              - dev
-            #                              - release
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - release
             - 'build-mac':
                   requires:
                       - unit-test
@@ -241,11 +241,11 @@ workflows:
             - 'stage-mac':
                   requires:
                       - e2e-mac
-            #                  filters:
-            #                      branches:
-            #                          only:
-            #                              - dev
-            #                              - release
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - release
             - 'publish-mac':
                   requires:
                       - stage-mac
