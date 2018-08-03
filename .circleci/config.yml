@@ -48,7 +48,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node
+                  command: brew upgrade node@10
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
@@ -139,7 +139,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node
+                  command: brew upgrade node@10
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
@@ -153,18 +153,12 @@ jobs:
                   command: OSENV=circle-mac yarn test:e2e
 
     'stage-mac':
-        docker: *DOCKERIMAGE
+        docker: &GGLOUDIMAGE
+            - image: google/cloud-sdk:latest
         steps:
             - checkout
             - attach_workspace:
                   at: /tmp/mac
-            - run:
-                  name: Install gcloud
-                  command: |
-                      export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-                      echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-                      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-                      sudo apt-get update && sudo apt-get install google-cloud-sdk jq
             - run:
                   name: Deploy mac to staging
                   command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
@@ -172,18 +166,12 @@ jobs:
                       OSENV: mac
 
     'stage-linux':
-        docker: *DOCKERIMAGE
+        docker: &GGLOUDIMAGE
+            - image: google/cloud-sdk:latest
         steps:
             - checkout
             - attach_workspace:
                   at: /tmp/linux
-            - run:
-                  name: Install gcloud
-                  command: |
-                      export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-                      echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-                      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-                      sudo apt-get update && sudo apt-get install google-cloud-sdk jq
             - run:
                   name: Deploy linux to staging
                   command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
@@ -206,7 +194,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node
+                  command: brew upgrade node@10
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
@@ -239,11 +227,11 @@ workflows:
             - 'stage-linux':
                   requires:
                       - build-linux
-                  filters:
-                      branches:
-                          only:
-                              - dev
-                              - release
+            #                  filters:
+            #                      branches:
+            #                          only:
+            #                              - dev
+            #                              - release
             - 'build-mac':
                   requires:
                       - unit-test
@@ -253,11 +241,11 @@ workflows:
             - 'stage-mac':
                   requires:
                       - e2e-mac
-                  filters:
-                      branches:
-                          only:
-                              - dev
-                              - release
+            #                  filters:
+            #                      branches:
+            #                          only:
+            #                              - dev
+            #                              - release
             - 'publish-mac':
                   requires:
                       - stage-mac
