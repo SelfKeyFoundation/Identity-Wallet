@@ -3,7 +3,7 @@ version: 2
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
-            - image: circleci/node:10.7.0-stretch-browsers
+            - image: circleci/node:8.11.3-stretch-browsers
         steps:
             - checkout
             - attach_workspace:
@@ -48,7 +48,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node@10
+                  command: brew upgrade node@8
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
@@ -139,7 +139,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node@10
+                  command: brew upgrade node@8
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
@@ -194,7 +194,7 @@ jobs:
                       - yarn-packages-mac-
             - run:
                   name: Upgrade Node
-                  command: brew upgrade node@10
+                  command: brew upgrade node@8
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
