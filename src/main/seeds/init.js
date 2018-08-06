@@ -1,4 +1,4 @@
-const { getUserDataPath } = require('../utils/common');
+const { getUserDataPath } = require('../../common/utils/common');
 const userDataPath = getUserDataPath();
 const countriesList = require('../assets/data/country-list.json');
 const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json');

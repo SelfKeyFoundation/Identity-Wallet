@@ -1,11 +1,12 @@
 /* global __static */
-const fs = require('fs');
-const electron = require('electron');
-const path = require('path');
-const version = electron.app.getVersion();
-const { download } = require('electron-dl');
-const { Logger } = require('common/logger');
+import fs from 'fs';
+import electron from 'electron';
+import path from 'path';
+import { download } from 'electron-dl';
+import { Logger } from 'common/logger';
+
 const log = new Logger('Menu');
+const version = electron.app.getVersion();
 /**
  * Create the Application's main menu
  */
@@ -123,4 +124,4 @@ const getMenuTemplate = mainWindow => {
 	return defaultMenu;
 };
 
-module.exports = getMenuTemplate;
+export default getMenuTemplate;

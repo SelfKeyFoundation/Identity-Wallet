@@ -1,6 +1,6 @@
 process.env.MODE = 'test';
 const Mocha = require('mocha');
-const { walkSync } = require('../src/main/utils/fs');
+const { walkSync } = require('../src/common/utils/fs');
 const path = require('path');
 const config = require('./config/config.js');
 const exec = require('child_process').exec;

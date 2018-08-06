@@ -1,6 +1,6 @@
 /* global angular */
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('MemberIdWalletMainController');
 function MemberIdWalletMainController(
 	$rootScope,

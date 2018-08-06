@@ -1,6 +1,6 @@
 /* globals BigNumber, globalFuncs */
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('EtherUnits');
 function EtherUnits($rootScope, $http) {
 	'ngInject';

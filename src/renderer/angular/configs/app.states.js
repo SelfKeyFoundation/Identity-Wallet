@@ -1,6 +1,6 @@
 /* global appName */
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('app.states');
 function appStates(
 	$urlRouterProvider,

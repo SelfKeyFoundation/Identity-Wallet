@@ -1,7 +1,7 @@
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
-import EthUtils from 'common/utils/eth-utils';
-const Web3Service = require('../../main/controllers/web3-service').default();
+import EthUtils from '../utils/eth-utils';
+import Web3Service from 'main/blockchain/web3-service';
 const web3Service = new Web3Service();
 const balanceHex = '0x70a08231';
 

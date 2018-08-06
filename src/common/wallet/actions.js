@@ -1,7 +1,7 @@
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
 import EthUnits from 'common/utils/eth-units';
-const Web3Service = require('../../main/controllers/web3-service').default();
+import Web3Service from 'main/blockchain/web3-service';
 const web3Service = new Web3Service();
 
 const getWalletWithBalance = wallet => {

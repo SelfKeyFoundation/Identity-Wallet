@@ -1,7 +1,7 @@
 /* eslint-env node */ /* global window */
 // eslint-disable-next-line
 const appPackage = require(__dirname + '/../../package.json');
-const config = require('./config');
+const config = require('common/config');
 const defaultWindowOpen = window.open;
 const async = require('async');
 const electron = require('electron');

@@ -5,8 +5,7 @@ import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
-
-const { Logger } = require('common/logger');
+import { Logger } from 'common/logger';
 
 const path = require('path');
 
@@ -76,7 +75,7 @@ const appStates = require('./angular/configs/app.states');
 /**
  * constants
  */
-const config = require('../main/config');
+const config = require('common/config');
 let envConfig = isDevelopment ? config.default : config.production;
 let appConfig = Object.assign(config.common, envConfig);
 appConfig.chainId = config.chainId;

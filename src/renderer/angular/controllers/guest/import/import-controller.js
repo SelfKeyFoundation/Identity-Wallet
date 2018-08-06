@@ -1,4 +1,4 @@
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('GuestImportWalletController');
 function GuestImportWalletController($rootScope, $scope, $state, SqlLiteService) {
 	'ngInject';

@@ -1,6 +1,6 @@
 const EthUtils = require('../classes/eth-utils');
 const Web3 = require('web3');
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('Web3Service');
 // documentation
 // https://www.myetherapi.com/

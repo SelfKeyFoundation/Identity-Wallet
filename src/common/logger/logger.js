@@ -30,9 +30,13 @@ export class Logger {
 		}
 		return false;
 	}
-	fmtMessage(level, msg, args) {
+	fmtMessage(level, msg, args = []) {
 		if (msg instanceof Error) {
 			msg = errToStr(msg);
+		}
+		if (typeof msg === 'object') {
+			args.shift(msg);
+			msg = '%2j';
 		}
 		args = args.map(e => (e instanceof Error ? errToStr(e) : e));
 		if (typeof msg === 'string') {
@@ -40,6 +44,7 @@ export class Logger {
 				msg = vsprintf(msg, args);
 			} catch (error) {
 				this.error(error);
+				this.error(`could not format msg ${msg}`);
 			}
 		}
 		return `${this.processName} ${this.name} ${level}: ${msg}`;
@@ -62,6 +67,7 @@ export class Logger {
 	}
 
 	log(level, msg, ...args) {
+		if (process.env.MODE === 'test' && !Logger.TEST) return;
 		if (!this.checkLevels(level)) return;
 		let formattedMsg = this.fmtMessage(level, msg, args);
 		if (this.isFiltered(level, formattedMsg)) return;

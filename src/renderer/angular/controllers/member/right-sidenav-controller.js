@@ -1,5 +1,5 @@
 /* global angular */
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('MemberRightSidenavController');
 function MemberRightSidenavController($rootScope, $scope, $mdSidenav, $state, $mdDialog) {
 	'ngInject';
