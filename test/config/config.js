@@ -17,13 +17,13 @@ let fullCmd =
 	'bash ' + pwd + '/test/utils/full/full.sh ' + user + ' ' + pwd.replace('/test/utils/full/', '');
 
 // OSENV Settings
-if (osEnv === 'travis') {
-	appPath = pwd + '/dist/' + 'mac/' + appCacheName + '.app/Contents/MacOS/' + appCacheName;
+if (osEnv === 'circle-mac') {
+	appPath = '/tmp/mac/dist/' + 'mac/' + appCacheName + '.app/Contents/MacOS/' + appCacheName;
 }
 
-if (osEnv === 'circle') {
+if (osEnv === 'circle-linux') {
 	chmodCmd = 'chmod a+x ' + pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
-	appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
+	appPath = '/tmp/linux/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
 }
 
 if (osEnv === 'linux') {

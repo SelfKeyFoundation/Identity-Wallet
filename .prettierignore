@@ -1,3 +1,4 @@
 *.json
 README.md
 src/main/extended_modules/**
+appveyor.yml
