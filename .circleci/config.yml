@@ -47,6 +47,9 @@ jobs:
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
             - run:
+                  name: Upgrade Yarn
+                  command: brew upgrade yarn
+            - run:
                   name: Add Read Access to yarn config
                   command: |
                       sudo mkdir ~/.config
@@ -132,6 +135,9 @@ jobs:
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
             - run:
+                  name: Upgrade Yarn
+                  command: brew upgrade yarn
+            - run:
                   name: Add Read Access to yarn config
                   command: |
                       sudo mkdir ~/.config
@@ -180,6 +186,9 @@ jobs:
                       - yarn-packages-mac-{{ .Branch }}
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
+            - run:
+                  name: Upgrade Yarn
+                  command: brew upgrade yarn
             - run:
                   name: Add Read Access to yarn config
                   command: |
