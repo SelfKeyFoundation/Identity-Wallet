@@ -47,9 +47,6 @@ jobs:
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
             - run:
-                  name: Upgrade Node
-                  command: brew upgrade node@8
-            - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
             - run:
@@ -138,9 +135,6 @@ jobs:
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
             - run:
-                  name: Upgrade Node
-                  command: brew upgrade node@8
-            - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
             - run:
@@ -192,9 +186,6 @@ jobs:
                       - yarn-packages-mac-{{ .Branch }}
                       - yarn-packages-mac-master
                       - yarn-packages-mac-
-            - run:
-                  name: Upgrade Node
-                  command: brew upgrade node@8
             - run:
                   name: Upgrade Yarn
                   command: brew upgrade yarn
