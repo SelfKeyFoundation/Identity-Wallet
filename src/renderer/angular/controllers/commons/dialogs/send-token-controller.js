@@ -405,7 +405,7 @@ function SendTokenDialogController(
 			})
 			.catch(error => {
 				error = error.toString();
-				if (error.indexOf('Insufficient funds') === -1) {
+				if (error.indexOf('insufficient funds') === -1) {
 					CommonService.showToast('error', error, 20000);
 				} else if (error.indexOf(TIMEOUT_ERROR) !== -1) {
 					send();
