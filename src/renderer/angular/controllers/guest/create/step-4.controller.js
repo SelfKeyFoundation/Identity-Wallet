@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('GuestKeystoreCreateStep4Controller');
 function GuestKeystoreCreateStep4Controller($rootScope, $scope, $state, $window) {
 	'ngInject';

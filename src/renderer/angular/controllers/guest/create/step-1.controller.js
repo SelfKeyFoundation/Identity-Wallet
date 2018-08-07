@@ -1,6 +1,6 @@
 /* global angular */
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('GuestKeystoreCreateStep1Controller');
 function GuestKeystoreCreateStep1Controller(
 	$rootScope,

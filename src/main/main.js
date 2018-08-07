@@ -1,18 +1,26 @@
 /* global __static */
 'use strict';
-import configureStore from 'common/configure-store';
+import path from 'path';
+import fs from 'fs';
+import isOnline from 'is-online';
+import ChildProcess from 'child_process';
+import electron, { Menu } from 'electron';
+import configureStore from 'common/store/configure-store';
 import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
+import { Logger } from '../common/logger';
+import { getUserDataPath, isDevMode, isDebugMode, isTestMode } from 'common/utils/common';
+import config from 'common/config';
+import createMenuTemplate from './menu';
+import crashReportService from 'common/logger/crash-report-service';
+import db from './db/db';
+import PriceService from './token/price-service';
+import ExchangesService from './exchanges/exchanges-service';
+import IdAttributeTypeService from './identity/id-attribute-type-service';
+import TxHistoryService from './blockchain/tx-history-service';
+import Web3Service from './blockchain/web3-service';
+import LedgerService from './blockchain/leadger-service';
 
-import { Logger } from 'common/logger';
-
-const path = require('path');
-const fs = require('fs');
-const electron = require('electron');
-const { Menu } = require('electron');
-const isOnline = require('is-online');
-const { getUserDataPath, isDevMode, isDebugMode } = require('./utils/common');
-const config = require('./config.js');
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
@@ -21,14 +29,12 @@ const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
-const createMenuTemplate = require('./menu');
-
-const crashReportService = require('./controllers/crash-report-service');
-
 /**
  * auto updated
  */
-process.on('unhandledRejection', err => log.error(err));
+process.on('unhandledRejection', err => {
+	log.error('unhandled rejection, %s', err);
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -57,7 +63,7 @@ let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 let mainWindow;
 
 for (let i in i18n) {
-	app.translations[i18n[i]] = require(`./i18n/${i18n[i]}.js`);
+	app.translations[i18n[i]] = require(`../common/locale/i18n/${i18n[i]}.js`);
 }
 
 if (!handleSquirrelEvent()) {
@@ -82,51 +88,41 @@ let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDire
 function onReady(app) {
 	return async () => {
 		global.__static = __static;
-
 		if (isSecondInstance) {
+			log.warn('another instance of the app is running, quiting');
 			electron.app.quit();
 			return;
 		}
-
-		if (process.env.NODE_ENV !== 'development' && process.env.MODE !== 'test') {
+		if (!isDevMode() && !isTestMode()) {
 			// Initate auto-updates
 			const { appUpdater } = require('./autoupdater');
 			appUpdater();
 		}
-
-		const initDb = require('./services/knex').init;
-
-		await initDb();
-		await crashReportService.startCrashReport();
+		await db.init();
+		if (!isDevMode() && !isTestMode()) {
+			await crashReportService.startCrashReport();
+		}
 		const store = configureStore(global.state, 'main');
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
 		} catch (e) {
-			log.error(e);
+			log.error('common/locale initi error %s', e);
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
 
-		const PriceService = require('./controllers/price-service');
+		const priceService = (electron.app.priceService = new PriceService());
 
-		const AirtableService = require('./controllers/airtable-service');
-
-		const LedgerService = require('./controllers/ledger-service')();
-		electron.app.ledgerService = new LedgerService();
-
-		const TrezorService = require('./controllers/trezor-service')();
-		electron.app.trezorService = new TrezorService();
-
-		const Web3Service = require('./controllers/web3-service').default(app);
 		electron.app.web3Service = new Web3Service();
-
-		const RPCHandler = require('./controllers/rpc-handler')(app, store);
+		electron.app.ledgerService = new LedgerService(electron.app.web3Service);
+		const TrezorService = require('./blockchain/trezor-service')();
+		electron.app.trezorService = new TrezorService();
+		const RPCHandler = require('./rpc-handler')(app, store);
 		electron.app.rpcHandler = new RPCHandler();
-		electron.app.rpcHandler.startTokenPricesBroadcaster(PriceService);
+		electron.app.rpcHandler.startTokenPricesBroadcaster(priceService);
 		electron.app.rpcHandler.startTrezorBroadcaster();
 
-		const TxHistory = require('./controllers/tx-history-service').default(app);
-		electron.app.txHistory = new TxHistory();
+		electron.app.txHistoryService = new TxHistoryService(electron.app.web3Service);
 
 		createKeystoreFolder();
 
@@ -197,10 +193,10 @@ function onReady(app) {
 					mainWindow.webContents.send('APP_START_LOADING');
 					// start update cmc data
 
-					PriceService.startUpdateData();
-					AirtableService.loadIdAttributeTypes();
-					AirtableService.loadExchangeData();
-					electron.app.txHistory.startSyncingJob();
+					priceService.startUpdateData();
+					IdAttributeTypeService.loadIdAttributeTypes();
+					ExchangesService.loadExchangeData();
+					electron.app.txHistoryService.startSyncingJob();
 
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
@@ -222,6 +218,7 @@ function onReady(app) {
 
 		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
 			if (electron.app.rpcHandler[actionName]) {
+				log.debug('rpc %s, %2j', actionName, args);
 				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
@@ -297,8 +294,6 @@ function handleSquirrelEvent() {
 	if (process.argv.length === 1) {
 		return false;
 	}
-
-	const ChildProcess = require('child_process');
 
 	const appFolder = path.resolve(process.execPath, '..');
 	const rootAtomFolder = path.resolve(appFolder, '..');

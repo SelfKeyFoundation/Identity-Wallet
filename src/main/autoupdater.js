@@ -1,10 +1,10 @@
 'use strict';
-const { app, dialog } = require('electron');
-const { autoUpdater } = require('electron-updater');
-const log = require('electron-log');
-const striptags = require('striptags');
+import { app, dialog } from 'electron';
+import { autoUpdater } from 'electron-updater';
+import log from 'electron-log';
+import striptags from 'striptags';
 
-function appUpdater() {
+export function appUpdater() {
 	autoUpdater.logger = log;
 
 	// TODO: hard coding it now but should be moved to a config file or build time or allow user to choose
@@ -46,6 +46,4 @@ function appUpdater() {
 	autoUpdater.checkForUpdatesAndNotify();
 }
 
-module.exports = {
-	appUpdater
-};
+export default appUpdater;

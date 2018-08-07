@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('TermsDialogController');
 function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService, $timeout) {
 	'ngInject';

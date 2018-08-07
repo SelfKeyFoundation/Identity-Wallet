@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('SqlLiteService');
 function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS) {
 	'ngInject';
@@ -15,7 +15,7 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 	let EXCHANGE_DATA = [];
 
 	// APP_SETTINGS = {}
-	// WALLET_SETTINGS = {}
+	// WALLET_SETTINGS = {}˝
 
 	class SqlLiteService {
 		constructor() {
@@ -31,7 +31,7 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 						);
 					})
 					.catch(error => {
-						log.error(error);
+						log.error('load data failed %2j', error);
 					});
 				this.listenForDataChange();
 			}
@@ -88,7 +88,6 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 				if (idAttributeTypes) {
 					for (let i in idAttributeTypes) {
 						let item = idAttributeTypes[i];
-						item.entity = item.entity;
 						ID_ATTRIBUTE_TYPES_STORE[item.key] = item;
 					}
 				}
@@ -97,8 +96,8 @@ function SqlLiteService($rootScope, $q, $interval, $timeout, RPCService, EVENTS)
 
 		loadTokenPrices(data) {
 			if (data) {
-				data.map((item, index) => {
-					TOKEN_PRICES_STORE[index] = item;
+				data.map(item => {
+					TOKEN_PRICES_STORE[item.id] = item;
 				});
 				log.debug('TOKEN_PRICES LOADED %j', TOKEN_PRICES_STORE);
 			}

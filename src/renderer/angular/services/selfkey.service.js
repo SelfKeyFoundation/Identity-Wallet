@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('SelfkeyService');
 function SelfkeyService($rootScope, $http, CONFIG) {
 	'ngInject';

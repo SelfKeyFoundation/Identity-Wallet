@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('SignService');
 const Wallet = require('../classes/wallet');
 const Token = require('../classes/token');

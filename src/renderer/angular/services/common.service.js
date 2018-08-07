@@ -1,5 +1,5 @@
 'use strict';
-const { Logger } = require('common/logger');
+const { Logger } = require('common/logger/logger');
 const log = new Logger('CommonService');
 const Wallet = require('../classes/wallet');
 const CommonUtils = require('../classes/common-utils');
