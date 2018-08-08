@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { Model, transaction } from 'objection';
-import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
-import { genRandId } from 'common/utils/crypto';
 
 const TABLE_NAME = 'id_attributes';
 
