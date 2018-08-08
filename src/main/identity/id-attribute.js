@@ -181,35 +181,14 @@ export class IdAttribute extends BaseModel {
 		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
 		const attrs = [];
 		for (let i in idAttributeTypes) {
-			let idAttributeType = idAttributeTypes[i];
+			let type = idAttributeTypes[i];
 
 			let item = {
 				walletId,
-				idAttributeType: idAttributeType.key,
-				items: [],
+				type: type.key,
+				data: { value: initialIdAttributes[type.key] },
 				createdAt: Date.now()
 			};
-
-			item.items.push({
-				id: genRandId(),
-				name: null,
-				isVerified: 0,
-				order: 0,
-				createdAt: Date.now(),
-				updatedAt: null,
-				values: [
-					{
-						id: genRandId(),
-						staticData: {
-							line1: initialIdAttributes[idAttributeType.key]
-						},
-						documentId: null,
-						order: 0,
-						createdAt: Date.now(),
-						updatedAt: null
-					}
-				]
-			});
 			attrs.push(item);
 		}
 		return attrs;
