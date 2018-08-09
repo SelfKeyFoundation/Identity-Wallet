@@ -405,11 +405,13 @@ function SendTokenDialogController(
 			})
 			.catch(error => {
 				error = error.toString();
-				if (error.indexOf('Insufficient funds') === -1) {
-					CommonService.showToast('error', error, 20000);
-				} else if (error.indexOf(TIMEOUT_ERROR) !== -1) {
+				if (error.indexOf(TIMEOUT_ERROR) !== -1) {
 					send();
 					return;
+				} else if (error.indexOf('insufficient funds') !== -1) {
+					$scope.errors.sendFailedDueToGas = true;
+				} else {
+					CommonService.showToast('error', error, 20000);
 				}
 				$scope.errors.sendFailed = error;
 				// reset view state
@@ -431,6 +433,7 @@ function SendTokenDialogController(
 				$scope.backgroundProcessStatuses.txInProgress = true;
 				$scope.backgroundProcessStatuses.checkingTransaction = true;
 				$scope.errors.sendFailed = false;
+				$scope.errors.sendFailedDueToGas = false;
 				break;
 			case 'before-send':
 				$scope.viewStates.showConfirmButtons = false;
@@ -535,7 +538,8 @@ function SendTokenDialogController(
 		$scope.errors = {
 			sendToAddressHex: false,
 			sendAmount: false,
-			sendFailed: false
+			sendFailed: false,
+			sendFailedDueToGas: false
 		};
 
 		if ($scope.symbol && $scope.symbol.toLowerCase() === 'eth') {
