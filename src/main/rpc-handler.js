@@ -425,13 +425,7 @@ module.exports = function(app, store) {
 									mimeType: mimeType,
 									size: stats.size
 								};
-
-								IdAttribute.addEditDocumentToIdAttributeItemValue(
-									args.idAttributeId,
-									args.idAttributeItemId,
-									args.idAttributeItemValueId,
-									args.file
-								)
+								IdAttribute.addDocument(args.idAttributeId, args.file)
 									.then(resp => {
 										app.win.webContents.send(
 											RPC_METHOD,
@@ -946,7 +940,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.getWalletProfilePicture = function(event, actionId, actionName, args) {
-		Wallet.selectProfilePictureById(args)
+		Wallet.selectProfilePictureById(args.id)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1103,12 +1097,7 @@ module.exports = function(app, store) {
 		actionName,
 		args
 	) {
-		IdAttribute.addEditDocumentToIdAttributeItemValue(
-			args.idAttributeId,
-			args.idAttributeItemId,
-			args.idAttributeItemValueId,
-			args.file
-		)
+		IdAttribute.addDocument(args.idAttributeId, args.file)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1124,12 +1113,7 @@ module.exports = function(app, store) {
 		actionName,
 		args
 	) {
-		IdAttribute.addEditStaticDataToIdAttributeItemValue(
-			args.idAttributeId,
-			args.idAttributeItemId,
-			args.idAttributeItemValueId,
-			args.staticData
-		)
+		IdAttribute.addData(args.idAttributeId, args.data)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1141,6 +1125,7 @@ module.exports = function(app, store) {
 	// DONE !!!!!
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
+			.eager('document')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1151,7 +1136,7 @@ module.exports = function(app, store) {
 
 	// DONE !!!!!
 	controller.prototype.addIdAttribute = function(event, actionId, actionName, args) {
-		IdAttribute.create(args.walletId, args.idAttributeType, args.staticData, args.file)
+		IdAttribute.create(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1162,7 +1147,7 @@ module.exports = function(app, store) {
 
 	// DONE !!!!!
 	controller.prototype.deleteIdAttribute = function(event, actionId, actionName, args) {
-		IdAttribute.delete(args.idAttributeId, args.idAttributeItemId, args.idAttributeItemValueId)
+		IdAttribute.delete(args.idAttributeId)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

@@ -137,6 +137,11 @@ function MemberIdWalletMainController(
 			});
 	};
 
+	$scope.isAttributeComplete = itm => {
+		let keys = Object.keys(itm.data);
+		return !!keys.length;
+	};
+
 	$scope.openValueDeletePanel = (event, idAttribute) => {
 		let itemElement = event.target.parentElement.parentElement;
 
@@ -174,12 +179,9 @@ function MemberIdWalletMainController(
 		loadWalletHistory();
 	});
 
-	$scope.$on(
-		'id-attribute:open-document-add-dialog',
-		(event, idAttributeItemValue, idAttributeType) => {
-			$scope.editIdAttributeItemDocument(null, idAttributeItemValue, idAttributeType);
-		}
-	);
+	$scope.$on('id-attribute:open-document-add-dialog', (event, attr) => {
+		$scope.editIdAttributeItemDocument(null, attr);
+	});
 
 	function prepareData() {
 		$rootScope.wallet.loadIdAttributes().then(() => {
@@ -191,15 +193,11 @@ function MemberIdWalletMainController(
 
 			if ($scope.idAttributesList) {
 				angular.forEach($scope.idAttributesList, item => {
-					if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'document') {
+					if (ID_ATTRIBUTE_TYPES[item.type].type === 'document') {
 						$scope.idDocumentsList.push(item);
-					} else if (ID_ATTRIBUTE_TYPES[item.idAttributeType].type === 'static_data') {
-						if (
-							item.items[0].values[0].staticData &&
-							item.items[0].values[0].staticData.line1 &&
-							item.idAttributeType === 'birthdate'
-						) {
-							item.longDateValue = Number(item.items[0].values[0].staticData.line1);
+					} else if (ID_ATTRIBUTE_TYPES[item.type].type === 'static_data') {
+						if (item.data && item.data.value && item.type === 'birthdate') {
+							item.longDateValue = Number(item.data.value);
 						}
 						$scope.attributesList.push(item);
 					}
@@ -208,7 +206,7 @@ function MemberIdWalletMainController(
 
 			excludeKeys = [];
 			for (let i in $scope.idAttributesList) {
-				excludeKeys.push($scope.idAttributesList[i].idAttributeType);
+				excludeKeys.push($scope.idAttributesList[i].type);
 			}
 
 			$rootScope.$broadcast('sk-user-info-box:update');
@@ -252,18 +250,14 @@ function itemValueDeletePanel(
 
 	$scope.delete = event => {
 		$scope.promise = RPCService.makeCall('deleteIdAttribute', {
-			idAttributeId: idAttribute.id,
-			idAttributeItemId: idAttribute.items[0].id,
-			idAttributeItemValueId: idAttribute.items[0].values[0].id
+			idAttributeId: idAttribute.id
 		});
 		$scope.promise.then(() => {
 			let idAttributeTypes = SqlLiteService.getIdAttributeTypes();
 			let actionText =
-				idAttributeTypes[idAttribute.idAttributeType].type === 'document'
-					? 'Document'
-					: 'Attribute';
+				idAttributeTypes[idAttribute.type].type === 'document' ? 'Document' : 'Attribute';
 			SqlLiteService.registerActionLog(
-				'Deleted ' + actionText + ': ' + $rootScope.DICTIONARY[idAttribute.idAttributeType],
+				'Deleted ' + actionText + ': ' + $rootScope.DICTIONARY[idAttribute.type],
 				'Deleted'
 			).then(() => {
 				$rootScope.$broadcast('id-attribute:changed');

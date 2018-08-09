@@ -53,18 +53,16 @@ function MemberSetupAddDocumentController(
 	};
 
 	$scope.selectFile = event => {
-		let selectedValue = $scope.idAttributes[$scope.selected.type].items[0].values[0];
+		let attr = $scope.idAttributes[$scope.selected.type];
 		let actionText = 'Created Document: ';
 		let actionTitle = 'Created';
-		if (selectedValue.documentId) {
+		if (attr.documentId) {
 			actionText = 'Updated Document: ';
 			actionTitle = 'Updated';
 		}
 
 		let args = {
-			idAttributeId: $scope.idAttributes[$scope.selected.type].id,
-			idAttributeItemId: $scope.idAttributes[$scope.selected.type].items[0].id,
-			idAttributeItemValueId: $scope.idAttributes[$scope.selected.type].items[0].values[0].id
+			idAttributeId: $scope.idAttributes[$scope.selected.type].id
 		};
 
 		let addDocumentPromise = RPCService.makeCall('openDocumentAddDialog', args);

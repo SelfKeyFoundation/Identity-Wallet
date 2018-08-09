@@ -71,7 +71,7 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static addDocuemnt(id, document) {
+	static addDocument(id, document) {
 		return this.update({ id, document });
 	}
 

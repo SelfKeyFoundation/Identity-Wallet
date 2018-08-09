@@ -46,10 +46,10 @@ describe('IdAttribute model', () => {
 	it('addDocument', async () => {
 		let attr = await IdAttribute.create(testAttribute);
 		expect(attr.documentId).toBeNull();
-		let updatedAttr = await IdAttribute.addDocuemnt(attr.id, testDoc);
+		let updatedAttr = await IdAttribute.addDocument(attr.id, testDoc);
 		expect(updatedAttr.documentId).not.toBeNull();
 		let oldDocId = updatedAttr.documentId;
-		updatedAttr = await IdAttribute.addDocuemnt(attr.id, testDoc);
+		updatedAttr = await IdAttribute.addDocument(attr.id, testDoc);
 		expect(updatedAttr.documentId).not.toBe(oldDocId);
 		let doc = await Document.findById(oldDocId);
 		expect(doc).toBeUndefined();

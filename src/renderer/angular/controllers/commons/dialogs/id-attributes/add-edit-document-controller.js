@@ -36,9 +36,9 @@ function AddEditDocumentDialogController(
 		if (mode === 'create') {
 			$scope.savePromise = RPCService.makeCall('addIdAttribute', {
 				walletId: $rootScope.wallet.id,
-				idAttributeType: idAttributeType,
-				staticData: null,
-				file: $scope.selectedFile
+				type: idAttributeType,
+				data: {},
+				document: $scope.selectedFile
 			});
 
 			$scope.savePromise
@@ -53,8 +53,6 @@ function AddEditDocumentDialogController(
 		} else {
 			$scope.savePromise = RPCService.makeCall('addEditDocumentToIdAttributeItemValue', {
 				idAttributeId: idAttribute.id,
-				idAttributeItemId: idAttribute.items[0].id,
-				idAttributeItemValueId: idAttribute.items[0].values[0].id,
 				file: $scope.selectedFile
 			});
 
