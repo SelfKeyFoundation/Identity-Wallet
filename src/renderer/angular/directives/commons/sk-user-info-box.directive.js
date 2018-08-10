@@ -48,25 +48,25 @@ function SkUserInfoBoxDirective(
 
 				switch (item.key) {
 					case 'birthdate':
-						return $filter('date')(Number(item.staticData.line1), 'yyyy/MM/dd');
+						return $filter('date')(Number(item.data.value), 'yyyy/MM/dd');
 					case 'work_place':
 					case 'physical_address':
-						let value = item.staticData.line1 + ', ';
+						let value = item.data.address1 + ', ';
 
-						if (item.staticData.line2) {
-							value += item.staticData.line2 + ', ';
+						if (item.data.address2) {
+							value += item.data.address2 + ', ';
 						}
 
-						value += item.staticData.line3 + ', ';
-						value += item.staticData.line4 + ', ';
-						value += item.staticData.line5 + ', ';
-						value += item.staticData.line6;
+						value += item.data.city + ', ';
+						value += item.data.region + ', ';
+						value += item.data.zip + ', ';
+						value += item.data.country;
 
 						return value;
 					case 'phonenumber_countrycode':
-						return item.staticData.line1 + ' ' + item.staticData.line2;
+						return item.data.countryCode + ' ' + item.data.telephoneNumber;
 					default:
-						return item.staticData.line1;
+						return item.data.value;
 				}
 			};
 
@@ -74,13 +74,12 @@ function SkUserInfoBoxDirective(
 				scope.idAttributes = {};
 
 				let idAttributes = $rootScope.wallet.getIdAttributes();
-
 				for (let i in idAttributes) {
 					scope.idAttributes[i] = {
 						key: i,
 						type: idAttributeTypes[i].type,
-						staticData: idAttributes[i].items[0].values[0].staticData,
-						documentName: idAttributes[i].items[0].values[0].documentName
+						data: idAttributes[i].data,
+						documentName: idAttributes[i].document && idAttributes[i].document.name
 					};
 				}
 			}

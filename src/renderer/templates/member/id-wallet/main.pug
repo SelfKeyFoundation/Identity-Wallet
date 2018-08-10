@@ -40,19 +40,19 @@
                         tbody
                             tr(ng-repeat="item in attributesList")
                                 td
-                                    sk-icon(icon="{{item.items[0].values[0].staticData.line1 ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                                    md-tooltip(md-direction="top") {{item.items[0].values[0].staticData.line1 ? 'Completed' : 'Missing' }}
-                                td {{$root.DICTIONARY[item.idAttributeType]}}
+                                    sk-icon(icon="{{isAttributeComplete(item)  ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{isAttributeComplete(item)  ? 'Completed' : 'Missing' }}
+                                td {{$root.DICTIONARY[item.type]}}
                                 td
-                                    span(ng-if="item.idAttributeType == 'birthdate'") {{ (item.longDateValue | date: 'yyyy/MM/dd') }}
-                                    span(ng-if="item.idAttributeType == 'phonenumber_countrycode'") {{ item.items[0].values[0].staticData.line1 }} {{ item.items[0].values[0].staticData.line2 }}
-                                    ul(ng-if="item.idAttributeType != 'birthdate' && item.idAttributeType != 'phonenumber_countrycode'")
-                                        li(ng-repeat="(key, value) in item.items[0].values[0].staticData") {{value}}
+                                    span(ng-if="item.type == 'birthdate'") {{ (item.longDateValue | date: 'yyyy/MM/dd') }}
+                                    span(ng-if="item.type == 'phonenumber_countrycode'") {{ item.data.countryCode }} {{ item.data.telephoneNumber}}
+                                    ul(ng-if="item.type != 'birthdate' && item.type != 'phonenumber_countrycode'")
+                                        li(ng-repeat="(key, value) in item.data") {{value}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                 td.action-columns
-                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_mode_edit_white_24px.svg')}}", ng-click="editIdAttributeItemValue($event, item, item.idAttributeType)", class="color-light-grey")
+                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_mode_edit_white_24px.svg')}}", ng-click="editIdAttributeItemValue($event, item, item.type)", class="color-light-grey")
                                 td.action-columns
-                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_delete_white_24px.svg')}}", ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", class="color-grey" , ng-click="openValueDeletePanel($event, item)")
+                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_delete_white_24px.svg')}}", ng-if="initialIdAttributes.indexOf(item.type) === -1", class="color-grey" , ng-click="openValueDeletePanel($event, item)")
 
                 .ID-documents-container
                     .table-head
@@ -71,16 +71,16 @@
                         tbody
                             tr(ng-repeat="item in idDocumentsList")
                                 td
-                                    sk-icon(icon="{{item.items[0].values[0].documentName ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
-                                    md-tooltip(md-direction="top") {{item.items[0].values[0].documentName ? 'Completed' : 'Missing' }}
-                                td {{$root.DICTIONARY[item.idAttributeType]}}
-                                td {{item.items[0].values[0].documentName}}
+                                    sk-icon(icon="{{item.document.name ? 'success-box' : 'danger-box' }}", size-class="icon-size-16x16")
+                                    md-tooltip(md-direction="top") {{item.document.name ? 'Completed' : 'Missing' }}
+                                td {{$root.DICTIONARY[item.type]}}
+                                td {{item.document.name}}
                                 td {{item.updatedAt ? item.updatedAt : item.createdAt | date: 'yyyy/MM/dd'}}
                                 td.action-columns
-                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_remove_red_eye_black_24px.svg')}}" ng-if="item.items[0].values[0].documentId", class="color-white", ng-click="openFilePreview($event, item.items[0].values[0])")
+                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_remove_red_eye_black_24px.svg')}}" ng-if="item.documentId", class="color-white", ng-click="openFilePreview($event, item)")
                                 td.action-columns
-                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_mode_edit_white_24px.svg')}}", ng-click="editIdAttributeItemDocument($event, item, item.idAttributeType)", class="color-light-grey")
+                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_mode_edit_white_24px.svg')}}", ng-click="editIdAttributeItemDocument($event, item, item.type)", class="color-light-grey")
                                 td.action-columns
-                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_delete_white_24px.svg')}}", class="color-grey" , ng-if="initialIdAttributes.indexOf(item.idAttributeType) === -1", ng-click="openValueDeletePanel($event, item)")
+                                    md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_delete_white_24px.svg')}}", class="color-grey" , ng-if="initialIdAttributes.indexOf(item.type) === -1", ng-click="openValueDeletePanel($event, item)")
             .right-side-wrapper(style="width: 350px !important; margin-left: 30px;")
                 sk-user-info-box

@@ -5,7 +5,12 @@ import db from '../db/test-db';
 
 describe('IdAttribute model', () => {
 	const testWalletId = 1;
-	const testStaticData = { test: 'test_data' };
+	const testAttribute = { walletId: testWalletId, type: 'test_data', data: { value: 'test' } };
+	const testAttributeComplex = {
+		walletId: testWalletId,
+		type: 'test_data2',
+		data: { testDate1: 'testdata' }
+	};
 	const testDoc = {
 		name: 'test',
 		mimeType: 'test-mime',
@@ -19,102 +24,58 @@ describe('IdAttribute model', () => {
 	it('create', async () => {
 		let all = await IdAttribute.query().where({ walletId: testWalletId });
 		expect(all.length).toBe(0);
-		let attr = await IdAttribute.create(testWalletId, 'test_key', testStaticData);
+		let attr = await IdAttribute.create(testAttribute);
 		expect(attr.id).toBeGreaterThan(0);
 		expect(attr.walletId).toBe(testWalletId);
 		expect(attr.createdAt).toBeGreaterThan(0);
 		expect(attr.updatedAt).toBeGreaterThan(0);
-		expect(attr.items.length).toBeGreaterThan(0);
-		let item = attr.items[0];
-		expect(item.values.length).toBeGreaterThan(0);
-		let value = item.values[0];
-		expect(value.staticData).toEqual(testStaticData);
-		try {
-			await IdAttribute.create(testWalletId, 'test_key', testStaticData);
-			throw new Error('Assertion Error, should have thrown');
-		} catch (error) {
-			expect(error instanceof Error).toBe(true);
-		}
-		attr = await IdAttribute.create(testWalletId, 'test_key2', testStaticData, testDoc);
+		expect(attr.value).toEqual(testAttribute.value);
+		attr = await IdAttribute.create(testAttributeComplex);
+		expect(attr.value).toEqual(testAttribute.value);
+		attr = await IdAttribute.create({ ...testAttribute, document: testDoc });
 		expect(attr.id).toBeGreaterThan(0);
+		expect(attr.documentId).not.toBeNull();
 		expect(attr.walletId).toBe(testWalletId);
 		expect(attr.createdAt).toBeGreaterThan(0);
 		expect(attr.updatedAt).toBeGreaterThan(0);
-		expect(attr.items.length).toBeGreaterThan(0);
-		item = attr.items[0];
-		expect(item.values.length).toBeGreaterThan(0);
-		value = item.values[0];
-		expect(value.staticData).toEqual(testStaticData);
-		// eslint-disable-next-line
-		expect(value.documentId).toBeDefined();
-		// eslint-disable-next-line
-		expect(value.documentName).toBeDefined();
-		try {
-			await IdAttribute.create(testWalletId, 'test_key', testStaticData);
-			throw new Error('Assertion Error, should have thrown');
-		} catch (error) {
-			expect(error instanceof Error).toBe(true);
-		}
+		expect(attr.value).toEqual(testAttribute.value);
+		expect(attr.documentId).not.toBeNull();
+		expect(attr.document).not.toBeNull();
 	});
 
-	it('addEditDocumentToIdAttributeItemValue', async () => {
-		let attr = await IdAttribute.create(testWalletId, 'test', testStaticData);
-		let item = attr.items[0];
-		let value = item.values[0];
-		// eslint-disable-next-line
-		expect(value.documentName).toBeUndefined();
-		// eslint-disable-next-line
-		expect(value.documentId).toBeUndefined();
-		let updatedAttr = await IdAttribute.addEditDocumentToIdAttributeItemValue(
-			attr.id,
-			item.id,
-			value.id,
-			testDoc
-		);
-		item = updatedAttr.items[0];
-		value = item.values[0];
-		// eslint-disable-next-line
-		expect(value.documentName).toBeDefined();
-		// eslint-disable-next-line
-		expect(value.documentId).toBeDefined();
+	it('addDocument', async () => {
+		let attr = await IdAttribute.create(testAttribute);
+		expect(attr.documentId).toBeNull();
+		let updatedAttr = await IdAttribute.addDocument(attr.id, testDoc);
+		expect(updatedAttr.documentId).not.toBeNull();
+		let oldDocId = updatedAttr.documentId;
+		updatedAttr = await IdAttribute.addDocument(attr.id, testDoc);
+		expect(updatedAttr.documentId).not.toBe(oldDocId);
+		let doc = await Document.findById(oldDocId);
+		expect(doc).toBeUndefined();
 	});
 
-	it('addEditStaticDataToIdAttributeItemValue', async () => {
-		let attr = await IdAttribute.create(testWalletId, 'test', testStaticData);
-		let item = attr.items[0];
-		let value = item.values[0];
-		expect(value.staticData).toEqual(testStaticData);
+	it('addData', async () => {
+		let attr = await IdAttribute.create(testAttributeComplex);
+		expect(attr.data).toEqual(testAttributeComplex.data);
 		const modifiedStaticData = { modified: 'data' };
-		let updatedAttr = await IdAttribute.addEditStaticDataToIdAttributeItemValue(
-			attr.id,
-			item.id,
-			value.id,
-			modifiedStaticData
-		);
-		item = updatedAttr.items[0];
-		value = item.values[0];
-		expect(value.staticData).toEqual(modifiedStaticData);
+		let updatedAttr = await IdAttribute.addData(attr.id, modifiedStaticData);
+		expect(updatedAttr.data).toEqual(modifiedStaticData);
 	});
 
 	it('findAllByWalletId', async () => {
-		let attr1 = await IdAttribute.create(testWalletId, 'test', testStaticData);
-		let attr2 = await IdAttribute.create(testWalletId, 'test2', testStaticData);
+		let attr1 = await IdAttribute.create(testAttribute);
+		let attr2 = await IdAttribute.create(testAttributeComplex);
 		let all = await IdAttribute.findAllByWalletId(testWalletId);
-
-		expect(all).toEqual({
-			[attr1.id]: attr1,
-			[attr2.id]: attr2
-		});
+		expect(all).toEqual([attr1, attr2]);
 	});
 
 	it('delete', async () => {
-		let attr = await IdAttribute.create(testWalletId, 'test', testStaticData, testDoc);
-		let item = attr.items[0];
-		let value = item.values[0];
-		let doc = await Document.findById(value.documentId);
-		expect(doc.id).toBe(value.documentId);
-		await IdAttribute.delete(attr.id, item.id, value.id);
-		doc = await Document.findById(value.documentId);
+		let attr = await IdAttribute.create({ ...testAttribute, document: testDoc });
+		let doc = await Document.findById(attr.documentId);
+		expect(doc.id).toBe(attr.documentId);
+		await IdAttribute.delete(attr.id);
+		doc = await Document.findById(attr.documentId);
 		// eslint-disable-next-line
 		expect(doc).toBeUndefined();
 		attr = await IdAttribute.query().findById(attr.id);
