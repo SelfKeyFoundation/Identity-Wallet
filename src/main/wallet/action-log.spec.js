@@ -1,9 +1,6 @@
 import ActionLog from './action-log';
 import db from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('ActionLog model', () => {
 	const testLog = { walletId: 10, title: 'test', content: 'test content' };
 	beforeEach(async () => {

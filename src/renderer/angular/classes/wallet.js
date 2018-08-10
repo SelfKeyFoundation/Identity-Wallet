@@ -93,6 +93,12 @@ class Wallet {
 		return this.publicKeyHex;
 	}
 
+	getIdAttributeItemValue(type, key = 'value') {
+		if (!this.idAttributes || !this.idAttributes[type]) return;
+		if (this.idAttributes[type].data) return this.idAttributes[type].data[key];
+		return this.idAttributes.documentId;
+	}
+
 	loadBalance() {
 		let defer = $q.defer();
 		let promise = Web3Service.getBalance('0x' + this.getPublicKeyHex());
@@ -244,7 +250,7 @@ class Wallet {
 				this.idAttributes = {};
 
 				for (let i in idAttributes) {
-					this.idAttributes[idAttributes[i].idAttributeType] = idAttributes[i];
+					this.idAttributes[idAttributes[i].type] = idAttributes[i];
 				}
 
 				defer.resolve(this.idAttributes);
@@ -258,22 +264,6 @@ class Wallet {
 
 	getIdAttributes() {
 		return this.idAttributes;
-	}
-
-	// temporary method - while we support only *ONE* item/value per attribute
-	getIdAttributeItemValue(idAttributeTypeKey, line) {
-		if (
-			this.idAttributes[idAttributeTypeKey] &&
-			this.idAttributes[idAttributeTypeKey].items &&
-			this.idAttributes[idAttributeTypeKey].items.length &&
-			this.idAttributes[idAttributeTypeKey].items[0].values &&
-			this.idAttributes[idAttributeTypeKey].items[0].values.length
-		) {
-			return (
-				this.idAttributes[idAttributeTypeKey].items[0].values[0].staticData[line] ||
-				this.idAttributes[idAttributeTypeKey].items[0].values[0].documentId
-			);
-		}
 	}
 
 	/**

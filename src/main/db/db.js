@@ -39,6 +39,10 @@ const createInitialDb = async () => {
 	await knex.seed.run();
 };
 
+const reset = () => {
+	return rollbackAllMigrations();
+};
+
 const createBackup = (dbPath, backupPath) => {
 	backupPath = backupPath || `${dbPath}.bkp`;
 	if (fs.existsSync(backupPath)) {
@@ -47,5 +51,13 @@ const createBackup = (dbPath, backupPath) => {
 	fs.renameSync(dbPath, backupPath);
 };
 
-export { config, knex, init, createInitialDb };
-export default { config, knex, init, createInitialDb };
+export { config, knex, init, createInitialDb, reset };
+export default { config, knex, init, createInitialDb, reset };
+
+async function rollbackAllMigrations() {
+	await knex.migrate.forceFreeMigrationsLock();
+	let migration = await knex.migrate.currentVersion(config.migrations);
+	if (migration === 'none') return;
+	await knex.migrate.rollback(config.migrations);
+	return rollbackAllMigrations();
+}

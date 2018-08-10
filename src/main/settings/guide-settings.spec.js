@@ -1,9 +1,6 @@
 import GuideSetting from './guide-setting';
 import db from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('GuideSettings model', () => {
 	beforeEach(async () => {
 		await db.reset();
