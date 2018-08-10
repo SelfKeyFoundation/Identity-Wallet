@@ -1306,15 +1306,13 @@ module.exports = function(app, store) {
 		}
 	};
 
-	controller.prototype.waitForWeb3Ticket = function(event, actionId, actionName, args) {
-		electron.app.web3Service
-			.waitForTicket(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
-			});
+	controller.prototype.waitForWeb3Ticket = async function(event, actionId, actionName, args) {
+		try {
+			const data = await electron.app.web3Service.waitForTicket(args);
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+		} catch (error) {
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
+		}
 	};
 
 	controller.prototype.getTxHistoryByPublicKeyAndTokenSymbol = function(

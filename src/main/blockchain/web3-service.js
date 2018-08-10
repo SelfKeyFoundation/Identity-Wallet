@@ -48,21 +48,28 @@ export class Web3Service {
 		return SELECTED_SERVER_URL;
 	}
 	async waitForTicket(args) {
-		let res = await this.q.push(args);
-		let ticketPromise = res.ticketPromise;
+		return new Promise(async (resolve, reject) => {
+			let res = await this.q.push(args);
+			let ticketPromise = res.ticketPromise;
 
-		if (!ticketPromise) {
-			throw new Error('Failed to process ticket');
-		}
+			if (!ticketPromise) {
+				return reject(new Error('Failed to process ticket'));
+			}
 
-		if (args.onceListenerName) {
-			ticketPromise = new Promise(resolve =>
-				res.ticketPromise.once(args.onceListenerName, res => {
+			ticketPromise.catch(err => {
+				reject(err);
+			});
+
+			if (args.onceListenerName) {
+				ticketPromise.once(args.onceListenerName, res => {
 					resolve(res);
-				})
-			);
-		}
-		return ticketPromise;
+				});
+			} else {
+				ticketPromise.then(res => {
+					resolve(res);
+				});
+			}
+		});
 	}
 }
 

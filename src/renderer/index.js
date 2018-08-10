@@ -5,7 +5,9 @@ import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
-import { Logger } from 'common/logger';
+import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
+
+const { Logger } = require('common/logger');
 
 const path = require('path');
 
@@ -203,6 +205,12 @@ angular.module('kyc-wallet').component('transferPrice', transferPriceWrapper);
 
 const cryptoPriceTableWrapper = react2angular(CryptoPriceTableWrapper, ['toggleAction']);
 angular.module('kyc-wallet').component('cryptoPriceTable', cryptoPriceTableWrapper);
+
+const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper, [
+	'cryptoCurrency',
+	'closeAction'
+]);
+angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
 /**
  * controllers
