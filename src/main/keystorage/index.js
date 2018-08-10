@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import keythereum from 'keythereum';
 
 export const keystorage = keythereum;
