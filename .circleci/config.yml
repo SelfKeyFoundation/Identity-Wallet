@@ -5,6 +5,14 @@ aliases:
       run:
           name: Prepare Cache Buster
           command: echo ${CACHE_VERSION} > /tmp/cache_buster
+    - &step_setup_nvm
+      run:
+          name: Setup NVM
+          command: |
+              export NODE_VERSION=$(cat .nvmrc)
+              curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
+              echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
+              echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
     - &step_restore_cache_mac
       restore_cache:
           name: Restore Yarn Package Cache
@@ -32,6 +40,10 @@ aliases:
           key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
               - node_modules/
+    - &step_yarn_upgrade
+      run:
+          name: Upgrade Yarn
+          command: npm install -g yarn@latest
 
 jobs:
     'unit-test':
@@ -45,16 +57,8 @@ jobs:
                   at: /tmp/mac
             - *step_prepare_cache_buster
             - *step_restore_cache_mac
-            - run:
-                  name: Setup NVM
-                  command: |
-                      export NODE_VERSION=$(cat .nvmrc)
-                      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
-                      echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
-                      echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
-            - run:
-                  name: Upgrade Yarn
-                  command: brew upgrade yarn
+            - *step_setup_nvm
+            - *step_yarn_upgrade
             - run:
                   name: Add Read Access to yarn config
                   command: |
@@ -88,16 +92,8 @@ jobs:
                   at: /tmp/mac
             - *step_prepare_cache_buster
             - *step_restore_cache_mac
-            - run:
-                  name: Setup NVM
-                  command: |
-                      export NODE_VERSION=$(cat .nvmrc)
-                      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
-                      echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
-                      echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
-            - run:
-                  name: Upgrade Yarn
-                  command: brew upgrade yarn
+            - *step_setup_nvm
+            - *step_yarn_upgrade
             - run:
                   name: Add Read Access to yarn config
                   command: |
@@ -171,16 +167,8 @@ jobs:
                   at: /tmp/mac
             - *step_prepare_cache_buster
             - *step_restore_cache_mac
-            - run:
-                  name: Setup NVM
-                  command: |
-                      export NODE_VERSION=$(cat .nvmrc)
-                      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
-                      echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
-                      echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
-            - run:
-                  name: Upgrade Yarn
-                  command: brew upgrade yarn
+            - *step_setup_nvm
+            - *step_yarn_upgrade
             - run:
                   name: Add Read Access to yarn config
                   command: |
@@ -227,9 +215,7 @@ jobs:
                   at: /tmp/mac
             - *step_prepare_cache_buster
             - *step_restore_cache_mac
-            - run:
-                  name: Upgrade Yarn
-                  command: brew upgrade yarn
+            - *step_yarn_upgrade
             - run:
                   name: Add Read Access to yarn config
                   command: |
