@@ -7,8 +7,21 @@ const init = async () => {
 	await db.createInitialDb();
 };
 
+const ensureConnection = async () => {
+	try {
+		await db.knex.raw('select 1+1 as result');
+		return false;
+	} catch (err) {
+		await db.knex.client.initializePool(db.config);
+		return true;
+	}
+};
+
 const reset = async () => {
-	if (initialized) await db.reset();
+	let isNewConn = await ensureConnection();
+	if (!isNewConn) {
+		await db.reset();
+	}
 	await init();
 };
 
