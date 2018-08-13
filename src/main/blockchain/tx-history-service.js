@@ -79,7 +79,7 @@ export class TxHistoryService {
 		}
 		return this.isSyncingMap[address];
 	}
-	constructor(web3Service) {
+	constructor({ web3Service }) {
 		this.web3Service = web3Service;
 		this.queue = new AsyncTaskQueue(this.handleTask.bind(this), REQUEST_INTERVAL_DELAY);
 	}
