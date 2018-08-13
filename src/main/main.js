@@ -12,14 +12,8 @@ import { Logger } from '../common/logger';
 import { getUserDataPath, isDevMode, isDebugMode, isTestMode } from 'common/utils/common';
 import config from 'common/config';
 import createMenuTemplate from './menu';
-import crashReportService from 'common/logger/crash-report-service';
 import db from './db/db';
-import PriceService from './token/price-service';
-import ExchangesService from './exchanges/exchanges-service';
-import IdAttributeTypeService from './identity/id-attribute-type-service';
-import TxHistoryService from './blockchain/tx-history-service';
-import Web3Service from './blockchain/web3-service';
-import LedgerService from './blockchain/leadger-service';
+import { configureContext } from './context';
 
 const log = new Logger('main');
 
@@ -99,30 +93,21 @@ function onReady(app) {
 			appUpdater();
 		}
 		await db.init();
-		if (!isDevMode() && !isTestMode()) {
-			await crashReportService.startCrashReport();
-		}
 		const store = configureStore(global.state, 'main');
+		const ctx = configureContext(store, app).cradle;
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
 		} catch (e) {
-			log.error('common/locale initi error %s', e);
+			log.error('common/locale init error %s', e);
+		}
+		if (!isDevMode() && !isTestMode()) {
+			await ctx.CrashReportService.startCrashReport();
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
 
-		const priceService = (electron.app.priceService = new PriceService());
-
-		electron.app.web3Service = new Web3Service();
-		electron.app.ledgerService = new LedgerService(electron.app.web3Service);
-		const TrezorService = require('./blockchain/trezor-service')();
-		electron.app.trezorService = new TrezorService();
-		const RPCHandler = require('./rpc-handler')(app, store);
-		electron.app.rpcHandler = new RPCHandler();
-		electron.app.rpcHandler.startTokenPricesBroadcaster(priceService);
-		electron.app.rpcHandler.startTrezorBroadcaster();
-
-		electron.app.txHistoryService = new TxHistoryService(electron.app.web3Service);
+		ctx.rpcHandler.startTokenPricesBroadcaster();
+		ctx.rpcHandler.startTrezorBroadcaster();
 
 		createKeystoreFolder();
 
@@ -193,10 +178,10 @@ function onReady(app) {
 					mainWindow.webContents.send('APP_START_LOADING');
 					// start update cmc data
 
-					priceService.startUpdateData();
-					IdAttributeTypeService.loadIdAttributeTypes();
-					ExchangesService.loadExchangeData();
-					electron.app.txHistoryService.startSyncingJob();
+					ctx.priceService.startUpdateData();
+					ctx.IdAttributeTypeService.loadIdAttributeTypes();
+					ctx.ExchangesService.loadExchangeData();
+					ctx.txHistoryService.startSyncingJob();
 
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
@@ -217,9 +202,9 @@ function onReady(app) {
 		});
 
 		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
-			if (electron.app.rpcHandler[actionName]) {
+			if (ctx.rpcHandler[actionName]) {
 				log.debug('rpc %s, %2j', actionName, args);
-				electron.app.rpcHandler[actionName](event, actionId, actionName, args);
+				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
 

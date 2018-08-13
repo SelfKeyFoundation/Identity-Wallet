@@ -44,7 +44,7 @@
     "commitmsg": "commitlint -E GIT_PARAMS",
     "check-deps-precommit": "npm-check -i eslint -i redux -s || true",
     "check-deps": "npm-check -i common",
-	"coveralls": "cat dist/coverage/lcov.info | coveralls"
+    "coveralls": "cat dist/coverage/lcov.info | coveralls"
   },
   "lint-staged": {
     "*.js": [
@@ -72,6 +72,7 @@
     "angular-sanitize": "^1.7.2",
     "angular-zxcvbn": "3.2.2",
     "async": "2.6.1",
+    "awilix": "^3.0.9",
     "babel-eslint": "^8.2.6",
     "bignumber.js": "7.2.1",
     "bluebird": "3.5.1",

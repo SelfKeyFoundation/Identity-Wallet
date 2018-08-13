@@ -6,7 +6,7 @@ const { Logger } = require('common/logger');
 const log = new Logger('rpc-handler');
 const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
-const { TxHistoryService } = require('./blockchain/tx-history-service');
+
 const { Wallet } = require('./wallet/wallet');
 const { IdAttribute } = require('./identity/id-attribute');
 const { IdAttributeType } = require('./identity/id-attribute-type');
@@ -35,7 +35,17 @@ const os = require('os');
 const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
-module.exports = function(app, store) {
+module.exports = function(cradle) {
+	const {
+		app,
+		store,
+		ledgerService,
+		trezorService,
+		txHistoryService,
+		TxHistoryService,
+		web3Service,
+		priceService
+	} = cradle;
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -863,7 +873,7 @@ module.exports = function(app, store) {
 		app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
 	};
 
-	controller.prototype.startTokenPricesBroadcaster = function(priceService) {
+	controller.prototype.startTokenPricesBroadcaster = function() {
 		priceService.on('pricesUpdated', newPrices => {
 			store.dispatch(pricesOperations.updatePrices(newPrices));
 			app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', newPrices);
@@ -1181,7 +1191,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.getLedgerAccounts = function(event, actionId, actionName, args) {
-		electron.app.ledgerService
+		ledgerService
 			.getAccounts(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1190,9 +1200,8 @@ module.exports = function(app, store) {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
 	};
-
 	controller.prototype.getTrezorAccounts = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.getAccounts(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1209,17 +1218,17 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.startTrezorBroadcaster = function() {
-		electron.app.trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
+		trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
 			app.win.webContents.send('TREZOR_PIN_REQUEST');
 		});
 	};
 
 	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
-		electron.app.trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+		trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
 	};
 
 	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
-		electron.app.ledgerService
+		ledgerService
 			.signTransaction(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1230,7 +1239,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.testTrezorConnection = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.testConnection(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {});
@@ -1241,7 +1250,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.signTransactionWithTrezor = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.signTransaction(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1308,7 +1317,7 @@ module.exports = function(app, store) {
 
 	controller.prototype.waitForWeb3Ticket = async function(event, actionId, actionName, args) {
 		try {
-			const data = await electron.app.web3Service.waitForTicket(args);
+			const data = await web3Service.waitForTicket(args);
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 		} catch (error) {
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
@@ -1352,7 +1361,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.syncTxHistoryByWallet = function(event, actionId, actionName, args) {
-		electron.app.txHistoryService
+		txHistoryService
 			.syncByWallet(args.publicKey, args.walletId, args.showProgress)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
