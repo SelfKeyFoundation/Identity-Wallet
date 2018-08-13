@@ -13,7 +13,7 @@ import { getUserDataPath, isDevMode, isDebugMode, isTestMode } from 'common/util
 import config from 'common/config';
 import createMenuTemplate from './menu';
 import db from './db/db';
-import { configureContrainer } from './composition-root';
+import { configureContext } from './context';
 
 const log = new Logger('main');
 
@@ -94,8 +94,7 @@ function onReady(app) {
 		}
 		await db.init();
 		const store = configureStore(global.state, 'main');
-		const container = configureContrainer(store, app);
-		const di = container.cradle;
+		const ctx = configureContext(store, app).cradle;
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
@@ -103,12 +102,12 @@ function onReady(app) {
 			log.error('common/locale init error %s', e);
 		}
 		if (!isDevMode() && !isTestMode()) {
-			await di.CrashReportService.startCrashReport();
+			await ctx.CrashReportService.startCrashReport();
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
 
-		di.rpcHandler.startTokenPricesBroadcaster();
-		di.rpcHandler.startTrezorBroadcaster();
+		ctx.rpcHandler.startTokenPricesBroadcaster();
+		ctx.rpcHandler.startTrezorBroadcaster();
 
 		createKeystoreFolder();
 
@@ -179,10 +178,10 @@ function onReady(app) {
 					mainWindow.webContents.send('APP_START_LOADING');
 					// start update cmc data
 
-					di.priceService.startUpdateData();
-					di.IdAttributeTypeService.loadIdAttributeTypes();
-					di.ExchangesService.loadExchangeData();
-					di.txHistoryService.startSyncingJob();
+					ctx.priceService.startUpdateData();
+					ctx.IdAttributeTypeService.loadIdAttributeTypes();
+					ctx.ExchangesService.loadExchangeData();
+					ctx.txHistoryService.startSyncingJob();
 
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');
 				})
@@ -203,9 +202,9 @@ function onReady(app) {
 		});
 
 		electron.ipcMain.on('ON_RPC', (event, actionId, actionName, args) => {
-			if (di.rpcHandler[actionName]) {
+			if (ctx.rpcHandler[actionName]) {
 				log.debug('rpc %s, %2j', actionName, args);
-				di.rpcHandler[actionName](event, actionId, actionName, args);
+				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
 

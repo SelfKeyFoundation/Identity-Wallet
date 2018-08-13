@@ -10,7 +10,7 @@ import { CrashReportService } from '../common/logger/crash-report-service';
 import TrezorService from './blockchain/trezor-service';
 import RpcHandler from './rpc-handler';
 
-export const configureContrainer = (store, app) => {
+export const configureContext = (store, app) => {
 	const container = createContainer({
 		injectionMode: InjectionMode.PROXY
 	});
@@ -19,11 +19,14 @@ export const configureContrainer = (store, app) => {
 		store: asValue(store),
 		web3Service: asClass(Web3Service).singleton(),
 		ledgerService: asClass(LedgerService).singleton(),
+		// TODO: refactor to not use static methods
 		CrashReportService: asValue(CrashReportService),
 		txHistoryService: asClass(TxHistoryService).singleton(),
 		TxHistoryService: asValue(TxHistoryService),
 		priceService: asClass(PriceService).singleton(),
+		// TODO: refactor to not use static methods
 		IdAttributeTypeService: asValue(IdAttributeTypeService),
+		// TODO: refactor to not use static methods
 		ExchangesService: asValue(ExchangesService),
 		trezorService: asFunction(() => {
 			let Service = TrezorService();
@@ -37,4 +40,4 @@ export const configureContrainer = (store, app) => {
 	return container;
 };
 
-export default configureContrainer;
+export default configureContext;
