@@ -30,7 +30,7 @@ exports.down = async (knex, Promise) => {
 	});
 
 	if (rowCount[0].countName > 0) {
-		await knex.insert({
+		await knex('seed').insert({
 			init: 1
 		});
 	}

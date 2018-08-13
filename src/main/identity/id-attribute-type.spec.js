@@ -3,9 +3,6 @@ import IdAttributeType from './id-attribute-type';
 import initialAttributes from 'main/assets/data/initial-id-attribute-type-list.json';
 import db from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('IdAttributeType model', () => {
 	const testItem = {
 		key: 'test',

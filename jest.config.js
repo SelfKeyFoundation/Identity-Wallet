@@ -4,5 +4,12 @@ module.exports = {
 	modulePaths: ['<rootDir>/src'],
 	testRegex: '.spec.js$',
 	verbose: true,
-	testURL: 'http://localhost/'
+	testEnvironment: 'node',
+	testURL: 'http://localhost/',
+	collectCoverage: true,
+	collectCoverageFrom: ['src/**/*.js'],
+	coverageReporters: ['json', 'lcov', 'text', 'html'],
+	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
+	coverageDirectory: 'dist/coverage',
+	coverageThreshold: {}
 };

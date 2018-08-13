@@ -1,9 +1,6 @@
 import Document from './document';
 import db from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('Country model', () => {
 	const testDoc = {
 		name: 'test',
