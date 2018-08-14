@@ -101,6 +101,7 @@
     "qrcode-generator": "1.4.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-jsonschema-form": "^1.0.4",
     "react-redux": "^5.0.7",
     "react2angular": "^4.0.4",
     "redux": "^4.0.0",

@@ -44,7 +44,8 @@ module.exports = function(cradle) {
 		txHistoryService,
 		TxHistoryService,
 		web3Service,
-		priceService
+		priceService,
+		IdAttributeTypeService
 	} = cradle;
 	const controller = function() {};
 
@@ -886,6 +887,13 @@ module.exports = function(cradle) {
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
 			.then(data => {
+				data = data.map(t => {
+					let schema = IdAttributeTypeService.resolveSchema(t);
+					if (schema) {
+						t.schema = schema;
+					}
+					return t;
+				});
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

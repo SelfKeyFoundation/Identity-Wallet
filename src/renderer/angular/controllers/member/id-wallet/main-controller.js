@@ -83,12 +83,7 @@ function MemberIdWalletMainController(
 						});
 				} else {
 					$rootScope
-						.openAddEditStaticDataDialog(
-							event,
-							'create',
-							selectedIdAttributeType.key,
-							null
-						)
+						.openAddEditStaticDataDialog(event, 'create', selectedIdAttributeType, null)
 						.then(() => {
 							prepareData();
 							CommonService.showToast('success', 'saved');
@@ -106,6 +101,7 @@ function MemberIdWalletMainController(
 	};
 
 	$scope.editIdAttributeItemValue = (event, idAttribute, idAttributeType) => {
+		idAttributeType = SqlLiteService.getIdAttributeTypes()[idAttributeType] || {};
 		$rootScope
 			.openAddEditStaticDataDialog(event, 'update', idAttributeType, idAttribute)
 			.then(() => {
@@ -113,7 +109,7 @@ function MemberIdWalletMainController(
 				CommonService.showToast('success', 'saved');
 
 				SqlLiteService.registerActionLog(
-					'Updated Attribute: ' + $rootScope.DICTIONARY[idAttributeType],
+					'Updated Attribute: ' + $rootScope.DICTIONARY[idAttributeType.key],
 					'Updated'
 				).then(() => {
 					loadWalletHistory();
