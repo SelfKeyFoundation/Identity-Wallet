@@ -30,8 +30,13 @@ const importIdAttributeTypes = [
 ];
 
 describe('IdAttributeTypeService', () => {
+	let service;
+	beforeEach(() => {
+		service = new IdAttributeTypeService();
+	});
 	afterEach(() => {
 		sinon.restore();
+		fetch.mockRestore();
 	});
 	it('loadIdAttributeTypes', async () => {
 		fetch.mockResolvedValue({
@@ -40,7 +45,7 @@ describe('IdAttributeTypeService', () => {
 			}
 		});
 		let stub = sinon.stub(IdAttributeType, 'import');
-		await IdAttributeTypeService.loadIdAttributeTypes();
+		await service.loadIdAttributeTypes();
 		expect(stub.getCall(0).args[0]).toEqual(importIdAttributeTypes);
 	});
 });

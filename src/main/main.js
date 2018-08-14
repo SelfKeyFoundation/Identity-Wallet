@@ -179,8 +179,8 @@ function onReady(app) {
 					// start update cmc data
 
 					ctx.priceService.startUpdateData();
-					ctx.IdAttributeTypeService.loadIdAttributeTypes();
-					ctx.ExchangesService.loadExchangeData();
+					ctx.idAttributeTypeService.loadIdAttributeTypes();
+					ctx.exchangesService.loadExchangeData();
 					ctx.txHistoryService.startSyncingJob();
 
 					mainWindow.webContents.send('APP_SUCCESS_LOADING');

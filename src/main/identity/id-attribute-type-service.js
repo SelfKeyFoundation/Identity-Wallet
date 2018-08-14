@@ -5,7 +5,7 @@ import IdAttributeType from './id-attribute-type';
 const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
 
 export class IdAttributeTypeService {
-	static async loadIdAttributeTypes() {
+	async loadIdAttributeTypes() {
 		const result = await fetch(`${airtableBaseUrl}id-attributes`);
 		const response = await result.json();
 
@@ -15,7 +15,7 @@ export class IdAttributeTypeService {
 
 		return IdAttributeType.import(idAttributeData);
 	}
-	static resolveSchema(type) {
+	resolveSchema(type) {
 		switch (type.key) {
 			case 'first_name':
 				return {

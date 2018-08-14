@@ -24,10 +24,8 @@ export const configureContext = (store, app) => {
 		txHistoryService: asClass(TxHistoryService).singleton(),
 		TxHistoryService: asValue(TxHistoryService),
 		priceService: asClass(PriceService).singleton(),
-		// TODO: refactor to not use static methods
-		IdAttributeTypeService: asValue(IdAttributeTypeService),
-		// TODO: refactor to not use static methods
-		ExchangesService: asValue(ExchangesService),
+		idAttributeTypeService: asClass(IdAttributeTypeService).singleton(),
+		exchangesService: asClass(ExchangesService).singleton(),
 		trezorService: asFunction(() => {
 			let Service = TrezorService();
 			return new Service();
