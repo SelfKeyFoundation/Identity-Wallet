@@ -1,33 +1,31 @@
+import { db as config } from 'common/config';
 import db from './db';
+import { Model } from 'objection';
+import Knex from 'knex';
 
-let initialized = false;
-
-const init = async () => {
-	initialized = true;
-	await db.createInitialDb();
-};
-
-const ensureConnection = async () => {
-	try {
-		await db.knex.raw('select 1+1 as result');
-		return false;
-	} catch (err) {
-		await db.knex.client.initializePool(db.config);
-		return true;
+export class TestDb {
+	async init() {
+		this.knex = Knex(db.config);
+		Model.knex(this.knex);
+		await this.knex.migrate.latest();
+		await this.knex.seed.run();
 	}
-};
-
-const reset = async () => {
-	let isNewConn = await ensureConnection();
-	if (!isNewConn) {
-		await db.reset();
+	async reset() {
+		// try {
+		// 	await this.rollbackAll();
+		// } catch (error) {
+		// 	console.error('rollback failed', error);
+		// }
+		await this.init();
 	}
-	await init();
-};
 
-export { init, reset };
+	async rollbackAll() {
+		await this.knex.migrate.forceFreeMigrationsLock();
+		let migration = await this.knex.migrate.currentVersion(config.migrations);
+		if (migration === 'none') return;
+		await this.knex.migrate.rollback(config.migrations);
+		return this.rollbackAll();
+	}
+}
 
-export default {
-	init,
-	reset
-};
+export default TestDb;

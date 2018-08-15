@@ -1,7 +1,12 @@
 import ActionLog from './action-log';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('ActionLog model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testLog = { walletId: 10, title: 'test', content: 'test content' };
 	beforeEach(async () => {
 		await db.reset();

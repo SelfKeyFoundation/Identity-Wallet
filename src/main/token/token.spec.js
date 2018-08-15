@@ -1,8 +1,13 @@
 import Token from './token';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 import initialTokens from 'main/assets/data/eth-tokens.json';
 
 describe('Token model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testItem = {
 		symbol: 'TST',
 		decimal: 2,
