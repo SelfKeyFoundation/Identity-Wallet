@@ -13,7 +13,9 @@ export class IdAttributeSchema extends BaseModel {
 			type: { type: 'string' },
 			expires: { type: 'integer' },
 			jsonSchema: { type: 'object' },
-			uiSchema: { type: 'object' }
+			uiSchema: { type: 'object' },
+			jsonSchemaUrl: { type: 'string' },
+			uiSchemaUrl: { type: 'string' }
 		}
 	};
 	static get relationMappings() {
@@ -28,6 +30,10 @@ export class IdAttributeSchema extends BaseModel {
 				}
 			}
 		};
+	}
+
+	hasExpired() {
+		return Date.now() > this.expires;
 	}
 }
 

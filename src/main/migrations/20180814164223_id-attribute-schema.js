@@ -10,6 +10,8 @@ exports.up = async (knex, Promise) => {
 		t.text('uiSchema')
 			.notNullable()
 			.defaultTo('{}');
+		t.string('jsonSchemaUrl');
+		t.string('uiSchemaUrl');
 		t.integer('createdAt').notNullable();
 		t.integer('updatedAt');
 	});

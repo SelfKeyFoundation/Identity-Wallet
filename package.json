@@ -89,6 +89,7 @@
     "hdkey": "^1.0.0",
     "is-online": "^7.0.0",
     "jsdom": "11.10.0",
+    "json-schema-ref-parser": "^5.1.2",
     "keythereum": "^1.0.4",
     "knex": "^0.15.0",
     "lodash": "^4.17.10",
