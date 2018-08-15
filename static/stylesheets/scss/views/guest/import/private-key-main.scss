@@ -5,7 +5,8 @@
 	width: 80%;
 	form {
 		width: 100%;
-		md-input-container {
+		md-input-container,
+		.md-input-container {
 			width: 100%;
 			line-height: 40px;
 		}

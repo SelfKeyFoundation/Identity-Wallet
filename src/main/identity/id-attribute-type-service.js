@@ -34,7 +34,6 @@ export class IdAttributeTypeService {
 				return;
 			}
 			let jsonSchema = await jsonRes.json();
-			log.info('%2j', jsonSchema);
 			jsonSchema = await RefParser.dereference(jsonSchema);
 			let schema = {
 				expires: Date.now() + JSON_SCHEMA_EXPIRTION_TIME,
