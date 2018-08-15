@@ -1,7 +1,12 @@
 import GuideSetting from './guide-setting';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('GuideSettings model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	beforeEach(async () => {
 		await db.reset();
 		GuideSetting.reset();

@@ -1,8 +1,13 @@
 import _ from 'lodash';
 import Exchange from './exchange';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('Exchange model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testItem = {
 		name: 'test',
 		data: {

@@ -1,7 +1,12 @@
 import WalletToken from './wallet-token';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('WalletToken model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testItem = {
 		walletId: 1,
 		tokenId: 1,

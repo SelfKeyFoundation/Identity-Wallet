@@ -1,9 +1,14 @@
 import IdAttribute from './id-attribute';
 import Document from './document';
 import Wallet from '../wallet/wallet';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('IdAttribute model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testWalletId = 1;
 	const testAttribute = { walletId: testWalletId, type: 'test_data', data: { value: 'test' } };
 	const testAttributeComplex = {

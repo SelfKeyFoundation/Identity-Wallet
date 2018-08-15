@@ -1,7 +1,12 @@
 import Wallet from './wallet';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('Wallet model', () => {
+	let db;
+	beforeAll(async () => {
+		db = new TestDb();
+		await db.init();
+	});
 	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
 
 	const testItm2 = {
