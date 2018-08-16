@@ -20,7 +20,7 @@ platform:
   - x64
 init:
   - git config --global core.autocrlf input
-cache:
+# cache:
   #- node_modules
   #- '%LOCALAPPDATA%/Yarn'
 install:
@@ -40,7 +40,7 @@ build_script:
   - set DEBUG=electron-builder
   - yarn dist --publish=never
 test_script:
-  # - yarn test:unit
+  - yarn test:unit
 deploy_script:
     - ps: $env:VERSION = (Get-Content package.json) -join "`n" | ConvertFrom-Json | Select -ExpandProperty "version"
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
