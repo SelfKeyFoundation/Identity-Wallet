@@ -28,17 +28,26 @@ export class TestDb {
 		}
 	}
 	async reset() {
-		if (this.knex) {
-			await this.destroyPool();
+		try {
+			if (this.knex) {
+				await this.destroyAllTables();
+			}
+			await this.init();
+		} catch (error) {
+			this.initKnex();
 		}
-		await this.init();
 	}
-	destroyPool() {
-		if (!this.knex) return Promise.resolve();
-		return new Promise((resolve, reject) => this.knex.destroy(() => resolve()));
+	async destroyAllTables() {
+		if (!this.knex) throw new Error('no-connectikon');
+		let tables = await this.knex('sqlite_master').where('type', 'table');
+		await Promise.all(
+			tables
+				.filter(t => !['sqlite_master', 'sqlite_sequence'].includes(t.name))
+				.map(t => this.knex.schema.dropTable(t.name))
+		);
 	}
 	async destroy() {
-		await this.destroyPool();
+		await this.destroyAllTables();
 	}
 }
 
