@@ -7,6 +7,9 @@ describe('Country model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testDoc = {
 		name: 'test',
 		mimeType: 'test-mime',

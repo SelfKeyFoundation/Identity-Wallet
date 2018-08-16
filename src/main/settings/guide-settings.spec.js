@@ -7,6 +7,9 @@ describe('GuideSettings model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	beforeEach(async () => {
 		await db.reset();
 		GuideSetting.reset();

@@ -8,6 +8,9 @@ describe('Token model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testItem = {
 		symbol: 'TST',
 		decimal: 2,

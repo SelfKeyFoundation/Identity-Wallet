@@ -7,6 +7,9 @@ describe('Country model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	beforeEach(async () => {
 		await db.reset();
 	});

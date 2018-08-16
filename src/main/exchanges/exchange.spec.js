@@ -8,6 +8,9 @@ describe('Exchange model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testItem = {
 		name: 'test',
 		data: {

@@ -7,6 +7,9 @@ describe('Wallet model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
 
 	const testItm2 = {

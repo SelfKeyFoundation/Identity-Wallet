@@ -9,6 +9,9 @@ describe('IdAttributeType model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testItem = {
 		key: 'test',
 		category: 'test_category',

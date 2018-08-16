@@ -7,6 +7,9 @@ describe('TxHistory model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const data = {
 		hash: 'abc',
 		blockNumber: 12,

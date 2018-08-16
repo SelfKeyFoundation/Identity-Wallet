@@ -7,6 +7,9 @@ describe('ActionLog model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testLog = { walletId: 10, title: 'test', content: 'test content' };
 	beforeEach(async () => {
 		await db.reset();

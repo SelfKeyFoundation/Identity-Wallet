@@ -9,6 +9,9 @@ describe('IdAttribute model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testWalletId = 1;
 	const testAttribute = { walletId: testWalletId, type: 'test_data', data: { value: 'test' } };
 	const testAttributeComplex = {

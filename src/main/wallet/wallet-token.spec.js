@@ -7,6 +7,9 @@ describe('WalletToken model', () => {
 		db = new TestDb();
 		await db.init();
 	});
+	afterAll(async () => {
+		await db.destroy();
+	});
 	const testItem = {
 		walletId: 1,
 		tokenId: 1,
