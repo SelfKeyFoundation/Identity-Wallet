@@ -10,7 +10,14 @@ export class TestDb {
 		await this.knex.seed.run();
 	}
 	async reset() {
+		if (this.knex) {
+			await this.destroyPool();
+		}
 		await this.init();
+	}
+	destroyPool() {
+		if (!this.knex) return Promise.resolve();
+		return new Promise((resolve, reject) => this.knex.destroy(() => resolve()));
 	}
 }
 
