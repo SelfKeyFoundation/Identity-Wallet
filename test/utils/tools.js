@@ -13,7 +13,7 @@ var app = new Application({
 	webdriverOptions: {
 		logLevel: 'verbose'
 	},
-	waitTimeout: 20000
+	waitTimeout: 40000
 });
 
 function init() {
@@ -22,21 +22,21 @@ function init() {
 	});
 }
 
-// function appStart() {
-// 	return new Promise((resolve, reject) => {
-// 		if (process.env.OSENV == 'windows') {
-// 			resolve(app.start())
-// 		} else {
-// 			init().then(() => resolve(app.start()))
-// 		}
-// 	})
-// }
-
 function appStart() {
 	return new Promise((resolve, reject) => {
-		return init().then(() => resolve(app.start()));
+		if (process.env.OSENV === 'windows') {
+			resolve(app.start());
+		} else {
+			init().then(() => resolve(app.start()));
+		}
 	});
 }
+
+// function appStart() {
+// 	return new Promise((resolve, reject) => {
+// 		return init().then(() => resolve(app.start()));
+// 	});
+// }
 
 function appStop() {
 	if (this.app && this.app.isRunning()) {
@@ -59,7 +59,7 @@ function clipboardCheck(check) {
 	return new Promise((resolve, reject) => {
 		app.electron.clipboard
 			.readText()
-			.then(cbt => assert.equal(cbt, check))
+			.then(cbt => assert.strictEqual(cbt, check))
 			.then(() => resolve(console.log(chalk.green('Clipboard Check : ' + check))))
 			.catch(err => reject(err));
 	});
