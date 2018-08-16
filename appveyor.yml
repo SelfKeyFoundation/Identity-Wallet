@@ -24,8 +24,8 @@ cache:
   #- node_modules
   #- '%LOCALAPPDATA%/Yarn'
 install:
-  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_1_0h.exe'
-  - ps: Start-Process 'Win64OpenSSL-1_1_0h.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2p.exe'
+  - ps: Start-Process 'Win64OpenSSL-1_0_2p.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
   - choco install gcloudsdk
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
