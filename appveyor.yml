@@ -35,6 +35,7 @@ install:
   - gem install sass compass
   - npm i -g yarn
   - yarn
+  - npm rebuild
 build_script:
   - echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
   - set DEBUG=electron-builder
