@@ -2,21 +2,21 @@ import TokenPrice from './token-price';
 import TestDb from '../db/test-db';
 
 describe('TokenPrice model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testItem = {
 		name: 'test',
 		symbol: 'TST'
 	};
 	const testItem2 = { name: 'test2', symbol: 'TST2' };
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('create', async () => {

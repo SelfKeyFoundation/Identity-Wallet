@@ -2,20 +2,20 @@ import WalletSetting from './wallet-setting';
 import TestDb from '../db/test-db';
 
 describe('WalletSetting model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testItem = {
 		walletId: 1,
 		showDesktopNotifications: 1
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('create', async () => {
 		let all = await WalletSetting.query();

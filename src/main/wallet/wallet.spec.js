@@ -2,14 +2,6 @@ import Wallet from './wallet';
 import TestDb from '../db/test-db';
 
 describe('Wallet model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
 
 	const testItm2 = {
@@ -31,9 +23,16 @@ describe('Wallet model', () => {
 	};
 
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		const itm = await Wallet.create(testItm);
 		expect(itm).toMatchObject(testItm);

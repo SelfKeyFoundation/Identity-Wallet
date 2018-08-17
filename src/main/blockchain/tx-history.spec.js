@@ -2,14 +2,6 @@ import TxHistory from './tx-history';
 import TestDb from '../db/test-db';
 
 describe('TxHistory model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const data = {
 		hash: 'abc',
 		blockNumber: 12,
@@ -35,7 +27,15 @@ describe('TxHistory model', () => {
 		networkId: 1
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('addOrUpdate', async () => {

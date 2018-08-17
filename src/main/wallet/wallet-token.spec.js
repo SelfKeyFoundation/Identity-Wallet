@@ -2,14 +2,6 @@ import WalletToken from './wallet-token';
 import TestDb from '../db/test-db';
 
 describe('WalletToken model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testItem = {
 		walletId: 1,
 		tokenId: 1,
@@ -29,9 +21,16 @@ describe('WalletToken model', () => {
 	};
 
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		let itm = await WalletToken.create(testItem);
 		expect(itm.id).toBeGreaterThan(0);

@@ -2,17 +2,17 @@ import ActionLog from './action-log';
 import TestDb from '../db/test-db';
 
 describe('ActionLog model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testLog = { walletId: 10, title: 'test', content: 'test content' };
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('create', async () => {
 		const log = await ActionLog.create(testLog);

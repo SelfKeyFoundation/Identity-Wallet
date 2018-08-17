@@ -4,14 +4,6 @@ import Wallet from '../wallet/wallet';
 import TestDb from '../db/test-db';
 
 describe('IdAttribute model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testWalletId = 1;
 	const testAttribute = { walletId: testWalletId, type: 'test_data', data: { value: 'test' } };
 	const testAttributeComplex = {
@@ -26,7 +18,15 @@ describe('IdAttribute model', () => {
 		buffer: Buffer.alloc(100)
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('create', async () => {

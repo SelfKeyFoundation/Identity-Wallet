@@ -1,5 +1,7 @@
 module.exports = {
 	globalSetup: '<rootDir>/test/jest-setup.js',
+	globalTeardown: '<rootDir>/test/jest-teardown.js',
+	setupTestFrameworkScriptFile: '<rootDir>/test/jest-setup-test-framework.js',
 	testPathIgnorePatterns: ['/node_modules/', 'test/e2e'],
 	modulePaths: ['<rootDir>/src'],
 	testRegex: '.spec.js$',

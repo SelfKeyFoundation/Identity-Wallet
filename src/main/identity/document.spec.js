@@ -2,14 +2,6 @@ import Document from './document';
 import TestDb from '../db/test-db';
 
 describe('Country model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testDoc = {
 		name: 'test',
 		mimeType: 'test-mime',
@@ -17,7 +9,15 @@ describe('Country model', () => {
 		buffer: Buffer.alloc(100)
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('findById', async () => {
 		const doc = await Document.query().insert(testDoc);

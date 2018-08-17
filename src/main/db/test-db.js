@@ -3,19 +3,19 @@ import { Model } from 'objection';
 import Knex from 'knex';
 
 export class TestDb {
-	constructor() {
-		this.initKnex();
+	static async init() {
+		try {
+			this.knex = Knex(config);
+			this.oldKnex = Model.knex();
+			Model.knex(this.knex);
+			await this.aquireConnection();
+			await this.knex.migrate.latest();
+			await this.knex.seed.run();
+		} catch (error) {
+			console.log(error);
+		}
 	}
-	initKnex() {
-		this.knex = Knex(config);
-		Model.knex(this.knex);
-	}
-	async init() {
-		await this.aquireConnection();
-		await this.knex.migrate.latest();
-		await this.knex.seed.run();
-	}
-	async aquireConnection(attempt = 0) {
+	static async aquireConnection(attempt = 0) {
 		try {
 			await this.knex.raw('select 1+1 as result');
 		} catch (error) {
@@ -23,21 +23,18 @@ export class TestDb {
 				console.error('Could not establish connection', 3, 'times', error);
 				throw error;
 			}
-			this.initKnex();
 			return this.aquireConnection(attempt + 1);
 		}
 	}
-	async reset() {
+	static async reset() {
 		try {
-			if (this.knex) {
-				await this.destroyAllTables();
-			}
-			await this.init();
+			await this.knex.destroy();
+			Model.knex(this.oldKnex);
 		} catch (error) {
-			this.initKnex();
+			console.log(error);
 		}
 	}
-	async destroyAllTables() {
+	static async destroyAllTables() {
 		if (!this.knex) throw new Error('no-connectikon');
 		let tables = await this.knex('sqlite_master').where('type', 'table');
 		await Promise.all(
@@ -46,8 +43,13 @@ export class TestDb {
 				.map(t => this.knex.schema.dropTable(t.name))
 		);
 	}
-	async destroy() {
-		await this.destroyAllTables();
+	static async destroy() {
+		try {
+			await this.knex.destroy();
+			this.knex = null;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
 

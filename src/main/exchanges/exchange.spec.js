@@ -3,14 +3,6 @@ import Exchange from './exchange';
 import TestDb from '../db/test-db';
 
 describe('Exchange model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
-	afterAll(async () => {
-		await db.destroy();
-	});
 	const testItem = {
 		name: 'test',
 		data: {
@@ -23,9 +15,16 @@ describe('Exchange model', () => {
 	const testItem2 = { ...testItem, name: `${testItem.name}2` };
 
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		const itm = await Exchange.create(testItem);
 		const itm2 = await Exchange.create(testItem2);
