@@ -34,7 +34,7 @@ install:
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
   - npm i -g yarn
-  - yarn
+  - yarn install-all
 build_script:
   - echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
   - set DEBUG=electron-builder

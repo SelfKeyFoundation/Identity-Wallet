@@ -68,7 +68,7 @@ jobs:
                   command: yarn
             - run:
                   name: Unit Tests
-                  command: yarn test:unit
+                  command: yarn test:unit:coverage
             - run:
                   name: Coveralls
                   command: yarn coveralls
@@ -98,7 +98,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
 
             - run:
                   name: Set Sentry
@@ -135,7 +135,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
             - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
@@ -219,7 +219,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
             - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
