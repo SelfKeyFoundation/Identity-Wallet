@@ -108,7 +108,7 @@
     "redux-thunk": "^2.3.0",
     "request": "2.87.0",
     "reselect": "^3.0.1",
-    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#fix/no-gas",
     "serialize-error": "^2.1.0",
     "sinon": "^6.1.3",
     "socket.io-client": "^2.1.1",
