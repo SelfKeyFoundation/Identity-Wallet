@@ -1,5 +1,5 @@
 import TokenPrice from './token-price';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('TokenPrice model', () => {
 	const testItem = {
@@ -8,7 +8,15 @@ describe('TokenPrice model', () => {
 	};
 	const testItem2 = { name: 'test2', symbol: 'TST2' };
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('create', async () => {

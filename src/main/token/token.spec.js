@@ -1,5 +1,5 @@
 import Token from './token';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 import initialTokens from 'main/assets/data/eth-tokens.json';
 
 describe('Token model', () => {
@@ -14,9 +14,16 @@ describe('Token model', () => {
 		address: 'test address2'
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		let itm = await Token.create(testItem);
 		expect(itm.id).toBeGreaterThan(0);

@@ -27,8 +27,8 @@ if (osEnv === 'circle-linux') {
 }
 
 if (osEnv === 'linux') {
-	chmodCmd = 'chmod a+x ' + pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
-	appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
+	chmodCmd = 'chmod a+x ' + path.join(pwd, 'dist', 'linux-unpacked', 'selfkey-identity-wallet');
+	appPath = path.join(pwd, 'dist', 'linux-unpacked', 'selfkey-identity-wallet');
 }
 
 if (osEnv === 'docker') {
@@ -36,7 +36,7 @@ if (osEnv === 'docker') {
 }
 
 if (osEnv === 'windows') {
-	appPath = pwd + '\\dist\\' + appCacheName + ' Setup ' + appVersion + '.exe';
+	appPath = path.join(pwd, 'dist', 'win-unpacked', 'Selfkey Identity Wallet.exe');
 }
 
 function consoleNotes() {

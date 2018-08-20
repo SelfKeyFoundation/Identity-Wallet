@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import IdAttributeType from './id-attribute-type';
 import initialAttributes from 'main/assets/data/initial-id-attribute-type-list.json';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('IdAttributeType model', () => {
 	const testItem = {
@@ -19,7 +19,15 @@ describe('IdAttributeType model', () => {
 		isInitial: 1
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('create', async () => {
 		const expected = { ...testItem, type: 'static_data' };

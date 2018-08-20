@@ -1,5 +1,5 @@
 import WalletToken from './wallet-token';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('WalletToken model', () => {
 	const testItem = {
@@ -21,9 +21,16 @@ describe('WalletToken model', () => {
 	};
 
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		let itm = await WalletToken.create(testItem);
 		expect(itm.id).toBeGreaterThan(0);

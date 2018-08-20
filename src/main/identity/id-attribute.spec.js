@@ -1,7 +1,7 @@
 import IdAttribute from './id-attribute';
 import Document from './document';
 import Wallet from '../wallet/wallet';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('IdAttribute model', () => {
 	const testWalletId = 1;
@@ -18,7 +18,15 @@ describe('IdAttribute model', () => {
 		buffer: Buffer.alloc(100)
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('create', async () => {
