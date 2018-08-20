@@ -1,6 +1,7 @@
 image: Visual Studio 2017
 environment:
   OSENV: windows
+  NO_PROXY: 127.0.0.1,localhost
   encryptedkey:
     secure: 8HCeZ0WW/f09cU7PgV31q14Xy46vU/2dYHnP0ZCpi/tLvVzr2gnY+BZ99S1u1cAHJNdAyRX/pp91L91KiXdh/2ZuE1fqAXcaVo2/j4VB01c=
   encryptediv:
