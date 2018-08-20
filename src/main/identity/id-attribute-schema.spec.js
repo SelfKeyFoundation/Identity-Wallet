@@ -2,13 +2,16 @@ import IdAttributeSchema from './id-attribute-schema';
 import TestDb from '../db/test-db';
 
 describe('IdAttributeSchema', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('sanity', async () => {
 		let schema = {

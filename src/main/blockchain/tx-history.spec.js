@@ -2,11 +2,6 @@ import TxHistory from './tx-history';
 import TestDb from '../db/test-db';
 
 describe('TxHistory model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const data = {
 		hash: 'abc',
 		blockNumber: 12,

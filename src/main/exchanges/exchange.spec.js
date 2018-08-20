@@ -3,11 +3,6 @@ import Exchange from './exchange';
 import TestDb from '../db/test-db';
 
 describe('Exchange model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const testItem = {
 		name: 'test',
 		data: {

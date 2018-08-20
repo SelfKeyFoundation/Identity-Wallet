@@ -2,11 +2,6 @@ import WalletSetting from './wallet-setting';
 import TestDb from '../db/test-db';
 
 describe('WalletSetting model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const testItem = {
 		walletId: 1,
 		showDesktopNotifications: 1

@@ -2,11 +2,6 @@ import Country from './country';
 import TestDb from '../db/test-db';
 
 describe('Country model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	beforeEach(async () => {
 		await TestDb.init();
 	});

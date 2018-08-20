@@ -2,11 +2,6 @@ import Document from './document';
 import TestDb from '../db/test-db';
 
 describe('Country model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const testDoc = {
 		name: 'test',
 		mimeType: 'test-mime',

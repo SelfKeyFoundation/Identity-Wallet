@@ -4,11 +4,6 @@ import initialAttributes from 'main/assets/data/initial-id-attribute-type-list.j
 import TestDb from '../db/test-db';
 
 describe('IdAttributeType model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const testItem = {
 		key: 'test',
 		category: 'test_category',

@@ -2,11 +2,6 @@ import TokenPrice from './token-price';
 import TestDb from '../db/test-db';
 
 describe('TokenPrice model', () => {
-	let db;
-	beforeAll(async () => {
-		db = new TestDb();
-		await db.init();
-	});
 	const testItem = {
 		name: 'test',
 		symbol: 'TST'
