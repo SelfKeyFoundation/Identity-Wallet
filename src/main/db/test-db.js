@@ -6,7 +6,6 @@ export class TestDb {
 	static async init() {
 		try {
 			this.knex = Knex(config);
-			this.oldKnex = Model.knex();
 			Model.knex(this.knex);
 			await this.aquireConnection();
 			await this.knex.migrate.latest();
@@ -29,7 +28,6 @@ export class TestDb {
 	static async reset() {
 		try {
 			await this.knex.destroy();
-			Model.knex(this.oldKnex);
 		} catch (error) {
 			console.log(error);
 		}
