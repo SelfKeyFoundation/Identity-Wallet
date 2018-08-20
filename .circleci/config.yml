@@ -47,40 +47,34 @@ aliases:
 
 jobs:
     'unit-test':
-        macos:
-            xcode: '9.0'
+        docker: &DOCKERIMAGE
+            - image: circleci/node:8.11.3-stretch-browsers
         environment:
             CACHE_VERSION: *cache_version
         steps:
             - checkout
             - attach_workspace:
-                  at: /tmp/mac
+                  at: /tmp/linux
             - *step_prepare_cache_buster
-            - *step_restore_cache_mac
-            - *step_setup_nvm
-            - *step_yarn_upgrade
+            - *step_restore_cache
             - run:
-                  name: Add Read Access to yarn config
+                  name: Install OS Dependecies
                   command: |
-                      sudo mkdir -p ~/.config
-                      sudo chown -R $USER:$GROUP ~/.config
-            - run:
-                  name: Install Gulp
-                  command: sudo npm i -g gulp-cli
+                      sudo apt-get update
+                      sudo apt-get install libudev-dev
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
             - run:
                   name: Install Node Packages
                   command: yarn
-            - *step_save_cache_mac
             - run:
                   name: Unit Tests
-                  command: yarn test:unit
+                  command: yarn test:unit:coverage
             - run:
                   name: Coveralls
                   command: yarn coveralls
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
+            - store_artifacts:
+                  path: dist
+            - *step_save_cache
     'build-mac':
         macos:
             xcode: '9.0'
@@ -104,8 +98,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
-            - *step_save_cache_mac
+                  command: yarn install-all
 
             - run:
                   name: Set Sentry
@@ -119,10 +112,10 @@ jobs:
                       - dist
             - store_artifacts:
                   path: dist
+            - *step_save_cache_mac
 
     'build-linux':
-        docker: &DOCKERIMAGE
-            - image: circleci/node:8.11.3-stretch-browsers
+        docker: *DOCKERIMAGE
         environment:
             CACHE_VERSION: *cache_version
         steps:
@@ -142,8 +135,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
-            - *step_save_cache
+                  command: yarn install-all
             - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
@@ -156,6 +148,7 @@ jobs:
                       - dist
             - store_artifacts:
                   path: dist
+            - *step_save_cache
     'e2e-mac':
         macos:
             xcode: '9.0'
@@ -226,7 +219,7 @@ jobs:
                   command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
             - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json

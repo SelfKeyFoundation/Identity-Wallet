@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Exchange from './exchange';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('Exchange model', () => {
 	const testItem = {
@@ -15,9 +15,16 @@ describe('Exchange model', () => {
 	const testItem2 = { ...testItem, name: `${testItem.name}2` };
 
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		const itm = await Exchange.create(testItem);
 		const itm2 = await Exchange.create(testItem2);
