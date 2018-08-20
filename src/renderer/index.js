@@ -209,7 +209,8 @@ angular.module('kyc-wallet').component('cryptoPriceTable', cryptoPriceTableWrapp
 
 const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper, [
 	'cryptoCurrency',
-	'closeAction'
+	'closeAction',
+	'openLink'
 ]);
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
