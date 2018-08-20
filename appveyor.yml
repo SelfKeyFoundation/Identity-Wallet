@@ -22,7 +22,7 @@ platform:
 init:
   - git config --global core.autocrlf input
 cache:
-  - node_modules
+  # - node_modules
   - '%LOCALAPPDATA%/Yarn'
 install:
   - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2p.exe'
