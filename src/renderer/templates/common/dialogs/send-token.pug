@@ -1,6 +1,6 @@
 .send-token
     div(style="width:600px;" ng-if="errors.sendFailedDueToGas")
-        transaction-no-gas-error(crypto-currency="symbol", close-action="cancel")
+        transaction-no-gas-error(crypto-currency="symbol", close-action="cancel", open-link="$root.openInBrowser")
     .send-token-wrapper(ng-if="!errors.sendFailedDueToGas")
         sk-icon.close-send-token-btn(icon="close-dialog", size-class="icon-size-36x36", ng-click="cancel($event)")
         .send-token-symbol(ng-if="allowSelectERC20Token && symbol")

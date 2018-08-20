@@ -33,13 +33,13 @@
   "scripts": {
     "dev": "gulp && electron-webpack dev",
     "install-app-deps": "electron-builder install-app-deps buildDependenciesFromSource",
-	"install-all": "yarn && yarn install-app-deps",
+    "install-all": "yarn && yarn install-app-deps",
     "compile": "gulp && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "jest -i --forceExit --coverage",
-	"test:unit:coverage": "yarn test:unit -- --coverage",
+    "test:unit:coverage": "yarn test:unit -- --coverage",
     "test:e2e": "node test/test.js e2e",
     "publish-build": "yarn compile && electron-builder -p always",
     "precommit": "npm run check-deps-precommit && pretty-quick --staged",
@@ -55,6 +55,7 @@
     ]
   },
   "dependencies": {
+    "@babel/runtime": "7.0.0-beta.42",
     "@ledgerhq/hw-transport-node-hid": "^4.19.1",
     "@ledgerhq/web3-subprovider": "^4.19.0",
     "@sentry/electron": "0.8.1",
