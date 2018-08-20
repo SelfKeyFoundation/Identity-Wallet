@@ -8,7 +8,15 @@ describe('Country model', () => {
 		await db.init();
 	});
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('findAll', async () => {
 		const countries = await Country.findAll();

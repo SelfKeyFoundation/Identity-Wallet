@@ -8,7 +8,11 @@ describe('GuideSettings model', () => {
 		await db.init();
 	});
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
 		GuideSetting.reset();
 	});
 

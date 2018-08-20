@@ -32,7 +32,15 @@ describe('TxHistory model', () => {
 		networkId: 1
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('addOrUpdate', async () => {

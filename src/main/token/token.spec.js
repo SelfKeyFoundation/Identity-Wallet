@@ -19,9 +19,16 @@ describe('Token model', () => {
 		address: 'test address2'
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
 	});
 
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
 	it('create', async () => {
 		let itm = await Token.create(testItem);
 		expect(itm.id).toBeGreaterThan(0);

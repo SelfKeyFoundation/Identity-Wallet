@@ -14,7 +14,15 @@ describe('Country model', () => {
 		buffer: Buffer.alloc(100)
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('findById', async () => {
 		const doc = await Document.query().insert(testDoc);
