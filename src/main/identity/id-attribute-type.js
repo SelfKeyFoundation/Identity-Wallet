@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Model } from 'objection';
 import BaseModel from '../common/base-model';
 
 const TABLE_NAME = 'id_attribute_types';
@@ -23,6 +23,20 @@ export class IdAttributeType extends BaseModel {
 				type: { type: 'string' },
 				entity: { type: 'array' },
 				isInitial: { type: 'integer' }
+			}
+		};
+	}
+
+	static get relationMappings() {
+		const IdAttributeSchema = require('./id-attribute-schema').default;
+		return {
+			schema: {
+				relation: Model.HasOneRelation,
+				modelClass: IdAttributeSchema,
+				join: {
+					from: `${this.tableName}.key`,
+					to: `${IdAttributeSchema.tableName}.type`
+				}
 			}
 		};
 	}

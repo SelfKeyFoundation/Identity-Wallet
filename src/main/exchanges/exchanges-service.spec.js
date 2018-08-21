@@ -36,8 +36,13 @@ const importExchanges = [
 ];
 
 describe('ExchangesService', () => {
+	let service;
+	beforeEach(() => {
+		service = new ExchangesService();
+	});
 	afterEach(() => {
 		sinon.restore();
+		fetch.mockRestore();
 	});
 	it('loadExchangeData', async () => {
 		fetch.mockResolvedValue({
@@ -46,7 +51,7 @@ describe('ExchangesService', () => {
 			}
 		});
 		let stub = sinon.stub(Exchange, 'import');
-		await ExchangesService.loadExchangeData();
+		await service.loadExchangeData();
 		expect(stub.getCall(0).args[0]).toEqual(importExchanges);
 	});
 });

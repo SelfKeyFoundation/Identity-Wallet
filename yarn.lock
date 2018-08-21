@@ -3960,7 +3960,7 @@ core-js@^1.0.0:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
 
-core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0, core-js@^2.5.3:
+core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0, core-js@^2.5.3, core-js@^2.5.7:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
@@ -6456,6 +6456,10 @@ form-data@^2.3.2, form-data@~2.3.1:
     combined-stream "1.0.6"
     mime-types "^2.1.12"
 
+format-util@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/format-util/-/format-util-1.0.3.tgz#032dca4a116262a12c43f4c3ec8566416c5b2d95"
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -8683,6 +8687,15 @@ json-rpc-random-id@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/json-rpc-random-id/-/json-rpc-random-id-1.0.1.tgz#ba49d96aded1444dbb8da3d203748acbbcdec8c8"
 
+json-schema-ref-parser@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/json-schema-ref-parser/-/json-schema-ref-parser-5.1.2.tgz#c9cdaec76ea894f71eb3776c3b3291dfa62e56c9"
+  dependencies:
+    call-me-maybe "^1.0.1"
+    debug "^3.1.0"
+    js-yaml "^3.12.0"
+    ono "^4.0.5"
+
 json-schema-traverse@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz#349a6d44c53a51de89b40805c5d5e59b417d3340"
@@ -9384,6 +9397,10 @@ lodash.toarray@^4.4.0:
 lodash.topairs@4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.topairs/-/lodash.topairs-4.3.0.tgz#3b6deaa37d60fb116713c46c5f17ea190ec48d64"
+
+lodash.topath@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/lodash.topath/-/lodash.topath-4.5.2.tgz#3616351f3bba61994a0931989660bd03254fd009"
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -10548,6 +10565,12 @@ onetime@^2.0.0:
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-2.0.1.tgz#067428230fd67443b2794b22bba528b6867962d4"
   dependencies:
     mimic-fn "^1.0.0"
+
+ono@^4.0.5:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/ono/-/ono-4.0.6.tgz#b865214e07dacf6e6dc7f1d498c7fba42a810ff5"
+  dependencies:
+    format-util "^1.0.3"
 
 opencollective@1.0.3:
   version "1.0.3"
@@ -11812,6 +11835,16 @@ react-google-charts@^1.6.6:
   resolved "https://registry.yarnpkg.com/react-google-charts/-/react-google-charts-1.6.6.tgz#ec8d4cc4c07f31942e947ca1515eb59a6fa2f760"
   dependencies:
     loadjs "^3.3.1"
+
+react-jsonschema-form@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-jsonschema-form/-/react-jsonschema-form-1.0.4.tgz#e63a3ebffcf3987d0bfe8e05e2fae738fa5f6f19"
+  dependencies:
+    ajv "^5.2.3"
+    babel-runtime "^6.26.0"
+    core-js "^2.5.7"
+    lodash.topath "^4.5.2"
+    prop-types "^15.5.8"
 
 react-jss@^8.1.0, react-jss@^8.4.0:
   version "8.6.1"

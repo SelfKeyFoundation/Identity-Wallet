@@ -25,6 +25,8 @@ function AddEditStaticDataDialogController(
 	const TELEPHONE_ID_ATTRIBUTES = ['phonenumber_countrycode'];
 
 	$scope.currentDate = new Date();
+	$scope.idAttributeTypeFull = idAttributeType;
+	idAttributeType = idAttributeType.key;
 	$scope.idAttribute = idAttribute;
 	$scope.idAttributeType = idAttributeType;
 	$scope.countryList = SqlLiteService.getCountries();
@@ -50,7 +52,9 @@ function AddEditStaticDataDialogController(
 	};
 
 	$scope.getFormPath = () => {
-		if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+		if ($scope.idAttributeTypeFull.schema) {
+			return 'common/dialogs/id-attributes/forms/schema.html';
+		} else if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
 			return 'common/dialogs/id-attributes/forms/address.html';
 		} else if (COUNTRY_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
 			return 'common/dialogs/id-attributes/forms/country.html';
@@ -64,13 +68,14 @@ function AddEditStaticDataDialogController(
 	};
 
 	$scope.save = (event, theForm) => {
-		if (!theForm.$valid || $scope.savePromise) return;
+		if (!$scope.idAttributeTypeFull.schema && (!theForm.$valid || $scope.savePromise)) return;
 
 		let attr = {
 			data: {}
 		};
-
-		if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+		if ($scope.idAttributeTypeFull.schema) {
+			attr.data = theForm;
+		} else if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
 			attr.data.address1 = $scope.inputs.line1;
 			attr.data.address2 = $scope.inputs.line2;
 			attr.data.city = $scope.inputs.line3;

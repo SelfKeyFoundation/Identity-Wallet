@@ -6,6 +6,7 @@ import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
 import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
+import { IdAttributeSchemaForm } from './react/id-attribute';
 
 const { Logger } = require('common/logger');
 
@@ -212,6 +213,14 @@ const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper,
 	'openLink'
 ]);
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
+
+const idAttributeSchemaForm = react2angular(IdAttributeSchemaForm, [
+	'attr',
+	'type',
+	'onClose',
+	'onSave'
+]);
+angular.module('kyc-wallet').component('idAttributeSchemaForm', idAttributeSchemaForm);
 
 /**
  * controllers
