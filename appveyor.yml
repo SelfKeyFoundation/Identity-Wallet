@@ -20,6 +20,7 @@ environment:
 platform:
   - x64
 init:
+  - tzutil /s "UTC"
   - git config --global core.autocrlf input
 cache:
   # - node_modules
