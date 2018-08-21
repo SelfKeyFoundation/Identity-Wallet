@@ -165,30 +165,30 @@ function onReady(app) {
 			mainWindow = null;
 		});
 
-		mainWindow.webContents.on('did-finish-load', () => {
-			isOnline()
-				.then(isOnline => {
-					log.info('is-online', isOnline);
-					if (!isOnline) {
-						mainWindow.webContents.send('SHOW_IS_OFFLINE_WARNING');
-						return;
-					}
+		mainWindow.webContents.on('did-finish-load', async () => {
+			try {
+				let online = await isOnline();
+				log.info('is-online %s', online);
+				if (!online) {
+					mainWindow.webContents.send('SHOW_IS_OFFLINE_WARNING');
+					return;
+				}
 
-					log.info('did-finish-load');
-					mainWindow.webContents.send('APP_START_LOADING');
-					// start update cmc data
-
-					ctx.priceService.startUpdateData();
-					ctx.IdAttributeTypeService.loadIdAttributeTypes();
-					ctx.ExchangesService.loadExchangeData();
-					ctx.txHistoryService.startSyncingJob();
-
-					mainWindow.webContents.send('APP_SUCCESS_LOADING');
-				})
-				.catch(error => {
-					log.error(error);
-					mainWindow.webContents.send('APP_FAILED_LOADING');
-				});
+				log.info('did-finish-load');
+				mainWindow.webContents.send('APP_START_LOADING');
+				// start update cmc data
+				await Promise.all([
+					ctx.priceService.startUpdateData(),
+					ctx.idAttributeTypeService.loadIdAttributeTypes(),
+					ctx.exchangesService.loadExchangeData()
+				]);
+				await ctx.idAttributeTypeService.resolveSchemas();
+				ctx.txHistoryService.startSyncingJob();
+				mainWindow.webContents.send('APP_SUCCESS_LOADING');
+			} catch (error) {
+				log.error(error);
+				mainWindow.webContents.send('APP_FAILED_LOADING');
+			}
 		});
 
 		mainWindow.webContents.on('did-fail-load', () => {

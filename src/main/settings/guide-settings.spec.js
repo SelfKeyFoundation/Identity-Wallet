@@ -11,6 +11,10 @@ describe('GuideSettings model', () => {
 		GuideSetting.reset();
 	});
 
+	afterAll(async () => {
+		await TestDb.destroy();
+	});
+
 	it('crashReport', async () => {
 		expect(GuideSetting.hasAgreedToCrashReport()).toBe(false);
 		await GuideSetting.loadCrashReportAgreement();

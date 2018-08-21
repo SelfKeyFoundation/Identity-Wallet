@@ -885,6 +885,7 @@ module.exports = function(cradle) {
 	 */
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
+			.eager('schema')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
