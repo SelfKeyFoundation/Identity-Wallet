@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 import keythereum from 'keythereum';
+import path from 'path';
+import { getWalletsDir } from 'common/utils/common';
 
 export const keystorage = keythereum;
 
@@ -15,6 +17,16 @@ keystorage.importFromFile = function(filepath, cb) {
 		return JSON.parse(fs.readFileSync(filepath));
 	}
 	return cb(JSON.parse(fs.readFileSync(filepath)));
+};
+
+export const checkPassword = (password, wallet) => {
+	let keystoreFileFullPath = path.join(getWalletsDir(), wallet.keystoreFilePath);
+	let keystore = keystorage.importFromFile(keystoreFileFullPath);
+	try {
+		return keystorage.recover(password, keystore);
+	} catch (err) {
+		return false;
+	}
 };
 
 export default keystorage;

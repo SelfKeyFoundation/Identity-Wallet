@@ -9,7 +9,13 @@ import configureStore from 'common/store/configure-store';
 import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 import { Logger } from '../common/logger';
-import { getUserDataPath, isDevMode, isDebugMode, isTestMode } from 'common/utils/common';
+import {
+	getUserDataPath,
+	isDevMode,
+	isDebugMode,
+	isTestMode,
+	getWalletsDir
+} from 'common/utils/common';
 import config from 'common/config';
 import createMenuTemplate from './menu';
 import db from './db/db';
@@ -20,7 +26,7 @@ const log = new Logger('main');
 log.info('starting: %s', electron.app.getName());
 
 const userDataDirectoryPath = getUserDataPath();
-const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+const walletsDirectoryPath = getWalletsDir();
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
 /**
