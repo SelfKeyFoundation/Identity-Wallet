@@ -26,7 +26,6 @@ export let paginator = knex => {
 		try {
 			const [data, countRows] = await Promise.all([query, countQuery]);
 			const total = countRows[0].total;
-
 			return {
 				data,
 				pagination: {
@@ -90,7 +89,7 @@ export class TxHistory extends BaseModel {
 		return this.query().insertAndFetch(data);
 	}
 
-	static async findByPublicKey(publicKey, pager) {
+	static findByPublicKey(publicKey, pager) {
 		publicKey = publicKey.toLowerCase();
 		let query = this.query()
 			.where({ from: publicKey })
@@ -99,7 +98,7 @@ export class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static async findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
+	static findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
 		publicKey = publicKey.toLowerCase();
 		let query = this.query()
 			.where({ from: publicKey, tokenSymbol })
@@ -108,7 +107,7 @@ export class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static async findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
+	static findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
 		publicKey = publicKey.toLowerCase();
 		let query = this.query()
 			.where({ from: publicKey, contractAddress })
@@ -117,7 +116,7 @@ export class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static async removeNotMinedPendingTxsByPublicKey(publicKey, nonce) {
+	static removeNotMinedPendingTxsByPublicKey(publicKey, nonce) {
 		publicKey = publicKey.toLowerCase();
 		let query = this.query()
 			.whereNull('blockNumber')
