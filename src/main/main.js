@@ -111,7 +111,7 @@ function onReady(app) {
 			await ctx.CrashReportService.startCrashReport();
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
-
+		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
 

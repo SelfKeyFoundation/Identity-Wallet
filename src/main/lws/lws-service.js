@@ -4,83 +4,163 @@ import Wallet from '../wallet/wallet';
 import { checkPassword } from '../keystorage';
 import { Logger } from 'common/logger';
 import { IdAttribute } from '../identity/id-attribute';
+import fetch from 'node-fetch';
+import { URLSearchParams } from 'url';
+import ethUtil from 'ethereumjs-util';
 
 const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 const log = new Logger('LWSService');
 
 export class LWSService {
-	constructor({ store }) {
+	constructor() {
 		this.wss = null;
-		this.store = store;
 	}
 
-	checkWallet(pubKey) {
-		const res = { pubKey, status: false };
-		const { wallet } = this.store.getState();
-		if (!wallet || !wallet.privateKey || !wallet.publicKey === pubKey) return res;
-		return { ...res, status: true, privateKey: wallet.privateKey };
+	checkWallet(publicKey, conn) {
+		const res = { publicKey, unlocked: false };
+		const privateKey = conn.getUnlockedWallet(publicKey);
+		if (!privateKey) return res;
+		return { ...res, unlocked: true, privateKey };
 	}
 
 	async reqWallets(msg, conn) {
-		let data = await Wallet.findAll();
-		data = data.map(w => {
-			let checked = this.checkWallet(w.publicKey);
+		let payload = await Wallet.findAll();
+		payload = payload.map(w => {
+			let checked = this.checkWallet(w.publicKey, conn);
 			return {
 				id: w.id,
-				pubKey: w.publicKey,
-				unlocked: checked.status
+				publicKey: w.publicKey,
+				unlocked: checked.unlocked
 			};
 		});
-		conn.send({
-			response: 'wallets',
-			data
-		});
+		conn.send(
+			{
+				payload
+			},
+			msg
+		);
 	}
 
 	async reqWallet(msg, conn) {
-		const checked = this.checkWallet(msg.data.pubKey);
-		const data = _.pick(checked, 'pubKey', 'status');
-		conn.send({
-			response: 'wallet',
-			data
-		});
+		const checked = this.checkWallet(msg.payload.publicKey, conn);
+		const payload = _.pick(checked, 'publicKey', 'unlocked');
+		conn.send(
+			{
+				payload
+			},
+			msg
+		);
 	}
 
 	async reqUnlock(msg, conn) {
-		let wallet = await Wallet.findByPublicKey(msg.data.pubKey);
-		let data = {
-			publicKey: wallet.publicKey,
-			check: checkPassword(wallet, msg.data.password)
-		};
-		conn.send({
-			response: 'unlock',
-			data
-		});
+		let wallet = await Wallet.findByPublicKey(msg.payload.publicKey);
+		const privateKey = checkPassword(wallet, msg.payload.password);
+		if (privateKey) {
+			conn.unlockWallet(msg.payload.publicKey, privateKey);
+		}
+		let payload = _.pick(
+			this.checkWallet(msg.payload.publicKey, conn),
+			'publicKey',
+			'unlocked'
+		);
+		conn.send(
+			{
+				payload
+			},
+			msg
+		);
 	}
+
+	async getAttributes(wid, required) {
+		let requiredMapByKey = required.reduce((acc, curr) => ({ ...acc, [curr.key]: curr }), {});
+		let walletAttrs = await IdAttribute.findAllByWalletId(wid).whereIn(
+			'type',
+			required.map(r => r.key)
+		);
+
+		return walletAttrs.map(attr => ({
+			key: requiredMapByKey[attr.type].key,
+			display: requiredMapByKey[attr.type].label,
+			value: attr.data
+		}));
+	}
+
+	async getDocuments() {}
 
 	async reqAttributes(msg, conn) {
-		let walletAttrs = await IdAttribute.findAllByWalletId(msg.data.wid);
-		let data = walletAttrs;
-
-		conn.send({
-			response: 'attributes',
-			data
-		});
+		try {
+			conn.send(
+				{
+					payload: await this.getAttributes(msg.payload.publicKey, msg.payload.required)
+				},
+				msg
+			);
+		} catch (error) {
+			conn.send(
+				{
+					error: error.message
+				},
+				msg
+			);
+		}
 	}
 
-	async reqAuth(msg, conn) {}
+	async genSignature(nonce, publicKey, conn) {
+		const privateKey = this.checkWallet(publicKey, conn);
+		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
+		const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
+		return signature;
+	}
+
+	async fetchNonce(url) {
+		const resp = await fetch(url);
+
+		if (resp.status >= 300) {
+			throw new Error(`error, status ${resp.status} - ${resp.statusresp.text()}`);
+		}
+		return resp.text();
+	}
+
+	async reqAuth(msg, conn) {
+		try {
+			const nonce = await this.fetchNonce(msg.payload.nonce_url);
+			const params = new URLSearchParams();
+
+			params.add('publicKey', msg.payload.publicKey);
+			params.append('nonce', nonce);
+			params.append('signature', this.genSignature(nonce, msg.payload.publicKey, conn));
+
+			let resp = await fetch(msg.payload.auth_url, { method: 'POST', body: params });
+			conn.send(
+				{
+					payload: { message: resp.text() }
+				},
+				msg
+			);
+		} catch (error) {
+			conn.send(
+				{
+					error: error.message
+				},
+				msg
+			);
+		}
+	}
 
 	reqUnknown(msg, conn) {
-		log.error('unknown request %s', msg.request);
-		conn.send({
-			response: msg.request,
-			error: 'unknown request'
-		});
+		log.error('unknown request %s', msg.type);
+		conn.send(
+			{
+				error: 'unknown request'
+			},
+			msg
+		);
 	}
 
 	async handleRequest(msg, conn) {
-		switch (msg.request) {
+		log.debug('ws type %2j', msg);
+		switch (msg.type) {
 			case 'wallets':
 				return this.reqWallets(msg, conn);
 			case 'wallet':
@@ -97,13 +177,15 @@ export class LWSService {
 	}
 
 	handleConn(conn) {
+		log.info('ws connection established');
 		let wsConn = new WSConnection(conn, this);
 		wsConn.listen();
 	}
 
 	startServer() {
 		this.wss = new WebSocket.Server({ port: WS_PORT });
-		this.wss.on('connection', this.handleWSConn.bind(this));
+		this.wss.on('connection', this.handleConn.bind(this));
+		this.wss.on('error', err => log.error(err));
 	}
 }
 
@@ -111,23 +193,51 @@ export class WSConnection {
 	constructor(conn, service) {
 		this.conn = conn;
 		this.service = service;
+		this.msgId = 0;
+		this.ctx = {
+			unlockedWallets: {}
+		};
 	}
 
-	handleMessage(msg) {
-		msg = JSON.parse(msg);
-		this.service.handleRequest(msg, this).catch(err => {
-			log.error(err);
-		});
+	unlockWallet(publicKey, privateKey) {
+		this.ctx.unlockedWallets[publicKey] = privateKey;
+	}
+
+	getUnlockedWallet(publicKey) {
+		return this.ctx.unlockedWallets[publicKey];
+	}
+
+	async handleMessage(msg) {
+		try {
+			msg = JSON.parse(msg);
+			await this.service.handleRequest(msg, this);
+		} catch (error) {
+			log.error(error);
+			this.send({ error: 'invalid message' }, msg);
+		}
 	}
 
 	listen() {
-		this.conn.on('message', this.handleWSMessage());
+		this.conn.on('message', this.handleMessage.bind(this));
+		this.conn.on('error', err => log.error(err));
 	}
 
-	send(msg) {
+	send(msg, req) {
 		if (!this.conn) {
 			log.error('cannot send message, no connection');
 			return;
+		}
+		req = req || {};
+		msg.type = msg.type || req.type;
+		msg.meta = msg.meta || {};
+		let id = msg.meta.id;
+		if (!id && req.meta && req.meta.id) {
+			id = req.meta.id;
+		}
+		msg.meta.id = id || `idw_${this.msgId++}`;
+		msg.meta.src = msg.meta.src || 'idw';
+		if (!msg.type && msg.error) {
+			msg.type = 'error';
 		}
 		this.conn.send(JSON.stringify(msg));
 	}

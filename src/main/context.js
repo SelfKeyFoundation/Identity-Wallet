@@ -5,6 +5,7 @@ import ExchangesService from './exchanges/exchanges-service';
 import IdAttributeTypeService from './identity/id-attribute-type-service';
 import TxHistoryService from './blockchain/tx-history-service';
 import Web3Service from './blockchain/web3-service';
+import { LWSService } from './lws/lws-service';
 import LedgerService from './blockchain/leadger-service';
 import { CrashReportService } from '../common/logger/crash-report-service';
 import TrezorService from './blockchain/trezor-service';
@@ -24,6 +25,7 @@ export const configureContext = (store, app) => {
 		txHistoryService: asClass(TxHistoryService).singleton(),
 		TxHistoryService: asValue(TxHistoryService),
 		priceService: asClass(PriceService).singleton(),
+		lwsService: asClass(LWSService).singleton(),
 		idAttributeTypeService: asClass(IdAttributeTypeService).singleton(),
 		exchangesService: asClass(ExchangesService).singleton(),
 		trezorService: asFunction(() => {
