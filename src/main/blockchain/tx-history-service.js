@@ -303,7 +303,7 @@ export class TxHistoryService {
 			args: [address, 'pending']
 		});
 
-		TxHistory.removeNotMinedPendingTxsByPublicKey(address, +nonce);
+		return TxHistory.removeNotMinedPendingTxsByPublicKey(address, +nonce);
 	}
 
 	startSyncingJob() {
