@@ -72,5 +72,5 @@ function RPCService($rootScope, $window, $q, $timeout, CommonService) {
 
 	return new RPCService();
 }
-RPCService.$inject = ['$rootScope', '$window', '$q', '$timeout', '$state', 'CommonService'];
+RPCService.$inject = ['$rootScope', '$window', '$q', '$timeout', 'CommonService'];
 module.exports = RPCService;
