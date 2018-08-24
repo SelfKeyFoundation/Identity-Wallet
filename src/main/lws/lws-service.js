@@ -89,8 +89,8 @@ export class LWSService {
 		);
 		return walletAttrs.map(attr => ({
 			key: requiredMapByKey[attr.type].key,
-			lable: requiredMapByKey[attr.type].label,
-			attrigute: attr.data.value ? attr.data.value : attr.data
+			label: requiredMapByKey[attr.type].label,
+			attribute: attr.data.value ? attr.data.value : attr.data
 		}));
 	}
 
