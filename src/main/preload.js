@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /* eslint-env node */ /* global window */
 // eslint-disable-next-line
 const appPackage = require(__dirname + '/../../package.json');

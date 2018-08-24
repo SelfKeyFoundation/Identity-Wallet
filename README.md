@@ -1,7 +1,13 @@
 # Selfkey Identity Wallet
 
 [![Build Status](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet.svg?branch=dev)](https://travis-ci.org/SelfKeyFoundation/Identity-Wallet) [![CircleCI](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet.svg?style=svg)](https://circleci.com/gh/SelfKeyFoundation/Identity-Wallet) [![Build status](https://ci.appveyor.com/api/projects/status/7g0lesr2456giitd?svg=true)](https://ci.appveyor.com/project/rodrigopavezi/identity-wallet)
- [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![David Dependancy Status](https://david-dm.org/SelfKeyFoundation/Identity-Wallet.svg)](https://david-dm.org/SelfKeyFoundation/Identity-Wallet) [![David Dependancy Status DEV](https://david-dm.org/SelfKeyFoundation/Identity-Wallet/dev-status.svg)](https://david-dm.org/SelfKeyFoundation/Identity-Wallet?type=dev) [![Coverage Status](https://coveralls.io/repos/github/SelfKeyFoundation/Identity-Wallet/badge.svg)](https://coveralls.io/github/SelfKeyFoundation/Identity-Wallet)
+ [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![David Dependancy Status](https://david-dm.org/SelfKeyFoundation/Identity-Wallet.svg)](https://david-dm.org/SelfKeyFoundation/Identity-Wallet) [![David Dependancy Status DEV](https://david-dm.org/SelfKeyFoundation/Identity-Wallet/dev-status.svg)](https://david-dm.org/SelfKeyFoundation/Identity-Wallet?type=dev)
+
+ ### Coverage:
+ #### master
+ [![Coverage Status](https://coveralls.io/repos/github/SelfKeyFoundation/Identity-Wallet/badge.svg?branch=master)](https://coveralls.io/github/SelfKeyFoundation/Identity-Wallet?branch=master)
+ #### dev
+ [![Coverage Status](https://coveralls.io/repos/github/SelfKeyFoundation/Identity-Wallet/badge.svg?branch=dev)](https://coveralls.io/github/SelfKeyFoundation/Identity-Wallet?branch=dev)
 
 ## Overview
 

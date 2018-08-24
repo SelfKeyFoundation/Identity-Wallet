@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	const rowCount = await knex('seed').count('id as countId');
 

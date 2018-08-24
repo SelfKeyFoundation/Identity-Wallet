@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /* global __static */
 import fs from 'fs';
 import electron from 'electron';

@@ -1,4 +1,4 @@
-/* istanbul ignore file */
+/* istanbul ignore file file */
 import keythereum from 'keythereum';
 import path from 'path';
 import { getWalletsDir } from 'common/utils/common';

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	await knex.schema.renameTable('id_attributes', 'id_attributes_old');
 	await knex.schema.createTable('id_attributes', table => {

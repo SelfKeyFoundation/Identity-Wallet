@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { db as config } from 'common/config';
 import { Model } from 'objection';
 import Knex from 'knex';

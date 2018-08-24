@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { init as confInit } from './config';
 import Logger from './logger';
 

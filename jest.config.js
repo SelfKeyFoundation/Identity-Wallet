@@ -8,7 +8,7 @@ module.exports = {
 	verbose: true,
 	testEnvironment: 'node',
 	testURL: 'http://localhost/',
-	collectCoverageFrom: ['src/**/*.js'],
+	collectCoverageFrom: ['src/{main,common}/**/*.js'],
 	coverageReporters: ['json', 'lcov', 'text', 'html'],
 	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
 	coverageDirectory: 'dist/coverage',

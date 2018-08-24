@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import reducer from './reducers';
 
 import tokensOperations from './operations';
