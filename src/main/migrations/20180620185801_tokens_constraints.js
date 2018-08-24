@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	await knex.schema.table('tokens', function(t) {
 		t.dropUnique('symbol');

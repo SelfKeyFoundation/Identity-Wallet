@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /* global __static */
 'use strict';
 import path from 'path';

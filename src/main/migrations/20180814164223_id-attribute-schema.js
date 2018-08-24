@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	await knex.schema.createTable('id_attribute_schemas', t => {
 		t.string('type')

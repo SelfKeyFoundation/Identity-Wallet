@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * old transactions_history table is removed
  * tx_history is added with new collumns

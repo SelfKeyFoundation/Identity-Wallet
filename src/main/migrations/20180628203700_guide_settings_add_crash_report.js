@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	await knex.schema.dropTable('guide_settings');
 	await knex.schema.createTable('guide_settings', table => {

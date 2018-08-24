@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
