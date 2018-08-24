@@ -20,11 +20,16 @@ const getSetupFilePath = () => {
 	return path.join(electron.app.getAppPath(), 'dist');
 };
 
+const getWalletsDir = () => {
+	return path.resolve(getUserDataPath(), 'wallets');
+};
+
 module.exports = {
 	isDevMode,
 	isTestMode,
 	isDebugMode,
 	isElectronApp,
 	getUserDataPath,
-	getSetupFilePath
+	getSetupFilePath,
+	getWalletsDir
 };
