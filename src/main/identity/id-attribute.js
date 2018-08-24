@@ -27,6 +27,15 @@ export class IdAttribute extends BaseModel {
 		};
 	}
 
+	hasDocument() {
+		return this.documentId !== null;
+	}
+
+	async loadDocumentDataUrl() {
+		let document = await this.$loadRelated('document');
+		return document.getDataUrl();
+	}
+
 	static get relationMappings() {
 		const Wallet = require('../wallet/wallet').default;
 		const IdAttributeType = require('./id-attribute-type').default;
