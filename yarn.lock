@@ -3100,6 +3100,12 @@ buffer@^5.0.5, buffer@^5.1.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
+bufferutil@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/bufferutil/-/bufferutil-4.0.0.tgz#a5078160e443751a4e83b6f4d6d7e26c058326a0"
+  dependencies:
+    node-gyp-build "~3.4.0"
+
 bufferview@~1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/bufferview/-/bufferview-1.0.1.tgz#7afd74a45f937fa422a1d338c08bbfdc76cd725d"
@@ -10198,6 +10204,10 @@ node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
 
+node-gyp-build@~3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-3.4.0.tgz#f8f62507e65f152488b28aac25d04b9d79748cf7"
+
 node-gyp@^3.8.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.8.0.tgz#540304261c330e80d0d5edce253a68cb3964218c"
@@ -14393,6 +14403,12 @@ use@^3.1.0:
 user-home@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/user-home/-/user-home-1.1.1.tgz#2b5be23a32b63a7c9deb8d0f28d485724a3df190"
+
+utf-8-validate@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/utf-8-validate/-/utf-8-validate-5.0.1.tgz#cef1f9011ba4b216f4d7c6ddf5189d750599ff8b"
+  dependencies:
+    node-gyp-build "~3.4.0"
 
 utf8-byte-length@^1.0.1:
   version "1.0.4"
