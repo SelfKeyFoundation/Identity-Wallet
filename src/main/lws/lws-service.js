@@ -80,15 +80,21 @@ export class LWSService {
 			'type',
 			required.map(r => r.key)
 		);
-
+		walletAttrs = await Promise.all(
+			walletAttrs.map(async attr => {
+				if (!attr.hasDocument()) {
+					return attr;
+				}
+				let docValue = await attr.loadDocumentDataUrl();
+				return { ...attr, data: docValue };
+			})
+		);
 		return walletAttrs.map(attr => ({
 			key: requiredMapByKey[attr.type].key,
-			display: requiredMapByKey[attr.type].label,
-			value: attr.data
+			label: requiredMapByKey[attr.type].label,
+			attribute: attr.data.value ? attr.data.value : attr.data
 		}));
 	}
-
-	async getDocuments() {}
 
 	async reqAttributes(msg, conn) {
 		try {

@@ -1,5 +1,5 @@
 import BaseModel from '../common/base-model';
-
+import { formatDataUrl } from 'common/utils/document';
 const TABLE_NAME = 'documents';
 
 export class Document extends BaseModel {
@@ -22,6 +22,10 @@ export class Document extends BaseModel {
 				buffer: { type: 'binary' }
 			}
 		};
+	}
+
+	getDataUrl() {
+		return formatDataUrl(this.mimeType, this.buffer);
 	}
 
 	static async findById(id) {
