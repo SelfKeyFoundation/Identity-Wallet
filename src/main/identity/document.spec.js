@@ -44,4 +44,11 @@ describe('Country model', () => {
 		// eslint-disable-next-line no-unused-expressions
 		expect(found).toBeUndefined();
 	});
+
+	it('getDataUrl', async () => {
+		const doc = await Document.create(testDoc);
+		const dataUrl = doc.getDataUrl();
+		const base64 = testDoc.buffer.toString('base64');
+		expect(dataUrl).toBe(`data:${testDoc.mimeType};base64,${base64}`);
+	});
 });

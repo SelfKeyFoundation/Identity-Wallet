@@ -184,4 +184,10 @@ describe('IdAttribute model', () => {
 		let attrs = await IdAttribute.initializeImported(wallet.id, initial);
 		expect(attrs.length).toBeGreaterThan(0);
 	});
+
+	it('loadDocumentDataUrl', async () => {
+		let attr = await IdAttribute.create({ ...testAttribute, document: testDoc });
+		let document = await Document.findById(attr.documentId);
+		expect(await attr.loadDocumentDataUrl()).toBe(document.getDataUrl());
+	});
 });
