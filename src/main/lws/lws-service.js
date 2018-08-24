@@ -8,7 +8,9 @@ import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import ethUtil from 'ethereumjs-util';
 
-const WS_PORT = process.env.LWS_WS_PORT || 8898;
+export const WS_ORIGINS_WHITELIST = ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
+export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 const log = new Logger('LWSService');
 
@@ -182,8 +184,22 @@ export class LWSService {
 		wsConn.listen();
 	}
 
+	verifyClient(info) {
+		const clientIp = info.req.connection.remoteAddress;
+		const clientOrigin = info.req.headers.origin;
+		if (!WS_IP_WHITELIST.includes(clientIp) || !WS_ORIGINS_WHITELIST.includes(clientOrigin)) {
+			log.info(`rejecting ws from ip:${clientIp} origin:${clientOrigin}`);
+			return false;
+		}
+		log.info(`accepting ws from ip:${clientIp} origin:${clientOrigin}`);
+		return true;
+	}
+
 	startServer() {
-		this.wss = new WebSocket.Server({ port: WS_PORT });
+		this.wss = new WebSocket.Server({
+			port: WS_PORT,
+			verifyClient: this.verifyClient.bind(this)
+		});
 		this.wss.on('connection', this.handleConn.bind(this));
 		this.wss.on('error', err => log.error(err));
 	}
