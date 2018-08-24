@@ -8,8 +8,12 @@ import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import ethUtil from 'ethereumjs-util';
 
-export const WS_ORIGINS_WHITELIST = ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
-export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
+export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
+	? process.env.WS_ORIGINS_WHITELIST.split(',')
+	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
+	? process.env.WS_IP_WHITELIST.split(',')
+	: ['127.0.0.1', '::1'];
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 const log = new Logger('LWSService');
