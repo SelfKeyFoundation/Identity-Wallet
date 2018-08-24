@@ -32,8 +32,8 @@ export class IdAttribute extends BaseModel {
 	}
 
 	async loadDocumentDataUrl() {
-		let document = await this.$loadRelated('document');
-		return document.getDataUrl();
+		await this.$loadRelated('document');
+		return this.document.getDataUrl();
 	}
 
 	static get relationMappings() {
