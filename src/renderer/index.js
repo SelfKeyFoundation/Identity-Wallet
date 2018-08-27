@@ -270,6 +270,9 @@ angular
 const TrezorPinController = require('./angular/controllers/commons/dialogs/trezor-pin-controller.js');
 angular.module('kyc-wallet').controller('TrezorPinController', TrezorPinController);
 
+const TrezorPassphraseController = require('./angular/controllers/commons/dialogs/trezor-passphrase-controller.js');
+angular.module('kyc-wallet').controller('TrezorPassphraseController', TrezorPassphraseController);
+
 const ChooseHardwareWalletAddressController = require('./angular/controllers/commons/dialogs/choose-hardware-wallet-address-controller.js');
 angular
 	.module('kyc-wallet')

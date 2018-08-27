@@ -66,12 +66,20 @@ module.exports = function() {
 		}
 		return wallets;
 	}
-	function pinCallback(type, callback) {
+	function _pinCallback(type, callback) {
 		_emitter.on('ON_PIN', (err, enteredPin) => {
 			callback(err, enteredPin);
 		});
 
 		_emitter.emit('TREZOR_PIN_REQUEST');
+	}
+
+	function _passphraseCallback(callback) {
+		_emitter.on('ON_PASSPHRASE', (err, enteredPassphrase) => {
+			callback(err, enteredPassphrase);
+		});
+
+		_emitter.emit('TREZOR_PASSPHRASE_REQUEST');
 	}
 
 	async function _getCurrentSession() {
@@ -98,7 +106,8 @@ module.exports = function() {
 			}
 		});
 
-		device.on('pin', pinCallback);
+		device.on('pin', _pinCallback);
+		device.on('passphrase', _passphraseCallback);
 
 		currentDevice = device;
 		currentSession = session;
