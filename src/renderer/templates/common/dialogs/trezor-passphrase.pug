@@ -9,7 +9,7 @@ md-dialog.trezor-passphrase-container(aira-lable="")
         .md-input-container.sk-input-box.no-error-spacer
           input.input(type="{{inputType}}", placeholder="Reconfirm passphrase", ng-model="passphraseRepeated")
         .actions-container
-          md-checkbox.custom-checkbox(ng-model="inputType", ng-change="toogleInputType()", aria-label="Show passphrase") Show passphrase
+          md-checkbox.custom-checkbox(ng-model="checkboxModel", ng-change="toogleInputType()", aria-label="Show passphrase") Show passphrase
           md-button.gray.md-ink-ripple.action-btn(ng-click="sendPassphrase()")
             span.primary Enter
           md-button.gray.md-ink-ripple.action-btn(ng-click="cancel($event)")
