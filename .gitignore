@@ -27,3 +27,5 @@ static/stylesheets/css/main.css
 static/stylesheets/css/*
 
 client-secret.json
+
+src/main/lws/keys/

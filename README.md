@@ -40,6 +40,28 @@ The Official SelfKey Identity Wallet for Desktop
 
 ## Development
 
+### Scripts
+```json
+  "scripts": {
+    "dev": "gulp && electron-webpack dev",
+    "install-app-deps": "electron-builder install-app-deps buildDependenciesFromSource",
+    "install-all": "yarn && yarn install-app-deps",
+    "compile": "gulp && electron-webpack",
+    "dist": "yarn compile && electron-builder",
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "test": "yarn test:unit && yarn test:e2e",
+    "test:unit": "jest -i --forceExit",
+    "test:unit:coverage": "yarn test:unit --coverage",
+    "test:e2e": "node test/test.js e2e",
+    "publish-build": "yarn compile && electron-builder -p always",
+    "precommit": "npm run check-deps-precommit && pretty-quick --staged && lint-staged",
+    "commitmsg": "commitlint -E GIT_PARAMS",
+    "check-deps-precommit": "npm-check -i eslint -i redux -s || true",
+    "check-deps": "npm-check -i common",
+    "coveralls": "cat dist/coverage/lcov.info | coveralls"
+  }
+ ```
+
 ### Run the App on OSX/macOS/Linux/Windows
 
     yarn dev
