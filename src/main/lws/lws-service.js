@@ -13,9 +13,12 @@ import child_process from 'child_process';
 import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
 
-export const WS_ORIGINS_WHITELIST = ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+export const WS_ORIGINS_WHITELIST = [
+	'chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik',
+	'chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo'
+];
 export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
-export const WS_PORT = process.env.LWS_WS_PORT || 8898;
+export let WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 const log = new Logger('LWSService');
 const userDataPath = common.getUserDataPath();
@@ -24,9 +27,16 @@ let reqFile = userDataPath + '/lws/keys/lws_cert.pem';
 let rsaFile = userDataPath + '/lws/keys/lws_key.pem';
 let keyTempFile = userDataPath + '/lws/keys/keytemp.pem';
 
+// start standard WS server with ability to only accept init message
+// upon recieving init message attempt to create certificate
+// go through certificate generation process
+// start secure websocket server
+// updgrade all incoming connections to secure websocket
+
 function listenForLWS() {
 	// listens for LWS
 	// triggers user prompt for secure websockets setup
+	log.info('skc calling');
 }
 
 function keyDirs() {
@@ -129,6 +139,21 @@ function createWSCerts() {
 		}
 	});
 }
+
+// function portIncrementInit() {
+//     console.log('we have created ' + listenerCounter + ' http server listeners');
+//     listenerCounter++;
+//     console.log('HTTPS listening:' + port);
+//   }
+// function portIncrementError(err) {
+// 	if (err.code === 'EADDRINUSE') {
+// 		port++;
+// 		console.log('Address in use, retrying on port ' + port);
+// 		setTimeout(() => {
+// 			httpsServer.listen(port);
+// 		}, 250);
+// 	}
+// }
 
 export class LWSService {
 	constructor() {
@@ -285,6 +310,8 @@ export class LWSService {
 	async handleRequest(msg, conn) {
 		log.debug('ws type %2j', msg);
 		switch (msg.type) {
+			case 'init':
+				return this.startSecureServer(msg, conn);
 			case 'wallets':
 				return this.reqWallets(msg, conn);
 			case 'wallet':
@@ -318,6 +345,24 @@ export class LWSService {
 	}
 
 	startServer() {
+		this.wss = new WebSocket.Server({
+			port: WS_PORT,
+			verifyClient: this.verifyClient.bind(this)
+		});
+		this.wss.on('connection', this.handleConn.bind(this));
+		this.wss.on('error', err => log.error(err));
+	}
+
+	startSecureServer(msg, conn) {
+		log.info('starting wss');
+		conn.send(
+			{
+				payload: { message: 'starting secure ws server' }
+			},
+			msg
+		);
+		// trigger modal and wait for user accept then
+
 		createWSCerts().then(status => {
 			if (status === 'wss') {
 				const httpsServer = new https.createServer({
@@ -327,14 +372,22 @@ export class LWSService {
 				this.wss = new WebSocket.Server({ server: httpsServer });
 				this.wss.on('connection', this.handleConn.bind(this));
 				this.wss.on('error', err => log.error(err));
-				httpsServer.listen(WS_PORT);
+				httpsServer
+					.listen(WS_PORT, () => {
+						log.info('HTTPS listening:' + WS_PORT);
+					})
+					.on('error', err => {
+						if (err.code === 'EADDRINUSE') {
+							WS_PORT++;
+							log.info('Address in use, retrying on port ' + WS_PORT);
+							setTimeout(() => {
+								httpsServer.listen(WS_PORT);
+							}, 250);
+						}
+					});
+				log.info('secure ws server started');
 			} else {
-				this.wss = new WebSocket.Server({
-					port: WS_PORT,
-					verifyClient: this.verifyClient.bind(this)
-				});
-				this.wss.on('connection', this.handleConn.bind(this));
-				this.wss.on('error', err => log.error(err));
+				log.info('error starting wss');
 			}
 		});
 	}
