@@ -11,7 +11,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.dashboard')", ng-click="$root.navigate($event, 'member.dashboard.main')")
                     md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/dashboard_16px.svg')}}")
                     span Dashboard
-                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.navigate($event, 'member.marketplace.exchange-list')")
+                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.marketplace')", ng-click="$root.navigate($event, 'member.marketplace.main')")
                     md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/swap_vertical_16px.svg')}}")
                     span Marketplace
                 .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.id-wallet')", id="selfkeyIdButton", ng-click="navigateToCreateId()")
