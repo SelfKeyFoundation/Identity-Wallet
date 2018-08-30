@@ -45,7 +45,7 @@ export class IdAttributeTypeService {
 			}
 			return IdAttributeSchema.query().insertAndFetch(schema);
 		} catch (error) {
-			log.error(error);
+			log.warn('failed to fetch schema, will use old ui, %s', error);
 		}
 	}
 

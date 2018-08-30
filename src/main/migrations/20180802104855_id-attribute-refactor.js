@@ -49,7 +49,7 @@ exports.up = async (knex, Promise) => {
 				walletId: attr.walletId,
 				type,
 				documentId,
-				data: { value: data.line1 }
+				data: data && data.line1 ? { value: data.line1 } : {}
 			};
 
 			switch (type) {
