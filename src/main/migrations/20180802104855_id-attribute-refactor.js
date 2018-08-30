@@ -55,7 +55,7 @@ exports.up = async (knex, Promise) => {
 			switch (type) {
 				case 'physical_address':
 				case 'work_place':
-					newAttr.value = {
+					newAttr.data = {
 						address: data.line1,
 						address2: data.line2,
 						city: data.line3,
@@ -65,13 +65,13 @@ exports.up = async (knex, Promise) => {
 					};
 					break;
 				case 'phonenumber_countrycode':
-					newAttr.value = {
+					newAttr.data = {
 						countryCode: data.line1,
 						telephoneNumber: data.line2
 					};
 					break;
 			}
-			newAttr.value = JSON.stringify(newAttr.value);
+			newAttr.data = JSON.stringify(newAttr.data);
 			return newAttr;
 		})
 		.map(attr => knex('id_attributes').insert(attr));
