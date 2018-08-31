@@ -1,0 +1,54 @@
+.json-schema-form {
+	color: #93b0c1;
+	font-size: 12px;
+	fieldset {
+		border: none;
+	}
+	label {
+		text-transform: uppercase;
+	}
+	legend {
+		font-size: 15px;
+		text-transform: uppercase;
+	}
+	input {
+		height: 44px;
+		border-radius: 4px;
+		width: 320px;
+		color: #fff;
+		background-color: #1e262e;
+		border: solid 1px #384656;
+		font-family: ProximaNovaSemibold;
+		font-size: 14px;
+		width: 100%;
+		padding-left: 24px;
+		padding-right: 24px;
+		box-sizing: border-box;
+		margin-top: 10px;
+	}
+	.static-data-actions-wrapper {
+		margin-top: 40px;
+	}
+	.field {
+		&.field-string,
+		&.field-integer,
+		&.field-number {
+			padding-top: 10px;
+			box-sizing: border-box;
+			&:hover {
+				color: #fff;
+			}
+		}
+	}
+	select {
+		margin-top: 10px;
+		border: solid 1px #384656;
+		border-radius: 4px;
+		background-color: #1e262e;
+		height: 44px;
+		margin: 0;
+		color: #fff;
+		width: 100%;
+		margin-top: 10px;
+	}
+}

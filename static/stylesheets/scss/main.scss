@@ -29,6 +29,7 @@
 @import './components/md-radio-group.scss';
 
 @import './panels/id-attribute-delete-panel.scss';
+@import './panels/json-schema-form.scss';
 
 @import './directives/sk-close-warning-box.scss';
 @import './directives/sk-offline-warning-box.scss';
@@ -73,6 +74,7 @@
 @import './dialogs/unlock-ledger-info.scss';
 @import './dialogs/hardware-wallet-timed-out.scss';
 @import './dialogs/trezor-pin.scss';
+@import './dialogs/trezor-passphrase.scss';
 @import './dialogs/choose-trezor-address-pre-dialog.scss';
 @import './dialogs/install-trezor-bridge-warning.scss';
 
@@ -96,6 +98,7 @@
 @import './views/member/dashboard/sk-my-cryptos-box.scss'; // todo - rename (circle-pie-chart)
 
 @import './views/member/id-wallet/main.scss';
+@import './views/member/marketplace/marketplace.scss';
 @import './views/member/marketplace/exchange-list.scss';
 @import './views/member/marketplace/exchange-item.scss';
 

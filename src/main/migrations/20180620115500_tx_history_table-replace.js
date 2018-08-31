@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * old transactions_history table is removed
  * tx_history is added with new collumns
@@ -50,4 +51,32 @@ exports.up = async (knex, Promise) => {
 	});
 };
 
-exports.down = async (knex, Promise) => {};
+exports.down = async (knex, Promise) => {
+	await knex.schema.dropTable('tx_history');
+
+	await knex.schema.table('wallet_settings', t => {
+		t.dropColumn('txHistoryLastSyncedBlock');
+		t.integer('ERC20TxHistoryLastBlock');
+		t.integer('EthTxHistoryLastBlock');
+	});
+	await knex.schema.createTable('transactions_history', table => {
+		table.increments('id');
+		table
+			.integer('walletId')
+			.notNullable()
+			.references('wallets.id');
+		table.integer('tokenId').references('tokens.id');
+		table
+			.string('txId')
+			.unique()
+			.notNullable();
+		table.string('sentTo');
+		table.decimal('value', null).notNullable();
+		table.integer('timestamp').notNullable();
+		table.integer('blockNumber').notNullable();
+		table.decimal('gas').notNullable();
+		table.string('gasPrice').notNullable();
+		table.integer('createdAt').notNullable();
+		table.integer('updatedAt');
+	});
+};

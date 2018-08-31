@@ -1,22 +1,55 @@
-import db from './db';
+/* istanbul ignore file */
+import { db as config } from 'common/config';
+import { Model } from 'objection';
+import Knex from 'knex';
 
-const init = async () => {
-	await db.createInitialDb();
-};
+export class TestDb {
+	static async init() {
+		try {
+			this.knex = Knex(config);
+			Model.knex(this.knex);
+			await this.aquireConnection();
+			await this.knex.migrate.latest();
+			await this.knex.seed.run();
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	static async aquireConnection(attempt = 0) {
+		try {
+			await this.knex.raw('select 1+1 as result');
+		} catch (error) {
+			if (attempt === 3) {
+				console.error('Could not establish connection', 3, 'times', error);
+				throw error;
+			}
+			return this.aquireConnection(attempt + 1);
+		}
+	}
+	static async reset() {
+		try {
+			await this.knex.destroy();
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	static async destroyAllTables() {
+		if (!this.knex) throw new Error('no-connectikon');
+		let tables = await this.knex('sqlite_master').where('type', 'table');
+		await Promise.all(
+			tables
+				.filter(t => !['sqlite_master', 'sqlite_sequence'].includes(t.name))
+				.map(t => this.knex.schema.dropTable(t.name))
+		);
+	}
+	static async destroy() {
+		try {
+			await this.knex.destroy();
+			this.knex = null;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+}
 
-const reconnect = async () => {
-	await db.knex.destroy();
-	await db.knex.client.initializePool(db.config);
-};
-
-const reset = async () => {
-	await reconnect();
-	await init();
-};
-
-export { init, reset };
-
-export default {
-	init,
-	reset
-};
+export default TestDb;

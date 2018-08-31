@@ -1,6 +1,7 @@
 image: Visual Studio 2017
 environment:
   OSENV: windows
+  NO_PROXY: 127.0.0.1,localhost
   encryptedkey:
     secure: 8HCeZ0WW/f09cU7PgV31q14Xy46vU/2dYHnP0ZCpi/tLvVzr2gnY+BZ99S1u1cAHJNdAyRX/pp91L91KiXdh/2ZuE1fqAXcaVo2/j4VB01c=
   encryptediv:
@@ -19,13 +20,14 @@ environment:
 platform:
   - x64
 init:
+  - tzutil /s "UTC"
   - git config --global core.autocrlf input
 cache:
-  #- node_modules
-  #- '%LOCALAPPDATA%/Yarn'
+  # - node_modules
+  - '%LOCALAPPDATA%/Yarn'
 install:
-  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_1_0h.exe'
-  - ps: Start-Process 'Win64OpenSSL-1_1_0h.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2p.exe'
+  - ps: Start-Process 'Win64OpenSSL-1_0_2p.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
   - choco install gcloudsdk
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
@@ -34,24 +36,23 @@ install:
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
   - npm i -g yarn
-  - yarn
+  - yarn install-all
 build_script:
   - echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
   - set DEBUG=electron-builder
   - yarn dist --publish=never
 test_script:
-  # - yarn test:unit
+  - yarn test:unit
+  - yarn test:e2e
 deploy_script:
-    - ps: $env:VERSION = (Get-Content package.json) -join "`n" | ConvertFrom-Json | Select -ExpandProperty "version"
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
-    - if defined _tempvar (
-        for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
-        set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%
-        C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
-        gcloud auth activate-service-account --key-file client-secret.json
-        gsutil cp dist/*.exe gs://selfkey-builds/%APPVEYOR_REPO_BRANCH%/%VERSION%/%datetime%/
-      )
+
+    - if defined _tempvar for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
+    - if defined _tempvar set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%
+    - if defined _tempvar C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
+    - if defined _tempvar gcloud auth activate-service-account --key-file client-secret.json
+    - if defined _tempvar gsutil cp dist/*.exe gs://selfkey-builds/%APPVEYOR_REPO_BRANCH%/%datetime%/
 after_deploy:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[master] yarn publish-build
 

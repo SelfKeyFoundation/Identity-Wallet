@@ -1,13 +1,18 @@
 import GuideSetting from './guide-setting';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('GuideSettings model', () => {
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
 		GuideSetting.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('crashReport', async () => {

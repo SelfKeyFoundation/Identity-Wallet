@@ -5,7 +5,11 @@ import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
-import { Logger } from 'common/logger';
+import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
+import { IdAttributeSchemaForm } from './react/id-attribute';
+import { MarketplaceWrapper } from './react/marketplace';
+
+const { Logger } = require('common/logger');
 
 const path = require('path');
 
@@ -204,6 +208,23 @@ angular.module('kyc-wallet').component('transferPrice', transferPriceWrapper);
 const cryptoPriceTableWrapper = react2angular(CryptoPriceTableWrapper, ['toggleAction']);
 angular.module('kyc-wallet').component('cryptoPriceTable', cryptoPriceTableWrapper);
 
+const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'openLink'
+]);
+angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
+
+const idAttributeSchemaForm = react2angular(IdAttributeSchemaForm, [
+	'attr',
+	'type',
+	'onClose',
+	'onSave'
+]);
+angular.module('kyc-wallet').component('idAttributeSchemaForm', idAttributeSchemaForm);
+
+const marketplaceWrapper = react2angular(MarketplaceWrapper, ['learnMoreActions']);
+angular.module('kyc-wallet').component('marketplace', marketplaceWrapper);
 /**
  * controllers
  */
@@ -251,6 +272,9 @@ angular
 
 const TrezorPinController = require('./angular/controllers/commons/dialogs/trezor-pin-controller.js');
 angular.module('kyc-wallet').controller('TrezorPinController', TrezorPinController);
+
+const TrezorPassphraseController = require('./angular/controllers/commons/dialogs/trezor-passphrase-controller.js');
+angular.module('kyc-wallet').controller('TrezorPassphraseController', TrezorPassphraseController);
 
 const ChooseHardwareWalletAddressController = require('./angular/controllers/commons/dialogs/choose-hardware-wallet-address-controller.js');
 angular
@@ -398,6 +422,9 @@ angular
 /**
  * marketplace
  */
+const MemberMarketplaceController = require('./angular/controllers/member/marketplace/marketplace-controller.js');
+angular.module('kyc-wallet').controller('MemberMarketplaceController', MemberMarketplaceController);
+
 const MemberMarketplaceExchangeListController = require('./angular/controllers/member/marketplace/exchange-list-controller.js');
 angular
 	.module('kyc-wallet')

@@ -22,7 +22,7 @@ describe('TxHistoryService', () => {
 		const t = (name, data) =>
 			it(name, async () => {
 				let stub = sinon.stub(TxHistoryService.prototype, 'makeRequest');
-				let txHistory = new TxHistoryService(web3ServiceMock);
+				let txHistory = new TxHistoryService({ web3Service: web3ServiceMock });
 				txHistory.queue.delay = 0;
 				stub.resolves('ok');
 				await txHistory[data.request](...data.args);
@@ -58,7 +58,7 @@ describe('TxHistoryService', () => {
 	describe('makeRequest', () => {
 		const t = (name, data) =>
 			it(name, async () => {
-				let txHistory = new TxHistoryService(web3ServiceMock);
+				let txHistory = new TxHistoryService({ web3Service: web3ServiceMock });
 				txHistory.queue.delay = 0;
 				const stub = sinon.stub(request, data.method);
 				stub.callsArgWith(1, data.error, data.httpResponse, data.response);
@@ -118,7 +118,7 @@ describe('TxHistoryService', () => {
 	});
 	it('getContractInfo', async () => {
 		let contractInfo = { tokenDecimal: 'decimals', tokenSymbol: 'symbol', tokenName: 'name' };
-		let txHistory = new TxHistoryService(web3ServiceMock);
+		let txHistory = new TxHistoryService({ web3Service: web3ServiceMock });
 		expect(await txHistory.getContractInfo('test')).toEqual(contractInfo);
 	});
 	describe('processTx', () => {
@@ -224,12 +224,12 @@ describe('TxHistoryService', () => {
 			sinon.stub(TxHistoryService.prototype, 'getTransactionReceipt');
 		});
 		it('should process eth transaction', async () => {
-			service = new TxHistoryService(web3ServiceMock);
+			service = new TxHistoryService({ web3Service: web3ServiceMock });
 			let processed = _.omit(await service.processTx(ethTransaction), 'createdAt');
 			expect(processed).toEqual(processedEthTransaction);
 		});
 		it('should process token transaction', async () => {
-			service = new TxHistoryService(web3ServiceMock);
+			service = new TxHistoryService({ web3Service: web3ServiceMock });
 			let processed = _.omit(await service.processTx(tokenTransaction), 'createdAt');
 			expect(processed).toEqual(processedTokenTransaction);
 		});

@@ -14,7 +14,7 @@
                 .content-wrapper
                     .box.clickable(flex, layout="column", layout-align="center center", ng-click="selectFile($event)")
                         sk-icon(icon="hard-drive", size-class="icon-size-34x44")
-                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type, 'line1') ? 'Saved' : selected.title1 }}
+                        span.header  {{ $root.wallet.getIdAttributeItemValue(selected.type) ? 'Saved' : selected.title1 }}
                         span.sub-header This is stored locally. Max file size 50mb.
         #check-list.sk-box
             .content(layout="column")
@@ -35,14 +35,14 @@
 
                     .item.clickable(sk-select-if="selected.type === 'id_document'")
                         .bullet
-                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}")
-                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('national_id', 'line1')}}", style="width: 12px;")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('national_id')")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('national_id')", style="width: 12px;")
                         span {{ $root.DICTIONARY['national_id'] }}
 
                     .item.clickable(sk-select-if="selected.type === 'id_selfie'")
                         .bullet
-                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}")
-                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie', 'line1')}}", style="width: 12px;")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/tick.svg')}}", ng-if="$root.wallet.getIdAttributeItemValue('id_selfie')")
+                            img(src="{{$root.appendStaticPath('assets/images/icons/question-mark.svg')}}", ng-if="!$root.wallet.getIdAttributeItemValue('id_selfie')", style="width: 12px;")
                         span {{ $root.DICTIONARY['id_selfie'] }}
 
     .actions-wrapper(layout="row", layout-align="start center")

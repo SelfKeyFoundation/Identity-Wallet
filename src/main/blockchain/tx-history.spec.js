@@ -1,5 +1,5 @@
 import TxHistory from './tx-history';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
 describe('TxHistory model', () => {
 	const data = {
@@ -27,7 +27,15 @@ describe('TxHistory model', () => {
 		networkId: 1
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 
 	it('addOrUpdate', async () => {

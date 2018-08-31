@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	const rowCount = await knex('seed').count('id as countId');
 
@@ -30,7 +31,7 @@ exports.down = async (knex, Promise) => {
 	});
 
 	if (rowCount[0].countName > 0) {
-		await knex.insert({
+		await knex('seed').insert({
 			init: 1
 		});
 	}

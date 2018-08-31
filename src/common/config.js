@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 'use strict';
 const path = require('path');
 const {
@@ -78,10 +79,6 @@ const prod = {
 const setupFilesPath = getSetupFilePath();
 let dbFileName = path.join(getUserDataPath(), 'IdentityWalletStorage.sqlite');
 
-if (isTestMode()) {
-	dbFileName = ':memory:';
-}
-
 const db = {
 	client: 'sqlite3',
 	useNullAsDefault: true,
@@ -95,6 +92,15 @@ const db = {
 		directory: path.join(setupFilesPath, 'main', 'seeds')
 	}
 };
+if (isTestMode()) {
+	db.connection = ':memory:';
+	db.pool = {
+		min: 1,
+		max: 1,
+		disposeTiemout: 360000 * 1000,
+		idleTimeoutMillis: 360000 * 1000
+	};
+}
 
 let conf = prod;
 

@@ -10,7 +10,7 @@ const mockWeb3 = {};
 describe('LeadgerService', () => {
 	let leadgerService;
 	beforeEach(() => {
-		leadgerService = new LeadgerService(web3ServiceMock);
+		leadgerService = new LeadgerService({ web3Service: web3ServiceMock });
 	});
 	afterEach(() => {
 		sinon.restore();

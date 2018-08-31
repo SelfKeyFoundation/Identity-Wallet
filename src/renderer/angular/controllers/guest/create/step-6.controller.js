@@ -108,17 +108,11 @@ function GuestKeystoreCreateStep6Controller(
 	}
 
 	function getIdAttribute(idAttributes, type) {
-		if (
-			idAttributes[type] &&
-			idAttributes[type].items &&
-			idAttributes[type].items.length &&
-			idAttributes[type].items[0].values &&
-			idAttributes[type].items[0].values.length
-		) {
-			if (idAttributes[type].items[0].values[0].staticData.line1) {
-				return idAttributes[type].items[0].values[0].staticData.line1;
-			} else if (idAttributes[type].items[0].values[0].documentName) {
-				return idAttributes[type].items[0].values[0].documentName;
+		if (idAttributes[type]) {
+			if (idAttributes[type].data.value) {
+				return idAttributes[type].data.value;
+			} else if (idAttributes[type].document) {
+				return idAttributes[type].document.name;
 			} else {
 				return null;
 			}

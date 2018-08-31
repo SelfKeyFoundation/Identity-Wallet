@@ -25,6 +25,8 @@ function AddEditStaticDataDialogController(
 	const TELEPHONE_ID_ATTRIBUTES = ['phonenumber_countrycode'];
 
 	$scope.currentDate = new Date();
+	$scope.idAttributeTypeFull = idAttributeType;
+	idAttributeType = idAttributeType.key;
 	$scope.idAttribute = idAttribute;
 	$scope.idAttributeType = idAttributeType;
 	$scope.countryList = SqlLiteService.getCountries();
@@ -50,7 +52,9 @@ function AddEditStaticDataDialogController(
 	};
 
 	$scope.getFormPath = () => {
-		if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+		if ($scope.idAttributeTypeFull.schema) {
+			return 'common/dialogs/id-attributes/forms/schema.html';
+		} else if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
 			return 'common/dialogs/id-attributes/forms/address.html';
 		} else if (COUNTRY_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
 			return 'common/dialogs/id-attributes/forms/country.html';
@@ -64,43 +68,42 @@ function AddEditStaticDataDialogController(
 	};
 
 	$scope.save = (event, theForm) => {
-		if (!theForm.$valid || $scope.savePromise) return;
+		if (!$scope.idAttributeTypeFull.schema && (!theForm.$valid || $scope.savePromise)) return;
 
-		let value = {
-			staticData: {}
+		let attr = {
+			data: {}
 		};
-
-		if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			value.staticData.line1 = $scope.inputs.line1;
-			value.staticData.line2 = $scope.inputs.line2;
-			value.staticData.line3 = $scope.inputs.line3;
-			value.staticData.line4 = $scope.inputs.line4;
-			value.staticData.line5 = $scope.inputs.line5;
-			value.staticData.line6 = $scope.inputs.line6;
+		if ($scope.idAttributeTypeFull.schema) {
+			attr.data = theForm;
+		} else if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
+			attr.data.address1 = $scope.inputs.line1;
+			attr.data.address2 = $scope.inputs.line2;
+			attr.data.city = $scope.inputs.line3;
+			attr.data.region = $scope.inputs.line4;
+			attr.data.zip = $scope.inputs.line5;
+			attr.data.country = $scope.inputs.line6;
 		} else if (COUNTRY_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			value.staticData.line1 = $scope.inputs.line1;
+			attr.data.value = $scope.inputs.line1;
 		} else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			value.staticData.line1 = $scope.inputs.line1.getTime();
+			attr.data.value = $scope.inputs.line1.getTime();
 		} else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			value.staticData.line1 = $scope.inputs.line1;
-			value.staticData.line2 = $scope.inputs.line2;
+			attr.data.countryCode = $scope.inputs.line1;
+			attr.data.telephoneNumber = $scope.inputs.line2;
 		} else {
-			value.staticData.line1 = $scope.inputs.line1;
+			attr.data.value = $scope.inputs.line1;
 		}
 
 		if (mode === 'create') {
 			$scope.savePromise = RPCService.makeCall('addIdAttribute', {
 				walletId: $rootScope.wallet.id,
-				idAttributeType: idAttributeType,
-				staticData: value.staticData,
-				file: null
+				type: idAttributeType,
+				data: attr.data,
+				document: null
 			});
 		} else {
 			$scope.savePromise = RPCService.makeCall('addEditStaticDataToIdAttributeItemValue', {
 				idAttributeId: idAttribute.id,
-				idAttributeItemId: idAttribute.items[0].id,
-				idAttributeItemValueId: idAttribute.items[0].values[0].id,
-				staticData: value.staticData
+				data: attr.data
 			});
 		}
 
@@ -126,23 +129,19 @@ function AddEditStaticDataDialogController(
 	function prepare() {
 		if (mode === 'create') return;
 
-		let idAttributeItemValue = idAttribute.items[0].values[0];
-		if (!idAttributeItemValue || !idAttributeItemValue.staticData) {
-			return;
-		}
-
-		$scope.inputs.line1 = angular.copy(idAttributeItemValue.staticData.line1);
+		$scope.inputs.line1 = angular.copy(idAttribute.data.value);
 
 		if (ADDRESS_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			$scope.inputs.line2 = angular.copy(idAttributeItemValue.staticData.line2);
-			$scope.inputs.line3 = angular.copy(idAttributeItemValue.staticData.line3);
-			$scope.inputs.line4 = angular.copy(idAttributeItemValue.staticData.line4);
-			$scope.inputs.line5 = angular.copy(idAttributeItemValue.staticData.line5);
-			$scope.inputs.line6 = angular.copy(idAttributeItemValue.staticData.line6);
+			$scope.inputs.line1 = angular.copy(idAttribute.data.address1);
+			$scope.inputs.line2 = angular.copy(idAttribute.data.address2);
+			$scope.inputs.line3 = angular.copy(idAttribute.data.city);
+			$scope.inputs.line4 = angular.copy(idAttribute.data.region);
+			$scope.inputs.line5 = angular.copy(idAttribute.data.zip);
+			$scope.inputs.line6 = angular.copy(idAttribute.data.country);
 		} else if (DATE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			$scope.inputs.line1 = new Date(idAttributeItemValue.staticData.line1);
+			$scope.inputs.line1 = new Date(idAttribute.data.value);
 		} else if (TELEPHONE_ID_ATTRIBUTES.indexOf(idAttributeType) !== -1) {
-			$scope.inputs.line2 = idAttributeItemValue.staticData.line2;
+			$scope.inputs.line2 = idAttribute.data.value;
 		}
 	}
 

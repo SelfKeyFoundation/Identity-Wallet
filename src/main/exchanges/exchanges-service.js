@@ -5,7 +5,7 @@ import Exchange from './exchange';
 const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
 
 export class ExchangesService {
-	static async loadExchangeData() {
+	async loadExchangeData() {
 		const response = await fetch(`${airtableBaseUrl}Exchanges`);
 
 		const responseBody = await response.json();

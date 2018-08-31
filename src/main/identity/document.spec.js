@@ -1,9 +1,6 @@
 import Document from './document';
-import db from '../db/test-db';
+import TestDb from '../db/test-db';
 
-beforeAll(async () => {
-	await db.init();
-});
 describe('Country model', () => {
 	const testDoc = {
 		name: 'test',
@@ -12,7 +9,15 @@ describe('Country model', () => {
 		buffer: Buffer.alloc(100)
 	};
 	beforeEach(async () => {
-		await db.reset();
+		await TestDb.init();
+	});
+
+	afterEach(async () => {
+		await TestDb.reset();
+	});
+
+	afterAll(async () => {
+		await TestDb.destroy();
 	});
 	it('findById', async () => {
 		const doc = await Document.query().insert(testDoc);
@@ -38,5 +43,12 @@ describe('Country model', () => {
 		found = await Document.query().findById(doc.id);
 		// eslint-disable-next-line no-unused-expressions
 		expect(found).toBeUndefined();
+	});
+
+	it('getDataUrl', async () => {
+		const doc = await Document.create(testDoc);
+		const dataUrl = doc.getDataUrl();
+		const base64 = testDoc.buffer.toString('base64');
+		expect(dataUrl).toBe(`data:${testDoc.mimeType};base64,${base64}`);
 	});
 });

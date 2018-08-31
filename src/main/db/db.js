@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Logger } from 'common/logger';
 import fs from 'fs';
 import { Model } from 'objection';

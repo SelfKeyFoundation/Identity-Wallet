@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
@@ -6,7 +7,7 @@ const { Logger } = require('common/logger');
 const log = new Logger('rpc-handler');
 const electron = require('electron');
 const { dialog, Notification, shell, autoUpdater } = require('electron');
-const { TxHistoryService } = require('./blockchain/tx-history-service');
+
 const { Wallet } = require('./wallet/wallet');
 const { IdAttribute } = require('./identity/id-attribute');
 const { IdAttributeType } = require('./identity/id-attribute-type');
@@ -35,7 +36,17 @@ const os = require('os');
 const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
-module.exports = function(app, store) {
+module.exports = function(cradle) {
+	const {
+		app,
+		store,
+		ledgerService,
+		trezorService,
+		txHistoryService,
+		TxHistoryService,
+		web3Service,
+		priceService
+	} = cradle;
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -425,13 +436,7 @@ module.exports = function(app, store) {
 									mimeType: mimeType,
 									size: stats.size
 								};
-
-								IdAttribute.addEditDocumentToIdAttributeItemValue(
-									args.idAttributeId,
-									args.idAttributeItemId,
-									args.idAttributeItemValueId,
-									args.file
-								)
+								IdAttribute.addDocument(args.idAttributeId, args.file)
 									.then(resp => {
 										app.win.webContents.send(
 											RPC_METHOD,
@@ -869,7 +874,7 @@ module.exports = function(app, store) {
 		app.win.webContents.send(RPC_METHOD, actionId, actionName, null, true);
 	};
 
-	controller.prototype.startTokenPricesBroadcaster = function(priceService) {
+	controller.prototype.startTokenPricesBroadcaster = function() {
 		priceService.on('pricesUpdated', newPrices => {
 			store.dispatch(pricesOperations.updatePrices(newPrices));
 			app.win.webContents.send(RPC_ON_DATA_CHANGE_METHOD, 'TOKEN_PRICE', newPrices);
@@ -881,6 +886,7 @@ module.exports = function(app, store) {
 	 */
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
 		IdAttributeType.findAll()
+			.eager('schema')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -946,7 +952,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.getWalletProfilePicture = function(event, actionId, actionName, args) {
-		Wallet.selectProfilePictureById(args)
+		Wallet.selectProfilePictureById(args.id)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1103,12 +1109,7 @@ module.exports = function(app, store) {
 		actionName,
 		args
 	) {
-		IdAttribute.addEditDocumentToIdAttributeItemValue(
-			args.idAttributeId,
-			args.idAttributeItemId,
-			args.idAttributeItemValueId,
-			args.file
-		)
+		IdAttribute.addDocument(args.idAttributeId, args.file)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1124,12 +1125,7 @@ module.exports = function(app, store) {
 		actionName,
 		args
 	) {
-		IdAttribute.addEditStaticDataToIdAttributeItemValue(
-			args.idAttributeId,
-			args.idAttributeItemId,
-			args.idAttributeItemValueId,
-			args.staticData
-		)
+		IdAttribute.addData(args.idAttributeId, args.data)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1141,6 +1137,7 @@ module.exports = function(app, store) {
 	// DONE !!!!!
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
+			.eager('document')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1151,7 +1148,7 @@ module.exports = function(app, store) {
 
 	// DONE !!!!!
 	controller.prototype.addIdAttribute = function(event, actionId, actionName, args) {
-		IdAttribute.create(args.walletId, args.idAttributeType, args.staticData, args.file)
+		IdAttribute.create(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1162,7 +1159,7 @@ module.exports = function(app, store) {
 
 	// DONE !!!!!
 	controller.prototype.deleteIdAttribute = function(event, actionId, actionName, args) {
-		IdAttribute.delete(args.idAttributeId, args.idAttributeItemId, args.idAttributeItemValueId)
+		IdAttribute.delete(args.idAttributeId)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1196,7 +1193,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.getLedgerAccounts = function(event, actionId, actionName, args) {
-		electron.app.ledgerService
+		ledgerService
 			.getAccounts(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1205,9 +1202,8 @@ module.exports = function(app, store) {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
 	};
-
 	controller.prototype.getTrezorAccounts = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.getAccounts(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1224,17 +1220,27 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.startTrezorBroadcaster = function() {
-		electron.app.trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
-			app.win.webContents.send('TREZOR_PIN_REQUEST');
+		let pinEvent = 'TREZOR_PIN_REQUEST';
+		trezorService.eventEmitter.on(pinEvent, () => {
+			app.win.webContents.send(pinEvent);
+		});
+
+		let passphraseEvent = 'TREZOR_PASSPHRASE_REQUEST';
+		trezorService.eventEmitter.on(passphraseEvent, () => {
+			app.win.webContents.send(passphraseEvent);
 		});
 	};
 
 	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
-		electron.app.trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+		trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+	};
+
+	controller.prototype.onTrezorPassphrase = function(event, actionId, actionName, args) {
+		trezorService.eventEmitter.emit('ON_PASSPHRASE', args.error, args.passphrase);
 	};
 
 	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
-		electron.app.ledgerService
+		ledgerService
 			.signTransaction(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1245,7 +1251,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.testTrezorConnection = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.testConnection(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {});
@@ -1256,7 +1262,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.signTransactionWithTrezor = function(event, actionId, actionName, args) {
-		electron.app.trezorService
+		trezorService
 			.signTransaction(args)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1321,15 +1327,13 @@ module.exports = function(app, store) {
 		}
 	};
 
-	controller.prototype.waitForWeb3Ticket = function(event, actionId, actionName, args) {
-		electron.app.web3Service
-			.waitForTicket(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
-			});
+	controller.prototype.waitForWeb3Ticket = async function(event, actionId, actionName, args) {
+		try {
+			const data = await web3Service.waitForTicket(args);
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+		} catch (error) {
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, error.toString(), null);
+		}
 	};
 
 	controller.prototype.getTxHistoryByPublicKeyAndTokenSymbol = function(
@@ -1369,7 +1373,7 @@ module.exports = function(app, store) {
 	};
 
 	controller.prototype.syncTxHistoryByWallet = function(event, actionId, actionName, args) {
-		electron.app.txHistoryService
+		txHistoryService
 			.syncByWallet(args.publicKey, args.walletId, args.showProgress)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);

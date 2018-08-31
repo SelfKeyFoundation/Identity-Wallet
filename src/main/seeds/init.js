@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { getUserDataPath } = require('../../common/utils/common');
 const userDataPath = getUserDataPath();
 const countriesList = require('../assets/data/country-list.json');

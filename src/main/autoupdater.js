@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 'use strict';
 import { app, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';

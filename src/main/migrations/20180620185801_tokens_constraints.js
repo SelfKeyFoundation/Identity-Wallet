@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 exports.up = async (knex, Promise) => {
 	await knex.schema.table('tokens', function(t) {
 		t.dropUnique('symbol');
@@ -10,4 +11,9 @@ exports.up = async (knex, Promise) => {
 		});
 };
 
-exports.down = async (knex, Promise) => {};
+exports.down = async (knex, Promise) => {
+	await knex.schema.table('tokens', function(t) {
+		t.dropUnique('address');
+		t.unique('symbol');
+	});
+};

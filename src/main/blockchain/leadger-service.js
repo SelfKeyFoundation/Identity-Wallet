@@ -10,7 +10,7 @@ import { chainId } from 'common/config';
 import { SELECTED_SERVER_URL } from './web3-service';
 
 export class LedgerService {
-	constructor(web3Service) {
+	constructor({ web3Service }) {
 		this.web3Service = web3Service;
 	}
 
