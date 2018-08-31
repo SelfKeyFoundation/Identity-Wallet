@@ -30,7 +30,7 @@ export const MarketplaceWrapper = props => {
 					{
 						title: 'Passport & Residencies',
 						description:
-							'Building your life internationally by getting a second residency, opening a myriad of opportunities that will let you grow both personally and professionally.',
+							'Build your life internationally by getting a second residency, which opens a myriad of opportunities that will let you grow both personally and professionally.',
 						active: false,
 						svgIcon:
 							'https://dl.airtable.com/U6ZlerC2SLWaly8rRk3Q_icon-exchange-passports.svg.png'
@@ -46,7 +46,7 @@ export const MarketplaceWrapper = props => {
 					{
 						title: 'Translations',
 						description:
-							'Professionally translate your text or documents into the required language ',
+							'Professionally translate your text or documents into the required language.',
 						active: false,
 						svgIcon:
 							'https://dl.airtable.com/gqwI3QPQwmwc4Jsu4vep_icon-exchange-translations.svg.png'
