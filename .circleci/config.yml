@@ -259,7 +259,7 @@ workflows:
                               - release
             - 'publish-mac':
                   requires:
-                      - stage-mac
+                      - e2e-mac
                   filters:
                       branches:
                           only:
