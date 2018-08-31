@@ -52,7 +52,7 @@ export const MarketplaceWrapper = props => {
 							'https://dl.airtable.com/gqwI3QPQwmwc4Jsu4vep_icon-exchange-translations.svg.png'
 					},
 					{
-						title: 'Notaties',
+						title: 'Notaries',
 						description:
 							'Verify and attest the authenticity of your legal or personal documents so that they have official credibility under law.',
 						active: false,
