@@ -203,7 +203,7 @@ export class LWSService {
 	}
 
 	async handleRequest(msg, conn) {
-		log.debug('ws type %2j', msg);
+		log.info('lws req %2j', msg);
 		switch (msg.type) {
 			case 'wallets':
 				return this.reqWallets(msg, conn);
@@ -295,6 +295,7 @@ export class WSConnection {
 		if (!msg.type && msg.error) {
 			msg.type = 'error';
 		}
+		log.info('lws resp %2j', msg);
 		this.conn.send(JSON.stringify(msg));
 	}
 }
