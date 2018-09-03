@@ -231,6 +231,7 @@ workflows:
                       branches:
                           only:
                               - dev
+                              - nightly
                               - release
             - 'build-mac':
                   requires:
@@ -245,6 +246,7 @@ workflows:
                       branches:
                           only:
                               - dev
+                              - nightly
                               - release
             - 'publish-mac':
                   requires:
