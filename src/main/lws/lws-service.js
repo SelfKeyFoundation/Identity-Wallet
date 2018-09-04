@@ -187,63 +187,75 @@ function windocutor(cmd, options) {
 	});
 }
 
+function checkDirs(config) {
+	return new Promise((resolve, reject) => {
+		let lwsPathCheck = fs.existsSync(config.lwsPath);
+		let lwsKeyPathCheck = fs.existsSync(config.lwsKeyPath);
+		if (!lwsPath) {
+			fs.mkdirSync(config.lwsPath);
+		}
+		if (!lwsKeyPath) {
+			fs.mkdirSync(config.lwsPath);
+		}
+		resolve('done')
+	});
+}
+
+function checkKeys(config) {
+	return new Promise((resolve, reject) => {
+		let reqFileCheck = fs.existsSync(config.reqFile);
+		let rsaFileCheck = fs.existsSync(config.rsaFile);
+		if (reqFileCheck && rsaFileCheck) {
+			resolve('wss');
+		} else {
+			resolve('ws')
+		}
+	}); 
+}
+
+function runCertgen(config) {
+	return new Promise((resolve, reject) => {
+		let steps = [];
+		for (let step of config.certgen) {
+			switch (step.type) {
+				case 'child':
+					steps.push(executor(step.cmd, step, options));
+				case 'sudo':
+					steps.push(sudocutor(step.cmd, step, options));
+				case 'power':
+					steps.push(windocutor(step.cmd));
+				default:
+					steps.push(executor(step.cmd, step, options));
+			}
+		}
+		resolve(Promise.all(steps));
+	});
+}
+
 function certs(config) {
 	return new Promise((resolve, reject) => {
 		try {
-			let lwsPathCheck = fs.existsSync(config.lwsPath);
-			let lwsKeyPathCheck = fs.existsSync(config.lwsKeyPath);
-			if (!lwsPath) {
-				fs.mkdirSync(config.lwsPath);
-			}
-			if (!lwsKeyPath) {
-				fs.mkdirSync(config.lwsPath);
-			}
-			let reqFileCheck = fs.existsSync(config.reqFile);
-			let rsaFileCheck = fs.existsSync(config.rsaFile);
-			if (reqFileCheck && rsaFileCheck) {
-				resolve('wss');
-			} else {
-				let steps = [];
-				for (let step of config.certgen) {
-					switch (step.type) {
-						case 'child':
-							steps.push(executor(step.cmd, step, options));
-						case 'sudo':
-							steps.push(sudocutor(step.cmd, step, options));
-						case 'power':
-							steps.push(windocutor(step.cmd));
-						default:
-							steps.push(executor(step.cmd, step, options));
-					}
+			checkDirs(config).then(checkDirs => {
+				if (checkDirs === 'done') {
+					checkKeys(config).then(status => {
+						if (status !== 'wss') {
+							runCertgen(config).then(() => resolve('done'))
+						}
+					})
+				} else {
+					resolve('done')
 				}
-				resolve(Promise.all(steps));
-			}
+			})
 		} catch (e) {
 			resolve(e);
 		}
 	});
 }
 
-// start standard WS server with ability to only accept init message
-// upon recieving init message attempt to create certificate
-// go through certificate generation process
-// start secure websocket server
-// updgrade all incoming connections to secure websocket
+// start standard WS server with ability to only accept init message upon recieving init message attempt to create certificate
+// borwser extension needs logic to change to wss and check port
 
-// function portIncrementInit() {
-//     console.log('we have created ' + listenerCounter + ' http server listeners');
-//     listenerCounter++;
-//     console.log('HTTPS listening:' + port);
-//   }
-// function portIncrementError(err) {
-// 	if (err.code === 'EADDRINUSE') {
-// 		port++;
-// 		console.log('Address in use, retrying on port ' + port);
-// 		setTimeout(() => {
-// 			httpsServer.listen(port);
-// 		}, 250);
-// 	}
-// }
+
 
 export class LWSService {
 	constructor() {
@@ -461,35 +473,44 @@ export class LWSService {
 			msg
 		);
 
-		// trigger modal and wait for user accept then
+		// TODO: trigger modal here and wait for user accept then
+		// TODO: updgrade all incoming connections to secure websocket
 
-		createWSCerts().then(status => {
-			if (status === 'wss') {
-				const httpsServer = new https.createServer({
-					cert: fs.readFileSync(reqFile),
-					key: fs.readFileSync(rsaFile)
-				});
-				this.wss = new WebSocket.Server({ server: httpsServer });
-				this.wss.on('connection', this.handleConn.bind(this));
-				this.wss.on('error', err => log.error(err));
-				httpsServer
-					.listen(WS_PORT, () => {
-						log.info('HTTPS listening:' + WS_PORT);
-					})
-					.on('error', err => {
-						if (err.code === 'EADDRINUSE') {
-							WS_PORT++;
-							log.info('Address in use, retrying on port ' + WS_PORT);
-							setTimeout(() => {
-								httpsServer.listen(WS_PORT);
-							}, 250);
-						}
+		init()
+			.then(config => certs(config).then(status => {
+				if (status === 'wss') {
+					
+					const httpsServer = new https.createServer({
+						cert: fs.readFileSync(config.reqFile),
+						key: fs.readFileSync(config.rsaFile)
 					});
-				log.info('secure ws server started');
-			} else {
-				log.info('error starting wss');
-			}
-		});
+					
+					this.wss = new WebSocket.Server({ 
+						server: httpsServer,
+						port: WS_PORT,
+						verifyClient: this.verifyClient.bind(this) 
+					});
+					this.wss.on('connection', this.handleConn.bind(this));
+					this.wss.on('error', err => log.error(err));
+					
+					httpsServer
+						.listen(WS_PORT, () => {
+							log.info('HTTPS listening:' + WS_PORT);
+						})
+						.on('error', err => {
+							if (err.code === 'EADDRINUSE') {
+								WS_PORT++;
+								log.info('Address in use, retrying on port ' + WS_PORT);
+								setTimeout(() => {
+									httpsServer.listen(WS_PORT);
+								}, 250);
+							}
+						});
+					log.info('secure ws server started');
+				} else {
+					log.info('error starting wss');
+				}
+			});
 	}
 }
 
