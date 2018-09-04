@@ -34,14 +34,15 @@ function init() {
 	return new Promise((resolve, reject) => {
 		try {
 			let osxConfig = {
-				lwsPath: fs.existsSync(userDataPath + '/lws/'),
-				lwsKeyPath: fs.existsSync(userDataPath + '/lws/keys)',
+				lwsPath: userDataPath + '/lws/',
+				lwsKeyPath: userDataPath + '/lws/keys',
 				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
 				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
 				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
 				certgen: [
 					{
-						cmd: 'openssl req \
+						cmd:
+							'openssl req \
 							-new \
 							-newkey rsa:2048 \
 							-days 365 \
@@ -50,10 +51,14 @@ function init() {
 							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
 							-extensions EXT \
 							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
-							-keyout "' + keyTempFile + '" \
-							-out "' + reqFile + '"',
-						options: { 
-							shell: '/bin/bash' 
+							-keyout "' +
+							keyTempFile +
+							'" \
+							-out "' +
+							reqFile +
+							'"',
+						options: {
+							shell: '/bin/bash'
 						},
 						type: 'child'
 					},
@@ -61,29 +66,34 @@ function init() {
 						cmd: 'openssl rsa \
 							-in "' + keyTempFile + '" \
 							-out "' + rsaFile + '"',
-						options: { 
-							shell: '/bin/bash' 
+						options: {
+							shell: '/bin/bash'
 						},
 						type: 'child'
 					},
 					{
-						cmd: 'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "' + reqFile + '"',
+						cmd:
+							'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "' +
+							reqFile +
+							'"',
 						options: {
-							name: 'SelfKey needs to install a security certifcate to encrypt data and'
+							name:
+								'SelfKey needs to install a security certifcate to encrypt data and'
 						},
 						type: 'sudo'
 					}
 				]
-			}
+			};
 			let linConfig = {
-				lwsPath: fs.existsSync(userDataPath + '/lws/'),
-				lwsKeyPath: fs.existsSync(userDataPath + '/lws/keys'),
+				lwsPath: userDataPath + '/lws/',
+				lwsKeyPath: userDataPath + '/lws/keys',
 				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
 				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
 				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
 				certgen: [
 					{
-						cmd: 'openssl req \
+						cmd:
+							'openssl req \
 							-new \
 							-newkey rsa:2048 \
 							-days 365 \
@@ -92,10 +102,14 @@ function init() {
 							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
 							-extensions EXT \
 							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
-							-keyout "' + keyTempFile + '" \
-							-out "' + reqFile + '"',
-						options: { 
-							shell: '/bin/bash' 
+							-keyout "' +
+							keyTempFile +
+							'" \
+							-out "' +
+							reqFile +
+							'"',
+						options: {
+							shell: '/bin/bash'
 						},
 						type: 'child'
 					},
@@ -103,27 +117,28 @@ function init() {
 						cmd: 'openssl rsa \
 							-in "' + keyTempFile + '" \
 							-out "' + rsaFile + '"',
-						options: { 
-							shell: '/bin/bash' 
+						options: {
+							shell: '/bin/bash'
 						},
 						type: 'child'
 					}
 				]
-			}
+			};
 			let winConfig = {
-				lwsPath: fs.existsSync(userDataPath + '\\lws\\'),
-				lwsKeyPath: fs.existsSync(userDataPath + '\\lws\\keys'),
-				reqFile = userDataPath + '\\lws\\keys\\lws_cert.pem',
-				rsaFile = userDataPath + '\\lws\\keys\\lws_key.pem',
-				keyTempFile = userDataPath + '\\lws\\keys\\keytemp.pem',
+				lwsPath: userDataPath + '\\lws\\',
+				lwsKeyPath: userDataPath + '\\lws\\keys',
+				reqFile: userDataPath + '\\lws\\keys\\lws_cert.pem',
+				rsaFile: userDataPath + '\\lws\\keys\\lws_key.pem',
+				keyTempFile: userDataPath + '\\lws\\keys\\keytemp.pem',
 				certgen: [
 					{
-						cmd: 'New-SelfSignedCertificate -Type Custom -Subject "C=NV,ST=SK,L=Nevis,O=selfkey,CN=localhost" -TextExtension @("CN=localhost,[req]distinguished_name=[EXT]subjectAltName=DNS:localhost,keyUsage=digitalSignature,extendedKeyUsage=serverAuth") -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:\CurrentUser\My"',
+						cmd:
+							'New-SelfSignedCertificate -Type Custom -Subject "C=NV,ST=SK,L=Nevis,O=selfkey,CN=localhost" -TextExtension @("CN=localhost,[req]distinguished_name=[EXT]subjectAltName=DNS:localhost,keyUsage=digitalSignature,extendedKeyUsage=serverAuth") -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:CurrentUserMy"',
 						options: {},
 						type: 'power'
 					}
 				]
-			}
+			};
 			let currentOS = process.platform;
 			switch (currentOS) {
 				case 'darwin':
@@ -136,7 +151,7 @@ function init() {
 					return resolve(osxConfig);
 			}
 		} catch (e) {
-			return reject(e)
+			return reject(e);
 		}
 	});
 }
@@ -162,12 +177,12 @@ function sudocutor(cmd, options) {
 
 function windocutor(cmd, options) {
 	return new Promise((resolve, reject) => {
-		ps.addCommand(cmd)
+		ps.addCommand(cmd);
 		ps.invoke()
 			.then(output => resolve(output))
 			.catch(err => {
-				ps.dispose()
-				reject(log.error(err))
+				ps.dispose();
+				reject(log.error(err));
 			});
 	});
 }
@@ -188,23 +203,23 @@ function certs(config) {
 			if (reqFileCheck && rsaFileCheck) {
 				resolve('wss');
 			} else {
-				let steps = []
+				let steps = [];
 				for (let step of config.certgen) {
-					switch(step.type) {
+					switch (step.type) {
 						case 'child':
-							steps.push(executor(step.cmd, step,options));
+							steps.push(executor(step.cmd, step, options));
 						case 'sudo':
-							steps.push(sudocutor(step.cmd, step,options));
+							steps.push(sudocutor(step.cmd, step, options));
 						case 'power':
 							steps.push(windocutor(step.cmd));
 						default:
-							steps.push(executor(step.cmd, step,options));
+							steps.push(executor(step.cmd, step, options));
 					}
 				}
 				resolve(Promise.all(steps));
-			}	
-		} catch(e) {
-			resolve(e)
+			}
+		} catch (e) {
+			resolve(e);
 		}
 	});
 }
@@ -426,7 +441,7 @@ export class LWSService {
 		});
 		this.wss.on('connection', this.handleConn.bind(this));
 		this.wss.on('error', err => {
-			log.error(err)
+			log.error(err);
 			if (err.code === 'EADDRINUSE') {
 				WS_PORT++;
 				log.info('Address in use, retrying on port ' + WS_PORT);
@@ -457,7 +472,8 @@ export class LWSService {
 				this.wss = new WebSocket.Server({ server: httpsServer });
 				this.wss.on('connection', this.handleConn.bind(this));
 				this.wss.on('error', err => log.error(err));
-				httpsServer.listen(WS_PORT, () => {
+				httpsServer
+					.listen(WS_PORT, () => {
 						log.info('HTTPS listening:' + WS_PORT);
 					})
 					.on('error', err => {
