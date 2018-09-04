@@ -12,6 +12,12 @@ import https from 'https';
 import child_process from 'child_process';
 import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
+import powerShell from 'node-powershell';
+
+export let ps = new powerShell({
+	executionPolicy: 'Bypass',
+	noProfile: true
+});
 
 export const WS_ORIGINS_WHITELIST = [
 	'chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik',
@@ -21,87 +27,132 @@ export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
 export let WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 const log = new Logger('LWSService');
+
 const userDataPath = common.getUserDataPath();
 
-let reqFile = userDataPath + '/lws/keys/lws_cert.pem';
-let rsaFile = userDataPath + '/lws/keys/lws_key.pem';
-let keyTempFile = userDataPath + '/lws/keys/keytemp.pem';
-
-// start standard WS server with ability to only accept init message
-// upon recieving init message attempt to create certificate
-// go through certificate generation process
-// start secure websocket server
-// updgrade all incoming connections to secure websocket
-
-function listenForLWS() {
-	// listens for LWS
-	// triggers user prompt for secure websockets setup
-	log.info('skc calling');
-}
-
-function keyDirs() {
-	// setup dirs for keys
+function init() {
 	return new Promise((resolve, reject) => {
-		let lwsPath = fs.existsSync(userDataPath + '/lws/');
-		let lwsKeyPath = fs.existsSync(userDataPath + '/lws/keys');
-		if (!lwsPath) {
-			fs.mkdirSync(userDataPath + '/lws/');
+		try {
+			let osxConfig = {
+				lwsPath: fs.existsSync(userDataPath + '/lws/'),
+				lwsKeyPath: fs.existsSync(userDataPath + '/lws/keys)',
+				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
+				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
+				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
+				certgen: [
+					{
+						cmd: 'openssl req \
+							-new \
+							-newkey rsa:2048 \
+							-days 365 \
+							-nodes \
+							-x509 \
+							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
+							-extensions EXT \
+							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
+							-keyout "' + keyTempFile + '" \
+							-out "' + reqFile + '"',
+						options: { 
+							shell: '/bin/bash' 
+						},
+						type: 'child'
+					},
+					{
+						cmd: 'openssl rsa \
+							-in "' + keyTempFile + '" \
+							-out "' + rsaFile + '"',
+						options: { 
+							shell: '/bin/bash' 
+						},
+						type: 'child'
+					},
+					{
+						cmd: 'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "' + reqFile + '"',
+						options: {
+							name: 'SelfKey needs to install a security certifcate to encrypt data and'
+						},
+						type: 'sudo'
+					}
+				]
+			}
+			let linConfig = {
+				lwsPath: fs.existsSync(userDataPath + '/lws/'),
+				lwsKeyPath: fs.existsSync(userDataPath + '/lws/keys'),
+				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
+				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
+				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
+				certgen: [
+					{
+						cmd: 'openssl req \
+							-new \
+							-newkey rsa:2048 \
+							-days 365 \
+							-nodes \
+							-x509 \
+							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
+							-extensions EXT \
+							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
+							-keyout "' + keyTempFile + '" \
+							-out "' + reqFile + '"',
+						options: { 
+							shell: '/bin/bash' 
+						},
+						type: 'child'
+					},
+					{
+						cmd: 'openssl rsa \
+							-in "' + keyTempFile + '" \
+							-out "' + rsaFile + '"',
+						options: { 
+							shell: '/bin/bash' 
+						},
+						type: 'child'
+					}
+				]
+			}
+			let winConfig = {
+				lwsPath: fs.existsSync(userDataPath + '\\lws\\'),
+				lwsKeyPath: fs.existsSync(userDataPath + '\\lws\\keys'),
+				reqFile = userDataPath + '\\lws\\keys\\lws_cert.pem',
+				rsaFile = userDataPath + '\\lws\\keys\\lws_key.pem',
+				keyTempFile = userDataPath + '\\lws\\keys\\keytemp.pem',
+				certgen: [
+					{
+						cmd: 'New-SelfSignedCertificate -Type Custom -Subject "C=NV,ST=SK,L=Nevis,O=selfkey,CN=localhost" -TextExtension @("CN=localhost,[req]distinguished_name=[EXT]subjectAltName=DNS:localhost,keyUsage=digitalSignature,extendedKeyUsage=serverAuth") -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:\CurrentUser\My"',
+						options: {},
+						type: 'power'
+					}
+				]
+			}
+			let currentOS = process.platform;
+			switch (currentOS) {
+				case 'darwin':
+					return resolve(osxConfig);
+				case 'linux':
+					return resolve(linConfig);
+				case 'win32':
+					return resolve(winConfig);
+				default:
+					return resolve(osxConfig);
+			}
+		} catch (e) {
+			return reject(e)
 		}
-		if (!lwsKeyPath) {
-			fs.mkdirSync(userDataPath + '/lws/keys');
-		}
-		resolve('done');
 	});
 }
 
-function createREQCert() {
+function executor(cmd, options) {
 	return new Promise((resolve, reject) => {
-		let reqCommand =
-			'openssl req \
-			-new \
-			-newkey rsa:4096 \
-			-days 365 \
-			-nodes \
-			-x509 \
-			-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
-			-extensions EXT \
-			-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
-			-keyout "' +
-			keyTempFile +
-			'" \
-			-out "' +
-			reqFile +
-			'"';
-		child_process.exec(reqCommand, { shell: '/bin/bash' }, (error, stdout, stderr) => {
-			if (error) throw error;
+		child_process.exec(cmd, options, (error, stdout, stderr) => {
+			if (error) reject(error);
 			resolve('done');
 		});
 	});
 }
 
-function createRSAKey() {
+function sudocutor(cmd, options) {
 	return new Promise((resolve, reject) => {
-		let rsaCommand = 'openssl rsa \
-			-in "' + keyTempFile + '" \
-			-out "' + rsaFile + '"';
-		child_process.exec(rsaCommand, { shell: '/bin/bash' }, (error, stdout, stderr) => {
-			if (error) throw error;
-			resolve('done');
-		});
-	});
-}
-
-function addTrustedCert() {
-	return new Promise((resolve, reject) => {
-		// add the certificate to the users system keychain - prompt the user for password
-		let sudoOptions = {
-			name: 'SelfKey needs to install a security certifcate to encrypt data and'
-		};
-		let sudoCommand =
-			'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "' +
-			reqFile +
-			'"';
-		sudo.exec(sudoCommand, sudoOptions, (error, stdout, stderr) => {
+		sudo.exec(cmd, options, (error, stdout, stderr) => {
 			// TODO: Handle no permission error better
 			if (error) resolve('ws');
 			resolve('wss');
@@ -109,36 +160,60 @@ function addTrustedCert() {
 	});
 }
 
-// Secure WebSocket Setup
-function createWSCerts() {
+function windocutor(cmd, options) {
 	return new Promise((resolve, reject) => {
-		log.info(userDataPath);
-		let currentOS = process.platform;
-		// IF OSX
-		if (currentOS === 'darwin') {
-			// check if key files exist
-			let reqFileCheck = fs.existsSync(reqFile);
-			let rsaFileCheck = fs.existsSync(rsaFile);
+		ps.addCommand(cmd)
+		ps.invoke()
+			.then(output => resolve(output))
+			.catch(err => {
+				ps.dispose()
+				reject(log.error(err))
+			});
+	});
+}
+
+function certs(config) {
+	return new Promise((resolve, reject) => {
+		try {
+			let lwsPathCheck = fs.existsSync(config.lwsPath);
+			let lwsKeyPathCheck = fs.existsSync(config.lwsKeyPath);
+			if (!lwsPath) {
+				fs.mkdirSync(config.lwsPath);
+			}
+			if (!lwsKeyPath) {
+				fs.mkdirSync(config.lwsPath);
+			}
+			let reqFileCheck = fs.existsSync(config.reqFile);
+			let rsaFileCheck = fs.existsSync(config.rsaFile);
 			if (reqFileCheck && rsaFileCheck) {
 				resolve('wss');
 			} else {
-				keyDirs().then(() =>
-					createREQCert().then(() =>
-						createRSAKey().then(() =>
-							addTrustedCert().then(status => {
-								resolve(status);
-							})
-						)
-					)
-				);
-			}
-			// IF NOT OSX
-		} else {
-			// will start non-TLS WebSocket server
-			resolve('ws');
+				let steps = []
+				for (let step of config.certgen) {
+					switch(step.type) {
+						case 'child':
+							steps.push(executor(step.cmd, step,options));
+						case 'sudo':
+							steps.push(sudocutor(step.cmd, step,options));
+						case 'power':
+							steps.push(windocutor(step.cmd));
+						default:
+							steps.push(executor(step.cmd, step,options));
+					}
+				}
+				resolve(Promise.all(steps));
+			}	
+		} catch(e) {
+			resolve(e)
 		}
 	});
 }
+
+// start standard WS server with ability to only accept init message
+// upon recieving init message attempt to create certificate
+// go through certificate generation process
+// start secure websocket server
+// updgrade all incoming connections to secure websocket
 
 // function portIncrementInit() {
 //     console.log('we have created ' + listenerCounter + ' http server listeners');
@@ -350,7 +425,16 @@ export class LWSService {
 			verifyClient: this.verifyClient.bind(this)
 		});
 		this.wss.on('connection', this.handleConn.bind(this));
-		this.wss.on('error', err => log.error(err));
+		this.wss.on('error', err => {
+			log.error(err)
+			if (err.code === 'EADDRINUSE') {
+				WS_PORT++;
+				log.info('Address in use, retrying on port ' + WS_PORT);
+				setTimeout(() => {
+					httpsServer.listen(WS_PORT);
+				}, 250);
+			}
+		});
 	}
 
 	startSecureServer(msg, conn) {
@@ -361,6 +445,7 @@ export class LWSService {
 			},
 			msg
 		);
+
 		// trigger modal and wait for user accept then
 
 		createWSCerts().then(status => {
@@ -372,8 +457,7 @@ export class LWSService {
 				this.wss = new WebSocket.Server({ server: httpsServer });
 				this.wss.on('connection', this.handleConn.bind(this));
 				this.wss.on('error', err => log.error(err));
-				httpsServer
-					.listen(WS_PORT, () => {
+				httpsServer.listen(WS_PORT, () => {
 						log.info('HTTPS listening:' + WS_PORT);
 					})
 					.on('error', err => {
