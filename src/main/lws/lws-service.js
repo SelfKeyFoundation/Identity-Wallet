@@ -219,13 +219,13 @@ function runCertgen(config) {
 		for (let step of config.certgen) {
 			switch (step.type) {
 				case 'child':
-					steps.push(executor(step.cmd, step, options));
+					steps.push(executor(step.cmd, step.options));
 				case 'sudo':
-					steps.push(sudocutor(step.cmd, step, options));
+					steps.push(sudocutor(step.cmd, step.options));
 				case 'power':
 					steps.push(windocutor(step.cmd));
 				default:
-					steps.push(executor(step.cmd, step, options));
+					steps.push(executor(step.cmd, step.options));
 			}
 		}
 		resolve(Promise.all(steps));
