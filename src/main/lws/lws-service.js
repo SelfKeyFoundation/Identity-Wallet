@@ -75,8 +75,8 @@ export class LWSService {
 			(acc, curr) => ({ ...acc, [curr.key]: curr }),
 			{}
 		);
-		let wallet = await Wallet.findByPublicKey(publicKey).eager('attributes');
-		let walletAttrs = wallet.attributes.filter(attr => attr.type in attributesMapByKey);
+		let wallet = await Wallet.findByPublicKey(publicKey).eager('idAttributes');
+		let walletAttrs = wallet.idAttributes.filter(attr => attr.type in attributesMapByKey);
 
 		walletAttrs = await Promise.all(
 			walletAttrs.map(async attr => {
@@ -84,13 +84,13 @@ export class LWSService {
 					return attr;
 				}
 				let docValue = await attr.loadDocumentDataUrl();
-				return { ...attr, data: docValue };
+				return { ...attr, data: { value: docValue } };
 			})
 		);
 		return walletAttrs.map(attr => ({
 			key: attributesMapByKey[attr.type].key,
 			label: attributesMapByKey[attr.type].label,
-			attribute: attr.data.value ? attr.data.value : attr.data
+			data: attr.data
 		}));
 	}
 
@@ -136,12 +136,16 @@ export class LWSService {
 		try {
 			const nonceResp = await this.fetchNonce(msg.payload.apiUrl);
 			if (nonceResp.error) {
-				return conn.send({
-					payload: {
-						code: 'nonce_fetch_error',
-						message: nonceResp.error
-					}
-				});
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'nonce_fetch_error',
+							message: nonceResp.error
+						}
+					},
+					msg
+				);
 			}
 			const body = {
 				publicKey: msg.payload.publicKey,
