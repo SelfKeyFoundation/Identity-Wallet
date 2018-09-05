@@ -134,7 +134,7 @@ export class LWSService {
 
 	async reqAuth(msg, conn) {
 		try {
-			const nonceResp = await this.fetchNonce(msg.payload.apiUrl);
+			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
 			if (nonceResp.error) {
 				return conn.send(
 					{
@@ -157,7 +157,7 @@ export class LWSService {
 				body.attributes = msg.attributes;
 			}
 
-			let resp = await fetch(msg.payload.apiUrl, {
+			let resp = await fetch(msg.payload.website.apiUrl, {
 				method: 'POST',
 				body,
 				headers: {
