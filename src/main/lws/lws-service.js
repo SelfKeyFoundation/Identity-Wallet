@@ -40,7 +40,8 @@ export class LWSService {
 			let checked = this.checkWallet(w.publicKey, conn);
 			return {
 				publicKey: w.publicKey,
-				unlocked: checked.unlocked
+				unlocked: checked.unlocked,
+				profile: w.profile
 			};
 		});
 		conn.send(
@@ -84,12 +85,13 @@ export class LWSService {
 					return attr;
 				}
 				let docValue = await attr.loadDocumentDataUrl();
-				return { ...attr, data: { value: docValue } };
+				return { ...attr, data: { value: docValue }, document: true };
 			})
 		);
 		return walletAttrs.map(attr => ({
 			key: attributesMapByKey[attr.type].key,
 			label: attributesMapByKey[attr.type].label,
+			document: !!attr.document,
 			data: attr.data
 		}));
 	}
