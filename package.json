@@ -46,7 +46,9 @@
     "commitmsg": "commitlint -E GIT_PARAMS",
     "check-deps-precommit": "npm-check -i eslint -i redux -s || true",
     "check-deps": "npm-check -i common",
-    "coveralls": "cat dist/coverage/lcov.info | coveralls"
+    "coveralls": "cat dist/coverage/lcov.info | coveralls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "lint-staged": {
     "*.js": [
@@ -128,7 +130,8 @@
     "utf-8-validate": "^5.0.1",
     "web3": "1.0.0-beta.35",
     "web3-provider-engine": "14.0.6",
-    "zxcvbn": "4.4.2"
+    "zxcvbn": "4.4.2",
+    "snyk": "^1.94.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.53",
@@ -224,5 +227,6 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  }
+  },
+  "snyk": true
 }
