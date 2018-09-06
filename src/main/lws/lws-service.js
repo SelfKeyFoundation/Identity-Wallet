@@ -63,6 +63,7 @@ export class LWSService {
 			'publicKey',
 			'unlocked'
 		);
+		payload.profile = wallet.profile;
 		conn.send(
 			{
 				payload
@@ -98,6 +99,19 @@ export class LWSService {
 
 	async reqAttributes(msg, conn) {
 		try {
+			const check = this.checkWallet(msg.payload.publicKey, conn);
+			if (!check.unlocked) {
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'not_authorized',
+							message: 'Wallet is locked, cannot request attributes'
+						}
+					},
+					msg
+				);
+			}
 			const payload = await this.getAttributes(msg.payload.publicKey, msg.payload.attributes);
 			conn.send({ payload }, msg);
 		} catch (error) {
@@ -115,9 +129,12 @@ export class LWSService {
 	}
 
 	async genSignature(nonce, publicKey, conn) {
-		const privateKey = this.checkWallet(publicKey, conn);
+		const check = this.checkWallet(publicKey, conn);
+		if (!check.unlocked) {
+			return null;
+		}
 		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
-		const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
+		const signature = ethUtil.ecsign(msgHash, Buffer.from(check.privateKey, 'hex'));
 		return signature;
 	}
 
@@ -266,7 +283,7 @@ export class WSConnection {
 	}
 
 	getUnlockedWallet(publicKey) {
-		return this.ctx.unlockedWallets[publicKey];
+		return this.ctx.unlockedWallets[publicKey] || null;
 	}
 
 	async handleMessage(msg) {
@@ -275,7 +292,11 @@ export class WSConnection {
 			await this.service.handleRequest(msg, this);
 		} catch (error) {
 			log.error(error);
-			this.send({ error: 'invalid message' }, msg);
+			msg = typeof msg === 'string' ? {} : msg;
+			this.send(
+				{ error: true, payload: { code: 'invalid_message', message: 'Invalid Message' } },
+				msg
+			);
 		}
 	}
 
@@ -290,6 +311,8 @@ export class WSConnection {
 			return;
 		}
 		req = req || {};
+		msg = msg || {};
+		msg = { ...msg };
 		msg.type = msg.type || req.type;
 		msg.meta = msg.meta || {};
 		let id = msg.meta.id;

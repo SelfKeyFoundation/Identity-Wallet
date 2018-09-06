@@ -22,7 +22,7 @@ export class IdAttribute extends BaseModel {
 				walletId: { type: 'integer' },
 				type: { type: 'string' },
 				data: { type: 'object' },
-				documentId: { type: 'integer' }
+				documentId: { type: ['integer', null] }
 			}
 		};
 	}
@@ -32,7 +32,9 @@ export class IdAttribute extends BaseModel {
 	}
 
 	async loadDocumentDataUrl() {
-		await this.$loadRelated('document');
+		if (!this.document) {
+			await this.$loadRelated('document');
+		}
 		return this.document.getDataUrl();
 	}
 
