@@ -8,21 +8,21 @@ import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import ethUtil from 'ethereumjs-util';
 import fs from 'fs';
+import path from 'path';
 import https from 'https';
 import child_process from 'child_process';
 import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
-import powerShell from 'node-powershell';
 
-export let ps = new powerShell({
-	executionPolicy: 'Bypass',
-	noProfile: true
-});
+// if (process.platform === 'win32' || 'win64') {
+// 	const powerShell = require('node-powershell');
+// 	let ps = new powerShell({
+// 		executionPolicy: 'Bypass',
+// 		noProfile: true
+// 	});
+// }
 
-export const WS_ORIGINS_WHITELIST = [
-	'chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik',
-	'chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo'
-];
+export const WS_ORIGINS_WHITELIST = [process.env.SK_LWS_CID, process.env.SWS_CID];
 export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
 export let WS_PORT = process.env.LWS_WS_PORT || 8898;
 
@@ -34,15 +34,14 @@ function init() {
 	return new Promise((resolve, reject) => {
 		try {
 			let osxConfig = {
-				lwsPath: userDataPath + '/lws/',
+				lwsPath: path.join(userDataPath, '/lws/'),
 				lwsKeyPath: userDataPath + '/lws/keys',
 				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
 				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
 				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
 				certgen: [
 					{
-						cmd:
-							'openssl req \
+						cmd: `openssl req \
 							-new \
 							-newkey rsa:2048 \
 							-days 365 \
@@ -51,21 +50,15 @@ function init() {
 							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
 							-extensions EXT \
 							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
-							-keyout "' +
-							keyTempFile +
-							'" \
-							-out "' +
-							reqFile +
-							'"',
+							-keyout ${keyTempFile} \
+							-out ${reqFile}`,
 						options: {
 							shell: '/bin/bash'
 						},
 						type: 'child'
 					},
 					{
-						cmd: 'openssl rsa \
-							-in "' + keyTempFile + '" \
-							-out "' + rsaFile + '"',
+						cmd: `openssl rsa -in ${keyTempFile} -out ${rsaFile}`,
 						options: {
 							shell: '/bin/bash'
 						},
@@ -73,9 +66,7 @@ function init() {
 					},
 					{
 						cmd:
-							'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "' +
-							reqFile +
-							'"',
+							'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ${reqFile}',
 						options: {
 							name:
 								'SelfKey needs to install a security certifcate to encrypt data and'
@@ -92,8 +83,7 @@ function init() {
 				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
 				certgen: [
 					{
-						cmd:
-							'openssl req \
+						cmd: `openssl req \
 							-new \
 							-newkey rsa:2048 \
 							-days 365 \
@@ -102,21 +92,17 @@ function init() {
 							-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
 							-extensions EXT \
 							-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
-							-keyout "' +
-							keyTempFile +
-							'" \
-							-out "' +
-							reqFile +
-							'"',
+							-keyout ${keyTempFile} \
+							-out ${reqFile}`,
 						options: {
 							shell: '/bin/bash'
 						},
 						type: 'child'
 					},
 					{
-						cmd: 'openssl rsa \
-							-in "' + keyTempFile + '" \
-							-out "' + rsaFile + '"',
+						cmd: `openssl rsa \
+							-in ${keyTempFile} \
+							-out ${rsaFile}`,
 						options: {
 							shell: '/bin/bash'
 						},
@@ -197,7 +183,7 @@ function checkDirs(config) {
 		if (!lwsKeyPath) {
 			fs.mkdirSync(config.lwsPath);
 		}
-		resolve('done')
+		resolve('done');
 	});
 }
 
@@ -208,9 +194,9 @@ function checkKeys(config) {
 		if (reqFileCheck && rsaFileCheck) {
 			resolve('wss');
 		} else {
-			resolve('ws')
+			resolve('ws');
 		}
-	}); 
+	});
 }
 
 function runCertgen(config) {
@@ -239,13 +225,13 @@ function certs(config) {
 				if (checkDirs === 'done') {
 					checkKeys(config).then(status => {
 						if (status !== 'wss') {
-							runCertgen(config).then(() => resolve('done'))
+							runCertgen(config).then(() => resolve('done'));
 						}
-					})
+					});
 				} else {
-					resolve('done')
+					resolve('done');
 				}
-			})
+			});
 		} catch (e) {
 			resolve(e);
 		}
@@ -254,8 +240,6 @@ function certs(config) {
 
 // start standard WS server with ability to only accept init message upon recieving init message attempt to create certificate
 // borwser extension needs logic to change to wss and check port
-
-
 
 export class LWSService {
 	constructor() {
@@ -476,23 +460,22 @@ export class LWSService {
 		// TODO: trigger modal here and wait for user accept then
 		// TODO: updgrade all incoming connections to secure websocket
 
-		init()
-			.then(config => certs(config).then(status => {
+		init().then(config =>
+			certs(config).then(status => {
 				if (status === 'wss') {
-					
 					const httpsServer = new https.createServer({
 						cert: fs.readFileSync(config.reqFile),
 						key: fs.readFileSync(config.rsaFile)
 					});
-					
-					this.wss = new WebSocket.Server({ 
+
+					this.wss = new WebSocket.Server({
 						server: httpsServer,
 						port: WS_PORT,
-						verifyClient: this.verifyClient.bind(this) 
+						verifyClient: this.verifyClient.bind(this)
 					});
 					this.wss.on('connection', this.handleConn.bind(this));
 					this.wss.on('error', err => log.error(err));
-					
+
 					httpsServer
 						.listen(WS_PORT, () => {
 							log.info('HTTPS listening:' + WS_PORT);
@@ -510,7 +493,8 @@ export class LWSService {
 				} else {
 					log.info('error starting wss');
 				}
-			});
+			})
+		);
 	}
 }
 
