@@ -3,6 +3,7 @@ const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
 const { pricesOperations } = require('common/prices');
+const { ethGasStationInfoOperations } = require('common/eth-gas-station');
 
 const { Logger } = require('common/logger');
 const log = new Logger('rpc-handler');
@@ -46,7 +47,8 @@ module.exports = function(cradle) {
 		txHistoryService,
 		TxHistoryService,
 		web3Service,
-		priceService
+		priceService,
+		ethGasStationService
 	} = cradle;
 	const controller = function() {};
 
@@ -1408,6 +1410,16 @@ module.exports = function(cradle) {
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
+	};
+
+	controller.prototype.getEthGasStationInfo = async function(event, actionId, actionName, args) {
+		try {
+			const data = await ethGasStationService.getInfo();
+			store.dispatch(ethGasStationInfoOperations.updateData(data));
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+		} catch (error) {
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+		}
 	};
 
 	return controller;
