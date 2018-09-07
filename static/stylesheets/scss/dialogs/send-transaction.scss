@@ -1,0 +1,12 @@
+.send-transaction {
+	padding-top: 40px;
+	min-width: 100%;
+	min-height: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	transaction-send-box {
+		width: 760px;
+	}
+}

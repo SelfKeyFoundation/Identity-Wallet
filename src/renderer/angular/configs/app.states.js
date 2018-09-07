@@ -347,6 +347,22 @@ function appStates(
 			}
 		})
 
+		.state('member.wallet.send-transaction', {
+			url: '/member/wallet/send-transaction',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction.html',
+					controller: 'SendTransactionController'
+					// templateUrl: 'common/dialogs/send-token.html',
+					// controller: 'SendTokenDialogController'
+				}
+			},
+			params: {
+				symbol: null,
+				allowSelectERC20Token: null
+			}
+		})
+
 		/**
 		 * ID Wallet
 		 */

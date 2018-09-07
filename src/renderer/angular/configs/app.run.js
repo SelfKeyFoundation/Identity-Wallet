@@ -101,6 +101,10 @@ function AppRun(
 		$state.go('member.wallet.send-token', { symbol, allowSelectERC20Token });
 	};
 
+	$rootScope.openSendTransactionDialog = (event, symbol, allowSelectERC20Token) => {
+		$state.go('member.wallet.send-transaction', { symbol, allowSelectERC20Token });
+	};
+
 	$rootScope.openReceiveTokenDialog = (event, args) => {
 		return $mdDialog.show({
 			controller: 'ReceiveTokenDialogController',
