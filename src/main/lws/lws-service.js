@@ -175,8 +175,8 @@ export class LWSService {
 				signature: this.genSignature(nonceResp.nonce, msg.payload.publicKey, conn)
 			};
 
-			if (msg.attributes) {
-				body.attributes = msg.attributes;
+			if (msg.payload.attributes) {
+				body.attributes = msg.payload.attributes;
 			}
 
 			let resp = await fetch(msg.payload.website.apiUrl, {
