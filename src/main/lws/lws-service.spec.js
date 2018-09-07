@@ -229,12 +229,12 @@ describe('lws-service', () => {
 		});
 
 		describe('genSignature', () => {
-			it('returns null if wallet is locked', async () => {
-				let sig = await service.genSignature('test', 'test', 'asdas');
+			it('returns null if wallet is locked', () => {
+				let sig = service.genSignature('test', 'test', 'asdas');
 				expect(sig).toBeNull();
 			});
 			it('signs nonce with privateKey', async () => {
-				let sig = await service.genSignature(
+				let sig = service.genSignature(
 					'12341',
 					'test',
 					'3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
@@ -246,6 +246,15 @@ describe('lws-service', () => {
 				expect(sig.s.toString('hex')).toEqual(
 					'6722b46c423932bce4824afd03f9338107577f1cb2e021064d73e7dd00c72b76'
 				);
+			});
+			it('stringify signature', () => {
+				let sig = {
+					v: 2,
+					s: Buffer.from('test', 'utf8'),
+					r: Buffer.from('test2Î', 'utf8')
+				};
+				let str = service.stringifySignature(sig);
+				expect(str).toEqual('{"v":2,"s":"74657374","r":"7465737432c38e"}');
 			});
 		});
 

@@ -145,7 +145,7 @@ export class LWSService {
 	stringifySignature(sig) {
 		sig = { ...sig };
 		sig.r = sig.r.toString('hex');
-		sig.s = sig.r.toString('hex');
+		sig.s = sig.s.toString('hex');
 		return JSON.stringify(sig);
 	}
 
