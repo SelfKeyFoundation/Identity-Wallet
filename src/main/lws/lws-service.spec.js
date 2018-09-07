@@ -230,16 +230,15 @@ describe('lws-service', () => {
 
 		describe('genSignature', () => {
 			it('returns null if wallet is locked', async () => {
-				sinon.stub(service, 'checkWallet').returns({ unlocked: false });
-				let sig = await service.genSignature('test', 'test', {});
+				let sig = await service.genSignature('test', 'test', 'asdas');
 				expect(sig).toBeNull();
 			});
 			it('signs nonce with privateKey', async () => {
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true,
-					privateKey: '3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
-				});
-				let sig = await service.genSignature('12341', 'test', {});
+				let sig = await service.genSignature(
+					'12341',
+					'test',
+					'3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
+				);
 				expect(sig.v).toEqual(27);
 				expect(sig.r.toString('hex')).toEqual(
 					'693d483f13b5ade55cc0741169a3d785c9aab8aa4b64826dc964ccbd97878efb'
