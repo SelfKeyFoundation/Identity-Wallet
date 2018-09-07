@@ -19,7 +19,6 @@ const update = data => {
 const ethGasStationInfoReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case types.DATA_UPDATE:
-			console.log('ethGasStationInfoReducer', action.payload);
 			return {
 				...state,
 				ethGasStationInfo: update(action.payload)

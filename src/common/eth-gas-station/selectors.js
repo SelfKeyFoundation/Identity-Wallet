@@ -1,3 +1,1 @@
-const getEthGasStationInfo = ({ ethGasStationInfo }) => ethGasStationInfo;
-
-export default { getEthGasStationInfo };
+export const getEthGasStationInfo = ({ ethGasStationInfo }) => ethGasStationInfo;
