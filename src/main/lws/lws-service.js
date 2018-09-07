@@ -9,7 +9,10 @@ import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
-	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+	: [
+			'chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik',
+			'chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd'
+	  ];
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
