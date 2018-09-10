@@ -411,6 +411,18 @@ function appStates(
 			params: {
 				data: {}
 			}
+		})
+		.state('member.marketplace.no-balance', {
+			url: '/member/marketplace/no-balance',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/no-balance.html',
+					controller: 'MemberMarketplaceNoBalanceController'
+				}
+			},
+			params: {
+				data: {}
+			}
 		});
 
 	$urlRouterProvider.otherwise('/guest/loading');
