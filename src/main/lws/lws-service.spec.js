@@ -256,7 +256,7 @@ describe('lws-service', () => {
 					r: Buffer.from('test2Î', 'utf8')
 				};
 				let str = service.stringifySignature(sig);
-				expect(str).toEqual('{"v":2,"s":"74657374","r":"7465737432c38e"}');
+				expect(str).toEqual('eyJ2IjoyLCJzIjoiNzQ2NTczNzQiLCJyIjoiNzQ2NTczNzQzMmMzOGUifQ==');
 			});
 		});
 
@@ -317,7 +317,7 @@ describe('lws-service', () => {
 							error: true,
 							payload: {
 								code: 'nonce_fetch_error',
-								message: 'No nonce in responce'
+								message: 'No nonce in response'
 							}
 						},
 						msg
@@ -340,7 +340,7 @@ describe('lws-service', () => {
 							error: true,
 							payload: {
 								code: 'sign_error',
-								message: 'Cannot could not generate signature'
+								message: 'Could not generate signature'
 							}
 						},
 						msg

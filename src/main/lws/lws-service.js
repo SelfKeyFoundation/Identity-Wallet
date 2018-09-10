@@ -146,7 +146,7 @@ export class LWSService {
 		sig = { ...sig };
 		sig.r = sig.r.toString('hex');
 		sig.s = sig.s.toString('hex');
-		return JSON.stringify(sig);
+		return Buffer.from(JSON.stringify(sig), 'utf8').toString('base64');
 	}
 
 	async fetchNonce(url) {
@@ -184,7 +184,7 @@ export class LWSService {
 						error: true,
 						payload: {
 							code: 'nonce_fetch_error',
-							message: nonceResp.error || 'No nonce in responce'
+							message: nonceResp.error || 'No nonce in response'
 						}
 					},
 					msg
@@ -203,7 +203,7 @@ export class LWSService {
 						error: true,
 						payload: {
 							code: 'sign_error',
-							message: 'Cannot could not generate signature'
+							message: 'Could not generate signature'
 						}
 					},
 					msg
@@ -212,9 +212,7 @@ export class LWSService {
 			const body = {
 				publicKey: msg.payload.publicKey,
 				nonce: nonceResp.nonce,
-				signature: Buffer.from(this.stringifySignature(signature), 'utf8').toString(
-					'base64'
-				)
+				signature
 			};
 
 			if (msg.payload.attributes) {
