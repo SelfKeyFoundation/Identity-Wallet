@@ -25,8 +25,9 @@ export const userAgent = `SelfKeyIDW/${pkg.version}`;
 const log = new Logger('LWSService');
 
 export class LWSService {
-	constructor() {
+	constructor({ rpcHandler }) {
 		this.wss = null;
+		this.rpcHandler = rpcHandler;
 	}
 
 	checkWallet(publicKey, conn) {
@@ -37,16 +38,20 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
+		const { website } = msg.payload;
 		let payload = await Wallet.findAll();
-		payload = payload.map(w => {
-			// TODO: check if wallet has signed up to msg.payload.website
-			let checked = this.checkWallet(w.publicKey, conn);
-			return {
-				publicKey: w.publicKey,
-				unlocked: checked.unlocked,
-				profile: w.profile
-			};
-		});
+		payload = await Promise.all(
+			payload.map(async w => {
+				let checked = this.checkWallet(w.publicKey, conn);
+				let signedUp = await w.hasSignedUp(website.url);
+				return {
+					publicKey: w.publicKey,
+					unlocked: checked.unlocked,
+					profile: w.profile,
+					signedUp
+				};
+			})
+		);
 		conn.send(
 			{
 				payload
@@ -166,7 +171,7 @@ export class LWSService {
 		try {
 			let check = this.checkWallet(msg.payload.publicKey, conn);
 			if (!check.unlocked) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -174,12 +179,13 @@ export class LWSService {
 							message: 'Cannot auth with locked wallet'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
 			if (nonceResp.error || !nonceResp.nonce) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -187,7 +193,8 @@ export class LWSService {
 							message: nonceResp.error || 'No nonce in response'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 
@@ -198,7 +205,7 @@ export class LWSService {
 			);
 
 			if (!signature) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -206,7 +213,8 @@ export class LWSService {
 							message: 'Could not generate signature'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 			const body = {
@@ -240,12 +248,9 @@ export class LWSService {
 					message: lwsResp.error || 'Unknown api error'
 				};
 			}
-			if (resp.status === 200) {
-				// TODO: mark wallet signed up to website
-			}
-			conn.send(lwsResp, msg);
+			return this.authResp(lwsResp, msg, conn);
 		} catch (error) {
-			conn.send(
+			return this.authResp(
 				{
 					payload: {
 						code: 'conn_error',
@@ -253,9 +258,56 @@ export class LWSService {
 					},
 					error: true
 				},
-				msg
+				msg,
+				conn
 			);
 		}
+	}
+
+	async authResp(resp, msg, conn) {
+		let { publicKey } = msg.payload || {};
+		let wallet = await Wallet.findByPublicKey(publicKey);
+		let attempt = this.formatActionLog(msg, resp);
+		await wallet.$relatedQuery('loginAttempts').insert(attempt);
+		if (this.rpcHandler) {
+			await this.rpcHandler.actionLogs_add(this.formatActionLog(wallet, attempt));
+		}
+		return conn.send(resp, msg);
+	}
+
+	formatLoginAttempt(msg, resp) {
+		let { website, attributes = [] } = msg.payload || {};
+		let attempt = {
+			websiteName: website.name,
+			websiteUrl: website.url,
+			apiUrl: website.apiUrl,
+			signup: attributes.length > 0,
+			success: true
+		};
+		if (resp.error) {
+			attempt.success = false;
+			attempt.errorCode = resp.payload.code;
+			attempt.errorMessage = resp.payload.message;
+		}
+		return attempt;
+	}
+
+	formatActionLog(wallet, loginAttempt) {
+		let title = 'Login';
+		let content = `Login to ${loginAttempt.websiteUrl}`;
+
+		if (loginAttempt.signup) {
+			title = 'Signup';
+			content = `Signup to ${loginAttempt.websiteUrl}`;
+		}
+
+		if (loginAttempt.errorCode) {
+			content = `${title} has failed`;
+		} else {
+			content = `${title} was successful`;
+		}
+
+		return { walletId: wallet.id, title, content };
 	}
 
 	reqUnknown(msg, conn) {

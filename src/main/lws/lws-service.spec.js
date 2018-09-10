@@ -23,7 +23,9 @@ describe('lws-service', () => {
 		let service = null;
 
 		beforeEach(() => {
-			service = new LWSService();
+			service = new LWSService({
+				rpcHandler: {}
+			});
 		});
 		afterEach(() => {
 			sinon.restore();
@@ -48,18 +50,24 @@ describe('lws-service', () => {
 				Wallet.findAll.resolves([
 					{
 						publicKey: 'unlocked',
-						profile: 'local'
+						profile: 'local',
+						hasSignedUp() {
+							return true;
+						}
 					},
 					{
 						publicKey: 'locked',
-						profile: 'local'
+						profile: 'local',
+						hasSignedUp() {
+							return true;
+						}
 					}
 				]);
 
 				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
-				const msg = { type: 'test' };
+				const msg = { type: 'test', payload: { website: { url: 'test' } } };
 
 				await service.reqWallets(msg, conn);
 
@@ -67,8 +75,18 @@ describe('lws-service', () => {
 					conn.send.calledWithMatch(
 						{
 							payload: [
-								{ publicKey: 'unlocked', profile: 'local', unlocked: true },
-								{ publicKey: 'locked', profile: 'local', unlocked: false }
+								{
+									publicKey: 'unlocked',
+									profile: 'local',
+									unlocked: true,
+									signedUp: true
+								},
+								{
+									publicKey: 'locked',
+									profile: 'local',
+									unlocked: false,
+									signedUp: true
+								}
 							]
 						},
 						msg
@@ -260,16 +278,37 @@ describe('lws-service', () => {
 			});
 		});
 
+		describe('authResp', () => {
+			xit('sends resp via conn', () => {});
+			xit('adds login login attempt', () => {});
+			xit('sends action log', () => {});
+		});
+
+		describe('formatActionLog', () => {
+			xit('login successfull action log', () => {});
+			xit('login failed action log', () => {});
+			xit('signup successfull action log', () => {});
+			xit('signup failed action log', () => {});
+		});
+
+		describe('formatLoginAttempt', () => {
+			xit('login successfull login attempt', () => {});
+			xit('login failed login attempt', () => {});
+			xit('signup successfull login attempt', () => {});
+			xit('signup failed login attempt', () => {});
+		});
+
 		describe('reqAuth', () => {
 			it('send auth error if wallet is locked', async () => {
-				const conn = { send: sinon.fake() };
+				const conn = {};
 				const msg = { payload: { publicKey: 'test' } };
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: false
 				});
+				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
 				expect(
-					conn.send.calledWithMatch(
+					service.authResp.calledWithMatch(
 						{
 							error: true,
 							payload: {
@@ -277,21 +316,23 @@ describe('lws-service', () => {
 								message: 'Cannot auth with locked wallet'
 							}
 						},
-						msg
+						msg,
+						conn
 					)
 				).toBeTruthy();
 			});
 			it('send nonce fetch error if got error from endpoint', async () => {
-				const conn = { send: sinon.fake() };
+				const conn = {};
 				const msg = { payload: { publicKey: 'test', website: {} } };
 				const error = 'could note generate nonce';
+				sinon.stub(service, 'authResp');
 				sinon.stub(service, 'fetchNonce').resolves({ error });
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: true
 				});
 				await service.reqAuth(msg, conn);
 				expect(
-					conn.send.calledWithMatch(
+					service.authResp.calledWithMatch(
 						{
 							error: true,
 							payload: {
@@ -299,20 +340,22 @@ describe('lws-service', () => {
 								message: error
 							}
 						},
-						msg
+						msg,
+						conn
 					)
 				).toBeTruthy();
 			});
 			it('send nonce fetch error if did not get nonce in responce json', async () => {
-				const conn = { send: sinon.fake() };
+				const conn = {};
 				const msg = { payload: { publicKey: 'test', website: {} } };
 				sinon.stub(service, 'fetchNonce').resolves({});
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: true
 				});
+				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
 				expect(
-					conn.send.calledWithMatch(
+					service.authResp.calledWithMatch(
 						{
 							error: true,
 							payload: {
@@ -320,22 +363,24 @@ describe('lws-service', () => {
 								message: 'No nonce in response'
 							}
 						},
-						msg
+						msg,
+						conn
 					)
 				).toBeTruthy();
 			});
 			it('send sign error if could not generate signature', async () => {
-				const conn = { send: sinon.fake() };
+				const conn = {};
 				const msg = { payload: { publicKey: 'test', website: {} } };
 				sinon.stub(service, 'fetchNonce').resolves({ nonce: 'test' });
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: true
 				});
 				sinon.stub(service, 'genSignature').returns(null);
+				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
 				expect(service.genSignature.calledOnce).toBeTruthy();
 				expect(
-					conn.send.calledWithMatch(
+					service.authResp.calledWithMatch(
 						{
 							error: true,
 							payload: {
@@ -343,20 +388,22 @@ describe('lws-service', () => {
 								message: 'Could not generate signature'
 							}
 						},
-						msg
+						msg,
+						conn
 					)
 				).toBeTruthy();
 			});
 			it('send conn_error on connection error', async () => {
-				const conn = { send: sinon.fake() };
+				const conn = {};
 				const msg = { payload: { publicKey: 'test', website: {} } };
 				sinon.stub(service, 'fetchNonce').throws(new Error('connection error'));
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: true
 				});
+				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
 				expect(
-					conn.send.calledWithMatch(
+					service.authResp.calledWithMatch(
 						{
 							payload: {
 								code: 'conn_error',
@@ -364,7 +411,8 @@ describe('lws-service', () => {
 							},
 							error: true
 						},
-						msg
+						msg,
+						conn
 					)
 				).toBeTruthy();
 			});
