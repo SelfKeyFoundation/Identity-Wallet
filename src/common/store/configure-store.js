@@ -11,6 +11,7 @@ import viewAll from '../view-all-tokens';
 import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
 import addressBook from '../address-book';
+import exchanges from '../exchanges';
 
 import {
 	forwardToMain,
@@ -42,7 +43,8 @@ export default (initialState, scope = 'main') => {
 		prices,
 		ethGasStationInfo,
 		transaction,
-		addressBook
+		addressBook,
+		exchanges
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
