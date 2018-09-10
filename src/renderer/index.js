@@ -9,6 +9,9 @@ import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no
 import { IdAttributeSchemaForm } from './react/id-attribute';
 import { MarketplaceWrapper } from './react/marketplace';
 import { TransactionsHistoryWrapper } from './react/transaction/transactions-history';
+import { ExchangesWrapper } from './react/marketplace/exchanges';
+import { ItemWrapper } from './react/marketplace/item';
+import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 
 const { Logger } = require('common/logger');
 
@@ -227,6 +230,14 @@ angular.module('kyc-wallet').component('marketplace', marketplaceWrapper);
 const transactionsHistoryWrapper = react2angular(TransactionsHistoryWrapper, ['list', 'openLink']);
 angular.module('kyc-wallet').component('transactionsHistory', transactionsHistoryWrapper);
 
+const exchangesWrapper = react2angular(ExchangesWrapper, ['viewAction', 'backAction']);
+angular.module('kyc-wallet').component('exchanges', exchangesWrapper);
+
+const itemWrapper = react2angular(ItemWrapper, ['name', 'unlockAction', 'backAction']);
+angular.module('kyc-wallet').component('item', itemWrapper);
+
+const withoutBalanceWrapper = react2angular(WithoutBalanceWrapper, ['closeAction']);
+angular.module('kyc-wallet').component('withoutBalance', withoutBalanceWrapper);
 /**
  * controllers
  */
@@ -436,6 +447,11 @@ const MemberMarketplaceExchangeItemController = require('./angular/controllers/m
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
+
+const MemberMarketplaceNoBalanceController = require('./angular/controllers/member/marketplace/no-balance-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('MemberMarketplaceNoBalanceController', MemberMarketplaceNoBalanceController);
 
 /**
  * config states

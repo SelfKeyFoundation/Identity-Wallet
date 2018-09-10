@@ -8,6 +8,7 @@ import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
+import exchanges from '../exchanges';
 
 import {
 	forwardToMain,
@@ -36,7 +37,8 @@ export default (initialState, scope = 'main') => {
 		wallet,
 		walletTokens,
 		viewAll,
-		prices
+		prices,
+		exchanges
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
