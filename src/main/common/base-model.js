@@ -10,17 +10,39 @@ export class BaseModel extends Model {
 		this.updatedAt = Date.now();
 	}
 
+	isPropertyType(key, type) {
+		let properties = this.constructor.jsonSchema ? this.constructor.jsonSchema.properties : {};
+		if (!properties[key]) return false;
+		let propType = properties[key].type || '';
+		if (Array.isArray(propType)) return propType.includes(type);
+		return type === propType;
+	}
+
 	$parseJson(json, opt) {
+		// json = { ...json };
+		let properties = this.constructor.jsonSchema ? this.constructor.jsonSchema.properties : {};
+		let relations = this.constructor.relationMappings || {};
 		Object.keys(json).forEach(key => {
-			if (
-				!(key in this.constructor.jsonSchema.properties) &&
-				!(key in this.constructor.relationMappings)
-			) {
+			if (!(key in properties) && !(key in relations)) {
 				delete json[key];
+			}
+			if (key in json && this.isPropertyType(key, 'boolean')) {
+				json[key] = !!json[key];
 			}
 		});
 
 		return super.$parseJson(json, opt);
+	}
+
+	$parseDatabaseJson(db) {
+		let json = super.$parseDatabaseJson(db);
+		for (let prop in json) {
+			if (this.isPropertyType(prop, 'boolean')) {
+				json[prop] = !!json[prop];
+			}
+		}
+
+		return json;
 	}
 
 	static relationMappings() {

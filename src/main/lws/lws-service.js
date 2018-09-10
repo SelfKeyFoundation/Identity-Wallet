@@ -189,18 +189,18 @@ export class LWSService {
 				}
 			});
 
-			let respData = await resp.json();
+			let respData = (await resp.json()) || {};
 			let lwsResp = {
 				payload: respData
 			};
-			if (respData.error) {
+			if (resp.status !== 200 || respData.error) {
 				lwsResp.error = true;
 				lwsResp.payload = {
-					code: lwsResp.code,
-					message: lwsResp.error
+					code: lwsResp.code || 'api_error',
+					message: lwsResp.error || 'Unknown api error'
 				};
 			}
-			if (respData.token) {
+			if (resp.status === 200) {
 				// TODO: mark wallet signed up to website
 			}
 			conn.send(lwsResp, msg);
