@@ -35,9 +35,5 @@ export const hasBalance = (state, name) => {
 	});
 	const requiredBalance = exchange.data.requiredBalance;
 
-	if (keyToken.balance >= requiredBalance) {
-		return true;
-	} else {
-		return false;
-	}
+	return keyToken.balance >= requiredBalance;
 };
