@@ -2,9 +2,11 @@ import { LWSService, WSConnection } from './lws-service';
 import { Wallet } from '../wallet/wallet';
 import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
+// import fetch from 'node-fetch';
 import { checkPassword } from '../keystorage';
 
 jest.mock('../keystorage');
+jest.mock('node-fetch');
 
 describe('lws-service', () => {
 	const connMock = wallet => ({
@@ -229,17 +231,16 @@ describe('lws-service', () => {
 		});
 
 		describe('genSignature', () => {
-			it('returns null if wallet is locked', async () => {
-				sinon.stub(service, 'checkWallet').returns({ unlocked: false });
-				let sig = await service.genSignature('test', 'test', {});
+			it('returns null on create error', () => {
+				let sig = service.genSignature('test', 'test', 'invalidPrivateKey');
 				expect(sig).toBeNull();
 			});
 			it('signs nonce with privateKey', async () => {
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true,
-					privateKey: '3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
-				});
-				let sig = await service.genSignature('12341', 'test', {});
+				let sig = service.genSignature(
+					'12341',
+					'test',
+					'3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
+				);
 				expect(sig.v).toEqual(27);
 				expect(sig.r.toString('hex')).toEqual(
 					'693d483f13b5ade55cc0741169a3d785c9aab8aa4b64826dc964ccbd97878efb'
@@ -248,11 +249,143 @@ describe('lws-service', () => {
 					'6722b46c423932bce4824afd03f9338107577f1cb2e021064d73e7dd00c72b76'
 				);
 			});
+			it('stringify signature', () => {
+				let sig = {
+					v: 2,
+					s: Buffer.from('test', 'utf8'),
+					r: Buffer.from('test2Î', 'utf8')
+				};
+				let str = service.stringifySignature(sig);
+				expect(str).toEqual('eyJ2IjoyLCJzIjoiNzQ2NTczNzQiLCJyIjoiNzQ2NTczNzQzMmMzOGUifQ==');
+			});
 		});
 
-		xdescribe('reqAuth', () => {});
+		describe('reqAuth', () => {
+			it('send auth error if wallet is locked', async () => {
+				const conn = { send: sinon.fake() };
+				const msg = { payload: { publicKey: 'test' } };
+				sinon.stub(service, 'checkWallet').returns({
+					unlocked: false
+				});
+				await service.reqAuth(msg, conn);
+				expect(
+					conn.send.calledWithMatch(
+						{
+							error: true,
+							payload: {
+								code: 'auth_error',
+								message: 'Cannot auth with locked wallet'
+							}
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+			it('send nonce fetch error if got error from endpoint', async () => {
+				const conn = { send: sinon.fake() };
+				const msg = { payload: { publicKey: 'test', website: {} } };
+				const error = 'could note generate nonce';
+				sinon.stub(service, 'fetchNonce').resolves({ error });
+				sinon.stub(service, 'checkWallet').returns({
+					unlocked: true
+				});
+				await service.reqAuth(msg, conn);
+				expect(
+					conn.send.calledWithMatch(
+						{
+							error: true,
+							payload: {
+								code: 'nonce_fetch_error',
+								message: error
+							}
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+			it('send nonce fetch error if did not get nonce in responce json', async () => {
+				const conn = { send: sinon.fake() };
+				const msg = { payload: { publicKey: 'test', website: {} } };
+				sinon.stub(service, 'fetchNonce').resolves({});
+				sinon.stub(service, 'checkWallet').returns({
+					unlocked: true
+				});
+				await service.reqAuth(msg, conn);
+				expect(
+					conn.send.calledWithMatch(
+						{
+							error: true,
+							payload: {
+								code: 'nonce_fetch_error',
+								message: 'No nonce in response'
+							}
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+			it('send sign error if could not generate signature', async () => {
+				const conn = { send: sinon.fake() };
+				const msg = { payload: { publicKey: 'test', website: {} } };
+				sinon.stub(service, 'fetchNonce').resolves({ nonce: 'test' });
+				sinon.stub(service, 'checkWallet').returns({
+					unlocked: true
+				});
+				sinon.stub(service, 'genSignature').returns(null);
+				await service.reqAuth(msg, conn);
+				expect(service.genSignature.calledOnce).toBeTruthy();
+				expect(
+					conn.send.calledWithMatch(
+						{
+							error: true,
+							payload: {
+								code: 'sign_error',
+								message: 'Could not generate signature'
+							}
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+			it('send conn_error on connection error', async () => {
+				const conn = { send: sinon.fake() };
+				const msg = { payload: { publicKey: 'test', website: {} } };
+				sinon.stub(service, 'fetchNonce').throws(new Error('connection error'));
+				sinon.stub(service, 'checkWallet').returns({
+					unlocked: true
+				});
+				await service.reqAuth(msg, conn);
+				expect(
+					conn.send.calledWithMatch(
+						{
+							payload: {
+								code: 'conn_error',
+								message: 'connection error'
+							},
+							error: true
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+			xit('fetches nonce and sends signed attributes to endpoint', async () => {});
+		});
 
-		xdescribe('reqUnknown', () => {});
+		describe('reqUnknown', () => {
+			it('sends unknown request error', () => {
+				const conn = { send: sinon.fake() };
+				const msg = { test1: 'test1' };
+				service.reqUnknown(msg, conn);
+				expect(
+					conn.send.calledWithMatch(
+						{
+							error: 'unknown request'
+						},
+						msg
+					)
+				).toBeTruthy();
+			});
+		});
 
 		xdescribe('handleRequest', () => {});
 
