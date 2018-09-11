@@ -1,11 +1,23 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionSendBox } from 'selfkey-ui';
-import { getEthGasStationInfo } from 'common/eth-gas-station/selectors';
+import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
+
+class TransactionSendBoxContainer extends Component {
+	componentDidMount() {
+		const { dispatch } = this.props;
+		dispatch(ethGasStationInfoOperations.loadData());
+	}
+
+	render() {
+		return <TransactionSendBox {...this.props} />;
+	}
+}
 
 const mapStateToProps = state => {
 	return {
-		...getEthGasStationInfo(state)
+		...ethGasStationInfoSelectors.getEthGasStationInfo(state)
 	};
 };
 
-export default connect(mapStateToProps)(TransactionSendBox);
+export default connect(mapStateToProps)(TransactionSendBoxContainer);

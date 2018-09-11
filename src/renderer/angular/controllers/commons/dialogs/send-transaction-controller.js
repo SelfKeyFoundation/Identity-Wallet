@@ -15,12 +15,6 @@ function SendTransactionController($scope, $state, $stateParams, CONFIG, RPCServ
 	log.info('SendTransactionController');
 	log.debug('SendTransactionController %j %j', args, CONFIG);
 
-	$scope.loadEthGasStationInfo = () => {
-		RPCService.makeCall('getEthGasStationInfo');
-	};
-
-	$scope.loadEthGasStationInfo();
-
 	$scope.cancel = event => {
 		// cancelEstimatedGasCheck(); TODO tato
 		// cancelTxCheck(); TODO tato
