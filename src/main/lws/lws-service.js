@@ -267,8 +267,8 @@ export class LWSService {
 	async authResp(resp, msg, conn) {
 		let { publicKey } = msg.payload || {};
 		let wallet = await Wallet.findByPublicKey(publicKey);
-		let attempt = this.formatActionLog(msg, resp);
-		await wallet.$relatedQuery('loginAttempts').insert(attempt);
+		let attempt = this.formatLoginAttempt(msg, resp);
+		await wallet.addLoginAttempt(attempt);
 		if (this.rpcHandler) {
 			await this.rpcHandler.actionLogs_add(this.formatActionLog(wallet, attempt));
 		}
@@ -293,12 +293,11 @@ export class LWSService {
 	}
 
 	formatActionLog(wallet, loginAttempt) {
-		let title = 'Login';
-		let content = `Login to ${loginAttempt.websiteUrl}`;
+		let title = `Login to ${loginAttempt.websiteUrl}`;
+		let content;
 
 		if (loginAttempt.signup) {
-			title = 'Signup';
-			content = `Signup to ${loginAttempt.websiteUrl}`;
+			title = `Signup to ${loginAttempt.websiteUrl}`;
 		}
 
 		if (loginAttempt.errorCode) {

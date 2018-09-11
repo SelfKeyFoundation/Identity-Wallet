@@ -174,4 +174,24 @@ describe('Wallet model', () => {
 			expect(hasSignedUp).toBe(true);
 		});
 	});
+	describe('addLoginAttempt', () => {
+		const testLoginAttempt = {
+			walletId: 10,
+			websiteName: 'Test Website',
+			websiteUrl: 'https://example.com',
+			apiUrl: 'https://example.com/v1/api',
+			success: true,
+			signup: true
+		};
+		const testWallet = { id: 10, publicKey: 'public' };
+		it('adds a new login attempt', async () => {
+			let wallet = await Wallet.query().insertAndFetch(testWallet);
+			await wallet.addLoginAttempt({ ...testLoginAttempt });
+			wallet = await Wallet.query()
+				.findById(wallet.id)
+				.eager('loginAttempts');
+			expect(wallet.loginAttempts).toBeDefined();
+			expect(wallet.loginAttempts.length).toBe(1);
+		});
+	});
 });

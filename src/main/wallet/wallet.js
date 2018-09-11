@@ -174,6 +174,10 @@ export class Wallet extends BaseModel {
 			.whereNull('errorCode');
 		return !!logins.length;
 	}
+
+	async addLoginAttempt(attempt) {
+		return this.$relatedQuery('loginAttempts').insert(attempt);
+	}
 }
 
 export default Wallet;

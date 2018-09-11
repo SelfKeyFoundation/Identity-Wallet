@@ -24,7 +24,7 @@ describe('lws-service', () => {
 
 		beforeEach(() => {
 			service = new LWSService({
-				rpcHandler: {}
+				rpcHandler: { actionLogs_add() {} }
 			});
 		});
 		afterEach(() => {
@@ -279,23 +279,142 @@ describe('lws-service', () => {
 		});
 
 		describe('authResp', () => {
-			xit('sends resp via conn', () => {});
-			xit('adds login login attempt', () => {});
-			xit('sends action log', () => {});
+			it('sends resp via conn', async () => {
+				let resp = { test: 'test resp' };
+				let msg = { payload: { publicKey: 'test' } };
+				let conn = { send: sinon.fake() };
+				sinon
+					.stub(Wallet, 'findByPublicKey')
+					.resolves({ addLoginAttempt: sinon.stub().resolves({}) });
+				sinon.stub(service, 'formatActionLog').returns({});
+				sinon.stub(service.rpcHandler, 'actionLogs_add').resolves('ok');
+				sinon.stub(service, 'formatLoginAttempt').returns({});
+				await service.authResp(resp, msg, conn);
+				expect(service.formatActionLog.calledOnce).toBeTruthy();
+				expect(service.formatLoginAttempt.calledOnce).toBeTruthy();
+				expect(service.rpcHandler.actionLogs_add.calledOnce).toBeTruthy();
+				expect(conn.send.calledOnceWith(resp, msg)).toBeTruthy();
+			});
 		});
 
 		describe('formatActionLog', () => {
-			xit('login successfull action log', () => {});
-			xit('login failed action log', () => {});
-			xit('signup successfull action log', () => {});
-			xit('signup failed action log', () => {});
+			const wallet = { id: 1 };
+			const loginAttempt = {
+				websiteUrl: 'http://example.com',
+				signup: false,
+				errorCode: null
+			};
+			it('login successfull action log', () => {
+				let actionLog = service.formatActionLog(wallet, loginAttempt);
+				expect(actionLog).toMatchObject({
+					title: `Login to ${loginAttempt.websiteUrl}`,
+					content: `Login to ${loginAttempt.websiteUrl} was successful`,
+					walletId: wallet.id
+				});
+			});
+			it('login failed action log', () => {
+				let actionLog = service.formatActionLog(wallet, {
+					...loginAttempt,
+					errorCode: true
+				});
+				expect(actionLog).toMatchObject({
+					title: `Login to ${loginAttempt.websiteUrl}`,
+					content: `Login to ${loginAttempt.websiteUrl} has failed`,
+					walletId: wallet.id
+				});
+			});
+			it('signup successfull action log', () => {
+				let actionLog = service.formatActionLog(wallet, {
+					...loginAttempt,
+					signup: true
+				});
+				expect(actionLog).toMatchObject({
+					title: `Signup to ${loginAttempt.websiteUrl}`,
+					content: `Signup to ${loginAttempt.websiteUrl} was successful`,
+					walletId: wallet.id
+				});
+			});
+			it('signup successfull action log', () => {
+				let actionLog = service.formatActionLog(wallet, {
+					...loginAttempt,
+					signup: true,
+					errorCode: true
+				});
+				expect(actionLog).toMatchObject({
+					title: `Signup to ${loginAttempt.websiteUrl}`,
+					content: `Signup to ${loginAttempt.websiteUrl} has failed`,
+					walletId: wallet.id
+				});
+			});
 		});
 
 		describe('formatLoginAttempt', () => {
-			xit('login successfull login attempt', () => {});
-			xit('login failed login attempt', () => {});
-			xit('signup successfull login attempt', () => {});
-			xit('signup failed login attempt', () => {});
+			const website = {
+				name: 'example',
+				url: 'http://example.com',
+				apiUrl: 'http://example.com/api'
+			};
+			const msg = {
+				payload: {
+					website,
+					attributes: []
+				}
+			};
+			const resp = {};
+			it('login successfull login attempt', () => {
+				expect(service.formatLoginAttempt(msg, resp)).toMatchObject({
+					websiteName: website.name,
+					websiteUrl: website.url,
+					apiUrl: website.apiUrl,
+					signup: false,
+					success: true
+				});
+			});
+			it('login failed login attempt', () => {
+				expect(
+					service.formatLoginAttempt(msg, {
+						error: true,
+						payload: { code: 'error', message: 'error' }
+					})
+				).toMatchObject({
+					websiteName: website.name,
+					websiteUrl: website.url,
+					apiUrl: website.apiUrl,
+					signup: false,
+					success: false
+				});
+			});
+			it('signup successfull login attempt', () => {
+				expect(
+					service.formatLoginAttempt(
+						{ ...msg, payload: { ...msg.payload, attributes: ['test'] } },
+						resp
+					)
+				).toMatchObject({
+					websiteName: website.name,
+					websiteUrl: website.url,
+					apiUrl: website.apiUrl,
+					signup: true,
+					success: true
+				});
+			});
+			it('signup failed login attempt', () => {
+				expect(
+					service.formatLoginAttempt(
+						{ ...msg, payload: { ...msg.payload, attributes: ['test'] } },
+						{
+							error: true,
+							payload: { code: 'error', message: 'error' }
+						}
+					)
+				).toMatchObject({
+					websiteName: website.name,
+					websiteUrl: website.url,
+					apiUrl: website.apiUrl,
+					signup: true,
+					success: false
+				});
+			});
 		});
 
 		describe('reqAuth', () => {
