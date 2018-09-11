@@ -1,16 +1,20 @@
 import * as types from './types';
+import { normalize } from 'normalizr';
+import { exchangeListSchema } from './schemas';
 
 const initialState = {
-	list: []
+	byId: {},
+	allIds: []
 };
 
 const exchangesReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case types.EXCHANGES_UPDATE:
-			console.log('Exchanges', action);
+			const normalized = normalize(action.payload, exchangeListSchema);
 			return {
 				...state,
-				list: action.payload
+				byId: normalized.entities.exchanges,
+				allIds: normalized.result
 			};
 		default:
 			return state;
