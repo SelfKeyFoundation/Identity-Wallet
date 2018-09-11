@@ -43,7 +43,7 @@ export class LWSService {
 		payload = await Promise.all(
 			payload.map(async w => {
 				let checked = this.checkWallet(w.publicKey, conn);
-				let signedUp = await w.hasSignedUp(website.url);
+				let signedUp = await w.hasSignedUpTo(website.url);
 				return {
 					publicKey: w.publicKey,
 					unlocked: checked.unlocked,
@@ -72,6 +72,7 @@ export class LWSService {
 			'unlocked'
 		);
 		payload.profile = wallet.profile;
+		payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
 		conn.send(
 			{
 				payload
@@ -244,8 +245,8 @@ export class LWSService {
 			if (resp.status !== 200 || respData.error) {
 				lwsResp.error = true;
 				lwsResp.payload = {
-					code: lwsResp.code || 'api_error',
-					message: lwsResp.error || 'Unknown api error'
+					code: respData.code || 'api_error',
+					message: respData.message || 'Unknown api error'
 				};
 			}
 			return this.authResp(lwsResp, msg, conn);
@@ -270,7 +271,12 @@ export class LWSService {
 		let attempt = this.formatLoginAttempt(msg, resp);
 		await wallet.addLoginAttempt(attempt);
 		if (this.rpcHandler) {
-			await this.rpcHandler.actionLogs_add(this.formatActionLog(wallet, attempt));
+			await this.rpcHandler.actionLogs_add(
+				'ON_RPC',
+				'',
+				'actionLogs_add',
+				this.formatActionLog(wallet, attempt)
+			);
 		}
 		return conn.send(resp, msg);
 	}
@@ -282,12 +288,14 @@ export class LWSService {
 			websiteUrl: website.url,
 			apiUrl: website.apiUrl,
 			signup: attributes.length > 0,
-			success: true
+			success: true,
+			errorCode: null,
+			errorMessage: null
 		};
 		if (resp.error) {
 			attempt.success = false;
 			attempt.errorCode = resp.payload.code;
-			attempt.errorMessage = resp.payload.message;
+			attempt.errorMessage = resp.payload.message || 'Unknown Error';
 		}
 		return attempt;
 	}

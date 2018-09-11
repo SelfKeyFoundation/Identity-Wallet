@@ -13,11 +13,11 @@ export class LoginAttempt extends BaseModel {
 			id: { type: 'integer' },
 			walletId: { type: 'integer' },
 			websiteName: { type: 'string' },
-			websiteUrl: {},
+			websiteUrl: { type: 'string' },
 			apiUrl: { type: 'string' },
 			success: { type: 'boolean' },
-			errorCode: { type: 'string' },
-			errorMessage: { type: 'string' },
+			errorCode: { type: ['string', 'null'] },
+			errorMessage: { type: ['string', 'null'] },
 			signup: { type: 'boolean' }
 		}
 	};

@@ -51,14 +51,14 @@ describe('lws-service', () => {
 					{
 						publicKey: 'unlocked',
 						profile: 'local',
-						hasSignedUp() {
+						hasSignedUpTo() {
 							return true;
 						}
 					},
 					{
 						publicKey: 'locked',
 						profile: 'local',
-						hasSignedUp() {
+						hasSignedUpTo() {
 							return true;
 						}
 					}
@@ -102,7 +102,10 @@ describe('lws-service', () => {
 					const conn = connMock(wallet);
 					sinon.stub(conn, 'send');
 					sinon.stub(conn, 'unlockWallet');
-					await service.reqUnlock({ payload: wallet }, conn);
+					await service.reqUnlock(
+						{ payload: { publicKey: wallet.publicKey, website: { url: 'test' } } },
+						conn
+					);
 
 					if (expected) {
 						expect(
@@ -119,18 +122,27 @@ describe('lws-service', () => {
 									unlocked: expected
 								}
 							},
-							{ payload: wallet }
+							{ payload: { publicKey: wallet.publicKey, website: { url: 'test' } } }
 						)
 					).toBeTruthy();
 				});
 			t(
 				'sends unlocked if password correct',
-				{ publicKey: 'unlocked', privateKey: 'ok', profile: 'local' },
+				{
+					publicKey: 'unlocked',
+					privateKey: 'ok',
+					profile: 'local',
+					hasSignedUpTo: sinon.stub().resolves(true)
+				},
 				true
 			);
 			t(
 				'sends locked if password incorrect',
-				{ publicKey: 'locked', profile: 'local' },
+				{
+					publicKey: 'locked',
+					profile: 'local',
+					hasSignedUpTo: sinon.stub().resolves(true)
+				},
 				false
 			);
 		});

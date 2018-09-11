@@ -176,7 +176,7 @@ export class Wallet extends BaseModel {
 	}
 
 	async addLoginAttempt(attempt) {
-		return this.$relatedQuery('loginAttempts').insert(attempt);
+		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
 	}
 }
 
