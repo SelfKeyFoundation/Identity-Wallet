@@ -19,7 +19,7 @@ export class BaseModel extends Model {
 	}
 
 	$parseJson(json, opt) {
-		// json = { ...json };
+		json = { ...json };
 		let properties = this.constructor.jsonSchema ? this.constructor.jsonSchema.properties : {};
 		let relations = this.constructor.relationMappings || {};
 		Object.keys(json).forEach(key => {
