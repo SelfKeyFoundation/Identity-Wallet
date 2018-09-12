@@ -25,8 +25,9 @@ export const userAgent = `SelfKeyIDW/${pkg.version}`;
 const log = new Logger('LWSService');
 
 export class LWSService {
-	constructor() {
+	constructor({ rpcHandler }) {
 		this.wss = null;
+		this.rpcHandler = rpcHandler;
 	}
 
 	checkWallet(publicKey, conn) {
@@ -37,16 +38,20 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
+		const { website } = msg.payload;
 		let payload = await Wallet.findAll();
-		payload = payload.map(w => {
-			// TODO: check if wallet has signed up to msg.payload.website
-			let checked = this.checkWallet(w.publicKey, conn);
-			return {
-				publicKey: w.publicKey,
-				unlocked: checked.unlocked,
-				profile: w.profile
-			};
-		});
+		payload = await Promise.all(
+			payload.map(async w => {
+				let checked = this.checkWallet(w.publicKey, conn);
+				let signedUp = await w.hasSignedUpTo(website.url);
+				return {
+					publicKey: w.publicKey,
+					unlocked: checked.unlocked,
+					profile: w.profile,
+					signedUp
+				};
+			})
+		);
 		conn.send(
 			{
 				payload
@@ -67,6 +72,7 @@ export class LWSService {
 			'unlocked'
 		);
 		payload.profile = wallet.profile;
+		payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
 		conn.send(
 			{
 				payload
@@ -166,7 +172,7 @@ export class LWSService {
 		try {
 			let check = this.checkWallet(msg.payload.publicKey, conn);
 			if (!check.unlocked) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -174,12 +180,13 @@ export class LWSService {
 							message: 'Cannot auth with locked wallet'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
 			if (nonceResp.error || !nonceResp.nonce) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -187,7 +194,8 @@ export class LWSService {
 							message: nonceResp.error || 'No nonce in response'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 
@@ -198,7 +206,7 @@ export class LWSService {
 			);
 
 			if (!signature) {
-				return conn.send(
+				return this.authResp(
 					{
 						error: true,
 						payload: {
@@ -206,7 +214,8 @@ export class LWSService {
 							message: 'Could not generate signature'
 						}
 					},
-					msg
+					msg,
+					conn
 				);
 			}
 			const body = {
@@ -229,23 +238,20 @@ export class LWSService {
 				}
 			});
 
-			let respData = await resp.json();
+			let respData = (await resp.json()) || {};
 			let lwsResp = {
 				payload: respData
 			};
-			if (respData.error) {
+			if (resp.status !== 200 || respData.error) {
 				lwsResp.error = true;
 				lwsResp.payload = {
-					code: lwsResp.code,
-					message: lwsResp.error
+					code: respData.code || 'api_error',
+					message: respData.message || 'Unknown api error'
 				};
 			}
-			if (respData.token) {
-				// TODO: mark wallet signed up to website
-			}
-			conn.send(lwsResp, msg);
+			return this.authResp(lwsResp, msg, conn);
 		} catch (error) {
-			conn.send(
+			return this.authResp(
 				{
 					payload: {
 						code: 'conn_error',
@@ -253,9 +259,62 @@ export class LWSService {
 					},
 					error: true
 				},
-				msg
+				msg,
+				conn
 			);
 		}
+	}
+
+	async authResp(resp, msg, conn) {
+		let { publicKey } = msg.payload || {};
+		let wallet = await Wallet.findByPublicKey(publicKey);
+		let attempt = this.formatLoginAttempt(msg, resp);
+		await wallet.addLoginAttempt(attempt);
+		if (this.rpcHandler) {
+			await this.rpcHandler.actionLogs_add(
+				'ON_RPC',
+				'',
+				'actionLogs_add',
+				this.formatActionLog(wallet, attempt)
+			);
+		}
+		return conn.send(resp, msg);
+	}
+
+	formatLoginAttempt(msg, resp) {
+		let { website, attributes = [] } = msg.payload || {};
+		let attempt = {
+			websiteName: website.name,
+			websiteUrl: website.url,
+			apiUrl: website.apiUrl,
+			signup: attributes.length > 0,
+			success: true,
+			errorCode: null,
+			errorMessage: null
+		};
+		if (resp.error) {
+			attempt.success = false;
+			attempt.errorCode = resp.payload.code;
+			attempt.errorMessage = resp.payload.message || 'Unknown Error';
+		}
+		return attempt;
+	}
+
+	formatActionLog(wallet, loginAttempt) {
+		let title = `Login to ${loginAttempt.websiteUrl}`;
+		let content;
+
+		if (loginAttempt.signup) {
+			title = `Signup to ${loginAttempt.websiteUrl}`;
+		}
+
+		if (loginAttempt.errorCode) {
+			content = `${title} has failed`;
+		} else {
+			content = `${title} was successful`;
+		}
+
+		return { walletId: wallet.id, title, content };
 	}
 
 	reqUnknown(msg, conn) {
