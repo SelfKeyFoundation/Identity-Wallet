@@ -131,14 +131,22 @@ export class LWSService {
 		}
 	}
 
-	async genSignature(nonce, publicKey, conn) {
-		const check = this.checkWallet(publicKey, conn);
-		if (!check.unlocked) {
+	genSignature(nonce, publicKey, privateKey) {
+		try {
+			const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
+			const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
+			return signature;
+		} catch (error) {
+			log.error(error);
 			return null;
 		}
-		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
-		const signature = ethUtil.ecsign(msgHash, Buffer.from(check.privateKey, 'hex'));
-		return signature;
+	}
+
+	stringifySignature(sig) {
+		sig = { ...sig };
+		sig.r = sig.r.toString('hex');
+		sig.s = sig.s.toString('hex');
+		return Buffer.from(JSON.stringify(sig), 'utf8').toString('base64');
 	}
 
 	async fetchNonce(url) {
@@ -156,14 +164,46 @@ export class LWSService {
 
 	async reqAuth(msg, conn) {
 		try {
+			let check = this.checkWallet(msg.payload.publicKey, conn);
+			if (!check.unlocked) {
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'auth_error',
+							message: 'Cannot auth with locked wallet'
+						}
+					},
+					msg
+				);
+			}
 			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
-			if (nonceResp.error) {
+			if (nonceResp.error || !nonceResp.nonce) {
 				return conn.send(
 					{
 						error: true,
 						payload: {
 							code: 'nonce_fetch_error',
-							message: nonceResp.error
+							message: nonceResp.error || 'No nonce in response'
+						}
+					},
+					msg
+				);
+			}
+
+			const signature = this.genSignature(
+				nonceResp.nonce,
+				msg.payload.publicKey,
+				check.privateKey
+			);
+
+			if (!signature) {
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'sign_error',
+							message: 'Could not generate signature'
 						}
 					},
 					msg
@@ -172,16 +212,16 @@ export class LWSService {
 			const body = {
 				publicKey: msg.payload.publicKey,
 				nonce: nonceResp.nonce,
-				signature: this.genSignature(nonceResp.nonce, msg.payload.publicKey, conn)
+				signature
 			};
 
-			if (msg.attributes) {
-				body.attributes = msg.attributes;
+			if (msg.payload.attributes) {
+				body.attributes = msg.payload.attributes;
 			}
 
 			let resp = await fetch(msg.payload.website.apiUrl, {
 				method: 'POST',
-				body,
+				body: JSON.stringify(body),
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
