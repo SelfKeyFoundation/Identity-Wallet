@@ -33,6 +33,7 @@ export class Wallet extends BaseModel {
 		const WalletSetting = require('./wallet-setting').default;
 		const WalletToken = require('./wallet-token').default;
 		const IdAttribute = require('../identity/id-attribute').default;
+		const LoginAttempt = require('../lws/login-attempt').default;
 
 		return {
 			setting: {
@@ -57,6 +58,14 @@ export class Wallet extends BaseModel {
 				join: {
 					from: `${this.tableName}.id`,
 					to: `${IdAttribute.tableName}.walletId`
+				}
+			},
+			loginAttempts: {
+				relation: Model.HasManyRelation,
+				modelClass: LoginAttempt,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${LoginAttempt.tableName}.walletId`
 				}
 			}
 		};
@@ -154,6 +163,20 @@ export class Wallet extends BaseModel {
 			await tx.rollback(error);
 			throw error;
 		}
+	}
+
+	async hasSignedUpTo(websiteUrl) {
+		let logins = await this.$relatedQuery('loginAttempts')
+			.where({
+				websiteUrl,
+				signup: true
+			})
+			.whereNull('errorCode');
+		return !!logins.length;
+	}
+
+	async addLoginAttempt(attempt) {
+		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
 	}
 }
 
