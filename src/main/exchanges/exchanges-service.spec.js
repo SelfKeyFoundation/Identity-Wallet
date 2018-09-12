@@ -47,7 +47,7 @@ describe('ExchangesService', () => {
 	it('loadExchangeData', async () => {
 		fetch.mockResolvedValue({
 			json() {
-				return { Exchanges: exchanges };
+				return { entities: exchanges };
 			}
 		});
 		let stub = sinon.stub(Exchange, 'import');
