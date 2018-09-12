@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable */
 const { Logger } = require('common/logger/logger');
 const log = new Logger('SKTxHistoryDirective');
 function SKTxHistoryDirective($rootScope, $interval, $filter, RPCService, CommonService) {
