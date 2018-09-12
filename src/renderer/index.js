@@ -227,11 +227,7 @@ angular.module('kyc-wallet').component('idAttributeSchemaForm', idAttributeSchem
 const marketplaceWrapper = react2angular(MarketplaceWrapper, ['learnMoreActions']);
 angular.module('kyc-wallet').component('marketplace', marketplaceWrapper);
 
-const transactionsHistoryWrapper = react2angular(TransactionsHistoryWrapper, [
-	'list',
-	'openLink',
-	'refreshAction'
-]);
+const transactionsHistoryWrapper = react2angular(TransactionsHistoryWrapper, ['list', 'openLink']);
 angular.module('kyc-wallet').component('transactionsHistory', transactionsHistoryWrapper);
 
 /**
