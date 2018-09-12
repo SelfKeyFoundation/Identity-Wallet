@@ -1,20 +1,19 @@
 .ledger-import-main-container {
-  > * {
-    font-family: ProximaNovaRegular;
-  }
-  .steps-wrapper {
-    padding-bottom: 22px;
-    .step {
-        opacity: 0.8;
-        font-size: 18px;
-        line-height: 1.4;
-        color: #ffffff;
-    }
-  }
-  .md-button {
-    width: 230px !important;
-    > span {
-      text-transform: uppercase !important;
-    }
-  }
+	> * {
+	}
+	.steps-wrapper {
+		padding-bottom: 22px;
+		.step {
+			opacity: 0.8;
+			font-size: 18px;
+			line-height: 1.4;
+			color: #ffffff;
+		}
+	}
+	.md-button {
+		width: 230px !important;
+		> span {
+			text-transform: uppercase !important;
+		}
+	}
 }
