@@ -2,379 +2,375 @@
  * animations
  */
 .transition-anim {
-  &.ng-enter {
-    transition: .5s;
-    opacity: 0;
-  }
+	&.ng-enter {
+		transition: 0.5s;
+		opacity: 0;
+	}
 
-  &.ng-enter-active {
-    opacity: 1;
-  }
+	&.ng-enter-active {
+		opacity: 1;
+	}
 }
 
 @keyframes blink {
-  0% {
-    opacity: .2;
-  }
+	0% {
+		opacity: 0.2;
+	}
 
-  20% {
-    opacity: 1;
-  }
+	20% {
+		opacity: 1;
+	}
 
-  100% {
-    opacity: .2;
-  }
+	100% {
+		opacity: 0.2;
+	}
 }
 
 // margins
 .no-margins {
-  margin: 0 !important;
+	margin: 0 !important;
 }
 
 // paddings
 .no-paddings {
-  padding: 0 !important;
+	padding: 0 !important;
 }
 
 .no-left-padding {
-  padding-left: 0 !important;
+	padding-left: 0 !important;
 }
 
 /**
  * TEXT ALIGNS
  */
 .text-align-left {
-  text-align: left !important;
+	text-align: left !important;
 }
 
 .text-align-center {
-  text-align: center !important;
+	text-align: center !important;
 }
 
 .text-align-right {
-  text-align: right !important;
+	text-align: right !important;
 }
 
 .vertical-align-center {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 /**
  * TEXTS
  */
 h1 {
-  user-select: none;
-  font-size: 36px;
-  margin: 0;
+	user-select: none;
+	font-size: 36px;
+	margin: 0;
 
-  &.proxima {
-    font-family: ProximaNovaRegular;
-  }
+	&.proxima {
+		font-family: $font-family;
+	}
 
-  &.white {
-    color: #ffffff;
-  }
+	&.white {
+		color: #ffffff;
+	}
 
-  &.blue {
-    color: #0dc7dd;
-  }
+	&.blue {
+		color: #0dc7dd;
+	}
 }
 
 h2 {
-  user-select: none;
-  font-size: 26px;
-  line-height: 1.38;
-  font-weight: normal;
-  margin: 0;
+	user-select: none;
+	font-size: 26px;
+	line-height: 1.38;
+	font-weight: normal;
+	margin: 0;
 
-  &.proxima {
-    font-family: ProximaNovaRegular;
-  }
+	&.proxima {
+		font-family: $font-family;
+	}
 
-  &.orbitron {
-    font-family: OrbitronMedium;
-  }
+	&.orbitron {
+		font-family: OrbitronMedium;
+	}
 
-  &.white {
-    color: #ffffff;
-  }
+	&.white {
+		color: #ffffff;
+	}
 }
 
 .uppercase {
-  text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 .font-weight-500 {
-  font-weight: 500;
+	font-weight: 500;
 }
 
 .bold {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .sk-white-header-text {
-  font-family: OrbitronMedium;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: normal;
+	font-family: OrbitronMedium;
+	font-size: 26px;
+	font-weight: 500;
+	letter-spacing: 4px;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: normal;
 }
 
 .sk-blue-header-text {
-  font-family: ProximaNovaRegular;
-  font-size: 36px;
-  color: #0dc7dd;
-  user-select: none;
+	font-family: $font-family;
+	font-size: 36px;
+	color: #0dc7dd;
+	user-select: none;
 }
 
 .sk-blue-subheader-text {
-  font-family: ProximaNovaRegular;
-  font-size: 16px;
-  line-height: 1.5;
-  letter-spacing: 3px;
-  color: #0abbd0;
-  text-transform: uppercase;
-  letter-spacing: normal;
+	font-family: $font-family;
+	font-size: 16px;
+	line-height: 1.5;
+	letter-spacing: 3px;
+	color: #0abbd0;
+	text-transform: uppercase;
+	letter-spacing: normal;
 }
 
 .none-select-text {
-  user-select: none;
-  cursor: default;
+	user-select: none;
+	cursor: default;
 }
 
 /**
  * CURSORS
  */
 .cursor-pointer {
-  cursor: pointer !important;
+	cursor: pointer !important;
 }
 
 .outline-none {
-  outline: none !important;
+	outline: none !important;
 }
 
 /**
  *
  */
 .full-width {
-  width: 100% !important;
+	width: 100% !important;
 }
 
 /**
  * background colors
  */
 
-
 // font colors
 .fc-white {
-  color: #ffffff;
+	color: #ffffff;
 }
 
 .fc-aqua-blue {
-  color: #0dc7dd;
+	color: #0dc7dd;
 }
 
 .fc-squash {
-  color: #f5a623
+	color: #f5a623;
 }
 
 .fc-bluey-grey {
-  color: #93a4af;
+	color: #93a4af;
 }
 
 .fc-greeny-blue {
-  color: #43c4a7;
+	color: #43c4a7;
 }
 
 .fc-turquoise-blue {
-  color: #00adc6;
+	color: #00adc6;
 }
 
 .fc-bright-orange {
-  color: #ff6c00;
+	color: #ff6c00;
 }
 
 .fc-tomato {
-  color: #f24846;
+	color: #f24846;
 }
 
 .fc-green {
-  color: #1bb934;
+	color: #1bb934;
 }
 
 /**
  * deviders
  */
 .sk-horizontal-devider {
-    height: 1px;
-    background-color: #303c49;
+	height: 1px;
+	background-color: #303c49;
 }
 
 /**
  *
  */
 .opacity-0 {
-  opacity: 0;
+	opacity: 0;
 }
 
 .display-none {
-  display: none !important;
+	display: none !important;
 }
 
 /**
  *
  */
- .icon-size-16x16 {
-  width: 16px !important;
-  height: 16px !important;
+.icon-size-16x16 {
+	width: 16px !important;
+	height: 16px !important;
 }
 
 .icon-size-18x18 {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    min-height: 18px !important;
+	width: 18px !important;
+	height: 18px !important;
+	min-width: 18px !important;
+	min-height: 18px !important;
 }
 
 .icon-size-24x23 {
-  width: 24px !important;
-  height: 23px !important;
+	width: 24px !important;
+	height: 23px !important;
 }
 
 .icon-size-24x24 {
-  width: 24px !important;
-  height: 24px !important;
+	width: 24px !important;
+	height: 24px !important;
 }
 
 .icon-size-26x26 {
-  width: 26px !important;
-  height: 26px !important;
+	width: 26px !important;
+	height: 26px !important;
 }
 
 .icon-size-26x14 {
-  width: 26.4px !important;
-  height: 14.6px !important;
+	width: 26.4px !important;
+	height: 14.6px !important;
 }
 
-
 .icon-size-33x36 {
-  width: 33px !important;
-  height: 36px !important;
+	width: 33px !important;
+	height: 36px !important;
 }
 
 .icon-size-34x34 {
-  width: 34px !important;
-  height: 34px !important;
+	width: 34px !important;
+	height: 34px !important;
 }
 
 .icon-size-35x35 {
-  width: 35px !important;
-  height: 35px !important;
+	width: 35px !important;
+	height: 35px !important;
 }
 
 .icon-size-36x36 {
-  width: 36px !important;
-  height: 36px !important;
+	width: 36px !important;
+	height: 36px !important;
 }
 
 .icon-size-34x44 {
-  width: 34px !important;
-  height: 44px !important;
+	width: 34px !important;
+	height: 44px !important;
 }
 
 .icon-size-39x44 {
-  width: 39px !important;
-  height: 44px !important;
+	width: 39px !important;
+	height: 44px !important;
 }
 
 .icon-size-43x35 {
-  width: 43px !important;
-  height: 35px !important;
+	width: 43px !important;
+	height: 35px !important;
 }
 
 .icon-size-44x44 {
-  width: 44px !important;
-  height: 44px !important;
+	width: 44px !important;
+	height: 44px !important;
 }
 
 .icon-size-57x65 {
-  width: 57px !important;
-  height: 65px !important;
+	width: 57px !important;
+	height: 65px !important;
 }
 
 .icon-size-64x64 {
-  width: 64px !important;
-  height: 64px !important;
+	width: 64px !important;
+	height: 64px !important;
 }
 
-
 .icon-size-20x20 {
-  width: 20px !important;
-  height: 20px !important;
+	width: 20px !important;
+	height: 20px !important;
 }
 
 .icon-size-15x15 {
-  width: 15.8px !important;
-  height: 15.8px !important;
+	width: 15.8px !important;
+	height: 15.8px !important;
 }
 .icon-size-20x15 {
-  width: 20px !important;
-  height: 15px !important;
+	width: 20px !important;
+	height: 15px !important;
 }
 
-
 .icon-size-68x74 {
-  width: 68px !important;
-  height: 74px !important;
+	width: 68px !important;
+	height: 74px !important;
 }
 
 .icon-size-19x23 {
-  width: 19.6px !important;;
-  height: 23.1px !important;;
+	width: 19.6px !important;
+	height: 23.1px !important;
 }
 
 .icon-size-19x24 {
-  width: 19px !important;;
-  height: 24px !important;;
+	width: 19px !important;
+	height: 24px !important;
 }
 
 //buttons
 
 .md-button.blue:disabled {
-    background-image: none;
-    border: solid 1px #93b0c1;
-    opacity: 0.3;
+	background-image: none;
+	border: solid 1px #93b0c1;
+	opacity: 0.3;
 }
 
 //colors
 
 .color-light-grey {
-    svg {
-        fill: #CFD8DC !important;
-    }
+	svg {
+		fill: #cfd8dc !important;
+	}
 }
 
 .color-violet {
-    svg {
-        fill: #FF4081 !important;
-    }
+	svg {
+		fill: #ff4081 !important;
+	}
 }
 
 .color-grey {
-    svg {
-        fill: #78909C !important;
-    }
+	svg {
+		fill: #78909c !important;
+	}
 }
 
 .color-white {
-    svg {
-        fill: #fff !important;
-    }
+	svg {
+		fill: #fff !important;
+	}
 }
 
 .background-green {
-  background-color: #417505 !important;
+	background-color: #417505 !important;
 }
