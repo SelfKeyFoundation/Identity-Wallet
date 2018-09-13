@@ -8,6 +8,7 @@ import { TransferPriceWrapper } from './react/transfer-price/index';
 import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
 import { IdAttributeSchemaForm } from './react/id-attribute';
 import { MarketplaceWrapper } from './react/marketplace';
+import { TransactionsHistoryWrapper } from './react/transaction/transactions-history';
 
 const { Logger } = require('common/logger');
 
@@ -225,6 +226,10 @@ angular.module('kyc-wallet').component('idAttributeSchemaForm', idAttributeSchem
 
 const marketplaceWrapper = react2angular(MarketplaceWrapper, ['learnMoreActions']);
 angular.module('kyc-wallet').component('marketplace', marketplaceWrapper);
+
+const transactionsHistoryWrapper = react2angular(TransactionsHistoryWrapper, ['list', 'openLink']);
+angular.module('kyc-wallet').component('transactionsHistory', transactionsHistoryWrapper);
+
 /**
  * controllers
  */
