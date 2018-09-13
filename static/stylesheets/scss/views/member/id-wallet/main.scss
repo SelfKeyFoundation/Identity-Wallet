@@ -1,270 +1,266 @@
 .id-wallet-main {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    >.center-container {
-        width: 1140px;
-        margin-top: 40px;
-        .header-wrapper {
-            width: 1140px;
-            span {
-                font-family: ProximaNovaRegular;
-                font-size: 18px;
-                color: #768fa9;
-            }
-            md-icon {
-                margin-left: 16px;
-                outline: none;
-            }
-        }
-        .body-wrapper {
-            width: 1140px;
-            margin-top: 40px;
-            .left-side-wrapper {
-                width: 760px;
-                .history-table-container {
-                    overflow: auto;
-                    border: 1px solid #303c49;
-                    .table-head {
-                        width: 758px;
-                        padding: 10px 0;
-                        border-bottom: 1px solid #303c49;
-                        span {
-                            padding-left: 10px;
-                        }
-                        .table-head-text {
-                            color: #93a4af;
-                            font-family: ProximaNovaRegular;
-                        }
-                        md-icon {
-                            float: right;
-                            cursor: pointer;
-                            outline: none;
-                            svg {
-                                fill: #262f39;
-                            }
-                        }
-                    }
-                    .table-body {
-                        overflow: auto;
-                        height: 220px;
-                        .history-table {
-                            width: 100%;
-                            background-color: #262f39;
-                            color: #fff;
-                            font-family: ProximaNovaRegular;
-                            border-collapse: collapse;
-                            tbody {
-                                tr {
-                                    td {
-                                        padding: 10px 0;
-                                        word-break: break-word;
-                                        md-icon {
-                                            cursor: pointer;
-                                            outline: none;
-                                        }
-                                        .sk-icon {
-                                            margin-left: 5px;
-                                        }
-                                    }
-                                    .action-columns {
-                                        width: 35px;
-                                    }
-                                    td:first-child {
-                                        padding-left: 10px;
-                                        width: 22%;
-                                    }
-                                    td:nth-child(2) {
-                                        width: 13%;
-                                    }
-                                    td:nth-child(3) {
-                                        width: 70%;
-                                    }
-                                }
-                            }
-                            thead {
-                                tr {
-                                    td {
-                                        padding: 5px 0;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .attributes-table-container {
-                    margin-top: 30px;
-                    .table-head {
-                        width: 100%;
-                        .table-head-text {
-                            color: #93a4af;
-                            font-family: ProximaNovaRegular;
-                        }
-                        md-icon {
-                            float: right;
-                            cursor: pointer;
-                            outline: none;
-                            svg {
-                                fill: #262f39;
-                            }
-                        }
-                    }
-                    .attributes-table {
-                        width: 100%;
-                        background-color: #262f39;
-                        color: #fff;
-                        font-family: ProximaNovaRegular;
-                        border-collapse: collapse;
-                        margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	> .center-container {
+		width: 1140px;
+		margin-top: 40px;
+		.header-wrapper {
+			width: 1140px;
+			span {
+				font-size: 18px;
+				color: #768fa9;
+			}
+			md-icon {
+				margin-left: 16px;
+				outline: none;
+			}
+		}
+		.body-wrapper {
+			width: 1140px;
+			margin-top: 40px;
+			.left-side-wrapper {
+				width: 760px;
+				.history-table-container {
+					overflow: auto;
+					border: 1px solid #303c49;
+					.table-head {
+						width: 758px;
+						padding: 10px 0;
+						border-bottom: 1px solid #303c49;
+						span {
+							padding-left: 10px;
+						}
+						.table-head-text {
+							color: #93a4af;
+						}
+						md-icon {
+							float: right;
+							cursor: pointer;
+							outline: none;
+							svg {
+								fill: #262f39;
+							}
+						}
+					}
+					.table-body {
+						overflow: auto;
+						height: 220px;
+						.history-table {
+							width: 100%;
+							background-color: #262f39;
+							color: #fff;
 
-                        ul {
-                            margin: 0;
-                            padding: 0;
-                            list-style-type: none;
-                        }
+							border-collapse: collapse;
+							tbody {
+								tr {
+									td {
+										padding: 10px 0;
+										word-break: break-word;
+										md-icon {
+											cursor: pointer;
+											outline: none;
+										}
+										.sk-icon {
+											margin-left: 5px;
+										}
+									}
+									.action-columns {
+										width: 35px;
+									}
+									td:first-child {
+										padding-left: 10px;
+										width: 22%;
+									}
+									td:nth-child(2) {
+										width: 13%;
+									}
+									td:nth-child(3) {
+										width: 70%;
+									}
+								}
+							}
+							thead {
+								tr {
+									td {
+										padding: 5px 0;
+									}
+								}
+							}
+						}
+					}
+				}
+				.attributes-table-container {
+					margin-top: 30px;
+					.table-head {
+						width: 100%;
+						.table-head-text {
+							color: #93a4af;
+						}
+						md-icon {
+							float: right;
+							cursor: pointer;
+							outline: none;
+							svg {
+								fill: #262f39;
+							}
+						}
+					}
+					.attributes-table {
+						width: 100%;
+						background-color: #262f39;
+						color: #fff;
 
-                        tbody {
-                            tr {
-                                td {
-                                    padding: 5px 0;
-                                    word-break: break-word;
-                                    md-icon {
-                                        cursor: pointer;
-                                        outline: none;
-                                    }
-                                    .sk-icon {
-                                        margin-left: 5px;
-                                    }
-                                    ul{
+						border-collapse: collapse;
+						margin-top: 10px;
 
-                                        li{
+						ul {
+							margin: 0;
+							padding: 0;
+							list-style-type: none;
+						}
 
-                                            display: inline-block;
-                                        }
+						tbody {
+							tr {
+								td {
+									padding: 5px 0;
+									word-break: break-word;
+									md-icon {
+										cursor: pointer;
+										outline: none;
+									}
+									.sk-icon {
+										margin-left: 5px;
+									}
+									ul {
+										li {
+											display: inline-block;
+										}
 
-                                        li:not(:first-child) {
-                                            margin-left: 4px;
-                                        }
-                                    }
-                                }
-                                .action-columns {
-                                    width: 35px;
-                                }
-                                td:first-child {
-                                    width: 5%;
-                                    md-icon {
-                                        padding-left: 5px;
-                                        outline: none;
-                                        svg {
-                                            fill: green;
-                                            g {
-                                                fill: green;
-                                            }
-                                        }
-                                    }
-                                }
-                                td:nth-child(2) {
-                                    width: 30%;
-                                }
-                                td:nth-child(3) {
-                                    width: 38%;
-                                    padding-right: 10px;
-                                }
-                            }
-                            tr:nth-child(even) {
-                                background-color: #262f39;
-                            }
-                            tr:nth-child(odd) {
-                                background-color: #303c49;
-                            }
-                        }
-                        thead {
-                            tr {
-                                td {
-                                    padding: 5px 0;
-                                }
-                            }
-                        }
-                    }
-                }
-                .ID-documents-container {
-                    margin-top: 30px;
-                    .table-head {
-                        width: 100%;
-                        .table-head-text {
-                            color: #93a4af;
-                            font-family: ProximaNovaRegular;
-                        }
-                        md-icon {
-                            float: right;
-                            cursor: pointer;
-                            outline: none;
-                        }
-                    }
-                    .ID-documents-table {
-                        width: 100%;
-                        background-color: #262f39;
-                        color: #fff;
-                        font-family: ProximaNovaRegular;
-                        border-collapse: collapse;
-                        margin-top: 10px;
-                        tbody {
-                            tr {
-                                td {
-                                    padding: 5px 0;
-                                    word-break: break-word;
-                                    md-icon {
-                                        cursor: pointer;
-                                        outline: none;
-                                        svg {}
-                                    }
-                                    .sk-icon {
-                                        margin-left: 5px;
-                                    }
-                                }
-                                .action-columns {
-                                    width: 35px;
-                                }
-                                td:first-child {
-                                    width: 5%;
-                                    md-icon {
-                                        padding-left: 5px;
-                                        outline: none;
-                                        svg {
-                                            fill: green;
-                                            g {
-                                                fill: green;
-                                            }
-                                        }
-                                    }
-                                }
-                                td:nth-child(2) {
-                                    width: 30%;
-                                }
-                                td:nth-child(3) {
-                                    width: 38%;
-                                    padding-right: 10px;
-                                }
-                            }
-                            tr:nth-child(even) {
-                                background-color: #262f39;
-                            }
-                            tr:nth-child(odd) {
-                                background-color: #303c49;
-                            }
-                        }
-                        thead {
-                            tr {
-                                td {
-                                    padding: 5px 0;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            .right-side-wrapper {}
-        }
-    }
+										li:not(:first-child) {
+											margin-left: 4px;
+										}
+									}
+								}
+								.action-columns {
+									width: 35px;
+								}
+								td:first-child {
+									width: 5%;
+									md-icon {
+										padding-left: 5px;
+										outline: none;
+										svg {
+											fill: green;
+											g {
+												fill: green;
+											}
+										}
+									}
+								}
+								td:nth-child(2) {
+									width: 30%;
+								}
+								td:nth-child(3) {
+									width: 38%;
+									padding-right: 10px;
+								}
+							}
+							tr:nth-child(even) {
+								background-color: #262f39;
+							}
+							tr:nth-child(odd) {
+								background-color: #303c49;
+							}
+						}
+						thead {
+							tr {
+								td {
+									padding: 5px 0;
+								}
+							}
+						}
+					}
+				}
+				.ID-documents-container {
+					margin-top: 30px;
+					.table-head {
+						width: 100%;
+						.table-head-text {
+							color: #93a4af;
+						}
+						md-icon {
+							float: right;
+							cursor: pointer;
+							outline: none;
+						}
+					}
+					.ID-documents-table {
+						width: 100%;
+						background-color: #262f39;
+						color: #fff;
+
+						border-collapse: collapse;
+						margin-top: 10px;
+						tbody {
+							tr {
+								td {
+									padding: 5px 0;
+									word-break: break-word;
+									md-icon {
+										cursor: pointer;
+										outline: none;
+										svg {
+										}
+									}
+									.sk-icon {
+										margin-left: 5px;
+									}
+								}
+								.action-columns {
+									width: 35px;
+								}
+								td:first-child {
+									width: 5%;
+									md-icon {
+										padding-left: 5px;
+										outline: none;
+										svg {
+											fill: green;
+											g {
+												fill: green;
+											}
+										}
+									}
+								}
+								td:nth-child(2) {
+									width: 30%;
+								}
+								td:nth-child(3) {
+									width: 38%;
+									padding-right: 10px;
+								}
+							}
+							tr:nth-child(even) {
+								background-color: #262f39;
+							}
+							tr:nth-child(odd) {
+								background-color: #303c49;
+							}
+						}
+						thead {
+							tr {
+								td {
+									padding: 5px 0;
+								}
+							}
+						}
+					}
+				}
+			}
+			.right-side-wrapper {
+			}
+		}
+	}
 }
