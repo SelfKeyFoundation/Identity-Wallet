@@ -11,6 +11,10 @@ function HardwareWalletService($rootScope, RPCService, CommonService, Web3Servic
 		$rootScope.openEnterTrezorPinDialog();
 	});
 
+	RPCService.on('TREZOR_PASSPHRASE_REQUEST', () => {
+		$rootScope.openEnterTrezorPassphraseDialog();
+	});
+
 	class HardwareWalletService {
 		async getAccountsWithBalances(args) {
 			const loadBalances = async accounts => {
@@ -69,6 +73,10 @@ function HardwareWalletService($rootScope, RPCService, CommonService, Web3Servic
 
 		sendTrezorPin(error, pin) {
 			return RPCService.makeCall('onTrezorPin', { error, pin });
+		}
+
+		sendTrezorPassphrase(error, passphrase) {
+			return RPCService.makeCall('onTrezorPassphrase', { error, passphrase });
 		}
 
 		testTrezorConnection() {

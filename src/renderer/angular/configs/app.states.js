@@ -381,6 +381,16 @@ function appStates(
 			}
 		})
 
+		.state('member.marketplace.main', {
+			url: '/member/marketplace/main',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/marketplace.html',
+					controller: 'MemberMarketplaceController'
+				}
+			}
+		})
+
 		.state('member.marketplace.exchange-list', {
 			url: '/member/marketplace/exchange-list',
 			views: {

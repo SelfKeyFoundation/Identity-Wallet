@@ -3,9 +3,7 @@ import WebSocket from 'ws';
 import Wallet from '../wallet/wallet';
 import { checkPassword } from '../keystorage';
 import { Logger } from 'common/logger';
-import { IdAttribute } from '../identity/id-attribute';
 import fetch from 'node-fetch';
-import { URLSearchParams } from 'url';
 import ethUtil from 'ethereumjs-util';
 import fs from 'fs';
 import path from 'path';
@@ -13,18 +11,29 @@ import https from 'https';
 import child_process from 'child_process';
 import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
+import request from 'request';
 
-// if (process.platform === 'win32' || 'win64') {
-// 	const powerShell = require('node-powershell');
-// 	let ps = new powerShell({
-// 		executionPolicy: 'Bypass',
-// 		noProfile: true
-// 	});
-// }
+const currentOS = process.platform;
 
-export const WS_ORIGINS_WHITELIST = [process.env.SK_LWS_CID, process.env.SWS_CID];
-export const WS_IP_WHITELIST = ['127.0.0.1', '::1'];
-export let WS_PORT = process.env.LWS_WS_PORT || 8898;
+if (currentOS === 'win32' || 'win64') {
+	const powerShell = require('node-powershell');
+	let ps = new powerShell({
+		executionPolicy: 'Bypass',
+		noProfile: true
+	});
+}
+
+import pkg from '../../../package.json';
+
+export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
+	? process.env.WS_ORIGINS_WHITELIST.split(',')
+	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
+	? process.env.WS_IP_WHITELIST.split(',')
+	: ['127.0.0.1', '::1'];
+export const WS_PORT = process.env.LWS_WS_PORT || 8898;
+
+export const userAgent = `SelfKeyIDW/${pkg.version}`;
 
 const log = new Logger('LWSService');
 
@@ -35,10 +44,10 @@ function init() {
 		try {
 			let osxConfig = {
 				lwsPath: path.join(userDataPath, '/lws/'),
-				lwsKeyPath: userDataPath + '/lws/keys',
-				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
-				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
-				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
+				lwsKeyPath: path.join(userDataPath, '/lws/keys'),
+				reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
+				rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
+				keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
 				certgen: [
 					{
 						cmd: `openssl req \
@@ -66,7 +75,7 @@ function init() {
 					},
 					{
 						cmd:
-							'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ${reqFile}',
+							`security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ${reqFile}`,
 						options: {
 							name:
 								'SelfKey needs to install a security certifcate to encrypt data and'
@@ -76,11 +85,11 @@ function init() {
 				]
 			};
 			let linConfig = {
-				lwsPath: userDataPath + '/lws/',
-				lwsKeyPath: userDataPath + '/lws/keys',
-				reqFile: userDataPath + '/lws/keys/lws_cert.pem',
-				rsaFile: userDataPath + '/lws/keys/lws_key.pem',
-				keyTempFile: userDataPath + '/lws/keys/keytemp.pem',
+				lwsPath: path.join(userDataPath, '/lws/'),
+				lwsKeyPath: path.join(userDataPath, '/lws/keys'),
+				reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
+				rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
+				keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
 				certgen: [
 					{
 						cmd: `openssl req \
@@ -100,9 +109,7 @@ function init() {
 						type: 'child'
 					},
 					{
-						cmd: `openssl rsa \
-							-in ${keyTempFile} \
-							-out ${rsaFile}`,
+						cmd: `openssl rsa -in ${keyTempFile} -out ${rsaFile}`,
 						options: {
 							shell: '/bin/bash'
 						},
@@ -111,11 +118,11 @@ function init() {
 				]
 			};
 			let winConfig = {
-				lwsPath: userDataPath + '\\lws\\',
-				lwsKeyPath: userDataPath + '\\lws\\keys',
-				reqFile: userDataPath + '\\lws\\keys\\lws_cert.pem',
-				rsaFile: userDataPath + '\\lws\\keys\\lws_key.pem',
-				keyTempFile: userDataPath + '\\lws\\keys\\keytemp.pem',
+				lwsPath: path.join(userDataPath, '\\lws\\'),
+				lwsKeyPath: path.join(userDataPath, '\\lws\\keys'),
+				reqFile: path.join(userDataPath, '\\lws\\keys\\lws_cert.pem'),
+				rsaFile: path.join(userDataPath, '\\lws\\keys\\lws_key.pem'),
+				keyTempFile: path.join(userDataPath, '\\lws\\keys\\keytemp.pem'),
 				certgen: [
 					{
 						cmd:
@@ -125,7 +132,6 @@ function init() {
 					}
 				]
 			};
-			let currentOS = process.platform;
 			switch (currentOS) {
 				case 'darwin':
 					return resolve(osxConfig);
@@ -256,24 +262,14 @@ export class LWSService {
 	async reqWallets(msg, conn) {
 		let payload = await Wallet.findAll();
 		payload = payload.map(w => {
+			// TODO: check if wallet has signed up to msg.payload.website
 			let checked = this.checkWallet(w.publicKey, conn);
 			return {
-				id: w.id,
 				publicKey: w.publicKey,
-				unlocked: checked.unlocked
+				unlocked: checked.unlocked,
+				profile: w.profile
 			};
 		});
-		conn.send(
-			{
-				payload
-			},
-			msg
-		);
-	}
-
-	async reqWallet(msg, conn) {
-		const checked = this.checkWallet(msg.payload.publicKey, conn);
-		const payload = _.pick(checked, 'publicKey', 'unlocked');
 		conn.send(
 			{
 				payload
@@ -301,40 +297,43 @@ export class LWSService {
 		);
 	}
 
-	async getAttributes(wid, required) {
-		let requiredMapByKey = required.reduce((acc, curr) => ({ ...acc, [curr.key]: curr }), {});
-		let walletAttrs = await IdAttribute.findAllByWalletId(wid).whereIn(
-			'type',
-			required.map(r => r.key)
+	async getAttributes(publicKey, attributes) {
+		let attributesMapByKey = attributes.reduce(
+			(acc, curr) => ({ ...acc, [curr.key]: curr }),
+			{}
 		);
+		let wallet = await Wallet.findByPublicKey(publicKey).eager('idAttributes');
+		let walletAttrs = wallet.idAttributes.filter(attr => attr.type in attributesMapByKey);
+
 		walletAttrs = await Promise.all(
 			walletAttrs.map(async attr => {
 				if (!attr.hasDocument()) {
 					return attr;
 				}
 				let docValue = await attr.loadDocumentDataUrl();
-				return { ...attr, data: docValue };
+				return { ...attr, data: { value: docValue }, document: true };
 			})
 		);
 		return walletAttrs.map(attr => ({
-			key: requiredMapByKey[attr.type].key,
-			label: requiredMapByKey[attr.type].label,
-			attribute: attr.data.value ? attr.data.value : attr.data
+			key: attributesMapByKey[attr.type].key,
+			label: attributesMapByKey[attr.type].label,
+			document: !!attr.document,
+			data: attr.data
 		}));
 	}
 
 	async reqAttributes(msg, conn) {
 		try {
-			conn.send(
-				{
-					payload: await this.getAttributes(msg.payload.publicKey, msg.payload.required)
-				},
-				msg
-			);
+			const payload = await this.getAttributes(msg.payload.publicKey, msg.payload.attributes);
+			conn.send({ payload }, msg);
 		} catch (error) {
 			conn.send(
 				{
-					error: error.message
+					error: true,
+					payload: {
+						code: 'attributes_error',
+						message: error.message
+					}
 				},
 				msg
 			);
@@ -349,34 +348,96 @@ export class LWSService {
 	}
 
 	async fetchNonce(url) {
-		const resp = await fetch(url);
-
-		if (resp.status >= 300) {
-			throw new Error(`error, status ${resp.status} - ${resp.statusresp.text()}`);
+		try {
+			const resp = await fetch(url, {
+				headers: { Accept: 'application/json', 'User-Agent': userAgent }
+			});
+			return resp.json();
+		} catch (error) {
+			return {
+				error: 'connection error'
+			};
 		}
-		return resp.text();
 	}
 
 	async reqAuth(msg, conn) {
 		try {
-			const nonce = await this.fetchNonce(msg.payload.nonce_url);
-			const params = new URLSearchParams();
+			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
+			if (nonceResp.error) {
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'nonce_fetch_error',
+							message: nonceResp.error
+						}
+					},
+					msg
+				);
+			}
 
-			params.add('publicKey', msg.payload.publicKey);
-			params.append('nonce', nonce);
-			params.append('signature', this.genSignature(nonce, msg.payload.publicKey, conn));
+			const pk = await conn.getUnlockedWallet(msg.payload.publicKey);
+			const signature = await ethUtil.ecsign(ethUtil.hashPersonalMessage(Buffer.from(nonceResp.nonce, 'hex')), Buffer.from(pk, 'hex'));
+			
+			let form = {
+				pubKey: msg.payload.publicKey,
+				nonce: nonceResp.nonce,
+				signature: JSON.stringify(signature)
+			};
 
-			let resp = await fetch(msg.payload.auth_url, { method: 'POST', body: params });
-			conn.send(
-				{
-					payload: { message: resp.text() }
+			if (msg.payload.attributes) {
+				form.attributes = JSON.stringify(msg.payload.attributes);
+			}
+
+			// let finalForm = LZUTF8.compress(JSON.stringify(form, {outputEncoding: 'Buffer'}));
+			// console.log(finalForm)
+
+			const options = {
+				url: msg.payload.website.apiUrl, 
+				method: 'POST',
+				headers: {
+		        	'Content-Type': 'application/json',
+					'Accept': 'application/json',
+					'User-Agent': userAgent
 				},
-				msg
-			);
+				form: form
+			};
+
+			request.post(options, (err, resp, body) => {
+				let lwsResp = {
+					payload: JSON.parse(body)
+				};
+				if (err) {
+					lwsResp.error = true;
+					lwsResp.payload = {
+						code: lwsResp.code,
+						message: lwsResp.error
+					};
+				}
+				// if (body.token) {
+					// TODO: mark wallet signed up to website
+				// }
+				conn.send(lwsResp, msg);
+			});
+
+			// let resp = await fetch(msg.payload.website.apiUrl, {
+			// 	method: 'POST',
+			// 	body,
+			// 	headers: {
+			// 		'Content-Type': 'application/json',
+			// 		Accept: 'application/json',
+			// 		'User-Agent': userAgent
+			// 	}
+			// });
+
 		} catch (error) {
 			conn.send(
 				{
-					error: error.message
+					payload: {
+						code: 'conn_error',
+						message: error.message
+					},
+					error: true
 				},
 				msg
 			);
@@ -394,14 +455,12 @@ export class LWSService {
 	}
 
 	async handleRequest(msg, conn) {
-		log.debug('ws type %2j', msg);
+		log.info('lws req %2j', msg);
 		switch (msg.type) {
 			case 'init':
 				return this.startSecureServer(msg, conn);
 			case 'wallets':
 				return this.reqWallets(msg, conn);
-			case 'wallet':
-				return this.reqWallet(msg, conn);
 			case 'unlock':
 				return this.reqUnlock(msg, conn);
 			case 'attributes':
@@ -548,6 +607,7 @@ export class WSConnection {
 		if (!msg.type && msg.error) {
 			msg.type = 'error';
 		}
+		log.info('lws resp %2j', msg);
 		this.conn.send(JSON.stringify(msg));
 	}
 }

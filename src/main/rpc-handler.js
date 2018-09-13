@@ -1220,13 +1220,23 @@ module.exports = function(cradle) {
 	};
 
 	controller.prototype.startTrezorBroadcaster = function() {
-		trezorService.eventEmitter.on('TREZOR_PIN_REQUEST', () => {
-			app.win.webContents.send('TREZOR_PIN_REQUEST');
+		let pinEvent = 'TREZOR_PIN_REQUEST';
+		trezorService.eventEmitter.on(pinEvent, () => {
+			app.win.webContents.send(pinEvent);
+		});
+
+		let passphraseEvent = 'TREZOR_PASSPHRASE_REQUEST';
+		trezorService.eventEmitter.on(passphraseEvent, () => {
+			app.win.webContents.send(passphraseEvent);
 		});
 	};
 
 	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
 		trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
+	};
+
+	controller.prototype.onTrezorPassphrase = function(event, actionId, actionName, args) {
+		trezorService.eventEmitter.emit('ON_PASSPHRASE', args.error, args.passphrase);
 	};
 
 	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {

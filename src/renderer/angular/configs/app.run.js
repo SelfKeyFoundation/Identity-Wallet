@@ -314,6 +314,23 @@ function AppRun(
 		});
 	};
 
+	$rootScope.openEnterTrezorPassphraseDialog = event => {
+		let result = document.getElementsByClassName('trezor-passphrase-container')[0];
+		if (result) {
+			return;
+		}
+
+		return $mdDialog.show({
+			controller: 'TrezorPassphraseController',
+			templateUrl: 'common/dialogs/trezor-passphrase.html',
+			parent: angular.element(document.body),
+			targetEvent: event,
+			clickOutsideToClose: false,
+			escapeToClose: false,
+			fullscreen: true
+		});
+	};
+
 	$rootScope.openChooseHardwareWalletAddressDialog = (
 		accountsArr,
 		ACCOUNTS_QUANTITY_PER_PAGE,

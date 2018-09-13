@@ -210,17 +210,6 @@ jobs:
             - *step_restore_cache_mac
             - *step_yarn_upgrade
             - run:
-                  name: Add Read Access to yarn config
-                  command: |
-                      sudo mkdir ~/.config
-                      sudo chown -R $USER:$GROUP ~/.config
-            - run:
-                  name: Install Gulp
-                  command: sudo npm i -g gulp-cli
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
             - run:
@@ -242,6 +231,7 @@ workflows:
                       branches:
                           only:
                               - dev
+                              - nightly
                               - release
             - 'build-mac':
                   requires:
@@ -256,10 +246,11 @@ workflows:
                       branches:
                           only:
                               - dev
+                              - nightly
                               - release
             - 'publish-mac':
                   requires:
-                      - stage-mac
+                      - e2e-mac
                   filters:
                       branches:
                           only:
