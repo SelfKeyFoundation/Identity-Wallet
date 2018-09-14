@@ -1,43 +1,42 @@
 .checklist {
-    >.header-wrapper {
-        width: 484px;
+	> .header-wrapper {
+		width: 484px;
 
-        span {
-            font-family: ProximaNovaRegular;
-            color: #ffffff;
+		span {
+			color: #ffffff;
 
-            &:first-of-type {
-	            font-size: 36px;
-	            line-height: 1.0;
-            }
+			&:first-of-type {
+				font-size: 36px;
+				line-height: 1;
+			}
 
-            &:last-of-type {
-                margin-top: 18px;
-                opacity: 0.8;
-	            font-size: 18px;
-	            line-height: 1.67;
-            }
-        }
-        .title{
-            align-self: center;
-        }
-    }
+			&:last-of-type {
+				margin-top: 18px;
+				opacity: 0.8;
+				font-size: 18px;
+				line-height: 1.67;
+			}
+		}
+		.title {
+			align-self: center;
+		}
+	}
 
-    >.content-wrapper {
-        margin-top: 44px;
-        width: 484px;
+	> .content-wrapper {
+		margin-top: 44px;
+		width: 484px;
 
-        >.content {
-            padding: 24px;
-        }
-    }
+		> .content {
+			padding: 24px;
+		}
+	}
 
-    >.actions-wrapper {
-        width: 484px;
-        margin-top: 44px;
+	> .actions-wrapper {
+		width: 484px;
+		margin-top: 44px;
 
-        .md-button {
-            padding: 8px;
-        }
-    }
+		.md-button {
+			padding: 8px;
+		}
+	}
 }

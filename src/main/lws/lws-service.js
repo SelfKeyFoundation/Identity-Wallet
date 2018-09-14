@@ -27,10 +27,12 @@ import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
-	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik'];
+	: ['chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd'];
+
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
 	: ['127.0.0.1', '::1'];
+
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
 export const userAgent = `SelfKeyIDW/${pkg.version}`;
@@ -74,8 +76,7 @@ function init() {
 						type: 'child'
 					},
 					{
-						cmd:
-							`security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ${reqFile}`,
+						cmd: `security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ${reqFile}`,
 						options: {
 							name:
 								'SelfKey needs to install a security certifcate to encrypt data and'
@@ -84,7 +85,7 @@ function init() {
 					}
 				]
 			};
-			let linConfig = {
+			let linuxConfig = {
 				lwsPath: path.join(userDataPath, '/lws/'),
 				lwsKeyPath: path.join(userDataPath, '/lws/keys'),
 				reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
@@ -136,7 +137,7 @@ function init() {
 				case 'darwin':
 					return resolve(osxConfig);
 				case 'linux':
-					return resolve(linConfig);
+					return resolve(linuxConfig);
 				case 'win32':
 					return resolve(winConfig);
 				default:
@@ -248,8 +249,9 @@ function certs(config) {
 // borwser extension needs logic to change to wss and check port
 
 export class LWSService {
-	constructor() {
+	constructor({ rpcHandler }) {
 		this.wss = null;
+		this.rpcHandler = rpcHandler;
 	}
 
 	checkWallet(publicKey, conn) {
@@ -260,16 +262,20 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
+		const { website } = msg.payload;
 		let payload = await Wallet.findAll();
-		payload = payload.map(w => {
-			// TODO: check if wallet has signed up to msg.payload.website
-			let checked = this.checkWallet(w.publicKey, conn);
-			return {
-				publicKey: w.publicKey,
-				unlocked: checked.unlocked,
-				profile: w.profile
-			};
-		});
+		payload = await Promise.all(
+			payload.map(async w => {
+				let checked = this.checkWallet(w.publicKey, conn);
+				let signedUp = await w.hasSignedUpTo(website.url);
+				return {
+					publicKey: w.publicKey,
+					unlocked: checked.unlocked,
+					profile: w.profile,
+					signedUp
+				};
+			})
+		);
 		conn.send(
 			{
 				payload
@@ -289,6 +295,8 @@ export class LWSService {
 			'publicKey',
 			'unlocked'
 		);
+		payload.profile = wallet.profile;
+		payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
 		conn.send(
 			{
 				payload
@@ -324,6 +332,19 @@ export class LWSService {
 
 	async reqAttributes(msg, conn) {
 		try {
+			const check = this.checkWallet(msg.payload.publicKey, conn);
+			if (!check.unlocked) {
+				return conn.send(
+					{
+						error: true,
+						payload: {
+							code: 'not_authorized',
+							message: 'Wallet is locked, cannot request attributes'
+						}
+					},
+					msg
+				);
+			}
 			const payload = await this.getAttributes(msg.payload.publicKey, msg.payload.attributes);
 			conn.send({ payload }, msg);
 		} catch (error) {
@@ -340,11 +361,22 @@ export class LWSService {
 		}
 	}
 
-	async genSignature(nonce, publicKey, conn) {
-		const privateKey = this.checkWallet(publicKey, conn);
-		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
-		const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
-		return signature;
+	genSignature(nonce, publicKey, privateKey) {
+		try {
+			const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
+			const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
+			return signature;
+		} catch (error) {
+			log.error(error);
+			return null;
+		}
+	}
+
+	stringifySignature(sig) {
+		sig = { ...sig };
+		sig.r = sig.r.toString('hex');
+		sig.s = sig.s.toString('hex');
+		return Buffer.from(JSON.stringify(sig), 'utf8').toString('base64');
 	}
 
 	async fetchNonce(url) {
@@ -362,23 +394,61 @@ export class LWSService {
 
 	async reqAuth(msg, conn) {
 		try {
+			let check = this.checkWallet(msg.payload.publicKey, conn);
+			if (!check.unlocked) {
+				return this.authResp(
+					{
+						error: true,
+						payload: {
+							code: 'auth_error',
+							message: 'Cannot auth with locked wallet'
+						}
+					},
+					msg,
+					conn
+				);
+			}
 			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
-			if (nonceResp.error) {
-				return conn.send(
+			if (nonceResp.error || !nonceResp.nonce) {
+				return this.authResp(
 					{
 						error: true,
 						payload: {
 							code: 'nonce_fetch_error',
-							message: nonceResp.error
+							message: nonceResp.error || 'No nonce in response'
 						}
 					},
-					msg
+					msg,
+					conn
+				);
+			}
+
+			const signature = this.genSignature(
+				nonceResp.nonce,
+				msg.payload.publicKey,
+				check.privateKey
+			);
+
+			if (!signature) {
+				return this.authResp(
+					{
+						error: true,
+						payload: {
+							code: 'sign_error',
+							message: 'Could not generate signature'
+						}
+					},
+					msg,
+					conn
 				);
 			}
 
 			const pk = await conn.getUnlockedWallet(msg.payload.publicKey);
-			const signature = await ethUtil.ecsign(ethUtil.hashPersonalMessage(Buffer.from(nonceResp.nonce, 'hex')), Buffer.from(pk, 'hex'));
-			
+			const signature = await ethUtil.ecsign(
+				ethUtil.hashPersonalMessage(Buffer.from(nonceResp.nonce, 'hex')),
+				Buffer.from(pk, 'hex')
+			);
+
 			let form = {
 				pubKey: msg.payload.publicKey,
 				nonce: nonceResp.nonce,
@@ -389,15 +459,12 @@ export class LWSService {
 				form.attributes = JSON.stringify(msg.payload.attributes);
 			}
 
-			// let finalForm = LZUTF8.compress(JSON.stringify(form, {outputEncoding: 'Buffer'}));
-			// console.log(finalForm)
-
 			const options = {
-				url: msg.payload.website.apiUrl, 
+				url: msg.payload.website.apiUrl,
 				method: 'POST',
 				headers: {
-		        	'Content-Type': 'application/json',
-					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
 					'User-Agent': userAgent
 				},
 				form: form
@@ -415,23 +482,12 @@ export class LWSService {
 					};
 				}
 				// if (body.token) {
-					// TODO: mark wallet signed up to website
+				// TODO: mark wallet signed up to website
 				// }
 				conn.send(lwsResp, msg);
 			});
-
-			// let resp = await fetch(msg.payload.website.apiUrl, {
-			// 	method: 'POST',
-			// 	body,
-			// 	headers: {
-			// 		'Content-Type': 'application/json',
-			// 		Accept: 'application/json',
-			// 		'User-Agent': userAgent
-			// 	}
-			// });
-
 		} catch (error) {
-			conn.send(
+			return this.authResp(
 				{
 					payload: {
 						code: 'conn_error',
@@ -439,9 +495,62 @@ export class LWSService {
 					},
 					error: true
 				},
-				msg
+				msg,
+				conn
 			);
 		}
+	}
+
+	async authResp(resp, msg, conn) {
+		let { publicKey } = msg.payload || {};
+		let wallet = await Wallet.findByPublicKey(publicKey);
+		let attempt = this.formatLoginAttempt(msg, resp);
+		await wallet.addLoginAttempt(attempt);
+		if (this.rpcHandler) {
+			await this.rpcHandler.actionLogs_add(
+				'ON_RPC',
+				'',
+				'actionLogs_add',
+				this.formatActionLog(wallet, attempt)
+			);
+		}
+		return conn.send(resp, msg);
+	}
+
+	formatLoginAttempt(msg, resp) {
+		let { website, attributes = [] } = msg.payload || {};
+		let attempt = {
+			websiteName: website.name,
+			websiteUrl: website.url,
+			apiUrl: website.apiUrl,
+			signup: attributes.length > 0,
+			success: true,
+			errorCode: null,
+			errorMessage: null
+		};
+		if (resp.error) {
+			attempt.success = false;
+			attempt.errorCode = resp.payload.code;
+			attempt.errorMessage = resp.payload.message || 'Unknown Error';
+		}
+		return attempt;
+	}
+
+	formatActionLog(wallet, loginAttempt) {
+		let title = `Login to ${loginAttempt.websiteUrl}`;
+		let content;
+
+		if (loginAttempt.signup) {
+			title = `Signup to ${loginAttempt.websiteUrl}`;
+		}
+
+		if (loginAttempt.errorCode) {
+			content = `${title} has failed`;
+		} else {
+			content = `${title} was successful`;
+		}
+
+		return { walletId: wallet.id, title, content };
 	}
 
 	reqUnknown(msg, conn) {
@@ -572,7 +681,7 @@ export class WSConnection {
 	}
 
 	getUnlockedWallet(publicKey) {
-		return this.ctx.unlockedWallets[publicKey];
+		return this.ctx.unlockedWallets[publicKey] || null;
 	}
 
 	async handleMessage(msg) {
@@ -581,7 +690,11 @@ export class WSConnection {
 			await this.service.handleRequest(msg, this);
 		} catch (error) {
 			log.error(error);
-			this.send({ error: 'invalid message' }, msg);
+			msg = typeof msg === 'string' ? {} : msg;
+			this.send(
+				{ error: true, payload: { code: 'invalid_message', message: 'Invalid Message' } },
+				msg
+			);
 		}
 	}
 
@@ -596,6 +709,8 @@ export class WSConnection {
 			return;
 		}
 		req = req || {};
+		msg = msg || {};
+		msg = { ...msg };
 		msg.type = msg.type || req.type;
 		msg.meta = msg.meta || {};
 		let id = msg.meta.id;
