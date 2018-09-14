@@ -15,19 +15,19 @@ import request from 'request';
 
 const currentOS = process.platform;
 
-if (currentOS === 'win32' || 'win64') {
-	const powerShell = require('node-powershell');
-	let ps = new powerShell({
-		executionPolicy: 'Bypass',
-		noProfile: true
-	});
-}
+// if (currentOS === 'win32' || 'win64') {
+// 	const powerShell = require('node-powershell');
+// 	let ps = new powerShell({
+// 		executionPolicy: 'Bypass',
+// 		noProfile: true
+// 	});
+// }
 
 import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
-	: ['chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd'];
+	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik','chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd'];
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
@@ -423,10 +423,10 @@ export class LWSService {
 				);
 			}
 
-			const signature = this.genSignature(
-				nonceResp.nonce,
-				msg.payload.publicKey,
-				check.privateKey
+			const pk = await conn.getUnlockedWallet(msg.payload.publicKey);
+			const signature = await ethUtil.ecsign(
+				ethUtil.hashPersonalMessage(Buffer.from(nonceResp.nonce, 'hex')),
+				Buffer.from(pk, 'hex')
 			);
 
 			if (!signature) {
@@ -442,12 +442,6 @@ export class LWSService {
 					conn
 				);
 			}
-
-			const pk = await conn.getUnlockedWallet(msg.payload.publicKey);
-			const signature = await ethUtil.ecsign(
-				ethUtil.hashPersonalMessage(Buffer.from(nonceResp.nonce, 'hex')),
-				Buffer.from(pk, 'hex')
-			);
 
 			let form = {
 				pubKey: msg.payload.publicKey,
