@@ -7,18 +7,6 @@
                 .logo
                     img.logo-image(ng-src="{{realData.logo[0].thumbnails.small.url}}", alt="")
                     span.name(style="font-weight: 600") {{realData.name}} (Exchange)
-                .status(layout="row")
-                    .icon-container
-                        md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/ic_help_outline_black_24px.svg')}}" class="color-white")
-                        .tooltip
-                            |  <div style="text-align:left;"> What is Staking? <br />
-                            |  Staking acts similarly like <br />
-                            |  a refundable security deposit. <br />
-                            |  to learn more,click
-                            span(ng-click="$root.openInBrowser('https://help.selfkey.org/selfkey-marketplace')") here...
-                            </div>
-                    span(style="font-style: italic") Coming Soon
-
             .body
                 .section
                     .section-content
