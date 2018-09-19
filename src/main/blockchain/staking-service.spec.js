@@ -43,8 +43,10 @@ describe('StackingService', () => {
 	});
 	it('acquireContract', async () => {
 		await service.acquireContract();
-		expect(service.activeContract).toEqual(parseContractAbi(activeContract));
-		expect(service.deprecatedContracts).toEqual(deprecatedContracts.map(parseContractAbi));
+		expect(service.activeContract).toBeDefined();
+		expect(service.activeContract.address).toEqual(activeContract.address);
+		expect(service.deprecatedContracts).toBeDefined();
+		expect(service.deprecatedContracts.length).toBe(2);
 	});
 	it('fetchConfig', async () => {
 		let res = await service.fetchConfig();

@@ -1,13 +1,23 @@
 import fetch from 'node-fetch';
 
+import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
+
 // TODO: use selfkey domain here
 const CONFIG_URL =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Contracts';
+
+// TODO: refactor away to config
+const SELFKEY_TOKEN_ADDRESS = '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
 
 export class StakingService {
 	constructor({ web3Service }) {
 		this.activeContract = null;
 		this.deprecatedContracts = [];
+		this.tokenContract = new SelfKeyTokenContract(
+			this.web3,
+			SELFKEY_ABI,
+			SELFKEY_TOKEN_ADDRESS
+		);
 		this.web3 = web3Service;
 	}
 	parseRemoteConfig(entities) {
@@ -45,9 +55,22 @@ export class StakingService {
 		}
 	}
 	async acquireContract() {
-		let config = await this.fetchConfig();
-		this.activeContract = config.activeContract;
-		this.deprecatedContracts = config.deprecatedContracts;
+		let { activeContract, deprecatedContracts } = await this.fetchConfig();
+		this.activeContract = new StakingContract(
+			this.web3,
+			activeContract.address,
+			activeContract.abi,
+			!!activeContract.deprecated
+		);
+		this.deprecatedContracts = deprecatedContracts.map(
+			contract =>
+				new StakingContract(
+					this.web3,
+					contract.address,
+					contract.abi,
+					!!contract.deprecated
+				)
+		);
 	}
 }
 
