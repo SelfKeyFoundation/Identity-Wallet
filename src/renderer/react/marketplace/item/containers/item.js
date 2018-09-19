@@ -4,7 +4,7 @@ import { ItemDetails } from 'selfkey-ui';
 
 const mapStateToProps = (state, props) => {
 	return {
-		item: getItemDetails(state, props.name).data,
+		item: getItemDetails(state, props.name),
 		hasBalance: hasBalance(state, props.name)
 	};
 };

@@ -20,8 +20,30 @@ export const getExchangeLinks = ({ exchanges }) => {
 	});
 };
 
+const getType = template => {
+	switch (template) {
+		case 'national_id':
+			return 'document';
+		case 'id_selfie':
+			return 'document';
+		default:
+			return 'metadata';
+	}
+};
+
 export const getItemDetails = ({ exchanges }, name) => {
-	return exchanges.byId[name];
+	let details = exchanges.byId[name].data;
+	const kycTemplate = details.kyc_template.map(template => {
+		return {
+			name: template,
+			type: getType(template),
+			isEntered: false
+		};
+	});
+
+	details = { ...details, kyc_template: kycTemplate, integration: 'UNLOCK MARKETPLACE' };
+	console.log(details);
+	return details;
 };
 
 export const hasBalance = (state, name) => {
@@ -31,7 +53,7 @@ export const hasBalance = (state, name) => {
 		return token.symbol === 'KEY';
 	});
 
-	const requiredBalance = exchange.data.requiredBalance;
+	const requiredBalance = exchange.requiredBalance;
 
 	return keyToken.balance >= requiredBalance;
 };
