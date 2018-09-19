@@ -215,11 +215,8 @@ const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper,
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
 const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
-	'reloadEthGasStationInfoAction',
-	'onAddressFieldChange',
 	'cryptoCurrency',
-	'closeAction',
-	'sendAction'
+	'closeAction'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
 

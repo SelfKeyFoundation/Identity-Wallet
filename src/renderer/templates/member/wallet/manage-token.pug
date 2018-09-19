@@ -14,9 +14,9 @@
             button.action-button(layout="row", ng-click="$root.openReceiveTokenDialog($event, {symbol: symbol, publicKeyHex: publicKeyHex})")
                 sk-icon(icon="coins", size-class="icon-size-24x23" style="margin: 13px 17px 14px 18px")
                 span.receive RECEIVE
-            // button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, symbol, false)")
+            button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTokenDialog($event, symbol, false)")
                 sk-icon(icon="sent", size-class="icon-size-24x24", style="margin: 12px 14px 14px 32px")
-                span.send SEND
+                span.send SEND OLD
             button.action-button(layout="row", style="margin-left:20px", ng-click="$root.openSendTransactionDialog($event, symbol, false)")
                 sk-icon(icon="sent", size-class="icon-size-24x24", style="margin: 12px 14px 14px 32px")
                 span.send SEND
