@@ -31,15 +31,23 @@ export class Web3Service {
 	}
 	handleTicket(data) {
 		log.debug('handle ticket %2j', data);
-		const { contractAddress, contractMethod, method, customWeb3, args } = data;
+		const {
+			contractAddress,
+			contractMethod,
+			method,
+			customWeb3,
+			customAbi,
+			contractMethodArgs = [],
+			args
+		} = data;
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
 		let contract = web3.eth;
 
 		if (contractAddress) {
-			contract = new Contract(ABI, contractAddress);
+			contract = new Contract(customAbi || ABI, contractAddress);
 			if (contractMethod) {
-				contract = contract.methods[contractMethod]();
+				contract = contract.methods[contractMethod](...contractMethodArgs);
 			}
 		}
 		return { ticketPromise: contract[method](...args) };
