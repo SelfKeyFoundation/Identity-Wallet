@@ -225,6 +225,9 @@ function onReady(app) {
 
 		// TODO: Refactor this away
 		app.win = mainWindow;
+		if (isDevMode() && process.env.ENABLE_STAKING_TEST === '1') {
+			startStakingTest(ctx);
+		}
 	};
 }
 
@@ -342,4 +345,76 @@ function handleSquirrelEvent() {
 			return true;
 	}
 	log.info('end handleSquirrelEvent');
+}
+
+function startStakingTest(ctx) {
+	let store = ctx.store;
+	let unlocked = false;
+	log.info('starting staking test');
+	store.subscribe(async () => {
+		let state = store.getState();
+		if (unlocked) return;
+		if (!state.wallet || !state.wallet.privateKey) return;
+		let { wallet } = state;
+		unlocked = true;
+		let { stakingService, web3Service } = ctx;
+		try {
+			await stakingService.acquireContract();
+			const serviceOwner = web3Service.web3.utils.toHex(0);
+			const serviceId = web3Service.web3.utils.toHex('test');
+			const sourceAddress = '0x' + wallet.publicKey;
+			let balance = await stakingService.activeContract.getBalance(
+				sourceAddress,
+				serviceOwner,
+				serviceId
+			);
+			log.info('Staking initial balance %d', balance);
+			let lockPeriod = await stakingService.activeContract.getLockPeriod(
+				sourceAddress,
+				serviceOwner,
+				serviceId
+			);
+			log.info('Staking lock period %2j', lockPeriod);
+			let releaseDate = await stakingService.activeContract.getReleaseDate(
+				sourceAddress,
+				serviceOwner,
+				serviceId
+			);
+			log.info('Staking release date %2j', releaseDate);
+			try {
+				let res = await stakingService.activeContract.deposit(
+					sourceAddress,
+					100,
+					serviceOwner,
+					serviceId
+				);
+				log.info('non approved deposit res %2j', res);
+			} catch (error) {
+				log.error('non approved deposit %s', error);
+			}
+			let approveRes = await stakingService.tokenContract.approve(
+				sourceAddress,
+				stakingService.activeContract.options.address,
+				100
+			);
+			log('approve res %2j', approveRes);
+
+			let depositRes = await stakingService.activeContract.deposit(
+				sourceAddress,
+				100,
+				serviceOwner,
+				serviceId
+			);
+			log('deposite res %2j', depositRes);
+
+			let withdrawRes = await stakingService.acquireContract.withdraw(
+				sourceAddress,
+				serviceOwner,
+				serviceId
+			);
+			log('withdraw res %2j', withdrawRes);
+		} catch (error) {
+			log.error('staking error %s', error);
+		}
+	});
 }

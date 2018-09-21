@@ -32,6 +32,12 @@ class ContractMock {
 }
 
 const ethMock = {
+	sendSignedTransaction() {
+		return mockPromise;
+	},
+	getTransactionCount() {
+		return Promise.resolve(15);
+	},
 	Contract: ContractMock,
 	method1() {
 		return mockPromise;
@@ -40,18 +46,28 @@ const ethMock = {
 		return mockPromise;
 	}
 };
+const ethUtilMock = {
+	toHex() {
+		return 'test';
+	}
+};
 
 describe('Web3Service', () => {
+	let store = null;
+	let service = null;
+	beforeEach(() => {
+		store = { wallet: {} };
+		service = new Web3Service({ store });
+	});
 	afterEach(() => {
 		sinon.restore();
 	});
 	it('waitForTicket', async () => {
-		let web3Service = new Web3Service();
-		web3Service.ensureRequestInterval = cb => cb();
-		web3Service.web3.eth = ethMock;
+		service.ensureRequestInterval = cb => cb();
+		service.web3.eth = ethMock;
 
 		let spy = sinon.spy(ethMock, 'method1');
-		let res = await web3Service.waitForTicket({
+		let res = await service.waitForTicket({
 			method: 'method1',
 			args: []
 		});
@@ -60,7 +76,7 @@ describe('Web3Service', () => {
 		spy.restore();
 
 		spy = sinon.spy(contractSubmethods, 'method1');
-		res = await web3Service.waitForTicket({
+		res = await service.waitForTicket({
 			method: 'method1',
 			contractAddress: '12345',
 			contractMethod: 'contractMethod1',
@@ -68,5 +84,44 @@ describe('Web3Service', () => {
 		});
 		expect(res).toBe('ok');
 		expect(contractSubmethods.method1.calledOnce).toBeTruthy();
+	});
+	describe('handleTicket', () => {});
+
+	describe('sendSignedTransaction', () => {
+		let contractAddress = 'test';
+		it('sends custom transaction for local profile', async () => {
+			let contactMethodInstance = { encodeABI: sinon.stub() };
+			let wallet = { publicKey: 'test', privateKey: 'test', profile: 'local' };
+			store.wallet = wallet;
+			const args = { from: wallet.publicKey };
+			sinon.stub(ethMock, 'sendSignedTransaction');
+			service.web3.eth = ethMock;
+			service.web3.utils = ethUtilMock;
+			await service.sendSignedTransaction(
+				contactMethodInstance,
+				contractAddress,
+				args,
+				wallet
+			);
+			expect(contactMethodInstance.encodeABI.calledOnce).toBeTruthy();
+			expect(ethMock.sendSignedTransaction.calledOnce).toBeTruthy();
+		});
+		it('uses regular send method for non local profiles', async () => {
+			let contactMethodInstance = { send: sinon.stub() };
+			let wallet = { publicKey: 'test', privateKey: 'test', profile: 'test' };
+			store.wallet = wallet;
+			const args = { from: wallet.publicKey };
+			await service.sendSignedTransaction(contactMethodInstance, contractAddress, args);
+			expect(contactMethodInstance.send.calledOnceWith(args)).toBeTruthy();
+			store.wallet = {};
+			await service.sendSignedTransaction(
+				contactMethodInstance,
+				contractAddress,
+				args,
+				wallet
+			);
+			expect(contactMethodInstance.send.calledOnceWith(args));
+		});
+		it('throws an error if no wallet unlocked', async () => {});
 	});
 });
