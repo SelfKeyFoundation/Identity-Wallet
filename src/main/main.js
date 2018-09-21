@@ -361,8 +361,18 @@ function startStakingTest(ctx) {
 		try {
 			await stakingService.acquireContract();
 			const serviceOwner = web3Service.web3.utils.toHex(0);
+			let decimals = await stakingService.tokenContract.call({
+				method: 'decimals'
+			});
+			let BN = require('bignumber.js');
+
+			const sendAmount = web3Service.web3.utils.padLeft(
+				new BN(100).times(new BN(10).pow(decimals)).toString(16),
+				64
+			);
 			const serviceId = web3Service.web3.utils.toHex('test');
 			const sourceAddress = '0x' + wallet.publicKey;
+			log.info('active contract %2j', stakingService.activeContract.address);
 			let balance = await stakingService.activeContract.getBalance(
 				sourceAddress,
 				serviceOwner,
@@ -384,7 +394,7 @@ function startStakingTest(ctx) {
 			try {
 				let res = await stakingService.activeContract.deposit(
 					sourceAddress,
-					100,
+					sendAmount,
 					serviceOwner,
 					serviceId
 				);
@@ -394,25 +404,32 @@ function startStakingTest(ctx) {
 			}
 			let approveRes = await stakingService.tokenContract.approve(
 				sourceAddress,
-				stakingService.activeContract.options.address,
-				100
+				stakingService.activeContract.address,
+				sendAmount
 			);
-			log('approve res %2j', approveRes);
+			log.info('approve res %2j', approveRes);
 
 			let depositRes = await stakingService.activeContract.deposit(
 				sourceAddress,
-				100,
+				sendAmount,
 				serviceOwner,
 				serviceId
 			);
-			log('deposite res %2j', depositRes);
+			log.info('deposite res %2j', depositRes);
 
-			let withdrawRes = await stakingService.acquireContract.withdraw(
+			let withdrawRes = await stakingService.activeContract.withdraw(
 				sourceAddress,
 				serviceOwner,
 				serviceId
 			);
-			log('withdraw res %2j', withdrawRes);
+			log.info('withdraw res %2j', withdrawRes);
+
+			balance = await stakingService.activeContract.getBalance(
+				sourceAddress,
+				serviceOwner,
+				serviceId
+			);
+			log.info('Staking final balance %d', balance);
 		} catch (error) {
 			log.error('staking error %s', error);
 		}

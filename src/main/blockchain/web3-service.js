@@ -31,7 +31,7 @@ export class Web3Service {
 		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 	}
-	handleTicket(data) {
+	async handleTicket(data) {
 		log.debug('handle ticket %2j', data);
 		const {
 			contractAddress,
@@ -41,7 +41,7 @@ export class Web3Service {
 			customAbi,
 			contractMethodArgs = [],
 			wallet = null,
-			args
+			args = []
 		} = data;
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
@@ -54,7 +54,9 @@ export class Web3Service {
 			}
 		}
 		if (method === 'send') {
-			return { ticketPromise: this.sendSignedTransaction(contract, args, wallet) };
+			return {
+				...(await this.sendSignedTransaction(contract, contractAddress, args, wallet))
+			};
 		}
 		return { ticketPromise: contract[method](...args) };
 	}
@@ -63,57 +65,73 @@ export class Web3Service {
 	}
 	waitForTicket(args) {
 		return new Promise(async (resolve, reject) => {
-			let res = await this.q.push(args);
-			let ticketPromise = res.ticketPromise;
+			try {
+				let res = await this.q.push(args);
+				let ticketPromise = res.ticketPromise;
+				if (!ticketPromise) {
+					return reject(new Error('Failed to process ticket'));
+				}
 
-			if (!ticketPromise) {
-				return reject(new Error('Failed to process ticket'));
-			}
-
-			ticketPromise.catch(err => {
-				reject(err);
-			});
-
-			if (args.onceListenerName) {
-				ticketPromise.once(args.onceListenerName, res => {
-					resolve(res);
+				ticketPromise.catch(err => {
+					reject(err);
 				});
-			} else {
-				ticketPromise.then(res => {
-					resolve(res);
-				});
+
+				if (args.onceListenerName) {
+					ticketPromise.once(args.onceListenerName, res => {
+						resolve(res);
+					});
+				} else {
+					ticketPromise.then(res => {
+						resolve(res);
+					});
+				}
+			} catch (error) {
+				reject(error);
 			}
 		});
 	}
 	async sendSignedTransaction(contactMethodInstance, contractAdrress, args, wallet) {
-		if (!args.from) {
+		let opts = (args || [])[0];
+		if (!opts.from) {
 			throw new Error('src address is not defined');
 		}
 		if (!wallet) {
-			wallet = this.store.wallet;
+			wallet = this.store.getState().wallet;
 		}
-		if (!wallet || wallet.publicKey !== args.from) {
+		if (!wallet || '0x' + wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
 		if (wallet.profile !== 'local') {
-			return contactMethodInstance.send(args);
+			return contactMethodInstance.send(...args);
 		}
 		if (!wallet.privateKey) {
 			throw new Error('the wallet provided is not unlocked');
 		}
+
+		// TODO: use external gas and gas limit, provide api for estimates
+		let gasPrice =
+			opts.gasPrice ||
+			(await contactMethodInstance.estimateGas({
+				from: opts.from,
+				value: '0x00'
+			}));
+		let gas = gasPrice * 2;
 		let data = contactMethodInstance.encodeABI();
-		let nonce = await this.web3.eth.getTransactionCount(args.from, 'pending');
-		// TODO: propagate gasPrice and gasLimit, using default for now
+		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
 		let rawTx = {
 			nonce: this.web3.utils.toHex(nonce),
 			to: contractAdrress,
 			value: '0x00',
-			data: data
+			data: data,
+			chainId: 3,
+			gasPrice,
+			gas,
+			...opts
 		};
 		const tx = new EtheriumTx(rawTx);
 		tx.sign(wallet.privateKey);
 		let serializedTx = '0x' + tx.serialize().toString('hex');
-		return this.web3.eth.sendSignedTransaction(serializedTx);
+		return { ticketPromise: this.web3.eth.sendSignedTransaction(serializedTx) };
 	}
 }
 

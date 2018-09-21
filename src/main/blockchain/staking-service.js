@@ -7,18 +7,18 @@ const CONFIG_URL =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Contracts';
 
 // TODO: refactor away to config
-const SELFKEY_TOKEN_ADDRESS = '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
+const SELFKEY_TOKEN_ADDRESS = '0xcfec6722f119240b97effd5afe04c8a97caa02ee'; // prod: '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
 
 export class StakingService {
 	constructor({ web3Service }) {
 		this.activeContract = null;
 		this.deprecatedContracts = [];
+		this.web3 = web3Service;
 		this.tokenContract = new SelfKeyTokenContract(
 			this.web3,
-			SELFKEY_ABI,
-			SELFKEY_TOKEN_ADDRESS
+			SELFKEY_TOKEN_ADDRESS,
+			SELFKEY_ABI
 		);
-		this.web3 = web3Service;
 	}
 	parseRemoteConfig(entities) {
 		return entities
@@ -88,6 +88,7 @@ export class EtheriumContract {
 			contractAddress: this.address,
 			contractMethod: options.method,
 			customAbi: this.abi,
+			onceListenerName: 'transactionHash',
 			args: [{ from: options.from }]
 		});
 	}
@@ -145,7 +146,7 @@ export class StakingContract extends EtheriumContract {
 	getLockPeriod(sourceAddress, serviceAddress, serviceId) {
 		return this.call({
 			from: sourceAddress,
-			args: [sourceAddress, serviceAddress, serviceId],
+			args: [serviceAddress, serviceId],
 			method: 'lockPeriods'
 		});
 	}

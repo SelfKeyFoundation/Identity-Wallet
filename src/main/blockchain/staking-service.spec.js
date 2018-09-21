@@ -117,6 +117,7 @@ describe('Contract', () => {
 			contractAddress: contract.address,
 			contractMethod: 'test',
 			customAbi: contract.abi,
+			onceListenerName: 'transactionHash',
 			args: [{ from: sourceAddress }]
 		});
 		expect(res).toBe(10);
@@ -191,7 +192,7 @@ describe('StakingContract', () => {
 		expect(contract.call.calledOnce).toBeTruthy();
 		expect(contract.call.getCall(0).args[0]).toEqual({
 			from: testDepositor,
-			args: [testDepositor, testServiceOwner, testServiceID],
+			args: [testServiceOwner, testServiceID],
 			method: 'lockPeriods'
 		});
 	});

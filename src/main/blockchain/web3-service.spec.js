@@ -56,7 +56,12 @@ describe('Web3Service', () => {
 	let store = null;
 	let service = null;
 	beforeEach(() => {
-		store = { wallet: {} };
+		store = {
+			getState() {
+				return this.state;
+			},
+			state: { wallet: null }
+		};
 		service = new Web3Service({ store });
 	});
 	afterEach(() => {
@@ -90,17 +95,20 @@ describe('Web3Service', () => {
 	describe('sendSignedTransaction', () => {
 		let contractAddress = 'test';
 		it('sends custom transaction for local profile', async () => {
-			let contactMethodInstance = { encodeABI: sinon.stub() };
+			let contactMethodInstance = {
+				encodeABI: sinon.stub(),
+				estimateGas: sinon.stub().resolves(100)
+			};
 			let wallet = { publicKey: 'test', privateKey: 'test', profile: 'local' };
-			store.wallet = wallet;
-			const args = { from: wallet.publicKey };
+			store.state.wallet = wallet;
+			const args = { from: '0x' + wallet.publicKey };
 			sinon.stub(ethMock, 'sendSignedTransaction');
 			service.web3.eth = ethMock;
 			service.web3.utils = ethUtilMock;
 			await service.sendSignedTransaction(
 				contactMethodInstance,
 				contractAddress,
-				args,
+				[args],
 				wallet
 			);
 			expect(contactMethodInstance.encodeABI.calledOnce).toBeTruthy();
@@ -109,18 +117,18 @@ describe('Web3Service', () => {
 		it('uses regular send method for non local profiles', async () => {
 			let contactMethodInstance = { send: sinon.stub() };
 			let wallet = { publicKey: 'test', privateKey: 'test', profile: 'test' };
-			store.wallet = wallet;
-			const args = { from: wallet.publicKey };
-			await service.sendSignedTransaction(contactMethodInstance, contractAddress, args);
+			store.state.wallet = wallet;
+			const args = { from: '0x' + wallet.publicKey };
+			await service.sendSignedTransaction(contactMethodInstance, contractAddress, [args]);
 			expect(contactMethodInstance.send.calledOnceWith(args)).toBeTruthy();
-			store.wallet = {};
+			store.state.wallet = {};
 			await service.sendSignedTransaction(
 				contactMethodInstance,
 				contractAddress,
-				args,
+				[args],
 				wallet
 			);
-			expect(contactMethodInstance.send.calledOnceWith(args));
+			expect(contactMethodInstance.send.calledOnceWith([args]));
 		});
 		it('throws an error if no wallet unlocked', async () => {});
 	});
