@@ -9,6 +9,9 @@ const {
 	getUserDataPath
 } = require('./utils/common');
 
+const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
+const NODE = process.env.NODE_OVERRIDE;
+
 const common = {
 	defaultLanguage: 'en',
 	constants: {
@@ -106,6 +109,14 @@ let conf = prod;
 
 if (isDevMode() || isDebugMode()) {
 	conf = dev;
+}
+
+if (CHAIN_ID) {
+	conf.chainId = CHAIN_ID;
+}
+
+if (NODE) {
+	conf.node = NODE;
 }
 
 module.exports = {
