@@ -23,7 +23,7 @@ function appStates(
 			/**
 			 * set primary token
 			 */
-			$rootScope.primaryToken = $rootScope.wallet.tokens['KEY'];
+			$rootScope.primaryToken = $rootScope.wallet.tokens[$rootScope.PRIMARY_TOKEN];
 
 			let initialPromises = [];
 

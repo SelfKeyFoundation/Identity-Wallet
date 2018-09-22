@@ -1,6 +1,8 @@
 import fetch from 'node-fetch';
 
+// import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
+// import { TxHistory } from './tx-history';
 
 // TODO: use selfkey domain here
 const CONFIG_URL =
@@ -81,8 +83,8 @@ export class EtheriumContract {
 		this.abi = abi;
 	}
 
-	send(options) {
-		return this.web3.waitForTicket({
+	async send(options) {
+		let hash = await this.web3.waitForTicket({
 			method: 'send',
 			contractMethodArgs: options.args || [],
 			contractAddress: this.address,
@@ -91,6 +93,18 @@ export class EtheriumContract {
 			onceListenerName: 'transactionHash',
 			args: [{ from: options.from }]
 		});
+		return hash;
+		// console.log(hash);
+		// return TxHistory.addOrUpdate({
+		// 	hash,
+		// 	from: options.from,
+		// 	to: this.address,
+		// 	contractAddress: this.address,
+		// 	value: 0,
+		// 	gasPrice: 0,
+		// 	networkId: CONFIG.chainId,
+		// 	timeStamp: Date.now()
+		// });
 	}
 
 	call(options) {

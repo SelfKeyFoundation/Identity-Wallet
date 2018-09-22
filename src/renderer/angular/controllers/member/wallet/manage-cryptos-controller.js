@@ -106,7 +106,7 @@ function ManageCryptosController(
 		}
 	});
 
-	const PRIMARY_TOKEN_KEYS = ['KEY', 'ETH'];
+	const PRIMARY_TOKEN_KEYS = [$rootScope.PRIMARY_TOKEN, 'ETH'];
 	$scope.isDeletable = token => {
 		if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) !== -1) {
 			return false;

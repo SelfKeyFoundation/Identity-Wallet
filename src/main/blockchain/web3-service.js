@@ -123,7 +123,7 @@ export class Web3Service {
 			to: contractAdrress,
 			value: '0x00',
 			data: data,
-			chainId: 3,
+			chainId: CONFIG.chainId,
 			gasPrice,
 			gas,
 			...opts
