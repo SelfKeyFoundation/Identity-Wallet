@@ -40,6 +40,7 @@ describe('StackingService', () => {
 	});
 	afterEach(() => {
 		fetch.mockRestore();
+		sinon.restore();
 	});
 	it('acquireContract', async () => {
 		await service.acquireContract();
@@ -64,9 +65,38 @@ describe('StackingService', () => {
 		expect(service.parseRemoteConfig(remoteConfig.entities)).toEqual(expectedConfig);
 	});
 
-	it('getStakingInfo', () => {});
-	it('placeStake', () => {});
-	it('refundStake', () => {});
+	describe('getStakingInfo', () => {
+		it('checks deprecatred contracts for stakes', async () => {
+			sinon.stub(StakingContract.prototype, 'getBalance').resolves(0);
+			await service.acquireContract();
+			await service.getStakingInfo('test', 'test', 'test');
+			expect(service.activeContract.getBalance.callCount).toBe(3);
+		});
+		it('checks gets release date for stakes', async () => {
+			sinon.stub(StakingContract.prototype, 'getBalance').resolves(100);
+			sinon.stub(StakingContract.prototype, 'getReleaseDate').resolves(0);
+			await service.acquireContract();
+			await service.getStakingInfo('test', 'test', 'test');
+			expect(service.activeContract.getReleaseDate.callCount).toBe(1);
+		});
+	});
+	it('placeStake', async () => {
+		await service.acquireContract();
+		sinon.stub(service.activeContract, 'deposit');
+		sinon.stub(service.tokenContract, 'approve');
+		await service.placeStake('test', 100, 'test', 'test');
+		expect(service.activeContract.deposit.calledOnce).toBeTruthy();
+		expect(service.tokenContract.approve).toBeTruthy();
+	});
+	it('withdrawStake', async () => {
+		await service.acquireContract();
+		let info = { contract: { withdraw: sinon.stub().resolves('test') } };
+		sinon.stub(service, 'getStakingInfo').resolves(info);
+
+		await service.withdrawStake('test', 'test', 'test');
+		expect(service.getStakingInfo.calledOnce).toBeTruthy();
+		expect(info.contract.withdraw.calledOnce).toBeTruthy();
+	});
 });
 
 describe('Contract', () => {

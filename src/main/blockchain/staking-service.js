@@ -1,26 +1,46 @@
 import fetch from 'node-fetch';
 
-// import CONFIG from 'common/config';
+import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
+import { Token } from '../token/token';
 // import { TxHistory } from './tx-history';
 
 // TODO: use selfkey domain here
 const CONFIG_URL =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Contracts';
 
-// TODO: refactor away to config
-const SELFKEY_TOKEN_ADDRESS = '0xcfec6722f119240b97effd5afe04c8a97caa02ee'; // prod: '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
-
 export class StakingService {
 	constructor({ web3Service }) {
 		this.activeContract = null;
 		this.deprecatedContracts = [];
 		this.web3 = web3Service;
-		this.tokenContract = new SelfKeyTokenContract(
-			this.web3,
-			SELFKEY_TOKEN_ADDRESS,
-			SELFKEY_ABI
-		);
+	}
+	async getStakingInfo(depositor, serviceAddress, serviceId) {
+		let info = { balance: 0, serviceAddress, serviceId, contract: null };
+		let contracts = [this.activeContract].concat(this.deprecatedContracts);
+		let balance = 0;
+		for (let i = 0; i < contracts.length; i++) {
+			balance = await contracts[i].getBalance(depositor, serviceAddress, serviceId);
+			if (!balance) continue;
+			info.balance = balance;
+			info.contract = contracts[i];
+			info.releaseDate = await contracts[i].getReleaseDate(
+				depositor,
+				serviceAddress,
+				serviceId
+			);
+			return info;
+		}
+		return info;
+	}
+	async placeStake(sourceAddress, ammount, serviceAddress, serviceId) {
+		await this.tokenContract.approve(sourceAddress, this.activeContract.address, ammount);
+		return this.activeContract.deposit(sourceAddress, ammount, serviceAddress, serviceId);
+	}
+	async withdrawStake(sourceAddress, serviceAddress, serviceId) {
+		let info = await this.getStakingInfo(sourceAddress, serviceAddress, serviceId);
+		if (!info.contract) return null;
+		return info.contract.withdraw(sourceAddress, serviceAddress, serviceId);
 	}
 	parseRemoteConfig(entities) {
 		return entities
@@ -73,6 +93,8 @@ export class StakingService {
 					!!contract.deprecated
 				)
 		);
+		let token = await Token.findOneBySymbol(CONFIG.constants.primaryToken);
+		this.tokenContract = new SelfKeyTokenContract(this.web3, token);
 	}
 }
 
@@ -167,6 +189,10 @@ export class StakingContract extends EtheriumContract {
 }
 
 export class SelfKeyTokenContract extends EtheriumContract {
+	constructor(web3, token) {
+		super(web3, token.address, SELFKEY_ABI);
+		this.token = token;
+	}
 	approve(sourceAddress, depositVaultAddress, maxAmmount) {
 		return this.send({
 			from: sourceAddress,

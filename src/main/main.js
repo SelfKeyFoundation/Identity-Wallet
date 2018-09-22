@@ -3,6 +3,7 @@
 'use strict';
 import path from 'path';
 import fs from 'fs';
+import _ from 'lodash';
 import isOnline from 'is-online';
 import ChildProcess from 'child_process';
 import electron, { Menu } from 'electron';
@@ -373,43 +374,18 @@ function startStakingTest(ctx) {
 			const serviceId = web3Service.web3.utils.toHex('test');
 			const sourceAddress = '0x' + wallet.publicKey;
 			log.info('active contract %2j', stakingService.activeContract.address);
-			let balance = await stakingService.activeContract.getBalance(
-				sourceAddress,
-				serviceOwner,
-				serviceId
-			);
-			log.info('Staking initial balance %d', balance);
+
+			let info = await stakingService.getStakingInfo(sourceAddress, serviceOwner, serviceId);
+			log.info('Staking initial balance %2j', _.omit(info, 'contract'));
+
 			let lockPeriod = await stakingService.activeContract.getLockPeriod(
 				sourceAddress,
 				serviceOwner,
 				serviceId
 			);
 			log.info('Staking lock period %2j', lockPeriod);
-			let releaseDate = await stakingService.activeContract.getReleaseDate(
-				sourceAddress,
-				serviceOwner,
-				serviceId
-			);
-			log.info('Staking release date %2j', releaseDate);
-			try {
-				let res = await stakingService.activeContract.deposit(
-					sourceAddress,
-					sendAmount,
-					serviceOwner,
-					serviceId
-				);
-				log.info('non approved deposit res %2j', res);
-			} catch (error) {
-				log.error('non approved deposit %s', error);
-			}
-			let approveRes = await stakingService.tokenContract.approve(
-				sourceAddress,
-				stakingService.activeContract.address,
-				sendAmount
-			);
-			log.info('approve res %2j', approveRes);
 
-			let depositRes = await stakingService.activeContract.deposit(
+			let depositRes = await stakingService.placeStake(
 				sourceAddress,
 				sendAmount,
 				serviceOwner,
@@ -417,19 +393,12 @@ function startStakingTest(ctx) {
 			);
 			log.info('deposite res %2j', depositRes);
 
-			let withdrawRes = await stakingService.activeContract.withdraw(
+			let withdrawRes = await stakingService.withdrawStake(
 				sourceAddress,
 				serviceOwner,
 				serviceId
 			);
 			log.info('withdraw res %2j', withdrawRes);
-
-			balance = await stakingService.activeContract.getBalance(
-				sourceAddress,
-				serviceOwner,
-				serviceId
-			);
-			log.info('Staking final balance %d', balance);
 		} catch (error) {
 			log.error('staking error %s', error);
 		}
