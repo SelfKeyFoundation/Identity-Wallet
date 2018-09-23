@@ -13,6 +13,7 @@ import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
 import request from 'request';
 import selfkey from 'selfkey.js';
+import tcpPortUsed from 'tcp-port-used';
 
 const currentOS = process.platform;
 
@@ -28,19 +29,31 @@ import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
-	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik','chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd', 'pfdhoblngboilpfeibdedpjgfnlcodoo'];
+	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik','chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd', 'chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo'];
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
 	: ['127.0.0.1', '::1'];
 
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
+export const WSS_PORT = process.env.LWS_WSS_PORT || 8899;
 
 export const userAgent = `SelfKeyIDW/${pkg.version}`;
 
 const log = new Logger('LWSService');
 
 const userDataPath = common.getUserDataPath();
+
+function checkPort(port) {
+	return new Promise((resolve, reject) => {
+		tcpPortUsed.check(port, '127.0.0.1').then(check => {
+			log.info(check)
+			resolve(check)
+		}, err => {
+			reject(console.error('Error on check:', err.message))
+		});
+	})
+}
 
 function init() {
 	return new Promise((resolve, reject) => {
@@ -52,7 +65,7 @@ function init() {
 				reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
 				rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
 				keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
-				certgen: null
+				certgen: []
 			}
 
 			macos.certgen = [
@@ -127,15 +140,17 @@ function init() {
 				]
 			};
 
+			log.info(currentOS)
+			log.info(macos)
 			switch (currentOS) {
 				case 'darwin':
+					log.info(macos)
 					resolve(macos);
 				case 'linux':
 					resolve(linux);
 				case 'win32':
 					resolve(windows);
 			}
-
 		} catch (e) {
 			reject(e);
 		}
@@ -143,12 +158,11 @@ function init() {
 }
 
 function executor(cmd, options) {
-	console.log('norm')	
-	console.log(cmd, options)	
+	console.log('norm: ', cmd, options)	
 	return new Promise((resolve, reject) => {
 		try {
 			child_process.exec(cmd, options, (error, stdout, stderr) => {
-				resolve(console.log('done'))
+				resolve(console.log('norm cmd done'))
 			});
 		} catch (e) {
 			reject(console.log('Error++: ' + e))
@@ -157,12 +171,12 @@ function executor(cmd, options) {
 }
 
 function sudocutor(cmd, options) {
-	console.log('sudo')		
+	console.log('sudo: ', cmd, options)	
 	return new Promise((resolve, reject) => {
 		try {
 			sudo.exec(cmd, options, (error, stdout, stderr) => {
 				// TODO: Handle no permission error better
-				resolve(console.log('done'))
+				resolve(console.log('sudo cmd done'))
 			});
 		} catch (e) {
 			reject(console.log('Error++: ' + e))
@@ -192,7 +206,7 @@ function checkDirs(config) {
 				fs.mkdirSync(config.lwsKeyPath);
 			}
 		}
-		resolve('done');
+		resolve('dirs ok');
 	});
 }
 
@@ -208,46 +222,56 @@ function checkKeys(config) {
 	});
 }
 
-function runCertgen(config) {
-	return new Promise((resolve, reject) => {
-		console.log('starting certgen')		
-		let steps = [];
-		for (let step of config.certgen) {
-			switch (step.type) {
-				case 'child':
-					steps.push(executor(step.cmd, step.options));
-				case 'sudo':
-					steps.push(sudocutor(step.cmd, step.options));
-				// case 'power':
-				// 	steps.push(windocutor(step.cmd));
-			}
-		}
-		resolve(Promise.all(steps));
-	});
+async function runCertgen(config) {
+	for (var i = config.certgen.length - 1; i >= 0; i--) {
+		if (config.certgen[i].type === 'sudo')
+			await sudocutor(config.certgen[i].cmd, config.certgen[i].options)
+		else 
+			await executor(config.certgen[i].cmd, config.certgen[i].options)
+	}
+	// await executor(config.certgen[0].cmd, config.certgen[0].options)
+	// await executor(config.certgen[1].cmd, config.certgen[1].options)
+	// await sudocutor(config.certgen[2].cmd, config.certgen[2].options)
+	return 'wss'
+	// return new Promise((resolve, reject) => {
+	// 	try {
+
+	// 		let steps = [];
+	// 		for (let step of config.certgen) {
+	// 			switch (step.type) {
+	// 				case 'child':
+	// 					steps.push(executor(step.cmd, step.options));
+	// 				case 'sudo':
+	// 					steps.push(sudocutor(step.cmd, step.options));
+	// 				// case 'power':
+	// 				// 	steps.push(windocutor(step.cmd));
+	// 			}
+	// 		}
+	// 		Promise.all(steps)
+	// 		resolve('wss')
+	// 	} catch (e) {
+	// 		reject(e)
+	// 	}
+	// });
 }
 
-function certs(config) {
+async function certs(config) {
 	return new Promise((resolve, reject) => {
 		try {
-			checkDirs(config).then(checkDirs => {
-				if (checkDirs === 'done') {
-					checkKeys(config).then(status => {
-						if (status !== 'wss') {
-							runCertgen(config).then(() => resolve('done'));
-						}
-					});
-				} else {
-					resolve('done');
-				}
-			});
+			checkDirs(config).then(() => {
+				checkKeys(config).then(keys => {
+					if (keys !== 'wss') {
+						resolve(runCertgen(config))
+					} else {
+						resolve('ws')
+					}
+				})
+			})
 		} catch (e) {
-			resolve(e);
+			reject(e);
 		}
-	});
+	})
 }
-
-// start standard WS server with ability to only accept init message upon recieving init message attempt to create certificate
-// borwser extension needs logic to change to wss and check port
 
 export class LWSService {
 	
@@ -556,11 +580,9 @@ export class LWSService {
 		);
 	}
 
-	async handleRequest(msg, conn) {
+	async handleSecureRequest(msg, conn) {
 		log.info('lws req %2j', msg);
 		switch (msg.type) {
-			case 'init':
-				return this.startSecureServer(msg, conn);
 			case 'wallets':
 				return this.reqWallets(msg, conn);
 			case 'unlock':
@@ -574,9 +596,25 @@ export class LWSService {
 		}
 	}
 
+	async handleRequest(msg, conn) {
+		log.info('lws req %2j', msg);
+		switch (msg.type) {
+			case 'init':
+				return this.startSecureServer(msg, conn);
+			default:
+				return this.reqUnknown(msg, conn);
+		}
+	}
+
 	handleConn(conn) {
 		log.info('ws connection established');
 		let wsConn = new WSConnection(conn, this);
+		wsConn.listen();
+	}
+
+	handleSecureConn(conn) {
+		log.info('wss connection established');
+		let wsConn = new WSConnection(conn, this, true);
 		wsConn.listen();
 	}
 
@@ -597,80 +635,72 @@ export class LWSService {
 			verifyClient: this.verifyClient.bind(this)
 		});
 		this.wss.on('connection', this.handleConn.bind(this));
-		this.wss.on('error', err => {
-			log.error(err);
-			if (err.code === 'EADDRINUSE') {
-				WS_PORT++;
-				log.info('Address in use, retrying on port ' + WS_PORT);
-				setTimeout(() => {
-					httpsServer.listen(WS_PORT);
-				}, 250);
-			}
-		});
+		this.wss.on('error', err => log.error(err));
 	}
 
-	startSecureServer(msg, conn) {
-		log.info('starting wss');
-		conn.send(
-			{
-				payload: { message: 'starting secure ws server' }
-			},
-			msg
-		);
+	async startSecureServer(msg, conn) {
 
-		// TODO: trigger modal here and wait for user accept then
-		// TODO: updgrade all incoming connections to secure websocket
+		let serverExists = await checkPort(WSS_PORT)
+		
+		log.info(serverExists)
+		
+		if (!serverExists) {
 
-		init()
-			.then(config => certs(config)
-				.then(status => {
-					console.log('certs' + status)
-				if (status === 'wss') {
-					
+			// TODO: trigger modal here and wait for user accept then
+			
+			log.info('starting wss');
+			conn.send(
+				{
+					payload: { message: 'starting secure ws server' }
+				},
+				msg
+			);
+
+			let tryInit = await init()
+			let config = tryInit
+			log.info('init ')
+			log.info(config)
+			certs(config).then(status => {
+				log.info(status)
+				
+				if (status === 'wss') {	
 					const httpsServer = new https.createServer({
 						cert: fs.readFileSync(config.reqFile),
 						key: fs.readFileSync(config.rsaFile)
 					});
 
-					this.wss = new WebSocket.Server({
-						server: httpsServer,
-						port: WS_PORT,
-						verifyClient: this.verifyClient.bind(this)
-					});
-					
-					this.wss.on('connection', this.handleConn.bind(this));
-					this.wss.on('error', err => log.error(err));
+					const wss = new WebSocket.Server({
+						server: httpsServer
+					})
+					.on('connection', this.handleSecureConn.bind(this))
+					.on('error', err => log.error(err));
 
-					httpsServer
-						.listen(WS_PORT, () => {
-							log.info('HTTPS listening:' + WS_PORT);
-						})
-						.on('error', err => {
-							if (err.code === 'EADDRINUSE') {
-								WS_PORT++;
-								log.info('Address in use, retrying on port ' + WS_PORT);
-								setTimeout(() => {
-									httpsServer.listen(WS_PORT);
-								}, 250);
-							}
-						});
-					log.info('secure ws server started');
+					httpsServer.listen(8899, () => console.log('wss listening on port 8899'))
+
+					log.info('secure wss server started');
+				
 				} else {
 					log.info('error starting wss');
 				}
 			})
-		);
+		} else {
+			log.info('wss already started')
+		}
 	}
+
 }
 
 export class WSConnection {
-	constructor(conn, service) {
+	constructor(conn, service, wss) {
 		this.conn = conn;
 		this.service = service;
 		this.msgId = 0;
 		this.ctx = {
 			unlockedWallets: {}
 		};
+		if (wss) {
+			this.wssStatus = wss;
+		}
 	}
 
 	unlockWallet(publicKey, privateKey) {
@@ -684,7 +714,11 @@ export class WSConnection {
 	async handleMessage(msg) {
 		try {
 			msg = JSON.parse(msg);
-			await this.service.handleRequest(msg, this);
+			if (this.wssStatus) {
+				await this.service.handleSecureRequest(msg, this);
+			} else {
+				await this.service.handleRequest(msg, this);
+			}
 		} catch (error) {
 			log.error(error);
 			msg = typeof msg === 'string' ? {} : msg;
