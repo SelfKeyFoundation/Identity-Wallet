@@ -24,11 +24,15 @@ export class StakingService {
 			if (!balance) continue;
 			info.balance = balance;
 			info.contract = contracts[i];
-			info.releaseDate = await contracts[i].getReleaseDate(
-				depositor,
-				serviceAddress,
-				serviceId
-			);
+			if (contracts[i].isDeprecated) {
+				info.releaseDate = 0;
+			} else {
+				info.releaseDate = await contracts[i].getReleaseDate(
+					depositor,
+					serviceAddress,
+					serviceId
+				);
+			}
 			return info;
 		}
 		return info;
@@ -40,7 +44,8 @@ export class StakingService {
 	async withdrawStake(sourceAddress, serviceAddress, serviceId) {
 		let info = await this.getStakingInfo(sourceAddress, serviceAddress, serviceId);
 		if (!info.contract) throw new Error('no contract to withdraw from');
-		if (Date.now() < info.releaseDate) throw new Error('stake is locked');
+		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
+			throw new Error('stake is locked');
 		return info.contract.withdraw(sourceAddress, serviceAddress, serviceId);
 	}
 	parseRemoteConfig(entities) {
