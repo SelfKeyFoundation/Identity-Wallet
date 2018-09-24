@@ -961,11 +961,12 @@ module.exports = function(cradle) {
 			});
 	};
 
-	controller.prototype.getWalletByPublicKey = function(event, actionId, actionName, args) {
+	controller.prototype.getWalletByPublicKey = async function(event, actionId, actionName, args) {
 		Wallet.findByPublicKey(args.publicKey)
 			.then(data => {
-				store.dispatch(walletOperations.updateWallet(data));
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+				store.dispatch(walletOperations.updateWallet(data)).then(() => {
+					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+				});
 			})
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
@@ -1402,6 +1403,11 @@ module.exports = function(cradle) {
 			.catch(error => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
 			});
+	};
+
+	controller.prototype.getCurrentWallet = function(event, actionId, actionName, args) {
+		let walletState = store.getState().wallet;
+		app.win.webContents.send(RPC_METHOD, actionId, actionName, null, walletState);
 	};
 
 	return controller;

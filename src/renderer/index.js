@@ -123,6 +123,9 @@ angular.module('kyc-wallet').service('SignService', SignService);
 const TxHistoryService = require('./angular/services/tx-history.service');
 angular.module('kyc-wallet').service('TxHistoryService', TxHistoryService);
 
+const BalanceUpdaterService = require('./angular/services/balance-updater.service');
+angular.module('kyc-wallet').service('BalanceUpdaterService', BalanceUpdaterService);
+
 /**
  * directives
  */

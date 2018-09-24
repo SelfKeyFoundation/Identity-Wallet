@@ -20,7 +20,8 @@ function SendTokenDialogController(
 	CommonService,
 	SqlLiteService,
 	TxHistoryService,
-	HardwareWalletService
+	HardwareWalletService,
+	BalanceUpdaterService
 ) {
 	'ngInject';
 
@@ -32,10 +33,8 @@ function SendTokenDialogController(
 	log.info('SendTokenDialogController');
 	log.debug('SendTokenDialogController %j %j', args, CONFIG);
 	const web3Utils = Web3Service.constructor.web3.utils;
-	const TX_CHECK_INTERVAL = 1000;
 	const ESTIMATED_GAS_CHECK_INTERVAL = 300;
 
-	let txInfoCheckInterval = null;
 	let checkEstimatedGasInterval = null;
 	let estimatedGasNeedsCheck = false;
 
@@ -219,7 +218,6 @@ function SendTokenDialogController(
 
 	$scope.cancel = event => {
 		cancelEstimatedGasCheck();
-		cancelTxCheck();
 
 		if (!args.symbol) {
 			$state.go('member.dashboard.main');
@@ -248,50 +246,6 @@ function SendTokenDialogController(
         */
 		prepare(newTokenKey);
 	};
-
-	// TODO: this function is this a workaround while the transaction transfer is not migrated to react.
-	// We need to call the backend so it can call the redux action to update the balance.
-	const updateBalances = () => {
-		RPCService.makeCall('getWalletByPublicKey', {
-			publicKey: $rootScope.wallet.getPublicKey()
-		});
-		RPCService.makeCall('getWalletTokens', {
-			walletId: $rootScope.wallet.id
-		});
-	};
-
-	/**
-	 *
-	 */
-	function startTxCheck() {
-		cancelTxCheck();
-
-		txInfoCheckInterval = $interval(() => {
-			if (!$scope.txHex) return;
-
-			let txInfoPromise = Web3Service.getTransactionReceipt($scope.txHex.toString());
-			txInfoPromise
-				.then(txInfo => {
-					if (txInfo && txInfo.blockNumber !== null) {
-						$scope.backgroundProcessStatuses.txStatus = Number(txInfo.status);
-						if ($scope.backgroundProcessStatuses.txStatus) {
-							updateBalances();
-						}
-						$interval.cancel(txInfoCheckInterval);
-					}
-				})
-				.catch(error => {
-					log.error(error);
-					cancelTxCheck();
-				});
-		}, TX_CHECK_INTERVAL);
-	}
-
-	function cancelTxCheck() {
-		if (txInfoCheckInterval) {
-			$interval.cancel(txInfoCheckInterval);
-		}
-	}
 
 	function startEstimatedGasCheck() {
 		cancelEstimatedGasCheck();
@@ -396,12 +350,13 @@ function SendTokenDialogController(
 		$scope.sendPromise = Web3Service.sendRawTransaction($scope.signedHex);
 
 		currentTxHistoryData.nonce = $scope.signedWithNonce;
+
 		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
+		BalanceUpdaterService.startTxBalanceUpdater($scope.sendPromise);
 
 		$scope.sendPromise
 			.then(transactionHash => {
 				$scope.txHex = transactionHash;
-				startTxCheck();
 			})
 			.catch(error => {
 				error = error.toString();
@@ -631,10 +586,15 @@ function SendTokenDialogController(
 		$mdDialog.cancel();
 		$scope.startSend(event);
 	});
+	let deregisterTxStatusEvent = $rootScope.$on('tx-status:change', (event, txHash, status) => {
+		if ($scope.txHex === txHash) {
+			$scope.backgroundProcessStatuses.txStatus = status;
+		}
+	});
 
 	$scope.$on('$destroy', () => {
 		if (deregisterTxSignEvent) deregisterTxSignEvent();
-		cancelTxCheck();
+		if (deregisterTxStatusEvent) deregisterTxStatusEvent();
 		cancelEstimatedGasCheck();
 	});
 }
@@ -654,7 +614,8 @@ SendTokenDialogController.$inject = [
 	'CommonService',
 	'SqlLiteService',
 	'TxHistoryService',
-	'HardwareWalletService'
+	'HardwareWalletService',
+	'BalanceUpdaterService'
 ];
 
 module.exports = SendTokenDialogController;
