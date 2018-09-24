@@ -962,15 +962,14 @@ module.exports = function(cradle) {
 	};
 
 	controller.prototype.getWalletByPublicKey = async function(event, actionId, actionName, args) {
-		Wallet.findByPublicKey(args.publicKey)
-			.then(data => {
-				store.dispatch(walletOperations.updateWallet(data)).then(() => {
-					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-				});
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
+		try {
+			let data = await Wallet.findByPublicKey(args.publicKey);
+			await store.dispatch(walletOperations.updateWallet(data));
+
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
+		} catch (error) {
+			app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
+		}
 	};
 
 	controller.prototype.getCountries = function(event, actionId, actionName, args) {

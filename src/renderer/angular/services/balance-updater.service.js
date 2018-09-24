@@ -19,7 +19,6 @@ function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 
 		await Promise.all([walletUpdaterPromise, tokensUpdaterPromise]);
 		let currentWallet = await RPCService.makeCall('getCurrentWallet');
-		console.log(oldBalance, currentWallet.balance);
 		if (oldBalance === currentWallet.balance) {
 			updateBalances(oldBalance);
 		}
