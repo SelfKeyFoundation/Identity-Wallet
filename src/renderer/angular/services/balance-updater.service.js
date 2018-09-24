@@ -1,5 +1,8 @@
 'use strict';
+
+const store = require('renderer/react/common/store').default;
 const { Logger } = require('common/logger/logger');
+
 const log = new Logger('BalanceUpdaterService');
 function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 	'ngInject';
@@ -18,7 +21,7 @@ function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 		});
 
 		await Promise.all([walletUpdaterPromise, tokensUpdaterPromise]);
-		let currentWallet = await RPCService.makeCall('getCurrentWallet');
+		let currentWallet = store.getState().wallet;
 		if (oldBalance === currentWallet.balance) {
 			updateBalances(oldBalance);
 		}
@@ -46,7 +49,7 @@ function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 
 	let BalanceUpdaterService = function() {
 		this.startTxBalanceUpdater = async sendPromise => {
-			let currentWallet = await RPCService.makeCall('getCurrentWallet');
+			let currentWallet = store.getState().wallet;
 			sendPromise.then(txHash => {
 				startTxCheck(txHash, currentWallet.balance);
 			});

@@ -1404,10 +1404,5 @@ module.exports = function(cradle) {
 			});
 	};
 
-	controller.prototype.getCurrentWallet = function(event, actionId, actionName, args) {
-		let walletState = store.getState().wallet;
-		app.win.webContents.send(RPC_METHOD, actionId, actionName, null, walletState);
-	};
-
 	return controller;
 };
