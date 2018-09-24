@@ -1,5 +1,5 @@
 'use strict';
-
+const { getWallet } = require('common/wallet/selectors');
 const store = require('renderer/react/common/store').default;
 const { Logger } = require('common/logger/logger');
 
@@ -21,7 +21,7 @@ function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 		});
 
 		await Promise.all([walletUpdaterPromise, tokensUpdaterPromise]);
-		let currentWallet = store.getState().wallet;
+		let currentWallet = getWallet(store.getState());
 		if (oldBalance === currentWallet.balance) {
 			updateBalances(oldBalance);
 		}
@@ -49,7 +49,7 @@ function BalanceUpdaterService($rootScope, $interval, Web3Service, RPCService) {
 
 	let BalanceUpdaterService = function() {
 		this.startTxBalanceUpdater = async sendPromise => {
-			let currentWallet = store.getState().wallet;
+			let currentWallet = getWallet(store.getState());
 			sendPromise.then(txHash => {
 				startTxCheck(txHash, currentWallet.balance);
 			});
