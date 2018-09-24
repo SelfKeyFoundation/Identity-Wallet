@@ -15,21 +15,11 @@ import request from 'request';
 import selfkey from 'selfkey.js';
 import tcpPortUsed from 'tcp-port-used';
 
-const currentOS = process.platform;
-
-// if (currentOS === 'win32' || 'win64') {
-// 	const powerShell = require('node-powershell');
-// 	let ps = new powerShell({
-// 		executionPolicy: 'Bypass',
-// 		noProfile: true
-// 	});
-// }
-
 import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
-	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik','chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd', 'chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo'];
+	: ['chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik','chrome-extension://fmmadhehohahcpnjjkbdajimilceilcd'];
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
@@ -42,18 +32,8 @@ export const userAgent = `SelfKeyIDW/${pkg.version}`;
 
 const log = new Logger('LWSService');
 
+const currentOS = process.platform;
 const userDataPath = common.getUserDataPath();
-
-function checkPort(port) {
-	return new Promise((resolve, reject) => {
-		tcpPortUsed.check(port, '127.0.0.1').then(check => {
-			log.info(check)
-			resolve(check)
-		}, err => {
-			reject(console.error('Error on check:', err.message))
-		});
-	})
-}
 
 function init() {
 	return new Promise((resolve, reject) => {
@@ -65,7 +45,7 @@ function init() {
 				reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
 				rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
 				keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
-				certgen: []
+				certgen: null
 			}
 
 			macos.certgen = [
@@ -138,24 +118,34 @@ function init() {
 						type: 'power'
 					}
 				]
-			};
+			}
 
-			log.info(currentOS)
-			log.info(macos)
 			switch (currentOS) {
 				case 'darwin':
-					log.info(macos)
 					resolve(macos);
 				case 'linux':
 					resolve(linux);
 				case 'win32':
 					resolve(windows);
 			}
+
 		} catch (e) {
 			reject(e);
 		}
 	});
 }
+
+function checkPort(port) {
+	return new Promise((resolve, reject) => {
+		tcpPortUsed.check(port, '127.0.0.1').then(check => {
+			log.info(check)
+			resolve(check)
+		}, err => {
+			reject(console.error('Error on check:', err.message))
+		});
+	})
+}
+
 
 function executor(cmd, options) {
 	console.log('norm: ', cmd, options)	
@@ -184,17 +174,26 @@ function sudocutor(cmd, options) {
 	})
 }
 
-// function windocutor(cmd, options) {
-// 	return new Promise((resolve, reject) => {
-// 		ps.addCommand(cmd);
-// 		ps.invoke()
-// 			.then(output => resolve(output))
-// 			.catch(err => {
-// 				ps.dispose();
-// 				reject(log.error(err));
-// 			});
-// 	});
-// }
+function windocutor(cmd, options) {
+	return new Promise((resolve, reject) => {
+		if (currentOS === 'win32' || 'win64') {
+			const powerShell = require('node-powershell');
+			let ps = new powerShell({
+				executionPolicy: 'Bypass',
+				noProfile: true
+			});
+			ps.addCommand(cmd);
+			ps.invoke()
+				.then(output => resolve(output))
+				.catch(err => {
+					ps.dispose();
+					reject(console.error(err));
+				});
+		} else {
+			reject(false)
+		}
+	});
+}
 
 function checkDirs(config) {
 	return new Promise((resolve, reject) => {
@@ -206,7 +205,7 @@ function checkDirs(config) {
 				fs.mkdirSync(config.lwsKeyPath);
 			}
 		}
-		resolve('dirs ok');
+		resolve(true);
 	});
 }
 
@@ -215,55 +214,38 @@ function checkKeys(config) {
 		let reqFileCheck = fs.existsSync(config.reqFile);
 		let rsaFileCheck = fs.existsSync(config.rsaFile);
 		if (reqFileCheck && rsaFileCheck) {
-			resolve('wss');
+			resolve(true);
 		} else {
-			resolve('ws');
+			resolve(false);
 		}
 	});
 }
 
 async function runCertgen(config) {
-	for (var i = config.certgen.length - 1; i >= 0; i--) {
-		if (config.certgen[i].type === 'sudo')
-			await sudocutor(config.certgen[i].cmd, config.certgen[i].options)
-		else 
-			await executor(config.certgen[i].cmd, config.certgen[i].options)
+	try {
+		for (let run of config.certgen) {
+			if (run.type === 'sudo')
+				await sudocutor(run.cmd, run.options)
+			else if (run.type === 'windows')
+				await windocutor(run.cmd, run.options)
+			else 
+				await executor(run.cmd, run.options)
+		}
+		return true
+	} catch (e) {
+		return e
 	}
-	// await executor(config.certgen[0].cmd, config.certgen[0].options)
-	// await executor(config.certgen[1].cmd, config.certgen[1].options)
-	// await sudocutor(config.certgen[2].cmd, config.certgen[2].options)
-	return 'wss'
-	// return new Promise((resolve, reject) => {
-	// 	try {
-
-	// 		let steps = [];
-	// 		for (let step of config.certgen) {
-	// 			switch (step.type) {
-	// 				case 'child':
-	// 					steps.push(executor(step.cmd, step.options));
-	// 				case 'sudo':
-	// 					steps.push(sudocutor(step.cmd, step.options));
-	// 				// case 'power':
-	// 				// 	steps.push(windocutor(step.cmd));
-	// 			}
-	// 		}
-	// 		Promise.all(steps)
-	// 		resolve('wss')
-	// 	} catch (e) {
-	// 		reject(e)
-	// 	}
-	// });
 }
 
 async function certs(config) {
 	return new Promise((resolve, reject) => {
 		try {
-			checkDirs(config).then(() => {
+			checkDirs(config).then(dirs => {
 				checkKeys(config).then(keys => {
-					if (keys !== 'wss') {
+					if (!keys) {
 						resolve(runCertgen(config))
 					} else {
-						resolve('ws')
+						resolve(true)
 					}
 				})
 			})
@@ -639,15 +621,10 @@ export class LWSService {
 	}
 
 	async startSecureServer(msg, conn) {
-
-		let serverExists = await checkPort(WSS_PORT)
-		
-		log.info(serverExists)
-		
+		const config = await init()
+		const serverExists = await checkPort(WSS_PORT)
 		if (!serverExists) {
-
 			// TODO: trigger modal here and wait for user accept then
-			
 			log.info('starting wss');
 			conn.send(
 				{
@@ -655,30 +632,19 @@ export class LWSService {
 				},
 				msg
 			);
-
-			let tryInit = await init()
-			let config = tryInit
-			log.info('init ')
-			log.info(config)
 			certs(config).then(status => {
-				log.info(status)
-				
-				if (status === 'wss') {	
+				if (status) {	
 					const httpsServer = new https.createServer({
 						cert: fs.readFileSync(config.reqFile),
 						key: fs.readFileSync(config.rsaFile)
 					});
-
 					const wss = new WebSocket.Server({
 						server: httpsServer
 					})
 					.on('connection', this.handleSecureConn.bind(this))
 					.on('error', err => log.error(err));
-
-					httpsServer.listen(8899, () => console.log('wss listening on port 8899'))
-
+					httpsServer.listen(WSS_PORT, () => console.log('wss listening on port ' + WSS_PORT))
 					log.info('secure wss server started');
-				
 				} else {
 					log.info('error starting wss');
 				}
