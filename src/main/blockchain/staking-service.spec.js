@@ -90,12 +90,28 @@ describe('StackingService', () => {
 	});
 	it('withdrawStake', async () => {
 		await service.acquireContract();
-		let info = { contract: { withdraw: sinon.stub().resolves('test') } };
+		sinon.stub(Date, 'now').returns(11);
+		let info = { contract: { withdraw: sinon.stub().resolves('test') }, releaseDate: 10 };
 		sinon.stub(service, 'getStakingInfo').resolves(info);
 
 		await service.withdrawStake('test', 'test', 'test');
 		expect(service.getStakingInfo.calledOnce).toBeTruthy();
 		expect(info.contract.withdraw.calledOnce).toBeTruthy();
+
+		Date.now.returns(9);
+		try {
+			await service.withdrawStake('test', 'test', 'test');
+		} catch (error) {
+			expect(error).toBeTruthy();
+		}
+
+		info.contract = null;
+		Date.now.returns(11);
+		try {
+			await service.withdrawStake('test', 'test', 'test');
+		} catch (error) {
+			expect(error).toBeTruthy();
+		}
 	});
 });
 

@@ -39,7 +39,8 @@ export class StakingService {
 	}
 	async withdrawStake(sourceAddress, serviceAddress, serviceId) {
 		let info = await this.getStakingInfo(sourceAddress, serviceAddress, serviceId);
-		if (!info.contract) return null;
+		if (!info.contract) throw new Error('no contract to withdraw from');
+		if (Date.now() < info.releaseDate) throw new Error('stake is locked');
 		return info.contract.withdraw(sourceAddress, serviceAddress, serviceId);
 	}
 	parseRemoteConfig(entities) {
