@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
 import { Token } from '../token/token';
+import BN from 'bignumber.js';
 // import { TxHistory } from './tx-history';
 
 // TODO: use selfkey domain here
@@ -45,7 +46,13 @@ export class StakingService {
 		options = { ...options };
 		let totalGas = options.gas;
 		let approveGas, depositGas;
-		if (totalGas) {
+		let allowance = new BN(
+			await this.tokenContract.allowance(this.activeContract.address, {
+				from: options.from
+			})
+		);
+		let hasAllowance = allowance.gte(new BN(ammount));
+		if (!hasAllowance && totalGas) {
 			approveGas = await this.tokenContract.approve(this.activeContract.address, ammount, {
 				from: options.from,
 				method: 'estimateGas',
@@ -53,10 +60,16 @@ export class StakingService {
 			});
 			depositGas = totalGas - approveGas;
 		}
-		hashes.approve = await this.tokenContract.approve(this.activeContract.address, ammount, {
-			...options,
-			gas: approveGas
-		});
+		if (!hasAllowance) {
+			hashes.approve = await this.tokenContract.approve(
+				this.activeContract.address,
+				ammount,
+				{
+					...options,
+					gas: approveGas
+				}
+			);
+		}
 		hashes.deposit = await this.activeContract.deposit(ammount, serviceAddress, serviceId, {
 			...options,
 			gas: depositGas
@@ -231,6 +244,14 @@ export class SelfKeyTokenContract extends EtheriumContract {
 			args: [depositVaultAddress, maxAmmount],
 			options,
 			method: 'approve'
+		});
+	}
+
+	allowance(depositVaultAddress, options) {
+		return this.call({
+			args: [options.from, depositVaultAddress],
+			options: { ...options },
+			method: 'allowance'
 		});
 	}
 }

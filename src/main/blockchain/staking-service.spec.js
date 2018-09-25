@@ -84,6 +84,7 @@ describe('StackingService', () => {
 		await service.acquireContract();
 		sinon.stub(service.activeContract, 'deposit');
 		sinon.stub(service.tokenContract, 'approve');
+		sinon.stub(service.tokenContract, 'allowance').resolves(0);
 		await service.placeStake('test', 100, 'test', 'test');
 		expect(service.activeContract.deposit.calledOnce).toBeTruthy();
 		expect(service.tokenContract.approve).toBeTruthy();
@@ -287,6 +288,17 @@ describe('SelfKeyTokenContract', () => {
 			options,
 			args: [depositVaultAddress, 200],
 			method: 'approve'
+		});
+	});
+	it('allowance', async () => {
+		sinon.stub(contract, 'call');
+		const options = { from: testDepositor };
+		await contract.allowance(depositVaultAddress, options);
+		expect(contract.call.calledOnce).toBeTruthy();
+		expect(contract.call.getCall(0).args[0]).toEqual({
+			options,
+			args: [options.from, depositVaultAddress],
+			method: 'allowance'
 		});
 	});
 });

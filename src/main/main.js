@@ -367,14 +367,17 @@ function startStakingTest(ctx) {
 			});
 			let BN = require('bignumber.js');
 
-			const sendAmount = web3Service.web3.utils.padLeft(
-				new BN(100).times(new BN(10).pow(decimals)).toString(16),
-				64
-			);
+			const sendAmount = new BN(100).times(new BN(10).pow(decimals)).toString();
 			const serviceId = web3Service.web3.utils.toHex('test');
 			const sourceAddress = '0x' + wallet.publicKey;
 			const options = { from: sourceAddress };
 			log.info('active contract %2j', stakingService.activeContract.address);
+
+			let allowance = await stakingService.tokenContract.allowance(
+				stakingService.activeContract.address,
+				options
+			);
+			log.info('allowance %s', allowance);
 
 			let info = await stakingService.getStakingInfo(serviceOwner, serviceId, options);
 			log.info('Staking initial balance %2j', _.omit(info, 'contract'));
@@ -404,11 +407,6 @@ function startStakingTest(ctx) {
 			} catch (error) {
 				log.error('withdraw error %s', error);
 			}
-
-			// await stakingService.tokenContract.approve(stakingService.activeContract.address, sendAmount, options);
-			// try {
-			// 	await await stakingService.tokenContract.approve(stakingService.activeContract.address, sendAmount, options);
-			// }
 		} catch (error) {
 			log.error('staking error %s', error);
 		}

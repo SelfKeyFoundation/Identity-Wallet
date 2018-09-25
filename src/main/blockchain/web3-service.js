@@ -74,6 +74,7 @@ export class Web3Service {
 				}
 
 				ticketPromise.catch(err => {
+					this.nonce = 0;
 					reject(err);
 				});
 
@@ -138,10 +139,7 @@ export class Web3Service {
 		let serializedTx = '0x' + tx.serialize().toString('hex');
 		this.nonce = nonce;
 		return {
-			ticketPromise: this.web3.eth.sendSignedTransaction(serializedTx).catch(error => {
-				this.nonce = 0;
-				return error;
-			})
+			ticketPromise: this.web3.eth.sendSignedTransaction(serializedTx)
 		};
 	}
 }
