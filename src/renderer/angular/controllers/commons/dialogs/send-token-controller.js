@@ -5,6 +5,9 @@ const log = new Logger('SendTokenDialogController');
 
 const EthUnits = require('../../../classes/eth-units');
 
+const BalanceUpdaterService = require('main/data-updaters/balance-updater.service').default;
+const balanceUpdaterService = new BalanceUpdaterService();
+
 function SendTokenDialogController(
 	$rootScope,
 	$scope,
@@ -20,8 +23,7 @@ function SendTokenDialogController(
 	CommonService,
 	SqlLiteService,
 	TxHistoryService,
-	HardwareWalletService,
-	BalanceUpdaterService
+	HardwareWalletService
 ) {
 	'ngInject';
 
@@ -352,7 +354,7 @@ function SendTokenDialogController(
 		currentTxHistoryData.nonce = $scope.signedWithNonce;
 
 		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
-		BalanceUpdaterService.startTxBalanceUpdater($scope.sendPromise);
+		balanceUpdaterService.startTxBalanceUpdater($scope.sendPromise);
 
 		$scope.sendPromise
 			.then(transactionHash => {
@@ -586,7 +588,8 @@ function SendTokenDialogController(
 		$mdDialog.cancel();
 		$scope.startSend(event);
 	});
-	let deregisterTxStatusEvent = $rootScope.$on('tx-status:change', (event, txHash, status) => {
+
+	balanceUpdaterService.on('tx-status:change', (txHash, status) => {
 		if ($scope.txHex === txHash) {
 			$scope.backgroundProcessStatuses.txStatus = status;
 		}
@@ -594,7 +597,7 @@ function SendTokenDialogController(
 
 	$scope.$on('$destroy', () => {
 		if (deregisterTxSignEvent) deregisterTxSignEvent();
-		if (deregisterTxStatusEvent) deregisterTxStatusEvent();
+		// if (deregisterTxStatusEvent) deregisterTxStatusEvent();
 		cancelEstimatedGasCheck();
 	});
 }
@@ -614,8 +617,7 @@ SendTokenDialogController.$inject = [
 	'CommonService',
 	'SqlLiteService',
 	'TxHistoryService',
-	'HardwareWalletService',
-	'BalanceUpdaterService'
+	'HardwareWalletService'
 ];
 
 module.exports = SendTokenDialogController;
