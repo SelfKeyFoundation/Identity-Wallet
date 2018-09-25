@@ -394,10 +394,21 @@ function startStakingTest(ctx) {
 			);
 			log.info('deposite res %2j', depositRes);
 
-			if (!+info.balance) return;
+			try {
+				let withdrawRes = await stakingService.withdrawStake(
+					serviceOwner,
+					serviceId,
+					options
+				);
+				log.info('withdraw res %2j', withdrawRes);
+			} catch (error) {
+				log.error('withdraw error %s', error);
+			}
 
-			let withdrawRes = await stakingService.withdrawStake(serviceOwner, serviceId, options);
-			log.info('withdraw res %2j', withdrawRes);
+			// await stakingService.tokenContract.approve(stakingService.activeContract.address, sendAmount, options);
+			// try {
+			// 	await await stakingService.tokenContract.approve(stakingService.activeContract.address, sendAmount, options);
+			// }
 		} catch (error) {
 			log.error('staking error %s', error);
 		}

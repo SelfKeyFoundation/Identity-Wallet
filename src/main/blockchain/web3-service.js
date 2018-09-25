@@ -30,6 +30,7 @@ export class Web3Service {
 		const { HttpProvider } = this.web3.providers;
 		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
+		this.nonce = 0;
 	}
 	async handleTicket(data) {
 		log.debug('handle ticket %2j', data);
@@ -112,7 +113,6 @@ export class Web3Service {
 			opts.gasPrice = await this.web3.eth.getGasPrice();
 		}
 		opts.gasPrice = this.web3.utils.toHex(opts.gasPrice);
-
 		if (!opts.gas) {
 			opts.gas = await contactMethodInstance.estimateGas({
 				from: opts.from,
@@ -121,11 +121,12 @@ export class Web3Service {
 		}
 
 		let data = contactMethodInstance.encodeABI();
-		let nonce = this.web3.utils.toHex(
-			await this.web3.eth.getTransactionCount(opts.from, 'pending')
-		);
+		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
+		if (nonce === this.nonce) {
+			nonce++;
+		}
 		let rawTx = {
-			nonce,
+			nonce: this.web3.utils.toHex(nonce),
 			to: contractAdress,
 			value: this.web3.utils.toHex(0),
 			data,
@@ -135,7 +136,13 @@ export class Web3Service {
 		const tx = new EtheriumTx(rawTx);
 		tx.sign(wallet.privateKey);
 		let serializedTx = '0x' + tx.serialize().toString('hex');
-		return { ticketPromise: this.web3.eth.sendSignedTransaction(serializedTx) };
+		this.nonce = nonce;
+		return {
+			ticketPromise: this.web3.eth.sendSignedTransaction(serializedTx).catch(error => {
+				this.nonce = 0;
+				return error;
+			})
+		};
 	}
 }
 

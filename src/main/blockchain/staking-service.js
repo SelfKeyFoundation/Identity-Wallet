@@ -21,7 +21,11 @@ export class StakingService {
 		let balance = 0;
 		options = { ...options };
 		for (let i = 0; i < contracts.length; i++) {
-			balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
+			try {
+				balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
+			} catch (error) {
+				balance = 0;
+			}
 			if (!balance) continue;
 			info.balance = balance;
 			info.contract = contracts[i];
@@ -135,6 +139,13 @@ export class EtheriumContract {
 		const opt = options.options;
 		const method = opt.method || 'send';
 		const onceListenerName = method === 'send' ? 'transactionHash' : null;
+		if (method === 'estimateGas') {
+			// TODO: fix generic gas estimation
+			return 100000;
+		}
+		if (!opt.gas) {
+			opt.gas = 100000;
+		}
 		let hash = await this.web3.waitForTicket({
 			method,
 			contractMethodArgs: args || [],
@@ -144,18 +155,8 @@ export class EtheriumContract {
 			onceListenerName,
 			args: [opt]
 		});
+		// TODO: add pending transactions to db
 		return hash;
-		// console.log(hash);
-		// return TxHistory.addOrUpdate({
-		// 	hash,
-		// 	from: options.from,
-		// 	to: this.address,
-		// 	contractAddress: this.address,
-		// 	value: 0,
-		// 	gasPrice: 0,
-		// 	networkId: CONFIG.chainId,
-		// 	timeStamp: Date.now()
-		// });
 	}
 
 	call(options) {

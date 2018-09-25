@@ -105,7 +105,7 @@ describe('Web3Service', () => {
 			let wallet = { publicKey: 'test', privateKey: 'test', profile: 'local' };
 			store.state.wallet = wallet;
 			const args = { from: '0x' + wallet.publicKey };
-			sinon.stub(ethMock, 'sendSignedTransaction');
+			sinon.stub(ethMock, 'sendSignedTransaction').resolves('ok');
 			service.web3.eth = ethMock;
 			service.web3.utils = ethUtilMock;
 			await service.sendSignedTransaction(
