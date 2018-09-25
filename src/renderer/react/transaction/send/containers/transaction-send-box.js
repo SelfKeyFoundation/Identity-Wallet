@@ -45,20 +45,14 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.cancelSend());
 	}
 
-	onSendAction(data) {
-		console.log('dsadasdasdasdasdas', data);
-		this.startSend();
+	handleConfirmAction() {
+		this.props.dispatch(transactionOperations.confirmSend());
+		console.log('TEST, HERE', this.props.navigateToTransactionProgress());
+		this.props.navigateToTransactionProgress();
 	}
 
-	validateEthAddress(field = { value: '' }) {
-		let check;
-		try {
-			let toChecksumAddress = web3Utils.toChecksumAddress(field.value);
-			check = web3Utils.isHex(field.value) && web3Utils.isAddress(toChecksumAddress);
-		} catch (e) {
-			check = false;
-		}
-		console.log('check!!!', check);
+	handleCancelAction() {
+		this.props.dispatch(transactionOperations.cancelSend());
 	}
 
 	render() {
