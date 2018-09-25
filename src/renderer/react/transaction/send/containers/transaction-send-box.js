@@ -2,52 +2,74 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionSendBox } from 'selfkey-ui';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
-import Web3Service from 'main/blockchain/web3-service';
-
-const web3Service = new Web3Service();
-const web3Utils = web3Service.constructor.web3.utils;
+import { transactionOperations, transactionSelectors } from 'common/transaction';
+import { getLocale } from 'common/locale/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 
 class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
+		this.props.dispatch(transactionOperations.init());
 	}
 
 	loadData() {
-		const { dispatch } = this.props;
-		dispatch(ethGasStationInfoOperations.loadData());
+		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
 
-	onSendAction(data) {
-		console.log('dsadasdasdasdasdas', data);
-		this.startSend();
+	onSendAction() {
+		this.props.dispatch(transactionOperations.startSend(this.props.cryptoCurrency));
 	}
 
-	validateEthAddress(field = { value: '' }) {
-		let check;
-		try {
-			let toChecksumAddress = web3Utils.toChecksumAddress(field.value);
-			check = web3Utils.isHex(field.value) && web3Utils.isAddress(toChecksumAddress);
-		} catch (e) {
-			check = false;
-		}
-		console.log('check!!!', check);
+	handleAddressChange(value) {
+		this.props.dispatch(transactionOperations.setAddress(value));
+	}
+
+	handleAmountChange(value) {
+		this.props.dispatch(transactionOperations.setAmount(value));
+	}
+
+	handleGasPriceChange(field) {
+		this.props.dispatch(transactionOperations.setGasPrice(field.target.value));
+	}
+
+	handleGasLimitChange(field) {
+		this.props.dispatch(transactionOperations.setGasLimit(field.target.value));
+	}
+
+	handleConfirmAction() {
+		this.props.dispatch(transactionOperations.confirmSend());
+		console.log('TEST, HERE', this.props.navigateToTransactionProgress());
+		this.props.navigateToTransactionProgress();
+	}
+
+	handleCancelAction() {
+		this.props.dispatch(transactionOperations.cancelSend());
 	}
 
 	render() {
 		return (
 			<TransactionSendBox
-				onAddressFieldChange={this.validateEthAddress}
-				onSendAction={this.onSendAction}
+				onAddressFieldChange={e => this.handleAddressChange(e)}
+				onSendAction={() => this.onSendAction()}
 				{...this.props}
-				reloadEthGasStationInfoAction={this.loadData.bind(this)}
+				reloadEthGasStationInfoAction={() => this.loadData()}
+				onAmountInputChange={value => this.handleAmountChange(value)}
+				changeGasPriceAction={e => this.handleGasPriceChange(e)}
+				changeGasLimitAction={e => this.handleGasLimitChange(e)}
+				confirmAction={() => this.handleConfirmAction()}
+				cancelAction={() => this.handleCancelAction()}
 			/>
 		);
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+	console.log(transactionSelectors.getTransaction(state, props.cryptoCurrency));
 	return {
-		...ethGasStationInfoSelectors.getEthGasStationInfo(state)
+		...getLocale(state),
+		...getFiatCurrency(state),
+		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
+		...transactionSelectors.getTransaction(state, props.cryptoCurrency)
 	};
 };
 

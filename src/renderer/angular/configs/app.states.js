@@ -348,13 +348,34 @@ function appStates(
 		})
 
 		.state('member.wallet.send-transaction', {
-			url: '/member/wallet/send-transaction',
+			abstract: true,
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/transaction-layout.html'
+				}
+			}
+		})
+
+		.state('member.wallet.send-transaction.main', {
+			url: '/member/wallet/send-transaction/main',
 			views: {
 				main: {
 					templateUrl: 'common/dialogs/send-transaction.html',
 					controller: 'SendTransactionController'
-					// templateUrl: 'common/dialogs/send-token.html',
-					// controller: 'SendTokenDialogController'
+				}
+			},
+			params: {
+				symbol: null,
+				allowSelectERC20Token: null
+			}
+		})
+
+		.state('member.wallet.send-transaction.progress', {
+			url: '/member/wallet/send-transaction/progress',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-progress.html',
+					controller: 'SendTransactionProgressController'
 				}
 			},
 			params: {

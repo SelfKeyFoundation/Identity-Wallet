@@ -4,21 +4,14 @@ const log = new Logger('SendTransactionController');
 
 // const EthUnits = require('../../../classes/eth-units');
 
-function SendTransactionController($scope, $state, $stateParams, CONFIG, RPCService) {
+function SendTransactionController($scope, $state, $stateParams) {
 	'ngInject';
 
-	let args = {
-		allowSelectERC20Token: $stateParams.allowSelectERC20Token
-	};
 	$scope.symbol = $stateParams.symbol;
 
 	log.info('SendTransactionController');
-	log.debug('SendTransactionController %j %j', args, CONFIG);
 
 	$scope.cancel = event => {
-		// cancelEstimatedGasCheck(); TODO tato
-		// cancelTxCheck(); TODO tato
-
 		if (!$scope.symbol) {
 			$state.go('member.dashboard.main');
 		} else {
@@ -26,16 +19,11 @@ function SendTransactionController($scope, $state, $stateParams, CONFIG, RPCServ
 		}
 	};
 
-	$scope.send = () => {
-		$scope.address = '';
-	};
-
-	$scope.onAddressFieldChange = value => {
-		$scope.address = value;
-		// validation
+	$scope.navigateToTransactionProgress = () => {
+		$state.go('member.wallet.send-transaction.progress', { symbol: $scope.symbol });
 	};
 }
 
-SendTransactionController.$inject = ['$scope', '$state', '$stateParams', 'CONFIG', 'RPCService'];
+SendTransactionController.$inject = ['$scope', '$state', '$stateParams'];
 
 module.exports = SendTransactionController;
