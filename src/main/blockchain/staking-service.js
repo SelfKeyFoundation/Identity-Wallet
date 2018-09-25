@@ -15,38 +15,56 @@ export class StakingService {
 		this.deprecatedContracts = [];
 		this.web3 = web3Service;
 	}
-	async getStakingInfo(depositor, serviceAddress, serviceId) {
-		let info = { balance: 0, serviceAddress, serviceId, contract: null };
+	async getStakingInfo(serviceAddress, serviceId, options) {
+		let info = { balance: 0, serviceAddress, serviceId, contract: null, releaseDate: 0 };
 		let contracts = [this.activeContract].concat(this.deprecatedContracts);
 		let balance = 0;
+		options = { ...options };
 		for (let i = 0; i < contracts.length; i++) {
-			balance = await contracts[i].getBalance(depositor, serviceAddress, serviceId);
+			balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
 			if (!balance) continue;
 			info.balance = balance;
 			info.contract = contracts[i];
-			if (contracts[i].isDeprecated) {
-				info.releaseDate = 0;
-			} else {
+			if (!contracts[i].isDeprecated) {
 				info.releaseDate = await contracts[i].getReleaseDate(
-					depositor,
 					serviceAddress,
-					serviceId
+					serviceId,
+					options
 				);
 			}
 			return info;
 		}
 		return info;
 	}
-	async placeStake(sourceAddress, ammount, serviceAddress, serviceId) {
-		await this.tokenContract.approve(sourceAddress, this.activeContract.address, ammount);
-		return this.activeContract.deposit(sourceAddress, ammount, serviceAddress, serviceId);
+	async placeStake(ammount, serviceAddress, serviceId, options) {
+		let hashes = {};
+		options = { ...options };
+		let totalGas = options.gas;
+		let approveGas, depositGas;
+		if (totalGas) {
+			approveGas = await this.tokenContract.approve(this.activeContract.address, ammount, {
+				from: options.from,
+				method: 'estimateGas',
+				value: '0x00'
+			});
+			depositGas = totalGas - approveGas;
+		}
+		hashes.approve = await this.tokenContract.approve(this.activeContract.address, ammount, {
+			...options,
+			gas: approveGas
+		});
+		hashes.deposit = await this.activeContract.deposit(ammount, serviceAddress, serviceId, {
+			...options,
+			gas: depositGas
+		});
+		return hashes;
 	}
-	async withdrawStake(sourceAddress, serviceAddress, serviceId) {
-		let info = await this.getStakingInfo(sourceAddress, serviceAddress, serviceId);
+	async withdrawStake(serviceAddress, serviceId, options) {
+		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
 		if (!info.contract) throw new Error('no contract to withdraw from');
 		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
 			throw new Error('stake is locked');
-		return info.contract.withdraw(sourceAddress, serviceAddress, serviceId);
+		return info.contract.withdraw(serviceAddress, serviceId, options);
 	}
 	parseRemoteConfig(entities) {
 		return entities
@@ -112,14 +130,19 @@ export class EtheriumContract {
 	}
 
 	async send(options) {
+		const { args } = options;
+		const contractMethod = options.method;
+		const opt = options.options;
+		const method = opt.method || 'send';
+		const onceListenerName = method === 'send' ? 'transactionHash' : null;
 		let hash = await this.web3.waitForTicket({
-			method: 'send',
-			contractMethodArgs: options.args || [],
+			method,
+			contractMethodArgs: args || [],
 			contractAddress: this.address,
-			contractMethod: options.method,
+			contractMethod,
 			customAbi: this.abi,
-			onceListenerName: 'transactionHash',
-			args: [{ from: options.from }]
+			onceListenerName,
+			args: [opt]
 		});
 		return hash;
 		// console.log(hash);
@@ -142,7 +165,7 @@ export class EtheriumContract {
 			contractAddress: this.address,
 			contractMethod: options.method,
 			customAbi: this.abi,
-			args: [{ from: options.from }]
+			args: [options.options || {}]
 		});
 	}
 }
@@ -153,42 +176,44 @@ export class StakingContract extends EtheriumContract {
 		this.isDeprecated = isDeprecated;
 	}
 
-	getBalance(sourceAddress, serviceAddress, serviceId) {
+	getBalance(serviceAddress, serviceId, options) {
 		return this.call({
-			from: sourceAddress,
-			args: [sourceAddress, serviceAddress, serviceId],
+			args: [options.from, serviceAddress, serviceId],
+			options,
 			method: 'balances'
 		});
 	}
 
-	deposit(sourceAddress, ammount, serviceAddress, serviceId) {
-		return this.send({
-			from: sourceAddress,
+	deposit(ammount, serviceAddress, serviceId, options) {
+		options = { method: 'send', ...options };
+		return this[options.method]({
 			args: [ammount, serviceAddress, serviceId],
+			options,
 			method: 'deposit'
 		});
 	}
 
-	withdraw(sourceAddress, serviceAddress, serviceId) {
-		return this.send({
-			from: sourceAddress,
+	withdraw(serviceAddress, serviceId, options) {
+		options = { method: 'send', ...options };
+		return this[options.method]({
 			args: [serviceAddress, serviceId],
+			options,
 			method: 'withdraw'
 		});
 	}
 
-	getReleaseDate(sourceAddress, serviceAddress, serviceId) {
+	getReleaseDate(serviceAddress, serviceId, options) {
 		return this.call({
-			from: sourceAddress,
-			args: [sourceAddress, serviceAddress, serviceId],
+			args: [options.from, serviceAddress, serviceId],
+			options,
 			method: 'releaseDates'
 		});
 	}
 
-	getLockPeriod(sourceAddress, serviceAddress, serviceId) {
+	getLockPeriod(serviceAddress, serviceId, options) {
 		return this.call({
-			from: sourceAddress,
 			args: [serviceAddress, serviceId],
+			options: { ...options },
 			method: 'lockPeriods'
 		});
 	}
@@ -199,10 +224,11 @@ export class SelfKeyTokenContract extends EtheriumContract {
 		super(web3, token.address, SELFKEY_ABI);
 		this.token = token;
 	}
-	approve(sourceAddress, depositVaultAddress, maxAmmount) {
-		return this.send({
-			from: sourceAddress,
+	approve(depositVaultAddress, maxAmmount, options) {
+		options = { method: 'send', ...options };
+		return this[options.method]({
 			args: [depositVaultAddress, maxAmmount],
+			options,
 			method: 'approve'
 		});
 	}

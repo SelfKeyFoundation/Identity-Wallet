@@ -373,31 +373,30 @@ function startStakingTest(ctx) {
 			);
 			const serviceId = web3Service.web3.utils.toHex('test');
 			const sourceAddress = '0x' + wallet.publicKey;
+			const options = { from: sourceAddress };
 			log.info('active contract %2j', stakingService.activeContract.address);
 
-			let info = await stakingService.getStakingInfo(sourceAddress, serviceOwner, serviceId);
+			let info = await stakingService.getStakingInfo(serviceOwner, serviceId, options);
 			log.info('Staking initial balance %2j', _.omit(info, 'contract'));
 
 			let lockPeriod = await stakingService.activeContract.getLockPeriod(
-				sourceAddress,
 				serviceOwner,
-				serviceId
+				serviceId,
+				options
 			);
 			log.info('Staking lock period %2j', lockPeriod);
 
 			let depositRes = await stakingService.placeStake(
-				sourceAddress,
 				sendAmount,
 				serviceOwner,
-				serviceId
+				serviceId,
+				options
 			);
 			log.info('deposite res %2j', depositRes);
 
-			let withdrawRes = await stakingService.withdrawStake(
-				sourceAddress,
-				serviceOwner,
-				serviceId
-			);
+			if (!+info.balance) return;
+
+			let withdrawRes = await stakingService.withdrawStake(serviceOwner, serviceId, options);
 			log.info('withdraw res %2j', withdrawRes);
 		} catch (error) {
 			log.error('staking error %s', error);

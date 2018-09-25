@@ -90,8 +90,8 @@ export class Web3Service {
 			}
 		});
 	}
-	async sendSignedTransaction(contactMethodInstance, contractAdrress, args, wallet) {
-		let opts = (args || [])[0];
+	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {
+		let opts = { ...(args || [])[0] };
 		if (!opts.from) {
 			throw new Error('src address is not defined');
 		}
@@ -108,24 +108,28 @@ export class Web3Service {
 			throw new Error('the wallet provided is not unlocked');
 		}
 
-		// TODO: use external gas and gas limit, provide api for estimates
-		let gasPrice =
-			opts.gasPrice ||
-			(await contactMethodInstance.estimateGas({
+		if (!opts.gasPrice) {
+			opts.gasPrice = await this.web3.eth.getGasPrice();
+		}
+		opts.gasPrice = this.web3.utils.toHex(opts.gasPrice);
+
+		if (!opts.gas) {
+			opts.gas = await contactMethodInstance.estimateGas({
 				from: opts.from,
-				value: '0x00'
-			}));
-		let gas = gasPrice * 2;
+				value: this.web3.utils.toHex(0)
+			});
+		}
+
 		let data = contactMethodInstance.encodeABI();
-		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
+		let nonce = this.web3.utils.toHex(
+			await this.web3.eth.getTransactionCount(opts.from, 'pending')
+		);
 		let rawTx = {
-			nonce: this.web3.utils.toHex(nonce),
-			to: contractAdrress,
-			value: '0x00',
-			data: data,
+			nonce,
+			to: contractAdress,
+			value: this.web3.utils.toHex(0),
+			data,
 			chainId: CONFIG.chainId,
-			gasPrice,
-			gas,
 			...opts
 		};
 		const tx = new EtheriumTx(rawTx);

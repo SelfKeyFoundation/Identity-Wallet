@@ -131,9 +131,9 @@ describe('Contract', () => {
 	});
 	it('call', async () => {
 		sinon.stub(web3ServiceMock, 'waitForTicket').resolves(10);
-
+		const options = { from: sourceAddress, testOpt: 'test' };
 		let res = await contract.call({
-			from: sourceAddress,
+			options,
 			args: [testArg1, testArg2],
 			method: 'test'
 		});
@@ -144,16 +144,16 @@ describe('Contract', () => {
 			contractAddress: contract.address,
 			contractMethod: 'test',
 			customAbi: contract.abi,
-			args: [{ from: sourceAddress }]
+			args: [options]
 		});
 		expect(res).toBe(10);
 	});
 	it('send', async () => {
 		sinon.stub(web3ServiceMock, 'waitForTicket').resolves(10);
-
+		const options = { from: sourceAddress, testOpt: 'test', method: 'send' };
 		let res = await contract.send({
-			from: sourceAddress,
 			args: [testArg1, testArg2],
+			options,
 			method: 'test'
 		});
 		expect(web3ServiceMock.waitForTicket.calledOnce).toBeTruthy();
@@ -164,7 +164,27 @@ describe('Contract', () => {
 			contractMethod: 'test',
 			customAbi: contract.abi,
 			onceListenerName: 'transactionHash',
-			args: [{ from: sourceAddress }]
+			args: [options]
+		});
+		expect(res).toBe(10);
+	});
+	it('estimateGas', async () => {
+		sinon.stub(web3ServiceMock, 'waitForTicket').resolves(10);
+		const options = { from: sourceAddress, testOpt: 'test', method: 'estimateGas' };
+		let res = await contract.send({
+			args: [testArg1, testArg2],
+			options,
+			method: 'test'
+		});
+		expect(web3ServiceMock.waitForTicket.calledOnce).toBeTruthy();
+		expect(web3ServiceMock.waitForTicket.getCall(0).args[0]).toEqual({
+			method: 'estimateGas',
+			contractMethodArgs: [testArg1, testArg2],
+			contractAddress: contract.address,
+			contractMethod: 'test',
+			customAbi: contract.abi,
+			onceListenerName: null,
+			args: [options]
 		});
 		expect(res).toBe(10);
 	});
@@ -189,55 +209,55 @@ describe('StakingContract', () => {
 	});
 	it('getBalance', async () => {
 		sinon.stub(contract, 'call');
-
-		await contract.getBalance(testDepositor, testServiceOwner, testServiceID);
+		const options = { from: testDepositor };
+		await contract.getBalance(testServiceOwner, testServiceID, options);
 		expect(contract.call.calledOnce).toBeTruthy();
 		expect(contract.call.getCall(0).args[0]).toEqual({
-			from: testDepositor,
 			args: [testDepositor, testServiceOwner, testServiceID],
-			method: 'balances'
+			method: 'balances',
+			options
 		});
 	});
 	it('deposit', async () => {
 		sinon.stub(contract, 'send');
-
-		await contract.deposit(testDepositor, 10, testServiceOwner, testServiceID);
+		const options = { from: testDepositor, method: 'send' };
+		await contract.deposit(10, testServiceOwner, testServiceID, options);
 		expect(contract.send.calledOnce).toBeTruthy();
 		expect(contract.send.getCall(0).args[0]).toEqual({
-			from: testDepositor,
+			options,
 			args: [10, testServiceOwner, testServiceID],
 			method: 'deposit'
 		});
 	});
 	it('withdraw', async () => {
 		sinon.stub(contract, 'send');
-
-		await contract.withdraw(testDepositor, testServiceOwner, testServiceID);
+		const options = { from: testDepositor, method: 'send' };
+		await contract.withdraw(testServiceOwner, testServiceID, options);
 		expect(contract.send.calledOnce).toBeTruthy();
 		expect(contract.send.getCall(0).args[0]).toEqual({
-			from: testDepositor,
+			options,
 			args: [testServiceOwner, testServiceID],
 			method: 'withdraw'
 		});
 	});
 	it('getReleaseDate', async () => {
 		sinon.stub(contract, 'call');
-
-		await contract.getReleaseDate(testDepositor, testServiceOwner, testServiceID);
+		const options = { from: testDepositor };
+		await contract.getReleaseDate(testServiceOwner, testServiceID, options);
 		expect(contract.call.calledOnce).toBeTruthy();
 		expect(contract.call.getCall(0).args[0]).toEqual({
-			from: testDepositor,
+			options,
 			args: [testDepositor, testServiceOwner, testServiceID],
 			method: 'releaseDates'
 		});
 	});
 	it('getLockPeriud', async () => {
 		sinon.stub(contract, 'call');
-
-		await contract.getLockPeriod(testDepositor, testServiceOwner, testServiceID);
+		const options = { from: testDepositor };
+		await contract.getLockPeriod(testServiceOwner, testServiceID, options);
 		expect(contract.call.calledOnce).toBeTruthy();
 		expect(contract.call.getCall(0).args[0]).toEqual({
-			from: testDepositor,
+			options,
 			args: [testServiceOwner, testServiceID],
 			method: 'lockPeriods'
 		});
@@ -259,10 +279,11 @@ describe('SelfKeyTokenContract', () => {
 	});
 	it('approve', async () => {
 		sinon.stub(contract, 'send');
-		await contract.approve(testDepositor, depositVaultAddress, 200);
+		const options = { from: testDepositor, method: 'send' };
+		await contract.approve(depositVaultAddress, 200, options);
 		expect(contract.send.calledOnce).toBeTruthy();
 		expect(contract.send.getCall(0).args[0]).toEqual({
-			from: testDepositor,
+			options,
 			args: [depositVaultAddress, 200],
 			method: 'approve'
 		});

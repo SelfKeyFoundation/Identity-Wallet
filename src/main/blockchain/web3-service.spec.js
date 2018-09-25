@@ -38,6 +38,9 @@ const ethMock = {
 	getTransactionCount() {
 		return Promise.resolve(15);
 	},
+	getGasPrice() {
+		return Promise.resolve(100);
+	},
 	Contract: ContractMock,
 	method1() {
 		return mockPromise;
