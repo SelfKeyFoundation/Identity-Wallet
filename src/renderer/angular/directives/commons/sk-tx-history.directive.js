@@ -76,7 +76,7 @@ function SKTxHistoryDirective($rootScope, $interval, $filter, RPCService, Common
 					tx.externalLink = `https://${testnet}etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
 					tx.statusIconName = getTxStatusIconName(tx);
-					tx.date = $filter('date')(tx.timeStamp, 'yyyy-dd-MM');
+					tx.date = $filter('date')(tx.timeStamp, 'yyyy-dd-MM h:mm:ss a');
 
 					return tx;
 				});
