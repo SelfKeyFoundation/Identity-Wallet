@@ -597,7 +597,6 @@ function SendTokenDialogController(
 
 	$scope.$on('$destroy', () => {
 		if (deregisterTxSignEvent) deregisterTxSignEvent();
-		// if (deregisterTxStatusEvent) deregisterTxStatusEvent();
 		cancelEstimatedGasCheck();
 	});
 }
