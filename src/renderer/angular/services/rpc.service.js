@@ -47,6 +47,10 @@ function RPCService($rootScope, $window, $q, $timeout, CommonService) {
 			this.ipcRenderer.on('APP_FAILED_LOADING', event => {
 				$rootScope.$broadcast('APP_FAILED_LOADING');
 			});
+
+			this.ipcRenderer.on('WSS_USER_PROMPT', event => {
+				$rootScope.openCertificateDialog();
+			});
 		}
 
 		makeCall(actionName, data) {

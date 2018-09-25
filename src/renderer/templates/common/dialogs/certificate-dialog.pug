@@ -4,6 +4,8 @@ md-dialog.generic-info-container(aira-lable="{{title}}")
             span {{ title }}
             span.close(ng-click="cancel($event)") x
         .info-body 
-            div {{ text }}    
-            md-button.default.cancal-btn(ng-click="cancel($event)")
+            div {{ text }}
+            md-button.default(ng-click="accept($event)")
+                span.primary accept
+            md-button.default.cancel-btn(ng-click="cancel($event)")
                 span.primary close

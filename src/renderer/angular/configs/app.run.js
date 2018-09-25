@@ -131,6 +131,18 @@ function AppRun(
 		});
 	};
 
+	$rootScope.openCertificateDialog = event => {
+		$mdDialog.show({
+			controller: 'CertificateDialogController',
+			templateUrl: 'common/dialogs/certificate-dialog.html',
+			parent: angular.element(document.body),
+			targetEvent: event,
+			clickOutsideToClose: false,
+			fullscreen: false,
+			escapeToClose: false
+		});
+	};
+
 	$rootScope.openNewERC20TokenInfoDialog = (event, title, symbol, balance) => {
 		$mdDialog.show({
 			controller: 'NewERC20TokenInfoController',
