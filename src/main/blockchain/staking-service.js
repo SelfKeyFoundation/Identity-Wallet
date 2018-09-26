@@ -4,7 +4,6 @@ import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
 import { Token } from '../token/token';
 import BN from 'bignumber.js';
-// import { TxHistory } from './tx-history';
 
 // TODO: use selfkey domain here
 const CONFIG_URL =
