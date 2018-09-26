@@ -16,8 +16,24 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
 
-	onSendAction() {
-		this.props.dispatch(transactionOperations.startSend(this.props.cryptoCurrency));
+	processSignTxError(error) {
+		if (this.props.isHardwareWallet) {
+			this.props.norifySignTxFealure(error);
+		}
+		console.log('error', error);
+	}
+
+	async onSendAction() {
+		if (this.props.isHardwareWallet) {
+			this.props.showConfirmTransactionInfoModal();
+		}
+		try {
+			await this.props.dispatch(transactionOperations.startSend(this.props.cryptoCurrency));
+		} catch (error) {
+			this.processSignTxError(error);
+		}
+
+		this.props.closeModal(); // neded for hardware wallets to close info modals
 	}
 
 	handleAddressChange(value) {

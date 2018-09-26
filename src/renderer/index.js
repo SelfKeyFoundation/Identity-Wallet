@@ -218,7 +218,11 @@ angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGas
 const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'cryptoCurrency',
 	'closeAction',
-	'navigateToTransactionProgress'
+	'navigateToTransactionProgress',
+	'showConfirmTransactionInfoModal',
+	'isHardwareWallet',
+	'closeModal',
+	'norifySignTxFealure'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
 

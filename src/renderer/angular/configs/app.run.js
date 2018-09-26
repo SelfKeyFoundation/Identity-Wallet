@@ -269,12 +269,11 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToLedgerDialog = (event, isSendingTxFealure) => {
+	$rootScope.openConnectingToLedgerDialog = isSendingTxFealure => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
 			parent: angular.element(document.body),
-			targetEvent: event,
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
@@ -356,7 +355,7 @@ function AppRun(
 	};
 
 	$rootScope.openRejectHardwareWalletTxWarningDialog = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 
 		return $mdDialog.show({
 			controller: [
@@ -382,7 +381,7 @@ function AppRun(
 	};
 
 	$rootScope.openConfirmHardwareWalletTxInfoWindow = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',
@@ -408,7 +407,7 @@ function AppRun(
 	};
 
 	$rootScope.openUnlockLedgerInfoWindow = () => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',
@@ -433,7 +432,7 @@ function AppRun(
 	};
 
 	$rootScope.openHardwareWalletTimedOutWindow = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',

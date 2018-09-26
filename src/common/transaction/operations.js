@@ -5,6 +5,8 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
+import LedgerService from 'main/blockchain/leadger-service';
+// import TrezorService from 'main/blockchain/trezor-service';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
 
@@ -16,6 +18,8 @@ const web3Utils = web3Service.web3.utils;
 
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
+
+const ledgerService = new LedgerService({ web3Service });
 
 const init = () => async dispatch => {
 	await dispatch(
@@ -138,9 +142,16 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, privateKey) => {
+const signTransaction = async (rawTx, wallet) => {
+	if (wallet.profile === 'ledger') {
+		return ledgerService.signTransaction({
+			dataToSign: rawTx,
+			address: `0x${wallet.publicKey}`
+		});
+	}
+
 	let eTx = new Tx(rawTx);
-	eTx.sign(privateKey);
+	eTx.sign(wallet.privateKey);
 	return `0x${eTx.serialize().toString('hex')}`;
 };
 
@@ -166,7 +177,7 @@ const startSend = cryptoCurrency => async (dispatch, getState) => {
 		chainId: config.chainId || 3 // if missing - use ropsten testnet
 	};
 
-	const signedHex = await signTransaction(rawTx, wallet.privateKey);
+	const signedHex = await signTransaction(rawTx, wallet);
 	await dispatch(
 		actions.updateTransaction({
 			signedHex,
