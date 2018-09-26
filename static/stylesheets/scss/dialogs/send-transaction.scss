@@ -6,7 +6,8 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	transaction-send-box {
+	transaction-send-box,
+	transaction-send-progress-box {
 		width: 760px;
 	}
 }

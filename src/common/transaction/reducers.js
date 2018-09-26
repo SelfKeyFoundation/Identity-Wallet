@@ -9,6 +9,7 @@ const initialState = {
 	gasLimit: 0,
 	nouce: 0,
 	signedHex: '',
+	transactionHash: '',
 	addressError: false,
 	sending: false
 };

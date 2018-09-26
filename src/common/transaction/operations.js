@@ -21,6 +21,7 @@ const init = () => async dispatch => {
 			gasLimit: 0,
 			nouce: 0,
 			signedHex: '',
+			transactionHash: '',
 			addressError: false,
 			sending: false
 		})
@@ -178,13 +179,27 @@ const cancelSend = () => async dispatch => {
 
 const confirmSend = () => async (dispatch, getState) => {
 	const transaction = getTransaction(getState());
-	console.log('transaction.signedHex', transaction.signedHex);
 	const params = {
 		method: 'sendSignedTransaction',
-		args: [transaction.signedHex]
+		args: [transaction.signedHex],
+		contractAddress: null,
+		contractMethod: null,
+		onceListenerName: 'transactionHash'
 	};
 
-	await web3Service.waitForTicket(params);
+	await dispatch(
+		actions.updateTransaction({
+			status: 'Pending'
+		})
+	);
+
+	const transactionHash = await web3Service.waitForTicket(params);
+
+	await dispatch(
+		actions.updateTransaction({
+			transactionHash
+		})
+	);
 };
 
 export default {

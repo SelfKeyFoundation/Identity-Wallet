@@ -224,7 +224,8 @@ angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxW
 
 const transactionSendProgressBoxWrapper = react2angular(TransactionSendProgressBoxWrapper, [
 	'cryptoCurrency',
-	'closeAction'
+	'closeAction',
+	'openLink'
 ]);
 angular
 	.module('kyc-wallet')

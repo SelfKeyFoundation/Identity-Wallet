@@ -38,7 +38,6 @@ class TransactionSendBoxContainer extends Component {
 
 	handleConfirmAction() {
 		this.props.dispatch(transactionOperations.confirmSend());
-		console.log('TEST, HERE', this.props.navigateToTransactionProgress());
 		this.props.navigateToTransactionProgress();
 	}
 
