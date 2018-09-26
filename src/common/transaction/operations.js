@@ -17,6 +17,7 @@ const web3Utils = web3Service.web3.utils;
 
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
+const ledgerService = new LedgerService({ web3Service });
 
 const ledgerService = new LedgerService({ web3Service });
 

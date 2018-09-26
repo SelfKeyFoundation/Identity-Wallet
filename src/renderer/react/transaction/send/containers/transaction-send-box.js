@@ -18,7 +18,7 @@ class TransactionSendBoxContainer extends Component {
 
 	processSignTxError(error) {
 		if (this.props.isHardwareWallet) {
-			this.props.norifySignTxFailure(error);
+			this.props.norifySignTxFealure(error);
 		}
 		console.log('error', error);
 	}
