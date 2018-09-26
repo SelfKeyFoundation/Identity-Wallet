@@ -11,6 +11,7 @@ import LedgerService from './blockchain/leadger-service';
 import { CrashReportService } from '../common/logger/crash-report-service';
 import TrezorService from './blockchain/trezor-service';
 import RpcHandler from './rpc-handler';
+import { StakingService } from './blockchain/staking-service';
 
 export const configureContext = (store, app) => {
 	const container = createContainer({
@@ -36,7 +37,8 @@ export const configureContext = (store, app) => {
 		rpcHandler: asFunction(cradle => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();
-		}).singleton()
+		}).singleton(),
+		stakingService: asClass(StakingService).singleton()
 	});
 	return container;
 };

@@ -9,6 +9,10 @@ const {
 	getUserDataPath
 } = require('./utils/common');
 
+const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
+const NODE = process.env.NODE_OVERRIDE;
+const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+
 const common = {
 	defaultLanguage: 'en',
 	constants: {
@@ -25,7 +29,7 @@ const common = {
 			notary: 'addition_with_notary',
 			certified_true_copy: 'addition_with_certified_true_copy'
 		},
-		primaryToken: 'key'
+		primaryToken: PRIMARY_TOKEN || 'key'
 	},
 	notificationTypes: {
 		wallet: {
@@ -63,7 +67,7 @@ const dev = {
 	dev: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
-	chainId: 1,
+	chainId: 3,
 	node: 'infura'
 };
 
@@ -108,8 +112,17 @@ if (isDevMode() || isDebugMode()) {
 	conf = dev;
 }
 
+if (CHAIN_ID) {
+	conf.chainId = CHAIN_ID;
+}
+
+if (NODE) {
+	conf.node = NODE;
+}
+
 module.exports = {
 	common,
+	...common,
 	db,
 	...conf
 };
