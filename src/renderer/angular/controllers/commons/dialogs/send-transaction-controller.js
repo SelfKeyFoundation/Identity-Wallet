@@ -51,12 +51,12 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 				$rootScope.openUnlockLedgerInfoWindow();
 				break;
 			default:
-				let isSendingTxFealure = true;
-				$rootScope.openConnectingToLedgerDialog(isSendingTxFealure);
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToLedgerDialog(isSendingTxFailure);
 		}
 	};
 
-	$scope.onSignTxFealure = err => {
+	$scope.onSignTxFailure = err => {
 		console.log('error in controller', err);
 		if (profile === 'ledger') {
 			processLedgerErr(err);

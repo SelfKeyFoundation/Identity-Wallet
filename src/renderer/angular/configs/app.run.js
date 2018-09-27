@@ -269,7 +269,7 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToLedgerDialog = isSendingTxFealure => {
+	$rootScope.openConnectingToLedgerDialog = isSendingTxFailure => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
