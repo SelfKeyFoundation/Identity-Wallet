@@ -6,7 +6,7 @@ function ConnectingToHardwareWalletController(
 	$scope,
 	$mdDialog,
 	HardwareWalletService,
-	isSendingTxFealure,
+	isSendingTxFailure,
 	profile
 ) {
 	'ngInject';
@@ -65,7 +65,7 @@ function ConnectingToHardwareWalletController(
 			});
 	};
 
-	if (isSendingTxFealure) {
+	if (isSendingTxFailure) {
 		$scope.connectionFailed = true;
 		$scope.isConnecting = false;
 	} else {
@@ -73,7 +73,7 @@ function ConnectingToHardwareWalletController(
 	}
 
 	$scope.tryAgain = event => {
-		if (isSendingTxFealure) {
+		if (isSendingTxFailure) {
 			$rootScope.broadcastRetryToSign(event);
 		} else {
 			$scope.getAccounts();
@@ -86,7 +86,7 @@ ConnectingToHardwareWalletController.$inject = [
 	'$scope',
 	'$mdDialog',
 	'HardwareWalletService',
-	'isSendingTxFealure',
+	'isSendingTxFailure',
 	'profile'
 ];
 module.exports = ConnectingToHardwareWalletController;

@@ -97,8 +97,8 @@ function SendTokenDialogController(
 				$rootScope.openUnlockLedgerInfoWindow();
 				break;
 			default:
-				let isSendingTxFealure = true;
-				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFailure);
 		}
 	};
 
@@ -118,8 +118,8 @@ function SendTokenDialogController(
 				$rootScope.incorrectTrezorPinEntered = true;
 				break;
 			default:
-				let isSendingTxFealure = true;
-				$rootScope.openConnectingToTrezorDialog(event, isSendingTxFealure);
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToTrezorDialog(event, isSendingTxFailure);
 		}
 	};
 

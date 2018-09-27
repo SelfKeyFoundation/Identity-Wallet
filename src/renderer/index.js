@@ -222,7 +222,7 @@ const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'showConfirmTransactionInfoModal',
 	'isHardwareWallet',
 	'closeModal',
-	'norifySignTxFealure'
+	'norifySignTxFailure'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
 

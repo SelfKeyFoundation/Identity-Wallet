@@ -269,7 +269,7 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToLedgerDialog = isSendingTxFealure => {
+	$rootScope.openConnectingToLedgerDialog = isSendingTxFailure => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
@@ -277,13 +277,13 @@ function AppRun(
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
-				isSendingTxFealure,
+				isSendingTxFailure,
 				profile: 'ledger'
 			}
 		});
 	};
 
-	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFealure) => {
+	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFailure) => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-trezor.html',
@@ -292,7 +292,7 @@ function AppRun(
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
-				isSendingTxFealure,
+				isSendingTxFailure,
 				profile: 'trezor'
 			}
 		});
