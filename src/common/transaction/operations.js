@@ -6,7 +6,6 @@ import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
 import LedgerService from 'main/blockchain/leadger-service';
-// import TrezorService from 'main/blockchain/trezor-service';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
 
@@ -148,6 +147,16 @@ const signTransaction = async (rawTx, wallet) => {
 			dataToSign: rawTx,
 			address: `0x${wallet.publicKey}`
 		});
+	}
+
+	if (wallet.profile === 'trezor') {
+		console.log('start');
+		await actions.signTxWithTrezor({
+			dataToSign: rawTx,
+			accountIndex: 0
+		});
+		// AWAIT doest works here
+		console.log('end');
 	}
 
 	let eTx = new Tx(rawTx);

@@ -26,6 +26,11 @@ const transactionReducer = (state = initialState, action) => {
 				...state,
 				addressError: action.payload
 			};
+		case types.TREZOR_TX_SIGN:
+			return {
+				...state,
+				signedHex: action.payload
+			};
 		default:
 			return state;
 	}
