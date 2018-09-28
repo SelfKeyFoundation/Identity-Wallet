@@ -1,4 +1,5 @@
 import { getTokens } from 'common/wallet-tokens/selectors';
+import CONFIG from 'common/config.js';
 
 export const getExchanges = ({ exchanges }) => {
 	return exchanges.allIds.map(item => {
@@ -50,7 +51,7 @@ export const hasBalance = (state, name) => {
 	const exchange = getItemDetails(state, name);
 
 	const keyToken = getTokens(state).find(token => {
-		return token.symbol === 'KEY';
+		return token.symbol === CONFIG.constants.primaryToken.toUpperCase();
 	});
 
 	const requiredBalance = exchange.requiredBalance;
