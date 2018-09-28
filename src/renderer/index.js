@@ -12,6 +12,7 @@ import { TransactionsHistoryWrapper } from './react/transaction/transactions-his
 import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
 import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
+import { UnlockWrapper } from './react/marketplace/unlock';
 
 const { Logger } = require('common/logger');
 
@@ -238,6 +239,9 @@ angular.module('kyc-wallet').component('item', itemWrapper);
 
 const withoutBalanceWrapper = react2angular(WithoutBalanceWrapper, ['closeAction']);
 angular.module('kyc-wallet').component('withoutBalance', withoutBalanceWrapper);
+
+const unlockMarketplace = react2angular(UnlockWrapper, ['closeAction', 'confirmAction']);
+angular.module('kyc-wallet').component('unlockMarketplace', unlockMarketplace);
 /**
  * controllers
  */
@@ -452,6 +456,11 @@ const MemberMarketplaceNoBalanceController = require('./angular/controllers/memb
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceNoBalanceController', MemberMarketplaceNoBalanceController);
+
+const MemberMarketplaceUnlockController = require('./angular/controllers/member/marketplace/unlock-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('MemberMarketplaceUnlockController', MemberMarketplaceUnlockController);
 
 /**
  * config states

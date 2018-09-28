@@ -80,11 +80,11 @@ function ManageCryptosController(
 				return 1;
 			}
 
-			if (symbolA === 'key') {
+			if (symbolA === $rootScope.PRIMARY_TOKEN) {
 				return -1;
 			}
 
-			if (symbolB === 'key') {
+			if (symbolB === $rootScope.PRIMARY_TOKEN) {
 				return 1;
 			}
 

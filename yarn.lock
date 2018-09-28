@@ -621,6 +621,12 @@
     "@babel/plugin-transform-react-jsx-self" "^7.0.0"
     "@babel/plugin-transform-react-jsx-source" "^7.0.0"
 
+"@babel/runtime@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/runtime@7.0.0-beta.42":
   version "7.0.0-beta.42"
   resolved "http://registry.npmjs.org/@babel/runtime/-/runtime-7.0.0-beta.42.tgz#352e40c92e0460d3e82f49bd7e79f6cda76f919f"
@@ -917,6 +923,14 @@
   dependencies:
     "@babel/runtime" "7.0.0-beta.42"
     recompose "^0.26.0 || ^0.27.0"
+
+"@material-ui/lab@^3.0.0-alpha.17":
+  version "3.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-3.0.0-alpha.17.tgz#9ed16896535ad3c8a03127aedc2b9e6efbb21035"
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    classnames "^2.2.5"
+    keycode "^2.1.9"
 
 "@posthtml/esm@^1.0.0":
   version "1.0.0"
@@ -2584,7 +2598,7 @@ bigi@^1.1.0, bigi@^1.2.1, bigi@^1.4.0, bigi@^1.4.1:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/bigi/-/bigi-1.4.2.tgz#9c665a95f88b8b08fc05cfd731f561859d725825"
 
-bignumber.js@7.2.1:
+bignumber.js@7.2.1, bignumber.js@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
 
@@ -12765,14 +12779,16 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#623e4c2e5831c641e473d85a6fd793970ff00ef1":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#6055b4359c715a6528d3845fc7f55a7f906cc74c":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#623e4c2e5831c641e473d85a6fd793970ff00ef1"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#6055b4359c715a6528d3845fc7f55a7f906cc74c"
   dependencies:
     "@material-ui/core" "^1.3.1"
     "@material-ui/icons" "^1.1.0"
+    "@material-ui/lab" "^3.0.0-alpha.17"
     "@types/google.visualization" "^0.0.42"
     "@types/react-dom" "^16.0.6"
+    bignumber.js "^7.2.1"
     jss "^9.8.7"
     jss-compose "^5.0.0"
     jss-expand "^5.3.0"

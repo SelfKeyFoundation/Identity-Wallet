@@ -423,6 +423,18 @@ function appStates(
 			params: {
 				data: {}
 			}
+		})
+		.state('member.marketplace.unlock', {
+			url: '/member/marketplace/unlock',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/unlock.html',
+					controller: 'MemberMarketplaceUnlockController'
+				}
+			},
+			params: {
+				data: {}
+			}
 		});
 
 	$urlRouterProvider.otherwise('/guest/loading');
