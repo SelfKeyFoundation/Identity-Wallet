@@ -10,6 +10,9 @@ import Tx from 'ethereumjs-tx';
 const web3Service = new Web3Service();
 const web3Utils = web3Service.constructor.web3.utils;
 
+let txInfoCheckInterval = null;
+const TX_CHECK_INTERVAL = 1500;
+
 const init = () => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -177,6 +180,40 @@ const cancelSend = () => async dispatch => {
 	);
 };
 
+const updateBalances = async oldBalance => {
+	await this.updateWalletBalance();
+	await this.updateTokensBalance();
+
+	const currentWallet = this.getCurrentWallet();
+	if (oldBalance === currentWallet.balance) {
+		setTimeout(() => {
+			this.updateBalances(oldBalance);
+		}, TX_CHECK_INTERVAL);
+	}
+};
+
+const startTxCheck = async (txHash, oldBalance) => {
+	txInfoCheckInterval = setInterval(async () => {
+		const txInfo = await web3Service.waitForTicket({
+			method: 'getTransactionReceipt',
+			args: [txHash]
+		});
+
+		if (txInfo && txInfo.blockNumber !== null) {
+			const status = Number(txInfo.status);
+			if (status) {
+				updateBalances(oldBalance);
+			}
+			clearInterval(txInfoCheckInterval);
+		}
+	}, TX_CHECK_INTERVAL);
+};
+
+const startTxBalanceUpdater = async (transactionHash, state) => {
+	const currentWallet = getWallet(state);
+	startTxCheck(transactionHash, currentWallet);
+};
+
 const confirmSend = () => async (dispatch, getState) => {
 	const transaction = getTransaction(getState());
 	const params = {
@@ -200,6 +237,8 @@ const confirmSend = () => async (dispatch, getState) => {
 			transactionHash
 		})
 	);
+
+	await startTxBalanceUpdater(transactionHash, getState());
 };
 
 export default {
