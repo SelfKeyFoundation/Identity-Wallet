@@ -8,7 +8,7 @@ import config from 'common/config';
 import Tx from 'ethereumjs-tx';
 
 const web3Service = new Web3Service();
-const web3Utils = web3Service.constructor.web3.utils;
+const web3Utils = web3Service.web3.utils;
 
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
