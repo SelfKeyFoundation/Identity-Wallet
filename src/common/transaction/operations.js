@@ -1,14 +1,18 @@
 import * as actions from './actions';
 import Web3Service from 'main/blockchain/web3-service';
 import { getWallet } from 'common/wallet/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
 import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
 
+import { walletOperations } from 'common/wallet';
+import { walletTokensOperations } from 'common/wallet-tokens';
+
 const web3Service = new Web3Service();
-const web3Utils = web3Service.constructor.web3.utils;
+const web3Utils = web3Service.web3.utils;
 
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
@@ -180,19 +184,31 @@ const cancelSend = () => async dispatch => {
 	);
 };
 
-const updateBalances = async oldBalance => {
-	await this.updateWalletBalance();
-	await this.updateTokensBalance();
+const updateBalances = oldBalance => async (dispatch, getState) => {
+	let wallet = getWallet(getState());
+	await dispatch(walletOperations.updateWalletWithBalance(wallet));
+	await dispatch(
+		walletTokensOperations.updateWalletTokensWithBalance(
+			getTokens(getState()),
+			wallet.publicKey
+		)
+	);
 
-	const currentWallet = this.getCurrentWallet();
+	const currentWallet = getWallet(getState());
 	if (oldBalance === currentWallet.balance) {
 		setTimeout(() => {
-			this.updateBalances(oldBalance);
+			dispatch(updateBalances(oldBalance));
 		}, TX_CHECK_INTERVAL);
+	} else {
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Sent'
+			})
+		);
 	}
 };
 
-const startTxCheck = async (txHash, oldBalance) => {
+const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
 	txInfoCheckInterval = setInterval(async () => {
 		const txInfo = await web3Service.waitForTicket({
 			method: 'getTransactionReceipt',
@@ -202,16 +218,16 @@ const startTxCheck = async (txHash, oldBalance) => {
 		if (txInfo && txInfo.blockNumber !== null) {
 			const status = Number(txInfo.status);
 			if (status) {
-				updateBalances(oldBalance);
+				dispatch(updateBalances(oldBalance));
 			}
 			clearInterval(txInfoCheckInterval);
 		}
 	}, TX_CHECK_INTERVAL);
 };
 
-const startTxBalanceUpdater = async (transactionHash, state) => {
-	const currentWallet = getWallet(state);
-	startTxCheck(transactionHash, currentWallet);
+const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
+	const currentWallet = getWallet(getState());
+	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
 const confirmSend = () => async (dispatch, getState) => {
@@ -238,7 +254,7 @@ const confirmSend = () => async (dispatch, getState) => {
 		})
 	);
 
-	await startTxBalanceUpdater(transactionHash, getState());
+	await dispatch(startTxBalanceUpdater(transactionHash));
 };
 
 export default {
