@@ -1,6 +1,7 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
 import { react2angular } from 'react2angular';
+import dotenv from 'dotenv';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
@@ -15,6 +16,8 @@ import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
 
 const { Logger } = require('common/logger');
+
+dotenv.config();
 
 const path = require('path');
 

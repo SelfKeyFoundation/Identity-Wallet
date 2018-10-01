@@ -9,6 +9,7 @@ import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
 import exchanges from '../exchanges';
+import { createLogger } from 'redux-logger';
 
 import {
 	forwardToMain,
@@ -22,6 +23,10 @@ export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
 
 	if (scope === 'renderer') {
+		if (process.env.ENABLE_REDUX_LOGGER) {
+			const logger = createLogger({ collapsed: (getState, actions) => true });
+			middleware.push(logger);
+		}
 		middleware = [forwardToMain, ...middleware];
 	}
 
