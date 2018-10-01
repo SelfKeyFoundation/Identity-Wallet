@@ -8,7 +8,7 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 	'ngInject';
 
 	$scope.symbol = $stateParams.symbol;
-	let profile = $rootScope.wallet.profile;
+	let { profile, publicKey } = $rootScope.wallet;
 
 	log.info('SendTransactionController');
 
@@ -24,8 +24,12 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		$state.go('member.wallet.send-transaction.progress', { symbol: $scope.symbol });
 	};
 
+	$scope.navigateToTransactionNoGasError = () => {
+		$state.go('member.wallet.send-transaction.no-gas', { publicKey, symbol: $scope.symbol });
+	};
+
 	$scope.showConfirmTransactionInfoModal = () => {
-		$rootScope.openConfirmHardwareWalletTxInfoWindow($rootScope.wallet.profile);
+		$rootScope.openConfirmHardwareWalletTxInfoWindow(profile);
 	};
 
 	$scope.closeModal = () => {

@@ -222,7 +222,8 @@ const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'showConfirmTransactionInfoModal',
 	'isHardwareWallet',
 	'closeModal',
-	'norifySignTxFailure'
+	'norifySignTxFailure',
+	'navigateToTransactionNoGasError'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
 
@@ -282,6 +283,11 @@ const SendTransactionProgressController = require('./angular/controllers/commons
 angular
 	.module('kyc-wallet')
 	.controller('SendTransactionProgressController', SendTransactionProgressController);
+
+const SendTransactionFailureController = require('./angular/controllers/commons/dialogs/send-transaction-failure-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('SendTransactionFailureController', SendTransactionFailureController);
 
 const UpdateDialogController = require('./angular/controllers/commons/dialogs/update-controller.js');
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);

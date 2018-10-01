@@ -52,9 +52,20 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.setGasLimit(field.target.value));
 	}
 
-	handleConfirmAction() {
-		this.props.dispatch(transactionOperations.confirmSend());
-		this.props.navigateToTransactionProgress();
+	handleConfirmActionError(err) {
+		let message = err.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			this.props.navigateToTransactionNoGasError();
+		}
+	}
+
+	async handleConfirmAction() {
+		try {
+			this.props.navigateToTransactionProgress();
+			await this.props.dispatch(transactionOperations.confirmSend());
+		} catch (err) {
+			this.handleConfirmActionError(err);
+		}
 	}
 
 	handleCancelAction() {
