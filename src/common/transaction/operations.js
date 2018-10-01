@@ -224,7 +224,7 @@ const updateBalances = oldBalance => async (dispatch, getState) => {
 	} else {
 		await dispatch(
 			actions.updateTransaction({
-				status: 'Sent'
+				status: 'Sent!'
 			})
 		);
 	}
