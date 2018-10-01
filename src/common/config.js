@@ -113,7 +113,7 @@ if (isDevMode() || isDebugMode()) {
 }
 
 if (CHAIN_ID) {
-	conf.chainId = CHAIN_ID;
+	conf.chainId = Number(CHAIN_ID);
 }
 
 if (NODE) {

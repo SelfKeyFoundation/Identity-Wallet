@@ -19,8 +19,6 @@ let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
 const ledgerService = new LedgerService({ web3Service });
 
-const ledgerService = new LedgerService({ web3Service });
-
 const init = () => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -142,7 +140,7 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, wallet) => {
+const signTransaction = async (rawTx, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
 		return ledgerService.signTransaction({
 			dataToSign: rawTx,
@@ -152,15 +150,16 @@ const signTransaction = async (rawTx, wallet) => {
 
 	if (wallet.profile === 'trezor') {
 		console.log('start');
-		await actions.signTxWithTrezor({
-			dataToSign: rawTx,
-			accountIndex: 0
-		});
-		// AWAIT doest works here
-		console.log('end');
+		await dispatch(
+			actions.signTxWithTrezor({
+				dataToSign: rawTx,
+				accountIndex: 0
+			})
+		);
+		return null;
 	}
 
-	let eTx = new Tx(rawTx);
+	const eTx = new Tx(rawTx);
 	eTx.sign(wallet.privateKey);
 	return `0x${eTx.serialize().toString('hex')}`;
 };
@@ -187,13 +186,15 @@ const startSend = cryptoCurrency => async (dispatch, getState) => {
 		chainId: config.chainId || 3 // if missing - use ropsten testnet
 	};
 
-	const signedHex = await signTransaction(rawTx, wallet);
-	await dispatch(
-		actions.updateTransaction({
-			signedHex,
-			sending: true
-		})
-	);
+	const signedHex = await signTransaction(rawTx, wallet, dispatch);
+	if (signedHex) {
+		await dispatch(
+			actions.updateTransaction({
+				signedHex,
+				sending: true
+			})
+		);
+	}
 };
 
 const cancelSend = () => async dispatch => {

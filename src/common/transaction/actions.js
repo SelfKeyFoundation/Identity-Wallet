@@ -17,15 +17,9 @@ const setAddressError = error => {
 	};
 };
 
-const signTransaction = data => {
-	return trezorService.signTransaction(data).then(res => {
-		return res.raw;
-	});
-};
-
 const signTxWithTrezor = createAliasedAction(types.TREZOR_TX_SIGN, data => ({
 	type: types.TREZOR_TX_SIGN,
-	payload: signTransaction(data)
+	payload: trezorService.signTransaction(data)
 }));
 
 export { updateTransaction, setAddressError, signTxWithTrezor };
