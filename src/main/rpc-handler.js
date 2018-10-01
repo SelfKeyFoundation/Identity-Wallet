@@ -5,6 +5,7 @@ const { walletTokensOperations } = require('common/wallet-tokens');
 const { exchangesOperations } = require('common/exchanges');
 
 const { pricesOperations } = require('common/prices');
+
 const { Logger } = require('common/logger');
 const log = new Logger('rpc-handler');
 const electron = require('electron');
@@ -110,7 +111,7 @@ module.exports = function(cradle) {
 						privateKey: privateKey,
 						keystoreFilePath: keystoreFilePath
 					};
-					store.dispatch(walletOperations.updateWallet(newWallet));
+					store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
 					app.win.webContents.send(RPC_METHOD, actionId, actionName, null, newWallet);
 				})
 				.catch(error => {
@@ -167,7 +168,7 @@ module.exports = function(cradle) {
 									keystoreFilePath: ksFilePathToSave,
 									profile: 'local'
 								};
-								store.dispatch(walletOperations.updateWallet(newWallet));
+								store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
 								app.win.webContents.send(
 									RPC_METHOD,
 									actionId,
@@ -236,7 +237,7 @@ module.exports = function(cradle) {
 								keystoreFilePath: wallet.keystoreFilePath,
 								profile: wallet.profile
 							};
-							store.dispatch(walletOperations.updateWallet(newWallet));
+							store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
 							app.win.webContents.send(
 								RPC_METHOD,
 								actionId,
@@ -279,7 +280,7 @@ module.exports = function(cradle) {
 				.then(wallet => {
 					if (wallet) {
 						wallet.privateKey = privateKeyBuffer;
-						store.dispatch(walletOperations.updateWallet(wallet));
+						store.dispatch(walletOperations.updateWalletWithBalance(wallet));
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
 					} else {
 						Wallet.create({
@@ -294,7 +295,7 @@ module.exports = function(cradle) {
 									privateKey: privateKeyBuffer,
 									profile
 								};
-								store.dispatch(walletOperations.updateWallet(newWallet));
+								store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
 								app.win.webContents.send(
 									RPC_METHOD,
 									actionId,
@@ -966,7 +967,7 @@ module.exports = function(cradle) {
 	controller.prototype.getWalletByPublicKey = async function(event, actionId, actionName, args) {
 		try {
 			let data = await Wallet.findByPublicKey(args.publicKey);
-			await store.dispatch(walletOperations.updateWallet(data));
+			await store.dispatch(walletOperations.updateWalletWithBalance(data));
 
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 		} catch (error) {
@@ -1007,7 +1008,9 @@ module.exports = function(cradle) {
 	const updateWalletTokensStore = data => {
 		Wallet.findById(data.walletId).then(wallet => {
 			WalletToken.findByTokenId(data.tokenId).then(tokens => {
-				store.dispatch(walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey));
+				store.dispatch(
+					walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey)
+				);
 			});
 		});
 	};
@@ -1072,7 +1075,10 @@ module.exports = function(cradle) {
 				WalletToken.findByWalletId(wallet.id)
 					.then(data => {
 						store.dispatch(
-							walletTokensOperations.updateWalletTokens(data, wallet.publicKey)
+							walletTokensOperations.updateWalletTokensWithBalance(
+								data,
+								wallet.publicKey
+							)
 						);
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 					})
@@ -1285,7 +1291,7 @@ module.exports = function(cradle) {
 			walletSelectPromise
 				.then(wallet => {
 					if (wallet) {
-						store.dispatch(walletOperations.updateWallet(wallet));
+						store.dispatch(walletOperations.updateWalletWithBalance(wallet));
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
 					} else {
 						Wallet.create({
@@ -1299,7 +1305,7 @@ module.exports = function(cradle) {
 									publicKey,
 									profile
 								};
-								store.dispatch(walletOperations.updateWallet(newWallet));
+								store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
 								app.win.webContents.send(
 									RPC_METHOD,
 									actionId,

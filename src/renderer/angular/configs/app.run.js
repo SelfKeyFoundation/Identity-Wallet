@@ -101,6 +101,10 @@ function AppRun(
 		$state.go('member.wallet.send-token', { symbol, allowSelectERC20Token });
 	};
 
+	$rootScope.openSendTransactionDialog = (event, symbol, allowSelectERC20Token) => {
+		$state.go('member.wallet.send-transaction.main', { symbol, allowSelectERC20Token });
+	};
+
 	$rootScope.openReceiveTokenDialog = (event, args) => {
 		return $mdDialog.show({
 			controller: 'ReceiveTokenDialogController',
@@ -265,22 +269,21 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToLedgerDialog = (event, isSendingTxFealure) => {
+	$rootScope.openConnectingToLedgerDialog = isSendingTxFailure => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-ledger.html',
 			parent: angular.element(document.body),
-			targetEvent: event,
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
-				isSendingTxFealure,
+				isSendingTxFailure,
 				profile: 'ledger'
 			}
 		});
 	};
 
-	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFealure) => {
+	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFailure) => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-trezor.html',
@@ -289,7 +292,7 @@ function AppRun(
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {
-				isSendingTxFealure,
+				isSendingTxFailure,
 				profile: 'trezor'
 			}
 		});
@@ -352,7 +355,7 @@ function AppRun(
 	};
 
 	$rootScope.openRejectHardwareWalletTxWarningDialog = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 
 		return $mdDialog.show({
 			controller: [
@@ -378,7 +381,7 @@ function AppRun(
 	};
 
 	$rootScope.openConfirmHardwareWalletTxInfoWindow = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',
@@ -404,7 +407,7 @@ function AppRun(
 	};
 
 	$rootScope.openUnlockLedgerInfoWindow = () => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',
@@ -429,7 +432,7 @@ function AppRun(
 	};
 
 	$rootScope.openHardwareWalletTimedOutWindow = profile => {
-		let result = document.getElementsByClassName('send-token')[0];
+		let result = document.getElementsByClassName('send-transaction')[0];
 		return $mdDialog.show({
 			controller: [
 				'$scope',

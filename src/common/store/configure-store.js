@@ -10,6 +10,8 @@ import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
 import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
+import ethGasStationInfo from '../eth-gas-station';
+import transaction from '../transaction';
 
 import {
 	forwardToMain,
@@ -43,7 +45,9 @@ export default (initialState, scope = 'main') => {
 		walletTokens,
 		viewAll,
 		prices,
-		exchanges
+		exchanges,
+		ethGasStationInfo,
+		transaction
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

@@ -14,6 +14,8 @@ import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
 import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
+import { TransactionSendBoxWrapper } from './react/transaction/send';
+import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
 
 const { Logger } = require('common/logger');
 
@@ -220,6 +222,26 @@ const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper,
 ]);
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
+const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'navigateToTransactionProgress',
+	'showConfirmTransactionInfoModal',
+	'isHardwareWallet',
+	'closeModal',
+	'norifySignTxFailure'
+]);
+angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
+
+const transactionSendProgressBoxWrapper = react2angular(TransactionSendProgressBoxWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'openLink'
+]);
+angular
+	.module('kyc-wallet')
+	.component('transactionSendProgressBox', transactionSendProgressBoxWrapper);
+
 const idAttributeSchemaForm = react2angular(IdAttributeSchemaForm, [
 	'attr',
 	'type',
@@ -270,6 +292,14 @@ angular
 
 const SendTokenDialogController = require('./angular/controllers/commons/dialogs/send-token-controller.js');
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
+
+const SendTransactionController = require('./angular/controllers/commons/dialogs/send-transaction-controller.js');
+angular.module('kyc-wallet').controller('SendTransactionController', SendTransactionController);
+
+const SendTransactionProgressController = require('./angular/controllers/commons/dialogs/send-transaction-progress-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('SendTransactionProgressController', SendTransactionProgressController);
 
 const UpdateDialogController = require('./angular/controllers/commons/dialogs/update-controller.js');
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);
