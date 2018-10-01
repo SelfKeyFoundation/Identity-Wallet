@@ -60,7 +60,7 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		console.log('error in controller', err);
 		if (profile === 'ledger') {
 			processLedgerErr(err);
-		} 
+		}
 	};
 }
 
