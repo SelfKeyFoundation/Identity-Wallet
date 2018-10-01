@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import _ from 'lodash';
 import isOnline from 'is-online';
+import dotenv from 'dotenv';
 import ChildProcess from 'child_process';
 import electron, { Menu } from 'electron';
 import configureStore from 'common/store/configure-store';
@@ -27,6 +28,7 @@ import { identityOperations } from '../common/identity';
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
+dotenv.config();
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = getWalletsDir();
