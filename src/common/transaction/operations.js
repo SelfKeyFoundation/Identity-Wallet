@@ -19,6 +19,8 @@ let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
 const ledgerService = new LedgerService({ web3Service });
 
+const chainId = config.chainId || 3;
+
 const init = () => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -183,7 +185,7 @@ const startSend = cryptoCurrency => async (dispatch, getState) => {
 					: transaction.amount
 			)
 		),
-		chainId: config.chainId || 3 // if missing - use ropsten testnet
+		chainId
 	};
 
 	const signedHex = await signTransaction(rawTx, wallet, dispatch);
@@ -252,6 +254,23 @@ const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
 	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
+const createTxHistry = transaction => (dispatch, getState) => {
+	const wallet = getWallet(getState());
+	// TODO tokenSymbol, contractAddress, tokenDecimal
+	let data = {
+		networkId: chainId,
+		from: wallet.publicKey,
+		to: transaction.address,
+		value: +transaction.amount,
+		gasPrice: transaction.gasPrice.toString(),
+		hash: transaction.transactionHash,
+		...transaction
+	};
+
+	dispatch(actions.createTxHistory(data));
+	return data;
+};
+
 const confirmSend = () => async (dispatch, getState) => {
 	const transaction = getTransaction(getState());
 	const params = {
@@ -269,12 +288,13 @@ const confirmSend = () => async (dispatch, getState) => {
 	);
 
 	const transactionHash = await web3Service.waitForTicket(params);
-
 	await dispatch(
 		actions.updateTransaction({
 			transactionHash
 		})
 	);
+
+	dispatch(createTxHistry(transaction));
 
 	await dispatch(startTxBalanceUpdater(transactionHash));
 };

@@ -1,6 +1,7 @@
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
 import TrezorService from 'main/blockchain/trezor-service';
+import TxHistory from 'main/blockchain/tx-history';
 
 let Service = TrezorService();
 let trezorService = new Service();
@@ -22,4 +23,9 @@ const signTxWithTrezor = createAliasedAction(types.TREZOR_TX_SIGN, data => ({
 	payload: trezorService.signTransaction(data)
 }));
 
-export { updateTransaction, setAddressError, signTxWithTrezor };
+const createTxHistory = createAliasedAction(types.CREATE_TX_HISTORY, data => ({
+	type: types.TREZOR_TX_SIGN,
+	payload: TxHistory.addOrUpdate(data)
+}));
+
+export { updateTransaction, setAddressError, signTxWithTrezor, createTxHistory };
