@@ -11,7 +11,8 @@ const initialState = {
 	signedHex: '',
 	transactionHash: '',
 	addressError: false,
-	sending: false
+	sending: false,
+	cryptoCurrency: ''
 };
 
 const transactionReducer = (state = initialState, action) => {

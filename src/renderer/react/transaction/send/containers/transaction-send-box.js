@@ -5,6 +5,7 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
 
 class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
@@ -72,6 +73,10 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.cancelSend());
 	}
 
+	handleCryptoCurrencyChange(value) {
+		this.props.dispatch(transactionOperations.setCryptoCurrency(value));
+	}
+
 	render() {
 		return (
 			<TransactionSendBox
@@ -84,18 +89,20 @@ class TransactionSendBoxContainer extends Component {
 				changeGasLimitAction={e => this.handleGasLimitChange(e)}
 				confirmAction={() => this.handleConfirmAction()}
 				cancelAction={() => this.handleCancelAction()}
+				onCryptoCurrencyChange={value => this.handleCryptoCurrencyChange(value)}
 			/>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	console.log(transactionSelectors.getTransaction(state, props.cryptoCurrency));
+	console.log('...getTokens(state)', getTokens(state));
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		...transactionSelectors.getTransaction(state, props.cryptoCurrency)
+		...transactionSelectors.getTransaction(state, props.cryptoCurrency),
+		tokens: getTokens(state)
 	};
 };
 
