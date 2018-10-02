@@ -12,6 +12,7 @@ import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
+import marketplaces from '../marketplaces';
 
 import {
 	forwardToMain,
@@ -47,7 +48,8 @@ export default (initialState, scope = 'main') => {
 		prices,
 		exchanges,
 		ethGasStationInfo,
-		transaction
+		transaction,
+		marketplaces
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
