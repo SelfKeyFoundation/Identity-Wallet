@@ -230,9 +230,7 @@ function checkKeys(config) {
 function userPrompt(app) {
 	return new Promise((resolve, reject) => {
 		app.win.webContents.send('WSS_USER_PROMPT');
-		console.log('yesss');
 		ipcMain.on('WSS_INSTALL', (event, install) => {
-			console.log('BACK HERRR');
 			if (install) {
 				resolve(true);
 			} else {
@@ -250,9 +248,9 @@ async function runCertgen(config) {
 				else if (run.type === 'windows') await windocutor(run.cmd, run.options);
 				else await executor(run.cmd, run.options);
 			}
-			return true;
+			resolve(true);
 		} catch (e) {
-			return e;
+			resolve(e);
 		}
 	});
 }
@@ -265,9 +263,12 @@ async function certs(config, app) {
 			if (!keys) {
 				const userAccept = await userPrompt(app);
 				if (userAccept) {
-					console.log('ACCEPT');
-					await runCertgen(config);
-					resolve(true);
+					const genned = await runCertgen(config);
+					if (genned) {
+						resolve(true);
+					} else {
+						resolve(false);
+					}
 				} else {
 					resolve(false);
 				}
@@ -589,7 +590,7 @@ export class LWSService {
 	async handleRequest(msg, conn) {
 		log.info('lws req %2j', msg);
 		switch (msg.type) {
-			case 'init':
+			case 'wss_init':
 				return this.startSecureServer(msg, conn);
 			default:
 				return this.reqUnknown(msg, conn);
@@ -604,7 +605,7 @@ export class LWSService {
 
 	handleSecureConn(conn) {
 		log.info('wss connection established');
-		let wsConn = new WSConnection(conn, this, true);
+		let wsConn = new WSSConnection(conn, this);
 		wsConn.listen();
 	}
 
@@ -629,13 +630,14 @@ export class LWSService {
 	}
 
 	async startSecureServer(msg, conn) {
+		console.log(conn)
 		const serverExists = await checkPort(WSS_PORT); // check if wss already running
 		if (!serverExists) {
 			// if server running don't do aother stuff
 			log.info('starting wss');
 			conn.send(
 				{
-					payload: { message: 'starting secure ws server' }
+					payload: { message: 'starting secure wss server' }
 				},
 				msg
 			);
@@ -655,26 +657,95 @@ export class LWSService {
 					console.log('wss listening on port ' + WSS_PORT)
 				);
 				log.info('secure wss server started');
+				conn.send(
+				{
+					payload: { message: 'secure wss server started' }
+				},
+				msg
+			);
 			} else {
 				log.info('error starting wss');
+				conn.send(
+				{
+					error: true,
+					payload: { message: 'error starting wss' }
+				},
+				msg
+			);
 			}
 		} else {
 			log.info('wss already started');
+			conn.send(
+				{
+					payload: { message: 'wss already started' }
+				},
+				msg
+			);
 		}
 	}
 }
 
 export class WSConnection {
-	constructor(conn, service, wss) {
+	constructor(conn, service) {
 		this.conn = conn;
 		this.service = service;
 		this.msgId = 0;
 		this.ctx = {
 			unlockedWallets: {}
 		};
-		if (wss) {
-			this.wss = wss;
+	}
+
+	async handleMessage(msg) {
+		try {
+			msg = JSON.parse(msg);
+			await this.service.handleRequest(msg, this);
+		} catch (error) {
+			log.error(error);
+			msg = typeof msg === 'string' ? {} : msg;
+			this.send(
+				{ error: true, payload: { code: 'invalid_message', message: 'Invalid Message' } },
+				msg
+			);
 		}
+	}
+
+	listen() {
+		this.conn.on('message', this.handleMessage.bind(this));
+		this.conn.on('error', err => log.error(err));
+	}
+
+	send(msg, req) {
+		if (!this.conn) {
+			log.error('cannot send message, no connection');
+			return;
+		}
+		req = req || {};
+		msg = msg || {};
+		msg = { ...msg };
+		msg.type = msg.type || req.type;
+		msg.meta = msg.meta || {};
+		let id = msg.meta.id;
+		if (!id && req.meta && req.meta.id) {
+			id = req.meta.id;
+		}
+		msg.meta.id = id || `idw_${this.msgId++}`;
+		msg.meta.src = msg.meta.src || 'idw';
+		if (!msg.type && msg.error) {
+			msg.type = 'error';
+		}
+		log.info('lws resp %2j', msg);
+		this.conn.send(JSON.stringify(msg));
+	}
+}
+
+export class WSSConnection {
+	constructor(conn, service) {
+		this.conn = conn;
+		this.service = service;
+		this.msgId = 0;
+		this.ctx = {
+			unlockedWallets: {}
+		};
 	}
 
 	unlockWallet(publicKey, privateKey) {
@@ -688,11 +759,7 @@ export class WSConnection {
 	async handleMessage(msg) {
 		try {
 			msg = JSON.parse(msg);
-			if (this.wss) {
 				await this.service.handleSecureRequest(msg, this);
-			} else {
-				await this.service.handleRequest(msg, this);
-			}
 		} catch (error) {
 			log.error(error);
 			msg = typeof msg === 'string' ? {} : msg;

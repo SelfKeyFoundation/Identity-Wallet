@@ -7,13 +7,12 @@ function CertificateDialogController($rootScope, $scope, $mdDialog, RPCService) 
 	$scope.title = 'Certificate Install';
 
 	$scope.accept = event => {
-		console.log('ACEePt 1');
+		RPCService.makeCustomCall('WSS_INSTALL', true);
 		$mdDialog.hide();
-		RPCService.makeCall('WSS_INSTALL', true);
 	};
 
 	$scope.cancel = event => {
-		RPCService.makeCall('WSS_INSTALL', false);
+		RPCService.makeCustomCall('WSS_INSTALL', false);
 		$mdDialog.cancel();
 	};
 }
