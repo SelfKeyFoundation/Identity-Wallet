@@ -32,7 +32,8 @@ const init = () => async dispatch => {
 			signedHex: '',
 			transactionHash: '',
 			addressError: false,
-			sending: false
+			sending: false,
+			cryptoCurrency: ''
 		})
 	);
 };
@@ -279,6 +280,14 @@ const confirmSend = () => async (dispatch, getState) => {
 	await dispatch(startTxBalanceUpdater(transactionHash));
 };
 
+const setCryptoCurrency = cryptoCurrency => async dispatch => {
+	await dispatch(
+		actions.updateTransaction({
+			cryptoCurrency
+		})
+	);
+};
+
 export default {
 	...actions,
 	setAddress,
@@ -289,5 +298,6 @@ export default {
 	setTransactionFee,
 	startSend,
 	cancelSend,
-	confirmSend
+	confirmSend,
+	setCryptoCurrency
 };

@@ -117,7 +117,7 @@
     "request": "2.87.0",
     "reselect": "^3.0.1",
     "scrypt": "^6.0.3",
-    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#feature/312",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#feature/312-token-selection",
     "serialize-error": "^2.1.0",
     "sinon": "^6.1.3",
     "snyk": "^1.94.0",
