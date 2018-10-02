@@ -40,7 +40,7 @@ export class StakingService {
 		}
 		return info;
 	}
-	async placeStake(ammount, serviceAddress, serviceId, options) {
+	async placeStake(amount, serviceAddress, serviceId, options) {
 		let hashes = {};
 		options = { ...options };
 		let totalGas = options.gas;
@@ -50,9 +50,9 @@ export class StakingService {
 				from: options.from
 			})
 		);
-		let hasAllowance = allowance.gte(new BN(ammount));
+		let hasAllowance = allowance.gte(new BN(amount));
 		if (!hasAllowance && totalGas) {
-			approveGas = await this.tokenContract.approve(this.activeContract.address, ammount, {
+			approveGas = await this.tokenContract.approve(this.activeContract.address, amount, {
 				from: options.from,
 				method: 'estimateGas',
 				value: '0x00'
@@ -60,16 +60,12 @@ export class StakingService {
 			depositGas = totalGas - approveGas;
 		}
 		if (!hasAllowance) {
-			hashes.approve = await this.tokenContract.approve(
-				this.activeContract.address,
-				ammount,
-				{
-					...options,
-					gas: approveGas
-				}
-			);
+			hashes.approve = await this.tokenContract.approve(this.activeContract.address, amount, {
+				...options,
+				gas: approveGas
+			});
 		}
-		hashes.deposit = await this.activeContract.deposit(ammount, serviceAddress, serviceId, {
+		hashes.deposit = await this.activeContract.deposit(amount, serviceAddress, serviceId, {
 			...options,
 			gas: depositGas
 		});
@@ -197,10 +193,10 @@ export class StakingContract extends EtheriumContract {
 		});
 	}
 
-	deposit(ammount, serviceAddress, serviceId, options) {
+	deposit(amount, serviceAddress, serviceId, options) {
 		options = { method: 'send', ...options };
 		return this[options.method]({
-			args: [ammount, serviceAddress, serviceId],
+			args: [amount, serviceAddress, serviceId],
 			options,
 			method: 'deposit'
 		});
