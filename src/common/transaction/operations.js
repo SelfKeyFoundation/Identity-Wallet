@@ -148,10 +148,11 @@ const setLimitPrice = gasLimit => async dispatch => {
 
 const signTransaction = async (rawTx, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
-		return ledgerService.signTransaction({
+		let signed = await ledgerService.signTransaction({
 			dataToSign: rawTx,
 			address: `0x${wallet.publicKey}`
 		});
+		return signed.raw;
 	}
 
 	if (wallet.profile === 'trezor') {
