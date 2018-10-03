@@ -16,10 +16,14 @@ import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
+import { configureContext, setGlobalCtx } from '../common/context';
 
 const { Logger } = require('common/logger');
 
 dotenv.config();
+
+const ctx = configureContext('renderer').cradle;
+setGlobalCtx(ctx);
 
 const path = require('path');
 
