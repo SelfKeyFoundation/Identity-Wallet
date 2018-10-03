@@ -3,6 +3,7 @@
 'use strict';
 import path from 'path';
 import fs from 'fs';
+import _ from 'lodash';
 import isOnline from 'is-online';
 import ChildProcess from 'child_process';
 import electron, { Menu } from 'electron';
@@ -115,6 +116,7 @@ function onReady(app) {
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
+		ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
 
@@ -225,6 +227,9 @@ function onReady(app) {
 
 		// TODO: Refactor this away
 		app.win = mainWindow;
+		if (isDevMode() && process.env.ENABLE_STAKING_TEST === '1') {
+			startStakingTest(ctx);
+		}
 	};
 }
 
@@ -342,4 +347,69 @@ function handleSquirrelEvent() {
 			return true;
 	}
 	log.info('end handleSquirrelEvent');
+}
+
+function startStakingTest(ctx) {
+	let store = ctx.store;
+	let unlocked = false;
+	log.info('starting staking test');
+	store.subscribe(async () => {
+		let state = store.getState();
+		if (unlocked) return;
+		if (!state.wallet || !state.wallet.privateKey) return;
+		let { wallet } = state;
+		unlocked = true;
+		let { stakingService, web3Service } = ctx;
+		try {
+			await stakingService.acquireContract();
+			const serviceOwner = web3Service.web3.utils.toHex(0);
+			let decimals = await stakingService.tokenContract.call({
+				method: 'decimals'
+			});
+			let BN = require('bignumber.js');
+
+			const sendAmount = new BN(100).times(new BN(10).pow(decimals)).toString();
+			const serviceId = web3Service.web3.utils.toHex('test');
+			const sourceAddress = '0x' + wallet.publicKey;
+			const options = { from: sourceAddress };
+			log.info('active contract %2j', stakingService.activeContract.address);
+
+			let allowance = await stakingService.tokenContract.allowance(
+				stakingService.activeContract.address,
+				options
+			);
+			log.info('allowance %s', allowance);
+
+			let info = await stakingService.getStakingInfo(serviceOwner, serviceId, options);
+			log.info('Staking initial balance %2j', _.omit(info, 'contract'));
+
+			let lockPeriod = await stakingService.activeContract.getLockPeriod(
+				serviceOwner,
+				serviceId,
+				options
+			);
+			log.info('Staking lock period %2j', lockPeriod);
+
+			let depositRes = await stakingService.placeStake(
+				sendAmount,
+				serviceOwner,
+				serviceId,
+				options
+			);
+			log.info('deposite res %2j', depositRes);
+
+			try {
+				let withdrawRes = await stakingService.withdrawStake(
+					serviceOwner,
+					serviceId,
+					options
+				);
+				log.info('withdraw res %2j', withdrawRes);
+			} catch (error) {
+				log.error('withdraw error %s', error);
+			}
+		} catch (error) {
+			log.error('staking error %s', error);
+		}
+	});
 }
