@@ -147,7 +147,7 @@ describe('Contract', () => {
 			customAbi: contract.abi,
 			args: [options]
 		});
-		expect(res).toBe(10);
+		expect(res).toEqual({ res: 10, contract: contract.address });
 	});
 	it('send', async () => {
 		sinon.stub(web3ServiceMock, 'waitForTicket').resolves(10);
@@ -167,7 +167,7 @@ describe('Contract', () => {
 			onceListenerName: 'transactionHash',
 			args: [options]
 		});
-		expect(res).toBe(10);
+		expect(res).toEqual({ hash: 10, contract: contract.address });
 	});
 	it('estimateGas', async () => {
 		sinon.stub(web3ServiceMock, 'waitForTicket').resolves(10);
@@ -177,7 +177,7 @@ describe('Contract', () => {
 			options,
 			method: 'test'
 		});
-		expect(res).toBe(100000);
+		expect(res).toEqual({ gas: 100000, contract: contract.address });
 		// expect(web3ServiceMock.waitForTicket.calledOnce).toBeTruthy();
 		// expect(web3ServiceMock.waitForTicket.getCall(0).args[0]).toEqual({
 		// 	method: 'estimateGas',

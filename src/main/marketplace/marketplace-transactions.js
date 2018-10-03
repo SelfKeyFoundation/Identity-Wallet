@@ -6,14 +6,13 @@ export class MarketplaceTransactions extends BaseModel {
 	static idColumn = 'id';
 	static jsonSchema = {
 		type: 'object',
-		required: ['serviceOwner', 'serviceId', 'action', 'contractAddress'],
+		required: ['serviceOwner', 'serviceId', 'action'],
 		properties: {
 			id: { type: 'integer' },
 			serviceOwner: { type: 'string' },
 			serviceId: { type: 'string' },
 			action: { type: 'string' },
 			amount: { type: 'number', default: 0 },
-			contractAddress: { type: 'string' },
 			gasPrice: { type: 'number', default: 0 },
 			gasLimit: { type: 'number', default: 0 },
 			networkId: { type: 'number' },
@@ -25,6 +24,10 @@ export class MarketplaceTransactions extends BaseModel {
 			}
 		}
 	};
+
+	static create(itm) {
+		return this.query().insertAndFetch(itm);
+	}
 
 	static find(where = {}) {
 		return this.query().where(where);

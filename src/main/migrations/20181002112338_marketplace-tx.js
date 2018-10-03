@@ -6,7 +6,6 @@ exports.up = async (knex, Promise) => {
 		t.string('serviceId').notNullable();
 		t.string('action').notNullable();
 		t.float('amount');
-		t.string('contractAddress');
 		t.float('gasPrice');
 		t.float('gasLimit');
 		t.integer('networkId');
