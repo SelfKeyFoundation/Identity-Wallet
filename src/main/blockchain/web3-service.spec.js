@@ -52,6 +52,10 @@ const ethMock = {
 const ethUtilMock = {
 	toHex() {
 		return 'test';
+	},
+	hexToNumber(hex) {
+		if (hex === '0x0') return 0;
+		return 1;
 	}
 };
 
@@ -134,5 +138,47 @@ describe('Web3Service', () => {
 			expect(contactMethodInstance.send.calledOnceWith([args]));
 		});
 		it('throws an error if no wallet unlocked', async () => {});
+	});
+
+	it('getTransaction', async () => {
+		sinon.stub(service, 'waitForTicket').resolves('ok');
+		let hash = 'test';
+		let res = await service.getTransaction(hash);
+		expect(res).toEqual('ok');
+		expect(service.waitForTicket.calledOnce).toBeTruthy();
+		expect(service.waitForTicket.getCall(0).args[0]).toEqual({
+			method: 'getTransaction',
+			args: [hash]
+		});
+	});
+
+	it('getTransactionReceipt', async () => {
+		sinon.stub(service, 'waitForTicket').resolves('ok');
+		let hash = 'test';
+		let res = await service.getTransactionReceipt(hash);
+		expect(res).toEqual('ok');
+		expect(service.waitForTicket.calledOnce).toBeTruthy();
+		expect(service.waitForTicket.getCall(0).args[0]).toEqual({
+			method: 'getTransactionReceipt',
+			args: [hash]
+		});
+	});
+	describe('checkTransactionStatus', () => {
+		const t = (name, transaction, receipt, expectedStatus) =>
+			it(name, async () => {
+				service.web3.utils = ethUtilMock;
+				let hash = 'test';
+				sinon.stub(service, 'getTransaction').resolves(transaction);
+				sinon.stub(service, 'getTransactionReceipt').resolves(receipt);
+
+				let status = await service.checkTransactionStatus(hash);
+
+				expect(status).toEqual(expectedStatus);
+			});
+
+		t('pending tx', null, null, 'pending');
+		t('processing tx', { blockNumber: null }, null, 'processing');
+		t('success tx', { blockNumber: 200 }, { status: '0x1' }, 'success');
+		t('failed tx', { blockNumber: 200 }, { status: '0x0' }, 'failed');
 	});
 });

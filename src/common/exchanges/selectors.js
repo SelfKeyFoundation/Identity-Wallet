@@ -43,7 +43,6 @@ export const getItemDetails = ({ exchanges }, name) => {
 	});
 
 	details = { ...details, kyc_template: kycTemplate, integration: 'UNLOCK MARKETPLACE' };
-	console.log(details);
 	return details;
 };
 

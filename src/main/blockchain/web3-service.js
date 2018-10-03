@@ -92,6 +92,34 @@ export class Web3Service {
 			}
 		});
 	}
+	getTransaction(hash) {
+		return this.waitForTicket({
+			method: 'getTransaction',
+			args: [hash]
+		});
+	}
+	getTransactionReceipt(hash) {
+		return this.waitForTicket({
+			method: 'getTransactionReceipt',
+			args: [hash]
+		});
+	}
+
+	async checkTransactionStatus(hash) {
+		let tx = await this.getTransaction(hash);
+		if (!tx) {
+			return 'pending';
+		}
+		if (!tx.blockNumber) {
+			return 'processing';
+		}
+		let receipt = await this.getTransactionReceipt(hash);
+		if (!this.web3.utils.hexToNumber(receipt.status)) {
+			return 'failed';
+		}
+		return 'success';
+	}
+
 	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {
 		let opts = { ...(args || [])[0] };
 		if (!opts.from) {

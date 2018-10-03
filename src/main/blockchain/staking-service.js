@@ -147,9 +147,10 @@ export class EtheriumContract {
 		const opt = options.options;
 		const method = opt.method || 'send';
 		const onceListenerName = method === 'send' ? 'transactionHash' : null;
+		let resName = method === 'estimateGas' ? 'gas' : 'hash';
 		if (method === 'estimateGas') {
 			// TODO: fix generic gas estimation
-			return 100000;
+			return { [resName]: 100000, contract: this.address };
 		}
 		if (!opt.gas) {
 			opt.gas = 100000;
@@ -164,18 +165,21 @@ export class EtheriumContract {
 			args: [opt]
 		});
 		// TODO: add pending transactions to db
-		return hash;
+		return { [resName]: hash, contract: this.address };
 	}
 
-	call(options) {
-		return this.web3.waitForTicket({
-			method: 'call',
-			contractMethodArgs: options.args || [],
-			contractAddress: this.address,
-			contractMethod: options.method,
-			customAbi: this.abi,
-			args: [options.options || {}]
-		});
+	async call(options) {
+		return {
+			res: await this.web3.waitForTicket({
+				method: 'call',
+				contractMethodArgs: options.args || [],
+				contractAddress: this.address,
+				contractMethod: options.method,
+				customAbi: this.abi,
+				args: [options.options || {}]
+			}),
+			contract: this.address
+		};
 	}
 }
 
