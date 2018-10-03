@@ -50,7 +50,7 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	handleGasLimitChange(field) {
-		this.props.dispatch(transactionOperations.setGasLimit(field.target.value));
+		this.props.dispatch(transactionOperations.setLimitPrice(field.target.value));
 	}
 
 	handleConfirmActionError(err) {
