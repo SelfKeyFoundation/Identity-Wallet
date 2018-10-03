@@ -8,6 +8,7 @@ import EthUtils from 'common/utils/eth-utils';
 import LedgerService from 'main/blockchain/leadger-service';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
+import { BigNumber } from 'bignumber.js';
 
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
@@ -21,7 +22,9 @@ const ledgerService = new LedgerService({ web3Service });
 
 const chainId = config.chainId || 3;
 
-const init = () => async dispatch => {
+const transferHex = '0xa9059cbb';
+
+const init = cryptoCurrency => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
 			address: '',
@@ -35,7 +38,7 @@ const init = () => async dispatch => {
 			transactionHash: '',
 			addressError: false,
 			sending: false,
-			cryptoCurrency: ''
+			cryptoCurrency
 		})
 	);
 };
@@ -167,10 +170,20 @@ const signTransaction = async (rawTx, wallet, dispatch) => {
 	return `0x${eTx.serialize().toString('hex')}`;
 };
 
-const startSend = cryptoCurrency => async (dispatch, getState) => {
+const generateContractData = (toAddress, value, decimal) => {
+	value = EthUtils.padLeft(
+		new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16),
+		64
+	);
+	toAddress = EthUtils.padLeft(EthUtils.getNakedAddress(toAddress), 64);
+	return transferHex + toAddress + value;
+};
+
+const startSend = () => async (dispatch, getState) => {
 	const state = getState();
 	const wallet = getWallet(state);
 	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
 
 	const rawTx = {
 		nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.nonce)),
@@ -178,16 +191,24 @@ const startSend = cryptoCurrency => async (dispatch, getState) => {
 			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'))
 		),
 		gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.gasLimit)),
-		to: EthUtils.sanitizeHex(transaction.address),
-		value: EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(
-				cryptoCurrency === 'ETH'
-					? EthUnits.unitToUnit(transaction.amount, 'ether', 'wei')
-					: transaction.amount
-			)
-		),
 		chainId
 	};
+
+	if (cryptoCurrency === 'ETH') {
+		rawTx.to = EthUtils.sanitizeHex(transaction.address);
+		rawTx.value = EthUtils.sanitizeHex(
+			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.amount, 'ether', 'wei'))
+		);
+	} else {
+		rawTx.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		rawTx.value = EthUtils.sanitizeHex(0);
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		rawTx.data = EthUtils.sanitizeHex(data);
+	}
 
 	const signedHex = await signTransaction(rawTx, wallet, dispatch);
 	if (signedHex) {

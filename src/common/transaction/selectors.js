@@ -9,13 +9,17 @@ const getAmountUsd = (amount, state, cryptoCurrency) => {
 	return 0;
 };
 
-export const getTransaction = (state, cryptoCurrency) => {
+export const getTransaction = state => {
 	const transaction = state.transaction;
+	const { cryptoCurrency } = transaction;
 	transaction.amountUsd = getAmountUsd(transaction.amount, state, cryptoCurrency);
 	transaction.usdFee = getAmountUsd(transaction.ethFee, state, cryptoCurrency);
 	const token = getTokens(state).filter(token => {
 		return token.symbol === cryptoCurrency;
-	});
-	transaction.balance = token.length && token[0] ? token[0].balance : 0;
+	})[0];
+
+	transaction.balance = token ? token.balance : 0;
+	transaction.contractAddress = token ? token.address : '';
+	transaction.tokenDecimal = token ? token.decimal : 18;
 	return transaction;
 };

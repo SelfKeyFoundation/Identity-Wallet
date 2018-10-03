@@ -10,7 +10,7 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
-		this.props.dispatch(transactionOperations.init());
+		this.props.dispatch(transactionOperations.init(this.props.cryptoCurrency));
 	}
 
 	loadData() {
@@ -29,7 +29,7 @@ class TransactionSendBoxContainer extends Component {
 			this.props.showConfirmTransactionInfoModal();
 		}
 		try {
-			await this.props.dispatch(transactionOperations.startSend(this.props.cryptoCurrency));
+			await this.props.dispatch(transactionOperations.startSend());
 		} catch (error) {
 			this.processSignTxError(error);
 		}
@@ -101,8 +101,9 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		...transactionSelectors.getTransaction(state, props.cryptoCurrency),
-		tokens: getTokens(state)
+		...transactionSelectors.getTransaction(state),
+		tokens: getTokens(state),
+		cryptoCurrency: props.cryptoCurrency
 	};
 };
 
