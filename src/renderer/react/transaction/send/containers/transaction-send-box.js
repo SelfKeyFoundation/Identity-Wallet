@@ -56,8 +56,9 @@ class TransactionSendBoxContainer extends Component {
 	handleConfirmActionError(err) {
 		let message = err.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
-			this.props.navigateToTransactionNoGasError();
+			return this.props.navigateToTransactionNoGasError();
 		}
+		this.props.navigateToTransactionError(message);
 	}
 
 	async handleConfirmAction() {

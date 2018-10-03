@@ -277,21 +277,23 @@ const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
 	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
-const createTxHistry = transaction => (dispatch, getState) => {
+const createTxHistry = () => (dispatch, getState) => {
 	const wallet = getWallet(getState());
-	// TODO tokenSymbol, contractAddress, tokenDecimal
-	let data = {
+	const transaction = getTransaction(getState());
+	const { cryptoCurrency } = transaction;
+	const tokenSymbol = cryptoCurrency === 'ETH' ? null : cryptoCurrency;
+	const data = {
+		tokenSymbol,
 		networkId: chainId,
 		from: wallet.publicKey,
 		to: transaction.address,
 		value: +transaction.amount,
-		gasPrice: transaction.gasPrice.toString(),
+		gasPrice: transaction.gasPrice,
 		hash: transaction.transactionHash,
 		...transaction
 	};
 
 	dispatch(actions.createTxHistory(data));
-	return data;
 };
 
 const confirmSend = () => async (dispatch, getState) => {
@@ -317,7 +319,7 @@ const confirmSend = () => async (dispatch, getState) => {
 		})
 	);
 
-	dispatch(createTxHistry(transaction));
+	dispatch(createTxHistry());
 
 	await dispatch(startTxBalanceUpdater(transactionHash));
 };

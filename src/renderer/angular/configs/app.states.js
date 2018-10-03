@@ -397,6 +397,20 @@ function appStates(
 				symbol: null
 			}
 		})
+		.state('member.wallet.send-transaction.error', {
+			url: '/member/wallet/send-transaction/error',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-fealure.html',
+					controller: 'SendTransactionFailureController'
+				}
+			},
+			params: {
+				publicKey: null,
+				symbol: null,
+				message: null
+			}
+		})
 
 		/**
 		 * ID Wallet

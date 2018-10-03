@@ -28,6 +28,14 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		$state.go('member.wallet.send-transaction.no-gas', { publicKey, symbol: $scope.symbol });
 	};
 
+	$scope.navigateToTransactionError = message => {
+		$state.go('member.wallet.send-transaction.error', {
+			message,
+			publicKey,
+			symbol: $scope.symbol
+		});
+	};
+
 	$scope.showConfirmTransactionInfoModal = () => {
 		$rootScope.openConfirmHardwareWalletTxInfoWindow(profile);
 	};

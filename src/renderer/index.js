@@ -6,6 +6,7 @@ import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
 import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
+import { TransactionErrorWrapper } from './react/transaction/transaction-error';
 import { IdAttributeSchemaForm } from './react/id-attribute';
 import { MarketplaceWrapper } from './react/marketplace';
 import { TransactionsHistoryWrapper } from './react/transaction/transactions-history';
@@ -215,6 +216,13 @@ const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper,
 ]);
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
+const transactionErrorWrapper = react2angular(TransactionErrorWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'message'
+]);
+angular.module('kyc-wallet').component('transactionError', transactionErrorWrapper);
+
 const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'cryptoCurrency',
 	'closeAction',
@@ -224,6 +232,7 @@ const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'closeModal',
 	'norifySignTxFailure',
 	'navigateToTransactionNoGasError',
+	'navigateToTransactionError',
 	'isSendCustomToken'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
