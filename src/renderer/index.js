@@ -17,17 +17,20 @@ import { TransactionsHistoryWrapper } from './react/transaction/transactions-his
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
 
-import { setGlobalContext, configureContext } from 'common/context';
-const ctx = configureContext(null, null).cradle;
-setGlobalContext(ctx);
 import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
 import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
+import { TransactionSendBoxWrapper } from './react/transaction/send';
+import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
+import { configureContext, setGlobalCtx } from '../common/context';
 
 const { Logger } = require('common/logger');
 
 dotenv.config();
+
+const ctx = configureContext('renderer').cradle;
+setGlobalCtx(ctx);
 
 const path = require('path');
 

@@ -1,10 +1,9 @@
 // import reducer, { marketplacesOperations, marketplacesSelectors } from '.';
 
 describe('marketplace duck', () => {
+	beforeEach({});
 	describe('marketplaceOperations', () => {
-		it('test', () => {
-			expect(true).toBeTruthy();
-		});
+		it('loadTransactions', () => {});
 	});
 	describe('marketplaceSelectors', () => {});
 	describe('reducer', () => {});
