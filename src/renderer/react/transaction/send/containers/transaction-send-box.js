@@ -10,7 +10,9 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
-		this.props.dispatch(transactionOperations.init(this.props.cryptoCurrency));
+
+		let { trezorAccountIndex, cryptoCurrency } = this.props;
+		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
 	loadData() {
@@ -34,7 +36,7 @@ class TransactionSendBoxContainer extends Component {
 			this.processSignTxError(error);
 		}
 
-		this.props.closeModal(); // neded for hardware wallets to close info modals
+		// this.props.closeModal(); // neded for hardware wallets to close info modals
 	}
 
 	handleAddressChange(value) {
