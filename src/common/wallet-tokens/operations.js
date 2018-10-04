@@ -36,7 +36,7 @@ const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 
 const updateWalletTokensWithBalance = (walletTokens, walletPublicKey) => async dispatch => {
 	await dispatch(
-		actions.updateWalletTokens(getWalletTokensWithBalance(walletTokens, walletPublicKey))
+		actions.updateWalletTokens(await getWalletTokensWithBalance(walletTokens, walletPublicKey))
 	);
 };
 
@@ -44,7 +44,7 @@ const refreshWalletTokensBalance = () => async (dispatch, getState) => {
 	const state = getState();
 	await dispatch(
 		actions.updateWalletTokens(
-			getWalletTokensWithBalance(getTokens(state), getWallet(state).publicKey)
+			await getWalletTokensWithBalance(getTokens(state), getWallet(state).publicKey)
 		)
 	);
 };
