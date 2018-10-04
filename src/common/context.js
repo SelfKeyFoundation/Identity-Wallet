@@ -19,10 +19,10 @@ import { MarketplaceService } from '../main/marketplace/marketplace-service';
 
 let globalContext = null;
 
-export const setGlobalCtx = ctx => {
+export const setGlobalContext = ctx => {
 	globalContext = ctx;
 };
-export const getGlobalCtx = () => globalContext;
+export const getGlobalContext = () => globalContext;
 
 export const registerCommonServices = (container, thread) =>
 	container.register({
