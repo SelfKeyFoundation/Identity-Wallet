@@ -13,7 +13,6 @@ function SkCustomBoxDirective($rootScope, $window, $timeout) {
 			scope.publicKeyHex = '0x' + $rootScope.wallet.getPublicKeyHex();
 
 			scope.navigateToTransfer = event => {
-				// $rootScope.openSendTokenDialog(event, null, true);
 				$rootScope.openSendTransactionDialog(event, null, true);
 			};
 		},

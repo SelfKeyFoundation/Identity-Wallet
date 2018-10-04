@@ -1235,6 +1235,16 @@ module.exports = function(cradle) {
 		trezorService.eventEmitter.on(passphraseEvent, () => {
 			app.win.webContents.send(passphraseEvent);
 		});
+
+		let signSuccessEvent = 'TREZOR_SIGN_SUCCESS';
+		trezorService.eventEmitter.on(signSuccessEvent, () => {
+			app.win.webContents.send(signSuccessEvent);
+		});
+
+		let signFailureEvent = 'TREZOR_SIGN_FAILURE';
+		trezorService.eventEmitter.on(signFailureEvent, err => {
+			app.win.webContents.send(signFailureEvent, err);
+		});
 	};
 
 	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
