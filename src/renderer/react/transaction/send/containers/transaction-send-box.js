@@ -36,7 +36,9 @@ class TransactionSendBoxContainer extends Component {
 			this.processSignTxError(error);
 		}
 
-		// this.props.closeModal(); // neded for hardware wallets to close info modals
+		if (this.props.walletProfile === 'ledger') {
+			this.props.closeModal();
+		}
 	}
 
 	handleAddressChange(value) {
