@@ -1,6 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
-    <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
-        <circle cx="18" cy="18" r="18" fill="#262F39" stroke="#303C49"/>
-        <path fill="#3B4A5A" fill-rule="nonzero" d="M10.815 9.64L9.64 10.814 16.824 18l-7.185 7.185 1.176 1.176L18 19.176l7.185 7.185 1.176-1.176L19.176 18l7.185-7.185-1.176-1.176L18 16.824z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Close</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Close-button" transform="translate(1.000000, 1.000000)">
+            <g id="Close">
+                <circle id="Oval-2" stroke="#1D505F" fill="#262F39" cx="18" cy="18" r="18"></circle>
+                <g id="icon-close-modal" transform="translate(9.000000, 9.000000)" fill="#23E6FE" fill-rule="nonzero">
+                    <polygon id="Shape" points="1.81534091 0.639204545 0.639204545 1.81534091 7.82386364 9 0.639204545 16.1846591 1.81534091 17.3607955 9 10.1761364 16.1846591 17.3607955 17.3607955 16.1846591 10.1761364 9 17.3607955 1.81534091 16.1846591 0.639204545 9 7.82386364"></polygon>
+                </g>
+            </g>
+        </g>
     </g>
 </svg>
