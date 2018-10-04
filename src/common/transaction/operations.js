@@ -70,7 +70,6 @@ const getGasLimit = async (
 	} else {
 		let arg = {};
 		const web3Utils = getGlobalContext().web3Service.web3.utils;
-		// const amountInHex = web3Utils.numberToHex(web3Utils.toWei(amount));
 		arg = {
 			from: walletAddress,
 			nonce,
