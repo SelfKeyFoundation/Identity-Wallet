@@ -5,9 +5,6 @@ const log = new Logger('SendTokenDialogController');
 
 const EthUnits = require('../../../classes/eth-units');
 
-const BalanceUpdaterService = require('main/data-updaters/balance-updater.service').default;
-const balanceUpdaterService = new BalanceUpdaterService();
-
 function SendTokenDialogController(
 	$rootScope,
 	$scope,
@@ -100,8 +97,8 @@ function SendTokenDialogController(
 				$rootScope.openUnlockLedgerInfoWindow();
 				break;
 			default:
-				let isSendingTxFealure = true;
-				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFealure);
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToLedgerDialog(event, isSendingTxFailure);
 		}
 	};
 
@@ -121,8 +118,8 @@ function SendTokenDialogController(
 				$rootScope.incorrectTrezorPinEntered = true;
 				break;
 			default:
-				let isSendingTxFealure = true;
-				$rootScope.openConnectingToTrezorDialog(event, isSendingTxFealure);
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToTrezorDialog(event, isSendingTxFailure);
 		}
 	};
 
@@ -354,7 +351,6 @@ function SendTokenDialogController(
 		currentTxHistoryData.nonce = $scope.signedWithNonce;
 
 		TxHistoryService.insertPandingTx($scope.sendPromise, currentTxHistoryData);
-		balanceUpdaterService.startTxBalanceUpdater($scope.sendPromise);
 
 		$scope.sendPromise
 			.then(transactionHash => {
@@ -587,12 +583,6 @@ function SendTokenDialogController(
 	let deregisterTxSignEvent = $rootScope.$on('tx-sign:retry', event => {
 		$mdDialog.cancel();
 		$scope.startSend(event);
-	});
-
-	balanceUpdaterService.on('tx-status:change', (txHash, status) => {
-		if ($scope.txHex === txHash) {
-			$scope.backgroundProcessStatuses.txStatus = status;
-		}
 	});
 
 	$scope.$on('$destroy', () => {

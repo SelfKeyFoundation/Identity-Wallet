@@ -6,9 +6,16 @@ import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
 import { TransferPriceWrapper } from './react/transfer-price/index';
 import { TransactionNoGasErrorWrapper } from './react/transaction/transaction-no-gas-error';
+import { TransactionErrorWrapper } from './react/transaction/transaction-error';
 import { IdAttributeSchemaForm } from './react/id-attribute';
 import { MarketplaceWrapper } from './react/marketplace';
 import { TransactionsHistoryWrapper } from './react/transaction/transactions-history';
+import { TransactionSendBoxWrapper } from './react/transaction/send';
+import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
+
+import { setGlobalContext, configureContext } from 'common/context';
+const ctx = configureContext(null, null).cradle;
+setGlobalContext(ctx);
 
 const { Logger } = require('common/logger');
 
@@ -213,6 +220,38 @@ const transactionNoGasErrorWrapper = react2angular(TransactionNoGasErrorWrapper,
 ]);
 angular.module('kyc-wallet').component('transactionNoGasError', transactionNoGasErrorWrapper);
 
+const transactionErrorWrapper = react2angular(TransactionErrorWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'message'
+]);
+angular.module('kyc-wallet').component('transactionError', transactionErrorWrapper);
+
+const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'navigateToTransactionProgress',
+	'showConfirmTransactionInfoModal',
+	'isHardwareWallet',
+	'closeModal',
+	'norifySignTxFailure',
+	'navigateToTransactionNoGasError',
+	'navigateToTransactionError',
+	'isSendCustomToken',
+	'trezorAccountIndex',
+	'walletProfile'
+]);
+angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
+
+const transactionSendProgressBoxWrapper = react2angular(TransactionSendProgressBoxWrapper, [
+	'cryptoCurrency',
+	'closeAction',
+	'openLink'
+]);
+angular
+	.module('kyc-wallet')
+	.component('transactionSendProgressBox', transactionSendProgressBoxWrapper);
+
 const idAttributeSchemaForm = react2angular(IdAttributeSchemaForm, [
 	'attr',
 	'type',
@@ -252,6 +291,19 @@ angular
 
 const SendTokenDialogController = require('./angular/controllers/commons/dialogs/send-token-controller.js');
 angular.module('kyc-wallet').controller('SendTokenDialogController', SendTokenDialogController);
+
+const SendTransactionController = require('./angular/controllers/commons/dialogs/send-transaction-controller.js');
+angular.module('kyc-wallet').controller('SendTransactionController', SendTransactionController);
+
+const SendTransactionProgressController = require('./angular/controllers/commons/dialogs/send-transaction-progress-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('SendTransactionProgressController', SendTransactionProgressController);
+
+const SendTransactionFailureController = require('./angular/controllers/commons/dialogs/send-transaction-failure-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('SendTransactionFailureController', SendTransactionFailureController);
 
 const UpdateDialogController = require('./angular/controllers/commons/dialogs/update-controller.js');
 angular.module('kyc-wallet').controller('UpdateDialogController', UpdateDialogController);

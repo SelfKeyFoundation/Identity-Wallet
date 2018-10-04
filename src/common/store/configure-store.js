@@ -8,6 +8,8 @@ import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
+import ethGasStationInfo from '../eth-gas-station';
+import transaction from '../transaction';
 
 import {
 	forwardToMain,
@@ -36,7 +38,9 @@ export default (initialState, scope = 'main') => {
 		wallet,
 		walletTokens,
 		viewAll,
-		prices
+		prices,
+		ethGasStationInfo,
+		transaction
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

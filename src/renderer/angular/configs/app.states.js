@@ -347,6 +347,71 @@ function appStates(
 			}
 		})
 
+		.state('member.wallet.send-transaction', {
+			abstract: true,
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/transaction-layout.html'
+				}
+			}
+		})
+
+		.state('member.wallet.send-transaction.main', {
+			url: '/member/wallet/send-transaction/main',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction.html',
+					controller: 'SendTransactionController'
+				}
+			},
+			params: {
+				symbol: null,
+				allowSelectERC20Token: null
+			}
+		})
+
+		.state('member.wallet.send-transaction.progress', {
+			url: '/member/wallet/send-transaction/progress',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-progress.html',
+					controller: 'SendTransactionProgressController'
+				}
+			},
+			params: {
+				symbol: null,
+				allowSelectERC20Token: null
+			}
+		})
+
+		.state('member.wallet.send-transaction.no-gas', {
+			url: '/member/wallet/send-transaction/no-gas',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-fealure-no-gas.html',
+					controller: 'SendTransactionFailureController'
+				}
+			},
+			params: {
+				publicKey: null,
+				symbol: null
+			}
+		})
+		.state('member.wallet.send-transaction.error', {
+			url: '/member/wallet/send-transaction/error',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-fealure.html',
+					controller: 'SendTransactionFailureController'
+				}
+			},
+			params: {
+				publicKey: null,
+				symbol: null,
+				message: null
+			}
+		})
+
 		/**
 		 * ID Wallet
 		 */
