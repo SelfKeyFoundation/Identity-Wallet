@@ -233,7 +233,8 @@ const transactionSendBoxWrapper = react2angular(TransactionSendBoxWrapper, [
 	'norifySignTxFailure',
 	'navigateToTransactionNoGasError',
 	'navigateToTransactionError',
-	'isSendCustomToken'
+	'isSendCustomToken',
+	'trezorAccountIndex'
 ]);
 angular.module('kyc-wallet').component('transactionSendBox', transactionSendBoxWrapper);
 

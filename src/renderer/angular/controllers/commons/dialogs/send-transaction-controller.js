@@ -68,12 +68,50 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		}
 	};
 
+	let processTrezorErr = err => {
+		let message = err.message || err.code || '';
+		switch (message) {
+			case 'Timeout':
+				$rootScope.openHardwareWalletTimedOutWindow(profile);
+				break;
+			case 'Failure_ActionCancelled':
+				$rootScope.openRejectHardwareWalletTxWarningDialog(profile);
+				break;
+			case 'Failure_PinCancelled':
+				break;
+			case 'Failure_PinInvalid':
+				$scope.startSend();
+				$rootScope.incorrectTrezorPinEntered = true;
+				break;
+			default:
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToTrezorDialog(isSendingTxFailure);
+		}
+	};
+
 	$scope.onSignTxFailure = err => {
 		console.log('error in controller', err);
 		if (profile === 'ledger') {
 			processLedgerErr(err);
 		}
+		if (profile === 'trezor') {
+			processTrezorErr(err);
+		}
 	};
+
+	let deregisterTxSignSuccessEvent = $rootScope.$on('TREZOR_SIGN_SUCCESS', event => {
+		$mdDialog.cancel();
+	});
+
+	let deregisterTxSignFailureEvent = $rootScope.$on('TREZOR_SIGN_FAILURE', (event, err) => {
+		$mdDialog.cancel();
+		$scope.onSignTxFailure(err);
+	});
+
+	$scope.$on('$destroy', () => {
+		if (deregisterTxSignSuccessEvent) deregisterTxSignSuccessEvent();
+		if (deregisterTxSignFailureEvent) deregisterTxSignFailureEvent();
+	});
 }
 
 SendTransactionController.$inject = ['$scope', '$rootScope', '$mdDialog', '$state', '$stateParams'];

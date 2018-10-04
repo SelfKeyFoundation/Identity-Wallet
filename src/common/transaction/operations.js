@@ -24,7 +24,7 @@ const chainId = config.chainId || 3;
 
 const transferHex = '0xa9059cbb';
 
-const init = cryptoCurrency => async dispatch => {
+const init = args => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
 			address: '',
@@ -38,7 +38,7 @@ const init = cryptoCurrency => async dispatch => {
 			transactionHash: '',
 			addressError: false,
 			sending: false,
-			cryptoCurrency
+			...args
 		})
 	);
 };
@@ -146,7 +146,7 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, wallet, dispatch) => {
+const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
 		let signed = await ledgerService.signTransaction({
 			dataToSign: rawTx,
@@ -160,7 +160,7 @@ const signTransaction = async (rawTx, wallet, dispatch) => {
 		await dispatch(
 			actions.signTxWithTrezor({
 				dataToSign: rawTx,
-				accountIndex: 0
+				accountIndex: transaction.trezorAccountIndex
 			})
 		);
 		return null;
@@ -211,7 +211,7 @@ const startSend = () => async (dispatch, getState) => {
 		rawTx.data = EthUtils.sanitizeHex(data);
 	}
 
-	const signedHex = await signTransaction(rawTx, wallet, dispatch);
+	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
 	if (signedHex) {
 		await dispatch(
 			actions.updateTransaction({
