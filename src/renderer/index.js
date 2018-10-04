@@ -13,6 +13,10 @@ import { TransactionsHistoryWrapper } from './react/transaction/transactions-his
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
 
+import { setGlobalContext, configureContext } from 'common/context';
+const ctx = configureContext(null, null).cradle;
+setGlobalContext(ctx);
+
 const { Logger } = require('common/logger');
 
 const path = require('path');

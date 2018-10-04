@@ -21,7 +21,7 @@ import {
 import config from 'common/config';
 import createMenuTemplate from './menu';
 import db from './db/db';
-import { configureContext } from './context';
+import { setGlobalContext, configureContext } from 'common/context';
 
 const log = new Logger('main');
 
@@ -103,6 +103,8 @@ function onReady(app) {
 		await db.init();
 		const store = configureStore(global.state, 'main');
 		const ctx = configureContext(store, app).cradle;
+		setGlobalContext(ctx);
+
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));

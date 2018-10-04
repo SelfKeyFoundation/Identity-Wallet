@@ -97,7 +97,6 @@ class TransactionSendBoxContainer extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	console.log('...getTokens(state)', getTokens(state));
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),

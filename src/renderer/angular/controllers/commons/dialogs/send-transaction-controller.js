@@ -41,7 +41,6 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 	};
 
 	$scope.closeModal = () => {
-		console.log('close action is invoked');
 		$mdDialog.cancel();
 	};
 
@@ -69,7 +68,6 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 	};
 
 	$scope.onSignTxFailure = err => {
-		console.log('error in controller', err);
 		if (profile === 'ledger') {
 			processLedgerErr(err);
 		}
