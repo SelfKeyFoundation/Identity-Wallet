@@ -17,13 +17,10 @@ import IdentityService from 'main/identity/identity-service';
 
 let globalContext = null;
 
-export const getGlobalContext = () => {
-	return globalContext;
-};
-
 export const setGlobalContext = ctx => {
 	globalContext = ctx;
 };
+export const getGlobalContext = () => globalContext;
 
 export const configureContext = (store, app) => {
 	const container = createContainer({

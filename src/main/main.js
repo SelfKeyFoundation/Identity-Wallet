@@ -14,7 +14,7 @@ import db from './db/db';
 import { identityOperations } from '../common/identity';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
 import config from 'common/config';
-import { configureContext, setGlobalCtx } from '../common/context';
+import { configureContext, setGlobalContext } from '../common/context';
 import { createMainWindow } from './main-window';
 import { handleSquirrelEvent, appUpdater } from './autoupdater';
 
@@ -28,7 +28,7 @@ const walletsDirectoryPath = getWalletsDir();
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
 const ctx = configureContext('main').cradle;
-setGlobalCtx(ctx);
+setGlobalContext(ctx);
 
 /**
  * auto updated
