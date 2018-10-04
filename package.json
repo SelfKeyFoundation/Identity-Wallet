@@ -190,6 +190,7 @@
     "prettier": "^1.13.7",
     "pretty-quick": "^1.6.0",
     "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.3",
     "regenerator-runtime": "^0.12.0",
     "run-sequence": "^2.2.1",
     "spectron": "^3.8.0",

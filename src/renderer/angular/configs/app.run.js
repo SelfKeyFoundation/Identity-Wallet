@@ -283,12 +283,11 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openConnectingToTrezorDialog = (event, isSendingTxFailure) => {
+	$rootScope.openConnectingToTrezorDialog = isSendingTxFailure => {
 		return $mdDialog.show({
 			controller: 'ConnectingToHardwareWalletController',
 			templateUrl: 'common/dialogs/connecting-to-trezor.html',
 			parent: angular.element(document.body),
-			targetEvent: event,
 			clickOutsideToClose: false,
 			fullscreen: true,
 			locals: {

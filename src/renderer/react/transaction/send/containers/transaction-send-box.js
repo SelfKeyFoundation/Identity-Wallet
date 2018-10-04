@@ -5,11 +5,14 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
 
 class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
-		this.props.dispatch(transactionOperations.init());
+
+		let { trezorAccountIndex, cryptoCurrency } = this.props;
+		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
 	loadData() {
@@ -28,12 +31,14 @@ class TransactionSendBoxContainer extends Component {
 			this.props.showConfirmTransactionInfoModal();
 		}
 		try {
-			await this.props.dispatch(transactionOperations.startSend(this.props.cryptoCurrency));
+			await this.props.dispatch(transactionOperations.startSend());
 		} catch (error) {
 			this.processSignTxError(error);
 		}
 
-		this.props.closeModal(); // neded for hardware wallets to close info modals
+		if (this.props.walletProfile === 'ledger') {
+			this.props.closeModal();
+		}
 	}
 
 	handleAddressChange(value) {
@@ -49,16 +54,32 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	handleGasLimitChange(field) {
-		this.props.dispatch(transactionOperations.setGasLimit(field.target.value));
+		this.props.dispatch(transactionOperations.setLimitPrice(field.target.value));
 	}
 
-	handleConfirmAction() {
-		this.props.dispatch(transactionOperations.confirmSend());
-		this.props.navigateToTransactionProgress();
+	handleConfirmActionError(err) {
+		let message = err.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			return this.props.navigateToTransactionNoGasError();
+		}
+		this.props.navigateToTransactionError(message);
+	}
+
+	async handleConfirmAction() {
+		try {
+			this.props.navigateToTransactionProgress();
+			await this.props.dispatch(transactionOperations.confirmSend());
+		} catch (err) {
+			this.handleConfirmActionError(err);
+		}
 	}
 
 	handleCancelAction() {
 		this.props.dispatch(transactionOperations.cancelSend());
+	}
+
+	handleCryptoCurrencyChange(value) {
+		this.props.dispatch(transactionOperations.setCryptoCurrency(value));
 	}
 
 	render() {
@@ -73,18 +94,20 @@ class TransactionSendBoxContainer extends Component {
 				changeGasLimitAction={e => this.handleGasLimitChange(e)}
 				confirmAction={() => this.handleConfirmAction()}
 				cancelAction={() => this.handleCancelAction()}
+				onCryptoCurrencyChange={value => this.handleCryptoCurrencyChange(value)}
 			/>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	console.log(transactionSelectors.getTransaction(state, props.cryptoCurrency));
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		...transactionSelectors.getTransaction(state, props.cryptoCurrency)
+		...transactionSelectors.getTransaction(state),
+		tokens: getTokens(state),
+		cryptoCurrency: props.cryptoCurrency
 	};
 };
 

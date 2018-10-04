@@ -11,7 +11,8 @@ const initialState = {
 	signedHex: '',
 	transactionHash: '',
 	addressError: false,
-	sending: false
+	sending: false,
+	cryptoCurrency: ''
 };
 
 const transactionReducer = (state = initialState, action) => {
@@ -29,8 +30,8 @@ const transactionReducer = (state = initialState, action) => {
 		case types.TREZOR_TX_SIGN:
 			return {
 				...state,
-				signedHex: action.payload.raw,
-				sending: true
+				signedHex: action.payload,
+				sending: !!action.payload
 			};
 		default:
 			return state;

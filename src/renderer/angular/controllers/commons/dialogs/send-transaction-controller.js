@@ -8,7 +8,7 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 	'ngInject';
 
 	$scope.symbol = $stateParams.symbol;
-	let profile = $rootScope.wallet.profile;
+	let { profile, publicKey } = $rootScope.wallet;
 
 	log.info('SendTransactionController');
 
@@ -24,12 +24,23 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		$state.go('member.wallet.send-transaction.progress', { symbol: $scope.symbol });
 	};
 
+	$scope.navigateToTransactionNoGasError = () => {
+		$state.go('member.wallet.send-transaction.no-gas', { publicKey, symbol: $scope.symbol });
+	};
+
+	$scope.navigateToTransactionError = message => {
+		$state.go('member.wallet.send-transaction.error', {
+			message,
+			publicKey,
+			symbol: $scope.symbol
+		});
+	};
+
 	$scope.showConfirmTransactionInfoModal = () => {
-		$rootScope.openConfirmHardwareWalletTxInfoWindow($rootScope.wallet.profile);
+		$rootScope.openConfirmHardwareWalletTxInfoWindow(profile);
 	};
 
 	$scope.closeModal = () => {
-		console.log('close action is invoked');
 		$mdDialog.cancel();
 	};
 
@@ -56,12 +67,49 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		}
 	};
 
+	let processTrezorErr = err => {
+		let message = err.message || err.code || '';
+		switch (message) {
+			case 'Timeout':
+				$rootScope.openHardwareWalletTimedOutWindow(profile);
+				break;
+			case 'Failure_ActionCancelled':
+				$rootScope.openRejectHardwareWalletTxWarningDialog(profile);
+				break;
+			case 'Failure_PinCancelled':
+				break;
+			case 'Failure_PinInvalid':
+				$scope.startSend();
+				$rootScope.incorrectTrezorPinEntered = true;
+				break;
+			default:
+				let isSendingTxFailure = true;
+				$rootScope.openConnectingToTrezorDialog(isSendingTxFailure);
+		}
+	};
+
 	$scope.onSignTxFailure = err => {
-		console.log('error in controller', err);
 		if (profile === 'ledger') {
 			processLedgerErr(err);
 		}
+		if (profile === 'trezor') {
+			processTrezorErr(err);
+		}
 	};
+
+	let deregisterTxSignSuccessEvent = $rootScope.$on('TREZOR_SIGN_SUCCESS', event => {
+		$mdDialog.cancel();
+	});
+
+	let deregisterTxSignFailureEvent = $rootScope.$on('TREZOR_SIGN_FAILURE', (event, err) => {
+		$mdDialog.cancel();
+		$scope.onSignTxFailure(err);
+	});
+
+	$scope.$on('$destroy', () => {
+		if (deregisterTxSignSuccessEvent) deregisterTxSignSuccessEvent();
+		if (deregisterTxSignFailureEvent) deregisterTxSignFailureEvent();
+	});
 }
 
 SendTransactionController.$inject = ['$scope', '$rootScope', '$mdDialog', '$state', '$stateParams'];

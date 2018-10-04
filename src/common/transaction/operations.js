@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import Web3Service from 'main/blockchain/web3-service';
+import { getGlobalContext } from 'common/context';
 import { getWallet } from 'common/wallet/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getTransaction } from './selectors';
@@ -8,18 +8,19 @@ import EthUtils from 'common/utils/eth-utils';
 import LedgerService from 'main/blockchain/leadger-service';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
+import { BigNumber } from 'bignumber.js';
 
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
-const web3Service = new Web3Service();
-const web3Utils = web3Service.web3.utils;
-
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
-const ledgerService = new LedgerService({ web3Service });
 
-const init = () => async dispatch => {
+const chainId = config.chainId || 3;
+
+const transferHex = '0xa9059cbb';
+
+const init = args => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
 			address: '',
@@ -32,13 +33,15 @@ const init = () => async dispatch => {
 			signedHex: '',
 			transactionHash: '',
 			addressError: false,
-			sending: false
+			sending: false,
+			...args
 		})
 	);
 };
 
 const setAddress = address => async dispatch => {
 	try {
+		const web3Utils = getGlobalContext().web3Service.web3.utils;
 		let toChecksumAddress = web3Utils.toChecksumAddress(address);
 		if (web3Utils.isHex(address) && web3Utils.isAddress(toChecksumAddress)) {
 			await dispatch(actions.updateTransaction({ address }));
@@ -48,6 +51,7 @@ const setAddress = address => async dispatch => {
 			await dispatch(actions.setAddressError(true));
 		}
 	} catch (e) {
+		console.log(e);
 		await dispatch(actions.setAddressError(true));
 	}
 };
@@ -56,6 +60,7 @@ const getGasLimit = async (newGasLimit, address, amount, walletAddress) => {
 	if (newGasLimit) {
 		return newGasLimit;
 	} else {
+		const web3Utils = getGlobalContext().web3Service.web3.utils;
 		const amountInHex = web3Utils.numberToHex(web3Utils.toWei(amount));
 
 		const params = {
@@ -69,7 +74,7 @@ const getGasLimit = async (newGasLimit, address, amount, walletAddress) => {
 			]
 		};
 
-		return web3Service.waitForTicket(params);
+		return getGlobalContext().web3Service.waitForTicket(params);
 	}
 };
 
@@ -79,37 +84,42 @@ const getTransactionCount = async publicKey => {
 		args: [publicKey, 'pending']
 	};
 
-	return web3Service.waitForTicket(params);
+	return getGlobalContext().web3Service.waitForTicket(params);
 };
 
 const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
 	dispatch,
 	getState
 ) => {
-	const state = getState();
-	const address = !newAddress ? state.transaction.address : newAddress;
-	const amount = !newAmount ? state.transaction.amount : newAmount;
-	const walletAddress = state.wallet.publicKey;
-	const gasPrice = !newGasPrice ? state.ethGasStationInfo.ethGasStationInfo.average : newGasPrice;
+	try {
+		const state = getState();
+		const address = !newAddress ? state.transaction.address : newAddress;
+		const amount = !newAmount ? state.transaction.amount : newAmount;
+		const walletAddress = state.wallet.publicKey;
+		const gasPrice = !newGasPrice
+			? state.ethGasStationInfo.ethGasStationInfo.average
+			: newGasPrice;
 
-	if (address && amount) {
-		let gasLimit = await getGasLimit(newGasLimit, address, amount, walletAddress);
+		if (address && amount) {
+			let gasLimit = await getGasLimit(newGasLimit, address, amount, walletAddress);
 
-		const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
-		const feeInWei = String(Math.round(gasPriceInWei * gasLimit));
-		console.log('feeInWei', feeInWei);
-		const feeInEth = web3Utils.fromWei(feeInWei, 'ether');
+			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
+			const feeInWei = String(Math.round(gasPriceInWei * gasLimit));
+			const feeInEth = getGlobalContext().web3Service.web3.utils.fromWei(feeInWei, 'ether');
 
-		const nonce = await getTransactionCount(walletAddress);
+			const nonce = await getTransactionCount(walletAddress);
 
-		await dispatch(
-			actions.updateTransaction({
-				ethFee: feeInEth,
-				gasPrice: gasPrice,
-				gasLimit,
-				nonce
-			})
-		);
+			await dispatch(
+				actions.updateTransaction({
+					ethFee: feeInEth,
+					gasPrice: gasPrice,
+					gasLimit,
+					nonce
+				})
+			);
+		}
+	} catch (e) {
+		console.log(e);
 	}
 };
 
@@ -140,20 +150,21 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, wallet, dispatch) => {
+const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
-		return ledgerService.signTransaction({
+		const ledgerService = new LedgerService({ web3Service: getGlobalContext().web3Service });
+		let signed = await ledgerService.signTransaction({
 			dataToSign: rawTx,
 			address: `0x${wallet.publicKey}`
 		});
+		return signed.raw;
 	}
 
 	if (wallet.profile === 'trezor') {
-		console.log('start');
 		await dispatch(
 			actions.signTxWithTrezor({
 				dataToSign: rawTx,
-				accountIndex: 0
+				accountIndex: transaction.trezorAccountIndex
 			})
 		);
 		return null;
@@ -164,10 +175,20 @@ const signTransaction = async (rawTx, wallet, dispatch) => {
 	return `0x${eTx.serialize().toString('hex')}`;
 };
 
-const startSend = cryptoCurrency => async (dispatch, getState) => {
+const generateContractData = (toAddress, value, decimal) => {
+	value = EthUtils.padLeft(
+		new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16),
+		64
+	);
+	toAddress = EthUtils.padLeft(EthUtils.getNakedAddress(toAddress), 64);
+	return transferHex + toAddress + value;
+};
+
+const startSend = () => async (dispatch, getState) => {
 	const state = getState();
 	const wallet = getWallet(state);
 	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
 
 	const rawTx = {
 		nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.nonce)),
@@ -175,18 +196,26 @@ const startSend = cryptoCurrency => async (dispatch, getState) => {
 			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'))
 		),
 		gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.gasLimit)),
-		to: EthUtils.sanitizeHex(transaction.address),
-		value: EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(
-				cryptoCurrency === 'ETH'
-					? EthUnits.unitToUnit(transaction.amount, 'ether', 'wei')
-					: transaction.amount
-			)
-		),
-		chainId: config.chainId || 3 // if missing - use ropsten testnet
+		chainId
 	};
 
-	const signedHex = await signTransaction(rawTx, wallet, dispatch);
+	if (cryptoCurrency === 'ETH') {
+		rawTx.to = EthUtils.sanitizeHex(transaction.address);
+		rawTx.value = EthUtils.sanitizeHex(
+			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.amount, 'ether', 'wei'))
+		);
+	} else {
+		rawTx.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		rawTx.value = EthUtils.sanitizeHex(0);
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		rawTx.data = EthUtils.sanitizeHex(data);
+	}
+
+	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
 	if (signedHex) {
 		await dispatch(
 			actions.updateTransaction({
@@ -232,7 +261,7 @@ const updateBalances = oldBalance => async (dispatch, getState) => {
 
 const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
 	txInfoCheckInterval = setInterval(async () => {
-		const txInfo = await web3Service.waitForTicket({
+		const txInfo = await getGlobalContext().web3Service.waitForTicket({
 			method: 'getTransactionReceipt',
 			args: [txHash]
 		});
@@ -252,6 +281,25 @@ const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
 	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
+const createTxHistry = () => (dispatch, getState) => {
+	const wallet = getWallet(getState());
+	const transaction = getTransaction(getState());
+	const { cryptoCurrency } = transaction;
+	const tokenSymbol = cryptoCurrency === 'ETH' ? null : cryptoCurrency;
+	const data = {
+		tokenSymbol,
+		networkId: chainId,
+		from: wallet.publicKey,
+		to: transaction.address,
+		value: +transaction.amount,
+		gasPrice: transaction.gasPrice,
+		hash: transaction.transactionHash,
+		...transaction
+	};
+
+	dispatch(actions.createTxHistory(data));
+};
+
 const confirmSend = () => async (dispatch, getState) => {
 	const transaction = getTransaction(getState());
 	const params = {
@@ -268,15 +316,24 @@ const confirmSend = () => async (dispatch, getState) => {
 		})
 	);
 
-	const transactionHash = await web3Service.waitForTicket(params);
-
+	const transactionHash = await getGlobalContext().web3Service.waitForTicket(params);
 	await dispatch(
 		actions.updateTransaction({
 			transactionHash
 		})
 	);
 
+	dispatch(createTxHistry());
+
 	await dispatch(startTxBalanceUpdater(transactionHash));
+};
+
+const setCryptoCurrency = cryptoCurrency => async dispatch => {
+	await dispatch(
+		actions.updateTransaction({
+			cryptoCurrency
+		})
+	);
 };
 
 export default {
@@ -289,5 +346,6 @@ export default {
 	setTransactionFee,
 	startSend,
 	cancelSend,
-	confirmSend
+	confirmSend,
+	setCryptoCurrency
 };

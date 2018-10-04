@@ -384,6 +384,34 @@ function appStates(
 			}
 		})
 
+		.state('member.wallet.send-transaction.no-gas', {
+			url: '/member/wallet/send-transaction/no-gas',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-fealure-no-gas.html',
+					controller: 'SendTransactionFailureController'
+				}
+			},
+			params: {
+				publicKey: null,
+				symbol: null
+			}
+		})
+		.state('member.wallet.send-transaction.error', {
+			url: '/member/wallet/send-transaction/error',
+			views: {
+				main: {
+					templateUrl: 'common/dialogs/send-transaction-fealure.html',
+					controller: 'SendTransactionFailureController'
+				}
+			},
+			params: {
+				publicKey: null,
+				symbol: null,
+				message: null
+			}
+		})
+
 		/**
 		 * ID Wallet
 		 */
