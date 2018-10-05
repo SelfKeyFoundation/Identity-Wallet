@@ -21,6 +21,5 @@ export const getTransaction = state => {
 	transaction.balance = token ? token.balance : 0;
 	transaction.contractAddress = token ? token.address : '';
 	transaction.tokenDecimal = token ? token.decimal : 18;
-	transaction.tokenContract = token ? token.address : '';
 	return transaction;
 };

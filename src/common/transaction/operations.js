@@ -117,7 +117,7 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			: newGasPrice;
 
 		if (address && amount) {
-			const tokenContract = state.transaction.tokenContract;
+			const tokenContract = state.transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = state.transaction.cryptoCurrency;
 
