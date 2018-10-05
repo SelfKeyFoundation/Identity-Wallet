@@ -15,7 +15,7 @@ function ManageTokenController(
 	log.debug('ManageTokenController, %j', $stateParams);
 
 	let temporaryMap = {
-		KEY: 'SelfKey',
+		[$rootScope.PRIMARY_TOKEN]: 'SelfKey',
 		ETH: 'Ethereum'
 	};
 

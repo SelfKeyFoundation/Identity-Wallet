@@ -129,7 +129,7 @@ export class StakingService {
 					!!contract.deprecated
 				)
 		);
-		let token = await Token.findOneBySymbol(CONFIG.constants.primaryToken);
+		let token = await Token.findOneBySymbol(CONFIG.constants.primaryToken.toUpperCase());
 		this.tokenContract = new SelfKeyTokenContract(this.web3, token);
 	}
 }

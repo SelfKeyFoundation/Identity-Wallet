@@ -119,7 +119,7 @@
     "request": "2.87.0",
     "reselect": "^3.0.1",
     "scrypt": "^6.0.3",
-    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7080179f9d769532e07d2be3554821c4fae43ca5",
+    "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7fa8dc4438b1d3c7d0072140656984f26ebcd532",
     "serialize-error": "^2.1.0",
     "sinon": "^6.1.3",
     "snyk": "^1.94.0",

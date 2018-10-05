@@ -35,10 +35,15 @@ describe('MarketplaceService', () => {
 	});
 
 	it('loadTransactions', async () => {
-		const testTransactions = [{}];
+		const testTransactions = [{ serviceOwner: 'testOwner', serviceId: 'testId' }];
 		sinon.stub(MarketplaceTransactions, 'find').resolves(testTransactions);
-		await service.loadTransactions();
-		expect(MarketplaceTransactions.find.calledOnce).toBeTruthy();
+		await service.loadTransactions('testOwner', 'testId');
+		expect(
+			MarketplaceTransactions.find.calledOnceWith({
+				serviceOwner: 'testOwner',
+				serviceId: 'testId'
+			})
+		).toBeTruthy();
 	});
 
 	it('loadStakingInfo', async () => {

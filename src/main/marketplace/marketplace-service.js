@@ -15,8 +15,8 @@ export class MarketplaceService {
 		if (!this.wallet || !this.wallet.publicKey) return null;
 		return `0x${this.wallet.publicKey}`;
 	}
-	loadTransactions() {
-		return MarketplaceTransactions.find();
+	loadTransactions(serviceOwner, serviceId) {
+		return MarketplaceTransactions.find({ serviceOwner, serviceId });
 	}
 	loadStakingInfo(serviceOwner, serviceId) {
 		let options = { from: this.walletAddress };
