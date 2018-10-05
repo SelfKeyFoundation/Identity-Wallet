@@ -44,7 +44,7 @@ function AppRun(
 	 */
 	$rootScope.INITIAL_ID_ATTRIBUTES = CONFIG.constants.initialIdAttributes;
 	$rootScope.LOCAL_STORAGE_KEYS = CONFIG.constants.localStorageKeys;
-	$rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken;
+	$rootScope.PRIMARY_TOKEN = CONFIG.constants.primaryToken.toUpperCase();
 	$rootScope.DICTIONARY = DICTIONARY[$rootScope.selectedLanguage];
 
 	/**

@@ -49,7 +49,7 @@ function SendTokenDialogController(
 		let tokenPrice = SqlLiteService.getTokenPriceBySymbol(token.symbol);
 
 		const tokenNameExceptions = {
-			KEY: 'SelfKey'
+			[$rootScope.PRIMARY_TOKEN]: 'SelfKey'
 		};
 		let getTokenName = () => {
 			return tokenNameExceptions[symbol] || tokenPrice.name;

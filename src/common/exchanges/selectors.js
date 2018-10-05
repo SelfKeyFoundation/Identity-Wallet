@@ -7,7 +7,9 @@ export const getExchanges = ({ exchanges }) => {
 			name: exchanges.byId[item].data.name,
 			status: exchanges.byId[item].data.status,
 			description: exchanges.byId[item].data.description,
-			logoUrl: exchanges.byId[item].data.logo[0].url
+			logoUrl: exchanges.byId[item].data.logo[0].url,
+			serviceOwner: '0x0',
+			serviceId: 'global'
 		};
 	});
 };
