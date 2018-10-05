@@ -68,26 +68,19 @@ const getGasLimit = async (
 	if (newGasLimit) {
 		return newGasLimit;
 	} else {
-		let arg = {};
-		const web3Utils = getGlobalContext().web3Service.web3.utils;
-		arg = {
-			from: walletAddress,
-			nonce,
-			to: address,
-			value: web3Utils.toWei(amount)
-		};
-
-		if (cryptoCurrency !== 'ETH') {
-			const data = await getGlobalContext().web3Service.waitForTicket({
-				method: 'getCode',
-				args: [tokenContract]
-			});
-			arg = { ...arg, data };
+		// Return default gas limit for Ethereum
+		if (cryptoCurrency === 'ETH') {
+			return 21000;
 		}
+
+		const web3Utils = getGlobalContext().web3Service.web3.utils;
 
 		const params = {
 			method: 'estimateGas',
-			args: [arg]
+			contractAddress: tokenContract,
+			contractMethod: 'transfer',
+			contractMethodArgs: [address, web3Utils.toWei(amount)],
+			args: [{ from: walletAddress, gas: 4500000 }]
 		};
 
 		return getGlobalContext().web3Service.waitForTicket(params);
