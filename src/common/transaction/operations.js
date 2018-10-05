@@ -56,22 +56,38 @@ const setAddress = address => async dispatch => {
 	}
 };
 
-const getGasLimit = async (newGasLimit, address, amount, walletAddress) => {
+const getGasLimit = async (
+	newGasLimit,
+	cryptoCurrency,
+	address,
+	amount,
+	walletAddress,
+	nonce,
+	tokenContract
+) => {
 	if (newGasLimit) {
 		return newGasLimit;
 	} else {
+		let arg = {};
 		const web3Utils = getGlobalContext().web3Service.web3.utils;
-		const amountInHex = web3Utils.numberToHex(web3Utils.toWei(amount));
+		arg = {
+			from: walletAddress,
+			nonce,
+			to: address,
+			value: web3Utils.toWei(amount)
+		};
+
+		if (cryptoCurrency !== 'ETH') {
+			const data = await getGlobalContext().web3Service.waitForTicket({
+				method: 'getCode',
+				args: [tokenContract]
+			});
+			arg = { ...arg, data };
+		}
 
 		const params = {
 			method: 'estimateGas',
-			args: [
-				{
-					from: walletAddress,
-					to: address,
-					value: amountInHex
-				}
-			]
+			args: [arg]
 		};
 
 		return getGlobalContext().web3Service.waitForTicket(params);
@@ -101,13 +117,23 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			: newGasPrice;
 
 		if (address && amount) {
-			let gasLimit = await getGasLimit(newGasLimit, address, amount, walletAddress);
+			const tokenContract = state.transaction.contractAddress;
+			const nonce = await getTransactionCount(walletAddress);
+			const cryptoCurrency = state.transaction.cryptoCurrency;
+
+			let gasLimit = await getGasLimit(
+				newGasLimit,
+				cryptoCurrency,
+				address,
+				amount,
+				walletAddress,
+				nonce,
+				tokenContract
+			);
 
 			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
 			const feeInWei = String(Math.round(gasPriceInWei * gasLimit));
 			const feeInEth = getGlobalContext().web3Service.web3.utils.fromWei(feeInWei, 'ether');
-
-			const nonce = await getTransactionCount(walletAddress);
 
 			await dispatch(
 				actions.updateTransaction({
