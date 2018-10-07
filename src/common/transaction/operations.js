@@ -256,13 +256,12 @@ const cancelSend = () => async dispatch => {
 
 const updateBalances = oldBalance => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
+
+	// the first one is ETH
+	let tokens = getTokens(getState()).splice(1);
+
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
-	await dispatch(
-		walletTokensOperations.updateWalletTokensWithBalance(
-			getTokens(getState()),
-			wallet.publicKey
-		)
-	);
+	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey));
 
 	const currentWallet = getWallet(getState());
 	if (oldBalance === currentWallet.balance) {
