@@ -1,5 +1,8 @@
 'use strict';
 const { Logger } = require('common/logger/logger');
+const store = require('renderer/react/common/store').default;
+const { transactionOperations } = require('common/transaction');
+
 const log = new Logger('SendTransactionController');
 
 // const EthUnits = require('../../../classes/eth-units');
@@ -88,6 +91,21 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		}
 	};
 
+	$scope.startSend = async () => {
+		if ($rootScope.wallet.isHardwareWallet) {
+			$scope.showConfirmTransactionInfoModal();
+		}
+		try {
+			await store.dispatch(transactionOperations.startSend());
+		} catch (error) {
+			$scope.onSignTxFailure(error);
+		}
+
+		if (profile === 'ledger') {
+			$scope.closeModal();
+		}
+	};
+
 	$scope.onSignTxFailure = err => {
 		if (profile === 'ledger') {
 			processLedgerErr(err);
@@ -106,9 +124,15 @@ function SendTransactionController($scope, $rootScope, $mdDialog, $state, $state
 		$scope.onSignTxFailure(err);
 	});
 
+	let deregisterTxSignEvent = $rootScope.$on('tx-sign:retry', () => {
+		$mdDialog.cancel();
+		$scope.startSend();
+	});
+
 	$scope.$on('$destroy', () => {
 		if (deregisterTxSignSuccessEvent) deregisterTxSignSuccessEvent();
 		if (deregisterTxSignFailureEvent) deregisterTxSignFailureEvent();
+		if (deregisterTxSignEvent) deregisterTxSignEvent();
 	});
 }
 
