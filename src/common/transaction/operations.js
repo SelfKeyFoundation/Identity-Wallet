@@ -304,14 +304,14 @@ const createTxHistry = () => (dispatch, getState) => {
 	const { cryptoCurrency } = transaction;
 	const tokenSymbol = cryptoCurrency === 'ETH' ? null : cryptoCurrency;
 	const data = {
+		...transaction,
 		tokenSymbol,
 		networkId: chainId,
 		from: wallet.publicKey,
 		to: transaction.address,
 		value: +transaction.amount,
 		gasPrice: +transaction.gasPrice,
-		hash: transaction.transactionHash,
-		...transaction
+		hash: transaction.transactionHash
 	};
 
 	dispatch(actions.createTxHistory(data));
