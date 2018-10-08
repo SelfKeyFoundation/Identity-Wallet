@@ -116,6 +116,20 @@ module.exports = function() {
 	}
 
 	async function _signTransaction(args) {
+		let result = {};
+		try {
+			result = await _sign(args);
+		} catch (err) {
+			_emitter.emit('TREZOR_SIGN_FAILURE', err);
+		}
+
+		if (result.raw) {
+			_emitter.emit('TREZOR_SIGN_SUCCESS');
+		}
+		return result.raw;
+	}
+
+	async function _sign(args) {
 		let { accountIndex } = args;
 		let { chainId, ...txData } = args.dataToSign;
 

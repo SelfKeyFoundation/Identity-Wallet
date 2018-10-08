@@ -39,7 +39,11 @@ export class Token extends BaseModel {
 	}
 
 	static findBySymbol(symbol) {
-		return this.query().where({ symbol });
+		return this.query().where({ symbol: (symbol || '').toUpperCase() });
+	}
+
+	static findOneBySymbol(symbol) {
+		return this.query().findOne({ symbol: (symbol || '').toUpperCase() });
 	}
 }
 

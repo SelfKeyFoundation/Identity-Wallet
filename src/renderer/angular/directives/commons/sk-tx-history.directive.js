@@ -41,7 +41,7 @@ function SKTxHistoryDirective($rootScope, $interval, $filter, RPCService, Common
 				let isSend = tx.from === publicKeyLowerCase;
 
 				if (status === 0) {
-					return isSend ? 'Faild To Send' : 'Faild To Receive';
+					return isSend ? 'Faild to send' : 'Faild to receive';
 				}
 				if (status === 1) {
 					return isSend ? 'Sent' : 'Received';
@@ -76,7 +76,7 @@ function SKTxHistoryDirective($rootScope, $interval, $filter, RPCService, Common
 					tx.externalLink = `https://${testnet}etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
 					tx.statusIconName = getTxStatusIconName(tx);
-					tx.date = $filter('date')(tx.timeStamp, 'yyyy-dd-MM');
+					tx.date = $filter('date')(tx.timeStamp, 'yyyy-dd-MM h:mm:ss a');
 
 					return tx;
 				});
