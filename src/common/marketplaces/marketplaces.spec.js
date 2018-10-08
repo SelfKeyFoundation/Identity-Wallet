@@ -1,59 +1,193 @@
+import sinon from 'sinon';
+import _ from 'lodash';
+import { setGlobalContext } from '../context';
+import { exchangesSelectors } from '../exchanges';
+import {
+	initialState,
+	marketplacesSelectors,
+	marketplacesActions,
+	loadTransactionsOperation,
+	loadStakesOperation
+} from '.';
+import { pricesSelectors } from '../prices';
+import { ethGasStationInfoSelectors } from '../eth-gas-station';
+import { fiatCurrencySelectors } from '../fiatCurrency';
+
 describe('marketplace selectors', () => {
-	it('dummy test to not fail ci', () => {
-		expect(true).toBeTruthy();
+	let state = {};
+
+	const testExchange = { serviceOwner: '0x0', serviceId: 'global', amount: 25, lockPeriod: 30 };
+	const testService = { id: '0x0_global', ...testExchange };
+
+	const testStake = {
+		id: '0x0_global',
+		serviceOwner: '0x0',
+		serviceId: 'global',
+		balance: 30,
+		releaseDate: 30000,
+		status: 'locked'
+	};
+
+	beforeEach(() => {
+		state = { marketplaces: { ...initialState } };
+		sinon.restore();
 	});
-	describe('servicesSelector', () => {
-		// selects a list of marketplace items (exchanges for now)
-		// reduces it to a list of services ( all exchanges will have thes same
-		//     serviceOwner and serviceId so at first the list will be only one item
-		// service should contain
-		//    - serviceOwner
-		//    - serviceId
-		//    - lockPeriod
-		//    - amount
+	it('servicesSelector', () => {
+		sinon.stub(exchangesSelectors, 'getExchanges').returns([testExchange]);
+		let services = marketplacesSelectors.servicesSelector(state);
+		expect(exchangesSelectors.getExchanges.calledOnceWith(state)).toBeTruthy();
+		expect(services.length).toBeGreaterThan(0);
+		expect(services[0]).toEqual(testService);
 	});
-	describe('selectStake', () => {
-		// gets serviceOwner and serviceId
-		// returns current stake info
-		// should contain:
-		//   - serviceOwner
-		//   - serviceId
-		//   - balance
-		//   - releaseDate ts
-		//   - status 'inactive', 'locked', 'unlocked', 'pending' ('pending is optional, could be derived from 'inactive' status and in progress transaction)
+	it('stakeSelector', () => {
+		state.marketplaces.stakesById = { [testStake.id]: testStake };
+		let selectedStake = marketplacesSelectors.stakeSelector(state, testStake.id);
+		expect(selectedStake).toEqual(testStake);
 	});
-	describe('selectPendingTransaction', () => {
-		// gets serviceOwner and serviceId
-		// returns in progress transaction (in pending or progress status)
+	it('pendingTransactionSelector', () => {
+		let successTx = {
+			serviceOwner: '0x0',
+			serviceId: 'global',
+			id: 1,
+			lastStatus: 'success'
+		};
+		let pendingTx = {
+			serviceOwner: '0x1',
+			serviceId: 'global',
+			id: 2,
+			lastStatus: 'pending'
+		};
+		let progressTx = {
+			serviceOwner: '0x0',
+			serviceId: 'global',
+			id: 3,
+			lastStatus: 'processing'
+		};
+		let errorTx = {
+			serviceOwner: '0x1',
+			serviceId: 'global',
+			id: 4,
+			lastStatus: 'error'
+		};
+		state.marketplaces.transactions = [1, 2, 3, 4];
+		state.marketplaces.transactionsById = {
+			1: successTx,
+			2: pendingTx,
+			3: progressTx,
+			4: errorTx
+		};
+		let selectedTx = marketplacesSelectors.pendingTransactionSelector(state, '0x0', 'global');
+		expect(selectedTx).toEqual(progressTx);
+		selectedTx = marketplacesSelectors.pendingTransactionSelector(state, '0x1', 'global');
+		expect(selectedTx).toEqual(pendingTx);
+		selectedTx = marketplacesSelectors.pendingTransactionSelector(state, '0x2', 'global');
+		expect(selectedTx).toBeNull();
 	});
-	describe('selectCurrentTransaction', () => {
-		// returns the currently constructed transaction (for new transaction)
-		// should return null if no current transaction
-		// should contain
-		//  - gasPrice estimates from gas station module
-		//  - gasPrice from price selector popup (actually used in the transaction)
-		//  - action (placeStake / withdraw)
-		//  - gasLimit
-		//  - amount in KEY
-		//  - lockPeriud
-		//  - feePrice in eth
-		//  - feePrice in usd
+	it('currentTransactionSelector', () => {
+		sinon.stub(ethGasStationInfoSelectors, 'getEthGasStationInfoWEI').returns({
+			avarage: 5000,
+			fast: 7000,
+			safeLow: 2000
+		});
+		sinon.stub(fiatCurrencySelectors, 'getFiatCurrency').returns('USD');
+		sinon.stub(pricesSelectors, 'getRate').returns(0.5);
+		let testCurrentTransaction = {
+			gasPriceEstimates: {
+				avarage: 5000,
+				fast: 7000,
+				safeLow: 2000
+			},
+			gasPrice: 3000,
+			gasLimit: 50000,
+			amount: 25,
+			action: 'placeStake',
+			fiat: 'USD',
+			fiatRate: 0.5,
+			lockPeriod: 30,
+			fee: '' + 3000 * 50000,
+			feeFiat: '' + 3000 * 50000 * 0.5
+		};
+		state.marketplaces.currentTransaction = _.pick(
+			testCurrentTransaction,
+			'gasPrice',
+			'gasLimit',
+			'amount',
+			'action',
+			'lockPeriod'
+		);
+		expect(marketplacesSelectors.currentTransactionSelector(state)).toEqual(
+			testCurrentTransaction
+		);
 	});
-	describe('currentPopupSelectors', () => {
-		// returns the name of popup to display or null
+	it('displayedPopupSelector', () => {
+		state.marketplaces.displayedPopup = 'test';
+		expect(marketplacesSelectors.displayedPopupSelector(state)).toEqual('test');
+	});
+	it('displayedCategorySelector', () => {
+		state.marketplaces.displayedCategory = 'test';
+		expect(marketplacesSelectors.displayedCategorySelector(state)).toEqual('test');
 	});
 });
 
 describe('marketplace operations', () => {
-	describe('loadTransactionsOperation', () => {
-		// selects a list of services
-		// forEach loads transactions via marketplace service
-		// dispatches set transactions action
+	let service = {
+		loadTransactions() {},
+		loadStakingInfo() {}
+	};
+	let state = {};
+	let store = {
+		dispatch() {},
+		getState() {
+			return state;
+		}
+	};
+	let services = [
+		{
+			id: '0x0_global',
+			serviceOwner: '0x0',
+			serviceId: 'global',
+			amount: 25,
+			lockPeriod: 30
+		},
+		{
+			id: '0x1_global',
+			serviceOwner: '0x1',
+			serviceId: 'global',
+			amount: 15,
+			lockPeriod: 20
+		}
+	];
+	let testAction = { type: 'test' };
+
+	beforeEach(() => {
+		sinon.restore();
+		setGlobalContext({ marketplacesService: service });
 	});
-	describe('loadStakesOperation', () => {
-		// selects a list of services
-		// forEach loads staking info via marketplace service
-		// dispatches set stakes action
+	it('loadTransactionsOperation', async () => {
+		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
+		sinon.stub(service, 'loadTransactions').resolves('ok');
+		sinon.stub(store, 'dispatch');
+		sinon.stub(marketplacesActions, 'setTransactionsAction').returns(testAction);
+
+		await loadTransactionsOperation()(store.dispatch, store.getState.bind(store));
+
+		expect(marketplacesSelectors.servicesSelector.calledOnceWith(state)).toBeTruthy();
+		expect(service.loadTransactions.calledOnceWith(services[0]));
+		expect(service.loadTransactions.calledOnceWith(services[1]));
+		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+	});
+	it('loadStakesOperation', async () => {
+		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
+		sinon.stub(service, 'loadStakingInfo').resolves('ok');
+		sinon.stub(store, 'dispatch');
+		sinon.stub(marketplacesActions, 'setStakesAction').returns(testAction);
+
+		await loadStakesOperation()(store.dispatch, store.getState.bind(store));
+
+		expect(marketplacesSelectors.servicesSelector.calledOnceWith(state)).toBeTruthy();
+		expect(service.loadStakingInfo.calledOnceWith(services[0]));
+		expect(service.loadStakingInfo.calledOnceWith(services[1]));
+		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
 	describe('placeStakeOperation', () => {
 		// calls place stake on marketplace service
@@ -112,6 +246,7 @@ describe('marketplace actions', () => {
 	describe('setCurrentTransactionAction', () => {});
 	describe('clearCurrentTransactionAction', () => {});
 	describe('showMarketplacePopup', () => {});
+	describe('displayMarketplaceCategory', () => {});
 });
 
 describe('marketplaceReducers', () => {
@@ -136,6 +271,7 @@ describe('marketplaceReducers', () => {
 		// update the transaction inside the store
 	});
 	describe('setMarketplacePopupReducer', () => {});
+	describe('setMarketplaceDisplayedCategoryReducer', () => {});
 	describe('clearCurrentTransactionReducer', () => {});
 	describe('setCurrentTransactionReducer', () => {});
 	describe('updateCurrentTransactionReducer', () => {});
