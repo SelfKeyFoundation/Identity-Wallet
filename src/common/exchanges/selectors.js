@@ -3,13 +3,16 @@ import CONFIG from 'common/config.js';
 
 export const getExchanges = ({ exchanges }) => {
 	return exchanges.allIds.map(item => {
+		let { data } = exchanges.byId[item];
 		return {
-			name: exchanges.byId[item].data.name,
-			status: exchanges.byId[item].data.status,
-			description: exchanges.byId[item].data.description,
-			logoUrl: exchanges.byId[item].data.logo[0].url,
-			serviceOwner: '0x0',
-			serviceId: 'global'
+			name: data.name,
+			status: data.status,
+			description: data.description,
+			logoUrl: data.logo[0].url,
+			serviceOwner: data.serviceOwner || '0x0',
+			serviceId: data.serviceId || 'global',
+			lockPeriud: data.lockPeriod || 2592000000, // 30 days
+			amount: data.amount || 25
 		};
 	});
 };

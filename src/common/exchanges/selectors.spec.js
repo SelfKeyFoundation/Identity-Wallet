@@ -124,7 +124,9 @@ describe('selectors', () => {
 					'Founded in 2013 by investment bankers, Gatecoin is a bitcoin and ethereum token exchange designed for both professional traders and retail investors. Through our intuitive trading platform, we enable individuals and institutions around the world to trade and invest in a wide variety of cryptocurrencies and blockchain assets. \n\nGatecoin has been an early supporter of bitcoin inspired technologies, as the first exchange in the world to list ethereum’s token, ether (ETH) in August 2015. We were subsequently the first exchange to list ERC20 standard tokens associated with decentralized applications (dapps) built on top of ethereum and the first to provide direct participation in token generation events (TGEs) or initial coin offerings (ICOs). \n\nAs cryptocurrencies and blockchain tokens challenge and transform forex and capital markets, Gatecoin is the marketplace bridging the two domains. We are the NASDAQ for the blockchain era.',
 				logoUrl: 'https://logo.jpg',
 				serviceOwner: '0x0',
-				serviceId: 'global'
+				serviceId: 'global',
+				amount: 25,
+				lockPeriud: 2592000000
 			}
 		];
 		expect(getExchanges({ exchanges })).toEqual(expectedExchanges);
