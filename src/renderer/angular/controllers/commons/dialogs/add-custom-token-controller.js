@@ -83,7 +83,6 @@ function AddCustomTokenDialogController(
 			let isValidHex = newVal && check;
 
 			let existingToken = isValidHex ? getExistingTokenByAddress(newVal) : null;
-			debugger; // eslint-disable-line
 			if (existingToken) {
 				$scope.duplicationErr = `${
 					existingToken.symbol
