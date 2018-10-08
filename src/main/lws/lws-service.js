@@ -8,17 +8,16 @@ import util from 'util';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import child_process from 'child_process';
+import ChildProcess from 'child_process';
 import sudo from 'sudo-prompt';
 import common from 'common/utils/common';
 import request from 'request';
 import selfkey from 'selfkey.js';
 import tcpPortUsed from 'tcp-port-used';
 import { ipcMain } from 'electron';
+import pkg from '../../../package.json';
 
 const log = new Logger('LWSService');
-
-import pkg from '../../../package.json';
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
@@ -145,7 +144,7 @@ async function checkPort(port) {
 }
 
 async function executor(cmd, options) {
-	const exec = util.promisify(child_process.exec);
+	const exec = util.promisify(ChildProcess.exec);
 	try {
 		await exec(cmd, options);
 		log.info(`command executed successfully`);
@@ -171,8 +170,8 @@ async function windocutor(cmd, options) {
 	if (!['win32', 'win64'].includes(currentOS)) {
 		throw new Error('Only for windows');
 	}
-	const powerShell = require('node-powershell');
-	let ps = new powerShell({
+	const PowerShell = require('node-powershell');
+	let ps = new PowerShell({
 		executionPolicy: 'Bypass',
 		noProfile: true
 	});
@@ -234,6 +233,8 @@ async function certs(config, app) {
 export class LWSService {
 	constructor({ rpcHandler, app }) {
 		this.wss = null;
+		this.secureWss = null;
+		this.httpServer = null;
 		this.rpcHandler = rpcHandler;
 		this.app = app;
 	}
@@ -605,16 +606,16 @@ export class LWSService {
 				msg
 			);
 		}
-		const httpsServer = new https.createServer({
+		this.httpsServer = https.createServer({
 			cert: fs.readFileSync(config.reqFile),
 			key: fs.readFileSync(config.rsaFile)
 		});
-		const wss = new WebSocket.Server({
-			server: httpsServer
+		this.secureWss = new WebSocket.Server({
+			server: this.httpsServer
 		})
 			.on('connection', this.handleSecureConn.bind(this))
 			.on('error', err => log.error(err));
-		httpsServer.listen(WSS_PORT, () => console.log('wss listening on port ' + WSS_PORT));
+		this.httpsServer.listen(WSS_PORT, () => log.info('wss listening on port ' + WSS_PORT));
 		log.info('secure wss server started');
 		conn.send(
 			{
