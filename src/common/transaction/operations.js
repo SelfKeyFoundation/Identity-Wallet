@@ -37,6 +37,9 @@ const init = args => async dispatch => {
 			...args
 		})
 	);
+	if (txInfoCheckInterval) {
+		clearInterval(txInfoCheckInterval);
+	}
 };
 
 const setAddress = address => async dispatch => {
