@@ -253,7 +253,7 @@ const cancelSend = () => async dispatch => {
 	);
 };
 
-const updateBalances = oldBalance => async (dispatch, getState) => {
+const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
 	// the first one is ETH
@@ -265,14 +265,17 @@ const updateBalances = oldBalance => async (dispatch, getState) => {
 	const currentWallet = getWallet(getState());
 	if (oldBalance === currentWallet.balance) {
 		setTimeout(() => {
-			dispatch(updateBalances(oldBalance));
+			dispatch(updateBalances(oldBalance, txHash));
 		}, TX_CHECK_INTERVAL);
 	} else {
-		await dispatch(
-			actions.updateTransaction({
-				status: 'Sent!'
-			})
-		);
+		const transaction = getTransaction(getState());
+		if (transaction.transactionHash === txHash) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Sent!'
+				})
+			);
+		}
 	}
 };
 
@@ -286,7 +289,7 @@ const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
 		if (txInfo && txInfo.blockNumber !== null) {
 			const status = Number(txInfo.status);
 			if (status) {
-				dispatch(updateBalances(oldBalance));
+				dispatch(updateBalances(oldBalance, txHash));
 			}
 			clearInterval(txInfoCheckInterval);
 		}
