@@ -409,6 +409,7 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
+		console.log('HERE');
 		try {
 			let check = this.checkWallet(msg.payload.publicKey, conn);
 			if (!check.unlocked) {
@@ -630,7 +631,7 @@ export class LWSService {
 	}
 
 	async startSecureServer(msg, conn) {
-		console.log(conn)
+		console.log(conn);
 		const serverExists = await checkPort(WSS_PORT); // check if wss already running
 		if (!serverExists) {
 			// if server running don't do aother stuff
@@ -658,20 +659,20 @@ export class LWSService {
 				);
 				log.info('secure wss server started');
 				conn.send(
-				{
-					payload: { message: 'secure wss server started' }
-				},
-				msg
-			);
+					{
+						payload: { message: 'secure wss server started' }
+					},
+					msg
+				);
 			} else {
 				log.info('error starting wss');
 				conn.send(
-				{
-					error: true,
-					payload: { message: 'error starting wss' }
-				},
-				msg
-			);
+					{
+						error: true,
+						payload: { message: 'error starting wss' }
+					},
+					msg
+				);
 			}
 		} else {
 			log.info('wss already started');
@@ -759,7 +760,7 @@ export class WSSConnection {
 	async handleMessage(msg) {
 		try {
 			msg = JSON.parse(msg);
-				await this.service.handleSecureRequest(msg, this);
+			await this.service.handleSecureRequest(msg, this);
 		} catch (error) {
 			log.error(error);
 			msg = typeof msg === 'string' ? {} : msg;
