@@ -238,7 +238,6 @@ const startSend = () => async (dispatch, getState) => {
 		);
 		rawTx.data = EthUtils.sanitizeHex(data);
 	}
-
 	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
 	if (signedHex) {
 		await dispatch(
@@ -310,14 +309,14 @@ const createTxHistry = () => (dispatch, getState) => {
 	const { cryptoCurrency } = transaction;
 	const tokenSymbol = cryptoCurrency === 'ETH' ? null : cryptoCurrency;
 	const data = {
+		...transaction,
 		tokenSymbol,
 		networkId: chainId,
 		from: wallet.publicKey,
 		to: transaction.address,
 		value: +transaction.amount,
-		gasPrice: transaction.gasPrice,
-		hash: transaction.transactionHash,
-		...transaction
+		gasPrice: +transaction.gasPrice,
+		hash: transaction.transactionHash
 	};
 
 	dispatch(actions.createTxHistory(data));
