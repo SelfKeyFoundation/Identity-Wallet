@@ -54,9 +54,12 @@ function AddCustomTokenDialogController(
 		'٨': 'DCN'
 	};
 
-	let resetVariables = () => {
+	let resetVariables = excludeDuplication => {
 		$scope.tokenDoesNotExists = false;
 		$scope.lookingContractIntoBlockain = false;
+		if (!excludeDuplication) {
+			$scope.duplicationErr = false;
+		}
 	};
 
 	/**
@@ -80,16 +83,13 @@ function AddCustomTokenDialogController(
 			let isValidHex = newVal && check;
 
 			let existingToken = isValidHex ? getExistingTokenByAddress(newVal) : null;
+			debugger; // eslint-disable-line
 			if (existingToken) {
-				CommonService.showToast(
-					'warning',
-					`${
-						existingToken.symbol
-					} token already exists. Please add a unique token and try again.`,
-					null,
-					'Duplicate Token'
-				);
-				return resetFormData();
+				$scope.duplicationErr = `${
+					existingToken.symbol
+				} token already exists. Please add a unique token and try again.`;
+
+				return resetFormData(true);
 			}
 
 			if (isValidHex) {
@@ -141,13 +141,13 @@ function AddCustomTokenDialogController(
 		tokenId: ''
 	};
 
-	let resetFormData = () => {
+	let resetFormData = excludeDuplication => {
 		let data = $scope.formData;
 
 		data.symbol = '';
 		data.decimalPlaces = null;
 		data.tokenId = '';
-		resetVariables();
+		resetVariables(excludeDuplication);
 	};
 	$scope.addCustomToken = (event, form) => {
 		if (!$scope.formDataIsValid(form)) {

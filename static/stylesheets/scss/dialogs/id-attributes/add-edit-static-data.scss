@@ -17,6 +17,22 @@ md-dialog {
 				.md-input-container {
 					width: 100%;
 					margin: 0;
+					.label-container {
+						display: flex;
+						.label {
+							color: #93a4af;
+							font-family: Lato;
+							font-size: 14px;
+							font-weight: bold;
+							line-height: 15px;
+						}
+						.required {
+							font-size: 25px;
+							color: rgb(221, 44, 0);
+							font-weight: bold;
+							margin-left: 5px;
+						}
+					}
 				}
 			}
 		}
