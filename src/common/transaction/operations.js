@@ -233,7 +233,6 @@ const startSend = () => async (dispatch, getState) => {
 		);
 		rawTx.data = EthUtils.sanitizeHex(data);
 	}
-
 	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
 	if (signedHex) {
 		await dispatch(
@@ -310,7 +309,7 @@ const createTxHistry = () => (dispatch, getState) => {
 		from: wallet.publicKey,
 		to: transaction.address,
 		value: +transaction.amount,
-		gasPrice: transaction.gasPrice,
+		gasPrice: +transaction.gasPrice,
 		hash: transaction.transactionHash,
 		...transaction
 	};
