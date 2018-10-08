@@ -411,7 +411,6 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
-		console.log('HERE');
 		try {
 			let check = this.checkWallet(msg.payload.publicKey, conn);
 			if (!check.unlocked) {
@@ -441,8 +440,7 @@ export class LWSService {
 					conn
 				);
 			}
-			const pk = await conn.getUnlockedWallet(msg.payload.publicKey);
-			const signature = await selfkey.createSignature(nonceResp.nonce, pk);
+			const signature = await selfkey.createSignature(nonceResp.nonce, check.privateKey);
 			if (!signature) {
 				return this.authResp(
 					{
@@ -492,9 +490,6 @@ export class LWSService {
 						message: resp
 					};
 				}
-				// if (body.token) {
-				// TODO: mark wallet signed up to website
-				// }
 				conn.send(lwsResp, msg);
 			});
 		} catch (error) {
@@ -633,7 +628,6 @@ export class LWSService {
 	}
 
 	async startSecureServer(msg, conn) {
-		console.log(conn);
 		const serverExists = await checkPort(WSS_PORT); // check if wss already running
 		if (!serverExists) {
 			// if server running don't do aother stuff
@@ -693,9 +687,6 @@ export class WSConnection {
 		this.conn = conn;
 		this.service = service;
 		this.msgId = 0;
-		this.ctx = {
-			unlockedWallets: {}
-		};
 	}
 
 	async handleMessage(msg) {
