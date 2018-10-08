@@ -1,4 +1,4 @@
-import { LWSService, WSSConnection } from './lws-service';
+import { LWSService, WSConnection } from './lws-service';
 import { Wallet } from '../wallet/wallet';
 import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
@@ -589,8 +589,8 @@ describe('lws-service', () => {
 
 		xdescribe('startServer', () => {});
 	});
-	describe('WSSConnection', () => {
-		let wssconn = null;
+	describe('WSConnection', () => {
+		let wsconn = null;
 
 		beforeEach(() => {
 			let connMock = {
@@ -600,7 +600,7 @@ describe('lws-service', () => {
 			let serviceMock = {
 				handleSecureRequest: sinon.fake()
 			};
-			wssconn = new WSSConnection(connMock, serviceMock);
+			wsconn = new WSConnection(connMock, serviceMock, true);
 		});
 
 		afterEach(() => {
@@ -611,17 +611,17 @@ describe('lws-service', () => {
 			const publicKey = 'public';
 			const privateKey = 'private';
 
-			expect(wssconn.getUnlockedWallet(publicKey)).toBeNull();
-			wssconn.unlockWallet(publicKey, privateKey);
-			expect(wssconn.getUnlockedWallet(publicKey)).toBe(privateKey);
+			expect(wsconn.getUnlockedWallet(publicKey)).toBeNull();
+			wsconn.unlockWallet(publicKey, privateKey);
+			expect(wsconn.getUnlockedWallet(publicKey)).toBe(privateKey);
 		});
 		describe('handleMessage', () => {
 			it('sends error on invalalid json msg', async () => {
-				sinon.stub(wssconn, 'send');
-				await wssconn.handleMessage('test');
+				sinon.stub(wsconn, 'send');
+				await wsconn.handleMessage('test');
 
 				expect(
-					wssconn.send.calledWithMatch(
+					wsconn.send.calledWithMatch(
 						{
 							error: true,
 							payload: { code: 'invalid_message', message: 'Invalid Message' }
@@ -632,16 +632,16 @@ describe('lws-service', () => {
 			});
 			it('passes parsed messages to service', async () => {
 				const msg = { type: 'test' };
-				await wssconn.handleMessage(JSON.stringify(msg));
-				expect(wssconn.service.handleSecureRequest.calledWithMatch(msg)).toBeTruthy();
+				await wsconn.handleMessage(JSON.stringify(msg));
+				expect(wsconn.service.handleSecureRequest.calledWithMatch(msg)).toBeTruthy();
 			});
 		});
 		describe('send', () => {
 			const t = (txt, msg, req, expected) =>
 				it(txt, async () => {
-					await wssconn.send(msg, req);
-					expect(wssconn.conn.send.calledOnce).toBeTruthy();
-					let arg = wssconn.conn.send.getCall(0).args[0];
+					await wsconn.send(msg, req);
+					expect(wsconn.conn.send.calledOnce).toBeTruthy();
+					let arg = wsconn.conn.send.getCall(0).args[0];
 					expect(JSON.parse(arg)).toEqual(expected);
 				});
 			t('adds meta with id and src', { type: 'test' }, null, {

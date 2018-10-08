@@ -603,7 +603,7 @@ export class LWSService {
 
 	handleSecureConn(conn) {
 		log.info('wss connection established');
-		let wsConn = new WSSConnection(conn, this);
+		let wsConn = new WSConnection(conn, this, true);
 		wsConn.listen();
 	}
 
@@ -681,62 +681,12 @@ export class LWSService {
 		}
 	}
 }
-
 export class WSConnection {
-	constructor(conn, service) {
+	constructor(conn, service, secure) {
 		this.conn = conn;
 		this.service = service;
 		this.msgId = 0;
-	}
-
-	async handleMessage(msg) {
-		try {
-			msg = JSON.parse(msg);
-			await this.service.handleRequest(msg, this);
-		} catch (error) {
-			log.error(error);
-			msg = typeof msg === 'string' ? {} : msg;
-			this.send(
-				{ error: true, payload: { code: 'invalid_message', message: 'Invalid Message' } },
-				msg
-			);
-		}
-	}
-
-	listen() {
-		this.conn.on('message', this.handleMessage.bind(this));
-		this.conn.on('error', err => log.error(err));
-	}
-
-	send(msg, req) {
-		if (!this.conn) {
-			log.error('cannot send message, no connection');
-			return;
-		}
-		req = req || {};
-		msg = msg || {};
-		msg = { ...msg };
-		msg.type = msg.type || req.type;
-		msg.meta = msg.meta || {};
-		let id = msg.meta.id;
-		if (!id && req.meta && req.meta.id) {
-			id = req.meta.id;
-		}
-		msg.meta.id = id || `idw_${this.msgId++}`;
-		msg.meta.src = msg.meta.src || 'idw';
-		if (!msg.type && msg.error) {
-			msg.type = 'error';
-		}
-		log.info('lws resp %2j', msg);
-		this.conn.send(JSON.stringify(msg));
-	}
-}
-
-export class WSSConnection {
-	constructor(conn, service) {
-		this.conn = conn;
-		this.service = service;
-		this.msgId = 0;
+		this.secure = secure;
 		this.ctx = {
 			unlockedWallets: {}
 		};
@@ -753,7 +703,9 @@ export class WSSConnection {
 	async handleMessage(msg) {
 		try {
 			msg = JSON.parse(msg);
-			await this.service.handleSecureRequest(msg, this);
+			let { service } = this;
+			let handler = this.secure ? service.handleSecureRequest : service.handleRequest;
+			handler.call(service, msg, this);
 		} catch (error) {
 			log.error(error);
 			msg = typeof msg === 'string' ? {} : msg;
