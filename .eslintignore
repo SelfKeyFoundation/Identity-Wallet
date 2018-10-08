@@ -3,3 +3,4 @@ dist/
 static/
 app.templates.js
 src/main/lws/lws-service.js
+src/renderer/angular/controllers/commons/dialogs/certificate-dialog-controller.js

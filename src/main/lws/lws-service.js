@@ -227,9 +227,9 @@ function checkKeys(config) {
 	});
 }
 
-function userPrompt(app) {
+function userPrompt(app, msgType) {
 	return new Promise((resolve, reject) => {
-		app.win.webContents.send('WSS_USER_PROMPT');
+		app.win.webContents.send('WSS_USER_PROMPT', msgType);
 		ipcMain.on('WSS_INSTALL', (event, install) => {
 			if (install) {
 				resolve(true);
@@ -261,12 +261,14 @@ async function certs(config, app) {
 			const dirs = await checkDirs(config);
 			const keys = await checkKeys(config);
 			if (!keys) {
-				const userAccept = await userPrompt(app);
+				const userAccept = await userPrompt(app, 'install');
 				if (userAccept) {
 					const genned = await runCertgen(config);
 					if (genned) {
+						await userPrompt(app, 'success');
 						resolve(true);
 					} else {
+						await userPrompt(app, 'error');
 						resolve(false);
 					}
 				} else {

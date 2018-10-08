@@ -131,7 +131,7 @@ function AppRun(
 		});
 	};
 
-	$rootScope.openCertificateDialog = event => {
+	$rootScope.openCertificateDialog = (event, msgType) => {
 		$mdDialog.show({
 			controller: 'CertificateDialogController',
 			templateUrl: 'common/dialogs/certificate-dialog.html',
@@ -139,7 +139,10 @@ function AppRun(
 			targetEvent: event,
 			clickOutsideToClose: false,
 			fullscreen: false,
-			escapeToClose: false
+			escapeToClose: false,
+			locals: {
+				msgType: msgType
+			}
 		});
 	};
 
