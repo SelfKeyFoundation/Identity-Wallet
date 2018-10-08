@@ -3,7 +3,6 @@ import { Wallet } from '../wallet/wallet';
 import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
 import selfkey from 'selfkey.js';
-// import fetch from 'node-fetch';
 import { checkPassword } from '../keystorage';
 
 jest.mock('../keystorage');
