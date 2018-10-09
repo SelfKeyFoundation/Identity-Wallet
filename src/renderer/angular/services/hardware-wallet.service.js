@@ -15,6 +15,21 @@ function HardwareWalletService($rootScope, RPCService, CommonService, Web3Servic
 		$rootScope.openEnterTrezorPassphraseDialog();
 	});
 
+	const SIGN_SUCCESS_EVENT = 'TREZOR_SIGN_SUCCESS';
+	RPCService.on(SIGN_SUCCESS_EVENT, () => {
+		$rootScope.$broadcast(SIGN_SUCCESS_EVENT);
+	});
+
+	const SIGN_FEALURE_EVENT = 'TREZOR_SIGN_FAILURE';
+	RPCService.on(SIGN_FEALURE_EVENT, (event, err) => {
+		$rootScope.$broadcast(SIGN_FEALURE_EVENT, err);
+	});
+
+	const SIGN_SIGN_REQ_EVENT = 'TREZOR_SIGN_REQUEST';
+	RPCService.on(SIGN_SIGN_REQ_EVENT, (event, err) => {
+		$rootScope.openConfirmHardwareWalletTxInfoWindow($rootScope.wallet.profile);
+	});
+
 	class HardwareWalletService {
 		async getAccountsWithBalances(args) {
 			const loadBalances = async accounts => {

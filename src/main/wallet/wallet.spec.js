@@ -113,4 +113,85 @@ describe('Wallet model', () => {
 		let attrs = await imported.$relatedQuery('idAttributes');
 		expect(attrs.length).toBeGreaterThan(0);
 	});
+
+	describe('hasSignedUpTo', () => {
+		const testLoginAttempt = {
+			walletId: 10,
+			websiteName: 'Test Website',
+			websiteUrl: 'https://example.com',
+			apiUrl: 'https://example.com/v1/api',
+			success: true,
+			signup: true
+		};
+		const testWallet = { id: 10, publicKey: 'public' };
+		let wallet = null;
+		beforeEach(async () => {
+			wallet = await Wallet.query().insertAndFetch(testWallet);
+		});
+		it('returns false if no attempts', async () => {
+			let hasSignedUp = await wallet.hasSignedUpTo(testLoginAttempt.websiteUrl);
+			expect(hasSignedUp).toBe(false);
+		});
+		it('returns false if no signup', async () => {
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			let hasSignedUp = await wallet.hasSignedUpTo(testLoginAttempt.websiteUrl);
+			expect(hasSignedUp).toBe(false);
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, websiteUrl: 'https://other-example.com' });
+			expect(hasSignedUp).toBe(false);
+		});
+		it('returns false if signed up with error', async () => {
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, errorCode: 'test' });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			let hasSignedUp = await wallet.hasSignedUpTo(testLoginAttempt.websiteUrl);
+			expect(hasSignedUp).toBe(false);
+		});
+		it('returns true if signed up successfully', async () => {
+			await wallet.$relatedQuery('loginAttempts').insert({ ...testLoginAttempt });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			await wallet
+				.$relatedQuery('loginAttempts')
+				.insert({ ...testLoginAttempt, signup: false });
+			let hasSignedUp = await wallet.hasSignedUpTo(testLoginAttempt.websiteUrl);
+			expect(hasSignedUp).toBe(true);
+		});
+	});
+	describe('addLoginAttempt', () => {
+		const testLoginAttempt = {
+			walletId: 10,
+			websiteName: 'Test Website',
+			websiteUrl: 'https://example.com',
+			apiUrl: 'https://example.com/v1/api',
+			success: true,
+			signup: true
+		};
+		const testWallet = { id: 10, publicKey: 'public' };
+		it('adds a new login attempt', async () => {
+			let wallet = await Wallet.query().insertAndFetch(testWallet);
+			await wallet.addLoginAttempt({ ...testLoginAttempt });
+			wallet = await Wallet.query()
+				.findById(wallet.id)
+				.eager('loginAttempts');
+			expect(wallet.loginAttempts).toBeDefined();
+			expect(wallet.loginAttempts.length).toBe(1);
+		});
+	});
 });

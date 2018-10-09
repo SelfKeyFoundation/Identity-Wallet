@@ -4,9 +4,8 @@
     #viewDashboard.dashboard-content-wrappper__header-section(layout="row", layout-align="start center")
         h2.proxima.white SelfKey Dashboard
 
-    // balances
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center")
-        sk-token-box(symbol="key", style="height: 216px;")
+        sk-token-box(symbol="{{PRIMARY_TOKEN}}", style="height: 216px;")
         sk-token-box(symbol="eth", style="height: 216px;")
         sk-custom-token-box(style="height: 216px;")
 
@@ -26,7 +25,7 @@
     .dashboard-content-wrappper__content-section(layout="row", layout-align="center center", style="margin-bottom: 40px;")
         .sk-box.transactions-box(style="width: 100%; padding: 20px; display: inline-flex; flex-direction: column;")
             .transactions-box__header
-                span(flex, style="font-family: ProximaNovaRegular; font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
+                span(flex, style="font-size: 20px; line-height: 1.8; color: #ffffff;") Transactions
                 span(flex)
                 span
                     button.sk-icon-button(ng-click="$root.broadcastTxHistorySync()")

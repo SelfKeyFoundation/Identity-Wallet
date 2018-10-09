@@ -1,7 +1,7 @@
 'use strict';
 const { Logger } = require('common/logger/logger');
 const log = new Logger('SKTxHistoryDirective');
-function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) {
+function SKTxHistoryDirective($rootScope, $interval, $filter, RPCService, CommonService) {
 	'ngInject';
 
 	return {
@@ -41,7 +41,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				let isSend = tx.from === publicKeyLowerCase;
 
 				if (status === 0) {
-					return isSend ? 'Faild To Send' : 'Faild To Receive';
+					return isSend ? 'Faild to send' : 'Faild to receive';
 				}
 				if (status === 1) {
 					return isSend ? 'Sent' : 'Received';
@@ -49,7 +49,7 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				return isSend ? 'Sending' : 'Receiving';
 			};
 
-			let getTxStatusIcon = tx => {
+			let getTxStatusIconName = tx => {
 				let status = tx.txReceiptStatus;
 				let isSend = tx.from === publicKeyLowerCase;
 
@@ -58,22 +58,25 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 				}
 
 				if (status === 0) {
-					return 'fail';
+					return 'failed';
 				}
 
-				return 'clock';
+				return 'hourglass';
 			};
 
 			let processTxHistoryList = list => {
 				return list.map(tx => {
+					let directionSign = publicKeyLowerCase === tx.from ? '- ' : '+ ';
+					tx.value = directionSign + tx.value;
+
 					let symbol = tx.tokenSymbol;
-					tx.symbol = symbol ? symbol.toUpperCase() : 'ETH';
-					tx.directionSign = publicKeyLowerCase === tx.from ? '- ' : '+ ';
+					tx.cryptoCurrency = symbol ? symbol.toUpperCase() : 'ETH';
 
 					let testnet = tx.networkId === 3 ? 'ropsten.' : '';
 					tx.externalLink = `https://${testnet}etherscan.io/tx/${tx.hash}`;
 					tx.statusText = getTxStatusText(tx);
-					tx.statusIcon = getTxStatusIcon(tx);
+					tx.statusIconName = getTxStatusIconName(tx);
+					tx.date = $filter('date')(tx.timeStamp, 'yyyy-dd-MM h:mm:ss a');
 
 					return tx;
 				});
@@ -146,6 +149,12 @@ function SKTxHistoryDirective($rootScope, $interval, RPCService, CommonService) 
 	};
 }
 
-SKTxHistoryDirective.$inject = ['$rootScope', '$interval', 'RPCService', 'CommonService'];
+SKTxHistoryDirective.$inject = [
+	'$rootScope',
+	'$interval',
+	'$filter',
+	'RPCService',
+	'CommonService'
+];
 
 module.exports = SKTxHistoryDirective;

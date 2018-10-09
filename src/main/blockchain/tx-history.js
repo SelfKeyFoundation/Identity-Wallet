@@ -71,7 +71,7 @@ export class TxHistory extends BaseModel {
 				tokenDecimal: { type: ['integer', 'null'] },
 				transactionIndex: { type: ['integer', 'null'] },
 				gas: { type: ['integer', 'null'] },
-				gasPrice: { type: 'integer' },
+				gasPrice: { type: 'number' },
 				cumulativeGasUsed: { type: 'integer' },
 				gasUsed: { type: ['integer', 'null'] },
 				input: { type: 'string' },
@@ -84,6 +84,10 @@ export class TxHistory extends BaseModel {
 	}
 
 	static async addOrUpdate(data) {
+		let now = new Date().getTime();
+		data.timeStamp = data.timeStamp || now;
+		data.createdAt = data.createdAt || now;
+
 		let record = await this.query().findOne({ hash: data.hash });
 		if (record) return this.query().patchAndFetchById(record.id, data);
 		return this.query().insertAndFetch(data);

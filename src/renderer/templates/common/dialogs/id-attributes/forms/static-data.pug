@@ -1,6 +1,8 @@
 .content
     md-input-container.sk-input-box.sk-input-non-floating
-        label {{$root.DICTIONARY[idAttributeType]}}
+        .label-container
+            span.label {{$root.DICTIONARY[idAttributeType]}}
+            span.required *
         input(name="input", type="{{singleInputType}}", ng-model="inputs.line1", ng-required="true")
         div(ng-messages="theForm.input.$error")
             div(ng-message="required") This field is required. Please enter {{ $root.DICTIONARY[idAttributeType] }}

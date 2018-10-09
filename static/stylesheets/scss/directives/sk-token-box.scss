@@ -1,77 +1,75 @@
 .sk-token-box {
-    min-width: 360px;
-    
-    position: relative;
-    padding: 20px 20px 8px 20px;
+	min-width: 360px;
 
-    .sk-token-box__header {
-        .sk-token-box__token {
-            width: 44px !important;
-            height: 44px !important;
+	position: relative;
+	padding: 20px 20px 8px 20px;
 
-            svg {
-                fill: inherit;
-            }
-        }
+	.sk-token-box__header {
+		.sk-token-box__token {
+			width: 44px !important;
+			height: 44px !important;
 
-        .sk-token-box__text {
-            margin-left: 12px;
-        }
+			svg {
+				fill: inherit;
+			}
+		}
 
-        .sk-token-box__plus {
-            width: 26px !important;
-            height: 26px !important;
-        }
-    }
+		.sk-token-box__text {
+			margin-left: 12px;
+		}
 
-    .sk-token-box__body {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
+		.sk-token-box__plus {
+			width: 26px !important;
+			height: 26px !important;
+		}
+	}
 
-        span {
-            &:first-of-type {
-                font-family: ProximaNovaRegular;
-                font-size: 40px;
-                font-weight: 300;
-                color: #ffffff;
-            }
-            
-            &:last-of-type {
-                font-family: ProximaNovaRegular;
-                font-size: 14px;
-                color: #93b0c1;
-            }
-        }
-    }
+	.sk-token-box__body {
+		margin-top: 30px;
+		display: flex;
+		flex-direction: column;
 
-    .sk-token-box__footer {
-        position: absolute;
-        bottom: 7px;
-        margin-top: 20px;
-        display: flex;
-        flex-direction: column;
+		span {
+			&:first-of-type {
+				font-size: 40px;
+				font-weight: 300;
+				color: #ffffff;
+			}
 
-        .sk-token-box__footer_address-box {
-            margin-top: 16px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            
-            span {
-                &.sk-token-box__footer_address-box_public-key {
-                    outline: none;
-                    cursor: pointer;
-                    font-family: ProximaNovaRegular;
-                    font-size: 12px;
-                    color: #93b0c1;
+			&:last-of-type {
+				font-size: 14px;
+				color: #93b0c1;
+			}
+		}
+	}
 
-                    &:hover {
-                        color: #bed6e4;
-                    }
-                }
-            }
-        }
-    }
+	.sk-token-box__footer {
+		position: absolute;
+		bottom: 7px;
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+
+		.sk-token-box__footer_address-box {
+			margin-top: 16px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+
+			span {
+				&.sk-token-box__footer_address-box_public-key {
+					outline: none;
+					cursor: pointer;
+
+					font-size: 12px;
+					color: #93b0c1;
+
+					&:hover {
+						color: #bed6e4;
+					}
+				}
+			}
+		}
+	}
 }

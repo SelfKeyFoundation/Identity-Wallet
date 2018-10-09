@@ -95,8 +95,11 @@ class Wallet {
 
 	getIdAttributeItemValue(type, key = 'value') {
 		if (!this.idAttributes || !this.idAttributes[type]) return;
-		if (this.idAttributes[type].data) return this.idAttributes[type].data[key];
-		return this.idAttributes.documentId;
+
+		let idAttribute = this.idAttributes[type];
+		idAttribute.data = idAttribute.data || {};
+
+		return idAttribute.data[key] || idAttribute.documentId;
 	}
 
 	loadBalance() {

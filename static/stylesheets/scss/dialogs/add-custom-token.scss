@@ -1,128 +1,128 @@
 md-dialog {
-    * {
-        font-family: ProximaNovaRegular;
-    }
-    background-image: linear-gradient(124deg, #2b3540, #1e262e);
-    min-width: 100%;
-    min-height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+	* {
+	}
+	background-image: linear-gradient(124deg, #2b3540, #1e262e);
+	min-width: 100%;
+	min-height: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 
-    .close-btn {
-        cursor: pointer;
-        position: absolute;
-        outline: none;
-        top: 30.8px;
-        right: 30.8px;
-    }
+	.close-btn {
+		cursor: pointer;
+		position: absolute;
+		outline: none;
+		top: 30.8px;
+		right: 30.8px;
+	}
 
-    .add-custom-token-container {
-        margin-top: 20px;
-        min-width: 100%;
-        min-height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
+	.add-custom-token-container {
+		margin-top: 20px;
+		min-width: 100%;
+		min-height: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
 
-        .fixed-tooltip {
-            width: 290px !important;
-            margin-left: 0px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-        }
-        .looking-contract-info-container {
-            display: flex;
-            font-size: 14px;
-            line-height: 1.71;
-            letter-spacing: 0.2px;
-            color: #0fb8d0;
-        }
-        .sk-icon-button {
-            height: 15.8px;
-            margin-top: 2px;
-        }
-        .header-text {
-            padding-top: 36px;
-            padding-bottom: 24px;
-            font-size: 24px;
-            line-height: 1.5;
-            text-align: center;
-            color: #ffffff;
-        }
-        .sub-header-text {
-            width: 500px;
-            font-size: 18px;
-            line-height: 1.72;
-            text-align: center;
-            color: #93b0c1;
-        }
+		.fixed-tooltip {
+			width: 325px !important;
+			padding: 10px !important;
+			margin-left: 0px !important;
+			left: 50% !important;
+			transform: translateX(-50%) !important;
+		}
+		.looking-contract-info-container {
+			display: flex;
+			font-size: 14px;
+			line-height: 1.71;
+			letter-spacing: 0.2px;
+			color: #0fb8d0;
+		}
+		.sk-icon-button {
+			height: 15.8px;
+			margin-top: 2px;
+		}
+		.header-text {
+			padding-top: 36px;
+			padding-bottom: 24px;
+			font-size: 24px;
+			line-height: 1.5;
+			text-align: center;
+			color: #ffffff;
+		}
+		.sub-header-text {
+			width: 500px;
+			font-size: 18px;
+			line-height: 1.72;
+			text-align: center;
+			color: #93b0c1;
+		}
 
-        .form-container {
-            width: 780px;
-            margin-top: 48px; 
+		.form-container {
+			width: 780px;
+			margin-top: 48px;
 
-            .input-form {
-                padding-top: 44px;
-                padding-left: 40px;
-                padding-right: 40px;
-                padding-bottom: 36px;
-                label {
-                    margin: 0 !important;
-                    line-height: 2 !important;
-                    letter-spacing: 1.5px !important;
-                    padding-bottom: 15px !important;
-                }
-                .sk-input-container {
-                    position: relative;
-                    padding-bottom: 36px !important;
-                    .error-field {
-                        border: solid 1px #d0021b;
-                        box-shadow: none;
-                        color: #fe4b61;
-                    }
-                    .success-field {
-                        border-radius: 4px;
-                        background-color: #1e262e;
-                        border: solid 1px #0dc7dd;
-                    }
-                    .address-green-check {
-                        position: absolute;
-                        top: 55px;
-                        left: 11px;
-                    }
-                    //stands for error messages
-                    > div {
-                        color: rgb(221,44,0);
-                        margin-top: 10px;
-                    }
-                }
-                // hides spinners
-                input[type=number]::-webkit-inner-spin-button, 
-                input[type=number]::-webkit-outer-spin-button { 
-                    -webkit-appearance: none; 
-                    margin: 0; 
-                }
+			.input-form {
+				padding-top: 44px;
+				padding-left: 40px;
+				padding-right: 40px;
+				padding-bottom: 36px;
+				label {
+					margin: 0 !important;
+					line-height: 2 !important;
+					letter-spacing: 1.5px !important;
+					padding-bottom: 15px !important;
+				}
+				.sk-input-container {
+					position: relative;
+					padding-bottom: 36px !important;
+					.error-field {
+						border: solid 1px #d0021b;
+						box-shadow: none;
+						color: #fe4b61;
+					}
+					.success-field {
+						border-radius: 4px;
+						background-color: #1e262e;
+						border: solid 1px #0dc7dd;
+					}
+					.address-green-check {
+						position: absolute;
+						top: 55px;
+						left: 11px;
+					}
+					//stands for error messages
+					> div {
+						color: rgb(221, 44, 0);
+						margin-top: 10px;
+					}
+				}
+				// hides spinners
+				input[type='number']::-webkit-inner-spin-button,
+				input[type='number']::-webkit-outer-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
 
-                .add-custom-token-btn {
-                    outline: none;
-                    width: 100%;
-                    padding: 0;
-                    text-transform: uppercase;
-                    height: 58px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    line-height: 0.75;
-                    letter-spacing: 0.7px;
-                    color: #ffffff;
+				.add-custom-token-btn {
+					outline: none;
+					width: 100%;
+					padding: 0;
+					text-transform: uppercase;
+					height: 58px;
+					font-size: 16px;
+					font-weight: 600;
+					line-height: 0.75;
+					letter-spacing: 0.7px;
+					color: #ffffff;
 
-                    border-radius: 4px;
-                    background-image: linear-gradient(to top, #09a8ba, #0abbd0);
-                    border: solid 1px #0fb8d0 !important;
-                }
-            }
-        }
-    }
+					border-radius: 4px;
+					background-image: linear-gradient(to top, #09a8ba, #0abbd0);
+					border: solid 1px #0fb8d0 !important;
+				}
+			}
+		}
+	}
 }

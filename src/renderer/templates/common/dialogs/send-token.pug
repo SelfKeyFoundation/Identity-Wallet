@@ -27,7 +27,7 @@
 
 
             .sk-send-ether-box__usd-amount-container
-                span(flex, style="font-family: ProximaNovaRegular; font-size: 40px; font-weight: 300; color: #ffffff") {{infoData.sendAmountInUSD == 0 ? '$0.00' : infoData.sendAmountInUSD}}
+                span(flex, style="font-size: 40px; font-weight: 300; color: #ffffff") {{infoData.sendAmountInUSD == 0 ? '$0.00' : infoData.sendAmountInUSD}}
                 span USD
 
             .sk-send-ether-box__gas-price-container
@@ -66,16 +66,16 @@
             span.sk-send-ether-box__sent(ng-class="{'send-error-text': errors.sendFailed}") {{getTransactionStatus()}}
 
             .sk-send-ether-box__amount-container(style="margin-top: 40px; ")
-                span(style="font-family: ProximaNovaLight; font-size: 40px; font-weight: 300; color: #ffffff;") {{formData.sendAmount}}
-                span(style="font-family: ProximaNovaSemibold; font-size: 20px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-left: 4px;") {{symbol}}
+                span(style="font-size: 40px; font-weight: 300; color: #ffffff;") {{formData.sendAmount}}
+                span(style="font-size: 20px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-left: 4px;") {{symbol}}
 
             .sk-send-ether-box__to-container(style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;")
-                span(style="font-family: ProximaNovaSemibold; font-size: 20px; font-weight: 600; color: #ffffff;") To
-                span(style="margin-top: 20px; font-family: ProximaNovaLight; font-size: 20px; font-weight: 300; color: #a9c5d6;") {{formData.sendToAddressHex}}
+                span(style="font-size: 20px; font-weight: 600; color: #ffffff;") To
+                span(style="margin-top: 20px; font-size: 20px; font-weight: 300; color: #a9c5d6;") {{formData.sendToAddressHex}}
                 div(style="display: flex; flex-direction: row; align-items: center; justify-content: center;")
                     .sk-button.small(ng-click="checkTransaction($event)", style="margin-top: 30px;", ng-if="txHex")
                         span view transaction
 
         .sk-balance-box(ng-if="allowSelectERC20Token && symbol && symbol !='0'", style="width: 600px; border-radius: 4px; background-color: #232b35; margin-top: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; justrify-content: center; z-index: 100;")
-            span(style="font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{ infoData.reminingBalance }} {{ symbol }} ${{ infoData.reminingBalanceInUsd | number }}
-            span(style="margin-top: 8px; font-family: ProximaNovaRegular; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ infoData.txFeeInEth }} ETH
+            span(style="font-size: 13px; font-weight: 500; color: #a9c5d6;") Remaining Balance: {{ infoData.reminingBalance }} {{ symbol }} ${{ infoData.reminingBalanceInUsd | number }}
+            span(style="margin-top: 8px; font-size: 13px; font-weight: 500; color: #a9c5d6;") Ethereum Network Fee: {{ infoData.txFeeInEth }} ETH

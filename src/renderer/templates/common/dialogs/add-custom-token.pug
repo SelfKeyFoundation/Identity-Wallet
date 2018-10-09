@@ -18,19 +18,21 @@ md-dialog(aira-lable="Add Custom Tokens")
                             button.sk-icon-button.fixed-tooltip-container
                                 .fixed-tooltip
                                         | <div style="text-align:center;"> Every ERC-20 token has its own smart contract <br />
-                                        | address. To learn more, <span ng-click="$root.openInBrowser('https://help.selfkey.org/selfkey-identity-wallet')" style="color: #0dc7dd !important;"> click here. </span> </div>
+                                        | address. To learn more, <span ng-click="$root.openInBrowser('https://help.selfkey.org/')" style="color: #0dc7dd !important;"> click here. </span> </div>
                                 sk-icon(icon="info-italic", size-class="icon-size-15x15")
-                            .looking-contract-info-container(ng-if="lookingContractIntoBlockain") 
+                            .looking-contract-info-container(ng-if="lookingContractIntoBlockain")
                                 .wave
                                     span.dot
                                     span.dot
                                     span.dot
                                 span Please wait. Checking the blockchain for ERC-20 token information.
-                        
+
                         input.sk-input(type="text", ng-class="{'error-field': tokenDoesNotExists, 'success-field': formDataIsValid(theForm)}", ng-disabled="inProgress", name="contractAddress", ng-model="formData.contractAddress", ng-maxlength="500", ng-required="true")
                         sk-icon.address-green-check(icon="check-bold", size-class="icon-size-20x15",ng-if="formDataIsValid(theForm)")
-                        .sk-field-error-tooltip.right(ng-if="tokenDoesNotExists", style="top: -27px;") 
+                        .sk-field-error-tooltip.right(ng-if="tokenDoesNotExists", style="top: -27px;")
                             span Token contract does not exist. Please double check and try again
+                        .sk-field-error-tooltip.right(ng-if="duplicationErr", style="top: -27px;")
+                            span {{duplicationErr}}
                         div(ng-messages="theForm.contractAddress.$dirty && theForm.contractAddress.$error")
                             div(ng-message="maxlength") The Address has to be less than 1000 characters long.
                             div(ng-message="required") This field is required. Please enter a token contract address.

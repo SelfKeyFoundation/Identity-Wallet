@@ -55,6 +55,7 @@
 @import './dialogs/startup-guide.scss';
 @import './dialogs/receive-token.scss';
 @import './dialogs/send-token.scss';
+@import './dialogs/send-transaction';
 @import './dialogs/password-warning.scss';
 @import './dialogs/info-dialog.scss';
 @import './dialogs/id-wallet-info.scss';
@@ -164,7 +165,7 @@
 	margin-left: -60px;
 	opacity: 0;
 	transition: opacity 0.3s;
-	font-family: ProximaNovaRegular;
+
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 1.36;
@@ -229,7 +230,6 @@ $buttonBackground: #2c3e50;
 $buttonColor: rgba(255, 255, 255, 1);
 
 .sk-text {
-	font-family: ProximaNovaRegular;
 	font-size: 18px;
 	line-height: 1.89;
 	color: #fff;
@@ -251,7 +251,6 @@ $buttonColor: rgba(255, 255, 255, 1);
 }
 
 .no-transaction-title {
-	font-family: ProximaNovaRegular;
 	font-size: 18px;
 	font-weight: 300;
 	color: #93b0c1;
