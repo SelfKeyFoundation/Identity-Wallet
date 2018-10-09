@@ -12794,7 +12794,7 @@ select-hose@^2.0.0:
 
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#9b70004ef6362698b24407a72944523144d1bce3"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#d2b49cb5a2bcd7830f9d7549fee4254b89c1aff9"
   dependencies:
     "@material-ui/core" "^1.3.1"
     "@material-ui/icons" "^1.1.0"
