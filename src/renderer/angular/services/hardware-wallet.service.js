@@ -25,6 +25,11 @@ function HardwareWalletService($rootScope, RPCService, CommonService, Web3Servic
 		$rootScope.$broadcast(SIGN_FEALURE_EVENT, err);
 	});
 
+	const SIGN_SIGN_REQ_EVENT = 'TREZOR_SIGN_REQUEST';
+	RPCService.on(SIGN_SIGN_REQ_EVENT, (event, err) => {
+		$rootScope.openConfirmHardwareWalletTxInfoWindow($rootScope.wallet.profile);
+	});
+
 	class HardwareWalletService {
 		async getAccountsWithBalances(args) {
 			const loadBalances = async accounts => {

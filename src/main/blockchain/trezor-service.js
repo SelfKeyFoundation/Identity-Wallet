@@ -118,6 +118,8 @@ module.exports = function() {
 	async function _signTransaction(args) {
 		let result = {};
 		try {
+			await _testConnection();
+			_emitter.emit('TREZOR_SIGN_REQUEST');
 			result = await _sign(args);
 		} catch (err) {
 			_emitter.emit('TREZOR_SIGN_FAILURE', err);
