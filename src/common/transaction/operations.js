@@ -309,7 +309,7 @@ const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
 	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
-const createTxHistry = () => (dispatch, getState) => {
+const createTxHistry = transactionHash => (dispatch, getState) => {
 	const wallet = getWallet(getState());
 	const transaction = getTransaction(getState());
 	const { cryptoCurrency } = transaction;
@@ -322,7 +322,7 @@ const createTxHistry = () => (dispatch, getState) => {
 		to: transaction.address,
 		value: +transaction.amount,
 		gasPrice: +transaction.gasPrice,
-		hash: transaction.transactionHash
+		hash: transactionHash
 	};
 
 	dispatch(actions.createTxHistory(data));
@@ -351,7 +351,7 @@ const confirmSend = () => async (dispatch, getState) => {
 		})
 	);
 
-	dispatch(createTxHistry());
+	dispatch(createTxHistry(transactionHash));
 
 	await dispatch(startTxBalanceUpdater(transactionHash));
 };
