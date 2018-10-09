@@ -23,6 +23,9 @@ function TrezorPassphraseController($rootScope, $scope, $mdDialog, HardwareWalle
 			return;
 		}
 		HardwareWalletService.sendTrezorPassphrase(null, $scope.passphrase);
+
+		// passphrase does't throw any error, so closo modal
+		$mdDialog.cancel();
 	};
 }
 
