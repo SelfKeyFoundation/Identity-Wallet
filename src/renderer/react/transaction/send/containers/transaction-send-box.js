@@ -27,7 +27,8 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	async onSendAction() {
-		if (this.props.isHardwareWallet) {
+		const { walletProfile } = this.props;
+		if (walletProfile === 'ledger') {
 			this.props.showConfirmTransactionInfoModal();
 		}
 		try {
@@ -36,7 +37,7 @@ class TransactionSendBoxContainer extends Component {
 			this.processSignTxError(error);
 		}
 
-		if (this.props.walletProfile === 'ledger') {
+		if (walletProfile === 'ledger') {
 			this.props.closeModal();
 		}
 	}
