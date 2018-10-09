@@ -49,12 +49,12 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.setAmount(value));
 	}
 
-	handleGasPriceChange(field) {
-		this.props.dispatch(transactionOperations.setGasPrice(field.target.value));
+	handleGasPriceChange(value) {
+		this.props.dispatch(transactionOperations.setGasPrice(value));
 	}
 
-	handleGasLimitChange(field) {
-		this.props.dispatch(transactionOperations.setLimitPrice(field.target.value));
+	handleGasLimitChange(value) {
+		this.props.dispatch(transactionOperations.setLimitPrice(value));
 	}
 
 	handleConfirmActionError(err) {
@@ -90,8 +90,8 @@ class TransactionSendBoxContainer extends Component {
 				{...this.props}
 				reloadEthGasStationInfoAction={() => this.loadData()}
 				onAmountInputChange={value => this.handleAmountChange(value)}
-				changeGasPriceAction={e => this.handleGasPriceChange(e)}
-				changeGasLimitAction={e => this.handleGasLimitChange(e)}
+				changeGasPriceAction={value => this.handleGasPriceChange(value)}
+				changeGasLimitAction={value => this.handleGasLimitChange(value)}
 				confirmAction={() => this.handleConfirmAction()}
 				cancelAction={() => this.handleCancelAction()}
 				onCryptoCurrencyChange={value => this.handleCryptoCurrencyChange(value)}
