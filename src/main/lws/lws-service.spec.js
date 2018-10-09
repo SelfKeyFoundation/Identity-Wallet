@@ -2,7 +2,7 @@ import { LWSService, WSConnection } from './lws-service';
 import { Wallet } from '../wallet/wallet';
 import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
-// import fetch from 'node-fetch';
+import selfkey from 'selfkey.js';
 import { checkPassword } from '../keystorage';
 
 jest.mock('../keystorage');
@@ -260,36 +260,6 @@ describe('lws-service', () => {
 			});
 		});
 
-		describe('genSignature', () => {
-			it('returns null on create error', () => {
-				let sig = service.genSignature('test', 'test', 'invalidPrivateKey');
-				expect(sig).toBeNull();
-			});
-			it('signs nonce with privateKey', async () => {
-				let sig = service.genSignature(
-					'12341',
-					'test',
-					'3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266'
-				);
-				expect(sig.v).toEqual(27);
-				expect(sig.r.toString('hex')).toEqual(
-					'693d483f13b5ade55cc0741169a3d785c9aab8aa4b64826dc964ccbd97878efb'
-				);
-				expect(sig.s.toString('hex')).toEqual(
-					'6722b46c423932bce4824afd03f9338107577f1cb2e021064d73e7dd00c72b76'
-				);
-			});
-			it('stringify signature', () => {
-				let sig = {
-					v: 2,
-					s: Buffer.from('test', 'utf8'),
-					r: Buffer.from('test2Î', 'utf8')
-				};
-				let str = service.stringifySignature(sig);
-				expect(str).toEqual('eyJ2IjoyLCJzIjoiNzQ2NTczNzQiLCJyIjoiNzQ2NTczNzQzMmMzOGUifQ==');
-			});
-		});
-
 		describe('authResp', () => {
 			it('sends resp via conn', async () => {
 				let resp = { test: 'test resp' };
@@ -506,10 +476,10 @@ describe('lws-service', () => {
 				sinon.stub(service, 'checkWallet').returns({
 					unlocked: true
 				});
-				sinon.stub(service, 'genSignature').returns(null);
+				sinon.stub(selfkey, 'createSignature').returns(null);
 				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
-				expect(service.genSignature.calledOnce).toBeTruthy();
+				expect(selfkey.createSignature.calledOnce).toBeTruthy();
 				expect(
 					service.authResp.calledWithMatch(
 						{
@@ -627,9 +597,9 @@ describe('lws-service', () => {
 				on: sinon.fake()
 			};
 			let serviceMock = {
-				handleRequest: sinon.fake()
+				handleSecureRequest: sinon.fake()
 			};
-			wsconn = new WSConnection(connMock, serviceMock);
+			wsconn = new WSConnection(connMock, serviceMock, true);
 		});
 
 		afterEach(() => {
@@ -662,7 +632,7 @@ describe('lws-service', () => {
 			it('passes parsed messages to service', async () => {
 				const msg = { type: 'test' };
 				await wsconn.handleMessage(JSON.stringify(msg));
-				expect(wsconn.service.handleRequest.calledWithMatch(msg)).toBeTruthy();
+				expect(wsconn.service.handleSecureRequest.calledWithMatch(msg)).toBeTruthy();
 			});
 		});
 		describe('send', () => {

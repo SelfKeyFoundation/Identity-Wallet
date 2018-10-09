@@ -5030,7 +5030,7 @@ deep-extend@^0.6.0:
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
   integrity sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==
 
-deep-is@~0.1.3:
+deep-is@^0.1.3, deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
@@ -9235,6 +9235,11 @@ is-unc-path@^1.0.0:
   dependencies:
     unc-path-regex "^0.1.2"
 
+is-url@^1.2.2:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
+  integrity sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==
+
 is-utf8@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
@@ -9254,6 +9259,15 @@ is-wsl@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-wsl/-/is-wsl-1.1.0.tgz#1f16e4aa22b04d1336b66188a66af3c600c3a66d"
   integrity sha1-HxbkqiKwTRM2tmGIpmrzxgDDpm0=
+
+is2@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/is2/-/is2-2.0.1.tgz#8ac355644840921ce435d94f05d3a94634d3481a"
+  integrity sha512-+WaJvnaA7aJySz2q/8sLjMb2Mw14KTplHmSwcSpZ/fWJPkUmqw3YTzSWbPJ7OAwRvdYTWF2Wg+yYJ1AdP5Z8CA==
+  dependencies:
+    deep-is "^0.1.3"
+    ip-regex "^2.1.0"
+    is-url "^1.2.2"
 
 isarray@0.0.1:
   version "0.0.1"
@@ -10900,6 +10914,11 @@ ltgt@~2.2.0:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha1-81ypHEk/e3PaDgdJUwTxezH4fuU=
 
+lzutf8@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/lzutf8/-/lzutf8-0.5.5.tgz#3f677ef865eae628fca5f8c6a423ae631371a71c"
+  integrity sha512-x4AdRtP0ETRe0BW8V+TfW+8rOF5t3vWU/Z52twUqDRf0OiEuXiLvXNN6Zm8biFCTI9ffXBZb++THAjfkJ559Nw==
+
 macos-release@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/macos-release/-/macos-release-1.1.0.tgz#831945e29365b470aa8724b0ab36c8f8959d10fb"
@@ -11696,6 +11715,14 @@ node-notifier@5.2.1, node-notifier@^5.2.1:
     shellwords "^0.1.1"
     which "^1.3.0"
 
+node-powershell@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/node-powershell/-/node-powershell-3.3.1.tgz#bbf76b29f091ed83eae16ad9e7a180a13f36d113"
+  integrity sha1-u/drKfCR7YPq4WrZ56GAoT820RM=
+  dependencies:
+    bluebird "^3.5.1"
+    chalk "^2.1.0"
+
 node-pre-gyp@^0.10.0, node-pre-gyp@^0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.10.3.tgz#3070040716afdc778747b61b6887bf78880b80fc"
@@ -11743,6 +11770,11 @@ node-sass@^4.8.3:
     sass-graph "^2.2.4"
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
+
+nonce-generator@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/nonce-generator/-/nonce-generator-1.0.2.tgz#2d039dd9946dca6651a8db054c8f6dab134bd37d"
+  integrity sha1-LQOd2ZRtymZRqNsFTI9tqxNL030=
 
 noop-logger@^0.1.1:
   version "0.1.1"
@@ -14731,6 +14763,14 @@ select-hose@^2.0.0:
     react-truncate "^2.3.0"
     reset-jss "^1.0.0"
 
+selfkey.js@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/selfkey.js/-/selfkey.js-1.0.24.tgz#7c1cefc5fb1b9c38198e3158fd916c23e39f93d0"
+  integrity sha512-fguHD0tRBhMAWlHgH2iWANW8Gh+hIEHtrahm9kx+rIAcLfQiSWmr02mlka0CVl4Kc4VRFE+dl+jf6oSTHpd2sQ==
+  dependencies:
+    ethereumjs-util "^5.1.5"
+    nonce-generator "^1.0.2"
+
 selfsigned@^1.9.1:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.3.tgz#d628ecf9e3735f84e8bafba936b3cf85bea43823"
@@ -15833,6 +15873,11 @@ style-loader@^0.23.0:
     loader-utils "^1.1.0"
     schema-utils "^1.0.0"
 
+sudo-prompt@^8.2.0:
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.3.tgz#abb34fde78d3458a4f6e84ae1d2a0f603f93e595"
+  integrity sha512-bjoT7WAPnrKj7CBO9T6DJVqPNC4IB+WxWyIL6zVhq8vJJsTWbUXrFV1qfvaxQRcyLgkSVGN47yNoAYxj+GNwHA==
+
 sumchecker@^1.2.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/sumchecker/-/sumchecker-1.3.1.tgz#79bb3b4456dd04f18ebdbc0d703a1d1daec5105d"
@@ -16056,6 +16101,14 @@ tarn@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/tarn/-/tarn-1.1.4.tgz#aeeb85964b1afa0bbf381359c1167df237c27b6a"
   integrity sha512-j4samMCQCP5+6Il9/cxCqBd3x4vvlLeVdoyGex0KixPKl4F8LpNbDSC6NDhjianZgUngElRr9UI1ryZqJDhwGg==
+
+tcp-port-used@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tcp-port-used/-/tcp-port-used-1.0.0.tgz#ae84547cfa6a947704e4fb4838d37f46e50d6de8"
+  integrity sha512-urotaMxVc37q9avahpxjSp47ZfN5MvyxXTvbGOiERaSjQ/kQCNTSMKcTyntKowzX27ZgB+jE0qRIDQv/ILiIwg==
+  dependencies:
+    debug "3.1.0"
+    is2 "2.0.1"
 
 temp-dir@^1.0.0:
   version "1.0.0"

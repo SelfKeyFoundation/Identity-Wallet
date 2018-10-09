@@ -319,6 +319,9 @@ angular.module('kyc-wallet').controller('IdWalletInfoController', IdWalletInfoCo
 const InfoDialogController = require('./angular/controllers/commons/dialogs/info-dialog-controller.js');
 angular.module('kyc-wallet').controller('InfoDialogController', InfoDialogController);
 
+const CertificateDialogController = require('./angular/controllers/commons/dialogs/certificate-dialog-controller.js');
+angular.module('kyc-wallet').controller('CertificateDialogController', CertificateDialogController);
+
 const ConnectingToHardwareWalletController = require('./angular/controllers/commons/dialogs/connecting-to-hardware-wallet-controller.js');
 angular
 	.module('kyc-wallet')
