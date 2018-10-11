@@ -435,6 +435,28 @@ function appStates(
 		})
 
 		/**
+		 *  Address book
+		 */
+		.state('member.address-book', {
+			abstract: true,
+			views: {
+				main: {
+					templateUrl: 'member/address-book/layout.html'
+				}
+			}
+		})
+
+		.state('member.address-book.main', {
+			url: '/member/address-book/main',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/main.html',
+					controller: 'MemberIdWalletMainController'
+				}
+			}
+		})
+
+		/**
 		 *  Marketplace
 		 */
 		.state('member.marketplace', {

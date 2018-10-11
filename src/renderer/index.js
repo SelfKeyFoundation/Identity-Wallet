@@ -1,6 +1,7 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
 import { react2angular } from 'react2angular';
+import { AddressBookWrapper } from './react/address-book/index';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
@@ -181,6 +182,8 @@ angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
 /**
  * React Components
  */
+const addressBookWrapper = react2angular(AddressBookWrapper, []);
+angular.module('kyc-wallet').component('addressBook', addressBookWrapper);
 
 const cryptoPriceBox = react2angular(PriceBoxWrapper, [
 	'cryptoCurrency',

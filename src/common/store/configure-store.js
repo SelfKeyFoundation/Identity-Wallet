@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import locale from '../locale';
 import fiatCurrency from '../fiatCurrency';
+import addressBook from '../addressBook';
 import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
@@ -35,6 +36,7 @@ export default (initialState, scope = 'main') => {
 	const rootReducer = combineReducers({
 		locale,
 		fiatCurrency,
+		addressBook,
 		wallet,
 		walletTokens,
 		viewAll,
