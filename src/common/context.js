@@ -13,6 +13,7 @@ import TrezorService from 'main/blockchain/trezor-service';
 import RpcHandler from 'main/rpc-handler';
 import { StakingService } from 'main/blockchain/staking-service';
 import EthGasStationService from 'main/blockchain/eth-gas-station-service';
+import AddressBookService from './address-book/address-book-service';
 
 let globalContext = null;
 
@@ -33,6 +34,7 @@ export const configureContext = (store, app) => {
 		store: asValue(store),
 		web3Service: asClass(Web3Service).singleton(),
 		ledgerService: asClass(LedgerService).singleton(),
+		addressBookService: asClass(AddressBookService).singleton(),
 		// TODO: refactor to not use static methods
 		CrashReportService: asValue(CrashReportService),
 		txHistoryService: asClass(TxHistoryService).singleton(),
