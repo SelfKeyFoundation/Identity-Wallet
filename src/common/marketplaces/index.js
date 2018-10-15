@@ -42,15 +42,44 @@ export const marketplacesTypes = {
 	MARKETPLACE_TRANSACTIONS_WITHDRAW_START: 'marketplace/transactions/WITHDRAW_START',
 	MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM: 'marketplace/transactions/WITHDRAW_CONFIRM',
 	MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE: 'marketplace/transactions/current/UPDATE',
+	MARKETPLACE_TRANSACTIONS_CURRENT_SET: 'marketplace/transactions/current/SET',
 	MARKETPLACE_TRANSACTIONS_CURRENT_CANCEL: 'marketplace/transactions/current/CANCEL',
 	MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR: 'marketplace/transactions/current/CLEAR',
-	MARKETPLACE_POPUP_SHOW: 'marketplace/popup/show'
+	MARKETPLACE_POPUP_SHOW: 'marketplace/popup/show',
+	MARKETPLACE_STATE_SHOW: 'marketplace/state/show'
 };
 
 export const marketplacesActions = {
-	setTransactionsAction() {},
-	setStakesAction() {},
-	addTransactionAction() {}
+	setTransactionsAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_SET, payload };
+	},
+	setStakesAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_STAKES_SET, payload };
+	},
+	updateStakeAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_STAKES_UPDATE_ONE, payload };
+	},
+	addTransactionAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_ADD, payload };
+	},
+	updateTransactionsAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS, payload };
+	},
+	updateCurrentTransactionAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE, payload };
+	},
+	setCurrentTransactionAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_SET, payload };
+	},
+	clearCurrentTransactionAction() {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR };
+	},
+	showMarketplacePopupAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_POPUP_SHOW, payload };
+	},
+	displayMarketplaceStateAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_STATE_SHOW, payload };
+	}
 };
 
 export const loadTransactionsOperation = () => async (dispatch, getState) => {

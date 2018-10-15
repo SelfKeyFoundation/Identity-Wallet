@@ -6,6 +6,7 @@ import {
 	initialState,
 	marketplacesSelectors,
 	marketplacesActions,
+	marketplacesTypes,
 	loadTransactionsOperation,
 	loadStakesOperation,
 	placeStakeOperation
@@ -279,16 +280,77 @@ describe('marketplace operations', () => {
 });
 
 describe('marketplace actions', () => {
-	describe('updateStakeAction', () => {});
-	describe('setStakesAction', () => {});
-	describe('addTransactionAction', () => {});
-	describe('setTransactionsAction', () => {});
-	describe('updateTransactionsAction', () => {});
-	describe('updateCurrentTransactionAction', () => {});
-	describe('setCurrentTransactionAction', () => {});
-	describe('clearCurrentTransactionAction', () => {});
-	describe('showMarketplacePopup', () => {});
-	describe('displayMarketplaceCategory', () => {});
+	beforeEach(() => {
+		sinon.restore();
+	});
+	it('updateStakeAction', () => {
+		let stake = { test: 'test' };
+		expect(marketplacesActions.updateStakeAction(stake)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_STAKES_UPDATE_ONE,
+			payload: stake
+		});
+	});
+	it('setStakesAction', () => {
+		let stakes = [{ test: 'test' }];
+		expect(marketplacesActions.setStakesAction(stakes)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_STAKES_SET,
+			payload: stakes
+		});
+	});
+	it('addTransactionAction', () => {
+		let tx = { test: 'test' };
+		expect(marketplacesActions.addTransactionAction(tx)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_ADD,
+			payload: tx
+		});
+	});
+	it('setTransactionsAction', () => {
+		let txs = { test: 'test' };
+		expect(marketplacesActions.setTransactionsAction(txs)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_SET,
+			payload: txs
+		});
+	});
+	it('updateTransactionsAction', () => {
+		let tx = { test: 'test' };
+		expect(marketplacesActions.updateTransactionsAction(tx)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS,
+			payload: tx
+		});
+	});
+	it('updateCurrentTransactionAction', () => {
+		let tx = { test: 'test' };
+		expect(marketplacesActions.updateCurrentTransactionAction(tx)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE,
+			payload: tx
+		});
+	});
+	it('setCurrentTransactionAction', () => {
+		let tx = { test: 'test' };
+		expect(marketplacesActions.setCurrentTransactionAction(tx)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_SET,
+			payload: tx
+		});
+	});
+	it('clearCurrentTransactionAction', () => {
+		expect(marketplacesActions.clearCurrentTransactionAction()).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR
+		});
+	});
+	it('showMarketplacePopupAction', () => {
+		let popup = 'test-popup';
+		expect(marketplacesActions.showMarketplacePopupAction(popup)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_POPUP_SHOW,
+			payload: popup
+		});
+	});
+	it('displayMarketplaceStateAction', () => {
+		let state = 'test-popup';
+		expect(marketplacesActions.displayMarketplaceStateAction(state)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_STATE_SHOW,
+			payload: state
+		});
+	});
 });
 
 describe('marketplaceReducers', () => {
