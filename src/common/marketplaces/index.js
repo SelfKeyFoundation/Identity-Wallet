@@ -49,7 +49,8 @@ export const marketplacesTypes = {
 
 export const marketplacesActions = {
 	setTransactionsAction() {},
-	setStakesAction() {}
+	setStakesAction() {},
+	addTransactionAction() {}
 };
 
 export const loadTransactionsOperation = () => async (dispatch, getState) => {
@@ -68,7 +69,22 @@ export const loadStakesOperation = () => async (dispatch, getState) => {
 	);
 	await dispatch(marketplacesActions.setStakesAction(stakes));
 };
-export const placeStakeOperation = () => async (dispatch, getState) => {};
+export const placeStakeOperation = id => async (dispatch, getState) => {
+	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const services = marketplacesSelectors.servicesSelector(getState()) || [];
+	const service = services.filter(service => service.id === id);
+	const currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
+
+	const newTransaction = await mpService.placeStake(
+		service.serviceId,
+		service.serviceOwner,
+		service.amount,
+		currentTransaction.gasPrice,
+		currentTransaction.gasLimit
+	);
+
+	await dispatch(marketplacesActions.addTransactionAction(newTransaction));
+};
 export const withdrawStakeOperation = () => async (dispatch, getState) => {};
 export const updateTransactionStatusOperation = () => async (dispatch, getState) => {};
 
@@ -88,7 +104,7 @@ export const marketplacesOperations = {
 		withdrawStakeOperation
 	),
 	updateTransactionStatus: createAliasedAction(
-		marketplacesTypes.MARKETPLACE_TRANSACTIONS_CHECK_STATUS,
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS,
 		updateTransactionStatusOperation
 	)
 };
