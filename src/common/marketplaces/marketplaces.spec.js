@@ -217,7 +217,7 @@ describe('marketplace operations', () => {
 		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
 		sinon.stub(service, 'placeStake').resolves('ok');
 		sinon.stub(store, 'dispatch');
-		sinon.stub(marketplacesActions, 'setTransactionsAction').returns(testAction);
+		sinon.stub(marketplacesActions, 'addTransactionAction').returns(testAction);
 		const { id, serviceId, serviceOwner, amount } = services[0];
 
 		await placeStakeOperation(id)(store.dispatch, store.getState.bind(store));
