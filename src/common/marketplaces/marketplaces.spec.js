@@ -7,7 +7,8 @@ import {
 	marketplacesSelectors,
 	marketplacesActions,
 	loadTransactionsOperation,
-	loadStakesOperation
+	loadStakesOperation,
+	placeStakeOperation
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -26,6 +27,23 @@ describe('marketplace selectors', () => {
 		balance: 30,
 		releaseDate: 30000,
 		status: 'locked'
+	};
+
+	let testCurrentTransaction = {
+		gasPriceEstimates: {
+			avarage: 5000,
+			fast: 7000,
+			safeLow: 2000
+		},
+		gasPrice: 3000,
+		gasLimit: 50000,
+		amount: 25,
+		action: 'placeStake',
+		fiat: 'USD',
+		fiatRate: 0.5,
+		lockPeriod: 30,
+		fee: '' + 3000 * 50000,
+		feeFiat: '' + 3000 * 50000 * 0.5
 	};
 
 	beforeEach(() => {
@@ -91,22 +109,7 @@ describe('marketplace selectors', () => {
 		});
 		sinon.stub(fiatCurrencySelectors, 'getFiatCurrency').returns('USD');
 		sinon.stub(pricesSelectors, 'getRate').returns(0.5);
-		let testCurrentTransaction = {
-			gasPriceEstimates: {
-				avarage: 5000,
-				fast: 7000,
-				safeLow: 2000
-			},
-			gasPrice: 3000,
-			gasLimit: 50000,
-			amount: 25,
-			action: 'placeStake',
-			fiat: 'USD',
-			fiatRate: 0.5,
-			lockPeriod: 30,
-			fee: '' + 3000 * 50000,
-			feeFiat: '' + 3000 * 50000 * 0.5
-		};
+
 		state.marketplaces.currentTransaction = _.pick(
 			testCurrentTransaction,
 			'gasPrice',
@@ -132,7 +135,8 @@ describe('marketplace selectors', () => {
 describe('marketplace operations', () => {
 	let service = {
 		loadTransactions() {},
-		loadStakingInfo() {}
+		loadStakingInfo() {},
+		async placeStake() {}
 	};
 	let state = {};
 	let store = {
@@ -158,6 +162,23 @@ describe('marketplace operations', () => {
 		}
 	];
 	let testAction = { type: 'test' };
+
+	let testCurrentTransaction = {
+		gasPriceEstimates: {
+			avarage: 5000,
+			fast: 7000,
+			safeLow: 2000
+		},
+		gasPrice: 3000,
+		gasLimit: 50000,
+		amount: 25,
+		action: 'placeStake',
+		fiat: 'USD',
+		fiatRate: 0.5,
+		lockPeriod: 30,
+		fee: '' + 3000 * 50000,
+		feeFiat: '' + 3000 * 50000 * 0.5
+	};
 
 	beforeEach(() => {
 		sinon.restore();
@@ -189,9 +210,30 @@ describe('marketplace operations', () => {
 		expect(service.loadStakingInfo.calledOnceWith(services[1]));
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
-	describe('placeStakeOperation', () => {
-		// calls place stake on marketplace service
-		// dispatches add transaction action
+	it('placeStakeOperation', async () => {
+		sinon
+			.stub(marketplacesSelectors, 'currentTransactionSelector')
+			.returns(testCurrentTransaction);
+		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
+		sinon.stub(service, 'placeStake').resolves('ok');
+		sinon.stub(store, 'dispatch');
+		sinon.stub(marketplacesActions, 'setTransactionsAction').returns(testAction);
+		const { id, serviceId, serviceOwner, amount } = services[0];
+
+		await placeStakeOperation(id)(store.dispatch, store.getState.bind(store));
+
+		expect(marketplacesSelectors.currentTransactionSelector.calledOnceWith(state)).toBeTruthy();
+		expect(marketplacesSelectors.servicesSelector.calledOnceWith(state)).toBeTruthy();
+		expect(
+			service.placeStake.calledOnceWith(
+				serviceId,
+				serviceOwner,
+				amount,
+				testCurrentTransaction.gasPrice,
+				testCurrentTransaction.gasLimit
+			)
+		);
+		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
 	describe('withdrawStakeOperation', () => {
 		// calls withdraw stake on marketplace service
