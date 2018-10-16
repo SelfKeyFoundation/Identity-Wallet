@@ -32,6 +32,10 @@ export class MarketplaceTransactions extends BaseModel {
 	static find(where = {}) {
 		return this.query().where(where);
 	}
+
+	static updateById(id, data) {
+		return this.query().patchAndFetchById(id, data);
+	}
 }
 
 export default MarketplaceTransactions;

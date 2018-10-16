@@ -6,10 +6,17 @@ import {
 	initialState,
 	marketplacesSelectors,
 	marketplacesActions,
+	marketplacesOperations,
 	marketplacesTypes,
 	loadTransactionsOperation,
+	withdrawStakeOperation,
 	loadStakesOperation,
-	placeStakeOperation
+	placeStakeOperation,
+	updateTransactionStatusOperation,
+	startStakeTransactionOperation,
+	startWithdrawTransactionOperation,
+	confirmStakeTransactionOperation,
+	confirmWithdrawTransactionOperation
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -136,8 +143,13 @@ describe('marketplace selectors', () => {
 describe('marketplace operations', () => {
 	let service = {
 		loadTransactions() {},
+		async withdrawStake() {},
 		loadStakingInfo() {},
-		async placeStake() {}
+		async placeStake() {},
+		async checkMpTxStatus() {},
+		async updateTransaction() {},
+		async estimateGasForStake() {},
+		async estimateGasForWithdraw() {}
 	};
 	let state = {};
 	let store = {
@@ -163,23 +175,6 @@ describe('marketplace operations', () => {
 		}
 	];
 	let testAction = { type: 'test' };
-
-	let testCurrentTransaction = {
-		gasPriceEstimates: {
-			avarage: 5000,
-			fast: 7000,
-			safeLow: 2000
-		},
-		gasPrice: 3000,
-		gasLimit: 50000,
-		amount: 25,
-		action: 'placeStake',
-		fiat: 'USD',
-		fiatRate: 0.5,
-		lockPeriod: 30,
-		fee: '' + 3000 * 50000,
-		feeFiat: '' + 3000 * 50000 * 0.5
-	};
 
 	beforeEach(() => {
 		sinon.restore();
@@ -212,66 +207,197 @@ describe('marketplace operations', () => {
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
 	it('placeStakeOperation', async () => {
-		sinon
-			.stub(marketplacesSelectors, 'currentTransactionSelector')
-			.returns(testCurrentTransaction);
-		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
+		let serviceOwner = '0x0';
+		let serviceId = 'global';
+
 		sinon.stub(service, 'placeStake').resolves('ok');
 		sinon.stub(store, 'dispatch');
 		sinon.stub(marketplacesActions, 'addTransactionAction').returns(testAction);
-		const { id, serviceId, serviceOwner, amount } = services[0];
 
-		await placeStakeOperation(id)(store.dispatch, store.getState.bind(store));
-
-		expect(marketplacesSelectors.currentTransactionSelector.calledOnceWith(state)).toBeTruthy();
-		expect(marketplacesSelectors.servicesSelector.calledOnceWith(state)).toBeTruthy();
-		expect(
-			service.placeStake.calledOnceWith(
-				serviceId,
-				serviceOwner,
-				amount,
-				testCurrentTransaction.gasPrice,
-				testCurrentTransaction.gasLimit
-			)
+		await placeStakeOperation(serviceId, serviceOwner, 25, 10, 20)(
+			store.dispatch,
+			store.getState.bind(store)
 		);
+
+		expect(service.placeStake.calledOnceWith(serviceId, serviceOwner, 25, 10, 20)).toBeTruthy();
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
-	describe('withdrawStakeOperation', () => {
-		// calls withdraw stake on marketplace service
-		// dispatches add transaction action
+	it('withdrawStakeOperation', async () => {
+		let serviceOwner = '0x0';
+		let serviceId = 'global';
+
+		sinon.stub(service, 'withdrawStake').resolves('ok');
+		sinon.stub(store, 'dispatch');
+		sinon.stub(marketplacesActions, 'addTransactionAction').returns(testAction);
+
+		await withdrawStakeOperation(serviceId, serviceOwner, 10, 20)(
+			store.dispatch,
+			store.getState.bind(store)
+		);
+
+		expect(service.withdrawStake.calledOnceWith(serviceId, serviceOwner, 10, 20)).toBeTruthy();
+		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
-	describe('updateTransactionStatusOperation', () => {
-		// calls check transaction status on marketplace service
-		// calls update transaction on marketplace service (sets 'lastStatus')
-		// if status changes dispatches update transaction status
-		// if status changes to success
-		//   -  calls load staking info for this service on marketplace service
-		//   -  dispatches update stake action
+	describe('updateTransactionStatusOperation', async () => {
+		it('if status changes calls to update transaction', async () => {
+			let tx = {
+				lastStatus: 'pending'
+			};
+			sinon.stub(service, 'checkMpTxStatus').resolves('test');
+			sinon.stub(service, 'updateTransaction').resolves('ok');
+			sinon.stub(marketplacesActions, 'updateTransactionAction').returns(tx);
+			sinon.stub(store, 'dispatch');
+			await updateTransactionStatusOperation(tx)(store.dispatch, store.getState.bind(store));
+
+			expect(service.checkMpTxStatus.calledOnce).toBeTruthy();
+			expect(service.updateTransaction.calledOnce).toBeTruthy();
+			expect(marketplacesActions.updateTransactionAction.calledOnce).toBeTruthy();
+			expect(store.dispatch.calledWith(tx)).toBeTruthy();
+		});
+
+		it('if status changes to success updates stake', async () => {
+			let tx = {
+				lastStatus: 'pending',
+				serviceOwner: '0x0',
+				serviceId: 'global'
+			};
+			let stake = { stake: 'stake' };
+			sinon.stub(service, 'checkMpTxStatus').resolves('success');
+			sinon.stub(service, 'loadStakingInfo').resolves(stake);
+			sinon.stub(service, 'updateTransaction').resolves(tx);
+			sinon.stub(marketplacesActions, 'updateStakeAction').returns('stake');
+			sinon.stub(marketplacesActions, 'updateTransactionAction');
+			sinon.stub(store, 'dispatch');
+
+			await updateTransactionStatusOperation(tx)(store.dispatch, store.getState.bind(store));
+
+			expect(
+				service.loadStakingInfo.calledOnceWith(tx.serviceOwner, tx.serviceId)
+			).toBeTruthy();
+			expect(marketplacesActions.updateStakeAction.calledOnceWith(stake)).toBeTruthy();
+			expect(store.dispatch.calledWith('stake')).toBeTruthy();
+		});
 	});
-	describe('startStakeTransactionOperation', () => {
-		// selects eth gas station estimates
-		// selects eth to usd rate
-		// fetches gasLimit from marketplace service
-		// dispastches setCurrentTransaction action
-		// dispatches showMarketplacePopup : confirmStakeTransaction
+	it('startStakeTransactionOperation', async () => {
+		let serviceOwner = '0x0';
+		let serviceId = 'global';
+		let amount = 25;
+		sinon
+			.stub(marketplacesSelectors, 'currentTransactionSelector')
+			.returns({ gasPriceEstimates: { average: 50 } });
+		sinon.stub(service, 'estimateGasForStake').returns({ approve: 100, deposit: 200 });
+		sinon.stub(marketplacesActions, 'setCurrentTransactionAction').returns('ok');
+		sinon.stub(marketplacesActions, 'showMarketplacePopupAction').returns('popup');
+		sinon.stub(store, 'dispatch');
+
+		await startStakeTransactionOperation(serviceOwner, serviceId, amount)(
+			store.dispatch,
+			store.getState
+		);
+
+		expect(service.estimateGasForStake.calledOnceWith(serviceOwner, serviceId)).toBeTruthy();
+		expect(marketplacesActions.setCurrentTransactionAction.calledOnce).toBeTruthy();
+		expect(
+			marketplacesActions.showMarketplacePopupAction.calledOnceWith('confirmStakeTransaction')
+		).toBeTruthy();
+		expect(store.dispatch.calledWith('ok')).toBeTruthy();
+		expect(store.dispatch.calledWith('popup')).toBeTruthy();
 	});
-	describe('confirmStakeTransactionOperation', () => {
-		// selects current transaction
-		// call placeStake on marketplace service
-		// dispatch clearCurrentTransaction
-		// dispatch showMarketplacePopup: pendingTransaction
+	it('confirmStakeTransactionOperation', async () => {
+		let tx = {
+			gasPriceEstimates: { average: 50 },
+			gasLimit: 100,
+			gasPrice: 100,
+			amount: 25,
+			action: 'placeStake',
+			serviceOwner: '0x0',
+			serviceId: 'global'
+		};
+		sinon.stub(marketplacesSelectors, 'currentTransactionSelector').returns(tx);
+		sinon.stub(marketplacesOperations, 'placeStake').returns('ok');
+		sinon.stub(marketplacesActions, 'clearCurrentTransactionAction').returns('clear');
+		sinon.stub(marketplacesActions, 'showMarketplacePopupAction').returns('popup');
+		sinon.stub(store, 'dispatch');
+
+		await confirmStakeTransactionOperation()(store.dispatch, store.getState);
+
+		expect(marketplacesSelectors.currentTransactionSelector.calledOnce).toBeTruthy();
+		expect(
+			marketplacesOperations.placeStake.calledOnceWith(
+				tx.serviceOwner,
+				tx.serviceId,
+				tx.amount,
+				tx.gasPrice,
+				tx.gasLimit
+			)
+		).toBeTruthy();
+		expect(
+			marketplacesActions.showMarketplacePopupAction.calledOnceWith('pendingTransaction')
+		).toBeTruthy();
+		expect(marketplacesActions.clearCurrentTransactionAction.calledOnce).toBeTruthy();
+		expect(store.dispatch.calledWith('ok')).toBeTruthy();
+		expect(store.dispatch.calledWith('clear')).toBeTruthy();
+		expect(store.dispatch.calledWith('popup')).toBeTruthy();
 	});
-	describe('startWithdrawTransactionOperation', () => {
-		// selects eth gas station estimates
-		// selects eth to usd rate
-		// fetches gasLimit from marketplace service
-		// dispastches setCurrentTransaction action
-		// dispatches showMarketplacePopup: confirmWithdrawTransaction
+	it('startWithdrawTransactionOperation', async () => {
+		let serviceOwner = '0x0';
+		let serviceId = 'global';
+		sinon
+			.stub(marketplacesSelectors, 'currentTransactionSelector')
+			.returns({ gasPriceEstimates: { average: 50 } });
+		sinon.stub(service, 'estimateGasForWithdraw').returns(30);
+		sinon.stub(marketplacesActions, 'setCurrentTransactionAction').returns('ok');
+		sinon.stub(marketplacesActions, 'showMarketplacePopupAction').returns('popup');
+		sinon.stub(store, 'dispatch');
+
+		await startWithdrawTransactionOperation(serviceOwner, serviceId)(
+			store.dispatch,
+			store.getState
+		);
+
+		expect(service.estimateGasForWithdraw.calledOnceWith(serviceOwner, serviceId)).toBeTruthy();
+		expect(marketplacesActions.setCurrentTransactionAction.calledOnce).toBeTruthy();
+		expect(
+			marketplacesActions.showMarketplacePopupAction.calledOnceWith(
+				'confirmWithdrawTransaction'
+			)
+		).toBeTruthy();
+		expect(store.dispatch.calledWith('ok')).toBeTruthy();
+		expect(store.dispatch.calledWith('popup')).toBeTruthy();
 	});
-	describe('confirmWithdrawTransactionOperation', () => {
-		// selects current transaction
-		// call placeStake on marketplace service
-		// dispatch cancelCurrentTransactionOperation
+	it('confirmWithdrawTransactionOperation', async () => {
+		let tx = {
+			gasPriceEstimates: { average: 50 },
+			gasLimit: 100,
+			gasPrice: 100,
+			action: 'withdrawStake',
+			serviceOwner: '0x0',
+			serviceId: 'global'
+		};
+		sinon.stub(marketplacesSelectors, 'currentTransactionSelector').returns(tx);
+		sinon.stub(marketplacesOperations, 'withdrawStake').returns('ok');
+		sinon.stub(marketplacesActions, 'clearCurrentTransactionAction').returns('clear');
+		sinon.stub(marketplacesActions, 'showMarketplacePopupAction').returns('popup');
+		sinon.stub(store, 'dispatch');
+
+		await confirmWithdrawTransactionOperation()(store.dispatch, store.getState);
+
+		expect(marketplacesSelectors.currentTransactionSelector.calledOnce).toBeTruthy();
+		expect(
+			marketplacesOperations.withdrawStake.calledOnceWith(
+				tx.serviceOwner,
+				tx.serviceId,
+				tx.gasPrice,
+				tx.gasLimit
+			)
+		).toBeTruthy();
+		expect(
+			marketplacesActions.showMarketplacePopupAction.calledOnceWith('pendingTransaction')
+		).toBeTruthy();
+		expect(marketplacesActions.clearCurrentTransactionAction.calledOnce).toBeTruthy();
+		expect(store.dispatch.calledWith('ok')).toBeTruthy();
+		expect(store.dispatch.calledWith('clear')).toBeTruthy();
+		expect(store.dispatch.calledWith('popup')).toBeTruthy();
 	});
 	describe('cancelCurrentTransactionOperation', () => {
 		// dispatches clearCurrentTransaction
@@ -311,10 +437,10 @@ describe('marketplace actions', () => {
 			payload: txs
 		});
 	});
-	it('updateTransactionsAction', () => {
+	it('updateTransactionAction', () => {
 		let tx = { test: 'test' };
-		expect(marketplacesActions.updateTransactionsAction(tx)).toEqual({
-			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS,
+		expect(marketplacesActions.updateTransactionAction(tx)).toEqual({
+			type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_ONE,
 			payload: tx
 		});
 	});

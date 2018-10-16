@@ -38,7 +38,7 @@ export const marketplacesTypes = {
 	MARKETPLACE_STAKES_PLACE: 'marketplace/stakes/PLACE',
 	MARKETPLACE_TRANSACTIONS_UPDATE_STATUS: 'marketplace/transactions/UPDATE_STATUS',
 	MARKETPLACE_TRANSACTIONS_STAKE_START: 'marketplace/transactions/STAKE_START',
-	MARKETPLACE_TRANSACTIONS_STAKE_CONFITM: 'marketplace/transactions/STAKE_CONFIRM',
+	MARKETPLACE_TRANSACTIONS_STAKE_CONFIRM: 'marketplace/transactions/STAKE_CONFIRM',
 	MARKETPLACE_TRANSACTIONS_WITHDRAW_START: 'marketplace/transactions/WITHDRAW_START',
 	MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM: 'marketplace/transactions/WITHDRAW_CONFIRM',
 	MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE: 'marketplace/transactions/current/UPDATE',
@@ -62,8 +62,8 @@ export const marketplacesActions = {
 	addTransactionAction(payload) {
 		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_ADD, payload };
 	},
-	updateTransactionsAction(payload) {
-		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS, payload };
+	updateTransactionAction(payload) {
+		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_ONE, payload };
 	},
 	updateCurrentTransactionAction(payload) {
 		return { type: marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE, payload };
@@ -90,6 +90,7 @@ export const loadTransactionsOperation = () => async (dispatch, getState) => {
 	);
 	await dispatch(marketplacesActions.setTransactionsAction(transactions));
 };
+
 export const loadStakesOperation = () => async (dispatch, getState) => {
 	let mpService = (getGlobalContext() || {}).marketplacesService;
 	let services = marketplacesSelectors.servicesSelector(getState()) || [];
@@ -98,24 +99,123 @@ export const loadStakesOperation = () => async (dispatch, getState) => {
 	);
 	await dispatch(marketplacesActions.setStakesAction(stakes));
 };
-export const placeStakeOperation = id => async (dispatch, getState) => {
+
+export const placeStakeOperation = (serviceOwner, serviceId, amount, gasPrice, gasLimit) => async (
+	dispatch,
+	getState
+) => {
 	const mpService = (getGlobalContext() || {}).marketplacesService;
-	const services = marketplacesSelectors.servicesSelector(getState()) || [];
-	const service = services.filter(service => service.id === id);
-	const currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
 
 	const newTransaction = await mpService.placeStake(
-		service.serviceId,
-		service.serviceOwner,
-		service.amount,
-		currentTransaction.gasPrice,
-		currentTransaction.gasLimit
+		serviceOwner,
+		serviceId,
+		amount,
+		gasPrice,
+		gasLimit
 	);
 
 	await dispatch(marketplacesActions.addTransactionAction(newTransaction));
 };
-export const withdrawStakeOperation = () => async (dispatch, getState) => {};
-export const updateTransactionStatusOperation = () => async (dispatch, getState) => {};
+
+export const withdrawStakeOperation = (serviceOwner, serviceId, gasPrice, gasLimit) => async (
+	dispatch,
+	getState
+) => {
+	const mpService = (getGlobalContext() || {}).marketplacesService;
+
+	const newTransaction = await mpService.withdrawStake(
+		serviceOwner,
+		serviceId,
+		gasPrice,
+		gasLimit
+	);
+
+	await dispatch(marketplacesActions.addTransactionAction(newTransaction));
+};
+export const updateTransactionStatusOperation = tx => async (dispatch, getState) => {
+	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const status = await mpService.checkMpTxStatus(tx);
+	if (status === tx.lastStatus) return;
+
+	tx = { ...tx, lastStatus: status };
+
+	tx = await mpService.updateTransaction(tx);
+	await dispatch(marketplacesActions.updateTransactionAction(tx));
+
+	if (status !== 'success') return;
+
+	let stake = await mpService.loadStakingInfo(tx.serviceOwner, tx.serviceId);
+	await dispatch(marketplacesActions.updateStakeAction(stake));
+};
+
+export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) => async (
+	dispatch,
+	getState
+) => {
+	const mpService = (getGlobalContext() || {}).marketplacesService;
+	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
+	let gasLimit = await mpService.estimateGasForStake(serviceOwner, serviceId);
+	let tx = {
+		action: 'placeStake',
+		gasLimit,
+		gasPrice: currentTransaction.gasPriceEstimates.average,
+		serviceOwner,
+		serviceId,
+		amount
+	};
+	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
+	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmStakeTransaction'));
+};
+
+export const confirmStakeTransactionOperation = () => async (dispatch, getState) => {
+	let tx = marketplacesSelectors.currentTransactionSelector(getState());
+	await dispatch(
+		marketplacesOperations.placeStake(
+			tx.serviceOwner,
+			tx.serviceId,
+			tx.amount,
+			tx.gasPrice,
+			tx.gasLimit
+		)
+	);
+	await dispatch(marketplacesActions.showMarketplacePopupAction('pendingTransaction'));
+	await dispatch(marketplacesActions.clearCurrentTransactionAction());
+};
+
+export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => async (
+	dispatch,
+	getState
+) => {
+	const mpService = (getGlobalContext() || {}).marketplacesService;
+	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
+	let gasLimit = await mpService.estimateGasForWithdraw(serviceOwner, serviceId);
+	let tx = {
+		action: 'withdrawStake',
+		gasLimit,
+		gasPrice: currentTransaction.gasPriceEstimates.average,
+		serviceOwner,
+		serviceId
+	};
+	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
+	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmWithdrawTransaction'));
+};
+
+export const confirmWithdrawTransactionOperation = (serviceOwner, serviceId) => async (
+	dispatch,
+	getState
+) => {
+	let tx = marketplacesSelectors.currentTransactionSelector(getState());
+	await dispatch(
+		marketplacesOperations.withdrawStake(
+			tx.serviceOwner,
+			tx.serviceId,
+			tx.gasPrice,
+			tx.gasLimit
+		)
+	);
+	await dispatch(marketplacesActions.showMarketplacePopupAction('pendingTransaction'));
+	await dispatch(marketplacesActions.clearCurrentTransactionAction());
+};
 
 export const marketplacesOperations = {
 	...marketplacesActions,
@@ -128,13 +228,29 @@ export const marketplacesOperations = {
 		marketplacesTypes.MARKETPLACE_STAKES_PLACE,
 		placeStakeOperation
 	),
-	widthdrawStake: createAliasedAction(
+	withdrawStake: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_STAKES_WITHDRAW,
 		withdrawStakeOperation
 	),
 	updateTransactionStatus: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_STATUS,
 		updateTransactionStatusOperation
+	),
+	startStakeTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_STAKE_START,
+		startStakeTransactionOperation
+	),
+	confirmStakeTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_STAKE_CONFIRM,
+		confirmStakeTransactionOperation
+	),
+	startWithdrawTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_WITHDRAW_START,
+		startWithdrawTransactionOperation
+	),
+	confirmWithdrawTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM,
+		confirmWithdrawTransactionOperation
 	)
 };
 
@@ -182,7 +298,7 @@ export const marketplacesSelectors = {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
 		let fiatRate = pricesSelectors.getRate(state, 'eth', fiat);
 		let tx = this.marketplacesSelector(state).currentTransaction;
-
+		if (!tx) tx = { action: 'none', gasLimit: 0, gasPrice: gasPriceEstimates.average };
 		let fee = new BN(tx.gasPrice || 0).multipliedBy(tx.gasLimit || 0).toString();
 		let feeFiat = new BN(fee).multipliedBy(fiatRate).toString();
 		return { ...tx, gasPriceEstimates, fiat, fiatRate, fee, feeFiat };
