@@ -217,6 +217,11 @@ export const confirmWithdrawTransactionOperation = (serviceOwner, serviceId) => 
 	await dispatch(marketplacesActions.clearCurrentTransactionAction());
 };
 
+export const cancelCurrentTransactionOperation = () => async (dispatch, getState) => {
+	await dispatch(marketplacesActions.clearCurrentTransactionAction());
+	await dispatch(marketplacesActions.showMarketplacePopupAction(null));
+};
+
 export const marketplacesOperations = {
 	...marketplacesActions,
 	loadTransactions: createAliasedAction(

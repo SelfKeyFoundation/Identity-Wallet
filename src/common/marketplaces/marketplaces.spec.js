@@ -16,7 +16,8 @@ import {
 	startStakeTransactionOperation,
 	startWithdrawTransactionOperation,
 	confirmStakeTransactionOperation,
-	confirmWithdrawTransactionOperation
+	confirmWithdrawTransactionOperation,
+	cancelCurrentTransactionOperation
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -399,9 +400,16 @@ describe('marketplace operations', () => {
 		expect(store.dispatch.calledWith('clear')).toBeTruthy();
 		expect(store.dispatch.calledWith('popup')).toBeTruthy();
 	});
-	describe('cancelCurrentTransactionOperation', () => {
-		// dispatches clearCurrentTransaction
-		// dispatches hideMarketplacePopup
+	it('cancelCurrentTransactionOperation', async () => {
+		sinon.stub(marketplacesActions, 'clearCurrentTransactionAction').returns('clear');
+		sinon.stub(marketplacesActions, 'showMarketplacePopupAction').returns('hide');
+		sinon.stub(store, 'dispatch');
+
+		await cancelCurrentTransactionOperation()(store.dispatch, store.getState);
+		expect(marketplacesActions.clearCurrentTransactionAction.calledOnce).toBeTruthy();
+		expect(marketplacesActions.showMarketplacePopupAction.calledOnceWith(null)).toBeTruthy();
+		expect(store.dispatch.calledWith('clear')).toBeTruthy();
+		expect(store.dispatch.calledWith('hide')).toBeTruthy();
 	});
 });
 
