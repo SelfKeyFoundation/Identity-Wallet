@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { MarketplaceTransactions } from './marketplace-transactions';
 import { getWallet } from '../../common/wallet/selectors';
 import CONFIG from '../../common/config';
@@ -22,9 +23,10 @@ export class MarketplaceService {
 		let options = { from: this.walletAddress };
 		return this.stakingService.getStakingInfo(serviceOwner, serviceId, options);
 	}
-	estimateGasForStake(serviceOwner, serviceId, amount) {
+	async estimateGasForStake(serviceOwner, serviceId, amount) {
 		let options = { from: this.walletAddress, method: 'estimateGas' };
-		return this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
+		let limits = await this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
+		return (limits.approve || 0) + (limits.deposit || 0);
 	}
 	estimateGasForWithdraw(serviceOwner, serviceId) {
 		let options = { from: this.walletAddress, method: 'estimateGas' };
@@ -81,12 +83,16 @@ export class MarketplaceService {
 			(tx.blockchainTx || []).map(tx => this.web3Service.checkTransactionStatus(tx.hash))
 		);
 
-		return statuses.reduce((acc, curr) => {
+		let status = statuses.reduce((acc, curr) => {
 			if (!statusMap[acc]) return curr;
 			if (!statusMap[curr]) return acc;
 			if (statusMap[curr] < statusMap[acc]) return curr;
 			return acc;
 		}, 'new');
+		return status;
+	}
+	async updateTransaction(tx) {
+		return MarketplaceTransactions.updateById(tx.id, _.omit(tx, 'id'));
 	}
 }
 

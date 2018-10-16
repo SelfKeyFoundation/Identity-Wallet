@@ -58,7 +58,7 @@ describe('MarketplaceService', () => {
 	});
 
 	it('estimateGasForStake', async () => {
-		const stakeTransactionsGas = [15, 20];
+		const stakeTransactionsGas = { approve: 15, deposit: 20 };
 		sinon.stub(stakingService, 'placeStake').resolves(stakeTransactionsGas);
 		let gas = await service.estimateGasForStake(serviceOwner, serviceId, 10);
 		expect(
@@ -68,11 +68,11 @@ describe('MarketplaceService', () => {
 			})
 		).toBeTruthy();
 
-		expect(gas).toEqual(stakeTransactionsGas);
+		expect(gas).toEqual(35);
 	});
 
 	it('estimateGasForWithdraw', async () => {
-		const withdrawTransactionsGas = [15, 20];
+		const withdrawTransactionsGas = 10;
 		sinon.stub(stakingService, 'withdrawStake').resolves(withdrawTransactionsGas);
 		let gas = await service.estimateGasForWithdraw(serviceOwner, serviceId);
 		expect(
@@ -133,5 +133,16 @@ describe('MarketplaceService', () => {
 		t(['success', 'success'], 'success');
 		t(['processing', 'success', 'success'], 'processing');
 		t(['pending', 'processing', 'success'], 'pending');
+	});
+
+	it('updateTransaction', async () => {
+		sinon.stub(MarketplaceTransactions, 'updateById');
+		let txId = 1;
+		let txData = { test: '1' };
+		let tx = { id: txId, ...txData };
+
+		await service.updateTransaction(tx);
+
+		expect(MarketplaceTransactions.updateById.calledOnceWith(txId, txData)).toBeTruthy();
 	});
 });
