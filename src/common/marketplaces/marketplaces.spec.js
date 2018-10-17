@@ -17,7 +17,8 @@ import {
 	startWithdrawTransactionOperation,
 	confirmStakeTransactionOperation,
 	confirmWithdrawTransactionOperation,
-	cancelCurrentTransactionOperation
+	cancelCurrentTransactionOperation,
+	updateStakeReducer
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -489,8 +490,25 @@ describe('marketplace actions', () => {
 
 describe('marketplaceReducers', () => {
 	describe('updateStakeReducer', () => {
-		// finds stake via serviceOwner and serviceId
-		// updates staking info
+		let oldStake = { id: '0x0_global' };
+		let newStake = { serviceOwner: '0x0', serviceId: 'global', test: 'test1' };
+		let state = {
+			stakes: [oldStake.id],
+			stakesById: { [oldStake.id]: oldStake }
+		};
+		let newState = updateStakeReducer(state, marketplacesActions.updateStakeAction(newStake));
+
+		expect(newState).toEqual({
+			stakes: [oldStake.id],
+			stakesById: {
+				[oldStake.id]: {
+					id: '0x0_global',
+					serviceOwner: '0x0',
+					serviceId: 'global',
+					test: 'test1'
+				}
+			}
+		});
 	});
 	describe('setStakesReducer', () => {
 		// gets a list of stakes
