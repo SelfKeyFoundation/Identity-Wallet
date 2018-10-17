@@ -179,7 +179,7 @@ describe('marketplace operations', () => {
 
 	beforeEach(() => {
 		sinon.restore();
-		setGlobalContext({ marketplacesService: service });
+		setGlobalContext({ marketplaceService: service });
 	});
 	it('loadTransactionsOperation', async () => {
 		sinon.stub(marketplacesSelectors, 'servicesSelector').returns(services);
