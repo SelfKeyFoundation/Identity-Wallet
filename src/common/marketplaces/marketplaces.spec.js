@@ -18,7 +18,8 @@ import {
 	confirmStakeTransactionOperation,
 	confirmWithdrawTransactionOperation,
 	cancelCurrentTransactionOperation,
-	updateStakeReducer
+	updateStakeReducer,
+	setStakesReducer
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -489,8 +490,8 @@ describe('marketplace actions', () => {
 });
 
 describe('marketplaceReducers', () => {
-	describe('updateStakeReducer', () => {
-		let oldStake = { id: '0x0_global' };
+	it('updateStakeReducer', () => {
+		let oldStake = { id: '0x0_global', test2: 'test2' };
 		let newStake = { serviceOwner: '0x0', serviceId: 'global', test: 'test1' };
 		let state = {
 			stakes: [oldStake.id],
@@ -505,14 +506,43 @@ describe('marketplaceReducers', () => {
 					id: '0x0_global',
 					serviceOwner: '0x0',
 					serviceId: 'global',
-					test: 'test1'
+					test: 'test1',
+					test2: 'test2'
 				}
 			}
 		});
 	});
-	describe('setStakesReducer', () => {
-		// gets a list of stakes
-		// sets overwrites them into the store
+	it('setStakesReducer', () => {
+		let oldStake = { id: '0x0_global', test2: 'test2' };
+		let newStakes = [
+			{ serviceOwner: '0x0', serviceId: 'global', test: 'test1' },
+			{ serviceOwner: '0x1', serviceId: 'global1', test: 'test12' }
+		];
+		let state = {
+			test: 'test',
+			stakes: [oldStake.id],
+			stakesById: { [oldStake.id]: oldStake }
+		};
+		let newState = setStakesReducer(state, marketplacesActions.setStakesAction(newStakes));
+
+		expect(newState).toEqual({
+			test: 'test',
+			stakes: ['0x0_global', '0x1_global1'],
+			stakesById: {
+				'0x0_global': {
+					id: '0x0_global',
+					serviceOwner: '0x0',
+					serviceId: 'global',
+					test: 'test1'
+				},
+				'0x1_global1': {
+					id: '0x1_global1',
+					serviceOwner: '0x1',
+					serviceId: 'global1',
+					test: 'test12'
+				}
+			}
+		});
 	});
 	describe('addTransactionReducer', () => {
 		// gets a new transaction
