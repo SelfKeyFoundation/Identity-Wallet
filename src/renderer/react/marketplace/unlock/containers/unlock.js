@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
+// import { marketplacesOperations } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { Unlock } from 'selfkey-ui';
@@ -18,8 +19,13 @@ class UnlockController extends Component {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
 
+	handleConfirmAction() {
+		this.props.navigateToTransactionProgress();
+		// this.props.dispatch(marketplacesOperations.placeStake());
+	}
+
 	render() {
-		const { closeAction, confirmAction, gas, fiat, ethPrice } = this.props;
+		const { closeAction, gas, fiat, ethPrice } = this.props;
 		console.log(this.props);
 		if (!gas.safeLow) {
 			return <div>Loading</div>;
@@ -33,7 +39,7 @@ class UnlockController extends Component {
 				fiat={fiat.fiatCurrency}
 				fiatRate={ethPrice.priceUSD}
 				onCancel={closeAction}
-				onConfirm={confirmAction}
+				onConfirm={() => this.handleConfirmAction()}
 			/>
 		);
 	}

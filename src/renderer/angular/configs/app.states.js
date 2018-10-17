@@ -545,6 +545,18 @@ function appStates(
 			params: {
 				data: {}
 			}
+		})
+		.state('member.marketplace.progress', {
+			url: '/member/marketplace/progress',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/unlock-progress.html',
+					controller: 'MemberMarketplaceUnlockProgressController'
+				}
+			},
+			params: {
+				data: {}
+			}
 		});
 
 	$urlRouterProvider.otherwise('/guest/loading');

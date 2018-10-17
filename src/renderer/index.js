@@ -21,6 +21,8 @@ import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
 import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
+import { UnlockProgressWrapper } from './react/marketplace/progress';
+
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
 import { configureContext, setGlobalCtx } from '../common/context';
@@ -308,8 +310,14 @@ angular.module('kyc-wallet').component('item', itemWrapper);
 const withoutBalanceWrapper = react2angular(WithoutBalanceWrapper, ['closeAction']);
 angular.module('kyc-wallet').component('withoutBalance', withoutBalanceWrapper);
 
-const unlockMarketplace = react2angular(UnlockWrapper, ['closeAction', 'confirmAction']);
+const unlockMarketplace = react2angular(UnlockWrapper, [
+	'closeAction',
+	'navigateToTransactionProgress'
+]);
 angular.module('kyc-wallet').component('unlockMarketplace', unlockMarketplace);
+
+const unlockProgressWrapper = react2angular(UnlockProgressWrapper, ['closeAction']);
+angular.module('kyc-wallet').component('unlockProgress', unlockProgressWrapper);
 /**
  * controllers
  */
@@ -545,6 +553,14 @@ const MemberMarketplaceUnlockController = require('./angular/controllers/member/
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceUnlockController', MemberMarketplaceUnlockController);
+
+const MemberMarketplaceUnlockProgressController = require('./angular/controllers/member/marketplace/unlock-progress-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller(
+		'MemberMarketplaceUnlockProgressController',
+		MemberMarketplaceUnlockProgressController
+	);
 
 /**
  * Address Book
