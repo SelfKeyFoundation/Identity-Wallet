@@ -316,7 +316,14 @@ export const marketplacesSelectors = {
 	}
 };
 
-export const updateServiceReducer = {};
+export const updateStakeReducer = (state, { payload }) => {
+	let id = payload.id || `${payload.serviceOwner}_${payload.serviceId}`;
+	let currentStake = state.stakesById[id];
+	if (!currentStake) return state;
+	currentStake = { ...currentStake, ...payload, id };
+	state = { ...state, stakesById: { ...state.stakesById, [id]: currentStake } };
+	return state;
+};
 
 const reducer = (state = initialState, action) => state;
 
