@@ -357,6 +357,18 @@ export const setTransactionsReducer = (state, { payload }) => {
 	};
 };
 
+export const updateTransactionReducer = (state, { payload }) => {
+	if (!state.transactionsById[payload.id]) return state;
+	state = {
+		...state,
+		transactionsById: {
+			...state.transactionsById,
+			[payload.id]: { ...state.transactionsById[payload.id], ...payload }
+		}
+	};
+	return state;
+};
+
 const reducer = (state = initialState, action) => state;
 
 export default reducer;

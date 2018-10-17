@@ -20,7 +20,9 @@ import {
 	cancelCurrentTransactionOperation,
 	updateStakeReducer,
 	setStakesReducer,
-	addTransactionReducer
+	addTransactionReducer,
+	updateTransactionReducer,
+	setTransactionsReducer
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -569,11 +571,52 @@ describe('marketplaceReducers', () => {
 			}
 		});
 	});
-	describe('setTransactionsReducer', () => {
-		// gets a list of transactions
-		// overwrites it into the store
+	it('setTransactionsReducer', () => {
+		let state = {
+			test: 'test',
+			transactions: [1],
+			transactionsById: {
+				1: { id: 1, lastStatus: 'pending' }
+			}
+		};
+		let transaction = [{ id: 2, lastStatus: 'success' }, { id: 3, lastStatus: 'pending' }];
+
+		let newState = setTransactionsReducer(
+			state,
+			marketplacesActions.setTransactionsAction(transaction)
+		);
+
+		expect(newState).toEqual({
+			test: 'test',
+			transactions: [2, 3],
+			transactionsById: {
+				2: { id: 2, lastStatus: 'success' },
+				3: { id: 3, lastStatus: 'pending' }
+			}
+		});
 	});
-	describe('updateTransactionReducer', () => {
+	it('updateTransactionReducer', () => {
+		let state = {
+			test: 'test',
+			transactions: [1],
+			transactionsById: {
+				1: { id: 1, lastStatus: 'pending' }
+			}
+		};
+		let transaction = { id: 1, lastStatus: 'success', test: 'test1' };
+
+		let newState = updateTransactionReducer(
+			state,
+			marketplacesActions.updateTransactionAction(transaction)
+		);
+
+		expect(newState).toEqual({
+			test: 'test',
+			transactions: [1],
+			transactionsById: {
+				1: { id: 1, lastStatus: 'success', test: 'test1' }
+			}
+		});
 		// gets a transaction
 		// update the transaction inside the store
 	});
