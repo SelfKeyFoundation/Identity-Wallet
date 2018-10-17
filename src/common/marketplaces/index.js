@@ -83,7 +83,7 @@ export const marketplacesActions = {
 };
 
 export const loadTransactionsOperation = () => async (dispatch, getState) => {
-	let mpService = (getGlobalContext() || {}).marketplacesService;
+	let mpService = (getGlobalContext() || {}).marketplaceService;
 	let services = marketplacesSelectors.servicesSelector(getState()) || [];
 	let transactions = await Promise.all(
 		services.map(service => mpService.loadTransactions(service.serviceOwner, service.serviceId))
@@ -92,7 +92,7 @@ export const loadTransactionsOperation = () => async (dispatch, getState) => {
 };
 
 export const loadStakesOperation = () => async (dispatch, getState) => {
-	let mpService = (getGlobalContext() || {}).marketplacesService;
+	let mpService = (getGlobalContext() || {}).marketplaceService;
 	let services = marketplacesSelectors.servicesSelector(getState()) || [];
 	let stakes = await Promise.all(
 		services.map(service => mpService.loadStakingInfo(service.serviceOwner, service.serviceId))
@@ -104,7 +104,7 @@ export const placeStakeOperation = (serviceOwner, serviceId, amount, gasPrice, g
 	dispatch,
 	getState
 ) => {
-	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const mpService = (getGlobalContext() || {}).marketplaceService;
 
 	const newTransaction = await mpService.placeStake(
 		serviceOwner,
@@ -121,7 +121,7 @@ export const withdrawStakeOperation = (serviceOwner, serviceId, gasPrice, gasLim
 	dispatch,
 	getState
 ) => {
-	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const mpService = (getGlobalContext() || {}).marketplaceService;
 
 	const newTransaction = await mpService.withdrawStake(
 		serviceOwner,
@@ -133,7 +133,7 @@ export const withdrawStakeOperation = (serviceOwner, serviceId, gasPrice, gasLim
 	await dispatch(marketplacesActions.addTransactionAction(newTransaction));
 };
 export const updateTransactionStatusOperation = tx => async (dispatch, getState) => {
-	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const mpService = (getGlobalContext() || {}).marketplaceService;
 	const status = await mpService.checkMpTxStatus(tx);
 	if (status === tx.lastStatus) return;
 
@@ -152,7 +152,7 @@ export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) 
 	dispatch,
 	getState
 ) => {
-	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const mpService = (getGlobalContext() || {}).marketplaceService;
 	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
 	let gasLimit = await mpService.estimateGasForStake(serviceOwner, serviceId);
 	let tx = {
@@ -186,7 +186,7 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 	dispatch,
 	getState
 ) => {
-	const mpService = (getGlobalContext() || {}).marketplacesService;
+	const mpService = (getGlobalContext() || {}).marketplaceService;
 	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
 	let gasLimit = await mpService.estimateGasForWithdraw(serviceOwner, serviceId);
 	let tx = {
