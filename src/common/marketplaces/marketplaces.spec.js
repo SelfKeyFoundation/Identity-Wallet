@@ -19,7 +19,8 @@ import {
 	confirmWithdrawTransactionOperation,
 	cancelCurrentTransactionOperation,
 	updateStakeReducer,
-	setStakesReducer
+	setStakesReducer,
+	addTransactionReducer
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -544,9 +545,29 @@ describe('marketplaceReducers', () => {
 			}
 		});
 	});
-	describe('addTransactionReducer', () => {
-		// gets a new transaction
-		// writes it into the store
+	it('addTransactionReducer', () => {
+		let state = {
+			test: 'test',
+			transactions: [1],
+			transactionsById: {
+				1: { id: 1, lastStatus: 'pending' }
+			}
+		};
+		let transaction = { id: 2, lastStatus: 'success' };
+
+		let newState = addTransactionReducer(
+			state,
+			marketplacesActions.addTransactionAction(transaction)
+		);
+
+		expect(newState).toEqual({
+			test: 'test',
+			transactions: [1, 2],
+			transactionsById: {
+				1: { id: 1, lastStatus: 'pending' },
+				2: { id: 2, lastStatus: 'success' }
+			}
+		});
 	});
 	describe('setTransactionsReducer', () => {
 		// gets a list of transactions
