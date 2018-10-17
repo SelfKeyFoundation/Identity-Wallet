@@ -325,6 +325,19 @@ export const updateStakeReducer = (state, { payload }) => {
 	return state;
 };
 
+export const setStakesReducer = (state, { payload }) => {
+	let newState = payload.reduce(
+		(acc, curr) => {
+			let id = curr.id || `${curr.serviceOwner}_${curr.serviceId}`;
+			acc.stakes.push(id);
+			acc.stakesById[id] = { ...curr, id };
+			return acc;
+		},
+		{ stakes: [], stakesById: {} }
+	);
+	return { ...state, ...newState };
+};
+
 const reducer = (state = initialState, action) => state;
 
 export default reducer;
