@@ -338,6 +338,14 @@ export const setStakesReducer = (state, { payload }) => {
 	return { ...state, ...newState };
 };
 
+export const addTransactionReducer = (state, { payload }) => {
+	return {
+		...state,
+		transactions: [...state.transactions, payload.id],
+		transactionsById: { ...state.transactionsById, [payload.id]: payload }
+	};
+};
+
 const reducer = (state = initialState, action) => state;
 
 export default reducer;
