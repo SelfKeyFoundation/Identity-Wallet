@@ -22,7 +22,9 @@ import {
 	setStakesReducer,
 	addTransactionReducer,
 	updateTransactionReducer,
-	setTransactionsReducer
+	setTransactionsReducer,
+	setMarketplacePopupReducer,
+	setMarketplaceStateReducer
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -617,11 +619,33 @@ describe('marketplaceReducers', () => {
 				1: { id: 1, lastStatus: 'success', test: 'test1' }
 			}
 		});
-		// gets a transaction
-		// update the transaction inside the store
 	});
-	describe('setMarketplacePopupReducer', () => {});
-	describe('setMarketplaceDisplayedCategoryReducer', () => {});
+	it('setMarketplacePopupReducer', () => {
+		let state = {
+			displayedPopup: null
+		};
+
+		let newState = setMarketplacePopupReducer(
+			state,
+			marketplacesActions.showMarketplacePopupAction('test')
+		);
+		expect(newState).toEqual({
+			displayedPopup: 'test'
+		});
+	});
+	describe('setMarketplaceDisplayedStateReducer', () => {
+		let state = {
+			displayedState: null
+		};
+
+		let newState = setMarketplaceStateReducer(
+			state,
+			marketplacesActions.displayMarketplaceStateAction('test')
+		);
+		expect(newState).toEqual({
+			displayedState: 'test'
+		});
+	});
 	describe('clearCurrentTransactionReducer', () => {});
 	describe('setCurrentTransactionReducer', () => {});
 	describe('updateCurrentTransactionReducer', () => {});

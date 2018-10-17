@@ -15,7 +15,7 @@ export const initialState = {
 	stakesById: {},
 	currentTransaction: null,
 	displayedPopup: null,
-	displayedCategory: null
+	displayedState: null
 };
 
 export const transactionSchema = new schema.Entity('transactions', {}, { idAttribute: 'id' });
@@ -367,6 +367,14 @@ export const updateTransactionReducer = (state, { payload }) => {
 		}
 	};
 	return state;
+};
+
+export const setMarketplacePopupReducer = (state, { payload }) => {
+	return { ...state, displayedPopup: payload };
+};
+
+export const setMarketplaceStateReducer = (state, { payload }) => {
+	return { ...state, displayedState: payload };
 };
 
 const reducer = (state = initialState, action) => state;
