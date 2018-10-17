@@ -346,6 +346,17 @@ export const addTransactionReducer = (state, { payload }) => {
 	};
 };
 
+export const setTransactionsReducer = (state, { payload }) => {
+	return {
+		...state,
+		transactions: payload.map(t => t.id),
+		transactionsById: payload.reduce((acc, t) => {
+			acc[t.id] = t;
+			return acc;
+		}, {})
+	};
+};
+
 const reducer = (state = initialState, action) => state;
 
 export default reducer;
