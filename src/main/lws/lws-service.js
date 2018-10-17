@@ -4,8 +4,20 @@ import Wallet from '../wallet/wallet';
 import { checkPassword } from '../keystorage';
 import { Logger } from 'common/logger';
 import fetch from 'node-fetch';
-import ethUtil from 'ethereumjs-util';
+import util from 'util';
+import fs from 'fs';
+import path from 'path';
+import https from 'https';
+import ChildProcess from 'child_process';
+import sudo from 'sudo-prompt';
+import common from 'common/utils/common';
+import request from 'request';
+import selfkey from 'selfkey.js';
+import tcpPortUsed from 'tcp-port-used';
+import { ipcMain } from 'electron';
 import pkg from '../../../package.json';
+
+const log = new Logger('LWSService');
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
@@ -19,15 +31,212 @@ export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	: ['127.0.0.1', '::1'];
 
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
+export const WSS_PORT = process.env.LWS_WSS_PORT || 8899;
 
 export const userAgent = `SelfKeyIDW/${pkg.version}`;
 
-const log = new Logger('LWSService');
+const currentOS = process.platform;
+const userDataPath = common.getUserDataPath();
+
+function init() {
+	let macos = {
+		lwsPath: path.join(userDataPath, '/lws/'),
+		lwsKeyPath: path.join(userDataPath, '/lws/keys/'),
+		reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
+		rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
+		keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
+		certgen: null
+	};
+
+	macos.certgen = [
+		{
+			cmd: `openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") -keyout "${
+				macos.keyTempFile
+			}" -out "${macos.reqFile}"`,
+			options: {
+				shell: '/bin/bash'
+			},
+			type: 'child'
+		},
+		{
+			cmd: `openssl rsa -in "${macos.keyTempFile}" -out "${macos.rsaFile}"`,
+			options: {
+				shell: '/bin/bash'
+			},
+			type: 'child'
+		},
+		{
+			cmd: `security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${
+				macos.reqFile
+			}"`,
+			options: {
+				name: 'SelfKey needs to install a security certifcate to encrypt data and'
+			},
+			type: 'sudo'
+		}
+	];
+
+	let linux = {
+		lwsPath: path.join(userDataPath, '/lws/'),
+		lwsKeyPath: path.join(userDataPath, '/lws/keys/'),
+		reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
+		rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
+		keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
+		certgen: []
+	};
+
+	linux.certgen = [
+		{
+			cmd: `openssl req \
+						-new \
+						-newkey rsa:2048 \
+						-days 365 \
+						-nodes \
+						-x509 \
+						-subj "/C=NV/ST=SK/L=Nevis/O=selfkey/CN=localhost" \
+						-extensions EXT \
+						-config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth") \
+						-keyout ${linux.keyTempFile} \
+						-out ${linux.reqFile}`,
+			options: {
+				shell: '/bin/bash'
+			},
+			type: 'child'
+		},
+		{
+			cmd: `openssl rsa -in ${linux.keyTempFile} -out ${linux.rsaFile}`,
+			options: {
+				shell: '/bin/bash'
+			},
+			type: 'child'
+		}
+	];
+
+	let windows = {
+		certgen: [
+			{
+				cmd:
+					'New-SelfSignedCertificate -Type Custom -Subject "C=NV,ST=SK,L=Nevis,O=selfkey,CN=localhost" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") -DnsName "localhost" -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:CurrentUser\\My"',
+				options: {},
+				type: 'power'
+			}
+		]
+	};
+
+	switch (currentOS) {
+		case 'darwin':
+			return macos;
+		case 'linux':
+			return linux;
+		case 'win32':
+			return windows;
+	}
+}
+
+async function checkPort(port) {
+	try {
+		let check = await tcpPortUsed.check(port, '127.0.0.1');
+		return check;
+	} catch (error) {
+		log.error('Error on port check %s', error);
+		throw error;
+	}
+}
+
+async function executor(cmd, options) {
+	const exec = util.promisify(ChildProcess.exec);
+	try {
+		await exec(cmd, options);
+		log.info(`command executed successfully`);
+	} catch (error) {
+		log.error(error);
+		throw error;
+	}
+}
+
+async function sudocutor(cmd, options) {
+	log.info(`running sudo ${cmd} %2j', options`);
+	const exec = util.promisify(sudo.exec);
+	try {
+		await exec(cmd, options);
+		log.info(`sudo command executed successfully`);
+	} catch (error) {
+		log.error(error);
+		throw error;
+	}
+}
+
+async function windocutor(cmd, options) {
+	if (!['win32', 'win64'].includes(currentOS)) {
+		throw new Error('Only for windows');
+	}
+	const PowerShell = require('node-powershell');
+	let ps = new PowerShell({
+		executionPolicy: 'Bypass',
+		noProfile: true
+	});
+	ps.addCommand(cmd);
+	try {
+		return await ps.invoke();
+	} catch (error) {
+		ps.dispose();
+		log.error(error);
+		throw error;
+	}
+}
+
+function ensureDirs(config) {
+	if (!fs.existsSync(config.lwsPath)) {
+		fs.mkdirSync(config.lwsPath);
+	}
+	if (!fs.existsSync(config.lwsKeyPath)) {
+		fs.mkdirSync(config.lwsKeyPath);
+	}
+}
+
+function checkKeys(config) {
+	return fs.existsSync(config.reqFile) && fs.existsSync(config.rsaFile);
+}
+
+function userPrompt(app, msgType) {
+	return new Promise((resolve, reject) => {
+		ipcMain.once('WSS_INSTALL', (event, install) => resolve(!!install));
+		app.win.webContents.send('WSS_USER_PROMPT', msgType);
+	});
+}
+
+async function runCertgen(config) {
+	try {
+		let exec = null;
+		for (let run of config.certgen) {
+			let { type, cmd, options } = run;
+			exec = executor;
+			if (type === 'sudo') exec = sudocutor;
+			if (type === 'windows') exec = windocutor;
+			await exec(cmd, options);
+		}
+	} catch (error) {
+		log.error(error);
+		throw error;
+	}
+}
+
+async function certs(config, app) {
+	ensureDirs(config);
+	if (checkKeys(config)) return true;
+	if (!(await userPrompt(app, 'install'))) return false;
+	let certgen = !!(await runCertgen(config));
+	await userPrompt(app, certgen ? 'success' : 'error');
+	return certgen;
+}
 
 export class LWSService {
-	constructor({ rpcHandler }) {
+	constructor({ rpcHandler, app }) {
 		this.wss = null;
+		this.secureWss = null;
+		this.httpServer = null;
 		this.rpcHandler = rpcHandler;
+		this.app = app;
 	}
 
 	checkWallet(publicKey, conn) {
@@ -137,24 +346,6 @@ export class LWSService {
 		}
 	}
 
-	genSignature(nonce, publicKey, privateKey) {
-		try {
-			const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce, 'hex'));
-			const signature = ethUtil.ecsign(msgHash, Buffer.from(privateKey, 'hex'));
-			return signature;
-		} catch (error) {
-			log.error(error);
-			return null;
-		}
-	}
-
-	stringifySignature(sig) {
-		sig = { ...sig };
-		sig.r = sig.r.toString('hex');
-		sig.s = sig.s.toString('hex');
-		return Buffer.from(JSON.stringify(sig), 'utf8').toString('base64');
-	}
-
 	async fetchNonce(url) {
 		try {
 			const resp = await fetch(url, {
@@ -198,13 +389,7 @@ export class LWSService {
 					conn
 				);
 			}
-
-			const signature = this.genSignature(
-				nonceResp.nonce,
-				msg.payload.publicKey,
-				check.privateKey
-			);
-
+			const signature = await selfkey.createSignature(nonceResp.nonce, check.privateKey);
 			if (!signature) {
 				return this.authResp(
 					{
@@ -218,38 +403,44 @@ export class LWSService {
 					conn
 				);
 			}
-			const body = {
+			let form = {
 				publicKey: msg.payload.publicKey,
 				nonce: nonceResp.nonce,
-				signature
+				signature: signature
 			};
-
 			if (msg.payload.attributes) {
-				body.attributes = msg.payload.attributes;
+				form.attributes = JSON.stringify(msg.payload.attributes);
 			}
-
-			let resp = await fetch(msg.payload.website.apiUrl, {
+			const options = {
+				url: msg.payload.website.apiUrl,
 				method: 'POST',
-				body: JSON.stringify(body),
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
 					'User-Agent': userAgent
-				}
-			});
-
-			let respData = (await resp.json()) || {};
-			let lwsResp = {
-				payload: respData
+				},
+				form: form
 			};
-			if (resp.status !== 200 || respData.error) {
-				lwsResp.error = true;
-				lwsResp.payload = {
-					code: respData.code || 'api_error',
-					message: respData.message || 'Unknown api error'
-				};
-			}
-			return this.authResp(lwsResp, msg, conn);
+			request.post(options, (err, resp, body) => {
+				let lwsResp = {};
+				try {
+					lwsResp = {
+						payload: JSON.parse(body)
+					};
+				} catch (e) {
+					lwsResp = {
+						payload: e
+					};
+				}
+				if (err) {
+					lwsResp.error = true;
+					lwsResp.payload = {
+						code: resp.statusCode,
+						message: resp
+					};
+				}
+				conn.send(lwsResp, msg);
+			});
 		} catch (error) {
 			return this.authResp(
 				{
@@ -327,7 +518,7 @@ export class LWSService {
 		);
 	}
 
-	async handleRequest(msg, conn) {
+	async handleSecureRequest(msg, conn) {
 		log.info('lws req %2j', msg);
 		switch (msg.type) {
 			case 'wallets':
@@ -343,9 +534,25 @@ export class LWSService {
 		}
 	}
 
+	async handleRequest(msg, conn) {
+		log.info('lws req %2j', msg);
+		switch (msg.type) {
+			case 'wss_init':
+				return this.startSecureServer(msg, conn);
+			default:
+				return this.reqUnknown(msg, conn);
+		}
+	}
+
 	handleConn(conn) {
 		log.info('ws connection established');
 		let wsConn = new WSConnection(conn, this);
+		wsConn.listen();
+	}
+
+	handleSecureConn(conn) {
+		log.info('wss connection established');
+		let wsConn = new WSConnection(conn, this, true);
 		wsConn.listen();
 	}
 
@@ -368,13 +575,62 @@ export class LWSService {
 		this.wss.on('connection', this.handleConn.bind(this));
 		this.wss.on('error', err => log.error(err));
 	}
-}
 
+	async startSecureServer(msg, conn) {
+		if (await checkPort(WSS_PORT)) {
+			log.info('wss already started');
+			return conn.send(
+				{
+					payload: { message: 'wss already started' }
+				},
+				msg
+			);
+		}
+
+		log.info('starting wss');
+		conn.send(
+			{
+				payload: { message: 'starting secure wss server' }
+			},
+			msg
+		);
+		const config = await init(); // gets config for cert gen
+
+		if (!(await certs(config, this.app))) {
+			log.info('error starting wss');
+			return conn.send(
+				{
+					error: true,
+					payload: { message: 'error starting wss' }
+				},
+				msg
+			);
+		}
+		this.httpsServer = https.createServer({
+			cert: fs.readFileSync(config.reqFile),
+			key: fs.readFileSync(config.rsaFile)
+		});
+		this.secureWss = new WebSocket.Server({
+			server: this.httpsServer
+		})
+			.on('connection', this.handleSecureConn.bind(this))
+			.on('error', err => log.error(err));
+		this.httpsServer.listen(WSS_PORT, () => log.info('wss listening on port ' + WSS_PORT));
+		log.info('secure wss server started');
+		conn.send(
+			{
+				payload: { message: 'secure wss server started' }
+			},
+			msg
+		);
+	}
+}
 export class WSConnection {
-	constructor(conn, service) {
+	constructor(conn, service, secure) {
 		this.conn = conn;
 		this.service = service;
 		this.msgId = 0;
+		this.secure = secure;
 		this.ctx = {
 			unlockedWallets: {}
 		};
@@ -391,7 +647,9 @@ export class WSConnection {
 	async handleMessage(msg) {
 		try {
 			msg = JSON.parse(msg);
-			await this.service.handleRequest(msg, this);
+			let { service } = this;
+			let handler = this.secure ? service.handleSecureRequest : service.handleRequest;
+			handler.call(service, msg, this);
 		} catch (error) {
 			log.error(error);
 			msg = typeof msg === 'string' ? {} : msg;

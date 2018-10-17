@@ -11,6 +11,10 @@ md-dialog.add-id-attribute(aria-label="Add ID Attribute")
             form.content
                 md-input-container
                     md-select.sk-select(ng-model="selectedKey", ng-keydown="ignoreEnterKey($event)")
+                        md-option(ng-value, selected) {{title}}
+                        md-select-header
+                            span
+
                         // global_attribute
                         md-option(ng-value="key", ng-repeat="(key, item) in globalAttributes") {{$root.DICTIONARY[key]}}
 

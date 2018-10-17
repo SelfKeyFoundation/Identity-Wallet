@@ -37,6 +37,9 @@ const init = args => async dispatch => {
 			...args
 		})
 	);
+	if (txInfoCheckInterval) {
+		clearInterval(txInfoCheckInterval);
+	}
 };
 
 const setAddress = address => async dispatch => {
@@ -56,26 +59,30 @@ const setAddress = address => async dispatch => {
 	}
 };
 
-const getGasLimit = async (newGasLimit, address, amount, walletAddress) => {
-	if (newGasLimit) {
-		return newGasLimit;
-	} else {
-		const web3Utils = getGlobalContext().web3Service.web3.utils;
-		const amountInHex = web3Utils.numberToHex(web3Utils.toWei(amount));
-
-		const params = {
-			method: 'estimateGas',
-			args: [
-				{
-					from: walletAddress,
-					to: address,
-					value: amountInHex
-				}
-			]
-		};
-
-		return getGlobalContext().web3Service.waitForTicket(params);
+const getGasLimit = async (
+	cryptoCurrency,
+	address,
+	amount,
+	walletAddress,
+	nonce,
+	tokenContract
+) => {
+	// Return default gas limit for Ethereum
+	if (cryptoCurrency === 'ETH') {
+		return 21000;
 	}
+
+	const web3Utils = getGlobalContext().web3Service.web3.utils;
+
+	const params = {
+		method: 'estimateGas',
+		contractAddress: tokenContract,
+		contractMethod: 'transfer',
+		contractMethodArgs: [address, web3Utils.toWei(amount)],
+		args: [{ from: walletAddress, gas: 4500000 }]
+	};
+
+	return getGlobalContext().web3Service.waitForTicket(params);
 };
 
 const getTransactionCount = async publicKey => {
@@ -96,18 +103,38 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 		const address = !newAddress ? state.transaction.address : newAddress;
 		const amount = !newAmount ? state.transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
-		const gasPrice = !newGasPrice
-			? state.ethGasStationInfo.ethGasStationInfo.average
-			: newGasPrice;
+
+		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
+		if (newGasPrice) {
+			gasPrice = newGasPrice;
+		} else if (state.transaction.gasPrice) {
+			gasPrice = state.transaction.gasPrice;
+		}
 
 		if (address && amount) {
-			let gasLimit = await getGasLimit(newGasLimit, address, amount, walletAddress);
+			const tokenContract = state.transaction.contractAddress;
+			const nonce = await getTransactionCount(walletAddress);
+			const cryptoCurrency = state.transaction.cryptoCurrency;
+
+			let gasLimit = 21000;
+			if (newGasLimit) {
+				gasLimit = newGasLimit;
+			} else if (state.transaction.gasLimit) {
+				gasLimit = state.transaction.gasLimit;
+			} else {
+				gasLimit = await getGasLimit(
+					cryptoCurrency,
+					address,
+					amount,
+					walletAddress,
+					nonce,
+					tokenContract
+				);
+			}
 
 			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
 			const feeInWei = String(Math.round(gasPriceInWei * gasLimit));
 			const feeInEth = getGlobalContext().web3Service.web3.utils.fromWei(feeInWei, 'ether');
-
-			const nonce = await getTransactionCount(walletAddress);
 
 			await dispatch(
 				actions.updateTransaction({
@@ -214,7 +241,6 @@ const startSend = () => async (dispatch, getState) => {
 		);
 		rawTx.data = EthUtils.sanitizeHex(data);
 	}
-
 	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
 	if (signedHex) {
 		await dispatch(
@@ -235,27 +261,29 @@ const cancelSend = () => async dispatch => {
 	);
 };
 
-const updateBalances = oldBalance => async (dispatch, getState) => {
+const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
+
+	// the first one is ETH
+	let tokens = getTokens(getState()).splice(1);
+
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
-	await dispatch(
-		walletTokensOperations.updateWalletTokensWithBalance(
-			getTokens(getState()),
-			wallet.publicKey
-		)
-	);
+	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey));
 
 	const currentWallet = getWallet(getState());
 	if (oldBalance === currentWallet.balance) {
 		setTimeout(() => {
-			dispatch(updateBalances(oldBalance));
+			dispatch(updateBalances(oldBalance, txHash));
 		}, TX_CHECK_INTERVAL);
 	} else {
-		await dispatch(
-			actions.updateTransaction({
-				status: 'Sent!'
-			})
-		);
+		const transaction = getTransaction(getState());
+		if (transaction.transactionHash === txHash) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Sent!'
+				})
+			);
+		}
 	}
 };
 
@@ -269,7 +297,7 @@ const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
 		if (txInfo && txInfo.blockNumber !== null) {
 			const status = Number(txInfo.status);
 			if (status) {
-				dispatch(updateBalances(oldBalance));
+				dispatch(updateBalances(oldBalance, txHash));
 			}
 			clearInterval(txInfoCheckInterval);
 		}
@@ -281,20 +309,20 @@ const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
 	dispatch(startTxCheck(transactionHash, currentWallet.balance));
 };
 
-const createTxHistry = () => (dispatch, getState) => {
+const createTxHistry = transactionHash => (dispatch, getState) => {
 	const wallet = getWallet(getState());
 	const transaction = getTransaction(getState());
 	const { cryptoCurrency } = transaction;
 	const tokenSymbol = cryptoCurrency === 'ETH' ? null : cryptoCurrency;
 	const data = {
+		...transaction,
 		tokenSymbol,
 		networkId: chainId,
 		from: wallet.publicKey,
 		to: transaction.address,
 		value: +transaction.amount,
-		gasPrice: transaction.gasPrice,
-		hash: transaction.transactionHash,
-		...transaction
+		gasPrice: +transaction.gasPrice,
+		hash: transactionHash
 	};
 
 	dispatch(actions.createTxHistory(data));
@@ -323,7 +351,7 @@ const confirmSend = () => async (dispatch, getState) => {
 		})
 	);
 
-	dispatch(createTxHistry());
+	dispatch(createTxHistry(transactionHash));
 
 	await dispatch(startTxBalanceUpdater(transactionHash));
 };

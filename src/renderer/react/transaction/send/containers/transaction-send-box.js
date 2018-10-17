@@ -27,7 +27,8 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	async onSendAction() {
-		if (this.props.isHardwareWallet) {
+		const { walletProfile } = this.props;
+		if (walletProfile === 'ledger') {
 			this.props.showConfirmTransactionInfoModal();
 		}
 		try {
@@ -36,7 +37,7 @@ class TransactionSendBoxContainer extends Component {
 			this.processSignTxError(error);
 		}
 
-		if (this.props.walletProfile === 'ledger') {
+		if (walletProfile === 'ledger') {
 			this.props.closeModal();
 		}
 	}
@@ -49,12 +50,12 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.setAmount(value));
 	}
 
-	handleGasPriceChange(field) {
-		this.props.dispatch(transactionOperations.setGasPrice(field.target.value));
+	handleGasPriceChange(value) {
+		this.props.dispatch(transactionOperations.setGasPrice(value));
 	}
 
-	handleGasLimitChange(field) {
-		this.props.dispatch(transactionOperations.setLimitPrice(field.target.value));
+	handleGasLimitChange(value) {
+		this.props.dispatch(transactionOperations.setLimitPrice(value));
 	}
 
 	handleConfirmActionError(err) {
@@ -90,8 +91,8 @@ class TransactionSendBoxContainer extends Component {
 				{...this.props}
 				reloadEthGasStationInfoAction={() => this.loadData()}
 				onAmountInputChange={value => this.handleAmountChange(value)}
-				changeGasPriceAction={e => this.handleGasPriceChange(e)}
-				changeGasLimitAction={e => this.handleGasLimitChange(e)}
+				changeGasPriceAction={value => this.handleGasPriceChange(value)}
+				changeGasLimitAction={value => this.handleGasLimitChange(value)}
 				confirmAction={() => this.handleConfirmAction()}
 				cancelAction={() => this.handleCancelAction()}
 				onCryptoCurrencyChange={value => this.handleCryptoCurrencyChange(value)}
@@ -106,7 +107,7 @@ const mapStateToProps = (state, props) => {
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		...transactionSelectors.getTransaction(state),
-		tokens: getTokens(state),
+		tokens: getTokens(state).splice(1), // remove ETH
 		cryptoCurrency: props.cryptoCurrency
 	};
 };
