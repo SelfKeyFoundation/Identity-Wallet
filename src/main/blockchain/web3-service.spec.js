@@ -56,6 +56,12 @@ const ethUtilMock = {
 	hexToNumber(hex) {
 		if (hex === '0x0') return 0;
 		return 1;
+	},
+	isHex(str) {
+		return true;
+	},
+	asciiToHex(str) {
+		return str;
 	}
 };
 
@@ -161,6 +167,29 @@ describe('Web3Service', () => {
 		expect(service.waitForTicket.getCall(0).args[0]).toEqual({
 			method: 'getTransactionReceipt',
 			args: [hash]
+		});
+	});
+
+	describe('ensureStrHex', () => {
+		it('convers ascii to hex if str not hex', () => {
+			service.web3.utils = ethUtilMock;
+			sinon.stub(ethUtilMock, 'isHex').returns(false);
+			sinon.stub(ethUtilMock, 'asciiToHex').returns('hex');
+
+			let str = service.ensureStrHex('str');
+			expect(ethUtilMock.isHex.calledOnceWith('str')).toBeTruthy();
+			expect(ethUtilMock.asciiToHex.calledOnceWith('str')).toBeTruthy();
+			expect(str).toEqual('hex');
+		});
+		it('does nothing if str is hex', () => {
+			service.web3.utils = ethUtilMock;
+			sinon.stub(ethUtilMock, 'isHex').returns(true);
+			sinon.stub(ethUtilMock, 'asciiToHex').returns('hex');
+
+			let str = service.ensureStrHex('str');
+			expect(ethUtilMock.isHex.calledOnceWith('str')).toBeTruthy();
+			expect(ethUtilMock.asciiToHex.calledOnceWith('str')).not.toBeTruthy();
+			expect(str).toEqual('str');
 		});
 	});
 	describe('checkTransactionStatus', () => {

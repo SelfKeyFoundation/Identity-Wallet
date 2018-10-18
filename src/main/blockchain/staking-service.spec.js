@@ -9,7 +9,10 @@ import sinon from 'sinon';
 jest.mock('node-fetch');
 
 const web3ServiceMock = {
-	async waitForTicket(ticket) {}
+	async waitForTicket(ticket) {},
+	ensureStrHex(str) {
+		return str;
+	}
 };
 
 const activeContract = {
@@ -83,7 +86,7 @@ describe('StackingService', () => {
 	it('placeStake', async () => {
 		await service.acquireContract();
 		sinon.stub(service.activeContract, 'deposit');
-		sinon.stub(service.tokenContract, 'approve');
+		sinon.stub(service.tokenContract, 'approve').resolves('1000');
 		sinon.stub(service.tokenContract, 'allowance').resolves(0);
 		await service.placeStake('test', 100, 'test', 'test');
 		expect(service.activeContract.deposit.calledOnce).toBeTruthy();

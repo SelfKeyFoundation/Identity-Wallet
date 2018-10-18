@@ -104,7 +104,12 @@ export class Web3Service {
 			args: [hash]
 		});
 	}
-
+	ensureStrHex(str) {
+		if (!this.web3.utils.isHex(str)) {
+			return this.web3.utils.asciiToHex(str);
+		}
+		return str;
+	}
 	async checkTransactionStatus(hash) {
 		let tx = await this.getTransaction(hash);
 		if (!tx) {
