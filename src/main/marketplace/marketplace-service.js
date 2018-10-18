@@ -37,7 +37,7 @@ export class MarketplaceService {
 		let blockchainTx = await this.stakingService.placeStake(
 			amount,
 			serviceOwner,
-			serviceId,
+			this.web3Service.web3.utils.toHex(serviceId),
 			options
 		);
 

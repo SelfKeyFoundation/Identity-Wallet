@@ -57,12 +57,12 @@ export class StakingService {
 				method: 'estimateGas',
 				value: '0x00'
 			});
-			depositGas = totalGas - approveGas;
+			depositGas = totalGas - approveGas.gas;
 		}
 		if (!hasAllowance) {
 			hashes.approve = await this.tokenContract.approve(this.activeContract.address, amount, {
 				...options,
-				gas: approveGas
+				gas: approveGas.gas
 			});
 		}
 		hashes.deposit = await this.activeContract.deposit(amount, serviceAddress, serviceId, {
@@ -199,7 +199,7 @@ export class StakingContract extends EtheriumContract {
 
 	deposit(amount, serviceAddress, serviceId, options) {
 		options = { method: 'send', ...options };
-		return this[options.method]({
+		return this.send({
 			args: [amount, serviceAddress, serviceId],
 			options,
 			method: 'deposit'
@@ -208,7 +208,7 @@ export class StakingContract extends EtheriumContract {
 
 	withdraw(serviceAddress, serviceId, options) {
 		options = { method: 'send', ...options };
-		return this[options.method]({
+		return this.send({
 			args: [serviceAddress, serviceId],
 			options,
 			method: 'withdraw'
@@ -239,7 +239,7 @@ export class SelfKeyTokenContract extends EtheriumContract {
 	}
 	approve(depositVaultAddress, maxAmmount, options) {
 		options = { method: 'send', ...options };
-		return this[options.method]({
+		return this.send({
 			args: [depositVaultAddress, maxAmmount],
 			options,
 			method: 'approve'
