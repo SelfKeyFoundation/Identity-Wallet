@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import _ from 'lodash';
 import { setGlobalContext } from '../context';
 import { exchangesSelectors } from '../exchanges';
-import {
+import reducer, {
 	initialState,
 	marketplacesSelectors,
 	marketplacesActions,
@@ -24,7 +24,11 @@ import {
 	updateTransactionReducer,
 	setTransactionsReducer,
 	setMarketplacePopupReducer,
-	setMarketplaceStateReducer
+	setMarketplaceStateReducer,
+	setCurrentTransactionReducer,
+	updateCurrentTransactionReducer,
+	clearCurrentTransactionReducer,
+	reducers
 } from '.';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
@@ -495,6 +499,9 @@ describe('marketplace actions', () => {
 });
 
 describe('marketplaceReducers', () => {
+	beforeEach(() => {
+		sinon.restore();
+	});
 	it('updateStakeReducer', () => {
 		let oldStake = { id: '0x0_global', test2: 'test2' };
 		let newStake = { serviceOwner: '0x0', serviceId: 'global', test: 'test1' };
@@ -633,7 +640,7 @@ describe('marketplaceReducers', () => {
 			displayedPopup: 'test'
 		});
 	});
-	describe('setMarketplaceDisplayedStateReducer', () => {
+	it('setMarketplaceDisplayedStateReducer', () => {
 		let state = {
 			displayedState: null
 		};
@@ -646,7 +653,100 @@ describe('marketplaceReducers', () => {
 			displayedState: 'test'
 		});
 	});
-	describe('clearCurrentTransactionReducer', () => {});
-	describe('setCurrentTransactionReducer', () => {});
-	describe('updateCurrentTransactionReducer', () => {});
+	it('clearCurrentTransactionReducer', () => {
+		let state = {
+			currentTransaction: { test: 'test1', test2: 'test2' }
+		};
+
+		let newState = clearCurrentTransactionReducer(
+			state,
+			marketplacesActions.clearCurrentTransactionAction()
+		);
+		expect(newState).toEqual({
+			currentTransaction: null
+		});
+	});
+	it('setCurrentTransactionReducer', () => {
+		let state = {
+			currentTransaction: null
+		};
+
+		let newState = setCurrentTransactionReducer(
+			state,
+			marketplacesActions.setCurrentTransactionAction({ test: 'test1', test2: 'test2' })
+		);
+		expect(newState).toEqual({
+			currentTransaction: { test: 'test1', test2: 'test2' }
+		});
+	});
+	it('updateCurrentTransactionReducer', () => {
+		let state = {
+			currentTransaction: { test: 'test1', test2: 'test2' }
+		};
+
+		let newState = updateCurrentTransactionReducer(
+			state,
+			marketplacesActions.updateCurrentTransactionAction({
+				test2: 'test3',
+				test5: 'test5'
+			})
+		);
+		expect(newState).toEqual({
+			currentTransaction: {
+				test: 'test1',
+				test2: 'test3',
+				test5: 'test5'
+			}
+		});
+	});
+	it('envokes update stake reducer', () => {
+		sinon.stub(reducers, 'updateStakeReducer');
+		reducer({}, marketplacesActions.updateStakeAction({}));
+		expect(reducers.updateStakeReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes set stakes reducer', () => {
+		sinon.stub(reducers, 'setStakesReducer');
+		reducer({}, marketplacesActions.setStakesAction({}));
+		expect(reducers.setStakesReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes add transaction reducer', () => {
+		sinon.stub(reducers, 'addTransactionReducer');
+		reducer({}, marketplacesActions.addTransactionAction({}));
+		expect(reducers.addTransactionReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes set transactions reducer', () => {
+		sinon.stub(reducers, 'setTransactionsReducer');
+		reducer({}, marketplacesActions.setTransactionsAction({}));
+		expect(reducers.setTransactionsReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes update transaction reducer', () => {
+		sinon.stub(reducers, 'updateTransactionReducer');
+		reducer({}, marketplacesActions.updateTransactionAction({}));
+		expect(reducers.updateTransactionReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes set marketplace popup reducer', () => {
+		sinon.stub(reducers, 'setMarketplacePopupReducer');
+		reducer({}, marketplacesActions.showMarketplacePopupAction({}));
+		expect(reducers.setMarketplacePopupReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes set marketplace state reducer', () => {
+		sinon.stub(reducers, 'setMarketplaceStateReducer');
+		reducer({}, marketplacesActions.displayMarketplaceStateAction({}));
+		expect(reducers.setMarketplaceStateReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes set current transaction reducer', () => {
+		sinon.stub(reducers, 'setCurrentTransactionReducer');
+		reducer({}, marketplacesActions.setCurrentTransactionAction({}));
+		expect(reducers.setCurrentTransactionReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes update current transaction reducer', () => {
+		sinon.stub(reducers, 'updateCurrentTransactionReducer');
+		reducer({}, marketplacesActions.updateCurrentTransactionAction({}));
+		expect(reducers.updateCurrentTransactionReducer.calledOnce).toBeTruthy();
+	});
+	it('envokes clear current transaction reducer', () => {
+		sinon.stub(reducers, 'clearCurrentTransactionReducer');
+		reducer({}, marketplacesActions.clearCurrentTransactionAction({}));
+		expect(reducers.clearCurrentTransactionReducer.calledOnce).toBeTruthy();
+	});
 });

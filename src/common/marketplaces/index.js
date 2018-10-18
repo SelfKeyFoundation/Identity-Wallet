@@ -377,6 +377,55 @@ export const setMarketplaceStateReducer = (state, { payload }) => {
 	return { ...state, displayedState: payload };
 };
 
-const reducer = (state = initialState, action) => state;
+export const setCurrentTransactionReducer = (state, { payload }) => {
+	return { ...state, currentTransaction: payload };
+};
+
+export const updateCurrentTransactionReducer = (state, { payload }) => {
+	return { ...state, currentTransaction: { ...state.currentTransaction, ...payload } };
+};
+
+export const clearCurrentTransactionReducer = state => {
+	return { ...state, currentTransaction: null };
+};
+
+export const reducers = {
+	updateStakeReducer,
+	setStakesReducer,
+	addTransactionReducer,
+	setTransactionsReducer,
+	updateTransactionReducer,
+	setMarketplaceStateReducer,
+	setMarketplacePopupReducer,
+	setCurrentTransactionReducer,
+	updateCurrentTransactionReducer,
+	clearCurrentTransactionReducer
+};
+
+const reducer = (state = initialState, action) => {
+	switch (action.type) {
+		case marketplacesTypes.MARKETPLACE_STAKES_UPDATE_ONE:
+			return reducers.updateStakeReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_STAKES_SET:
+			return reducers.setStakesReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_ADD:
+			return reducers.addTransactionReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_SET:
+			return reducers.setTransactionsReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_ONE:
+			return reducers.updateTransactionReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_STATE_SHOW:
+			return reducers.setMarketplaceStateReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_POPUP_SHOW:
+			return reducers.setMarketplacePopupReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_SET:
+			return reducers.setCurrentTransactionReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_UPDATE:
+			return reducers.updateCurrentTransactionReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR:
+			return reducers.clearCurrentTransactionReducer(state, action);
+	}
+	return state;
+};
 
 export default reducer;
