@@ -42,6 +42,7 @@ export class StakingService {
 	}
 	async placeStake(amount, serviceAddress, serviceId, options) {
 		let hashes = {};
+		serviceId = this.web3.ensureStrHex(serviceId);
 		options = { ...options };
 		let totalGas = options.gas;
 		let approveGas, depositGas;
@@ -52,17 +53,19 @@ export class StakingService {
 		);
 		let hasAllowance = allowance.gte(new BN(amount));
 		if (!hasAllowance && totalGas) {
-			approveGas = await this.tokenContract.approve(this.activeContract.address, amount, {
-				from: options.from,
-				method: 'estimateGas',
-				value: '0x00'
-			});
-			depositGas = totalGas - approveGas.gas;
+			approveGas = (
+				(await this.tokenContract.approve(this.activeContract.address, amount, {
+					from: options.from,
+					method: 'estimateGas',
+					value: '0x00'
+				})) || {}
+			).gas;
+			depositGas = totalGas - approveGas;
 		}
 		if (!hasAllowance) {
 			hashes.approve = await this.tokenContract.approve(this.activeContract.address, amount, {
 				...options,
-				gas: approveGas.gas
+				gas: approveGas
 			});
 		}
 		hashes.deposit = await this.activeContract.deposit(amount, serviceAddress, serviceId, {
@@ -72,6 +75,7 @@ export class StakingService {
 		return hashes;
 	}
 	async withdrawStake(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
 		if (!info.contract) throw new Error('no contract to withdraw from');
 		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
@@ -190,6 +194,7 @@ export class StakingContract extends EtheriumContract {
 	}
 
 	getBalance(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		return this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
@@ -198,6 +203,7 @@ export class StakingContract extends EtheriumContract {
 	}
 
 	deposit(amount, serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		options = { method: 'send', ...options };
 		return this.send({
 			args: [amount, serviceAddress, serviceId],
@@ -207,6 +213,7 @@ export class StakingContract extends EtheriumContract {
 	}
 
 	withdraw(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		options = { method: 'send', ...options };
 		return this.send({
 			args: [serviceAddress, serviceId],
@@ -216,6 +223,7 @@ export class StakingContract extends EtheriumContract {
 	}
 
 	getReleaseDate(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		return this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
@@ -224,6 +232,7 @@ export class StakingContract extends EtheriumContract {
 	}
 
 	getLockPeriod(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		return this.call({
 			args: [serviceAddress, serviceId],
 			options: { ...options },
