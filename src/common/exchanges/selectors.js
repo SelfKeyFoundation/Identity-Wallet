@@ -11,8 +11,8 @@ export const getExchanges = ({ exchanges }) => {
 			logoUrl: data.logo[0].url,
 			serviceOwner: data.serviceOwner || '0x0',
 			serviceId: data.serviceId || 'global',
-			lockPeriud: data.lockPeriod || 2592000000, // 30 days
-			amount: data.amount || 25
+			lockPeriod: data.lockPeriod || 2592000000, // 30 days
+			amount: data.requiredBalance || 25
 		};
 	});
 };

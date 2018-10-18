@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
-// import { marketplacesOperations } from 'common/marketplaces';
+import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { Unlock } from 'selfkey-ui';
@@ -10,7 +10,9 @@ const mapStateToProps = state => {
 	return {
 		fiat: getFiatCurrency(state),
 		ethPrice: pricesSelectors.getBySymbol(state, 'ETH'),
-		gas: ethGasStationInfoSelectors.getEthGasStationInfoWEI(state)
+		gas: ethGasStationInfoSelectors.getEthGasStationInfoWEI(state),
+		service: marketplacesSelectors.servicesSelector(state)[0],
+		gasLimit: 45000
 	};
 };
 
@@ -19,13 +21,22 @@ class UnlockController extends Component {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
 
-	handleConfirmAction() {
+	handleConfirmAction(fee) {
+		const { service, gasLimit } = this.props;
 		this.props.navigateToTransactionProgress();
-		// this.props.dispatch(marketplacesOperations.placeStake());
+		this.props.dispatch(
+			marketplacesOperations.placeStake(
+				service.serviceOwner,
+				service.serviceId,
+				service.amount,
+				fee,
+				gasLimit
+			)
+		);
 	}
 
 	render() {
-		const { closeAction, gas, fiat, ethPrice } = this.props;
+		const { closeAction, gas, fiat, ethPrice, gasLimit } = this.props;
 		console.log(this.props);
 		if (!gas.safeLow) {
 			return <div>Loading</div>;
@@ -35,11 +46,11 @@ class UnlockController extends Component {
 				minGasPrice={gas.safeLow}
 				maxGasPrice={gas.fast}
 				defaultValue={gas.avarage}
-				gasLimit={45000}
+				gasLimit={gasLimit}
 				fiat={fiat.fiatCurrency}
 				fiatRate={ethPrice.priceUSD}
 				onCancel={closeAction}
-				onConfirm={() => this.handleConfirmAction()}
+				onConfirm={fee => this.handleConfirmAction(fee)}
 			/>
 		);
 	}
