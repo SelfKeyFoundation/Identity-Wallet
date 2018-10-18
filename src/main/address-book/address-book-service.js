@@ -6,6 +6,6 @@ export class AddressBookService {
 	}
 
 	addEntry = entry => {
-		this.addressBook.add(entry);
+		AddressBook.query().insert(entry);
 	};
 }
