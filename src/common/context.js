@@ -13,7 +13,7 @@ import TrezorService from 'main/blockchain/trezor-service';
 import RpcHandler from 'main/rpc-handler';
 import { StakingService } from 'main/blockchain/staking-service';
 import EthGasStationService from 'main/blockchain/eth-gas-station-service';
-import AddressBookService from './address-book/address-book-service';
+import AddressBookService from 'main/address-book/address-book-service';
 
 let globalContext = null;
 

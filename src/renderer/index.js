@@ -1,7 +1,9 @@
 /* eslint-env browser */ /* global angular, staticPath */
 'use strict';
 import { react2angular } from 'react2angular';
-import { AddressBookWrapper } from './react/address-book/index';
+import { AddressBookWrapper } from './react/address-book/main/index';
+import { AddressBookAddWrapper } from './react/address-book/add/index';
+import { AddressBookEditWrapper } from './react/address-book/edit/index';
 import { PriceBoxWrapper } from './react/price-box/index';
 import { TokenBoxWrapper } from './react/token-box/index';
 import { CryptoChartBoxWrapper, CryptoPriceTableWrapper } from './react/my-crypto/index';
@@ -182,8 +184,18 @@ angular.module('kyc-wallet').directive('skTxHistory', SkTxHistoryDirective);
 /**
  * React Components
  */
-const addressBookWrapper = react2angular(AddressBookWrapper, []);
+const addressBookWrapper = react2angular(AddressBookWrapper, ['onAdd', 'onEdit']);
 angular.module('kyc-wallet').component('addressBook', addressBookWrapper);
+
+const addressBookAddWrapper = react2angular(AddressBookAddWrapper, ['closeAction', 'onCancel']);
+angular.module('kyc-wallet').component('addressBookAdd', addressBookAddWrapper);
+
+const addressBookEditWrapper = react2angular(AddressBookEditWrapper, [
+	'closeAction',
+	'onCancel',
+	'id'
+]);
+angular.module('kyc-wallet').component('addressBookEdit', addressBookEditWrapper);
 
 const cryptoPriceBox = react2angular(PriceBoxWrapper, [
 	'cryptoCurrency',
@@ -494,6 +506,18 @@ const MemberMarketplaceExchangeItemController = require('./angular/controllers/m
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
+
+/**
+ * Address Book
+ */
+const AddressBookMainController = require('./angular/controllers/member/address-book/main-controller.js');
+angular.module('kyc-wallet').controller('AddressBookMainController', AddressBookMainController);
+
+const AddressBookAddController = require('./angular/controllers/member/address-book/add-controller.js');
+angular.module('kyc-wallet').controller('AddressBookAddController', AddressBookAddController);
+
+const AddressBookEditController = require('./angular/controllers/member/address-book/edit-controller.js');
+angular.module('kyc-wallet').controller('AddressBookEditController', AddressBookEditController);
 
 /**
  * config states

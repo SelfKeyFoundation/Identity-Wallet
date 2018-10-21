@@ -4,13 +4,13 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import locale from '../locale';
 import fiatCurrency from '../fiatCurrency';
-import addressBook from '../addressBook';
 import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
 import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
+import addressBook from '../address-book';
 
 import {
 	forwardToMain,
@@ -36,13 +36,13 @@ export default (initialState, scope = 'main') => {
 	const rootReducer = combineReducers({
 		locale,
 		fiatCurrency,
-		addressBook,
 		wallet,
 		walletTokens,
 		viewAll,
 		prices,
 		ethGasStationInfo,
-		transaction
+		transaction,
+		addressBook
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

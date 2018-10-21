@@ -451,8 +451,31 @@ function appStates(
 			views: {
 				main: {
 					templateUrl: 'member/address-book/main.html',
-					controller: 'MemberIdWalletMainController'
+					controller: 'AddressBookMainController'
 				}
+			}
+		})
+
+		.state('member.address-book.add', {
+			url: '/member/address-book/add',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/add.html',
+					controller: 'AddressBookAddController'
+				}
+			}
+		})
+
+		.state('member.address-book.edit', {
+			url: '/member/address-book/edit',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/edit.html',
+					controller: 'AddressBookEditController'
+				}
+			},
+			params: {
+				data: {}
 			}
 		})
 
