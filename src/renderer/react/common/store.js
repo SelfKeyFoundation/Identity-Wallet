@@ -1,7 +1,7 @@
-import { getInitialStateRenderer } from 'electron-redux';
-import configureStore from 'common/store/configure-store';
+import { getGlobalContext, configureContext, setGlobalContext } from 'common/context';
 
-const initialState = getInitialStateRenderer();
-const store = configureStore(initialState, 'renderer');
+const ctx = getGlobalContext() || configureContext('renderer').cradle;
+setGlobalContext(ctx);
 
+const store = ctx.store;
 export default store;

@@ -10,7 +10,7 @@ export const getExchanges = ({ exchanges }) => {
 			description: data.description,
 			logoUrl: data.logo[0].url,
 			serviceOwner: data.serviceOwner || '0x0',
-			serviceId: data.serviceId || 'global',
+			serviceId: data.serviceId || 'global1',
 			lockPeriod: data.lockPeriod || 2592000000, // 30 days
 			amount: data.requiredBalance || 25
 		};
@@ -38,7 +38,16 @@ const getType = template => {
 };
 
 export const getItemDetails = ({ exchanges }, name) => {
-	let details = exchanges.byId[name].data;
+	let details = {
+		serviceOwner: '0x0',
+		serviceId: 'global1',
+		lockPeriod: 2592000000,
+		amount: 25,
+		...exchanges.byId[name].data
+	};
+	if (details.requiredBalance) {
+		details.amount = details.requiredBalance;
+	}
 	const kycTemplate = details.kyc_template.map(template => {
 		return {
 			name: template,
@@ -47,7 +56,7 @@ export const getItemDetails = ({ exchanges }, name) => {
 		};
 	});
 
-	details = { ...details, kyc_template: kycTemplate, integration: 'UNLOCK MARKETPLACE' };
+	details = { ...details, kyc_template: kycTemplate };
 	return details;
 };
 

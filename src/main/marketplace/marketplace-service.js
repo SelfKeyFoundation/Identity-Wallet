@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { MarketplaceTransactions } from './marketplace-transactions';
 import { getWallet } from '../../common/wallet/selectors';
 import CONFIG from '../../common/config';
+import BN from 'bignumber.js';
 
 export class MarketplaceService {
 	constructor({ store, stakingService, web3Service }) {
@@ -34,12 +35,17 @@ export class MarketplaceService {
 	}
 	async placeStake(serviceOwner, serviceId, amount, gasPrice, gas) {
 		let options = { from: this.walletAddress, gasPrice, gas };
-		let blockchainTx = await this.stakingService.placeStake(
-			amount,
-			serviceOwner,
-			serviceId,
-			options
-		);
+		amount = new BN(amount).times(new BN(10).pow(18)).toString();
+		let blockchainTx = [];
+		let tx = await this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
+
+		if (tx.approve) {
+			blockchainTx.push(tx.approve);
+		}
+
+		if (tx.deposit) {
+			blockchainTx.push(tx.deposit);
+		}
 
 		return MarketplaceTransactions.create({
 			serviceOwner,
@@ -55,16 +61,14 @@ export class MarketplaceService {
 	}
 	async withdrawStake(serviceOwner, serviceId, gasPrice, gas) {
 		let options = { from: this.walletAddress, gas, gasPrice };
-		let blockchainTx = await this.stakingService.withdrawStake(
-			serviceOwner,
-			serviceId,
-			options
-		);
+		let blockchainTx = [
+			await this.stakingService.withdrawStake(serviceOwner, serviceId, options)
+		];
 		return MarketplaceTransactions.create({
 			serviceOwner,
 			serviceId,
 			action: 'withdrawStake',
-			amount: 0,
+			amount: '0',
 			gasPrice,
 			gasLimit: gas,
 			networkId: CONFIG.chainId,

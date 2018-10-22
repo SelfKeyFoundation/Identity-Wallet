@@ -47,7 +47,6 @@ export class Web3Service {
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
 		let contract = web3.eth;
-
 		if (contractAddress) {
 			contract = new Contract(customAbi || ABI, contractAddress);
 			if (contractMethod) {
@@ -110,6 +109,12 @@ export class Web3Service {
 		}
 		return str;
 	}
+	ensureIntHex(num) {
+		if (!this.web3.utils.isHex(num)) {
+			return this.web3.utils.numberToHex(num);
+		}
+		return num;
+	}
 	async checkTransactionStatus(hash) {
 		let tx = await this.getTransaction(hash);
 		if (!tx) {
@@ -119,7 +124,11 @@ export class Web3Service {
 			return 'processing';
 		}
 		let receipt = await this.getTransactionReceipt(hash);
-		if (!this.web3.utils.hexToNumber(receipt.status)) {
+		let status = receipt.status;
+		if (typeof status !== 'boolean') {
+			status = this.web3.utils.hexToNumber(receipt.status);
+		}
+		if (!status) {
 			return 'failed';
 		}
 		return 'success';
@@ -153,7 +162,6 @@ export class Web3Service {
 				value: this.web3.utils.toHex(0)
 			});
 		}
-
 		let data = contactMethodInstance.encodeABI();
 		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
 		if (nonce === this.nonce) {

@@ -12,6 +12,9 @@ const web3ServiceMock = {
 	async waitForTicket(ticket) {},
 	ensureStrHex(str) {
 		return str;
+	},
+	ensureIntHex(num) {
+		return num;
 	}
 };
 

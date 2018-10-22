@@ -88,6 +88,10 @@ export const loadTransactionsOperation = () => async (dispatch, getState) => {
 	let transactions = await Promise.all(
 		services.map(service => mpService.loadTransactions(service.serviceOwner, service.serviceId))
 	);
+
+	transactions = transactions.reduce((acc, curr) => {
+		return acc.concat(curr);
+	}, []);
 	await dispatch(marketplacesActions.setTransactionsAction(transactions));
 };
 
@@ -328,6 +332,7 @@ export const updateStakeReducer = (state, { payload }) => {
 export const setStakesReducer = (state, { payload }) => {
 	let newState = payload.reduce(
 		(acc, curr) => {
+			curr.serviceOwner = curr.serviceOwner || curr.serviceAddress;
 			let id = curr.id || `${curr.serviceOwner}_${curr.serviceId}`;
 			acc.stakes.push(id);
 			acc.stakesById[id] = { ...curr, id };
