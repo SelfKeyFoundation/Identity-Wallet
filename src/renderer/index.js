@@ -19,13 +19,13 @@ import { UnlockProgressWrapper } from './react/marketplace/progress';
 
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
-import { setGlobalContext, configureContext } from 'common/context';
+import { setGlobalContext, configureContext, getGlobalContext } from 'common/context';
 
 const { Logger } = require('common/logger');
 
 dotenv.config();
 
-const ctx = configureContext('renderer').cradle;
+const ctx = getGlobalContext() || configureContext('renderer').cradle;
 setGlobalContext(ctx);
 
 const path = require('path');

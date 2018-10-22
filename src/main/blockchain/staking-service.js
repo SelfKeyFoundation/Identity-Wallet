@@ -42,7 +42,6 @@ export class StakingService {
 	}
 	async placeStake(amount, serviceAddress, serviceId, options) {
 		let hashes = {};
-		serviceId = this.web3.ensureStrHex(serviceId);
 		options = { ...options };
 		let totalGas = options.gas;
 		let approveGas, depositGas;
@@ -193,17 +192,19 @@ export class StakingContract extends EtheriumContract {
 		this.isDeprecated = isDeprecated;
 	}
 
-	getBalance(serviceAddress, serviceId, options) {
+	async getBalance(serviceAddress, serviceId, options) {
 		serviceId = this.web3.ensureStrHex(serviceId);
-		return this.call({
+		let res = await this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
 			method: 'balances'
 		});
+		return res.res;
 	}
 
 	deposit(amount, serviceAddress, serviceId, options) {
 		serviceId = this.web3.ensureStrHex(serviceId);
+		amount = this.web3.ensureIntHex(amount);
 		options = { method: 'send', ...options };
 		return this.send({
 			args: [amount, serviceAddress, serviceId],
@@ -222,22 +223,24 @@ export class StakingContract extends EtheriumContract {
 		});
 	}
 
-	getReleaseDate(serviceAddress, serviceId, options) {
+	async getReleaseDate(serviceAddress, serviceId, options) {
 		serviceId = this.web3.ensureStrHex(serviceId);
-		return this.call({
+		let res = await this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
 			method: 'releaseDates'
 		});
+		return res.res;
 	}
 
-	getLockPeriod(serviceAddress, serviceId, options) {
+	async getLockPeriod(serviceAddress, serviceId, options) {
 		serviceId = this.web3.ensureStrHex(serviceId);
-		return this.call({
+		let res = await this.call({
 			args: [serviceAddress, serviceId],
 			options: { ...options },
 			method: 'lockPeriods'
 		});
+		return res.res;
 	}
 }
 
@@ -246,10 +249,11 @@ export class SelfKeyTokenContract extends EtheriumContract {
 		super(web3, token.address, SELFKEY_ABI);
 		this.token = token;
 	}
-	approve(depositVaultAddress, maxAmmount, options) {
+	approve(depositVaultAddress, maxAmount, options) {
 		options = { method: 'send', ...options };
+		maxAmount = this.web3.ensureIntHex(maxAmount);
 		return this.send({
-			args: [depositVaultAddress, maxAmmount],
+			args: [depositVaultAddress, maxAmount],
 			options,
 			method: 'approve'
 		});
@@ -260,7 +264,7 @@ export class SelfKeyTokenContract extends EtheriumContract {
 			args: [options.from, depositVaultAddress],
 			options: { ...options },
 			method: 'allowance'
-		});
+		}).res;
 	}
 }
 

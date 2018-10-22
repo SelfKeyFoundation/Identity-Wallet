@@ -12,7 +12,7 @@ export class MarketplaceTransactions extends BaseModel {
 			serviceOwner: { type: 'string' },
 			serviceId: { type: 'string' },
 			action: { type: 'string' },
-			amount: { type: 'number', default: 0 },
+			amount: { type: ['string', 'number'], default: '0' },
 			gasPrice: { type: 'number', default: 0 },
 			gasLimit: { type: 'number', default: 0 },
 			networkId: { type: 'number' },

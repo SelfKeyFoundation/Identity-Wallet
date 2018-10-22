@@ -62,6 +62,9 @@ const ethUtilMock = {
 	},
 	asciiToHex(str) {
 		return str;
+	},
+	numberToHex(num) {
+		return num;
 	}
 };
 
@@ -189,6 +192,28 @@ describe('Web3Service', () => {
 			let str = service.ensureStrHex('str');
 			expect(ethUtilMock.isHex.calledOnceWith('str')).toBeTruthy();
 			expect(ethUtilMock.asciiToHex.calledOnceWith('str')).not.toBeTruthy();
+			expect(str).toEqual('str');
+		});
+	});
+	describe('ensureIntHex', () => {
+		it('convers int to hex if int not hex', () => {
+			service.web3.utils = ethUtilMock;
+			sinon.stub(ethUtilMock, 'isHex').returns(false);
+			sinon.stub(ethUtilMock, 'numberToHex').returns('hex');
+
+			let str = service.ensureIntHex('str');
+			expect(ethUtilMock.isHex.calledOnceWith('str')).toBeTruthy();
+			expect(ethUtilMock.numberToHex.calledOnceWith('str')).toBeTruthy();
+			expect(str).toEqual('hex');
+		});
+		it('does nothing if int is hex', () => {
+			service.web3.utils = ethUtilMock;
+			sinon.stub(ethUtilMock, 'isHex').returns(true);
+			sinon.stub(ethUtilMock, 'numberToHex').returns('hex');
+
+			let str = service.ensureIntHex('str');
+			expect(ethUtilMock.isHex.calledOnceWith('str')).toBeTruthy();
+			expect(ethUtilMock.numberToHex.calledOnceWith('str')).not.toBeTruthy();
 			expect(str).toEqual('str');
 		});
 	});

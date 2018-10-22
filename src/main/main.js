@@ -4,7 +4,6 @@
 import path from 'path';
 import fs from 'fs';
 import isOnline from 'is-online';
-import dotenv from 'dotenv';
 import electron from 'electron';
 import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
@@ -19,7 +18,6 @@ import { handleSquirrelEvent, appUpdater } from './autoupdater';
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
-dotenv.config();
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = getWalletsDir();

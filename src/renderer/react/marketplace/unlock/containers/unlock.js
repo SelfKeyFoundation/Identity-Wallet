@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 		ethPrice: pricesSelectors.getBySymbol(state, 'ETH'),
 		gas: ethGasStationInfoSelectors.getEthGasStationInfoWEI(state),
 		service: marketplacesSelectors.servicesSelector(state)[0],
-		gasLimit: 45000
+		gasLimit: 200000
 	};
 };
 
@@ -37,7 +37,6 @@ class UnlockController extends Component {
 
 	render() {
 		const { closeAction, gas, fiat, ethPrice, gasLimit } = this.props;
-		console.log(this.props);
 		if (!gas.safeLow) {
 			return <div>Loading</div>;
 		}

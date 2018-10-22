@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
+const dotenv = require('dotenv');
 const {
 	isDevMode,
 	isDebugMode,
@@ -9,9 +10,13 @@ const {
 	getUserDataPath
 } = require('./utils/common');
 
+dotenv.config();
+
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;
 const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+
+console.log('XXX', PRIMARY_TOKEN);
 
 const common = {
 	defaultLanguage: 'en',
