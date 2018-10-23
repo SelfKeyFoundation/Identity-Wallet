@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { asClass, asValue, asFunction, createContainer, InjectionMode } from 'awilix';
 
 import PriceService from '../main/token/price-service';

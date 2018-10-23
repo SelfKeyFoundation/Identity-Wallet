@@ -528,7 +528,7 @@ describe('marketplaceReducers', () => {
 		let oldStake = { id: '0x0_global', test2: 'test2' };
 		let newStakes = [
 			{ serviceOwner: '0x0', serviceId: 'global', test: 'test1' },
-			{ serviceOwner: '0x1', serviceId: 'global1', test: 'test12' }
+			{ serviceOwner: '0x1', serviceId: 'global', test: 'test12' }
 		];
 		let state = {
 			test: 'test',
@@ -539,7 +539,7 @@ describe('marketplaceReducers', () => {
 
 		expect(newState).toEqual({
 			test: 'test',
-			stakes: ['0x0_global', '0x1_global1'],
+			stakes: ['0x0_global', '0x1_global'],
 			stakesById: {
 				'0x0_global': {
 					id: '0x0_global',
@@ -547,10 +547,10 @@ describe('marketplaceReducers', () => {
 					serviceId: 'global',
 					test: 'test1'
 				},
-				'0x1_global1': {
-					id: '0x1_global1',
+				'0x1_global': {
+					id: '0x1_global',
 					serviceOwner: '0x1',
-					serviceId: 'global1',
+					serviceId: 'global',
 					test: 'test12'
 				}
 			}

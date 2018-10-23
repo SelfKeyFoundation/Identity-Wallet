@@ -66,6 +66,15 @@ describe('selectors', () => {
 			},
 			{
 				id: 1,
+				name: 'Selfkey',
+				priceBTC: 1,
+				priceETH: 31.288316997525087,
+				priceUSD: 6513.00400614,
+				source: 'https://coincap.io',
+				symbol: 'KI'
+			},
+			{
+				id: 1,
 				name: 'Ethereum',
 				priceBTC: 1,
 				priceETH: 31.288316997525087,
@@ -111,6 +120,24 @@ describe('selectors', () => {
 				tokenId: 1,
 				updatedAt: 1536856439488,
 				walletId: 1
+			},
+			{
+				address: '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7',
+				balance: '30',
+				balanceInFiat: 0.01068399626228,
+				createdAt: 1536856439488,
+				decimal: 18,
+				hidden: 0,
+				id: 1,
+				isCustom: 0,
+				name: 'Selfkey',
+				price: 0.00534199813114,
+				priceUSD: 0.00534199813114,
+				recordState: 1,
+				symbol: 'KI',
+				tokenId: 1,
+				updatedAt: 1536856439488,
+				walletId: 1
 			}
 		]
 	};
@@ -126,7 +153,7 @@ describe('selectors', () => {
 				serviceOwner: '0x0',
 				serviceId: 'global',
 				amount: 25,
-				lockPeriud: 2592000000
+				lockPeriod: 2592000000
 			}
 		];
 		expect(getExchanges({ exchanges })).toEqual(expectedExchanges);
@@ -171,12 +198,16 @@ describe('selectors', () => {
 			Code: 'UK1e',
 			'Buy/Sell Fee': '1.49%',
 			year_launched: 2013,
-			integration: 'UNLOCK MARKETPLACE',
+			lockPeriod: 2592000000,
+			serviceId: 'global',
+			serviceOwner: '0x0',
+			integration: 'Coming Soon',
 			Type: [Array],
 			name: 'Gatecoin',
 			'Device availability': [Array],
 			Company: 'Coinbase UK, Ltd, Coinbase Inc',
 			requiredBalance: 25,
+			amount: 25,
 			'Accepts Fiat': true,
 			'Personal Account': true,
 			Languages: [Array],
@@ -189,19 +220,21 @@ describe('selectors', () => {
 
 	it('should return exchange hasBalance when amount of key is over the required balance', () => {
 		walletTokens.tokens[0].balance = '30';
+		walletTokens.tokens[1].balance = '30';
 
 		expect(hasBalance({ exchanges, walletTokens, prices, wallet }, 'Gatecoin')).toBeTruthy();
 	});
 
 	it('should return exchange hasBalance when amount of key is equal the required balance', () => {
 		walletTokens.tokens[0].balance = '25';
+		walletTokens.tokens[1].balance = '25';
 
 		expect(hasBalance({ exchanges, walletTokens, prices, wallet }, 'Gatecoin')).toBeTruthy();
 	});
 
 	it('should return exchange hasBalance false when amount of key is less than required balance', () => {
 		walletTokens.tokens[0].balance = '20';
-
+		walletTokens.tokens[1].balance = '20';
 		expect(hasBalance({ exchanges, walletTokens, prices, wallet }, 'Gatecoin')).toBeFalsy();
 	});
 });

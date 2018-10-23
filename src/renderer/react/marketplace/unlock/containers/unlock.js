@@ -19,6 +19,8 @@ const mapStateToProps = state => {
 class UnlockController extends Component {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
+		this.props.dispatch(marketplacesOperations.loadTransactions());
+		this.props.dispatch(marketplacesOperations.loadStakes());
 	}
 
 	handleConfirmAction(fee) {
