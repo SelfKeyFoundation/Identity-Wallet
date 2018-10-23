@@ -39,8 +39,9 @@ function appStart() {
 // }
 
 function appStop() {
-	if (this.app && this.app.isRunning()) {
-		return this.app.stop();
+	if (app && app.isRunning()) {
+		app.stop();
+		return app.stop();
 	}
 	return undefined;
 }

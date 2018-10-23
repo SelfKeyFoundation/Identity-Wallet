@@ -182,12 +182,28 @@ describe('address book operations', () => {
 			address: '0xdasdas'
 		};
 
+		const entries = [
+			{
+				id: 1,
+				label: 'one',
+				address: '0x',
+				walletId: 1
+			},
+			{
+				id: 2,
+				label: 'two',
+				address: '0x4',
+				walletId: 1
+			}
+		];
+
 		setGlobalContext({ addressBookService });
 
 		it('validateAddress happy path', async () => {
-			const address = '0x';
+			const address = '0xgdsgdsgds555';
 			sinon.stub(addressBookService, 'isValidAddress').returns(true);
 			sinon.stub(walletSelectors, 'getWallet').returns(wallet);
+			sinon.stub(addressSelectors, 'getAddresses').returns(entries);
 			sinon.stub(store, 'dispatch');
 			sinon.stub(actions, 'setAddressError').returns(testAction);
 
@@ -200,9 +216,10 @@ describe('address book operations', () => {
 		});
 
 		it('validateAddress not a valid address ', async () => {
-			const address = '0x';
+			const address = '0x432423423';
 			sinon.stub(addressBookService, 'isValidAddress').returns(false);
 			sinon.stub(walletSelectors, 'getWallet').returns(wallet);
+			sinon.stub(addressSelectors, 'getAddresses').returns(entries);
 			sinon.stub(store, 'dispatch');
 			sinon.stub(actions, 'setAddressError').returns(testAction);
 
@@ -218,6 +235,7 @@ describe('address book operations', () => {
 			const address = '0xdasdas';
 			sinon.stub(addressBookService, 'isValidAddress').returns(true);
 			sinon.stub(walletSelectors, 'getWallet').returns(wallet);
+			sinon.stub(addressSelectors, 'getAddresses').returns(entries);
 			sinon.stub(store, 'dispatch');
 			sinon.stub(actions, 'setAddressError').returns(testAction);
 
@@ -227,6 +245,24 @@ describe('address book operations', () => {
 			);
 			expect(
 				actions.setAddressError.calledOnceWith(`Sorry, you can't add your current address.`)
+			).toBeTruthy();
+			expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+		});
+
+		it('validateAddress already added ', async () => {
+			const address = '0x4';
+			sinon.stub(addressBookService, 'isValidAddress').returns(true);
+			sinon.stub(walletSelectors, 'getWallet').returns(wallet);
+			sinon.stub(addressSelectors, 'getAddresses').returns(entries);
+			sinon.stub(store, 'dispatch');
+			sinon.stub(actions, 'setAddressError').returns(testAction);
+
+			await addressBookOperations.validateAddress(address)(
+				store.dispatch,
+				store.getState.bind(store)
+			);
+			expect(
+				actions.setAddressError.calledOnceWith(`Address is already being used.`)
 			).toBeTruthy();
 			expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 		});

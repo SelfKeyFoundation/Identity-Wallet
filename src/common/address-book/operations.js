@@ -56,8 +56,11 @@ const validateAddress = address => async (dispatch, getState) => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	const isValidAddress = addressBookService.isValidAddress(address);
 	const currentWalletAddress = walletSelectors.getWallet(getState()).address;
+	const existentAddress = getAddresses(getState()).filter(entry => {
+		return entry.address === address;
+	});
 
-	if (isValidAddress && currentWalletAddress !== address) {
+	if (isValidAddress && currentWalletAddress !== address && existentAddress.length === 0) {
 		await dispatch(actions.setAddressError(''));
 	}
 
@@ -67,6 +70,10 @@ const validateAddress = address => async (dispatch, getState) => {
 
 	if (currentWalletAddress === address) {
 		await dispatch(actions.setAddressError(`Sorry, you can't add your current address.`));
+	}
+
+	if (existentAddress.length > 0) {
+		await dispatch(actions.setAddressError('Address is already being used.'));
 	}
 };
 

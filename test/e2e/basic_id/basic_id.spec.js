@@ -1,10 +1,11 @@
 const tools = require('../../utils/tools.js');
 const delay = require('delay');
 const data = require('../../data/data.json');
+jest.setTimeout(30000);
 
 describe('Creates a New Wallet with Basic ID Details and a Password', () => {
-	before(tools.appStart);
-	after(tools.appStop);
+	beforeAll(tools.appStart);
+	afterAll(tools.appStop);
 
 	it('PRE: Accepts The TOC and Confirms Setup Wallet', () => {
 		return tools

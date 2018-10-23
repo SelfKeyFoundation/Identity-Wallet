@@ -1202,6 +1202,11 @@
   resolved "https://registry.yarnpkg.com/@types/google.visualization/-/google.visualization-0.0.42.tgz#1ca0ac9a30e37b3917d9d30f076af316cc2a9fb9"
   integrity sha512-G6OoQbBFFm3P+NDfi9N7B+QNP80eV0u0zk4otohdK2T/lwYJg+IrOiDtwiZlyyvY3Kpn4PnJ8UErk2czcG1J0g==
 
+"@types/jest@^23.1.5":
+  version "23.3.5"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.5.tgz#870a1434208b60603745bfd214fc3fc675142364"
+  integrity sha512-3LI+vUC3Wju28vbjIjsTKakhMB8HC4l+tMz+Z8WRzVK+kmvezE5jcOvKtBpznWSI5KDLFo+FouUhpTKoekadCA==
+
 "@types/jss@^9.5.3":
   version "9.5.6"
   resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.5.6.tgz#96e1d246ddfbccc4867494077c714773cf29acde"
@@ -1226,6 +1231,11 @@
   version "10.11.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.5.tgz#6489ebda4452592d3fd37aefa57eedc01ed13378"
   integrity sha512-3j1EFLfrjYRHRFjBb+RIXXwr1YGzcfpQVMP39thZa6tMY+JjVgQddPF+hsdV800JqbuLwpwAWclDpbGSAw44vQ==
+
+"@types/node@^10.5.2":
+  version "10.12.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.0.tgz#ea6dcbddbc5b584c83f06c60e82736d8fbb0c235"
+  integrity sha512-3TUHC3jsBAB7qVRGxT6lWyYo2v96BMmD2PTcl47H25Lu7UXtFH/2qqmKiVrnel6Ne//0TFYf6uvNX+HW2FRkLQ==
 
 "@types/node@^8.0.24":
   version "8.10.35"
@@ -7570,6 +7580,11 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+gherkin@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/gherkin/-/gherkin-5.1.0.tgz#684bbb03add24eaf7bdf544f58033eb28fb3c6d5"
+  integrity sha1-aEu7A63STq9731RPWAM+so+zxtU=
+
 git-raw-commits@^1.3.0:
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/git-raw-commits/-/git-raw-commits-1.3.6.tgz#27c35a32a67777c1ecd412a239a6c19d71b95aff"
@@ -9468,6 +9483,16 @@ jest-config@^23.6.0:
     micromatch "^2.3.11"
     pretty-format "^23.6.0"
 
+jest-cucumber@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/jest-cucumber/-/jest-cucumber-1.0.11.tgz#356f39d9542da6c769dc50244d57fdc206d1b099"
+  integrity sha512-//utkdxmTRbXWWY175WlUyAWiUd9ZRG8sKry84gTK1GZVOtw6LjQXeiHBXCN+XHTT59/isda+vPPnLVlVFNz0A==
+  dependencies:
+    "@types/jest" "^23.1.5"
+    "@types/node" "^10.5.2"
+    gherkin "^5.0.0"
+    jest "^23.3.0"
+
 jest-diff@^23.6.0:
   version "23.6.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-23.6.0.tgz#1500f3f16e850bb3d71233408089be099f610c7d"
@@ -9713,7 +9738,7 @@ jest-worker@^23.2.0:
   dependencies:
     merge-stream "^1.0.1"
 
-jest@^23.5.0:
+jest@^23.3.0, jest@^23.5.0:
   version "23.6.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-23.6.0.tgz#ad5835e923ebf6e19e7a1d7529a432edfee7813d"
   integrity sha512-lWzcd+HSiqeuxyhG+EnZds6iO3Y3ZEnMrfZq/OTGvF/C+Z4fPMCdhWTGSAiO2Oym9rbEXfwddHhh6jqrTF3+Lw==
@@ -14739,9 +14764,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#897c4973614b0615a422967548cfdf714e5b33a0":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#1a4e25d688e1136554638354b7c2ba80533cfedf":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#897c4973614b0615a422967548cfdf714e5b33a0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#1a4e25d688e1136554638354b7c2ba80533cfedf"
   dependencies:
     "@material-ui/core" "^1.3.1"
     "@material-ui/icons" "^1.1.0"

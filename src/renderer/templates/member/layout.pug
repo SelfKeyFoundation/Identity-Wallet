@@ -17,7 +17,7 @@ md-sidenav.md-sidenav-right(md-component-id="right")
                 .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.id-wallet')", id="selfkeyIdButton", ng-click="navigateToCreateId()")
                     md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/selfkey_id_16px.svg')}}")
                     span SelfKey ID
-                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.address-book')", ng-click="$root.navigate($event, 'member.address-book.main')")
+                .sk-right-sidenav__top-section__item(ng-class="getSelectedClass('member.address-book')", id="addressBookButton", ng-click="$root.navigate($event, 'member.address-book.main')")
                     md-icon(md-svg-src="{{$root.appendStaticPath('assets/images/icons/selfkey_id_16px.svg')}}")
                     span Address book
 
