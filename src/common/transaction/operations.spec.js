@@ -10,6 +10,10 @@ describe('operations', () => {
 	it('should call updateTransaction action', async () => {
 		const store = mockStore({});
 
+		const extraParams = {
+			trezorAccountIndex: 0,
+			cryptoCurrency: 'ETH'
+		};
 		const expectedActions = [
 			operations.updateTransaction({
 				address: '',
@@ -23,11 +27,12 @@ describe('operations', () => {
 				transactionHash: '',
 				addressError: false,
 				sending: false,
-				cryptoCurrency: undefined
+				cryptoCurrency: undefined,
+				...extraParams
 			})
 		];
 
-		await store.dispatch(operations.init());
+		await store.dispatch(operations.init(extraParams));
 		expect(store.getActions()).toEqual(expectedActions);
 	});
 

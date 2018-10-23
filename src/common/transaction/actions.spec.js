@@ -24,4 +24,13 @@ describe('actions', () => {
 		};
 		expect(actions.updateTransaction(transaction)).toEqual(expectedAction);
 	});
+
+	it('should create an action to update address error', () => {
+		const error = true;
+		const expectedAction = {
+			type: types.ADDRESS_ERROR_UPDATE,
+			payload: error
+		};
+		expect(actions.setAddressError(error)).toEqual(expectedAction);
+	});
 });
