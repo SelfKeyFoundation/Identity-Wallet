@@ -18,7 +18,6 @@ class AddressBookContainer extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	console.log('state', state);
 	return {
 		addresses: addressBookSelectors.getAddresses(state)
 	};

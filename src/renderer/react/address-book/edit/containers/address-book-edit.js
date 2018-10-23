@@ -34,7 +34,6 @@ class AddressBookEditContainer extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	console.log('props', props);
 	return {
 		labelError: addressBookSelectors.getLabelError(state),
 		label: addressBookSelectors.getLabel(state, props.id)
