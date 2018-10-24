@@ -40,7 +40,7 @@
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "jest -i --testPathPattern='src' --forceExit",
     "test:unit:coverage": "yarn test:unit --testPathPattern='src' --coverage",
-    "test:e2e": "jest -i --testPathPattern='test'",
+    "test:e2e": "jest -i --config='jest.e2e.config.js'",
     "publish-build": "yarn compile && electron-builder -p always",
     "precommit": "npm run check-deps-precommit && pretty-quick --staged && lint-staged",
     "commitmsg": "commitlint -E GIT_PARAMS",
