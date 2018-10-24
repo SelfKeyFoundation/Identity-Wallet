@@ -80,7 +80,6 @@ export class StakingService {
 		log.info('withdrawing stake for %s, %s, %2j', serviceAddress, serviceId, options);
 		serviceId = this.web3.ensureStrHex(serviceId);
 		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
-		log.info('info %2j', info);
 		if (!info.contract) throw new Error('no contract to withdraw from');
 		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
 			throw new Error('stake is locked');

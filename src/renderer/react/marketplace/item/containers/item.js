@@ -64,7 +64,6 @@ class ItemDetailsContainer extends Component {
 			item.integration = 'KEY Deposit';
 			unlockAction = null;
 		}
-		console.log('XXX', stake);
 		if (stake && +stake.balance && !+stake.releaseDay) {
 			item.status = 'unlocked';
 			item.integration = 'Return KEY Deposit';
