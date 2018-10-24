@@ -4,6 +4,9 @@ import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
 import { Token } from '../token/token';
 import BN from 'bignumber.js';
+import { Logger } from 'common/logger';
+
+const log = new Logger('staking-service');
 
 // TODO: use selfkey domain here
 const CONFIG_URL =
@@ -74,8 +77,10 @@ export class StakingService {
 		return hashes;
 	}
 	async withdrawStake(serviceAddress, serviceId, options) {
+		log.info('withdrawing stake for %s, %s, %2j', serviceAddress, serviceId, options);
 		serviceId = this.web3.ensureStrHex(serviceId);
 		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
+		log.info('info %2j', info);
 		if (!info.contract) throw new Error('no contract to withdraw from');
 		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
 			throw new Error('stake is locked');
