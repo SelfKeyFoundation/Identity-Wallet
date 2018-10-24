@@ -5,7 +5,7 @@ import { addressBookSelectors, addressBookOperations } from 'common/address-book
 
 class AddressBookContainer extends Component {
 	componentDidMount() {
-		this.props.dispatch(addressBookOperations.init());
+		this.props.dispatch(addressBookOperations.loadAddressBook());
 	}
 
 	handleDelete = id => {

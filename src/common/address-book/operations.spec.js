@@ -19,7 +19,7 @@ describe('address book operations', () => {
 		sinon.restore();
 	});
 
-	it('init', async () => {
+	it('loadAddressBook', async () => {
 		const wallet = {
 			id: 1
 		};
@@ -27,28 +27,28 @@ describe('address book operations', () => {
 		sinon.stub(store, 'dispatch');
 		sinon.stub(actions, 'loadAddressBookEntries').returns(testAction);
 
-		await addressBookOperations.init()(store.dispatch, store.getState.bind(store));
+		await addressBookOperations.loadAddressBook()(store.dispatch, store.getState.bind(store));
 
 		expect(walletSelectors.getWallet.calledOnceWith(state)).toBeTruthy();
 		expect(actions.loadAddressBookEntries.calledOnceWith(wallet.id)).toBeTruthy();
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
 
-	it('initAdd', async () => {
+	it('resetAdd', async () => {
 		sinon.stub(store, 'dispatch');
 		sinon.stub(actions, 'setLabelError').returns(testAction);
 		sinon.stub(actions, 'setAddressError').returns(testAction);
 
-		await addressBookOperations.initAdd()(store.dispatch, store.getState.bind(store));
+		await addressBookOperations.resetAdd()(store.dispatch, store.getState.bind(store));
 
 		expect(store.dispatch.alwaysCalledWith(testAction)).toBeTruthy();
 	});
 
-	it('initEdit', async () => {
+	it('resetEdit', async () => {
 		sinon.stub(store, 'dispatch');
 		sinon.stub(actions, 'setLabelError').returns(testAction);
 
-		await addressBookOperations.initEdit()(store.dispatch, store.getState.bind(store));
+		await addressBookOperations.resetEdit()(store.dispatch, store.getState.bind(store));
 
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});

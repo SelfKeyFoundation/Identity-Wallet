@@ -3,16 +3,16 @@ import { walletSelectors } from '../wallet';
 import { getAddresses } from './selectors';
 import { getGlobalContext } from '../context';
 
-const init = () => async (dispatch, getState) => {
+const loadAddressBook = () => async (dispatch, getState) => {
 	await dispatch(actions.loadAddressBookEntries(walletSelectors.getWallet(getState()).id));
 };
 
-const initAdd = () => async dispatch => {
+const resetAdd = () => async dispatch => {
 	await dispatch(actions.setLabelError(''));
 	await dispatch(actions.setAddressError(''));
 };
 
-const initEdit = () => async dispatch => {
+const resetEdit = () => async dispatch => {
 	await dispatch(actions.setLabelError(''));
 };
 
@@ -79,12 +79,12 @@ const validateAddress = address => async (dispatch, getState) => {
 
 export default {
 	...actions,
-	init,
+	loadAddressBook,
 	addAddressBookEntry,
 	editAddressBookEntry,
 	deleteAddressBookEntry,
 	validateLabel,
 	validateAddress,
-	initAdd,
-	initEdit
+	resetAdd,
+	resetEdit
 };

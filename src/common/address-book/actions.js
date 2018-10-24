@@ -26,33 +26,33 @@ const loadEntries = async walletId => {
 	return entries;
 };
 
-const addAddressBookEntry = createAliasedAction(types.ADD_ADDRESS_BOOK_ENTRY, entry => ({
-	type: types.ADD_ADDRESS_BOOK_ENTRY,
+const addAddressBookEntry = createAliasedAction(types.ADRESS_BOOK_ENTRY_ADD, entry => ({
+	type: types.ADRESS_BOOK_ENTRY_ADD,
 	payload: addEntry(entry)
 }));
 
-const editAddressBookEntry = createAliasedAction(types.EDIT_ADDRESS_BOOK_ENTRY, entry => ({
-	type: types.EDIT_ADDRESS_BOOK_ENTRY,
+const editAddressBookEntry = createAliasedAction(types.ADDRESS_BOOK_ENTRY_EDIT, entry => ({
+	type: types.ADDRESS_BOOK_ENTRY_EDIT,
 	payload: editEntry(entry)
 }));
 
-const deleteAddressBookEntry = createAliasedAction(types.DELETE_ADDRESS_BOOK_ENTRY, id => ({
-	type: types.DELETE_ADDRESS_BOOK_ENTRY,
+const deleteAddressBookEntry = createAliasedAction(types.ADDRESS_BOOK_ENTRY_DELETE, id => ({
+	type: types.ADDRESS_BOOK_ENTRY_DELETE,
 	payload: deleteEntry(id)
 }));
 
-const loadAddressBookEntries = createAliasedAction(types.LOAD_ADDRESS_BOOK_ENTRIES, walletId => ({
-	type: types.LOAD_ADDRESS_BOOK_ENTRIES,
+const loadAddressBookEntries = createAliasedAction(types.ADDRESS_BOOK_ENTRIES_LOAD, walletId => ({
+	type: types.ADDRESS_BOOK_ENTRIES_LOAD,
 	payload: loadEntries(walletId)
 }));
 
 const setLabelError = error => ({
-	type: types.SET_ADDRESS_BOOK_LABEL_ERROR,
+	type: types.ADDRESS_BOOK_LABEL_ERROR_SET,
 	payload: error
 });
 
 const setAddressError = error => ({
-	type: types.SET_ADDRESS_BOOK_ADDRESS_ERROR,
+	type: types.ADDRESS_BOOK_ADDRESS_ERROR_SET,
 	payload: error
 });
 

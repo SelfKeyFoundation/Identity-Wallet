@@ -10,7 +10,7 @@ describe('address book reducer', () => {
 		});
 	});
 
-	it('should handle ADD_ADDRESS_BOOK_ENTRY', () => {
+	it('should handle ADRESS_BOOK_ENTRY_ADD', () => {
 		const entry = {
 			id: 1,
 			walletId: 1,
@@ -20,7 +20,7 @@ describe('address book reducer', () => {
 
 		expect(
 			reducer(undefined, {
-				type: types.ADD_ADDRESS_BOOK_ENTRY,
+				type: types.ADRESS_BOOK_ENTRY_ADD,
 				payload: entry
 			})
 		).toEqual({
@@ -30,7 +30,7 @@ describe('address book reducer', () => {
 		});
 	});
 
-	it('should handle LOAD_ADDRESS_BOOK_ENTRIES', () => {
+	it('should handle ADDRESS_BOOK_ENTRIES_LOAD', () => {
 		const entries = [
 			{
 				id: 1,
@@ -48,7 +48,7 @@ describe('address book reducer', () => {
 
 		expect(
 			reducer(undefined, {
-				type: types.LOAD_ADDRESS_BOOK_ENTRIES,
+				type: types.ADDRESS_BOOK_ENTRIES_LOAD,
 				payload: entries
 			})
 		).toEqual({
@@ -58,7 +58,7 @@ describe('address book reducer', () => {
 		});
 	});
 
-	it('should handle DELETE_ADDRESS_BOOK_ENTRY', () => {
+	it('should handle ADDRESS_BOOK_ENTRY_DELETE', () => {
 		const entries = [
 			{
 				id: 1,
@@ -78,7 +78,7 @@ describe('address book reducer', () => {
 			reducer(
 				{ entries, labelError: '', addressError: '' },
 				{
-					type: types.DELETE_ADDRESS_BOOK_ENTRY,
+					type: types.ADDRESS_BOOK_ENTRY_DELETE,
 					payload: entries[0].id
 				}
 			)
@@ -89,10 +89,10 @@ describe('address book reducer', () => {
 		});
 	});
 
-	it('should handle SET_ADDRESS_BOOK_LABEL_ERROR', () => {
+	it('should handle ADDRESS_BOOK_LABEL_ERROR_SET', () => {
 		expect(
 			reducer(undefined, {
-				type: types.SET_ADDRESS_BOOK_LABEL_ERROR,
+				type: types.ADDRESS_BOOK_LABEL_ERROR_SET,
 				payload: 'Error'
 			})
 		).toEqual({
@@ -102,10 +102,10 @@ describe('address book reducer', () => {
 		});
 	});
 
-	it('should handle SET_ADDRESS_BOOK_ADDRESS_ERROR', () => {
+	it('should handle ADDRESS_BOOK_ADDRESS_ERROR_SET', () => {
 		expect(
 			reducer(undefined, {
-				type: types.SET_ADDRESS_BOOK_ADDRESS_ERROR,
+				type: types.ADDRESS_BOOK_ADDRESS_ERROR_SET,
 				payload: 'Error'
 			})
 		).toEqual({

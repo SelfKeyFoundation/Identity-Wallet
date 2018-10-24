@@ -11,8 +11,8 @@ export const getAddressError = state => {
 };
 
 export const getLabel = (state, id) => {
-	const entry = state.addressBook.entries.filter(entry => {
+	const entries = state.addressBook.entries.filter(entry => {
 		return entry.id === id;
 	});
-	return entry[0].label;
+	return entries.length > 0 ? entries[0].label : '';
 };

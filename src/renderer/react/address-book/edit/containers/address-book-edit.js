@@ -5,7 +5,7 @@ import { addressBookSelectors, addressBookOperations } from 'common/address-book
 
 class AddressBookEditContainer extends Component {
 	componentDidMount() {
-		this.props.dispatch(addressBookOperations.initEdit());
+		this.props.dispatch(addressBookOperations.resetEdit());
 	}
 
 	handleSave = async label => {

@@ -11,7 +11,7 @@ describe('actions', () => {
 
 		const expectedAction = {
 			meta: {
-				trigger: types.ADD_ADDRESS_BOOK_ENTRY
+				trigger: types.ADRESS_BOOK_ENTRY_ADD
 			},
 			type: 'ALIASED',
 			payload: [entry]
@@ -28,7 +28,7 @@ describe('actions', () => {
 
 		const expectedAction = {
 			meta: {
-				trigger: types.EDIT_ADDRESS_BOOK_ENTRY
+				trigger: types.ADDRESS_BOOK_ENTRY_EDIT
 			},
 			type: 'ALIASED',
 			payload: [entry]
@@ -41,7 +41,7 @@ describe('actions', () => {
 
 		const expectedAction = {
 			meta: {
-				trigger: types.DELETE_ADDRESS_BOOK_ENTRY
+				trigger: types.ADDRESS_BOOK_ENTRY_DELETE
 			},
 			type: 'ALIASED',
 			payload: [id]
@@ -54,7 +54,7 @@ describe('actions', () => {
 
 		const expectedAction = {
 			meta: {
-				trigger: types.LOAD_ADDRESS_BOOK_ENTRIES
+				trigger: types.ADDRESS_BOOK_ENTRIES_LOAD
 			},
 			type: 'ALIASED',
 			payload: [walletId]
@@ -66,7 +66,7 @@ describe('actions', () => {
 		const error = 'error';
 
 		const expectedAction = {
-			type: types.SET_ADDRESS_BOOK_LABEL_ERROR,
+			type: types.ADDRESS_BOOK_LABEL_ERROR_SET,
 			payload: error
 		};
 		expect(actions.setLabelError(error)).toEqual(expectedAction);
@@ -76,7 +76,7 @@ describe('actions', () => {
 		const error = 'error';
 
 		const expectedAction = {
-			type: types.SET_ADDRESS_BOOK_ADDRESS_ERROR,
+			type: types.ADDRESS_BOOK_ADDRESS_ERROR_SET,
 			payload: error
 		};
 		expect(actions.setAddressError(error)).toEqual(expectedAction);
