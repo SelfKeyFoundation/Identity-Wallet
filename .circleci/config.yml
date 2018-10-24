@@ -1,6 +1,6 @@
 version: 2
 aliases:
-    - &cache_version '1'
+    - &cache_version '2'
     - &step_prepare_cache_buster
       run:
           name: Prepare Cache Buster
