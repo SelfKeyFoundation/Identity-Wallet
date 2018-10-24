@@ -65,7 +65,7 @@ jobs:
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn --build-from-source
             - run:
                   name: Unit Tests
                   command: yarn test:unit:coverage
