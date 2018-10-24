@@ -53,20 +53,22 @@ class ItemDetailsContainer extends Component {
 		let unlockAction = this.props.unlockAction;
 		let item = this.props.item;
 		let { stake } = this.props;
-		item.integration = 'UNLOCK MARKETPLACE';
+		item.integration = 'Unlock marketplace';
 		if (this.props.pendingTransaction) {
 			item.status = 'pending';
-			item.integration = 'PENDING TRANSACTION';
-			unlockAction = this.props.pendingAction;
-		}
-		if (stake && stake.balance && stake.releaseDate) {
-			item.status = 'locked';
-			item.integration = 'LOCKED FOR 30 days';
+			item.integration = 'Pending KEY deposit';
 			unlockAction = null;
 		}
-		if (stake && stake.balance && !stake.releaseDay) {
+		if (stake && +stake.balance && +stake.releaseDate) {
+			item.status = 'locked';
+			item.integration = 'KEY Deposit';
+			unlockAction = null;
+		}
+		console.log('XXX', stake);
+		if (stake && +stake.balance && !+stake.releaseDay) {
 			item.status = 'unlocked';
-			item.integration = 'UNLOCKED';
+			item.integration = 'Return KEY Deposit';
+			unlockAction = this.props.returnAction;
 		}
 		return <ItemDetails {...this.props} unlockAction={unlockAction} />;
 	}

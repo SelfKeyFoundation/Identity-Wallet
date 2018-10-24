@@ -15,9 +15,10 @@ function MemberMarketplaceExchangeItemController($rootScope, $scope, $state) {
 		$state.go('member.marketplace.unlock', { data: { name: $scope.name } });
 	};
 
-	$scope.navigateToTransactionPending = () => {};
-
-	$scope.navigateToWithdraw = () => {};
+	$scope.navigateToReturn = () => {
+		log.info(`returning stake for  marketplace ${$scope.name}`);
+		$state.go('member.marketplace.return', { data: { name: $scope.name } });
+	};
 
 	$scope.navigateToExchangeList = () => {
 		$state.go('member.marketplace.exchange-list');

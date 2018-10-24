@@ -15,6 +15,7 @@ import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
 import { WithoutBalanceWrapper } from './react/marketplace/no-balance';
 import { UnlockWrapper } from './react/marketplace/unlock';
+import { ReturnWrapper } from './react/marketplace/return';
 import { UnlockProgressWrapper } from './react/marketplace/progress';
 
 import { TransactionSendBoxWrapper } from './react/transaction/send';
@@ -278,7 +279,12 @@ angular.module('kyc-wallet').component('transactionsHistory', transactionsHistor
 const exchangesWrapper = react2angular(ExchangesWrapper, ['viewAction', 'backAction']);
 angular.module('kyc-wallet').component('exchanges', exchangesWrapper);
 
-const itemWrapper = react2angular(ItemWrapper, ['name', 'unlockAction', 'backAction']);
+const itemWrapper = react2angular(ItemWrapper, [
+	'name',
+	'unlockAction',
+	'backAction',
+	'returnAction'
+]);
 angular.module('kyc-wallet').component('item', itemWrapper);
 
 const withoutBalanceWrapper = react2angular(WithoutBalanceWrapper, ['closeAction']);
@@ -292,6 +298,13 @@ angular.module('kyc-wallet').component('unlockMarketplace', unlockMarketplace);
 
 const unlockProgressWrapper = react2angular(UnlockProgressWrapper, ['closeAction']);
 angular.module('kyc-wallet').component('unlockProgress', unlockProgressWrapper);
+
+const returnDepositMarketplace = react2angular(ReturnWrapper, [
+	'closeAction',
+	'navigateToTransactionProgress'
+]);
+angular.module('kyc-wallet').component('returnDepositMarketplace', returnDepositMarketplace);
+
 /**
  * controllers
  */
@@ -527,6 +540,11 @@ const MemberMarketplaceUnlockController = require('./angular/controllers/member/
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceUnlockController', MemberMarketplaceUnlockController);
+
+const MemberMarketplaceReturnController = require('./angular/controllers/member/marketplace/return-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller('MemberMarketplaceReturnController', MemberMarketplaceReturnController);
 
 const MemberMarketplaceUnlockProgressController = require('./angular/controllers/member/marketplace/unlock-progress-controller.js');
 angular

@@ -501,6 +501,18 @@ function appStates(
 				data: {}
 			}
 		})
+		.state('member.marketplace.return', {
+			url: '/member/marketplace/return',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/return.html',
+					controller: 'MemberMarketplaceReturnController'
+				}
+			},
+			params: {
+				data: {}
+			}
+		})
 		.state('member.marketplace.progress', {
 			url: '/member/marketplace/progress',
 			views: {
