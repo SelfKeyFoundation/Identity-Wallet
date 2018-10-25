@@ -55,7 +55,7 @@ const validateLabel = label => async (dispatch, getState) => {
 const validateAddress = address => async (dispatch, getState) => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	const isValidAddress = addressBookService.isValidAddress(address);
-	const currentWalletAddress = walletSelectors.getWallet(getState()).address;
+	const currentWalletAddress = `0x${walletSelectors.getWallet(getState()).publicKey}`;
 	const existentAddress = getAddresses(getState()).filter(entry => {
 		return entry.address === address;
 	});
