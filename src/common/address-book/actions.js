@@ -2,25 +2,25 @@ import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
 import { getGlobalContext } from '../context';
 
-const addEntry = entry => async () => {
+const addEntry = async entry => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	const newAddress = await addressBookService.addEntry(entry);
 	return newAddress;
 };
 
-const editEntry = entry => async () => {
+const editEntry = async entry => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	const newAddress = await addressBookService.editEntry(entry);
 	return newAddress;
 };
 
-const deleteEntry = id => async () => {
+const deleteEntry = async id => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	await addressBookService.deleteEntryById(id);
 	return id;
 };
 
-const loadEntries = walletId => async () => {
+const loadEntries = async walletId => {
 	const addressBookService = (getGlobalContext() || {}).addressBookService;
 	const entries = await addressBookService.loadEntriesByWalletId(walletId);
 	return entries;
