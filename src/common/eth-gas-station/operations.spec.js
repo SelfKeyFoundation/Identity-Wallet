@@ -41,7 +41,14 @@ describe('operations', () => {
 		};
 		setGlobalContext(ctx);
 
-		const expectedActions = [actions.updateData(data)];
+		const expectedActions = [
+			{
+				meta: { trigger: 'app/eth-gas-station/UPDATE' },
+				payload: [{ average: 8, fast: 1, safeLow: 10 }],
+				type: 'ALIASED'
+			},
+			{ meta: { trigger: 'app/transaction/fee/SET' }, payload: [], type: 'ALIASED' }
+		];
 
 		await store.dispatch(operations.loadData());
 		expect(store.getActions()).toEqual(expectedActions);

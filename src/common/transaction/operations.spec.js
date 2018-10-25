@@ -15,21 +15,11 @@ describe('operations', () => {
 			cryptoCurrency: 'ETH'
 		};
 		const expectedActions = [
-			operations.updateTransaction({
-				address: '',
-				amount: 0,
-				ethFee: 0,
-				usdFee: 0,
-				gasPrice: 0,
-				gasLimit: 0,
-				nouce: 0,
-				signedHex: '',
-				transactionHash: '',
-				addressError: false,
-				sending: false,
-				cryptoCurrency: undefined,
-				...extraParams
-			})
+			{
+				meta: { trigger: 'app/transaction/init' },
+				payload: [{ cryptoCurrency: 'ETH', trezorAccountIndex: 0 }],
+				type: 'ALIASED'
+			}
 		];
 
 		await store.dispatch(operations.init(extraParams));
@@ -79,12 +69,12 @@ describe('operations', () => {
 			}
 		});
 
-		const address = '0xd0d99d16dbeae0be07e0bbaa5d715bf17ac4f0c8';
 		const expectedActions = [
-			operations.updateTransaction({
-				address
-			}),
-			operations.setAddressError(false)
+			{
+				meta: { trigger: 'app/transaction/address/SET' },
+				payload: ['0xd0d99d16dbeae0be07e0bbaa5d715bf17ac4f0c8'],
+				type: 'ALIASED'
+			}
 		];
 
 		await store.dispatch(operations.setAddress('0xd0d99d16dbeae0be07e0bbaa5d715bf17ac4f0c8'));
@@ -133,9 +123,14 @@ describe('operations', () => {
 				}
 			}
 		});
-
 		const address = 'dadsa';
-		const expectedActions = [operations.setAddressError(true)];
+		const expectedActions = [
+			{
+				meta: { trigger: 'app/transaction/address/SET' },
+				payload: [address],
+				type: 'ALIASED'
+			}
+		];
 
 		await store.dispatch(operations.setAddress(address));
 		expect(store.getActions()).toEqual(expectedActions);
@@ -185,7 +180,13 @@ describe('operations', () => {
 		});
 
 		const address = 'dadsa';
-		const expectedActions = [operations.setAddressError(true)];
+		const expectedActions = [
+			{
+				meta: { trigger: 'app/transaction/address/SET' },
+				payload: [address],
+				type: 'ALIASED'
+			}
+		];
 
 		await store.dispatch(operations.setAddress(address));
 		expect(store.getActions()).toEqual(expectedActions);
