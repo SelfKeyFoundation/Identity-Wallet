@@ -4,7 +4,7 @@ module.exports = {
 	setupTestFrameworkScriptFile: '<rootDir>/test/jest-setup-test-framework.js',
 	testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 	modulePaths: ['<rootDir>/src'],
-	testMatch: ['**/src/**/*.spec.js', '**/src/**/*.steps.js'],
+	testMatch: ['**/test/e2e/**/*.spec.js', '**/test/e2e/**/*.steps.js'],
 	verbose: true,
 	testEnvironment: 'node',
 	testURL: 'http://localhost/',
