@@ -30,7 +30,8 @@ export const registerCommonServices = (container, thread) =>
 		threadName: asValue(thread),
 		store: asFunction(({ initialState, threadName }) =>
 			configureStore(initialState, threadName)
-		).singleton()
+		).singleton(),
+		ethGasStationService: asClass(EthGasStationService).singleton()
 	});
 
 export const registerMainServices = container =>
@@ -47,7 +48,6 @@ export const registerMainServices = container =>
 		lwsService: asClass(LWSService).singleton(),
 		idAttributeTypeService: asClass(IdAttributeTypeService).singleton(),
 		exchangesService: asClass(ExchangesService).singleton(),
-		ethGasStationService: asClass(EthGasStationService).singleton(),
 		trezorService: asFunction(() => {
 			let Service = TrezorService();
 			return new Service();
