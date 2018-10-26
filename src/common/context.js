@@ -21,9 +21,14 @@ export const setGlobalContext = ctx => {
 };
 export const getGlobalContext = () => globalContext;
 
-export const configureContext = (store, app) => {
-	const container = createContainer({
-		injectionMode: InjectionMode.PROXY
+export const registerCommonServices = (container, thread) => {
+	container.register({
+		initialState: asValue(global.state),
+		threadName: asValue(thread),
+		store: asFunction(({ initialState, threadName }) =>
+			configureStore(initialState, threadName)
+		).singleton(),
+		ethGasStationService: asClass(EthGasStationService).singleton()
 	});
 	container.register({
 		app: asValue(app),
