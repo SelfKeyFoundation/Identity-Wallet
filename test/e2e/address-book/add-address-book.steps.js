@@ -44,7 +44,7 @@ defineFeature(feature, test => {
 		});
 
 		then(`user can see error message that current eth address can't be saved`, () => {
-			return tools.app.client.waitForVisible('#addressInput', 10000);
+			return tools.app.client.waitForVisible('#addressError', 10000);
 		});
 	});
 
