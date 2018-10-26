@@ -3,11 +3,11 @@
     form(name="theForm", layout="column", layout-align="center center")
         md-input-container.sk-input-box
             label Enter Your Private Key
-            input(type="{{formType}}", name="privateKey", ng-model="userInput.privateKey")
+            input(type="{{formType}}", name="privateKey", id='privateKeyInput', ng-model="userInput.privateKey")
             md-button.outline-gray.smallest.show-password(ng-click="togglePasswordVisibility()")
                 span {{ formType == 'password' ? 'show' : 'hide'}}
             div(ng-messages="theForm.privateKey.$error")
                 div(ng-message="theForm.privateKey.$error.badPrivateKey") {{ theForm.privateKey.$error.badPrivateKey ? 'Incorrect private key' : '' }}
-    md-button.blue(style="", ng-click="unlock($event, theForm)", ng-disabled="isUnlocking")
+    md-button.blue(style="", ng-click="unlock($event, theForm)", id='unlockButton', ng-disabled="isUnlocking")
         span {{ isUnlocking ? 'Please wait...' : 'unlock' }}
     .title.warning Warning: Please keep your private keys safe and secure.

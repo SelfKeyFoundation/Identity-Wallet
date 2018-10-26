@@ -15,6 +15,7 @@ import { StakingService } from '../main/blockchain/staking-service';
 import EthGasStationService from '../main/blockchain/eth-gas-station-service';
 import { createApp } from '../main/app';
 import { MarketplaceService } from '../main/marketplace/marketplace-service';
+import AddressBookService from 'main/address-book/address-book-service';
 
 let globalContext = null;
 
@@ -37,6 +38,7 @@ export const registerMainServices = container =>
 		app: asFunction(createApp).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		ledgerService: asClass(LedgerService).singleton(),
+		addressBookService: asClass(AddressBookService).singleton(),
 		// TODO: refactor to not use static methods
 		CrashReportService: asValue(CrashReportService),
 		txHistoryService: asClass(TxHistoryService).singleton(),

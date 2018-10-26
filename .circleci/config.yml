@@ -1,6 +1,6 @@
 version: 2
 aliases:
-    - &cache_version '1'
+    - &cache_version '2'
     - &step_prepare_cache_buster
       run:
           name: Prepare Cache Buster
@@ -48,7 +48,7 @@ aliases:
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
-            - image: circleci/node:8.11.3-stretch-browsers
+            - image: circleci/node:10.12.0-stretch-browsers
         environment:
             CACHE_VERSION: *cache_version
         steps:
@@ -61,7 +61,7 @@ jobs:
                   name: Install OS Dependecies
                   command: |
                       sudo apt-get update
-                      sudo apt-get install libudev-dev
+                      sudo apt-get install build-essential
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
             - run:
                   name: Install Node Packages
