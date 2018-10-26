@@ -47,6 +47,14 @@ export class Web3Service {
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
 		let contract = web3.eth;
+		if (args[0]) {
+			if (args[0].gas && typeof args[0].gas === 'number') {
+				args[0].gas = Math.round(args[0].gas);
+			}
+			if (args[0].gasPrice && typeof args[0].gasPrice === 'number') {
+				args[0].gasPrice = Math.round(args[0].gasPrice);
+			}
+		}
 		if (contractAddress) {
 			contract = new Contract(customAbi || ABI, contractAddress);
 			if (contractMethod) {
@@ -155,7 +163,7 @@ export class Web3Service {
 		if (!opts.gasPrice) {
 			opts.gasPrice = await this.web3.eth.getGasPrice();
 		}
-		opts.gasPrice = this.web3.utils.toHex(opts.gasPrice);
+		opts.gasPrice = this.web3.utils.toHex(Math.round(opts.gasPrice));
 		if (!opts.gas) {
 			opts.gas = await contactMethodInstance.estimateGas({
 				from: opts.from,

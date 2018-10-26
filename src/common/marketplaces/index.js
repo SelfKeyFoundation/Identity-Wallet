@@ -109,7 +109,6 @@ export const placeStakeOperation = (serviceOwner, serviceId, amount, gasPrice, g
 	getState
 ) => {
 	const mpService = (getGlobalContext() || {}).marketplaceService;
-
 	const newTransaction = await mpService.placeStake(
 		serviceOwner,
 		serviceId,
@@ -144,12 +143,12 @@ export const updateTransactionStatusOperation = tx => async (dispatch, getState)
 	tx = { ...tx, lastStatus: status };
 
 	tx = await mpService.updateTransaction(tx);
+
+	if (status === 'success') {
+		let stake = await mpService.loadStakingInfo(tx.serviceOwner, tx.serviceId);
+		await dispatch(marketplacesActions.updateStakeAction(stake));
+	}
 	await dispatch(marketplacesActions.updateTransactionAction(tx));
-
-	if (status !== 'success') return;
-
-	let stake = await mpService.loadStakingInfo(tx.serviceOwner, tx.serviceId);
-	await dispatch(marketplacesActions.updateStakeAction(stake));
 };
 
 export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) => async (
@@ -296,7 +295,7 @@ export const marketplacesSelectors = {
 	pendingTransactionSelector(state, serviceOwner, serviceId) {
 		let pendingTxs = this.transactionsSelector(state).filter(
 			tx =>
-				tx.serviceOwner === serviceOwner &&
+				(tx.serviceOwner || tx.serviceAddress) === serviceOwner &&
 				tx.serviceId === serviceId &&
 				['pending', 'processing'].includes(tx.lastStatus)
 		);
@@ -321,7 +320,8 @@ export const marketplacesSelectors = {
 };
 
 export const updateStakeReducer = (state, { payload }) => {
-	let id = payload.id || `${payload.serviceOwner}_${payload.serviceId}`;
+	let serviceOwner = payload.serviceOwner || payload.serviceAddress;
+	let id = payload.id || `${serviceOwner}_${payload.serviceId}`;
 	let currentStake = state.stakesById[id];
 	if (!currentStake) return state;
 	currentStake = { ...currentStake, ...payload, id };

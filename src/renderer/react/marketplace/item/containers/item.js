@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { getItemDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
 import { ItemDetails } from 'selfkey-ui';
+import { Logger } from 'common/logger';
+
+const log = new Logger('marketplace-item-container');
 
 const mapStateToProps = (state, props) => {
 	let item = getItemDetails(state, props.name);
@@ -41,6 +44,7 @@ class ItemDetailsContainer extends Component {
 			return;
 		}
 		if (this.timeout) return;
+		log.info('Will check transaction status in 5 sec');
 		this.timeout = setTimeout(() => {
 			this.props.dispatch(
 				marketplacesOperations.updateTransactionStatus(this.props.pendingTransaction)
@@ -54,17 +58,22 @@ class ItemDetailsContainer extends Component {
 		let item = this.props.item;
 		let { stake } = this.props;
 		item.integration = 'Unlock marketplace';
-		if (this.props.pendingTransaction) {
+		if (item.status === 'Inactive') {
+			item.integration = 'Coming Soon';
+			unlockAction = null;
+		} else if (this.props.pendingTransaction) {
 			item.status = 'pending';
 			item.integration = 'Pending KEY deposit';
+			if (this.props.pendingTransaction.action === 'withdrawStake') {
+				item.integration = 'Pending KEY return';
+			}
 			unlockAction = null;
-		}
-		if (stake && +stake.balance && +stake.releaseDate) {
+		} else if (stake && +stake.balance && +stake.releaseDate) {
 			item.status = 'locked';
 			item.integration = 'KEY Deposit';
+			item.releaseDate = stake.releaseDate;
 			unlockAction = null;
-		}
-		if (stake && +stake.balance && !+stake.releaseDay) {
+		} else if (stake && +stake.balance && !+stake.releaseDay) {
 			item.status = 'unlocked';
 			item.integration = 'Return KEY Deposit';
 			unlockAction = this.props.returnAction;

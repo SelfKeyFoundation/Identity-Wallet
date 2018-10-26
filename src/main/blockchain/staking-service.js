@@ -27,6 +27,7 @@ export class StakingService {
 			try {
 				balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
 			} catch (error) {
+				log.error(error);
 				balance = 0;
 			}
 			if (!balance) continue;
