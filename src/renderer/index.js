@@ -66,7 +66,9 @@ require('angular-local-storage');
 require('angular-qrcode');
 require('angular-zxcvbn');
 require('./angular/app.templates');
-
+require('angulartics');
+require('angulartics-piwik');
+require('angular-md5');
 /**
  * main module: 'kyc-wallet'
  */
@@ -78,7 +80,10 @@ window.app = angular.module('kyc-wallet', [
 	'templates',
 	'LocalStorageModule',
 	'monospaced.qrcode',
-	'zxcvbn'
+	'zxcvbn',
+	'angulartics',
+	'angulartics.piwik',
+	'angular-md5'
 ]);
 
 /**
