@@ -11,6 +11,8 @@ let Web3Service;
 let CommonService;
 let SqlLiteService;
 let SignService;
+let Analytics;
+let AngularMD5;
 
 let priceUpdaterInterval;
 let loadBalanceInterval = null;
@@ -37,6 +39,14 @@ class Wallet {
 
 	static set SignService(value) {
 		SignService = value;
+	}
+
+	static set Analytics(value) {
+		Analytics = value;
+	}
+
+	static set AngularMD5(value) {
+		AngularMD5 = value;
 	}
 
 	constructor(id, privateKey, publicKey, keystoreFilePath, profile) {
@@ -71,6 +81,12 @@ class Wallet {
 		this.isHardwareWallet = profile === 'ledger' || profile === 'trezor';
 
 		this.loadTokens();
+
+		this.setAnalyticsUserId();
+	}
+
+	setAnalyticsUserId() {
+		Analytics.setUsername(AngularMD5.createHash(this.publicKey));
 	}
 
 	getPrivateKey() {
