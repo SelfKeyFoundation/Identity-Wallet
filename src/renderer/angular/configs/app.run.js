@@ -29,7 +29,7 @@ function AppRun(
 	const setAnalytics = agreed => {
 		if (agreed) {
 			const matomo = $window.document.createElement('script');
-			matomo.src = $window.staticPath + 'assets/libs/matomo.js';
+			matomo.src = $window.staticPath + '/assets/libs/matomo.js';
 			$window.document.body.appendChild(matomo);
 		}
 	};
