@@ -188,7 +188,7 @@ function onReady(app) {
 				log.info('did-finish-load');
 				mainWindow.webContents.send('APP_START_LOADING');
 				// start update cmc data
-				await Promise.all([
+				Promise.all([
 					ctx.priceService.startUpdateData(),
 					ctx.idAttributeTypeService.loadIdAttributeTypes(),
 					ctx.exchangesService.loadExchangeData()
