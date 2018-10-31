@@ -193,7 +193,9 @@ function onReady(app) {
 					ctx.idAttributeTypeService.loadIdAttributeTypes(),
 					ctx.exchangesService.loadExchangeData()
 				]);
-				await ctx.idAttributeTypeService.resolveSchemas();
+				if (process.env.ENABLE_JSON_SCHEMA === '1') {
+					await ctx.idAttributeTypeService.resolveSchemas();
+				}
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
