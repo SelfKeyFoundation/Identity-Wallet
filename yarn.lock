@@ -1205,9 +1205,9 @@
   integrity sha512-G6OoQbBFFm3P+NDfi9N7B+QNP80eV0u0zk4otohdK2T/lwYJg+IrOiDtwiZlyyvY3Kpn4PnJ8UErk2czcG1J0g==
 
 "@types/jest@^23.1.5":
-  version "23.3.8"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.8.tgz#56b07c0c3d7c8a6c47abb4f785cab648c6eafd01"
-  integrity sha512-OKDxB/7woaQfUKkj+7+Zo3PmAxAYAy+SNwOwFhnYAc8JTaPhGOv8SC6QQg5D9+Giprhx/DzoKbJIpV9799VV0g==
+  version "23.3.9"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.9.tgz#c16b55186ee73ae65e001fbee69d392c51337ad1"
+  integrity sha512-wNMwXSUcwyYajtbayfPp55tSayuDVU6PfY5gzvRSj80UvxdXEJOVPnUVajaOp7NgXLm+1e2ZDLULmpsU9vDvQw==
 
 "@types/jss@^9.5.3":
   version "9.5.7"
@@ -2099,7 +2099,7 @@ async-eventemitter@^0.2.2:
   dependencies:
     async "^2.4.0"
 
-async-eventemitter@ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c:
+"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
   version "0.2.3"
   resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
   dependencies:
@@ -4681,9 +4681,9 @@ css-select@^2.0.0:
     nth-check "^1.0.2"
 
 css-selector-tokenizer@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/css-selector-tokenizer/-/css-selector-tokenizer-0.7.0.tgz#e6988474ae8c953477bf5e7efecfceccd9cf4c86"
-  integrity sha1-5piEdK6MlTR3v15+/s/OzNnPTIY=
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/css-selector-tokenizer/-/css-selector-tokenizer-0.7.1.tgz#a177271a8bca5019172f4f891fc6eed9cbf68d5d"
+  integrity sha512-xYL0AMZJ4gFzJQsHUKa5jiWWi2vH77WVNg7JYRyewwj6oPh4yb/y6Y9ZCw9dsj/9UauMhtuxR+ogQd//EdEVNA==
   dependencies:
     cssesc "^0.1.0"
     fastparse "^1.1.1"
@@ -5714,9 +5714,9 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.47, electron-to-chromium@
   integrity sha512-NI4nB2IWGcU4JVT1AE8kBb/dFor4zjLHMLsOROPahppeHrR0FG5uslxMmkp/thO1MvPjM2xhlKoY29/I60s0ew==
 
 electron-updater@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-3.1.5.tgz#8624ac28a5867022adcf3d2fe59eba886cf52de1"
-  integrity sha512-xZPTExO2q8FjgetiBcmRDY3KgYbo+B2vAsblElR7ygdwdXmY5RtEymNdCmZr0/HSRnd3v2POCx77CASnSZxBWA==
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-3.1.6.tgz#142ab3341a0a483ed377005b8dce961999d2b4d5"
+  integrity sha512-ZzNrFqvJJmG2O0qEVhAhI25WqJx6Nq3lNlXvBvX3i0zqWtAuSmcAdCbq4VyDymun/glsZ4bD3ZzATcIk3sYygg==
   dependencies:
     bluebird-lst "^1.0.5"
     builder-util-runtime "~5.0.0"
@@ -5782,10 +5782,10 @@ electron-webpack@^2.3.1:
     webpack-merge "^4.1.4"
     yargs "^12.0.1"
 
-electron@^2.0.12:
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.12.tgz#04b11ef3246cd2a5839a8f16314051341dc5c449"
-  integrity sha512-mw8hoM/GPtFPP8FGiJcVNe8Rx63YJ7O8bf7McQj21HAvrXGAwReGFrpIe5xN6ec10fDXNSNyfzRucjFXtOtLcg==
+electron@2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.11.tgz#8e352a83ec607471e82d323a2adc7e7b53698e79"
+  integrity sha512-bFTMDQN3epfiymqTPdgffyTxuy/7A52sIkW7Hos+hY5XLPArOXLXAKx1JtB3dM7CcPfZa+5qp/J3cPCidh5WXg==
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^3.0.1"
@@ -6883,9 +6883,9 @@ fast-levenshtein@~2.0.4:
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
 fastparse@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/fastparse/-/fastparse-1.1.1.tgz#d1e2643b38a94d7583b479060e6c4affc94071f8"
-  integrity sha1-0eJkOzipTXWDtHkGDmxK/8lAcfg=
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/fastparse/-/fastparse-1.1.2.tgz#91728c5a5942eced8531283c79441ee4122c35a9"
+  integrity sha512-483XLLxTVIwWK3QTrMGRqUfUpoOs/0hbQrl2oz4J0pAcm3A3bu84wxTFqGqkJzewCLdME38xJLJAxBABfQT8sQ==
 
 faye-websocket@^0.10.0:
   version "0.10.0"
@@ -11733,9 +11733,9 @@ node-pre-gyp@^0.11.0:
     tar "^4"
 
 node-releases@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.1.tgz#957a2735d2ca737d7005588f8e85e6c27032555b"
-  integrity sha512-/kOv7jA26OBwkBPx6B9xR/FzJzs2OkMtcWjS8uPQRMHE7IELdSfN0QKZvmiWnf5P1QJ8oYq/e9qe0aCZISB1pQ==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.2.tgz#27c296d9fca3b659c64f7d43ea47a31ad2a90e4b"
+  integrity sha512-zP8Asfg13lG9KDAW85rylSxXBYvaSdtjMIYKHUk8c1fM8drmFwRqbSYKYD+UlNVPUvrceSvgLUKHMOWR5jPWQg==
   dependencies:
     semver "^5.3.0"
 
@@ -12936,9 +12936,9 @@ postcss-minify-selectors@^2.0.4:
     postcss-selector-parser "^2.0.0"
 
 postcss-modules-extract-imports@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/postcss-modules-extract-imports/-/postcss-modules-extract-imports-1.2.0.tgz#66140ecece38ef06bf0d3e355d69bf59d141ea85"
-  integrity sha1-ZhQOzs447wa/DT41XWm/WdFB6oU=
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/postcss-modules-extract-imports/-/postcss-modules-extract-imports-1.2.1.tgz#dc87e34148ec7eab5f791f7cd5849833375b741a"
+  integrity sha512-6jt9XZwUhwmRUhb/CkyJY020PYaPJsCyt3UjbaWo6XEbH/94Hmv6MP7fG2C5NDU/BcHzyGYxNtHvM+LTf9HrYw==
   dependencies:
     postcss "^6.0.1"
 
@@ -16096,9 +16096,9 @@ term-size@^1.2.0:
     execa "^0.7.0"
 
 terser@^3.8.1:
-  version "3.10.4"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.10.4.tgz#63ed0b5266d39cbdcb9c2bf6506f6444b70184a3"
-  integrity sha512-Gobjr6j9ZbA0oAFW+foiqp8LUZjBkd5UHxCVL0cPOlHO7wKKa3FwHW/j9p7d1/ypPl6m9Bf0LAFbbHf3k97asA==
+  version "3.10.7"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.10.7.tgz#8b48f25f959eeef7ae48407c1b21149052535973"
+  integrity sha512-6iazZDyDBQ5EgAQo+CgswXdWV8gDzJADFIWtIZlI7wPtmGL84JzDFtkOR8m/Mjsp2blzOK3+uQG2rex2+E6Z7A==
   dependencies:
     commander "~2.17.1"
     source-map "~0.6.1"
