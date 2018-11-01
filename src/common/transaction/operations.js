@@ -36,6 +36,7 @@ const init = args => async dispatch => {
 			transactionHash: '',
 			addressError: false,
 			sending: false,
+			status: '',
 			...args
 		})
 	);
@@ -345,22 +346,36 @@ const confirmSend = () => async (dispatch, getState) => {
 		onceListenerName: 'transactionHash'
 	};
 
-	await dispatch(
-		actions.updateTransaction({
-			status: 'Pending'
-		})
-	);
+	try {
+		const transactionHash = await (getGlobalContext() || {}).web3Service.waitForTicket(params);
 
-	const transactionHash = await (getGlobalContext() || {}).web3Service.waitForTicket(params);
-	await dispatch(
-		actions.updateTransaction({
-			transactionHash
-		})
-	);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash
+			})
+		);
 
-	dispatch(createTxHistry(transactionHash));
+		dispatch(createTxHistry(transactionHash));
 
-	await dispatch(startTxBalanceUpdater(transactionHash));
+		await dispatch(startTxBalanceUpdater(transactionHash));
+	} catch (err) {
+		console.log(err);
+		const message = err.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+		}
+	}
 };
 
 const setCryptoCurrency = cryptoCurrency => async dispatch => {
@@ -378,7 +393,7 @@ export default {
 	setGasPrice: createAliasedAction(types.GAS_PRICE_SET, setGasPrice),
 	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
 	init: createAliasedAction(types.INIT, init),
-	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, init),
+	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	startSend: createAliasedAction(types.START_SEND, startSend),
 	cancelSend: createAliasedAction(types.CANCEL_SEND, cancelSend),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),

@@ -15,6 +15,17 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
+	componentDidUpdate() {
+		console.log(this.props.status);
+		if (this.props.status === 'NoBalance') {
+			this.props.navigateToTransactionNoGasError();
+		} else if (this.props.status === 'Error') {
+			this.props.navigateToTransactionError('Error');
+		} else if (this.props.status === 'Pending') {
+			this.props.navigateToTransactionProgress();
+		}
+	}
+
 	loadData() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
@@ -58,21 +69,9 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.setLimitPrice(value));
 	}
 
-	handleConfirmActionError(err) {
-		let message = err.toString().toLowerCase();
-		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
-			return this.props.navigateToTransactionNoGasError();
-		}
-		this.props.navigateToTransactionError(message);
-	}
-
 	async handleConfirmAction() {
-		try {
-			this.props.navigateToTransactionProgress();
-			await this.props.dispatch(transactionOperations.confirmSend());
-		} catch (err) {
-			this.handleConfirmActionError(err);
-		}
+		// this.props.navigateToTransactionProgress();
+		await this.props.dispatch(transactionOperations.confirmSend());
 	}
 
 	handleCancelAction() {
