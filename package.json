@@ -85,7 +85,6 @@
     "bignumber.js": "7.2.1",
     "bluebird": "3.5.1",
     "bufferutil": "^4.0.0",
-    "commitizen": "^2.10.1",
     "decompress": "4.2.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-dl": "^1.12.0",
