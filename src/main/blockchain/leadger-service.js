@@ -1,5 +1,5 @@
 'use strict';
-
+import 'babel-polyfill';
 import { timeout } from 'promise-timeout';
 import Web3 from 'web3';
 import ProviderEngine from 'web3-provider-engine';
