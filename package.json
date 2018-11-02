@@ -82,6 +82,7 @@
     "async": "2.6.1",
     "awilix": "^3.0.9",
     "babel-eslint": "^8.2.6",
+    "babel-polyfill": "^6.26.0",
     "bignumber.js": "7.2.1",
     "bluebird": "3.5.1",
     "bufferutil": "^4.0.0",
