@@ -208,6 +208,7 @@ jobs:
                   at: /tmp/mac
             - *step_prepare_cache_buster
             - *step_restore_cache_mac
+            - *step_setup_nvm
             - *step_yarn_upgrade
             - run:
                   name: Set Sentry
