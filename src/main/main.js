@@ -75,14 +75,19 @@ if (!handleSquirrelEvent()) {
 	electron.app.on('ready', onReady(app));
 }
 
-let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
-	// Someone tried to run a second instance, we should focus our window.
-	if (app.win && Object.keys(app.win).length) {
-		if (app.win.isMinimized()) app.win.restore();
-		app.win.focus();
-	}
-	return true;
-});
+const gotTheLock = electron.app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+	electron.app.quit();
+} else {
+	electron.app.on('second-instance', (event, commandLine, workingDirectory) => {
+		// Someone tried to run a second instance, we should focus our window.
+		if (electron.app.win) {
+			if (electron.app.win.isMinimized()) electron.app.win.restore();
+			electron.app.win.focus();
+		}
+	});
+}
 
 /**
  *
@@ -90,11 +95,6 @@ let isSecondInstance = electron.app.makeSingleInstance((commandLine, workingDire
 function onReady(app) {
 	return async () => {
 		global.__static = __static;
-		if (isSecondInstance) {
-			log.warn('another instance of the app is running, quiting');
-			electron.app.quit();
-			return;
-		}
 		if (!isDevMode() && !isTestMode()) {
 			// Initate auto-updates
 			const { appUpdater } = require('./autoupdater');
@@ -118,7 +118,7 @@ function onReady(app) {
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
-		ctx.stakingService.acquireContract();
+		// ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
 
@@ -188,12 +188,14 @@ function onReady(app) {
 				log.info('did-finish-load');
 				mainWindow.webContents.send('APP_START_LOADING');
 				// start update cmc data
-				await Promise.all([
+				Promise.all([
 					ctx.priceService.startUpdateData(),
 					ctx.idAttributeTypeService.loadIdAttributeTypes(),
 					ctx.exchangesService.loadExchangeData()
 				]);
-				await ctx.idAttributeTypeService.resolveSchemas();
+				if (process.env.ENABLE_JSON_SCHEMA === '1') {
+					await ctx.idAttributeTypeService.resolveSchemas();
+				}
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
@@ -276,11 +278,15 @@ function onWebContentsCreated(event, contents) {
 
 function createKeystoreFolder() {
 	if (!fs.existsSync(walletsDirectoryPath)) {
-		fs.mkdir(walletsDirectoryPath);
+		fs.mkdir(walletsDirectoryPath, error => {
+			if (error) log.error(error);
+		});
 	}
 
 	if (!fs.existsSync(documentsDirectoryPath)) {
-		fs.mkdir(documentsDirectoryPath);
+		fs.mkdir(documentsDirectoryPath, error => {
+			if (error) log.error(error);
+		});
 	}
 }
 

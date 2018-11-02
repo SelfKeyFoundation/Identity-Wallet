@@ -886,8 +886,11 @@ module.exports = function(cradle) {
 	 * SQL Lite
 	 */
 	controller.prototype.getIdAttributeTypes = function(event, actionId, actionName, args) {
-		IdAttributeType.findAll()
-			.eager('schema')
+		let attrPromise = IdAttributeType.findAll();
+		if (process.env.ENABLE_JSON_SCHEMA === '1') {
+			attrPromise = attrPromise.eager('schema');
+		}
+		attrPromise
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})

@@ -435,6 +435,51 @@ function appStates(
 		})
 
 		/**
+		 *  Address book
+		 */
+		.state('member.address-book', {
+			abstract: true,
+			views: {
+				main: {
+					templateUrl: 'member/address-book/layout.html'
+				}
+			}
+		})
+
+		.state('member.address-book.main', {
+			url: '/member/address-book/main',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/main.html',
+					controller: 'AddressBookMainController'
+				}
+			}
+		})
+
+		.state('member.address-book.add', {
+			url: '/member/address-book/add',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/add.html',
+					controller: 'AddressBookAddController'
+				}
+			}
+		})
+
+		.state('member.address-book.edit', {
+			url: '/member/address-book/edit',
+			views: {
+				main: {
+					templateUrl: 'member/address-book/edit.html',
+					controller: 'AddressBookEditController'
+				}
+			},
+			params: {
+				data: {}
+			}
+		})
+
+		/**
 		 *  Marketplace
 		 */
 		.state('member.marketplace', {

@@ -1,7 +1,7 @@
 'use strict';
 const { Logger } = require('common/logger/logger');
 const log = new Logger('TermsDialogController');
-function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService, $timeout) {
+function TermsDialogController($rootScope, $scope, $mdDialog, SqlLiteService, $timeout, $window) {
 	'ngInject';
 
 	log.info('TermsDialogController');
@@ -16,7 +16,15 @@ function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService
 	};
 
 	$scope.crashReportAgreement = {
-		isSet: false
+		isSet: true
+	};
+
+	const setAnalytics = agreed => {
+		if (agreed) {
+			const matomo = $window.document.createElement('script');
+			matomo.src = $window.staticPath + '/assets/libs/matomo.js';
+			$window.document.body.appendChild(matomo);
+		}
 	};
 
 	$scope.agree = event => {
@@ -29,6 +37,7 @@ function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService
 		$scope.isLoading = true;
 		guideSettings.termsAccepted = 1;
 		guideSettings.crashReportAgreement = $scope.crashReportAgreement.isSet;
+		setAnalytics($scope.crashReportAgreement.isSet);
 		let savePromise = SqlLiteService.saveGuideSettings(guideSettings);
 		savePromise.then(() => {
 			$scope.isLoading = false;
@@ -51,9 +60,9 @@ function TermsDialogController($rootScope, $scope, $q, $mdDialog, SqlLiteService
 TermsDialogController.$inject = [
 	'$rootScope',
 	'$scope',
-	'$q',
 	'$mdDialog',
 	'SqlLiteService',
-	'$timeout'
+	'$timeout',
+	'$window'
 ];
 module.exports = TermsDialogController;

@@ -18,11 +18,21 @@ function AppRun(
 	SqlLiteService,
 	Web3Service,
 	CommonService,
-	SignService
+	SignService,
+	$analytics,
+	md5
 ) {
 	'ngInject';
 
 	$trace.enable('TRANSITION');
+
+	const setAnalytics = agreed => {
+		if (agreed) {
+			const matomo = $window.document.createElement('script');
+			matomo.src = $window.staticPath + '/assets/libs/matomo.js';
+			$window.document.body.appendChild(matomo);
+		}
+	};
 
 	$rootScope.isDevMode = CONFIG.dev;
 	$rootScope.productName = appName;
@@ -51,6 +61,8 @@ function AppRun(
 	Wallet.Web3Service = Web3Service;
 	Wallet.SqlLiteService = SqlLiteService;
 	Wallet.CommonService = CommonService;
+	Wallet.Analytics = $analytics;
+	Wallet.AngularMD5 = md5;
 
 	Token.$rootScope = $rootScope;
 	Token.$q = $q;
@@ -210,6 +222,8 @@ function AppRun(
 						});
 					});
 			}, 300);
+		} else {
+			setAnalytics(guideSettings.crashReportAgreement);
 		}
 	};
 
@@ -536,7 +550,9 @@ AppRun.$inject = [
 	'SqlLiteService',
 	'Web3Service',
 	'CommonService',
-	'SignService'
+	'SignService',
+	'$analytics',
+	'md5'
 ];
 
 module.exports = AppRun;

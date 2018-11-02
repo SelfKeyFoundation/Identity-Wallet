@@ -1,4 +1,6 @@
 import * as actions from './actions';
+import * as types from './types';
+import { createAliasedAction } from 'electron-redux';
 import { getGlobalContext } from 'common/context';
 import { getWallet } from 'common/wallet/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
@@ -34,6 +36,7 @@ const init = args => async dispatch => {
 			transactionHash: '',
 			addressError: false,
 			sending: false,
+			status: '',
 			...args
 		})
 	);
@@ -44,7 +47,7 @@ const init = args => async dispatch => {
 
 const setAddress = address => async dispatch => {
 	try {
-		const web3Utils = getGlobalContext().web3Service.web3.utils;
+		const web3Utils = (getGlobalContext() || {}).web3Service.web3.utils;
 		let toChecksumAddress = web3Utils.toChecksumAddress(address);
 		if (web3Utils.isHex(address) && web3Utils.isAddress(toChecksumAddress)) {
 			await dispatch(actions.updateTransaction({ address }));
@@ -72,7 +75,7 @@ const getGasLimit = async (
 		return 21000;
 	}
 
-	const web3Utils = getGlobalContext().web3Service.web3.utils;
+	const web3Utils = (getGlobalContext() || {}).web3Service.web3.utils;
 
 	const params = {
 		method: 'estimateGas',
@@ -82,7 +85,7 @@ const getGasLimit = async (
 		args: [{ from: walletAddress, gas: 4500000 }]
 	};
 
-	return getGlobalContext().web3Service.waitForTicket(params);
+	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
 };
 
 const getTransactionCount = async publicKey => {
@@ -91,7 +94,7 @@ const getTransactionCount = async publicKey => {
 		args: [publicKey, 'pending']
 	};
 
-	return getGlobalContext().web3Service.waitForTicket(params);
+	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
 };
 
 const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
@@ -134,7 +137,10 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 
 			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
 			const feeInWei = String(Math.round(gasPriceInWei * gasLimit));
-			const feeInEth = getGlobalContext().web3Service.web3.utils.fromWei(feeInWei, 'ether');
+			const feeInEth = (getGlobalContext() || {}).web3Service.web3.utils.fromWei(
+				feeInWei,
+				'ether'
+			);
 
 			await dispatch(
 				actions.updateTransaction({
@@ -179,7 +185,9 @@ const setLimitPrice = gasLimit => async dispatch => {
 
 const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
-		const ledgerService = new LedgerService({ web3Service: getGlobalContext().web3Service });
+		const ledgerService = new LedgerService({
+			web3Service: (getGlobalContext() || {}).web3Service
+		});
 		let signed = await ledgerService.signTransaction({
 			dataToSign: rawTx,
 			address: `0x${wallet.publicKey}`
@@ -289,7 +297,7 @@ const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
 
 const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
 	txInfoCheckInterval = setInterval(async () => {
-		const txInfo = await getGlobalContext().web3Service.waitForTicket({
+		const txInfo = await (getGlobalContext() || {}).web3Service.waitForTicket({
 			method: 'getTransactionReceipt',
 			args: [txHash]
 		});
@@ -338,22 +346,36 @@ const confirmSend = () => async (dispatch, getState) => {
 		onceListenerName: 'transactionHash'
 	};
 
-	await dispatch(
-		actions.updateTransaction({
-			status: 'Pending'
-		})
-	);
+	try {
+		const transactionHash = await (getGlobalContext() || {}).web3Service.waitForTicket(params);
 
-	const transactionHash = await getGlobalContext().web3Service.waitForTicket(params);
-	await dispatch(
-		actions.updateTransaction({
-			transactionHash
-		})
-	);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash
+			})
+		);
 
-	dispatch(createTxHistry(transactionHash));
+		dispatch(createTxHistry(transactionHash));
 
-	await dispatch(startTxBalanceUpdater(transactionHash));
+		await dispatch(startTxBalanceUpdater(transactionHash));
+	} catch (err) {
+		console.log(err);
+		const message = err.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+		}
+	}
 };
 
 const setCryptoCurrency = cryptoCurrency => async dispatch => {
@@ -366,14 +388,14 @@ const setCryptoCurrency = cryptoCurrency => async dispatch => {
 
 export default {
 	...actions,
-	setAddress,
-	setAmount,
-	setGasPrice,
-	setLimitPrice,
-	init,
-	setTransactionFee,
-	startSend,
-	cancelSend,
-	confirmSend,
-	setCryptoCurrency
+	setAddress: createAliasedAction(types.ADDRESS_SET, setAddress),
+	setAmount: createAliasedAction(types.AMOUNT_SET, setAmount),
+	setGasPrice: createAliasedAction(types.GAS_PRICE_SET, setGasPrice),
+	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
+	init: createAliasedAction(types.INIT, init),
+	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
+	startSend: createAliasedAction(types.START_SEND, startSend),
+	cancelSend: createAliasedAction(types.CANCEL_SEND, cancelSend),
+	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
+	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
 };

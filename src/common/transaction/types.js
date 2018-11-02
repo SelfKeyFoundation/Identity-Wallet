@@ -3,4 +3,30 @@ const ADDRESS_ERROR_UPDATE = 'app/transaction/address/error/UPDATE';
 const TREZOR_TX_SIGN = 'app/transaction/TREZOR_TX_SIGN';
 const CREATE_TX_HISTORY = 'app/transaction/CREATE_TX_HISTORY';
 
-export { TRANSACTION_UPDATE, ADDRESS_ERROR_UPDATE, TREZOR_TX_SIGN, CREATE_TX_HISTORY };
+const ADDRESS_SET = 'app/transaction/address/SET';
+const AMOUNT_SET = 'app/transaction/amount/SET';
+const GAS_PRICE_SET = 'app/transaction/gasPrice/SET';
+const LIMIT_PRICE_SET = 'app/transaction/limitPrice/SET';
+const INIT = 'app/transaction/init';
+const TRANSACTION_FEE_SET = 'app/transaction/fee/SET';
+const START_SEND = 'app/transaction/startSend';
+const CANCEL_SEND = 'app/transaction/cancelSend';
+const CONFIRM_SEND = 'app/transaction/comfirmSend';
+const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
+
+export {
+	TRANSACTION_UPDATE,
+	ADDRESS_ERROR_UPDATE,
+	TREZOR_TX_SIGN,
+	CREATE_TX_HISTORY,
+	ADDRESS_SET,
+	AMOUNT_SET,
+	GAS_PRICE_SET,
+	LIMIT_PRICE_SET,
+	INIT,
+	TRANSACTION_FEE_SET,
+	START_SEND,
+	CANCEL_SEND,
+	CONFIRM_SEND,
+	CRYPTO_CURRENCY_SET
+};

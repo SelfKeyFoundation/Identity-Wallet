@@ -157,10 +157,10 @@ md-dialog.terms(aira-lable="Terms of Service Agreement")
                             | code or visual design elements (including logos) without express written permission from SelfKey unless otherwise permitted by law.
 
                         .sub-title
-                            | 18) CRASH REPORT
+                            | 18) CRASH REPORT & ANALYTICS
                         p
                             input(id='crashReportAgreement', type='checkbox' ng-model="crashReportAgreement.isSet")
-                            | I agree to anonymously share crash report data with the SelfKey Foundation. This information will be used to improve the performance of the SelfKey Identity Wallet.
+                            | [Default opt-in] I voluntarily agree to anonymously share crash report & analytics data with the SelfKey Foundation. This information will be used to improve the performance of the SelfKey Identity Wallet. The sharing of crash reports and analytics data is not mandatory and users may opt-out if they choose to not share this information.
 
                 section(layout='row', layout-sm='column', layout-align='start center', layout-wrap='', style="z-index: 100;")
                     if (process.env.NODE_ENV === 'test')
