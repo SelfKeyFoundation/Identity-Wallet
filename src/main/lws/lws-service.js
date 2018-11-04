@@ -82,7 +82,7 @@ function init() {
 		reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
 		rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
 		keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
-		certgen: []
+		certgen: null
 	};
 
 	linux.certgen = [
@@ -212,7 +212,7 @@ async function runCertgen(config) {
 			let { type, cmd, options } = run;
 			exec = executor;
 			if (type === 'sudo') exec = sudocutor;
-			if (type === 'windows') exec = windocutor;
+			if (type === 'power') exec = windocutor;
 			await exec(cmd, options);
 		}
 	} catch (error) {
