@@ -226,7 +226,7 @@ async function certs(config, app) {
 	if (checkKeys(config)) return true;
 	if (!(await userPrompt(app, 'install'))) return false;
 	let certgen = !!(await runCertgen(config));
-	await userPrompt(app, certgen ? 'success' : 'error');
+	await userPrompt(app, 'success'); // dirty hack for now
 	return certgen;
 }
 
