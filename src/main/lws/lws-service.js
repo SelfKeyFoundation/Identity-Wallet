@@ -432,11 +432,11 @@ export class LWSService {
 						payload: e
 					};
 				}
-				if (err) {
+				if (err || resp.statusCode >= 400) {
 					lwsResp.error = true;
 					lwsResp.payload = {
 						code: resp.statusCode,
-						message: resp
+						message: body
 					};
 				}
 				conn.send(lwsResp, msg);
@@ -519,7 +519,7 @@ export class LWSService {
 	}
 
 	async handleSecureRequest(msg, conn) {
-		log.info('lws req %2j', msg);
+		log.debug('lws secure req %2j', msg);
 		switch (msg.type) {
 			case 'wallets':
 				return this.reqWallets(msg, conn);
@@ -535,7 +535,7 @@ export class LWSService {
 	}
 
 	async handleRequest(msg, conn) {
-		log.info('lws req %2j', msg);
+		log.debug('lws req %2j', msg);
 		switch (msg.type) {
 			case 'wss_init':
 				return this.startSecureServer(msg, conn);
