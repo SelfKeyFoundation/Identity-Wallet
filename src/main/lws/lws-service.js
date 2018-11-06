@@ -82,7 +82,7 @@ function init() {
 		reqFile: path.join(userDataPath, '/lws/keys/lws_cert.pem'),
 		rsaFile: path.join(userDataPath, '/lws/keys/lws_key.pem'),
 		keyTempFile: path.join(userDataPath, '/lws/keys/keytemp.pem'),
-		certgen: []
+		certgen: null
 	};
 
 	linux.certgen = [
@@ -212,7 +212,7 @@ async function runCertgen(config) {
 			let { type, cmd, options } = run;
 			exec = executor;
 			if (type === 'sudo') exec = sudocutor;
-			if (type === 'windows') exec = windocutor;
+			if (type === 'power') exec = windocutor;
 			await exec(cmd, options);
 		}
 	} catch (error) {
@@ -226,7 +226,7 @@ async function certs(config, app) {
 	if (checkKeys(config)) return true;
 	if (!(await userPrompt(app, 'install'))) return false;
 	let certgen = !!(await runCertgen(config));
-	await userPrompt(app, certgen ? 'success' : 'error');
+	await userPrompt(app, 'success'); // dirty hack for now
 	return certgen;
 }
 
@@ -432,11 +432,11 @@ export class LWSService {
 						payload: e
 					};
 				}
-				if (err) {
+				if (err || resp.statusCode >= 400) {
 					lwsResp.error = true;
 					lwsResp.payload = {
 						code: resp.statusCode,
-						message: resp
+						message: body
 					};
 				}
 				conn.send(lwsResp, msg);
@@ -519,7 +519,7 @@ export class LWSService {
 	}
 
 	async handleSecureRequest(msg, conn) {
-		log.info('lws req %2j', msg);
+		log.debug('lws secure req %2j', msg);
 		switch (msg.type) {
 			case 'wallets':
 				return this.reqWallets(msg, conn);
@@ -535,7 +535,7 @@ export class LWSService {
 	}
 
 	async handleRequest(msg, conn) {
-		log.info('lws req %2j', msg);
+		log.debug('lws req %2j', msg);
 		switch (msg.type) {
 			case 'wss_init':
 				return this.startSecureServer(msg, conn);
