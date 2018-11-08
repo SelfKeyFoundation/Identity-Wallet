@@ -1,7 +1,7 @@
 import Document from './document';
 import TestDb from '../db/test-db';
 
-describe('Country model', () => {
+describe('Document model', () => {
 	const testDoc = {
 		name: 'test',
 		mimeType: 'test-mime',
