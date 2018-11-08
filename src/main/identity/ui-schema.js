@@ -1,17 +1,17 @@
 import BaseModel from '../common/base-model';
-const TABLE_NAME = 'repository';
+const TABLE_NAME = 'ui_schema';
 
-export class Repository extends BaseModel {
+export class UiSchema extends BaseModel {
 	static tableName = TABLE_NAME;
 	static idColumn = 'id';
 	static jsonSchema = {
 		type: 'object',
-		required: ['url'],
+		required: ['url', 'repository', 'attributeType'],
 		properties: {
 			id: { type: 'integer' },
 			url: { type: 'string' },
-			name: { type: 'string' },
-			eager: { type: 'boolean', default: false },
+			repository: { type: 'integer' },
+			attributeType: { type: 'integer' },
 			content: { type: 'object' },
 			expires: { type: 'integer' }
 		}
@@ -30,4 +30,4 @@ export class Repository extends BaseModel {
 	}
 }
 
-export default Repository;
+export default UiSchema;
