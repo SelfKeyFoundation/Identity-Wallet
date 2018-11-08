@@ -2,7 +2,6 @@
 const { getUserDataPath } = require('../../common/utils/common');
 const userDataPath = getUserDataPath();
 const countriesList = require('../assets/data/country-list.json');
-const idAttributeTypes = require('../assets/data/initial-id-attribute-type-list.json');
 const ethTokens = require('../assets/data/eth-tokens.json');
 
 const seeds = () => [
@@ -40,11 +39,6 @@ const seeds = () => [
 			}
 		],
 		multi: false
-	},
-	{
-		table: 'id_attribute_types',
-		insert: idAttributeTypes,
-		multi: true
 	},
 	{
 		table: 'tokens',
