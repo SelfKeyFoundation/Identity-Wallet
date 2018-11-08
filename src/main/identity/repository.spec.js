@@ -3,10 +3,10 @@ import TestDb from '../db/test-db';
 
 describe('Repository model', () => {
 	const testRepo = {
-		walletId: 0,
 		name: 'test',
 		url: 'http://test-url.com',
 		eager: false,
+		content: {},
 		expires: Date.now() + 20000
 	};
 	beforeEach(async () => {
