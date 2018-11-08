@@ -6,13 +6,14 @@ export class Repository extends BaseModel {
 	static idColumn = 'id';
 	static jsonSchema = {
 		type: 'object',
-		required: ['walletId', 'url'],
+		required: ['url'],
 		properties: {
 			id: { type: 'integer' },
 			walletId: { type: 'integer' },
 			url: { type: 'string' },
 			name: { type: 'string' },
 			eager: { type: 'boolean', default: false },
+			content: { type: 'object' },
 			expires: { type: 'integer' }
 		}
 	};
