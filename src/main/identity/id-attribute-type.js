@@ -15,30 +15,22 @@ export class IdAttributeType extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['url', 'schemaId'],
+			required: ['url'],
 			properties: {
 				id: { type: 'integer' },
 				url: { type: 'string' },
-				schemaId: { type: 'integer' },
-				defaultRepositoryId: { type: 'integer' }
+				defaultRepositoryId: { type: 'integer' },
+				content: { type: 'object' },
+				expires: { type: 'integer' }
 			}
 		};
 	}
 
 	static get relationMappings() {
-		const JsonSchema = require('./json-schema').default;
 		const Repository = require('./repository').default;
 		const UiSchema = require('./ui-schema').default;
 
 		return {
-			schema: {
-				relation: Model.HasOneRelation,
-				modelClass: JsonSchema,
-				join: {
-					from: `${this.tableName}.schemaId`,
-					to: `${JsonSchema.tableName}.id`
-				}
-			},
 			defaultRepository: {
 				relation: Model.HasOneRelation,
 				modelClass: Repository,
