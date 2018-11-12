@@ -30,7 +30,7 @@ const importIdAttributeTypes = [
 	}
 ];
 
-describe('IdAttributeTypeService', () => {
+xdescribe('IdAttributeTypeService', () => {
 	let service;
 	beforeEach(() => {
 		service = new IdAttributeTypeService();
