@@ -3,26 +3,20 @@ import { formatDataUrl } from 'common/utils/document';
 const TABLE_NAME = 'documents';
 
 export class Document extends BaseModel {
-	static get tableName() {
-		return TABLE_NAME;
-	}
-
-	static get idColumn() {
-		return 'id';
-	}
-
-	static get jsonSchema() {
-		return {
-			type: 'object',
-			properties: {
-				id: { type: 'integer' },
-				name: { type: 'string' },
-				mimeType: { type: 'string' },
-				size: { type: 'integer' },
-				buffer: { type: 'binary' }
-			}
-		};
-	}
+	static tableName = TABLE_NAME;
+	static idColumn = 'id';
+	static jsonSchema = {
+		type: 'object',
+		properties: {
+			id: { type: 'integer' },
+			name: { type: 'string' },
+			mimeType: { type: 'string' },
+			size: { type: 'integer' },
+			buffer: { type: 'binary' },
+			attributeId: { type: 'integer' }
+		},
+		required: ['attributeId', 'mimeType', 'size', 'buffer']
+	};
 
 	getDataUrl() {
 		return formatDataUrl(this.mimeType, this.buffer);

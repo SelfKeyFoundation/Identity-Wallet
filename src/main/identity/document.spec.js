@@ -6,7 +6,8 @@ describe('Document model', () => {
 		name: 'test',
 		mimeType: 'test-mime',
 		size: 100,
-		buffer: Buffer.alloc(100)
+		buffer: Buffer.alloc(100),
+		attributeId: 1
 	};
 	beforeEach(async () => {
 		await TestDb.init();
