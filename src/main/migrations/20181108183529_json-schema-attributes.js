@@ -19,10 +19,10 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	await knex.schema.createTable('id_attribute_types', t => {
 		t.increments('id');
 		t.string('url').notNullable();
-		t.integer('schema')
+		t.integer('schemaId')
 			.notNullable()
 			.references('json_schema.id');
-		t.integer('defaultRepository').references('repository.id');
+		t.integer('defaultRepositoryId').references('repository.id');
 		t.integer('createdAt').notNullable();
 		t.integer('updatedAt');
 	});
@@ -40,7 +40,7 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			let newType = {
 				oldKey: t.key,
 				type: {
-					defaultRepository: ctx.repoId,
+					defaultRepositoryId: ctx.repoId,
 					url,
 					createdAt: t.createdAt,
 					updatedAt: ctx.now
@@ -56,7 +56,7 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 		})
 		.map(async t => {
 			let schemaIds = await knex('json_schema').insert(t.schema);
-			t.type.schema = schemaIds[0];
+			t.type.schemaId = schemaIds[0];
 			t.schema.id = schemaIds[0];
 			let typeIds = await knex('id_attribute_types').insert(t.type);
 			t.type.id = typeIds[0];
@@ -179,10 +179,10 @@ exports.up = async (knex, Promise) => {
 
 	await knex.schema.createTable('ui_schema', t => {
 		t.increments('id');
-		t.integer('repository')
+		t.integer('repositoryId')
 			.notNullable()
 			.references('repository.id');
-		t.integer('attributeType')
+		t.integer('attributeTypeId')
 			.notNullable()
 			.references('id_attribute_types.id');
 		t.string('url');
@@ -194,8 +194,8 @@ exports.up = async (knex, Promise) => {
 
 	await knex.schema.createTable('json_schema', t => {
 		t.increments('id');
-		t.integer('defaultRepository').references('repository.id');
-		t.integer('attributeType')
+		t.integer('defaultRepositoryId').references('repository.id');
+		t.integer('attributeTypeId')
 			.notNullable()
 			.references('id_attribute_types.id');
 		t.string('url');

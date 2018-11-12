@@ -1,3 +1,4 @@
+import { Model } from 'objection';
 import BaseModel from '../common/base-model';
 const TABLE_NAME = 'json_schema';
 
@@ -6,16 +7,39 @@ export class JsonSchema extends BaseModel {
 	static idColumn = 'id';
 	static jsonSchema = {
 		type: 'object',
-		required: ['url', 'attributeType'],
+		required: ['url', 'attributeTypeId'],
 		properties: {
 			id: { type: 'integer' },
 			url: { type: 'string' },
-			defaultRepository: { type: 'integer' },
-			attributeType: { type: 'integer' },
+			defaultRepositoryId: { type: 'integer' },
+			attributeTypeId: { type: 'integer' },
 			content: { type: 'object' },
 			expires: { type: 'integer' }
 		}
 	};
+
+	static get relationMappings() {
+		const IdAttributeType = require('./id-attribute-type').default;
+		const Repository = require('./repository').default;
+		return {
+			idAttributeType: {
+				relation: Model.HasOneRelation,
+				modelClass: IdAttributeType,
+				join: {
+					from: `${this.tableName}.attributeTypeId`,
+					to: `${IdAttributeType.tableName}.id`
+				}
+			},
+			defaultRepository: {
+				relation: Model.HasOneRelation,
+				modelClass: Repository,
+				join: {
+					from: `${this.tableName}.defaultRepositoryId`,
+					to: `${Repository.tableName}.id`
+				}
+			}
+		};
+	}
 
 	static async findById(id) {
 		return this.query().findById(id);

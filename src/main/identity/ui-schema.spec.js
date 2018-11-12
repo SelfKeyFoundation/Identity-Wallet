@@ -4,8 +4,8 @@ import TestDb from '../db/test-db';
 describe('UiSchema model', () => {
 	const testUiSchema = {
 		url: 'http://test-url.com',
-		attributeType: 1,
-		repository: 1,
+		attributeTypeId: 1,
+		repositoryId: 1,
 		content: {},
 		expires: Date.now() + 20000
 	};

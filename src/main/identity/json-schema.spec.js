@@ -4,8 +4,8 @@ import TestDb from '../db/test-db';
 describe('JsonSchema model', () => {
 	const testUiSchema = {
 		url: 'http://test-url.com',
-		attributeType: 1,
-		defaultRepository: 1,
+		attributeTypeId: 1,
+		defaultRepositoryId: 1,
 		content: {},
 		expires: Date.now() + 20000
 	};

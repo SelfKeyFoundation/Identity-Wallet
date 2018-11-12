@@ -1,3 +1,4 @@
+import { Model } from 'objection';
 import BaseModel from '../common/base-model';
 const TABLE_NAME = 'repository';
 
@@ -16,6 +17,34 @@ export class Repository extends BaseModel {
 			expires: { type: 'integer' }
 		}
 	};
+
+	static get relationMappings() {
+		const IdAttributeType = require('./id-attribute-type').default;
+		const UiSchema = require('./ui-schema').default;
+
+		return {
+			attributeTypes: {
+				relation: Model.ManyToManyRelation,
+				modelClass: IdAttributeType,
+				join: {
+					from: `${this.tableName}.id`,
+					through: {
+						from: 'repository_attribute_types.repositoryId',
+						to: 'repository_attribute_types.attributeTypeId'
+					},
+					to: `${IdAttributeType.tableName}.id`
+				}
+			},
+			uiSchemas: {
+				relation: Model.HasManyRelation,
+				modelClass: UiSchema,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${UiSchema.tableName}.repositoryId`
+				}
+			}
+		};
+	}
 
 	static async findById(id) {
 		return this.query().findById(id);
