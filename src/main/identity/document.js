@@ -1,3 +1,4 @@
+import { Model } from 'objection';
 import BaseModel from '../common/base-model';
 import { formatDataUrl } from 'common/utils/document';
 const TABLE_NAME = 'documents';
@@ -17,6 +18,20 @@ export class Document extends BaseModel {
 		},
 		required: ['attributeId', 'mimeType', 'size', 'buffer']
 	};
+
+	static get relationMappings() {
+		const IdAttribute = require('./id-attribute').default;
+		return {
+			wallet: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: IdAttribute,
+				join: {
+					from: `${this.tableName}.attributeId`,
+					to: `${IdAttribute.tableName}.id`
+				}
+			}
+		};
+	}
 
 	getDataUrl() {
 		return formatDataUrl(this.mimeType, this.buffer);

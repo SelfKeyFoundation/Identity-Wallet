@@ -15,25 +15,56 @@ export class IdAttributeType extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['url', 'schema'],
+			required: ['url', 'schemaId'],
 			properties: {
 				id: { type: 'integer' },
 				url: { type: 'string' },
-				schema: { type: 'integer' },
-				defaultRepository: { type: 'integer' }
+				schemaId: { type: 'integer' },
+				defaultRepositoryId: { type: 'integer' }
 			}
 		};
 	}
 
 	static get relationMappings() {
 		const JsonSchema = require('./json-schema').default;
+		const Repository = require('./repository').default;
+		const UiSchema = require('./ui-schema').default;
+
 		return {
-			fullSchema: {
+			schema: {
 				relation: Model.HasOneRelation,
 				modelClass: JsonSchema,
 				join: {
-					from: `${this.tableName}.schema`,
+					from: `${this.tableName}.schemaId`,
 					to: `${JsonSchema.tableName}.id`
+				}
+			},
+			defaultRepository: {
+				relation: Model.HasOneRelation,
+				modelClass: Repository,
+				join: {
+					from: `${this.tableName}.defaultRepositoryId`,
+					to: `${Repository.tableName}.id`
+				}
+			},
+			uiSchemas: {
+				relation: Model.HasManyRelation,
+				modelClass: UiSchema,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${UiSchema.tableName}.attributeTypeId`
+				}
+			},
+			repositories: {
+				relation: Model.ManyToManyRelation,
+				modelClass: Repository,
+				join: {
+					from: `${this.tableName}.id`,
+					through: {
+						from: 'repository_attribute_types.attributeTypeId',
+						to: 'repository_attribute_types.repositoryId'
+					},
+					to: `${Repository.tableName}.id`
 				}
 			}
 		};
