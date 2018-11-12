@@ -15,13 +15,6 @@ describe('Wallet model', () => {
 		isSetupFinished: 1
 	};
 
-	const initialAttributes = {
-		country_of_residency: 'Algeria',
-		first_name: 'test1',
-		last_name: 'test1',
-		middle_name: 'test1'
-	};
-
 	beforeEach(async () => {
 		await TestDb.init();
 	});
@@ -93,25 +86,6 @@ describe('Wallet model', () => {
 		});
 		let selectedProfilePicture = await Wallet.selectProfilePictureById(itm.id);
 		expect(selectedProfilePicture).toBe('test_profile_picture');
-	});
-
-	it('addInitialIdAttributesAndActivate', async () => {
-		const wallet = await Wallet.create(testItm);
-		const initialized = await Wallet.addInitialIdAttributesAndActivate(
-			wallet.id,
-			initialAttributes
-		);
-		expect(initialized.id).toBe(wallet.id);
-		let attrs = await initialized.$relatedQuery('idAttributes');
-		expect(attrs.length).toBeGreaterThan(0);
-	});
-
-	it('editImportedIdAttributes', async () => {
-		const wallet = await Wallet.create(testItm);
-		const imported = await Wallet.editImportedIdAttributes(wallet.id, initialAttributes);
-		expect(imported.id).toBe(wallet.id);
-		let attrs = await imported.$relatedQuery('idAttributes');
-		expect(attrs.length).toBeGreaterThan(0);
 	});
 
 	describe('hasSignedUpTo', () => {
