@@ -5,12 +5,12 @@ import TestDb from '../db/test-db';
 describe('IdAttributeType model', () => {
 	const testItem = {
 		url: 'test',
-		schemaId: 1,
+		content: {},
 		defaultRepositoryId: 1
 	};
 	const testItem2 = {
 		url: 'test2',
-		schemaId: 2,
+		content: {},
 		defaultRepositoryId: 1
 	};
 	beforeEach(async () => {
