@@ -27,6 +27,13 @@ describe('UiSchema model', () => {
 		expect(repo).toEqual(found);
 	});
 
+	it('findByUrl', async () => {
+		const schema = await UiSchema.query().insert(testUiSchema);
+		expect(schema.url).toBeDefined();
+		const found = await UiSchema.findByUrl(schema.url);
+		expect(schema).toEqual(found);
+	});
+
 	it('create', async () => {
 		const repo = await UiSchema.create(testUiSchema);
 		const repo2 = await UiSchema.create(testUiSchema);

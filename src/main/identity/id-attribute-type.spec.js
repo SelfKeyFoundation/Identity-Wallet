@@ -45,4 +45,10 @@ describe('IdAttributeType model', () => {
 		all = await IdAttributeType.findAll();
 		expect(all.length).toBe(2);
 	});
+	it('findByUrl', async () => {
+		const attr = await IdAttributeType.query().insert(testItem);
+		expect(attr.url).toBeDefined();
+		const found = await IdAttributeType.findByUrl(attr.url);
+		expect(attr).toEqual(found);
+	});
 });
