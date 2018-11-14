@@ -41,6 +41,10 @@ export class UiSchema extends BaseModel {
 		};
 	}
 
+	static findByUrl(url, tx) {
+		return this.query(tx).findOne({ url });
+	}
+
 	static async findById(id) {
 		return this.query().findById(id);
 	}

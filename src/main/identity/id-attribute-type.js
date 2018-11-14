@@ -62,12 +62,16 @@ export class IdAttributeType extends BaseModel {
 		};
 	}
 
-	static create(data) {
-		return this.query().insertAndFetch(data);
+	static create(data, tx) {
+		return this.query(tx).insertAndFetch(data);
 	}
 
 	static findAll(tx) {
 		return this.query(tx);
+	}
+
+	static findByUrl(url, tx) {
+		return this.query(tx).findOne({ url });
 	}
 }
 
