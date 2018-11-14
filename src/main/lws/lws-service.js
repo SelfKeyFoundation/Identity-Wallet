@@ -303,6 +303,7 @@ export class LWSService {
 				if (!attr.hasDocument()) {
 					return attr;
 				}
+				// TODO: Fix, attribute can contain multiple files now
 				let docValue = await attr.loadDocumentDataUrl();
 				return { ...attr, data: { value: docValue }, document: true };
 			})

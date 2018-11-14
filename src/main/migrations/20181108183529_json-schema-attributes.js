@@ -25,6 +25,16 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 		t.integer('createdAt').notNullable();
 		t.integer('updatedAt');
 	});
+	await knex.schema.createTable('repository_attribute_types', table => {
+		table
+			.integer('repositoryId')
+			.notNullable()
+			.references('repository.id');
+		table
+			.integer('attributeTypeId')
+			.notNullable()
+			.references('id_attribute_types.id');
+	});
 
 	let attributeTypes = await knex('id_attribute_types_old').select();
 
@@ -54,7 +64,6 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			t.type.id = typeIds[0];
 			return t;
 		});
-
 	await Promise.all(attributeTypes);
 	await knex.schema.dropTable('id_attribute_types_old');
 	return ctx;
@@ -124,6 +133,7 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		FROM id_attributes_old AS attr, id_attribute_types as t
 		WHERE attr.type == t.key;
 	`);
+
 	await knex.raw(`
 		INSERT INTO documents
 		SELECT
