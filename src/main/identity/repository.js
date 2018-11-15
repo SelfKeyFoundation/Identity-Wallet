@@ -83,7 +83,7 @@ export class Repository extends BaseModel {
 			url,
 			name: remoteRepo.name,
 			content: remoteRepo,
-			expires: remoteRepo.expires || REPOSITORY_EXPIRES_DEFAULT
+			expires: Date.now() + (remoteRepo.expires || REPOSITORY_EXPIRES_DEFAULT)
 		};
 	}
 
@@ -184,8 +184,8 @@ export class Repository extends BaseModel {
 	}
 
 	static async addRemoteRepo(url) {
-		let [content, repo] = await Promise.all([this.loadRemote(url), this.findByUrl(url)]);
-		if (!content) {
+		let [remote, repo] = await Promise.all([this.loadRemote(url), this.findByUrl(url)]);
+		if (!remote) {
 			log.error('could not load repo %s from remote', url);
 			return;
 		}
@@ -195,14 +195,10 @@ export class Repository extends BaseModel {
 				repo = await this.create({ url, content: {} }, tx);
 			}
 
-			let updates = repo.diffAttributes({ url, content });
+			let updates = repo.diffAttributes(remote);
 
 			await repo.updateAttributes(updates, tx);
-			repo = await repo.$query(tx).patchAndFetch({
-				name: content.name,
-				expires: content.expires || REPOSITORY_EXPIRES_DEFAULT,
-				content
-			});
+			repo = await repo.$query(tx).patchAndFetch(remote);
 			await tx.commit();
 			return repo;
 		} catch (error) {
