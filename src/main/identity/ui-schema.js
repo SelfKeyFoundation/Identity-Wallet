@@ -41,8 +41,8 @@ export class UiSchema extends BaseModel {
 		};
 	}
 
-	static findByUrl(url, tx) {
-		return this.query(tx).findOne({ url });
+	static findByUrl(url, repositoryId, tx) {
+		return this.query(tx).findOne({ url, repositoryId });
 	}
 
 	static async findById(id) {

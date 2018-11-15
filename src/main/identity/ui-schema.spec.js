@@ -30,7 +30,7 @@ describe('UiSchema model', () => {
 	it('findByUrl', async () => {
 		const schema = await UiSchema.query().insert(testUiSchema);
 		expect(schema.url).toBeDefined();
-		const found = await UiSchema.findByUrl(schema.url);
+		const found = await UiSchema.findByUrl(schema.url, testUiSchema.repositoryId);
 		expect(schema).toEqual(found);
 	});
 
