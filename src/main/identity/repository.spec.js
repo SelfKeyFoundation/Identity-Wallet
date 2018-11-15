@@ -328,9 +328,15 @@ describe('Repository model', () => {
 				'http://test-url/id-attribute4.json'
 			]
 		};
+		const remoteRepo = {
+			url: 'http://test-url.com',
+			name: 'test',
+			expires: Date.now() + 3000000,
+			content: remoteContent
+		};
 		it('it should update repo if it exists', async () => {
 			let createdRepo = await Repository.create(testRepo);
-			sinon.stub(Repository, 'loadRemote').resolves(remoteContent);
+			sinon.stub(Repository, 'loadRemote').resolves(remoteRepo);
 			await Repository.addRemoteRepo(testRepo.url);
 			let updatedRepo = await Repository.findById(createdRepo.id).eager(
 				'[uiSchemas, attributeTypes]'
@@ -344,7 +350,7 @@ describe('Repository model', () => {
 		it('it should add new repo if it does not exists', async () => {
 			let foundRepo = await Repository.findByUrl(testRepo.url);
 			expect(foundRepo).toBeUndefined();
-			sinon.stub(Repository, 'loadRemote').resolves(remoteContent);
+			sinon.stub(Repository, 'loadRemote').resolves(remoteRepo);
 			await Repository.addRemoteRepo(testRepo.url);
 			let addedRepo = await Repository.findByUrl(testRepo.url).eager(
 				'[uiSchemas, attributeTypes]'

@@ -1,7 +1,14 @@
-import { Model } from 'objection';
+import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
+import fetch from 'node-fetch';
+import { Logger } from 'common/logger';
+import { Repository } from './repository';
+
+const log = new Logger('id-attribute-type-model');
 
 const TABLE_NAME = 'id_attribute_types';
+
+const ID_ATTROBUTE_TYPE_EXPIRES = 0;
 
 export class IdAttributeType extends BaseModel {
 	static get tableName() {
@@ -75,12 +82,61 @@ export class IdAttributeType extends BaseModel {
 		return this.query(tx).insertAndFetch(data);
 	}
 
+	static findById(id, tx) {
+		return this.query(tx).findById(id);
+	}
+
 	static findAll(tx) {
 		return this.query(tx);
 	}
 
 	static findByUrl(url, tx) {
 		return this.query(tx).findOne({ url });
+	}
+
+	static async loadRemote(url) {
+		let defaultRepo = null;
+		let res = await fetch(url);
+		if (res.statusCode >= 400) {
+			throw new Error('Failed to fetch repository from remote');
+		}
+		let remote = await res.json();
+		if (remote.identityAttributeRepository) {
+			defaultRepo = await Repository.findByUrl(remote.identityAttributeRepository);
+			if (!defaultRepo) {
+				defaultRepo = await Repository.addRemoteRepo(remote.identityAttributeRepository);
+			}
+		}
+		let remoteRepo = {
+			url,
+			content: remote,
+			expires: Date.now() + (remote.expires || ID_ATTROBUTE_TYPE_EXPIRES)
+		};
+		if (defaultRepo) remoteRepo.defaultRepositoryId = defaultRepo.id;
+		return remoteRepo;
+	}
+
+	static async addRemote(url) {
+		let [remote, attrType] = await Promise.all([this.loadRemote(url), this.findByUrl(url)]);
+		if (!remote) {
+			log.error('could not load attribute type %s from remote', url);
+			return;
+		}
+		const tx = await transaction.start(this.knex());
+		try {
+			if (!attrType) {
+				attrType = await this.create(remote, tx);
+			} else {
+				attrType = await attrType.$query(tx).patchAndFetch(remote);
+			}
+
+			await tx.commit();
+			return attrType;
+		} catch (error) {
+			log.error(error);
+			await tx.rollback(error);
+			throw error;
+		}
 	}
 }
 
