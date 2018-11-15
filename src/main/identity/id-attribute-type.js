@@ -2,13 +2,12 @@ import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
 import fetch from 'node-fetch';
 import { Logger } from 'common/logger';
-import { Repository } from './repository';
 
 const log = new Logger('id-attribute-type-model');
 
 const TABLE_NAME = 'id_attribute_types';
 
-const ID_ATTROBUTE_TYPE_EXPIRES = 0;
+const ID_ATTROBUTE_TYPE_EXPIRES = 86400000; // 1 day
 
 export class IdAttributeType extends BaseModel {
 	static get tableName() {
@@ -95,6 +94,7 @@ export class IdAttributeType extends BaseModel {
 	}
 
 	static async loadRemote(url) {
+		const Repository = require('./repository').default;
 		let defaultRepo = null;
 		let res = await fetch(url);
 		if (res.statusCode >= 400) {
@@ -107,13 +107,13 @@ export class IdAttributeType extends BaseModel {
 				defaultRepo = await Repository.addRemoteRepo(remote.identityAttributeRepository);
 			}
 		}
-		let remoteRepo = {
+		let remoteAttrType = {
 			url,
 			content: remote,
 			expires: Date.now() + (remote.expires || ID_ATTROBUTE_TYPE_EXPIRES)
 		};
-		if (defaultRepo) remoteRepo.defaultRepositoryId = defaultRepo.id;
-		return remoteRepo;
+		if (defaultRepo) remoteAttrType.defaultRepositoryId = defaultRepo.id;
+		return remoteAttrType;
 	}
 
 	static async addRemote(url) {

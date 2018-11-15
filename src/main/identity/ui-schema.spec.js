@@ -1,5 +1,8 @@
 import UiSchema from './ui-schema';
 import TestDb from '../db/test-db';
+import fetch from 'node-fetch';
+import sinon from 'sinon';
+jest.mock('node-fetch');
 
 describe('UiSchema model', () => {
 	const testUiSchema = {
@@ -15,6 +18,8 @@ describe('UiSchema model', () => {
 
 	afterEach(async () => {
 		await TestDb.reset();
+		sinon.restore();
+		fetch.mockRestore();
 	});
 
 	afterAll(async () => {
@@ -49,5 +54,54 @@ describe('UiSchema model', () => {
 		await UiSchema.delete(repo.id);
 		found = await UiSchema.query().findById(repo.id);
 		expect(found).toBeUndefined();
+	});
+
+	it('loadRemote', async () => {
+		let testScchema = {
+			test: 'test'
+		};
+		let testUrl = 'https://test-url/ui-schema.json';
+		fetch.mockResolvedValue({
+			statusCode: 200,
+			json() {
+				return testScchema;
+			}
+		});
+		let res = await UiSchema.loadRemote(testUrl);
+
+		expect(res.url).toBe(testUrl);
+		expect(res.content).toEqual(testScchema);
+	});
+
+	describe('addRemote', () => {
+		let testUrl = 'https://test-url/ui-schema.json';
+		const remoteContent = {
+			test: 'test'
+		};
+		const remoteUiSchema = {
+			url: testUrl,
+			expires: Date.now() + 3000000,
+			content: remoteContent
+		};
+		it('it should update id attribute type if it exists', async () => {
+			let createdUiSchemna = await UiSchema.create({
+				url: testUrl,
+				repositoryId: 1,
+				attributeTypeId: 1
+			});
+			sinon.stub(UiSchema, 'loadRemote').resolves(remoteUiSchema);
+			await UiSchema.addRemote(testUrl, 1);
+			let updatedUiSchema = await UiSchema.findById(createdUiSchemna.id);
+			expect(updatedUiSchema.updatedAt).toBeGreaterThan(createdUiSchemna.updatedAt);
+			expect(updatedUiSchema.content).toEqual(remoteContent);
+		});
+		it('it should add new repo if it does not exists', async () => {
+			let foundUiSchema = await UiSchema.findByUrl(remoteUiSchema.url, 1);
+			expect(foundUiSchema).toBeUndefined();
+			sinon.stub(UiSchema, 'loadRemote').resolves(remoteUiSchema);
+			await UiSchema.addRemote(remoteUiSchema.url, 1, 1);
+			let addedUiSchema = await UiSchema.findByUrl(remoteUiSchema.url, 1);
+			expect(addedUiSchema.content).toEqual(remoteContent);
+		});
 	});
 });
