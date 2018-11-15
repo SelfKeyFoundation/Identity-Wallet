@@ -29,6 +29,7 @@ export class IdAttributeType extends BaseModel {
 	static get relationMappings() {
 		const Repository = require('./repository').default;
 		const UiSchema = require('./ui-schema').default;
+		const IdAttribute = require('./id-attribute').default;
 
 		return {
 			defaultRepository: {
@@ -45,6 +46,14 @@ export class IdAttributeType extends BaseModel {
 				join: {
 					from: `${this.tableName}.id`,
 					to: `${UiSchema.tableName}.attributeTypeId`
+				}
+			},
+			idAttributes: {
+				relation: Model.HasManyRelation,
+				modelClass: IdAttribute,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${IdAttribute.tableName}.typeId`
 				}
 			},
 			repositories: {

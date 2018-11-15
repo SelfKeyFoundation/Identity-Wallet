@@ -145,12 +145,15 @@ export class Repository extends BaseModel {
 	}
 
 	async addAttribute(attr, tx) {
+		if (typeof attr === 'string') {
+			attr = { json: attr };
+		}
 		if (!attr.json) return;
 		let attrType = await IdAttributeType.findByUrl(attr.json, tx);
 		if (!attrType) attrType = await IdAttributeType.create({ url: attr.json }, tx);
 		await attrType.$relatedQuery('repositories', tx).relate(this.id);
 		if (!attr.ui) return;
-		let uiSchema = await UiSchema.findByUrl(attr.ui, tx);
+		let uiSchema = await UiSchema.findByUrl(attr.ui, this.id, tx);
 		if (uiSchema) return;
 
 		await UiSchema.create(
@@ -164,14 +167,20 @@ export class Repository extends BaseModel {
 	}
 
 	async deleteAttribute(attr, tx) {
-		if (attr.json) {
-			let attrType = await IdAttributeType.findByUrl(attr.json, tx);
-			if (attrType) await attrType.$query(tx).delete();
-		}
 		if (attr.ui) {
-			let uiSchema = await UiSchema.findByUrl(attr.ui, tx);
+			let uiSchema = await UiSchema.findByUrl(attr.ui, this.id, tx);
 			if (uiSchema) await uiSchema.$query(tx).delete();
 		}
+		if (!attr.json) return;
+
+		let attrType = await IdAttributeType.findByUrl(attr.json, tx).eager('idAttributes');
+		if (!attrType) return;
+		await this.$relatedQuery('attributeTypes', tx)
+			.unrelate()
+			.where('id', attrType.id);
+		await attrType.$loadRelated('[repositories, idAttributes]', tx);
+		if (!attrType.repositories.length && !attrType.idAttributes.length)
+			await attrType.$query(tx).delete();
 	}
 
 	static async addRemoteRepo(url) {
@@ -182,12 +191,9 @@ export class Repository extends BaseModel {
 		}
 		const tx = await transaction.start(this.knex());
 		try {
-			console.log('transaction started');
 			if (!repo) {
 				repo = await this.create({ url, content: {} }, tx);
 			}
-
-			console.log('repo created');
 
 			let updates = repo.diffAttributes({ url, content });
 

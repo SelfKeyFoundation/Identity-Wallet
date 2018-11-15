@@ -2,6 +2,9 @@ import Repository from './repository';
 import TestDb from '../db/test-db';
 import fetch from 'node-fetch';
 import sinon from 'sinon';
+import { UiSchema } from './ui-schema';
+import { IdAttribute } from './id-attribute';
+import { IdAttributeType } from './id-attribute-type';
 jest.mock('node-fetch');
 
 describe('Repository model', () => {
@@ -209,15 +212,102 @@ describe('Repository model', () => {
 		});
 	});
 	describe('addAttribute', () => {
-		it('should add attribute and schema', () => {});
-		it('should not create new identity attribute if it exists in other repo', () => {});
-		it('should create new ui schema even if attribute exists in a different repo', () => {});
+		it('should add attribute and schema', async () => {
+			let repo = await Repository.findById(1);
+			let attr = {
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui.json'
+			};
+			await repo.addAttribute(attr);
+
+			let uiSchema = await UiSchema.findByUrl(attr.ui, repo.id).eager(
+				'[idAttributeType, repository]'
+			);
+
+			expect(uiSchema.url).toEqual(attr.ui);
+			expect(uiSchema.idAttributeType.url).toEqual(attr.json);
+			expect(uiSchema.repository.id).toEqual(repo.id);
+		});
+		it('should not create new identity attribute if it exists in other repo', async () => {
+			let repo1 = await Repository.findById(1);
+			let repo2 = await Repository.create({
+				url: 'http://test-url/repository.json'
+			});
+			expect(repo1.id).not.toEqual(repo2.id);
+			await repo1.addAttribute('http://test-url/schema.json');
+
+			let attrCreated = await IdAttributeType.findByUrl('http://test-url/schema.json');
+			expect(attrCreated).toBeDefined();
+
+			await repo2.addAttribute({
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui.json'
+			});
+
+			await repo2.$loadRelated('attributeTypes');
+
+			let repo2Attr = repo2.attributeTypes.filter(
+				attr => attr.url === 'http://test-url/schema.json'
+			);
+
+			expect(repo2Attr.length).toBe(1);
+			expect(repo2Attr[0].id).toBe(attrCreated.id);
+		});
+		it('should create new ui schema even if attribute exists in a different repo', async () => {
+			let repo1 = await Repository.findById(1);
+			let repo2 = await Repository.create({
+				url: 'http://test-url/repository.json'
+			});
+			expect(repo1.id).not.toEqual(repo2.id);
+			await repo1.addAttribute({
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui1.json'
+			});
+
+			let attrCreated = await IdAttributeType.findByUrl('http://test-url/schema.json');
+			expect(attrCreated).toBeDefined();
+
+			await repo2.addAttribute({
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui2.json'
+			});
+
+			await attrCreated.$loadRelated('uiSchemas');
+
+			expect(attrCreated.uiSchemas.length).toBe(2);
+			expect(attrCreated.uiSchemas[0].id).not.toBe(attrCreated.uiSchemas[1].id);
+		});
 	});
 	describe('deleteAttribute', () => {
-		it('id attribure type with no other attached repos and no id attributes should be deleted', () => {});
-		it('id attribute type with no other attached repos but with attributes should be redirected to null repo', () => {});
-		it('ui schema should alway be deleted on delete', () => {});
-		it('if no attributes and no other repos deletre idAttributeType', () => {});
+		it('id attribure type with no other attached repos and no id attributes should be deleted', async () => {
+			let repo1 = await Repository.findById(1);
+			let attr = {
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui1.json'
+			};
+			await repo1.addAttribute(attr);
+			await repo1.deleteAttribute(attr);
+
+			expect(await IdAttributeType.findByUrl(attr.json)).toBeUndefined();
+			expect(await UiSchema.findByUrl(attr.ui, repo1.id)).toBeUndefined();
+		});
+		it('id attribute type with no other attached repos but with attributes should be redirected to null repo', async () => {
+			let repo1 = await Repository.findById(1);
+			let attr = {
+				json: 'http://test-url/schema.json',
+				ui: 'http://test-url/ui1.json'
+			};
+			await repo1.addAttribute(attr);
+			let attrType = await IdAttributeType.findByUrl(attr.json);
+			await IdAttribute.create({
+				walletId: 1,
+				typeId: attrType.id
+			});
+			await repo1.deleteAttribute(attr);
+			attrType = await IdAttributeType.findByUrl(attr.json);
+			expect(attrType).toBeDefined();
+			expect(await UiSchema.findByUrl(attr.ui, repo1.id)).toBeUndefined();
+		});
 	});
 	describe('addRemoteRepo', () => {
 		const remoteContent = {
