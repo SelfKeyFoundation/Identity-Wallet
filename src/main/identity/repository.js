@@ -53,8 +53,8 @@ export class Repository extends BaseModel {
 		};
 	}
 
-	static findById(id) {
-		return this.query().findById(id);
+	static findById(id, tx) {
+		return this.query(tx).findById(id);
 	}
 
 	static findByUrl(url, tx) {
