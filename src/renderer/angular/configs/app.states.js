@@ -413,6 +413,27 @@ function appStates(
 		})
 
 		/**
+		 * Selfkey ID
+		 */
+		.state('member.selfkey-id', {
+			abstract: true,
+			views: {
+				main: {
+					templateUrl: 'member/selfkey-id/layout.html'
+				}
+			}
+		})
+
+		.state('member.selfkey-id.main', {
+			url: '/member/selfkey-id/main',
+			views: {
+				main: {
+					templateUrl: 'member/selfkey-id/main.html'
+				}
+			}
+		})
+
+		/**
 		 * ID Wallet
 		 */
 		.state('member.id-wallet', {
