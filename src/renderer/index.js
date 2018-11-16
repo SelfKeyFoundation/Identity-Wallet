@@ -16,6 +16,7 @@ import { MarketplaceWrapper } from './react/marketplace';
 import { TransactionsHistoryWrapper } from './react/transaction/transactions-history';
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
+import { SelfkeyIdWrapper } from './react/selfkey-id/main';
 
 import { ExchangesWrapper } from './react/marketplace/exchanges';
 import { ItemWrapper } from './react/marketplace/item';
@@ -328,6 +329,8 @@ const returnDepositMarketplace = react2angular(ReturnWrapper, [
 	'navigateToTransactionProgress'
 ]);
 angular.module('kyc-wallet').component('returnDepositMarketplace', returnDepositMarketplace);
+const selfkeyIdWrapper = react2angular(SelfkeyIdWrapper, []);
+angular.module('kyc-wallet').component('selfkeyId', selfkeyIdWrapper);
 
 /**
  * controllers

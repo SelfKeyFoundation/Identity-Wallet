@@ -29,6 +29,15 @@ function MemberRightSidenavController($rootScope, $scope, $mdSidenav, $state, $m
 		$scope.close();
 	};
 
+	$scope.navigateToCreateIdNew = () => {
+		if (angular.equals({}, $rootScope.wallet.getIdAttributes())) {
+			$state.go('guest.create.step-5');
+		} else {
+			$state.go('member.selfkey-id.main');
+		}
+		$scope.close();
+	};
+
 	$rootScope.navigate = ($event, state, params) => {
 		$state.go(state, params);
 		$scope.close();
