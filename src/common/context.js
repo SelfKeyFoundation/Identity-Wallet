@@ -14,6 +14,7 @@ import RpcHandler from 'main/rpc-handler';
 import { StakingService } from 'main/blockchain/staking-service';
 import EthGasStationService from 'main/blockchain/eth-gas-station-service';
 import AddressBookService from 'main/address-book/address-book-service';
+import IdentityService from 'main/identity/identity-service';
 
 let globalContext = null;
 
@@ -44,6 +45,7 @@ export const configureContext = (store, app) => {
 		idAttributeTypeService: asClass(IdAttributeTypeService).singleton(),
 		exchangesService: asClass(ExchangesService).singleton(),
 		ethGasStationService: asClass(EthGasStationService).singleton(),
+		IdentityService: asClass(IdentityService).singleton(),
 		trezorService: asFunction(() => {
 			let Service = TrezorService();
 			return new Service();
