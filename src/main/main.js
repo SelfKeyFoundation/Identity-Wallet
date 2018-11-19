@@ -22,6 +22,7 @@ import config from 'common/config';
 import createMenuTemplate from './menu';
 import db from './db/db';
 import { setGlobalContext, configureContext } from 'common/context';
+import { identityOperations } from '../common/identity';
 
 const log = new Logger('main');
 
@@ -89,9 +90,6 @@ if (!gotTheLock) {
 	});
 }
 
-/**
- *
- */
 function onReady(app) {
 	return async () => {
 		global.__static = __static;
@@ -121,11 +119,6 @@ function onReady(app) {
 		// ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
-
-		// TODO
-		// 1) load ETH & KEY icons & prices
-		// 2) insert tokenPrices - set icon & price
-		// 3) notify angular app when done
 
 		if (electron.app.dock) {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
@@ -191,7 +184,8 @@ function onReady(app) {
 				Promise.all([
 					ctx.priceService.startUpdateData(),
 					ctx.idAttributeTypeService.loadIdAttributeTypes(),
-					ctx.exchangesService.loadExchangeData()
+					ctx.exchangesService.loadExchangeData(),
+					loadIdentity(ctx)
 				]);
 				if (process.env.ENABLE_JSON_SCHEMA === '1') {
 					await ctx.idAttributeTypeService.resolveSchemas();
@@ -235,6 +229,17 @@ function onReady(app) {
 			startStakingTest(ctx);
 		}
 	};
+}
+
+async function loadIdentity(ctx) {
+	// TODO, this probably shouild be initialized in root of react app
+	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
+	try {
+		// TODO: should be
+		await ctx.store.dispatch(identityOperations.updateExpiredRepositoriesOperation());
+	} catch (error) {
+		log.error('failed to update repositories from remote');
+	}
 }
 
 function onActivate(app) {
