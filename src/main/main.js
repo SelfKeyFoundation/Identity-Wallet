@@ -240,6 +240,7 @@ async function loadIdentity(ctx) {
 	} catch (error) {
 		log.error('failed to update repositories from remote');
 	}
+	await ctx.store.dispatch(identityOperations.loadIdAttributeTypesOperation());
 }
 
 function onActivate(app) {
