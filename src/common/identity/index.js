@@ -7,7 +7,9 @@ export const initialState = {
 	idAtrributeTypes: [],
 	idAtrributeTypesById: {},
 	uiSchemas: [],
-	uiSchemasById: {}
+	uiSchemasById: {},
+	documents: [],
+	documentsById: {}
 };
 
 export const identityTypes = {
@@ -19,7 +21,9 @@ export const identityTypes = {
 	IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE: 'identity/id-atribute_types/UPDATE_REMOTE',
 	IDENTITY_UI_SCHEMAS_LOAD: 'identity/ui-schemas/LOAD',
 	IDENTITY_UI_SCHEMAS_SET: 'identity/ui-schemas/SET',
-	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE'
+	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE',
+	IDENTITY_DOCUMENTS_LOAD: 'identity/documents/LOAD',
+	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET'
 };
 
 const identityActions = {
@@ -34,6 +38,13 @@ const identityActions = {
 	setUiSchemasAction: uiSchemas => ({
 		type: identityTypes.IDENTITY_UI_SCHEMAS_SET,
 		payload: uiSchemas
+	}),
+	setDocumentsAction: (walletId, documents) => ({
+		type: identityTypes.IDENTITY_DOCUMENTS_SET,
+		payload: {
+			walletId,
+			documents
+		}
 	})
 };
 
@@ -76,13 +87,20 @@ const updateExpiredUiSchemasOperation = () => async (dispatch, getState) => {
 	await operations.loadUiSchemasOperation(dispatch, getState);
 };
 
+const loadDocumentsOperation = walletId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let documents = await identityService.loadDocuments(walletId);
+	await dispatch(identityActions.setDocumentsAction(documents));
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
 	loadIdAttributeTypesOperation,
 	updateExpiredIdAttributeTypesOperation,
 	loadUiSchemasOperation,
-	updateExpiredUiSchemasOperation
+	updateExpiredUiSchemasOperation,
+	loadDocumentsOperation
 };
 
 const identityOperations = {
@@ -110,6 +128,10 @@ const identityOperations = {
 	updateExpiredUiSchemasOperation: createAliasedAction(
 		identityTypes.IDENTITY_UI_SCHEMAS_UPDATE_REMOTE,
 		operations.updateExpiredUiSchemasOperation
+	),
+	loadDocumentsOperation: createAliasedAction(
+		identityTypes.IDENTITY_DOCUMENTS_LOAD,
+		loadDocumentsOperation
 	)
 };
 
@@ -143,10 +165,24 @@ const setUiSchemasReducer = (state, action) => {
 	return { ...state, uiSchemas, uiSchemasById };
 };
 
+const setDocumentsReducer = (state, action) => {
+	let oldDocuments = state.documents
+		.map(docId => state.documentsById[docId])
+		.filter(doc => doc.walletId !== action.walletId);
+	let documents = [...oldDocuments, ...(action.payload.documents || [])];
+	let documentsById = documents.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	documents = documents.map(attr => attr.id);
+	return { ...state, documents, documentsById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
-	setUiSchemasReducer
+	setUiSchemasReducer,
+	setDocumentsReducer
 };
 
 const selectIdentity = state => state.identity;
@@ -187,6 +223,12 @@ const selectExpiredUiSchemas = state => {
 		.filter(uiSelectors => uiSelectors.expires <= now);
 };
 
+const selectDocuments = (state, walletId) =>
+	identitySelectors
+		.selectIdentity(state)
+		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId])
+		.filter(doc => doc.walletId === walletId);
+
 const identitySelectors = {
 	selectIdentity,
 	selectRepositories,
@@ -194,7 +236,8 @@ const identitySelectors = {
 	selectIdAttributeTypes,
 	selectExpiredIdAttributeTypes,
 	selectUiSchemas,
-	selectExpiredUiSchemas
+	selectExpiredUiSchemas,
+	selectDocuments
 };
 
 export const testExports = { operations };
