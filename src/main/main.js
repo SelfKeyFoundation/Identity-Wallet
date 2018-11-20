@@ -247,6 +247,13 @@ async function loadIdentity(ctx) {
 	} catch (error) {
 		log.error('failed to update id attribute types from remote');
 	}
+	await ctx.store.dispatch(identityOperations.loadUiSchemasOperation());
+	try {
+		// TODO: should be in update manager
+		await ctx.store.dispatch(identityOperations.updateExpiredUiSchemasOperation);
+	} catch (error) {
+		log.error('failed to update ui schemas from remote');
+	}
 }
 
 function onActivate(app) {
