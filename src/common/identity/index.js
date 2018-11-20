@@ -5,7 +5,9 @@ export const initialState = {
 	repositories: [],
 	repositoriesById: {},
 	idAtrributeTypes: [],
-	idAtrributeTypesById: {}
+	idAtrributeTypesById: {},
+	uiSchemas: [],
+	uiSchemasById: {}
 };
 
 export const identityTypes = {
@@ -14,7 +16,10 @@ export const identityTypes = {
 	IDENTITY_REPOSITORIES_UPDATE_REMOTE: 'identity/repositories/UPDATE_REMOTE',
 	IDENTITY_ID_ATTRIBUTE_TYPES_LOAD: 'identity/id-atribute_types/LOAD',
 	IDENTITY_ID_ATTRIBUTE_TYPES_SET: 'identity/id-atribute_types/SET',
-	IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE: 'identity/id-atribute_types/UPDATE_REMOTE'
+	IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE: 'identity/id-atribute_types/UPDATE_REMOTE',
+	IDENTITY_UI_SCHEMAS_LOAD: 'identity/ui-schemas/LOAD',
+	IDENTITY_UI_SCHEMAS_SET: 'identity/ui-schemas/SET',
+	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE'
 };
 
 const identityActions = {
@@ -25,6 +30,10 @@ const identityActions = {
 	setIdAttributeTypesAction: attributeTypes => ({
 		type: identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET,
 		payload: attributeTypes
+	}),
+	setUiSchemasAction: uiSchemas => ({
+		type: identityTypes.IDENTITY_UI_SCHEMAS_SET,
+		payload: uiSchemas
 	})
 };
 
@@ -54,11 +63,26 @@ const updateExpiredIdAttributeTypesOperation = () => async (dispatch, getState) 
 	await operations.loadIdAttributeTypesOperation(dispatch, getState);
 };
 
+const loadUiSchemasOperation = () => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let uiSchemas = await identityService.loadUiSchemas();
+	await dispatch(identityActions.setUiSchemasAction(uiSchemas));
+};
+
+const updateExpiredUiSchemasOperation = () => async (dispatch, getState) => {
+	let expired = identitySelectors.selectExpiredUiSchemas(getState());
+	const identityService = getGlobalContext().identityService;
+	await identityService.updateUiSchemas(expired);
+	await operations.loadUiSchemasOperation(dispatch, getState);
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
 	loadIdAttributeTypesOperation,
-	updateExpiredIdAttributeTypesOperation
+	updateExpiredIdAttributeTypesOperation,
+	loadUiSchemasOperation,
+	updateExpiredUiSchemasOperation
 };
 
 const identityOperations = {
@@ -78,6 +102,14 @@ const identityOperations = {
 	updateExpiredIdAttributeTypesOperation: createAliasedAction(
 		identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE,
 		operations.updateExpiredIdAttributeTypesOperation
+	),
+	loadUiSchemasOperation: createAliasedAction(
+		identityTypes.IDENTITY_UI_SCHEMAS_LOAD,
+		operations.loadUiSchemasOperation
+	),
+	updateExpiredUiSchemasOperation: createAliasedAction(
+		identityTypes.IDENTITY_UI_SCHEMAS_UPDATE_REMOTE,
+		operations.updateExpiredUiSchemasOperation
 	)
 };
 
@@ -101,9 +133,20 @@ const setIdAttributeTypesReducer = (state, action) => {
 	return { ...state, idAtrributeTypes, idAtrributeTypesById };
 };
 
+const setUiSchemasReducer = (state, action) => {
+	let uiSchemas = action.payload || [];
+	let uiSchemasById = uiSchemas.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	uiSchemas = uiSchemas.map(attr => attr.id);
+	return { ...state, uiSchemas, uiSchemasById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
-	setIdAttributeTypesReducer
+	setIdAttributeTypesReducer,
+	setUiSchemasReducer
 };
 
 const selectIdentity = state => state.identity;
@@ -127,7 +170,21 @@ const selectIdAttributeTypes = state =>
 
 const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();
-	return selectIdAttributeTypes(state).filter(attributeType => attributeType.expires <= now);
+	return identitySelectors
+		.selectIdAttributeTypes(state)
+		.filter(attributeType => attributeType.expires <= now);
+};
+
+const selectUiSchemas = state =>
+	identitySelectors
+		.selectIdentity(state)
+		.uiSchemas.map(id => identitySelectors.selectIdentity(state).uiSchemasById[id]);
+
+const selectExpiredUiSchemas = state => {
+	let now = Date.now();
+	return identitySelectors
+		.selectUiSchemas(state)
+		.filter(uiSelectors => uiSelectors.expires <= now);
 };
 
 const identitySelectors = {
@@ -135,7 +192,9 @@ const identitySelectors = {
 	selectRepositories,
 	selectExpiredRepositories,
 	selectIdAttributeTypes,
-	selectExpiredIdAttributeTypes
+	selectExpiredIdAttributeTypes,
+	selectUiSchemas,
+	selectExpiredUiSchemas
 };
 
 export const testExports = { operations };

@@ -14,9 +14,9 @@ describe('Identity Duck', () => {
 	// + LOAD Repositories
 	// + UPDATE Repositories
 	// + LOAD IdAttribute Types
-	// - UPDATE IdAttribute Types
-	// - LOAD UiSchemas
-	// - UPDATE UiSchemas Types
+	// + UPDATE IdAttribute Types
+	// + LOAD UiSchemas
+	// + UPDATE UiSchemas Types
 	// - LOAD document binary -- with binary
 	// - EDIT id attribute
 	// - REMOVE id-attribute
@@ -30,7 +30,7 @@ describe('Identity Duck', () => {
 	// Actions:
 	// + SET Repositories
 	// + Set id attribute types
-	// - set ui schemas
+	// + set ui schemas
 	// - set documents are loading
 	// - set document is loadin
 	// - set id-attribute update
@@ -46,7 +46,9 @@ describe('Identity Duck', () => {
 		loadRepositories() {},
 		updateRepositories() {},
 		loadIdAttributeTypes() {},
-		updateIdAttributeTypes() {}
+		updateIdAttributeTypes() {},
+		loadUiSchemas() {},
+		updateUiSchemas() {}
 	};
 	let state = {};
 	let store = {
@@ -228,6 +230,86 @@ describe('Identity Duck', () => {
 				expect(identitySelectors.selectExpiredIdAttributeTypes(state)).toEqual(
 					expiredIdAttributeTypes
 				);
+			});
+		});
+	});
+	describe('uiSchemas', () => {
+		let now = Date.now();
+		const testUiSchemas = [
+			{ id: 1, url: 'test', expires: now - 50000 },
+			{ id: 2, url: 'test1', expires: now + 50000 },
+			{ id: 3, url: 'test2', expires: now - 50000 }
+		];
+		let expiredUiSchemas = testUiSchemas.filter(uiSchema => uiSchema.expires <= now);
+		describe('Operations', () => {
+			it('loadUiSchemasOperation', async () => {
+				sinon.stub(identityService, 'loadUiSchemas').resolves(testUiSchemas);
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'setUiSchemasAction').returns(testAction);
+
+				await testExports.operations.loadUiSchemasOperation()(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.loadUiSchemas.calledOnce).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
+			it('updateExpiredUiSchemasOperation', async () => {
+				sinon.stub(identitySelectors, 'selectExpiredUiSchemas').returns(expiredUiSchemas);
+				sinon.stub(identityService, 'updateUiSchemas').resolves('ok');
+				sinon.stub(testExports.operations, 'loadUiSchemasOperation');
+
+				await testExports.operations.updateExpiredUiSchemasOperation()(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identitySelectors.selectExpiredUiSchemas.calledOnce).toBeTruthy();
+				expect(
+					identityService.updateUiSchemas.calledOnceWith(expiredUiSchemas)
+				).toBeTruthy();
+				expect(testExports.operations.loadUiSchemasOperation.calledOnce).toBeTruthy();
+			});
+		});
+		describe('Actions', () => {
+			it('setUiSchemasAction', () => {
+				expect(identityActions.setUiSchemasAction(testUiSchemas)).toEqual({
+					type: identityTypes.IDENTITY_UI_SCHEMAS_SET,
+					payload: testUiSchemas
+				});
+			});
+		});
+		describe('Reducers', () => {
+			let state = {
+				uiSchemas: [],
+				uiSchemasById: {}
+			};
+			let newState = identityReducers.setUiSchemasReducer(
+				state,
+				identityActions.setUiSchemasAction([testUiSchemas[0]])
+			);
+
+			expect(newState).toEqual({
+				uiSchemas: [testUiSchemas[0].id],
+				uiSchemasById: {
+					[testUiSchemas[0].id]: testUiSchemas[0]
+				}
+			});
+		});
+		describe('Selectors', () => {
+			beforeEach(() => {
+				state.identity.uiSchemas = testUiSchemas.map(repo => repo.id);
+				state.identity.uiSchemasById = testUiSchemas.reduce((acc, curr) => {
+					acc[curr.id] = curr;
+					return acc;
+				}, {});
+			});
+			it('selectUiSchemas', () => {
+				expect(identitySelectors.selectUiSchemas(state)).toEqual(testUiSchemas);
+			});
+			it('selectExpiredUiSchemas', () => {
+				expect(identitySelectors.selectExpiredUiSchemas(state)).toEqual(expiredUiSchemas);
 			});
 		});
 	});
