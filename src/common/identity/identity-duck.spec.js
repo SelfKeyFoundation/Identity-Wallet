@@ -12,8 +12,11 @@ import {
 describe('Identity Duck', () => {
 	// Operations:
 	// + LOAD Repositories
+	// + UPDATE Repositories
 	// + LOAD IdAttribute Types
+	// - UPDATE IdAttribute Types
 	// - LOAD UiSchemas
+	// - UPDATE UiSchemas Types
 	// - LOAD document binary -- with binary
 	// - EDIT id attribute
 	// - REMOVE id-attribute
@@ -27,7 +30,7 @@ describe('Identity Duck', () => {
 	// Actions:
 	// + SET Repositories
 	// + Set id attribute types
-	// - set ui schema is loading
+	// - set ui schemas
 	// - set documents are loading
 	// - set document is loadin
 	// - set id-attribute update
@@ -42,7 +45,8 @@ describe('Identity Duck', () => {
 	let identityService = {
 		loadRepositories() {},
 		updateRepositories() {},
-		loadIdAttributeTypes() {}
+		loadIdAttributeTypes() {},
+		updateIdAttributeTypes() {}
 	};
 	let state = {};
 	let store = {
@@ -140,7 +144,13 @@ describe('Identity Duck', () => {
 		});
 	});
 	describe('IdAttributeTypes', () => {
-		const testIdAttributeTypes = [{}];
+		let now = Date.now();
+		const testIdAttributeTypes = [
+			{ id: 1, url: 'test', expires: now - 50000 },
+			{ id: 2, url: 'test1', expires: now + 50000 },
+			{ id: 3, url: 'test2', expires: now - 50000 }
+		];
+		let expiredIdAttributeTypes = testIdAttributeTypes.filter(type => type.expires <= now);
 		describe('Operations', () => {
 			it('loadIdAttributeTypesOperation', async () => {
 				sinon.stub(identityService, 'loadIdAttributeTypes').resolves(testIdAttributeTypes);
@@ -154,6 +164,26 @@ describe('Identity Duck', () => {
 
 				expect(identityService.loadIdAttributeTypes.calledOnce).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
+			it('updateExpiredIdAttributeTypesOperation', async () => {
+				sinon
+					.stub(identitySelectors, 'selectExpiredIdAttributeTypes')
+					.returns(expiredIdAttributeTypes);
+				sinon.stub(identityService, 'updateIdAttributeTypes').resolves('ok');
+				sinon.stub(testExports.operations, 'loadIdAttributeTypesOperation');
+
+				await testExports.operations.updateExpiredIdAttributeTypesOperation()(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identitySelectors.selectExpiredIdAttributeTypes.calledOnce).toBeTruthy();
+				expect(
+					identityService.updateIdAttributeTypes.calledOnceWith(expiredIdAttributeTypes)
+				).toBeTruthy();
+				expect(
+					testExports.operations.loadIdAttributeTypesOperation.calledOnce
+				).toBeTruthy();
 			});
 		});
 		describe('Actions', () => {
@@ -189,9 +219,14 @@ describe('Identity Duck', () => {
 					return acc;
 				}, {});
 			});
-			it('selectRepositories', () => {
+			it('selectIdAttributeTypes', () => {
 				expect(identitySelectors.selectIdAttributeTypes(state)).toEqual(
 					testIdAttributeTypes
+				);
+			});
+			it('selectExpiredIdAttributeTypes', () => {
+				expect(identitySelectors.selectExpiredIdAttributeTypes(state)).toEqual(
+					expiredIdAttributeTypes
 				);
 			});
 		});

@@ -11,8 +11,10 @@ export const initialState = {
 export const identityTypes = {
 	IDENTITY_REPOSITORIES_LOAD: 'identity/repositories/LOAD',
 	IDENTITY_REPOSITORIES_SET: 'identity/repositories/SET',
-	IDENTITY_REPOSITORIES_UPDATE: 'identity/repositories/UPDATE',
-	IDENTITY_ID_ATTRIBUTE_TYPES_SET: 'identity/id-atribute_types/SET'
+	IDENTITY_REPOSITORIES_UPDATE_REMOTE: 'identity/repositories/UPDATE_REMOTE',
+	IDENTITY_ID_ATTRIBUTE_TYPES_LOAD: 'identity/id-atribute_types/LOAD',
+	IDENTITY_ID_ATTRIBUTE_TYPES_SET: 'identity/id-atribute_types/SET',
+	IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE: 'identity/id-atribute_types/UPDATE_REMOTE'
 };
 
 const identityActions = {
@@ -45,10 +47,18 @@ const loadIdAttributeTypesOperation = () => async (dispatch, getState) => {
 	await dispatch(identityActions.setIdAttributeTypesAction(attributeTypes));
 };
 
+const updateExpiredIdAttributeTypesOperation = () => async (dispatch, getState) => {
+	let expired = identitySelectors.selectExpiredIdAttributeTypes(getState());
+	const identityService = getGlobalContext().identityService;
+	await identityService.updateIdAttributeTypes(expired);
+	await operations.loadIdAttributeTypesOperation(dispatch, getState);
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
-	loadIdAttributeTypesOperation
+	loadIdAttributeTypesOperation,
+	updateExpiredIdAttributeTypesOperation
 };
 
 const identityOperations = {
@@ -58,8 +68,16 @@ const identityOperations = {
 		operations.loadRepositoriesOperation
 	),
 	updateExpiredRepositoriesOperation: createAliasedAction(
-		identityTypes.IDENTITY_REPOSITORIES_UPDATE,
+		identityTypes.IDENTITY_REPOSITORIES_UPDATE_REMOTE,
 		operations.updateExpiredRepositoriesOperation
+	),
+	loadIdAttributeTypesOperation: createAliasedAction(
+		identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_LOAD,
+		operations.loadIdAttributeTypesOperation
+	),
+	updateExpiredIdAttributeTypesOperation: createAliasedAction(
+		identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_UPDATE_REMOTE,
+		operations.updateExpiredIdAttributeTypesOperation
 	)
 };
 
@@ -107,11 +125,17 @@ const selectIdAttributeTypes = state =>
 			id => identitySelectors.selectIdentity(state).idAtrributeTypesById[id]
 		);
 
+const selectExpiredIdAttributeTypes = state => {
+	let now = Date.now();
+	return selectIdAttributeTypes(state).filter(attributeType => attributeType.expires <= now);
+};
+
 const identitySelectors = {
 	selectIdentity,
 	selectRepositories,
 	selectExpiredRepositories,
-	selectIdAttributeTypes
+	selectIdAttributeTypes,
+	selectExpiredIdAttributeTypes
 };
 
 export const testExports = { operations };

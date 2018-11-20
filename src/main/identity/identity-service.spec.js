@@ -31,8 +31,8 @@ describe('IdentityService', () => {
 
 		it('updateRepositories', async () => {
 			sinon.stub(Repository, 'addRemoteRepo').resolves('ok');
-			let testRepos = ['http://test1', 'http://test2'];
-			await service.updateRepositories(testRepos);
+			let testRepos = ['test', 'test3'];
+			await service.updateRepositories([repositories[0], repositories[1]]);
 			expect(Repository.addRemoteRepo.calledOnceWith(testRepos[0]));
 			expect(Repository.addRemoteRepo.calledOnceWith(testRepos[1]));
 		});
@@ -41,6 +41,14 @@ describe('IdentityService', () => {
 			sinon.stub(IdAttributeType, 'findAll').resolves(idAttributeTypes);
 			let loadedTypes = await service.loadIdAttributeTypes();
 			expect(loadedTypes).toEqual(idAttributeTypes);
+		});
+
+		it('updateIdAttributeTypes', async () => {
+			sinon.stub(IdAttributeType, 'addRemote').resolves('ok');
+			let testIdAttributeTypes = ['test', 'test3'];
+			await service.updateIdAttributeTypes(testIdAttributeTypes);
+			expect(IdAttributeType.addRemote.calledOnceWith(testIdAttributeTypes[0]));
+			expect(IdAttributeType.addRemote.calledOnceWith(testIdAttributeTypes[1]));
 		});
 	});
 });

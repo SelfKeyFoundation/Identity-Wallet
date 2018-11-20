@@ -235,12 +235,18 @@ async function loadIdentity(ctx) {
 	// TODO, this probably shouild be initialized in root of react app
 	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
 	try {
-		// TODO: should be
+		// TODO: should be in update manager
 		await ctx.store.dispatch(identityOperations.updateExpiredRepositoriesOperation());
 	} catch (error) {
 		log.error('failed to update repositories from remote');
 	}
 	await ctx.store.dispatch(identityOperations.loadIdAttributeTypesOperation());
+	try {
+		// TODO: should be in update manager
+		await ctx.store.dispatch(identityOperations.updateExpiredIdAttributeTypesOperation);
+	} catch (error) {
+		log.error('failed to update id attribute types from remote');
+	}
 }
 
 function onActivate(app) {

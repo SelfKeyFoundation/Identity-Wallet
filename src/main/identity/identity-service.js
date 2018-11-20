@@ -13,4 +13,10 @@ export class IdentityService {
 	loadIdAttributeTypes() {
 		return IdAttributeType.findAll();
 	}
+
+	updateIdAttributeTypes(idAttributeTypes) {
+		return Promise.all(
+			idAttributeTypes.map(attrType => IdAttributeType.addRemote(attrType.url))
+		);
+	}
 }
