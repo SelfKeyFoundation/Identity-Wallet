@@ -1,6 +1,7 @@
 import sinon from 'sinon';
 import { Repository } from './repository';
 import { IdentityService } from './identity-service';
+import { IdAttributeType } from './id-attribute-type';
 
 describe('IdentityService', () => {
 	let service = null;
@@ -11,6 +12,12 @@ describe('IdentityService', () => {
 	});
 	describe('Repositories', () => {
 		let repositories = [
+			{ id: 1, url: 'test', expires: Date.now() - 3000 },
+			{ id: 2, url: 'test2', expires: Date.now() + 50000 },
+			{ id: 3, url: 'test3', expires: Date.now() - 3000 }
+		];
+
+		let idAttributeTypes = [
 			{ id: 1, url: 'test', expires: Date.now() - 3000 },
 			{ id: 2, url: 'test2', expires: Date.now() + 50000 },
 			{ id: 3, url: 'test3', expires: Date.now() - 3000 }
@@ -28,6 +35,12 @@ describe('IdentityService', () => {
 			await service.updateRepositories(testRepos);
 			expect(Repository.addRemoteRepo.calledOnceWith(testRepos[0]));
 			expect(Repository.addRemoteRepo.calledOnceWith(testRepos[1]));
+		});
+
+		it('loadIdAttributeTypes', async () => {
+			sinon.stub(IdAttributeType, 'findAll').resolves(idAttributeTypes);
+			let loadedTypes = await service.loadIdAttributeTypes();
+			expect(loadedTypes).toEqual(idAttributeTypes);
 		});
 	});
 });
