@@ -17,6 +17,7 @@ describe('Identity Duck', () => {
 	// + UPDATE IdAttribute Types
 	// + LOAD UiSchemas
 	// + UPDATE UiSchemas Types
+	// + LOAD documents (without binary)
 	// - LOAD document binary -- with binary
 	// - EDIT id attribute
 	// - REMOVE id-attribute
@@ -31,15 +32,14 @@ describe('Identity Duck', () => {
 	// + SET Repositories
 	// + Set id attribute types
 	// + set ui schemas
-	// - set documents are loading
-	// - set document is loadin
 	// - set id-attribute update
 	// - set id-attribute-types
 	// - set id-attributes
 	// - update id-attribute
 	// - add id-attribute
 	// - delete id-attribute
-	// - set documents
+	// + set documents
+	// - set document
 	// - delete document
 	// - update document
 	let identityService = {
@@ -48,7 +48,8 @@ describe('Identity Duck', () => {
 		loadIdAttributeTypes() {},
 		updateIdAttributeTypes() {},
 		loadUiSchemas() {},
-		updateUiSchemas() {}
+		updateUiSchemas() {},
+		loadDocuments() {}
 	};
 	let state = {};
 	let store = {
@@ -197,20 +198,22 @@ describe('Identity Duck', () => {
 			});
 		});
 		describe('Reducers', () => {
-			let state = {
-				idAtrributeTypes: [],
-				idAtrributeTypesById: {}
-			};
-			let newState = identityReducers.setIdAttributeTypesReducer(
-				state,
-				identityActions.setIdAttributeTypesAction([testIdAttributeTypes[0]])
-			);
+			it('setIdAttributeTypesReducer', () => {
+				let state = {
+					idAtrributeTypes: [],
+					idAtrributeTypesById: {}
+				};
+				let newState = identityReducers.setIdAttributeTypesReducer(
+					state,
+					identityActions.setIdAttributeTypesAction([testIdAttributeTypes[0]])
+				);
 
-			expect(newState).toEqual({
-				idAtrributeTypes: [testIdAttributeTypes[0].id],
-				idAtrributeTypesById: {
-					[testIdAttributeTypes[0].id]: testIdAttributeTypes[0]
-				}
+				expect(newState).toEqual({
+					idAtrributeTypes: [testIdAttributeTypes[0].id],
+					idAtrributeTypesById: {
+						[testIdAttributeTypes[0].id]: testIdAttributeTypes[0]
+					}
+				});
 			});
 		});
 		describe('Selectors', () => {
@@ -281,20 +284,22 @@ describe('Identity Duck', () => {
 			});
 		});
 		describe('Reducers', () => {
-			let state = {
-				uiSchemas: [],
-				uiSchemasById: {}
-			};
-			let newState = identityReducers.setUiSchemasReducer(
-				state,
-				identityActions.setUiSchemasAction([testUiSchemas[0]])
-			);
+			it('setUiSchemasReducer', () => {
+				let state = {
+					uiSchemas: [],
+					uiSchemasById: {}
+				};
+				let newState = identityReducers.setUiSchemasReducer(
+					state,
+					identityActions.setUiSchemasAction([testUiSchemas[0]])
+				);
 
-			expect(newState).toEqual({
-				uiSchemas: [testUiSchemas[0].id],
-				uiSchemasById: {
-					[testUiSchemas[0].id]: testUiSchemas[0]
-				}
+				expect(newState).toEqual({
+					uiSchemas: [testUiSchemas[0].id],
+					uiSchemasById: {
+						[testUiSchemas[0].id]: testUiSchemas[0]
+					}
+				});
 			});
 		});
 		describe('Selectors', () => {
@@ -310,6 +315,72 @@ describe('Identity Duck', () => {
 			});
 			it('selectExpiredUiSchemas', () => {
 				expect(identitySelectors.selectExpiredUiSchemas(state)).toEqual(expiredUiSchemas);
+			});
+		});
+	});
+	describe('Documents', () => {
+		let testWalletId = 1;
+		let testDocuments = [{ id: 1, walletId: testWalletId }, { id: 2, walletId: testWalletId }];
+		describe('Operation', () => {
+			it('loadDocumentsOperation', async () => {
+				sinon.stub(identityService, 'loadDocuments').resolves(testDocuments);
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'setDocumentsAction').returns(testAction);
+
+				await testExports.operations.loadDocumentsOperation(testWalletId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.loadDocuments.calledOnceWith(testWalletId)).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
+		});
+		describe('Actions', () => {
+			it('setDocumentsAction', () => {
+				expect(identityActions.setDocumentsAction(testWalletId, testDocuments)).toEqual({
+					type: identityTypes.IDENTITY_DOCUMENTS_SET,
+					payload: { walletId: testWalletId, documents: testDocuments }
+				});
+			});
+		});
+		describe('Reducers', () => {
+			it('setDocumentsReducer', async () => {
+				let state = {
+					documents: [3],
+					documentsById: { 3: { id: 3, walletId: 2 } }
+				};
+				let newState = identityReducers.setDocumentsReducer(
+					state,
+					identityActions.setDocumentsAction(testWalletId, [testDocuments[0]])
+				);
+
+				expect(newState).toEqual({
+					documents: [3, testDocuments[0].id],
+					documentsById: {
+						3: { id: 3, walletId: 2 },
+						[testDocuments[0].id]: testDocuments[0]
+					}
+				});
+			});
+		});
+		describe('Selectors', () => {
+			beforeEach(() => {
+				state.identity.documents = [...testDocuments, { id: 3, walletId: 2 }].map(
+					repo => repo.id
+				);
+				state.identity.documentsById = [...testDocuments, { id: 3, walletId: 2 }].reduce(
+					(acc, curr) => {
+						acc[curr.id] = curr;
+						return acc;
+					},
+					{}
+				);
+			});
+			it('selectDocuments', () => {
+				expect(identitySelectors.selectDocuments(state, testWalletId)).toEqual(
+					testDocuments
+				);
 			});
 		});
 	});
