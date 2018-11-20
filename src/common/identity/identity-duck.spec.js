@@ -11,8 +11,8 @@ import {
 
 describe('Identity Duck', () => {
 	// Operations:
-	// - LOAD Repositories
-	// - LOAD IdAttribute Types
+	// + LOAD Repositories
+	// + LOAD IdAttribute Types
 	// - LOAD UiSchemas
 	// - LOAD document binary -- with binary
 	// - EDIT id attribute
@@ -25,8 +25,8 @@ describe('Identity Duck', () => {
 	//   - LOAD idAttributes
 	//   - LOAD documents  - without binary
 	// Actions:
-	// - SET Repositories loading
-	// - Set id attribute types loading
+	// + SET Repositories
+	// + Set id attribute types
 	// - set ui schema is loading
 	// - set documents are loading
 	// - set document is loadin
@@ -41,7 +41,8 @@ describe('Identity Duck', () => {
 	// - update document
 	let identityService = {
 		loadRepositories() {},
-		updateRepositories() {}
+		updateRepositories() {},
+		loadIdAttributeTypes() {}
 	};
 	let state = {};
 	let store = {
@@ -135,6 +136,63 @@ describe('Identity Duck', () => {
 			});
 			it('selectExpiredRepositories', () => {
 				expect(identitySelectors.selectExpiredRepositories(state)).toEqual(expiredRepos);
+			});
+		});
+	});
+	describe('IdAttributeTypes', () => {
+		const testIdAttributeTypes = [{}];
+		describe('Operations', () => {
+			it('loadIdAttributeTypesOperation', async () => {
+				sinon.stub(identityService, 'loadIdAttributeTypes').resolves(testIdAttributeTypes);
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'setIdAttributeTypesAction').returns(testAction);
+
+				await testExports.operations.loadIdAttributeTypesOperation()(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.loadIdAttributeTypes.calledOnce).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
+		});
+		describe('Actions', () => {
+			it('setIdAttributeTypesAction', () => {
+				expect(identityActions.setIdAttributeTypesAction(testIdAttributeTypes)).toEqual({
+					type: identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET,
+					payload: testIdAttributeTypes
+				});
+			});
+		});
+		describe('Reducers', () => {
+			let state = {
+				idAtrributeTypes: [],
+				idAtrributeTypesById: {}
+			};
+			let newState = identityReducers.setIdAttributeTypesReducer(
+				state,
+				identityActions.setIdAttributeTypesAction([testIdAttributeTypes[0]])
+			);
+
+			expect(newState).toEqual({
+				idAtrributeTypes: [testIdAttributeTypes[0].id],
+				idAtrributeTypesById: {
+					[testIdAttributeTypes[0].id]: testIdAttributeTypes[0]
+				}
+			});
+		});
+		describe('Selectors', () => {
+			beforeEach(() => {
+				state.identity.idAtrributeTypes = testIdAttributeTypes.map(repo => repo.id);
+				state.identity.idAtrributeTypesById = testIdAttributeTypes.reduce((acc, curr) => {
+					acc[curr.id] = curr;
+					return acc;
+				}, {});
+			});
+			it('selectRepositories', () => {
+				expect(identitySelectors.selectIdAttributeTypes(state)).toEqual(
+					testIdAttributeTypes
+				);
 			});
 		});
 	});
