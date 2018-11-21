@@ -22,7 +22,7 @@ export class Document extends BaseModel {
 	static get relationMappings() {
 		const IdAttribute = require('./id-attribute').default;
 		return {
-			wallet: {
+			attribute: {
 				relation: Model.BelongsToOneRelation,
 				modelClass: IdAttribute,
 				join: {
@@ -31,6 +31,13 @@ export class Document extends BaseModel {
 				}
 			}
 		};
+	}
+
+	static findAllByWalletId(walletId) {
+		return this.query()
+			.select(`${TABLE_NAME}.*`)
+			.join('id_attributes', `${TABLE_NAME}.attributeId`, 'id_attributes.id')
+			.where({ 'id_attributes.walletId': walletId });
 	}
 
 	getDataUrl() {

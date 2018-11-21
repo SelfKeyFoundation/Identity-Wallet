@@ -10,38 +10,6 @@ import {
 } from './index';
 
 describe('Identity Duck', () => {
-	// Operations:
-	// + LOAD Repositories
-	// + UPDATE Repositories
-	// + LOAD IdAttribute Types
-	// + UPDATE IdAttribute Types
-	// + LOAD UiSchemas
-	// + UPDATE UiSchemas Types
-	// + LOAD documents (without binary)
-	// - LOAD document binary -- with binary
-	// - EDIT id attribute
-	// - REMOVE id-attribute
-	// - CREATE id-attribute
-	// - LOCK IDENTITY
-	//   - DELETE id attributres
-	//   - DELETE documents
-	// - UNLOCK IDENTITY
-	//   - LOAD idAttributes
-	//   - LOAD documents  - without binary
-	// Actions:
-	// + SET Repositories
-	// + Set id attribute types
-	// + set ui schemas
-	// - set id-attribute update
-	// - set id-attribute-types
-	// - set id-attributes
-	// - update id-attribute
-	// - add id-attribute
-	// - delete id-attribute
-	// + set documents
-	// - set document
-	// - delete document
-	// - update document
 	let identityService = {
 		loadRepositories() {},
 		updateRepositories() {},
