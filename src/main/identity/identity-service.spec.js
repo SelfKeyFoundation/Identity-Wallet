@@ -2,6 +2,7 @@ import sinon from 'sinon';
 import { Repository } from './repository';
 import { IdentityService } from './identity-service';
 import { IdAttributeType } from './id-attribute-type';
+import { Document } from './document';
 
 describe('IdentityService', () => {
 	let service = null;
@@ -49,6 +50,12 @@ describe('IdentityService', () => {
 			await service.updateIdAttributeTypes(testIdAttributeTypes);
 			expect(IdAttributeType.addRemote.calledOnceWith(testIdAttributeTypes[0]));
 			expect(IdAttributeType.addRemote.calledOnceWith(testIdAttributeTypes[1]));
+		});
+		it('loadDocuments', async () => {
+			sinon.stub(Document, 'findAllByWalletId').resolves('ok');
+			let res = await service.loadDocuments(1);
+			expect(Document.findAllByWalletId.calledOnceWith(1)).toBeTruthy();
+			expect(res).toEqual('ok');
 		});
 	});
 });

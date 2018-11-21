@@ -1,5 +1,6 @@
 import { Repository } from './repository';
 import { IdAttributeType } from './id-attribute-type';
+import { Document } from './document';
 
 export class IdentityService {
 	loadRepositories() {
@@ -18,5 +19,9 @@ export class IdentityService {
 		return Promise.all(
 			idAttributeTypes.map(attrType => IdAttributeType.addRemote(attrType.url))
 		);
+	}
+
+	loadDocuments(walletId) {
+		return Document.findAllByWalletId(walletId);
 	}
 }
