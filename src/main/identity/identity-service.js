@@ -25,3 +25,5 @@ export class IdentityService {
 		return Document.findAllByWalletId(walletId);
 	}
 }
+
+export default IdentityService;
