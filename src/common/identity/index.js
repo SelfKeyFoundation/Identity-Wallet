@@ -32,7 +32,8 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
 	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
-	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET'
+	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET',
+	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE'
 };
 
 const identityActions = {
@@ -73,6 +74,10 @@ const identityActions = {
 	setDocumentsForAttributeAction: (attributeId, documents) => ({
 		type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET,
 		payload: { attributeId, documents }
+	}),
+	deleteDocumentsForAttributeAction: attributeId => ({
+		type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE,
+		payload: attributeId
 	})
 };
 
@@ -242,6 +247,18 @@ const setAttributeDocumentsReducer = (state, action) => {
 	return { ...state, documents, documentsById };
 };
 
+const deleteAttributeDocumentsReducer = (state, action) => {
+	let documents = state.documents
+		.map(docId => state.documentsById[docId])
+		.filter(doc => doc.attributeId !== action.payload);
+	let documentsById = documents.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	documents = documents.map(attr => attr.id);
+	return { ...state, documents, documentsById };
+};
+
 const deleteDocumentsReducer = (state, action) => {
 	let documents = state.documents
 		.map(docId => state.documentsById[docId])
@@ -287,7 +304,8 @@ const identityReducers = {
 	deleteDocumentsReducer,
 	setIdAttributesReducer,
 	deleteIdAttributesReducer,
-	setAttributeDocumentsReducer
+	setAttributeDocumentsReducer,
+	deleteAttributeDocumentsReducer
 };
 
 const selectIdentity = state => state.identity;
