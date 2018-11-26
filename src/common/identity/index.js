@@ -29,6 +29,7 @@ export const identityTypes = {
 	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE',
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
+	IDENTITY_ATTRIBUTE_ADD: 'identity/attribute/ADD',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
 	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
@@ -70,6 +71,10 @@ const identityActions = {
 	deleteIdAttributesAction: walletId => ({
 		type: identityTypes.IDENTITY_ATTRIBUTES_DELETE,
 		payload: walletId
+	}),
+	addIdAttributeAction: attribute => ({
+		type: identityTypes.IDENTITY_ATTRIBUTE_ADD,
+		payload: attribute
 	}),
 	setDocumentsForAttributeAction: (attributeId, documents) => ({
 		type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET,
@@ -296,6 +301,12 @@ const deleteIdAttributesReducer = (state, action) => {
 	return { ...state, attributes, attributesById };
 };
 
+const addIdAttributeReducer = (state, action) => {
+	let attributes = [...state.attributes, action.payload.id];
+	let attributesById = { ...state.attributesById, [action.payload.id]: action.payload };
+	return { ...state, attributes, attributesById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
@@ -305,7 +316,8 @@ const identityReducers = {
 	setIdAttributesReducer,
 	deleteIdAttributesReducer,
 	setAttributeDocumentsReducer,
-	deleteAttributeDocumentsReducer
+	deleteAttributeDocumentsReducer,
+	addIdAttributeReducer
 };
 
 const selectIdentity = state => state.identity;
