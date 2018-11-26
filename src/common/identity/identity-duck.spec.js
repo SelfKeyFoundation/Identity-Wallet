@@ -605,6 +605,12 @@ describe('Identity Duck', () => {
 					payload: testIdAttributes[0]
 				});
 			});
+			it('deleteIdAttributeAction', () => {
+				expect(identityActions.deleteIdAttributeAction(testIdAttributes[0].id)).toEqual({
+					type: identityTypes.IDENTITY_ATTRIBUTE_DELETE,
+					payload: testIdAttributes[0].id
+				});
+			});
 		});
 		describe('Reducers', () => {
 			it('setIdAttributesReducer', async () => {
@@ -690,6 +696,26 @@ describe('Identity Duck', () => {
 					attributes: [1, 3],
 					attributesById: {
 						1: testIdAttributes[0],
+						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
+					}
+				});
+			});
+			it('deleteIdAttributeReducer', async () => {
+				let state = {
+					attributes: [1, 3],
+					attributesById: {
+						1: testIdAttributes[0],
+						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
+					}
+				};
+				let newState = identityReducers.deleteIdAttributeReducer(
+					state,
+					identityActions.deleteIdAttributeAction(1)
+				);
+
+				expect(newState).toEqual({
+					attributes: [3],
+					attributesById: {
 						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
 					}
 				});
