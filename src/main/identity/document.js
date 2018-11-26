@@ -40,6 +40,10 @@ export class Document extends BaseModel {
 			.where({ 'id_attributes.walletId': walletId });
 	}
 
+	static findAllByAttributeId(attributeId) {
+		return this.query().where({ attributeId });
+	}
+
 	getDataUrl() {
 		return formatDataUrl(this.mimeType, this.buffer);
 	}

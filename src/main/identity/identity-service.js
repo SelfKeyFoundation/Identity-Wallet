@@ -29,6 +29,10 @@ export class IdentityService {
 	loadIdAttributes(walletId) {
 		return IdAttribute.findAllByWalletId(walletId);
 	}
+
+	loadDocumentsForAttribute(attributeId) {
+		return Document.findAllByAttributeId(attributeId);
+	}
 }
 
 export default IdentityService;

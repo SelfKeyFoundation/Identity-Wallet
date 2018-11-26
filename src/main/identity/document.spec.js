@@ -43,7 +43,6 @@ describe('Document model', () => {
 		expect(doc).toEqual(found);
 		await Document.delete(doc.id);
 		found = await Document.query().findById(doc.id);
-		// eslint-disable-next-line no-unused-expressions
 		expect(found).toBeUndefined();
 	});
 
@@ -96,6 +95,37 @@ describe('Document model', () => {
 		expect(docs[0].name).toBe('test1');
 		expect(docs[1].name).toBe('test3');
 		docs = await Document.findAllByWalletId(2);
+		expect(docs.length).toBe(1);
+		expect(docs[0].name).toBe('test2');
+	});
+
+	it('findAllByAttributeId', async () => {
+		await Document.create({
+			attributeId: 1,
+			mimeType: 'test',
+			name: 'test1',
+			size: 100,
+			buffer: Buffer.alloc(100)
+		});
+		await Document.create({
+			attributeId: 2,
+			mimeType: 'test2',
+			name: 'test2',
+			size: 100,
+			buffer: Buffer.alloc(100)
+		});
+		await Document.create({
+			attributeId: 1,
+			mimeType: 'test3',
+			name: 'test3',
+			size: 100,
+			buffer: Buffer.alloc(100)
+		});
+		let docs = await Document.findAllByAttributeId(1);
+		expect(docs.length).toBe(2);
+		expect(docs[0].name).toBe('test1');
+		expect(docs[1].name).toBe('test3');
+		docs = await Document.findAllByAttributeId(2);
 		expect(docs.length).toBe(1);
 		expect(docs[0].name).toBe('test2');
 	});
