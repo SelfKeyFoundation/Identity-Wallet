@@ -357,6 +357,18 @@ describe('Identity Duck', () => {
 					payload: testWalletId
 				});
 			});
+			it('addDocumentAction', () => {
+				expect(identityActions.addDocumentAction(testDocuments[0])).toEqual({
+					type: identityTypes.IDENTITY_DOCUMENT_ADD,
+					payload: testDocuments[0]
+				});
+			});
+			it('updateDocumentAction', () => {
+				expect(identityActions.updateDocumentAction(testDocuments[0])).toEqual({
+					type: identityTypes.IDENTITY_DOCUMENT_UPDATE,
+					payload: testDocuments[0]
+				});
+			});
 		});
 		describe('Reducers', () => {
 			it('setDocumentsReducer', async () => {
@@ -417,6 +429,27 @@ describe('Identity Duck', () => {
 						1: testDocuments[0],
 						2: testDocuments[1],
 						3: { id: 3, walletId: 2 }
+					}
+				});
+			});
+			it('updateDocumentReducer', async () => {
+				let state = {
+					documents: [1, 3],
+					documentsById: {
+						1: testDocuments[0],
+						3: { id: 3, walletId: 2, mimeType: 'test', name: 'test' }
+					}
+				};
+				let newState = identityReducers.updateDocumentReducer(
+					state,
+					identityActions.updateDocumentAction({ id: 3, walletId: 2, mimeType: 'test2' })
+				);
+
+				expect(newState).toEqual({
+					documents: [1, 3],
+					documentsById: {
+						1: testDocuments[0],
+						3: { id: 3, walletId: 2, mimeType: 'test2', name: 'test' }
 					}
 				});
 			});

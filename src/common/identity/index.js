@@ -26,7 +26,8 @@ export const identityTypes = {
 	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE',
 	IDENTITY_DOCUMENTS_LOAD: 'identity/documents/LOAD',
 	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET',
-	IDENTITY_DOCUMENTS_ADD: 'identity/documents/ADD',
+	IDENTITY_DOCUMENT_ADD: 'identity/documents/ADD',
+	IDENTITY_DOCUMENT_UPDATE: 'identity/documents/ADD',
 	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE',
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
@@ -86,7 +87,11 @@ const identityActions = {
 		payload: attributeId
 	}),
 	addDocumentAction: attribute => ({
-		type: identityTypes.IDENTITY_DOCUMENTS_ADD,
+		type: identityTypes.IDENTITY_DOCUMENT_ADD,
+		payload: attribute
+	}),
+	updateDocumentAction: attribute => ({
+		type: identityTypes.IDENTITY_DOCUMENT_UPDATE,
 		payload: attribute
 	})
 };
@@ -318,6 +323,24 @@ const addDocumentReducer = (state, action) => {
 	return { ...state, documents, documentsById };
 };
 
+const updateIdAttributeReducer = (state, action) => {
+	let attributes = [...state.attributes, action.payload.id];
+	let attributesById = { ...state.attributesById, [action.payload.id]: action.payload };
+	return { ...state, attributes, attributesById };
+};
+
+const updateDocumentReducer = (state, action) => {
+	if (!state.documents.includes(action.payload.id)) return state;
+	let documentsById = {
+		...state.documentsById,
+		[action.payload.id]: {
+			...state.documentsById[action.payload.id],
+			...action.payload
+		}
+	};
+	return { ...state, documentsById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
@@ -329,7 +352,9 @@ const identityReducers = {
 	setAttributeDocumentsReducer,
 	deleteAttributeDocumentsReducer,
 	addIdAttributeReducer,
-	addDocumentReducer
+	addDocumentReducer,
+	updateIdAttributeReducer,
+	updateDocumentReducer
 };
 
 const selectIdentity = state => state.identity;
