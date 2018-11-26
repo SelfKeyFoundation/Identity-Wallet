@@ -398,6 +398,28 @@ describe('Identity Duck', () => {
 					}
 				});
 			});
+			it('addDocumentReducer', async () => {
+				let state = {
+					documents: [1, 2],
+					documentsById: {
+						1: testDocuments[0],
+						2: testDocuments[1]
+					}
+				};
+				let newState = identityReducers.addDocumentReducer(
+					state,
+					identityActions.addDocumentAction({ id: 3, walletId: 2 })
+				);
+
+				expect(newState).toEqual({
+					documents: [1, 2, 3],
+					documentsById: {
+						1: testDocuments[0],
+						2: testDocuments[1],
+						3: { id: 3, walletId: 2 }
+					}
+				});
+			});
 			it('setAttributeDocumentsReducer', async () => {
 				let state = {
 					documents: [3],

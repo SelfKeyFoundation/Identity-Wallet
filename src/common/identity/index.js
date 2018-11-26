@@ -26,6 +26,7 @@ export const identityTypes = {
 	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE',
 	IDENTITY_DOCUMENTS_LOAD: 'identity/documents/LOAD',
 	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET',
+	IDENTITY_DOCUMENTS_ADD: 'identity/documents/ADD',
 	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE',
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
@@ -83,6 +84,10 @@ const identityActions = {
 	deleteDocumentsForAttributeAction: attributeId => ({
 		type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE,
 		payload: attributeId
+	}),
+	addDocumentAction: attribute => ({
+		type: identityTypes.IDENTITY_DOCUMENTS_ADD,
+		payload: attribute
 	})
 };
 
@@ -307,6 +312,12 @@ const addIdAttributeReducer = (state, action) => {
 	return { ...state, attributes, attributesById };
 };
 
+const addDocumentReducer = (state, action) => {
+	let documents = [...state.documents, action.payload.id];
+	let documentsById = { ...state.documentsById, [action.payload.id]: action.payload };
+	return { ...state, documents, documentsById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
@@ -317,7 +328,8 @@ const identityReducers = {
 	deleteIdAttributesReducer,
 	setAttributeDocumentsReducer,
 	deleteAttributeDocumentsReducer,
-	addIdAttributeReducer
+	addIdAttributeReducer,
+	addDocumentReducer
 };
 
 const selectIdentity = state => state.identity;
