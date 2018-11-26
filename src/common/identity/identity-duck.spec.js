@@ -18,7 +18,8 @@ describe('Identity Duck', () => {
 		loadUiSchemas() {},
 		updateUiSchemas() {},
 		loadDocuments() {},
-		loadIdAttributes() {}
+		loadIdAttributes() {},
+		loadDocumentsForAttribute() {}
 	};
 	let state = {};
 	let store = {
@@ -289,7 +290,11 @@ describe('Identity Duck', () => {
 	});
 	describe('Documents', () => {
 		let testWalletId = 1;
-		let testDocuments = [{ id: 1, walletId: testWalletId }, { id: 2, walletId: testWalletId }];
+		let testAttributeId = 1;
+		let testDocuments = [
+			{ id: 1, walletId: testWalletId, attributeId: testAttributeId },
+			{ id: 2, walletId: testWalletId, attributeId: testAttributeId }
+		];
 		let testDocumentsRaw = testDocuments.map(doc => {
 			doc = { ...doc };
 			delete doc.walletId;
@@ -309,12 +314,35 @@ describe('Identity Duck', () => {
 				expect(identityService.loadDocuments.calledOnceWith(testWalletId)).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
+			it('loadDocumentsForAttributeOperation', async () => {
+				sinon.stub(identityService, 'loadDocumentsForAttribute').resolves(testDocumentsRaw);
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'setDocumentsForAttributeAction').returns(testAction);
+
+				await testExports.operations.loadDocumentsForAttributeOperation(testAttributeId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(
+					identityService.loadDocumentsForAttribute.calledOnceWith(testAttributeId)
+				).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
 		});
 		describe('Actions', () => {
 			it('setDocumentsAction', () => {
 				expect(identityActions.setDocumentsAction(testWalletId, testDocuments)).toEqual({
 					type: identityTypes.IDENTITY_DOCUMENTS_SET,
 					payload: { walletId: testWalletId, documents: testDocuments }
+				});
+			});
+			it('setDocumentsForAttributeAction', () => {
+				expect(
+					identityActions.setDocumentsForAttributeAction(testAttributeId, testDocuments)
+				).toEqual({
+					type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET,
+					payload: { attributeId: testAttributeId, documents: testDocuments }
 				});
 			});
 			it('deleteDocumentsAction', () => {
@@ -364,6 +392,25 @@ describe('Identity Duck', () => {
 					}
 				});
 			});
+			it('setAttributeDocumentsReducer', async () => {
+				let state = {
+					documents: [3],
+					documentsById: { 3: { id: 3, walletId: 1, attributeId: 2 } }
+				};
+				let newState = identityReducers.setAttributeDocumentsReducer(
+					state,
+					identityActions.setDocumentsForAttributeAction(testAttributeId, testDocuments)
+				);
+
+				expect(newState).toEqual({
+					documents: [3, ...testDocuments.map(d => d.id)],
+					documentsById: {
+						3: { id: 3, walletId: 1, attributeId: 2 },
+						[testDocuments[0].id]: testDocuments[0],
+						[testDocuments[1].id]: testDocuments[1]
+					}
+				});
+			});
 		});
 		describe('Selectors', () => {
 			beforeEach(() => {
@@ -405,6 +452,7 @@ describe('Identity Duck', () => {
 				expect(identityService.loadIdAttributes.calledOnceWith(testWalletId)).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
+			it('createIdAttributeOperation', async () => {});
 		});
 		describe('Actions', () => {
 			it('setIdAttributesAction', () => {

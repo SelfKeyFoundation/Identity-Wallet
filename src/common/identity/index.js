@@ -30,7 +30,9 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
-	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE'
+	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE',
+	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
+	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET'
 };
 
 const identityActions = {
@@ -67,6 +69,10 @@ const identityActions = {
 	deleteIdAttributesAction: walletId => ({
 		type: identityTypes.IDENTITY_ATTRIBUTES_DELETE,
 		payload: walletId
+	}),
+	setDocumentsForAttributeAction: (attributeId, documents) => ({
+		type: identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET,
+		payload: { attributeId, documents }
 	})
 };
 
@@ -122,6 +128,12 @@ const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.setIdAttributesAction(attributes));
 };
 
+const loadDocumentsForAttributeOperation = attrId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let documents = await identityService.loadDocumentsForAttribute(attrId);
+	await dispatch(identityActions.setDocumentsForAttributeAction(attrId, documents));
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
@@ -130,7 +142,8 @@ const operations = {
 	loadUiSchemasOperation,
 	updateExpiredUiSchemasOperation,
 	loadDocumentsOperation,
-	loadIdAttributesOperation
+	loadIdAttributesOperation,
+	loadDocumentsForAttributeOperation
 };
 
 const identityOperations = {
@@ -166,6 +179,10 @@ const identityOperations = {
 	loadIdAttributesOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTES_LOAD,
 		loadIdAttributesOperation
+	),
+	loadDocumentsForAttributeOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD,
+		loadDocumentsForAttributeOperation
 	)
 };
 
@@ -203,6 +220,19 @@ const setDocumentsReducer = (state, action) => {
 	let oldDocuments = state.documents
 		.map(docId => state.documentsById[docId])
 		.filter(doc => doc.walletId !== action.walletId);
+	let documents = [...oldDocuments, ...(action.payload.documents || [])];
+	let documentsById = documents.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	documents = documents.map(attr => attr.id);
+	return { ...state, documents, documentsById };
+};
+
+const setAttributeDocumentsReducer = (state, action) => {
+	let oldDocuments = state.documents
+		.map(docId => state.documentsById[docId])
+		.filter(doc => doc.attributeId !== action.attributeId);
 	let documents = [...oldDocuments, ...(action.payload.documents || [])];
 	let documentsById = documents.reduce((acc, curr) => {
 		acc[curr.id] = curr;
@@ -256,7 +286,8 @@ const identityReducers = {
 	setDocumentsReducer,
 	deleteDocumentsReducer,
 	setIdAttributesReducer,
-	deleteIdAttributesReducer
+	deleteIdAttributesReducer,
+	setAttributeDocumentsReducer
 };
 
 const selectIdentity = state => state.identity;
