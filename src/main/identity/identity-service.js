@@ -33,6 +33,10 @@ export class IdentityService {
 	loadDocumentsForAttribute(attributeId) {
 		return Document.findAllByAttributeId(attributeId);
 	}
+
+	removeDocument(documentId) {
+		return Document.delete(documentId);
+	}
 }
 
 export default IdentityService;

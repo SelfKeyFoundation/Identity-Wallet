@@ -28,7 +28,8 @@ export const identityTypes = {
 	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET',
 	IDENTITY_DOCUMENT_ADD: 'identity/documents/ADD',
 	IDENTITY_DOCUMENT_UPDATE: 'identity/documents/ADD',
-	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE',
+	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE_ONE',
+	IDENTITY_DOCUMENT_DELETE: 'identity/documents/DELETE',
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
 	IDENTITY_ATTRIBUTE_ADD: 'identity/attribute/ADD',
@@ -37,7 +38,8 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET',
-	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE'
+	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE',
+	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE'
 };
 
 const identityActions = {
@@ -98,6 +100,10 @@ const identityActions = {
 	updateIdAttributeAction: attribute => ({
 		type: identityTypes.IDENTITY_ATTRIBUTE_UPDATE,
 		payload: attribute
+	}),
+	deleteDocumentAction: documentId => ({
+		type: identityTypes.IDENTITY_DOCUMENT_DELETE,
+		payload: documentId
 	})
 };
 
@@ -159,6 +165,12 @@ const loadDocumentsForAttributeOperation = attrId => async (dispatch, getState) 
 	await dispatch(identityActions.setDocumentsForAttributeAction(attrId, documents));
 };
 
+const removeDocumentOperation = documentId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	await identityService.removeDocument(documentId);
+	await dispatch(identityActions.deleteDocumentAction(documentId));
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
@@ -168,7 +180,8 @@ const operations = {
 	updateExpiredUiSchemasOperation,
 	loadDocumentsOperation,
 	loadIdAttributesOperation,
-	loadDocumentsForAttributeOperation
+	loadDocumentsForAttributeOperation,
+	removeDocumentOperation
 };
 
 const identityOperations = {
@@ -208,6 +221,10 @@ const identityOperations = {
 	loadDocumentsForAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD,
 		loadDocumentsForAttributeOperation
+	),
+	removeDocumentOperation: createAliasedAction(
+		identityTypes.IDENTITY_DOCUMENT_REMOVE,
+		removeDocumentOperation
 	)
 };
 
@@ -352,6 +369,14 @@ const updateDocumentReducer = (state, action) => {
 	return { ...state, documentsById };
 };
 
+const deleteDocumentReducer = (state, action) => {
+	if (!state.documents.includes(action.payload)) return state;
+	let documents = state.documents.filter(id => id !== action.payload);
+	let documentsById = { ...state.documentsById };
+	delete documentsById[action.payload];
+	return { ...state, documentsById, documents };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
@@ -365,7 +390,8 @@ const identityReducers = {
 	addIdAttributeReducer,
 	addDocumentReducer,
 	updateIdAttributeReducer,
-	updateDocumentReducer
+	updateDocumentReducer,
+	deleteDocumentReducer
 };
 
 const selectIdentity = state => state.identity;

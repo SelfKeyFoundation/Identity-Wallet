@@ -19,7 +19,8 @@ describe('Identity Duck', () => {
 		updateUiSchemas() {},
 		loadDocuments() {},
 		loadIdAttributes() {},
-		loadDocumentsForAttribute() {}
+		loadDocumentsForAttribute() {},
+		removeDocument() {}
 	};
 	let state = {};
 	let store = {
@@ -329,6 +330,19 @@ describe('Identity Duck', () => {
 				).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
+			it('removeDocumentOperation', async () => {
+				sinon.stub(identityService, 'removeDocument');
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'deleteDocumentAction').returns(testAction);
+
+				await testExports.operations.removeDocumentOperation(testAttributeId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.removeDocument.calledOnceWith(testAttributeId)).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
 		});
 		describe('Actions', () => {
 			it('setDocumentsAction', () => {
@@ -369,6 +383,12 @@ describe('Identity Duck', () => {
 					payload: testDocuments[0]
 				});
 			});
+			it('deleteDocumentAction', () => {
+				expect(identityActions.deleteDocumentAction(testDocuments[0].id)).toEqual({
+					type: identityTypes.IDENTITY_DOCUMENT_DELETE,
+					payload: testDocuments[0].id
+				});
+			});
 		});
 		describe('Reducers', () => {
 			it('setDocumentsReducer', async () => {
@@ -406,6 +426,28 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					documents: [3],
 					documentsById: {
+						3: { id: 3, walletId: 2 }
+					}
+				});
+			});
+			it('deleteDocumentReducer', async () => {
+				let state = {
+					documents: [1, 2, 3],
+					documentsById: {
+						1: testDocuments[0],
+						2: testDocuments[1],
+						3: { id: 3, walletId: 2 }
+					}
+				};
+				let newState = identityReducers.deleteDocumentReducer(
+					state,
+					identityActions.deleteDocumentAction(2)
+				);
+
+				expect(newState).toEqual({
+					documents: [1, 3],
+					documentsById: {
+						1: testDocuments[0],
 						3: { id: 3, walletId: 2 }
 					}
 				});
