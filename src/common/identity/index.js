@@ -32,6 +32,7 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
 	IDENTITY_ATTRIBUTE_ADD: 'identity/attribute/ADD',
+	IDENTITY_ATTRIBUTE_UPDATE: 'identity/attribute/UPDATE',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
 	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
@@ -92,6 +93,10 @@ const identityActions = {
 	}),
 	updateDocumentAction: attribute => ({
 		type: identityTypes.IDENTITY_DOCUMENT_UPDATE,
+		payload: attribute
+	}),
+	updateIdAttributeAction: attribute => ({
+		type: identityTypes.IDENTITY_ATTRIBUTE_UPDATE,
 		payload: attribute
 	})
 };
@@ -324,9 +329,15 @@ const addDocumentReducer = (state, action) => {
 };
 
 const updateIdAttributeReducer = (state, action) => {
-	let attributes = [...state.attributes, action.payload.id];
-	let attributesById = { ...state.attributesById, [action.payload.id]: action.payload };
-	return { ...state, attributes, attributesById };
+	if (!state.attributes.includes(action.payload.id)) return state;
+	let attributesById = {
+		...state.attributesById,
+		[action.payload.id]: {
+			...state.attributesById[action.payload.id],
+			...action.payload
+		}
+	};
+	return { ...state, attributesById };
 };
 
 const updateDocumentReducer = (state, action) => {
