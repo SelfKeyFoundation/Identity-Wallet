@@ -49,6 +49,15 @@ describe('IdAttribute model', () => {
 		expect(attr.documents[0]).not.toBeNull();
 	});
 
+	it('findAllByWalletId', async () => {
+		await IdAttribute.create(testAttribute);
+		await IdAttribute.create({ ...testAttribute, walletId: 2 });
+		await IdAttribute.create(testAttribute);
+
+		let res = await IdAttribute.findAllByWalletId(testWalletId);
+		expect(res.length).toBe(2);
+	});
+
 	it('delete', async () => {
 		let attr = await IdAttribute.create({ ...testAttribute, documents: [testDoc] });
 		await attr.$loadRelated('documents');
