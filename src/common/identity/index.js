@@ -26,6 +26,7 @@ export const identityTypes = {
 	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE',
 	IDENTITY_DOCUMENTS_LOAD: 'identity/documents/LOAD',
 	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET',
+	IDENTITY_DOCUMENTS_DELETE: 'identity/documents/DELETE',
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
@@ -51,6 +52,10 @@ const identityActions = {
 			walletId,
 			documents
 		}
+	}),
+	deleteDocumentsAction: walletId => ({
+		type: identityTypes.IDENTITY_DOCUMENTS_DELETE,
+		payload: walletId
 	}),
 	setIdAttributesAction: (walletId, attributes) => ({
 		type: identityTypes.IDENTITY_ATTRIBUTES_SET,
@@ -207,6 +212,18 @@ const setDocumentsReducer = (state, action) => {
 	return { ...state, documents, documentsById };
 };
 
+const deleteDocumentsReducer = (state, action) => {
+	let documents = state.documents
+		.map(docId => state.documentsById[docId])
+		.filter(doc => doc.walletId !== action.payload);
+	let documentsById = documents.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	documents = documents.map(attr => attr.id);
+	return { ...state, documents, documentsById };
+};
+
 const setIdAttributesReducer = (state, action) => {
 	let oldIdAttributes = state.attributes
 		.map(attrId => state.attributesById[attrId])
@@ -237,6 +254,7 @@ const identityReducers = {
 	setIdAttributeTypesReducer,
 	setUiSchemasReducer,
 	setDocumentsReducer,
+	deleteDocumentsReducer,
 	setIdAttributesReducer,
 	deleteIdAttributesReducer
 };
