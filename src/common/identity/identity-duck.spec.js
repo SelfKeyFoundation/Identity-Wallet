@@ -17,7 +17,8 @@ describe('Identity Duck', () => {
 		updateIdAttributeTypes() {},
 		loadUiSchemas() {},
 		updateUiSchemas() {},
-		loadDocuments() {}
+		loadDocuments() {},
+		loadIdAttributes() {}
 	};
 	let state = {};
 	let store = {
@@ -289,9 +290,14 @@ describe('Identity Duck', () => {
 	describe('Documents', () => {
 		let testWalletId = 1;
 		let testDocuments = [{ id: 1, walletId: testWalletId }, { id: 2, walletId: testWalletId }];
+		let testDocumentsRaw = testDocuments.map(doc => {
+			doc = { ...doc };
+			delete doc.walletId;
+			return doc;
+		});
 		describe('Operation', () => {
 			it('loadDocumentsOperation', async () => {
-				sinon.stub(identityService, 'loadDocuments').resolves(testDocuments);
+				sinon.stub(identityService, 'loadDocuments').resolves(testDocumentsRaw);
 				sinon.stub(store, 'dispatch');
 				sinon.stub(identityActions, 'setDocumentsAction').returns(testAction);
 
@@ -348,6 +354,106 @@ describe('Identity Duck', () => {
 			it('selectDocuments', () => {
 				expect(identitySelectors.selectDocuments(state, testWalletId)).toEqual(
 					testDocuments
+				);
+			});
+		});
+	});
+	describe('IdAttributes', () => {
+		let testWalletId = 1;
+		let testIdAttributes = [
+			{ id: 1, walletId: testWalletId, typeId: 1 },
+			{ id: 2, walletId: testWalletId, typeId: 2 }
+		];
+		describe('Operation', () => {
+			it('loadIdAttributesOperation', async () => {
+				sinon.stub(identityService, 'loadIdAttributes').resolves(testIdAttributes);
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'setIdAttributesAction').returns(testAction);
+
+				await testExports.operations.loadIdAttributesOperation(testWalletId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.loadIdAttributes.calledOnceWith(testWalletId)).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
+		});
+		describe('Actions', () => {
+			it('setIdAttributesAction', () => {
+				expect(
+					identityActions.setIdAttributesAction(testWalletId, testIdAttributes)
+				).toEqual({
+					type: identityTypes.IDENTITY_ATTRIBUTES_SET,
+					payload: { walletId: testWalletId, attributes: testIdAttributes }
+				});
+			});
+			it('deleteIdAttributesAction', () => {
+				expect(identityActions.deleteIdAttributesAction(testWalletId)).toEqual({
+					type: identityTypes.IDENTITY_ATTRIBUTES_DELETE,
+					payload: testWalletId
+				});
+			});
+		});
+		describe('Reducers', () => {
+			it('setIdAttributesReducer', async () => {
+				let state = {
+					attributes: [3],
+					attributesById: { 3: { id: 3, walletId: 2, typeId: 3 } }
+				};
+				let newState = identityReducers.setIdAttributesReducer(
+					state,
+					identityActions.setIdAttributesAction(testWalletId, [testIdAttributes[0]])
+				);
+
+				expect(newState).toEqual({
+					attributes: [3, testIdAttributes[0].id],
+					attributesById: {
+						3: { id: 3, walletId: 2, typeId: 3 },
+						[testIdAttributes[0].id]: testIdAttributes[0]
+					}
+				});
+			});
+			it('deleteIdAttributesReducer', async () => {
+				let state = {
+					attributes: [1, 2, 3],
+					attributesById: {
+						1: testIdAttributes[0],
+						2: testIdAttributes[1],
+						3: { id: 3, walletId: 2, typeId: 3 }
+					}
+				};
+				let newState = identityReducers.deleteIdAttributesReducer(
+					state,
+					identityActions.deleteIdAttributesAction(testWalletId)
+				);
+
+				expect(newState).toEqual({
+					attributes: [3],
+					attributesById: {
+						3: { id: 3, walletId: 2, typeId: 3 }
+					}
+				});
+			});
+		});
+		describe('Selectors', () => {
+			beforeEach(() => {
+				state.identity.attributes = [
+					...testIdAttributes,
+					{ id: 3, walletId: 2, typeId: 3 }
+				].map(repo => repo.id);
+
+				state.identity.attributesById = [
+					...testIdAttributes,
+					{ id: 3, walletId: 2, typeId: 3 }
+				].reduce((acc, curr) => {
+					acc[curr.id] = curr;
+					return acc;
+				}, {});
+			});
+			it('selectIdAttributes', () => {
+				expect(identitySelectors.selectIdAttributes(state, testWalletId)).toEqual(
+					testIdAttributes
 				);
 			});
 		});

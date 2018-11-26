@@ -1,6 +1,7 @@
 import { Repository } from './repository';
 import { IdAttributeType } from './id-attribute-type';
 import { Document } from './document';
+import { IdAttribute } from './id-attribute';
 
 export class IdentityService {
 	loadRepositories() {
@@ -23,6 +24,10 @@ export class IdentityService {
 
 	loadDocuments(walletId) {
 		return Document.findAllByWalletId(walletId);
+	}
+
+	loadIdAttributes(walletId) {
+		return IdAttribute.findAllByWalletId(walletId);
 	}
 }
 

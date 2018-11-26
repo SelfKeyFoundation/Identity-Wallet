@@ -81,6 +81,10 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
+	static async findAllByWalletId(walletId) {
+		return this.query().where({ walletId });
+	}
+
 	static async delete(id) {
 		const tx = await transaction.start(this.knex());
 		try {

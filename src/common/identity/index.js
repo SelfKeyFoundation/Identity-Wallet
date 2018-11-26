@@ -9,7 +9,9 @@ export const initialState = {
 	uiSchemas: [],
 	uiSchemasById: {},
 	documents: [],
-	documentsById: {}
+	documentsById: {},
+	attributes: [],
+	attributesById: {}
 };
 
 export const identityTypes = {
@@ -23,7 +25,11 @@ export const identityTypes = {
 	IDENTITY_UI_SCHEMAS_SET: 'identity/ui-schemas/SET',
 	IDENTITY_UI_SCHEMAS_UPDATE_REMOTE: 'identity/ui-schemas/UPDATE_REMOTE',
 	IDENTITY_DOCUMENTS_LOAD: 'identity/documents/LOAD',
-	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET'
+	IDENTITY_DOCUMENTS_SET: 'identity/documents/SET',
+	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
+	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
+	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
+	IDENTITY_ATTRIBUTES_DELETE_ONE: 'identity/attributes/DELETE_ONE'
 };
 
 const identityActions = {
@@ -45,6 +51,17 @@ const identityActions = {
 			walletId,
 			documents
 		}
+	}),
+	setIdAttributesAction: (walletId, attributes) => ({
+		type: identityTypes.IDENTITY_ATTRIBUTES_SET,
+		payload: {
+			walletId,
+			attributes
+		}
+	}),
+	deleteIdAttributesAction: walletId => ({
+		type: identityTypes.IDENTITY_ATTRIBUTES_DELETE,
+		payload: walletId
 	})
 };
 
@@ -90,7 +107,14 @@ const updateExpiredUiSchemasOperation = () => async (dispatch, getState) => {
 const loadDocumentsOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let documents = await identityService.loadDocuments(walletId);
+	documents = documents.map(doc => ({ ...doc, walletId }));
 	await dispatch(identityActions.setDocumentsAction(documents));
+};
+
+const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let attributes = await identityService.loadIdAttributes(walletId);
+	await dispatch(identityActions.setIdAttributesAction(attributes));
 };
 
 const operations = {
@@ -100,7 +124,8 @@ const operations = {
 	updateExpiredIdAttributeTypesOperation,
 	loadUiSchemasOperation,
 	updateExpiredUiSchemasOperation,
-	loadDocumentsOperation
+	loadDocumentsOperation,
+	loadIdAttributesOperation
 };
 
 const identityOperations = {
@@ -132,6 +157,10 @@ const identityOperations = {
 	loadDocumentsOperation: createAliasedAction(
 		identityTypes.IDENTITY_DOCUMENTS_LOAD,
 		loadDocumentsOperation
+	),
+	loadIdAttributesOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTES_LOAD,
+		loadIdAttributesOperation
 	)
 };
 
@@ -178,11 +207,38 @@ const setDocumentsReducer = (state, action) => {
 	return { ...state, documents, documentsById };
 };
 
+const setIdAttributesReducer = (state, action) => {
+	let oldIdAttributes = state.attributes
+		.map(attrId => state.attributesById[attrId])
+		.filter(attr => attr.walletId !== action.walletId);
+	let attributes = [...oldIdAttributes, ...(action.payload.attributes || [])];
+	let attributesById = attributes.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	attributes = attributes.map(attr => attr.id);
+	return { ...state, attributes, attributesById };
+};
+
+const deleteIdAttributesReducer = (state, action) => {
+	let attributes = state.attributes
+		.map(attrId => state.attributesById[attrId])
+		.filter(attr => attr.walletId !== action.payload);
+	let attributesById = attributes.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	attributes = attributes.map(attr => attr.id);
+	return { ...state, attributes, attributesById };
+};
+
 const identityReducers = {
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
 	setUiSchemasReducer,
-	setDocumentsReducer
+	setDocumentsReducer,
+	setIdAttributesReducer,
+	deleteIdAttributesReducer
 };
 
 const selectIdentity = state => state.identity;
@@ -229,6 +285,12 @@ const selectDocuments = (state, walletId) =>
 		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId])
 		.filter(doc => doc.walletId === walletId);
 
+const selectIdAttributes = (state, walletId) =>
+	identitySelectors
+		.selectIdentity(state)
+		.attributes.map(attrId => identitySelectors.selectIdentity(state).attributesById[attrId])
+		.filter(attr => attr.walletId === walletId);
+
 const identitySelectors = {
 	selectIdentity,
 	selectRepositories,
@@ -237,7 +299,8 @@ const identitySelectors = {
 	selectExpiredIdAttributeTypes,
 	selectUiSchemas,
 	selectExpiredUiSchemas,
-	selectDocuments
+	selectDocuments,
+	selectIdAttributes
 };
 
 export const testExports = { operations };
