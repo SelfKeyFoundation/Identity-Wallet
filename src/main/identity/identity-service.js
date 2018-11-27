@@ -45,6 +45,10 @@ export class IdentityService {
 	removeIdAttribute(attributeId) {
 		return IdAttribute.delete(attributeId);
 	}
+
+	editIdAttribute(attribute) {
+		return IdAttribute.update(attribute);
+	}
 }
 
 export default IdentityService;

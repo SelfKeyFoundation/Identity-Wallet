@@ -36,6 +36,7 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTE_REMOVE: 'identity/attribute/REMOVE',
 	IDENTITY_ATTRIBUTE_CREATE: 'identity/attribute/CREATE',
 	IDENTITY_ATTRIBUTE_UPDATE: 'identity/attribute/UPDATE',
+	IDENTITY_ATTRIBUTE_EDIT: 'identity/attribute/EDIT',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
 	IDENTITY_ATTRIBUTE_DELETE: 'identity/attributes/DELETE_ONE',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
@@ -191,6 +192,13 @@ const removeIdAttributeOperation = attributeId => async (dispatch, getState) => 
 	await dispatch(identityActions.deleteIdAttributeAction(attributeId));
 };
 
+const editIdAttributeOperation = attribute => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	await identityService.editIdAttribute(attribute);
+	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(identityActions.updateIdAttributeAction(attribute));
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
@@ -203,7 +211,8 @@ const operations = {
 	loadDocumentsForAttributeOperation,
 	removeDocumentOperation,
 	createIdAttributeOperation,
-	removeIdAttributeOperation
+	removeIdAttributeOperation,
+	editIdAttributeOperation
 };
 
 const identityOperations = {
