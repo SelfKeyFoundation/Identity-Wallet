@@ -80,4 +80,11 @@ describe('IdentityService', () => {
 		expect(Document.delete.calledOnceWith(1)).toBeTruthy();
 		expect(res).toEqual('ok');
 	});
+
+	it('removeIdAttribute', async () => {
+		sinon.stub(IdAttribute, 'delete').resolves('ok');
+		let res = await service.removeIdAttribute(1);
+		expect(IdAttribute.delete.calledOnceWith(1)).toBeTruthy();
+		expect(res).toEqual('ok');
+	});
 });

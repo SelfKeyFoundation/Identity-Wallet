@@ -33,6 +33,8 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTES_LOAD: 'identity/attributes/LOAD',
 	IDENTITY_ATTRIBUTES_SET: 'identity/attributes/SET',
 	IDENTITY_ATTRIBUTE_ADD: 'identity/attribute/ADD',
+	IDENTITY_ATTRIBUTE_REMOVE: 'identity/attribute/REMOVE',
+	IDENTITY_ATTRIBUTE_CREATE: 'identity/attribute/CREATE',
 	IDENTITY_ATTRIBUTE_UPDATE: 'identity/attribute/UPDATE',
 	IDENTITY_ATTRIBUTES_DELETE: 'identity/attributes/DELETE',
 	IDENTITY_ATTRIBUTE_DELETE: 'identity/attributes/DELETE_ONE',
@@ -175,6 +177,20 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteDocumentAction(documentId));
 };
 
+const createIdAttributeOperation = attribute => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	attribute = await identityService.createIdAttribute(attribute);
+	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(identityActions.addIdAttributeAction(attribute));
+};
+
+const removeIdAttributeOperation = attributeId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	await identityService.deleteIdAttribute(attributeId);
+	await dispatch(identityActions.deleteDocumentsForAttributeAction(attributeId));
+	await dispatch(identityActions.deleteIdAttributeAction(attributeId));
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
@@ -185,17 +201,10 @@ const operations = {
 	loadDocumentsOperation,
 	loadIdAttributesOperation,
 	loadDocumentsForAttributeOperation,
-	removeDocumentOperation
+	removeDocumentOperation,
+	createIdAttributeOperation,
+	removeIdAttributeOperation
 };
-
-const createIdAttributeOperation = attribute => async (dispatch, getState) => {
-	let identityService = getGlobalContext().identityService;
-	attribute = await identityService.createIdAttribute(attribute);
-	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
-	await dispatch(identityActions.addIdAttributeAction(attribute));
-};
-
-operations.createIdAttributeOperation = createIdAttributeOperation;
 
 const identityOperations = {
 	...identityActions,
@@ -238,6 +247,14 @@ const identityOperations = {
 	removeDocumentOperation: createAliasedAction(
 		identityTypes.IDENTITY_DOCUMENT_REMOVE,
 		removeDocumentOperation
+	),
+	createIdAttributeOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTE_CREATE,
+		createIdAttributeOperation
+	),
+	removeIdAttributeOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTE_REMOVE,
+		removeIdAttributeOperation
 	)
 };
 

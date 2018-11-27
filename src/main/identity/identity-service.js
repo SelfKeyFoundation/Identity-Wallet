@@ -37,6 +37,14 @@ export class IdentityService {
 	removeDocument(documentId) {
 		return Document.delete(documentId);
 	}
+
+	createIdAttribute(attribute) {
+		return IdAttribute.create(attribute);
+	}
+
+	removeIdAttribute(attributeId) {
+		return IdAttribute.delete(attributeId);
+	}
 }
 
 export default IdentityService;
