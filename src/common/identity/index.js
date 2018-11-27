@@ -188,6 +188,15 @@ const operations = {
 	removeDocumentOperation
 };
 
+const createIdAttributeOperation = attribute => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	attribute = await identityService.createIdAttribute(attribute);
+	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(identityActions.addIdAttributeAction(attribute));
+};
+
+operations.createIdAttributeOperation = createIdAttributeOperation;
+
 const identityOperations = {
 	...identityActions,
 	loadRepositoriesOperation: createAliasedAction(

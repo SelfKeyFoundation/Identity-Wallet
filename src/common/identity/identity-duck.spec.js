@@ -20,7 +20,8 @@ describe('Identity Duck', () => {
 		loadDocuments() {},
 		loadIdAttributes() {},
 		loadDocumentsForAttribute() {},
-		removeDocument() {}
+		removeDocument() {},
+		createIdAttribute() {}
 	};
 	let state = {};
 	let store = {
@@ -576,7 +577,38 @@ describe('Identity Duck', () => {
 				expect(identityService.loadIdAttributes.calledOnceWith(testWalletId)).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
-			it('createIdAttributeOperation', async () => {});
+			it('createIdAttributeOperation', async () => {
+				const testAttribute = {
+					typeId: 1,
+					walletId: 1,
+					data: { test: 'test' },
+					documents: [
+						{ name: 'test1', mimeType: 'mime1', size: 100, buffer: '0xsadasdasd' },
+						{ name: 'test2', mimeType: 'mime2', size: 144, buffer: '0xsadasdasd1' }
+					]
+				};
+				sinon
+					.stub(identityService, 'createIdAttribute')
+					.resolves({ ...testAttribute, id: 1 });
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'addIdAttributeAction').returns(testAction);
+				sinon
+					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
+					.returns(() => {});
+
+				await testExports.operations.createIdAttributeOperation(testAttribute)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(
+					identityService.createIdAttribute.calledOnceWith(testAttribute)
+				).toBeTruthy();
+				expect(
+					testExports.operations.loadDocumentsForAttributeOperation.calledOnceWith(1)
+				).toBeTruthy();
+				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+			});
 		});
 		describe('Actions', () => {
 			it('setIdAttributesAction', () => {
