@@ -38,6 +38,45 @@ describe('Identity Duck', () => {
 		state = { identity: { ...initialState } };
 		setGlobalContext({ identityService: identityService });
 	});
+	describe('Identity', () => {
+		describe('Operations', () => {
+			const testWalletId = 1;
+			it('lockIdentityOperation', async () => {
+				sinon.stub(store, 'dispatch');
+				sinon.stub(identityActions, 'deleteIdAttributesAction').returns(testAction);
+				sinon.stub(identityActions, 'deleteDocumentsAction').returns(testAction);
+
+				await testExports.operations.lockIdentityOperation(testWalletId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(
+					identityActions.deleteDocumentsAction.calledOnceWith(testWalletId)
+				).toBeTruthy();
+				expect(
+					identityActions.deleteDocumentsAction.calledOnceWith(testWalletId)
+				).toBeTruthy();
+				expect(store.dispatch.callCount).toBe(2);
+			});
+			it('unlockIdentityOperation', async () => {
+				sinon.stub(testExports.operations, 'loadIdAttributesOperation').returns(() => {});
+				sinon.stub(testExports.operations, 'loadDocumentsOperation').returns(() => {});
+
+				await testExports.operations.unlockIdentityOperation(testWalletId)(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(
+					testExports.operations.loadIdAttributesOperation.calledOnceWith(testWalletId)
+				).toBeTruthy();
+				expect(
+					testExports.operations.loadDocumentsOperation.calledOnceWith(testWalletId)
+				).toBeTruthy();
+			});
+		});
+	});
 	describe('Repositories', () => {
 		let now = Date.now();
 		let testRepos = [
