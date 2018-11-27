@@ -1,5 +1,6 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
+import RefParser from 'json-schema-ref-parser';
 import fetch from 'node-fetch';
 import { Logger } from 'common/logger';
 
@@ -101,6 +102,7 @@ export class IdAttributeType extends BaseModel {
 			throw new Error('Failed to fetch repository from remote');
 		}
 		let remote = await res.json();
+		remote = await RefParser.dereference(remote);
 		if (remote.identityAttributeRepository) {
 			defaultRepo = await Repository.findByUrl(remote.identityAttributeRepository);
 			if (!defaultRepo) {

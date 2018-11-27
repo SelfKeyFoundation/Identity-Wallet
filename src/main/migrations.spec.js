@@ -1,6 +1,22 @@
 import TestDb from './db/test-db';
 const { getUserDataPath } = require('../common/utils/common');
+// const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
 const path = require('path');
+
+const hasColumn = async (table, column, expected) => {
+	let has = await TestDb.knex.schema.hasColumn(table, column);
+	expect(has).toBe(expected);
+};
+
+const hasTable = async (table, expected) => {
+	let has = await TestDb.knex.schema.hasTable(table);
+	expect(has).toBe(expected);
+};
+
+// const getAttribute = url => {
+// 	let found = selfkeyPlatform.attributes.filter(attr => attr.url === url);
+// 	return found[0] || null;
+// };
 
 describe('migrations', () => {
 	const dbFile = path.join(getUserDataPath(), 'migrationsTest.sqlite');
@@ -15,16 +31,6 @@ describe('migrations', () => {
 	afterAll(async () => {
 		await TestDb.destroy();
 	});
-
-	const hasColumn = async (table, column, expected) => {
-		let has = await TestDb.knex.schema.hasColumn(table, column);
-		expect(has).toBe(expected);
-	};
-
-	const hasTable = async (table, expected) => {
-		let has = await TestDb.knex.schema.hasTable(table);
-		expect(has).toBe(expected);
-	};
 
 	describe('up 20181108183529_json-schema-attributes', () => {
 		const currMigration = '20181108183529';
@@ -100,7 +106,12 @@ describe('migrations', () => {
 		});
 
 		it('existing documents should point to id attribute', () => {});
-		it('existing id attributes should be updated to new structure', () => {});
+		describe('existing id attributes should be updated to new structure', () => {
+			beforeEach(async () => {
+				await TestDb.migrate('up', { to: prevMigration });
+			});
+			it('should migrate first name', () => {});
+		});
 		it('existing attribute types should migrate to json schema', () => {});
 		it('default repository should be added', async () => {
 			await TestDb.migrate('up', { to: currMigration });
