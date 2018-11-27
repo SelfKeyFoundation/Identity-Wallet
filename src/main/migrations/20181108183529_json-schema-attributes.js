@@ -201,7 +201,6 @@ exports.up = async (knex, Promise) => {
 exports.down = async (knex, Promise) => {
 	await downgradeIdentityAttributes(knex, Promise);
 	await downgradeAttributeTypes(knex, Promise);
-	await knex.schema.dropTable('json_schema');
 	await knex.schema.dropTable('ui_schema');
 	await knex.schema.dropTable('repository');
 };
