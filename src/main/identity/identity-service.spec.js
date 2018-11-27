@@ -87,4 +87,12 @@ describe('IdentityService', () => {
 		expect(IdAttribute.delete.calledOnceWith(1)).toBeTruthy();
 		expect(res).toEqual('ok');
 	});
+
+	it('editIdAttribute', async () => {
+		let test = { test: 1 };
+		sinon.stub(IdAttribute, 'update').resolves('ok');
+		let res = await service.editIdAttribute(test);
+		expect(IdAttribute.update.calledOnceWith(test)).toBeTruthy();
+		expect(res).toEqual('ok');
+	});
 });

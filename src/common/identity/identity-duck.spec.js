@@ -22,7 +22,8 @@ describe('Identity Duck', () => {
 		loadDocumentsForAttribute() {},
 		removeDocument() {},
 		createIdAttribute() {},
-		deleteIdAttribute() {}
+		deleteIdAttribute() {},
+		editIdAttribute() {}
 	};
 	let state = {};
 	let store = {
@@ -625,6 +626,25 @@ describe('Identity Duck', () => {
 
 				expect(identityService.deleteIdAttribute.calledOnceWith(1)).toBeTruthy();
 				expect(identityActions.deleteIdAttributeAction.calledOnceWith(1)).toBeTruthy();
+				expect(store.dispatch.calledWith(testAction)).toBeTruthy();
+			});
+			it('editIdAttributeOperation', async () => {
+				sinon.stub(identityService, 'editIdAttribute').resolves('ok');
+				sinon.stub(store, 'dispatch');
+				sinon
+					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
+					.returns(() => {});
+				sinon.stub(identityActions, 'updateIdAttributeAction').returns(testAction);
+
+				await testExports.operations.editIdAttributeOperation({ id: 1 })(
+					store.dispatch,
+					store.getState.bind(store)
+				);
+
+				expect(identityService.editIdAttribute.calledOnceWith({ id: 1 })).toBeTruthy();
+				expect(
+					identityActions.updateIdAttributeAction.calledOnceWith({ id: 1 })
+				).toBeTruthy();
 				expect(store.dispatch.calledWith(testAction)).toBeTruthy();
 			});
 		});
