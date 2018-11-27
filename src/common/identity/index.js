@@ -199,6 +199,15 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };
 
+const lockIdentityOperation = walletId => async (dispatch, getState) => {
+	await dispatch(identityActions.deleteIdAttributesAction(walletId));
+	await dispatch(identityActions.deleteDocumentsAction(walletId));
+};
+const unlockIdentityOperation = walletId => async (dispatch, getState) => {
+	await operations.loadDocumentsOperation(walletId)(dispatch, getState);
+	await operations.loadIdAttributesOperation(walletId)(dispatch, getState);
+};
+
 const operations = {
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
@@ -212,7 +221,9 @@ const operations = {
 	removeDocumentOperation,
 	createIdAttributeOperation,
 	removeIdAttributeOperation,
-	editIdAttributeOperation
+	editIdAttributeOperation,
+	unlockIdentityOperation,
+	lockIdentityOperation
 };
 
 const identityOperations = {
@@ -243,27 +254,35 @@ const identityOperations = {
 	),
 	loadDocumentsOperation: createAliasedAction(
 		identityTypes.IDENTITY_DOCUMENTS_LOAD,
-		loadDocumentsOperation
+		operations.loadDocumentsOperation
 	),
 	loadIdAttributesOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTES_LOAD,
-		loadIdAttributesOperation
+		operations.loadIdAttributesOperation
 	),
 	loadDocumentsForAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD,
-		loadDocumentsForAttributeOperation
+		operations.loadDocumentsForAttributeOperation
 	),
 	removeDocumentOperation: createAliasedAction(
 		identityTypes.IDENTITY_DOCUMENT_REMOVE,
-		removeDocumentOperation
+		operations.removeDocumentOperation
 	),
 	createIdAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_CREATE,
-		createIdAttributeOperation
+		operations.createIdAttributeOperation
 	),
 	removeIdAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_REMOVE,
-		removeIdAttributeOperation
+		operations.removeIdAttributeOperation
+	),
+	unlockIdentityOperation: createAliasedAction(
+		identityTypes.IDENTITY_UNLOCK,
+		operations.unlockIdentityOperation
+	),
+	lockIdentityOperation: createAliasedAction(
+		identityTypes.IDENTITY_LOCK,
+		operations.lockIdentityOperation
 	)
 };
 
