@@ -43,9 +43,6 @@ describe('migrations', () => {
 			await hasColumn('repository', 'expires', true);
 			await hasColumn('repository', 'createdAt', true);
 			await hasColumn('repository', 'updatedAt', true);
-			let initialRepos = await TestDb.knex('repository').select();
-			expect(initialRepos.length).toBe(1);
-			expect(initialRepos[0].url).toBe('https://platform.selfkey.org/repository.json');
 		});
 
 		it('adds repository_attribute_types', async () => {
@@ -100,6 +97,16 @@ describe('migrations', () => {
 			await hasColumn('id_attribute_types', 'expires', true);
 			await hasColumn('id_attribute_types', 'createdAt', true);
 			await hasColumn('id_attribute_types', 'updatedAt', true);
+		});
+
+		it('existing documents should point to id attribute', () => {});
+		it('existing id attributes should be updated to new structure', () => {});
+		it('existing attribute types should migrate to json schema', () => {});
+		it('default repository should be added', async () => {
+			await TestDb.migrate('up', { to: currMigration });
+			let initialRepos = await TestDb.knex('repository').select();
+			expect(initialRepos.length).toBe(1);
+			expect(initialRepos[0].url).toBe('https://platform.selfkey.org/repository.json');
 		});
 	});
 });
