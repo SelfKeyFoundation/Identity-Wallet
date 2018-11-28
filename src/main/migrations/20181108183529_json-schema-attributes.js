@@ -216,6 +216,12 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 					.join(', ')
 			};
 		}
+		if (['fingerprint'].includes(attr.type)) {
+			data.value = { image: 0 };
+		}
+		if (['voice_id'].includes(attr.type)) {
+			data.value = { audio: 0 };
+		}
 		attr.data = JSON.stringify(data);
 		delete attr.type;
 		return attr;
