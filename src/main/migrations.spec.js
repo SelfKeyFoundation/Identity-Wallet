@@ -234,10 +234,83 @@ describe('migrations', () => {
 
 				expect(newAttr[0].data).toEqual({ value: '+35512312123123123' });
 			});
+			it('should migrate simple documents', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'fingerprint',
+					category: 'global_attribute',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'voice_id',
+					category: 'global_attribute',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 15,
+					walletId: 1,
+					type: 'fingerprint',
+					data: '{}',
+					documentId: 3,
+					createdAt: 0
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 16,
+					walletId: 1,
+					type: 'voice_id',
+					data: '{}',
+					documentId: 4,
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 3,
+					name: 'Screen Shot 2018-11-16 at 17.12.55.png',
+					mimeType: 'image/png',
+					size: 17065,
+					buffer: Buffer.alloc(17065),
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 4,
+					name: 'Screen Shot 2018-11-16 at 17.12.55.png',
+					mimeType: 'image/png',
+					size: 17065,
+					buffer: Buffer.alloc(17065),
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+				let newDocs = await TestDb.knex('documents').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].data).toEqual({
+					value: {
+						image: 0
+					}
+				});
+				expect(newAttr[1].typeId).toBe(newType[1].id);
+				expect(newAttr[1].data).toEqual({
+					value: {
+						audio: 0
+					}
+				});
+				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+				expect(newDocs[1].attributeId).toBe(newAttr[1].id);
+			});
+			it('should migrate drivers license', () => {});
+			it('should migrate national id', () => {});
 		});
-		it('should migrate simple documents', () => {});
-		it('should migrate drivers license', () => {});
-		it('should migrate national id', () => {});
 
 		it('default repository should be added', async () => {
 			await TestDb.migrate('up', { to: currMigration });
