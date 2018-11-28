@@ -26,7 +26,7 @@ cache:
   # - node_modules
   - '%LOCALAPPDATA%/Yarn'
 install:
-  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2p.exe'
+  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2q.exe'
   - ps: Start-Process 'Win64OpenSSL-1_0_2p.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
   - choco install gcloudsdk
   - refreshenv
