@@ -18,6 +18,7 @@ export class IdAttribute extends BaseModel {
 			required: ['walletId', 'typeId'],
 			properties: {
 				id: { type: 'integer' },
+				name: { type: 'string' },
 				walletId: { type: 'integer' },
 				typeId: { type: 'integer' },
 				data: { type: 'object' }

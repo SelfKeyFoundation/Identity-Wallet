@@ -105,14 +105,140 @@ describe('migrations', () => {
 			await hasColumn('id_attribute_types', 'updatedAt', true);
 		});
 
-		it('existing documents should point to id attribute', () => {});
 		describe('existing id attributes should be updated to new structure', () => {
 			beforeEach(async () => {
 				await TestDb.migrate('up', { to: prevMigration });
 			});
-			it('should migrate first name', () => {});
+			it('should migrate simple value', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'first_name',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["individual"]',
+					createdAt: 0,
+					isInitial: 1
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 1,
+					walletId: 1,
+					type: 'first_name',
+					data: '{"value":"First Name"}',
+					createdAt: 0,
+					documentId: null
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newAttr = await TestDb.knex('id_attributes')
+					.select()
+					.where({ id: 1 });
+
+				expect(newAttr[0]).toEqual({
+					id: 1,
+					walletId: 1,
+					typeId: 1,
+					data: '{"value":"First Name"}',
+					createdAt: 0,
+					name: 'first_name',
+					updatedAt: null
+				});
+			});
+			it('should migrate address', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'physical_address',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["individual"]',
+					createdAt: 0,
+					isInitial: 0
+				});
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'work_place',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["individual"]',
+					createdAt: 0,
+					isInitial: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 9,
+					walletId: 1,
+					type: 'physical_address',
+					data:
+						'{"address1":"street address 1","address2":"street address 2","city":"city","country":"Anguilla","region":"state","zip":"zip"}',
+					documentId: null,
+					createdAt: 0
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 10,
+					walletId: 1,
+					type: 'work_place',
+					data:
+						'{"address1":"workplace str 1","address2":"workplace str 2","city":"workplace city","country":"Andorra","region":"workplace state","zip":"workplace zip"}',
+					documentId: null,
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+				expect(newAttr.length).toBe(2);
+				expect(newType.length).toBe(1);
+
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].name).toEqual('physical_address');
+				expect(newAttr[0].data.value).toEqual({
+					'address-line-1': 'street address 1',
+					'address-line-2': 'street address 2',
+					'address-line-3': 'zip, city, state, Anguilla'
+				});
+				expect(newAttr[1].typeId).toEqual(newType[0].id);
+				expect(newAttr[1].name).toEqual('work_place');
+				expect(newAttr[1].data.value).toEqual({
+					'address-line-1': 'workplace str 1',
+					'address-line-2': 'workplace str 2',
+					'address-line-3': 'workplace zip, workplace city, workplace state, Andorra'
+				});
+			});
+			it('should migrate phone number', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'phonenumber_countrycode',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["company","individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 14,
+					walletId: 1,
+					type: 'phonenumber_countrycode',
+					data: '{"countryCode":"+355","telephoneNumber":12312123123123}',
+					documentId: null,
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].name).toEqual('phonenumber_countrycode');
+
+				expect(newAttr[0].data).toEqual({ value: '+35512312123123123' });
+			});
 		});
-		it('existing attribute types should migrate to json schema', () => {});
+		it('should migrate simple documents', () => {});
+		it('should migrate drivers license', () => {});
+		it('should migrate national id', () => {});
+
 		it('default repository should be added', async () => {
 			await TestDb.migrate('up', { to: currMigration });
 			let initialRepos = await TestDb.knex('repository').select();
