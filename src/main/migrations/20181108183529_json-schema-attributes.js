@@ -1,5 +1,12 @@
 /* istanbul ignore file */
 
+const selfkeyPlatform = require('../assets/data/selfkey-platform.json');
+
+const getAttribute = url => {
+	let found = selfkeyPlatform.attributes.filter(attr => attr.$id === url);
+	return found[0] || null;
+};
+
 const populateInitialRepo = async (ctx, knex, Promise) => {
 	let repoIDs = await knex('repository').insert({
 		url: 'https://platform.selfkey.org/repository.json',
@@ -37,34 +44,67 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	});
 
 	let attributeTypes = await knex('id_attribute_types_old').select();
-
+	let oldNewMap = {
+		phonenumber_countrycode: {
+			id: 'phone-number'
+		}
+	};
 	// TODO: go over all attribute types and hadnle cases when attribute key of old does not match json file of new
 	// TODO: handle attribute merges
 	ctx.attributeTypes = attributeTypes
 		.map(t => {
-			let url = `https://platform.selfkey.org/schema/attribute/${t.key.replace(
+			let oldKey = t.key;
+			let duplicate = false;
+			if (t.key === 'work_place') {
+				duplicate = 'physical_address';
+			}
+			let key = oldNewMap[duplicate || t.key]
+				? oldNewMap[duplicate || t.key].id
+				: duplicate || t.key;
+			let url = `https://platform.selfkey.org/schema/attribute/${key.replace(
 				/_/g,
 				'-'
 			)}.json`;
+
+			let attr = getAttribute(url);
+
 			let newType = {
-				oldKey: t.key,
+				oldKey,
+				duplicate,
 				type: {
+					id: t.id,
 					defaultRepositoryId: ctx.repoId,
 					url,
+					content: attr ? JSON.stringify(attr) : null,
 					expires: ctx.now,
 					createdAt: t.createdAt,
 					updatedAt: ctx.now
 				}
 			};
-
 			return newType;
 		})
 		.map(async t => {
-			let typeIds = await knex('id_attribute_types').insert(t.type);
-			t.type.id = typeIds[0];
+			await knex('id_attribute_types').insert(t.type);
 			return t;
 		});
-	await Promise.all(attributeTypes);
+	ctx.attributeTypes = await Promise.all(ctx.attributeTypes);
+
+	let attrsMap = ctx.attributeTypes.filter(t => !t.duplicate).reduce((acc, curr) => {
+		acc[curr.oldKey] = curr;
+		return acc;
+	}, {});
+	await Promise.all(
+		ctx.attributeTypes.filter(t => !!t.duplicate).map(async t => {
+			let newT = attrsMap[t.duplicate];
+			await knex('id_attributes')
+				.update({ typeId: newT.type.id })
+				.where({ typeId: t.type.id });
+			await knex('id_attribute_types')
+				.where({ id: t.type.id })
+				.del();
+		})
+	);
+
 	await knex.schema.dropTable('id_attribute_types_old');
 	return ctx;
 };
@@ -95,6 +135,7 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 			.integer('walletId')
 			.notNullable()
 			.references('wallets.id');
+		table.string('name');
 		table
 			.integer('typeId')
 			.notNullable()
@@ -126,6 +167,7 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		SELECT
 			attr.id as id,
 			attr.walletId as walletId,
+			t.key as name,
 			t.id as typeId,
 			attr.data as data,
 			attr.createdAt,
@@ -148,6 +190,45 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		FROM id_attributes_old as attr, documents_old as doc
 		WHERE attr.documentId == doc.id;
 	`);
+	let attrs = (await knex.raw(`
+		SELECT id_attributes.*, id_attributes_old.type
+		FROM id_attributes, id_attributes_old
+		WHERE id_attributes.id == id_attributes_old.id;
+	`)).map(attr => {
+		let data = JSON.parse(attr.data);
+		if (!data.value) {
+			data = { value: data };
+		}
+		if (attr.type === 'phonenumber_countrycode') {
+			data.value = data.value.countryCode + data.value.telephoneNumber;
+		}
+		if (['physical_address', 'work_place'].includes(attr.type)) {
+			data.value = {
+				'address-line-1': data.value.address1 || '',
+				'address-line-2': data.value.address2 || '',
+				'address-line-3': [
+					data.value.zip,
+					data.value.city,
+					data.value.region,
+					data.value.country
+				]
+					.filter(x => !!x)
+					.join(', ')
+			};
+		}
+		attr.data = JSON.stringify(data);
+		delete attr.type;
+		return attr;
+	});
+
+	await Promise.all(
+		attrs.map(attr =>
+			knex('id_attributes')
+				.update(attr)
+				.where({ id: attr.id })
+		)
+	);
+
 	await knex.schema.dropTable('documents_old');
 	await knex.schema.dropTable('id_attributes_old');
 	return ctx;
