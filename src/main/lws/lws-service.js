@@ -419,26 +419,31 @@ export class LWSService {
 				},
 				json: form
 			};
-			request.post(options, (err, resp, body) => {
-				let lwsResp = {};
-				try {
-					lwsResp = {
-						payload: JSON.parse(body)
-					};
-				} catch (e) {
-					lwsResp = {
-						payload: e
-					};
-				}
-				if (err || resp.statusCode >= 400) {
-					lwsResp.error = true;
-					lwsResp.payload = {
-						code: resp.statusCode,
-						message: body
-					};
-				}
-				conn.send(lwsResp, msg);
-			});
+			conn.send(
+				await new Promise((resolve, reject) => {
+					request.post(options, (err, resp, body) => {
+						let lwsResp = {};
+						try {
+							lwsResp = {
+								payload: JSON.parse(body)
+							};
+						} catch (e) {
+							lwsResp = {
+								payload: e
+							};
+						}
+						if (err || resp.statusCode >= 400) {
+							lwsResp.error = true;
+							lwsResp.payload = {
+								code: resp.statusCode,
+								message: body
+							};
+						}
+						resolve(lwsResp);
+					});
+				}),
+				msg
+			);
 		} catch (error) {
 			return this.authResp(
 				{
