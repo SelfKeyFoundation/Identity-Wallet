@@ -308,8 +308,123 @@ describe('migrations', () => {
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
 				expect(newDocs[1].attributeId).toBe(newAttr[1].id);
 			});
-			it('should migrate drivers license', () => {});
-			it('should migrate national id', () => {});
+			it('should migrate drivers license', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'drivers_license',
+					category: 'id_document',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 18,
+					walletId: 1,
+					type: 'drivers_license',
+					data: '{}',
+					documentId: 6,
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 6,
+					name: 'Screen Shot 2018-11-16 at 15.27.17.png',
+					mimeType: 'image/png',
+					size: 3711637,
+					buffer: Buffer.alloc(3711637),
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+				let newDocs = await TestDb.knex('documents').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].data).toEqual({
+					value: {
+						front: 0
+					}
+				});
+				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+			});
+			it('should migrate national id', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'national_id',
+					category: 'id_document',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 18,
+					walletId: 1,
+					type: 'national_id',
+					data: '{}',
+					documentId: 6,
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 6,
+					name: 'Screen Shot 2018-11-16 at 15.27.17.png',
+					mimeType: 'image/png',
+					size: 3711637,
+					buffer: Buffer.alloc(3711637),
+					createdAt: 0
+				});
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'national_id_back',
+					category: 'id_document',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 19,
+					walletId: 1,
+					type: 'national_id_back',
+					data: '{}',
+					documentId: 7,
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 7,
+					name: 'Screen Shot 2018-11-16 at 15.27.17.png',
+					mimeType: 'image/png',
+					size: 3711637,
+					buffer: Buffer.alloc(3711637),
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+				let newDocs = await TestDb.knex('documents').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+				expect(newAttr.length).toBe(1);
+				expect(newType.length).toBe(1);
+				expect(newDocs.length).toBe(2);
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].data).toEqual({
+					value: {
+						front: 0,
+						back: 0,
+						additional: []
+					}
+				});
+				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+			});
 		});
 
 		it('default repository should be added', async () => {
