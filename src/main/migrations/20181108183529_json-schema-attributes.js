@@ -222,6 +222,9 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		if (['voice_id'].includes(attr.type)) {
 			data.value = { audio: 0 };
 		}
+		if (['drivers_license'].includes(attr.type)) {
+			data.value = { front: 0 };
+		}
 		attr.data = JSON.stringify(data);
 		delete attr.type;
 		return attr;
