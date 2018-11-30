@@ -409,17 +409,15 @@ export class LWSService {
 				signature: signature
 			};
 			if (msg.payload.attributes) {
-				form.attributes = JSON.stringify(msg.payload.attributes);
+				form.attributes = msg.payload.attributes;
 			}
 			const options = {
 				url: msg.payload.website.apiUrl,
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
 					'User-Agent': userAgent
 				},
-				form: form
+				json: form
 			};
 			request.post(options, (err, resp, body) => {
 				let lwsResp = {};
