@@ -65,10 +65,13 @@ require('angular-sanitize');
 require('angular-local-storage');
 require('angular-qrcode');
 require('angular-zxcvbn');
-require('./angular/app.templates');
 require('angulartics');
 require('angulartics-piwik');
 require('angular-md5');
+
+angular.module('templates', []);
+require('./angular/app.templates');
+
 /**
  * main module: 'kyc-wallet'
  */

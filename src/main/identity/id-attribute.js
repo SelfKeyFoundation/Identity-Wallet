@@ -157,18 +157,20 @@ export class IdAttribute extends BaseModel {
 					return acc;
 				}, []);
 
-			let dataAttrs = requiredStaticData.filter(req => !!req.attributeType).map(req => {
-				let staticData = {};
-				for (let j in req.staticDatas) {
-					let answer = req.staticDatas[j];
-					staticData['line' + (parseInt(j) + 1).toString()] = answer;
-				}
-				return {
-					walletId,
-					type: req.attributeType,
-					data: staticData
-				};
-			});
+			let dataAttrs = requiredStaticData
+				.filter(req => !!req.attributeType)
+				.map(req => {
+					let staticData = {};
+					for (let j in req.staticDatas) {
+						let answer = req.staticDatas[j];
+						staticData['line' + (parseInt(j) + 1).toString()] = answer;
+					}
+					return {
+						walletId,
+						type: req.attributeType,
+						data: staticData
+					};
+				});
 
 			walletSetting.airDropCode = exportCode;
 
