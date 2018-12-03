@@ -1,7 +1,7 @@
 import GuideSetting from './guide-setting';
 import TestDb from '../db/test-db';
 
-describe('GuideSettings model', () => {
+xdescribe('GuideSettings model', () => {
 	beforeEach(async () => {
 		await TestDb.init();
 	});
