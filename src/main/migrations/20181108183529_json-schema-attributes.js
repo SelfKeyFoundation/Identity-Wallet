@@ -21,6 +21,10 @@ const populateInitialRepo = async (ctx, knex, Promise) => {
 	return ctx;
 };
 
+const attributeUrlForKey = key => {
+	return `https://platform.selfkey.org/schema/attribute/${key.replace(/_/g, '-')}.json`;
+};
+
 const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	await knex.schema.renameTable('id_attribute_types', 'id_attribute_types_old');
 	await knex.schema.createTable('id_attribute_types', t => {
@@ -49,22 +53,24 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			id: 'phone-number'
 		}
 	};
+	let duplicateMap = {
+		work_place: {
+			id: 'physical_address'
+		}
+	};
 	// TODO: go over all attribute types and hadnle cases when attribute key of old does not match json file of new
 	// TODO: handle attribute merges
 	ctx.attributeTypes = attributeTypes
 		.map(t => {
 			let oldKey = t.key;
 			let duplicate = false;
-			if (t.key === 'work_place') {
-				duplicate = 'physical_address';
+			if (duplicateMap[t.key]) {
+				duplicate = duplicateMap[t.key].id;
 			}
 			let key = oldNewMap[duplicate || t.key]
 				? oldNewMap[duplicate || t.key].id
 				: duplicate || t.key;
-			let url = `https://platform.selfkey.org/schema/attribute/${key.replace(
-				/_/g,
-				'-'
-			)}.json`;
+			let url = attributeUrlForKey(key);
 
 			let attr = getAttribute(url);
 
@@ -88,7 +94,6 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			return t;
 		});
 	ctx.attributeTypes = await Promise.all(ctx.attributeTypes);
-
 	let attrsMap = ctx.attributeTypes.filter(t => !t.duplicate).reduce((acc, curr) => {
 		acc[curr.oldKey] = curr;
 		return acc;
@@ -96,6 +101,8 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	await Promise.all(
 		ctx.attributeTypes.filter(t => !!t.duplicate).map(async t => {
 			let newT = attrsMap[t.duplicate];
+			if (!newT) return;
+
 			await knex('id_attributes')
 				.update({ typeId: newT.type.id })
 				.where({ typeId: t.type.id });
@@ -104,9 +111,83 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 				.del();
 		})
 	);
+	await mergeAttributes(
+		attributeUrlForKey('national_id'),
+		{
+			[attributeUrlForKey('national_id')]: 'front',
+			[attributeUrlForKey('national_id_back')]: 'back'
+		},
+		knex,
+		ctx
+	);
 
 	await knex.schema.dropTable('id_attribute_types_old');
 	return ctx;
+};
+
+const mergeAttributes = async (target, attrs, knex, ctx) => {
+	let attrsToMerge = await knex('id_attribute_types')
+		.join('id_attributes', 'id_attributes.typeId', 'id_attribute_types.id')
+		.select('id_attributes.*', 'id_attribute_types.url')
+		.whereIn('id_attribute_types.url', Object.keys(attrs));
+
+	if (!attrsToMerge.length) return;
+	let targetAttrType = await knex('id_attribute_types')
+		.select()
+		.where({ url: target });
+	if (!targetAttrType.length) {
+		let content = getAttribute(target);
+		targetAttrType = {
+			url: target,
+			content: content ? JSON.stringify(content) : null,
+			expires: ctx.now,
+			createdAt: ctx.now,
+			updatedAt: ctx.now
+		};
+		let ids = await knex('id_attributes_types').insert(targetAttrType);
+
+		targetAttrType.id = ids[0];
+	} else {
+		targetAttrType = targetAttrType[0];
+	}
+
+	let data = attrsToMerge.reduce((acc, curr) => {
+		curr = { ...curr, data: JSON.parse(curr.data) };
+		let key = attrs[curr.url];
+		let value = curr.data ? curr.data.value : null;
+		acc[curr.walletId] = acc[curr.walletId] || {};
+		acc[curr.walletId][key] = value;
+		return acc;
+	}, {});
+
+	let typeIds = attrsToMerge.map(attr => attr.typeId).filter(t => targetAttrType.id !== t);
+
+	await knex('id_attribute_types')
+		.whereIn('id', typeIds)
+		.del();
+
+	for (let walletId in data) {
+		let attrsIds = attrsToMerge
+			.filter(attr => +attr.walletId === +walletId)
+			.map(attr => attr.id);
+
+		let targetAttr = {
+			typeId: targetAttrType.id,
+			data: JSON.stringify({ value: data[walletId] }),
+			walletId: walletId,
+			createdAt: ctx.now,
+			updatedAt: ctx.now
+		};
+
+		let ids = await knex('id_attributes').insert(targetAttr);
+
+		await knex('id_attributes')
+			.whereIn('id', attrsIds)
+			.del();
+		await knex('documents')
+			.update({ attributeId: ids[0] })
+			.whereIn('attributeId', attrsIds);
+	}
 };
 
 const migrateIdentityAttributes = async (ctx, knex, Promise) => {

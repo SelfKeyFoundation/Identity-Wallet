@@ -203,6 +203,46 @@ describe('migrations', () => {
 					'address-line-3': 'workplace zip, workplace city, workplace state, Andorra'
 				});
 			});
+			it('should migrate work address', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'work_place',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["individual"]',
+					createdAt: 0,
+					isInitial: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 10,
+					walletId: 1,
+					type: 'work_place',
+					data:
+						'{"address1":"workplace str 1","address2":"workplace str 2","city":"workplace city","country":"Andorra","region":"workplace state","zip":"workplace zip"}',
+					documentId: null,
+					createdAt: 0
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newType = await TestDb.knex('id_attribute_types').select();
+				let newAttr = await TestDb.knex('id_attributes').select();
+
+				newAttr = newAttr.map(attr => {
+					attr.data = JSON.parse(attr.data);
+					return attr;
+				});
+				expect(newAttr.length).toBe(1);
+				expect(newType.length).toBe(1);
+
+				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newType[0].url).toEqual(
+					'https://platform.selfkey.org/schema/attribute/physical-address.json'
+				);
+				expect(newAttr[0].data.value).toEqual({
+					'address-line-1': 'workplace str 1',
+					'address-line-2': 'workplace str 2',
+					'address-line-3': 'workplace zip, workplace city, workplace state, Andorra'
+				});
+			});
 			it('should migrate phone number', async () => {
 				await TestDb.knex('id_attribute_types').insert({
 					key: 'phonenumber_countrycode',
@@ -296,13 +336,13 @@ describe('migrations', () => {
 				expect(newAttr[0].typeId).toBe(newType[0].id);
 				expect(newAttr[0].data).toEqual({
 					value: {
-						image: 0
+						image: '$document-3'
 					}
 				});
 				expect(newAttr[1].typeId).toBe(newType[1].id);
 				expect(newAttr[1].data).toEqual({
 					value: {
-						audio: 0
+						audio: '$document-4'
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
@@ -347,7 +387,7 @@ describe('migrations', () => {
 				expect(newAttr[0].typeId).toBe(newType[0].id);
 				expect(newAttr[0].data).toEqual({
 					value: {
-						front: 0
+						front: '$document-6'
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
@@ -412,14 +452,14 @@ describe('migrations', () => {
 					attr.data = JSON.parse(attr.data);
 					return attr;
 				});
-				expect(newAttr.length).toBe(1);
 				expect(newType.length).toBe(1);
+				expect(newAttr.length).toBe(1);
 				expect(newDocs.length).toBe(2);
 				expect(newAttr[0].typeId).toBe(newType[0].id);
 				expect(newAttr[0].data).toEqual({
 					value: {
-						front: 0,
-						back: 0,
+						front: '$document-6',
+						back: '$document-7',
 						additional: []
 					}
 				});
