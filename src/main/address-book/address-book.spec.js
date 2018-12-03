@@ -1,7 +1,7 @@
 import AddressBook from './address-book';
 import TestDb from '../db/test-db';
 
-xdescribe('Exchange model', () => {
+describe('Exchange model', () => {
 	const testItem = {
 		label: 'Jack',
 		address: '0xefd32a',
