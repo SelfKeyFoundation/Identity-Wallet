@@ -3,7 +3,7 @@ import AddressBook from './address-book';
 import sinon from 'sinon';
 import { setGlobalContext } from '../../common/context';
 
-xdescribe('AddressBookService', () => {
+describe('AddressBookService', () => {
 	afterEach(() => {
 		sinon.restore();
 	});
