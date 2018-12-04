@@ -271,10 +271,11 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		FROM id_attributes_old as attr, documents_old as doc
 		WHERE attr.documentId == doc.id;
 	`);
+
 	let attrs = (await knex.raw(`
-		SELECT id_attributes.*, id_attributes_old.type
-		FROM id_attributes, id_attributes_old
-		WHERE id_attributes.id == id_attributes_old.id;
+		SELECT attr.*, old.type, old.documentId
+		FROM id_attributes as attr, id_attributes_old as old
+		WHERE attr.id == old.id;
 	`)).map(attr => {
 		let data = JSON.parse(attr.data);
 		if (!data.value) {
@@ -297,17 +298,21 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 					.join(', ')
 			};
 		}
+		if (attr.documentId) {
+			data.value = `$document-${attr.documentId}`;
+		}
 		if (['fingerprint'].includes(attr.type)) {
-			data.value = { image: 0 };
+			data.value = { image: data.value };
 		}
 		if (['voice_id'].includes(attr.type)) {
-			data.value = { audio: 0 };
+			data.value = { audio: data.value };
 		}
 		if (['drivers_license'].includes(attr.type)) {
-			data.value = { front: 0 };
+			data.value = { front: data.value };
 		}
 		attr.data = JSON.stringify(data);
 		delete attr.type;
+		delete attr.documentId;
 		return attr;
 	});
 
