@@ -183,13 +183,9 @@ function onReady(app) {
 				// start update cmc data
 				Promise.all([
 					ctx.priceService.startUpdateData(),
-					ctx.idAttributeTypeService.loadIdAttributeTypes(),
 					ctx.exchangesService.loadExchangeData(),
 					loadIdentity(ctx)
 				]);
-				if (process.env.ENABLE_JSON_SCHEMA === '1') {
-					await ctx.idAttributeTypeService.resolveSchemas();
-				}
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {

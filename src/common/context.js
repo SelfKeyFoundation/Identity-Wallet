@@ -3,7 +3,6 @@ import { asClass, asValue, asFunction, createContainer, InjectionMode } from 'aw
 
 import PriceService from 'main/token/price-service';
 import ExchangesService from 'main/exchanges/exchanges-service';
-import IdAttributeTypeService from 'main/identity/id-attribute-type-service';
 import TxHistoryService from 'main/blockchain/tx-history-service';
 import Web3Service from 'main/blockchain/web3-service';
 import { LWSService } from 'main/lws/lws-service';
@@ -42,7 +41,6 @@ export const configureContext = (store, app) => {
 		TxHistoryService: asValue(TxHistoryService),
 		priceService: asClass(PriceService).singleton(),
 		lwsService: asClass(LWSService).singleton(),
-		idAttributeTypeService: asClass(IdAttributeTypeService).singleton(),
 		exchangesService: asClass(ExchangesService).singleton(),
 		ethGasStationService: asClass(EthGasStationService).singleton(),
 		IdentityService: asClass(IdentityService).singleton(),
