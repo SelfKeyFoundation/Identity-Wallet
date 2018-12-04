@@ -459,8 +459,7 @@ describe('migrations', () => {
 				expect(newAttr[0].data).toEqual({
 					value: {
 						front: '$document-6',
-						back: '$document-7',
-						additional: []
+						back: '$document-7'
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
