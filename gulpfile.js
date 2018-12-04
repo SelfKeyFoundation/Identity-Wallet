@@ -13,6 +13,7 @@ const tap = require('gulp-tap');
 const concat = require('gulp-concat');
 const header = require('gulp-header');
 const insert = require('gulp-insert');
+const os = require('os');
 
 gulp.task('templates', cb => {
 	gulp.src(tmplSrc)
@@ -23,11 +24,18 @@ gulp.task('templates', cb => {
 		})
 		.pipe(
 			tap(function(file) {
+				let contents = '';
+				if (os === 'win32') {
+					// eslint-disable-next-line no-useless-escape
+					contents = htmlJsStr(file.contents).replace(/\"/g, '\\"');
+				} else {
+					contents = htmlJsStr(file.contents);
+				}
 				file.contents = Buffer.from(
 					'$templateCache.put("' +
 						file.path.replace(file.base, '') +
 						'","' +
-						htmlJsStr(file.contents) +
+						contents +
 						'");'
 				);
 			})
