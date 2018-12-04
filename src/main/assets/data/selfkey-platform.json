@@ -53,40 +53,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -111,17 +88,13 @@
 			"type": "object",
 			"properties": {
 				"country": {
+					"$id": "http://platform.selfkey.org/schema/misc/country.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"title": "Country",
 					"type": "string",
-					"description": "An arbirary, localised country name"
-				},
-				"demonym": {
-					"type": "string",
-					"description": "The word used to identify citizens of the country"
-				},
-				"isoCode": {
-					"description": "The two-letter code referencing the country per ISO 3166-1 alpha-2",
 					"enum": [
 						"AF",
+						"AX",
 						"AL",
 						"DZ",
 						"AS",
@@ -174,12 +147,12 @@
 						"CD",
 						"CK",
 						"CR",
+						"CI",
 						"HR",
 						"CU",
 						"CW",
 						"CY",
 						"CZ",
-						"CI",
 						"DK",
 						"DJ",
 						"DM",
@@ -300,10 +273,10 @@
 						"PT",
 						"PR",
 						"QA",
+						"RE",
 						"RO",
 						"RU",
 						"RW",
-						"RE",
 						"BL",
 						"SH",
 						"KN",
@@ -369,262 +342,261 @@
 						"YE",
 						"ZM",
 						"ZW"
-					]
-				},
-				"unCode": {
-					"enum": [
-						"AFG",
-						"ALB",
-						"DZA",
-						"ASM",
-						"AND",
-						"AGO",
-						"AIA",
-						"ATA",
-						"ATG",
-						"ARG",
-						"ARM",
-						"ABW",
-						"AUS",
-						"AUT",
-						"AZE",
-						"BHS",
-						"BHR",
-						"BGD",
-						"BRB",
-						"BLR",
-						"BEL",
-						"BLZ",
-						"BEN",
-						"BMU",
-						"BTN",
-						"BOL",
-						"BES",
-						"BIH",
-						"BWA",
-						"BVT",
-						"BRA",
-						"IOT",
-						"BRN",
-						"BGR",
-						"BFA",
-						"BDI",
-						"KHM",
-						"CMR",
-						"CAN",
-						"CPV",
-						"CYM",
-						"CAF",
-						"TCD",
-						"CHL",
-						"CHN",
-						"CXR",
-						"CCK",
-						"COL",
-						"COM",
-						"COG",
-						"COD",
-						"COK",
-						"CRI",
-						"HRV",
-						"CUB",
-						"CUW",
-						"CYP",
-						"CZE",
-						"CIV",
-						"DNK",
-						"DJI",
-						"DMA",
-						"DOM",
-						"ECU",
-						"EGY",
-						"SLV",
-						"GNQ",
-						"ERI",
-						"EST",
-						"ETH",
-						"FLK",
-						"FRO",
-						"FJI",
-						"FIN",
-						"FRA",
-						"GUF",
-						"PYF",
-						"ATF",
-						"GAB",
-						"GMB",
-						"GEO",
-						"DEU",
-						"GHA",
-						"GIB",
-						"GRC",
-						"GRL",
-						"GRD",
-						"GLP",
-						"GUM",
-						"GTM",
-						"GGY",
-						"GIN",
-						"GNB",
-						"GUY",
-						"HTI",
-						"HMD",
-						"VAT",
-						"HND",
-						"HKG",
-						"HUN",
-						"ISL",
-						"IND",
-						"IDN",
-						"IRN",
-						"IRQ",
-						"IRL",
-						"IMN",
-						"ISR",
-						"ITA",
-						"JAM",
-						"JPN",
-						"JEY",
-						"JOR",
-						"KAZ",
-						"KEN",
-						"KIR",
-						"PRK",
-						"KOR",
-						"KWT",
-						"KGZ",
-						"LAO",
-						"LVA",
-						"LBN",
-						"LSO",
-						"LBR",
-						"LBY",
-						"LIE",
-						"LTU",
-						"LUX",
-						"MAC",
-						"MKD",
-						"MDG",
-						"MWI",
-						"MYS",
-						"MDV",
-						"MLI",
-						"MLT",
-						"MHL",
-						"MTQ",
-						"MRT",
-						"MUS",
-						"MYT",
-						"MEX",
-						"FSM",
-						"MDA",
-						"MCO",
-						"MNG",
-						"MNE",
-						"MSR",
-						"MAR",
-						"MOZ",
-						"MMR",
-						"NAM",
-						"NRU",
-						"NPL",
-						"NLD",
-						"NCL",
-						"NZL",
-						"NIC",
-						"NER",
-						"NGA",
-						"NIU",
-						"NFK",
-						"MNP",
-						"NOR",
-						"OMN",
-						"PAK",
-						"PLW",
-						"PSE",
-						"PAN",
-						"PNG",
-						"PRY",
-						"PER",
-						"PHL",
-						"PCN",
-						"POL",
-						"PRT",
-						"PRI",
-						"QAT",
-						"ROU",
-						"RUS",
-						"RWA",
-						"REU",
-						"BLM",
-						"SHN",
-						"KNA",
-						"LCA",
-						"MAF",
-						"SPM",
-						"VCT",
-						"WSM",
-						"SMR",
-						"STP",
-						"SAU",
-						"SEN",
-						"SRB",
-						"SYC",
-						"SLE",
-						"SGP",
-						"SXM",
-						"SVK",
-						"SVN",
-						"SLB",
-						"SOM",
-						"ZAF",
-						"SGS",
-						"SSD",
-						"ESP",
-						"LKA",
-						"SDN",
-						"SUR",
-						"SJM",
-						"SWZ",
-						"SWE",
-						"CHE",
-						"SYR",
-						"TWN",
-						"TJK",
-						"TZA",
-						"THA",
-						"TLS",
-						"TGO",
-						"TKL",
-						"TON",
-						"TTO",
-						"TUN",
-						"TUR",
-						"TKM",
-						"TCA",
-						"TUV",
-						"UGA",
-						"UKR",
-						"ARE",
-						"GBR",
-						"USA",
-						"UMI",
-						"URY",
-						"UZB",
-						"VUT",
-						"VEN",
-						"VNM",
-						"VGB",
-						"VIR",
-						"WLF",
-						"ESH",
-						"YEM",
-						"ZMB",
-						"ZWE"
+					],
+					"enumNames": [
+						"Afghanistan",
+						"Åland Islands",
+						"Albania",
+						"Algeria",
+						"American Samoa",
+						"Andorra",
+						"Angola",
+						"Anguilla",
+						"Antarctica",
+						"Antigua and Barbuda",
+						"Argentina",
+						"Armenia",
+						"Aruba",
+						"Australia",
+						"Austria",
+						"Azerbaijan",
+						"Bahamas",
+						"Bahrain",
+						"Bangladesh",
+						"Barbados",
+						"Belarus",
+						"Belgium",
+						"Belize",
+						"Benin",
+						"Bermuda",
+						"Bhutan",
+						"Bolivia, Plurinational State of",
+						"Bonaire, Sint Eustatius and Saba",
+						"Bosnia and Herzegovina",
+						"Botswana",
+						"Bouvet Island",
+						"Brazil",
+						"British Indian Ocean Territory",
+						"Brunei Darussalam",
+						"Bulgaria",
+						"Burkina Faso",
+						"Burundi",
+						"Cambodia",
+						"Cameroon",
+						"Canada",
+						"Cape Verde",
+						"Cayman Islands",
+						"Central African Republic",
+						"Chad",
+						"Chile",
+						"China",
+						"Christmas Island",
+						"Cocos (Keeling) Islands",
+						"Colombia",
+						"Comoros",
+						"Congo",
+						"Congo, the Democratic Republic of the",
+						"Cook Islands",
+						"Costa Rica",
+						"Côte d'Ivoire",
+						"Croatia",
+						"Cuba",
+						"Curaçao",
+						"Cyprus",
+						"Czech Republic",
+						"Denmark",
+						"Djibouti",
+						"Dominica",
+						"Dominican Republic",
+						"Ecuador",
+						"Egypt",
+						"El Salvador",
+						"Equatorial Guinea",
+						"Eritrea",
+						"Estonia",
+						"Ethiopia",
+						"Falkland Islands (Malvinas)",
+						"Faroe Islands",
+						"Fiji",
+						"Finland",
+						"France",
+						"French Guiana",
+						"French Polynesia",
+						"French Southern Territories",
+						"Gabon",
+						"Gambia",
+						"Georgia",
+						"Germany",
+						"Ghana",
+						"Gibraltar",
+						"Greece",
+						"Greenland",
+						"Grenada",
+						"Guadeloupe",
+						"Guam",
+						"Guatemala",
+						"Guernsey",
+						"Guinea",
+						"Guinea-Bissau",
+						"Guyana",
+						"Haiti",
+						"Heard Island and McDonald Islands",
+						"Holy See (Vatican City State)",
+						"Honduras",
+						"Hong Kong",
+						"Hungary",
+						"Iceland",
+						"India",
+						"Indonesia",
+						"Iran, Islamic Republic of",
+						"Iraq",
+						"Ireland",
+						"Isle of Man",
+						"Israel",
+						"Italy",
+						"Jamaica",
+						"Japan",
+						"Jersey",
+						"Jordan",
+						"Kazakhstan",
+						"Kenya",
+						"Kiribati",
+						"Korea, Democratic People's Republic of",
+						"Korea, Republic of",
+						"Kuwait",
+						"Kyrgyzstan",
+						"Lao People's Democratic Republic",
+						"Latvia",
+						"Lebanon",
+						"Lesotho",
+						"Liberia",
+						"Libya",
+						"Liechtenstein",
+						"Lithuania",
+						"Luxembourg",
+						"Macao",
+						"Macedonia, the Former Yugoslav Republic of",
+						"Madagascar",
+						"Malawi",
+						"Malaysia",
+						"Maldives",
+						"Mali",
+						"Malta",
+						"Marshall Islands",
+						"Martinique",
+						"Mauritania",
+						"Mauritius",
+						"Mayotte",
+						"Mexico",
+						"Micronesia, Federated States of",
+						"Moldova, Republic of",
+						"Monaco",
+						"Mongolia",
+						"Montenegro",
+						"Montserrat",
+						"Morocco",
+						"Mozambique",
+						"Myanmar",
+						"Namibia",
+						"Nauru",
+						"Nepal",
+						"Netherlands",
+						"New Caledonia",
+						"New Zealand",
+						"Nicaragua",
+						"Niger",
+						"Nigeria",
+						"Niue",
+						"Norfolk Island",
+						"Northern Mariana Islands",
+						"Norway",
+						"Oman",
+						"Pakistan",
+						"Palau",
+						"Palestine, State of",
+						"Panama",
+						"Papua New Guinea",
+						"Paraguay",
+						"Peru",
+						"Philippines",
+						"Pitcairn",
+						"Poland",
+						"Portugal",
+						"Puerto Rico",
+						"Qatar",
+						"Réunion",
+						"Romania",
+						"Russian Federation",
+						"Rwanda",
+						"Saint Barthélemy",
+						"Saint Helena, Ascension and Tristan da Cunha",
+						"Saint Kitts and Nevis",
+						"Saint Lucia",
+						"Saint Martin (French part)",
+						"Saint Pierre and Miquelon",
+						"Saint Vincent and the Grenadines",
+						"Samoa",
+						"San Marino",
+						"Sao Tome and Principe",
+						"Saudi Arabia",
+						"Senegal",
+						"Serbia",
+						"Seychelles",
+						"Sierra Leone",
+						"Singapore",
+						"Sint Maarten (Dutch part)",
+						"Slovakia",
+						"Slovenia",
+						"Solomon Islands",
+						"Somalia",
+						"South Africa",
+						"South Georgia and the South Sandwich Islands",
+						"South Sudan",
+						"Spain",
+						"Sri Lanka",
+						"Sudan",
+						"Suriname",
+						"Svalbard and Jan Mayen",
+						"Swaziland",
+						"Sweden",
+						"Switzerland",
+						"Syrian Arab Republic",
+						"Taiwan, Province of China",
+						"Tajikistan",
+						"Tanzania, United Republic of",
+						"Thailand",
+						"Timor-Leste",
+						"Togo",
+						"Tokelau",
+						"Tonga",
+						"Trinidad and Tobago",
+						"Tunisia",
+						"Turkey",
+						"Turkmenistan",
+						"Turks and Caicos Islands",
+						"Tuvalu",
+						"Uganda",
+						"Ukraine",
+						"United Arab Emirates",
+						"United Kingdom",
+						"United States",
+						"United States Minor Outlying Islands",
+						"Uruguay",
+						"Uzbekistan",
+						"Vanuatu",
+						"Venezuela, Bolivarian Republic of",
+						"Viet Nam",
+						"Virgin Islands, British",
+						"Virgin Islands, U.S.",
+						"Wallis and Futuna",
+						"Western Sahara",
+						"Yemen",
+						"Zambia",
+						"Zimbabwe"
 					]
 				}
 			},
-			"required": ["country", "isoCode"]
+			"required": ["country"]
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/drivers-license.json",
@@ -640,84 +612,36 @@
 					"$schema": "http://json-schema.org/draft-07/schema",
 					"$id": "http://platform.selfkey.org/schema/document/image.json",
 					"type": "object",
-					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				},
 				"back": {
 					"title": "Back image",
 					"$schema": "http://json-schema.org/draft-07/schema",
 					"$id": "http://platform.selfkey.org/schema/document/image.json",
 					"type": "object",
-					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["front", "back"]
@@ -747,40 +671,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -809,40 +710,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -879,84 +757,36 @@
 					"$schema": "http://json-schema.org/draft-07/schema",
 					"$id": "http://platform.selfkey.org/schema/document/image.json",
 					"type": "object",
-					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				},
 				"back": {
 					"title": "Back image",
 					"$schema": "http://json-schema.org/draft-07/schema",
 					"$id": "http://platform.selfkey.org/schema/document/image.json",
 					"type": "object",
-					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				},
 				"additional": {
 					"type": "array",
@@ -967,40 +797,17 @@
 						"type": "object",
 						"title": "Image",
 						"format": "file",
-						"allOf": [
-							{
-								"$schema": "http://json-schema.org/draft-07/schema",
-								"$id": "http://platform.selfkey.org/schema/document/document.json",
-								"type": "object",
-								"format": "file",
-								"properties": {
-									"mimeType": { "type": "string" },
-									"size": { "type": "integer" },
-									"content": {
-										"oneOf": [
-											{
-												"type": "string",
-												"contentEncoding": "base64",
-												"format": "data-url"
-											},
-											{ "type": "string", "format": "url" },
-											{ "type": "string" }
-										]
-									}
-								},
-								"required": ["mimeType", "size", "content"]
+						"properties": {
+							"mimeType": {
+								"type": "string",
+								"enum": ["image/jpg", "image/png", "application/pdf"]
 							},
-							{
-								"type": "object",
-								"properties": {
-									"mimeType": {
-										"type": "string",
-										"enum": ["image/jpg", "image/png", "application/pdf"]
-									},
-									"size": { "type": "integer", "max": 50000000 }
-								}
+							"size": { "type": "integer", "max": 50000000 },
+							"content": {
+								"type": "string"
 							}
-						]
+						},
+						"required": ["mimeType", "size", "content"]
 					}
 				}
 			},
@@ -1016,18 +823,13 @@
 			"type": "object",
 			"properties": {
 				"country": {
+					"$id": "http://platform.selfkey.org/schema/misc/country.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"title": "Country",
 					"type": "string",
-					"description": "An arbitrary, localised country name"
-				},
-				"demonym": {
-					"type": "string",
-					"description": "The word used to identify citizens of the country"
-				},
-				"isoCode": {
-					"type": "string",
-					"description": "The two-letter code referencing the country per ISO 3166-1 alpha-2",
 					"enum": [
 						"AF",
+						"AX",
 						"AL",
 						"DZ",
 						"AS",
@@ -1080,12 +882,12 @@
 						"CD",
 						"CK",
 						"CR",
+						"CI",
 						"HR",
 						"CU",
 						"CW",
 						"CY",
 						"CZ",
-						"CI",
 						"DK",
 						"DJ",
 						"DM",
@@ -1206,10 +1008,10 @@
 						"PT",
 						"PR",
 						"QA",
+						"RE",
 						"RO",
 						"RU",
 						"RW",
-						"RE",
 						"BL",
 						"SH",
 						"KN",
@@ -1275,263 +1077,266 @@
 						"YE",
 						"ZM",
 						"ZW"
+					],
+					"enumNames": [
+						"Afghanistan",
+						"Åland Islands",
+						"Albania",
+						"Algeria",
+						"American Samoa",
+						"Andorra",
+						"Angola",
+						"Anguilla",
+						"Antarctica",
+						"Antigua and Barbuda",
+						"Argentina",
+						"Armenia",
+						"Aruba",
+						"Australia",
+						"Austria",
+						"Azerbaijan",
+						"Bahamas",
+						"Bahrain",
+						"Bangladesh",
+						"Barbados",
+						"Belarus",
+						"Belgium",
+						"Belize",
+						"Benin",
+						"Bermuda",
+						"Bhutan",
+						"Bolivia, Plurinational State of",
+						"Bonaire, Sint Eustatius and Saba",
+						"Bosnia and Herzegovina",
+						"Botswana",
+						"Bouvet Island",
+						"Brazil",
+						"British Indian Ocean Territory",
+						"Brunei Darussalam",
+						"Bulgaria",
+						"Burkina Faso",
+						"Burundi",
+						"Cambodia",
+						"Cameroon",
+						"Canada",
+						"Cape Verde",
+						"Cayman Islands",
+						"Central African Republic",
+						"Chad",
+						"Chile",
+						"China",
+						"Christmas Island",
+						"Cocos (Keeling) Islands",
+						"Colombia",
+						"Comoros",
+						"Congo",
+						"Congo, the Democratic Republic of the",
+						"Cook Islands",
+						"Costa Rica",
+						"Côte d'Ivoire",
+						"Croatia",
+						"Cuba",
+						"Curaçao",
+						"Cyprus",
+						"Czech Republic",
+						"Denmark",
+						"Djibouti",
+						"Dominica",
+						"Dominican Republic",
+						"Ecuador",
+						"Egypt",
+						"El Salvador",
+						"Equatorial Guinea",
+						"Eritrea",
+						"Estonia",
+						"Ethiopia",
+						"Falkland Islands (Malvinas)",
+						"Faroe Islands",
+						"Fiji",
+						"Finland",
+						"France",
+						"French Guiana",
+						"French Polynesia",
+						"French Southern Territories",
+						"Gabon",
+						"Gambia",
+						"Georgia",
+						"Germany",
+						"Ghana",
+						"Gibraltar",
+						"Greece",
+						"Greenland",
+						"Grenada",
+						"Guadeloupe",
+						"Guam",
+						"Guatemala",
+						"Guernsey",
+						"Guinea",
+						"Guinea-Bissau",
+						"Guyana",
+						"Haiti",
+						"Heard Island and McDonald Islands",
+						"Holy See (Vatican City State)",
+						"Honduras",
+						"Hong Kong",
+						"Hungary",
+						"Iceland",
+						"India",
+						"Indonesia",
+						"Iran, Islamic Republic of",
+						"Iraq",
+						"Ireland",
+						"Isle of Man",
+						"Israel",
+						"Italy",
+						"Jamaica",
+						"Japan",
+						"Jersey",
+						"Jordan",
+						"Kazakhstan",
+						"Kenya",
+						"Kiribati",
+						"Korea, Democratic People's Republic of",
+						"Korea, Republic of",
+						"Kuwait",
+						"Kyrgyzstan",
+						"Lao People's Democratic Republic",
+						"Latvia",
+						"Lebanon",
+						"Lesotho",
+						"Liberia",
+						"Libya",
+						"Liechtenstein",
+						"Lithuania",
+						"Luxembourg",
+						"Macao",
+						"Macedonia, the Former Yugoslav Republic of",
+						"Madagascar",
+						"Malawi",
+						"Malaysia",
+						"Maldives",
+						"Mali",
+						"Malta",
+						"Marshall Islands",
+						"Martinique",
+						"Mauritania",
+						"Mauritius",
+						"Mayotte",
+						"Mexico",
+						"Micronesia, Federated States of",
+						"Moldova, Republic of",
+						"Monaco",
+						"Mongolia",
+						"Montenegro",
+						"Montserrat",
+						"Morocco",
+						"Mozambique",
+						"Myanmar",
+						"Namibia",
+						"Nauru",
+						"Nepal",
+						"Netherlands",
+						"New Caledonia",
+						"New Zealand",
+						"Nicaragua",
+						"Niger",
+						"Nigeria",
+						"Niue",
+						"Norfolk Island",
+						"Northern Mariana Islands",
+						"Norway",
+						"Oman",
+						"Pakistan",
+						"Palau",
+						"Palestine, State of",
+						"Panama",
+						"Papua New Guinea",
+						"Paraguay",
+						"Peru",
+						"Philippines",
+						"Pitcairn",
+						"Poland",
+						"Portugal",
+						"Puerto Rico",
+						"Qatar",
+						"Réunion",
+						"Romania",
+						"Russian Federation",
+						"Rwanda",
+						"Saint Barthélemy",
+						"Saint Helena, Ascension and Tristan da Cunha",
+						"Saint Kitts and Nevis",
+						"Saint Lucia",
+						"Saint Martin (French part)",
+						"Saint Pierre and Miquelon",
+						"Saint Vincent and the Grenadines",
+						"Samoa",
+						"San Marino",
+						"Sao Tome and Principe",
+						"Saudi Arabia",
+						"Senegal",
+						"Serbia",
+						"Seychelles",
+						"Sierra Leone",
+						"Singapore",
+						"Sint Maarten (Dutch part)",
+						"Slovakia",
+						"Slovenia",
+						"Solomon Islands",
+						"Somalia",
+						"South Africa",
+						"South Georgia and the South Sandwich Islands",
+						"South Sudan",
+						"Spain",
+						"Sri Lanka",
+						"Sudan",
+						"Suriname",
+						"Svalbard and Jan Mayen",
+						"Swaziland",
+						"Sweden",
+						"Switzerland",
+						"Syrian Arab Republic",
+						"Taiwan, Province of China",
+						"Tajikistan",
+						"Tanzania, United Republic of",
+						"Thailand",
+						"Timor-Leste",
+						"Togo",
+						"Tokelau",
+						"Tonga",
+						"Trinidad and Tobago",
+						"Tunisia",
+						"Turkey",
+						"Turkmenistan",
+						"Turks and Caicos Islands",
+						"Tuvalu",
+						"Uganda",
+						"Ukraine",
+						"United Arab Emirates",
+						"United Kingdom",
+						"United States",
+						"United States Minor Outlying Islands",
+						"Uruguay",
+						"Uzbekistan",
+						"Vanuatu",
+						"Venezuela, Bolivarian Republic of",
+						"Viet Nam",
+						"Virgin Islands, British",
+						"Virgin Islands, U.S.",
+						"Wallis and Futuna",
+						"Western Sahara",
+						"Yemen",
+						"Zambia",
+						"Zimbabwe"
 					]
 				},
-				"unCode": {
+				"demonym": {
 					"type": "string",
-					"enum": [
-						"AFG",
-						"ALB",
-						"DZA",
-						"ASM",
-						"AND",
-						"AGO",
-						"AIA",
-						"ATA",
-						"ATG",
-						"ARG",
-						"ARM",
-						"ABW",
-						"AUS",
-						"AUT",
-						"AZE",
-						"BHS",
-						"BHR",
-						"BGD",
-						"BRB",
-						"BLR",
-						"BEL",
-						"BLZ",
-						"BEN",
-						"BMU",
-						"BTN",
-						"BOL",
-						"BES",
-						"BIH",
-						"BWA",
-						"BVT",
-						"BRA",
-						"IOT",
-						"BRN",
-						"BGR",
-						"BFA",
-						"BDI",
-						"KHM",
-						"CMR",
-						"CAN",
-						"CPV",
-						"CYM",
-						"CAF",
-						"TCD",
-						"CHL",
-						"CHN",
-						"CXR",
-						"CCK",
-						"COL",
-						"COM",
-						"COG",
-						"COD",
-						"COK",
-						"CRI",
-						"HRV",
-						"CUB",
-						"CUW",
-						"CYP",
-						"CZE",
-						"CIV",
-						"DNK",
-						"DJI",
-						"DMA",
-						"DOM",
-						"ECU",
-						"EGY",
-						"SLV",
-						"GNQ",
-						"ERI",
-						"EST",
-						"ETH",
-						"FLK",
-						"FRO",
-						"FJI",
-						"FIN",
-						"FRA",
-						"GUF",
-						"PYF",
-						"ATF",
-						"GAB",
-						"GMB",
-						"GEO",
-						"DEU",
-						"GHA",
-						"GIB",
-						"GRC",
-						"GRL",
-						"GRD",
-						"GLP",
-						"GUM",
-						"GTM",
-						"GGY",
-						"GIN",
-						"GNB",
-						"GUY",
-						"HTI",
-						"HMD",
-						"VAT",
-						"HND",
-						"HKG",
-						"HUN",
-						"ISL",
-						"IND",
-						"IDN",
-						"IRN",
-						"IRQ",
-						"IRL",
-						"IMN",
-						"ISR",
-						"ITA",
-						"JAM",
-						"JPN",
-						"JEY",
-						"JOR",
-						"KAZ",
-						"KEN",
-						"KIR",
-						"PRK",
-						"KOR",
-						"KWT",
-						"KGZ",
-						"LAO",
-						"LVA",
-						"LBN",
-						"LSO",
-						"LBR",
-						"LBY",
-						"LIE",
-						"LTU",
-						"LUX",
-						"MAC",
-						"MKD",
-						"MDG",
-						"MWI",
-						"MYS",
-						"MDV",
-						"MLI",
-						"MLT",
-						"MHL",
-						"MTQ",
-						"MRT",
-						"MUS",
-						"MYT",
-						"MEX",
-						"FSM",
-						"MDA",
-						"MCO",
-						"MNG",
-						"MNE",
-						"MSR",
-						"MAR",
-						"MOZ",
-						"MMR",
-						"NAM",
-						"NRU",
-						"NPL",
-						"NLD",
-						"NCL",
-						"NZL",
-						"NIC",
-						"NER",
-						"NGA",
-						"NIU",
-						"NFK",
-						"MNP",
-						"NOR",
-						"OMN",
-						"PAK",
-						"PLW",
-						"PSE",
-						"PAN",
-						"PNG",
-						"PRY",
-						"PER",
-						"PHL",
-						"PCN",
-						"POL",
-						"PRT",
-						"PRI",
-						"QAT",
-						"ROU",
-						"RUS",
-						"RWA",
-						"REU",
-						"BLM",
-						"SHN",
-						"KNA",
-						"LCA",
-						"MAF",
-						"SPM",
-						"VCT",
-						"WSM",
-						"SMR",
-						"STP",
-						"SAU",
-						"SEN",
-						"SRB",
-						"SYC",
-						"SLE",
-						"SGP",
-						"SXM",
-						"SVK",
-						"SVN",
-						"SLB",
-						"SOM",
-						"ZAF",
-						"SGS",
-						"SSD",
-						"ESP",
-						"LKA",
-						"SDN",
-						"SUR",
-						"SJM",
-						"SWZ",
-						"SWE",
-						"CHE",
-						"SYR",
-						"TWN",
-						"TJK",
-						"TZA",
-						"THA",
-						"TLS",
-						"TGO",
-						"TKL",
-						"TON",
-						"TTO",
-						"TUN",
-						"TUR",
-						"TKM",
-						"TCA",
-						"TUV",
-						"UGA",
-						"UKR",
-						"ARE",
-						"GBR",
-						"USA",
-						"UMI",
-						"URY",
-						"UZB",
-						"VUT",
-						"VEN",
-						"VNM",
-						"VGB",
-						"VIR",
-						"WLF",
-						"ESH",
-						"YEM",
-						"ZMB",
-						"ZWE"
-					]
+					"title": "Denonym",
+					"description": "The word used to identify citizens of the country"
 				}
 			},
-			"required": ["country", "isoCode"]
+			"required": ["country"]
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/passport.json",
@@ -1548,40 +1353,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -1631,40 +1413,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -1693,40 +1452,17 @@
 					"type": "object",
 					"title": "Image",
 					"format": "file",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["image/jpg", "image/png", "application/pdf"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["image/jpg", "image/png", "application/pdf"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["image"]
@@ -1746,40 +1482,17 @@
 					"type": "object",
 					"format": "file",
 					"title": "Audio",
-					"allOf": [
-						{
-							"$schema": "http://json-schema.org/draft-07/schema",
-							"$id": "http://platform.selfkey.org/schema/document/document.json",
-							"type": "object",
-							"format": "file",
-							"properties": {
-								"mimeType": { "type": "string" },
-								"size": { "type": "integer" },
-								"content": {
-									"oneOf": [
-										{
-											"type": "string",
-											"contentEncoding": "base64",
-											"format": "data-url"
-										},
-										{ "type": "string", "format": "url" },
-										{ "type": "string" }
-									]
-								}
-							},
-							"required": ["mimeType", "size", "content"]
+					"properties": {
+						"mimeType": {
+							"type": "string",
+							"enum": ["audio/mp3", "audio/mp4", "audio/ogg", "audio/x-wav"]
 						},
-						{
-							"type": "object",
-							"properties": {
-								"mimeType": {
-									"type": "string",
-									"enum": ["audio/mp3", "audio/mp4", "audio/ogg", "audio/x-wav"]
-								},
-								"size": { "type": "integer", "max": 50000000 }
-							}
+						"size": { "type": "integer", "max": 50000000 },
+						"content": {
+							"type": "string"
 						}
-					]
+					},
+					"required": ["mimeType", "size", "content"]
 				}
 			},
 			"required": ["audio"]
