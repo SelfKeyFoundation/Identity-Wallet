@@ -31,7 +31,6 @@ install:
   - choco install gcloudsdk
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
-  - npm i -g --production windows-build-tools
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
