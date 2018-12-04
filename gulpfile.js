@@ -3,12 +3,16 @@ const gulp = require('gulp');
 const runSequence = require('run-sequence');
 const watch = require('gulp-watch');
 const pug = require('gulp-pug');
-const templateCache = require('gulp-angular-templatecache');
 const sass = require('gulp-sass');
 const tmplSrc = path.resolve(__dirname, './src/renderer/templates/**/*.pug');
 const tmplDest = path.resolve(__dirname, './src/renderer/angular/');
 const scssSrc = path.resolve(__dirname, './static/stylesheets/scss/main.scss');
 const scssDest = path.resolve(__dirname, './static/stylesheets/css');
+const htmlJsStr = require('js-string-escape');
+const tap = require('gulp-tap');
+const concat = require('gulp-concat');
+const header = require('gulp-header');
+const insert = require('gulp-insert');
 
 gulp.task('templates', cb => {
 	gulp.src(tmplSrc)
@@ -17,11 +21,24 @@ gulp.task('templates', cb => {
 			console.log(error);
 			this.emit('end');
 		})
-		.pipe(templateCache({ standalone: true, filename: 'app.templates.js' }))
-		.on('error', function(error) {
-			console.log(error);
-			this.emit('end');
-		})
+		.pipe(
+			tap(function(file) {
+				file.contents = Buffer.from(
+					'$templateCache.put("' +
+						file.path.replace(file.base, '') +
+						'","' +
+						htmlJsStr(file.contents) +
+						'");'
+				);
+			})
+		)
+		.pipe(concat('app.templates.js'))
+		.pipe(
+			header(
+				'angular.module("templates").run(["$templateCache", function($templateCache) {\n'
+			)
+		)
+		.pipe(insert.append('\n}]);'))
 		.pipe(gulp.dest(tmplDest))
 		.on('end', () => {
 			cb();
