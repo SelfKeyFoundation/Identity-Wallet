@@ -27,7 +27,7 @@ gulp.task('templates', cb => {
 				let fileBase = '';
 				if (os.platform() === 'win32') {
 					// eslint-disable-next-line no-useless-escape
-					fileBase = file.path.replace(file.base, '').replace(/\"/g, '\\"');
+					fileBase = file.path.replace(file.base, '').replace(/\\/g, '/');
 				} else {
 					fileBase = htmlJsStr(file.contents);
 				}
