@@ -24,19 +24,15 @@ gulp.task('templates', cb => {
 		})
 		.pipe(
 			tap(function(file) {
-				let contents = '';
-				if (os === 'win32') {
+				let fileBase = '';
+				if (os.platform() === 'win32') {
 					// eslint-disable-next-line no-useless-escape
-					contents = htmlJsStr(file.contents).replace(/\"/g, '\\"');
+					fileBase = file.path.replace(file.base, '').replace(/\"/g, '\\"');
 				} else {
-					contents = htmlJsStr(file.contents);
+					fileBase = htmlJsStr(file.contents);
 				}
 				file.contents = Buffer.from(
-					'$templateCache.put("' +
-						file.path.replace(file.base, '') +
-						'","' +
-						contents +
-						'");'
+					'$templateCache.put("' + fileBase + '","' + htmlJsStr(file.contents) + '");'
 				);
 			})
 		)
