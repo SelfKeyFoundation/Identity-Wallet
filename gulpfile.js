@@ -29,7 +29,7 @@ gulp.task('templates', cb => {
 					// eslint-disable-next-line no-useless-escape
 					fileBase = file.path.replace(file.base, '').replace(/\\/g, '/');
 				} else {
-					fileBase = htmlJsStr(file.contents);
+					fileBase = file.path.replace(file.base, '');
 				}
 				file.contents = Buffer.from(
 					'$templateCache.put("' + fileBase + '","' + htmlJsStr(file.contents) + '");'
