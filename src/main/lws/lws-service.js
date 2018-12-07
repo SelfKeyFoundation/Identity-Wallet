@@ -679,7 +679,7 @@ export class WSConnection {
 		if (!id && req.meta && req.meta.id) {
 			id = req.meta.id;
 		}
-		msg.meta.id = id || `idw_${this.msgId++}`;
+		msg.meta.id = id || `idw-${this.msgId++}`;
 		msg.meta.src = msg.meta.src || 'idw';
 		if (!msg.type && msg.error) {
 			msg.type = 'error';
