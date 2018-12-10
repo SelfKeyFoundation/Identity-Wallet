@@ -24,12 +24,10 @@ gulp.task('templates', cb => {
 		})
 		.pipe(
 			tap(function(file) {
-				let fileBase = '';
+				let fileBase = file.path.replace(file.base, '');
 				if (os.platform() === 'win32') {
 					// eslint-disable-next-line no-useless-escape
 					fileBase = file.path.replace(file.base, '').replace(/\\/g, '/');
-				} else {
-					fileBase = file.path.replace(file.base, '');
 				}
 				file.contents = Buffer.from(
 					'$templateCache.put("' + fileBase + '","' + htmlJsStr(file.contents) + '");'
