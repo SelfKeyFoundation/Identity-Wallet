@@ -13,7 +13,7 @@ identityAttributes.normalizeDocumentsSchema = (typeSchema, value, documents, max
 		let id = value.id;
 
 		if (id) {
-			documents = documents.filter(doc => doc.id === id);
+			documents = documents.filter(doc => doc.id !== id);
 			documents.push(value);
 			value = `$document-${id}`;
 		} else {

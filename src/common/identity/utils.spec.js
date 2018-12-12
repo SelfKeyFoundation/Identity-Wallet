@@ -141,5 +141,57 @@ describe('Identity uitls', () => {
 				]
 			});
 		});
+		it('should normalize arrays of documents', () => {
+			let attrTypeSchema = findAttributeType(
+				'http://platform.selfkey.org/schema/attribute/national-id.json'
+			);
+			let value = {
+				front: {
+					id: 15,
+					content: 'abc'
+				},
+				back: {
+					id: 17,
+					content: 'abc2'
+				},
+				additional: [
+					{
+						content: 'abc3'
+					},
+					{
+						content: 'abc4'
+					}
+				]
+			};
+			let documents = [];
+
+			expect(
+				identityAttributes.normalizeDocumentsSchema(attrTypeSchema, value, documents)
+			).toEqual({
+				value: {
+					front: '$document-15',
+					back: '$document-17',
+					additional: ['$document-#ref{document2.id}', '$document-#ref{document3.id}']
+				},
+				documents: [
+					{
+						id: 15,
+						content: 'abc'
+					},
+					{
+						id: 17,
+						content: 'abc2'
+					},
+					{
+						'#id': 'document2',
+						content: 'abc3'
+					},
+					{
+						'#id': 'document3',
+						content: 'abc4'
+					}
+				]
+			});
+		});
 	});
 });
