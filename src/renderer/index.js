@@ -16,6 +16,8 @@ import { TransactionsHistoryWrapper } from './react/transaction/transactions-his
 import { TransactionSendBoxWrapper } from './react/transaction/send';
 import { TransactionSendProgressBoxWrapper } from './react/transaction/progress';
 
+import { IncorporationsWrapper } from './react/marketplace/incorporations';
+
 import { setGlobalContext, configureContext } from 'common/context';
 const ctx = configureContext(null, null).cradle;
 setGlobalContext(ctx);
@@ -286,6 +288,9 @@ angular.module('kyc-wallet').component('marketplace', marketplaceWrapper);
 const transactionsHistoryWrapper = react2angular(TransactionsHistoryWrapper, ['list', 'openLink']);
 angular.module('kyc-wallet').component('transactionsHistory', transactionsHistoryWrapper);
 
+const incorporationsWrapper = react2angular(IncorporationsWrapper, []);
+angular.module('kyc-wallet').component('incorporations', incorporationsWrapper);
+
 /**
  * controllers
  */
@@ -511,6 +516,14 @@ const MemberMarketplaceExchangeItemController = require('./angular/controllers/m
 angular
 	.module('kyc-wallet')
 	.controller('MemberMarketplaceExchangeItemController', MemberMarketplaceExchangeItemController);
+
+const MemberMarketplaceIncorporationsController = require('./angular/controllers/member/marketplace/marketplace-incorporations-controller.js');
+angular
+	.module('kyc-wallet')
+	.controller(
+		'MemberMarketplaceIncorporationsController',
+		MemberMarketplaceIncorporationsController
+	);
 
 /**
  * Address Book

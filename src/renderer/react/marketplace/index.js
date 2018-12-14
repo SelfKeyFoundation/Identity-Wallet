@@ -6,6 +6,7 @@ import { Marketplace } from 'selfkey-ui';
 
 export const MarketplaceWrapper = props => {
 	const { learnMoreActions } = props;
+
 	return (
 		<Provider store={store}>
 			<Marketplace
@@ -23,9 +24,10 @@ export const MarketplaceWrapper = props => {
 						title: 'Incorporation',
 						description:
 							'Find the best jurisdiction to set up your business. Filter by corporate ownership, minimum shareholders, accounting requirements, privacy, tax rates, offshore tax laws, and more.',
-						active: false,
+						active: true,
 						svgIcon:
-							'https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png'
+							'https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png',
+						learnMoreAction: learnMoreActions[1]
 					},
 					{
 						title: 'Passport & Residencies',

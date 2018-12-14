@@ -3,6 +3,10 @@ function MemberMarketplaceController($rootScope, $scope, $state) {
 	$scope.navigateToExchanges = () => {
 		$state.go('member.marketplace.exchange-list');
 	};
+
+	$scope.navigateToIncorporations = () => {
+		$state.go('member.marketplace.incorporations');
+	};
 }
 MemberMarketplaceController.$inject = ['$rootScope', '$scope', '$state'];
 module.exports = MemberMarketplaceController;

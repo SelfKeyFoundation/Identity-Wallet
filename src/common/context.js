@@ -14,6 +14,7 @@ import RpcHandler from 'main/rpc-handler';
 import { StakingService } from 'main/blockchain/staking-service';
 import EthGasStationService from 'main/blockchain/eth-gas-station-service';
 import AddressBookService from 'main/address-book/address-book-service';
+import IncorporationsService from 'main/marketplace/incorporations-service';
 
 let globalContext = null;
 
@@ -52,7 +53,8 @@ export const configureContext = (store, app) => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();
 		}).singleton(),
-		stakingService: asClass(StakingService).singleton()
+		stakingService: asClass(StakingService).singleton(),
+		incorporationsService: asClass(IncorporationsService).singleton()
 	});
 	return container;
 };

@@ -634,21 +634,15 @@
     core-js "^2.5.3"
     regenerator-runtime "^0.11.1"
 
-"@babel/runtime@7.0.0-beta.56":
-  version "7.0.0-beta.56"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0-beta.56.tgz#cda612dffd5b1719a7b8e91e3040bd6ae64de8b0"
-  dependencies:
-    regenerator-runtime "^0.12.0"
-
-"@babel/runtime@7.0.0-rc.1":
-  version "7.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0-rc.1.tgz#42f36fc5817911c89ea75da2b874054922967616"
-  dependencies:
-    regenerator-runtime "^0.12.0"
-
-"@babel/runtime@^7.1.2":
+"@babel/runtime@7.1.2", "@babel/runtime@^7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.1.2.tgz#81c89935f4647706fc54541145e6b4ecfef4b8e3"
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
+"@babel/runtime@^7.0.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.2.0.tgz#b03e42eeddf5898e00646e4c840fa07ba8dcad7f"
   dependencies:
     regenerator-runtime "^0.12.0"
 
@@ -893,12 +887,13 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@material-ui/core@^1.3.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-1.5.1.tgz#cb00cb934447ae688e08129f1dab55f54d29d87a"
+"@material-ui/core@^3.5.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.6.1.tgz#6f8259c64eaa34c9f977165f6b8d175d9eb1858a"
   dependencies:
-    "@babel/runtime" "7.0.0-rc.1"
-    "@types/jss" "^9.5.3"
+    "@babel/runtime" "7.1.2"
+    "@material-ui/utils" "^3.0.0-alpha.0"
+    "@types/jss" "^9.5.6"
     "@types/react-transition-group" "^2.0.8"
     brcast "^3.0.1"
     classnames "^2.2.5"
@@ -906,7 +901,7 @@
     debounce "^1.1.0"
     deepmerge "^2.0.1"
     dom-helpers "^3.2.1"
-    hoist-non-react-statics "^2.5.0"
+    hoist-non-react-statics "^3.0.0"
     is-plain-object "^2.0.4"
     jss "^9.3.3"
     jss-camel-case "^6.0.0"
@@ -920,17 +915,30 @@
     popper.js "^1.14.1"
     prop-types "^15.6.0"
     react-event-listener "^0.6.2"
-    react-jss "^8.1.0"
     react-transition-group "^2.2.1"
-    recompose "^0.28.0"
+    recompose "0.28.0 - 0.30.0"
     warning "^4.0.1"
 
-"@material-ui/icons@^1.1.0":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.1.1.tgz#f104d6a1ac4d3ff34a2bed74b066986b2a7054a5"
+"@material-ui/icons@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.1.tgz#671fb3d04dcaf9351dbbd2bf82ae2ae72e3d93cd"
   dependencies:
-    "@babel/runtime" "7.0.0-beta.42"
-    recompose "^0.26.0 || ^0.27.0"
+    "@babel/runtime" "7.0.0"
+    recompose "^0.29.0"
+
+"@material-ui/lab@^3.0.0-alpha.24":
+  version "3.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-3.0.0-alpha.24.tgz#727a8c4d5063fbab8d651190bc9ec90743079ee2"
+  dependencies:
+    "@babel/runtime" "7.1.2"
+    classnames "^2.2.5"
+    keycode "^2.1.9"
+
+"@material-ui/utils@^3.0.0-alpha.0":
+  version "3.0.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-3.0.0-alpha.0.tgz#506fcaf531a9a8f58a73ff2d3dfaa36c0f238506"
+  dependencies:
+    "@babel/runtime" "7.1.2"
 
 "@posthtml/esm@^1.0.0":
   version "1.0.0"
@@ -1072,7 +1080,7 @@
   version "23.3.9"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.9.tgz#c16b55186ee73ae65e001fbee69d392c51337ad1"
 
-"@types/jss@^9.5.3":
+"@types/jss@^9.5.6":
   version "9.5.7"
   resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.5.7.tgz#fa57a6d0b38a3abef8a425e3eb6a53495cb9d5a0"
   dependencies:
@@ -6180,6 +6188,10 @@ first-chunk-stream@^2.0.0:
   resolved "https://registry.yarnpkg.com/first-chunk-stream/-/first-chunk-stream-2.0.0.tgz#1bdecdb8e083c0664b91945581577a43a9f31d70"
   dependencies:
     readable-stream "^2.0.2"
+
+flag-icon-css@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.2.1.tgz#ff269388e25e29d54b39699e88d76c3141a7cc70"
 
 flagged-respawn@^1.0.0:
   version "1.0.0"
@@ -11747,7 +11759,7 @@ react-jsonschema-form@^1.0.4:
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
 
-react-jss@^8.1.0, react-jss@^8.4.0:
+react-jss@^8.4.0:
   version "8.6.1"
   resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-8.6.1.tgz#a06e2e1d2c4d91b4d11befda865e6c07fbd75252"
   dependencies:
@@ -11949,22 +11961,22 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-"recompose@^0.26.0 || ^0.27.0":
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.27.1.tgz#1a49e931f183634516633bbb4f4edbfd3f38a7ba"
+"recompose@0.28.0 - 0.30.0":
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.30.0.tgz#82773641b3927e8c7d24a0d87d65aeeba18aabd0"
   dependencies:
-    babel-runtime "^6.26.0"
+    "@babel/runtime" "^7.0.0"
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
     react-lifecycles-compat "^3.0.2"
     symbol-observable "^1.0.4"
 
-recompose@^0.28.0:
-  version "0.28.2"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.28.2.tgz#19e679227bdf979e0d31b73ffe7ae38c9194f4a7"
+recompose@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.29.0.tgz#f1a4e20d5f24d6ef1440f83924e821de0b1bccef"
   dependencies:
-    "@babel/runtime" "7.0.0-beta.56"
+    "@babel/runtime" "^7.0.0"
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
@@ -12637,12 +12649,13 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#e50c630":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#material-ui":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#e50c630bc8aad792d36f33d0ba87d9be376e6b0b"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#be77db504bf44275092f25e1c3efbaf1b2cc3962"
   dependencies:
-    "@material-ui/core" "^1.3.1"
-    "@material-ui/icons" "^1.1.0"
+    "@material-ui/core" "^3.5.1"
+    "@material-ui/icons" "^3.0.1"
+    "@material-ui/lab" "^3.0.0-alpha.24"
     "@types/google.visualization" "^0.0.42"
     "@types/react-dom" "^16.0.6"
     jss "^9.8.7"

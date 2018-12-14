@@ -521,6 +521,16 @@ function appStates(
 			params: {
 				data: {}
 			}
+		})
+
+		.state('member.marketplace.incorporations', {
+			url: '/member/marketplace/incorporations',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/incorporations.html',
+					controller: 'MemberMarketplaceIncorporationsController'
+				}
+			}
 		});
 
 	$urlRouterProvider.otherwise('/guest/loading');
