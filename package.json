@@ -119,6 +119,7 @@
     "redux-promise": "0.6.0",
     "redux-thunk": "2.3.0",
     "request": "2.88.0",
+    "request-promise-native": "^1.0.5",
     "reselect": "4.0.0",
     "scrypt": "6.0.3",
     "selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#e50c630",
