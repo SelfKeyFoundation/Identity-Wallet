@@ -58,8 +58,6 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			id: 'physical_address'
 		}
 	};
-	// TODO: go over all attribute types and hadnle cases when attribute key of old does not match json file of new
-	// TODO: handle attribute merges
 	ctx.attributeTypes = attributeTypes
 		.map(t => {
 			let oldKey = t.key;
@@ -94,22 +92,26 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			return t;
 		});
 	ctx.attributeTypes = await Promise.all(ctx.attributeTypes);
-	let attrsMap = ctx.attributeTypes.filter(t => !t.duplicate).reduce((acc, curr) => {
-		acc[curr.oldKey] = curr;
-		return acc;
-	}, {});
+	let attrsMap = ctx.attributeTypes
+		.filter(t => !t.duplicate)
+		.reduce((acc, curr) => {
+			acc[curr.oldKey] = curr;
+			return acc;
+		}, {});
 	await Promise.all(
-		ctx.attributeTypes.filter(t => !!t.duplicate).map(async t => {
-			let newT = attrsMap[t.duplicate];
-			if (!newT) return;
+		ctx.attributeTypes
+			.filter(t => !!t.duplicate)
+			.map(async t => {
+				let newT = attrsMap[t.duplicate];
+				if (!newT) return;
 
-			await knex('id_attributes')
-				.update({ typeId: newT.type.id })
-				.where({ typeId: t.type.id });
-			await knex('id_attribute_types')
-				.where({ id: t.type.id })
-				.del();
-		})
+				await knex('id_attributes')
+					.update({ typeId: newT.type.id })
+					.where({ typeId: t.type.id });
+				await knex('id_attribute_types')
+					.where({ id: t.type.id })
+					.del();
+			})
 	);
 	await mergeAttributes(
 		attributeUrlForKey('national_id'),
