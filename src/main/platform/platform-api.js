@@ -1,4 +1,4 @@
-export class RelyingPartyRest {
+export class PlatformRest {
 	static getChallange() {}
 	static postChallangeReply() {}
 	static getUserToken() {}
@@ -11,13 +11,13 @@ export class RelyingPartyRest {
 	static uploadKYCApplicationFile() {}
 }
 
-export class RelyingPartyApi {
+export class PlatformApi {
 	constructor(config) {
-		this.config = new RelyingPartyConfig(config);
+		this.config = new PlatformConfig(config);
 	}
 }
 
-export class RelyingPartyConfig {
+export class PlatformConfig {
 	constructor(config) {
 		this.config = config;
 	}
@@ -26,4 +26,4 @@ export class RelyingPartyConfig {
 	getAttributes() {}
 }
 
-export default RelyingPartyApi;
+export default PlatformApi;
