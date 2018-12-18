@@ -2,6 +2,7 @@ import { Repository } from './repository';
 import { IdAttributeType } from './id-attribute-type';
 import { Document } from './document';
 import { IdAttribute } from './id-attribute';
+import { UiSchema } from './ui-schema';
 
 export class IdentityService {
 	loadRepositories() {
@@ -14,6 +15,10 @@ export class IdentityService {
 
 	loadIdAttributeTypes() {
 		return IdAttributeType.findAll();
+	}
+
+	loadUiSchemas() {
+		return UiSchema.findAll();
 	}
 
 	updateIdAttributeTypes(idAttributeTypes) {
