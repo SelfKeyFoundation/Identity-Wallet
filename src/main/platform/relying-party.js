@@ -1,13 +1,14 @@
-export class RelyingPartyConfig {
-	constructor(config) {
+import request from 'request-promise-native';
+export class RelyingPartyCtx {
+	constructor(config, identity, token) {
 		this.config = config;
+		this.identity = identity;
+		this.token = token;
 	}
 	mergeWithConfig() {}
 	getEndpoint() {}
 	getAttributes() {}
 }
-
-export class RelyingPartyCtx {}
 
 export class RelyingPartyToken {
 	constructor(algo, data, sig) {
@@ -20,8 +21,19 @@ export class RelyingPartyToken {
 }
 
 export class RelyingPartyRest {
-	static getChallange() {}
-	static postChallangeReply() {}
+	static getChallange(ctx) {
+		let url = ctx.getEndpoint('challange');
+		return request.get(url);
+	}
+	static postChallangeReply(ctx, challange, signature) {
+		let url = ctx.getEndpoint('challange');
+		return request.post({
+			url,
+			body: { signature },
+			headers: { Authorization: challange },
+			json: true
+		});
+	}
 	static getUserToken() {}
 	static createUser() {}
 	static listKYCTemplates() {}
@@ -44,11 +56,15 @@ export class RelyingPartySession {
 	async establish() {
 		if (this.isActive()) return this.ctx.token;
 		let challange = await RelyingPartyRest.getChallange(this.ctx);
-		let signature = await this.identity.genSignatureForMessage(challange.challange);
-		let tokenStr = await RelyingPartyRest.postChallangeReply(this.ctx, signature);
+		let challangeToken = RelyingPartyToken.fromString(challange);
+		let signature = await this.identity.genSignatureForMessage(challangeToken.data.challange);
+		let tokenStr = await RelyingPartyRest.postChallangeReply(this.ctx, challange, signature);
 		let token = RelyingPartyToken.fromString(tokenStr);
 		this.ctx.token = token;
 		return token;
+	}
+	getUserLoginPayload() {
+		return RelyingPartyRest.getUserToken(this.ctx);
 	}
 }
 
