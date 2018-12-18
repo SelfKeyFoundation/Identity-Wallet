@@ -9,6 +9,7 @@ import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 import { Logger } from '../common/logger';
 import db from './db/db';
+import configureStore from 'common/store/configure-store';
 
 import { identityOperations } from '../common/identity';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
@@ -25,9 +26,6 @@ const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = getWalletsDir();
 const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
-const ctx = configureContext('main').cradle;
-setGlobalContext(ctx);
-
 /**
  * auto updated
  */
@@ -41,11 +39,25 @@ if (require('electron-squirrel-startup')) {
 	process.exit(0);
 }
 
+const app = {
+	dir: {
+		root: path.join(__dirname, '..'),
+		desktopApp: path.join(__dirname, '..', 'app')
+	},
+	config: {
+		app: config,
+		user: null
+	},
+	translations: {},
+	win: {},
+	log: log
+};
+
 if (!handleSquirrelEvent()) {
 	electron.app.on('window-all-closed', onWindowAllClosed());
-	electron.app.on('activate', onActivate());
+	electron.app.on('activate', onActivate(app));
 	electron.app.on('web-contents-created', onWebContentsCreated);
-	electron.app.on('ready', onReady());
+	electron.app.on('ready', onReady(app));
 }
 
 const gotTheLock = electron.app.requestSingleInstanceLock();
@@ -69,7 +81,10 @@ function onReady(app) {
 			appUpdater();
 		}
 		await db.init();
-		const store = ctx.store;
+		const store = configureStore(global.state, 'main');
+		const ctx = configureContext(store, app).cradle;
+		setGlobalContext(ctx);
+
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
@@ -80,6 +95,7 @@ function onReady(app) {
 			await ctx.CrashReportService.startCrashReport();
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
+
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
@@ -171,7 +187,6 @@ async function loadIdentity(ctx) {
 
 function onActivate(app) {
 	log.info('onActivate');
-	const app = ctx.app;
 	return function() {
 		if (app.win === null) {
 			onReady();

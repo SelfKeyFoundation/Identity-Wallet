@@ -21,14 +21,9 @@ export const setGlobalContext = ctx => {
 };
 export const getGlobalContext = () => globalContext;
 
-export const registerCommonServices = (container, thread) => {
-	container.register({
-		initialState: asValue(global.state),
-		threadName: asValue(thread),
-		store: asFunction(({ initialState, threadName }) =>
-			configureStore(initialState, threadName)
-		).singleton(),
-		ethGasStationService: asClass(EthGasStationService).singleton()
+export const configureContext = (store, app) => {
+	const container = createContainer({
+		injectionMode: InjectionMode.PROXY
 	});
 	container.register({
 		app: asValue(app),
@@ -44,7 +39,7 @@ export const registerCommonServices = (container, thread) => {
 		lwsService: asClass(LWSService).singleton(),
 		exchangesService: asClass(ExchangesService).singleton(),
 		ethGasStationService: asClass(EthGasStationService).singleton(),
-		IdentityService: asClass(IdentityService).singleton(),
+		identityService: asClass(IdentityService).singleton(),
 		trezorService: asFunction(() => {
 			let Service = TrezorService();
 			return new Service();
