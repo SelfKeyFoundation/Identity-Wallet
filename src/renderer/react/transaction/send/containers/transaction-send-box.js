@@ -16,7 +16,6 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	componentDidUpdate() {
-		console.log(this.props.status);
 		if (this.props.status === 'NoBalance') {
 			this.props.navigateToTransactionNoGasError();
 		} else if (this.props.status === 'Error') {
