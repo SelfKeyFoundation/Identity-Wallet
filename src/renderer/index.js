@@ -30,7 +30,7 @@ const { Logger } = require('common/logger');
 
 dotenv.config();
 
-const ctx = configureContext(null, null).cradle;
+const ctx = configureContext('renderer').cradle;
 setGlobalContext(ctx);
 
 const path = require('path');

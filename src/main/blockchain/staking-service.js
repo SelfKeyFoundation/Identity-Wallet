@@ -28,7 +28,7 @@ export class StakingService {
 			try {
 				balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
 			} catch (error) {
-				log.error(error);
+				log.error('balance error %s, %2j', error, info);
 				balance = 0;
 			}
 			if (!balance) continue;
@@ -123,6 +123,7 @@ export class StakingService {
 	}
 	async acquireContract() {
 		let { activeContract, deprecatedContracts } = await this.fetchConfig();
+		console.log(activeContract, deprecatedContracts);
 		this.activeContract = new StakingContract(
 			this.web3,
 			activeContract.address,

@@ -9,7 +9,7 @@ export const getExchanges = ({ exchanges }) => {
 			status: data.status,
 			description: data.description,
 			logoUrl: data.logo[0].url,
-			serviceOwner: data.serviceOwner || '0x0',
+			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
 			serviceId: data.serviceId || 'global',
 			lockPeriod: data.lockPeriod || 2592000000, // 30 days
 			amount: data.requiredBalance || 25
@@ -39,7 +39,7 @@ const getType = template => {
 
 export const getItemDetails = ({ exchanges }, name) => {
 	let details = {
-		serviceOwner: '0x0',
+		serviceOwner: '0x0000000000000000000000000000000000000000',
 		serviceId: 'global',
 		lockPeriod: 2592000000,
 		amount: 25,

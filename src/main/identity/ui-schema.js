@@ -48,6 +48,10 @@ export class UiSchema extends BaseModel {
 		};
 	}
 
+	static findAll(where) {
+		return this.query().where(where || {});
+	}
+
 	static findByUrl(url, repositoryId, tx) {
 		return this.query(tx).findOne({ url, repositoryId });
 	}

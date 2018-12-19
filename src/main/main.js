@@ -9,14 +9,12 @@ import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 import { Logger } from '../common/logger';
 import db from './db/db';
-import configureStore from 'common/store/configure-store';
-
 import { identityOperations } from '../common/identity';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
 import config from 'common/config';
-import { configureContext, setGlobalContext } from '../common/context';
-import { createMainWindow } from './main-window';
+import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
 import { handleSquirrelEvent, appUpdater } from './autoupdater';
+import { createMainWindow } from './main-window';
 
 const log = new Logger('main');
 
@@ -39,25 +37,11 @@ if (require('electron-squirrel-startup')) {
 	process.exit(0);
 }
 
-const app = {
-	dir: {
-		root: path.join(__dirname, '..'),
-		desktopApp: path.join(__dirname, '..', 'app')
-	},
-	config: {
-		app: config,
-		user: null
-	},
-	translations: {},
-	win: {},
-	log: log
-};
-
 if (!handleSquirrelEvent()) {
 	electron.app.on('window-all-closed', onWindowAllClosed());
-	electron.app.on('activate', onActivate(app));
+	electron.app.on('activate', onReady());
 	electron.app.on('web-contents-created', onWebContentsCreated);
-	electron.app.on('ready', onReady(app));
+	electron.app.on('ready', onReady());
 }
 
 const gotTheLock = electron.app.requestSingleInstanceLock();
@@ -74,17 +58,20 @@ if (!gotTheLock) {
 	});
 }
 
-function onReady(app) {
+function onReady() {
 	return async () => {
+		let ctx = getGlobalContext();
+		if (ctx && ctx.app.win) return;
 		global.__static = __static;
 		if (!isDevMode() && !isTestMode()) {
 			appUpdater();
 		}
 		await db.init();
-		const store = configureStore(global.state, 'main');
-		const ctx = configureContext(store, app).cradle;
+		ctx = configureContext('main').cradle;
+		console.log('onReady');
 		setGlobalContext(ctx);
-
+		const store = ctx.store;
+		const app = ctx.app;
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
@@ -99,7 +86,7 @@ function onReady(app) {
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
-		// ctx.stakingService.acquireContract();
+		ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
 
@@ -183,15 +170,6 @@ async function loadIdentity(ctx) {
 	} catch (error) {
 		log.error('failed to update ui schemas from remote');
 	}
-}
-
-function onActivate(app) {
-	log.info('onActivate');
-	return function() {
-		if (app.win === null) {
-			onReady();
-		}
-	};
 }
 
 function onWindowAllClosed() {
