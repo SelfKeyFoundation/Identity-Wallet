@@ -608,7 +608,7 @@ describe('lws-service', () => {
 				on: sinon.fake()
 			};
 			let serviceMock = {
-				handleSecureRequest: sinon.fake()
+				handleRequest: sinon.fake()
 			};
 			wsconn = new WSConnection(connMock, serviceMock, true);
 		});
@@ -643,7 +643,7 @@ describe('lws-service', () => {
 			it('passes parsed messages to service', async () => {
 				const msg = { type: 'test' };
 				await wsconn.handleMessage(JSON.stringify(msg));
-				expect(wsconn.service.handleSecureRequest.calledWithMatch(msg)).toBeTruthy();
+				expect(wsconn.service.handleRequest.getCall(0).args[0]).toMatchObject(msg);
 			});
 		});
 		describe('send', () => {
