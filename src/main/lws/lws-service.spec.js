@@ -657,7 +657,7 @@ describe('lws-service', () => {
 			t('adds meta with id and src', { type: 'test' }, null, {
 				type: 'test',
 				meta: {
-					id: 'idw_0',
+					id: 'idw-0',
 					src: 'idw'
 				}
 			});
@@ -670,7 +670,7 @@ describe('lws-service', () => {
 			t('adds type error for errors without type', { error: true }, null, {
 				error: true,
 				type: 'error',
-				meta: { src: 'idw', id: 'idw_0' }
+				meta: { src: 'idw', id: 'idw-0' }
 			});
 		});
 	});
