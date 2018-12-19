@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-
 import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
 import { Token } from '../token/token';
@@ -123,7 +122,6 @@ export class StakingService {
 	}
 	async acquireContract() {
 		let { activeContract, deprecatedContracts } = await this.fetchConfig();
-		console.log(activeContract, deprecatedContracts);
 		this.activeContract = new StakingContract(
 			this.web3,
 			activeContract.address,

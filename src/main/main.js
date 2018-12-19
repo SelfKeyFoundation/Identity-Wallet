@@ -68,7 +68,6 @@ function onReady() {
 		}
 		await db.init();
 		ctx = configureContext('main').cradle;
-		console.log('onReady');
 		setGlobalContext(ctx);
 		const store = ctx.store;
 		const app = ctx.app;
