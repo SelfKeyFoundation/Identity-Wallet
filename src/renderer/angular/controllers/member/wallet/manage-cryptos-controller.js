@@ -80,11 +80,11 @@ function ManageCryptosController(
 				return 1;
 			}
 
-			if (symbolA === 'key') {
+			if (symbolA === $rootScope.PRIMARY_TOKEN.toLowerCase()) {
 				return -1;
 			}
 
-			if (symbolB === 'key') {
+			if (symbolB === $rootScope.PRIMARY_TOKEN.toLowerCase()) {
 				return 1;
 			}
 
@@ -106,7 +106,7 @@ function ManageCryptosController(
 		}
 	});
 
-	const PRIMARY_TOKEN_KEYS = [$rootScope.PRIMARY_TOKEN, 'ETH'];
+	const PRIMARY_TOKEN_KEYS = [$rootScope.PRIMARY_TOKEN.toUpperCase(), 'ETH'];
 	$scope.isDeletable = token => {
 		if (PRIMARY_TOKEN_KEYS.indexOf(token.symbol.toUpperCase()) !== -1) {
 			return false;

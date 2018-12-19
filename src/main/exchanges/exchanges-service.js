@@ -2,7 +2,8 @@
 import fetch from 'node-fetch';
 import Exchange from './exchange';
 
-const airtableBaseUrl = 'https://alpha.selfkey.org/marketplace/i/api/';
+const airtableBaseUrl =
+	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=';
 
 export class ExchangesService {
 	async loadExchangeData() {
@@ -10,12 +11,12 @@ export class ExchangesService {
 
 		const responseBody = await response.json();
 
-		const exchanges = responseBody.Exchanges.filter(
-			row => row.data && row.data.fields.name
-		).map(row => ({
-			name: row.data.fields.name,
-			data: row.data.fields
-		}));
+		const exchanges = responseBody.entities
+			.filter(row => row.data && row.data.name)
+			.map(row => ({
+				name: row.data.name,
+				data: row.data
+			}));
 
 		return Exchange.import(exchanges);
 	}

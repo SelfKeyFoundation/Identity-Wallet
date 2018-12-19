@@ -1,22 +1,4 @@
-.marketplace-exchange-list-container
-    md-button.gray.default.back(ui-sref="member.marketplace.main")
-        span.primary  Back
-    .marketplace-exchange-list
-        .center-container
-            .header-wrapper
-                .logo
-                    sk-icon(icon="exchanges-icon", size-class="icon-size-36x36")
-                .title Exchanges
-            .body-wrapper
-                ul
-                    li(ng-repeat='item in exchangesList')
-                        .list-title(layout='row')
-                            .title-logo
-                                span.helper
-                                img.logo-image(ng-src="{{item.data.logo[0].thumbnails.large.url}}", alt="")
-                            .title-text   {{item.name}}
-                        .list-body
-                            .body-description(ng-bind-html="item.content + (item.data.description.length > 150 ? '...' : '')")
-                            .buttons-section
-                                md-button.gray(ui-sref="member.marketplace.exchange-item({data: item.data})")
-                                    span {{item.data ? 'View' : 'Coming Soon'}}
+.marketplace
+  .center
+    exchanges(view-action='navigateToDetails' back-action='navigateToMarketplace')
+        

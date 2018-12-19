@@ -47,7 +47,14 @@ export class Web3Service {
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
 		let contract = web3.eth;
-
+		if (args[0]) {
+			if (args[0].gas && typeof args[0].gas === 'number') {
+				args[0].gas = Math.round(args[0].gas);
+			}
+			if (args[0].gasPrice && typeof args[0].gasPrice === 'number') {
+				args[0].gasPrice = Math.round(args[0].gasPrice);
+			}
+		}
 		if (contractAddress) {
 			contract = new Contract(customAbi || ABI, contractAddress);
 			if (contractMethod) {
@@ -92,6 +99,49 @@ export class Web3Service {
 			}
 		});
 	}
+	getTransaction(hash) {
+		return this.waitForTicket({
+			method: 'getTransaction',
+			args: [hash]
+		});
+	}
+	getTransactionReceipt(hash) {
+		return this.waitForTicket({
+			method: 'getTransactionReceipt',
+			args: [hash]
+		});
+	}
+	ensureStrHex(str) {
+		if (!this.web3.utils.isHex(str)) {
+			return this.web3.utils.asciiToHex(str);
+		}
+		return str;
+	}
+	ensureIntHex(num) {
+		if (!this.web3.utils.isHex(num)) {
+			return this.web3.utils.numberToHex(num);
+		}
+		return num;
+	}
+	async checkTransactionStatus(hash) {
+		let tx = await this.getTransaction(hash);
+		if (!tx) {
+			return 'pending';
+		}
+		if (!tx.blockNumber) {
+			return 'processing';
+		}
+		let receipt = await this.getTransactionReceipt(hash);
+		let status = receipt.status;
+		if (typeof status !== 'boolean') {
+			status = this.web3.utils.hexToNumber(receipt.status);
+		}
+		if (!status) {
+			return 'failed';
+		}
+		return 'success';
+	}
+
 	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {
 		let opts = { ...(args || [])[0] };
 		if (!opts.from) {
@@ -113,14 +163,13 @@ export class Web3Service {
 		if (!opts.gasPrice) {
 			opts.gasPrice = await this.web3.eth.getGasPrice();
 		}
-		opts.gasPrice = this.web3.utils.toHex(opts.gasPrice);
+		opts.gasPrice = this.web3.utils.toHex(Math.round(opts.gasPrice));
 		if (!opts.gas) {
 			opts.gas = await contactMethodInstance.estimateGas({
 				from: opts.from,
 				value: this.web3.utils.toHex(0)
 			});
 		}
-
 		let data = contactMethodInstance.encodeABI();
 		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
 		if (nonce === this.nonce) {

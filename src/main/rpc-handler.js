@@ -2,6 +2,8 @@
 const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
+const { exchangesOperations } = require('common/exchanges');
+
 const { pricesOperations } = require('common/prices');
 
 const { Logger } = require('common/logger');
@@ -1194,6 +1196,7 @@ module.exports = function(cradle) {
 	controller.prototype.findAllExchangeData = function(event, actionId, actionName, args) {
 		Exchange.findAll(args)
 			.then(data => {
+				store.dispatch(exchangesOperations.updateExchanges(data));
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

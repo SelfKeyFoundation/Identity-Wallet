@@ -521,6 +521,54 @@ function appStates(
 			params: {
 				data: {}
 			}
+		})
+		.state('member.marketplace.no-balance', {
+			url: '/member/marketplace/no-balance',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/no-balance.html',
+					controller: 'MemberMarketplaceNoBalanceController'
+				}
+			},
+			params: {
+				data: {}
+			}
+		})
+		.state('member.marketplace.unlock', {
+			url: '/member/marketplace/unlock',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/unlock.html',
+					controller: 'MemberMarketplaceUnlockController'
+				}
+			},
+			params: {
+				data: {}
+			}
+		})
+		.state('member.marketplace.return', {
+			url: '/member/marketplace/return',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/return.html',
+					controller: 'MemberMarketplaceReturnController'
+				}
+			},
+			params: {
+				data: {}
+			}
+		})
+		.state('member.marketplace.progress', {
+			url: '/member/marketplace/progress',
+			views: {
+				main: {
+					templateUrl: 'member/marketplace/unlock-progress.html',
+					controller: 'MemberMarketplaceUnlockProgressController'
+				}
+			},
+			params: {
+				data: {}
+			}
 		});
 
 	$urlRouterProvider.otherwise('/guest/loading');
