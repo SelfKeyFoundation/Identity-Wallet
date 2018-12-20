@@ -1,0 +1,96 @@
+[
+	{
+		"id": 1,
+		"walletId": 1,
+		"type": "first_name",
+		"data": "{\"value\":\"First Name\"}",
+		"documentId": null
+	},
+	{
+		"id": 2,
+		"walletId": 1,
+		"type": "last_name",
+		"data": "{\"value\":\"Last Name\"}",
+		"documentId": null
+	},
+	{
+		"id": 3,
+		"walletId": 1,
+		"type": "middle_name",
+		"data": "{\"value\":\"Middle Name\"}",
+		"documentId": null
+	},
+	{
+		"id": 4,
+		"walletId": 1,
+		"type": "country_of_residency",
+		"data": "{\"value\":\"Algeria\"}",
+		"documentId": null
+	},
+	{ "id": 5, "walletId": 1, "type": "national_id", "data": "{}", "documentId": 1 },
+	{
+		"id": 6,
+		"walletId": 1,
+		"type": "email",
+		"data": "{\"value\":\"test@test.net\"}",
+		"documentId": null
+	},
+	{ "id": 7, "walletId": 1, "type": "id_selfie", "data": "{}", "documentId": 2 },
+	{
+		"id": 8,
+		"walletId": 1,
+		"type": "public_key",
+		"data": "{\"value\":\"public key\"}",
+		"documentId": null
+	},
+	{
+		"id": 9,
+		"walletId": 1,
+		"type": "physical_address",
+		"data": "{\"address1\":\"street address 1\",\"address2\":\"street address 2\",\"city\":\"city\",\"country\":\"Anguilla\",\"region\":\"state\",\"zip\":\"zip\"}",
+		"documentId": null
+	},
+	{
+		"id": 10,
+		"walletId": 1,
+		"type": "work_place",
+		"data": "{\"address1\":\"workplace str 1\",\"address2\":\"workplace str 2\",\"city\":\"workplace city\",\"country\":\"Andorra\",\"region\":\"workplace state\",\"zip\":\"workplace zip\"}",
+		"documentId": null
+	},
+	{
+		"id": 11,
+		"walletId": 1,
+		"type": "birthdate",
+		"data": "{\"value\":-17579642400000}",
+		"documentId": null
+	},
+	{
+		"id": 12,
+		"walletId": 1,
+		"type": "nationality",
+		"data": "{\"value\":\"Angola\"}",
+		"documentId": null
+	},
+	{
+		"id": 13,
+		"walletId": 1,
+		"type": "tax_id_number",
+		"data": "{\"value\":\"12312321\"}",
+		"documentId": null
+	},
+	{
+		"id": 14,
+		"walletId": 1,
+		"type": "phonenumber_countrycode",
+		"data": "{\"countryCode\":\"+355\",\"telephoneNumber\":12312123123123}",
+		"documentId": null
+	},
+	{ "id": 15, "walletId": 1, "type": "fingerprint", "data": "{}", "documentId": 3 },
+	{ "id": 16, "walletId": 1, "type": "voice_id", "data": "{}", "documentId": 4 },
+	{ "id": 17, "walletId": 1, "type": "passport", "data": "{}", "documentId": 5 },
+	{ "id": 18, "walletId": 1, "type": "drivers_license", "data": "{}", "documentId": 6 },
+	{ "id": 19, "walletId": 1, "type": "national_id_back", "data": "{}", "documentId": 7 },
+	{ "id": 20, "walletId": 1, "type": "utility_bill", "data": "{}", "documentId": 8 },
+	{ "id": 21, "walletId": 1, "type": "bank_statement", "data": "{}", "documentId": 9 },
+	{ "id": 22, "walletId": 1, "type": "tax_certificate", "data": "{}", "documentId": 10 }
+]

@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 import store from '../common/store';
 import TokenPrice from '../common/token-price';
 import { EthereumIcon, SelfkeyIcon, TransferPrice } from 'selfkey-ui';
+import CONFIG from 'common/config.js';
 
 const renderIcon = shortName => {
 	switch (shortName) {
-		case 'KEY':
+		case CONFIG.constants.primaryToken.toUpperCase():
 			return SelfkeyIcon;
 		case 'ETH':
 			return EthereumIcon;

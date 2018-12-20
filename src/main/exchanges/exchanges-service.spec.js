@@ -6,16 +6,12 @@ jest.mock('node-fetch');
 const exchanges = [
 	{
 		data: {
-			fields: {
-				name: 'exchange1'
-			}
+			name: 'exchange1'
 		}
 	},
 	{
 		data: {
-			fields: {
-				name: 'exchange2'
-			}
+			name: 'exchange2'
 		}
 	}
 ];
@@ -47,7 +43,7 @@ describe('ExchangesService', () => {
 	it('loadExchangeData', async () => {
 		fetch.mockResolvedValue({
 			json() {
-				return { Exchanges: exchanges };
+				return { entities: exchanges };
 			}
 		});
 		let stub = sinon.stub(Exchange, 'import');

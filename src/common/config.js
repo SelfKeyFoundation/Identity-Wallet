@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
+const dotenv = require('dotenv');
 const {
 	isDevMode,
 	isDebugMode,
@@ -9,6 +10,8 @@ const {
 	getUserDataPath
 } = require('./utils/common');
 const pkg = require('../../package.json');
+
+dotenv.config();
 
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;

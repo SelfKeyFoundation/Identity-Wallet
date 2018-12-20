@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import store from '../common/store';
+import { ethGasStationInfoOperations } from 'common/eth-gas-station';
+import { marketplacesOperations } from 'common/marketplaces';
 import { Marketplace } from 'selfkey-ui';
 
-export const MarketplaceWrapper = props => {
-	const { learnMoreActions } = props;
-	return (
-		<Provider store={store}>
+class MarketplaceContainerSrc extends Component {
+	static propTypes = {
+		learnMoreAction: PropTypes.array
+	};
+	componentDidMount() {
+		this.props.dispatch(ethGasStationInfoOperations.loadData());
+		this.props.dispatch(marketplacesOperations.loadTransactions());
+		this.props.dispatch(marketplacesOperations.loadStakes());
+	}
+	render() {
+		let { learnMoreActions } = this.props;
+		return (
 			<Marketplace
 				items={[
 					{
@@ -61,9 +71,17 @@ export const MarketplaceWrapper = props => {
 					}
 				]}
 			/>
-		</Provider>
-	);
-};
+		);
+	}
+}
+
+const MarketplaceContainer = connect()(MarketplaceContainerSrc);
+
+export const MarketplaceWrapper = props => (
+	<Provider store={store}>
+		<MarketplaceContainer {...props} />
+	</Provider>
+);
 
 MarketplaceWrapper.propTypes = {
 	learnMoreAction: PropTypes.array

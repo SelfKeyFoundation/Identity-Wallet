@@ -234,6 +234,7 @@ workflows:
                               - dev
                               - nightly
                               - release
+                              - /staging.*/
             - 'build-mac':
                   requires:
                       - unit-test
@@ -249,6 +250,7 @@ workflows:
                               - dev
                               - nightly
                               - release
+                              - /staging.*/
             - 'publish-mac':
                   requires:
                       - e2e-mac

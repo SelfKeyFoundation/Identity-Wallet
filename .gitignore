@@ -27,5 +27,4 @@ static/stylesheets/css/main.css
 static/stylesheets/css/*
 
 client-secret.json
-
-.env
+**/.env

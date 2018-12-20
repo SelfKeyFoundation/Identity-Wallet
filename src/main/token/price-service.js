@@ -1,10 +1,14 @@
 'use strict';
 import EventEmitter from 'events';
 import fetch from 'node-fetch';
+import { Logger } from 'common/logger';
 import io from 'socket.io-client';
 import TokenPrice from './token-price';
 import Token from './token';
 import WalletToken from '../wallet/wallet-token';
+
+const log = new Logger('PriceService');
+
 // Update every 10 minutes
 export const PRICE_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
 export class PriceService extends EventEmitter {
@@ -14,6 +18,7 @@ export class PriceService extends EventEmitter {
 		this.existing = {};
 	}
 	async loadPriceData() {
+		log.info('fetching price data');
 		const response = await fetch('https://coincap.io/front');
 		const data = await response.json();
 
