@@ -1,4 +1,13 @@
 import request from 'request-promise-native';
+import config from 'common/config';
+
+const { userAgent } = config;
+export class RelyingPartyError extends Error {
+	constructor(conf) {
+		super(conf.message);
+		this.code = conf.code;
+	}
+}
 export class RelyingPartyCtx {
 	constructor(config, identity, token) {
 		this.config = config;
@@ -17,25 +26,56 @@ export class RelyingPartyToken {
 		this.sig = sig;
 	}
 	static fromString(str) {}
+	toString() {}
 	hasExpired() {}
 }
 
 export class RelyingPartyRest {
+	static userAgent = userAgent;
 	static getChallange(ctx) {
 		let url = ctx.getEndpoint('challange');
-		return request.get(url);
+		return request.get({ url, headers: { 'User-Agent': this.userAgent } });
 	}
 	static postChallangeReply(ctx, challange, signature) {
 		let url = ctx.getEndpoint('challange');
 		return request.post({
 			url,
 			body: { signature },
-			headers: { Authorization: challange },
+			headers: { Authorization: challange, 'User-Agent': this.userAgent },
 			json: true
 		});
 	}
-	static getUserToken() {}
-	static createUser() {}
+	static getUserToken(ctx) {
+		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
+		let token = ctx.token.toString();
+		let url = ctx.getEndpoint('auth/token');
+		return request.get({
+			url,
+			headers: { Authorization: token, 'User-Agent': this.userAgent }
+		});
+	}
+	static createUser(ctx, attributes, documents = []) {
+		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
+		let url = ctx.getEndpoint('user');
+		let formData = documents.reduce((acc, curr) => {
+			let key = `$document-${curr.id}`;
+			acc[key] = {
+				value: curr.buffer,
+				options: {
+					contentType: curr.mimeType,
+					fileName: curr.name || null,
+					knownSize: curr.size
+				}
+			};
+			return acc;
+		}, {});
+		formData.attributes = JSON.stringify(attributes);
+		return request.post({
+			url,
+			formData,
+			headers: { Authorization: ctx.token.toString(), 'User-Agent': this.userAgent }
+		});
+	}
 	static listKYCTemplates() {}
 	static getKYCTemplate() {}
 	static createKYCApplication() {}
@@ -65,6 +105,15 @@ export class RelyingPartySession {
 	}
 	getUserLoginPayload() {
 		return RelyingPartyRest.getUserToken(this.ctx);
+	}
+
+	createUser(attributes = []) {
+		let documents = attributes.reduce((acc, curr) => {
+			acc = acc.concact(curr.documents);
+			return documents;
+		}, []);
+		let attributesData = attributes.map(attr => attr.data);
+		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
 	}
 }
 

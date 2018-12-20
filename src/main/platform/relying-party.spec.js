@@ -33,6 +33,12 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.getChallange(ctx);
 			expect(ctx.getEndpoint.calledOnceWith('challange')).toBeTruthy();
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: { 'User-Agent': RelyingPartyRest.userAgent }
+				}
+			]);
 			expect(res).toBe(testChallnage);
 		});
 		it('should throw on call failure', () => {});
@@ -51,7 +57,10 @@ describe('RelyingPartyRest', () => {
 				{
 					url: testEndpoint,
 					body: { signature: testSignature },
-					headers: { Authorization: testChallange },
+					headers: {
+						Authorization: testChallange,
+						'User-Agent': RelyingPartyRest.userAgent
+					},
 					json: true
 				}
 			]);
@@ -61,17 +70,74 @@ describe('RelyingPartyRest', () => {
 		xit('should throw 401 on bad or missing challange token', () => {});
 		xit('should throw error on failed request', () => {});
 	});
-	xdescribe('getUserToken', () => {
-		it('should return user payload if user exists', () => {});
-		it('should throw 404 if user does not exist', () => {});
-		it('should throw 401 on invalid or expired token', () => {});
-		it('should throw on failed request', () => {});
+	describe('getUserToken', () => {
+		it('should return user payload if user exists', async () => {
+			const testEndpoint = 'http://test';
+			const testUserToken = { testUserToken: 'test' };
+			sinon.stub(request, 'get').resolves(testUserToken);
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			let res = await RelyingPartyRest.getUserToken(ctx);
+			expect(ctx.getEndpoint.calledOnceWith('auth/token')).toBeTruthy();
+			expect(res).toEqual(testUserToken);
+		});
+		xit('should throw 404 if user does not exist', () => {});
+		xit('should throw 401 on invalid or expired token', () => {});
+		xit('should throw on failed request', () => {});
 	});
-	xdescribe('createUser', () => {
-		it('Should return 201 if user successfully created/updated', () => {});
-		it('Should throw 400 if request was not accepted (or is invalid)', () => {});
-		it('should throw 401 if token is invalid/expired', () => {});
-		it('should throw on request failure', () => {});
+	describe('createUser', () => {
+		it('Should return 201 if user successfully created/updated', async () => {
+			const testEndpoint = 'http://test';
+			let attributes = [{ test1: 'test1' }, { test2: 'test2' }];
+			let documents = [
+				{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') },
+				{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
+			];
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
+			expect(res).toEqual('ok');
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'test',
+						'User-Agent': RelyingPartyRest.userAgent
+					},
+					formData: {
+						attributes: JSON.stringify(attributes),
+						'$document-1': {
+							value: documents[0].buffer,
+							options: {
+								contentType: documents[0].mimeType,
+								fileName: null,
+								knownSize: documents[0].size
+							}
+						},
+						'$document-2': {
+							value: documents[1].buffer,
+							options: {
+								contentType: documents[1].mimeType,
+								fileName: null,
+								knownSize: documents[1].size
+							}
+						}
+					}
+				}
+			]);
+		});
+		xit('Should throw 400 if request was not accepted (or is invalid)', () => {});
+		xit('should throw 401 if token is invalid/expired', () => {});
+		xit('should throw on request failure', () => {});
 	});
 	describe('listKYCTemplates', () => {});
 	describe('getKYCTemplate', () => {});
