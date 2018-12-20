@@ -15,6 +15,7 @@ describe('RelyingPartyCtx', () => {
 	describe('mergeConfig', () => {});
 	describe('getEndpoing', () => {});
 	describe('getAttributes', () => {});
+	describe('getOrigin', () => {});
 });
 
 describe('RelyingPartyRest', () => {
@@ -22,44 +23,49 @@ describe('RelyingPartyRest', () => {
 	let config = null;
 
 	beforeEach(() => {
-		config = {};
+		config = { origin: 'test' };
 		ctx = new RelyingPartyCtx(config);
 	});
-	describe('getChallange', () => {
-		it('should return challange on successfull request', async () => {
+	it('getAuthorizationHeader', () => {
+		let token = 'test';
+		expect(RelyingPartyRest.getAuthorizationHeader(token)).toEqual(`Bearer ${token}`);
+	});
+	describe('getChallenge', () => {
+		it('should return challenge on successfull request', async () => {
 			const testEndpoint = 'http://test';
-			const testChallnage = 'testChallange';
+			const testChallnage = 'testChallenge';
 			sinon.stub(request, 'get').resolves(testChallnage);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.getChallange(ctx);
-			expect(ctx.getEndpoint.calledOnceWith('challange')).toBeTruthy();
+			let res = await RelyingPartyRest.getChallenge(ctx);
+			expect(ctx.getEndpoint.calledOnceWith('challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
-					headers: { 'User-Agent': RelyingPartyRest.userAgent }
+					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' }
 				}
 			]);
 			expect(res).toBe(testChallnage);
 		});
 		it('should throw on call failure', () => {});
 	});
-	describe('postChallangeReply', () => {
-		it('should return token on successfull challange reply', async () => {
+	describe('postChallengeReply', () => {
+		it('should return token on successfull challenge reply', async () => {
 			const testEndpoint = 'http://test';
 			const testToken = 'testToken';
-			const testChallange = 'test';
+			const testChallenge = 'test';
 			const testSignature = 'test sig';
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.postChallangeReply(ctx, testChallange, testSignature);
-			expect(ctx.getEndpoint.calledOnceWith('challange')).toBeTruthy();
+			let res = await RelyingPartyRest.postChallengeReply(ctx, testChallenge, testSignature);
+			expect(ctx.getEndpoint.calledOnceWith('challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
 					body: { signature: testSignature },
 					headers: {
-						Authorization: testChallange,
-						'User-Agent': RelyingPartyRest.userAgent
+						Authorization: `Bearer ${testChallenge}`,
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
 					},
 					json: true
 				}
@@ -67,7 +73,7 @@ describe('RelyingPartyRest', () => {
 			expect(res).toBe(testToken);
 		});
 		xit('should throw 400 on bad signature', () => {});
-		xit('should throw 401 on bad or missing challange token', () => {});
+		xit('should throw 401 on bad or missing challenge token', () => {});
 		xit('should throw error on failed request', () => {});
 	});
 	describe('getUserToken', () => {
@@ -84,6 +90,16 @@ describe('RelyingPartyRest', () => {
 			let res = await RelyingPartyRest.getUserToken(ctx);
 			expect(ctx.getEndpoint.calledOnceWith('auth/token')).toBeTruthy();
 			expect(res).toEqual(testUserToken);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					}
+				}
+			]);
 		});
 		xit('should throw 404 if user does not exist', () => {});
 		xit('should throw 401 on invalid or expired token', () => {});
@@ -110,11 +126,17 @@ describe('RelyingPartyRest', () => {
 				{
 					url: testEndpoint,
 					headers: {
-						Authorization: 'test',
-						'User-Agent': RelyingPartyRest.userAgent
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
 					},
 					formData: {
-						attributes: JSON.stringify(attributes),
+						attributes: {
+							value: JSON.stringify(attributes),
+							options: {
+								contentType: 'application/json'
+							}
+						},
 						'$document-1': {
 							value: documents[0].buffer,
 							options: {
@@ -180,34 +202,34 @@ describe('Relying Party session', () => {
 	describe('establish', () => {
 		it('should athenticate with rp if not active', async () => {
 			const testSignature = 'testSignature';
-			const testChallange = 'challange';
+			const testChallenge = 'challenge';
 			const testToken = 'token';
-			const testChallangeToken = { data: { challange: 'test' } };
+			const testChallengeToken = { data: { challenge: 'test' } };
 			const testServiceToken = { data: 'test' };
 			sinon.stub(session, 'isActive').returns(false);
-			sinon.stub(RelyingPartyRest, 'getChallange').resolves(testChallange);
-			sinon.stub(RelyingPartyRest, 'postChallangeReply').resolves(testToken);
+			sinon.stub(RelyingPartyRest, 'getChallenge').resolves(testChallenge);
+			sinon.stub(RelyingPartyRest, 'postChallengeReply').resolves(testToken);
 			sinon
 				.stub(RelyingPartyToken, 'fromString')
 				.onCall(0)
-				.returns(testChallangeToken)
+				.returns(testChallengeToken)
 				.onCall(1)
 				.returns(testServiceToken);
 			sinon.stub(identity, 'genSignatureForMessage').resolves(testSignature);
 
 			let token = await session.establish();
 
-			expect(RelyingPartyRest.getChallange.calledOnceWith(session.ctx)).toBeTruthy();
+			expect(RelyingPartyRest.getChallenge.calledOnceWith(session.ctx)).toBeTruthy();
 			expect(
-				identity.genSignatureForMessage.calledOnceWith(testChallangeToken.data.challange)
+				identity.genSignatureForMessage.calledOnceWith(testChallengeToken.data.challenge)
 			).toBeTruthy();
-			expect(RelyingPartyRest.postChallangeReply.getCall(0).args).toEqual([
+			expect(RelyingPartyRest.postChallengeReply.getCall(0).args).toEqual([
 				session.ctx,
-				testChallange,
+				testChallenge,
 				testSignature
 			]);
 
-			expect(RelyingPartyToken.fromString.calledWith(testChallange)).toBeTruthy();
+			expect(RelyingPartyToken.fromString.calledWith(testChallenge)).toBeTruthy();
 			expect(RelyingPartyToken.fromString.calledWith(testToken)).toBeTruthy();
 			expect(token).toEqual(testServiceToken);
 			expect(session.ctx.token).toEqual(testServiceToken);
@@ -217,11 +239,11 @@ describe('Relying Party session', () => {
 			session.ctx.token = 'ACTIVE';
 			sinon.stub(session, 'isActive').returns(true);
 
-			sinon.stub(RelyingPartyRest, 'postChallangeReply').resolves(testSessionToken);
+			sinon.stub(RelyingPartyRest, 'postChallengeReply').resolves(testSessionToken);
 
 			let token = await session.establish();
 
-			expect(RelyingPartyRest.postChallangeReply.calledOnce).toBeFalsy();
+			expect(RelyingPartyRest.postChallengeReply.calledOnce).toBeFalsy();
 
 			expect(token).toEqual('ACTIVE');
 			expect(session.ctx.token).toEqual(token);

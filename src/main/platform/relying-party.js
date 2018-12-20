@@ -15,6 +15,9 @@ export class RelyingPartyCtx {
 		this.token = token;
 	}
 	mergeWithConfig() {}
+	getOrigin() {
+		return this.config.origin || 'IDW';
+	}
 	getEndpoint() {}
 	getAttributes() {}
 }
@@ -32,16 +35,26 @@ export class RelyingPartyToken {
 
 export class RelyingPartyRest {
 	static userAgent = userAgent;
-	static getChallange(ctx) {
-		let url = ctx.getEndpoint('challange');
-		return request.get({ url, headers: { 'User-Agent': this.userAgent } });
+	static getAuthorizationHeader(token) {
+		return `Bearer ${token}`;
 	}
-	static postChallangeReply(ctx, challange, signature) {
-		let url = ctx.getEndpoint('challange');
+	static getChallenge(ctx) {
+		let url = ctx.getEndpoint('challenge');
+		return request.get({
+			url,
+			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() }
+		});
+	}
+	static postChallengeReply(ctx, challenge, signature) {
+		let url = ctx.getEndpoint('challenge');
 		return request.post({
 			url,
 			body: { signature },
-			headers: { Authorization: challange, 'User-Agent': this.userAgent },
+			headers: {
+				Authorization: this.getAuthorizationHeader(challenge),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
 			json: true
 		});
 	}
@@ -51,12 +64,16 @@ export class RelyingPartyRest {
 		let url = ctx.getEndpoint('auth/token');
 		return request.get({
 			url,
-			headers: { Authorization: token, 'User-Agent': this.userAgent }
+			headers: {
+				Authorization: this.getAuthorizationHeader(token),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			}
 		});
 	}
 	static createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('user');
+		let url = ctx.getEndpoint('users');
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
@@ -69,11 +86,20 @@ export class RelyingPartyRest {
 			};
 			return acc;
 		}, {});
-		formData.attributes = JSON.stringify(attributes);
+		formData.attributes = {
+			value: JSON.stringify(attributes),
+			options: {
+				contentType: 'application/json'
+			}
+		};
 		return request.post({
 			url,
 			formData,
-			headers: { Authorization: ctx.token.toString(), 'User-Agent': this.userAgent }
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			}
 		});
 	}
 	static listKYCTemplates() {}
@@ -95,10 +121,10 @@ export class RelyingPartySession {
 	}
 	async establish() {
 		if (this.isActive()) return this.ctx.token;
-		let challange = await RelyingPartyRest.getChallange(this.ctx);
-		let challangeToken = RelyingPartyToken.fromString(challange);
-		let signature = await this.identity.genSignatureForMessage(challangeToken.data.challange);
-		let tokenStr = await RelyingPartyRest.postChallangeReply(this.ctx, challange, signature);
+		let challenge = await RelyingPartyRest.getChallenge(this.ctx);
+		let challengeToken = RelyingPartyToken.fromString(challenge);
+		let signature = await this.identity.genSignatureForMessage(challengeToken.data.challenge);
+		let tokenStr = await RelyingPartyRest.postChallengeReply(this.ctx, challenge, signature);
 		let token = RelyingPartyToken.fromString(tokenStr);
 		this.ctx.token = token;
 		return token;
@@ -112,7 +138,7 @@ export class RelyingPartySession {
 			acc = acc.concact(curr.documents);
 			return documents;
 		}, []);
-		let attributesData = attributes.map(attr => attr.data);
+		let attributesData = attributes.map(attr => ({ id: attr.id, data: attr.data }));
 		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
 	}
 }
