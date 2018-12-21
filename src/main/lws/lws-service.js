@@ -1,13 +1,10 @@
-import _ from 'lodash';
 import WebSocket from 'ws';
 import Wallet from '../wallet/wallet';
-import { checkPassword } from '../keystorage';
 import { Logger } from 'common/logger';
-import fetch from 'node-fetch';
-
-import request from 'request';
-import selfkey from 'selfkey.js';
 import pkg from '../../../package.json';
+
+import Identity from '../platform/identity';
+import RelyingPartySession from '../platform/relying-party';
 
 const log = new Logger('LWSService');
 
@@ -34,23 +31,16 @@ export class LWSService {
 		this.app = app;
 	}
 
-	checkWallet(publicKey, conn) {
-		const res = { publicKey, unlocked: false };
-		const privateKey = conn.getUnlockedWallet(publicKey);
-		if (!privateKey) return res;
-		return { ...res, unlocked: true, privateKey };
-	}
-
 	async reqWallets(msg, conn) {
 		const { website } = msg.payload;
 		let payload = await Wallet.findAll();
 		payload = await Promise.all(
 			payload.map(async w => {
-				let checked = this.checkWallet(w.publicKey, conn);
-				let signedUp = await w.hasSignedUpTo(website.url);
+				let unlocked = !!conn.getIdentity(w.publicKey);
+				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
 				return {
 					publicKey: w.publicKey,
-					unlocked: checked.unlocked,
+					unlocked,
 					profile: w.profile,
 					signedUp
 				};
@@ -65,18 +55,19 @@ export class LWSService {
 	}
 
 	async reqUnlock(msg, conn) {
+		let payload = { publicKey: msg.payload.publicKey, unlocked: false };
 		let wallet = await Wallet.findByPublicKey(msg.payload.publicKey);
-		const privateKey = checkPassword(wallet, msg.payload.password);
-		if (privateKey) {
-			conn.unlockWallet(msg.payload.publicKey, privateKey);
+		let identity = new Identity(wallet);
+		payload.profile = identity.profile;
+		try {
+			await identity.unlock({ password: msg.payload.password });
+			conn.addIdentity(identity);
+			payload.unlocked = true;
+			payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
+		} catch (error) {
+			payload.unlocked = false;
 		}
-		let payload = _.pick(
-			this.checkWallet(msg.payload.publicKey, conn),
-			'publicKey',
-			'unlocked'
-		);
-		payload.profile = wallet.profile;
-		payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
+
 		conn.send(
 			{
 				payload
@@ -142,106 +133,31 @@ export class LWSService {
 		}
 	}
 
-	async fetchNonce(url) {
-		try {
-			const resp = await fetch(url, {
-				headers: { Accept: 'application/json', 'User-Agent': userAgent }
-			});
-			return resp.json();
-		} catch (error) {
-			return {
-				error: 'connection error'
-			};
-		}
-	}
-
 	async reqAuth(msg, conn) {
-		try {
-			let check = this.checkWallet(msg.payload.publicKey, conn);
-			if (!check.unlocked) {
-				return this.authResp(
-					{
-						error: true,
-						payload: {
-							code: 'auth_error',
-							message: 'Cannot auth with locked wallet'
-						}
-					},
-					msg,
-					conn
-				);
-			}
-			const nonceResp = await this.fetchNonce(msg.payload.website.apiUrl);
-			if (nonceResp.error || !nonceResp.nonce) {
-				return this.authResp(
-					{
-						error: true,
-						payload: {
-							code: 'nonce_fetch_error',
-							message: nonceResp.error || 'No nonce in response'
-						}
-					},
-					msg,
-					conn
-				);
-			}
-			const signature = await selfkey.createSignature(nonceResp.nonce, check.privateKey);
-			if (!signature) {
-				return this.authResp(
-					{
-						error: true,
-						payload: {
-							code: 'sign_error',
-							message: 'Could not generate signature'
-						}
-					},
-					msg,
-					conn
-				);
-			}
-			let form = {
-				publicKey: msg.payload.publicKey,
-				nonce: nonceResp.nonce,
-				signature: signature
-			};
-			if (msg.payload.attributes) {
-				form.attributes = JSON.stringify(msg.payload.attributes);
-			}
-			const options = {
-				url: msg.payload.website.apiUrl,
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					'User-Agent': userAgent
+		const { publicKey, config, attributes } = msg.payload;
+		let identity = conn.getIdentity(publicKey);
+
+		if (!(await identity.isUnlocked())) {
+			return this.authResp(
+				{
+					error: true,
+					payload: {
+						code: 'auth_error',
+						message: 'Cannot auth with locked wallet'
+					}
 				},
-				form: form
-			};
-			request.post(options, (err, resp, body) => {
-				let lwsResp = {};
-				try {
-					lwsResp = {
-						payload: JSON.parse(body)
-					};
-				} catch (e) {
-					lwsResp = {
-						payload: e
-					};
-				}
-				if (err || resp.statusCode >= 400) {
-					lwsResp.error = true;
-					lwsResp.payload = {
-						code: resp.statusCode,
-						message: body
-					};
-				}
-				conn.send(lwsResp, msg);
-			});
+				msg,
+				conn
+			);
+		}
+		let session = new RelyingPartySession(config, identity);
+		try {
+			await session.establish();
 		} catch (error) {
 			return this.authResp(
 				{
 					payload: {
-						code: 'conn_error',
+						code: 'session_establish',
 						message: error.message
 					},
 					error: true
@@ -249,6 +165,33 @@ export class LWSService {
 				msg,
 				conn
 			);
+		}
+		if (attributes) {
+			try {
+				await session.createUser(attributes);
+			} catch (error) {
+				return this.authResp(
+					{
+						payload: {
+							code: 'user_create_error',
+							message: error.message
+						},
+						error: true
+					},
+					msg,
+					conn
+				);
+			}
+		}
+		try {
+			let payload = await session.getUserLoginPayload();
+			return this.authResp({ payload }, msg, conn);
+		} catch (error) {
+			let payload = {
+				code: error.statusCode || 'token_error',
+				message: error.message
+			};
+			return this.authResp({ payload, error: true }, msg, conn);
 		}
 	}
 
