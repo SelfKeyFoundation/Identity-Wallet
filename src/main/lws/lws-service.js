@@ -55,15 +55,16 @@ export class LWSService {
 	}
 
 	async reqUnlock(msg, conn) {
-		let payload = { publicKey: msg.payload.publicKey, unlocked: false };
-		let wallet = await Wallet.findByPublicKey(msg.payload.publicKey);
+		const { publicKey, password, config } = msg.payload;
+		let payload = { publicKey, unlocked: false };
+		let wallet = await Wallet.findByPublicKey(publicKey);
 		let identity = new Identity(wallet);
 		payload.profile = identity.profile;
 		try {
-			await identity.unlock({ password: msg.payload.password });
+			await identity.unlock({ password });
 			conn.addIdentity(identity);
 			payload.unlocked = true;
-			payload.signedUp = await wallet.hasSignedUpTo(msg.payload.website.url);
+			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);
 		} catch (error) {
 			payload.unlocked = false;
 		}
@@ -76,68 +77,45 @@ export class LWSService {
 		);
 	}
 
-	async getAttributes(publicKey, attributes) {
-		let attributesMapByKey = attributes.reduce(
-			(acc, curr) => ({ ...acc, [curr.key]: curr }),
-			{}
-		);
-		let wallet = await Wallet.findByPublicKey(publicKey).eager('idAttributes');
-		let walletAttrs = wallet.idAttributes.filter(attr => attr.type in attributesMapByKey);
-
-		walletAttrs = await Promise.all(
-			walletAttrs.map(async attr => {
-				if (!attr.hasDocument()) {
-					return attr;
-				}
-				// TODO: Fix, attribute can contain multiple files now
-				let docValue = await attr.loadDocumentDataUrl();
-				return { ...attr, data: { value: docValue }, document: true };
-			})
-		);
-		return walletAttrs.map(attr => ({
-			key: attributesMapByKey[attr.type].key,
-			label: attributesMapByKey[attr.type].label,
-			document: !!attr.document,
-			data: attr.data
-		}));
-	}
-
 	async reqAttributes(msg, conn) {
-		try {
-			const check = this.checkWallet(msg.payload.publicKey, conn);
-			if (!check.unlocked) {
-				return conn.send(
-					{
-						error: true,
-						payload: {
-							code: 'not_authorized',
-							message: 'Wallet is locked, cannot request attributes'
-						}
-					},
-					msg
-				);
-			}
-			const payload = await this.getAttributes(msg.payload.publicKey, msg.payload.attributes);
-			conn.send({ payload }, msg);
-		} catch (error) {
-			conn.send(
+		const { publicKey } = msg.payload;
+		let identity = conn.getIdentity(publicKey);
+
+		if (!identity) {
+			return conn.send(
 				{
 					error: true,
 					payload: {
-						code: 'attributes_error',
-						message: error.message
+						code: 'not_authorized',
+						message: 'Wallet is locked, cannot request attributes'
 					}
 				},
 				msg
 			);
 		}
+
+		// load attribute types, if some are missing --- create it
+		// load attributes related to attribute types with documents
+		// return a list of attributes
+		// conn.send({ payload }, msg);
+		// return an error if something went wrong
+		// conn.send(
+		// 	{
+		// 		error: true,
+		// 		payload: {
+		// 			code: 'attributes_error',
+		// 			message: error.message
+		// 		}
+		// 	},
+		// 	msg
+		// );
 	}
 
 	async reqAuth(msg, conn) {
 		const { publicKey, config, attributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 
-		if (!(await identity.isUnlocked())) {
+		if (!identity) {
 			return this.authResp(
 				{
 					error: true,
@@ -306,16 +284,16 @@ export class WSConnection {
 		this.service = service;
 		this.msgId = 0;
 		this.ctx = {
-			unlockedWallets: {}
+			identities: {}
 		};
 	}
 
-	unlockWallet(publicKey, privateKey) {
-		this.ctx.unlockedWallets[publicKey] = privateKey;
+	addIdentity(publicKey, identity) {
+		this.ctx.identities[publicKey] = identity;
 	}
 
-	getUnlockedWallet(publicKey) {
-		return this.ctx.unlockedWallets[publicKey] || null;
+	getIdentity(publicKey) {
+		return this.ctx.identities[publicKey] || null;
 	}
 
 	async handleMessage(msg) {
