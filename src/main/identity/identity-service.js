@@ -21,6 +21,14 @@ export class IdentityService {
 		return UiSchema.findAll();
 	}
 
+	updateUiSchemas(schemas) {
+		return Promise.all(
+			schemas.map(schema =>
+				UiSchema.addRemote(schema.url, schema.repositoryId, schema.attributeTypeId)
+			)
+		);
+	}
+
 	updateIdAttributeTypes(idAttributeTypes) {
 		return Promise.all(
 			idAttributeTypes.map(attrType => IdAttributeType.addRemote(attrType.url))

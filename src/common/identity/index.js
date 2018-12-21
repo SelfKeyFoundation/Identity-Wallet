@@ -526,3 +526,41 @@ const identitySelectors = {
 export const testExports = { operations };
 
 export { identitySelectors, identityReducers, identityActions, identityOperations };
+
+const reducer = (state = initialState, action) => {
+	switch (action.type) {
+		case identityTypes.IDENTITY_REPOSITORIES_SET:
+			return identityReducers.setRepositoriesReducer(state, action);
+		case identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET:
+			return identityReducers.setIdAttributeTypesReducer(state, action);
+		case identityTypes.IDENTITY_UI_SCHEMAS_SET:
+			return identityReducers.setUiSchemasReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENTS_SET:
+			return identityReducers.setDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENTS_DELETE:
+			return identityReducers.deleteDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTES_SET:
+			return identityReducers.setIdAttributesReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTES_DELETE:
+			return identityReducers.deleteIdAttributesReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET:
+			return identityReducers.setAttributeDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE:
+			return identityReducers.deleteAttributeDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_ADD:
+			return identityReducers.addIdAttributeReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_ADD:
+			return identityReducers.addDocumentReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_UPDATE:
+			return identityReducers.updateIdAttributeReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_UPDATE:
+			return identityReducers.updateDocumentReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_DELETE:
+			return identityReducers.deleteDocumentReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DELETE:
+			return identityReducers.deleteIdAttributeReducer(state, action);
+	}
+	return state;
+};
+
+export default reducer;

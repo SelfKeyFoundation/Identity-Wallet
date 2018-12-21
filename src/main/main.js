@@ -153,21 +153,21 @@ async function loadIdentity(ctx) {
 		// TODO: should be in update manager
 		await ctx.store.dispatch(identityOperations.updateExpiredRepositoriesOperation());
 	} catch (error) {
-		log.error('failed to update repositories from remote');
+		log.error('failed to update repositories from remote %s', error);
 	}
 	await ctx.store.dispatch(identityOperations.loadIdAttributeTypesOperation());
 	try {
 		// TODO: should be in update manager
-		await ctx.store.dispatch(identityOperations.updateExpiredIdAttributeTypesOperation);
+		await ctx.store.dispatch(identityOperations.updateExpiredIdAttributeTypesOperation());
 	} catch (error) {
-		log.error('failed to update id attribute types from remote');
+		log.error('failed to update id attribute types from remote %s', error);
 	}
 	await ctx.store.dispatch(identityOperations.loadUiSchemasOperation());
 	try {
 		// TODO: should be in update manager
-		await ctx.store.dispatch(identityOperations.updateExpiredUiSchemasOperation);
+		await ctx.store.dispatch(identityOperations.updateExpiredUiSchemasOperation());
 	} catch (error) {
-		log.error('failed to update ui schemas from remote');
+		log.error('failed to update ui schemas from remote %s', error);
 	}
 }
 
