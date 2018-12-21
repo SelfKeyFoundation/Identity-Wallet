@@ -32,7 +32,7 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
-		const { website } = msg.payload;
+		const { website } = msg.payload.config;
 		let payload = await Wallet.findAll();
 		payload = await Promise.all(
 			payload.map(async w => {
@@ -120,8 +120,8 @@ export class LWSService {
 				{
 					error: true,
 					payload: {
-						code: 'auth_error',
-						message: 'Cannot auth with locked wallet'
+						code: 'not_authorized',
+						message: 'Wallet is locked, cannot auth with relying party'
 					}
 				},
 				msg,
