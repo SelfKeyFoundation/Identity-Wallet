@@ -147,7 +147,7 @@ function onReady() {
 }
 
 async function loadIdentity(ctx) {
-	// TODO, this probably shouild be initialized in root of react app
+	// TODO, this probably should be initialized in root of react app
 	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
 	try {
 		// TODO: should be in update manager

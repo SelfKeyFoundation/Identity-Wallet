@@ -123,7 +123,7 @@
 		"request": "2.88.0",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#6dbb39f77cb82c7b8cc74ec53cec000ee5d19eeb",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#d4ec709",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",

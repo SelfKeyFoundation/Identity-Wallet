@@ -1,6 +1,7 @@
 import { Model, transaction } from 'objection';
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
+import IdAttribute from '../identity/id-attribute';
 
 const TABLE_NAME = 'wallets';
 const log = new Logger('wallet-model');
@@ -140,6 +141,16 @@ export class Wallet extends BaseModel {
 
 	async addLoginAttempt(attempt) {
 		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
+	}
+
+	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
+		for (let key in initialIdAttributesValues) {
+			await IdAttribute.create({
+				walletId: id,
+				typeId: 1,
+				data: { [key]: initialIdAttributesValues[key] }
+			});
+		}
 	}
 }
 
