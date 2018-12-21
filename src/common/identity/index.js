@@ -1,5 +1,6 @@
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
+import { walletSelectors } from '../wallet';
 
 export const initialState = {
 	repositories: [],
@@ -42,7 +43,9 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE',
-	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE'
+	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE',
+	IDENTITY_UNLOCK: 'identity/UNLOCK',
+	IDENTITY_LOCK: 'identity/LOCK'
 };
 
 const identityActions = {
@@ -163,7 +166,7 @@ const loadDocumentsOperation = walletId => async (dispatch, getState) => {
 const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let attributes = await identityService.loadIdAttributes(walletId);
-	await dispatch(identityActions.setIdAttributesAction(attributes));
+	await dispatch(identityActions.setIdAttributesAction(walletId, attributes));
 };
 
 const loadDocumentsForAttributeOperation = attrId => async (dispatch, getState) => {
@@ -203,7 +206,9 @@ const lockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteIdAttributesAction(walletId));
 	await dispatch(identityActions.deleteDocumentsAction(walletId));
 };
-const unlockIdentityOperation = walletId => async (dispatch, getState) => {
+const unlockIdentityOperation = () => async (dispatch, getState) => {
+	console.log('HEY');
+	const walletId = walletSelectors.getWallet(getState()).id;
 	await operations.loadDocumentsOperation(walletId)(dispatch, getState);
 	await operations.loadIdAttributesOperation(walletId)(dispatch, getState);
 };
@@ -442,6 +447,62 @@ const deleteIdAttributeReducer = (state, action) => {
 	delete attributesById[action.payload];
 	return { ...state, attributesById, attributes };
 };
+
+export const reducers = {
+	setRepositoriesReducer,
+	setIdAttributeTypesReducer,
+	setUiSchemasReducer,
+	setDocumentsReducer,
+	setAttributeDocumentsReducer,
+	deleteAttributeDocumentsReducer,
+	deleteDocumentsReducer,
+	setIdAttributesReducer,
+	deleteIdAttributesReducer,
+	addIdAttributeReducer,
+	addDocumentReducer,
+	updateIdAttributeReducer,
+	updateDocumentReducer,
+	deleteDocumentReducer,
+	deleteIdAttributeReducer
+};
+
+const reducer = (state = initialState, action) => {
+	switch (action.type) {
+		case identityTypes.IDENTITY_REPOSITORIES_SET:
+			return reducers.setRepositoriesReducer(state, action);
+		case identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET:
+			return reducers.setIdAttributeTypesReducer(state, action);
+		case identityTypes.IDENTITY_UI_SCHEMAS_SET:
+			return reducers.setUiSchemasReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENTS_SET:
+			return reducers.setDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENTS_DELETE:
+			return reducers.deleteDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTES_SET:
+			return reducers.setIdAttributesReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTES_DELETE:
+			return reducers.deleteIdAttributesReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DELETE:
+			return reducers.deleteIdAttributeReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_ADD:
+			return reducers.addIdAttributeReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET:
+			return reducers.setAttributeDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE:
+			return reducers.deleteAttributeDocumentsReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_ADD:
+			return reducers.addDocumentReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_UPDATE:
+			return reducers.updateDocumentReducer(state, action);
+		case identityTypes.IDENTITY_ATTRIBUTE_UPDATE:
+			return reducers.updateIdAttributeReducer(state, action);
+		case identityTypes.IDENTITY_DOCUMENT_DELETE:
+			return reducers.deleteDocumentReducer(state, action);
+	}
+	return state;
+};
+
+export default reducer;
 
 const identityReducers = {
 	setRepositoriesReducer,

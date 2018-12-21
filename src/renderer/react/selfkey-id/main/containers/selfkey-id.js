@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SelfkeyId from '../components/selfkey-id';
+import { identitySelectors, identityOperations } from 'common/identity';
+import { walletSelectors } from 'common/wallet';
 
 class SelfkeyIdContainer extends Component {
+	componentDidMount() {
+		this.props.dispatch(identityOperations.unlockIdentityOperation());
+	}
+
 	render() {
 		return <SelfkeyId {...this.props} />;
 	}
@@ -16,14 +22,6 @@ const mapStateToProps = (state, props) => {
 		}
 	];
 
-	const attributes = [
-		{
-			name: 'Fisrt Name',
-			record: 'Rob',
-			lastedited: '2018-11-16 05:47'
-		}
-	];
-
 	const documents = [
 		{
 			name: 'Passport',
@@ -31,7 +29,16 @@ const mapStateToProps = (state, props) => {
 			lastedited: '2018-11-16 05:47'
 		}
 	];
-	return { attributeHistory, attributes, documents };
+
+	const attributes = identitySelectors.selectIdentity(state)
+		? identitySelectors.selectIdAttributes(state, walletSelectors.getWallet(state).id)
+		: [];
+	console.log('state', state);
+	return {
+		attributeHistory,
+		attributes,
+		documents
+	};
 };
 
 export default connect(mapStateToProps)(SelfkeyIdContainer);

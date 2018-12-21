@@ -14,6 +14,7 @@ import addressBook from '../address-book';
 import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import marketplaces from '../marketplaces';
+import identity from '../identity';
 
 import {
 	forwardToMain,
@@ -51,7 +52,8 @@ export default (initialState, scope = 'main') => {
 		transaction,
 		addressBook,
 		exchanges,
-		marketplaces
+		marketplaces,
+		identity
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
