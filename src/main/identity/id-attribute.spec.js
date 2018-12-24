@@ -1,4 +1,5 @@
 import IdAttribute from './id-attribute';
+import IdAttributeType from './id-attribute-type';
 import Document from './document';
 import TestDb from '../db/test-db';
 
@@ -67,5 +68,46 @@ describe('IdAttribute model', () => {
 		expect(doc).toBeUndefined();
 		attr = await IdAttribute.query().findById(attr.id);
 		expect(attr).toBeUndefined();
+	});
+
+	it('findByTypeUrls', async () => {
+		await IdAttributeType.create({
+			url: 'test',
+			content: {},
+			expires: 0,
+			defaultRepositoryId: 1
+		});
+		await IdAttributeType.create({
+			url: 'test2',
+			content: {},
+			expires: 0,
+			defaultRepositoryId: 1
+		});
+		await IdAttributeType.create({
+			url: 'test3',
+			content: {},
+			expires: 0,
+			defaultRepositoryId: 1
+		});
+		await IdAttribute.create({ walletId: 1, typeId: 1, data: { value: 'test' } });
+		await IdAttribute.create({ walletId: 1, typeId: 2, data: { value: 'test1' } });
+		await IdAttribute.create({ walletId: 2, typeId: 2, data: { value: 'test1-1' } });
+		await IdAttribute.create({
+			walletId: 1,
+			typeId: 2,
+			data: { value: 'test1.1' },
+			documents: [testDoc]
+		});
+		await IdAttribute.create({ walletId: 1, typeId: 3, data: { value: 'test2' } });
+
+		let attrs = await IdAttribute.findByTypeUrls(1, ['test', 'test2']);
+
+		expect(attrs.map(attr => attr.data.value)).toEqual(['test', 'test1', 'test1.1']);
+
+		attrs = await IdAttribute.findByTypeUrls(1, ['test', 'test2']).eager(
+			'[documents, attributeType]'
+		);
+		expect(attrs[2].documents.length).toBe(1);
+		expect(attrs[1].attributeType.id).toBe(2);
 	});
 });

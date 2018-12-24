@@ -1,5 +1,7 @@
+import sinon from 'sinon';
 import Identity from './identity';
 import { getPrivateKey } from '../keystorage';
+import { IdAttribute } from '../identity/id-attribute';
 
 jest.mock('../keystorage');
 
@@ -11,11 +13,13 @@ describe('identity', () => {
 		id = new Identity({
 			publicKey,
 			privateKey,
-			profile: 'local'
+			profile: 'local',
+			wid: 1
 		});
 	});
 	afterEach(() => {
 		getPrivateKey.mockRestore();
+		sinon.restore();
 	});
 	it('isUnlocked', async () => {
 		expect(await id.isUnlocked()).toBeTruthy();
@@ -69,5 +73,16 @@ describe('identity', () => {
 			expect(id1.privateKey).toEqual(privateKey);
 		});
 	});
-	it('getIdAttributes', async () => {});
+	it('getAttributesByTypes', async () => {
+		sinon.stub(IdAttribute, 'findAllByWalletId').returns({
+			eager() {
+				return 'ok';
+			}
+		});
+
+		let res = await id.getAttributesByTypes(['test1', 'test2']);
+
+		expect(IdAttribute.findAllByWalletId.getCall(0).args).toEqual([id.wid, ['test1', 'test2']]);
+		expect(res).toEqual('ok');
+	});
 });

@@ -2,6 +2,7 @@ import ethUtil from 'ethereumjs-util';
 import config from 'common/config';
 
 import { getPrivateKey } from '../keystorage';
+import { IdAttribute } from '../identity/id-attribute';
 
 class Identity {
 	constructor(wallet) {
@@ -10,6 +11,7 @@ class Identity {
 		this.privateKey = wallet.privateKey;
 		this.chainId = config.chainId;
 		this.keystorePath = wallet.keystoreFilePath;
+		this.wid = wallet.id;
 	}
 	// async for future hardware wallet support
 	async isUnlocked() {
@@ -31,6 +33,10 @@ class Identity {
 		} catch (error) {
 			throw new Error('INVALID_PASSWORD');
 		}
+	}
+
+	getAttributesByTypes(types = []) {
+		return IdAttribute.findAllByWalletId(this.wid, types).eager('[documents, attributeType]');
 	}
 }
 

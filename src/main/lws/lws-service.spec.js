@@ -1,6 +1,5 @@
 import { LWSService, WSConnection } from './lws-service';
 import { Wallet } from '../wallet/wallet';
-import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
 import Identity from '../platform/identity';
 import RelyingPartySession from '../platform/relying-party';
@@ -143,128 +142,58 @@ describe('lws-service', () => {
 				false
 			);
 		});
-		xdescribe('getAttributes', () => {
-			// TODO: fix attributes json schema
-			const attributes = [
-				IdAttribute.fromJson({
-					id: 1,
-					walletId: 1,
-					typeId: 1,
-					data: { value: 'test' },
-					documents: null
-				}),
-				IdAttribute.fromJson({
-					id: 2,
-					walletId: 1,
-					typeId: 2,
-					data: { value1: 'test1', value2: 'test2' },
-					documents: null
-				}),
-				IdAttribute.fromJson({
-					id: 3,
-					walletId: 1,
-					typeId: 3,
-					data: {},
-					documents: [
-						{
-							mimeType: 'test',
-							buffer: Buffer.from('test', 'utf8'),
-							size: 10,
-							attributeId: 3
-						}
-					]
-				})
-			];
-			beforeEach(() => {
-				sinon.stub(Wallet, 'findByPublicKey').returns({
-					eager: () =>
-						Promise.resolve({
-							idAttributes: attributes
-						})
-				});
-			});
-			it('get simple attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } }
-				]);
-			});
-			it('get missing attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' },
-					{ key: 'missing', label: 'Missing1' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } }
-				]);
-			});
-			it('get document attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' },
-					{ key: 'test3', label: 'Test3' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } },
-					{
-						key: 'test3',
-						label: 'Test3',
-						document: true,
-						data: { value: 'data:test;base64,dGVzdA==' }
-					}
-				]);
-			});
-		});
-		xdescribe('reqAttributes', () => {
-			it('returns error for locked wallet', async () => {
-				const wallet = { publicKey: 'locked', profile: 'local' };
-				const conn = connMock(wallet);
-				const resolvedAttrs = [
-					{ key: 'test_key', label: 'Test Label', data: { value: 'test data' } }
-				];
-				sinon.stub(service, 'checkWallet').returns({ unlocked: !!wallet.privateKey });
-				sinon.stub(conn, 'send');
-				sinon.stub(service, 'getAttributes').resolves(resolvedAttrs);
-				const msg = { payload: { ...wallet, attributes: [] } };
-
+		describe('reqAttributes', () => {
+			it('send auth error if wallet is locked', async () => {
+				const conn = {};
+				const msg = { payload: { publicKey: 'test' } };
+				conn.getIdentity = sinon.stub().returns(null);
+				conn.send = sinon.stub().returns(null);
 				await service.reqAttributes(msg, conn);
-
-				expect(
-					conn.send.calledWithMatch(
-						{
-							error: true,
-							payload: {
-								code: 'not_authorized',
-								message: 'Wallet is locked, cannot request attributes'
-							}
-						},
-						msg
-					)
-				).toBeTruthy();
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						error: true,
+						payload: {
+							code: 'not_authorized',
+							message: 'Wallet is locked, cannot request attributes'
+						}
+					},
+					msg
+				]);
 			});
 
 			it('returns attributes', async () => {
-				const wallet = { publicKey: 'unlocked', privateKey: 'ok', profile: 'local' };
-				const conn = connMock(wallet);
-				const resolvedAttrs = [
-					{ key: 'test_key', label: 'Test Label', data: { value: 'test data' } }
-				];
-				sinon.stub(service, 'checkWallet').returns({ unlocked: !!wallet.privateKey });
-				sinon.stub(conn, 'send');
-				sinon.stub(service, 'getAttributes').resolves(resolvedAttrs);
-				const msg = { payload: { ...wallet, attributes: [] } };
-
+				const conn = {};
+				const msg = { payload: { publicKey: 'test', attributes: [] } };
+				let ident = { getAttributesByTypes() {} };
+				sinon.stub(ident, 'getAttributesByTypes').resolves([
+					{
+						attributeType: { url: 'test1', content: {} },
+						data: { value: 1 },
+						documents: [],
+						id: 1
+					},
+					{
+						attributeType: { url: 'test2', content: {} },
+						data: { value: 2 },
+						documents: [],
+						id: 2
+					}
+				]);
+				conn.getIdentity = sinon.stub().returns(ident);
+				conn.send = sinon.stub().returns(null);
 				await service.reqAttributes(msg, conn);
-
-				expect(
-					conn.send.calledWithMatch(
-						{
-							payload: resolvedAttrs
-						},
-						msg
-					)
-				).toBeTruthy();
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						payload: {
+							publicKey: 'test',
+							attributes: [
+								{ url: 'test1', schema: {}, value: 1, id: 1 },
+								{ url: 'test2', schema: {}, value: 2, id: 2 }
+							]
+						}
+					},
+					msg
+				]);
 			});
 		});
 
@@ -498,7 +427,6 @@ describe('lws-service', () => {
 					conn
 				]);
 			});
-			xit('returns user token payload', async () => {});
 		});
 
 		describe('reqUnknown', () => {

@@ -5,6 +5,7 @@ import pkg from '../../../package.json';
 
 import Identity from '../platform/identity';
 import RelyingPartySession from '../platform/relying-party';
+import identityUtils from '../../common/identity/utils';
 
 const log = new Logger('LWSService');
 
@@ -78,7 +79,7 @@ export class LWSService {
 	}
 
 	async reqAttributes(msg, conn) {
-		const { publicKey } = msg.payload;
+		const { publicKey, attributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 
 		if (!identity) {
@@ -93,22 +94,39 @@ export class LWSService {
 				msg
 			);
 		}
+		try {
+			let fetchedAttrs = await identity.getAttributesByTypes(
+				attributes.map(attr => attr.id || attr)
+			);
+			let payload = fetchedAttrs.map(attr => {
+				let schema = attr.attributeType.content;
+				let value = attr.data.value;
+				let documents = attr.documents;
+				return {
+					url: attr.attributeType.url,
+					value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
+						schema,
+						value,
+						documents
+					).value,
+					schema: schema,
+					id: attr.id
+				};
+			});
 
-		// load attribute types, if some are missing --- create it
-		// load attributes related to attribute types with documents
-		// return a list of attributes
-		// conn.send({ payload }, msg);
-		// return an error if something went wrong
-		// conn.send(
-		// 	{
-		// 		error: true,
-		// 		payload: {
-		// 			code: 'attributes_error',
-		// 			message: error.message
-		// 		}
-		// 	},
-		// 	msg
-		// );
+			return conn.send({ payload: { publicKey, attributes: payload } }, msg);
+		} catch (error) {
+			conn.send(
+				{
+					error: true,
+					payload: {
+						code: 'attributes_error',
+						message: error.message
+					}
+				},
+				msg
+			);
+		}
 	}
 
 	async reqAuth(msg, conn) {
@@ -146,7 +164,18 @@ export class LWSService {
 		}
 		if (attributes) {
 			try {
-				await session.createUser(attributes);
+				let rpAttributes = attributes.map(attr => {
+					let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
+						attr.schema,
+						attr.value
+					);
+					return {
+						id: attr.url,
+						data: normalized.value,
+						documents: normalized.documents
+					};
+				});
+				await session.createUser(rpAttributes);
 			} catch (error) {
 				return this.authResp(
 					{

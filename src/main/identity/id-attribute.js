@@ -104,5 +104,13 @@ export class IdAttribute extends BaseModel {
 			throw error;
 		}
 	}
+
+	static findByTypeUrls(walletId, urls = []) {
+		return this.query()
+			.select(`${TABLE_NAME}.*`)
+			.join('id_attribute_types', `${TABLE_NAME}.typeId`, 'id_attribute_types.id')
+			.where({ walletId })
+			.whereIn('id_attribute_types.url', urls);
+	}
 }
 export default IdAttribute;
