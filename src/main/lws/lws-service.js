@@ -63,10 +63,11 @@ export class LWSService {
 		payload.profile = identity.profile;
 		try {
 			await identity.unlock({ password });
-			conn.addIdentity(identity);
+			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
 			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);
 		} catch (error) {
+			log.error(error);
 			payload.unlocked = false;
 		}
 
@@ -81,7 +82,6 @@ export class LWSService {
 	async reqAttributes(msg, conn) {
 		const { publicKey, attributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
-
 		if (!identity) {
 			return conn.send(
 				{
@@ -132,7 +132,7 @@ export class LWSService {
 	async reqAuth(msg, conn) {
 		const { publicKey, config, attributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
-
+		console.log(publicKey, identity);
 		if (!identity) {
 			return this.authResp(
 				{
@@ -219,11 +219,11 @@ export class LWSService {
 	}
 
 	formatLoginAttempt(msg, resp) {
-		let { website, attributes = [] } = msg.payload || {};
+		let { config, attributes = [] } = msg.payload || {};
+		let website = config.website;
 		let attempt = {
 			websiteName: website.name,
 			websiteUrl: website.url,
-			apiUrl: website.apiUrl,
 			signup: attributes.length > 0,
 			success: true,
 			errorCode: null,

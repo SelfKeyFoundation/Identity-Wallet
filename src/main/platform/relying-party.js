@@ -18,7 +18,25 @@ export class RelyingPartyCtx {
 	getOrigin() {
 		return this.config.origin || 'IDW';
 	}
-	getEndpoint() {}
+	getEndpoint(name) {
+		let rootEndpoint = this.getRootEndpoint();
+		let endpoints = this.config.endpoints;
+		let url = endpoints[name];
+		if (!url) {
+			// TODO: make it safe
+			url = `${rootEndpoint}/name`;
+		}
+		return url;
+	}
+	getRootEndpoint() {
+		let root = this.config.rootEndpoint;
+		let url = this.config.website.url;
+		if (!root.match(/^https?:/)) {
+			// TODO: make this safe
+			root = url + root;
+		}
+		return root;
+	}
 	getAttributes() {}
 }
 
@@ -39,16 +57,16 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static getChallenge(ctx) {
-		let url = ctx.getEndpoint('challenge');
+		let uri = ctx.getEndpoint('challenge');
 		return request.get({
-			url,
+			uri,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() }
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature) {
-		let url = ctx.getEndpoint('challenge');
+		let uri = ctx.getEndpoint('challenge');
 		return request.post({
-			url,
+			uri,
 			body: { signature },
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
@@ -61,9 +79,9 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('auth/token');
+		let uri = ctx.getEndpoint('auth/token');
 		return request.get({
-			url,
+			uri,
 			headers: {
 				Authorization: this.getAuthorizationHeader(token),
 				'User-Agent': this.userAgent,
@@ -73,7 +91,7 @@ export class RelyingPartyRest {
 	}
 	static createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('users');
+		let uri = ctx.getEndpoint('users');
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
@@ -93,7 +111,7 @@ export class RelyingPartyRest {
 			}
 		};
 		return request.post({
-			url,
+			uri,
 			formData,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),

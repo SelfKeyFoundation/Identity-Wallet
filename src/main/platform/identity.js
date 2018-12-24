@@ -29,14 +29,15 @@ class Identity {
 			throw new Error('NOT_SUPPORTED');
 		}
 		try {
-			this.privateKey = getPrivateKey(this.keystoreFilePath, config.password);
+			this.privateKey = getPrivateKey(this.keystorePath, config.password);
 		} catch (error) {
+			console.log(error);
 			throw new Error('INVALID_PASSWORD');
 		}
 	}
 
 	getAttributesByTypes(types = []) {
-		return IdAttribute.findAllByWalletId(this.wid, types).eager('[documents, attributeType]');
+		return IdAttribute.findByTypeUrls(this.wid, types).eager('[documents, attributeType]');
 	}
 }
 
