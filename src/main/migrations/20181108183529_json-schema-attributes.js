@@ -3,13 +3,14 @@
 const selfkeyPlatform = require('../assets/data/selfkey-platform.json');
 
 const getAttribute = url => {
+	console.log('XXX', url);
 	let found = selfkeyPlatform.attributes.filter(attr => attr.$id === url);
 	return found[0] || null;
 };
 
 const populateInitialRepo = async (ctx, knex, Promise) => {
 	let repoIDs = await knex('repository').insert({
-		url: 'https://platform.selfkey.org/repository.json',
+		url: 'http://platform.selfkey.org/repository.json',
 		name: 'Selfkey.org',
 		eager: true,
 		content: '{}',
@@ -22,7 +23,7 @@ const populateInitialRepo = async (ctx, knex, Promise) => {
 };
 
 const attributeUrlForKey = key => {
-	return `https://platform.selfkey.org/schema/attribute/${key.replace(/_/g, '-')}.json`;
+	return `http://platform.selfkey.org/schema/attribute/${key.replace(/_/g, '-')}.json`;
 };
 
 const migrateAttributeTypes = async (ctx, knex, Promise) => {
@@ -71,6 +72,7 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 			let url = attributeUrlForKey(key);
 
 			let attr = getAttribute(url);
+			console.log('XXX', attr);
 
 			let newType = {
 				oldKey,
@@ -146,6 +148,7 @@ const mergeAttributes = async (target, attrs, knex, ctx) => {
 			createdAt: ctx.now,
 			updatedAt: ctx.now
 		};
+		console.log('XXX', content);
 		let ids = await knex('id_attributes_types').insert(targetAttrType);
 
 		targetAttrType.id = ids[0];

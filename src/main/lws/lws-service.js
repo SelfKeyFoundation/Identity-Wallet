@@ -96,7 +96,7 @@ export class LWSService {
 		}
 		try {
 			let fetchedAttrs = await identity.getAttributesByTypes(
-				attributes.map(attr => attr.id || attr)
+				attributes.map(attr => attr.id || attr.attribute || attr)
 			);
 			let payload = fetchedAttrs.map(attr => {
 				let schema = attr.attributeType.content;
@@ -364,7 +364,7 @@ export class WSConnection {
 		if (!msg.type && msg.error) {
 			msg.type = 'error';
 		}
-		log.info('lws resp %2j', msg);
+		log.debug('lws resp %2j', msg);
 		this.conn.send(JSON.stringify(msg));
 	}
 }
