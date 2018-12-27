@@ -101,7 +101,10 @@ export class LWSService {
 			let payload = fetchedAttrs.map(attr => {
 				let schema = attr.attributeType.content;
 				let value = attr.data.value;
-				let documents = attr.documents;
+				let documents = attr.documents.map(doc => {
+					doc.buffer = doc.buffer.toString('base64');
+					return doc;
+				});
 				return {
 					url: attr.attributeType.url,
 					value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
@@ -132,7 +135,7 @@ export class LWSService {
 	async reqAuth(msg, conn) {
 		const { publicKey, config, attributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
-		console.log(publicKey, identity);
+		console.log('XXX starting auth', publicKey, identity);
 		if (!identity) {
 			return this.authResp(
 				{
@@ -150,6 +153,7 @@ export class LWSService {
 		try {
 			await session.establish();
 		} catch (error) {
+			log.error(error);
 			return this.authResp(
 				{
 					payload: {
@@ -162,7 +166,8 @@ export class LWSService {
 				conn
 			);
 		}
-		if (attributes) {
+		console.log('XXX session established auth', session.ctx);
+		if (attributes && attributes.length) {
 			try {
 				let rpAttributes = attributes.map(attr => {
 					let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
@@ -171,12 +176,18 @@ export class LWSService {
 					);
 					return {
 						id: attr.url,
+						schema: attr.schema,
 						data: normalized.value,
-						documents: normalized.documents
+						documents: normalized.documents.map(doc => {
+							doc.buffer = Buffer.from(doc.buffer, 'base64');
+							return doc;
+						})
 					};
 				});
 				await session.createUser(rpAttributes);
+				console.log('XXX user created ', rpAttributes);
 			} catch (error) {
+				log.error(error);
 				return this.authResp(
 					{
 						payload: {
@@ -192,8 +203,10 @@ export class LWSService {
 		}
 		try {
 			let payload = await session.getUserLoginPayload();
+			console.log('XXX user payload ', payload);
 			return this.authResp({ payload }, msg, conn);
 		} catch (error) {
+			log.error(error);
 			let payload = {
 				code: error.statusCode || 'token_error',
 				message: error.message

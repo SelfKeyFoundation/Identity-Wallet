@@ -1,17 +1,21 @@
 import ethUtil from 'ethereumjs-util';
-import config from 'common/config';
-
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 
 class Identity {
 	constructor(wallet) {
-		this.publicKey = wallet.publicKey;
+		this.address = '0x' + wallet.publicKey;
+		this.publicKey = null;
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey;
-		this.chainId = config.chainId;
 		this.keystorePath = wallet.keystoreFilePath;
 		this.wid = wallet.id;
+
+		if (this.privateKey) {
+			this.publicKey = ethUtil
+				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
+				.toString('hex');
+		}
 	}
 	// async for future hardware wallet support
 	async isUnlocked() {
@@ -20,8 +24,8 @@ class Identity {
 
 	async genSignatureForMessage(msg) {
 		let msgHash = ethUtil.hashPersonalMessage(Buffer.from(msg));
-		let signature = ethUtil.ecsign(msgHash, this.privateKey, this.chainId);
-		return ethUtil.toRpcSig(signature.v, signature.r, signature.s, this.chainId);
+		let signature = ethUtil.ecsign(msgHash, Buffer.from(this.privateKey, 'hex'));
+		return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
 	}
 
 	async unlock(config) {
@@ -29,7 +33,10 @@ class Identity {
 			throw new Error('NOT_SUPPORTED');
 		}
 		try {
-			this.privateKey = getPrivateKey(this.keystorePath, config.password);
+			this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
+			this.publicKey = ethUtil
+				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
+				.toString('hex');
 		} catch (error) {
 			console.log(error);
 			throw new Error('INVALID_PASSWORD');

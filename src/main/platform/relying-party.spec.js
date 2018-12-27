@@ -14,7 +14,6 @@ afterEach(() => {
 describe('RelyingPartyCtx', () => {
 	describe('mergeConfig', () => {});
 	describe('getEndpoing', () => {});
-	describe('getAttributes', () => {});
 	describe('getOrigin', () => {});
 });
 
@@ -37,7 +36,7 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(request, 'get').resolves(testChallnage);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.getChallenge(ctx);
-			expect(ctx.getEndpoint.calledOnceWith('challenge')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
@@ -57,7 +56,7 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.postChallengeReply(ctx, testChallenge, testSignature);
-			expect(ctx.getEndpoint.calledOnceWith('challenge')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
@@ -108,11 +107,21 @@ describe('RelyingPartyRest', () => {
 	describe('createUser', () => {
 		it('Should return 201 if user successfully created/updated', async () => {
 			const testEndpoint = 'http://test';
-			let attributes = [{ test1: 'test1' }, { test2: 'test2' }];
-			let documents = [
-				{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') },
-				{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
+			let attributes = [
+				{
+					test1: 'test1',
+					documents: [
+						{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') }
+					]
+				},
+				{
+					test2: 'test2',
+					documents: [
+						{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
+					]
+				}
 			];
+
 			ctx.token = {
 				toString() {
 					return 'test';
@@ -120,7 +129,7 @@ describe('RelyingPartyRest', () => {
 			};
 			sinon.stub(request, 'post').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
+			let res = await RelyingPartyRest.createUser(ctx, attributes);
 			expect(res).toEqual('ok');
 			expect(request.post.getCall(0).args).toEqual([
 				{
@@ -132,25 +141,34 @@ describe('RelyingPartyRest', () => {
 					},
 					formData: {
 						attributes: {
-							value: JSON.stringify(attributes),
+							value: JSON.stringify([
+								{
+									test1: 'test1',
+									documents: [1]
+								},
+								{
+									test2: 'test2',
+									documents: [2]
+								}
+							]),
 							options: {
 								contentType: 'application/json'
 							}
 						},
 						'$document-1': {
-							value: documents[0].buffer,
+							value: attributes[0].documents[0].buffer,
 							options: {
-								contentType: documents[0].mimeType,
+								contentType: attributes[0].documents[0].mimeType,
 								fileName: null,
-								knownSize: documents[0].size
+								knownSize: attributes[0].documents[0].size
 							}
 						},
 						'$document-2': {
-							value: documents[1].buffer,
+							value: attributes[1].documents[0].buffer,
 							options: {
-								contentType: documents[1].mimeType,
+								contentType: attributes[1].documents[0].mimeType,
 								fileName: null,
-								knownSize: documents[1].size
+								knownSize: attributes[1].documents[0].size
 							}
 						}
 					}

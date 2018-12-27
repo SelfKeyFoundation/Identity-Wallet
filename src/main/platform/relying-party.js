@@ -1,5 +1,7 @@
 import request from 'request-promise-native';
 import config from 'common/config';
+import jwt from 'jsonwebtoken';
+import urljoin from 'url-join';
 
 const { userAgent } = config;
 export class RelyingPartyError extends Error {
@@ -23,21 +25,19 @@ export class RelyingPartyCtx {
 		let endpoints = this.config.endpoints;
 		let url = endpoints[name];
 		if (!url) {
-			// TODO: make it safe
-			url = `${rootEndpoint}/name`;
+			url = urljoin(rootEndpoint, name);
 		}
+		console.log('XXX url', url);
 		return url;
 	}
 	getRootEndpoint() {
 		let root = this.config.rootEndpoint;
 		let url = this.config.website.url;
 		if (!root.match(/^https?:/)) {
-			// TODO: make this safe
-			root = url + root;
+			root = urljoin(url, root);
 		}
 		return root;
 	}
-	getAttributes() {}
 }
 
 export class RelyingPartyToken {
@@ -46,9 +46,29 @@ export class RelyingPartyToken {
 		this.data = data;
 		this.sig = sig;
 	}
-	static fromString(str) {}
-	toString() {}
-	hasExpired() {}
+	static fromString(str) {
+		let decoded = jwt.decode(str, { complete: true });
+		console.log('XXX decoded', decoded, str);
+		return new RelyingPartyToken(decoded.header, decoded.payload, decoded.signature);
+	}
+	toString() {
+		function base64url(buf) {
+			return buf
+				.toString('base64')
+				.replace(/=/g, '')
+				.replace(/\+/g, '-')
+				.replace(/\//g, '_');
+		}
+		const encodedHeader = base64url(Buffer.from(JSON.stringify(this.algo), 'utf8'));
+		const encodedPayload = base64url(Buffer.from(JSON.stringify(this.data), 'utf8'));
+
+		return `${encodedHeader}.${encodedPayload}.${this.sig}`;
+	}
+
+	hasExpired() {
+		const ts = Math.floor(Date.now() / 1000);
+		return ts > this.data.exp;
+	}
 }
 
 export class RelyingPartyRest {
@@ -57,16 +77,28 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static getChallenge(ctx) {
-		let uri = ctx.getEndpoint('challenge');
+		let url = ctx.getEndpoint('auth/challenge');
+		url = urljoin(url, ctx.identity.publicKey);
 		return request.get({
-			uri,
-			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() }
+			url,
+			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
+			json: true
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature) {
-		let uri = ctx.getEndpoint('challenge');
+		let url = ctx.getEndpoint('auth/challenge');
+		console.log('XXX', {
+			url,
+			body: { signature },
+			headers: {
+				Authorization: this.getAuthorizationHeader(challenge),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
 		return request.post({
-			uri,
+			url,
 			body: { signature },
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
@@ -79,39 +111,41 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let uri = ctx.getEndpoint('auth/token');
+		let url = ctx.getEndpoint('auth/token');
 		return request.get({
-			uri,
+			url,
 			headers: {
 				Authorization: this.getAuthorizationHeader(token),
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
-			}
+			},
+			json: true
 		});
 	}
-	static createUser(ctx, attributes, documents = []) {
+	static createUser(ctx, attributes, documents) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let uri = ctx.getEndpoint('users');
+		let url = ctx.getEndpoint('users');
+		console.log('XXX', attributes);
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
 				value: curr.buffer,
 				options: {
 					contentType: curr.mimeType,
-					fileName: curr.name || null,
-					knownSize: curr.size
+					filename: curr.name || `document-${curr.id}`,
+					knownLength: curr.size
 				}
 			};
 			return acc;
 		}, {});
+		console.log('XXX attributes', attributes);
 		formData.attributes = {
 			value: JSON.stringify(attributes),
-			options: {
-				contentType: 'application/json'
-			}
+			options: { contentType: 'application/json' }
 		};
+		console.log('XXX', formData);
 		return request.post({
-			uri,
+			url,
 			formData,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
@@ -140,10 +174,15 @@ export class RelyingPartySession {
 	async establish() {
 		if (this.isActive()) return this.ctx.token;
 		let challenge = await RelyingPartyRest.getChallenge(this.ctx);
-		let challengeToken = RelyingPartyToken.fromString(challenge);
+		console.log('XXX challange', challenge);
+		let challengeToken = RelyingPartyToken.fromString(challenge.jwt);
 		let signature = await this.identity.genSignatureForMessage(challengeToken.data.challenge);
-		let tokenStr = await RelyingPartyRest.postChallengeReply(this.ctx, challenge, signature);
-		let token = RelyingPartyToken.fromString(tokenStr);
+		let challengeReply = await RelyingPartyRest.postChallengeReply(
+			this.ctx,
+			challenge.jwt,
+			signature
+		);
+		let token = RelyingPartyToken.fromString(challengeReply.jwt);
 		this.ctx.token = token;
 		return token;
 	}
@@ -153,10 +192,19 @@ export class RelyingPartySession {
 
 	createUser(attributes = []) {
 		let documents = attributes.reduce((acc, curr) => {
-			acc = acc.concact(curr.documents);
-			return documents;
+			acc = acc.concat(curr.documents);
+			return acc;
 		}, []);
-		let attributesData = attributes.map(attr => ({ id: attr.id, data: attr.data }));
+		attributes = attributes.map(attr => {
+			attr = { ...attr, documents: (attr.documents || []).map(doc => doc.id) };
+			return attr;
+		});
+		let attributesData = attributes.map(attr => ({
+			id: attr.id,
+			data: attr.data,
+			schema: attr.schema,
+			documents: attr.documents
+		}));
 		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
 	}
 }
