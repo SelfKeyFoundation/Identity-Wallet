@@ -44,7 +44,6 @@ class Identity {
 	}
 
 	getAttributesByTypes(types = []) {
-		console.log('XXX', types);
 		return IdAttribute.findByTypeUrls(this.wid, types.filter(t => typeof t === 'string')).eager(
 			'[documents, attributeType]'
 		);

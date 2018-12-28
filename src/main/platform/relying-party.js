@@ -27,7 +27,6 @@ export class RelyingPartyCtx {
 		if (!url) {
 			url = urljoin(rootEndpoint, name);
 		}
-		console.log('XXX url', url);
 		return url;
 	}
 	getRootEndpoint() {
@@ -48,7 +47,6 @@ export class RelyingPartyToken {
 	}
 	static fromString(str) {
 		let decoded = jwt.decode(str, { complete: true });
-		console.log('XXX decoded', decoded, str);
 		return new RelyingPartyToken(decoded.header, decoded.payload, decoded.signature);
 	}
 	toString() {
@@ -87,16 +85,6 @@ export class RelyingPartyRest {
 	}
 	static postChallengeReply(ctx, challenge, signature) {
 		let url = ctx.getEndpoint('auth/challenge');
-		console.log('XXX', {
-			url,
-			body: { signature },
-			headers: {
-				Authorization: this.getAuthorizationHeader(challenge),
-				'User-Agent': this.userAgent,
-				Origin: ctx.getOrigin()
-			},
-			json: true
-		});
 		return request.post({
 			url,
 			body: { signature },
@@ -125,7 +113,6 @@ export class RelyingPartyRest {
 	static createUser(ctx, attributes, documents) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let url = ctx.getEndpoint('users');
-		console.log('XXX', attributes);
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
@@ -138,12 +125,10 @@ export class RelyingPartyRest {
 			};
 			return acc;
 		}, {});
-		console.log('XXX attributes', attributes);
 		formData.attributes = {
 			value: JSON.stringify(attributes),
 			options: { contentType: 'application/json' }
 		};
-		console.log('XXX', formData);
 		return request.post({
 			url,
 			formData,
@@ -174,7 +159,6 @@ export class RelyingPartySession {
 	async establish() {
 		if (this.isActive()) return this.ctx.token;
 		let challenge = await RelyingPartyRest.getChallenge(this.ctx);
-		console.log('XXX challange', challenge);
 		let challengeToken = RelyingPartyToken.fromString(challenge.jwt);
 		let signature = await this.identity.genSignatureForMessage(challengeToken.data.challenge);
 		let challengeReply = await RelyingPartyRest.postChallengeReply(

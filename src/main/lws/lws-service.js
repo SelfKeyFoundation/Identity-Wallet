@@ -169,7 +169,6 @@ export class LWSService {
 		}
 		try {
 			let payload = await session.getUserLoginPayload();
-			console.log('XXX user payload ', payload);
 			return this.authResp({ payload }, msg, conn);
 		} catch (error) {
 			log.error(error);
@@ -287,7 +286,6 @@ export class LWSService {
 			errorMessage: null
 		};
 		if (resp.error) {
-			console.log('XXX', resp);
 			attempt.success = false;
 			attempt.errorCode = resp.payload.code || 'unknown_error';
 			attempt.errorMessage = resp.payload.message || 'Unknown Error';
