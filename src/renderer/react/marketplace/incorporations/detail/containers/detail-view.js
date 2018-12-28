@@ -7,12 +7,25 @@ import FlagCountryName from '../../common/flag-country-name';
 
 const styles = {
 	container: {
-		width: '946px',
+		// width: '946px',
+		width: '100%',
 		margin: '0 auto'
+	},
+	flagCell: {
+		width: '10px'
 	},
 	title: {
 		padding: '22px 30px',
-		background: '#2A3540'
+		background: '#2A3540',
+		'& div': {
+			display: 'inline-block',
+			color: '#FFF'
+		},
+		'& span.region': {
+			marginLeft: '1em',
+			marginTop: '0.5em',
+			fontSize: '24px'
+		}
 	},
 	content: {
 		background: '#262F39',
@@ -73,12 +86,18 @@ class IncorporationsDetailView extends Component {
 		return (
 			<div>
 				<div style={{ margin: '1em 0' }}>
-					<OutlineSecondaryButton>Back</OutlineSecondaryButton>
+					<OutlineSecondaryButton onClick={() => this.props.onBackClick(false)}>
+						Back
+					</OutlineSecondaryButton>
 				</div>
 				<div className={classes.container}>
 					<Grid container justify="left" alignItems="left" className={classes.title}>
-						<FlagCountryName code={program[`Country code`]} />
-						<span>{program.Region}</span>
+						<div>
+							<FlagCountryName code={program[`Country code`]} />
+						</div>
+						<div>
+							<span className="region">{program.Region}</span>
+						</div>
 					</Grid>
 					<Grid container justify="left" alignItems="left" className={classes.content}>
 						<div className={classes.resumeTable}>

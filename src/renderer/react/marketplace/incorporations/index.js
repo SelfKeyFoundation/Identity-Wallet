@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import store from '../../common/store';
-import { H1, SelfkeyIcon, SelfkeyDarkTheme } from 'selfkey-ui';
+import { H1, IncorporationsIcon, SelfkeyDarkTheme } from 'selfkey-ui';
 import { Grid } from '@material-ui/core';
 import injectSheet from 'react-jss';
 
@@ -50,7 +50,7 @@ class IncorporationsViewWrapper extends Component {
 				<SelfkeyDarkTheme>
 					<Grid container justify="center" alignItems="center">
 						<Grid item id="header" className={classes.header} xs={12}>
-							<SelfkeyIcon />
+							<IncorporationsIcon />
 							<H1 className={classes.headerTitle}>Incorporation Marketplace</H1>
 						</Grid>
 						<Grid item id="body" xs={12}>

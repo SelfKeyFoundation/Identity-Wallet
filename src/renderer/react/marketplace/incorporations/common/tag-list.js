@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tag } from 'selfkey-ui';
 
 const TagList = props => {
 	const { categories } = props;
@@ -8,9 +9,7 @@ const TagList = props => {
 	return (
 		<div>
 			{categories.map(cat => (
-				<span key={`cat-${cat}`} className="category">
-					{cat}
-				</span>
+				<Tag key={cat}>{cat}</Tag>
 			))}
 		</div>
 	);

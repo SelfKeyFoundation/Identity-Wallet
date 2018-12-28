@@ -10,10 +10,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { TableHeader, LargeTableHeadRow, TableText, TagTableCell, Tag } from 'selfkey-ui';
 
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import FlagCountryName from '../../common/flag-country-name';
-import TagList from '../../common/tag-list';
+// import TagList from '../../common/tag-list';
 import ProgramPrice from '../../common/program-price';
 import { getTaxFieldForCompanyCode } from '../../common/data-operations';
 
@@ -28,12 +29,8 @@ const styles = {
 	headerTitle: {
 		paddingLeft: '21px'
 	},
-
 	table: {
-		tableLayout: 'fixed',
-		'& tbody tr:nth-child(odd)': {
-			background: '#2E3945'
-		}
+		tableLayout: 'fixed'
 	},
 	tableHeaderRow: {
 		'& th': {
@@ -46,15 +43,6 @@ const styles = {
 		}
 	},
 	tableBodyRow: {
-		'& td': {
-			fontFamily: 'Lato, arial, sans-serif',
-			border: 'none',
-			fontSize: '15px',
-			color: '#FFFFFF'
-		},
-		'& tMain.details': {
-			color: '#00C0D9'
-		},
 		'& span.category': {
 			display: 'inline-block',
 			margin: '2px 5px',
@@ -73,8 +61,27 @@ const styles = {
 			margin: '2px auto'
 		}
 	},
-	goodFor: {
-		width: '220px'
+	costCell: {
+		width: '50px'
+	},
+	smallCell: {
+		width: '15px'
+	},
+	flagCell: {
+		width: '10px'
+	},
+	regionCell: {
+		width: '30px'
+	},
+	detailsCell: {
+		width: '55px',
+		color: '#00C0D9',
+		'& span': {
+			cursor: 'pointer'
+		}
+	},
+	goodForCell: {
+		width: '325px'
 	},
 	loading: {
 		marginTop: '5em'
@@ -101,53 +108,78 @@ class IncorporationsTable extends Component {
 			return this._renderLoadingScreen();
 		}
 
-		console.log(this.props.data);
 		const { Main, Taxes } = this.props.data;
+		console.log(Taxes);
 
 		return (
 			<Grid container direction="row" justify="space-evenly" alignItems="center">
 				<Table className={classes.table}>
 					<TableHead>
-						<TableRow className={classes.tableHeaderRow}>
-							<TableCell>&nbsp;</TableCell>
-							<TableCell style={{ width: '130px', paddingLeft: '0px' }}>
-								Jurisdiction
+						<LargeTableHeadRow>
+							<TableCell className={classes.flagCell} />
+							<TableCell>
+								<TableHeader>Jurisdiction</TableHeader>
 							</TableCell>
-							<TableCell>Entity</TableCell>
-							<TableCell>Offshore Tax</TableCell>
-							<TableCell>Corp Tax</TableCell>
-							<TableCell style={{ width: '350px' }}>Good for</TableCell>
-							<TableCell>Cost</TableCell>
-							<TableCell>&nbsp;</TableCell>
-						</TableRow>
+							<TableCell className={classes.regionCell}>
+								<TableHeader>Entity</TableHeader>
+							</TableCell>
+							<TableCell className={classes.smallCell}>
+								<TableHeader>Offshore Tax</TableHeader>
+							</TableCell>
+							<TableCell className={classes.smallCell}>
+								<TableHeader>Corp Tax</TableHeader>
+							</TableCell>
+							<TableCell className={classes.goodForCell}>
+								<TableHeader>Good for</TableHeader>
+							</TableCell>
+							<TableCell className={classes.costCell}>
+								<TableHeader>Cost</TableHeader>
+							</TableCell>
+							<TableCell className={classes.detailsCell} />
+						</LargeTableHeadRow>
 					</TableHead>
 					<TableBody className={classes.tableBodyRow}>
 						{Main.map(d => (
 							<TableRow key={d.id}>
-								<TableCell>
+								<TableCell className={classes.flagCell}>
 									<FlagCountryName code={d.data.fields[`Country code`]} />
 								</TableCell>
-								<TableCell style={{ width: '130px', paddingLeft: '0px' }}>
-									{d.data.fields.Region}
-								</TableCell>
-								<TableCell style={{ width: '100px', paddingLeft: '0px' }}>
-									{d.data.fields.Acronym}
-								</TableCell>
 								<TableCell>
-									{getTaxFieldForCompanyCode(
-										Taxes,
-										d.data.fields['Company code'],
-										'Offshore Income Tax Rate'
-									)}
+									<TableText>{d.data.fields.Region}</TableText>
 								</TableCell>
-								<TableCell>{Math.floor(Math.random() * 30) + 1}%</TableCell>
-								<TableCell style={{ width: '350px' }}>
-									<TagList categories={d.data.fields[`Good for`]} />
+								<TableCell className={classes.regionCell}>
+									<TableText>{d.data.fields.Acronym}</TableText>
 								</TableCell>
-								<TableCell>
-									<ProgramPrice price={d.data.fields.Price} />
+								<TableCell className={classes.smallCell}>
+									<TableText>
+										{getTaxFieldForCompanyCode(
+											Taxes,
+											d.data.fields['Company code'],
+											'Offshore Income Tax Rate'
+										)}
+									</TableText>
 								</TableCell>
-								<TableCell className="details">
+								<TableCell className={classes.smallCell}>
+									<TableText>
+										{getTaxFieldForCompanyCode(
+											Taxes,
+											d.data.fields['Company code'],
+											'Corporate Tax Rate'
+										)}
+									</TableText>
+								</TableCell>
+								<TagTableCell className={classes.goodForCell}>
+									{d.data.fields[`Good for`] &&
+										d.data.fields[`Good for`].map(tag => (
+											<Tag key={tag}>{tag}</Tag>
+										))}
+								</TagTableCell>
+								<TableCell className={classes.costCell}>
+									<TableText>
+										<ProgramPrice price={d.data.fields.Price} />
+									</TableText>
+								</TableCell>
+								<TableCell className={classes.detailsCell}>
 									<span onClick={() => this.props.onDetailClick(d.data.fields)}>
 										Details
 									</span>
