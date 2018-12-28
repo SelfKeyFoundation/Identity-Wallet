@@ -80,7 +80,7 @@ export class LWSService {
 	}
 
 	async reqAttributes(msg, conn) {
-		const { publicKey, attributes } = msg.payload;
+		const { publicKey, requestedAttributes } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 		if (!identity) {
 			return conn.send(
@@ -96,7 +96,7 @@ export class LWSService {
 		}
 		try {
 			let fetchedAttrs = await identity.getAttributesByTypes(
-				attributes.map(attr => attr.id || attr.attribute || attr)
+				requestedAttributes.map(attr => attr.id || attr.attribute || attr)
 			);
 			let payload = fetchedAttrs.map(attr => {
 				let schema = attr.attributeType.content;
@@ -107,6 +107,7 @@ export class LWSService {
 				});
 				return {
 					url: attr.attributeType.url,
+					name: attr.name,
 					value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
 						schema,
 						value,
@@ -119,6 +120,7 @@ export class LWSService {
 
 			return conn.send({ payload: { publicKey, attributes: payload } }, msg);
 		} catch (error) {
+			log.error(error);
 			conn.send(
 				{
 					error: true,
@@ -133,9 +135,8 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
-		const { publicKey, config, attributes } = msg.payload;
+		const { publicKey, config } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
-		console.log('XXX starting auth', publicKey, identity);
 		if (!identity) {
 			return this.authResp(
 				{
@@ -166,41 +167,6 @@ export class LWSService {
 				conn
 			);
 		}
-		console.log('XXX session established auth', session.ctx);
-		if (attributes && attributes.length) {
-			try {
-				let rpAttributes = attributes.map(attr => {
-					let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
-						attr.schema,
-						attr.value
-					);
-					return {
-						id: attr.url,
-						schema: attr.schema,
-						data: normalized.value,
-						documents: normalized.documents.map(doc => {
-							doc.buffer = Buffer.from(doc.buffer, 'base64');
-							return doc;
-						})
-					};
-				});
-				await session.createUser(rpAttributes);
-				console.log('XXX user created ', rpAttributes);
-			} catch (error) {
-				log.error(error);
-				return this.authResp(
-					{
-						payload: {
-							code: 'user_create_error',
-							message: error.message
-						},
-						error: true
-					},
-					msg,
-					conn
-				);
-			}
-		}
 		try {
 			let payload = await session.getUserLoginPayload();
 			console.log('XXX user payload ', payload);
@@ -208,25 +174,103 @@ export class LWSService {
 		} catch (error) {
 			log.error(error);
 			let payload = {
-				code: error.statusCode || 'token_error',
-				message: error.message
+				code: 'token_error',
+				message: 'User Authentication failed'
 			};
 			return this.authResp({ payload, error: true }, msg, conn);
 		}
 	}
 
-	async authResp(resp, msg, conn) {
-		let { publicKey } = msg.payload || {};
-		let wallet = await Wallet.findByPublicKey(publicKey);
-		let attempt = this.formatLoginAttempt(msg, resp);
-		await wallet.addLoginAttempt(attempt);
-		if (this.rpcHandler) {
-			await this.rpcHandler.actionLogs_add(
-				'ON_RPC',
-				'',
-				'actionLogs_add',
-				this.formatActionLog(wallet, attempt)
+	async reqSignup(msg, conn) {
+		const { publicKey, config, attributes } = msg.payload;
+		let identity = conn.getIdentity(publicKey);
+		if (!identity) {
+			return this.authResp(
+				{
+					error: true,
+					payload: {
+						code: 'not_authorized',
+						message: 'Wallet is locked, cannot signup with relying party'
+					}
+				},
+				msg,
+				conn
 			);
+		}
+		let session = new RelyingPartySession(config, identity);
+		try {
+			await session.establish();
+		} catch (error) {
+			log.error(error);
+			return this.authResp(
+				{
+					payload: {
+						code: 'session_establish',
+						message: error.message
+					},
+					error: true
+				},
+				msg,
+				conn
+			);
+		}
+
+		try {
+			let rpAttributes = (attributes || []).map(attr => {
+				let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
+					attr.schema,
+					attr.value
+				);
+				return {
+					id: attr.url,
+					schema: attr.schema,
+					data: normalized.value,
+					documents: normalized.documents.map(doc => {
+						doc.buffer = Buffer.from(doc.buffer, 'base64');
+						return doc;
+					})
+				};
+			});
+			await session.createUser(rpAttributes);
+			return this.authResp(
+				{
+					payload: 'ok'
+				},
+				msg,
+				conn
+			);
+		} catch (error) {
+			log.error(error);
+			return this.authResp(
+				{
+					payload: {
+						code: 'user_create_error',
+						message: error.message
+					},
+					error: true
+				},
+				msg,
+				conn
+			);
+		}
+	}
+
+	async authResp(resp, msg, conn) {
+		try {
+			let { publicKey } = msg.payload || {};
+			let wallet = await Wallet.findByPublicKey(publicKey);
+			let attempt = this.formatLoginAttempt(msg, resp);
+			await wallet.addLoginAttempt(attempt);
+			if (this.rpcHandler) {
+				await this.rpcHandler.actionLogs_add(
+					'ON_RPC',
+					'',
+					'actionLogs_add',
+					this.formatActionLog(wallet, attempt)
+				);
+			}
+		} catch (error) {
+			log.error(error);
 		}
 		return conn.send(resp, msg);
 	}
@@ -243,8 +287,9 @@ export class LWSService {
 			errorMessage: null
 		};
 		if (resp.error) {
+			console.log('XXX', resp);
 			attempt.success = false;
-			attempt.errorCode = resp.payload.code;
+			attempt.errorCode = resp.payload.code || 'unknown_error';
 			attempt.errorMessage = resp.payload.message || 'Unknown Error';
 		}
 		return attempt;
@@ -289,6 +334,10 @@ export class LWSService {
 				return this.reqAttributes(msg, conn);
 			case 'auth':
 				return this.reqAuth(msg, conn);
+			case 'signup':
+				return this.reqSignup(msg, conn);
+			case 'version':
+				return this.reqVersion(msg, conn);
 			default:
 				return this.reqUnknown(msg, conn);
 		}
