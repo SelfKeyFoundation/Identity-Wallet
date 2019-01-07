@@ -2,6 +2,8 @@
 'use strict';
 const path = require('path');
 const dotenv = require('dotenv');
+const electron = require('electron');
+
 const {
 	isDevMode,
 	isDebugMode,
@@ -15,6 +17,13 @@ dotenv.config();
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;
 const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+
+let userDataDirectoryPath = '';
+let walletsDirectoryPath = '';
+if (electron.app) {
+	userDataDirectoryPath = electron.app.getPath('userData');
+	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+}
 
 const common = {
 	defaultLanguage: 'en',
@@ -127,5 +136,7 @@ module.exports = {
 	common,
 	...common,
 	db,
-	...conf
+	...conf,
+	userDataDirectoryPath,
+	walletsDirectoryPath
 };

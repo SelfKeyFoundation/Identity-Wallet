@@ -15,6 +15,7 @@ import config from 'common/config';
 import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
 import { handleSquirrelEvent, appUpdater } from './autoupdater';
 import { createMainWindow } from './main-window';
+import { asValue } from 'awilix';
 
 const log = new Logger('main');
 
@@ -67,7 +68,8 @@ function onReady() {
 			appUpdater();
 		}
 		await db.init();
-		ctx = configureContext('main').cradle;
+		const container = configureContext('main');
+		ctx = container.cradle;
 		setGlobalContext(ctx);
 		const store = ctx.store;
 		const app = ctx.app;
@@ -93,7 +95,12 @@ function onReady() {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
-		let mainWindow = (app.win = createMainWindow(ctx));
+		let mainWindow = (app.win = createMainWindow());
+
+		container.register({
+			mainWindow: asValue(mainWindow)
+		});
+
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
 				let online = await isOnline();

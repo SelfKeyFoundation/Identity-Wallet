@@ -15,6 +15,11 @@ import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import marketplaces from '../marketplaces';
 import identity from '../identity';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import history from './history';
+import createWallet from '../create-wallet';
+// eslint-disable-next-line
+import { closeOperations } from '../close';
 
 import {
 	forwardToMain,
@@ -26,13 +31,18 @@ import {
 
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
-
+	let router;
 	if (scope === 'renderer') {
 		if (process.env.ENABLE_REDUX_LOGGER) {
 			const logger = createLogger({ collapsed: (getState, actions) => true });
 			middleware.push(logger);
 		}
 		middleware = [forwardToMain, ...middleware];
+
+		history.create();
+		router = connectRouter(history.getHistory());
+
+		middleware = [forwardToMain, ...middleware, routerMiddleware(history.getHistory())];
 	}
 
 	if (scope === 'main') {
@@ -53,7 +63,9 @@ export default (initialState, scope = 'main') => {
 		addressBook,
 		exchanges,
 		marketplaces,
-		identity
+		identity,
+		router,
+		createWallet
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

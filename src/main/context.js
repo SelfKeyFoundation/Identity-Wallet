@@ -13,11 +13,13 @@ import AddressBookService from './address-book/address-book-service';
 import IdentityService from './identity/identity-service';
 import MarketplaceService from './marketplace/marketplace-service';
 import { createApp } from './app';
+import WalletService from './wallet/wallet-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
+		walletService: asClass(WalletService).singleton(),
 		ledgerService: asClass(LedgerService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),
 		// TODO: refactor to not use static methods

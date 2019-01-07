@@ -374,7 +374,7 @@ const deleteDocumentsReducer = (state, action) => {
 const setIdAttributesReducer = (state, action) => {
 	let oldIdAttributes = state.attributes
 		.map(attrId => state.attributesById[attrId])
-		.filter(attr => attr.walletId !== action.walletId);
+		.filter(attr => attr.walletId !== action.payload.walletId);
 	let attributes = [...oldIdAttributes, ...(action.payload.attributes || [])];
 	let attributesById = attributes.reduce((acc, curr) => {
 		acc[curr.id] = curr;
@@ -447,62 +447,6 @@ const deleteIdAttributeReducer = (state, action) => {
 	delete attributesById[action.payload];
 	return { ...state, attributesById, attributes };
 };
-
-export const reducers = {
-	setRepositoriesReducer,
-	setIdAttributeTypesReducer,
-	setUiSchemasReducer,
-	setDocumentsReducer,
-	setAttributeDocumentsReducer,
-	deleteAttributeDocumentsReducer,
-	deleteDocumentsReducer,
-	setIdAttributesReducer,
-	deleteIdAttributesReducer,
-	addIdAttributeReducer,
-	addDocumentReducer,
-	updateIdAttributeReducer,
-	updateDocumentReducer,
-	deleteDocumentReducer,
-	deleteIdAttributeReducer
-};
-
-const reducer = (state = initialState, action) => {
-	switch (action.type) {
-		case identityTypes.IDENTITY_REPOSITORIES_SET:
-			return reducers.setRepositoriesReducer(state, action);
-		case identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET:
-			return reducers.setIdAttributeTypesReducer(state, action);
-		case identityTypes.IDENTITY_UI_SCHEMAS_SET:
-			return reducers.setUiSchemasReducer(state, action);
-		case identityTypes.IDENTITY_DOCUMENTS_SET:
-			return reducers.setDocumentsReducer(state, action);
-		case identityTypes.IDENTITY_DOCUMENTS_DELETE:
-			return reducers.deleteDocumentsReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTES_SET:
-			return reducers.setIdAttributesReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTES_DELETE:
-			return reducers.deleteIdAttributesReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTE_DELETE:
-			return reducers.deleteIdAttributeReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTE_ADD:
-			return reducers.addIdAttributeReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_SET:
-			return reducers.setAttributeDocumentsReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE:
-			return reducers.deleteAttributeDocumentsReducer(state, action);
-		case identityTypes.IDENTITY_DOCUMENT_ADD:
-			return reducers.addDocumentReducer(state, action);
-		case identityTypes.IDENTITY_DOCUMENT_UPDATE:
-			return reducers.updateDocumentReducer(state, action);
-		case identityTypes.IDENTITY_ATTRIBUTE_UPDATE:
-			return reducers.updateIdAttributeReducer(state, action);
-		case identityTypes.IDENTITY_DOCUMENT_DELETE:
-			return reducers.deleteDocumentReducer(state, action);
-	}
-	return state;
-};
-
-export default reducer;
 
 const identityReducers = {
 	setRepositoriesReducer,

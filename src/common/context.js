@@ -1,6 +1,7 @@
 import { asClass, asValue, asFunction, createContainer, InjectionMode } from 'awilix';
 import EthGasStationService from '../main/blockchain/eth-gas-station-service';
 import configureStore from './store/configure-store';
+import config from './config';
 
 let globalContext = null;
 
@@ -16,7 +17,8 @@ export const registerCommonServices = (container, thread) => {
 		store: asFunction(({ initialState, threadName }) =>
 			configureStore(initialState, threadName)
 		).singleton(),
-		ethGasStationService: asClass(EthGasStationService).singleton()
+		ethGasStationService: asClass(EthGasStationService).singleton(),
+		config: asValue(config)
 	});
 	return container;
 };

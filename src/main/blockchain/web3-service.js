@@ -32,6 +32,7 @@ export class Web3Service {
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
 	}
+
 	async handleTicket(data) {
 		log.debug('handle ticket %2j', data);
 		const {
@@ -150,7 +151,7 @@ export class Web3Service {
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
 		}
-		if (!wallet || '0x' + wallet.publicKey !== opts.from) {
+		if (!wallet || wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
 		if (wallet.profile !== 'local') {
