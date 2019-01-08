@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { TableHeader, LargeTableHeadRow, TableText, TagTableCell, Tag } from 'selfkey-ui';
+import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import FlagCountryName from '../../common/flag-country-name';
@@ -118,22 +118,34 @@ class IncorporationsTable extends Component {
 						<LargeTableHeadRow>
 							<TableCell className={classes.flagCell} />
 							<TableCell>
-								<TableHeader>Jurisdiction</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Jurisdiction
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.regionCell}>
-								<TableHeader>Entity</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Entity
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.smallCell}>
-								<TableHeader>Offshore Tax</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Offshore Tax
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.smallCell}>
-								<TableHeader>Corp Tax</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Corp Tax
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.goodForCell}>
-								<TableHeader>Good for</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Good for
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<TableHeader>Cost</TableHeader>
+								<Typography variant="overline" gutterBottom>
+									Cost
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.detailsCell} />
 						</LargeTableHeadRow>
@@ -144,29 +156,23 @@ class IncorporationsTable extends Component {
 								<TableCell className={classes.flagCell}>
 									<FlagCountryName code={d.data.fields[`Country code`]} />
 								</TableCell>
-								<TableCell>
-									<TableText>{d.data.fields.Region}</TableText>
-								</TableCell>
+								<TableCell>{d.data.fields.Region}</TableCell>
 								<TableCell className={classes.regionCell}>
-									<TableText>{d.data.fields.Acronym}</TableText>
+									{d.data.fields.Acronym}
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<TableText>
-										{getTaxFieldForCompanyCode(
-											Taxes,
-											d.data.fields['Company code'],
-											'Offshore Income Tax Rate'
-										)}
-									</TableText>
+									{getTaxFieldForCompanyCode(
+										Taxes,
+										d.data.fields['Company code'],
+										'Offshore Income Tax Rate'
+									)}
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<TableText>
-										{getTaxFieldForCompanyCode(
-											Taxes,
-											d.data.fields['Company code'],
-											'Corporate Tax Rate'
-										)}
-									</TableText>
+									{getTaxFieldForCompanyCode(
+										Taxes,
+										d.data.fields['Company code'],
+										'Corporate Tax Rate'
+									)}
 								</TableCell>
 								<TagTableCell className={classes.goodForCell}>
 									{d.data.fields[`Good for`] &&
@@ -175,9 +181,7 @@ class IncorporationsTable extends Component {
 										))}
 								</TagTableCell>
 								<TableCell className={classes.costCell}>
-									<TableText>
-										<ProgramPrice price={d.data.fields.Price} />
-									</TableText>
+									<ProgramPrice price={d.data.fields.Price} />
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
 									<span onClick={() => this.props.onDetailClick(d.data.fields)}>
