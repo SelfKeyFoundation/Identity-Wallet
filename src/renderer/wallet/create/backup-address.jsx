@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
-import {
-	SelfkeyLogo,
-	ModalWrap,
-	ModalHeader,
-	ModalBody,
-	Paragraph,
-	TableHeader,
-	Copy,
-	DownloadIcon2
-} from 'selfkey-ui';
+import { SelfkeyLogo, ModalWrap, ModalHeader, ModalBody, Copy, DownloadIcon2 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
@@ -64,9 +55,9 @@ class BackupAddress extends Component {
 
 	showFileDownloadedResult = () => {
 		if (this.props.fileDownloaded) {
-			return <Paragraph>File Downloaded Successfuly</Paragraph>;
+			return <Typography variant="body1">File Downloaded Successfuly</Typography>;
 		} else {
-			return <Paragraph>File NOT Downloaded Successfuly</Paragraph>;
+			return <Typography variant="body1">File NOT Downloaded Successfuly</Typography>;
 		}
 	};
 
@@ -108,17 +99,19 @@ class BackupAddress extends Component {
 									<DownloadIcon2 className={classes.downloadIcon} />
 								</Grid>
 								<Grid item xs={10}>
-									<Paragraph id="simple-modal-description" gutterBottom>
+									<Typography variant="body1" gutterBottom>
 										Your public key is a unique address on the Ethereum
 										blockchain. Think of it like a bank account number that you
 										own, used to send and receive Ether or tokens. The ability
 										to authorize transactions on this address is encrypted by
 										the password you just created. Download a backup and save
 										this address in a convenient location.
-									</Paragraph>
+									</Typography>
 									<br />
 									<br />
-									<TableHeader gutterBottom>Your Public Key</TableHeader>
+									<Typography variant="subtitle1" gutterBottom>
+										Your Public Key
+									</Typography>
 									<Input
 										fullWidth
 										disableUnderline={true}

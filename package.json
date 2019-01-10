@@ -127,7 +127,7 @@
 		"request": "2.88.0",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#9112442",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#abd5a0e",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -142,7 +142,7 @@
 		"trezor.js": "6.19.0",
 		"usb": "1.5.0",
 		"utf-8-validate": "5.0.1",
-		"web3": "1.0.0-beta.36",
+		"web3": "1.0.0-beta.37",
 		"web3-provider-engine": "14.1.0",
 		"zxcvbn": "^4.4.2"
 	},

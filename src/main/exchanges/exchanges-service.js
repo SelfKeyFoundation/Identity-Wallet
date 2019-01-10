@@ -1,6 +1,8 @@
 'use strict';
 import fetch from 'node-fetch';
 import Exchange from './exchange';
+import { getGlobalContext } from 'common/context';
+const { exchangesOperations } = require('common/exchanges');
 
 const airtableBaseUrl =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=';
@@ -18,7 +20,10 @@ export class ExchangesService {
 				data: row.data
 			}));
 
-		return Exchange.import(exchanges);
+		await Exchange.import(exchanges);
+		const importedExchanges = await Exchange.findAll();
+		const store = getGlobalContext().store;
+		return store.dispatch(exchangesOperations.updateExchanges(importedExchanges));
 	}
 }
 

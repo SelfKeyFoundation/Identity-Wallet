@@ -116,6 +116,7 @@ function onReady() {
 				Promise.all([
 					ctx.priceService.startUpdateData(),
 					ctx.exchangesService.loadExchangeData(),
+					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
 				ctx.txHistoryService.startSyncingJob();

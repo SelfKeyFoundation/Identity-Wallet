@@ -14,6 +14,8 @@ import IdentityService from './identity/identity-service';
 import MarketplaceService from './marketplace/marketplace-service';
 import { createApp } from './app';
 import WalletService from './wallet/wallet-service';
+import TokenService from './token/token-service';
+import WalletTokenService from './wallet/wallet-token-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -39,6 +41,8 @@ export const registerMainServices = container => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();
 		}).singleton(),
-		stakingService: asClass(StakingService).singleton()
+		stakingService: asClass(StakingService).singleton(),
+		tokenService: asClass(TokenService).singleton(),
+		walletTokenService: asClass(WalletTokenService).singleton()
 	});
 };

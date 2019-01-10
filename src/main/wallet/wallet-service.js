@@ -56,6 +56,26 @@ export class WalletService {
 		const wallet = await Wallet.findById(id);
 		return this.web3.eth.getBalance(wallet.publicKey);
 	}
+
+	async getWallets() {
+		return Wallet.findAll();
+	}
+
+	async unlockWalletWithPassword(id, password) {
+		const wallet = await Wallet.findById(id);
+		const keystore = JSON.parse(await fs.promises.readFile(wallet.keystoreFilePath));
+		const account = this.web3.eth.accounts.decrypt(keystore, password);
+		if (!account) {
+			throw new Error('Wrong Password!');
+		}
+		return {
+			id: wallet.id,
+			isSetupFinished: wallet.isSetupFinished,
+			publicKey: account.address,
+			privateKey: account.privateKey,
+			keystoreFilePath: wallet.keystoreFilePath
+		};
+	}
 }
 
 export default WalletService;

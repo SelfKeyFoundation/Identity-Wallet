@@ -7,8 +7,7 @@ import {
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody,
-	Paragraph
+	ModalBody
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -106,12 +105,12 @@ class Password extends Component {
 									<PasswordIcon className={classes.passwordIcon} />
 								</Grid>
 								<Grid item xs={10}>
-									<Paragraph id="simple-modal-description" gutterBottom>
+									<Typography variant="body1" gutterBottom>
 										Protect your SelfKey Identity Wallet and Ethereum address
 										with a password. Your address is like a bank account number
 										on the blockchain, used to send and receive Ether or tokens.
 										This password is required to unlock your wallet.
-									</Paragraph>
+									</Typography>
 									<br />
 									<br />
 									<Input

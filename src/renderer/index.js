@@ -23,6 +23,7 @@ import PasswordConfirmation from './wallet/create/password/confirmation';
 import BackupAddress from './wallet/create/backup-address';
 import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
+import Unlock from './wallet/unlock';
 
 import path from 'path';
 
@@ -77,6 +78,7 @@ render(
 						<Route path="/backupAddress" component={BackupAddress} />
 						<Route path="/backupPrivateKey" component={BackupPK} />
 						<Route path="/main" component={Main} />
+						<Route path="/unlockWallet" component={Unlock} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>

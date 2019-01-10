@@ -3,6 +3,7 @@ import { withStyles, Grid, IconButton } from '@material-ui/core';
 import { SelfkeyLogo, MenuButtonIcon } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
+import config from 'common/config';
 
 const styles = theme => ({
 	wrapper: {
@@ -59,7 +60,7 @@ class Toolbar extends Component {
 					<Grid item xs={3}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
-								<PriceBox cryptoCurrency="KEY" />
+								<PriceBox cryptoCurrency={config.constants.primaryToken} />
 							</Grid>
 							<Grid item>
 								<PriceBox cryptoCurrency="ETH" />

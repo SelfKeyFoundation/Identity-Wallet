@@ -1,6 +1,6 @@
 import React from 'react';
 import zxcvbn from 'zxcvbn';
-import { Paragraph } from 'selfkey-ui';
+import { Typography } from '@material-ui/core';
 
 export const handlePassword = (event, state) => {
 	const strength = {
@@ -27,6 +27,10 @@ export const handlePassword = (event, state) => {
 
 export const renderPasswordStrength = (password, strength) => {
 	if (password !== '') {
-		return <Paragraph align="center">{strength}</Paragraph>;
+		return (
+			<Typography variant="body1" align="center">
+				{strength}
+			</Typography>
+		);
 	}
 };

@@ -7,9 +7,7 @@ import {
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody,
-	Paragraph,
-	ErrorMessage
+	ModalBody
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -109,11 +107,11 @@ class PasswordConfirmation extends Component {
 									<PasswordIcon className={classes.passwordIcon} />
 								</Grid>
 								<Grid item xs={10}>
-									<Paragraph id="simple-modal-description" gutterBottom>
+									<Typography variant="body1" gutterBottom>
 										Confirm the password you just created. After this step,
 										there is no way the password can be restored or reset, and
 										SelfKey cannot you help if it is lost.
-									</Paragraph>
+									</Typography>
 									<br />
 									<br />
 									<Input
@@ -126,7 +124,9 @@ class PasswordConfirmation extends Component {
 										className={classes.passwordInput}
 									/>
 									{this.state.error !== '' && (
-										<ErrorMessage>{this.state.error}</ErrorMessage>
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{this.state.error}
+										</Typography>
 									)}
 									<LinearProgress
 										variant="determinate"

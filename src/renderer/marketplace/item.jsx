@@ -4,15 +4,17 @@ import { getItemDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
 import { ItemDetails } from 'selfkey-ui';
 import { Logger } from 'common/logger';
+import { push } from 'connected-react-router';
 
 const log = new Logger('marketplace-item-container');
 
 const mapStateToProps = (state, props) => {
-	let item = getItemDetails(state, props.name);
+	const name = props.match.params.name;
+	let item = getItemDetails(state, name);
 	let id = `${item.serviceOwner}_${item.serviceId}`;
 	return {
 		item,
-		hasBalance: hasBalance(state, props.name),
+		hasBalance: hasBalance(state, name),
 		stake: marketplacesSelectors.stakeSelector(state, id),
 		pendingTransaction: marketplacesSelectors.pendingTransactionSelector(
 			state,
@@ -53,8 +55,25 @@ class ItemDetailsContainer extends Component {
 			this.updatePendingTransaction();
 		}, 5000);
 	}
+
+	unlockAction = () => {
+		if (this.props.hasBalance) {
+			this.props.dispatch(push('/main/marketplaceUnlock'));
+		} else {
+			this.props.dispatch(push('/main/marketplaceNoBalance'));
+		}
+	};
+
+	returnAction = () => {
+		this.props.dispatch(push('/main/marketplaceReturn'));
+	};
+
+	backAction = () => {
+		this.props.dispatch(push('/main/exchanges'));
+	};
+
 	render() {
-		let unlockAction = this.props.unlockAction;
+		let unlockAction = this.unlockAction;
 		let item = this.props.item;
 		let { stake } = this.props;
 		item.integration = 'Unlock marketplace';
@@ -76,9 +95,11 @@ class ItemDetailsContainer extends Component {
 		} else if (stake && +stake.balance && !+stake.releaseDay) {
 			item.status = 'unlocked';
 			item.integration = 'Return KEY Deposit';
-			unlockAction = this.props.returnAction;
+			unlockAction = this.returnAction;
 		}
-		return <ItemDetails {...this.props} unlockAction={unlockAction} />;
+		return (
+			<ItemDetails {...this.props} unlockAction={unlockAction} backAction={this.backAction} />
+		);
 	}
 }
 

@@ -18,6 +18,8 @@ import identity from '../identity';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import history from './history';
 import createWallet from '../create-wallet';
+import transactionHistory from '../transaction-history';
+import app from '../app';
 // eslint-disable-next-line
 import { closeOperations } from '../close';
 
@@ -65,7 +67,9 @@ export default (initialState, scope = 'main') => {
 		marketplaces,
 		identity,
 		router,
-		createWallet
+		createWallet,
+		transactionHistory,
+		app
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

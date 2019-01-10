@@ -5,8 +5,6 @@ import {
 	ModalWrap,
 	ModalHeader,
 	ModalBody,
-	Paragraph,
-	TableHeader,
 	DownloadIcon2,
 	VisibilityOnIcon,
 	VisibilityOffIcon
@@ -109,17 +107,19 @@ class BackupPK extends Component {
 										<DownloadIcon2 className={classes.downloadIcon} />
 									</Grid>
 									<Grid item xs={10}>
-										<Paragraph id="simple-modal-description" gutterBottom>
+										<Typography variant="body1" gutterBottom>
 											Your private key is used to authorize transactions for
 											sending Ether or tokens on your Ethereum address. Do not
 											share this with anyone, as this will give them full
 											access to move your assets somewhere else. You can print
 											a copy to make an offline backup. This is also known as
 											&#34;cold storage&#34;.
-										</Paragraph>
+										</Typography>
 										<br />
 										<br />
-										<TableHeader gutterBottom>Your Private Key</TableHeader>
+										<Typography variant="subtitle1" gutterBottom>
+											Your Private Key
+										</Typography>
 										<Input
 											fullWidth
 											disableUnderline={true}

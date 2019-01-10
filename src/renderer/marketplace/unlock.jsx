@@ -4,7 +4,8 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
-import { Unlock } from 'selfkey-ui';
+import { Unlock, UnlockBox } from 'selfkey-ui';
+import history from 'common/store/history';
 
 const mapStateToProps = state => {
 	return {
@@ -43,16 +44,18 @@ class UnlockController extends Component {
 			return <div>Loading</div>;
 		}
 		return (
-			<Unlock
-				minGasPrice={gas.safeLow}
-				maxGasPrice={gas.fast}
-				defaultValue={gas.avarage}
-				gasLimit={gasLimit}
-				fiat={fiat.fiatCurrency}
-				fiatRate={ethPrice.priceUSD}
-				onCancel={closeAction}
-				onConfirm={fee => this.handleConfirmAction(fee)}
-			/>
+			<UnlockBox closeAction={history.getHistory().goBack}>
+				<Unlock
+					minGasPrice={gas.safeLow}
+					maxGasPrice={gas.fast}
+					defaultValue={gas.avarage}
+					gasLimit={gasLimit}
+					fiat={fiat.fiatCurrency}
+					fiatRate={ethPrice.priceUSD}
+					onCancel={closeAction}
+					onConfirm={fee => this.handleConfirmAction(fee)}
+				/>
+			</UnlockBox>
 		);
 	}
 }

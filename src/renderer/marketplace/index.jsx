@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations } from 'common/marketplaces';
 import { Marketplace } from 'selfkey-ui';
+import { push } from 'connected-react-router';
 
 class MarketplaceContainerSrc extends Component {
-	static propTypes = {
-		learnMoreAction: PropTypes.array
-	};
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		this.props.dispatch(marketplacesOperations.loadTransactions());
 		this.props.dispatch(marketplacesOperations.loadStakes());
 	}
+
+	handleExchanges = () => {
+		this.props.dispatch(push('/main/exchanges'));
+	};
+
 	render() {
-		let { learnMoreActions } = this.props;
 		return (
 			<Marketplace
 				items={[
@@ -26,7 +27,7 @@ class MarketplaceContainerSrc extends Component {
 						active: true,
 						svgIcon:
 							'https://dl.airtable.com/ugGbCqEQSKhS3ZPOhGMH_icon-exchange-crypto.svg',
-						learnMoreAction: learnMoreActions[0]
+						learnMoreAction: this.handleExchanges
 					},
 					{
 						title: 'Incorporation',

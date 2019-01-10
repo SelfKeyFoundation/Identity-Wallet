@@ -2,6 +2,7 @@ import { Model, transaction } from 'objection';
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
 import IdAttribute from '../identity/id-attribute';
+import config from 'common/config';
 
 const TABLE_NAME = 'wallets';
 const log = new Logger('wallet-model');
@@ -84,7 +85,7 @@ export class Wallet extends BaseModel {
 					},
 					tokens: [
 						{
-							tokenId: 1
+							tokenId: config.constants.primaryToken === 'KEY' ? 1 : 2
 						}
 					]
 				},

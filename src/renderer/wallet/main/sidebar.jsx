@@ -7,7 +7,8 @@ import {
 	Drawer,
 	ListItemIcon,
 	Grid,
-	Typography
+	Typography,
+	Divider
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Close from '@material-ui/icons/Close';
@@ -42,6 +43,7 @@ const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace" {...props} />;
 const selfkeyID = props => <Link to="/main/selfkeyID" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
+const switchAccount = props => <Link to="/" {...props} />;
 
 class Sidebar extends Component {
 	state = {
@@ -126,6 +128,14 @@ class Sidebar extends Component {
 								<AddressBookMenuIcon />
 							</ListItemIcon>
 							<ListItemText primary="Address Book" />
+						</ListItem>
+					</List>
+				</Grid>
+				<Divider />
+				<Grid item xs={12}>
+					<List>
+						<ListItem component={switchAccount} key="switchAccount">
+							<ListItemText primary="Switch Account" />
 						</ListItem>
 					</List>
 				</Grid>

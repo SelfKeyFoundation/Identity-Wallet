@@ -31,6 +31,7 @@ export class Web3Service {
 		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
+		this.abi = ABI;
 	}
 
 	async handleTicket(data) {

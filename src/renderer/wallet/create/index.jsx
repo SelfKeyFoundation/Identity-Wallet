@@ -1,16 +1,15 @@
 import React from 'react';
 import { Modal, Typography, Grid, Button } from '@material-ui/core';
+import history from 'common/store/history';
+import { Link } from 'react-router-dom';
 import {
 	ModalWrap,
 	ModalCloseButton,
+	ModalCloseIcon,
 	ModalHeader,
 	ModalBody,
-	Paragraph,
-	ModalCloseIcon,
 	WarningShieldIcon
 } from 'selfkey-ui';
-import history from 'common/store/history';
-import { Link } from 'react-router-dom';
 
 const createPasswordLink = props => <Link to="/createPassword" {...props} />;
 
@@ -33,13 +32,13 @@ export const CreateWallet = props => {
 							<WarningShieldIcon />
 						</Grid>
 						<Grid item xs={10}>
-							<Paragraph id="simple-modal-description" gutterBottom>
+							<Typography variant="body1" gutterBottom>
 								The SelfKey Identity Wallet protects your wallet and Ethereum
 								address with a password. You must remember this password to unlock
 								the wallet. It cannot be restored or reset. As the wallet is stored
 								locally in your device, SelfKey does not have access and cannot help
 								you if the password is lost.
-							</Paragraph>
+							</Typography>
 							<br />
 							<br />
 							<Grid container spacing={24}>

@@ -322,6 +322,10 @@ export class TxHistoryService {
 			next();
 		})();
 	}
+
+	async getTransactions(publicKey) {
+		return TxHistory.findByPublicKey(publicKey);
+	}
 }
 
 export default TxHistoryService;

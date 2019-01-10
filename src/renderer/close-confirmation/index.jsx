@@ -1,13 +1,6 @@
 import React from 'react';
 import { Modal, Typography, Grid, Button } from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	Paragraph,
-	ModalCloseIcon
-} from 'selfkey-ui';
+import { ModalWrap, ModalCloseButton, ModalHeader, ModalBody, ModalCloseIcon } from 'selfkey-ui';
 import history from 'common/store/history';
 import { connect } from 'react-redux';
 import { closeOperations } from 'common/close';
@@ -31,9 +24,9 @@ export const CloseConfirmation = props => {
 				</ModalHeader>
 
 				<ModalBody>
-					<Paragraph id="simple-modal-description" gutterBottom>
+					<Typography variant="body1" gutterBottom>
 						Are you sure you want to close?
-					</Paragraph>
+					</Typography>
 					<br />
 					<br />
 					<Grid container spacing={24}>
