@@ -348,11 +348,11 @@ describe('RelyingPartyRest', () => {
 							value: doc.buffer,
 							options: {
 								contentType: doc.mimeType,
-								filename: 'document',
-								knownLength: doc.size
+								filename: 'document'
 							}
 						}
-					}
+					},
+					json: true
 				}
 			]);
 		});

@@ -4,7 +4,7 @@ import { IdAttribute } from '../identity/id-attribute';
 import { Logger } from 'common/logger';
 
 const log = new Logger('Identity');
-class Identity {
+export class Identity {
 	constructor(wallet) {
 		this.address = '0x' + wallet.publicKey;
 		this.publicKey = null;
