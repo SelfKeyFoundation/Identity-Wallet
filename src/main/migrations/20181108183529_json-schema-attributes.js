@@ -9,7 +9,7 @@ const getAttribute = url => {
 
 const populateInitialRepo = async (ctx, knex, Promise) => {
 	let repoIDs = await knex('repository').insert({
-		url: 'https://platform.selfkey.org/repository.json',
+		url: 'http://platform.selfkey.org/repository.json',
 		name: 'Selfkey.org',
 		eager: true,
 		content: '{}',
@@ -22,7 +22,7 @@ const populateInitialRepo = async (ctx, knex, Promise) => {
 };
 
 const attributeUrlForKey = key => {
-	return `https://platform.selfkey.org/schema/attribute/${key.replace(/_/g, '-')}.json`;
+	return `http://platform.selfkey.org/schema/attribute/${key.replace(/_/g, '-')}.json`;
 };
 
 const migrateAttributeTypes = async (ctx, knex, Promise) => {

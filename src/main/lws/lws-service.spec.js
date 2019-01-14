@@ -1,23 +1,22 @@
 import { LWSService, WSConnection } from './lws-service';
 import { Wallet } from '../wallet/wallet';
-import { IdAttribute } from '../identity/id-attribute';
 import sinon from 'sinon';
-import selfkey from 'selfkey.js';
-import { checkPassword } from '../keystorage';
+import Identity from '../platform/identity';
+import RelyingPartySession from '../platform/relying-party';
 
 jest.mock('../keystorage');
 jest.mock('node-fetch');
 
 describe('lws-service', () => {
 	const connMock = wallet => ({
-		getUnlockedWallet(publicKey) {
+		getIdentity(publicKey) {
 			if (publicKey === wallet.publicKey) {
-				return wallet.privateKey;
+				return wallet;
 			}
 			return null;
 		},
 		send(msg, req) {},
-		unlockWallet(publicKey, privateKey) {}
+		addIdentity(publicKey, identity) {}
 	});
 	describe('LWSService', () => {
 		let service = null;
@@ -29,21 +28,8 @@ describe('lws-service', () => {
 		});
 		afterEach(() => {
 			sinon.restore();
-			checkPassword.mockRestore();
 		});
 
-		describe('checkWallet', () => {
-			it('returns unlocked wallet if private key found in conn', () => {
-				let expected = { publicKey: 'unlocked', unlocked: true, privateKey: 'private key' };
-				let wallet = service.checkWallet(expected.publicKey, connMock(expected));
-				expect(wallet).toEqual(expected);
-			});
-			it('returns locked wallet if private key not found in conn', () => {
-				let expected = { publicKey: 'locked', unlocked: false };
-				let wallet = service.checkWallet(expected.publicKey, connMock(expected));
-				expect(wallet).toEqual(expected);
-			});
-		});
 		describe('reqWallets', () => {
 			it('returns wallets', async () => {
 				sinon.stub(Wallet, 'findAll');
@@ -67,50 +53,55 @@ describe('lws-service', () => {
 				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
-				const msg = { type: 'test', payload: { website: { url: 'test' } } };
+				const msg = { type: 'test', payload: { config: { website: { url: 'test' } } } };
 
 				await service.reqWallets(msg, conn);
 
-				expect(
-					conn.send.calledWithMatch(
-						{
-							payload: [
-								{
-									publicKey: 'unlocked',
-									profile: 'local',
-									unlocked: true,
-									signedUp: true
-								},
-								{
-									publicKey: 'locked',
-									profile: 'local',
-									unlocked: false,
-									signedUp: true
-								}
-							]
-						},
-						msg
-					)
-				).toBeTruthy();
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						payload: [
+							{
+								publicKey: 'unlocked',
+								profile: 'local',
+								unlocked: true,
+								signedUp: true
+							},
+							{
+								publicKey: 'locked',
+								profile: 'local',
+								unlocked: false,
+								signedUp: false
+							}
+						]
+					},
+					msg
+				]);
 			});
 		});
 		describe('reqUnlock', () => {
 			const t = (msg, wallet, expected) =>
 				it(msg, async () => {
 					sinon.stub(Wallet, 'findByPublicKey').resolves(wallet);
-					checkPassword.mockReturnValue(wallet.privateKey);
 					const conn = connMock(wallet);
 					sinon.stub(conn, 'send');
-					sinon.stub(conn, 'unlockWallet');
+					sinon.stub(conn, 'addIdentity');
+					if (expected) {
+						sinon.stub(Identity.prototype, 'unlock').resolves('ok');
+					} else {
+						sinon.stub(Identity.prototype, 'unlock').rejects(new Error('error'));
+					}
 					await service.reqUnlock(
-						{ payload: { publicKey: wallet.publicKey, website: { url: 'test' } } },
+						{
+							payload: {
+								publicKey: wallet.publicKey,
+								config: { website: { url: 'test' } }
+							}
+						},
 						conn
 					);
 
 					if (expected) {
-						expect(
-							conn.unlockWallet.calledWith(wallet.publicKey, wallet.privateKey)
-						).toBeTruthy();
+						expect(conn.addIdentity.calledOnce).toBeTruthy();
 					}
 
 					expect(
@@ -122,7 +113,12 @@ describe('lws-service', () => {
 									unlocked: expected
 								}
 							},
-							{ payload: { publicKey: wallet.publicKey, website: { url: 'test' } } }
+							{
+								payload: {
+									publicKey: wallet.publicKey,
+									config: { website: { url: 'test' } }
+								}
+							}
 						)
 					).toBeTruthy();
 				});
@@ -146,128 +142,58 @@ describe('lws-service', () => {
 				false
 			);
 		});
-		xdescribe('getAttributes', () => {
-			// TODO: fix attributes json schema
-			const attributes = [
-				IdAttribute.fromJson({
-					id: 1,
-					walletId: 1,
-					typeId: 1,
-					data: { value: 'test' },
-					documents: null
-				}),
-				IdAttribute.fromJson({
-					id: 2,
-					walletId: 1,
-					typeId: 2,
-					data: { value1: 'test1', value2: 'test2' },
-					documents: null
-				}),
-				IdAttribute.fromJson({
-					id: 3,
-					walletId: 1,
-					typeId: 3,
-					data: {},
-					documents: [
-						{
-							mimeType: 'test',
-							buffer: Buffer.from('test', 'utf8'),
-							size: 10,
-							attributeId: 3
-						}
-					]
-				})
-			];
-			beforeEach(() => {
-				sinon.stub(Wallet, 'findByPublicKey').returns({
-					eager: () =>
-						Promise.resolve({
-							idAttributes: attributes
-						})
-				});
-			});
-			it('get simple attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } }
-				]);
-			});
-			it('get missing attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' },
-					{ key: 'missing', label: 'Missing1' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } }
-				]);
-			});
-			it('get document attributes', async () => {
-				let retAttrs = await service.getAttributes('test', [
-					{ key: 'test1', label: 'Test1' },
-					{ key: 'test3', label: 'Test3' }
-				]);
-				expect(retAttrs).toEqual([
-					{ key: 'test1', label: 'Test1', document: false, data: { value: 'test' } },
-					{
-						key: 'test3',
-						label: 'Test3',
-						document: true,
-						data: { value: 'data:test;base64,dGVzdA==' }
-					}
-				]);
-			});
-		});
 		describe('reqAttributes', () => {
-			it('returns error for locked wallet', async () => {
-				const wallet = { publicKey: 'locked', profile: 'local' };
-				const conn = connMock(wallet);
-				const resolvedAttrs = [
-					{ key: 'test_key', label: 'Test Label', data: { value: 'test data' } }
-				];
-				sinon.stub(service, 'checkWallet').returns({ unlocked: !!wallet.privateKey });
-				sinon.stub(conn, 'send');
-				sinon.stub(service, 'getAttributes').resolves(resolvedAttrs);
-				const msg = { payload: { ...wallet, attributes: [] } };
-
+			it('send auth error if wallet is locked', async () => {
+				const conn = {};
+				const msg = { payload: { publicKey: 'test' } };
+				conn.getIdentity = sinon.stub().returns(null);
+				conn.send = sinon.stub().returns(null);
 				await service.reqAttributes(msg, conn);
-
-				expect(
-					conn.send.calledWithMatch(
-						{
-							error: true,
-							payload: {
-								code: 'not_authorized',
-								message: 'Wallet is locked, cannot request attributes'
-							}
-						},
-						msg
-					)
-				).toBeTruthy();
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						error: true,
+						payload: {
+							code: 'not_authorized',
+							message: 'Wallet is locked, cannot request attributes'
+						}
+					},
+					msg
+				]);
 			});
 
 			it('returns attributes', async () => {
-				const wallet = { publicKey: 'unlocked', privateKey: 'ok', profile: 'local' };
-				const conn = connMock(wallet);
-				const resolvedAttrs = [
-					{ key: 'test_key', label: 'Test Label', data: { value: 'test data' } }
-				];
-				sinon.stub(service, 'checkWallet').returns({ unlocked: !!wallet.privateKey });
-				sinon.stub(conn, 'send');
-				sinon.stub(service, 'getAttributes').resolves(resolvedAttrs);
-				const msg = { payload: { ...wallet, attributes: [] } };
-
+				const conn = {};
+				const msg = { payload: { publicKey: 'test', requestedAttributes: [] } };
+				let ident = { getAttributesByTypes() {} };
+				sinon.stub(ident, 'getAttributesByTypes').resolves([
+					{
+						attributeType: { url: 'test1', content: {} },
+						data: { value: 1 },
+						documents: [],
+						id: 1
+					},
+					{
+						attributeType: { url: 'test2', content: {} },
+						data: { value: 2 },
+						documents: [],
+						id: 2
+					}
+				]);
+				conn.getIdentity = sinon.stub().returns(ident);
+				conn.send = sinon.stub().returns(null);
 				await service.reqAttributes(msg, conn);
-
-				expect(
-					conn.send.calledWithMatch(
-						{
-							payload: resolvedAttrs
-						},
-						msg
-					)
-				).toBeTruthy();
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						payload: {
+							publicKey: 'test',
+							attributes: [
+								{ url: 'test1', schema: {}, value: 1, id: 1 },
+								{ url: 'test2', schema: {}, value: 2, id: 2 }
+							]
+						}
+					},
+					msg
+				]);
 			});
 		});
 
@@ -344,12 +270,11 @@ describe('lws-service', () => {
 		describe('formatLoginAttempt', () => {
 			const website = {
 				name: 'example',
-				url: 'http://example.com',
-				apiUrl: 'http://example.com/api'
+				url: 'http://example.com'
 			};
 			const msg = {
 				payload: {
-					website,
+					config: { website },
 					attributes: []
 				}
 			};
@@ -358,7 +283,6 @@ describe('lws-service', () => {
 				expect(service.formatLoginAttempt(msg, resp)).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: false,
 					success: true
 				});
@@ -372,7 +296,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: false,
 					success: false
 				});
@@ -386,7 +309,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: true,
 					success: true
 				});
@@ -403,7 +325,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: true,
 					success: false
 				});
@@ -414,9 +335,7 @@ describe('lws-service', () => {
 			it('send auth error if wallet is locked', async () => {
 				const conn = {};
 				const msg = { payload: { publicKey: 'test' } };
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: false
-				});
+				conn.getIdentity = sinon.stub().returns(null);
 				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
 				expect(
@@ -424,8 +343,8 @@ describe('lws-service', () => {
 						{
 							error: true,
 							payload: {
-								code: 'auth_error',
-								message: 'Cannot auth with locked wallet'
+								code: 'not_authorized',
+								message: 'Wallet is locked, cannot auth with relying party'
 							}
 						},
 						msg,
@@ -433,23 +352,21 @@ describe('lws-service', () => {
 					)
 				).toBeTruthy();
 			});
-			it('send nonce fetch error if got error from endpoint', async () => {
+			it('send session_establish error if challange failed', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test', website: {} } };
-				const error = 'could note generate nonce';
+				const msg = { payload: { publicKey: 'test', config: { website: {} } } };
+				const error = new Error('Session Establish Error');
+				sinon.stub(RelyingPartySession.prototype, 'establish').throws(error);
 				sinon.stub(service, 'authResp');
-				sinon.stub(service, 'fetchNonce').resolves({ error });
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true
-				});
+				conn.getIdentity = sinon.stub().returns({});
 				await service.reqAuth(msg, conn);
 				expect(
 					service.authResp.calledWithMatch(
 						{
 							error: true,
 							payload: {
-								code: 'nonce_fetch_error',
-								message: error
+								code: 'session_establish',
+								message: error.message
 							}
 						},
 						msg,
@@ -457,78 +374,56 @@ describe('lws-service', () => {
 					)
 				).toBeTruthy();
 			});
-			it('send nonce fetch error if did not get nonce in responce json', async () => {
+			it('send token_error on token fetch error', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test', website: {} } };
-				sinon.stub(service, 'fetchNonce').resolves({});
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true
-				});
+				const msg = {
+					payload: { publicKey: 'test', config: { website: {} } }
+				};
+				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
+				conn.getIdentity = sinon.stub().returns({});
+				sinon
+					.stub(RelyingPartySession.prototype, 'getUserLoginPayload')
+					.throws(new Error('error'));
 				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
-				expect(
-					service.authResp.calledWithMatch(
-						{
-							error: true,
-							payload: {
-								code: 'nonce_fetch_error',
-								message: 'No nonce in response'
-							}
+				expect(service.authResp.getCall(0).args).toEqual([
+					{
+						payload: {
+							code: 'token_error',
+							message: 'User authentication failed'
 						},
-						msg,
-						conn
-					)
-				).toBeTruthy();
+						error: true
+					},
+					msg,
+					conn
+				]);
 			});
-			it('send sign error if could not generate signature', async () => {
+		});
+
+		describe('reqSignUp', () => {
+			it('send user create error if could not create user', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test', website: {} } };
-				sinon.stub(service, 'fetchNonce').resolves({ nonce: 'test' });
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true
-				});
-				sinon.stub(selfkey, 'createSignature').returns(null);
+				const msg = {
+					payload: { publicKey: 'test', attributes: [], config: { website: {} } }
+				};
+				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
+				conn.getIdentity = sinon.stub().returns({});
+				sinon.stub(RelyingPartySession.prototype, 'createUser').throws(new Error('error'));
 				sinon.stub(service, 'authResp');
-				await service.reqAuth(msg, conn);
-				expect(selfkey.createSignature.calledOnce).toBeTruthy();
-				expect(
-					service.authResp.calledWithMatch(
-						{
-							error: true,
-							payload: {
-								code: 'sign_error',
-								message: 'Could not generate signature'
-							}
-						},
-						msg,
-						conn
-					)
-				).toBeTruthy();
+				await service.reqSignup(msg, conn);
+				expect(service.authResp.calledOnce).toBeTruthy();
+				expect(service.authResp.getCall(0).args).toEqual([
+					{
+						error: true,
+						payload: {
+							code: 'user_create_error',
+							message: 'error'
+						}
+					},
+					msg,
+					conn
+				]);
 			});
-			it('send conn_error on connection error', async () => {
-				const conn = {};
-				const msg = { payload: { publicKey: 'test', website: {} } };
-				sinon.stub(service, 'fetchNonce').throws(new Error('connection error'));
-				sinon.stub(service, 'checkWallet').returns({
-					unlocked: true
-				});
-				sinon.stub(service, 'authResp');
-				await service.reqAuth(msg, conn);
-				expect(
-					service.authResp.calledWithMatch(
-						{
-							payload: {
-								code: 'conn_error',
-								message: 'connection error'
-							},
-							error: true
-						},
-						msg,
-						conn
-					)
-				).toBeTruthy();
-			});
-			xit('fetches nonce and sends signed attributes to endpoint', async () => {});
 		});
 
 		describe('reqUnknown', () => {
@@ -621,9 +516,9 @@ describe('lws-service', () => {
 			const publicKey = 'public';
 			const privateKey = 'private';
 
-			expect(wsconn.getUnlockedWallet(publicKey)).toBeNull();
-			wsconn.unlockWallet(publicKey, privateKey);
-			expect(wsconn.getUnlockedWallet(publicKey)).toBe(privateKey);
+			expect(wsconn.getIdentity(publicKey)).toBeNull();
+			wsconn.addIdentity(publicKey, privateKey);
+			expect(wsconn.getIdentity(publicKey)).toBe(privateKey);
 		});
 		describe('handleMessage', () => {
 			it('sends error on invalalid json msg', async () => {
