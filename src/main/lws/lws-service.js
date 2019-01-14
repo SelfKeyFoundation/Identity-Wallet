@@ -174,7 +174,7 @@ export class LWSService {
 			log.error(error);
 			let payload = {
 				code: 'token_error',
-				message: 'User Authentication failed'
+				message: 'User authentication failed'
 			};
 			return this.authResp({ payload, error: true }, msg, conn);
 		}

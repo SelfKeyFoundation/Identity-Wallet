@@ -23,7 +23,7 @@ describe('RelyingPartyRest', () => {
 
 	beforeEach(() => {
 		config = { origin: 'test' };
-		ctx = new RelyingPartyCtx(config);
+		ctx = new RelyingPartyCtx(config, { publicKey: 'test' });
 	});
 	it('getAuthorizationHeader', () => {
 		let token = 'test';
@@ -39,8 +39,9 @@ describe('RelyingPartyRest', () => {
 			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
-					url: testEndpoint,
-					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' }
+					url: `${testEndpoint}/test`,
+					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
+					json: true
 				}
 			]);
 			expect(res).toBe(testChallnage);
@@ -96,7 +97,8 @@ describe('RelyingPartyRest', () => {
 						Authorization: 'Bearer test',
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
-					}
+					},
+					json: true
 				}
 			]);
 		});
@@ -110,16 +112,17 @@ describe('RelyingPartyRest', () => {
 			let attributes = [
 				{
 					test1: 'test1',
-					documents: [
-						{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') }
-					]
+					documents: [1]
 				},
 				{
 					test2: 'test2',
-					documents: [
-						{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
-					]
+					documents: [2]
 				}
+			];
+
+			let documents = [
+				{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') },
+				{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
 			];
 
 			ctx.token = {
@@ -129,7 +132,7 @@ describe('RelyingPartyRest', () => {
 			};
 			sinon.stub(request, 'post').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.createUser(ctx, attributes);
+			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
 			expect(res).toEqual('ok');
 			expect(request.post.getCall(0).args).toEqual([
 				{
@@ -156,19 +159,19 @@ describe('RelyingPartyRest', () => {
 							}
 						},
 						'$document-1': {
-							value: attributes[0].documents[0].buffer,
+							value: documents[0].buffer,
 							options: {
-								contentType: attributes[0].documents[0].mimeType,
-								fileName: null,
-								knownSize: attributes[0].documents[0].size
+								contentType: documents[0].mimeType,
+								filename: 'document-1',
+								knownLength: documents[0].size
 							}
 						},
 						'$document-2': {
-							value: attributes[1].documents[0].buffer,
+							value: documents[1].buffer,
 							options: {
-								contentType: attributes[1].documents[0].mimeType,
-								fileName: null,
-								knownSize: attributes[1].documents[0].size
+								contentType: documents[1].mimeType,
+								filename: 'document-2',
+								knownLength: documents[1].size
 							}
 						}
 					}
@@ -220,8 +223,8 @@ describe('Relying Party session', () => {
 	describe('establish', () => {
 		it('should athenticate with rp if not active', async () => {
 			const testSignature = 'testSignature';
-			const testChallenge = 'challenge';
-			const testToken = 'token';
+			const testChallenge = { jwt: 'challenge' };
+			const testToken = { jwt: 'token' };
 			const testChallengeToken = { data: { challenge: 'test' } };
 			const testServiceToken = { data: 'test' };
 			sinon.stub(session, 'isActive').returns(false);
@@ -243,12 +246,12 @@ describe('Relying Party session', () => {
 			).toBeTruthy();
 			expect(RelyingPartyRest.postChallengeReply.getCall(0).args).toEqual([
 				session.ctx,
-				testChallenge,
+				testChallenge.jwt,
 				testSignature
 			]);
 
-			expect(RelyingPartyToken.fromString.calledWith(testChallenge)).toBeTruthy();
-			expect(RelyingPartyToken.fromString.calledWith(testToken)).toBeTruthy();
+			expect(RelyingPartyToken.fromString.calledWith(testChallenge.jwt)).toBeTruthy();
+			expect(RelyingPartyToken.fromString.calledWith(testToken.jwt)).toBeTruthy();
 			expect(token).toEqual(testServiceToken);
 			expect(session.ctx.token).toEqual(testServiceToken);
 		});

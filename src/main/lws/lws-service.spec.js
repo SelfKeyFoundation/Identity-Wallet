@@ -163,7 +163,7 @@ describe('lws-service', () => {
 
 			it('returns attributes', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test', attributes: [] } };
+				const msg = { payload: { publicKey: 'test', requestedAttributes: [] } };
 				let ident = { getAttributesByTypes() {} };
 				sinon.stub(ident, 'getAttributesByTypes').resolves([
 					{
@@ -270,12 +270,11 @@ describe('lws-service', () => {
 		describe('formatLoginAttempt', () => {
 			const website = {
 				name: 'example',
-				url: 'http://example.com',
-				apiUrl: 'http://example.com/api'
+				url: 'http://example.com'
 			};
 			const msg = {
 				payload: {
-					website,
+					config: { website },
 					attributes: []
 				}
 			};
@@ -284,7 +283,6 @@ describe('lws-service', () => {
 				expect(service.formatLoginAttempt(msg, resp)).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: false,
 					success: true
 				});
@@ -298,7 +296,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: false,
 					success: false
 				});
@@ -312,7 +309,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: true,
 					success: true
 				});
@@ -329,7 +325,6 @@ describe('lws-service', () => {
 				).toMatchObject({
 					websiteName: website.name,
 					websiteUrl: website.url,
-					apiUrl: website.apiUrl,
 					signup: true,
 					success: false
 				});
@@ -379,30 +374,6 @@ describe('lws-service', () => {
 					)
 				).toBeTruthy();
 			});
-			it('send user create error if could not create user', async () => {
-				const conn = {};
-				const msg = {
-					payload: { publicKey: 'test', attributes: [], config: { website: {} } }
-				};
-				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
-				conn.getIdentity = sinon.stub().returns({});
-				sinon.stub(RelyingPartySession.prototype, 'createUser').throws(new Error('error'));
-				sinon.stub(service, 'authResp');
-				await service.reqAuth(msg, conn);
-				expect(
-					service.authResp.calledWithMatch(
-						{
-							error: true,
-							payload: {
-								code: 'user_create_error',
-								message: 'error'
-							}
-						},
-						msg,
-						conn
-					)
-				).toBeTruthy();
-			});
 			it('send token_error on token fetch error', async () => {
 				const conn = {};
 				const msg = {
@@ -419,9 +390,35 @@ describe('lws-service', () => {
 					{
 						payload: {
 							code: 'token_error',
-							message: 'error'
+							message: 'User authentication failed'
 						},
 						error: true
+					},
+					msg,
+					conn
+				]);
+			});
+		});
+
+		describe('reqSignUp', () => {
+			it('send user create error if could not create user', async () => {
+				const conn = {};
+				const msg = {
+					payload: { publicKey: 'test', attributes: [], config: { website: {} } }
+				};
+				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
+				conn.getIdentity = sinon.stub().returns({});
+				sinon.stub(RelyingPartySession.prototype, 'createUser').throws(new Error('error'));
+				sinon.stub(service, 'authResp');
+				await service.reqSignup(msg, conn);
+				expect(service.authResp.calledOnce).toBeTruthy();
+				expect(service.authResp.getCall(0).args).toEqual([
+					{
+						error: true,
+						payload: {
+							code: 'user_create_error',
+							message: 'error'
+						}
 					},
 					msg,
 					conn

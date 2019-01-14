@@ -29,7 +29,7 @@ describe('identity', () => {
 	it('genSignatureForMessage', async () => {
 		let signature = await id.genSignatureForMessage('test');
 		expect(signature).toEqual(
-			'1testc6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e1'
+			'174657374c6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e1'
 		);
 	});
 	describe('unlock', () => {
@@ -74,7 +74,7 @@ describe('identity', () => {
 		});
 	});
 	it('getAttributesByTypes', async () => {
-		sinon.stub(IdAttribute, 'findAllByWalletId').returns({
+		sinon.stub(IdAttribute, 'findByTypeUrls').returns({
 			eager() {
 				return 'ok';
 			}
@@ -82,7 +82,7 @@ describe('identity', () => {
 
 		let res = await id.getAttributesByTypes(['test1', 'test2']);
 
-		expect(IdAttribute.findAllByWalletId.getCall(0).args).toEqual([id.wid, ['test1', 'test2']]);
+		expect(IdAttribute.findByTypeUrls.getCall(0).args).toEqual([id.wid, ['test1', 'test2']]);
 		expect(res).toEqual('ok');
 	});
 });

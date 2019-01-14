@@ -235,7 +235,7 @@ describe('migrations', () => {
 
 				expect(newAttr[0].typeId).toBe(newType[0].id);
 				expect(newType[0].url).toEqual(
-					'https://platform.selfkey.org/schema/attribute/physical-address.json'
+					'http://platform.selfkey.org/schema/attribute/physical-address.json'
 				);
 				expect(newAttr[0].data.value).toEqual({
 					'address-line-1': 'workplace str 1',
@@ -470,7 +470,7 @@ describe('migrations', () => {
 			await TestDb.migrate('up', { to: currMigration });
 			let initialRepos = await TestDb.knex('repository').select();
 			expect(initialRepos.length).toBe(1);
-			expect(initialRepos[0].url).toBe('https://platform.selfkey.org/repository.json');
+			expect(initialRepos[0].url).toBe('http://platform.selfkey.org/repository.json');
 		});
 	});
 });

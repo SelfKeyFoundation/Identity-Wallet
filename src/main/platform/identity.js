@@ -1,7 +1,9 @@
 import ethUtil from 'ethereumjs-util';
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
+import { Logger } from 'common/logger';
 
+const log = new Logger('Identity');
 class Identity {
 	constructor(wallet) {
 		this.address = '0x' + wallet.publicKey;
@@ -38,7 +40,7 @@ class Identity {
 				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
 				.toString('hex');
 		} catch (error) {
-			console.log(error);
+			log.error(error);
 			throw new Error('INVALID_PASSWORD');
 		}
 	}

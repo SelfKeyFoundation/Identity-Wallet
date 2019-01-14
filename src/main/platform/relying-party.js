@@ -110,7 +110,7 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static createUser(ctx, attributes, documents) {
+	static createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let url = ctx.getEndpoint('users');
 		let formData = documents.reduce((acc, curr) => {
