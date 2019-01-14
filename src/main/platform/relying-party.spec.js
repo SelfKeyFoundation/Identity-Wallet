@@ -182,12 +182,181 @@ describe('RelyingPartyRest', () => {
 		xit('should throw 401 if token is invalid/expired', () => {});
 		xit('should throw on request failure', () => {});
 	});
-	describe('listKYCTemplates', () => {});
-	describe('getKYCTemplate', () => {});
-	describe('createKYCApplication', () => {});
-	describe('listKYCApplications', () => {});
-	describe('getKYCApplication', () => {});
-	describe('uploadKYCApplicationFile', () => {});
+	describe('listKYCTemplates', () => {
+		it('should return a list of KYC templates', async () => {
+			const testEndpoint = 'http://test';
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'get').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.listKYCTemplates(ctx);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint}`,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
+	describe('getKYCTemplate', () => {
+		it('should return a KYC templates', async () => {
+			const testEndpoint = 'http://test/:id';
+			const id = 'template-id';
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'get').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.getKYCTemplate(ctx, id);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `http://test/${id}`,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
+	describe('createKYCApplication', () => {
+		it('Should create application', async () => {
+			const testEndpoint = 'http://test';
+			const templateId = 1;
+			const attributes = [
+				{
+					test1: 'test1',
+					documents: [1]
+				},
+				{
+					test2: 'test2',
+					documents: [2]
+				}
+			];
+
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.createKYCApplication(ctx, templateId, attributes);
+			expect(res).toEqual('ok');
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					body: { templateId, attributes },
+					json: true
+				}
+			]);
+		});
+	});
+	describe('listKYCApplications', () => {
+		it('should return a list of KYC applications', async () => {
+			const testEndpoint = 'http://test';
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'get').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.listKYCApplications(ctx);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint}`,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
+	describe('getKYCApplication', () => {
+		it('should return a KYC application', async () => {
+			const testEndpoint = 'http://test/:id';
+			const id = 'template-id';
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'get').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.getKYCApplication(ctx, id);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `http://test/${id}`,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
+	describe('uploadKYCApplicationFile', () => {
+		it('Should upload application file', async () => {
+			const testEndpoint = 'http://test';
+			const doc = { mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') };
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.uploadKYCApplicationFile(ctx, doc);
+			expect(res).toEqual('ok');
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					formData: {
+						document: {
+							value: doc.buffer,
+							options: {
+								contentType: doc.mimeType,
+								filename: 'document',
+								knownLength: doc.size
+							}
+						}
+					}
+				}
+			]);
+		});
+	});
 });
 
 describe('Relying Party session', () => {

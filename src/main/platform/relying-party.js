@@ -139,12 +139,92 @@ export class RelyingPartyRest {
 			}
 		});
 	}
-	static listKYCTemplates() {}
-	static getKYCTemplate() {}
-	static createKYCApplication() {}
-	static listKYCApplications() {}
-	static getKYCApplications() {}
-	static uploadKYCApplicationFile() {}
+	static listKYCTemplates(ctx) {
+		let url = ctx.getEndpoint('/templates');
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static getKYCTemplate(ctx, id) {
+		let url = ctx.getEndpoint('/templates/:id');
+		url = url.replace(':id', id);
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static createKYCApplication(ctx, templateId, attributes) {
+		let url = ctx.getEndpoint('/applications');
+		return request.post({
+			url,
+			body: { attributes, templateId },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static listKYCApplications(ctx) {
+		let url = ctx.getEndpoint('/applications');
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static getKYCApplication(ctx, id) {
+		let url = ctx.getEndpoint('/applications/:id');
+		url = url.replace(':id', id);
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static uploadKYCApplicationFile(ctx, doc) {
+		let url = ctx.getEndpoint('users');
+		let formData = {
+			document: {
+				value: doc.buffer,
+				options: {
+					contentType: doc.mimeType,
+					filename: doc.name || 'document',
+					knownLength: doc.size
+				}
+			}
+		};
+
+		return request.post({
+			url,
+			formData,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			}
+		});
+	}
 }
 
 export class RelyingPartySession {
