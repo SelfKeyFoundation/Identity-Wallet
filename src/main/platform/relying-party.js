@@ -287,7 +287,7 @@ export class RelyingPartySession {
 		}, []);
 		documents = await Promise.all(
 			documents.map(async doc => {
-				let id = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+				const { id } = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
 				let newDoc = { ...doc };
 				delete newDoc.buffer;
 				newDoc.content = id;

@@ -463,7 +463,57 @@ describe('Relying Party session', () => {
 	});
 	describe('listKYCTemplates', () => {});
 	describe('getKYCTemplate', () => {});
-	describe('createKYCApplication', () => {});
+	describe('createKYCApplication', () => {
+		it('should create kyc application', async () => {
+			sinon.stub(RelyingPartyRest, 'uploadKYCApplicationFile').resolves({ id: 'ok' });
+			sinon.stub(RelyingPartyRest, 'createKYCApplication').resolves('ok');
+
+			let attributes = [
+				{
+					id: 1,
+					data: 'test1',
+					documents: [
+						{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+						{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+					]
+				},
+				{
+					id: 2,
+					data: 'test2',
+					documents: [
+						{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+						{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+					]
+				}
+			];
+
+			let res = await session.createKYCApplication(1, attributes);
+
+			expect(RelyingPartyRest.createKYCApplication.getCall(0).args).toEqual([
+				session.ctx,
+				1,
+				[
+					{
+						id: 1,
+						data: 'test1',
+						documents: [
+							{ id: 1, mimeType: 'test', size: 123, content: 'ok' },
+							{ id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
+						]
+					},
+					{
+						id: 2,
+						data: 'test2',
+						documents: [
+							{ id: 3, mimeType: 'test', size: 123, content: 'ok' },
+							{ id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
+						]
+					}
+				]
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
 	describe('listKYCApplications', () => {});
 	describe('getKYCApplication', () => {});
 });
