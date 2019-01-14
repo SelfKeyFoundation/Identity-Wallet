@@ -271,6 +271,46 @@ export class RelyingPartySession {
 		}));
 		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
 	}
+
+	listKYCApplications() {
+		return RelyingPartyRest.listKYCApplications(this.ctx);
+	}
+
+	getKYCApplication(id) {
+		return RelyingPartyRest.getKYCApplication(this.ctx, id);
+	}
+
+	async createKYCApplication(templateId, attributes) {
+		let documents = attributes.reduce((acc, curr) => {
+			acc = acc.concat(curr.documents);
+			return acc;
+		}, []);
+		documents = await Promise.all(
+			documents.map(async doc => {
+				let id = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+				let newDoc = { ...doc };
+				delete newDoc.buffer;
+				newDoc.content = id;
+				return newDoc;
+			})
+		);
+		attributes = attributes.map(attr => {
+			let attrDocs = documents.filter(
+				doc => !!attr.documents.filter(d => d.id === doc.id).length
+			);
+			attr = { ...attr, documents: attrDocs };
+			return attr;
+		});
+		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
+	}
+
+	listKYCTemplates() {
+		return RelyingPartyRest.listKYCTemplates(this.ctx);
+	}
+
+	getKYCTemplate(id) {
+		return RelyingPartyRest.getKYCTemplate(this.ctx, id);
+	}
 }
 
 export default RelyingPartySession;
