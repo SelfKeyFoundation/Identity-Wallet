@@ -139,12 +139,92 @@ export class RelyingPartyRest {
 			}
 		});
 	}
-	static listKYCTemplates() {}
-	static getKYCTemplate() {}
-	static createKYCApplication() {}
-	static listKYCApplications() {}
-	static getKYCApplications() {}
-	static uploadKYCApplicationFile() {}
+	static listKYCTemplates(ctx) {
+		let url = ctx.getEndpoint('/templates');
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static getKYCTemplate(ctx, id) {
+		let url = ctx.getEndpoint('/templates/:id');
+		url = url.replace(':id', id);
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static createKYCApplication(ctx, templateId, attributes) {
+		let url = ctx.getEndpoint('/applications');
+		return request.post({
+			url,
+			body: { attributes, templateId },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static listKYCApplications(ctx) {
+		let url = ctx.getEndpoint('/applications');
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static getKYCApplication(ctx, id) {
+		let url = ctx.getEndpoint('/applications/:id');
+		url = url.replace(':id', id);
+		return request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static uploadKYCApplicationFile(ctx, doc) {
+		let url = ctx.getEndpoint('users');
+		let formData = {
+			document: {
+				value: doc.buffer,
+				options: {
+					contentType: doc.mimeType,
+					filename: doc.name || 'document',
+					knownLength: doc.size
+				}
+			}
+		};
+
+		return request.post({
+			url,
+			formData,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			}
+		});
+	}
 }
 
 export class RelyingPartySession {
@@ -190,6 +270,46 @@ export class RelyingPartySession {
 			documents: attr.documents
 		}));
 		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
+	}
+
+	listKYCApplications() {
+		return RelyingPartyRest.listKYCApplications(this.ctx);
+	}
+
+	getKYCApplication(id) {
+		return RelyingPartyRest.getKYCApplication(this.ctx, id);
+	}
+
+	async createKYCApplication(templateId, attributes) {
+		let documents = attributes.reduce((acc, curr) => {
+			acc = acc.concat(curr.documents);
+			return acc;
+		}, []);
+		documents = await Promise.all(
+			documents.map(async doc => {
+				const { id } = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+				let newDoc = { ...doc };
+				delete newDoc.buffer;
+				newDoc.content = id;
+				return newDoc;
+			})
+		);
+		attributes = attributes.map(attr => {
+			let attrDocs = documents.filter(
+				doc => !!attr.documents.filter(d => d.id === doc.id).length
+			);
+			attr = { ...attr, documents: attrDocs };
+			return attr;
+		});
+		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
+	}
+
+	listKYCTemplates() {
+		return RelyingPartyRest.listKYCTemplates(this.ctx);
+	}
+
+	getKYCTemplate(id) {
+		return RelyingPartyRest.getKYCTemplate(this.ctx, id);
 	}
 }
 
