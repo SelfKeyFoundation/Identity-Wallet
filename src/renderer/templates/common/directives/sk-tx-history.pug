@@ -1,8 +1,0 @@
-.tx-history-container.mt-20
-  sk-linear-progress.progress-bar(ng-if="isSyncing")
-  transactions-history(list="txList", open-link="$root.openInBrowser")
-  .pager-container(ng-if="hasPager", layout="row", layout-align="space-between start")
-    .pager-action-item
-        span(ng-click="onPageChange(false)", ng-if="pager.page > 1") < Previous Page
-    .pager-action-item
-        span(ng-click="onPageChange(true)", ng-if="pager.page * pager.perPage < total") Next Page >

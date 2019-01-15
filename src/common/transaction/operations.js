@@ -190,7 +190,7 @@ const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 		});
 		let signed = await ledgerService.signTransaction({
 			dataToSign: rawTx,
-			address: `0x${wallet.publicKey}`
+			address: wallet.publicKey
 		});
 		return signed.raw;
 	}
@@ -207,7 +207,7 @@ const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 
 	const eTx = new Tx(rawTx);
 	eTx.sign(wallet.privateKey);
-	return `0x${eTx.serialize().toString('hex')}`;
+	return eTx.serialize().toString('hex');
 };
 
 const generateContractData = (toAddress, value, decimal) => {

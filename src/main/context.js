@@ -13,11 +13,15 @@ import AddressBookService from './address-book/address-book-service';
 import IdentityService from './identity/identity-service';
 import MarketplaceService from './marketplace/marketplace-service';
 import { createApp } from './app';
+import WalletService from './wallet/wallet-service';
+import TokenService from './token/token-service';
+import WalletTokenService from './wallet/wallet-token-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
+		walletService: asClass(WalletService).singleton(),
 		ledgerService: asClass(LedgerService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),
 		// TODO: refactor to not use static methods
@@ -37,6 +41,8 @@ export const registerMainServices = container => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();
 		}).singleton(),
-		stakingService: asClass(StakingService).singleton()
+		stakingService: asClass(StakingService).singleton(),
+		tokenService: asClass(TokenService).singleton(),
+		walletTokenService: asClass(WalletTokenService).singleton()
 	});
 };

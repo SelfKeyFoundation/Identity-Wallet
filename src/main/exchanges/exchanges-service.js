@@ -3,8 +3,10 @@ import fetch from 'node-fetch';
 import Exchange from './exchange';
 import { isDevMode } from 'common/utils/common';
 import { Logger } from 'common/logger';
+import { getGlobalContext } from 'common/context';
 
 const log = new Logger('ExchangesService');
+const { exchangesOperations } = require('common/exchanges');
 
 const airtableBaseUrl =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=';
@@ -32,7 +34,10 @@ export class ExchangesService {
 				};
 			});
 
-		return Exchange.import(exchanges);
+		await Exchange.import(exchanges);
+		const importedExchanges = await Exchange.findAll();
+		const store = getGlobalContext().store;
+		return store.dispatch(exchangesOperations.updateExchanges(importedExchanges));
 	}
 }
 

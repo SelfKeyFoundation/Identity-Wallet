@@ -1,5 +1,6 @@
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
+import { walletSelectors } from '../wallet';
 
 export const initialState = {
 	repositories: [],
@@ -42,7 +43,9 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTE_DOCUMENTS_LOAD: 'identity/attribute_documents/LOAD',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_SET: 'identity/attribute_documents/SET',
 	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE',
-	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE'
+	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE',
+	IDENTITY_UNLOCK: 'identity/UNLOCK',
+	IDENTITY_LOCK: 'identity/LOCK'
 };
 
 const identityActions = {
@@ -163,7 +166,7 @@ const loadDocumentsOperation = walletId => async (dispatch, getState) => {
 const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let attributes = await identityService.loadIdAttributes(walletId);
-	await dispatch(identityActions.setIdAttributesAction(attributes));
+	await dispatch(identityActions.setIdAttributesAction(walletId, attributes));
 };
 
 const loadDocumentsForAttributeOperation = attrId => async (dispatch, getState) => {
@@ -203,7 +206,9 @@ const lockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteIdAttributesAction(walletId));
 	await dispatch(identityActions.deleteDocumentsAction(walletId));
 };
-const unlockIdentityOperation = walletId => async (dispatch, getState) => {
+const unlockIdentityOperation = () => async (dispatch, getState) => {
+	console.log('HEY');
+	const walletId = walletSelectors.getWallet(getState()).id;
 	await operations.loadDocumentsOperation(walletId)(dispatch, getState);
 	await operations.loadIdAttributesOperation(walletId)(dispatch, getState);
 };
@@ -369,7 +374,7 @@ const deleteDocumentsReducer = (state, action) => {
 const setIdAttributesReducer = (state, action) => {
 	let oldIdAttributes = state.attributes
 		.map(attrId => state.attributesById[attrId])
-		.filter(attr => attr.walletId !== action.walletId);
+		.filter(attr => attr.walletId !== action.payload.walletId);
 	let attributes = [...oldIdAttributes, ...(action.payload.attributes || [])];
 	let attributesById = attributes.reduce((acc, curr) => {
 		acc[curr.id] = curr;

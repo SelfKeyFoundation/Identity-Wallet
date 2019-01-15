@@ -93,13 +93,12 @@ export class TxHistory extends BaseModel {
 		return this.query().insertAndFetch(data);
 	}
 
-	static findByPublicKey(publicKey, pager) {
+	static findByPublicKey(publicKey) {
 		publicKey = publicKey.toLowerCase();
-		let query = this.query()
+		return this.query()
 			.where({ from: publicKey })
 			.orWhere({ to: publicKey })
 			.orderBy('timeStamp', 'desc');
-		return paginator(this.knex())(query, pager);
 	}
 
 	static findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {

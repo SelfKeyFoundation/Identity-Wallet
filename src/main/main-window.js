@@ -5,6 +5,8 @@ import path from 'path';
 import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
+import { getGlobalContext } from 'common/context';
+import { push } from 'connected-react-router';
 
 const log = new Logger('main-window');
 
@@ -51,7 +53,8 @@ export const createMainWindow = () => {
 		if (mainWindow.shouldIgnoreClose) {
 			event.preventDefault();
 			mainWindow.shouldIgnoreClose = false;
-			mainWindow.webContents.send('SHOW_CLOSE_DIALOG');
+			const store = getGlobalContext().store;
+			store.dispatch(push('/closeConfirmation'));
 		}
 	});
 

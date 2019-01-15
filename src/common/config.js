@@ -2,6 +2,8 @@
 'use strict';
 const path = require('path');
 const dotenv = require('dotenv');
+const electron = require('electron');
+
 const {
 	isDevMode,
 	isDebugMode,
@@ -16,6 +18,13 @@ dotenv.config();
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;
 const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+
+let userDataDirectoryPath = '';
+let walletsDirectoryPath = '';
+if (electron.app) {
+	userDataDirectoryPath = electron.app.getPath('userData');
+	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+}
 
 const common = {
 	defaultLanguage: 'en',
@@ -34,7 +43,7 @@ const common = {
 			notary: 'addition_with_notary',
 			certified_true_copy: 'addition_with_certified_true_copy'
 		},
-		primaryToken: PRIMARY_TOKEN || 'key'
+		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},
 	notificationTypes: {
 		wallet: {
@@ -73,7 +82,10 @@ const dev = {
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
-	node: 'infura'
+	node: 'infura',
+	constants: {
+		primaryToken: PRIMARY_TOKEN || 'KI'
+	}
 };
 
 const prod = {
@@ -82,7 +94,10 @@ const prod = {
 	updateEndpoint: 'https://release.selfkey.org',
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
-	node: 'infura'
+	node: 'infura',
+	constants: {
+		primaryToken: PRIMARY_TOKEN || 'KEY'
+	}
 };
 
 const setupFilesPath = getSetupFilePath();
@@ -129,5 +144,7 @@ module.exports = {
 	common,
 	...common,
 	db,
-	...conf
+	...conf,
+	userDataDirectoryPath,
+	walletsDirectoryPath
 };
