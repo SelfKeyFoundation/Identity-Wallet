@@ -1,63 +1,160 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
-import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
-import { getFiatCurrency } from 'common/fiatCurrency/selectors';
-import { pricesSelectors } from 'common/prices';
-import { Unlock, UnlockBox } from 'selfkey-ui';
-import history from 'common/store/history';
+import {
+	Grid,
+	Checkbox,
+	FormControlLabel,
+	FormControl,
+	FormHelperText,
+	withStyles
+} from '@material-ui/core';
+import { P } from '../typography/paragraph';
+import ExchangeIcon from '../icons/exchange-large';
+import { TransactionFeeSelector } from '../transaction/transaction-fee-selector';
+import { StyledButton } from '../common/styled-button';
 
-const mapStateToProps = state => {
-	return {
-		fiat: getFiatCurrency(state),
-		ethPrice: pricesSelectors.getBySymbol(state, 'ETH'),
-		gas: ethGasStationInfoSelectors.getEthGasStationInfoWEI(state),
-		service: marketplacesSelectors.servicesSelector(state)[0],
-		gasLimit: 200000
+const styles = theme => ({
+	text: {
+		fontSize: '18px',
+		lineHeight: '30px'
+	},
+	footer: {
+		marginTop: '30px',
+		paddingTop: '30px',
+		borderTop: '1px solid #475768'
+	},
+	contentSection: {
+		marginBottom: '20px',
+		marginTop: '20px'
+	},
+	understandLabel: {
+		fontFamily: theme.typography.fontFamily,
+		fontSize: '14px',
+		lineHeight: '21px',
+		color: '#93B0C1'
+	},
+	understandCheckbox: {
+		color: '#00C0D9',
+		'&$primary$checked': {
+			color: '#00C0D9'
+		}
+	},
+	actions: {
+		'&>button': {
+			marginRight: '20px',
+			marginTop: '30px'
+		}
+	},
+	primary: {},
+	checked: {}
+});
+@withStyles(styles)
+class Unlock extends Component {
+	state = {
+		error: false,
+		understood: false,
+		fee: 0
 	};
-};
-
-class UnlockController extends Component {
-	componentDidMount() {
-		this.props.dispatch(ethGasStationInfoOperations.loadData());
-		this.props.dispatch(marketplacesOperations.loadTransactions());
-		this.props.dispatch(marketplacesOperations.loadStakes());
-	}
-
-	handleConfirmAction(fee) {
-		const { service, gasLimit } = this.props;
-		this.props.navigateToTransactionProgress();
-		this.props.dispatch(
-			marketplacesOperations.placeStake(
-				service.serviceOwner,
-				service.serviceId,
-				service.amount,
-				fee,
-				gasLimit
-			)
-		);
-	}
+	handleUnderstoodChange = (event, checked) => {
+		this.setState({ understood: checked });
+	};
+	handleFeeChange = fee => {
+		this.setState({ fee });
+	};
+	handleSubmit = event => {
+		event.preventDefault();
+		if (!this.state.understood) {
+			return this.setState({ error: true });
+		}
+		return this.props.onConfirm(this.state.fee);
+	};
 
 	render() {
-		const { closeAction, gas, fiat, ethPrice, gasLimit } = this.props;
-		if (!gas.safeLow) {
-			return <div>Loading</div>;
-		}
+		const {
+			classes,
+			amount = 25,
+			token = 'KEY',
+			days = 30,
+			minGasPrice,
+			maxGasPrice,
+			gasLimit,
+			fiat,
+			fiatRate,
+			onCancel
+		} = this.props;
+
+		const { error, understood } = this.state;
 		return (
-			<UnlockBox closeAction={history.getHistory().goBack}>
-				<Unlock
-					minGasPrice={gas.safeLow}
-					maxGasPrice={gas.fast}
-					defaultValue={gas.avarage}
-					gasLimit={gasLimit}
-					fiat={fiat.fiatCurrency}
-					fiatRate={ethPrice.priceUSD}
-					onCancel={closeAction}
-					onConfirm={fee => this.handleConfirmAction(fee)}
-				/>
-			</UnlockBox>
+			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+				<Grid item xs={2}>
+					<ExchangeIcon />
+				</Grid>
+				<Grid item xs={10}>
+					<Grid container direction="column" justify="flex-start" alignItems="stretch">
+						<Grid item classes={{ item: classes.contentSection }}>
+							<P className={classes.text}>
+								A refundable deposit of {amount} {token} tokens is required to
+								unlock this marketplace for {days} days.
+							</P>
+						</Grid>
+						<Grid item classes={{ item: classes.contentSection }}>
+							<TransactionFeeSelector
+								minGasPrice={minGasPrice}
+								maxGasPrice={maxGasPrice}
+								gasLimit={gasLimit}
+								fiat={fiat}
+								fiatRate={fiatRate}
+								onChange={this.handleFeeChange}
+							/>
+						</Grid>
+						<Grid item classes={{ item: classes.footer }}>
+							<form onSubmit={this.handleSubmit}>
+								<FormControl required={true} error={error}>
+									<FormControlLabel
+										classes={{ label: classes.understandLabel }}
+										checked={understood}
+										value="understood"
+										onChange={this.handleUnderstoodChange}
+										control={
+											<Checkbox
+												color="primary"
+												classes={{
+													root: classes.understandCheckbox,
+													colorPrimary: classes.primary,
+													checked: classes.checked
+												}}
+											/>
+										}
+										label={`OK, I understand that this deposit is refundable after ${days} days.`}
+									/>
+									{error ? (
+										<FormHelperText>
+											Please confirm you understand how the deposit works.
+										</FormHelperText>
+									) : (
+										''
+									)}
+								</FormControl>
+								<div className={classes.actions}>
+									<StyledButton variant="contained" size="medium" type="submit">
+										Confirm
+									</StyledButton>
+									<StyledButton
+										variant="outlined"
+										size="medium"
+										onClick={onCancel}
+									>
+										Cancel
+									</StyledButton>
+								</div>
+							</form>
+						</Grid>
+					</Grid>
+				</Grid>
+			</Grid>
 		);
 	}
 }
 
-export default connect(mapStateToProps)(UnlockController);
+export { Unlock };
+
+export default Unlock;

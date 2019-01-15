@@ -295,6 +295,7 @@ export class TxHistoryService {
 		let wallets = await Wallet.findAll();
 		for (let wallet of wallets) {
 			let address = wallet.publicKey.toLowerCase();
+			address = address.startsWith('0x') ? address : `0x${address}`;
 			await this.syncByWallet(address, wallet.id);
 			await this.removeNotMinedPendingTxs(address);
 		}
