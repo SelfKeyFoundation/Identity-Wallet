@@ -46,7 +46,6 @@ class BackupAddress extends Component {
 
 	handleDownload = async event => {
 		const directoryPath = await window.openDirectorySelectDialog(event);
-		console.log('directoryPath', directoryPath);
 		if (directoryPath) {
 			this.props.dispatch(createWalletOperations.downloadFileOperation(directoryPath));
 			this.setState({ ...this.state, showFileDownloadedResult: true });

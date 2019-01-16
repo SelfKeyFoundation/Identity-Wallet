@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
-import {
-	Avatar,
-	Input,
-	Button,
-	Grid,
-	Typography,
-	Select,
-	MenuItem,
-	FormControl
-} from '@material-ui/core';
+import { Avatar, Input, Button, Grid, Typography } from '@material-ui/core';
 import { baseLight } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
-import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	avatar: {
@@ -22,27 +12,20 @@ const styles = theme => ({
 		fontSize: '12px',
 		backgroundColor: baseLight
 	},
-	selectInput: {
-		width: '100%'
-	},
 	passwordInput: {
-		width: '205%'
+		width: '110%'
 	},
 	menuItem: {
 		display: 'flex'
 	}
 });
 
-class ExistingAddress extends Component {
+class NewAddress extends Component {
 	state = {
-		wallet: -1,
 		password: '',
+		filePath: '',
 		error: ''
 	};
-
-	componentDidMount() {
-		this.props.dispatch(appOperations.loadWalletsOperation());
-	}
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.error !== this.props.error) {
@@ -50,26 +33,33 @@ class ExistingAddress extends Component {
 		}
 	}
 
-	handleWalletSelection = event => {
-		this.setState({ wallet: event.target.value });
+	resetErrorState = async () => {
+		if (this.state.error !== '') {
+			await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
+		}
+	};
+
+	handleSelectFile = async event => {
+		event.persist();
+		await this.resetErrorState();
+		const filePath = await window.openFileSelectDialog(event);
+		this.setState({ filePath });
 	};
 
 	handleUnlockAction = async () => {
 		await this.props.dispatch(
-			appOperations.unlockWalletWithPasswordOperation(this.state.wallet, this.state.password)
+			appOperations.unlockWalletWithNewFileOperation(this.state.filePath, this.state.password)
 		);
 	};
 
 	handlePasswordChange = async event => {
 		event.persist();
-		if (this.state.error !== '') {
-			await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
-		}
+		await this.resetErrorState();
 		this.setState({ password: event.target.value, error: '' });
 	};
 
 	render() {
-		const { classes, wallets } = this.props;
+		const { classes } = this.props;
 		return (
 			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
 				<Grid
@@ -99,37 +89,19 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
-											SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY
-											WALLET
+										<Typography variant="subtitle2" color="secondary">
+											SELECT A KEYSTORE FILE (UTC/JSON)
 										</Typography>
 									</Grid>
 									<Grid item className={classes.selectInput}>
-										<FormControl variant="filled" fullWidth>
-											<Select
-												value={this.state.wallet}
-												onChange={this.handleWalletSelection}
-												displayEmpty
-												name="wallet"
-												disableUnderline
-												IconComponent={KeyboardArrowDown}
-												input={<Input disableUnderline fullWidth />}
-												autoWidth
-											>
-												<MenuItem value={-1}>
-													<em>Choose...</em>
-												</MenuItem>
-												{wallets.map((wallet, index) => (
-													<MenuItem key={index} value={wallet.id}>
-														{wallet.publicKey}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
+										<Button
+											size="large"
+											variant="outlined"
+											color="primary"
+											onClick={this.handleSelectFile}
+										>
+											SELECT KEYSTORE FILE
+										</Button>
 									</Grid>
 								</Grid>
 							</Grid>
@@ -154,11 +126,7 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
+										<Typography variant="subtitle2" color="secondary">
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>
@@ -197,9 +165,8 @@ class ExistingAddress extends Component {
 const mapStateToProps = (state, props) => {
 	const app = appSelectors.selectApp(state);
 	return {
-		wallets: app.wallets,
 		error: app.error
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(ExistingAddress));
+export default connect(mapStateToProps)(withStyles(styles)(NewAddress));

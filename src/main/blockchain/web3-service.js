@@ -5,6 +5,9 @@ import AsyncTaskQueue from 'common/utils/async-task-queue';
 import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
+import ProviderEngine from 'web3-provider-engine';
+import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+import LedgerWalletSubproviderFactory from 'ledger-wallet-provider';
 
 const log = new Logger('Web3Service');
 
@@ -32,6 +35,16 @@ export class Web3Service {
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
 		this.abi = ABI;
+	}
+
+	async switchToLedgerWallet() {
+		const engine = new ProviderEngine();
+		this.web3 = new Web3(engine);
+
+		const ledgerWalletSubProvider = LedgerWalletSubproviderFactory();
+		engine.addProvider(ledgerWalletSubProvider);
+		engine.addProvider(new RpcSubprovider({ rpcUrl: '/api' }));
+		engine.start();
 	}
 
 	async handleTicket(data) {

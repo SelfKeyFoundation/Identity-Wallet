@@ -101,6 +101,7 @@
 		"json-schema-ref-parser": "6.0.2",
 		"keythereum": "1.0.4",
 		"knex": "0.15.2",
+		"ledger-wallet-provider": "^2.0.1-beta.4",
 		"lodash": "4.17.11",
 		"lzutf8": "0.5.5",
 		"md5-file": "4.0.0",
@@ -127,7 +128,7 @@
 		"request": "2.88.0",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#abd5a0e",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2e6dac3",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -143,7 +144,7 @@
 		"usb": "1.5.0",
 		"utf-8-validate": "5.0.1",
 		"web3": "1.0.0-beta.37",
-		"web3-provider-engine": "14.1.0",
+		"web3-provider-engine": "^14.1.0",
 		"zxcvbn": "^4.4.2"
 	},
 	"devDependencies": {

@@ -44,7 +44,7 @@ const styles = theme => ({
 	}
 });
 
-const main = props => <Link to="/main" {...props} />;
+const main = props => <Link to="/main/dashboard" {...props} />;
 
 class BackupPK extends Component {
 	state = {
