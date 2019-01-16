@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, withStyles } from '@material-ui/core';
-import { H2, CloseButtonIcon } from '../typography/headings';
+import { H2, CloseButtonIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	root: {

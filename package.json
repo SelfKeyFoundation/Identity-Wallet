@@ -129,7 +129,7 @@
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#5d3ce277bcc36a8a888fb8e6b9b262e1f15e1af8",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#85a314bfb0f8996963582243f40237db70b6c20c",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",

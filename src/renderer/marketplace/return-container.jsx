@@ -4,7 +4,8 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
-import { Return, UnlockBox } from 'selfkey-ui';
+import { Return } from './return';
+import { UnlockBox } from './unlock-box';
 import history from 'common/store/history';
 
 const mapStateToProps = state => {
@@ -17,7 +18,6 @@ const mapStateToProps = state => {
 	};
 };
 
-@connect(mapStateToProps)
 class ReturnController extends Component {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
@@ -60,4 +60,4 @@ class ReturnController extends Component {
 	}
 }
 
-export default ReturnController;
+export default connect(mapStateToProps)(ReturnController);

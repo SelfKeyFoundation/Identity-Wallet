@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 import { Grid, withStyles } from '@material-ui/core';
-import { P, StyledButton, ReturnIcon } from 'selfkey-ui';
-import { TransactionFeeSelector } from '../transaction/transaction-fee-selector';
+import { P, StyledButton, ReturnIcon, TransactionFeeSelector } from 'selfkey-ui';
 
 const styles = theme => ({
 	text: {
@@ -40,8 +39,7 @@ const styles = theme => ({
 	checked: {}
 });
 
-@withStyles(styles)
-class Return extends Component {
+class ReturnComponent extends Component {
 	state = {
 		error: false,
 		understood: false,
@@ -112,6 +110,6 @@ class Return extends Component {
 	}
 }
 
-export { Return };
+export const Return = withStyles(styles)(ReturnComponent);
 
 export default Return;

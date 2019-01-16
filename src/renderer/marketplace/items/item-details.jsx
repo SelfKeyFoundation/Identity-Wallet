@@ -24,7 +24,7 @@ import {
 	CalendarIcon,
 	DocumentIcon,
 	StyledButton
-} from 'slefkey-ui';
+} from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
 const styles = theme => ({
@@ -146,8 +146,7 @@ const styles = theme => ({
 	}
 });
 
-@withStyles(styles)
-class ItemDetails extends Component {
+class ItemDetailsComponent extends Component {
 	state = {
 		isDescriptionTruncated: true
 	};
@@ -392,6 +391,8 @@ class ItemDetails extends Component {
 		);
 	}
 }
+
+const ItemDetails = withStyles(styles)(ItemDetailsComponent);
 
 export { ItemDetails };
 

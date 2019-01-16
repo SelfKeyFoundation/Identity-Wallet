@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getExchanges } from 'common/exchanges/selectors';
-import { Items } from 'selfkey-ui';
+import { Items } from './items/items.jsx';
 import { push } from 'connected-react-router';
 
 const Exchanges = props => {

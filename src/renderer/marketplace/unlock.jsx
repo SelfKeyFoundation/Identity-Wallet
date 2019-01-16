@@ -7,10 +7,8 @@ import {
 	FormHelperText,
 	withStyles
 } from '@material-ui/core';
-import { P } from '../typography/paragraph';
-import ExchangeIcon from '../icons/exchange-large';
-import { TransactionFeeSelector } from '../transaction/transaction-fee-selector';
-import { StyledButton } from '../common/styled-button';
+
+import { StyledButton, TransactionFeeSelector, ExchangeLargeIcon, P } from 'selfkey-ui';
 
 const styles = theme => ({
 	text: {
@@ -47,8 +45,8 @@ const styles = theme => ({
 	primary: {},
 	checked: {}
 });
-@withStyles(styles)
-class Unlock extends Component {
+
+class UnlockComponent extends Component {
 	state = {
 		error: false,
 		understood: false,
@@ -86,7 +84,7 @@ class Unlock extends Component {
 		return (
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
-					<ExchangeIcon />
+					<ExchangeLargeIcon />
 				</Grid>
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
@@ -155,6 +153,6 @@ class Unlock extends Component {
 	}
 }
 
-export { Unlock };
+export const Unlock = withStyles(styles)(UnlockComponent);
 
 export default Unlock;

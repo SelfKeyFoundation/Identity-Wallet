@@ -4,7 +4,8 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
-import { Unlock, UnlockBox } from 'selfkey-ui';
+import { UnlockBox } from './unlock-box';
+import { Unlock } from './unlock';
 import history from 'common/store/history';
 
 const mapStateToProps = state => {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getItemDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
-import { ItemDetails } from 'selfkey-ui';
+import { ItemDetails } from './items/item-details';
 import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
 

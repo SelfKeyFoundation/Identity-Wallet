@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations } from 'common/marketplaces';
-import { Marketplace } from 'selfkey-ui';
+import { Marketplace } from './marketplace';
 import { push } from 'connected-react-router';
 
 class MarketplaceContainerSrc extends Component {

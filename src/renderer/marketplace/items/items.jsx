@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Grid, Button, withStyles } from '@material-ui/core';
-import { H1, ExchangeIcon } from 'selfkey-ui';
+import { H1, ExchangeLargeIcon } from 'selfkey-ui';
 import { Item } from './item';
 
 const styles = theme => ({
@@ -78,7 +78,7 @@ export const Items = withStyles(styles)(
 							className={classes.headerContent}
 						>
 							<Grid item>
-								<ExchangeIcon />
+								<ExchangeLargeIcon />
 							</Grid>
 							<Grid item>
 								<H1>{category}</H1>

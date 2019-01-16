@@ -1,5 +1,6 @@
 import React from 'react';
-import { UnlockBox, UnlockProgress } from 'selfkey-ui';
+import UnlockBox from './unlock-box';
+import UnlockProgress from './unlock-progress';
 
 export const UnlockProgressWrapper = props => {
 	return (
