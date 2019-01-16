@@ -146,7 +146,7 @@ const styles = theme => ({
 	}
 });
 
-class ItemDetailsComponent extends Component {
+class MarketplaceServiceDetailsComponent extends Component {
 	state = {
 		isDescriptionTruncated: true
 	};
@@ -392,8 +392,6 @@ class ItemDetailsComponent extends Component {
 	}
 }
 
-const ItemDetails = withStyles(styles)(ItemDetailsComponent);
+export const MarketplaceServiceDetails = withStyles(styles)(MarketplaceServiceDetailsComponent);
 
-export { ItemDetails };
-
-export default ItemDetails;
+export default MarketplaceServiceDetails;

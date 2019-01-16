@@ -7,6 +7,7 @@ import { ethGasStationInfoSelectors } from '../eth-gas-station';
 import { fiatCurrencySelectors } from '../fiatCurrency';
 import { pricesSelectors } from '../prices';
 import { getGlobalContext } from '../context';
+import { categories } from './assets.json';
 
 export const initialState = {
 	transactions: [],
@@ -15,7 +16,12 @@ export const initialState = {
 	stakesById: {},
 	currentTransaction: null,
 	displayedPopup: null,
-	displayedState: null
+	displayedState: null,
+	categories: categories.map(c => c.id),
+	categoriesById: categories.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {})
 };
 
 export const transactionSchema = new schema.Entity('transactions', {}, { idAttribute: 'id' });
@@ -316,6 +322,13 @@ export const marketplacesSelectors = {
 	},
 	displayedCategorySelector(state) {
 		return this.marketplacesSelector(state).displayedCategory;
+	},
+	categoriesSelectors(state) {
+		let { categories, categoriesById } = this.marketplacesSelector(state);
+		return categories.map(id => categoriesById[id]);
+	},
+	categorySelector(state, id) {
+		return this.marketplacesSelector(state).categoriesById[id];
 	}
 };
 

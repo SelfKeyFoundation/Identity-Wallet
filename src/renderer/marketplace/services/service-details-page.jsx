@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getItemDetails, hasBalance } from 'common/exchanges/selectors';
+import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
-import { ItemDetails } from './items/item-details';
 import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
+
+import { MarketplaceServiceDetails } from './service-details';
 
 const log = new Logger('marketplace-item-container');
 
 const mapStateToProps = (state, props) => {
 	const name = props.match.params.name;
-	let item = getItemDetails(state, name);
-	let id = `${item.serviceOwner}_${item.serviceId}`;
+	let item = getServiceDetails(state, name);
+	let serviceId = `${item.serviceOwner}_${item.serviceId}`;
 	return {
 		item,
 		hasBalance: hasBalance(state, name),
-		stake: marketplacesSelectors.stakeSelector(state, id),
+		stake: marketplacesSelectors.stakeSelector(state, serviceId),
 		pendingTransaction: marketplacesSelectors.pendingTransactionSelector(
 			state,
 			item.serviceOwner,
@@ -24,7 +25,7 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-class ItemDetailsContainer extends Component {
+class MarketplaceServiceDetailsPageComponent extends Component {
 	componentDidMount() {
 		this.props.dispatch(marketplacesOperations.loadTransactions());
 		this.props.dispatch(marketplacesOperations.loadStakes());
@@ -58,18 +59,18 @@ class ItemDetailsContainer extends Component {
 
 	unlockAction = () => {
 		if (this.props.hasBalance) {
-			this.props.dispatch(push('/main/marketplaceUnlock'));
+			this.props.dispatch(push('/main/marketplace-deposit'));
 		} else {
-			this.props.dispatch(push('/main/marketplaceNoBalance'));
+			this.props.dispatch(push('/main/marketplace-no-balance'));
 		}
 	};
 
 	returnAction = () => {
-		this.props.dispatch(push('/main/marketplaceReturn'));
+		this.props.dispatch(push('/main/marketplace-return-deposit'));
 	};
 
 	backAction = () => {
-		this.props.dispatch(push('/main/exchanges'));
+		this.props.dispatch(push('/main/marketplace-exchanges'));
 	};
 
 	render() {
@@ -98,9 +99,17 @@ class ItemDetailsContainer extends Component {
 			unlockAction = this.returnAction;
 		}
 		return (
-			<ItemDetails {...this.props} unlockAction={unlockAction} backAction={this.backAction} />
+			<MarketplaceServiceDetails
+				{...this.props}
+				unlockAction={unlockAction}
+				backAction={this.backAction}
+			/>
 		);
 	}
 }
 
-export default connect(mapStateToProps)(ItemDetailsContainer);
+export const MarketplaceServiceDetailsPage = connect(mapStateToProps)(
+	MarketplaceServiceDetailsPageComponent
+);
+
+export default MarketplaceServiceDetailsPage;

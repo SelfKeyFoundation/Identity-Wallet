@@ -4,9 +4,10 @@ import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
-import { UnlockBox } from './unlock-box';
-import { Unlock } from './unlock';
 import history from 'common/store/history';
+
+import { ReturnDepositContent } from './return-deposit-content';
+import { Popup } from './popup';
 
 const mapStateToProps = state => {
 	return {
@@ -18,7 +19,7 @@ const mapStateToProps = state => {
 	};
 };
 
-class UnlockController extends Component {
+class ReturnDepositPopupComponent extends Component {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		this.props.dispatch(marketplacesOperations.loadTransactions());
@@ -29,10 +30,9 @@ class UnlockController extends Component {
 		const { service, gasLimit } = this.props;
 		this.props.navigateToTransactionProgress();
 		this.props.dispatch(
-			marketplacesOperations.placeStake(
+			marketplacesOperations.withdrawStake(
 				service.serviceOwner,
 				service.serviceId,
-				service.amount,
 				fee,
 				gasLimit
 			)
@@ -45,8 +45,8 @@ class UnlockController extends Component {
 			return <div>Loading</div>;
 		}
 		return (
-			<UnlockBox closeAction={history.getHistory().goBack}>
-				<Unlock
+			<Popup text="Return KEY Deposit" closeAction={history.getHistory().goBack}>
+				<ReturnDepositContent
 					minGasPrice={gas.safeLow}
 					maxGasPrice={gas.fast}
 					defaultValue={gas.avarage}
@@ -56,9 +56,11 @@ class UnlockController extends Component {
 					onCancel={closeAction}
 					onConfirm={fee => this.handleConfirmAction(fee)}
 				/>
-			</UnlockBox>
+			</Popup>
 		);
 	}
 }
 
-export default connect(mapStateToProps)(UnlockController);
+export const MarketplaceReturnDepositPopup = connect(mapStateToProps)(ReturnDepositPopupComponent);
+
+export default MarketplaceReturnDepositPopup;

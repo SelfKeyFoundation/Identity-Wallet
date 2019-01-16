@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Grid, Button, withStyles } from '@material-ui/core';
 import { P, H2 } from 'selfkey-ui';
+
+import Truncate from 'react-truncate';
 
 const styles = theme => ({
 	root: {
@@ -14,6 +16,11 @@ const styles = theme => ({
 		fontFamily: 'Lato, arial, sans-serif'
 	},
 
+	svgIcon: {
+		fontSize: '50px',
+		color: '#FFF'
+	},
+
 	title: {
 		margin: '20px'
 	},
@@ -22,22 +29,17 @@ const styles = theme => ({
 		marginLeft: '20px'
 	},
 
-	header: {
-		backgroundColor: '#2a3540'
-	},
-
-	svgIcon: {
-		height: '44px',
-		color: '#23E6FE'
-	},
-
 	button: {
 		color: '#93b0c1',
-		fontFamily: 'Lato, arial, sans-serif',
 		borderColor: '#3b4a5a',
+		fontFamily: 'Lato, arial, sans-serif',
 		'&:disabled': {
 			color: '#48565f'
 		}
+	},
+
+	header: {
+		backgroundColor: '#2a3540'
 	},
 
 	body: {
@@ -57,8 +59,8 @@ const styles = theme => ({
 	}
 });
 
-export const MarketplaceItem = withStyles(styles)(
-	({ classes, children, title, description, active, svgIcon, learnMoreAction }) => (
+export const MarketplaceServicesListItem = withStyles(styles)(
+	({ classes, children, name, description, status, logoUrl, viewAction }) => (
 		<Grid container className={classes.root}>
 			<Grid item>
 				<Grid
@@ -70,23 +72,24 @@ export const MarketplaceItem = withStyles(styles)(
 					className={classes.header}
 				>
 					<Grid item id="icon" className={classes.icon}>
-						{svgIcon && <img src={svgIcon} className={classes.svgIcon} />}
+						<img src={logoUrl} />
 					</Grid>
 					<Grid item id="title" className={classes.title}>
-						<H2>{title}</H2>
+						<H2>{name}</H2>
 					</Grid>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
-					<P>{description}</P>
+					<P>
+						<Truncate lines={5}>{description}</Truncate>
+					</P>
 				</Grid>
 				<Grid item id="footer" className={classes.footer}>
 					<Button
 						variant="outlined"
-						disabled={!active}
 						className={classes.button}
-						onClick={learnMoreAction}
+						onClick={() => (viewAction ? viewAction(name) : '')}
 					>
-						{active ? 'Learn More' : 'Coming Soon'}
+						View
 					</Button>
 				</Grid>
 			</Grid>
@@ -94,4 +97,4 @@ export const MarketplaceItem = withStyles(styles)(
 	)
 );
 
-export default MarketplaceItem;
+export default MarketplaceServicesListItem;

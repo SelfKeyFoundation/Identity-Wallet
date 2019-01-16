@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Grid, Button, withStyles } from '@material-ui/core';
-import { H1, ExchangeLargeIcon } from 'selfkey-ui';
-import { Item } from './item';
+import { H1 } from 'selfkey-ui';
+import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
 	wrapper: {
@@ -38,11 +38,12 @@ const styles = theme => ({
 	}
 });
 
-const getItems = (items, viewAction) => {
+const getServices = (items, viewAction) => {
 	return items.map(item => {
 		return (
-			<Item
-				key={item.name}
+			<MarketplaceServicesListItem
+				id={item.id || item.name}
+				key={item.id || item.name}
 				name={item.name}
 				description={item.description}
 				status={item.status}
@@ -53,7 +54,7 @@ const getItems = (items, viewAction) => {
 	});
 };
 
-export const Items = withStyles(styles)(
+export const MarketplaceServicesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction }) => (
 		<Grid container>
 			<Grid item>
@@ -77,17 +78,15 @@ export const Items = withStyles(styles)(
 							alignItems="center"
 							className={classes.headerContent}
 						>
+							<Grid item>{category.icon}</Grid>
 							<Grid item>
-								<ExchangeLargeIcon />
-							</Grid>
-							<Grid item>
-								<H1>{category}</H1>
+								<H1>{category.name}</H1>
 							</Grid>
 						</Grid>
 					</Grid>
 					<Grid item id="body" xs={12} className={classes.body}>
 						<Grid container direction="row" justify="space-between" alignItems="center">
-							{getItems(items, viewAction)}
+							{getServices(items, viewAction)}
 						</Grid>
 					</Grid>
 				</Grid>
@@ -96,4 +95,4 @@ export const Items = withStyles(styles)(
 	)
 );
 
-export default Items;
+export default MarketplaceServicesList;

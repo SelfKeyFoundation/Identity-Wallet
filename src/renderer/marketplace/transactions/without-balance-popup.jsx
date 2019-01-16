@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getExchangeLinks } from 'common/exchanges/selectors';
 import { Grid, List, ListItem, withStyles } from '@material-ui/core';
 import { H3, P, WarningShieldIcon } from 'selfkey-ui';
+import { Popup } from './popup';
 
 const styles = theme => ({
 	headerText: {
@@ -52,7 +55,7 @@ const getExchanges = (exchanges, classes) => {
 	});
 };
 
-export const WithoutBalance = withStyles(styles)(({ classes, children, exchanges }) => (
+export const WithoutBalanceContent = withStyles(styles)(({ classes, children, exchanges }) => (
 	<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 		<Grid item xs={2}>
 			<WarningShieldIcon />
@@ -89,4 +92,22 @@ export const WithoutBalance = withStyles(styles)(({ classes, children, exchanges
 	</Grid>
 ));
 
-export default WithoutBalance;
+const WithoutBalancePopupComponent = props => {
+	return (
+		<Popup closeAction={props.closeAction}>
+			<WithoutBalanceContent {...props} />
+		</Popup>
+	);
+};
+
+const mapStateToProps = state => {
+	return {
+		exchanges: getExchangeLinks(state)
+	};
+};
+
+export const MarketplaceWithoutBalancePopup = connect(mapStateToProps)(
+	WithoutBalancePopupComponent
+);
+
+export default MarketplaceWithoutBalancePopup;

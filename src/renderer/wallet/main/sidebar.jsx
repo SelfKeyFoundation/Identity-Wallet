@@ -40,7 +40,7 @@ const styles = theme => ({
 });
 
 const dashboard = props => <Link to="/main/dashboard" {...props} />;
-const marketplace = props => <Link to="/main/marketplace" {...props} />;
+const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
 const selfkeyID = props => <Link to="/main/selfkeyID" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/" {...props} />;

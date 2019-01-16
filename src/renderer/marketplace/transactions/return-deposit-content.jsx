@@ -39,7 +39,7 @@ const styles = theme => ({
 	checked: {}
 });
 
-class ReturnComponent extends Component {
+class ReturnDepositContentComponent extends Component {
 	state = {
 		error: false,
 		understood: false,
@@ -110,6 +110,6 @@ class ReturnComponent extends Component {
 	}
 }
 
-export const Return = withStyles(styles)(ReturnComponent);
+export const ReturnDepositContent = withStyles(styles)(ReturnDepositContentComponent);
 
-export default Return;
+export default ReturnDepositContent;

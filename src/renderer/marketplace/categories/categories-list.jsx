@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, withStyles } from '@material-ui/core';
 import { H1, MarketplaceIcon } from 'selfkey-ui';
 
-import { MarketplaceItem } from './marketplace-item';
+import { MarketplaceCategory } from './category';
 
 const styles = theme => ({
 	header: {
@@ -20,7 +20,7 @@ const styles = theme => ({
 const getItems = items => {
 	return items.map((item, index) => {
 		return (
-			<MarketplaceItem
+			<MarketplaceCategory
 				key={index}
 				title={item.title}
 				description={item.description}
@@ -32,7 +32,7 @@ const getItems = items => {
 	});
 };
 
-export const Marketplace = withStyles(styles)(({ classes, children, items }) => (
+export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children, items }) => (
 	<Grid container justify="center" alignItems="center">
 		<Grid item id="header" className={classes.header} xs={12}>
 			<MarketplaceIcon />
@@ -46,4 +46,4 @@ export const Marketplace = withStyles(styles)(({ classes, children, items }) => 
 	</Grid>
 ));
 
-export default Marketplace;
+export default MarketplaceCategoriesList;

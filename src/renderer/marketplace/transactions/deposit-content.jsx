@@ -46,7 +46,7 @@ const styles = theme => ({
 	checked: {}
 });
 
-class UnlockComponent extends Component {
+class DepositContentComponent extends Component {
 	state = {
 		error: false,
 		understood: false,
@@ -153,6 +153,6 @@ class UnlockComponent extends Component {
 	}
 }
 
-export const Unlock = withStyles(styles)(UnlockComponent);
+export const DepositContent = withStyles(styles)(DepositContentComponent);
 
-export default Unlock;
+export default DepositContent;

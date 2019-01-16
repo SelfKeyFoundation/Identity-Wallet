@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { Popup } from './popup';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import { H2, HourGlassLargeIcon } from 'selfkey-ui';
 
@@ -14,7 +15,7 @@ const styles = theme => ({
 	}
 });
 
-export const UnlockProgress = withStyles(styles)(({ classes }) => (
+export const TransactionProcessingContent = withStyles(styles)(({ classes }) => (
 	<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 		<Grid item xs={2}>
 			<HourGlassLargeIcon />
@@ -35,4 +36,12 @@ export const UnlockProgress = withStyles(styles)(({ classes }) => (
 	</Grid>
 ));
 
-export default UnlockProgress;
+export const MarketplaceTransactionProcessingPopup = props => {
+	return (
+		<Popup closeAction={props.closeAction}>
+			<TransactionProcessingContent {...props} />
+		</Popup>
+	);
+};
+
+export default MarketplaceTransactionProcessingPopup;

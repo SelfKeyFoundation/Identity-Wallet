@@ -45,7 +45,7 @@ const styles = theme => ({
 	}
 });
 
-export const UnlockBox = withStyles(styles)(({ classes, children, closeAction, text }) => (
+export const Popup = withStyles(styles)(({ classes, children, closeAction, text }) => (
 	<Grid
 		container
 		className={classes.root}
@@ -54,7 +54,7 @@ export const UnlockBox = withStyles(styles)(({ classes, children, closeAction, t
 		alignItems="flex-start"
 	>
 		<Grid item id="header" className={classes.header}>
-			<H2>{text || 'Unlock This Marketplace: Crypto Exchanges'}</H2>
+			<H2>{text}</H2>
 			<a className={classes.closeButton} onClick={closeAction}>
 				<CloseButtonIcon />
 			</a>
@@ -65,4 +65,4 @@ export const UnlockBox = withStyles(styles)(({ classes, children, closeAction, t
 	</Grid>
 ));
 
-export default UnlockBox;
+export default Popup;
