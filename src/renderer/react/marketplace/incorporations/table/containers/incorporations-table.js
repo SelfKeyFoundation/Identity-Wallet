@@ -16,7 +16,12 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 import FlagCountryName from '../../common/flag-country-name';
 // import TagList from '../../common/tag-list';
 import ProgramPrice from '../../common/program-price';
-import { getTaxFieldForCompanyCode } from '../../common/data-operations';
+import {
+	getTaxFieldForCompanyCode,
+	getTaxForCompanyCode,
+	getProgramForCompanyCode,
+	getTranslationForCompanyCode
+} from '../../common/data-operations';
 
 const styles = {
 	header: {
@@ -65,7 +70,7 @@ const styles = {
 		width: '50px'
 	},
 	smallCell: {
-		width: '15px'
+		width: '25px'
 	},
 	flagCell: {
 		width: '10px'
@@ -101,6 +106,22 @@ class IncorporationsTable extends Component {
 		</Grid>
 	);
 
+	_getData = fields => {
+		const companyCode = fields['Company code'];
+
+		const { Taxes, Corporations, Foundations, Trusts, EN } = this.props.data;
+		const tax = getTaxForCompanyCode(Taxes, companyCode);
+		const program = getProgramForCompanyCode(Corporations, Foundations, Trusts, companyCode);
+		const translation = getTranslationForCompanyCode(EN, companyCode);
+
+		return {
+			Main: fields,
+			Tax: tax['data']['fields'],
+			Program: program['data']['fields'],
+			Translation: translation['data']['fields']
+		};
+	};
+
 	render() {
 		const classes = this.props.classes;
 
@@ -109,7 +130,6 @@ class IncorporationsTable extends Component {
 		}
 
 		const { Main, Taxes } = this.props.data;
-		console.log(Taxes);
 
 		return (
 			<Grid container direction="row" justify="space-evenly" alignItems="center">
@@ -184,7 +204,11 @@ class IncorporationsTable extends Component {
 									<ProgramPrice price={d.data.fields.Price} />
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<span onClick={() => this.props.onDetailClick(d.data.fields)}>
+									<span
+										onClick={() =>
+											this.props.onDetailClick(this._getData(d.data.fields))
+										}
+									>
 										Details
 									</span>
 								</TableCell>

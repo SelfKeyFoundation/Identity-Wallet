@@ -1430,8 +1430,8 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.7.18"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.18.tgz#f4ce0d539a893dd61e36cd11ae3a5e54f5a48337"
+  version "16.7.20"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.20.tgz#13ae752c012710d0fa800985ca809814b51d3b58"
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -12415,8 +12415,8 @@ react-redux@5.1.1:
     react-lifecycles-compat "^3.0.0"
 
 react-transition-group@^2.2.1:
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.5.2.tgz#9457166a9ba6ce697a3e1b076b3c049b9fb2c408"
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.5.3.tgz#26de363cab19e5c88ae5dbae105c706cf953bb92"
   dependencies:
     dom-helpers "^3.3.1"
     loose-envify "^1.4.0"
@@ -13281,7 +13281,7 @@ select-hose@^2.0.0:
 
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#material-ui":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#5aca4c51fb1aabec5597cac1a07ac9bf1aba37d2"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#464d82d18c54525d926f56298adc66cae5a47971"
   dependencies:
     "@material-ui/core" "3.7.0"
     "@material-ui/icons" "3.0.1"
