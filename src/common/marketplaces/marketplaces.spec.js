@@ -8,6 +8,9 @@ import reducer, {
 	marketplacesActions,
 	marketplacesOperations,
 	marketplacesTypes,
+	reducers
+} from '.';
+import {
 	loadTransactionsOperation,
 	withdrawStakeOperation,
 	loadStakesOperation,
@@ -17,19 +20,8 @@ import reducer, {
 	startWithdrawTransactionOperation,
 	confirmStakeTransactionOperation,
 	confirmWithdrawTransactionOperation,
-	cancelCurrentTransactionOperation,
-	updateStakeReducer,
-	setStakesReducer,
-	addTransactionReducer,
-	updateTransactionReducer,
-	setTransactionsReducer,
-	setMarketplacePopupReducer,
-	setMarketplaceStateReducer,
-	setCurrentTransactionReducer,
-	updateCurrentTransactionReducer,
-	clearCurrentTransactionReducer,
-	reducers
-} from '.';
+	cancelCurrentTransactionOperation
+} from './operations';
 import { pricesSelectors } from '../prices';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
 import { fiatCurrencySelectors } from '../fiatCurrency';
@@ -509,7 +501,10 @@ describe('marketplaceReducers', () => {
 			stakes: [oldStake.id],
 			stakesById: { [oldStake.id]: oldStake }
 		};
-		let newState = updateStakeReducer(state, marketplacesActions.updateStakeAction(newStake));
+		let newState = reducers.updateStakeReducer(
+			state,
+			marketplacesActions.updateStakeAction(newStake)
+		);
 
 		expect(newState).toEqual({
 			stakes: [oldStake.id],
@@ -535,7 +530,10 @@ describe('marketplaceReducers', () => {
 			stakes: [oldStake.id],
 			stakesById: { [oldStake.id]: oldStake }
 		};
-		let newState = setStakesReducer(state, marketplacesActions.setStakesAction(newStakes));
+		let newState = reducers.setStakesReducer(
+			state,
+			marketplacesActions.setStakesAction(newStakes)
+		);
 
 		expect(newState).toEqual({
 			test: 'test',
@@ -566,7 +564,7 @@ describe('marketplaceReducers', () => {
 		};
 		let transaction = { id: 2, lastStatus: 'success' };
 
-		let newState = addTransactionReducer(
+		let newState = reducers.addTransactionReducer(
 			state,
 			marketplacesActions.addTransactionAction(transaction)
 		);
@@ -590,7 +588,7 @@ describe('marketplaceReducers', () => {
 		};
 		let transaction = [{ id: 2, lastStatus: 'success' }, { id: 3, lastStatus: 'pending' }];
 
-		let newState = setTransactionsReducer(
+		let newState = reducers.setTransactionsReducer(
 			state,
 			marketplacesActions.setTransactionsAction(transaction)
 		);
@@ -614,7 +612,7 @@ describe('marketplaceReducers', () => {
 		};
 		let transaction = { id: 1, lastStatus: 'success', test: 'test1' };
 
-		let newState = updateTransactionReducer(
+		let newState = reducers.updateTransactionReducer(
 			state,
 			marketplacesActions.updateTransactionAction(transaction)
 		);
@@ -632,7 +630,7 @@ describe('marketplaceReducers', () => {
 			displayedPopup: null
 		};
 
-		let newState = setMarketplacePopupReducer(
+		let newState = reducers.setMarketplacePopupReducer(
 			state,
 			marketplacesActions.showMarketplacePopupAction('test')
 		);
@@ -645,7 +643,7 @@ describe('marketplaceReducers', () => {
 			displayedState: null
 		};
 
-		let newState = setMarketplaceStateReducer(
+		let newState = reducers.setMarketplaceStateReducer(
 			state,
 			marketplacesActions.displayMarketplaceStateAction('test')
 		);
@@ -658,7 +656,7 @@ describe('marketplaceReducers', () => {
 			currentTransaction: { test: 'test1', test2: 'test2' }
 		};
 
-		let newState = clearCurrentTransactionReducer(
+		let newState = reducers.clearCurrentTransactionReducer(
 			state,
 			marketplacesActions.clearCurrentTransactionAction()
 		);
@@ -671,7 +669,7 @@ describe('marketplaceReducers', () => {
 			currentTransaction: null
 		};
 
-		let newState = setCurrentTransactionReducer(
+		let newState = reducers.setCurrentTransactionReducer(
 			state,
 			marketplacesActions.setCurrentTransactionAction({ test: 'test1', test2: 'test2' })
 		);
@@ -684,7 +682,7 @@ describe('marketplaceReducers', () => {
 			currentTransaction: { test: 'test1', test2: 'test2' }
 		};
 
-		let newState = updateCurrentTransactionReducer(
+		let newState = reducers.updateCurrentTransactionReducer(
 			state,
 			marketplacesActions.updateCurrentTransactionAction({
 				test2: 'test3',
