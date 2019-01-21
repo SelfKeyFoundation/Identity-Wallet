@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SelfkeyId from '../components/selfkey-id';
-import { identitySelectors, identityOperations } from 'common/identity';
+import { identitySelectors } from 'common/identity';
 import { walletSelectors } from 'common/wallet';
 
 class SelfkeyIdContainer extends Component {
-	componentDidMount() {
-		this.props.dispatch(identityOperations.unlockIdentityOperation());
-	}
-
 	render() {
 		return <SelfkeyId {...this.props} />;
 	}

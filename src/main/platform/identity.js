@@ -9,7 +9,7 @@ export class Identity {
 		this.address = '0x' + wallet.publicKey;
 		this.publicKey = null;
 		this.profile = wallet.profile;
-		this.privateKey = wallet.privateKey;
+		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
 		this.wid = wallet.id;
 

@@ -11,7 +11,7 @@ export class WalletService {
 	}
 
 	async createWallet(password) {
-		const { address, privateKey } = this.web3.eth.accounts.create(password);
+		const { address, privateKey } = this.web3.eth.accounts.create();
 		const keystore = this.web3.eth.accounts.encrypt(privateKey, password);
 		const keystoreFileFullPath = path.resolve(
 			getGlobalContext().config.walletsDirectoryPath,

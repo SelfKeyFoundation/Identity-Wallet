@@ -2,6 +2,7 @@ import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletOperations } from '../wallet';
 import { push } from 'connected-react-router';
+import { identityOperations } from '../identity';
 
 export const initialState = {
 	wallets: [],
@@ -37,6 +38,7 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithPassword(walletId, password);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main'));
 	} catch (error) {
 		await dispatch(appActions.setUnlockWalletErrorAction(error.message));

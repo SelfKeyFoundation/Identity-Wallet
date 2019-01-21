@@ -8,6 +8,9 @@ import { fiatCurrencySelectors } from '../fiatCurrency';
 import { pricesSelectors } from '../prices';
 import { getGlobalContext } from '../context';
 import { categories } from './assets.json';
+import * as serviceSelectors from '../exchanges/selectors';
+import * as walletSelectors from '../wallet/selectors';
+import { identitySelectors } from '../identity';
 
 export const initialState = {
 	transactions: [],
@@ -21,8 +24,12 @@ export const initialState = {
 	categoriesById: categories.reduce((acc, curr) => {
 		acc[curr.id] = curr;
 		return acc;
-	}, {})
+	}, {}),
+	relyingParties: [],
+	relyingPartiesByName: {}
 };
+
+export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 
 export const transactionSchema = new schema.Entity('transactions', {}, { idAttribute: 'id' });
 export const stakeSchema = new schema.Entity('stakes', {}, { idAttribute: 'id' });
@@ -52,7 +59,10 @@ export const marketplacesTypes = {
 	MARKETPLACE_TRANSACTIONS_CURRENT_CANCEL: 'marketplace/transactions/current/CANCEL',
 	MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR: 'marketplace/transactions/current/CLEAR',
 	MARKETPLACE_POPUP_SHOW: 'marketplace/popup/show',
-	MARKETPLACE_STATE_SHOW: 'marketplace/state/show'
+	MARKETPLACE_STATE_SHOW: 'marketplace/state/show',
+	MARKETPLACE_RP_LOAD: 'marketplace/rp/load',
+	MARKETPLACE_RP_UPDATE: 'marketplace/rp/update',
+	MARKETPLACE_RP_APPLICATION_ADD: 'marketplace/rp/application/add'
 };
 
 export const marketplacesActions = {
@@ -85,6 +95,19 @@ export const marketplacesActions = {
 	},
 	displayMarketplaceStateAction(payload) {
 		return { type: marketplacesTypes.MARKETPLACE_STATE_SHOW, payload };
+	},
+	updateRelyingParty(payload, error) {
+		if (error) {
+			payload = { ...payload, error: error.message };
+			error = true;
+		}
+		return { type: marketplacesTypes.MARKETPLACE_RP_UPDATE, payload, error };
+	},
+	addKYCApplication(rpName, application) {
+		return {
+			type: marketplacesTypes.MARKETPLACE_RP_APPLICATION_ADD,
+			payload: { name: rpName, application }
+		};
 	}
 };
 
@@ -231,6 +254,58 @@ export const cancelCurrentTransactionOperation = () => async (dispatch, getState
 	await dispatch(marketplacesActions.showMarketplacePopupAction(null));
 };
 
+export const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
+	let mpService = (getGlobalContext() || {}).marketplaceService;
+	const ts = Date.now();
+	const rp = serviceSelectors.getServiceDetails(getState(), rpName);
+	const config = rp.relying_party_config;
+
+	try {
+		const session = mpService.createRelyingPartySession(config);
+		await session.establish();
+		const templates = await session.listKYCTemplates();
+		const applications = await session.listKYCApplications();
+		await dispatch(
+			marketplacesActions.updateRelyingParty({
+				name: rpName,
+				templates,
+				applications,
+				session,
+				lastUpdated: ts
+			})
+		);
+	} catch (error) {
+		await dispatch(
+			marketplacesActions.updateRelyingParty(
+				{
+					name: rpName,
+					lastUpdated: ts
+				},
+				error
+			)
+		);
+	}
+};
+
+export const createRelyingPartyKYCApplication = (rpName, templateId, attributeIds) => async (
+	dispatch,
+	getState
+) => {
+	const rp = marketplacesSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+	if (!rp.templates[templateId]) throw new Error('template does not exist');
+
+	const wallet = walletSelectors.getWallet(getState());
+	if (!wallet) return;
+	const attributes = identitySelectors.selectFullIdAttributesByIds(
+		getState(),
+		wallet.id,
+		attributeIds
+	);
+	const application = await rp.session.createKYCApplication(rpName, templateId, attributes);
+	await dispatch(marketplacesActions.addKYCApplication(rpName, application));
+};
+
 export const marketplacesOperations = {
 	...marketplacesActions,
 	loadTransactions: createAliasedAction(
@@ -265,6 +340,10 @@ export const marketplacesOperations = {
 	confirmWithdrawTransaction: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM,
 		confirmWithdrawTransactionOperation
+	),
+	loadRelyingParty: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_RP_LOAD,
+		loadRelyingPartyOperation
 	)
 };
 
@@ -329,6 +408,29 @@ export const marketplacesSelectors = {
 	},
 	categorySelector(state, id) {
 		return this.marketplacesSelector(state).categoriesById[id];
+	},
+	relyingPartySelector(state, rpName) {
+		return this.marketplacesSelector(state).relyingPartiesByName[rpName];
+	},
+	relyingPartyIsActiveSelector(state, rpName) {
+		const rp = this.relyingPartySelector(state, rpName);
+		if (rp && !rp.disabled) {
+			return true;
+		}
+		const service = serviceSelectors.getServiceDetails(state, rpName);
+		const config = service.relying_party_config;
+
+		return service.status === 'Active' && config;
+	},
+	relyingPartyShouldUpdateSelector(state, rpName) {
+		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
+		const rp = this.relyingPartySelector(state, rpName);
+		if (!rp) return true;
+		if (Date.now() - rp.lastUpdated > RP_UPDATE_INTERVAL) return true;
+		if (!rp.session || !rp.session.ctx || !rp.session.ctx.token) return true;
+		if (rp.session.ctx.token.data.exp > Date.now()) return true;
+
+		return false;
 	}
 };
 
@@ -407,6 +509,22 @@ export const clearCurrentTransactionReducer = state => {
 	return { ...state, currentTransaction: null };
 };
 
+export const updateRelyingPartyReducer = (state, { error, payload }) => {
+	let relyingParties = [state.relyingParties];
+	let relyingPartiesByName = { ...state.relyingPartiesByName };
+	if (!relyingPartiesByName[payload.name]) {
+		relyingParties.push(payload.name);
+	}
+	relyingPartiesByName[payload.name] = { ...payload, error };
+	return { ...state, relyingPartiesByName, relyingParties };
+};
+
+export const addKYCApplicationReducer = (state, { payload }) => {
+	let rp = state.relyingPartiesByName[payload.name];
+	rp = { ...rp, applications: [...rp.applications, payload.application] };
+	return { ...state, relyingPartiesByName: { ...state.relyingPartiesByName, [rp.name]: rp } };
+};
+
 export const reducers = {
 	updateStakeReducer,
 	setStakesReducer,
@@ -417,7 +535,8 @@ export const reducers = {
 	setMarketplacePopupReducer,
 	setCurrentTransactionReducer,
 	updateCurrentTransactionReducer,
-	clearCurrentTransactionReducer
+	clearCurrentTransactionReducer,
+	updateRelyingPartyReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -442,6 +561,10 @@ const reducer = (state = initialState, action) => {
 			return reducers.updateCurrentTransactionReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR:
 			return reducers.clearCurrentTransactionReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_RP_UPDATE:
+			return reducers.updateRelyingPartyReducer(state, action);
+		case marketplacesTypes.MARKETPLACE_RP_APPLICATION_ADD:
+			return reducers.addKYCApplicationReducer(state, action);
 	}
 	return state;
 };

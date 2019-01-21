@@ -151,6 +151,7 @@ export class Web3Service {
 		}
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
+			console.log('XXX', wallet, opts);
 		}
 		if (!wallet || wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');

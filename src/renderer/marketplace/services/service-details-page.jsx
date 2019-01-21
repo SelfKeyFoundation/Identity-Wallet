@@ -21,14 +21,27 @@ const mapStateToProps = (state, props) => {
 			state,
 			item.serviceOwner,
 			item.serviceId
+		),
+		relyingParty: marketplacesSelectors.relyingPartySelector(state, name),
+		relyingPartyIsActive: marketplacesSelectors.relyingPartyIsActiveSelector(state, name),
+		relyingPartyShouldUpdate: marketplacesSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			name
 		)
 	};
 };
 
 class MarketplaceServiceDetailsPageComponent extends Component {
-	componentDidMount() {
-		this.props.dispatch(marketplacesOperations.loadTransactions());
-		this.props.dispatch(marketplacesOperations.loadStakes());
+	async componentDidMount() {
+		await Promise.all([
+			this.props.dispatch(marketplacesOperations.loadTransactions()),
+			this.props.dispatch(marketplacesOperations.loadStakes())
+		]);
+		if (this.props.relyingPartyShouldUpdate) {
+			await this.props.dispatch(
+				marketplacesOperations.loadRelyingParty(this.props.item.name)
+			);
+		}
 		this.updatePendingTransaction();
 	}
 	componentDidUpdate() {

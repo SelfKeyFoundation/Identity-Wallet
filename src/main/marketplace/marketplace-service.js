@@ -101,7 +101,7 @@ export class MarketplaceService {
 		return MarketplaceTransactions.updateById(tx.id, _.omit(tx, 'id'));
 	}
 
-	async createRelyingPartySession(config) {
+	createRelyingPartySession(config) {
 		const identity = new Identity(this.wallet);
 		return new RelyingPartySession(config, identity);
 	}
