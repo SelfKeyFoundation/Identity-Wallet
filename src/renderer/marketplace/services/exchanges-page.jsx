@@ -6,7 +6,6 @@ import { marketplacesSelectors } from '../../../common/marketplaces';
 import { MarketplaceServicesPage } from './services-page';
 
 const mapStateToProps = (state, props) => {
-	console.log('state', state);
 	return {
 		items: getExchanges(state),
 		category: {
