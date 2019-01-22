@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import { Grid, Tab, Tabs, Button, Typography, List, ListItem } from '@material-ui/core';
 import { CheckedIcon, HourGlassIcon } from 'selfkey-ui';
 import IncorporationsTaxView from '../components/tax-view';
 import IncorporationsLegalView from '../components/legal-view';
 import FlagCountryName from '../../common/flag-country-name';
+import { incorporationsSelectors } from 'common/incorporations';
 
 const styles = {
 	container: {
@@ -128,13 +130,11 @@ class IncorporationsDetailView extends Component {
 	};
 
 	render() {
-		const { program, classes } = this.props;
+		const { details, classes } = this.props;
 		const { selectedTab } = this.state;
-		const { Main, Translation, Tax, Program } = program;
 
-		console.log(Main);
-		console.log(Program);
-		console.log(Tax);
+		const Translation = {};
+		const Program = {};
 
 		return (
 			<div>
@@ -150,10 +150,10 @@ class IncorporationsDetailView extends Component {
 				<div className={classes.container}>
 					<Grid container justify="left" alignItems="left" className={classes.title}>
 						<div>
-							<FlagCountryName code={Main[`Country code`]} />
+							<FlagCountryName code={details.countryCode} />
 						</div>
 						<div>
-							<span className="region">{Main.Region}</span>
+							<span className="region">{details.region}</span>
 						</div>
 					</Grid>
 					<Grid container justify="left" alignItems="left" className={classes.content}>
@@ -161,13 +161,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Offshore Tax</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Offshore Income Tax Rate'] || '--'}
+									{details.tax.offshoreIncomeTax || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends received</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Dividends Received'] || '--'}
+									{details.tax.dividendsReceived || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -175,13 +175,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Corp Income</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Corporate Tax Rate'] || '--'}
+									{details.tax.corporateTax || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends paid</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Dividends Withholding Tax Rate'] || '--'}
+									{details.tax.dividendsWitholdingTax || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -189,13 +189,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Capital Gains</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Capital Gains Tax Rate'] || '--'}
+									{details.tax.capitalGainsTax || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Royalties paid</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Royalties Withholding Tax Rate'] || '--'}
+									{details.tax.royaltiesWitholdingTax || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -203,7 +203,7 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Interests paid</label>
 								<Typography variant="h4" gutterBottom>
-									{Tax['Interests Paid Tax Rate'] || '--'}
+									{details.tax.interestsWitholdingTax || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -300,7 +300,7 @@ class IncorporationsDetailView extends Component {
 							)}
 							{selectedTab === 2 && (
 								<TabContainer className="taxes">
-									<IncorporationsTaxView data={Tax} />
+									<IncorporationsTaxView tax={details.tax} />
 									<div
 										dangerouslySetInnerHTML={{
 											__html: Translation['taxes_paragraph']
@@ -405,4 +405,10 @@ class IncorporationsDetailView extends Component {
 	}
 }
 
-export default injectSheet(styles)(IncorporationsDetailView);
+const mapStateToProps = (state, props) => {
+	return {
+		details: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode)
+	};
+};
+
+export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsDetailView));

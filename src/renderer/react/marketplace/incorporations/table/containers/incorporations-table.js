@@ -16,12 +16,6 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 import FlagCountryName from '../../common/flag-country-name';
 // import TagList from '../../common/tag-list';
 import ProgramPrice from '../../common/program-price';
-import {
-	getTaxFieldForCompanyCode,
-	getTaxForCompanyCode,
-	getProgramForCompanyCode,
-	getTranslationForCompanyCode
-} from '../../common/data-operations';
 
 const styles = {
 	header: {
@@ -95,8 +89,8 @@ const styles = {
 
 class IncorporationsTable extends Component {
 	componentDidMount() {
-		if (!this.props.data) {
-			this.props.dispatch(incorporationsOperations.loadData());
+		if (!this.props.incorporations || !this.props.incorporations.length) {
+			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
 	}
 
@@ -106,30 +100,11 @@ class IncorporationsTable extends Component {
 		</Grid>
 	);
 
-	_getData = fields => {
-		const companyCode = fields['Company code'];
-
-		const { Taxes, Corporations, Foundations, Trusts, EN } = this.props.data;
-		const tax = getTaxForCompanyCode(Taxes, companyCode);
-		const program = getProgramForCompanyCode(Corporations, Foundations, Trusts, companyCode);
-		const translation = getTranslationForCompanyCode(EN, companyCode);
-
-		return {
-			Main: fields,
-			Tax: tax['data']['fields'],
-			Program: program['data']['fields'],
-			Translation: translation['data']['fields']
-		};
-	};
-
 	render() {
-		const classes = this.props.classes;
-
-		if (!this.props.data) {
+		const { classes, isLoading, incorporations } = this.props;
+		if (isLoading) {
 			return this._renderLoadingScreen();
 		}
-
-		const { Main, Taxes } = this.props.data;
 
 		return (
 			<Grid container direction="row" justify="space-evenly" alignItems="center">
@@ -171,44 +146,27 @@ class IncorporationsTable extends Component {
 						</LargeTableHeadRow>
 					</TableHead>
 					<TableBody className={classes.tableBodyRow}>
-						{Main.map(d => (
-							<TableRow key={d.id}>
+						{incorporations.map(inc => (
+							<TableRow key={inc.id}>
 								<TableCell className={classes.flagCell}>
-									<FlagCountryName code={d.data.fields[`Country code`]} />
+									<FlagCountryName code={inc.countryCode} />
 								</TableCell>
-								<TableCell>{d.data.fields.Region}</TableCell>
-								<TableCell className={classes.regionCell}>
-									{d.data.fields.Acronym}
+								<TableCell>{inc.region}</TableCell>
+								<TableCell className={classes.regionCell}>{inc.acronym}</TableCell>
+								<TableCell className={classes.smallCell}>
+									{inc.tax.offshoreIncomeTax}
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									{getTaxFieldForCompanyCode(
-										Taxes,
-										d.data.fields['Company code'],
-										'Offshore Income Tax Rate'
-									)}
-								</TableCell>
-								<TableCell className={classes.smallCell}>
-									{getTaxFieldForCompanyCode(
-										Taxes,
-										d.data.fields['Company code'],
-										'Corporate Tax Rate'
-									)}
+									{inc.tax.corporateTax}
 								</TableCell>
 								<TagTableCell className={classes.goodForCell}>
-									{d.data.fields[`Good for`] &&
-										d.data.fields[`Good for`].map(tag => (
-											<Tag key={tag}>{tag}</Tag>
-										))}
+									{inc.tags && inc.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}
 								</TagTableCell>
 								<TableCell className={classes.costCell}>
-									<ProgramPrice price={d.data.fields.Price} />
+									<ProgramPrice price={inc.price} />
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<span
-										onClick={() =>
-											this.props.onDetailClick(this._getData(d.data.fields))
-										}
-									>
+									<span onClick={() => this.props.onDetailClick(inc.companyCode)}>
 										Details
 									</span>
 								</TableCell>
@@ -222,12 +180,14 @@ class IncorporationsTable extends Component {
 }
 
 IncorporationsTable.propTypes = {
-	data: PropTypes.object
+	incorporations: PropTypes.array,
+	isLoading: PropTypes.bool
 };
 
 const mapStateToProps = (state, props) => {
 	return {
-		data: incorporationsSelectors.getData(state)
+		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
+		isLoading: incorporationsSelectors.getLoading(state)
 	};
 };
 
