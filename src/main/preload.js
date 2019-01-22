@@ -56,3 +56,29 @@ window.openDirectorySelectDialog = event => {
 		}
 	});
 };
+
+window.openFileSelectDialog = event => {
+	return new Promise((resolve, reject) => {
+		try {
+			const dialogConfig = {
+				title: 'Choose keystore file (UTC/JSON)',
+				message: 'Choose keystore file (UTC/JSON)',
+				properties: ['openFile']
+			};
+			electron.remote.dialog.showOpenDialog(
+				electron.remote.app.win,
+				dialogConfig,
+				filePaths => {
+					if (filePaths) {
+						resolve(filePaths[0]);
+					} else {
+						reject(new Error('File not Selected'));
+					}
+				}
+			);
+		} catch (e) {
+			console.log(e);
+			reject(e);
+		}
+	});
+};

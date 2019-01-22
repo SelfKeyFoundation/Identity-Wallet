@@ -19,6 +19,9 @@ import { Link, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import ExistingAddress from './existing-address';
+import NewAddress from './new-address';
+import PrivateKey from './private-key';
+import Ledger from './ledger';
 
 const styles = theme => ({
 	logo: {
@@ -234,6 +237,15 @@ class Unlock extends Component {
 										path={`${match.path}/existingAddress`}
 										component={ExistingAddress}
 									/>
+									<Route
+										path={`${match.path}/newAddress`}
+										component={NewAddress}
+									/>
+									<Route
+										path={`${match.path}/privateKey`}
+										component={PrivateKey}
+									/>
+									<Route path={`${match.path}/ledger`} component={Ledger} />
 								</Grid>
 							</Grid>
 						</ModalBody>

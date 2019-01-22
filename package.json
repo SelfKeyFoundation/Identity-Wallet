@@ -102,6 +102,7 @@
 		"jsonwebtoken": "^8.4.0",
 		"keythereum": "1.0.4",
 		"knex": "0.15.2",
+		"ledger-wallet-provider": "^2.0.1-beta.4",
 		"lodash": "4.17.11",
 		"lzutf8": "0.5.5",
 		"md5-file": "4.0.0",
@@ -146,7 +147,7 @@
 		"usb": "1.5.0",
 		"utf-8-validate": "5.0.1",
 		"web3": "1.0.0-beta.37",
-		"web3-provider-engine": "14.1.0",
+		"web3-provider-engine": "^14.1.0",
 		"zxcvbn": "^4.4.2"
 	},
 	"devDependencies": {
