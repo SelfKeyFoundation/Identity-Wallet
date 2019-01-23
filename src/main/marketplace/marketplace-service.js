@@ -3,6 +3,8 @@ import { MarketplaceTransactions } from './marketplace-transactions';
 import { getWallet } from '../../common/wallet/selectors';
 import CONFIG from '../../common/config';
 import BN from 'bignumber.js';
+import { Identity } from '../platform/identity';
+import { RelyingPartySession } from '../platform/relying-party';
 
 export class MarketplaceService {
 	constructor({ store, stakingService, web3Service }) {
@@ -15,7 +17,7 @@ export class MarketplaceService {
 	}
 	get walletAddress() {
 		if (!this.wallet || !this.wallet.publicKey) return null;
-		return `0x${this.wallet.publicKey}`;
+		return this.wallet.publicKey;
 	}
 	loadTransactions(serviceOwner, serviceId) {
 		return MarketplaceTransactions.find({ serviceOwner, serviceId });
@@ -97,6 +99,11 @@ export class MarketplaceService {
 	}
 	async updateTransaction(tx) {
 		return MarketplaceTransactions.updateById(tx.id, _.omit(tx, 'id'));
+	}
+
+	createRelyingPartySession(config) {
+		const identity = new Identity(this.wallet);
+		return new RelyingPartySession(config, identity);
 	}
 }
 

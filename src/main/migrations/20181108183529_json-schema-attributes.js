@@ -51,6 +51,9 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	let oldNewMap = {
 		phonenumber_countrycode: {
 			id: 'phone-number'
+		},
+		birthdate: {
+			id: 'date-of-birth'
 		}
 	};
 	let duplicateMap = {

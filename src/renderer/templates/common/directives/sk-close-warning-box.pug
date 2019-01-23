@@ -1,9 +1,0 @@
-#close-dialog
-    .sk-box.md-padding(layout="column", layout-align="center center")
-        img(src="{{$root.appendStaticPath('assets/images/icons/selfkey.svg')}}", width="57")
-        span(style="color: #93b0c1; padding: 20px 40px 40px 40px;") Are you sure you want to close?
-        div(layout="row", layout-align="center center")
-            md-button.outline-gray(ng-click="cancel($event)", style="margin-right: 8px;")
-                span.primary cancel
-            md-button.blue(ng-click="yes($event)", style="margin-left: 8px;")
-                span.primary Yes

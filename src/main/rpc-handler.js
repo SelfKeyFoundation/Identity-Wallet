@@ -272,7 +272,7 @@ module.exports = function(cradle) {
 			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
 			publicKey = publicKey.toString('hex');
 
-			let privateKeyBuffer = Buffer.from(args.privateKey.replace('0x', ''), 'hex');
+			let privateKeyBuffer = Buffer.from(args.privateKey, 'hex');
 			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
 			let profile = 'local';
 

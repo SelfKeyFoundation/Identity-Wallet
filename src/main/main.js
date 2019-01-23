@@ -15,6 +15,7 @@ import config from 'common/config';
 import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
 import { handleSquirrelEvent, appUpdater } from './autoupdater';
 import { createMainWindow } from './main-window';
+import { asValue } from 'awilix';
 
 const log = new Logger('main');
 
@@ -67,7 +68,8 @@ function onReady() {
 			appUpdater();
 		}
 		await db.init();
-		ctx = configureContext('main').cradle;
+		const container = configureContext('main');
+		ctx = container.cradle;
 		setGlobalContext(ctx);
 		const store = ctx.store;
 		const app = ctx.app;
@@ -93,7 +95,12 @@ function onReady() {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
-		let mainWindow = (app.win = createMainWindow(ctx));
+		let mainWindow = (app.win = createMainWindow());
+
+		container.register({
+			mainWindow: asValue(mainWindow)
+		});
+
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
 				let online = await isOnline();
@@ -109,6 +116,7 @@ function onReady() {
 				Promise.all([
 					ctx.priceService.startUpdateData(),
 					ctx.exchangesService.loadExchangeData(),
+					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
 				ctx.txHistoryService.startSyncingJob();
@@ -147,7 +155,7 @@ function onReady() {
 }
 
 async function loadIdentity(ctx) {
-	// TODO, this probably shouild be initialized in root of react app
+	// TODO, this probably should be initialized in root of react app
 	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
 	try {
 		// TODO: should be in update manager
@@ -214,3 +222,54 @@ function createKeystoreFolder() {
 		});
 	}
 }
+
+// async function runRelyingPartyTest() {
+// 	const { RelyingPartySession } = require('./platform/relying-party');
+// 	const { Identity } = require('./platform/identity');
+// 	const privateKey = 'c6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e';
+// 	const ident = new Identity({ privateKey });
+// 	const session = new RelyingPartySession(
+// 		{
+// 			rootEndpoint: 'http://localhost:3331/api/v1'
+// 		},
+// 		ident
+// 	);
+// 	const attributes = [
+// 		{
+// 			id: 1,
+// 			data: 'test1',
+// 			documents: [
+// 				{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+// 				{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+// 			]
+// 		},
+// 		{
+// 			id: 2,
+// 			data: 'test2',
+// 			documents: [
+// 				{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+// 				{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+// 			]
+// 		}
+// 	];
+// 	try {
+// 		console.log('XXX', 'establishing session');
+// 		await session.establish();
+// 		let allTemplates = await session.listKYCTemplates();
+// 		console.log('XXX ALL TEMPLATES', allTemplates);
+// 		let templateDetails = await session.getKYCTemplate(allTemplates[0].id);
+// 		console.log('XXX template details', templateDetails);
+// 		let applications = await session.listKYCApplications();
+// 		console.log('XXX all applications', applications);
+// 		let newApplication = await session.createKYCApplication(allTemplates[0].id, attributes);
+// 		console.log('XXX new application', newApplication);
+// 		applications = await session.listKYCApplications();
+// 		console.log('XXX all applications 2', applications);
+// 		const application = await session.getKYCApplication(
+// 			applications[applications.length - 1].id
+// 		);
+// 		console.log('XXX last appliction', application);
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// }

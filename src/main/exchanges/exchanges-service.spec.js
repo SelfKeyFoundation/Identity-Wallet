@@ -2,6 +2,7 @@ import sinon from 'sinon';
 import Exchange from './exchange';
 import fetch from 'node-fetch';
 import { ExchangesService } from './exchanges-service';
+import { setGlobalContext } from '../../common/context';
 jest.mock('node-fetch');
 const exchanges = [
 	{
@@ -35,6 +36,7 @@ describe('ExchangesService', () => {
 	let service;
 	beforeEach(() => {
 		service = new ExchangesService();
+		setGlobalContext({ store: { dispatch: () => {} } });
 	});
 	afterEach(() => {
 		sinon.restore();

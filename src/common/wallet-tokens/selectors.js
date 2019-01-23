@@ -6,7 +6,7 @@ import { getWallet } from 'common/wallet/selectors';
 export const getTopTokenListSize = state => state.walletTokens.topTokenListSize;
 
 export const getTokens = state => {
-	const tokens = state.walletTokens.tokens;
+	const tokens = state.walletTokens.tokens.slice(0);
 	tokens.forEach(token => {
 		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
 		const priceUSD = price ? price.priceUSD : 0;

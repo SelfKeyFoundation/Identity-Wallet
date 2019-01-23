@@ -1,4 +1,4 @@
-import { getExchanges, getItemDetails, getExchangeLinks, hasBalance } from './selectors';
+import { getExchanges, getServiceDetails, getExchangeLinks, hasBalance } from './selectors';
 
 describe('selectors', () => {
 	const exchanges = {
@@ -215,7 +215,7 @@ describe('selectors', () => {
 			kyc_template: [{ isEntered: false, name: 'test', type: 'metadata' }],
 			'Fiat Withdrawal methods': [Array]
 		};
-		expect(getItemDetails({ exchanges }, 'Gatecoin')).toEqual(expectedExchangeDetails);
+		expect(getServiceDetails({ exchanges }, 'Gatecoin')).toEqual(expectedExchangeDetails);
 	});
 
 	it('should return exchange hasBalance when amount of key is over the required balance', () => {

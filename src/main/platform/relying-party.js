@@ -22,7 +22,7 @@ export class RelyingPartyCtx {
 	}
 	getEndpoint(name) {
 		let rootEndpoint = this.getRootEndpoint();
-		let endpoints = this.config.endpoints;
+		let endpoints = this.config.endpoints || {};
 		let url = endpoints[name];
 		if (!url) {
 			url = urljoin(rootEndpoint, name);
@@ -31,7 +31,7 @@ export class RelyingPartyCtx {
 	}
 	getRootEndpoint() {
 		let root = this.config.rootEndpoint;
-		let url = this.config.website.url;
+		let url = (this.config.website || {}).url || '';
 		if (!root.match(/^https?:/)) {
 			root = urljoin(url, root);
 		}
@@ -203,18 +203,16 @@ export class RelyingPartyRest {
 		});
 	}
 	static uploadKYCApplicationFile(ctx, doc) {
-		let url = ctx.getEndpoint('users');
+		let url = ctx.getEndpoint('/files');
 		let formData = {
 			document: {
 				value: doc.buffer,
 				options: {
 					contentType: doc.mimeType,
-					filename: doc.name || 'document',
-					knownLength: doc.size
+					filename: doc.name || 'document'
 				}
 			}
 		};
-
 		return request.post({
 			url,
 			formData,
@@ -222,7 +220,8 @@ export class RelyingPartyRest {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
-			}
+			},
+			json: true
 		});
 	}
 }
@@ -287,10 +286,10 @@ export class RelyingPartySession {
 		}, []);
 		documents = await Promise.all(
 			documents.map(async doc => {
-				const { id } = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+				const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
 				let newDoc = { ...doc };
 				delete newDoc.buffer;
-				newDoc.content = id;
+				newDoc.content = res.id;
 				return newDoc;
 			})
 		);

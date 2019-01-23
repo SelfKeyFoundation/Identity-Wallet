@@ -37,7 +37,7 @@ const getType = template => {
 	}
 };
 
-export const getItemDetails = ({ exchanges }, name) => {
+export const getServiceDetails = ({ exchanges }, name) => {
 	let details = {
 		serviceOwner: '0x0000000000000000000000000000000000000000',
 		serviceId: 'global',
@@ -61,13 +61,13 @@ export const getItemDetails = ({ exchanges }, name) => {
 };
 
 export const hasBalance = (state, name) => {
-	const exchange = getItemDetails(state, name);
+	const service = getServiceDetails(state, name);
 
 	const keyToken = getTokens(state).find(token => {
 		return token.symbol === CONFIG.constants.primaryToken.toUpperCase();
 	});
 
-	const requiredBalance = exchange.requiredBalance;
+	const requiredBalance = service.requiredBalance;
 
 	return keyToken.balance >= requiredBalance;
 };
