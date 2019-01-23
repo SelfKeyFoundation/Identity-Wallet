@@ -11,6 +11,7 @@ import {
 	MarketplaceWithoutBalancePopup
 } from '../../marketplace';
 
+import SelfkeyIdWrapper from '../../selfkey-id/main';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
@@ -22,9 +23,15 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
+		maxWidth: '1140px',
 		width: '100%'
 	}
 });
+
+const contentWrapperStyle = {
+	marginBottom: '60px',
+	marginTop: '50px'
+};
 
 class Main extends Component {
 	componentDidMount() {
@@ -44,9 +51,10 @@ class Main extends Component {
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />
 				</Grid>
-				<Grid item xs={12} className={classes.bodySection}>
+				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
+					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdWrapper} />
 					<Route
 						path={`${match.path}/marketplace-categories`}
 						component={MarketplaceCategoriesPage}
