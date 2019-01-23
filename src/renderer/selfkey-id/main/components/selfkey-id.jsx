@@ -17,19 +17,20 @@ class SelfkeyId extends Component {
 		let component = <SelfkeyIdOverview {...this.props} />;
 		if (this.state.tabValue === 1) {
 			component = <SelfkeyIdApplications {...this.props} />;
-		} else if (this.state.tabValue === 2) {
+		} else if (this.state.tabValue === 3) {
 			component = <SelfkeyIdHistory {...this.props} />;
 		}
 
 		return (
 			<Grid container direction="column" spacing={32}>
 				<Grid item>
-					<Typography variant="h5">SelfKey Identity Wallet</Typography>
+					<Typography variant="h1">SelfKey Identity Wallet</Typography>
 				</Grid>
 				<Grid item>
 					<Tabs value={this.state.tabValue} onChange={this.handleChange}>
 						<Tab label="Overview" />
 						<Tab label="Marketplace Applications" />
+						<Tab label="Companies" />
 						<Tab label="History" />
 					</Tabs>
 				</Grid>
