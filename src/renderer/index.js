@@ -66,7 +66,7 @@ render(
 		<Provider store={store}>
 			<ConnectedRouter history={history.getHistory()}>
 				<HashRouter>
-					<div style={{ backgroundColor: '#262F39' }}>
+					<div style={{ background: 'linear-gradient(135deg, #2b3540 0%,#1e262e 100%)' }}>
 						<Route exact path="/" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
 						<Route path="/createWallet" component={CreateWallet} />
