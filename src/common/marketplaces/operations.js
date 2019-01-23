@@ -83,6 +83,7 @@ export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) 
 	const mpService = (getGlobalContext() || {}).marketplaceService;
 	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
 	let gasLimit = await mpService.estimateGasForStake(serviceOwner, serviceId);
+	console.log('XXX', gasLimit);
 	let tx = {
 		action: 'placeStake',
 		gasLimit,
@@ -124,6 +125,7 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 		serviceOwner,
 		serviceId
 	};
+	console.log(tx);
 	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
 	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmWithdrawTransaction'));
 };

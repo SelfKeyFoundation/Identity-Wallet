@@ -9,7 +9,6 @@ export const initialState = {
 	stakesById: {},
 	currentTransaction: null,
 	displayedPopup: null,
-	displayedState: null,
 	categories: categories.map(c => c.id),
 	categoriesById: categories.reduce((acc, curr) => {
 		acc[curr.id] = curr;
@@ -86,10 +85,6 @@ export const setMarketplacePopupReducer = (state, { payload }) => {
 	return { ...state, displayedPopup: payload };
 };
 
-export const setMarketplaceStateReducer = (state, { payload }) => {
-	return { ...state, displayedState: payload };
-};
-
 export const setCurrentTransactionReducer = (state, { payload }) => {
 	return { ...state, currentTransaction: payload };
 };
@@ -124,7 +119,6 @@ export const reducers = {
 	addTransactionReducer,
 	setTransactionsReducer,
 	updateTransactionReducer,
-	setMarketplaceStateReducer,
 	setMarketplacePopupReducer,
 	setCurrentTransactionReducer,
 	updateCurrentTransactionReducer,
@@ -144,8 +138,6 @@ const reducer = (state = initialState, action) => {
 			return reducers.setTransactionsReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_UPDATE_ONE:
 			return reducers.updateTransactionReducer(state, action);
-		case marketplacesTypes.MARKETPLACE_STATE_SHOW:
-			return reducers.setMarketplaceStateReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_POPUP_SHOW:
 			return reducers.setMarketplacePopupReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_SET:

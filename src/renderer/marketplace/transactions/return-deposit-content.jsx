@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Grid, withStyles } from '@material-ui/core';
 import { P, StyledButton, ReturnIcon, TransactionFeeSelector } from 'selfkey-ui';
+import config from 'common/config';
 
 const styles = theme => ({
 	text: {
@@ -57,7 +58,7 @@ class ReturnDepositContentComponent extends Component {
 		const {
 			classes,
 			amount = 25,
-			token = 'KEY',
+			token = config.constants.primaryToken,
 			minGasPrice,
 			maxGasPrice,
 			gasLimit,

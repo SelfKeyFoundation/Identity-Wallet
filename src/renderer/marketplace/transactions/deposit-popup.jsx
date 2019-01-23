@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
+import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
-import { getFiatCurrency } from 'common/fiatCurrency/selectors';
-import { pricesSelectors } from 'common/prices';
+
 import history from 'common/store/history';
 import { Popup } from './popup';
 import { DepositContent } from './deposit-content';
 
 const mapStateToProps = state => {
 	return {
-		fiat: getFiatCurrency(state),
-		ethPrice: pricesSelectors.getBySymbol(state, 'ETH'),
-		gas: ethGasStationInfoSelectors.getEthGasStationInfoWEI(state),
-		service: marketplacesSelectors.servicesSelector(state)[0],
-		gasLimit: 200000
+		tx: marketplacesSelectors.currentTransactionSelector(state)
 	};
 };
 
@@ -25,36 +20,29 @@ class DepositPopupComponent extends Component {
 		this.props.dispatch(marketplacesOperations.loadStakes());
 	}
 
-	handleConfirmAction(fee) {
-		const { service, gasLimit } = this.props;
-		this.props.navigateToTransactionProgress();
-		this.props.dispatch(
-			marketplacesOperations.placeStake(
-				service.serviceOwner,
-				service.serviceId,
-				service.amount,
-				fee,
-				gasLimit
-			)
+	async handleConfirmAction(gasPrice) {
+		await this.props.dispatch(
+			marketplacesOperations.updateCurrentTransactionAction({ gasPrice })
 		);
+		await this.props.dispatch(marketplacesOperations.confirmStakeTransaction());
 	}
 
 	render() {
-		const { closeAction, gas, fiat, ethPrice, gasLimit } = this.props;
-		if (!gas.safeLow) {
+		const { closeAction, tx } = this.props;
+		if (!tx.gasPriceEstimates.safeLow) {
 			return <div>Loading</div>;
 		}
 		return (
 			<Popup closeAction={history.getHistory().goBack}>
 				<DepositContent
-					minGasPrice={gas.safeLow}
-					maxGasPrice={gas.fast}
-					defaultValue={gas.avarage}
-					gasLimit={gasLimit}
-					fiat={fiat.fiatCurrency}
-					fiatRate={ethPrice.priceUSD}
+					minGasPrice={tx.gasPriceEstimates.safeLow}
+					maxGasPrice={tx.gasPriceEstimates.fast}
+					defaultValue={tx.gasPriceEstimates.avarage}
+					gasLimit={tx.gasLimit}
+					fiat={tx.fiat}
+					fiatRate={tx.fiatRate}
 					onCancel={closeAction}
-					onConfirm={fee => this.handleConfirmAction(fee)}
+					onConfirm={gasLimit => this.handleConfirmAction(gasLimit)}
 				/>
 			</Popup>
 		);
