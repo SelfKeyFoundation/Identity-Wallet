@@ -63,9 +63,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 							<Typography variant="body2">
 								You have not applied for any service in the marketplace yet.
 							</Typography>
-							<Button variant="contained" color="primary">
-								Access Marketplace
-							</Button>
+							<Button variant="contained">Access Marketplace</Button>
 						</CardContent>
 					</Card>
 				</Grid>
