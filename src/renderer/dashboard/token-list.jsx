@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 const TokenList = props => {
 	return (
-		<Grid container spacing={16}>
+		<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={16}>
 			<Grid item>
 				<TokenBox
 					cryptoCurrencyShort={config.constants.primaryToken}

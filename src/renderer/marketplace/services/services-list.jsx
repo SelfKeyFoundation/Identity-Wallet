@@ -21,10 +21,6 @@ const styles = theme => ({
 		height: '120px'
 	},
 
-	body: {
-		marginTop: '20px'
-	},
-
 	headerContent: {
 		marginTop: '30px'
 	},
@@ -80,11 +76,11 @@ export const MarketplaceServicesList = withStyles(styles)(
 						>
 							<Grid item>{category.icon}</Grid>
 							<Grid item>
-								<H1>{category.name}</H1>
+								<H1>{category.title}</H1>
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item id="body" xs={12} className={classes.body}>
+					<Grid item xs={12} spacing={24}>
 						<Grid container direction="row" justify="space-between" alignItems="center">
 							{getServices(items, viewAction)}
 						</Grid>

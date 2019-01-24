@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
-
-import history from 'common/store/history';
 import { Popup } from './popup';
 import { DepositContent } from './deposit-content';
 
@@ -33,7 +31,7 @@ class DepositPopupComponent extends Component {
 			return <div>Loading</div>;
 		}
 		return (
-			<Popup closeAction={history.getHistory().goBack}>
+			<Popup closeAction={closeAction}>
 				<DepositContent
 					minGasPrice={tx.gasPriceEstimates.safeLow}
 					maxGasPrice={tx.gasPriceEstimates.fast}

@@ -7,23 +7,24 @@ import {
 	FormGroup,
 	FormControl,
 	Button,
+	CircularProgress,
 	List,
 	ListItem,
-	ListItemText,
 	ListItemAvatar,
+	ListItemText,
 	Avatar
 } from '@material-ui/core';
 import {
-	H2,
-	H3,
 	P,
-	TickIcon,
+	H3,
+	H2,
 	UnlockIcon,
 	ReturnIcon,
 	HourGlassSmallIcon,
 	CalendarIcon,
-	DocumentIcon,
-	StyledButton
+	StyledButton,
+	TickIcon,
+	DocumentIcon
 } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
@@ -151,28 +152,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		isDescriptionTruncated: true
 	};
 
-	getKYCRequirements(requirements, classes) {
-		return requirements.map((requirement, index) => {
-			return (
-				<ListItem key={requirement.name} className={classes.requirementListItem}>
-					<ListItemAvatar>
-						{requirement.isEntered ? (
-							<Avatar className={classes.bullet}>
-								<TickIcon />
-							</Avatar>
-						) : (
-							<Avatar className={classes.notEnteredRequeriment}>
-								<div>{index + 1}</div>
-							</Avatar>
-						)}
-					</ListItemAvatar>
-					<ListItemText disableTypography={true}>{requirement.name}</ListItemText>
-					{requirement.type === 'document' && <DocumentIcon />}
-				</ListItem>
-			);
-		});
-	}
-
 	unlockActionCall(unlockAction, item, hasBalance) {
 		if (!unlockAction) {
 			return;
@@ -193,7 +172,15 @@ class MarketplaceServiceDetailsComponent extends Component {
 	}
 
 	render() {
-		const { classes, item, unlockAction, hasBalance, backAction } = this.props;
+		const {
+			classes,
+			item,
+			unlockAction,
+			hasBalance,
+			backAction,
+			relyingParty,
+			relyingPartyIsActive
+		} = this.props;
 		let daysLeft = 0;
 		if (item.status === 'locked' && item.releaseDate) {
 			daysLeft = Math.ceil((item.releaseDate - Date.now()) / 1000 / 60 / 60 / 24);
@@ -378,9 +365,13 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<H3>KYC Requirements</H3>
 									</Grid>
 									<Grid item>
-										<List className={classes.requirementList}>
-											{this.getKYCRequirements(item.kyc_template, classes)}
-										</List>
+										{relyingParty ? (
+											<KycManager relyingParty={relyingParty} />
+										) : relyingPartyIsActive ? (
+											<CircularProgress />
+										) : (
+											'None'
+										)}
 									</Grid>
 								</Grid>
 							</Grid>
@@ -391,6 +382,58 @@ class MarketplaceServiceDetailsComponent extends Component {
 		);
 	}
 }
+
+class KycManagerComponent extends Component {
+	renderTemplate(tpl) {
+		return (
+			<ListItem key={tpl.id}>
+				<ListItemText>
+					<h3>{tpl.name}</h3>
+					<p>{tpl.description}</p>
+				</ListItemText>
+				<List>
+					{(tpl.identity_attributes || []).map((attr, index) =>
+						this.renderKycRequirement({ id: attr }, index)
+					)}
+				</List>
+			</ListItem>
+		);
+	}
+	renderKycRequirement(requirement, index) {
+		const { classes = {} } = this.props;
+		return (
+			<ListItem key={requirement.name} className={classes.requirementListItem}>
+				<ListItemAvatar>
+					{requirement.isEntered ? (
+						<Avatar className={classes.bullet}>
+							<TickIcon />
+						</Avatar>
+					) : (
+						<Avatar className={classes.notEnteredRequeriment}>
+							<div>{index + 1}</div>
+						</Avatar>
+					)}
+				</ListItemAvatar>
+				<ListItemText disableTypography={true}>{requirement.name}</ListItemText>
+				{requirement.type === 'document' && <DocumentIcon />}
+			</ListItem>
+		);
+	}
+	render() {
+		console.log('Relying party', this.props.relyingParty);
+		const { relyingParty } = this.props;
+		if (relyingParty.error) {
+			return <div>Error connecting to relying party</div>;
+		}
+		return (
+			<div>
+				<List>{relyingParty.templates.map(this.renderTemplate.bind(this))};</List>
+			</div>
+		);
+	}
+}
+
+const KycManager = withStyles(styles)(KycManagerComponent);
 
 export const MarketplaceServiceDetails = withStyles(styles)(MarketplaceServiceDetailsComponent);
 
