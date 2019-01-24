@@ -44,6 +44,12 @@ const infoStyle = {
 	padding: '25px 30px'
 };
 
+const hexagonStyle = {
+	border: '3px solid #313D49',
+	height: '120px',
+	width: '120px'
+};
+
 const SelfkeyIdOverview = ({ attributes, documents }) => (
 	<Grid container direction="column" spacing={32}>
 		<Grid item>
@@ -51,7 +57,13 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 				<Grid item xs={8}>
 					<Card>
 						<CardHeader
-							avatar={<Avatar>R</Avatar>}
+							avatar={
+								<Avatar
+									style={hexagonStyle}
+									alt="Avatar Image"
+									src="https://avatars0.githubusercontent.com/u/9919?s=280&v=4"
+								/>
+							}
 							title="Shrimp and Chorizo Pael"
 							subheader="Chorizo"
 						/>
@@ -63,6 +75,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 							<Typography variant="body2">
 								You have not applied for any service in the marketplace yet.
 							</Typography>
+							<br />
 							<Button variant="contained">Access Marketplace</Button>
 						</CardContent>
 					</Card>
@@ -115,26 +128,26 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 										<Table>
 											<TableHead>
 												<SmallTableHeadRow>
-													<TableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Information
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Label
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Last edited
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head" align="right">
 														<Typography variant="overline">
 															Actions
 														</Typography>
-													</TableCell>
+													</SmallTableCell>
 												</SmallTableHeadRow>
 											</TableHead>
 											<TableBody>
@@ -157,19 +170,10 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 																		{entry.lastEdited}
 																	</Typography>
 																</SmallTableCell>
-																<SmallTableCell>
-																	<Grid
-																		container
-																		direction="row"
-																		justify="flex-start"
-																		alignItems="center"
-																	>
-																		<Grid item>
-																			<IconButton id="editButton">
-																				<EditTransparentIcon />
-																			</IconButton>
-																		</Grid>
-																	</Grid>
+																<SmallTableCell align="right">
+																	<IconButton id="editButton">
+																		<EditTransparentIcon />
+																	</IconButton>
 																</SmallTableCell>
 															</SmallTableRow>
 														);
@@ -219,26 +223,26 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 										<Table>
 											<TableHead>
 												<SmallTableHeadRow>
-													<TableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Information
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Label
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head">
 														<Typography variant="overline">
 															Last edited
 														</Typography>
-													</TableCell>
-													<TableCell>
+													</SmallTableCell>
+													<SmallTableCell variant="head" align="right">
 														<Typography variant="overline">
 															Actions
 														</Typography>
-													</TableCell>
+													</SmallTableCell>
 												</SmallTableHeadRow>
 											</TableHead>
 											<TableBody>
@@ -261,19 +265,10 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 																		{entry.lastEdited}
 																	</Typography>
 																</SmallTableCell>
-																<SmallTableCell>
-																	<Grid
-																		container
-																		direction="row"
-																		justify="flex-start"
-																		alignItems="center"
-																	>
-																		<Grid item>
-																			<IconButton id="editButton">
-																				<EditTransparentIcon />
-																			</IconButton>
-																		</Grid>
-																	</Grid>
+																<SmallTableCell align="right">
+																	<IconButton id="editButton">
+																		<EditTransparentIcon />
+																	</IconButton>
 																</SmallTableCell>
 															</SmallTableRow>
 														);
@@ -332,7 +327,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 															Last Edited
 														</Typography>
 													</TableCell>
-													<TableCell>
+													<TableCell align="right">
 														<Typography variant="overline">
 															Actions
 														</Typography>
@@ -396,24 +391,13 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 																		{entry.lastEdited}
 																	</Typography>
 																</TableCell>
-																<TableCell>
-																	<Grid
-																		container
-																		direction="row"
-																		justify="flex-start"
-																		alignItems="center"
-																	>
-																		<Grid item>
-																			<IconButton id="editButton">
-																				<EditTransparentIcon />
-																			</IconButton>
-																		</Grid>
-																		<Grid item>
-																			<IconButton id="deleteButton">
-																				<DeleteIcon />
-																			</IconButton>
-																		</Grid>
-																	</Grid>
+																<TableCell align="right">
+																	<IconButton id="editButton">
+																		<EditTransparentIcon />
+																	</IconButton>
+																	<IconButton id="deleteButton">
+																		<DeleteIcon />
+																	</IconButton>
 																</TableCell>
 															</TableRow>
 														);
