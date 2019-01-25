@@ -23,26 +23,28 @@ const styles = {
 
 class IncorporationsViewWrapper extends Component {
 	state = {
-		selectedProgram: false
+		detailed: false
 	};
 
-	_setSelectedProgram = data => this.setState({ selectedProgram: data });
+	handleDetailClick = companyCode => {
+		this.setState({ detailed: companyCode });
+	};
 
 	render() {
 		const classes = this.props.classes;
-		const selectedProgram = this.state.selectedProgram;
+		const detailed = this.state.detailed;
 		let view = null;
 
-		if (selectedProgram) {
+		if (detailed) {
 			view = (
 				<IncorporationsDetailView
 					{...this.props}
-					program={selectedProgram}
-					onBackClick={this._setSelectedProgram}
+					companyCode={detailed}
+					onBackClick={this.handleDetailClick}
 				/>
 			);
 		} else {
-			view = <IncorporationsTable {...this.props} onDetailClick={this._setSelectedProgram} />;
+			view = <IncorporationsTable {...this.props} onDetailClick={this.handleDetailClick} />;
 		}
 
 		return (
