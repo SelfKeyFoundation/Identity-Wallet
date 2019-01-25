@@ -12,7 +12,8 @@ import {
 	IconButton,
 	TableHead,
 	Typography,
-	Button
+	Button,
+	withStyles
 } from '@material-ui/core';
 import {
 	EditTransparentIcon,
@@ -25,6 +26,7 @@ import {
 	SmallTableRow,
 	SmallTableCell
 } from 'selfkey-ui';
+import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
 // import { Link } from 'react-router-dom';
 
 // const getRecord = (attributes, entryName) => {
@@ -32,25 +34,31 @@ import {
 // 	return entry ? entry.record : '';
 // };
 
-const hrStyle = {
-	backgroundColor: '#303C49',
-	border: 'none',
-	boxSizing: 'border-box',
-	height: '1px',
-	margin: '5px 16px'
-};
+const styles = theme => ({
+	hr: {
+		backgroundColor: '#303C49',
+		border: 'none',
+		boxSizing: 'border-box',
+		height: '1px',
+		margin: '5px 16px'
+	},
+	hexagon: {
+		border: '3px solid #313D49',
+		height: '120px',
+		width: '120px'
+	},
+	info: {
+		padding: '25px 30px'
+	},
+	card: {
+		backgroundColor: '#1E262E',
+		backgroundImage: `url(${backgroundImage})`,
+		backgroundPosition: '90% 50%',
+		backgroundRepeat: 'no-repeat'
+	}
+});
 
-const infoStyle = {
-	padding: '25px 30px'
-};
-
-const hexagonStyle = {
-	border: '3px solid #313D49',
-	height: '120px',
-	width: '120px'
-};
-
-const SelfkeyIdOverview = ({ attributes, documents }) => (
+export const SelfkeyIdOverview = withStyles(styles)(({ classes, attributes, documents }) => (
 	<Grid container direction="column" spacing={32}>
 		<Grid item>
 			<Grid container direction="row" spacing={32}>
@@ -59,7 +67,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 						<CardHeader
 							avatar={
 								<Avatar
-									style={hexagonStyle}
+									className={classes.hexagon}
 									alt="Avatar Image"
 									src="https://avatars0.githubusercontent.com/u/9919?s=280&v=4"
 								/>
@@ -70,7 +78,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 					</Card>
 				</Grid>
 				<Grid item xs={4}>
-					<Card>
+					<Card className={classes.card}>
 						<CardContent>
 							<Typography variant="body2">
 								You have not applied for any service in the marketplace yet.
@@ -88,7 +96,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 				<Grid item>
 					<Card>
 						<CardHeader title="Basic Information" />
-						<hr style={hrStyle} />
+						<hr className={classes.hr} />
 						<CardContent>
 							<Grid
 								container
@@ -106,7 +114,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 										direction="column"
 										wrap="nowrap"
 										spacing={24}
-										style={infoStyle}
+										className={classes.info}
 									>
 										<Grid item>
 											<IdCardIcon />
@@ -186,7 +194,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 						</CardContent>
 
 						<CardHeader title="Additional Information" />
-						<hr style={hrStyle} />
+						<hr className={classes.hr} />
 						<CardContent>
 							<Grid
 								container
@@ -204,7 +212,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 										direction="column"
 										wrap="nowrap"
 										spacing={24}
-										style={infoStyle}
+										className={classes.info}
 									>
 										<Grid item>
 											<BookIcon />
@@ -292,7 +300,7 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 				<Grid item>
 					<Card>
 						<CardHeader title="Documents" />
-						<hr style={hrStyle} />
+						<hr className={classes.hr} />
 
 						<CardContent>
 							<Grid
@@ -420,6 +428,6 @@ const SelfkeyIdOverview = ({ attributes, documents }) => (
 			</Grid>
 		</Grid>
 	</Grid>
-);
+));
 
 export default SelfkeyIdOverview;
