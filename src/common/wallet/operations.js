@@ -1,14 +1,11 @@
 import * as actions from './actions';
 import { getWallet } from './selectors';
 import EthUnits from 'common/utils/eth-units';
-import Web3Service from 'main/blockchain/web3-service';
-const web3Service = new Web3Service();
+import { getGlobalContext } from 'common/context';
 
 const getWalletWithBalance = async wallet => {
-	const balanceWei = await web3Service.waitForTicket({
-		method: 'getBalance',
-		args: [`0x${wallet.publicKey}`]
-	});
+	const walletService = getGlobalContext().walletService;
+	const balanceWei = await walletService.getBalance(wallet.id);
 
 	return {
 		...wallet,

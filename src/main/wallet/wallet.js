@@ -1,6 +1,8 @@
 import { Model, transaction } from 'objection';
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
+import IdAttribute from '../identity/id-attribute';
+import config from 'common/config';
 
 const TABLE_NAME = 'wallets';
 const log = new Logger('wallet-model');
@@ -83,7 +85,7 @@ export class Wallet extends BaseModel {
 					},
 					tokens: [
 						{
-							tokenId: 1
+							tokenId: config.constants.primaryToken === 'KEY' ? 1 : 2
 						}
 					]
 				},
@@ -128,43 +130,6 @@ export class Wallet extends BaseModel {
 		return itm.profilePicture;
 	}
 
-	static async addInitialIdAttributesAndActivate(id, initialIdAttributes) {
-		const tx = await transaction.start(this.knex());
-		try {
-			const IdAttributes = require('../identity/id-attribute').default;
-			const attributes = await IdAttributes.genInitial(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).upsertGraphAndFetch({
-				id,
-				isSetupFinished: 1,
-				idAttributes: attributes
-			});
-			await tx.commit();
-			return wallet;
-		} catch (error) {
-			log.error(error);
-			await tx.rollback(error);
-			throw error;
-		}
-	}
-
-	static async editImportedIdAttributes(id, initialIdAttributes) {
-		const tx = await transaction.start(this.knex());
-		try {
-			const IdAttributes = require('../identity/id-attribute').default;
-			const attributes = await IdAttributes.initializeImported(id, initialIdAttributes, tx);
-			let wallet = await this.query(tx).upsertGraphAndFetch({
-				id,
-				isSetupFinished: 1,
-				idAttributes: attributes
-			});
-			await tx.commit();
-			return wallet;
-		} catch (error) {
-			await tx.rollback(error);
-			throw error;
-		}
-	}
-
 	async hasSignedUpTo(websiteUrl) {
 		let logins = await this.$relatedQuery('loginAttempts')
 			.where({
@@ -177,6 +142,16 @@ export class Wallet extends BaseModel {
 
 	async addLoginAttempt(attempt) {
 		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
+	}
+
+	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
+		for (let key in initialIdAttributesValues) {
+			await IdAttribute.create({
+				walletId: id,
+				typeId: 1,
+				data: { [key]: initialIdAttributesValues[key] }
+			});
+		}
 	}
 }
 

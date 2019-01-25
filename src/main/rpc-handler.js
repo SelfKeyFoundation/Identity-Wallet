@@ -2,6 +2,8 @@
 const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
+const { exchangesOperations } = require('common/exchanges');
+
 const { pricesOperations } = require('common/prices');
 
 const { Logger } = require('common/logger');
@@ -270,7 +272,7 @@ module.exports = function(cradle) {
 			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
 			publicKey = publicKey.toString('hex');
 
-			let privateKeyBuffer = Buffer.from(args.privateKey.replace('0x', ''), 'hex');
+			let privateKeyBuffer = Buffer.from(args.privateKey, 'hex');
 			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
 			let profile = 'local';
 
@@ -1146,7 +1148,6 @@ module.exports = function(cradle) {
 	// DONE !!!!!
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
-			.eager('document')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1194,6 +1195,7 @@ module.exports = function(cradle) {
 	controller.prototype.findAllExchangeData = function(event, actionId, actionName, args) {
 		Exchange.findAll(args)
 			.then(data => {
+				store.dispatch(exchangesOperations.updateExchanges(data));
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

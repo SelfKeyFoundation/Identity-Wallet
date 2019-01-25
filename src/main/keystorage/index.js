@@ -19,14 +19,10 @@ keystorage.importFromFile = function(filepath, cb) {
 	return cb(JSON.parse(fs.readFileSync(filepath)));
 };
 
-export const checkPassword = (wallet, password) => {
-	let keystoreFileFullPath = path.join(getWalletsDir(), wallet.keystoreFilePath);
+export const getPrivateKey = (keystoreFilePath, password) => {
+	let keystoreFileFullPath = path.join(getWalletsDir(), keystoreFilePath);
 	let keystore = keystorage.importFromFile(keystoreFileFullPath);
-	try {
-		return keystorage.recover(password, keystore);
-	} catch (err) {
-		return false;
-	}
+	return keystorage.recover(password, keystore);
 };
 
 export default keystorage;

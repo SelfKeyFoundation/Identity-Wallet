@@ -139,7 +139,7 @@ export class TxHistoryService {
 			});
 			return { tokenDecimal, tokenSymbol, tokenName };
 		} catch (err) {
-			log.error('IS NOT CONTRACT ADDRESS, %s', err);
+			log.error('IS NOT CONTRACT ADDRESS, %s, %s', contractAddress, err);
 			return null;
 		}
 	}
@@ -195,17 +195,19 @@ export class TxHistoryService {
 		if (this.isFailedERC20TokenTx(txs)) {
 			// set faild status, there is some exeptions, so that's needed
 			processedTx.txReceiptStatus = 0;
-
 			processedTx.from === walletAddress
 				? (processedTx.contractAddress = processedTx.to)
 				: (processedTx.contractAddress = processedTx.from);
-
-			let contractInfo = await this.getContractInfo(processedTx.contractAddress);
-			if (!contractInfo) {
+			try {
+				let contractInfo = await this.getContractInfo(processedTx.contractAddress);
+				if (!contractInfo) {
+					return null;
+				}
+				Object.assign(processedTx, contractInfo);
+			} catch (error) {
+				console.error(error);
 				return null;
 			}
-
-			Object.assign(processedTx, contractInfo);
 		}
 
 		processedTx.contractAddress = processedTx.contractAddress || null; // iportant for find by eth
@@ -292,7 +294,8 @@ export class TxHistoryService {
 	async sync() {
 		let wallets = await Wallet.findAll();
 		for (let wallet of wallets) {
-			let address = ('0x' + wallet.publicKey).toLowerCase();
+			let address = wallet.publicKey.toLowerCase();
+			address = address.startsWith('0x') ? address : `0x${address}`;
 			await this.syncByWallet(address, wallet.id);
 			await this.removeNotMinedPendingTxs(address);
 		}
@@ -319,6 +322,10 @@ export class TxHistoryService {
 			await that.sync();
 			next();
 		})();
+	}
+
+	async getTransactions(publicKey) {
+		return TxHistory.findByPublicKey(publicKey);
 	}
 }
 

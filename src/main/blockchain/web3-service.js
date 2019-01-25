@@ -5,6 +5,9 @@ import AsyncTaskQueue from 'common/utils/async-task-queue';
 import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
+import ProviderEngine from 'web3-provider-engine';
+import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+import LedgerWalletSubproviderFactory from 'ledger-wallet-provider';
 
 const log = new Logger('Web3Service');
 
@@ -31,7 +34,19 @@ export class Web3Service {
 		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
+		this.abi = ABI;
 	}
+
+	async switchToLedgerWallet() {
+		const engine = new ProviderEngine();
+		this.web3 = new Web3(engine);
+
+		const ledgerWalletSubProvider = LedgerWalletSubproviderFactory();
+		engine.addProvider(ledgerWalletSubProvider);
+		engine.addProvider(new RpcSubprovider({ rpcUrl: '/api' }));
+		engine.start();
+	}
+
 	async handleTicket(data) {
 		log.debug('handle ticket %2j', data);
 		const {
@@ -47,7 +62,14 @@ export class Web3Service {
 		const { Contract } = this.web3.eth;
 		const web3 = customWeb3 || this.web3;
 		let contract = web3.eth;
-
+		if (args[0]) {
+			if (args[0].gas && typeof args[0].gas === 'number') {
+				args[0].gas = Math.round(args[0].gas);
+			}
+			if (args[0].gasPrice && typeof args[0].gasPrice === 'number') {
+				args[0].gasPrice = Math.round(args[0].gasPrice);
+			}
+		}
 		if (contractAddress) {
 			contract = new Contract(customAbi || ABI, contractAddress);
 			if (contractMethod) {
@@ -92,6 +114,49 @@ export class Web3Service {
 			}
 		});
 	}
+	getTransaction(hash) {
+		return this.waitForTicket({
+			method: 'getTransaction',
+			args: [hash]
+		});
+	}
+	getTransactionReceipt(hash) {
+		return this.waitForTicket({
+			method: 'getTransactionReceipt',
+			args: [hash]
+		});
+	}
+	ensureStrHex(str) {
+		if (!this.web3.utils.isHex(str)) {
+			return this.web3.utils.asciiToHex(str);
+		}
+		return str;
+	}
+	ensureIntHex(num) {
+		if (!this.web3.utils.isHex(num)) {
+			return this.web3.utils.numberToHex(num);
+		}
+		return num;
+	}
+	async checkTransactionStatus(hash) {
+		let tx = await this.getTransaction(hash);
+		if (!tx) {
+			return 'pending';
+		}
+		if (!tx.blockNumber) {
+			return 'processing';
+		}
+		let receipt = await this.getTransactionReceipt(hash);
+		let status = receipt.status;
+		if (typeof status !== 'boolean') {
+			status = this.web3.utils.hexToNumber(receipt.status);
+		}
+		if (!status) {
+			return 'failed';
+		}
+		return 'success';
+	}
+
 	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {
 		let opts = { ...(args || [])[0] };
 		if (!opts.from) {
@@ -99,8 +164,9 @@ export class Web3Service {
 		}
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
+			console.log('XXX', wallet, opts);
 		}
-		if (!wallet || '0x' + wallet.publicKey !== opts.from) {
+		if (!wallet || wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
 		if (wallet.profile !== 'local') {
@@ -113,14 +179,13 @@ export class Web3Service {
 		if (!opts.gasPrice) {
 			opts.gasPrice = await this.web3.eth.getGasPrice();
 		}
-		opts.gasPrice = this.web3.utils.toHex(opts.gasPrice);
+		opts.gasPrice = this.web3.utils.toHex(Math.round(opts.gasPrice));
 		if (!opts.gas) {
 			opts.gas = await contactMethodInstance.estimateGas({
 				from: opts.from,
 				value: this.web3.utils.toHex(0)
 			});
 		}
-
 		let data = contactMethodInstance.encodeABI();
 		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
 		if (nonce === this.nonce) {
