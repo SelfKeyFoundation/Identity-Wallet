@@ -1,19 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-	Grid,
-	Divider,
-	FormGroup,
-	FormControl,
-	Button,
-	CircularProgress,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
-	Avatar
-} from '@material-ui/core';
+import { Grid, Divider, FormGroup, FormControl, Button, CircularProgress } from '@material-ui/core';
 import {
 	P,
 	H3,
@@ -22,9 +10,7 @@ import {
 	ReturnIcon,
 	HourGlassSmallIcon,
 	CalendarIcon,
-	StyledButton,
-	TickIcon,
-	DocumentIcon
+	StyledButton
 } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
@@ -366,7 +352,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 									<Grid item>
 										{relyingParty ? (
-											<KycManager relyingParty={relyingParty} />
+											'KYC MANAGER HERE'
 										) : relyingPartyIsActive ? (
 											<CircularProgress />
 										) : (
@@ -382,58 +368,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		);
 	}
 }
-
-class KycManagerComponent extends Component {
-	renderTemplate(tpl) {
-		return (
-			<ListItem key={tpl.id}>
-				<ListItemText>
-					<h3>{tpl.name}</h3>
-					<p>{tpl.description}</p>
-				</ListItemText>
-				<List>
-					{(tpl.identity_attributes || []).map((attr, index) =>
-						this.renderKycRequirement({ id: attr }, index)
-					)}
-				</List>
-			</ListItem>
-		);
-	}
-	renderKycRequirement(requirement, index) {
-		const { classes = {} } = this.props;
-		return (
-			<ListItem key={requirement.name} className={classes.requirementListItem}>
-				<ListItemAvatar>
-					{requirement.isEntered ? (
-						<Avatar className={classes.bullet}>
-							<TickIcon />
-						</Avatar>
-					) : (
-						<Avatar className={classes.notEnteredRequeriment}>
-							<div>{index + 1}</div>
-						</Avatar>
-					)}
-				</ListItemAvatar>
-				<ListItemText disableTypography={true}>{requirement.name}</ListItemText>
-				{requirement.type === 'document' && <DocumentIcon />}
-			</ListItem>
-		);
-	}
-	render() {
-		console.log('Relying party', this.props.relyingParty);
-		const { relyingParty } = this.props;
-		if (relyingParty.error) {
-			return <div>Error connecting to relying party</div>;
-		}
-		return (
-			<div>
-				<List>{relyingParty.templates.map(this.renderTemplate.bind(this))};</List>
-			</div>
-		);
-	}
-}
-
-const KycManager = withStyles(styles)(KycManagerComponent);
 
 export const MarketplaceServiceDetails = withStyles(styles)(MarketplaceServiceDetailsComponent);
 

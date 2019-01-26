@@ -83,7 +83,6 @@ export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) 
 	const mpService = (getGlobalContext() || {}).marketplaceService;
 	let currentTransaction = marketplacesSelectors.currentTransactionSelector(getState());
 	let gasLimit = await mpService.estimateGasForStake(serviceOwner, serviceId);
-	console.log('XXX', gasLimit);
 	let tx = {
 		action: 'placeStake',
 		gasLimit,
