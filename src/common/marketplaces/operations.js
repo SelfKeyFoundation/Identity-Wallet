@@ -1,9 +1,6 @@
 import { createAliasedAction } from 'electron-redux';
 import { getGlobalContext } from '../context';
 import { marketplacesSelectors } from './selectors';
-import * as serviceSelectors from '../exchanges/selectors';
-import * as walletSelectors from '../wallet/selectors';
-import { identitySelectors } from '../identity';
 import { marketplacesActions } from './actions';
 import { marketplacesTypes } from './types';
 
@@ -150,58 +147,6 @@ export const cancelCurrentTransactionOperation = () => async (dispatch, getState
 	await dispatch(marketplacesActions.showMarketplacePopupAction(null));
 };
 
-export const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
-	let mpService = (getGlobalContext() || {}).marketplaceService;
-	const ts = Date.now();
-	const rp = serviceSelectors.getServiceDetails(getState(), rpName);
-	const config = rp.relying_party_config;
-
-	try {
-		const session = mpService.createRelyingPartySession(config);
-		await session.establish();
-		const templates = await session.listKYCTemplates();
-		const applications = await session.listKYCApplications();
-		await dispatch(
-			marketplacesActions.updateRelyingParty({
-				name: rpName,
-				templates,
-				applications,
-				session,
-				lastUpdated: ts
-			})
-		);
-	} catch (error) {
-		await dispatch(
-			marketplacesActions.updateRelyingParty(
-				{
-					name: rpName,
-					lastUpdated: ts
-				},
-				error
-			)
-		);
-	}
-};
-
-export const createRelyingPartyKYCApplication = (rpName, templateId, attributeIds) => async (
-	dispatch,
-	getState
-) => {
-	const rp = marketplacesSelectors.relyingPartySelector(getState(), rpName);
-	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.templates[templateId]) throw new Error('template does not exist');
-
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
-	const attributes = identitySelectors.selectFullIdAttributesByIds(
-		getState(),
-		wallet.id,
-		attributeIds
-	);
-	const application = await rp.session.createKYCApplication(rpName, templateId, attributes);
-	await dispatch(marketplacesActions.addKYCApplication(rpName, application));
-};
-
 export const marketplacesOperations = {
 	...marketplacesActions,
 	loadTransactions: createAliasedAction(
@@ -236,9 +181,5 @@ export const marketplacesOperations = {
 	confirmWithdrawTransaction: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM,
 		confirmWithdrawTransactionOperation
-	),
-	loadRelyingParty: createAliasedAction(
-		marketplacesTypes.MARKETPLACE_RP_LOAD,
-		loadRelyingPartyOperation
 	)
 };

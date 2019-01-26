@@ -4,9 +4,6 @@ import { exchangesSelectors } from '../exchanges';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
 import { fiatCurrencySelectors } from '../fiatCurrency';
 import { pricesSelectors } from '../prices';
-import * as serviceSelectors from '../exchanges/selectors';
-
-export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 
 export const marketplacesSelectors = {
 	marketplacesSelector(state) {
@@ -69,29 +66,6 @@ export const marketplacesSelectors = {
 	},
 	categorySelector(state, id) {
 		return this.marketplacesSelector(state).categoriesById[id];
-	},
-	relyingPartySelector(state, rpName) {
-		return this.marketplacesSelector(state).relyingPartiesByName[rpName];
-	},
-	relyingPartyIsActiveSelector(state, rpName) {
-		const rp = this.relyingPartySelector(state, rpName);
-		if (rp && !rp.disabled) {
-			return true;
-		}
-		const service = serviceSelectors.getServiceDetails(state, rpName);
-		const config = service.relying_party_config;
-
-		return service.status === 'Active' && config;
-	},
-	relyingPartyShouldUpdateSelector(state, rpName) {
-		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
-		const rp = this.relyingPartySelector(state, rpName);
-		if (!rp) return true;
-		if (Date.now() - rp.lastUpdated > RP_UPDATE_INTERVAL) return true;
-		if (!rp.session || !rp.session.ctx || !rp.session.ctx.token) return true;
-		if (rp.session.ctx.token.data.exp > Date.now()) return true;
-
-		return false;
 	}
 };
 

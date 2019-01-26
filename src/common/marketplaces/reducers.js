@@ -14,9 +14,7 @@ export const initialState = {
 	categoriesById: categories.reduce((acc, curr) => {
 		acc[curr.id] = curr;
 		return acc;
-	}, {}),
-	relyingParties: [],
-	relyingPartiesByName: {}
+	}, {})
 };
 
 export const transactionSchema = new schema.Entity('transactions', {}, { idAttribute: 'id' });
@@ -102,22 +100,6 @@ export const clearCurrentTransactionReducer = state => {
 	return { ...state, currentTransaction: null };
 };
 
-export const updateRelyingPartyReducer = (state, { error, payload }) => {
-	let relyingParties = [state.relyingParties];
-	let relyingPartiesByName = { ...state.relyingPartiesByName };
-	if (!relyingPartiesByName[payload.name]) {
-		relyingParties.push(payload.name);
-	}
-	relyingPartiesByName[payload.name] = { ...payload, error };
-	return { ...state, relyingPartiesByName, relyingParties };
-};
-
-export const addKYCApplicationReducer = (state, { payload }) => {
-	let rp = state.relyingPartiesByName[payload.name];
-	rp = { ...rp, applications: [...rp.applications, payload.application] };
-	return { ...state, relyingPartiesByName: { ...state.relyingPartiesByName, [rp.name]: rp } };
-};
-
 export const reducers = {
 	updateStakeReducer,
 	setStakesReducer,
@@ -128,8 +110,7 @@ export const reducers = {
 	setMarketplacePopupReducer,
 	setCurrentTransactionReducer,
 	updateCurrentTransactionReducer,
-	clearCurrentTransactionReducer,
-	updateRelyingPartyReducer
+	clearCurrentTransactionReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -154,10 +135,6 @@ const reducer = (state = initialState, action) => {
 			return reducers.updateCurrentTransactionReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR:
 			return reducers.clearCurrentTransactionReducer(state, action);
-		case marketplacesTypes.MARKETPLACE_RP_UPDATE:
-			return reducers.updateRelyingPartyReducer(state, action);
-		case marketplacesTypes.MARKETPLACE_RP_APPLICATION_ADD:
-			return reducers.addKYCApplicationReducer(state, action);
 	}
 	return state;
 };

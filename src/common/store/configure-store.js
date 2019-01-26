@@ -14,6 +14,7 @@ import addressBook from '../address-book';
 import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import marketplaces from '../marketplaces';
+import kyc from '../kyc';
 import identity from '../identity';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import history from './history';
@@ -69,7 +70,8 @@ export default (initialState, scope = 'main') => {
 		router,
 		createWallet,
 		transactionHistory,
-		app
+		app,
+		kyc
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
