@@ -3,25 +3,19 @@
 'use strict';
 import path from 'path';
 import fs from 'fs';
-import _ from 'lodash';
 import isOnline from 'is-online';
-import ChildProcess from 'child_process';
-import electron, { Menu } from 'electron';
-import configureStore from 'common/store/configure-store';
+import electron from 'electron';
 import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 import { Logger } from '../common/logger';
-import {
-	getUserDataPath,
-	isDevMode,
-	isDebugMode,
-	isTestMode,
-	getWalletsDir
-} from 'common/utils/common';
-import config from 'common/config';
-import createMenuTemplate from './menu';
 import db from './db/db';
-import { setGlobalContext, configureContext } from 'common/context';
+import { identityOperations } from '../common/identity';
+import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
+import config from 'common/config';
+import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
+import { handleSquirrelEvent, appUpdater } from './autoupdater';
+import { createMainWindow } from './main-window';
+import { asValue } from 'awilix';
 
 const log = new Logger('main');
 
@@ -44,35 +38,11 @@ if (require('electron-squirrel-startup')) {
 	process.exit(0);
 }
 
-const app = {
-	dir: {
-		root: path.join(__dirname, '..'),
-		desktopApp: path.join(__dirname, '..', 'app')
-	},
-	config: {
-		app: config,
-		user: null
-	},
-	translations: {},
-	win: {},
-	log: log
-};
-
-const i18n = ['en'];
-
-let shouldIgnoreClose = true;
-let shouldIgnoreCloseDialog = false; // in order to don't show prompt window
-let mainWindow;
-
-for (let i in i18n) {
-	app.translations[i18n[i]] = require(`../common/locale/i18n/${i18n[i]}.js`);
-}
-
 if (!handleSquirrelEvent()) {
 	electron.app.on('window-all-closed', onWindowAllClosed());
-	electron.app.on('activate', onActivate(app));
+	electron.app.on('activate', onReady());
 	electron.app.on('web-contents-created', onWebContentsCreated);
-	electron.app.on('ready', onReady(app));
+	electron.app.on('ready', onReady());
 }
 
 const gotTheLock = electron.app.requestSingleInstanceLock();
@@ -89,22 +59,20 @@ if (!gotTheLock) {
 	});
 }
 
-/**
- *
- */
-function onReady(app) {
+function onReady() {
 	return async () => {
+		let ctx = getGlobalContext();
+		if (ctx && ctx.app.win) return;
 		global.__static = __static;
 		if (!isDevMode() && !isTestMode()) {
-			// Initate auto-updates
-			const { appUpdater } = require('./autoupdater');
 			appUpdater();
 		}
 		await db.init();
-		const store = configureStore(global.state, 'main');
-		const ctx = configureContext(store, app).cradle;
+		const container = configureContext('main');
+		ctx = container.cradle;
 		setGlobalContext(ctx);
-
+		const store = ctx.store;
+		const app = ctx.app;
 		try {
 			store.dispatch(localeUpdate('en'));
 			store.dispatch(fiatCurrencyUpdate('USD'));
@@ -115,65 +83,22 @@ function onReady(app) {
 			await ctx.CrashReportService.startCrashReport();
 		}
 		app.config.userDataPath = electron.app.getPath('userData');
+
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
 		ctx.rpcHandler.startTrezorBroadcaster();
-		// ctx.stakingService.acquireContract();
+		ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
-
-		// TODO
-		// 1) load ETH & KEY icons & prices
-		// 2) insert tokenPrices - set icon & price
-		// 3) notify angular app when done
 
 		if (electron.app.dock) {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
-		mainWindow = new electron.BrowserWindow({
-			id: 'main-window',
-			title: electron.app.getName(),
-			width: 1170,
-			height: 800,
-			minWidth: 1170,
-			minHeight: 800,
-			webPreferences: {
-				nodeIntegration: true,
-				webSecurity: true,
-				disableBlinkFeatures: 'Auxclick',
-				preload: path.resolve(__dirname, 'preload.js')
-			},
-			icon: __static + '/assets/icons/png/newlogo-256x256.png'
-		});
+		let mainWindow = (app.win = createMainWindow());
 
-		Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
-
-		const webAppPath = isDevMode()
-			? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html`
-			: `file://${__dirname}/index.html`;
-
-		mainWindow.loadURL(webAppPath);
-
-		if (isDebugMode()) {
-			log.info('app is running in debug mode');
-			mainWindow.webContents.openDevTools();
-		}
-
-		mainWindow.on('close', event => {
-			if (shouldIgnoreCloseDialog) {
-				shouldIgnoreCloseDialog = false;
-				return;
-			}
-			if (shouldIgnoreClose) {
-				event.preventDefault();
-				shouldIgnoreClose = false;
-				mainWindow.webContents.send('SHOW_CLOSE_DIALOG');
-			}
-		});
-
-		mainWindow.on('closed', () => {
-			mainWindow = null;
+		container.register({
+			mainWindow: asValue(mainWindow)
 		});
 
 		mainWindow.webContents.on('did-finish-load', async () => {
@@ -190,16 +115,14 @@ function onReady(app) {
 				// start update cmc data
 				Promise.all([
 					ctx.priceService.startUpdateData(),
-					ctx.idAttributeTypeService.loadIdAttributeTypes(),
-					ctx.exchangesService.loadExchangeData()
+					ctx.exchangesService.loadExchangeData(),
+					ctx.tokenService.loadTokens(),
+					loadIdentity(ctx)
 				]);
-				if (process.env.ENABLE_JSON_SCHEMA === '1') {
-					await ctx.idAttributeTypeService.resolveSchemas();
-				}
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
-				log.error(error);
+				log.error('finish-load-error %s', error);
 				mainWindow.webContents.send('APP_FAILED_LOADING');
 			}
 		});
@@ -222,28 +145,38 @@ function onReady(app) {
 		});
 
 		electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', event => {
-			shouldIgnoreClose = true;
+			mainWindow.shouldIgnoreClose = true;
 		});
 
 		electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', event => {
-			shouldIgnoreCloseDialog = true;
+			mainWindow.shouldIgnoreCloseDialog = true;
 		});
-
-		// TODO: Refactor this away
-		app.win = mainWindow;
-		if (isDevMode() && process.env.ENABLE_STAKING_TEST === '1') {
-			startStakingTest(ctx);
-		}
 	};
 }
 
-function onActivate(app) {
-	log.info('onActivate');
-	return function() {
-		if (app.win === null) {
-			onReady(app);
-		}
-	};
+async function loadIdentity(ctx) {
+	// TODO, this probably should be initialized in root of react app
+	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
+	try {
+		// TODO: should be in update manager
+		await ctx.store.dispatch(identityOperations.updateExpiredRepositoriesOperation());
+	} catch (error) {
+		log.error('failed to update repositories from remote %s', error);
+	}
+	await ctx.store.dispatch(identityOperations.loadIdAttributeTypesOperation());
+	try {
+		// TODO: should be in update manager
+		await ctx.store.dispatch(identityOperations.updateExpiredIdAttributeTypesOperation());
+	} catch (error) {
+		log.error('failed to update id attribute types from remote %s', error);
+	}
+	await ctx.store.dispatch(identityOperations.loadUiSchemasOperation());
+	try {
+		// TODO: should be in update manager
+		await ctx.store.dispatch(identityOperations.updateExpiredUiSchemasOperation());
+	} catch (error) {
+		log.error('failed to update ui schemas from remote %s', error);
+	}
 }
 
 function onWindowAllClosed() {
@@ -290,134 +223,53 @@ function createKeystoreFolder() {
 	}
 }
 
-/**
- *
- */
-function handleSquirrelEvent() {
-	log.info('started handleSquirrelEvent');
-
-	if (process.argv.length === 1) {
-		return false;
-	}
-
-	const appFolder = path.resolve(process.execPath, '..');
-	const rootAtomFolder = path.resolve(appFolder, '..');
-	const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-	const exeName = 'Identity-Wallet-Installer.exe';
-
-	const spawn = function(command, args) {
-		let spawnedProcess;
-
-		try {
-			spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
-		} catch (error) {
-			log.error(error);
-		}
-
-		return spawnedProcess;
-	};
-
-	const spawnUpdate = function(args) {
-		return spawn(updateDotExe, args);
-	};
-
-	const squirrelEvent = process.argv[1];
-	switch (squirrelEvent) {
-		case '--squirrel-install':
-		case '--squirrel-updated':
-			// Optionally do things such as:
-			// - Add your .exe to the PATH
-			// - Write to the registry for things like file associations and
-			//   explorer context menus
-
-			// Install desktop and start menu shortcuts
-			spawnUpdate(['--createShortcut', exeName]);
-
-			setTimeout(electron.app.quit, 1000);
-			return true;
-
-		case '--squirrel-uninstall':
-			// Undo anything you did in the --squirrel-install and
-			// --squirrel-updated handlers
-
-			// Remove desktop and start menu shortcuts
-			spawnUpdate(['--removeShortcut', exeName]);
-
-			setTimeout(electron.app.quit, 1000);
-			return true;
-
-		case '--squirrel-obsolete':
-			// This is called on the outgoing version of your app before
-			// we update to the new version - it's the opposite of
-			// --squirrel-updated
-
-			electron.app.quit();
-			return true;
-	}
-	log.info('end handleSquirrelEvent');
-}
-
-function startStakingTest(ctx) {
-	let store = ctx.store;
-	let unlocked = false;
-	log.info('starting staking test');
-	store.subscribe(async () => {
-		let state = store.getState();
-		if (unlocked) return;
-		if (!state.wallet || !state.wallet.privateKey) return;
-		let { wallet } = state;
-		unlocked = true;
-		let { stakingService, web3Service } = ctx;
-		try {
-			await stakingService.acquireContract();
-			const serviceOwner = web3Service.web3.utils.toHex(0);
-			let decimals = await stakingService.tokenContract.call({
-				method: 'decimals'
-			});
-			let BN = require('bignumber.js');
-
-			const sendAmount = new BN(100).times(new BN(10).pow(decimals)).toString();
-			const serviceId = web3Service.web3.utils.toHex('test');
-			const sourceAddress = '0x' + wallet.publicKey;
-			const options = { from: sourceAddress };
-			log.info('active contract %2j', stakingService.activeContract.address);
-
-			let allowance = await stakingService.tokenContract.allowance(
-				stakingService.activeContract.address,
-				options
-			);
-			log.info('allowance %s', allowance);
-
-			let info = await stakingService.getStakingInfo(serviceOwner, serviceId, options);
-			log.info('Staking initial balance %2j', _.omit(info, 'contract'));
-
-			let lockPeriod = await stakingService.activeContract.getLockPeriod(
-				serviceOwner,
-				serviceId,
-				options
-			);
-			log.info('Staking lock period %2j', lockPeriod);
-
-			let depositRes = await stakingService.placeStake(
-				sendAmount,
-				serviceOwner,
-				serviceId,
-				options
-			);
-			log.info('deposite res %2j', depositRes);
-
-			try {
-				let withdrawRes = await stakingService.withdrawStake(
-					serviceOwner,
-					serviceId,
-					options
-				);
-				log.info('withdraw res %2j', withdrawRes);
-			} catch (error) {
-				log.error('withdraw error %s', error);
-			}
-		} catch (error) {
-			log.error('staking error %s', error);
-		}
-	});
-}
+// async function runRelyingPartyTest() {
+// 	const { RelyingPartySession } = require('./platform/relying-party');
+// 	const { Identity } = require('./platform/identity');
+// 	const privateKey = 'c6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e';
+// 	const ident = new Identity({ privateKey });
+// 	const session = new RelyingPartySession(
+// 		{
+// 			rootEndpoint: 'http://localhost:3331/api/v1'
+// 		},
+// 		ident
+// 	);
+// 	const attributes = [
+// 		{
+// 			id: 1,
+// 			data: 'test1',
+// 			documents: [
+// 				{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+// 				{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+// 			]
+// 		},
+// 		{
+// 			id: 2,
+// 			data: 'test2',
+// 			documents: [
+// 				{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+// 				{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+// 			]
+// 		}
+// 	];
+// 	try {
+// 		console.log('XXX', 'establishing session');
+// 		await session.establish();
+// 		let allTemplates = await session.listKYCTemplates();
+// 		console.log('XXX ALL TEMPLATES', allTemplates);
+// 		let templateDetails = await session.getKYCTemplate(allTemplates[0].id);
+// 		console.log('XXX template details', templateDetails);
+// 		let applications = await session.listKYCApplications();
+// 		console.log('XXX all applications', applications);
+// 		let newApplication = await session.createKYCApplication(allTemplates[0].id, attributes);
+// 		console.log('XXX new application', newApplication);
+// 		applications = await session.listKYCApplications();
+// 		console.log('XXX all applications 2', applications);
+// 		const application = await session.getKYCApplication(
+// 			applications[applications.length - 1].id
+// 		);
+// 		console.log('XXX last appliction', application);
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// }

@@ -1,0 +1,156 @@
+[
+	{
+		"key": "first_name",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "last_name",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "middle_name",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "country_of_residency",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "national_id",
+		"category": "id_document",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "id_selfie",
+		"category": "id_document",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "email",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\",\"company\"]",
+		"isInitial": 1
+	},
+	{
+		"key": "public_key",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "physical_address",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "work_place",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "birthdate",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "nationality",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "tax_id_number",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"company\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "passport",
+		"category": "id_document",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "drivers_license",
+		"category": "id_document",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "utility_bill",
+		"category": "proof_of_address",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "tax_certificate",
+		"category": "proof_of_wealth",
+		"type": "document",
+		"entity": "[\"individual\",\"company\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "bank_statement",
+		"category": "proof_of_address",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "phonenumber_countrycode",
+		"category": "global_attribute",
+		"type": "static_data",
+		"entity": "[\"company\",\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "fingerprint",
+		"category": "global_attribute",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "national_id_back",
+		"category": "id_document",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	},
+	{
+		"key": "voice_id",
+		"category": "global_attribute",
+		"type": "document",
+		"entity": "[\"individual\"]",
+		"isInitial": 0
+	}
+]

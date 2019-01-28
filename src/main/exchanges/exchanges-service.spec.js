@@ -2,20 +2,17 @@ import sinon from 'sinon';
 import Exchange from './exchange';
 import fetch from 'node-fetch';
 import { ExchangesService } from './exchanges-service';
+import { setGlobalContext } from '../../common/context';
 jest.mock('node-fetch');
 const exchanges = [
 	{
 		data: {
-			fields: {
-				name: 'exchange1'
-			}
+			name: 'exchange1'
 		}
 	},
 	{
 		data: {
-			fields: {
-				name: 'exchange2'
-			}
+			name: 'exchange2'
 		}
 	}
 ];
@@ -39,6 +36,7 @@ describe('ExchangesService', () => {
 	let service;
 	beforeEach(() => {
 		service = new ExchangesService();
+		setGlobalContext({ store: { dispatch: () => {} } });
 	});
 	afterEach(() => {
 		sinon.restore();
@@ -47,7 +45,7 @@ describe('ExchangesService', () => {
 	it('loadExchangeData', async () => {
 		fetch.mockResolvedValue({
 			json() {
-				return { Exchanges: exchanges };
+				return { entities: exchanges };
 			}
 		});
 		let stub = sinon.stub(Exchange, 'import');
