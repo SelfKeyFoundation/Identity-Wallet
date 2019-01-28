@@ -28,7 +28,7 @@ import {
 } from 'selfkey-ui';
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
 
-// const bgImage = 'http://placekitten.com/240/240';
+const avatarPlaceholder = 'http://placekitten.com/240/240';
 
 const styles = theme => ({
 	hr: {
@@ -73,15 +73,13 @@ const styles = theme => ({
 	}
 });
 
-export const HexagonAvatar = withStyles(styles)(
-	({ classes, src = 'https://via.placeholder.com/240/240' }) => (
-		<div className={classes.hexagon}>
-			<div className={classes.hexagonIn}>
-				<div className={classes.hexagonIn2} style={{ backgroundImage: `url${src}` }} />
-			</div>
+export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlaceholder }) => (
+	<div className={classes.hexagon}>
+		<div className={classes.hexagonIn}>
+			<div className={classes.hexagonIn2} style={{ backgroundImage: `url(${src})` }} />
 		</div>
-	)
-);
+	</div>
+));
 
 const renderAttributeName = ({ data, name, type }) => {
 	if (!data.value || typeof data.value === 'object') {
@@ -156,10 +154,13 @@ export const SelfkeyIdOverview = withStyles(styles)(
 						<Card className={classes.card}>
 							<CardContent>
 								<Typography variant="body2">
-									You have not applied for any service in the marketplace yet.
+									{/* You have not applied for any service in the marketplace yet. */}
+									Selfkey Marketplace is coming soon...
 								</Typography>
 								<br />
-								<Button variant="contained">Access Marketplace</Button>
+								<Button variant="contained" disabled>
+									Access Marketplace
+								</Button>
 							</CardContent>
 						</Card>
 					</Grid>

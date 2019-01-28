@@ -109,7 +109,7 @@ const selectSelfkeyId = state => {
 
 	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
 
-	// FIXME: all base attributes should be rendered
+	// FIXME: all base attribute types should be rendered (even if not created yet)
 	const basicAttributes = allAttributes.reduce(
 		(acc, curr) => {
 			const { url } = curr.type;
@@ -130,7 +130,7 @@ const selectSelfkeyId = state => {
 
 	const getBasicInfo = (type, basicAttrs) => {
 		let attr = basicAttrs.find(attr => attr.type.url === type);
-		if (!attr || !attr.data) return null;
+		if (!attr || !attr.data) return '';
 		return attr.data.value;
 	};
 
