@@ -124,6 +124,7 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 		serviceOwner,
 		serviceId
 	};
+	console.log(tx);
 	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
 	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmWithdrawTransaction'));
 };
@@ -159,7 +160,10 @@ export const loadRelyingPartyOperation = rpName => async (dispatch, getState) =>
 	try {
 		const session = mpService.createRelyingPartySession(config);
 		await session.establish();
-		const templates = await session.listKYCTemplates();
+		const templates = await Promise.all(
+			(await session.listKYCTemplates()).map(tpl => session.getKYCTemplate(tpl.id))
+		);
+
 		const applications = await session.listKYCApplications();
 		await dispatch(
 			marketplacesActions.updateRelyingParty({
@@ -240,5 +244,9 @@ export const marketplacesOperations = {
 	loadRelyingParty: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_RP_LOAD,
 		loadRelyingPartyOperation
+	),
+	cancelCurrentTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CANCEL,
+		cancelCurrentTransactionOperation
 	)
 };

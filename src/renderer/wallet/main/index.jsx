@@ -22,7 +22,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		width: '100%'
+		maxWidth: '1140px'
 	}
 });
 
@@ -37,40 +37,42 @@ class Main extends Component {
 			<Grid
 				container
 				direction="column"
-				justify="flex-start"
+				justify="space-between"
 				alignItems="center"
-				className={classes.wrapper}
+				spacing={24}
 			>
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />
 				</Grid>
-				<Grid item xs={12} className={classes.bodySection}>
-					<Route path={`${match.path}/dashboard`} component={Dashboard} />
-					<Route path={`${match.path}/addressBook`} component={AddressBook} />
-					<Route
-						path={`${match.path}/marketplace-categories`}
-						component={MarketplaceCategoriesPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-exchanges`}
-						component={MarketplaceExchangesPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-services/:name`}
-						component={MarketplaceServiceDetailsPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-deposit`}
-						component={MarketplaceDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-return-deposit`}
-						component={MarketplaceReturnDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-no-balance`}
-						component={MarketplaceWithoutBalancePopup}
-					/>
+				<Grid item xs={12}>
+					<div className={classes.bodySection}>
+						<Route path={`${match.path}/dashboard`} component={Dashboard} />
+						<Route path={`${match.path}/addressBook`} component={AddressBook} />
+						<Route
+							path={`${match.path}/marketplace-categories`}
+							component={MarketplaceCategoriesPage}
+						/>
+						<Route
+							path={`${match.path}/marketplace-exchanges`}
+							component={MarketplaceExchangesPage}
+						/>
+						<Route
+							path={`${match.path}/marketplace-services/:name`}
+							component={MarketplaceServiceDetailsPage}
+						/>
+						<Route
+							path={`${match.path}/marketplace-deposit`}
+							component={MarketplaceDepositPopup}
+						/>
+						<Route
+							path={`${match.path}/marketplace-return-deposit`}
+							component={MarketplaceReturnDepositPopup}
+						/>
+						<Route
+							path={`${match.path}/marketplace-no-balance`}
+							component={MarketplaceWithoutBalancePopup}
+						/>
+					</div>
 				</Grid>
 			</Grid>
 		);

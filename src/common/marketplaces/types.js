@@ -18,7 +18,6 @@ export const marketplacesTypes = {
 	MARKETPLACE_TRANSACTIONS_CURRENT_CANCEL: 'marketplace/transactions/current/CANCEL',
 	MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR: 'marketplace/transactions/current/CLEAR',
 	MARKETPLACE_POPUP_SHOW: 'marketplace/popup/show',
-	MARKETPLACE_STATE_SHOW: 'marketplace/state/show',
 	MARKETPLACE_RP_LOAD: 'marketplace/rp/load',
 	MARKETPLACE_RP_UPDATE: 'marketplace/rp/update',
 	MARKETPLACE_RP_APPLICATION_ADD: 'marketplace/rp/application/add'

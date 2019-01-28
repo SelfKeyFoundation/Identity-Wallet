@@ -164,12 +164,11 @@ export class Web3Service {
 		}
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
-			console.log('XXX', wallet, opts);
 		}
 		if (!wallet || wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
-		if (wallet.profile !== 'local') {
+		if ((wallet.profile && wallet.profile !== 'local') || wallet.isHardwareWallet) {
 			return contactMethodInstance.send(...args);
 		}
 		if (!wallet.privateKey) {
@@ -200,7 +199,7 @@ export class Web3Service {
 			...opts
 		};
 		const tx = new EtheriumTx(rawTx);
-		tx.sign(wallet.privateKey);
+		tx.sign(Buffer.from(wallet.privateKey.replace('0x', ''), 'hex'));
 		let serializedTx = '0x' + tx.serialize().toString('hex');
 		this.nonce = nonce;
 		return {

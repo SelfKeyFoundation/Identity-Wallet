@@ -75,7 +75,6 @@ export class Wallet extends BaseModel {
 
 	static async create(itm) {
 		const tx = await transaction.start(this.knex());
-
 		try {
 			let insertedItm = await this.query(tx).insertGraphAndFetch(
 				{

@@ -17,7 +17,9 @@ dotenv.config();
 
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;
-const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
+	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
+	: null;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';

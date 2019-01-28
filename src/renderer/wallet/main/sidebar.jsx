@@ -22,7 +22,7 @@ import {
 
 const styles = theme => ({
 	list: {
-		width: 300
+		width: 260
 	},
 
 	logoSection: {
