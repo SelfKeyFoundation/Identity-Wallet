@@ -1,5 +1,19 @@
 import { walletSelectors } from '../wallet';
 
+const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
+const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
+const LAST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/last-name.json';
+const MIDDLE_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/middle-name.json';
+
+const BASIC_ATTRIBUTES = {
+	[FIRST_NAME_ATTRIBUTE]: 1,
+	[LAST_NAME_ATTRIBUTE]: 1,
+	[MIDDLE_NAME_ATTRIBUTE]: 1,
+	[EMAIL_ATTRIBUTE]: 1,
+	'http://platform.selfkey.org/schema/attribute/country-of-residency.json': 1,
+	'http://platform.selfkey.org/schema/attribute/address.json': 1
+};
+
 const selectIdentity = state => state.identity;
 
 const selectRepositories = state =>
@@ -93,12 +107,44 @@ const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 const selectSelfkeyId = state => {
 	const wallet = walletSelectors.getWallet(state);
 
-	const attributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
+	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
+
+	// FIXME: all base attributes should be rendered
+	const basicAttributes = allAttributes.reduce(
+		(acc, curr) => {
+			const { url } = curr.type;
+			if (!BASIC_ATTRIBUTES[url]) return acc;
+			if (acc.seen[url]) return acc;
+			acc.seen[url] = 1;
+			acc.attrs.push(curr);
+			return acc;
+		},
+		{ seen: {}, attrs: [] }
+	).attrs;
+	const attributes = allAttributes.filter(
+		attr => !attr.documents.length && !basicAttributes.includes(attr)
+	);
+
+	// FIXME: document type should be determined by attribute type
+	const documents = allAttributes.filter(attr => attr.documents.length);
+
+	const getBasicInfo = (type, basicAttrs) => {
+		let attr = basicAttrs.find(attr => attr.type.url === type);
+		if (!attr || !attr.data) return null;
+		return attr.data.value;
+	};
 
 	return {
 		wallet,
 		profilePicture: wallet.profilePicture,
-		attributes
+		allAttributes,
+		attributes,
+		basicAttributes,
+		documents,
+		email: getBasicInfo(EMAIL_ATTRIBUTE, basicAttributes),
+		firstName: getBasicInfo(FIRST_NAME_ATTRIBUTE, basicAttributes),
+		lastName: getBasicInfo(LAST_NAME_ATTRIBUTE, basicAttributes),
+		middleName: getBasicInfo(MIDDLE_NAME_ATTRIBUTE, basicAttributes)
 	};
 };
 

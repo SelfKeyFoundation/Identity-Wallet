@@ -27,12 +27,6 @@ import {
 	SmallTableCell
 } from 'selfkey-ui';
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
-// import { Link } from 'react-router-dom';
-
-// const getRecord = (attributes, entryName) => {
-// 	const entry = attributes.filter(entry => entry.name === entryName)[0];
-// 	return entry ? entry.record : '';
-// };
 
 // const bgImage = 'http://placekitten.com/240/240';
 
@@ -135,7 +129,17 @@ const renderDocumentName = doc => {
 };
 
 export const SelfkeyIdOverview = withStyles(styles)(
-	({ classes, attributes, basicAttributes, documents, profilePicture }) => (
+	({
+		classes,
+		attributes,
+		basicAttributes,
+		documents,
+		profilePicture,
+		email,
+		firstName,
+		lastName,
+		middleName
+	}) => (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
 				<Grid container direction="row" spacing={32}>
@@ -143,8 +147,8 @@ export const SelfkeyIdOverview = withStyles(styles)(
 						<Card>
 							<CardHeader
 								avatar={<HexagonAvatar src={profilePicture} />}
-								title="Shrimp and Chorizo Pael"
-								subheader="Chorizo"
+								title={`${firstName} ${middleName} ${lastName}`}
+								subheader={email}
 							/>
 						</Card>
 					</Grid>
