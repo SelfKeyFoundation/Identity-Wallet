@@ -1,7 +1,7 @@
 import incorporationsTypes from './types';
 
 export const initialState = {
-	loading: false,
+	loading: true,
 	error: null,
 	details: null,
 	incorporations: [],

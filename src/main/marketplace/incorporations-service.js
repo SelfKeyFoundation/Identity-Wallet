@@ -30,6 +30,8 @@ export class IncorporationsService {
 				} = response;
 				const payload = {};
 
+				console.log(Main);
+
 				payload.incorporations = Main.map(inc => {
 					const newInc = {};
 					const fields = inc.data.fields;

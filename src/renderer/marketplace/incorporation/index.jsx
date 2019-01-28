@@ -5,7 +5,7 @@ import { IncorporationsIcon, SelfkeyDarkTheme } from 'selfkey-ui';
 import { Typography, Grid } from '@material-ui/core';
 import injectSheet from 'react-jss';
 
-import IncorporationsTable from './table/containers/incorporations-table';
+import IncorporationsTable from './table';
 import IncorporationsDetailView from './detail/containers/detail-view';
 
 const styles = {
@@ -21,7 +21,7 @@ const styles = {
 	}
 };
 
-class IncorporationsViewWrapper extends Component {
+class MarketplaceIncorporationComponent extends Component {
 	state = {
 		detailed: false
 	};
@@ -67,6 +67,6 @@ class IncorporationsViewWrapper extends Component {
 	}
 }
 
-const IncorporationsWrapper = injectSheet(styles)(IncorporationsViewWrapper);
+const MarketplaceIncorporationPage = injectSheet(styles)(MarketplaceIncorporationComponent);
 
-export { IncorporationsWrapper };
+export { MarketplaceIncorporationPage };

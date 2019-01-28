@@ -5,6 +5,7 @@ import AddressBook from '../../address-book/main';
 import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
+	MarketplaceIncorporationPage,
 	MarketplaceServiceDetailsPage,
 	MarketplaceDepositPopup,
 	MarketplaceReturnDepositPopup,

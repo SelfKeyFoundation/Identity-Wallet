@@ -13,9 +13,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import FlagCountryName from '../../common/flag-country-name';
-// import TagList from '../../common/tag-list';
-import ProgramPrice from '../../common/program-price';
+import FlagCountryName from '../common/flag-country-name';
+import ProgramPrice from '../common/program-price';
 
 const styles = {
 	header: {
@@ -101,6 +100,7 @@ class IncorporationsTable extends Component {
 	);
 
 	render() {
+		console.log(this.props);
 		const { classes, isLoading, incorporations } = this.props;
 		if (isLoading) {
 			return this._renderLoadingScreen();
