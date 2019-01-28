@@ -1,95 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { identitySelectors } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
 // import { identitySelectors, identityOperations } from 'common/identity';
 // import { walletSelectors } from 'common/wallet';
 
-class SelfkeyIdContainer extends Component {
-	// componentDidMount() {
-	// 	this.props.dispatch(identityOperations.unlockIdentityOperation());
-	// }
+const BASIC_ATTRIBUTES = {
+	'http://platform.selfkey.org/schema/attribute/first-name.json': 1,
+	'http://platform.selfkey.org/schema/attribute/last-name.json': 1,
+	'http://platform.selfkey.org/schema/attribute/middle-name.json': 1,
+	'http://platform.selfkey.org/schema/attribute/email.json': 1,
+	'http://platform.selfkey.org/schema/attribute/country-of-residency.json': 1,
+	'http://platform.selfkey.org/schema/attribute/address.json': 1
+};
 
+class SelfkeyIdContainerComponent extends Component {
 	render() {
 		return <SelfkeyId {...this.props} />;
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	const attributeHistory = [
-		{
-			timestamp: '2018-11-16 05:47',
-			action: 'Created Attribute: Nationality'
-		}
-	];
+	const skId = identitySelectors.selectSelfkeyId(state);
+	const allAttributes = skId.attributes;
+	const attributes = allAttributes.filter(attr => !attr.documents.length);
+	const basicAttributes = attributes.filter(attr => BASIC_ATTRIBUTES[attr.type.url]);
 
-	const documents = [
-		{
-			type: 'Passport',
-			name: 'My ID Card',
-			record: 'passport.pdf',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		},
-		{
-			name: 'Passport 2',
-			record: 'passport2.png',
-			expiryDate: '12 Dec 2019',
-			lastEdited: '08 Jun 2017, 12:28 PM'
-		},
-		{
-			name: 'Passport 3',
-			record: 'passport3.pdf',
-			expiryDate: '17 Dec 2021',
-			lastEdited: '19 Dec 2018, 07:22 AM'
-		}
-	];
+	// FIXME: document type should be determined by attribute type
+	const documents = allAttributes.filter(attr => attr.documents.length);
 
-	const attributes = [
-		{
-			type: 'Passport',
-			name: 'My ID Card',
-			record: 'passport.pdf',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		},
-		{
-			type: 'Passport',
-			name: 'My ID Card',
-			record: 'passport.pdf',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		},
-		{
-			type: 'Passport',
-			name: 'My ID Card',
-			record: 'passport.pdf',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		},
-		{
-			type: 'Passport',
-			name: 'My ID Card',
-			record: 'passport.pdf',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		},
-		{
-			name: 'Passport',
-			record: 'passport.png',
-			expiryDate: '20 Dec 2021',
-			lastEdited: '05 May 2018, 11:48 AM'
-		}
-	];
-
-	// const attributes = identitySelectors.selectIdentity(state)
-	// 	? identitySelectors.selectIdAttributes(state, walletSelectors.getWallet(state).id)
-	// 	: [];
-	console.log('state', state);
 	return {
-		attributeHistory,
+		...skId,
+		allAttributes,
+		basicAttributes,
 		attributes,
 		documents
 	};
 };
+export const SelfkeyIdContainer = connect(mapStateToProps)(SelfkeyIdContainerComponent);
 
-export default connect(mapStateToProps)(SelfkeyIdContainer);
+export default SelfkeyIdContainer;

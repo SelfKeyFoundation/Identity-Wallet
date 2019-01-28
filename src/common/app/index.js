@@ -59,6 +59,7 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithNewFile(filePath, password);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
@@ -70,6 +71,7 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		await dispatch(appActions.setUnlockWalletErrorAction(error.message));

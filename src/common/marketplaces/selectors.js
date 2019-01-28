@@ -4,6 +4,7 @@ import { exchangesSelectors } from '../exchanges';
 import { ethGasStationInfoSelectors } from '../eth-gas-station';
 import { fiatCurrencySelectors } from '../fiatCurrency';
 import { pricesSelectors } from '../prices';
+import { identitySelectors } from '../identity';
 import * as serviceSelectors from '../exchanges/selectors';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
@@ -92,6 +93,16 @@ export const marketplacesSelectors = {
 		if (rp.session.ctx.token.data.exp > Date.now()) return true;
 
 		return false;
+	},
+	selectKYCAttributes(state, walletId, attributeIds) {
+		return identitySelectors
+			.selectFullIdAttributesByIds(state, walletId, attributeIds)
+			.map(attr => ({
+				id: attr.type.url,
+				schema: attr.type.schema,
+				value: attr.data,
+				documents: attr.documents
+			}));
 	}
 };
 

@@ -3,7 +3,6 @@ import { getGlobalContext } from '../context';
 import { marketplacesSelectors } from './selectors';
 import * as serviceSelectors from '../exchanges/selectors';
 import * as walletSelectors from '../wallet/selectors';
-import { identitySelectors } from '../identity';
 import { marketplacesActions } from './actions';
 import { marketplacesTypes } from './types';
 
@@ -193,7 +192,7 @@ export const createRelyingPartyKYCApplication = (rpName, templateId, attributeId
 
 	const wallet = walletSelectors.getWallet(getState());
 	if (!wallet) return;
-	const attributes = identitySelectors.selectFullIdAttributesByIds(
+	const attributes = marketplacesSelectors.selectKYCAttributes(
 		getState(),
 		wallet.id,
 		attributeIds

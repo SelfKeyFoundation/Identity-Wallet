@@ -47,7 +47,7 @@ const loadDocumentsOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let documents = await identityService.loadDocuments(walletId);
 	documents = documents.map(doc => ({ ...doc, walletId }));
-	await dispatch(identityActions.setDocumentsAction(documents));
+	await dispatch(identityActions.setDocumentsAction(walletId, documents));
 };
 
 const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
@@ -94,8 +94,8 @@ const lockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteDocumentsAction(walletId));
 };
 const unlockIdentityOperation = walletId => async (dispatch, getState) => {
-	await operations.loadDocumentsOperation(walletId)(dispatch, getState);
-	await operations.loadIdAttributesOperation(walletId)(dispatch, getState);
+	await dispatch(identityOperations.loadDocumentsOperation(walletId));
+	await dispatch(identityOperations.loadIdAttributesOperation(walletId));
 };
 
 export const operations = {

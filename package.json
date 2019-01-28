@@ -107,6 +107,7 @@
 		"lzutf8": "0.5.5",
 		"md5-file": "4.0.0",
 		"mime-types": "2.1.21",
+		"moment": "^2.24.0",
 		"node-fetch": "2.3.0",
 		"node-powershell": "3.3.1",
 		"node-pre-gyp": "0.12.0",

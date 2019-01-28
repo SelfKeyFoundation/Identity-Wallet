@@ -82,10 +82,8 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static async findAllByWalletId(walletId) {
-		return this.query()
-			.eager('documents')
-			.where({ walletId });
+	static findAllByWalletId(walletId) {
+		return this.query().where({ walletId });
 	}
 
 	static async delete(id) {

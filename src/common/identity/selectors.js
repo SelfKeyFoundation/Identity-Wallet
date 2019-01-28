@@ -1,3 +1,5 @@
+import { walletSelectors } from '../wallet';
+
 const selectIdentity = state => state.identity;
 
 const selectRepositories = state =>
@@ -48,27 +50,56 @@ const selectIdAttributes = (state, walletId) =>
 		.attributes.map(attrId => identitySelectors.selectIdentity(state).attributesById[attrId])
 		.filter(attr => attr.walletId === walletId);
 
-const selectDocumentsByAttributeIds = (state, walletId, attributeIds) =>
+const selectDocumentsByAttributeIds = (state, walletId, attributeIds = null) =>
 	identitySelectors.selectDocuments(state, walletId).reduce((acc, curr) => {
-		if (!attributeIds.includes(curr.attributeId)) return acc;
-		acc[curr.attributeId] = curr;
+		if (attributeIds !== null && !attributeIds.includes(curr.attributeId)) return acc;
+		acc[curr.attributeId] = acc[curr.attributeId] || [];
+		acc[curr.attributeId].push(curr);
 		return acc;
 	}, {});
 
-const selectFullIdAttributesByIds = (state, walletId, attributeIds) => {
+const selectUiSchema = (state, typeId, repositoryId) =>
+	(identitySelectors.selectUiSchemas(state) || []).find(
+		schema => schema.repositoryId === repositoryId && typeId === schema.attributeTypeId
+	);
+
+const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
+	const identity = identitySelectors.selectIdentity(state);
 	const documents = selectDocumentsByAttributeIds(state, walletId, attributeIds);
-	const types = identitySelectors.selectIdentity(state).idAtrributeTypesById;
+	const types = identity.idAtrributeTypesById;
+
 	return identitySelectors
 		.selectIdAttributes(state, walletId)
-		.filter(attr => attributeIds.includes(attr.id))
+		.filter(attr => !attributeIds || attributeIds.includes(attr.id))
 		.map(attr => {
+			const type = types[attr.typeId];
+			const defaultRepository = identity.repositoriesById[type.defaultRepositoryId];
+			const defaultUiSchema = identitySelectors.selectUiSchema(
+				state,
+				type.id,
+				defaultRepository.id
+			);
+
 			return {
-				value: attr.data,
-				id: types[attr.typeId].url,
-				schema: types[attr.typeId].schema,
+				...attr,
+				type,
+				defaultRepository,
+				defaultUiSchema,
 				documents: documents[attr.id] || []
 			};
 		});
+};
+
+const selectSelfkeyId = state => {
+	const wallet = walletSelectors.getWallet(state);
+
+	const attributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
+
+	return {
+		wallet,
+		profilePicture: wallet.profilePicture,
+		attributes
+	};
 };
 
 export const identitySelectors = {
@@ -82,7 +113,9 @@ export const identitySelectors = {
 	selectDocuments,
 	selectIdAttributes,
 	selectDocumentsByAttributeIds,
-	selectFullIdAttributesByIds
+	selectFullIdAttributesByIds,
+	selectSelfkeyId,
+	selectUiSchema
 };
 
 export default identitySelectors;
