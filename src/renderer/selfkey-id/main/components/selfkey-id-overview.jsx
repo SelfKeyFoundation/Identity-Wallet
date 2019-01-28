@@ -3,7 +3,6 @@ import {
 	Grid,
 	CardHeader,
 	Card,
-	Avatar,
 	CardContent,
 	Table,
 	TableBody,
@@ -34,6 +33,8 @@ import backgroundImage from '../../../../../static/assets/images/icons/icon-mark
 // 	return entry ? entry.record : '';
 // };
 
+const bgImage = 'http://placekitten.com/240/240';
+
 const styles = theme => ({
 	hr: {
 		backgroundColor: '#303C49',
@@ -41,11 +42,6 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		height: '1px',
 		margin: '5px 16px'
-	},
-	hexagon: {
-		border: '3px solid #313D49',
-		height: '120px',
-		width: '120px'
 	},
 	info: {
 		padding: '25px 30px'
@@ -55,8 +51,41 @@ const styles = theme => ({
 		backgroundImage: `url(${backgroundImage})`,
 		backgroundPosition: '90% 50%',
 		backgroundRepeat: 'no-repeat'
+	},
+	hexagon: {
+		cursor: 'pointer',
+		height: '120px',
+		margin: '0 4px 0 10px',
+		overflow: 'hidden',
+		transform: 'rotate(120deg)',
+		visibility: 'hidden',
+		width: '104px'
+	},
+	hexagonIn: {
+		height: '100%',
+		overflow: 'hidden',
+		transform: 'rotate(-60deg)',
+		width: '100%'
+	},
+	hexagonIn2: {
+		backgroundImage: `url(${bgImage})`,
+		backgroundPosition: '50%',
+		backgroundRepeat: 'no-repeat',
+		backgroundSize: 'cover',
+		height: '100%',
+		transform: 'rotate(-60deg)',
+		visibility: 'visible',
+		width: '100%'
 	}
 });
+
+export const HexagonAvatar = withStyles(styles)(({ classes }) => (
+	<div className={classes.hexagon}>
+		<div className={classes.hexagonIn}>
+			<div className={classes.hexagonIn2} />
+		</div>
+	</div>
+));
 
 export const SelfkeyIdOverview = withStyles(styles)(({ classes, attributes, documents }) => (
 	<Grid container direction="column" spacing={32}>
@@ -65,13 +94,7 @@ export const SelfkeyIdOverview = withStyles(styles)(({ classes, attributes, docu
 				<Grid item xs={8}>
 					<Card>
 						<CardHeader
-							avatar={
-								<Avatar
-									className={classes.hexagon}
-									alt="Avatar Image"
-									src="https://avatars0.githubusercontent.com/u/9919?s=280&v=4"
-								/>
-							}
+							avatar={<HexagonAvatar />}
 							title="Shrimp and Chorizo Pael"
 							subheader="Chorizo"
 						/>
