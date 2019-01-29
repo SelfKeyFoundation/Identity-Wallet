@@ -5,10 +5,7 @@ import AddressBook from '../../address-book/main';
 import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
-	MarketplaceServiceDetailsPage,
-	MarketplaceDepositPopup,
-	MarketplaceReturnDepositPopup,
-	MarketplaceWithoutBalancePopup
+	MarketplaceServiceDetailsPage
 } from '../../marketplace';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';

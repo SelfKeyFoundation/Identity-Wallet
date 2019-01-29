@@ -20,6 +20,7 @@ import {
 	DeleteIcon,
 	FilePdfIcon,
 	FileImageIcon,
+	FileDefaultIcon,
 	BookIcon,
 	IdCardIcon,
 	SmallTableHeadRow,
@@ -27,8 +28,7 @@ import {
 	SmallTableCell
 } from 'selfkey-ui';
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
-
-const avatarPlaceholder = 'http://placekitten.com/240/240';
+import avatarPlaceholder from '../../../../../static/assets/images/icons/icon-add-image.svg';
 
 const styles = theme => ({
 	hr: {
@@ -76,7 +76,13 @@ const styles = theme => ({
 export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlaceholder }) => (
 	<div className={classes.hexagon}>
 		<div className={classes.hexagonIn}>
-			<div className={classes.hexagonIn2} style={{ backgroundImage: `url(${src})` }} />
+			<div
+				className={classes.hexagonIn2}
+				style={{
+					backgroundImage: `url(${src})`,
+					backgroundSize: src === avatarPlaceholder ? 'auto' : 'cover'
+				}}
+			/>
 		</div>
 	</div>
 ));
@@ -102,25 +108,29 @@ const renderLastUpdateDate = ({ updatedAt }) => moment(updatedAt).format('DD MMM
 const renderDocumentName = doc => {
 	let fileType = null;
 	let fileName = null;
+	let FileIcon = FileDefaultIcon;
 
 	if (typeof doc.data.value === 'string' && doc.documents.length === 1) {
 		fileName = doc.documents[0].name;
 		fileType = doc.documents[0].mimeType;
 	}
+	console.log(doc.documents[0]);
+	if (fileType) {
+		if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
+		else if (fileType.startsWith('image')) FileIcon = FileImageIcon;
+	}
 	return (
 		<Grid container>
-			{fileType && (
-				<Grid item xs={3}>
-					{fileType === 'application/pdf' ? <FilePdfIcon /> : <FileImageIcon />}
-				</Grid>
-			)}
+			<Grid item xs={3}>
+				<FileIcon />
+			</Grid>
+
 			<Grid item xs={6}>
 				<Typography variant="h6">{doc.name}</Typography>
-				{fileName && (
-					<Typography variant="subtitle1" color="secondary">
-						{fileName}
-					</Typography>
-				)}
+
+				<Typography variant="subtitle1" color="secondary">
+					{fileName || `${doc.documents.length} files`}
+				</Typography>
 			</Grid>
 		</Grid>
 	);
