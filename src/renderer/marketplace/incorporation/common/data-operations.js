@@ -5,7 +5,6 @@ const getTaxForCompanyCode = (taxArray, code) => {
 };
 
 const getProgramForCompanyCode = (corpArray, foundArray, trustArray, code) => {
-	console.log(code, corpArray);
 	let program = corpArray.find(e => {
 		return e.data.fields['Company code'] === code;
 	});
@@ -21,8 +20,6 @@ const getProgramForCompanyCode = (corpArray, foundArray, trustArray, code) => {
 			});
 		}
 	}
-	console.log(program);
-
 	return program;
 };
 

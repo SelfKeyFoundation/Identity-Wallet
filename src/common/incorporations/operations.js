@@ -9,9 +9,11 @@ const loadIncorporationsOperation = () => async (dispatch, getState) => {
 	try {
 		const data = await getGlobalContext().incorporationsService.loadIncorporations();
 		await dispatch(incorporationsActions.setIncorporationsAction(data.incorporations));
+		await dispatch(incorporationsActions.setCorporationsAction(data.corporations));
 		await dispatch(incorporationsActions.setLLCsAction(data.llcs));
 		await dispatch(incorporationsActions.setFoundationsAction(data.foundations));
 		await dispatch(incorporationsActions.setTaxesAction(data.taxes));
+		await dispatch(incorporationsActions.setTranslationAction(data.translation));
 	} catch (error) {
 		console.error(error);
 		await dispatch(incorporationsActions.setErrorAction(true));

@@ -6,7 +6,7 @@ import { Typography, Grid } from '@material-ui/core';
 import injectSheet from 'react-jss';
 
 import IncorporationsTable from './table';
-import IncorporationsDetailView from './detail/containers/detail-view';
+import IncorporationsDetailView from './detail-view';
 
 const styles = {
 	header: {

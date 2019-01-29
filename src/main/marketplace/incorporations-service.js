@@ -24,18 +24,18 @@ export class IncorporationsService {
 					Corporations,
 					LLCs,
 					Taxes,
-					Foundations
-					// Trusts,
+					Foundations,
+					Trusts,
+					EN
 					// Guarantee
 				} = response;
 				const payload = {};
 
-				console.log(Main);
-
 				payload.incorporations = Main.map(inc => {
-					const newInc = {};
 					const fields = inc.data.fields;
-					newInc.id = inc.data.id;
+					const newInc = { ...fields, id: inc.data.id };
+
+					/* newInc.id = inc.data.id;
 					newInc.region = fields.Region;
 					newInc.acronym = fields.Acronym;
 					newInc.corpllc = fields.corpllc;
@@ -46,107 +46,33 @@ export class IncorporationsService {
 					newInc.reputation = fields['Reputation'];
 					newInc.price = fields['Price'];
 					newInc.package = fields['package'];
-					newInc.shop = fields['shop'];
+					newInc.shop = fields['shop']; */
 					return newInc;
 				});
 
 				const corpMap = corp => {
-					const newCorp = {};
 					const fields = corp.data.fields;
+					const newCorp = { ...fields, id: corp.data.id };
 
-					newCorp.id = corp.data.id;
-					newCorp.aeoi = fields.AEOI;
-					newCorp.region = fields.Region;
-					newCorp.legalBasis = fields['Legal basis'];
-					newCorp.companyCode = fields['Company code'];
-					newCorp.countryCode = fields['Country code'];
-					newCorp.annualReturn = fields['Annual return'];
-					newCorp.legalFramework = fields['Legal framework'];
-					newCorp.auditedAccounts = fields['Audited accounts'];
-					newCorp.capitalCurrency = fields['Capital currency'];
-
-					newCorp.regulatoryBody = fields['Regulatory body'];
-					newCorp.registrationFee = fields['Registration fee'];
-					newCorp.nameOfFoundation = fields['Name of foundation'];
-					newCorp.descriptionOfFoundation = fields['Description of the Foundation'];
-					newCorp.annualGovermentFee = fields['Annual goverment fee'];
-					newCorp.minimumCouncilMembers = fields['Minimum council members'];
-
-					newCorp.minimumMembers = fields['Minimum members'];
-					newCorp.minimumManagers = fields['Minimum managers'];
-					newCorp.minimumDirectors = fields['Minimum directors'];
-					newCorp.minimumShareholders = fields['Mimimum shareholders'];
-
-					newCorp.electronicSignature = fields['Electronic signatures'];
-
-					newCorp.localDirectorRequired = fields['Local director required'];
-					newCorp.localManagerRequired = fields['Local manger required'];
-					newCorp.localPersonRequired = fields['Local regulated person required'];
-
-					newCorp.minimumPaidUpCapital = fields['Minimum paid up capital'];
-					newCorp.foreignOwnershipAllowed =
-						fields['Foreign ownership allowed'] || fields['Foreign-ownership allowed'];
-					newCorp.redomiciliationPermitted = fields['Redomiciliation permitted'];
-					newCorp.auditedAccountsExemption = fields['Audited accounts exemption'];
-
-					newCorp.corporateFounderPermitted = fields['Corporate founder permitted'];
-					newCorp.corporateMembersPermitted = fields['Corporate members permitted'];
-					newCorp.corporateManagersPermitted = fields['Corporate managers permitted'];
-					newCorp.corporateDirectorsPermitted = fields['Corporate directors permitted'];
-					newCorp.corporateShareholdersPermitted =
-						fields['Corporate shareholders permitted'];
-					newCorp.corporateCouncilMembersPermitted =
-						fields['Corporate council members permitted'];
-
-					newCorp.annualGeneralMeetingRequired =
-						fields['Annual general meetings required'];
-					newCorp.locationOfAnnualGeneralMeeting =
-						fields['Location of annual general meeting'];
-					newCorp.registeredOfficeOrAgentRequired =
-						fields['Registered office or agent required'] ||
-						fields['Registered agent required'];
-					newCorp.field36 = fields['Field 36'];
-
-					newCorp.managerNotDisclosed =
-						fields['Manager not disclosed in a public registry'];
-					newCorp.membersNotDisclosed =
-						fields['Members not disclosed in a public registry'];
-					newCorp.directorsNotDisclosed =
-						fields['Directors not disclosed in a public registry'];
-					newCorp.shareholdersNotDisclosed =
-						fields['Shareholders not disclosed in a public registry'];
-					newCorp.beneficiariesNotDisclosed =
-						fields['Beneficiaries not disclosed in a public registry'];
-					newCorp.protectorNotDisclosed =
-						fields['Protector/Guardian not disclosed in a public registry'];
-
-					newCorp.minimumCapitalization = fields['Min_capitalization_'];
-					newCorp.companyRegisterUrl = fields['Company_Register_URL'];
-					newCorp.companyRegisterName = fields['Company_Register_Name'];
-					newCorp.registeredAgentList = fields['Registered_Agent_List'];
-					newCorp.minimumIssuedCapital = fields['Minimum issued capital'];
-					newCorp.onlineRegistry = fields['Online_Registry\n'];
-					newCorp.secreteryRequired = fields['Secretary required'];
-					newCorp.taxTransparentEntity = fields['Tax transparent entity'];
-
-					newCorp.initialAssetsEndowent = fields['Initial endowment of assets'];
-					newCorp.charitablePurposesPermitted = fields['Charitable purposes permitted'];
-					newCorp.beneficiariesHaveInformationRights =
-						fields['Beneficiaries have right to information'];
-					newCorp.meaningOfSecurities = fields['meaning of secutiries'];
-					newCorp.protectorRequired = fields['Protector/Guardian required'];
 					return newCorp;
 				};
 
 				payload.corporations = Corporations.map(corpMap);
 				payload.llcs = LLCs.map(corpMap);
 				payload.foundations = Foundations.map(corpMap);
+				payload.trusts = Trusts.map(corpMap);
+
+				payload.translation = EN.map(translation => {
+					const fields = translation.data.fields;
+					const newTranslation = { ...fields, id: translation.data.id };
+					return newTranslation;
+				});
 
 				payload.taxes = Taxes.map(tax => {
-					const newTax = {};
 					const fields = tax.data.fields;
+					const newTax = { ...fields, id: tax.data.id };
 
-					newTax.id = tax.data.id;
+					/* newTax.id = tax.data.id;
 					newTax.country = fields.Country;
 					newTax.patentBox = fields['Patent Box'];
 					newTax.vat = fields['VAT Rate'];
@@ -182,7 +108,7 @@ export class IncorporationsService {
 					newTax.offshoreDividendsTaxExemption =
 						fields['Offshore dividends tax exemption'];
 					newTax.offshoreCapitalGainsTaxExemption =
-						fields['Offshore capital gains tax exemption'];
+						fields['Offshore capital gains tax exemption']; */
 
 					return newTax;
 				});

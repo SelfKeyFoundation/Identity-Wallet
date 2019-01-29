@@ -6,7 +6,8 @@ export const incorporationsTypes = {
 	INCORPORATIONS_TAXES_SET: 'app/incorporations/taxes/SET',
 	INCORPORATIONS_LLCS_SET: 'app/incorporations/LLCs/SET',
 	INCORPORATIONS_CORPORATIONS_SET: 'app/incorporations/corporations/SET',
-	INCORPORATIONS_FOUNDATIONS_SET: 'app/foundations/LLCs/SET'
+	INCORPORATIONS_FOUNDATIONS_SET: 'app/incorporations/foundations/SET',
+	INCORPORATIONS_TRANSLATION_SET: 'app/incorporations/translations/SET'
 };
 
 export default incorporationsTypes;

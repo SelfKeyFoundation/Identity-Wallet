@@ -17,7 +17,8 @@ export const initialState = {
 	corporations: [],
 	corporationsById: {},
 	foundations: [],
-	foundationsById: {}
+	foundationsById: {},
+	translation: {}
 };
 
 export const incorporationsReducers = {
@@ -66,6 +67,14 @@ export const incorporationsReducers = {
 			return acc;
 		}, {});
 		return { ...state, foundations, foundationsById };
+	},
+	translationSetReducers(state, action) {
+		const translation = action.payload.map(t => t.id);
+		const translationById = action.payload.reduce((acc, curr) => {
+			acc[curr.id] = curr;
+			return acc;
+		}, {});
+		return { ...state, translation, translationById };
 	}
 };
 
@@ -85,6 +94,8 @@ export const reducer = (state = initialState, action) => {
 			return incorporationsReducers.corporationsSetReducers(state, action);
 		case incorporationsTypes.INCORPORATIONS_FOUNDATIONS_SET:
 			return incorporationsReducers.foundationsSetReducers(state, action);
+		case incorporationsTypes.INCORPORATIONS_TRANSLATION_SET:
+			return incorporationsReducers.translationSetReducers(state, action);
 
 		default:
 			return state;

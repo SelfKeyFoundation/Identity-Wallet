@@ -42,6 +42,12 @@ export const incorporationsActions = {
 			type: incorporationsTypes.INCORPORATIONS_TAXES_SET,
 			payload
 		};
+	},
+	setTranslationAction(payload) {
+		return {
+			type: incorporationsTypes.INCORPORATIONS_TRANSLATION_SET,
+			payload
+		};
 	}
 };
 

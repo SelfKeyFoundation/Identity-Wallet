@@ -100,7 +100,6 @@ class IncorporationsTable extends Component {
 	);
 
 	render() {
-		console.log(this.props);
 		const { classes, isLoading, incorporations } = this.props;
 		if (isLoading) {
 			return this._renderLoadingScreen();
@@ -149,24 +148,29 @@ class IncorporationsTable extends Component {
 						{incorporations.map(inc => (
 							<TableRow key={inc.id}>
 								<TableCell className={classes.flagCell}>
-									<FlagCountryName code={inc.countryCode} />
+									<FlagCountryName code={inc['Country code']} />
 								</TableCell>
-								<TableCell>{inc.region}</TableCell>
-								<TableCell className={classes.regionCell}>{inc.acronym}</TableCell>
+								<TableCell>{inc.Region}</TableCell>
+								<TableCell className={classes.regionCell}>{inc.Acronym}</TableCell>
 								<TableCell className={classes.smallCell}>
-									{inc.tax.offshoreIncomeTax}
+									{inc.tax['Offshore Income Tax Rate']}
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									{inc.tax.corporateTax}
+									{inc.tax['Corporate Tax Rate']}
 								</TableCell>
 								<TagTableCell className={classes.goodForCell}>
-									{inc.tags && inc.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}
+									{inc['Good for'] &&
+										inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 								</TagTableCell>
 								<TableCell className={classes.costCell}>
-									<ProgramPrice price={inc.price} />
+									<ProgramPrice price={inc.Price} />
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<span onClick={() => this.props.onDetailClick(inc.companyCode)}>
+									<span
+										onClick={() =>
+											this.props.onDetailClick(inc['Company code'])
+										}
+									>
 										Details
 									</span>
 								</TableCell>

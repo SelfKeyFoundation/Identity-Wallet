@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import { Grid, Tab, Tabs, Button, Typography, List, ListItem } from '@material-ui/core';
 import { CheckedIcon, HourGlassIcon } from 'selfkey-ui';
-import IncorporationsTaxView from '../components/tax-view';
-import IncorporationsLegalView from '../components/legal-view';
-import FlagCountryName from '../../common/flag-country-name';
+import IncorporationsTaxView from './components/tax-view';
+import IncorporationsLegalView from './components/legal-view';
+import FlagCountryName from '../common/flag-country-name';
 import { incorporationsSelectors } from 'common/incorporations';
 
 const styles = {
@@ -133,8 +133,9 @@ class IncorporationsDetailView extends Component {
 		const { details, classes } = this.props;
 		const { selectedTab } = this.state;
 
-		const Translation = {};
-		const Program = {};
+		console.log(details);
+
+		const { translation } = details;
 
 		return (
 			<div>
@@ -150,10 +151,10 @@ class IncorporationsDetailView extends Component {
 				<div className={classes.container}>
 					<Grid container justify="left" alignItems="left" className={classes.title}>
 						<div>
-							<FlagCountryName code={details.countryCode} />
+							<FlagCountryName code={details['Country code']} />
 						</div>
 						<div>
-							<span className="region">{details.region}</span>
+							<span className="region">{details.Region}</span>
 						</div>
 					</Grid>
 					<Grid container justify="left" alignItems="left" className={classes.content}>
@@ -161,13 +162,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Offshore Tax</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.offshoreIncomeTax || '--'}
+									{details.tax['Offshore Income Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends received</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.dividendsReceived || '--'}
+									{details.tax['Dividends Received'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -175,13 +176,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Corp Income</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.corporateTax || '--'}
+									{details.tax['Corporate Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.dividendsWitholdingTax || '--'}
+									{details.tax['Dividends Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -189,13 +190,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Capital Gains</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.capitalGainsTax || '--'}
+									{details.tax['Capital Gains Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Royalties paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.royaltiesWitholdingTax || '--'}
+									{details.tax['Royalties Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -203,16 +204,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Interests paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax.interestsWitholdingTax || '--'}
+									{details.tax['Interests Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
 						<div className={classes.applyButton}>
 							<Button variant="contained" size="large">
 								Start Incorporation
-							</Button>
-							<Button variant="outlined" size="large" disabled>
-								Key Deposit
 							</Button>
 						</div>
 					</Grid>
@@ -282,17 +280,17 @@ class IncorporationsDetailView extends Component {
 								<TabContainer className="description">
 									<div
 										dangerouslySetInnerHTML={{
-											__html: Translation['introduction']
+											__html: translation['introduction']
 										}}
 									/>
 								</TabContainer>
 							)}
 							{selectedTab === 1 && (
 								<TabContainer className="legal">
-									<IncorporationsLegalView data={Program} />
+									<IncorporationsLegalView data={details.details} />
 									<div
 										dangerouslySetInnerHTML={{
-											__html: Translation['legal_paragraph']
+											__html: translation['legal_paragraph']
 										}}
 										className={classes.tabDescription}
 									/>
@@ -303,7 +301,7 @@ class IncorporationsDetailView extends Component {
 									<IncorporationsTaxView tax={details.tax} />
 									<div
 										dangerouslySetInnerHTML={{
-											__html: Translation['taxes_paragraph']
+											__html: translation['taxes_paragraph']
 										}}
 										className={classes.tabDescription}
 									/>

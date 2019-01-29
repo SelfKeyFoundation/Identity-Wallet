@@ -8,70 +8,70 @@ import { GreenTick, DeniedTick } from 'selfkey-ui';
 const TAX_COLUMNS = [
 	[
 		{
-			id: 'offshoreIncomeTaxExemption',
+			id: 'Offshore Income Tax Exemption',
 			label: 'Offshore Income Tax Exemption'
 		},
 		{
-			id: 'offshoreCapitalGainsTaxExemption',
+			id: 'Offshore capital gains tax exemption',
 			label: 'Offshore capital gains tax exemption'
 		},
 		{
-			id: 'offshoreDividendsTaxExemption',
+			id: 'Offshore dividends tax exemption',
 			label: 'Offshore dividends tax exemption'
 		},
 		{
-			id: 'cfcRules',
+			id: 'CFC Rules',
 			label: 'CFC Rules'
 		},
 		{
-			id: 'thinCapitalisationRules',
+			id: 'Thin Capitalisation Rules',
 			label: 'Thin Capitalisation Rules'
 		},
 		{
-			id: 'patentBox',
+			id: 'Patent Box',
 			label: 'Patent Box'
 		},
 		{
-			id: 'taxIncentivesAndCredits',
+			id: 'Tax Incentives & Credits',
 			label: 'Tax Incentives & Credits'
 		},
 		{
-			id: 'propertyTax',
+			id: 'Property Tax',
 			label: 'Property Tax'
 		},
 		{
-			id: 'wealthTax',
+			id: 'Wealth tax',
 			label: 'Wealth Tax'
 		},
 		{
-			id: 'estateInheritanceTax',
+			id: 'Estate inheritance tax',
 			label: 'Estate inheritance tax'
 		},
 
-		{ id: 'transferTax', label: 'Transfer tax' },
-		{ id: 'capitalDuties', label: 'Capital Duties' }
+		{ id: 'Transfer tax', label: 'Transfer tax' },
+		{ id: 'Capital duties', label: 'Capital Duties' }
 	],
 	[
-		{ id: 'offshoreIncomeTax', label: 'Offshore Income Tax Rate' },
+		{ id: 'Offshore Income Tax Rate', label: 'Offshore Income Tax Rate' },
 
-		{ id: 'corporateTax', label: 'Corporate Tax Rate' },
-		{ id: 'capitalGainsTax', label: 'Capital Gains Tax Rate' },
-		{ id: 'dividendsReceived', label: 'Dividends Received' },
-		{ id: 'dividendsWitholdingTax', label: 'Dividends Withholding Tax Rate' },
-		{ id: 'interestsWitholdingTax', label: 'Interests Withholding Tax Rate' },
-		{ id: 'royaltiesWitholdingTax', label: 'Royalties Withholding Tax Rate' },
-		{ id: 'lossesCarryback', label: 'Losses carryback (years)' },
-		{ id: 'losessCarryforward', label: 'Losses carryforward (years)' }
+		{ id: 'Corporate Tax Rate', label: 'Corporate Tax Rate' },
+		{ id: 'Capital Gains Tax Rate', label: 'Capital Gains Tax Rate' },
+		{ id: 'Dividends Received', label: 'Dividends Received' },
+		{ id: 'Dividends Withholding Tax Rate', label: 'Dividends Withholding Tax Rate' },
+		{ id: 'Interests Withholding Tax Rate', label: 'Interests Withholding Tax Rate' },
+		{ id: 'Royalties Withholding Tax Rate', label: 'Royalties Withholding Tax Rate' },
+		{ id: 'Losses carryback (years)', label: 'Losses carryback (years)' },
+		{ id: 'Losses carryforward (years)', label: 'Losses carryforward (years)' }
 	],
 	[
-		{ id: 'personalIncomeTax', label: 'Personal Income Tax Rate' },
-		{ id: 'vat', label: 'VAT Rate' },
-		{ id: 'inventoryMethodsPermitted', label: 'Inventory methods permitted' },
-		{ id: 'taxTime', label: 'Tax time (hours)' },
-		{ id: 'taxPaymentsPerYear', label: 'Tax payments per year' },
-		{ id: 'totalCorporationTax', label: 'Total Corporation Tax Burden' },
-		{ id: 'socialSecurityEmployee', label: 'Social Security Employee' },
-		{ id: 'socialSecurityEmployer', label: 'Social Security Employer' }
+		{ id: 'Personal Income Tax Rate', label: 'Personal Income Tax Rate' },
+		{ id: 'VAT Rate', label: 'VAT Rate' },
+		{ id: 'Inventory methods permitted', label: 'Inventory methods permitted' },
+		{ id: 'Tax time (hours)', label: 'Tax time (hours)' },
+		{ id: 'Tax payments per year', label: 'Tax payments per year' },
+		{ id: 'Total Tax Rate', label: 'Total Corporation Tax Burden' },
+		{ id: 'Social Security Employee', label: 'Social Security Employee' },
+		{ id: 'Social Security Employer', label: 'Social Security Employer' }
 	]
 ];
 
