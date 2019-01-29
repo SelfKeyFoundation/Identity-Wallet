@@ -1,0 +1,35 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { identitySelectors } from 'common/identity';
+import { Popup } from '../../../common/popup';
+import CreateAttribute from '../components/create-attribute';
+
+class CreateAttributePopupComponent extends Component {
+	handlCreateAttributeContainer = () => {
+		console.log('XXX create clicked');
+	};
+	handleCancel = () => {
+		if (this.props.onClose) return this.props.onClose();
+	};
+	render() {
+		const { types, open = true, text = 'Add Information' } = this.props;
+		return (
+			<Popup open={open} closeAction={this.handleCancel} text={text}>
+				<CreateAttribute
+					handleCreate={this.handleCreate}
+					handleCancel={this.handleCancel}
+					types={types}
+				/>
+			</Popup>
+		);
+	}
+}
+
+const mapStateToProps = (state, props) => {
+	return {
+		types: identitySelectors.selectIdAttributeTypes(state)
+	};
+};
+export const CreateAttributePopup = connect(mapStateToProps)(CreateAttributePopupComponent);
+
+export default CreateAttributePopup;

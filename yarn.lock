@@ -1037,6 +1037,39 @@
     recompose "0.28.0 - 0.30.0"
     warning "^4.0.1"
 
+"@material-ui/core@^3.6.0":
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.9.1.tgz#994fa54f0936092556d231d1055b8f76b12be06e"
+  integrity sha512-26GtjuwxPPfSsUnYrTOC8zuCuhWPVhc4SsUSFTZq0n1QvpGi9UEZRFe8yp6FykQE+PmqyyY+eWdrfiXKSUKZ0w==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    "@material-ui/system" "^3.0.0-alpha.0"
+    "@material-ui/utils" "^3.0.0-alpha.2"
+    "@types/jss" "^9.5.6"
+    "@types/react-transition-group" "^2.0.8"
+    brcast "^3.0.1"
+    classnames "^2.2.5"
+    csstype "^2.5.2"
+    debounce "^1.1.0"
+    deepmerge "^3.0.0"
+    dom-helpers "^3.2.1"
+    hoist-non-react-statics "^3.2.1"
+    is-plain-object "^2.0.4"
+    jss "^9.8.7"
+    jss-camel-case "^6.0.0"
+    jss-default-unit "^8.0.2"
+    jss-global "^3.0.0"
+    jss-nested "^6.0.1"
+    jss-props-sort "^6.0.0"
+    jss-vendor-prefixer "^7.0.0"
+    normalize-scroll-left "^0.1.2"
+    popper.js "^1.14.1"
+    prop-types "^15.6.0"
+    react-event-listener "^0.6.2"
+    react-transition-group "^2.2.1"
+    recompose "0.28.0 - 0.30.0"
+    warning "^4.0.1"
+
 "@material-ui/icons@3.0.1", "@material-ui/icons@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.1.tgz#671fb3d04dcaf9351dbbd2bf82ae2ae72e3d93cd"
@@ -1044,6 +1077,14 @@
   dependencies:
     "@babel/runtime" "7.0.0"
     recompose "^0.29.0"
+
+"@material-ui/icons@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.2.tgz#d67a6dd1ec8312d3a88ec97944a63daeef24fe10"
+  integrity sha512-QY/3gJnObZQ3O/e6WjH+0ah2M3MOgLOzCy8HTUoUx9B6dDrS18vP7Ycw3qrDEKlB6q1KNxy6CZHm5FCauWGy2g==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    recompose "0.28.0 - 0.30.0"
 
 "@material-ui/lab@3.0.0-alpha.26":
   version "3.0.0-alpha.26"
@@ -1055,12 +1096,42 @@
     classnames "^2.2.5"
     keycode "^2.1.9"
 
+"@material-ui/lab@^3.0.0-alpha.28":
+  version "3.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-3.0.0-alpha.29.tgz#6ed4bdb5c0ed53ea7b14325a6b9dbe5efd8f7f5a"
+  integrity sha512-rCCRgF+Dk35OyBSKAufnh0s0OvvhFN4PQyimYgk7DziIxbgOxcQI/sgpqNOB5yT+63OcTZL6OaeSytPdxlEpCQ==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    "@material-ui/utils" "^3.0.0-alpha.2"
+    classnames "^2.2.5"
+    keycode "^2.1.9"
+    prop-types "^15.6.0"
+
+"@material-ui/system@^3.0.0-alpha.0":
+  version "3.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/system/-/system-3.0.0-alpha.2.tgz#096e80c8bb0f70aea435b9e38ea7749ee77b4e46"
+  integrity sha512-odmxQ0peKpP7RQBQ8koly06YhsPzcoVib1vByVPBH4QhwqBXuYoqlCjt02846fYspAqkrWzjxnWUD311EBbxOA==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    deepmerge "^3.0.0"
+    prop-types "^15.6.0"
+    warning "^4.0.1"
+
 "@material-ui/utils@^3.0.0-alpha.1":
   version "3.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-3.0.0-alpha.1.tgz#4080d4c03eff439c31765c5ffc3d860ceb3dffc0"
   integrity sha512-Ls0J83xCRgeUUISidNceCs8BR5zqIDcxZd8AfJqSZ1M4LGGYPyKeUR0STBCgmTejnibBtanqONW5xY8mFbk/vw==
   dependencies:
     "@babel/runtime" "7.2.0"
+    react-is "^16.6.3"
+
+"@material-ui/utils@^3.0.0-alpha.2":
+  version "3.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-3.0.0-alpha.3.tgz#836c62ea46f5ffc6f0b5ea05ab814704a86908b1"
+  integrity sha512-rwMdMZptX0DivkqBuC+Jdq7BYTXwqKai5G5ejPpuEDKpWzi1Oxp+LygGw329FrKpuKeiqpcymlqJTjmy+quWng==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    prop-types "^15.6.0"
     react-is "^16.6.3"
 
 "@posthtml/esm@^1.0.0":
@@ -4093,6 +4164,11 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
+
+codemirror@^5.42.0:
+  version "5.43.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.43.0.tgz#2454b5e0f7005dc9945ab7b0d9594ccf233da040"
+  integrity sha512-mljwQWUaWIf85I7QwTBryF2ASaIvmYAL4s5UCanCJFfKeXOKhrqdHWdHiZWAMNT+hjLTCnVx2S/SYTORIgxsgA==
 
 coinkey@^0.1.0:
   version "0.1.0"
@@ -10231,7 +10307,7 @@ jss-vendor-prefixer@^7.0.0:
   dependencies:
     css-vendor "^0.3.8"
 
-jss@9.8.7, jss@^9.3.3, jss@^9.7.0:
+jss@9.8.7, jss@^9.3.3, jss@^9.7.0, jss@^9.8.7:
   version "9.8.7"
   resolved "https://registry.yarnpkg.com/jss/-/jss-9.8.7.tgz#ed9763fc0f2f0260fc8260dac657af61e622ce05"
   integrity sha512-awj3XRZYxbrmmrx9LUSj5pXSUfm12m8xzi/VKeqI1ZwWBtQ0kVPTs3vYs32t4rFw83CgFDukA8wKzOE9sMQnoQ==
@@ -13976,6 +14052,11 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.1, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-codemirror2@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.1.0.tgz#62de4460178adea40eb52eabf7491669bf3794b8"
+  integrity sha512-Cksbgbviuf2mJfMyrKmcu7ycK6zX/ukuQO8dvRZdFWqATf5joalhjFc6etnBdGCcPA2LbhIwz+OPnQxLN/j1Fw==
+
 react-copy-to-clipboard@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.1.tgz#8eae107bb400be73132ed3b6a7b4fb156090208e"
@@ -14004,6 +14085,16 @@ react-dom@16.6.3:
     prop-types "^15.6.2"
     scheduler "^0.11.2"
 
+react-dom@^16.6.3:
+  version "16.7.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.7.0.tgz#a17b2a7ca89ee7390bc1ed5eb81783c7461748b8"
+  integrity sha512-D0Ufv1ExCAmF38P2Uh1lwpminZFRXEINJe53zRAbm4KPwSyd6DY/uDoS0Blj9jvPpn1+wivKpZYc8aAAN/nAkg==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.12.0"
+
 react-event-listener@^0.6.2:
   version "0.6.4"
   resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.6.4.tgz#d0ea5ed897da1a796616c44b5a8758898140f203"
@@ -14025,10 +14116,25 @@ react-is@^16.3.2, react-is@^16.6.3:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
   integrity sha512-u7FDWtthB4rWibG/+mFbVd5FvdI20yde86qKGx4lVUTWmPlSWQ4QxbBIrrs+HnXGbxOUlUzTAP/VDmvCwaP2yA==
 
-react-jsonschema-form@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-jsonschema-form/-/react-jsonschema-form-1.0.6.tgz#ceef7c2c386e46a149ec94203547dd9111913e36"
-  integrity sha512-F6441MjApWHiFU/98T+fM19kBP9Ib0b3GMOB5DNyXnfMYC35CLwaANeZsTHug0HAmXGxgG+caPZSxgJSAyPz1Q==
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#4c0215d67e9ac00b760b1b8711c592c2ebad080d":
+  version "0.0.1"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#4c0215d67e9ac00b760b1b8711c592c2ebad080d"
+  dependencies:
+    "@material-ui/core" "^3.6.0"
+    "@material-ui/icons" "^3.0.2"
+    "@material-ui/lab" "^3.0.0-alpha.28"
+    ajv "^6.5.5"
+    codemirror "^5.42.0"
+    lodash.topath "^4.5.2"
+    react "^16.6.3"
+    react-codemirror2 "^5.1.0"
+    react-dom "^16.6.3"
+    react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#templates"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#material-ui"
+
+"react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#templates":
+  version "1.0.4"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#03bf5637193ed4f23dd1d1cbe35d7fc7f5a72c0c"
   dependencies:
     ajv "^5.2.3"
     babel-runtime "^6.26.0"
@@ -14140,6 +14246,16 @@ react@16.6.3:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.11.2"
+
+react@^16.6.3:
+  version "16.7.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.7.0.tgz#b674ec396b0a5715873b350446f7ea0802ab6381"
+  integrity sha512-StCz3QY8lxTb5cl2HJxjwLFOXPIFQp+p+hxQfc8WE0QiLfCtIlKj8/+5tjjKm8uSTlAW+fCPaavGFS06V9Ar3A==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.12.0"
 
 read-config-file@3.2.0, read-config-file@^3.2.0:
   version "3.2.0"
@@ -15011,6 +15127,14 @@ scheduler@^0.11.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
+scheduler@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
+  integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
 schema-utils@^0.4.3, schema-utils@^0.4.4:
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.4.7.tgz#ba74f597d2be2ea880131746ee17d0a093c68187"
@@ -15126,6 +15250,34 @@ select-hose@^2.0.0:
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#4d4b8badccbe56e0cb56d971b363663f6f1e98d4":
   version "1.0.0"
   resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#4d4b8badccbe56e0cb56d971b363663f6f1e98d4"
+  dependencies:
+    "@material-ui/core" "3.7.0"
+    "@material-ui/icons" "3.0.1"
+    "@material-ui/lab" "3.0.0-alpha.26"
+    "@types/google.visualization" "0.0.46"
+    "@types/react-dom" "16.0.11"
+    bignumber.js "8.0.1"
+    jss "9.8.7"
+    jss-compose "5.0.0"
+    jss-expand "5.3.0"
+    jss-extend "6.2.0"
+    jss-global "3.0.0"
+    jss-preset-default "4.5.0"
+    jss-template "1.0.1"
+    lodash "4.17.11"
+    moment "^2.23.0"
+    react "16.6.3"
+    react-copy-to-clipboard "5.0.1"
+    react-datetime "^2.16.3"
+    react-dom "16.6.3"
+    react-google-charts "3.0.10"
+    react-jss "8.6.1"
+    react-truncate "2.4.0"
+    reset-jss "1.0.0"
+
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#material-ui":
+  version "1.0.0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#464d82d18c54525d926f56298adc66cae5a47971"
   dependencies:
     "@material-ui/core" "3.7.0"
     "@material-ui/icons" "3.0.1"

@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { Modal, Typography } from '@material-ui/core';
 import { ModalWrap, ModalCloseButton, ModalCloseIcon, ModalHeader, ModalBody } from 'selfkey-ui';
 
-export const Popup = ({ classes, children, closeAction, text }) => (
-	<Modal open={true}>
+export const Popup = ({ classes, children, closeAction, text, open = true }) => (
+	<Modal open={open}>
 		<ModalWrap>
 			<ModalCloseButton onClick={closeAction}>
 				<ModalCloseIcon />
