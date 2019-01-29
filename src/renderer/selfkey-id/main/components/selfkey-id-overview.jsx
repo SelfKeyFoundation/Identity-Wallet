@@ -114,11 +114,12 @@ const renderDocumentName = doc => {
 		fileName = doc.documents[0].name;
 		fileType = doc.documents[0].mimeType;
 	}
-	console.log(doc.documents[0]);
+
 	if (fileType) {
 		if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
 		else if (fileType.startsWith('image')) FileIcon = FileImageIcon;
 	}
+
 	return (
 		<Grid container>
 			<Grid item xs={3}>
