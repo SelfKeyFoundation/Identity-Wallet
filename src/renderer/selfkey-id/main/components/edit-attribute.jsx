@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, withStyles, Typography } from '@material-ui/core';
+import { TextField, withStyles, Typography, Divider } from '@material-ui/core';
 // import { withTheme } from 'react-jsonschema-form/dist/react-jsonschema-form';
 // import theme from 'react-jsonschema-form-material-theme';
 
@@ -8,15 +8,7 @@ import { TextField, withStyles, Typography } from '@material-ui/core';
 // 	templates: theme.templates
 // });
 
-const styles = theme => ({
-	hr: {
-		backgroundColor: '#303C49',
-		border: 'none',
-		boxSizing: 'border-box',
-		height: '1px',
-		margin: '5px 16px'
-	}
-});
+const styles = theme => ({});
 
 class EditAttributeComponent extends Component {
 	state = { label: null };
@@ -35,7 +27,7 @@ class EditAttributeComponent extends Component {
 		return this.props.types.find(type => type.id === this.state.typeId);
 	}
 	render() {
-		const { attribute, classes } = this.props;
+		const { attribute } = this.props;
 		const { label } = this.state;
 		// const type = this.type;
 		return (
@@ -50,7 +42,7 @@ class EditAttributeComponent extends Component {
 					onChange={this.hadnleFieldChange('label')}
 					fullWidth
 				/>
-				<hr className={classes.hr} />
+				<Divider variant="middle" />
 				{/* type && <Form schema={type.content} formData={{}} /> */}
 			</React.Fragment>
 		);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, MenuItem, withStyles } from '@material-ui/core';
+import { TextField, MenuItem, withStyles, Divider } from '@material-ui/core';
 // import { withTheme } from 'react-jsonschema-form/dist/react-jsonschema-form';
 // import theme from 'react-jsonschema-form-material-theme';
 
@@ -8,15 +8,7 @@ import { TextField, MenuItem, withStyles } from '@material-ui/core';
 // 	templates: theme.templates
 // });
 
-const styles = theme => ({
-	hr: {
-		backgroundColor: '#303C49',
-		border: 'none',
-		boxSizing: 'border-box',
-		height: '1px',
-		margin: '5px 16px'
-	}
-});
+const styles = theme => ({});
 
 class CreateAttributeComponent extends Component {
 	state = { typeId: -1, label: '' };
@@ -67,7 +59,7 @@ class CreateAttributeComponent extends Component {
 					onChange={this.hadnleFieldChange('label')}
 					fullWidth
 				/>
-				<hr className={classes.hr} />
+				<Divider variant="middle" />
 				{/* type && <Form schema={type.content} formData={{}} /> */}
 			</React.Fragment>
 		);
