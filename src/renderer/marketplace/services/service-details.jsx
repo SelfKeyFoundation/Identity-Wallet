@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
+import { Grid, Divider, FormGroup, FormControl, Button, CircularProgress } from '@material-ui/core';
 import {
-	Grid,
-	Divider,
-	FormGroup,
-	FormControl,
-	Button,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemAvatar,
-	Avatar
-} from '@material-ui/core';
-import {
-	H2,
-	H3,
 	P,
-	TickIcon,
+	H3,
+	H2,
 	UnlockIcon,
 	ReturnIcon,
 	HourGlassSmallIcon,
 	CalendarIcon,
-	DocumentIcon,
 	StyledButton
 } from 'selfkey-ui';
 import Truncate from 'react-truncate';
@@ -151,28 +138,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		isDescriptionTruncated: true
 	};
 
-	getKYCRequirements(requirements, classes) {
-		return requirements.map((requirement, index) => {
-			return (
-				<ListItem key={requirement.name} className={classes.requirementListItem}>
-					<ListItemAvatar>
-						{requirement.isEntered ? (
-							<Avatar className={classes.bullet}>
-								<TickIcon />
-							</Avatar>
-						) : (
-							<Avatar className={classes.notEnteredRequeriment}>
-								<div>{index + 1}</div>
-							</Avatar>
-						)}
-					</ListItemAvatar>
-					<ListItemText disableTypography={true}>{requirement.name}</ListItemText>
-					{requirement.type === 'document' && <DocumentIcon />}
-				</ListItem>
-			);
-		});
-	}
-
 	unlockActionCall(unlockAction, item, hasBalance) {
 		if (!unlockAction) {
 			return;
@@ -193,7 +158,15 @@ class MarketplaceServiceDetailsComponent extends Component {
 	}
 
 	render() {
-		const { classes, item, unlockAction, hasBalance, backAction } = this.props;
+		const {
+			classes,
+			item,
+			unlockAction,
+			hasBalance,
+			backAction,
+			relyingParty,
+			relyingPartyIsActive
+		} = this.props;
 		let daysLeft = 0;
 		if (item.status === 'locked' && item.releaseDate) {
 			daysLeft = Math.ceil((item.releaseDate - Date.now()) / 1000 / 60 / 60 / 24);
@@ -378,9 +351,13 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<H3>KYC Requirements</H3>
 									</Grid>
 									<Grid item>
-										<List className={classes.requirementList}>
-											{this.getKYCRequirements(item.kyc_template, classes)}
-										</List>
+										{relyingParty ? (
+											'KYC MANAGER HERE'
+										) : relyingPartyIsActive ? (
+											<CircularProgress />
+										) : (
+											'None'
+										)}
 									</Grid>
 								</Grid>
 							</Grid>

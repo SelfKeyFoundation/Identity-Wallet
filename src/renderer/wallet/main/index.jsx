@@ -44,9 +44,9 @@ class Main extends Component {
 			<Grid
 				container
 				direction="column"
-				justify="flex-start"
+				justify="space-between"
 				alignItems="center"
-				className={classes.wrapper}
+				spacing={24}
 			>
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />
@@ -66,18 +66,6 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-services/:name`}
 						component={MarketplaceServiceDetailsPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-deposit`}
-						component={MarketplaceDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-return-deposit`}
-						component={MarketplaceReturnDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-no-balance`}
-						component={MarketplaceWithoutBalancePopup}
 					/>
 				</Grid>
 			</Grid>
