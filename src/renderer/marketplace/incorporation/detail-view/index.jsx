@@ -6,7 +6,7 @@ import { CheckedIcon, HourGlassIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import FlagCountryName from '../common/flag-country-name';
-import { incorporationsSelectors } from 'common/incorporations';
+import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 
 const styles = {
 	container: {
@@ -125,6 +125,16 @@ class IncorporationsDetailView extends Component {
 		selectedTab: 0
 	};
 
+	componentDidMount() {
+		if (!this.props.treaties || !this.props.treaties.length) {
+			this.props.dispatch(
+				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
+					this.props.details['Country code']
+				)
+			);
+		}
+	}
+
 	handleChange = (event, selectedTab) => {
 		this.setState({ selectedTab });
 	};
@@ -133,9 +143,9 @@ class IncorporationsDetailView extends Component {
 		const { details, classes } = this.props;
 		const { selectedTab } = this.state;
 
-		console.log(details);
-
 		const { translation } = details;
+
+		console.log(details);
 
 		return (
 			<div>
@@ -405,7 +415,12 @@ class IncorporationsDetailView extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		details: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode)
+		details: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode),
+		treaties: incorporationsSelectors.getTaxTreaties(
+			state,
+			props.details ? props.details['Country code'] : false
+		),
+		isLoading: incorporationsSelectors.getLoading(state)
 	};
 };
 

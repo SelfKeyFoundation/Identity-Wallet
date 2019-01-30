@@ -9,11 +9,12 @@ const log = new Logger('marketplace-incorporations-service');
 // FIXME: hard coded URL
 const URL = 'https://passports.io/api/incorporations';
 const TREATIES_URL = 'https://passports.io/api/tax-treaties';
+const COUNTRY_INFO_URL = 'https://passports.io/api/country';
 
 export class IncorporationsService {
 	loadIncorporations() {
 		return new Promise((resolve, reject) => {
-			log.debug('Loading incorporations API data');
+			log.info('Loading incorporations main API data');
 			request.get({ url: URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);
@@ -119,7 +120,7 @@ export class IncorporationsService {
 
 	loadTreatiesData(countryCode) {
 		return new Promise((resolve, reject) => {
-			log.debug('Loading incorporations tax-treaties API data');
+			log.info('Loading incorporations tax treaties API data');
 			request.get(
 				{ url: `${TREATIES_URL}/${countryCode}`, json: true },
 				(error, httpResponse, response) => {
@@ -127,6 +128,26 @@ export class IncorporationsService {
 						log.error(error);
 						reject(error);
 					}
+					console.log(`${TREATIES_URL}/${countryCode}`);
+					console.log(response);
+					resolve(response);
+				}
+			);
+		});
+	}
+
+	loadCountryInfo(countryCode) {
+		return new Promise((resolve, reject) => {
+			log.info('Loading incorporations country details API data');
+			request.get(
+				{ url: `${COUNTRY_INFO_URL}/${countryCode}`, json: true },
+				(error, httpResponse, response) => {
+					if (error) {
+						log.error(error);
+						reject(error);
+					}
+					console.log(`${COUNTRY_INFO_URL}/${countryCode}`);
+					console.log(response);
 					resolve(response);
 				}
 			);

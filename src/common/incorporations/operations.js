@@ -22,11 +22,29 @@ const loadIncorporationsOperation = () => async (dispatch, getState) => {
 	}
 };
 
+const loadIncorporationsTaxTreatiesOperation = countryCode => async (dispatch, getState) => {
+	await dispatch(incorporationsActions.setLoadingAction(true));
+	await dispatch(incorporationsActions.setErrorAction(null));
+	try {
+		const data = await getGlobalContext().incorporationsService.loadTreatiesData(countryCode);
+		await dispatch(incorporationsActions.setTaxTreatiesAction(data));
+	} catch (error) {
+		console.error(error);
+		await dispatch(incorporationsActions.setErrorAction(true));
+	} finally {
+		dispatch(incorporationsActions.setLoadingAction(false));
+	}
+};
+
 export const incorporationsOperations = {
 	...incorporationsActions,
 	loadIncorporationsOperation: createAliasedAction(
 		incorporationsTypes.INCORPORATIONS_LOAD,
 		loadIncorporationsOperation
+	),
+	loadIncorporationsTaxTreatiesOperation: createAliasedAction(
+		incorporationsTypes.INCORPORATIONS_TREATIES_LOAD,
+		loadIncorporationsTaxTreatiesOperation
 	)
 };
 

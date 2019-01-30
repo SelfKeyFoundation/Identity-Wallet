@@ -61,9 +61,11 @@ export const incorporationsSelectors = {
 		let data = this.getCorporationsByCompanyCode(state, companyCode);
 		if (!data) {
 			data = this.getLLCsByCompanyCode(state, companyCode);
-		} else if (!data) {
+		}
+		if (!data) {
 			data = this.getFoundationsByCompanyCode(state, companyCode);
-		} else {
+		}
+		if (!data) {
 			data = this.getTrustsByCompanyCode(state, companyCode);
 		}
 		return data;
@@ -81,50 +83,14 @@ export const incorporationsSelectors = {
 		inc.details = this.getDetailsForCompanyCode(state, companyCode);
 
 		return inc;
+	},
+	getTaxTreaties(state, countryCode) {
+		if (!countryCode) {
+			return false;
+		}
+		const tree = this.getIncorporations(state);
+		return tree;
 	}
 };
-
-// export const getIncorporationsTree = state => {
-// 	return state.incorporations;
-// };
-
-// const getTaxForCompanyCode = (taxArray, code) => {
-// 	return taxArray.find(e => {
-// 		return e.data.fields['Company code'] === code;
-// 	});
-// };
-
-// const getProgramForCompanyCode = (corpArray, foundArray, trustArray, code) => {
-// 	console.log(code, corpArray);
-// 	let program = corpArray.find(e => {
-// 		return e.data.fields['Company code'] === code;
-// 	});
-
-// 	if (!program) {
-// 		program = foundArray.find(e => {
-// 			return e.data.fields['Company code'] === code;
-// 		});
-
-// 		if (!program) {
-// 			program = trustArray.find(e => {
-// 				return e.data.fields['Company code'] === code;
-// 			});
-// 		}
-// 	}
-// 	console.log(program);
-
-// 	return program;
-// };
-
-// const getTranslationForCompanyCode = (transArray, code) => {
-// 	return transArray.find(e => {
-// 		return e.data.fields['Company code'] === code;
-// 	});
-// };
-
-// const getTaxFieldForCompanyCode = (taxArray, code, field) => {
-// 	const tax = getTaxForCompanyCode(taxArray, code);
-// 	return tax ? tax.data.fields[field] : false;
-// };
 
 export default incorporationsSelectors;
