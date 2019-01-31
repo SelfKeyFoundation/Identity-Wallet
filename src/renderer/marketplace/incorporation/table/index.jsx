@@ -15,6 +15,7 @@ import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import FlagCountryName from '../common/flag-country-name';
 import ProgramPrice from '../common/program-price';
+import { pricesSelectors } from 'common/prices';
 
 const styles = {
 	header: {
@@ -100,10 +101,11 @@ class IncorporationsTable extends Component {
 	);
 
 	render() {
-		const { classes, isLoading, incorporations } = this.props;
+		const { classes, isLoading, incorporations, keyRate } = this.props;
 		if (isLoading) {
 			return this._renderLoadingScreen();
 		}
+		const data = incorporations.filter(program => Object.keys(program.tax).length !== 0);
 
 		return (
 			<Grid container direction="row" justify="space-evenly" alignItems="center">
@@ -145,7 +147,7 @@ class IncorporationsTable extends Component {
 						</LargeTableHeadRow>
 					</TableHead>
 					<TableBody className={classes.tableBodyRow}>
-						{incorporations.map(inc => (
+						{data.map(inc => (
 							<TableRow key={inc.id}>
 								<TableCell className={classes.flagCell}>
 									<FlagCountryName code={inc['Country code']} />
@@ -163,12 +165,15 @@ class IncorporationsTable extends Component {
 										inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 								</TagTableCell>
 								<TableCell className={classes.costCell}>
-									<ProgramPrice price={inc.Price} />
+									<ProgramPrice price={inc['Wallet Price']} rate={keyRate} />
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
 									<span
 										onClick={() =>
-											this.props.onDetailClick(inc['Company code'])
+											this.props.onDetailClick(
+												inc['Company code'],
+												inc['Country code']
+											)
 										}
 									>
 										Details
@@ -191,16 +196,9 @@ IncorporationsTable.propTypes = {
 const mapStateToProps = (state, props) => {
 	return {
 		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
-		isLoading: incorporationsSelectors.getLoading(state)
+		isLoading: incorporationsSelectors.getLoading(state),
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };
-
-/*
-const mapDispatchToProps = (dispatch, ownProps) => ({
-	onClick: () => {
-		dispatch(getChannel(ownProps.channelString));
-	}
-});
-*/
 
 export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsTable));

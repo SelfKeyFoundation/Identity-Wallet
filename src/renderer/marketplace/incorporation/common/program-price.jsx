@@ -1,15 +1,14 @@
 import React from 'react';
 
 const ProgramPrice = props => {
-	const { price } = props;
+	const { price, rate } = props;
 
 	if (!price) {
 		return null;
 	}
 
-	// FIXME: stub code
 	const numeric = parseInt(price.replace(/\$/, '').replace(/,/, ''));
-	const key = Math.round(numeric / 0.0075);
+	const key = Math.round(numeric / rate);
 
 	return (
 		<div className="price">

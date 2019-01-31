@@ -89,7 +89,13 @@ export const incorporationsSelectors = {
 			return false;
 		}
 		const tree = this.getIncorporations(state);
-		return tree;
+
+		// Dynamic property, created after API call, might not exist at runtime
+		if (!tree[`treaties-${countryCode}`]) {
+			return false;
+		}
+
+		return tree[`treaties-${countryCode}`].map(id => tree[`treatiesById-${countryCode}`][id]);
 	}
 };
 

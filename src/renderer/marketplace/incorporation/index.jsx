@@ -23,23 +23,25 @@ const styles = {
 
 class MarketplaceIncorporationComponent extends Component {
 	state = {
-		detailed: false
+		companyCode: false,
+		countryCode: false
 	};
 
-	handleDetailClick = companyCode => {
-		this.setState({ detailed: companyCode });
+	handleDetailClick = (companyCode, countryCode) => {
+		this.setState({ companyCode, countryCode });
 	};
 
 	render() {
-		const classes = this.props.classes;
-		const detailed = this.state.detailed;
+		const { classes } = this.props;
+		const { companyCode, countryCode } = this.state;
 		let view = null;
 
-		if (detailed) {
+		if (companyCode && countryCode) {
 			view = (
 				<IncorporationsDetailView
 					{...this.props}
-					companyCode={detailed}
+					companyCode={companyCode}
+					countryCode={countryCode}
 					onBackClick={this.handleDetailClick}
 				/>
 			);

@@ -6,6 +6,7 @@ import { CheckedIcon, HourGlassIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import FlagCountryName from '../common/flag-country-name';
+import TreatiesMap from '../common/treaties-map';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 
 const styles = {
@@ -120,6 +121,17 @@ function TabContainer({ children }) {
 	return <div>{children}</div>;
 }
 
+/* ==========================================================================
+   Received props:
+   ---------------
+   countryCode: country two letter code
+   programCode: program specific code (from airtable)
+   program: program details
+   isLoading: still loading data
+   treaties: tax treaties for this specific country/jurisdiction
+   ==========================================================================
+*/
+
 class IncorporationsDetailView extends Component {
 	state = {
 		selectedTab: 0
@@ -129,7 +141,7 @@ class IncorporationsDetailView extends Component {
 		if (!this.props.treaties || !this.props.treaties.length) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
-					this.props.details['Country code']
+					this.props.countryCode
 				)
 			);
 		}
@@ -140,12 +152,14 @@ class IncorporationsDetailView extends Component {
 	};
 
 	render() {
-		const { details, classes } = this.props;
+		// const { program, countryCode, classes, isLoading, treaties } = this.props;
+		const { program, countryCode, classes, treaties } = this.props;
 		const { selectedTab } = this.state;
+		const { translation, tax } = program;
 
-		const { translation } = details;
-
-		console.log(details);
+		// console.log(program);
+		// console.log(isLoading);
+		// console.log(treaties);
 
 		return (
 			<div>
@@ -153,7 +167,7 @@ class IncorporationsDetailView extends Component {
 					<Button
 						variant="outlined"
 						size="small"
-						onClick={() => this.props.onBackClick(false)}
+						onClick={() => this.props.onBackClick(false, false)}
 					>
 						Back
 					</Button>
@@ -161,10 +175,10 @@ class IncorporationsDetailView extends Component {
 				<div className={classes.container}>
 					<Grid container justify="left" alignItems="left" className={classes.title}>
 						<div>
-							<FlagCountryName code={details['Country code']} />
+							<FlagCountryName code={countryCode} />
 						</div>
 						<div>
-							<span className="region">{details.Region}</span>
+							<span className="region">{program.Region}</span>
 						</div>
 					</Grid>
 					<Grid container justify="left" alignItems="left" className={classes.content}>
@@ -172,13 +186,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Offshore Tax</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Offshore Income Tax Rate'] || '--'}
+									{tax['Offshore Income Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends received</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Dividends Received'] || '--'}
+									{tax['Dividends Received'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -186,13 +200,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Corp Income</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Corporate Tax Rate'] || '--'}
+									{tax['Corporate Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Dividends paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Dividends Witholding Tax Rate'] || '--'}
+									{tax['Dividends Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -200,13 +214,13 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Capital Gains</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Capital Gains Tax Rate'] || '--'}
+									{tax['Capital Gains Tax Rate'] || '--'}
 								</Typography>
 							</div>
 							<div>
 								<label>Royalties paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Royalties Witholding Tax Rate'] || '--'}
+									{tax['Royalties Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -214,7 +228,7 @@ class IncorporationsDetailView extends Component {
 							<div>
 								<label>Interests paid</label>
 								<Typography variant="h4" gutterBottom>
-									{details.tax['Interests Witholding Tax Rate'] || '--'}
+									{tax['Interests Witholding Tax Rate'] || '--'}
 								</Typography>
 							</div>
 						</div>
@@ -297,7 +311,7 @@ class IncorporationsDetailView extends Component {
 							)}
 							{selectedTab === 1 && (
 								<TabContainer className="legal">
-									<IncorporationsLegalView data={details.details} />
+									<IncorporationsLegalView data={program.details} />
 									<div
 										dangerouslySetInnerHTML={{
 											__html: translation['legal_paragraph']
@@ -308,7 +322,7 @@ class IncorporationsDetailView extends Component {
 							)}
 							{selectedTab === 2 && (
 								<TabContainer className="taxes">
-									<IncorporationsTaxView tax={details.tax} />
+									<IncorporationsTaxView tax={tax} />
 									<div
 										dangerouslySetInnerHTML={{
 											__html: translation['taxes_paragraph']
@@ -324,7 +338,7 @@ class IncorporationsDetailView extends Component {
 							)}
 							{selectedTab === 4 && (
 								<TabContainer className="tax-treaties">
-									<span>Tax Treaties</span>
+									<TreatiesMap data={treaties} />
 								</TabContainer>
 							)}
 							{selectedTab === 5 && (
@@ -415,11 +429,8 @@ class IncorporationsDetailView extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		details: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode),
-		treaties: incorporationsSelectors.getTaxTreaties(
-			state,
-			props.details ? props.details['Country code'] : false
-		),
+		program: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode),
+		treaties: incorporationsSelectors.getTaxTreaties(state, props.countryCode),
 		isLoading: incorporationsSelectors.getLoading(state)
 	};
 };

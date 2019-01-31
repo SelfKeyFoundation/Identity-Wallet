@@ -77,12 +77,17 @@ export const incorporationsReducers = {
 		return { ...state, translation, translationById };
 	},
 	treatiesSetReducers(state, action) {
-		const treaties = action.payload.map(t => t.id);
-		const treatiesById = action.payload.reduce((acc, curr) => {
+		// FIXME: find a clearer way to have a tax treaty property per-country
+		const { countryCode, treaties: treatiesPayload } = action.payload;
+		const treaties = treatiesPayload.map(t => t.id);
+		const treatiesById = treatiesPayload.reduce((acc, curr) => {
 			acc[curr.id] = curr;
 			return acc;
 		}, {});
-		return { ...state, treaties, treatiesById };
+		const treatyHash = {};
+		treatyHash[`treaties-${countryCode}`] = treaties;
+		treatyHash[`treatiesById-${countryCode}`] = treatiesById;
+		return { ...state, ...treatyHash };
 	}
 };
 

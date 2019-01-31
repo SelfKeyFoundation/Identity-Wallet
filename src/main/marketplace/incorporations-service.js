@@ -14,7 +14,7 @@ const COUNTRY_INFO_URL = 'https://passports.io/api/country';
 export class IncorporationsService {
 	loadIncorporations() {
 		return new Promise((resolve, reject) => {
-			log.info('Loading incorporations main API data');
+			log.info(`Loading incorporations main API data: ${URL}`);
 			request.get({ url: URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);
@@ -120,7 +120,9 @@ export class IncorporationsService {
 
 	loadTreatiesData(countryCode) {
 		return new Promise((resolve, reject) => {
-			log.info('Loading incorporations tax treaties API data');
+			log.info(
+				`Loading incorporations tax treaties API data for country ${countryCode}: ${TREATIES_URL}/${countryCode}`
+			);
 			request.get(
 				{ url: `${TREATIES_URL}/${countryCode}`, json: true },
 				(error, httpResponse, response) => {
@@ -128,9 +130,17 @@ export class IncorporationsService {
 						log.error(error);
 						reject(error);
 					}
-					console.log(`${TREATIES_URL}/${countryCode}`);
-					console.log(response);
-					resolve(response);
+					const payload = {};
+					const treaties = response[0];
+
+					payload.treaties = treaties.map(t => {
+						const newTreaties = { ...t };
+						return newTreaties;
+					});
+
+					payload.countryCode = countryCode;
+
+					resolve(payload);
 				}
 			);
 		});
