@@ -12,7 +12,7 @@ describe('MarketplaceService', () => {
 		placeStake() {},
 		withdrawStake() {}
 	};
-	let wallet = { publicKey: 'test', balance: 0 };
+	let wallet = { publicKey: '0xtest', balance: 0 };
 	let state = { wallet, prices: { prices: [] } };
 	let store = {
 		dispatch: () => {},
@@ -58,7 +58,7 @@ describe('MarketplaceService', () => {
 	});
 
 	it('estimateGasForStake', async () => {
-		const stakeTransactionsGas = { approve: 15, deposit: 20 };
+		const stakeTransactionsGas = { approve: { gas: 15 }, deposit: { gas: 20 } };
 		sinon.stub(stakingService, 'placeStake').resolves(stakeTransactionsGas);
 		let gas = await service.estimateGasForStake(serviceOwner, serviceId, 10);
 		expect(
@@ -72,7 +72,7 @@ describe('MarketplaceService', () => {
 	});
 
 	it('estimateGasForWithdraw', async () => {
-		const withdrawTransactionsGas = 10;
+		const withdrawTransactionsGas = { gas: 10 };
 		sinon.stub(stakingService, 'withdrawStake').resolves(withdrawTransactionsGas);
 		let gas = await service.estimateGasForWithdraw(serviceOwner, serviceId);
 		expect(
@@ -82,7 +82,7 @@ describe('MarketplaceService', () => {
 			})
 		).toBeTruthy();
 
-		expect(gas).toEqual(withdrawTransactionsGas);
+		expect(gas).toEqual(withdrawTransactionsGas.gas);
 	});
 
 	it('placeStake', async () => {
