@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { TextField, MenuItem, withStyles, Divider } from '@material-ui/core';
-// import { withTheme } from 'react-jsonschema-form/dist/react-jsonschema-form';
-// import theme from 'react-jsonschema-form-material-theme';
+import { withTheme } from 'react-jsonschema-form';
+import theme from 'react-jsonschema-form-material-theme/build/lib/react-jsonschema-form-material-theme.min';
 
-// const Form = withTheme('MyTheme', {
-// 	widgets: theme.widgets,
-// 	templates: theme.templates
-// });
+const Form = withTheme('MyTheme', {
+	widgets: theme.widgets,
+	templates: theme.templates
+});
 
 const styles = theme => ({});
 
@@ -27,9 +27,10 @@ class CreateAttributeComponent extends Component {
 		return this.props.types.find(type => type.id === this.state.typeId);
 	}
 	render() {
-		const { types, classes } = this.props;
+		const { types } = this.props;
 		const { typeId, label } = this.state;
-		// const type = this.type;
+		const type = this.type;
+
 		return (
 			<React.Fragment>
 				<TextField
@@ -39,7 +40,7 @@ class CreateAttributeComponent extends Component {
 					margin="normal"
 					fullWidth
 					value={typeId}
-					variant="outlined"
+					variant="filled"
 					onChange={this.hadnleFieldChange('typeId')}
 				>
 					<MenuItem value={-1}>
@@ -55,12 +56,12 @@ class CreateAttributeComponent extends Component {
 					label="Label"
 					value={label}
 					margin="normal"
-					variant="outlined"
+					variant="filled"
 					onChange={this.hadnleFieldChange('label')}
 					fullWidth
 				/>
 				<Divider variant="middle" />
-				{/* type && <Form schema={type.content} formData={{}} /> */}
+				{type && <Form schema={type.content} />}
 			</React.Fragment>
 		);
 	}
