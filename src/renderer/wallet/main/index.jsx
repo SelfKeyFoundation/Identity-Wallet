@@ -23,7 +23,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		width: '100%'
+		maxWidth: '1140px'
 	}
 });
 
@@ -38,9 +38,9 @@ class Main extends Component {
 			<Grid
 				container
 				direction="column"
-				justify="flex-start"
+				justify="space-between"
 				alignItems="center"
-				className={classes.wrapper}
+				spacing={24}
 			>
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />

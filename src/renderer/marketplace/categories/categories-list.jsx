@@ -7,10 +7,17 @@ import { MarketplaceCategory } from './category';
 const styles = theme => ({
 	header: {
 		borderBottom: 'solid 1px #475768',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		paddingBottom: '38px'
+		'& h1': {
+			marginLeft: '20px'
+		},
+		'& svg': {
+			marginLeft: '20px'
+		},
+		width: '100%',
+		height: '120px'
+	},
+	headerIcon: {
+		marginLeft: '30px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -33,13 +40,17 @@ const getItems = items => {
 };
 
 export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children, items }) => (
-	<Grid container justify="center" alignItems="center">
-		<Grid item id="header" className={classes.header} xs={12}>
-			<MarketplaceIcon />
-			<H1 className={classes.headerTitle}>SelfKey Marketplace</H1>
+	<Grid container direction="column" justify="space-between" alignItems="strech" spacing={24}>
+		<Grid container item className={classes.header} xs={12} direction="row" alignItems="center">
+			<Grid item>
+				<MarketplaceIcon className={classes.headerIcon} />
+			</Grid>
+			<Grid item>
+				<H1 className={classes.headerTitle}>SelfKey Marketplace</H1>
+			</Grid>
 		</Grid>
 		<Grid item id="body" xs={12}>
-			<Grid container direction="row" justify="space-evenly" alignItems="center">
+			<Grid container direction="row" justify="space-evenly" alignItems="flex-start">
 				{getItems(items)}
 			</Grid>
 		</Grid>

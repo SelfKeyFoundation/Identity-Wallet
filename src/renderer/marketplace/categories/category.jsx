@@ -31,15 +31,6 @@ const styles = theme => ({
 		color: '#23E6FE'
 	},
 
-	button: {
-		color: '#93b0c1',
-		fontFamily: 'Lato, arial, sans-serif',
-		borderColor: '#3b4a5a',
-		'&:disabled': {
-			color: '#48565f'
-		}
-	},
-
 	body: {
 		width: '320px',
 		textAlign: 'left',

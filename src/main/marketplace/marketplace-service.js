@@ -29,11 +29,19 @@ export class MarketplaceService {
 	async estimateGasForStake(serviceOwner, serviceId, amount) {
 		let options = { from: this.walletAddress, method: 'estimateGas' };
 		let limits = await this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
-		return (limits.approve || 0) + (limits.deposit || 0);
+		let gasLimit = 0;
+		if (limits.approve && limits.approve.gas) {
+			gasLimit += limits.approve.gas;
+		}
+		if (limits.deposit && limits.deposit.gas) {
+			gasLimit += limits.deposit.gas;
+		}
+		return gasLimit;
 	}
-	estimateGasForWithdraw(serviceOwner, serviceId) {
-		let options = { from: this.walletAddress, method: 'estimateGas' };
-		return this.stakingService.withdrawStake(serviceOwner, serviceId, options);
+	async estimateGasForWithdraw(serviceOwner, serviceId) {
+		const options = { from: this.walletAddress, method: 'estimateGas' };
+		const limit = await this.stakingService.withdrawStake(serviceOwner, serviceId, options);
+		return limit.gas || 0;
 	}
 	async placeStake(serviceOwner, serviceId, amount, gasPrice, gas) {
 		let options = { from: this.walletAddress, gasPrice, gas };
