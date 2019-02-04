@@ -39,15 +39,7 @@ const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
 module.exports = function(cradle) {
-	const {
-		app,
-		store,
-		ledgerService,
-		txHistoryService,
-		TxHistoryService,
-		web3Service,
-		priceService
-	} = cradle;
+	const { app, store, txHistoryService, TxHistoryService, web3Service, priceService } = cradle;
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -1194,28 +1186,6 @@ module.exports = function(cradle) {
 		Exchange.findAll(args)
 			.then(data => {
 				store.dispatch(exchangesOperations.updateExchanges(data));
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.getLedgerAccounts = function(event, actionId, actionName, args) {
-		ledgerService
-			.getAccounts(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
-		ledgerService
-			.signTransaction(args)
-			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
