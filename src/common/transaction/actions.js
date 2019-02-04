@@ -1,10 +1,6 @@
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
-// import TrezorService from 'main/blockchain/trezor-service';
 import TxHistory from 'main/blockchain/tx-history';
-
-/* let Service = TrezorService();
-let trezorService = new Service(); */
 
 const updateTransaction = transaction => ({
 	type: types.TRANSACTION_UPDATE,
