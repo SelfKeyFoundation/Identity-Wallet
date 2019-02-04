@@ -36,6 +36,20 @@ const loadIncorporationsTaxTreatiesOperation = countryCode => async (dispatch, g
 	}
 };
 
+const loadIncorporationsCountryOperation = countryCode => async (dispatch, getState) => {
+	await dispatch(incorporationsActions.setLoadingAction(true));
+	await dispatch(incorporationsActions.setErrorAction(null));
+	try {
+		const data = await getGlobalContext().incorporationsService.loadCountryInfo(countryCode);
+		await dispatch(incorporationsActions.setCountryInfoAction(data));
+	} catch (error) {
+		console.error(error);
+		await dispatch(incorporationsActions.setErrorAction(true));
+	} finally {
+		dispatch(incorporationsActions.setLoadingAction(false));
+	}
+};
+
 export const incorporationsOperations = {
 	...incorporationsActions,
 	loadIncorporationsOperation: createAliasedAction(
@@ -45,6 +59,10 @@ export const incorporationsOperations = {
 	loadIncorporationsTaxTreatiesOperation: createAliasedAction(
 		incorporationsTypes.INCORPORATIONS_TREATIES_LOAD,
 		loadIncorporationsTaxTreatiesOperation
+	),
+	loadIncorporationsCountryOperation: createAliasedAction(
+		incorporationsTypes.INCORPORATIONS_COUNTRY_LOAD,
+		loadIncorporationsCountryOperation
 	)
 };
 

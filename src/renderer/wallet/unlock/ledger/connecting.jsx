@@ -18,7 +18,6 @@ class Connecting extends Component {
 	};
 
 	componentDidMount() {
-		console.log('HERE');
 		this.setState({ isModalOpen: this.props.open });
 		this.props.dispatch(appOperations.loadLedgerWalletsOperation());
 	}

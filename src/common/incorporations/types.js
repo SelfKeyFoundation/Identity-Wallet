@@ -9,7 +9,9 @@ export const incorporationsTypes = {
 	INCORPORATIONS_FOUNDATIONS_SET: 'app/incorporations/foundations/SET',
 	INCORPORATIONS_TRANSLATION_SET: 'app/incorporations/translations/SET',
 	INCORPORATIONS_TREATIES_LOAD: 'app/incorporations/treaties/LOAD',
-	INCORPORATIONS_TREATIES_SET: 'app/incorporations/treaties/SET'
+	INCORPORATIONS_TREATIES_SET: 'app/incorporations/treaties/SET',
+	INCORPORATIONS_COUNTRY_LOAD: 'app/incorporations/country/LOAD',
+	INCORPORATIONS_COUNTRY_SET: 'app/incorporations/country/SET'
 };
 
 export default incorporationsTypes;

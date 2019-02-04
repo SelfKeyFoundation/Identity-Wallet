@@ -1,10 +1,18 @@
 import React from 'react';
+import injectSheet from 'react-jss';
+
+const styles = {
+	mapContainer: {
+		maxWidth: '80%',
+		margin: 'auto'
+	}
+};
 
 const TreatiesMap = props => {
-	const { data } = props;
+	const { data, classes } = props;
 
 	return (
-		<div className="treaties-map">
+		<div className={classes.mapContainer}>
 			<style>
 				{`.land { fill: #697c95; fill-opacity: 1; stroke: white; stroke-opacity: 1; stroke-width: 0.5 }`}
 				{`.land.selected { fill: #00c0d9; }`}
@@ -1430,4 +1438,4 @@ const TreatiesMap = props => {
 	);
 };
 
-export default TreatiesMap;
+export default injectSheet(styles)(TreatiesMap);

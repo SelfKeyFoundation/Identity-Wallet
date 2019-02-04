@@ -21,7 +21,6 @@ class Ledger extends Component {
 	};
 
 	handleConnectingOnClose = () => {
-		console.log('HEYYY');
 		this.setState({ isConnecting: false });
 	};
 

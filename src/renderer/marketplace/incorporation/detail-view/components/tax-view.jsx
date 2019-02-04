@@ -78,23 +78,28 @@ const TAX_COLUMNS = [
 const styles = {
 	booleanProp: {
 		'& h5': {
-			fontWeight: 'normal'
+			fontWeight: 'normal',
+			fontSize: '14px'
 		}
 	},
 	textProp: {
 		'& h5': {
 			fontWeight: 'normal',
-			display: 'inline-block'
+			display: 'inline-block',
+			fontSize: '14px'
 		},
 		'& div': {
 			display: 'inline-block'
 		},
 		'& h5.value': {
-			background: 'linear-gradient(to bottom, #0abbd0 0%, #09a8ba 100%)',
-			padding: '1px 6px',
-			borderRadius: '3px',
-			fontWeight: 'bold',
-			marginRight: '1em'
+			color: '#93B0C1',
+			marginLeft: '1em',
+			fontWeight: 'bold'
+		}
+	},
+	denied: {
+		'& rect': {
+			fill: '#697C95 !important'
 		}
 	}
 };
@@ -102,14 +107,20 @@ const styles = {
 class IncorporationsTaxView extends Component {
 	render() {
 		const { classes, tax } = this.props;
-		console.log(tax);
+
 		return (
 			<Grid container justify="left" alignItems="left">
 				<div>
 					<List>
 						{TAX_COLUMNS[0].map(prop => (
 							<ListItem key={prop} className={classes.booleanProp}>
-								{tax[prop.id] ? <GreenTick /> : <DeniedTick />}
+								{tax[prop.id] ? (
+									<GreenTick />
+								) : (
+									<span className={classes.denied}>
+										<DeniedTick />
+									</span>
+								)}
 								<Typography variant="h5" gutterBottom>
 									{prop.label}
 								</Typography>
@@ -123,11 +134,11 @@ class IncorporationsTaxView extends Component {
 							.filter(prop => tax[prop.id])
 							.map(prop => (
 								<ListItem key={prop.id} className={classes.textProp}>
-									<Typography variant="h5" gutterBottom className="value">
-										{tax[prop.id]}
-									</Typography>
 									<Typography variant="h5" gutterBottom>
 										{prop.label}
+									</Typography>
+									<Typography variant="h5" gutterBottom className="value">
+										{tax[prop.id]}
 									</Typography>
 								</ListItem>
 							))}
@@ -139,11 +150,11 @@ class IncorporationsTaxView extends Component {
 							.filter(prop => tax[prop.id])
 							.map(prop => (
 								<ListItem key={prop.id} className={classes.textProp}>
-									<Typography variant="h5" gutterBottom className="value">
-										{tax[prop.id]}
-									</Typography>
 									<Typography variant="h5" gutterBottom>
 										{prop.label}
+									</Typography>
+									<Typography variant="h5" gutterBottom className="value">
+										{tax[prop.id]}
 									</Typography>
 								</ListItem>
 							))}

@@ -148,7 +148,9 @@ export class IncorporationsService {
 
 	loadCountryInfo(countryCode) {
 		return new Promise((resolve, reject) => {
-			log.info('Loading incorporations country details API data');
+			log.info(
+				`Loading incorporations country details for ${countryCode}: ${COUNTRY_INFO_URL}/${countryCode}`
+			);
 			request.get(
 				{ url: `${COUNTRY_INFO_URL}/${countryCode}`, json: true },
 				(error, httpResponse, response) => {
@@ -156,9 +158,18 @@ export class IncorporationsService {
 						log.error(error);
 						reject(error);
 					}
-					console.log(`${COUNTRY_INFO_URL}/${countryCode}`);
-					console.log(response);
-					resolve(response);
+
+					const payload = {};
+					const country = response;
+
+					payload.country = country.map(c => {
+						const newCountry = { ...c };
+						return newCountry;
+					});
+
+					payload.countryCode = countryCode;
+
+					resolve(payload);
 				}
 			);
 		});

@@ -96,6 +96,19 @@ export const incorporationsSelectors = {
 		}
 
 		return tree[`treaties-${countryCode}`].map(id => tree[`treatiesById-${countryCode}`][id]);
+	},
+	getCountry(state, countryCode) {
+		if (!countryCode) {
+			return false;
+		}
+		const tree = this.getIncorporations(state);
+
+		// Dynamic property, created after API call, might not exist at runtime
+		if (!tree[`country-${countryCode}`]) {
+			return false;
+		}
+
+		return tree[`country-${countryCode}`].map(id => tree[`countryById-${countryCode}`][id]);
 	}
 };
 

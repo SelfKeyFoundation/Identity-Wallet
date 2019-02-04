@@ -64,13 +64,13 @@ const styles = {
 		width: '50px'
 	},
 	smallCell: {
-		width: '25px'
+		width: '35px'
 	},
 	flagCell: {
 		width: '10px'
 	},
 	regionCell: {
-		width: '30px'
+		width: '60px'
 	},
 	detailsCell: {
 		width: '55px',

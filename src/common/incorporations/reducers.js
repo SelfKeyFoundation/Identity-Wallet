@@ -88,6 +88,18 @@ export const incorporationsReducers = {
 		treatyHash[`treaties-${countryCode}`] = treaties;
 		treatyHash[`treatiesById-${countryCode}`] = treatiesById;
 		return { ...state, ...treatyHash };
+	},
+	countrySetReducers(state, action) {
+		const { countryCode, country: countryPayload } = action.payload;
+		const country = countryPayload.map(c => c.code);
+		const countryById = countryPayload.reduce((acc, curr) => {
+			acc[curr.code] = curr;
+			return acc;
+		}, {});
+		const countryHash = {};
+		countryHash[`country-${countryCode}`] = country;
+		countryHash[`countryById-${countryCode}`] = countryById;
+		return { ...state, ...countryHash };
 	}
 };
 
@@ -111,6 +123,8 @@ export const reducer = (state = initialState, action) => {
 			return incorporationsReducers.translationSetReducers(state, action);
 		case incorporationsTypes.INCORPORATIONS_TREATIES_SET:
 			return incorporationsReducers.treatiesSetReducers(state, action);
+		case incorporationsTypes.INCORPORATIONS_COUNTRY_SET:
+			return incorporationsReducers.countrySetReducers(state, action);
 
 		default:
 			return state;

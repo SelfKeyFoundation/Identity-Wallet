@@ -18,6 +18,9 @@ const styles = {
 	},
 	headerTitle: {
 		paddingLeft: '21px'
+	},
+	body: {
+		minHeight: '90vh'
 	}
 };
 
@@ -59,7 +62,7 @@ class MarketplaceIncorporationComponent extends Component {
 								Incorporation Marketplace
 							</Typography>
 						</Grid>
-						<Grid item id="body" xs={12}>
+						<Grid item id="body" xs={12} className={classes.body}>
 							{view}
 						</Grid>
 					</Grid>

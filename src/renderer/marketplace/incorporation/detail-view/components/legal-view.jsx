@@ -117,23 +117,28 @@ const LEGAL_COLUMNS = [
 const styles = {
 	booleanProp: {
 		'& h5': {
-			fontWeight: 'normal'
+			fontWeight: 'normal',
+			fontSize: '14px'
 		}
 	},
 	textProp: {
 		'& h5': {
 			fontWeight: 'normal',
-			display: 'inline-block'
+			display: 'inline-block',
+			fontSize: '14px'
 		},
 		'& div': {
 			display: 'inline-block'
 		},
 		'& h5.value': {
-			background: 'linear-gradient(to bottom, #0abbd0 0%, #09a8ba 100%)',
-			padding: '1px 6px',
-			borderRadius: '3px',
-			fontWeight: 'bold',
-			marginRight: '1em'
+			color: '#93B0C1',
+			marginLeft: '1em',
+			fontWeight: 'bold'
+		}
+	},
+	denied: {
+		'& rect': {
+			fill: '#697C95 !important'
 		}
 	}
 };
@@ -141,14 +146,23 @@ const styles = {
 class IncorporationsLegalView extends Component {
 	render() {
 		const { classes, data } = this.props;
-		console.log(data);
+
+		// Troubleshooting log
+		// console.log(data);
+
 		return (
 			<Grid container justify="left" alignItems="left">
 				<div>
 					<List>
 						{LEGAL_COLUMNS[0].map(prop => (
 							<ListItem key={prop.id} className={classes.booleanProp}>
-								{data[prop.id] ? <GreenTick /> : <DeniedTick />}
+								{data[prop.id] ? (
+									<GreenTick />
+								) : (
+									<span className={classes.denied}>
+										<DeniedTick />
+									</span>
+								)}
 								<Typography variant="h5" gutterBottom>
 									{prop.text}
 								</Typography>
@@ -160,7 +174,13 @@ class IncorporationsLegalView extends Component {
 					<List>
 						{LEGAL_COLUMNS[1].map(prop => (
 							<ListItem key={prop.id} className={classes.booleanProp}>
-								{data[prop.id] ? <GreenTick /> : <DeniedTick />}
+								{data[prop.id] ? (
+									<GreenTick />
+								) : (
+									<span className={classes.denied}>
+										<DeniedTick />
+									</span>
+								)}
 								<Typography variant="h5" gutterBottom>
 									{prop.text}
 								</Typography>
@@ -174,11 +194,11 @@ class IncorporationsLegalView extends Component {
 							.filter(prop => data[prop.id])
 							.map(prop => (
 								<ListItem key={prop.id} className={classes.textProp}>
-									<Typography variant="h5" gutterBottom className="value">
-										{data[prop.id]}
-									</Typography>
 									<Typography variant="h5" gutterBottom>
 										{prop.text}
+									</Typography>
+									<Typography variant="h5" gutterBottom className="value">
+										{data[prop.id]}
 									</Typography>
 								</ListItem>
 							))}

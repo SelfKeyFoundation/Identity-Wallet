@@ -54,6 +54,12 @@ export const incorporationsActions = {
 			type: incorporationsTypes.INCORPORATIONS_TREATIES_SET,
 			payload
 		};
+	},
+	setCountryInfoAction(payload) {
+		return {
+			type: incorporationsTypes.INCORPORATIONS_COUNTRY_SET,
+			payload
+		};
 	}
 };
 
