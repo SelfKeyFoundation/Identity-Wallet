@@ -3,8 +3,6 @@ import { Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
-import Connecting from './connecting';
-import { appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
@@ -13,21 +11,9 @@ const styles = theme => ({
 	}
 });
 
-class Ledger extends Component {
-	state = {
-		isConnecting: false,
-		selectAddress: false
-	};
-
-	handleConnectAction = () => {
-		this.setState({ isConnecting: true });
-	};
-
-	handleConnectingOnClose = async () => {
-		this.setState({ isConnecting: false });
-		if (this.props.hasConnected) {
-			await this.props.dispatch(push('/selectAddress'));
-		}
+class Trezor extends Component {
+	handleConnectAction = async () => {
+		await this.props.dispatch(push('/connectingToTrezor'));
 	};
 
 	render() {
@@ -44,21 +30,17 @@ class Ledger extends Component {
 					<HelpStepsSection />
 					<Grid item>
 						<Button variant="contained" onClick={this.handleConnectAction}>
-							CONNECT TO LEDGER
+							CONNECT TO TREZOR
 						</Button>
 					</Grid>
 				</Grid>
-				<Connecting open={this.state.isConnecting} onClose={this.handleConnectingOnClose} />
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	const app = appSelectors.selectApp(state);
-	return {
-		hasConnected: app.hardwareWallets.length > 0
-	};
+	return {};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Ledger));
+export default connect(mapStateToProps)(withStyles(styles)(Trezor));
