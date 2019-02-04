@@ -246,8 +246,14 @@ const reducer = (state = initialState, action) => {
 
 const selectApp = state => state.app;
 
+const hasConnected = state => {
+	const app = selectApp(state);
+	return app.hardwareWallets.length > 0;
+};
+
 const appSelectors = {
-	selectApp
+	selectApp,
+	hasConnected
 };
 
 export { appSelectors, appReducers, appActions, appOperations };

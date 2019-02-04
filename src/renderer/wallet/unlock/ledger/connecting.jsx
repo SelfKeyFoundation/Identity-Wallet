@@ -199,10 +199,9 @@ class Connecting extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const app = appSelectors.selectApp(state);
 	return {
-		error: app.error,
-		hasConnected: app.hardwareWallets.length > 0
+		error: appSelectors.selectApp(state).error,
+		hasConnected: appSelectors.hasConnected(state)
 	};
 };
 

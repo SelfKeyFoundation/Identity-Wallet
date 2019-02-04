@@ -142,7 +142,7 @@
 		"sudo-prompt": "8.2.3",
 		"tcp-port-used": "1.0.1",
 		"url-join": "^4.0.0",
-		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#0c5ef04",
+		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#6a09944",
 		"usb": "1.5.0",
 		"utf-8-validate": "5.0.1",
 		"web3": "1.0.0-beta.37",

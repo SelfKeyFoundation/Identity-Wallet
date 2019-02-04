@@ -55,9 +55,8 @@ class Ledger extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const app = appSelectors.selectApp(state);
 	return {
-		hasConnected: app.hardwareWallets.length > 0
+		hasConnected: appSelectors.hasConnected(state)
 	};
 };
 
