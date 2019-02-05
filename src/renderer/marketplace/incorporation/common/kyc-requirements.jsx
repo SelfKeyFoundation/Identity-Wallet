@@ -2,7 +2,6 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import { CheckedIcon } from 'selfkey-ui';
-// import { HourGlassIcon } from 'selfkey-ui';
 
 const styles = {
 	kyc: {

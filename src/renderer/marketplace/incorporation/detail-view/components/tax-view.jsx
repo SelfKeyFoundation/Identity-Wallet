@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-// import ProgramListItem from '../../common/program-list-item';
 import { Grid, List, ListItem, Typography } from '@material-ui/core';
 import { GreenTick, DeniedTick } from 'selfkey-ui';
 
