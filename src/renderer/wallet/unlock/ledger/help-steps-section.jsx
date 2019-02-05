@@ -1,13 +1,9 @@
 import React from 'react';
 import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
+		marginTop: 0
 	}
 });
 
