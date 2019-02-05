@@ -9,8 +9,13 @@ const styles = theme => ({
 	root: {
 		flexGrow: 1
 	},
+
 	input: {
 		width: '500px'
+	},
+
+	pointer: {
+		cursor: 'pointer'
 	}
 });
 
@@ -103,7 +108,10 @@ class PrivateKey extends Component {
 											fullWidth
 											error={this.state.error !== ''}
 											endAdornment={
-												<InputAdornment position="start">
+												<InputAdornment
+													position="start"
+													className={classes.pointer}
+												>
 													<div onClick={this.handleVisibility}>
 														{this.state.visibilityComponent}
 													</div>
@@ -127,7 +135,7 @@ class PrivateKey extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						<Button variant="contained" onClick={this.handleUnlockAction}>
+						<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
 							UNLOCK
 						</Button>
 					</Grid>

@@ -96,12 +96,20 @@ class Connecting extends Component {
 									spacing={24}
 								>
 									<Grid item>
-										<Button variant="contained" onClick={this.handleTryAgain}>
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.handleTryAgain}
+										>
 											TRY AGAIN
 										</Button>
 									</Grid>
 									<Grid item>
-										<Button variant="outlined" onClick={this.handleClose}>
+										<Button
+											variant="outlined"
+											size="large"
+											onClick={this.handleClose}
+										>
 											BACK
 										</Button>
 									</Grid>

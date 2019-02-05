@@ -6,8 +6,13 @@ import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
 	passwordInput: {
-		width: '110%'
+		width: '500px'
 	},
+
+	button: {
+		width: '500px'
+	},
+
 	menuItem: {
 		display: 'flex'
 	}
@@ -94,6 +99,7 @@ class NewAddress extends Component {
 											variant="outlined"
 											color="primary"
 											onClick={this.handleSelectFile}
+											className={classes.button}
 										>
 											SELECT KEYSTORE FILE
 										</Button>
@@ -150,7 +156,7 @@ class NewAddress extends Component {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" onClick={this.handleUnlockAction}>
+					<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
 						UNLOCK
 					</Button>
 				</Grid>

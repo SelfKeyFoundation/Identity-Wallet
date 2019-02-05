@@ -16,13 +16,19 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	selectInput: {
-		width: '100%'
+		width: '500px'
 	},
+
 	passwordInput: {
-		width: '205%'
+		width: '500px'
 	},
+
 	menuItem: {
 		display: 'flex'
+	},
+
+	dropdown: {
+		width: '450px'
 	}
 });
 
@@ -111,7 +117,7 @@ class ExistingAddress extends Component {
 												input={<Input disableUnderline fullWidth />}
 												autoWidth
 											>
-												<MenuItem value={-1}>
+												<MenuItem value={-1} className={classes.dropdown}>
 													<em>Choose...</em>
 												</MenuItem>
 												{wallets.map((wallet, index) => (
@@ -174,7 +180,7 @@ class ExistingAddress extends Component {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" onClick={this.handleUnlockAction}>
+					<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
 						UNLOCK
 					</Button>
 				</Grid>
