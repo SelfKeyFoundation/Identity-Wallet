@@ -20,6 +20,12 @@ const styles = theme => ({
 		width: '50px',
 		height: '65px'
 	},
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px'
+	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -80,7 +86,9 @@ class Password extends Component {
 							<SelfkeyLogo className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Grid>
 					</Grid>
 					<Paper>

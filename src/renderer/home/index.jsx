@@ -10,6 +10,12 @@ const styles = theme => ({
 		width: '50px',
 		height: '65px'
 	},
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px'
+	},
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
 		minHeight: '100vh'
@@ -67,7 +73,9 @@ export const Home = props => {
 							<SelfkeyLogo className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Grid>
 						<Grid item>
 							<Typography variant="h2" className={classes.primaryTintText}>

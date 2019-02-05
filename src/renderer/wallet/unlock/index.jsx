@@ -29,6 +29,12 @@ const styles = theme => ({
 		width: '50px',
 		height: '65px'
 	},
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px'
+	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -59,6 +65,9 @@ const gotBackHome = props => <Link to="/" {...props} />;
 
 const unlockOptionStyle = theme => ({
 	box: {
+		backgroundColor: '#293743',
+		boxShadow: 'none',
+		borderColor: '#1D505F',
 		maxWidth: '110px',
 		minWidth: '110px',
 		minHeight: '88px',
@@ -75,7 +84,7 @@ const unlockOptionStyle = theme => ({
 		lineHeight: '0px'
 	},
 	grid: {
-		marginTop: '10px'
+		marginTop: '15px'
 	},
 	selected: {
 		borderColor: primaryTint
@@ -101,7 +110,7 @@ const UnlockOption = props => {
 					</Typography>
 				</Grid>
 				<Grid item>
-					<Typography variant="body2" className={classes.body2}>
+					<Typography variant="body2" color="secondary" className={classes.body2}>
 						{subtitle}
 					</Typography>
 				</Grid>
@@ -143,7 +152,9 @@ class Unlock extends Component {
 							<SelfkeyLogo className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Grid>
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
