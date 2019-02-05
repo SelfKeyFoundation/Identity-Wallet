@@ -68,9 +68,11 @@ const unlockOptionStyle = theme => ({
 		backgroundColor: '#293743',
 		boxShadow: 'none',
 		borderColor: '#1D505F',
-		maxWidth: '110px',
-		minWidth: '110px',
-		minHeight: '88px',
+		display: 'flex',
+		maxWidth: '133px',
+		minWidth: '133px',
+		minHeight: '110px',
+		margin: '16px 5px',
 		cursor: 'pointer',
 		'&:hover': {
 			borderColor: primaryTint
@@ -84,7 +86,8 @@ const unlockOptionStyle = theme => ({
 		lineHeight: '0px'
 	},
 	grid: {
-		marginTop: '15px'
+		marginBottom: '10px',
+		paddingTop: '20px'
 	},
 	selected: {
 		borderColor: primaryTint
@@ -96,23 +99,19 @@ const UnlockOption = props => {
 	const selectedClass = selected ? `${classes.box} ${classes.selected}` : classes.box;
 	return (
 		<Paper className={selectedClass} onClick={onClick}>
-			<Grid
-				container
-				direction="column"
-				justify="center"
-				alignItems="center"
-				className={classes.grid}
-			>
-				<Grid item>{icon}</Grid>
-				<Grid item>
-					<Typography variant="body1" className={classes.body1}>
-						{title}
-					</Typography>
+			<Grid container direction="column" justify="flex-start" alignItems="center">
+				<Grid item className={classes.grid}>
+					{icon}
 				</Grid>
-				<Grid item>
-					<Typography variant="body2" color="secondary" className={classes.body2}>
-						{subtitle}
-					</Typography>
+				<Grid container direction="column" justify="center" alignItems="center">
+					<Grid item>
+						<Typography variant="body2">{title}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography variant="subtitle2" color="secondary" gutterBottom>
+							{subtitle}
+						</Typography>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Paper>
@@ -163,7 +162,7 @@ class Unlock extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h3" color="textPrimary" id="modal-title">
+							<Typography variant="h2" color="textPrimary" id="modal-title">
 								Use An Existing ETH Address
 							</Typography>
 						</ModalHeader>
@@ -182,7 +181,6 @@ class Unlock extends Component {
 										direction="row"
 										justify="center"
 										alignItems="center"
-										spacing={32}
 									>
 										<Grid item>
 											<UnlockOptionWrapped
