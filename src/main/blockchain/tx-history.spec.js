@@ -52,23 +52,22 @@ describe('TxHistory model', () => {
 
 	it('findByPublicKey', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
-
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from)).data[0]);
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from.toUpperCase())).data[0]);
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to)).data[0]);
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to.toUpperCase())).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from))[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from.toUpperCase()))[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to))[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to.toUpperCase()))[0]);
 	});
 
 	it('findByPublicKeyAndTokenSymbol', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
 
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from, itm.tokenSymbol)).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from, itm.tokenSymbol))[0]);
 		expect(itm).toEqual(
-			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.tokenSymbol)).data[0]
+			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.tokenSymbol))[0]
 		);
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.tokenSymbol)).data[0]);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.tokenSymbol))[0]);
 		expect(itm).toEqual(
-			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.tokenSymbol)).data[0]
+			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.tokenSymbol))[0]
 		);
 
 		// TODO: check doe not fetch different symbol
@@ -77,15 +76,13 @@ describe('TxHistory model', () => {
 	it('findByPublicKeyAndContractAddress', async () => {
 		let itm = await TxHistory.addOrUpdate(data);
 
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.from, itm.contractAddress))[0]);
 		expect(itm).toEqual(
-			(await TxHistory.findByPublicKey(itm.from, itm.contractAddress)).data[0]
+			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.contractAddress))[0]
 		);
+		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.contractAddress))[0]);
 		expect(itm).toEqual(
-			(await TxHistory.findByPublicKey(itm.from.toUpperCase(), itm.contractAddress)).data[0]
-		);
-		expect(itm).toEqual((await TxHistory.findByPublicKey(itm.to, itm.contractAddress)).data[0]);
-		expect(itm).toEqual(
-			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.contractAddress)).data[0]
+			(await TxHistory.findByPublicKey(itm.to.toUpperCase(), itm.contractAddress))[0]
 		);
 
 		// TODO: check doe not fetch different contract

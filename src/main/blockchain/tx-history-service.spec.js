@@ -161,7 +161,7 @@ describe('TxHistoryService', () => {
 			input:
 				'0xa9059cbb000000000000000000000000ddbd2b932c763ba5b1b7ae3b362eac3e8d40121a0000000000000000000000000000000000000000000000000de0b6b3a7640000',
 			isError: undefined,
-			networkId: 3,
+			networkId: 1,
 			nonce: '10753',
 			timeStamp: 1504784559000,
 			to: '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',
@@ -207,7 +207,7 @@ describe('TxHistoryService', () => {
 			hash: 'GENESIS_ddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',
 			input: '',
 			isError: '0',
-			networkId: 3,
+			networkId: 1,
 			nonce: '',
 			timeStamp: 1438269973000,
 			to: '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',

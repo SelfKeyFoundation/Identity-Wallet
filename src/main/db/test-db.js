@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 import knexMigrate from 'knex-migrate';
 import fs from 'fs';
-import { db as config } from 'common/config';
 import { Model } from 'objection';
 import Knex from 'knex';
+import { db as config } from 'common/config';
 
 export class TestDb {
 	static config = config;
@@ -51,9 +51,12 @@ export class TestDb {
 		try {
 			await this.knex.destroy();
 			if (this.config.connection !== ':memory:') {
-				fs.unlinkSync(this.config.connection);
+				await fs.promises.unlink(this.config.connection);
 			}
 		} catch (error) {
+			if (this.config.connection !== ':memory:') {
+				await fs.promises.unlink(this.config.connection);
+			}
 			console.log(error);
 		}
 	}
