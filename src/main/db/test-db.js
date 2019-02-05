@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 import knexMigrate from 'knex-migrate';
 import fs from 'fs';
-import { db as config } from 'common/config';
 import { Model } from 'objection';
 import Knex from 'knex';
+import { db as config } from 'common/config';
 process.env['MODE'] = 'test';
 
 export class TestDb {
