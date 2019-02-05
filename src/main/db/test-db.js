@@ -4,6 +4,7 @@ import fs from 'fs';
 import { db as config } from 'common/config';
 import { Model } from 'objection';
 import Knex from 'knex';
+process.env['MODE'] = 'test';
 
 export class TestDb {
 	static config = config;

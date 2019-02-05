@@ -1,5 +1,4 @@
 import TestDb from './db/test-db';
-import fs from 'fs';
 
 // const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
 const path = require('path');
@@ -31,7 +30,6 @@ describe('migrations', () => {
 
 	afterAll(async () => {
 		await TestDb.destroy();
-		await fs.promises.unlink(dbFile);
 	});
 
 	describe('up 20181108183529_json-schema-attributes', () => {
