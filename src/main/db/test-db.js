@@ -3,8 +3,9 @@ import knexMigrate from 'knex-migrate';
 import fs from 'fs';
 import { Model } from 'objection';
 import Knex from 'knex';
-import { db as config } from 'common/config';
 process.env['MODE'] = 'test';
+// eslint-disable-next-line
+import { db as config } from 'common/config';
 
 export class TestDb {
 	static config = config;
