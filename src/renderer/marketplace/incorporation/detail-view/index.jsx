@@ -17,6 +17,9 @@ const styles = {
 		margin: '0 auto',
 		maxWidth: '960px'
 	},
+	backButtonContainer: {
+		marginBottom: '1em'
+	},
 	flagCell: {
 		width: '10px'
 	},
@@ -163,7 +166,7 @@ class IncorporationsDetailView extends Component {
 
 		return (
 			<div>
-				<div style={{ margin: '1em' }}>
+				<div className={classes.backButtonContainer}>
 					<Button
 						variant="outlined"
 						size="small"

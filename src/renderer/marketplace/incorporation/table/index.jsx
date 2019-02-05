@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-
+import { pricesSelectors } from 'common/prices';
 import { Grid, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,12 +10,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
-
+import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfkey-ui';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import FlagCountryName from '../common/flag-country-name';
 import ProgramPrice from '../common/program-price';
-import { pricesSelectors } from 'common/prices';
 
 const styles = {
 	header: {
@@ -108,82 +106,92 @@ class IncorporationsTable extends Component {
 		const data = incorporations.filter(program => Object.keys(program.tax).length !== 0);
 
 		return (
-			<Grid container direction="row" justify="space-evenly" alignItems="center">
-				<Table className={classes.table}>
-					<TableHead>
-						<LargeTableHeadRow>
-							<TableCell className={classes.flagCell} />
-							<TableCell>
-								<Typography variant="overline" gutterBottom>
-									Jurisdiction
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.regionCell}>
-								<Typography variant="overline" gutterBottom>
-									Entity
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.smallCell}>
-								<Typography variant="overline" gutterBottom>
-									Offshore Tax
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.smallCell}>
-								<Typography variant="overline" gutterBottom>
-									Corp Tax
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.goodForCell}>
-								<Typography variant="overline" gutterBottom>
-									Good for
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.costCell}>
-								<Typography variant="overline" gutterBottom>
-									Cost
-								</Typography>
-							</TableCell>
-							<TableCell className={classes.detailsCell} />
-						</LargeTableHeadRow>
-					</TableHead>
-					<TableBody className={classes.tableBodyRow}>
-						{data.map(inc => (
-							<TableRow key={inc.id}>
-								<TableCell className={classes.flagCell}>
-									<FlagCountryName code={inc['Country code']} />
+			<div>
+				<Grid item id="header" className={classes.header} xs={12}>
+					<IncorporationsIcon />
+					<Typography variant="h1" gutterBottom className={classes.headerTitle}>
+						Incorporation Marketplace
+					</Typography>
+				</Grid>
+				<Grid container direction="row" justify="space-evenly" alignItems="center">
+					<Table className={classes.table}>
+						<TableHead>
+							<LargeTableHeadRow>
+								<TableCell className={classes.flagCell} />
+								<TableCell>
+									<Typography variant="overline" gutterBottom>
+										Jurisdiction
+									</Typography>
 								</TableCell>
-								<TableCell>{inc.Region}</TableCell>
-								<TableCell className={classes.regionCell}>{inc.Acronym}</TableCell>
-								<TableCell className={classes.smallCell}>
-									{inc.tax['Offshore Income Tax Rate']}
+								<TableCell className={classes.regionCell}>
+									<Typography variant="overline" gutterBottom>
+										Entity
+									</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									{inc.tax['Corporate Tax Rate']}
+									<Typography variant="overline" gutterBottom>
+										Offshore Tax
+									</Typography>
 								</TableCell>
-								<TagTableCell className={classes.goodForCell}>
-									{inc['Good for'] &&
-										inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
-								</TagTableCell>
+								<TableCell className={classes.smallCell}>
+									<Typography variant="overline" gutterBottom>
+										Corp Tax
+									</Typography>
+								</TableCell>
+								<TableCell className={classes.goodForCell}>
+									<Typography variant="overline" gutterBottom>
+										Good for
+									</Typography>
+								</TableCell>
 								<TableCell className={classes.costCell}>
-									<ProgramPrice price={inc['Wallet Price']} rate={keyRate} />
+									<Typography variant="overline" gutterBottom>
+										Cost
+									</Typography>
 								</TableCell>
-								<TableCell className={classes.detailsCell}>
-									<span
-										onClick={() =>
-											this.props.onDetailClick(
-												inc['Company code'],
-												inc['Country code']
-											)
-										}
-									>
-										Details
-									</span>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</Grid>
+								<TableCell className={classes.detailsCell} />
+							</LargeTableHeadRow>
+						</TableHead>
+						<TableBody className={classes.tableBodyRow}>
+							{data.map(inc => (
+								<TableRow key={inc.id}>
+									<TableCell className={classes.flagCell}>
+										<FlagCountryName code={inc['Country code']} />
+									</TableCell>
+									<TableCell>{inc.Region}</TableCell>
+									<TableCell className={classes.regionCell}>
+										{inc.Acronym}
+									</TableCell>
+									<TableCell className={classes.smallCell}>
+										{inc.tax['Offshore Income Tax Rate']}
+									</TableCell>
+									<TableCell className={classes.smallCell}>
+										{inc.tax['Corporate Tax Rate']}
+									</TableCell>
+									<TagTableCell className={classes.goodForCell}>
+										{inc['Good for'] &&
+											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+									</TagTableCell>
+									<TableCell className={classes.costCell}>
+										<ProgramPrice price={inc['Wallet Price']} rate={keyRate} />
+									</TableCell>
+									<TableCell className={classes.detailsCell}>
+										<span
+											onClick={() =>
+												this.props.onDetailClick(
+													inc['Company code'],
+													inc['Country code']
+												)
+											}
+										>
+											Details
+										</span>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</Grid>
+			</div>
 		);
 	}
 }
