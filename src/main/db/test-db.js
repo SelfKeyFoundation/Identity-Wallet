@@ -3,8 +3,6 @@ import knexMigrate from 'knex-migrate';
 import fs from 'fs';
 import { Model } from 'objection';
 import Knex from 'knex';
-process.env['MODE'] = 'test';
-// eslint-disable-next-line
 import { db as config } from 'common/config';
 
 export class TestDb {
@@ -53,7 +51,7 @@ export class TestDb {
 		try {
 			await this.knex.destroy();
 			if (this.config.connection !== ':memory:') {
-				fs.unlinkSync(this.config.connection);
+				await fs.promises.unlink(this.config.connection);
 			}
 		} catch (error) {
 			console.log(error);
