@@ -1,5 +1,6 @@
 import TestDb from './db/test-db';
-const { getUserDataPath } = require('../common/utils/common');
+import fs from 'fs';
+
 // const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
 const path = require('path');
 
@@ -19,7 +20,7 @@ const hasTable = async (table, expected) => {
 // };
 
 describe('migrations', () => {
-	const dbFile = path.join(getUserDataPath(), 'migrationsTest.sqlite');
+	const dbFile = path.join('migrationsTest.sqlite');
 	beforeEach(async () => {
 		await TestDb.initRaw(dbFile);
 	});
@@ -30,6 +31,7 @@ describe('migrations', () => {
 
 	afterAll(async () => {
 		await TestDb.destroy();
+		await fs.promises.unlink(dbFile);
 	});
 
 	describe('up 20181108183529_json-schema-attributes', () => {
