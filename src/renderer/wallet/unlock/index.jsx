@@ -163,7 +163,7 @@ class Unlock extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h3" id="modal-title">
+							<Typography variant="h3" color="textPrimary" id="modal-title">
 								Use An Existing ETH Address
 							</Typography>
 						</ModalHeader>
