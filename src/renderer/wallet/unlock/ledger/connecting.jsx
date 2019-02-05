@@ -75,12 +75,12 @@ class Connecting extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">
+								<Typography variant="h1">
 									Error: Can&#39;t Connect To Ledger
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="subtitle1">
+								<Typography variant="body1">
 									To ensure a successful connection, please check following:
 								</Typography>
 							</Grid>
@@ -96,20 +96,12 @@ class Connecting extends Component {
 									spacing={24}
 								>
 									<Grid item>
-										<Button
-											variant="contained"
-											size="large"
-											onClick={this.handleTryAgain}
-										>
+										<Button variant="contained" onClick={this.handleTryAgain}>
 											TRY AGAIN
 										</Button>
 									</Grid>
 									<Grid item>
-										<Button
-											variant="outlined"
-											size="large"
-											onClick={this.handleClose}
-										>
+										<Button variant="outlined" onClick={this.handleClose}>
 											BACK
 										</Button>
 									</Grid>
@@ -183,10 +175,10 @@ class Connecting extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Connecting</Typography>
+									<Typography variant="body1">Connecting</Typography>
 								</Grid>
 								<Grid item>
-									<CircularProgress />
+									<CircularProgress style={{ height: '25px', width: '25px' }} />
 								</Grid>
 							</Grid>
 						</ModalHeader>

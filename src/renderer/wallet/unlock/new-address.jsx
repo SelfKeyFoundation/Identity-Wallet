@@ -84,7 +84,7 @@ class NewAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="subtitle2" color="secondary">
+										<Typography variant="overline" gutterBottom>
 											SELECT A KEYSTORE FILE (UTC/JSON)
 										</Typography>
 									</Grid>
@@ -123,7 +123,7 @@ class NewAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="subtitle2" color="secondary">
+										<Typography variant="overline" gutterBottom>
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>

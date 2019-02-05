@@ -94,7 +94,7 @@ class PrivateKey extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="subtitle2" color="secondary">
+										<Typography variant="overline" gutterBottom>
 											ENTER YOUR PRIVATE KEY
 										</Typography>
 									</Grid>

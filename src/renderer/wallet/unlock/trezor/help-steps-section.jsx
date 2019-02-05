@@ -36,7 +36,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Plug in the device via USB
 								</Typography>
 							</Grid>
@@ -63,7 +63,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Click &#34;Connect to Trezor&#34; button below
 								</Typography>
 							</Grid>
@@ -90,7 +90,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Look at the device for number positions and enter your PIN
 								</Typography>
 							</Grid>

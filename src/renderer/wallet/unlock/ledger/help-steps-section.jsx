@@ -36,7 +36,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Is &#34;Browser Support&#34; disabled in settings?
 								</Typography>
 							</Grid>
@@ -63,7 +63,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Is &#34;Contract Data&#34; set to Yes in settings?
 								</Typography>
 							</Grid>
@@ -90,7 +90,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Is it properly plugged in?
 								</Typography>
 							</Grid>
@@ -117,7 +117,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Did you enter the PIN to unlock?
 								</Typography>
 							</Grid>
@@ -144,7 +144,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Is the Ethereum application open?
 								</Typography>
 							</Grid>

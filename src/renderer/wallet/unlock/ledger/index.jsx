@@ -43,7 +43,7 @@ class Ledger extends Component {
 				>
 					<HelpStepsSection />
 					<Grid item>
-						<Button variant="contained" onClick={this.handleConnectAction}>
+						<Button variant="contained" size="large" onClick={this.handleConnectAction}>
 							CONNECT TO LEDGER
 						</Button>
 					</Grid>

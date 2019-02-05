@@ -1,13 +1,9 @@
 import React from 'react';
 import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
+		marginTop: 0
 	}
 });
 
@@ -40,7 +36,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Plug in the device via USB and unlock it with your PIN
 								</Typography>
 							</Grid>
@@ -67,7 +63,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									&#34;Browser Support&#34; must be DISABLED in settings.
 								</Typography>
 							</Grid>
@@ -94,7 +90,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Also, make sure &#34;Contract Data&#34; is set to YES.
 								</Typography>
 							</Grid>
@@ -121,7 +117,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Open the Ethereum application on the device.
 								</Typography>
 							</Grid>
@@ -148,7 +144,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Press &#34;Connect To Ledger&#34;.
 								</Typography>
 							</Grid>
