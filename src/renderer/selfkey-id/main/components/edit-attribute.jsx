@@ -34,7 +34,6 @@ class EditAttributeComponent extends Component {
 			data: { value: normalized.value },
 			documents: normalized.documents
 		};
-		console.log('XXX normalized', newAttr);
 		this.props.onSave(newAttr);
 		this.props.onCancel();
 	};
@@ -49,7 +48,6 @@ class EditAttributeComponent extends Component {
 	};
 	render() {
 		const { type, label, value, schema, title } = this.state;
-		console.log('XXX', value);
 		return (
 			<React.Fragment>
 				<Typography variant="h3">{title}</Typography>

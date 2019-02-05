@@ -3,6 +3,7 @@ export const formatDataUrl = (mime, buffer) => {
 };
 
 export const bufferFromDataUrl = dataUrl => {
+	if (!dataUrl) return null;
 	let parts = (dataUrl || '').split(';base64,');
 	if (parts.length !== 2) return Buffer.from(dataUrl, 'base64');
 	return Buffer.from(parts[1], 'base64');

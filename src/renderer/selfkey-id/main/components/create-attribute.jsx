@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
-import { TextField, MenuItem, withStyles, Divider } from '@material-ui/core';
 import { withTheme } from 'react-jsonschema-form';
+import { TextField, withStyles, Divider, Button, Grid, MenuItem } from '@material-ui/core';
+import { identityAttributes } from 'common/identity/utils';
 import theme from 'react-jsonschema-form-material-theme';
 
 const Form = withTheme('MyTheme', {
@@ -11,17 +13,29 @@ const Form = withTheme('MyTheme', {
 const styles = theme => ({});
 
 class CreateAttributeComponent extends Component {
-	state = { typeId: -1, label: '' };
-
+	state = { typeId: -1, label: '', value: null };
 	handleSave = () => {
-		this.props.onSave();
+		const { typeId, label, value } = this.state;
+		const type = this.type;
+		const normalized = identityAttributes.normalizeDocumentsSchema(type.content, value);
+		this.props.onSave({
+			typeId,
+			name: label,
+			data: { value: normalized.value },
+			documents: normalized.documents
+		});
 		this.props.onCancel();
 	};
 	handleCancel = () => {
 		this.props.onCancel();
 	};
 	hadnleFieldChange = prop => evt => {
-		this.setState({ [prop]: evt.target.value });
+		let { value } = this.state;
+		if (prop === 'typeId') value = null;
+		this.setState({ [prop]: evt.target.value, value });
+	};
+	handleFormChange = prop => ({ formData }) => {
+		this.setState({ [prop]: formData });
 	};
 	get type() {
 		if (!this.state.typeId) return null;
@@ -29,7 +43,7 @@ class CreateAttributeComponent extends Component {
 	}
 	render() {
 		const { types } = this.props;
-		const { typeId, label } = this.state;
+		const { typeId, label, value } = this.state;
 		const type = this.type;
 
 		return (
@@ -62,7 +76,27 @@ class CreateAttributeComponent extends Component {
 					fullWidth
 				/>
 				<Divider variant="middle" />
-				{type && <Form schema={type.content} />}
+				{type && (
+					<Form
+						schema={_.omit(type.content, ['$id', 'schema'])}
+						formData={value}
+						onChange={this.handleFormChange('value')}
+					>
+						<Grid container spacing={24}>
+							<Grid item>
+								<Button variant="contained" size="large" onClick={this.handleSave}>
+									Save
+								</Button>
+							</Grid>
+
+							<Grid item>
+								<Button variant="outlined" size="large" onClick={this.handleCancel}>
+									Cancel
+								</Button>
+							</Grid>
+						</Grid>
+					</Form>
+				)}
 			</React.Fragment>
 		);
 	}

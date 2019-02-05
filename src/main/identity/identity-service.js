@@ -54,7 +54,6 @@ export class IdentityService {
 
 	async loadDocumentsForAttribute(attributeId) {
 		let docs = await Document.findAllByAttributeId(attributeId);
-		console.log('XXX docs for attr', attributeId, docs);
 		return docs.map(doc => {
 			doc = doc.toJSON();
 			if (doc.buffer) {
@@ -72,7 +71,10 @@ export class IdentityService {
 	createIdAttribute(attribute) {
 		let documents = (attribute.documents || []).map(doc => {
 			doc = { ...doc };
-			doc.buffer = bufferFromDataUrl(doc.content);
+			if (doc.content) {
+				doc.buffer = bufferFromDataUrl(doc.content);
+				delete doc.content;
+			}
 			return doc;
 		});
 		attribute = { ...attribute, documents };

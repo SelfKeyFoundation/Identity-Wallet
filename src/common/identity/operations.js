@@ -1,3 +1,4 @@
+import { walletSelectors } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import identitySelectors from './selectors';
@@ -70,6 +71,9 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 
 const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
+	const wallet = walletSelectors.getWallet(getState());
+	const walletId = attribute.walletId || wallet.id;
+	attribute = { ...attribute, walletId };
 	attribute = await identityService.createIdAttribute(attribute);
 	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.addIdAttributeAction(attribute));
@@ -84,7 +88,7 @@ const removeIdAttributeOperation = attributeId => async (dispatch, getState) => 
 
 const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	console.log('XXX edit op', await identityService.editIdAttribute(attribute));
+	await identityService.editIdAttribute(attribute);
 	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };

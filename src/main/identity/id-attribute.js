@@ -77,7 +77,6 @@ export class IdAttribute extends BaseModel {
 
 	static async update(attr, txRunning) {
 		const tx = txRunning || (await transaction.start(this.knex()));
-		console.log('XXX update', attr);
 		try {
 			const documents = await Promise.all(
 				(attr.documents || []).map(async doc => {
@@ -91,7 +90,6 @@ export class IdAttribute extends BaseModel {
 					return newDoc;
 				})
 			);
-			console.log('XXX', attr, documents);
 			attr = await this.query(tx).upsertGraphAndFetch({ ...attr, documents });
 			if (!txRunning) await tx.commit();
 			return attr;
