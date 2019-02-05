@@ -27,6 +27,7 @@ import Unlock from './wallet/unlock';
 import EnterPin from './wallet/unlock/trezor/enter-pin';
 import SelectAddress from './wallet/unlock/select-address';
 import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
+import TransactionSendBoxWrapper from './transaction/send';
 
 import path from 'path';
 
@@ -85,6 +86,18 @@ render(
 						<Route path="/enterTrezorPin" component={EnterPin} />
 						<Route path="/selectAddress" component={SelectAddress} />
 						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
+						<Route
+							path="/main/transfer/key"
+							render={props => (
+								<TransactionSendBoxWrapper {...props} cryptoCurrency="KEY" />
+							)}
+						/>
+						<Route
+							path="/main/transfer/eth"
+							render={props => (
+								<TransactionSendBoxWrapper {...props} cryptoCurrency="ETH" />
+							)}
+						/>
 					</div>
 				</HashRouter>
 			</ConnectedRouter>
