@@ -38,7 +38,7 @@
 		"dist": "yarn compile && electron-builder",
 		"dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
 		"test": "yarn test:unit",
-		"test:unit": "jest -i --forceExit",
+		"test:unit": "MODE=test jest -i --forceExit",
 		"test:unit:coverage": "yarn test:unit --testPathPattern='src' --coverage",
 		"test:e2e": "jest -i --config='jest.e2e.config.js'",
 		"publish-build": "yarn compile && electron-builder -p always",
