@@ -54,6 +54,9 @@ export class TestDb {
 				await fs.promises.unlink(this.config.connection);
 			}
 		} catch (error) {
+			if (this.config.connection !== ':memory:') {
+				await fs.promises.unlink(this.config.connection);
+			}
 			console.log(error);
 		}
 	}
