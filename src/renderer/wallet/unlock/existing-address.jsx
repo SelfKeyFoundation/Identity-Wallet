@@ -9,19 +9,12 @@ import {
 	MenuItem,
 	FormControl
 } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
-	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
-	},
 	selectInput: {
 		width: '100%'
 	},
@@ -89,7 +82,9 @@ class ExistingAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>1</Avatar>
+								<Avatar>
+									<Typography variant="overline">1</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -99,11 +94,7 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
+										<Typography variant="overline" gutterBottom>
 											SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY
 											WALLET
 										</Typography>
@@ -144,7 +135,9 @@ class ExistingAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>2</Avatar>
+								<Avatar>
+									<Typography variant="overline">2</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -154,11 +147,7 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
+										<Typography variant="overline" gutterBottom>
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>

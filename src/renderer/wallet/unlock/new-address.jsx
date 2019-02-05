@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import { Avatar, Input, Button, Grid, Typography } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
-	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
-	},
 	passwordInput: {
 		width: '110%'
 	},
@@ -79,7 +72,9 @@ class NewAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>1</Avatar>
+								<Avatar>
+									<Typography variant="overline">1</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -116,7 +111,9 @@ class NewAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>2</Avatar>
+								<Avatar>
+									<Typography variant="overline">2</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
