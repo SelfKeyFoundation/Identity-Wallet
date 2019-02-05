@@ -52,11 +52,10 @@ const selectExpiredUiSchemas = state => {
 		.filter(uiSelectors => uiSelectors.expires <= now);
 };
 
-const selectDocuments = (state, walletId) =>
+const selectDocuments = state =>
 	identitySelectors
 		.selectIdentity(state)
-		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId])
-		.filter(doc => doc.walletId === walletId);
+		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId]);
 
 const selectIdAttributes = (state, walletId) =>
 	identitySelectors
@@ -64,8 +63,8 @@ const selectIdAttributes = (state, walletId) =>
 		.attributes.map(attrId => identitySelectors.selectIdentity(state).attributesById[attrId])
 		.filter(attr => attr.walletId === walletId);
 
-const selectDocumentsByAttributeIds = (state, walletId, attributeIds = null) =>
-	identitySelectors.selectDocuments(state, walletId).reduce((acc, curr) => {
+const selectDocumentsByAttributeIds = (state, attributeIds = null) =>
+	identitySelectors.selectDocuments(state).reduce((acc, curr) => {
 		if (attributeIds !== null && !attributeIds.includes(curr.attributeId)) return acc;
 		acc[curr.attributeId] = acc[curr.attributeId] || [];
 		acc[curr.attributeId].push(curr);
@@ -79,7 +78,7 @@ const selectUiSchema = (state, typeId, repositoryId) =>
 
 const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 	const identity = identitySelectors.selectIdentity(state);
-	const documents = selectDocumentsByAttributeIds(state, walletId, attributeIds);
+	const documents = selectDocumentsByAttributeIds(state, attributeIds);
 	const types = identity.idAtrributeTypesById;
 
 	return identitySelectors

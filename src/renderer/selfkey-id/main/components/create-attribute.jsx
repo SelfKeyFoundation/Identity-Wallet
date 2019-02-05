@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TextField, MenuItem, withStyles, Divider } from '@material-ui/core';
 import { withTheme } from 'react-jsonschema-form';
-import theme from 'react-jsonschema-form-material-theme/build/lib/react-jsonschema-form-material-theme.min';
+import theme from 'react-jsonschema-form-material-theme';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -13,11 +13,12 @@ const styles = theme => ({});
 class CreateAttributeComponent extends Component {
 	state = { typeId: -1, label: '' };
 
-	handlCreateAttributeContainer = () => {
-		console.log('XXX create clicked');
+	handleSave = () => {
+		this.props.onSave();
+		this.props.onCancel();
 	};
 	handleCancel = () => {
-		console.log('XXX cancel clicked');
+		this.props.onCancel();
 	};
 	hadnleFieldChange = prop => evt => {
 		this.setState({ [prop]: evt.target.value });

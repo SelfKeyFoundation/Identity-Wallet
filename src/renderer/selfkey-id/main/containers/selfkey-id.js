@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors } from 'common/identity';
+import { identitySelectors, identityOperations } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
 // import { identitySelectors, identityOperations } from 'common/identity';
 // import { walletSelectors } from 'common/wallet';
 
 class SelfkeyIdContainerComponent extends Component {
+	handleAttributeDelete = attributeId =>
+		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
 	render() {
-		return <SelfkeyId {...this.props} />;
+		return <SelfkeyId {...this.props} onAttributeDelete={this.handleAttributeDelete} />;
 	}
 }
 

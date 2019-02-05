@@ -14025,16 +14025,16 @@ react-is@^16.3.2, react-is@^16.6.3:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
   integrity sha512-u7FDWtthB4rWibG/+mFbVd5FvdI20yde86qKGx4lVUTWmPlSWQ4QxbBIrrs+HnXGbxOUlUzTAP/VDmvCwaP2yA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#297d31467b1eb6d93c742fad084dcb976131e082":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1b7ea46d7f12a07b5ca69be84af3dbf63d9b0070":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#297d31467b1eb6d93c742fad084dcb976131e082"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1b7ea46d7f12a07b5ca69be84af3dbf63d9b0070"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
 
-"react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#fdd611781c0a47fd599e5e1753f87f9cbb51a4de":
+"react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#01f4a2c24c2c4110dfddea6d0cf581dea8875498":
   version "1.0.4"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#fdd611781c0a47fd599e5e1753f87f9cbb51a4de"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#01f4a2c24c2c4110dfddea6d0cf581dea8875498"
   dependencies:
     ajv "^5.2.3"
     babel-runtime "^6.26.0"

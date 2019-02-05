@@ -71,7 +71,7 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	attribute = await identityService.createIdAttribute(attribute);
-	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.addIdAttributeAction(attribute));
 };
 
@@ -84,8 +84,8 @@ const removeIdAttributeOperation = attributeId => async (dispatch, getState) => 
 
 const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	await identityService.editIdAttribute(attribute);
-	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	console.log('XXX edit op', await identityService.editIdAttribute(attribute));
+	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };
 
@@ -161,6 +161,10 @@ export const identityOperations = {
 	createIdAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_CREATE,
 		operations.createIdAttributeOperation
+	),
+	editIdAttributeOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTE_EDIT,
+		operations.editIdAttributeOperation
 	),
 	removeIdAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_REMOVE,

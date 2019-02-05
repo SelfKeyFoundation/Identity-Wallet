@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors } from 'common/identity';
+import { identitySelectors, identityOperations } from 'common/identity';
 import { Popup } from '../../../common/popup';
 import CreateAttribute from '../components/create-attribute';
 
 class CreateAttributePopupComponent extends Component {
-	handlCreateAttributeContainer = () => {
-		console.log('XXX create clicked');
+	handleSave = attribute => {
+		this.props.dispatch(identityOperations.createIdAttributeOperation(attribute));
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
@@ -16,8 +16,8 @@ class CreateAttributePopupComponent extends Component {
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<CreateAttribute
-					handleCreate={this.handleCreate}
-					handleCancel={this.handleCancel}
+					onSave={this.handleSave}
+					onCancel={this.handleCancel}
 					types={types}
 				/>
 			</Popup>

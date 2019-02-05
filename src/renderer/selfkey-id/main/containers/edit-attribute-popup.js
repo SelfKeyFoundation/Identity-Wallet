@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Popup } from '../../../common/popup';
+import { identityOperations } from 'common/identity';
 import EditAttribute from '../components/edit-attribute';
 
-class EditAttributePopupComponent extends Component {
-	handlCreateAttributeContainer = () => {
-		console.log('XXX create clicked');
+class EditAttributePopupComponent extends PureComponent {
+	handleSave = attribute => {
+		this.props.dispatch(identityOperations.editIdAttributeOperation(attribute));
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
@@ -15,8 +16,8 @@ class EditAttributePopupComponent extends Component {
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<EditAttribute
-					handleCreate={this.handleCreate}
-					handleCancel={this.handleCancel}
+					onSave={this.handleSave}
+					onCancel={this.handleCancel}
 					attribute={attribute}
 					type={type}
 				/>

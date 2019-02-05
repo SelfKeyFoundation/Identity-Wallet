@@ -86,7 +86,8 @@ identityAttributes.normalizeDocumentsSchema = (
 	}
 	documents = [...documents];
 	if (typeSchema.format === 'file') {
-		if (!value || typeof value !== 'object') return { value, documents };
+		if (!value || typeof value !== 'object' || Object.keys(value).length === 0)
+			return { value, documents };
 		let id = value.id;
 
 		if (id) {

@@ -1,5 +1,7 @@
 import { Model, transaction } from 'objection';
+import _ from 'lodash';
 import BaseModel from '../common/base-model';
+import Document from './document';
 
 const TABLE_NAME = 'id_attributes';
 
@@ -60,8 +62,11 @@ export class IdAttribute extends BaseModel {
 
 	static async create(attr) {
 		const tx = await transaction.start(this.knex());
+		attr = { ...attr };
 		try {
-			attr = await this.query(tx).insertGraphAndFetch(attr);
+			let newAttr = await this.query(tx).insertAndFetch(_.omit(attr, ['documents']));
+			attr.id = newAttr.id;
+			attr = await this.update(attr, tx);
 			await tx.commit();
 			return attr;
 		} catch (error) {
@@ -70,14 +75,28 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static async update(attr) {
-		const tx = await transaction.start(this.knex());
+	static async update(attr, txRunning) {
+		const tx = txRunning || (await transaction.start(this.knex()));
+		console.log('XXX update', attr);
 		try {
-			attr = await this.query(tx).upsertGraphAndFetch(attr);
-			await tx.commit();
+			const documents = await Promise.all(
+				(attr.documents || []).map(async doc => {
+					let newDoc = await Document.query(tx).upsertGraphAndFetch({
+						...doc,
+						attributeId: attr.id
+					});
+					if (doc['#id']) {
+						newDoc['#id'] = doc['#id'];
+					}
+					return newDoc;
+				})
+			);
+			console.log('XXX', attr, documents);
+			attr = await this.query(tx).upsertGraphAndFetch({ ...attr, documents });
+			if (!txRunning) await tx.commit();
 			return attr;
 		} catch (error) {
-			await tx.rollback();
+			if (!txRunning) await tx.rollback();
 			throw error;
 		}
 	}
