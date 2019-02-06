@@ -10,7 +10,10 @@ const Form = withTheme('MyTheme', {
 	templates: theme.templates
 });
 
-const styles = theme => ({});
+const styles = theme => ({
+	section1: { marginBottom: '10px' },
+	section2: { marginTop: '10px' }
+});
 
 class CreateAttributeComponent extends Component {
 	state = { typeId: -1, label: '', value: null };
@@ -41,61 +44,79 @@ class CreateAttributeComponent extends Component {
 		if (!this.state.typeId) return null;
 		return this.props.types.find(type => type.id === this.state.typeId);
 	}
+	get uiSchema() {
+		const type = this.type;
+		if (!type) return null;
+		return this.props.uiSchemas.find(ui => ui.repositoryId === type.defaultRepositoryId) || {};
+	}
 	render() {
-		const { types } = this.props;
+		const { types, classes } = this.props;
 		const { typeId, label, value } = this.state;
 		const type = this.type;
-
+		const uiSchema = this.uiSchema;
 		return (
 			<React.Fragment>
-				<TextField
-					select
-					label="Information"
-					placeholder="Information"
-					margin="normal"
-					fullWidth
-					value={typeId}
-					variant="filled"
-					onChange={this.hadnleFieldChange('typeId')}
-				>
-					<MenuItem value={-1}>
-						<em>Choose...</em>
-					</MenuItem>
-					{types.map(option => (
-						<MenuItem key={option.id} value={option.id}>
-							{option.content.title}
-						</MenuItem>
-					))}
-				</TextField>
-				<TextField
-					label="Label"
-					value={label}
-					margin="normal"
-					variant="filled"
-					onChange={this.hadnleFieldChange('label')}
-					fullWidth
-				/>
-				<Divider variant="middle" />
-				{type && (
-					<Form
-						schema={_.omit(type.content, ['$id', 'schema'])}
-						formData={value}
-						onChange={this.handleFormChange('value')}
+				<div className={classes.section1}>
+					<TextField
+						select
+						label="Information"
+						placeholder="Information"
+						margin="normal"
+						fullWidth
+						value={typeId}
+						variant="filled"
+						onChange={this.hadnleFieldChange('typeId')}
 					>
-						<Grid container spacing={24}>
-							<Grid item>
-								<Button variant="contained" size="large" onClick={this.handleSave}>
-									Save
-								</Button>
-							</Grid>
+						<MenuItem value={-1}>
+							<em>Choose...</em>
+						</MenuItem>
+						{types.map(option => (
+							<MenuItem key={option.id} value={option.id}>
+								{option.content.title}
+							</MenuItem>
+						))}
+					</TextField>
+					<TextField
+						label="Label"
+						value={label}
+						margin="normal"
+						variant="filled"
+						onChange={this.hadnleFieldChange('label')}
+						fullWidth
+					/>
+				</div>
+				{type && <Divider variant="middle" />}
+				{type && (
+					<div className={classes.section2}>
+						<Form
+							schema={_.omit(type.content, ['$id', 'schema', 'title'])}
+							formData={value}
+							uiSchema={uiSchema.content}
+							onChange={this.handleFormChange('value')}
+						>
+							<Grid container spacing={24}>
+								<Grid item>
+									<Button
+										variant="contained"
+										size="large"
+										onClick={this.handleSave}
+									>
+										Save
+									</Button>
+								</Grid>
 
-							<Grid item>
-								<Button variant="outlined" size="large" onClick={this.handleCancel}>
-									Cancel
-								</Button>
+								<Grid item>
+									<Button
+										variant="outlined"
+										size="large"
+										onClick={this.handleCancel}
+									>
+										Cancel
+									</Button>
+								</Grid>
 							</Grid>
-						</Grid>
-					</Form>
+						</Form>
+					</div>
 				)}
 			</React.Fragment>
 		);

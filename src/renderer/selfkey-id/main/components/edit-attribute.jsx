@@ -10,7 +10,10 @@ const Form = withTheme('MyTheme', {
 	templates: theme.templates
 });
 
-const styles = theme => ({});
+const styles = theme => ({
+	section1: { marginBottom: '10px' },
+	section2: { marginTop: '10px' }
+});
 
 class EditAttributeComponent extends Component {
 	constructor(props) {
@@ -47,39 +50,52 @@ class EditAttributeComponent extends Component {
 	};
 	render() {
 		const { type, label, value, schema, title, uiSchema } = this.state;
+		const { classes } = this.props;
 		return (
 			<React.Fragment>
-				<Typography variant="h3">{title}</Typography>
-				<TextField
-					label="Label"
-					value={label}
-					margin="normal"
-					variant="outlined"
-					onChange={this.handleFieldChange('label')}
-					fullWidth
-				/>
-				<Divider variant="middle" />
+				<div className={classes.section1}>
+					<Typography variant="h3">{title}</Typography>
+					<TextField
+						label="Label"
+						value={label}
+						margin="normal"
+						variant="outlined"
+						onChange={this.handleFieldChange('label')}
+						fullWidth
+					/>
+				</div>
+				{type && <Divider variant="middle" />}
 				{type && (
-					<Form
-						schema={_.omit(schema, ['$id', 'schema'])}
-						uiSchema={uiSchema.content}
-						formData={value}
-						onChange={this.handleFormChange('value')}
-					>
-						<Grid container spacing={24}>
-							<Grid item>
-								<Button variant="contained" size="large" onClick={this.handleSave}>
-									Save
-								</Button>
-							</Grid>
+					<div className={classes.section2}>
+						<Form
+							schema={_.omit(schema, ['$id', 'schema', 'title'])}
+							uiSchema={uiSchema.content}
+							formData={value}
+							onChange={this.handleFormChange('value')}
+						>
+							<Grid container spacing={24}>
+								<Grid item>
+									<Button
+										variant="contained"
+										size="large"
+										onClick={this.handleSave}
+									>
+										Save
+									</Button>
+								</Grid>
 
-							<Grid item>
-								<Button variant="outlined" size="large" onClick={this.handleCancel}>
-									Cancel
-								</Button>
+								<Grid item>
+									<Button
+										variant="outlined"
+										size="large"
+										onClick={this.handleCancel}
+									>
+										Cancel
+									</Button>
+								</Grid>
 							</Grid>
-						</Grid>
-					</Form>
+						</Form>
+					</div>
 				)}
 			</React.Fragment>
 		);
