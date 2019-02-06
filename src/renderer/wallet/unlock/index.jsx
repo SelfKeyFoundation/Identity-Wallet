@@ -52,6 +52,19 @@ const styles = theme => ({
 	passwordInput: {
 		width: '100%'
 	},
+	hr: {
+		backgroundColor: '#475768',
+		border: 'none',
+		boxSizing: 'border-box',
+		height: '1px',
+		margin: '5px 16px',
+		width: '100%'
+	},
+	divider: {
+		backgroundColor: '#475768',
+		marginBottom: '15px',
+		width: 'calc(100% - 50px)'
+	},
 	modalContentWrapper: {}
 });
 
@@ -230,7 +243,7 @@ class Unlock extends Component {
 										</Grid>
 									</Grid>
 								</Grid>
-								<Divider />
+								<Divider className={classes.divider} />
 								<Grid item>
 									<Route
 										path={`${match.path}/existingAddress`}
