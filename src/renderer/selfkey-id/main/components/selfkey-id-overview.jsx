@@ -29,6 +29,7 @@ import {
 } from 'selfkey-ui';
 import { CreateAttributePopup } from '../containers/create-attribute-popup';
 import { EditAttributePopup } from '../containers/edit-attribute-popup';
+import { DeleteAttributePopup } from '../containers/delete-attribute-popup';
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
 import avatarPlaceholder from '../../../../../static/assets/images/icons/icon-add-image.svg';
 
@@ -98,6 +99,9 @@ class SelfkeyIdOverviewComponent extends Component {
 	};
 	handleAddAttribute = () => {
 		this.setState({ popup: 'create-attribute' });
+	};
+	handleDeleteAttribute = attribute => {
+		this.setState({ popup: 'delete-attribute', deleteAttribute: attribute });
 	};
 	handlePopupClose = () => {
 		this.setState({ popup: null });
@@ -176,6 +180,11 @@ class SelfkeyIdOverviewComponent extends Component {
 					open={popup === 'edit-attribute'}
 					onClose={this.handlePopupClose}
 					attribute={this.state.editAttribute}
+				/>
+				<DeleteAttributePopup
+					open={popup === 'delete-attribute'}
+					onClose={this.handlePopupClose}
+					attribute={this.state.deleteAttribute}
 				/>
 				<Grid item>
 					<Grid container direction="row" spacing={32}>
@@ -425,7 +434,14 @@ class SelfkeyIdOverviewComponent extends Component {
 																					}}
 																				/>
 																			</IconButton>
-																			<IconButton id="deleteButton">
+																			<IconButton
+																				id="deleteButton"
+																				onClick={() => {
+																					this.handleDeleteAttribute(
+																						entry
+																					);
+																				}}
+																			>
 																				<DeleteIcon />
 																			</IconButton>
 																		</SmallTableCell>
@@ -535,7 +551,14 @@ class SelfkeyIdOverviewComponent extends Component {
 																					}}
 																				/>
 																			</IconButton>
-																			<IconButton id="deleteButton">
+																			<IconButton
+																				id="deleteButton"
+																				onClick={() => {
+																					this.handleDeleteAttribute(
+																						entry
+																					);
+																				}}
+																			>
 																				<DeleteIcon />
 																			</IconButton>
 																		</TableCell>

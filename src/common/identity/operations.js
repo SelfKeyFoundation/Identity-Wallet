@@ -81,7 +81,7 @@ const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 
 const removeIdAttributeOperation = attributeId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	await identityService.deleteIdAttribute(attributeId);
+	await identityService.removeIdAttribute(attributeId);
 	await dispatch(identityActions.deleteDocumentsForAttributeAction(attributeId));
 	await dispatch(identityActions.deleteIdAttributeAction(attributeId));
 };
