@@ -7,7 +7,8 @@ import {
 	ModalBody,
 	ModalCloseIcon,
 	HourGlassLargeIcon,
-	WarningShieldIcon
+	WarningShieldIcon,
+	TrezorBridgeIcon
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
@@ -53,7 +54,7 @@ class ConnectingToTrezor extends Component {
 						spacing={40}
 					>
 						<Grid item xs={2}>
-							<WarningShieldIcon />
+							<TrezorBridgeIcon />
 						</Grid>
 						<Grid item xs={10}>
 							<Grid
@@ -64,12 +65,12 @@ class ConnectingToTrezor extends Component {
 								spacing={40}
 							>
 								<Grid item>
-									<Typography variant="h2">
+									<Typography variant="h1">
 										Please Install Trezor Bridge
 									</Typography>
 								</Grid>
 								<Grid item>
-									<Typography variant="subtitle1">
+									<Typography variant="body1">
 										Trezor Bridge is required so that the SelfKey Identity
 										Wallet can communicate with your device. It is an official
 										application released by the Trezor team available to
@@ -272,10 +273,10 @@ class ConnectingToTrezor extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Connecting</Typography>
+									<Typography variant="body1">Connecting</Typography>
 								</Grid>
 								<Grid item>
-									<CircularProgress />
+									<CircularProgress size={25} />
 								</Grid>
 							</Grid>
 						</ModalHeader>

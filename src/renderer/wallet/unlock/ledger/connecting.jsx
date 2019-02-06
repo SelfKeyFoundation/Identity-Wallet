@@ -186,7 +186,7 @@ class Connecting extends Component {
 									<Typography variant="body1">Connecting</Typography>
 								</Grid>
 								<Grid item>
-									<CircularProgress style={{ height: '25px', width: '25px' }} />
+									<CircularProgress size={25} />
 								</Grid>
 							</Grid>
 						</ModalHeader>
