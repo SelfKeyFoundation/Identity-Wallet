@@ -3,6 +3,7 @@ import { getGlobalContext } from 'common/context';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
+import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 
 const log = new Logger('wallet-model');
 export class WalletService {
@@ -53,12 +54,13 @@ export class WalletService {
 	}
 
 	async getBalance(id) {
-		const wallet = await Wallet.findById(id);
+		let wallet = await Wallet.findById(id);
 		return this.web3.eth.getBalance(wallet.publicKey);
 	}
 
 	async getWallets() {
-		return Wallet.findAllWithKeyStoreFile();
+		const wallets = await Wallet.findAllWithKeyStoreFile();
+		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
 	}
 
 	async unlockWalletWithPassword(id, password) {
@@ -140,6 +142,13 @@ export class WalletService {
 				address,
 				balance: this.web3.eth.getBalance(address)
 			};
+		});
+	}
+
+	updateWalletAvatar(avatar, id) {
+		return Wallet.updateProfilePicture({
+			id,
+			profilePicture: bufferFromDataUrl(avatar)
 		});
 	}
 }

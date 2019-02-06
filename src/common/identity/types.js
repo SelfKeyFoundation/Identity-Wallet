@@ -28,7 +28,8 @@ export const identityTypes = {
 	IDENTITY_ATTRIBUTE_DOCUMENTS_DELETE: 'identity/attribute_documents/DELETE',
 	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE',
 	IDENTITY_UNLOCK: 'identity/UNLOCK',
-	IDENTITY_LOCK: 'identity/LOCK'
+	IDENTITY_LOCK: 'identity/LOCK',
+	PROFILE_PICTURE_UPDATE: 'identity/profile-picture/update'
 };
 
 export default identityTypes;

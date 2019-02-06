@@ -1,4 +1,10 @@
 export const formatDataUrl = (mime, buffer) => {
+	if (mime instanceof Buffer) {
+		buffer = mime;
+		mime = null;
+	}
+	mime = mime || '';
+	if (!buffer) return null;
 	return `data:${mime};base64,${buffer.toString('base64')}`;
 };
 

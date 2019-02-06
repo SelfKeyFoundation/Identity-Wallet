@@ -30,8 +30,10 @@ import {
 import { CreateAttributePopup } from '../containers/create-attribute-popup';
 import { EditAttributePopup } from '../containers/edit-attribute-popup';
 import { DeleteAttributePopup } from '../containers/delete-attribute-popup';
+import { EditAvatarPopup } from '../containers/edit-avatar-popup';
+import { HexagonAvatar } from './hexagon-avatar';
+
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
-import avatarPlaceholder from '../../../../../static/assets/images/icons/icon-add-image.svg';
 
 const styles = theme => ({
 	hr: {
@@ -49,46 +51,8 @@ const styles = theme => ({
 		backgroundImage: `url(${backgroundImage})`,
 		backgroundPosition: '90% 50%',
 		backgroundRepeat: 'no-repeat'
-	},
-	hexagon: {
-		cursor: 'pointer',
-		height: '120px',
-		margin: '0 4px 0 10px',
-		overflow: 'hidden',
-		transform: 'rotate(120deg)',
-		visibility: 'hidden',
-		width: '104px'
-	},
-	hexagonIn: {
-		height: '100%',
-		overflow: 'hidden',
-		transform: 'rotate(-60deg)',
-		width: '100%'
-	},
-	hexagonIn2: {
-		backgroundPosition: '50%',
-		backgroundRepeat: 'no-repeat',
-		backgroundSize: 'cover',
-		height: '100%',
-		transform: 'rotate(-60deg)',
-		visibility: 'visible',
-		width: '100%'
 	}
 });
-
-export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlaceholder }) => (
-	<div className={classes.hexagon}>
-		<div className={classes.hexagonIn}>
-			<div
-				className={classes.hexagonIn2}
-				style={{
-					backgroundImage: `url(${src})`,
-					backgroundSize: src === avatarPlaceholder ? 'auto' : 'cover'
-				}}
-			/>
-		</div>
-	</div>
-));
 
 class SelfkeyIdOverviewComponent extends Component {
 	state = {
@@ -105,6 +69,9 @@ class SelfkeyIdOverviewComponent extends Component {
 	};
 	handlePopupClose = () => {
 		this.setState({ popup: null });
+	};
+	handleAvatarClick = () => {
+		this.setState({ popup: 'edit-avatar' });
 	};
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
@@ -166,7 +133,8 @@ class SelfkeyIdOverviewComponent extends Component {
 			email,
 			firstName,
 			lastName,
-			middleName
+			middleName,
+			wallet
 		} = this.props;
 		const { popup } = this.state;
 
@@ -186,6 +154,12 @@ class SelfkeyIdOverviewComponent extends Component {
 					onClose={this.handlePopupClose}
 					attribute={this.state.deleteAttribute}
 				/>
+				<EditAvatarPopup
+					open={popup === 'edit-avatar'}
+					onClose={this.handlePopupClose}
+					avatar={profilePicture}
+					walletId={wallet.id}
+				/>
 				<Grid item>
 					<Grid container direction="row" spacing={32}>
 						<Grid item xs={8}>
@@ -194,6 +168,7 @@ class SelfkeyIdOverviewComponent extends Component {
 									avatar={<HexagonAvatar src={profilePicture} />}
 									title={`${firstName} ${middleName} ${lastName}`}
 									subheader={email}
+									onClick={this.handleAvatarClick}
 								/>
 							</Card>
 						</Grid>

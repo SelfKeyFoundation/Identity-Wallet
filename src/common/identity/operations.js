@@ -1,4 +1,4 @@
-import { walletSelectors } from '../wallet';
+import { walletSelectors, walletOperations } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import identitySelectors from './selectors';
@@ -93,6 +93,11 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };
 
+const updateProfilePictureOperation = (picture, walletId) => (dispatch, getState) => {
+	console.log('XXX update profile', !!picture, walletId);
+	return dispatch(walletOperations.updateWalletAvatar(picture, walletId));
+};
+
 const lockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteIdAttributesAction(walletId));
 	await dispatch(identityActions.deleteDocumentsAction(walletId));
@@ -117,7 +122,8 @@ export const operations = {
 	removeIdAttributeOperation,
 	editIdAttributeOperation,
 	unlockIdentityOperation,
-	lockIdentityOperation
+	lockIdentityOperation,
+	updateProfilePictureOperation
 };
 
 export const identityOperations = {
@@ -181,6 +187,10 @@ export const identityOperations = {
 	lockIdentityOperation: createAliasedAction(
 		identityTypes.IDENTITY_LOCK,
 		operations.lockIdentityOperation
+	),
+	updateProfilePictureOperation: createAliasedAction(
+		identityTypes.PROFILE_PICTURE_UPDATE,
+		operations.updateProfilePictureOperation
 	)
 };
 
