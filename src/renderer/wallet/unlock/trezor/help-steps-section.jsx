@@ -26,7 +26,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>1</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">1</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -53,7 +55,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>2</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">2</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -80,7 +84,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>3</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">3</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid

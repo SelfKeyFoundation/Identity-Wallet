@@ -26,7 +26,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>1</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">1</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -37,7 +39,7 @@ const HelpStepsSection = ({ classes }) => {
 						>
 							<Grid item>
 								<Typography variant="h5" color="secondary">
-									Is &#34;Browser Support&#34; disabled in settings?
+									Plug in the device via USB and unlock it with your PIN
 								</Typography>
 							</Grid>
 						</Grid>
@@ -53,7 +55,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>2</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">2</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -64,7 +68,7 @@ const HelpStepsSection = ({ classes }) => {
 						>
 							<Grid item>
 								<Typography variant="h5" color="secondary">
-									Is &#34;Contract Data&#34; set to Yes in settings?
+									&#34;Browser Support&#34; must be DISABLED in settings.
 								</Typography>
 							</Grid>
 						</Grid>
@@ -80,7 +84,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>3</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">3</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -91,7 +97,7 @@ const HelpStepsSection = ({ classes }) => {
 						>
 							<Grid item>
 								<Typography variant="h5" color="secondary">
-									Is it properly plugged in?
+									Also, make sure &#34;Contract Data&#34; is set to YES.
 								</Typography>
 							</Grid>
 						</Grid>
@@ -107,7 +113,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>4</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">4</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -118,7 +126,7 @@ const HelpStepsSection = ({ classes }) => {
 						>
 							<Grid item>
 								<Typography variant="h5" color="secondary">
-									Did you enter the PIN to unlock?
+									Open the Ethereum application on the device.
 								</Typography>
 							</Grid>
 						</Grid>
@@ -134,7 +142,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>5</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">5</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -145,7 +155,7 @@ const HelpStepsSection = ({ classes }) => {
 						>
 							<Grid item>
 								<Typography variant="h5" color="secondary">
-									Is the Ethereum application open?
+									Press &#34;Connect To Ledger&#34;.
 								</Typography>
 							</Grid>
 						</Grid>
