@@ -94,7 +94,6 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 };
 
 const updateProfilePictureOperation = (picture, walletId) => (dispatch, getState) => {
-	console.log('XXX update profile', !!picture, walletId);
 	return dispatch(walletOperations.updateWalletAvatar(picture, walletId));
 };
 

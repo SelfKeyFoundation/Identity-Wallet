@@ -1,4 +1,5 @@
 import { walletSelectors } from '../wallet';
+import { jsonSchema } from './utils';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -121,15 +122,15 @@ const selectSelfkeyId = state => {
 		{ seen: {}, attrs: [] }
 	).attrs;
 	const attributes = allAttributes.filter(
-		attr => !attr.documents.length && !basicAttributes.includes(attr)
+		attr => !jsonSchema.containsFile(attr.type.content) && !basicAttributes.includes(attr)
 	);
 
 	// FIXME: document type should be determined by attribute type
-	const documents = allAttributes.filter(attr => attr.documents.length);
+	const documents = allAttributes.filter(attr => jsonSchema.containsFile(attr.type.content));
 
 	const getBasicInfo = (type, basicAttrs) => {
 		let attr = basicAttrs.find(attr => attr.type.url === type);
-		if (!attr || !attr.data) return '';
+		if (!attr || !attr.data || !attr.data.value) return '';
 		return attr.data.value;
 	};
 

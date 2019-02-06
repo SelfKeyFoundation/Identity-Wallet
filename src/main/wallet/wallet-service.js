@@ -29,8 +29,8 @@ export class WalletService {
 		});
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: address,
 			privateKey: privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -71,11 +71,10 @@ export class WalletService {
 			throw new Error('Wrong Password!');
 		}
 		return {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
-			privateKey: account.privateKey,
-			keystoreFilePath: wallet.keystoreFilePath
+			privateKey: account.privateKey
 		};
 	}
 
@@ -103,8 +102,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -125,8 +124,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey
 		};
