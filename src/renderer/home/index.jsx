@@ -1,20 +1,15 @@
 import React from 'react';
 import { Grid, Typography, Paper, Button } from '@material-ui/core';
-import { SelfkeyLogo, primary, HelpIcon, QuitIcon } from 'selfkey-ui';
+import { primary, HelpIcon, QuitIcon } from 'selfkey-ui';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
+import logo from '../../../static/assets/images/logos/selfkey-neon-logo.png';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
 	logo: {
-		width: '50px',
-		height: '65px'
-	},
-	logoText: {
-		fontFamily: 'Orbitron, arial, sans-serif',
-		fontSize: '18px',
-		letterSpacing: '2.77px',
-		lineHeight: '22px'
+		width: '177px',
+		height: '130px'
 	},
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
@@ -70,12 +65,7 @@ export const Home = props => {
 						spacing={8}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1" className={classes.logoText}>
-								SELFKEY
-							</Typography>
+							<img className={classes.logo} src={logo} />
 						</Grid>
 						<Grid item>
 							<Typography variant="h2" className={classes.primaryTintText}>

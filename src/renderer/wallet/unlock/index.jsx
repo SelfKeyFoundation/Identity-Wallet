@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Divider } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
@@ -23,17 +22,12 @@ import NewAddress from './new-address';
 import PrivateKey from './private-key';
 import Ledger from './ledger';
 import Trezor from './trezor';
+import logo from '../../../../static/assets/images/logos/selfkey-neon-logo.png';
 
 const styles = theme => ({
 	logo: {
-		width: '50px',
-		height: '65px'
-	},
-	logoText: {
-		fontFamily: 'Orbitron, arial, sans-serif',
-		fontSize: '18px',
-		letterSpacing: '2.77px',
-		lineHeight: '22px'
+		width: '177px',
+		height: '130px'
 	},
 	container: {
 		minHeight: '100vh'
@@ -148,12 +142,7 @@ class Unlock extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1" className={classes.logoText}>
-								SELFKEY
-							</Typography>
+							<img className={classes.logo} src={logo} />
 						</Grid>
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
