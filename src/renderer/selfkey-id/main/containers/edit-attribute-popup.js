@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Popup } from '../../../common/popup';
-import { identityOperations } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 import EditAttribute from '../components/edit-attribute';
 
 class EditAttributePopupComponent extends PureComponent {
@@ -12,14 +12,14 @@ class EditAttributePopupComponent extends PureComponent {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		const { open = true, attribute, type, text = 'Edit information' } = this.props;
+		const { open = true, attribute, text = 'Edit information', uiSchema } = this.props;
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<EditAttribute
 					onSave={this.handleSave}
 					onCancel={this.handleCancel}
 					attribute={attribute}
-					type={type}
+					uiSchema={uiSchema}
 				/>
 			</Popup>
 		);
@@ -27,7 +27,18 @@ class EditAttributePopupComponent extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	return {};
+	const { attribute } = props;
+	let uiSchema = null;
+	if (attribute) {
+		uiSchema = identitySelectors.selectUiSchema(
+			state,
+			attribute.type.id,
+			attribute.type.defaultRepositoryId
+		);
+	}
+	return {
+		uiSchema
+	};
 };
 export const EditAttributePopup = connect(mapStateToProps)(EditAttributePopupComponent);
 

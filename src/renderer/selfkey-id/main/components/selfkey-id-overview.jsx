@@ -140,26 +140,31 @@ class SelfkeyIdOverviewComponent extends Component {
 
 		return (
 			<Grid container direction="column" spacing={32}>
-				<CreateAttributePopup
-					open={popup === 'create-attribute'}
-					onClose={this.handlePopupClose}
-				/>
-				<EditAttributePopup
-					open={popup === 'edit-attribute'}
-					onClose={this.handlePopupClose}
-					attribute={this.state.editAttribute}
-				/>
-				<DeleteAttributePopup
-					open={popup === 'delete-attribute'}
-					onClose={this.handlePopupClose}
-					attribute={this.state.deleteAttribute}
-				/>
-				<EditAvatarPopup
-					open={popup === 'edit-avatar'}
-					onClose={this.handlePopupClose}
-					avatar={profilePicture}
-					walletId={wallet.id}
-				/>
+				{popup === 'create-attribute' && (
+					<CreateAttributePopup open={true} onClose={this.handlePopupClose} />
+				)}
+				{popup === 'edit-attribute' && (
+					<EditAttributePopup
+						open={true}
+						onClose={this.handlePopupClose}
+						attribute={this.state.editAttribute}
+					/>
+				)}
+				{popup === 'delete-attribute' && (
+					<DeleteAttributePopup
+						open={true}
+						onClose={this.handlePopupClose}
+						attribute={this.state.deleteAttribute}
+					/>
+				)}
+				{popup === 'edit-avatar' && (
+					<EditAvatarPopup
+						open={true}
+						onClose={this.handlePopupClose}
+						avatar={profilePicture}
+						walletId={wallet.id}
+					/>
+				)}
 				<Grid item>
 					<Grid container direction="row" spacing={32}>
 						<Grid item xs={8}>

@@ -15,15 +15,14 @@ const styles = theme => ({});
 class EditAttributeComponent extends Component {
 	constructor(props) {
 		super(props);
-		const { attribute } = props;
+		const { attribute, uiSchema = {} } = props;
 		let { type, data, documents, name } = attribute;
 		const schema = type.content;
 		const title = type.content.title;
-		// TODO: buffer to content convert in docs
 		let value = data ? _.cloneDeep(attribute.data).value : undefined;
 		let denormalized = identityAttributes.denormalizeDocumentsSchema(schema, value, documents);
 		value = denormalized.value;
-		this.state = { title, schema, label: name, value, type, attribute };
+		this.state = { title, schema, label: name, value, type, attribute, uiSchema };
 	}
 	handleSave = () => {
 		const { label, value, schema, attribute } = this.state;
@@ -47,7 +46,7 @@ class EditAttributeComponent extends Component {
 		this.setState({ [prop]: formData });
 	};
 	render() {
-		const { type, label, value, schema, title } = this.state;
+		const { type, label, value, schema, title, uiSchema } = this.state;
 		return (
 			<React.Fragment>
 				<Typography variant="h3">{title}</Typography>
@@ -63,6 +62,7 @@ class EditAttributeComponent extends Component {
 				{type && (
 					<Form
 						schema={_.omit(schema, ['$id', 'schema'])}
+						uiSchema={uiSchema.content}
 						formData={value}
 						onChange={this.handleFormChange('value')}
 					>
