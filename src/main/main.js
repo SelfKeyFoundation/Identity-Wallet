@@ -86,7 +86,6 @@ function onReady() {
 
 		ctx.lwsService.startServer();
 		ctx.rpcHandler.startTokenPricesBroadcaster();
-		ctx.rpcHandler.startTrezorBroadcaster();
 		ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();

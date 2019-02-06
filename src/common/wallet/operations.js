@@ -1,17 +1,17 @@
 import * as actions from './actions';
 import { getWallet } from './selectors';
-import EthUnits from 'common/utils/eth-units';
+
 import { getGlobalContext } from 'common/context';
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
 
 const getWalletWithBalance = async wallet => {
 	const walletService = getGlobalContext().walletService;
-	const balanceWei = await walletService.getBalance(wallet.id);
+	const balance = await walletService.getBalance(wallet.id);
 
 	return {
 		...wallet,
-		balance: EthUnits.toEther(balanceWei, 'wei')
+		balance
 	};
 };
 

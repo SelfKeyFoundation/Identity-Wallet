@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
 import Connecting from './connecting';
+import { appSelectors } from 'common/app';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	root: {
@@ -13,16 +15,19 @@ const styles = theme => ({
 
 class Ledger extends Component {
 	state = {
-		isConnecting: false
+		isConnecting: false,
+		selectAddress: false
 	};
 
 	handleConnectAction = () => {
 		this.setState({ isConnecting: true });
 	};
 
-	handleConnectingOnClose = () => {
-		console.log('HEYYY');
+	handleConnectingOnClose = async () => {
 		this.setState({ isConnecting: false });
+		if (this.props.hasConnected) {
+			await this.props.dispatch(push('/selectAddress'));
+		}
 	};
 
 	render() {
@@ -50,7 +55,9 @@ class Ledger extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		hasConnected: appSelectors.hasConnected(state)
+	};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(Ledger));

@@ -5,6 +5,7 @@ import AddressBook from '../../address-book/main';
 import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
+	MarketplaceIncorporationPage,
 	MarketplaceServiceDetailsPage
 } from '../../marketplace';
 
@@ -63,6 +64,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-services/:name`}
 						component={MarketplaceServiceDetailsPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-incorporation`}
+						component={MarketplaceIncorporationPage}
 					/>
 				</Grid>
 			</Grid>
