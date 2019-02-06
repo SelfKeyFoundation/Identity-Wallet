@@ -140,10 +140,10 @@ class Connecting extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">Connecting To Ledger</Typography>
+								<Typography variant="h1">Connecting To Ledger</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="subtitle1">
+								<Typography variant="body1">
 									To ensure a successful connection, please check the following:
 								</Typography>
 							</Grid>

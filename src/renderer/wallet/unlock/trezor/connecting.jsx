@@ -169,7 +169,7 @@ class ConnectingToTrezor extends Component {
 									</Typography>
 								</Grid>
 								<Grid item>
-									<Typography variant="subtitle1">
+									<Typography variant="body1">
 										To ensure a successful connection, please make sure your
 										device is plugged in properly via USB. If you need more
 										assistance, please contact help@selfkey.org
@@ -229,10 +229,10 @@ class ConnectingToTrezor extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">Connecting To Trezor</Typography>
+								<Typography variant="h1">Connecting To Trezor</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="subtitle1">
+								<Typography variant="body1">
 									To ensure a successful connection, please make sure your device
 									is plugged in properly via USB.
 								</Typography>
