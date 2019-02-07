@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Grid,
 	Typography,
@@ -7,7 +8,6 @@ import {
 	List,
 	ListItem,
 	Button,
-	Link,
 	Checkbox,
 	FormControlLabel
 } from '@material-ui/core';
