@@ -4,7 +4,7 @@ import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 
 import { ReturnDepositContent } from './return-deposit-content';
-import { Popup } from './popup';
+import { Popup } from '../../common/popup';
 
 const mapStateToProps = state => {
 	return {

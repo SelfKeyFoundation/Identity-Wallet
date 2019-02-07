@@ -9,14 +9,11 @@ import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
 	MarketplaceIncorporationPage,
-	MarketplaceServiceDetailsPage,
-	MarketplaceDepositPopup,
-	MarketplaceReturnDepositPopup,
-	MarketplaceWithoutBalancePopup
+	MarketplaceServiceDetailsPage
 } from '../../marketplace';
 
+import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
-
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
@@ -28,9 +25,15 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		maxWidth: '1140px'
+		maxWidth: '1140px',
+		width: '100%'
 	}
 });
+
+const contentWrapperStyle = {
+	marginBottom: '60px',
+	marginTop: '50px'
+};
 
 class Main extends Component {
 	componentDidMount() {
@@ -50,9 +53,10 @@ class Main extends Component {
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />
 				</Grid>
-				<Grid item xs={12} className={classes.bodySection}>
-					<Route path={`${match.path}/dashboard`} component={Dashboard} />
+				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
+					<Route path={`${match.path}/dashboard/:tabid`} component={Dashboard} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
+					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
@@ -64,24 +68,12 @@ class Main extends Component {
 						component={MarketplaceExchangesPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-incorporation`}
-						component={MarketplaceIncorporationPage}
-					/>
-					<Route
 						path={`${match.path}/marketplace-services/:name`}
 						component={MarketplaceServiceDetailsPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-deposit`}
-						component={MarketplaceDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-return-deposit`}
-						component={MarketplaceReturnDepositPopup}
-					/>
-					<Route
-						path={`${match.path}/marketplace-no-balance`}
-						component={MarketplaceWithoutBalancePopup}
+						path={`${match.path}/marketplace-incorporation`}
+						component={MarketplaceIncorporationPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/key`}

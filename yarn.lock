@@ -10802,7 +10802,7 @@ modify-filename@^1.1.0:
   resolved "https://registry.yarnpkg.com/modify-filename/-/modify-filename-1.1.0.tgz#9a2dec83806fbb2d975f22beec859ca26b393aa1"
   integrity sha1-mi3sg4Bvuy2XXyK+7IWcoms5OqE=
 
-moment@^2.23.0:
+moment@^2.23.0, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -12910,10 +12910,16 @@ react-is@^16.6.3, react-is@^16.7.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
   integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
-react-jsonschema-form@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-jsonschema-form/-/react-jsonschema-form-1.0.6.tgz#ceef7c2c386e46a149ec94203547dd9111913e36"
-  integrity sha512-F6441MjApWHiFU/98T+fM19kBP9Ib0b3GMOB5DNyXnfMYC35CLwaANeZsTHug0HAmXGxgG+caPZSxgJSAyPz1Q==
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1b7ea46d7f12a07b5ca69be84af3dbf63d9b0070":
+  version "0.0.1"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1b7ea46d7f12a07b5ca69be84af3dbf63d9b0070"
+  dependencies:
+    ajv "^6.5.5"
+    lodash.topath "^4.5.2"
+
+"react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#01f4a2c24c2c4110dfddea6d0cf581dea8875498":
+  version "1.0.4"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#01f4a2c24c2c4110dfddea6d0cf581dea8875498"
   dependencies:
     ajv "^5.2.3"
     babel-runtime "^6.26.0"
@@ -13957,9 +13963,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#afbaa21":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#420988f4ba1a2173540e8f8f50523dbc5c9bc281":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#afbaa214db582f4bb2dc8e583e216437b804289a"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#420988f4ba1a2173540e8f8f50523dbc5c9bc281"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"

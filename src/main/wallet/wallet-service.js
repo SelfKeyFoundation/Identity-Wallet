@@ -3,6 +3,7 @@ import { getGlobalContext } from 'common/context';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
+import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
 
 const log = new Logger('wallet-model');
@@ -29,8 +30,8 @@ export class WalletService {
 		});
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: address,
 			privateKey: privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -60,7 +61,8 @@ export class WalletService {
 	}
 
 	async getWallets() {
-		return Wallet.findAllWithKeyStoreFile();
+		const wallets = await Wallet.findAllWithKeyStoreFile();
+		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
 	}
 
 	async unlockWalletWithPassword(id, password) {
@@ -71,11 +73,10 @@ export class WalletService {
 			throw new Error('Wrong Password!');
 		}
 		return {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
-			privateKey: account.privateKey,
-			keystoreFilePath: wallet.keystoreFilePath
+			privateKey: account.privateKey
 		};
 	}
 
@@ -103,8 +104,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -125,8 +126,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey
 		};
@@ -169,6 +170,13 @@ export class WalletService {
 					resolve(Promise.all(promises));
 				}
 			});
+		});
+	}
+
+	updateWalletAvatar(avatar, id) {
+		return Wallet.updateProfilePicture({
+			id,
+			profilePicture: bufferFromDataUrl(avatar)
 		});
 	}
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
-import { Popup } from './popup';
+import { Popup } from '../../common/popup';
 import { DepositContent } from './deposit-content';
 
 const mapStateToProps = state => {
