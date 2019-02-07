@@ -1,6 +1,5 @@
 import React from 'react';
-import { Provider, connect } from 'react-redux';
-import store from '../../common/store';
+import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import {
 	transactionHistoryOperations,
@@ -210,118 +209,113 @@ export class Transfer extends React.Component {
 		);
 
 		return (
-			<Provider store={store}>
-				<Modal open={true}>
-					<ModalWrap className={classes.modalWrap}>
-						<Paper className={classes.modalContentWrapper}>
-							<ModalCloseButton
-								className={classes.closeIcon}
-								component={goBackDashboard}
-							>
-								<ModalCloseIcon />
-							</ModalCloseButton>
+			<Modal open={true}>
+				<ModalWrap className={classes.modalWrap}>
+					<Paper className={classes.modalContentWrapper}>
+						<ModalCloseButton className={classes.closeIcon} component={goBackDashboard}>
+							<ModalCloseIcon />
+						</ModalCloseButton>
 
-							<ModalBody>
+						<ModalBody>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								alignItems="flex-start"
+								spacing={16}
+							>
+								<div className={classes.cryptoIcon}>
+									{getIconForToken(cryptoCurrency)}
+								</div>
+								<div>
+									<Typography variant="h5">
+										{getNameForToken(cryptoCurrency)}
+									</Typography>
+									<Typography variant="h2" className={classes.cryptoSymbol}>
+										{cryptoCurrency}
+									</Typography>
+								</div>
+							</Grid>
+							<div className={classes.tokenPrice}>
+								<TokenPrice cryptoCurrency={cryptoCurrency} />
+							</div>
+							<Divider />
+							<div className={classes.tokenAddress}>
+								<Typography variant="body2" gutterBottom>
+									Your Address
+								</Typography>
+								<div className={classes.tokenPublicKey}>
+									<Typography variant="body2" color="secondary" gutterBottom>
+										{publicKey}
+									</Typography>
+									<Copy text={publicKey} />
+								</div>
+							</div>
+							<Divider />
+							<div className={classes.actionButtons}>
 								<Grid
 									container
 									direction="row"
 									justify="flex-start"
 									alignItems="flex-start"
-									spacing={16}
+									spacing={0}
 								>
-									<div className={classes.cryptoIcon}>
-										{getIconForToken(cryptoCurrency)}
-									</div>
-									<div>
-										<Typography variant="h5">
-											{getNameForToken(cryptoCurrency)}
-										</Typography>
-										<Typography variant="h2" className={classes.cryptoSymbol}>
-											{cryptoCurrency}
-										</Typography>
-									</div>
+									<Button variant="outlined" size="large">
+										<CustomIcon /> Receive
+									</Button>
+									<Button variant="outlined" size="large">
+										<SentIcon /> Send
+									</Button>
 								</Grid>
-								<div className={classes.tokenPrice}>
-									<TokenPrice cryptoCurrency={cryptoCurrency} />
-								</div>
-								<Divider />
-								<div className={classes.tokenAddress}>
-									<Typography variant="body2" gutterBottom>
-										Your Address
-									</Typography>
-									<div className={classes.tokenPublicKey}>
-										<Typography variant="body2" color="secondary" gutterBottom>
-											{publicKey}
-										</Typography>
-										<Copy text={publicKey} />
-									</div>
-								</div>
-								<Divider />
-								<div className={classes.actionButtons}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="flex-start"
-										spacing={0}
-									>
-										<Button variant="outlined" size="large">
-											<CustomIcon /> Receive
-										</Button>
-										<Button variant="outlined" size="large">
-											<SentIcon /> Send
-										</Button>
-									</Grid>
-								</div>
-							</ModalBody>
-						</Paper>
+							</div>
+						</ModalBody>
+					</Paper>
 
-						<Paper className={classes.modalContentWrapper}>
-							<ModalBody>
+					<Paper className={classes.modalContentWrapper}>
+						<ModalBody>
+							<div>
+								<Typography variant="h4">Activity</Typography>
 								<div>
-									<Typography variant="h4">Activity</Typography>
-									<div>
-										{lastCryptoTransactions.map(transaction => (
-											<div key={transaction.id}>
-												<div className={classes.transactionEntry}>
-													<div className={classes.transactionEntryDate}>
-														<Typography
-															variant="body2"
-															color="secondary"
-															gutterBottom
-														>
-															{this._renderDate(transaction.date)}
-														</Typography>
-													</div>
-													<div className={classes.transactionEntryIcon}>
-														{getIconForTransaction(
-															transaction.statusIconName,
-															transaction.sending
-														)}
-													</div>
-													<div className={classes.transactionEntryStatus}>
-														<Typography variant="body2" gutterBottom>
-															{transaction.statusText ||
-																getCustomStatusText(transaction)}
-														</Typography>
-													</div>
-													<div className={classes.transactionEntryAmount}>
-														<Typography variant="body2" gutterBottom>
-															{transaction.sending ? '- ' : '+ '}
-															{transaction.amount}
-														</Typography>
-													</div>
+									{lastCryptoTransactions.map(transaction => (
+										<div key={transaction.id}>
+											<div className={classes.transactionEntry}>
+												<div className={classes.transactionEntryDate}>
+													<Typography
+														variant="body2"
+														color="secondary"
+														gutterBottom
+													>
+														{this._renderDate(transaction.date)}
+													</Typography>
 												</div>
-												<Divider />
+												<div className={classes.transactionEntryIcon}>
+													{getIconForTransaction(
+														transaction.statusIconName,
+														transaction.sending
+													)}
+												</div>
+												<div className={classes.transactionEntryStatus}>
+													<Typography variant="body2" gutterBottom>
+														{transaction.statusText ||
+															getCustomStatusText(transaction)}
+													</Typography>
+												</div>
+												<div className={classes.transactionEntryAmount}>
+													<Typography variant="body2" gutterBottom>
+														{transaction.sending ? '- ' : '+ '}
+														{transaction.amount}
+													</Typography>
+												</div>
 											</div>
-										))}
-									</div>
+											<Divider />
+										</div>
+									))}
 								</div>
-							</ModalBody>
-						</Paper>
-					</ModalWrap>
-				</Modal>
-			</Provider>
+							</div>
+						</ModalBody>
+					</Paper>
+				</ModalWrap>
+			</Modal>
 		);
 	}
 }
