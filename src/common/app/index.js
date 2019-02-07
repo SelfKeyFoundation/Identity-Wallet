@@ -12,11 +12,13 @@ export const initialState = {
 	wallets: [],
 	hardwareWallets: [],
 	error: '',
-	hardwareWalletType: ''
+	hardwareWalletType: '',
+	settings: {}
 };
 
 export const appTypes = {
 	APP_SET_WALLETS: 'app/set/WALLETS',
+	APP_SET_SETTINGS: 'app/set/SETTINGS',
 	APP_SET_HARDWARE_WALLETS: 'app/set/hardware/WALLETS',
 	APP_SET_HARDWARE_WALLET_TYPE: 'app/set/hardware/wallet/TYPE',
 	APP_SET_UNLOCK_WALLET_ERROR: 'app/set/unlock/wallet/ERROR',
@@ -28,13 +30,19 @@ export const appTypes = {
 	APP_LOAD_TREZOR_WALLETS: 'app/load/trezor/WALLETS',
 	APP_LOAD_WALLETS: 'app/load/WALLETS',
 	APP_LOAD_OTHER_HARDWARE_WALLETS: 'app/load/other/hardware/WALLETS',
-	APP_ENTER_TREZOR_PIN: 'app/enter/trezor/pin'
+	APP_ENTER_TREZOR_PIN: 'app/enter/trezor/pin',
+	APP_LOADING: 'app/LOADING',
+	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED'
 };
 
 const appActions = {
 	setWalletsAction: wallets => ({
 		type: appTypes.APP_SET_WALLETS,
 		payload: wallets
+	}),
+	setSettingsAction: settings => ({
+		type: appTypes.APP_SET_SETTINGS,
+		payload: settings
 	}),
 	setHardwareWalletsAction: wallets => ({
 		type: appTypes.APP_SET_HARDWARE_WALLETS,
@@ -158,6 +166,28 @@ const enterTrezorPin = (error, pin) => async () => {
 	eventEmitter.emit('ON_PIN', error, pin);
 };
 
+const loading = () => async dispatch => {
+	const guideSettingsService = getGlobalContext().guideSettingsService;
+	const settings = await guideSettingsService.getSettings();
+	await dispatch(appActions.setSettingsAction(settings));
+
+	if (!settings.termsAccepted) {
+		await dispatch(push('/terms'));
+	} else {
+		await dispatch(push('/home'));
+	}
+};
+
+const setTermsAccepted = (isTermsAccepted, crashReportAgreement) => async (dispatch, getState) => {
+	const guideSettingsService = getGlobalContext().guideSettingsService;
+	const settings = selectApp(getState()).settings;
+	settings.termsAccepted = isTermsAccepted;
+	settings.crashReportAgreement = crashReportAgreement ? 1 : 0;
+	const newSettings = await guideSettingsService.setSettings(settings);
+	await dispatch(appActions.setSettingsAction(newSettings));
+	await dispatch(push('/home'));
+};
+
 const operations = {
 	loadWallets,
 	unlockWalletWithPassword,
@@ -167,7 +197,9 @@ const operations = {
 	loadLedgerWallets,
 	loadTrezorWallets,
 	enterTrezorPin,
-	loadOtherHardwareWallets
+	loadOtherHardwareWallets,
+	loading,
+	setTermsAccepted
 };
 
 const appOperations = {
@@ -204,6 +236,11 @@ const appOperations = {
 	loadOtherHardwareWalletsOperation: createAliasedAction(
 		appTypes.APP_LOAD_OTHER_HARDWARE_WALLETS,
 		operations.loadOtherHardwareWallets
+	),
+	loadingOperation: createAliasedAction(appTypes.APP_LOADING, operations.loading),
+	setTermsAcceptedOperation: createAliasedAction(
+		appTypes.APP_SET_TERMS_ACCEPTED,
+		operations.setTermsAccepted
 	)
 };
 
@@ -223,8 +260,13 @@ const setHardwareWalletTypeReducer = (state, action) => {
 	return { ...state, hardwareWalletType: action.payload };
 };
 
+const setSettingsReducer = (state, action) => {
+	return { ...state, settings: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
+	setSettingsReducer,
 	setHardwareWalletsReducer,
 	setUnlockWalletErrorReducer,
 	setHardwareWalletTypeReducer
@@ -234,6 +276,8 @@ const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case appTypes.APP_SET_WALLETS:
 			return appReducers.setWalletsReducer(state, action);
+		case appTypes.APP_SET_SETTINGS:
+			return appReducers.setSettingsReducer(state, action);
 		case appTypes.APP_SET_HARDWARE_WALLETS:
 			return appReducers.setHardwareWalletsReducer(state, action);
 		case appTypes.APP_SET_UNLOCK_WALLET_ERROR:
