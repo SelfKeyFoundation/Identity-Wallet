@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import AddressBookAddContainer from 'renderer/address-book/add';
-import AddressBookEditContainer from 'renderer/address-book/edit';
-import AddressBookIcon from 'renderer/address-book/icon';
-import { H2, CopyIcon, DeleteIcon, EditTransparentIcon } from 'selfkey-ui';
+import { H2, CopyIcon, DeleteIcon, EditTransparentIcon, AddressBookIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import {
 	Grid,
@@ -19,9 +16,12 @@ import {
 	IconButton
 } from '@material-ui/core';
 
+import { push } from 'connected-react-router';
+
 const styles = theme => ({
 	addressBook: {
-		width: '1140px'
+		width: '1140px',
+		minHeight: '100vh'
 	},
 
 	button: {
@@ -87,11 +87,7 @@ const styles = theme => ({
 
 class AddressBookContainer extends Component {
 	state = {
-		addresses: [],
-		showModalAdd: false,
-		showModalEdit: false,
-		id: undefined,
-		label: ''
+		addresses: []
 	};
 
 	componentDidMount() {
@@ -107,62 +103,12 @@ class AddressBookContainer extends Component {
 		}
 	}
 
-	openModalAdd = () => {
-		this.setState({
-			...this.state,
-			showModalAdd: true,
-			showModalEdit: false
-		});
-	};
-
-	closeModalAdd = () => {
-		this.setState({
-			...this.state,
-			showModalAdd: false
-		});
-	};
-
-	openModalEdit = () => {
-		this.setState({
-			...this.state,
-			showModalAdd: false,
-			showModalEdit: true
-		});
-	};
-
-	confirmModalEdit = ({ id, label }) => {
-		const addresses = this.props.addresses.slice();
-		const address = addresses.find(address => {
-			return address.id === id;
-		});
-		address.label = label;
-		this.setState({
-			...this.state,
-			addresses: addresses
-		});
-	};
-
-	closeModalEdit = () => {
-		this.setState({
-			...this.state,
-			showModalEdit: false
-		});
+	handleAdd = () => {
+		this.props.dispatch(push('addressBookAdd'));
 	};
 
 	handleEdit = id => {
-		const address = this.props.addresses.find(address => {
-			return address.id === id;
-		});
-		this.setState(
-			{
-				...this.state,
-				id: id,
-				label: address.label
-			},
-			function() {
-				return this.openModalEdit();
-			}
-		);
+		this.props.dispatch(push(`addressBookEdit/${id}`));
 	};
 
 	handleDelete = id => {
@@ -171,12 +117,12 @@ class AddressBookContainer extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { showModalAdd, showModalEdit, addresses } = this.state;
+		const { addresses } = this.state;
 		return (
 			<Grid
 				container
 				direction="column"
-				justify="center"
+				justify="flex-start"
 				alignItems="center"
 				className={classes.addressBook}
 				spacing={32}
@@ -197,7 +143,7 @@ class AddressBookContainer extends Component {
 					<Button
 						id="addAddressButton"
 						className={classes.button}
-						onClick={this.openModalAdd}
+						onClick={this.handleAdd}
 					>
 						ADD ADDRESS
 					</Button>
@@ -260,15 +206,6 @@ class AddressBookContainer extends Component {
 						</TableBody>
 					</Table>
 				</Grid>
-				{showModalAdd && <AddressBookAddContainer closeAction={this.closeModalAdd} />}
-				{showModalEdit && (
-					<AddressBookEditContainer
-						closeAction={this.closeModalEdit}
-						confirmAction={this.confirmModalEdit}
-						id={this.state.id}
-						label={this.state.label}
-					/>
-				)}
 			</Grid>
 		);
 	}

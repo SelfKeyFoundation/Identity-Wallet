@@ -4,6 +4,7 @@ import { StyledButton, ModalBox } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	errorText: {
@@ -13,6 +14,10 @@ const styles = theme => ({
 		fontFamily: 'Lato',
 		fontSize: '13px',
 		lineHeight: '19px'
+	},
+
+	container: {
+		minHeight: '100vh'
 	},
 
 	errorColor: {
@@ -68,7 +73,7 @@ class AddressBookAddContainer extends Component {
 
 	handleSave = async (label, address) => {
 		await this.props.dispatch(addressBookOperations.addAddressBookEntry({ label, address }));
-		this.props.closeAction();
+		this.closeAction();
 	};
 
 	handleLabelChange = event => {
@@ -91,6 +96,10 @@ class AddressBookAddContainer extends Component {
 		this.props.dispatch(addressBookOperations.validateAddress(address));
 	};
 
+	closeAction = () => {
+		this.props.dispatch(push('/main/addressBook'));
+	};
+
 	render() {
 		const { classes, labelError, addressError } = this.props;
 		const hasLabelError = labelError !== '' && labelError !== undefined;
@@ -99,7 +108,7 @@ class AddressBookAddContainer extends Component {
 		const addressInputClass = `${classes.input} ${hasAddressError ? classes.errorColor : ''}`;
 
 		return (
-			<ModalBox closeAction={this.props.closeAction} headerText="Add Address">
+			<ModalBox closeAction={this.closeAction} headerText="Add Address">
 				<form
 					className={classes.container}
 					noValidate
@@ -174,7 +183,7 @@ class AddressBookAddContainer extends Component {
 										id="cancelButton"
 										variant="outlined"
 										size="medium"
-										onClick={this.props.closeAction}
+										onClick={this.closeAction}
 									>
 										Cancel
 									</StyledButton>

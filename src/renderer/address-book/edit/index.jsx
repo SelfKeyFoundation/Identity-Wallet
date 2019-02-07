@@ -4,6 +4,7 @@ import { StyledButton, ModalBox } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	errorText: {
@@ -13,6 +14,10 @@ const styles = theme => ({
 		fontFamily: 'Lato',
 		fontSize: '13px',
 		lineHeight: '19px'
+	},
+
+	container: {
+		minHeight: '100vh'
 	},
 
 	errorColor: {
@@ -58,16 +63,20 @@ class AddressBookEditContainer extends Component {
 	};
 
 	componentDidMount() {
-		const id = this.props.id;
-		const label = this.props.label;
+		const id = parseInt(this.props.match.params.id);
 		this.setState({
 			...this.state,
 			id: id,
-			label: label
+			label: this.props.label
 		});
 		this.props.dispatch(addressBookOperations.resetEdit());
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.label !== this.props.label) {
+			this.setState({ label: this.props.label });
+		}
+	}
 	handleLabelChange = event => {
 		event.preventDefault();
 		const label = event.target.value;
@@ -84,10 +93,13 @@ class AddressBookEditContainer extends Component {
 	};
 
 	handleEdit = async label => {
-		const id = this.props.id;
+		const id = this.state.id;
 		await this.props.dispatch(addressBookOperations.editAddressBookEntry({ id, label }));
-		this.props.confirmAction({ id, label });
-		this.props.closeAction();
+		this.closeAction();
+	};
+
+	closeAction = () => {
+		this.props.dispatch(push('/main/addressBook'));
 	};
 
 	render() {
@@ -96,7 +108,7 @@ class AddressBookEditContainer extends Component {
 		const labelInputClass = `${classes.input} ${hasLabelError ? classes.errorColor : ''}`;
 
 		return (
-			<ModalBox closeAction={this.props.closeAction} headerText="Edit Label">
+			<ModalBox closeAction={this.closeAction} headerText="Edit Label">
 				<form
 					className={classes.container}
 					noValidate
@@ -144,7 +156,7 @@ class AddressBookEditContainer extends Component {
 										id="cancelButton"
 										variant="outlined"
 										size="medium"
-										onClick={this.props.closeAction}
+										onClick={this.closeAction}
 									>
 										Cancel
 									</StyledButton>
@@ -161,7 +173,7 @@ class AddressBookEditContainer extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		labelError: addressBookSelectors.getLabelError(state),
-		label: addressBookSelectors.getLabel(state, props.id)
+		label: addressBookSelectors.getLabel(state, parseInt(props.match.params.id))
 	};
 };
 
