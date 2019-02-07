@@ -11,7 +11,8 @@ import {
 	NewAddressIcon,
 	KeyIcon,
 	LedgerIcon,
-	TrezorIcon
+	TrezorIcon,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, Route } from 'react-router-dom';
@@ -22,13 +23,8 @@ import NewAddress from './new-address';
 import PrivateKey from './private-key';
 import Ledger from './ledger';
 import Trezor from './trezor';
-import logo from '../../../../static/assets/images/logos/selfkey-neon-logo.png';
 
 const styles = theme => ({
-	logo: {
-		width: '177px',
-		height: '130px'
-	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -155,7 +151,7 @@ class Unlock extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<img className={classes.logo} src={logo} />
+							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>

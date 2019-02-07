@@ -1,16 +1,11 @@
 import React from 'react';
 import { Grid, Typography, Paper, Button } from '@material-ui/core';
-import { primary, HelpIcon, QuitIcon } from 'selfkey-ui';
+import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
-import logo from '../../../static/assets/images/logos/selfkey-neon-logo.png';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
-	logo: {
-		width: '177px',
-		height: '130px'
-	},
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
 		minHeight: '100vh'
@@ -65,7 +60,7 @@ export const Home = props => {
 						spacing={8}
 					>
 						<Grid item>
-							<img className={classes.logo} src={logo} />
+							<SelfkeyLogoTemp />
 						</Grid>
 						<Grid item>
 							<Typography variant="h2" className={classes.primaryTintText}>

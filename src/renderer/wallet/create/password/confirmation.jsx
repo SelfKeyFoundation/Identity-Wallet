@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	PasswordIcon,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody
+	ModalBody,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -17,10 +17,6 @@ import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
-	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -79,10 +75,7 @@ class PasswordConfirmation extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
 					<Paper>
@@ -91,7 +84,7 @@ class PasswordConfirmation extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h6" id="modal-title">
+							<Typography variant="body1" id="modal-title">
 								Step 2: Confirm Password
 							</Typography>
 						</ModalHeader>

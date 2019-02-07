@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	PasswordIcon,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody
+	ModalBody,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -16,10 +16,6 @@ import { connect } from 'react-redux';
 import { createWalletOperations } from 'common/create-wallet';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
-	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
 		fontSize: '18px',
@@ -83,12 +79,7 @@ class Password extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1" className={classes.logoText}>
-								SELFKEY
-							</Typography>
+							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
 					<Paper>
@@ -97,7 +88,7 @@ class Password extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h6" id="modal-title">
+							<Typography variant="body1" id="modal-title">
 								Step 1: Create Password
 							</Typography>
 						</ModalHeader>
