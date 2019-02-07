@@ -64,7 +64,7 @@ const styles = theme => ({
 	modalContentWrapper: {}
 });
 
-const gotBackHome = props => <Link to="/" {...props} />;
+const gotBackHome = props => <Link to="/home" {...props} />;
 
 const unlockOptionStyle = theme => ({
 	box: {

@@ -1,3 +1,4 @@
+import { walletSelectors, walletOperations } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import identitySelectors from './selectors';
@@ -47,7 +48,7 @@ const loadDocumentsOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let documents = await identityService.loadDocuments(walletId);
 	documents = documents.map(doc => ({ ...doc, walletId }));
-	await dispatch(identityActions.setDocumentsAction(documents));
+	await dispatch(identityActions.setDocumentsAction(walletId, documents));
 };
 
 const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
@@ -70,14 +71,17 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 
 const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
+	const wallet = walletSelectors.getWallet(getState());
+	const walletId = attribute.walletId || wallet.id;
+	attribute = { ...attribute, walletId };
 	attribute = await identityService.createIdAttribute(attribute);
-	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.addIdAttributeAction(attribute));
 };
 
 const removeIdAttributeOperation = attributeId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	await identityService.deleteIdAttribute(attributeId);
+	await identityService.removeIdAttribute(attributeId);
 	await dispatch(identityActions.deleteDocumentsForAttributeAction(attributeId));
 	await dispatch(identityActions.deleteIdAttributeAction(attributeId));
 };
@@ -85,8 +89,12 @@ const removeIdAttributeOperation = attributeId => async (dispatch, getState) => 
 const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	await identityService.editIdAttribute(attribute);
-	await operations.loadDocumentsForAttributeOperation(attribute.id)(dispatch, getState);
+	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
+};
+
+const updateProfilePictureOperation = (picture, walletId) => (dispatch, getState) => {
+	return dispatch(walletOperations.updateWalletAvatar(picture, walletId));
 };
 
 const lockIdentityOperation = walletId => async (dispatch, getState) => {
@@ -94,8 +102,8 @@ const lockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteDocumentsAction(walletId));
 };
 const unlockIdentityOperation = walletId => async (dispatch, getState) => {
-	await operations.loadDocumentsOperation(walletId)(dispatch, getState);
-	await operations.loadIdAttributesOperation(walletId)(dispatch, getState);
+	await dispatch(identityOperations.loadDocumentsOperation(walletId));
+	await dispatch(identityOperations.loadIdAttributesOperation(walletId));
 };
 
 export const operations = {
@@ -113,7 +121,8 @@ export const operations = {
 	removeIdAttributeOperation,
 	editIdAttributeOperation,
 	unlockIdentityOperation,
-	lockIdentityOperation
+	lockIdentityOperation,
+	updateProfilePictureOperation
 };
 
 export const identityOperations = {
@@ -162,6 +171,10 @@ export const identityOperations = {
 		identityTypes.IDENTITY_ATTRIBUTE_CREATE,
 		operations.createIdAttributeOperation
 	),
+	editIdAttributeOperation: createAliasedAction(
+		identityTypes.IDENTITY_ATTRIBUTE_EDIT,
+		operations.editIdAttributeOperation
+	),
 	removeIdAttributeOperation: createAliasedAction(
 		identityTypes.IDENTITY_ATTRIBUTE_REMOVE,
 		operations.removeIdAttributeOperation
@@ -173,6 +186,10 @@ export const identityOperations = {
 	lockIdentityOperation: createAliasedAction(
 		identityTypes.IDENTITY_LOCK,
 		operations.lockIdentityOperation
+	),
+	updateProfilePictureOperation: createAliasedAction(
+		identityTypes.PROFILE_PICTURE_UPDATE,
+		operations.updateProfilePictureOperation
 	)
 };
 

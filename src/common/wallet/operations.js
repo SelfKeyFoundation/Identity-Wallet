@@ -2,6 +2,8 @@ import * as actions from './actions';
 import { getWallet } from './selectors';
 
 import { getGlobalContext } from 'common/context';
+import * as types from './types';
+import { createAliasedAction } from 'electron-redux';
 
 const getWalletWithBalance = async wallet => {
 	const walletService = getGlobalContext().walletService;
@@ -21,4 +23,20 @@ const refreshWalletBalance = () => async (dispatch, getState) => {
 	await dispatch(actions.updateWallet(await getWalletWithBalance(getWallet(getState()))));
 };
 
-export default { ...actions, updateWalletWithBalance, refreshWalletBalance };
+const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		await walletService.updateWalletAvatar(avatar, walletId);
+		const wallet = getWallet(getState());
+		await dispatch(updateWalletWithBalance({ ...wallet, profilePicture: avatar }));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export default {
+	...actions,
+	updateWalletWithBalance,
+	refreshWalletBalance,
+	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar)
+};

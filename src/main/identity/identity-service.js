@@ -2,6 +2,7 @@ import { Repository } from './repository';
 import { IdAttributeType } from './id-attribute-type';
 import { Document } from './document';
 import { IdAttribute } from './id-attribute';
+import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import { UiSchema } from './ui-schema';
 
 export class IdentityService {
@@ -35,16 +36,32 @@ export class IdentityService {
 		);
 	}
 
-	loadDocuments(walletId) {
-		return Document.findAllByWalletId(walletId);
+	async loadDocuments(walletId) {
+		let docs = await Document.findAllByWalletId(walletId);
+		return docs.map(doc => {
+			doc = doc.toJSON();
+			if (doc.buffer) {
+				doc.content = formatDataUrl(doc.mimeType, doc.buffer.toString('base64'));
+				delete doc.buffer;
+			}
+			return doc;
+		});
 	}
 
 	loadIdAttributes(walletId) {
 		return IdAttribute.findAllByWalletId(walletId);
 	}
 
-	loadDocumentsForAttribute(attributeId) {
-		return Document.findAllByAttributeId(attributeId);
+	async loadDocumentsForAttribute(attributeId) {
+		let docs = await Document.findAllByAttributeId(attributeId);
+		return docs.map(doc => {
+			doc = doc.toJSON();
+			if (doc.buffer) {
+				doc.content = formatDataUrl(doc.mimeType, doc.buffer.toString('base64'));
+				delete doc.buffer;
+			}
+			return doc;
+		});
 	}
 
 	removeDocument(documentId) {
@@ -52,6 +69,16 @@ export class IdentityService {
 	}
 
 	createIdAttribute(attribute) {
+		let documents = (attribute.documents || []).map(doc => {
+			doc = { ...doc };
+			if (doc.content) {
+				doc.buffer = bufferFromDataUrl(doc.content);
+				delete doc.content;
+			}
+			return doc;
+		});
+		attribute = { ...attribute, documents };
+
 		return IdAttribute.create(attribute);
 	}
 
@@ -60,6 +87,15 @@ export class IdentityService {
 	}
 
 	editIdAttribute(attribute) {
+		let documents = (attribute.documents || []).map(doc => {
+			doc = { ...doc };
+			if (doc.content) {
+				doc.buffer = bufferFromDataUrl(doc.content);
+				delete doc.content;
+			}
+			return doc;
+		});
+		attribute = { ...attribute, documents };
 		return IdAttribute.update(attribute);
 	}
 }

@@ -1,5 +1,5 @@
 import platform from '../../main/assets/data/selfkey-platform.json';
-import { identityAttributes } from './utils';
+import { identityAttributes, jsonSchema } from './utils';
 const findAttributeType = id => {
 	let attrs = platform.attributes.filter(attr => attr['$id'] === id);
 
@@ -336,6 +336,34 @@ describe('Identity uitls', () => {
 						}
 					]
 				});
+			});
+		});
+	});
+	describe('Json Schema', () => {
+		describe('containsFile', () => {
+			it('false if simple schema', () => {
+				let attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/email.json'
+				);
+				expect(jsonSchema.containsFile(attrTypeSchema)).toBe(false);
+			});
+			it('false if complext non file schema', () => {
+				let attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/physical-address.json'
+				);
+				expect(jsonSchema.containsFile(attrTypeSchema)).toBe(false);
+			});
+			it('true if simple file schema', () => {
+				let attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+				);
+				expect(jsonSchema.containsFile(attrTypeSchema)).toBe(true);
+			});
+			it('true if complex file schema', () => {
+				let attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/national-id.json'
+				);
+				expect(jsonSchema.containsFile(attrTypeSchema)).toBe(true);
 			});
 		});
 	});
