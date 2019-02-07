@@ -12,9 +12,9 @@ describe('utils.document', () => {
 			let buffer = documentUtils.bufferFromDataUrl('data:test;base64,dGVzdA==');
 			expect(buffer.toString('utf8')).toEqual('test');
 		});
-		it('if empty string returns empty buffer', () => {
+		it('if empty string returns null', () => {
 			let buffer = documentUtils.bufferFromDataUrl('');
-			expect(buffer.toString('utf8')).toEqual('');
+			expect(buffer).toBe(null);
 		});
 		it("if base 64 string return it's value in buffer", () => {
 			let buffer = documentUtils.bufferFromDataUrl('dGVzdA=');
