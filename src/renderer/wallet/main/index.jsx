@@ -14,6 +14,7 @@ import {
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
+import ReceiveTransfer from '../../transaction/receive';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
@@ -86,6 +87,14 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/transfer/custom`}
 						render={props => <Transfer cryptoCurrency="" />}
+					/>
+					<Route
+						path={`${match.path}/transfer/receive/:crypto`}
+						render={props => (
+							<ReceiveTransfer
+								cryptoCurrency={props.match.params.crypto.toUpperCase()}
+							/>
+						)}
 					/>
 				</Grid>
 			</Grid>
