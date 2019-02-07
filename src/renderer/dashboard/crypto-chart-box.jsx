@@ -4,7 +4,7 @@ import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { GearIcon, NumberFormat, PriceSummary } from 'selfkey-ui';
-import { Grid, Paper, IconButton, Divider } from '@material-ui/core';
+import { Grid, Paper, Typography, IconButton, Divider } from '@material-ui/core';
 import { getLocale } from 'common/locale/selectors';
 import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -14,6 +14,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
+	paper: {
+		padding: 16
+	},
+
 	coloredBox: {
 		width: '44px !important',
 		height: '44px !important',
@@ -45,20 +49,6 @@ const styles = () => ({
 		border: 'none'
 	},
 
-	totalPrice: {
-		fontSize: '30px',
-		fontWeight: 300,
-		textAlign: 'center',
-		color: '#ffffff'
-	},
-
-	totalPriceText: {
-		fontSize: '14px',
-		marginTop: '5px',
-		textAlign: 'center',
-		color: '#93b0c1'
-	},
-
 	chartCenterContainer: {
 		position: 'absolute',
 		textAlign: 'center',
@@ -86,10 +76,6 @@ const styles = () => ({
 
 	expandMore: {
 		verticalAlign: 'middle !important'
-	},
-
-	header: {
-		margin: '10px'
 	}
 });
 
@@ -101,46 +87,43 @@ export class CryptoChartBoxComponent extends React.Component {
 		this.pieChart = React.createRef();
 	}
 
+	DEFAULT_COLLOR = '#2A3540';
 	OTHERS_COLOR = '#71a6b8';
-
 	activations = [];
-
 	state = {
 		activations: this.activations
 	};
-
 	selection = [];
 	chart;
-
 	refs = {
 		pieChart: null
 	};
 
-	initActivations(tokens) {
+	initActivations = tokens => {
 		if (!tokens) {
 			return;
 		}
-		tokens.forEach((token, index) => {
+		tokens.forEach((_token, index) => {
 			let activations = [...this.state.activations];
 			activations[index] = { active: false };
 			this.setState({ activations });
 		});
-	}
+	};
 
-	initSelection() {
+	initSelection = () => {
 		this.selection = [];
 		this.chart = {
 			setSelection: () => {}
 		};
-	}
+	};
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(_prevProps) {
 		this.chart.setSelection(this.selection);
 	}
 
 	selectEvent = {
 		eventName: 'select',
-		callback: (Chart, chartItem) => {
+		callback: Chart => {
 			this.initSelection();
 			const selection = Chart.chart.getSelection();
 
@@ -148,7 +131,7 @@ export class CryptoChartBoxComponent extends React.Component {
 				return;
 			}
 			const row = selection[0].row;
-			const newTokens = this.state.activations.map((activation, index) => {
+			const newTokens = this.state.activations.map((_activation, index) => {
 				if (index !== row) {
 					return { active: false };
 				} else {
@@ -165,7 +148,6 @@ export class CryptoChartBoxComponent extends React.Component {
 		eventName: 'onmouseover',
 		callback: (Chart, chartItem) => {
 			const selection = Chart.chart.getSelection();
-
 			let newTokens = this.state.activations.slice(0);
 
 			if (newTokens[chartItem.row] && newTokens[chartItem.row].active) {
@@ -198,11 +180,67 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
-	getChartEvents() {
+	hasBalance = () => {
+		let { tokens } = this.props;
+		tokens = tokens || [];
+		let check = tokens.find(token => {
+			return token.balanceInFiat > 0;
+		});
+
+		return !!check;
+	};
+
+	getColors = () => ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+
+	getChartData = tokens => {
+		const data = [['Content', 'percents']];
+		let dataPoints = null;
+		if (this.hasBalance()) {
+			dataPoints = tokens.map(token => {
+				return [token.name, token.balanceInFiat];
+			});
+		} else {
+			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
+		}
+
+		return data.concat(dataPoints);
+	};
+
+	getChartEvents = () => {
 		return this.hasBalance()
 			? [this.selectEvent, this.onMouseOutEvent, this.onMouseOverEvent]
 			: [];
-	}
+	};
+
+	getTotalBalanceInFiat = tokens => {
+		return tokens.reduce((a, b) => {
+			return a + b['balanceInFiat'];
+		}, 0);
+	};
+
+	getChart = () => {
+		const wrapper = this.pieChart.wrapper;
+		if (!wrapper) {
+			return;
+		}
+		return wrapper.getChart();
+	};
+
+	onItemHoverEnter = index => {
+		const chart = this.getChart();
+		if (!chart || !this.hasBalance()) {
+			return;
+		}
+		chart.setSelection([{ row: index }]);
+	};
+
+	onItemHoverLeave = () => {
+		const chart = this.getChart();
+		if (!chart || !this.hasBalance()) {
+			return;
+		}
+		chart.setSelection([]);
+	};
 
 	getTokensLegend(classes, tokens, locale, fiatCurrency) {
 		return tokens.map((token, index) => {
@@ -232,12 +270,12 @@ export class CryptoChartBoxComponent extends React.Component {
 							</div>
 						</Grid>
 						<Grid item xs={4}>
-							<Grid container alignItems="flex-start" className={classes.texts}>
+							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
-									{token.name}
+									<Typography variant="h2">{token.name}</Typography>
 								</Grid>
 								<Grid item xs={12}>
-									{token.symbol}
+									<Typography variant="h2">{token.symbol}</Typography>
 								</Grid>
 							</Grid>
 						</Grid>
@@ -271,66 +309,6 @@ export class CryptoChartBoxComponent extends React.Component {
 				</Grid>
 			);
 		});
-	}
-
-	hasBalance() {
-		let { tokens } = this.props;
-		tokens = tokens || [];
-		let check = tokens.find(token => {
-			return token.balanceInFiat > 0;
-		});
-
-		return !!check;
-	}
-
-	getChartData(tokens) {
-		const data = [['Content', 'percents']];
-		let dataPoints = null;
-		if (this.hasBalance()) {
-			dataPoints = tokens.map(token => {
-				return [token.name, token.balanceInFiat];
-			});
-		} else {
-			dataPoints = [['', 1]]; // positive value is needed for pie chart
-		}
-
-		return data.concat(dataPoints);
-	}
-
-	DEFAULT_COLLOR = '#2A3540';
-
-	getColors() {
-		return ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
-	}
-
-	getTotalBalanceInFiat(tokens) {
-		return tokens.reduce((a, b) => {
-			return a + b['balanceInFiat'];
-		}, 0);
-	}
-
-	getChart() {
-		const wrapper = this.pieChart.wrapper;
-		if (!wrapper) {
-			return;
-		}
-		return wrapper.getChart();
-	}
-
-	onItemHoverEnter(index) {
-		const chart = this.getChart();
-		if (!chart || !this.hasBalance()) {
-			return;
-		}
-		chart.setSelection([{ row: index }]);
-	}
-
-	onItemHoverLeave() {
-		const chart = this.getChart();
-		if (!chart || !this.hasBalance()) {
-			return;
-		}
-		chart.setSelection([]);
 	}
 
 	toggleViewAll() {
@@ -383,14 +361,9 @@ export class CryptoChartBoxComponent extends React.Component {
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
 					<Grid item xs={12}>
-						<Grid
-							container
-							justify="space-between"
-							alignItems="flex-end"
-							className={classes.header}
-						>
+						<Grid container justify="space-between" alignItems="flex-end">
 							<Grid item xs={11}>
-								My Crypto
+								<Typography variant="h1">My Crypto</Typography>
 							</Grid>
 							<Grid item xs={1}>
 								<IconButton onClick={manageCryptoAction}>
@@ -434,17 +407,15 @@ export class CryptoChartBoxComponent extends React.Component {
 									}}
 								/>
 								<div className={classes.chartCenterContainer}>
-									<div className={classes.totalPrice}>
+									<Typography variant="h1">
 										<NumberFormat
 											locale={locale}
 											currency={fiatCurrency}
 											style="currency"
 											value={this.getTotalBalanceInFiat(tokens)}
 										/>
-									</div>
-									<div className={classes.totalPriceText}>
-										Total Value {fiatCurrency}
-									</div>
+									</Typography>
+									<Typography variant="h3">Total Value {fiatCurrency}</Typography>
 								</div>
 							</Grid>
 							<Grid item xs={8}>
