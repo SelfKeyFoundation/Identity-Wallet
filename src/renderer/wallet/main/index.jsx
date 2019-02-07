@@ -13,6 +13,7 @@ import {
 } from '../../marketplace';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
+import Transfer from '../../transaction/send';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
@@ -73,6 +74,18 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-incorporation`}
 						component={MarketplaceIncorporationPage}
+					/>
+					<Route
+						path={`${match.path}/transfer/key`}
+						render={props => <Transfer cryptoCurrency="KEY" />}
+					/>
+					<Route
+						path={`${match.path}/transfer/eth`}
+						render={props => <Transfer cryptoCurrency="ETH" />}
+					/>
+					<Route
+						path={`${match.path}/transfer/custom`}
+						render={props => <Transfer cryptoCurrency="" />}
 					/>
 				</Grid>
 			</Grid>
