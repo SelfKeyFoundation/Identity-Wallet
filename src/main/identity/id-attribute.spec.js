@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import IdAttribute from './id-attribute';
 import IdAttributeType from './id-attribute-type';
 import Document from './document';
@@ -29,25 +30,52 @@ describe('IdAttribute model', () => {
 		await TestDb.destroy();
 	});
 
-	it('create', async () => {
-		let all = await IdAttribute.query().where({ walletId: testWalletId });
-		expect(all.length).toBe(0);
-		let attr = await IdAttribute.create(testAttribute);
-		expect(attr.id).toBeGreaterThan(0);
-		expect(attr.walletId).toBe(testWalletId);
-		expect(attr.createdAt).toBeGreaterThan(0);
-		expect(attr.updatedAt).toBeGreaterThan(0);
-		expect(attr.value).toEqual(testAttribute.value);
-		attr = await IdAttribute.create(testAttributeComplex);
-		expect(attr.value).toEqual(testAttribute.value);
-		attr = await IdAttribute.create({ ...testAttribute, documents: [testDoc] });
-		expect(attr.id).toBeGreaterThan(0);
-		expect(attr.walletId).toBe(testWalletId);
-		expect(attr.createdAt).toBeGreaterThan(0);
-		expect(attr.updatedAt).toBeGreaterThan(0);
-		expect(attr.data).toEqual(testAttribute.data);
-		expect(attr.documens).not.toBeNull();
-		expect(attr.documents[0]).not.toBeNull();
+	describe('create', () => {
+		it('sanity', async () => {
+			let all = await IdAttribute.query().where({ walletId: testWalletId });
+			expect(all.length).toBe(0);
+			let attr = await IdAttribute.create(testAttribute);
+			expect(attr.id).toBeGreaterThan(0);
+			expect(attr.walletId).toBe(testWalletId);
+			expect(attr.createdAt).toBeGreaterThan(0);
+			expect(attr.updatedAt).toBeGreaterThan(0);
+			expect(attr.value).toEqual(testAttribute.value);
+			attr = await IdAttribute.create(testAttributeComplex);
+			expect(attr.value).toEqual(testAttribute.value);
+			attr = await IdAttribute.create({ ...testAttribute, documents: [testDoc] });
+			expect(attr.id).toBeGreaterThan(0);
+			expect(attr.walletId).toBe(testWalletId);
+			expect(attr.createdAt).toBeGreaterThan(0);
+			expect(attr.updatedAt).toBeGreaterThan(0);
+			expect(attr.data).toEqual(testAttribute.data);
+			expect(attr.documens).not.toBeNull();
+			expect(attr.documents[0]).not.toBeNull();
+		});
+
+		it('should create attributes with document references', async () => {
+			let attr = {
+				createdAt: 1543342261241,
+				data: { value: { image: '$document-#ref{document0.id}' } },
+				documents: [
+					{
+						'#id': 'document0',
+						buffer: Uint8Array.from([14, 51, 61]),
+						mimeType: 'image/png',
+						name: 'unnamed.png',
+						size: 3
+					}
+				],
+				name: 'passport',
+				typeId: 14,
+				updatedAt: 1543342261241,
+				walletId: 1
+			};
+			let create = await IdAttribute.create(attr);
+			expect(create.documents.length).toBe(1);
+			expect(create.data).toEqual({
+				value: { image: `$document-${create.documents[0].id}` }
+			});
+		});
 	});
 
 	it('findAllByWalletId', async () => {
@@ -109,5 +137,35 @@ describe('IdAttribute model', () => {
 		);
 		expect(attrs[2].documents.length).toBe(1);
 		expect(attrs[1].attributeType.id).toBe(2);
+	});
+
+	describe('update', () => {
+		it('should update attributes with document references', async () => {
+			let attr = {
+				createdAt: 1543342261241,
+				data: { value: { image: '$document-#ref{document0.id}' } },
+				documents: [
+					{
+						'#id': 'document0',
+						buffer: Uint8Array.from([14, 51, 61]),
+						mimeType: 'image/png',
+						name: 'unnamed.png',
+						size: 3
+					}
+				],
+				id: 17,
+				name: 'passport',
+				typeId: 14,
+				updatedAt: 1543342261241,
+				walletId: 1
+			};
+			await IdAttribute.create(_.omit(attr, ['data', 'document']));
+			let update = await IdAttribute.update(attr);
+			expect(update.documents.length).toBe(1);
+			expect(update.data).toEqual({
+				value: { image: `$document-${update.documents[0].id}` }
+			});
+			expect(update.documents[0].buffer).toEqual(Buffer.from([14, 51, 61]));
+		});
 	});
 });

@@ -59,7 +59,7 @@ const setDocumentsReducer = (state, action) => {
 const setAttributeDocumentsReducer = (state, action) => {
 	let oldDocuments = state.documents
 		.map(docId => state.documentsById[docId])
-		.filter(doc => doc.attributeId !== action.attributeId);
+		.filter(doc => doc.attributeId !== action.payload.attributeId);
 	let documents = [...oldDocuments, ...(action.payload.documents || [])];
 	let documentsById = documents.reduce((acc, curr) => {
 		acc[curr.id] = curr;

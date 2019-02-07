@@ -1,40 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { identitySelectors, identityOperations } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
-import { identitySelectors } from 'common/identity';
-import { walletSelectors } from 'common/wallet';
+// import { identitySelectors, identityOperations } from 'common/identity';
+// import { walletSelectors } from 'common/wallet';
 
-class SelfkeyIdContainer extends Component {
+class SelfkeyIdContainerComponent extends Component {
+	handleAttributeDelete = attributeId =>
+		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
 	render() {
-		return <SelfkeyId {...this.props} />;
+		return <SelfkeyId {...this.props} onAttributeDelete={this.handleAttributeDelete} />;
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	const attributeHistory = [
-		{
-			timestamp: '2018-11-16 05:47',
-			action: 'Created Attribute: Nationality'
-		}
-	];
-
-	const documents = [
-		{
-			name: 'Passport',
-			record: 'passport.png',
-			lastedited: '2018-11-16 05:47'
-		}
-	];
-
-	const attributes = identitySelectors.selectIdentity(state)
-		? identitySelectors.selectIdAttributes(state, walletSelectors.getWallet(state).id)
-		: [];
-	console.log('state', state);
 	return {
-		attributeHistory,
-		attributes,
-		documents
+		...identitySelectors.selectSelfkeyId(state)
 	};
 };
+export const SelfkeyIdContainer = connect(mapStateToProps)(SelfkeyIdContainerComponent);
 
-export default connect(mapStateToProps)(SelfkeyIdContainer);
+export default SelfkeyIdContainer;

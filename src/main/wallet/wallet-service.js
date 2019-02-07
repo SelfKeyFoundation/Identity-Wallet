@@ -3,16 +3,18 @@ import { getGlobalContext } from 'common/context';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
+import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
+import EthUnits from 'common/utils/eth-units';
 
 const log = new Logger('wallet-model');
 export class WalletService {
 	constructor() {
-		this.web3 = getGlobalContext().web3Service.web3;
+		this.web3Service = getGlobalContext().web3Service;
 	}
 
 	async createWallet(password) {
-		const { address, privateKey } = this.web3.eth.accounts.create();
-		const keystore = this.web3.eth.accounts.encrypt(privateKey, password);
+		const { address, privateKey } = this.web3Service.web3.eth.accounts.create(password);
+		const keystore = this.web3Service.web3.eth.accounts.encrypt(privateKey, password);
 		const keystoreFileFullPath = path.resolve(
 			getGlobalContext().config.walletsDirectoryPath,
 			address
@@ -28,8 +30,8 @@ export class WalletService {
 		});
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: address,
 			privateKey: privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -54,32 +56,33 @@ export class WalletService {
 
 	async getBalance(id) {
 		const wallet = await Wallet.findById(id);
-		return this.web3.eth.getBalance(wallet.publicKey);
+		const balanceInWei = await this.web3Service.web3.eth.getBalance(wallet.publicKey);
+		return EthUnits.toEther(balanceInWei, 'wei');
 	}
 
 	async getWallets() {
-		return Wallet.findAllWithKeyStoreFile();
+		const wallets = await Wallet.findAllWithKeyStoreFile();
+		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
 	}
 
 	async unlockWalletWithPassword(id, password) {
 		const wallet = await Wallet.findById(id);
 		const keystore = JSON.parse(await fs.promises.readFile(wallet.keystoreFilePath));
-		const account = this.web3.eth.accounts.decrypt(keystore, password);
+		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
 		return {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
-			privateKey: account.privateKey,
-			keystoreFilePath: wallet.keystoreFilePath
+			privateKey: account.privateKey
 		};
 	}
 
 	async unlockWalletWithNewFile(filePath, password) {
 		const keystore = JSON.parse(await fs.promises.readFile(filePath));
-		const account = this.web3.eth.accounts.decrypt(keystore, password);
+		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
@@ -101,8 +104,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -112,7 +115,7 @@ export class WalletService {
 	}
 
 	async unlockWalletWithPrivateKey(privateKey) {
-		const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+		const account = this.web3Service.web3.eth.accounts.privateKeyToAccount(privateKey);
 
 		let wallet = await Wallet.findByPublicKey(account.address);
 
@@ -123,8 +126,8 @@ export class WalletService {
 			: wallet;
 
 		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
+			...wallet,
+			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey
 		};
@@ -132,15 +135,60 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async getLedgerWallets() {
-		const web3Service = getGlobalContext().web3Service;
-		await web3Service.switchToLedgerWallet();
-		return this.web3.eth.getAccounts().map(address => {
-			return {
-				address,
-				balance: this.web3.eth.getBalance(address)
-			};
+	async unlockWalletWithPublicKey(publicKey) {
+		let wallet = await Wallet.findByPublicKey(publicKey);
+
+		wallet = !wallet
+			? await Wallet.create({
+					publicKey
+			  })
+			: wallet;
+
+		const newWallet = {
+			id: wallet.id,
+			isSetupFinished: wallet.isSetupFinished,
+			publicKey: wallet.publicKey
+		};
+
+		return newWallet;
+	}
+
+	async _getWallets() {
+		return new Promise((resolve, reject) => {
+			this.web3Service.web3.eth.getAccounts((error, accounts) => {
+				if (error) {
+					log.info('error: %j', error);
+					reject(error);
+				} else {
+					const promises = accounts.map(async address => {
+						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
+						return {
+							address,
+							balance: EthUnits.toEther(balanceInWei, 'wei')
+						};
+					});
+					resolve(Promise.all(promises));
+				}
+			});
 		});
+	}
+
+	updateWalletAvatar(avatar, id) {
+		return Wallet.updateProfilePicture({
+			id,
+			profilePicture: bufferFromDataUrl(avatar)
+		});
+	}
+
+	async getLedgerWallets(page) {
+		await this.web3Service.switchToLedgerWallet(page);
+		return this._getWallets();
+	}
+
+	async getTrezorWallets(page, eventEmitter) {
+		await this.web3Service.switchToTrezorWallet(page, 6, eventEmitter);
+
+		return this._getWallets();
 	}
 }
 

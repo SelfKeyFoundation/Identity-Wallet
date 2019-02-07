@@ -86,7 +86,8 @@ identityAttributes.normalizeDocumentsSchema = (
 	}
 	documents = [...documents];
 	if (typeSchema.format === 'file') {
-		if (!value || typeof value !== 'object') return { value, documents };
+		if (!value || typeof value !== 'object' || Object.keys(value).length === 0)
+			return { value, documents };
 		let id = value.id;
 
 		if (id) {
@@ -143,4 +144,26 @@ identityAttributes.normalizeDocumentsSchema = (
 	return { value, documents };
 };
 
-export default { identityAttributes };
+export const jsonSchema = {};
+
+jsonSchema.containsFile = (schema, maxDepth = 10) => {
+	if (maxDepth < 0) {
+		return false;
+	}
+	if (schema.format === 'file') return true;
+
+	if (schema.type === 'object') {
+		if (!schema.properties) return false;
+		for (let key in schema.properties) {
+			if (!schema.properties.hasOwnProperty(key)) continue;
+			if (jsonSchema.containsFile(schema.properties[key], maxDepth - 1)) return true;
+		}
+		return false;
+	}
+	if (schema.type === 'array') {
+		return jsonSchema.containsFile(schema.items, maxDepth - 1);
+	}
+	return false;
+};
+
+export default { identityAttributes, jsonSchema };

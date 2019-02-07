@@ -6,6 +6,7 @@ import {
 	identityReducers,
 	initialState,
 	identitySelectors,
+	identityOperations,
 	testExports
 } from './index';
 
@@ -22,7 +23,7 @@ describe('Identity Duck', () => {
 		loadDocumentsForAttribute() {},
 		removeDocument() {},
 		createIdAttribute() {},
-		deleteIdAttribute() {},
+		removeIdAttribute() {},
 		editIdAttribute() {}
 	};
 	let state = {};
@@ -60,8 +61,8 @@ describe('Identity Duck', () => {
 				expect(store.dispatch.callCount).toBe(2);
 			});
 			it('unlockIdentityOperation', async () => {
-				sinon.stub(testExports.operations, 'loadIdAttributesOperation').returns(() => {});
-				sinon.stub(testExports.operations, 'loadDocumentsOperation').returns(() => {});
+				sinon.stub(identityOperations, 'loadIdAttributesOperation').returns(() => {});
+				sinon.stub(identityOperations, 'loadDocumentsOperation').returns(() => {});
 
 				await testExports.operations.unlockIdentityOperation(testWalletId)(
 					store.dispatch,
@@ -69,10 +70,10 @@ describe('Identity Duck', () => {
 				);
 
 				expect(
-					testExports.operations.loadIdAttributesOperation.calledOnceWith(testWalletId)
+					identityOperations.loadIdAttributesOperation.calledOnceWith(testWalletId)
 				).toBeTruthy();
 				expect(
-					testExports.operations.loadDocumentsOperation.calledOnceWith(testWalletId)
+					identityOperations.loadDocumentsOperation.calledOnceWith(testWalletId)
 				).toBeTruthy();
 			});
 		});
@@ -592,9 +593,10 @@ describe('Identity Duck', () => {
 				);
 			});
 			it('selectDocuments', () => {
-				expect(identitySelectors.selectDocuments(state, testWalletId)).toEqual(
-					testDocuments
-				);
+				expect(identitySelectors.selectDocuments(state)).toEqual([
+					...testDocuments,
+					{ id: 3, walletId: 2 }
+				]);
 			});
 		});
 	});
@@ -648,10 +650,10 @@ describe('Identity Duck', () => {
 				expect(
 					testExports.operations.loadDocumentsForAttributeOperation.calledOnceWith(1)
 				).toBeTruthy();
-				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
+				expect(store.dispatch.calledWith(testAction)).toBeTruthy();
 			});
 			it('removeIdAttributeOperation', async () => {
-				sinon.stub(identityService, 'deleteIdAttribute').resolves('ok');
+				sinon.stub(identityService, 'removeIdAttribute').resolves('ok');
 				sinon.stub(store, 'dispatch');
 				sinon
 					.stub(identityActions, 'deleteDocumentsForAttributeAction')
@@ -663,7 +665,7 @@ describe('Identity Duck', () => {
 					store.getState.bind(store)
 				);
 
-				expect(identityService.deleteIdAttribute.calledOnceWith(1)).toBeTruthy();
+				expect(identityService.removeIdAttribute.calledOnceWith(1)).toBeTruthy();
 				expect(identityActions.deleteIdAttributeAction.calledOnceWith(1)).toBeTruthy();
 				expect(store.dispatch.calledWith(testAction)).toBeTruthy();
 			});

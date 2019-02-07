@@ -2,6 +2,7 @@ import * as actions from './actions';
 import { walletSelectors } from '../wallet';
 import { getAddresses } from './selectors';
 import { getGlobalContext } from '../context';
+import EthUtils from 'common/utils/eth-utils';
 
 const loadAddressBook = () => async (dispatch, getState) => {
 	await dispatch(actions.loadAddressBookEntries(walletSelectors.getWallet(getState()).id));
@@ -26,7 +27,7 @@ const addAddressBookEntry = entry => async (dispatch, getState) => {
 };
 
 const editAddressBookEntry = entry => async dispatch => {
-	dispatch(actions.editAddressBookEntry(entry));
+	await dispatch(actions.editAddressBookEntry(entry));
 };
 
 const deleteAddressBookEntry = id => async dispatch => {
@@ -53,8 +54,11 @@ const validateLabel = label => async (dispatch, getState) => {
 };
 
 const validateAddress = address => async (dispatch, getState) => {
-	const addressBookService = (getGlobalContext() || {}).addressBookService;
-	const isValidAddress = addressBookService.isValidAddress(address);
+	const context = getGlobalContext() || {};
+	const isValidAddress =
+		'addressBookService' in context
+			? context.addressBookService.isValidAddress(address)
+			: EthUtils.validateEtherAddress(address);
 	const currentWalletAddress = walletSelectors.getWallet(getState()).publicKey;
 	const existentAddress = getAddresses(getState()).filter(entry => {
 		return entry.address === address;

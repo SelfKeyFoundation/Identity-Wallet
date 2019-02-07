@@ -21,7 +21,7 @@ class MarketplaceCategoriesPageComponent extends Component {
 			this.props.dispatch(push('/main/marketplace-exchanges'));
 		},
 		incorporation: () => {
-			this.props.dispatch(push('/main/marketplace-incorporations'));
+			this.props.dispatch(push('/main/marketplace-incorporation'));
 		}
 	};
 

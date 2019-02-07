@@ -49,7 +49,7 @@ const createPasswordConfirmationLink = props => (
 	<Link to="/createPasswordConfirmation" {...props} />
 );
 
-const gotBackHome = props => <Link to="/" {...props} />;
+const gotBackHome = props => <Link to="/home" {...props} />;
 
 class Password extends Component {
 	state = {

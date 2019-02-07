@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from './popup';
+import { Popup } from '../../common/popup';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import { H2, HourGlassLargeIcon } from 'selfkey-ui';
 

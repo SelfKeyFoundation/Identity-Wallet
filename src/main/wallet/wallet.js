@@ -119,8 +119,9 @@ export class Wallet extends BaseModel {
 		return this.query().findOne({ publicKey });
 	}
 
-	static updateProfilePicture({ id, profilePicture }) {
-		return this.query().patchAndFetchById(id, { profilePicture });
+	static async updateProfilePicture({ id, profilePicture }) {
+		let wallet = await this.query().patchAndFetchById(id, { profilePicture });
+		return wallet;
 	}
 
 	static async selectProfilePictureById(id) {

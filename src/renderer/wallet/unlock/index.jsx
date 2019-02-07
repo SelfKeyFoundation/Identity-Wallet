@@ -22,6 +22,7 @@ import ExistingAddress from './existing-address';
 import NewAddress from './new-address';
 import PrivateKey from './private-key';
 import Ledger from './ledger';
+import Trezor from './trezor';
 
 const styles = theme => ({
 	logo: {
@@ -54,7 +55,7 @@ const styles = theme => ({
 	modalContentWrapper: {}
 });
 
-const gotBackHome = props => <Link to="/" {...props} />;
+const gotBackHome = props => <Link to="/home" {...props} />;
 
 const unlockOptionStyle = theme => ({
 	box: {
@@ -246,6 +247,7 @@ class Unlock extends Component {
 										component={PrivateKey}
 									/>
 									<Route path={`${match.path}/ledger`} component={Ledger} />
+									<Route path={`${match.path}/trezor`} component={Trezor} />
 								</Grid>
 							</Grid>
 						</ModalBody>
