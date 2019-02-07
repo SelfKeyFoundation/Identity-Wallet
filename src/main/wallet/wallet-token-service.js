@@ -1,5 +1,6 @@
 import { WalletToken } from './wallet-token';
 import { getGlobalContext } from 'common/context';
+import EthUtils from 'common/utils/eth-utils';
 
 export class WalletTokenService {
 	constructor() {
@@ -15,7 +16,9 @@ export class WalletTokenService {
 	// TODO use the test ABI when in dev mode
 	async getTokenBalance(contractAddress, address) {
 		const tokenContract = new this.web3.eth.Contract(this.contractABI, contractAddress);
-		return tokenContract.methods.balanceOf(address).call();
+		const balanceWei = await tokenContract.methods.balanceOf(address).call();
+		const decimals = await tokenContract.methods.decimals().call();
+		return EthUtils.getBalanceDecimal(balanceWei, decimals);
 	}
 }
 
