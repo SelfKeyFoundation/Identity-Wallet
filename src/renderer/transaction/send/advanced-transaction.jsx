@@ -148,7 +148,7 @@ class TransactionSendBoxContainer extends Component {
 	state = {
 		amount: '',
 		address: '',
-		cryptoCurrency: this.props.cryptoCurrency
+		cryptoCurrency: this.props.match.params.cryptoCurrency
 	};
 
 	componentDidMount() {
@@ -440,7 +440,7 @@ const mapStateToProps = (state, props) => {
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		...transactionSelectors.getTransaction(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		cryptoCurrency: props.cryptoCurrency
+		cryptoCurrency: props.match.params.cryptoCurrency
 	};
 };
 

@@ -23,6 +23,7 @@ import {
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import TokenPrice from '../../common/token-price';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	cryptoIcon: {
@@ -194,6 +195,10 @@ export class Transfer extends React.Component {
 		);
 	}
 
+	handleSend = () => {
+		this.props.dispatch(push(`/main/advancedTransaction/${this.props.cryptoCurrency}`));
+	};
+
 	render() {
 		const { classes, cryptoCurrency, publicKey, transactions } = this.props;
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
@@ -263,7 +268,11 @@ export class Transfer extends React.Component {
 									<Button variant="outlined" size="large">
 										<CustomIcon /> Receive
 									</Button>
-									<Button variant="outlined" size="large">
+									<Button
+										variant="outlined"
+										size="large"
+										onClick={this.handleSend}
+									>
 										<SentIcon /> Send
 									</Button>
 								</Grid>
