@@ -1,5 +1,5 @@
 import TestDb from './db/test-db';
-const { getUserDataPath } = require('../common/utils/common');
+
 // const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
 const path = require('path');
 
@@ -19,7 +19,7 @@ const hasTable = async (table, expected) => {
 // };
 
 describe('migrations', () => {
-	const dbFile = path.join(getUserDataPath(), 'migrationsTest.sqlite');
+	const dbFile = path.join('migrationsTest.sqlite');
 	beforeEach(async () => {
 		await TestDb.initRaw(dbFile);
 	});
@@ -137,7 +137,7 @@ describe('migrations', () => {
 					typeId: 1,
 					data: '{"value":"First Name"}',
 					createdAt: 0,
-					name: 'first_name',
+					name: 'first name',
 					updatedAt: null
 				});
 			});
@@ -189,14 +189,14 @@ describe('migrations', () => {
 				expect(newType.length).toBe(1);
 
 				expect(newAttr[0].typeId).toBe(newType[0].id);
-				expect(newAttr[0].name).toEqual('physical_address');
+				expect(newAttr[0].name).toEqual('physical address');
 				expect(newAttr[0].data.value).toEqual({
 					'address-line-1': 'street address 1',
 					'address-line-2': 'street address 2',
 					'address-line-3': 'zip, city, state, Anguilla'
 				});
 				expect(newAttr[1].typeId).toEqual(newType[0].id);
-				expect(newAttr[1].name).toEqual('work_place');
+				expect(newAttr[1].name).toEqual('work place');
 				expect(newAttr[1].data.value).toEqual({
 					'address-line-1': 'workplace str 1',
 					'address-line-2': 'workplace str 2',
@@ -270,7 +270,7 @@ describe('migrations', () => {
 				});
 
 				expect(newAttr[0].typeId).toBe(newType[0].id);
-				expect(newAttr[0].name).toEqual('phonenumber_countrycode');
+				expect(newAttr[0].name).toEqual('phonenumber countrycode');
 
 				expect(newAttr[0].data).toEqual({ value: '+35512312123123123' });
 			});

@@ -54,10 +54,10 @@ describe('IdentityService', () => {
 	});
 
 	it('loadDocuments', async () => {
-		sinon.stub(Document, 'findAllByWalletId').resolves('ok');
+		sinon.stub(Document, 'findAllByWalletId').resolves([]);
 		let res = await service.loadDocuments(1);
 		expect(Document.findAllByWalletId.calledOnceWith(1)).toBeTruthy();
-		expect(res).toEqual('ok');
+		expect(res).toEqual([]);
 	});
 
 	it('loadIdAttributes', async () => {
@@ -68,10 +68,10 @@ describe('IdentityService', () => {
 	});
 
 	it('loadDocumentsForAttribute', async () => {
-		sinon.stub(Document, 'findAllByAttributeId').resolves('ok');
+		sinon.stub(Document, 'findAllByAttributeId').resolves([]);
 		let res = await service.loadDocumentsForAttribute(1);
 		expect(Document.findAllByAttributeId.calledOnceWith(1)).toBeTruthy();
-		expect(res).toEqual('ok');
+		expect(res).toEqual([]);
 	});
 
 	it('removeDocument', async () => {
@@ -92,7 +92,7 @@ describe('IdentityService', () => {
 		let test = { test: 1 };
 		sinon.stub(IdAttribute, 'update').resolves('ok');
 		let res = await service.editIdAttribute(test);
-		expect(IdAttribute.update.calledOnceWith(test)).toBeTruthy();
+		expect(IdAttribute.update.calledOnceWith({ ...test, documents: [] })).toBeTruthy();
 		expect(res).toEqual('ok');
 	});
 });

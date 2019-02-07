@@ -24,6 +24,11 @@ import BackupAddress from './wallet/create/backup-address';
 import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
 import Unlock from './wallet/unlock';
+import EnterPin from './wallet/unlock/trezor/enter-pin';
+import SelectAddress from './wallet/unlock/select-address';
+import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
+import Terms from './settings/terms';
+import Loading from './home/loading';
 
 import path from 'path';
 
@@ -67,7 +72,8 @@ render(
 			<ConnectedRouter history={history.getHistory()}>
 				<HashRouter>
 					<div style={{ backgroundColor: '#262F39' }}>
-						<Route exact path="/" component={Home} />
+						<Route exact path="/" component={Loading} />
+						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
 						<Route path="/createWallet" component={CreateWallet} />
 						<Route path="/createPassword" component={CreatePassword} />
@@ -79,6 +85,10 @@ render(
 						<Route path="/backupPrivateKey" component={BackupPK} />
 						<Route path="/main" component={Main} />
 						<Route path="/unlockWallet" component={Unlock} />
+						<Route path="/enterTrezorPin" component={EnterPin} />
+						<Route path="/selectAddress" component={SelectAddress} />
+						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
+						<Route path="/terms" component={Terms} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>

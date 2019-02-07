@@ -15,7 +15,7 @@ environment:
   MM_URL:
     secure: QfAI68E/qnE7UZMvjqIQIkiMASDooWknt2psZWeawGTa8iu4cuNWd5P+ronxVphBXYAPuwEywIadwnxAj4WmIkL6rfGd/OQo1hlsNfEwYCo=
   SENTRY_DSN:
-    secure: gSaaWHq0v1X7SY/HWJlmSVPmxZb/6JhO5N1bPJXLQ41JzGrP+YmGKWazLaZkrb+oGiB4Z1alNWJHK/gyBwPa8A==
+    secure: z2HN+AfLblFuqEDtdIOzj9ngBI0H+JWU2A7EdUX70iUfTU/dQYoDkCQAnLG87K90TYcsQF7eXzQ0dhZvfuRWFmD2iQfXJnTc2fnbe4trtd0=
   nodejs_version: 10.11.0
 platform:
   - x64

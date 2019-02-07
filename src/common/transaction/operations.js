@@ -7,7 +7,6 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
-import LedgerService from 'main/blockchain/leadger-service';
 import config from 'common/config';
 import Tx from 'ethereumjs-tx';
 import { BigNumber } from 'bignumber.js';
@@ -185,14 +184,6 @@ const setLimitPrice = gasLimit => async dispatch => {
 
 const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
 	if (wallet.profile === 'ledger') {
-		const ledgerService = new LedgerService({
-			web3Service: (getGlobalContext() || {}).web3Service
-		});
-		let signed = await ledgerService.signTransaction({
-			dataToSign: rawTx,
-			address: wallet.publicKey
-		});
-		return signed.raw;
 	}
 
 	if (wallet.profile === 'trezor') {
