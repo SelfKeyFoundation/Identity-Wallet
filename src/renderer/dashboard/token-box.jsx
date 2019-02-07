@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import { Copy, TransferIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper, IconButton, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
 	paper: {
