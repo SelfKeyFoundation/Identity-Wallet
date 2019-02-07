@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Dashboard from '../../dashboard';
 import AddressBook from '../../address-book/main';
+import AddressBookAdd from '../../address-book/add';
+import AddressBookEdit from '../../address-book/edit';
+
 import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
@@ -48,6 +51,8 @@ class Main extends Component {
 				<Grid item xs={12} className={classes.bodySection}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
+					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
+					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
 						path={`${match.path}/marketplace-categories`}
 						component={MarketplaceCategoriesPage}

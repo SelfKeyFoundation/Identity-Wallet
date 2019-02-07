@@ -12,7 +12,7 @@ export const getAddressError = state => {
 
 export const getLabel = (state, id) => {
 	const entries = state.addressBook.entries.filter(entry => {
-		return entry.id === id;
+		return entry.id === parseInt(id);
 	});
 	return entries.length > 0 ? entries[0].label : '';
 };

@@ -28,6 +28,8 @@ import EnterPin from './wallet/unlock/trezor/enter-pin';
 import SelectAddress from './wallet/unlock/select-address';
 import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
 import Transfer from './transaction/send';
+import Terms from './settings/terms';
+import Loading from './home/loading';
 
 import path from 'path';
 
@@ -71,7 +73,8 @@ render(
 			<ConnectedRouter history={history.getHistory()}>
 				<HashRouter>
 					<div style={{ backgroundColor: '#262F39' }}>
-						<Route exact path="/" component={Home} />
+						<Route exact path="/" component={Loading} />
+						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
 						<Route path="/createWallet" component={CreateWallet} />
 						<Route path="/createPassword" component={CreatePassword} />
@@ -98,6 +101,7 @@ render(
 							path="/main/transfer/custom"
 							render={props => <Transfer cryptoCurrency="" />}
 						/>
+						<Route path="/terms" component={Terms} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>
