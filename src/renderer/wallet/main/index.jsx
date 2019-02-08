@@ -78,16 +78,10 @@ class Main extends Component {
 						component={MarketplaceIncorporationPage}
 					/>
 					<Route
-						path={`${match.path}/transfer/key`}
-						render={props => <Transfer cryptoCurrency="KEY" />}
-					/>
-					<Route
-						path={`${match.path}/transfer/eth`}
-						render={props => <Transfer cryptoCurrency="ETH" />}
-					/>
-					<Route
-						path={`${match.path}/transfer/custom`}
-						render={props => <Transfer cryptoCurrency="" />}
+						path={`${match.path}/transfer/:crypto`}
+						render={props => (
+							<Transfer cryptoCurrency={props.match.params.crypto.toUpperCase()} />
+						)}
 					/>
 					<Route
 						path={`${match.path}/transaction-progress`}
