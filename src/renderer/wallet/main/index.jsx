@@ -20,6 +20,9 @@ import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar';
 import { connect } from 'react-redux';
 
+import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
+import { transactionOperations } from 'common/transaction';
+
 const styles = theme => ({
 	headerSection: {
 		width: '100%'
@@ -39,7 +42,6 @@ class Main extends Component {
 	componentDidMount() {
 		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
-
 	render() {
 		const { match, classes } = this.props;
 		return (
@@ -86,6 +88,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/transfer/custom`}
 						render={props => <Transfer cryptoCurrency="" />}
+					/>
+					<Route
+						path={`${match.path}/transaction-progress`}
+						component={TransactionSendProgress}
 					/>
 				</Grid>
 			</Grid>

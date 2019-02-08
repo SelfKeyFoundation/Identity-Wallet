@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TransactionSendProgressBox } from 'selfkey-ui';
+import { TransactionSendProgressBox } from '../components/transaction-send-progress-box';
 import { transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 
 class TransactionSendProgressBoxContainer extends Component {
+	openLink = url => {
+		window.openExternal(null, url);
+	};
 	render() {
-		return <TransactionSendProgressBox {...this.props} />;
+		return <TransactionSendProgressBox openLink={this.openLink} {...this.props} />;
 	}
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = state => {
 	return {
 		...getLocale(state),
-		...transactionSelectors.getTransaction(state, props.cryptoCurrency)
+		...transactionSelectors.getTransaction(state)
 	};
 };
 
