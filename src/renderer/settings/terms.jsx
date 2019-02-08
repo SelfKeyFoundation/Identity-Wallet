@@ -5,9 +5,9 @@ import {
 	Paper,
 	Modal,
 	List,
+	Link,
 	ListItem,
 	Button,
-	Link,
 	Checkbox,
 	FormControlLabel
 } from '@material-ui/core';
