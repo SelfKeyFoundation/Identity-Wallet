@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TransactionBox, TransactionFeeBox, NumberFormat } from 'selfkey-ui';
+import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
+import { TransactionBox, NumberFormat } from 'selfkey-ui';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
@@ -8,6 +9,7 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Divider } from '@material-ui/core';
+import history from 'common/store/history';
 
 const styles = theme => ({
 	container: {
@@ -191,6 +193,7 @@ class TransactionSendBoxContainer extends Component {
 
 	handleCancel = () => {
 		this.setState({ sending: false });
+		history.getHistory().goBack();
 	};
 
 	// TransactionSendBox - Start
@@ -304,7 +307,6 @@ class TransactionSendBoxContainer extends Component {
 
 	render() {
 		const {
-			closeAction,
 			isSendCustomToken,
 			classes,
 			addressError,
@@ -318,7 +320,10 @@ class TransactionSendBoxContainer extends Component {
 		let cryptoCurrencyText = cryptoCurrency || 'Send Custom Tokens';
 
 		return (
-			<TransactionBox cryptoCurrency={cryptoCurrencyText} closeAction={closeAction}>
+			<TransactionBox
+				cryptoCurrency={cryptoCurrencyText}
+				closeAction={() => this.handleCancelAction()}
+			>
 				<input
 					type="text"
 					onChange={e => this.handleAddressChange(e)}
