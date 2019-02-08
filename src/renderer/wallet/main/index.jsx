@@ -21,7 +21,6 @@ import Toolbar from './toolbar';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
-import { transactionOperations } from 'common/transaction';
 
 const styles = theme => ({
 	headerSection: {
