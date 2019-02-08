@@ -13,7 +13,10 @@ export class WalletService {
 	}
 
 	async createWallet(password) {
-		const { address, privateKey } = this.web3Service.web3.eth.accounts.create(password);
+		const account = this.web3Service.web3.eth.accounts.create(password);
+		this.web3Service.web3.eth.accounts.wallet.add(account);
+		this.web3Service.web3.eth.defaultAccount = account.address;
+		const { address, privateKey } = account;
 		const keystore = this.web3Service.web3.eth.accounts.encrypt(privateKey, password);
 		const keystoreFileFullPath = path.resolve(
 			getGlobalContext().config.walletsDirectoryPath,
@@ -69,6 +72,9 @@ export class WalletService {
 		const wallet = await Wallet.findById(id);
 		const keystore = JSON.parse(await fs.promises.readFile(wallet.keystoreFilePath));
 		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
+		this.web3Service.web3.eth.accounts.wallet.add(account);
+		this.web3Service.web3.eth.defaultAccount = account.address;
+
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
@@ -83,6 +89,9 @@ export class WalletService {
 	async unlockWalletWithNewFile(filePath, password) {
 		const keystore = JSON.parse(await fs.promises.readFile(filePath));
 		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
+		this.web3Service.web3.eth.accounts.wallet.add(account);
+		this.web3Service.web3.eth.defaultAccount = account.address;
+
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
@@ -116,6 +125,8 @@ export class WalletService {
 
 	async unlockWalletWithPrivateKey(privateKey) {
 		const account = this.web3Service.web3.eth.accounts.privateKeyToAccount(privateKey);
+		this.web3Service.web3.eth.accounts.wallet.add(account);
+		this.web3Service.web3.eth.defaultAccount = account.address;
 
 		let wallet = await Wallet.findByPublicKey(account.address);
 
@@ -189,6 +200,10 @@ export class WalletService {
 		await this.web3Service.switchToTrezorWallet(page, 6, eventEmitter);
 
 		return this._getWallets();
+	}
+
+	async sendTransaction(transactionObject) {
+		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
 }
 

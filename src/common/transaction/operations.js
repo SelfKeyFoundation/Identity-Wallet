@@ -8,11 +8,11 @@ import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
 import config from 'common/config';
-import Tx from 'ethereumjs-tx';
 import { BigNumber } from 'bignumber.js';
 
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { push } from 'connected-react-router';
 
 let txInfoCheckInterval = null;
 const TX_CHECK_INTERVAL = 1500;
@@ -182,25 +182,6 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
-	if (wallet.profile === 'ledger') {
-	}
-
-	if (wallet.profile === 'trezor') {
-		await dispatch(
-			actions.signTxWithTrezor({
-				dataToSign: rawTx,
-				accountIndex: transaction.trezorAccountIndex
-			})
-		);
-		return null;
-	}
-
-	const eTx = new Tx(rawTx);
-	eTx.sign(wallet.privateKey);
-	return eTx.serialize().toString('hex');
-};
-
 const generateContractData = (toAddress, value, decimal) => {
 	value = EthUtils.padLeft(
 		new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16),
@@ -210,54 +191,62 @@ const generateContractData = (toAddress, value, decimal) => {
 	return transferHex + toAddress + value;
 };
 
-const startSend = () => async (dispatch, getState) => {
+const confirmSend = () => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
 	const state = getState();
-	const wallet = getWallet(state);
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
 
-	const rawTx = {
-		nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.nonce)),
-		gasPrice: EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'))
-		),
-		gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.gasLimit)),
-		chainId
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gasLimit: transaction.gasLimit
 	};
 
 	if (cryptoCurrency === 'ETH') {
-		rawTx.to = EthUtils.sanitizeHex(transaction.address);
-		rawTx.value = EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.amount, 'ether', 'wei'))
-		);
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
 	} else {
-		rawTx.to = EthUtils.sanitizeHex(transaction.contractAddress);
-		rawTx.value = EthUtils.sanitizeHex(0);
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
 		const data = generateContractData(
 			transaction.address,
 			transaction.amount,
 			transaction.tokenDecimal
 		);
-		rawTx.data = EthUtils.sanitizeHex(data);
+		transactionObject.data = EthUtils.sanitizeHex(data);
 	}
-	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
-	if (signedHex) {
+	try {
+		const transactionHash = await walletService.sendTransaction(transactionObject);
 		await dispatch(
 			actions.updateTransaction({
-				signedHex,
-				sending: true
+				status: 'Pending',
+				transactionHash
 			})
 		);
-	}
-};
 
-const cancelSend = () => async dispatch => {
-	await dispatch(
-		actions.updateTransaction({
-			signedHex: '',
-			sending: false
-		})
-	);
+		await dispatch(push('/main/transaction-progress'));
+
+		dispatch(createTxHistry(transactionHash));
+
+		await dispatch(startTxBalanceUpdater(transactionHash));
+	} catch (error) {
+		console.log(error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+		}
+	}
 };
 
 const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
@@ -327,48 +316,6 @@ const createTxHistry = transactionHash => (dispatch, getState) => {
 	dispatch(actions.createTxHistory(data));
 };
 
-const confirmSend = () => async (dispatch, getState) => {
-	const transaction = getTransaction(getState());
-	const params = {
-		method: 'sendSignedTransaction',
-		args: [transaction.signedHex],
-		contractAddress: null,
-		contractMethod: null,
-		onceListenerName: 'transactionHash'
-	};
-
-	try {
-		const transactionHash = await (getGlobalContext() || {}).web3Service.waitForTicket(params);
-
-		await dispatch(
-			actions.updateTransaction({
-				status: 'Pending',
-				transactionHash
-			})
-		);
-
-		dispatch(createTxHistry(transactionHash));
-
-		await dispatch(startTxBalanceUpdater(transactionHash));
-	} catch (err) {
-		console.log(err);
-		const message = err.toString().toLowerCase();
-		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'NoBalance'
-				})
-			);
-		} else {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'Error'
-				})
-			);
-		}
-	}
-};
-
 const setCryptoCurrency = cryptoCurrency => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -385,8 +332,6 @@ export default {
 	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
-	startSend: createAliasedAction(types.START_SEND, startSend),
-	cancelSend: createAliasedAction(types.CANCEL_SEND, cancelSend),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
 };
