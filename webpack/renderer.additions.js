@@ -6,7 +6,7 @@ module.exports = {
 			{
 				test: /\.(jsx?|tsx?|vue)$/,
 				enforce: 'pre',
-				exclude: /node_modules/,
+				include: /src/,
 				loader: 'eslint-loader',
 				options: {
 					fix: true,
@@ -17,6 +17,7 @@ module.exports = {
 			{
 				test: /\.jsx?$/,
 				loader: 'babel-loader',
+				include: /src/,
 				options: {
 					presets: ['@babel/react']
 				}
@@ -25,7 +26,7 @@ module.exports = {
 				test: /\.css$/,
 				include: [
 					path.resolve(__dirname, 'src'),
-					path.resolve(__dirname, 'node_modules/selfkey-ui')
+					path.resolve(__dirname, 'node_modules/selfkey-ui/')
 				],
 				use: ['style-loader', 'css-loader']
 			}

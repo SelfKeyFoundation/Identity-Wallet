@@ -1,10 +1,10 @@
 import * as types from './types';
 
-const updateTokens = tokens => {
+const setTokens = tokens => {
 	return {
-		type: types.TOKENS_UPDATE,
+		type: types.TOKENS_SET,
 		payload: tokens
 	};
 };
 
-export { updateTokens };
+export { setTokens };

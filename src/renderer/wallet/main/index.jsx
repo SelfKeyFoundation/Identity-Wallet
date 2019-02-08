@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Dashboard from '../../dashboard';
+import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
@@ -31,7 +32,8 @@ const styles = theme => ({
 	bodySection: {
 		maxWidth: '1140px',
 		width: '100%'
-	}
+	},
+	page: {}
 });
 
 const contentWrapperStyle = {
@@ -40,7 +42,7 @@ const contentWrapperStyle = {
 };
 
 class Main extends Component {
-	componentDidMount() {
+	async componentDidMount() {
 		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
 	render() {
@@ -51,6 +53,7 @@ class Main extends Component {
 				direction="column"
 				justify="space-between"
 				alignItems="center"
+				className={classes.page}
 				spacing={24}
 			>
 				<Grid item xs={12} className={classes.headerSection}>
@@ -58,6 +61,11 @@ class Main extends Component {
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
+					<Route
+						path={`${match.path}/crypto-manager`}
+						component={CryptoMangerContainer}
+					/>
+					<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
 					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
