@@ -15,12 +15,14 @@ import {
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
+import ReceiveTransfer from '../../transaction/receive';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar';
 import { connect } from 'react-redux';
-import config from 'common/config';
+
+import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
 
 const styles = theme => ({
 	headerSection: {
@@ -41,7 +43,6 @@ class Main extends Component {
 	componentDidMount() {
 		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
-
 	render() {
 		const { match, classes } = this.props;
 		return (
@@ -78,9 +79,9 @@ class Main extends Component {
 						component={MarketplaceIncorporationPage}
 					/>
 					<Route
-						path={`${match.path}/transfer/key`}
+						path={`${match.path}/transfer/:crypto`}
 						render={props => (
-							<Transfer cryptoCurrency={config.constants.primaryToken} />
+							<Transfer cryptoCurrency={props.match.params.crypto.toUpperCase()} />
 						)}
 					/>
 					<Route
@@ -88,12 +89,20 @@ class Main extends Component {
 						render={props => <Transfer cryptoCurrency="ETH" />}
 					/>
 					<Route
-						path={`${match.path}/transfer/custom`}
-						render={props => <Transfer cryptoCurrency="" />}
+						path={`${match.path}/transaction-progress`}
+						component={TransactionSendProgress}
 					/>
 					<Route
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
+					/>
+					<Route
+						path={`${match.path}/transfer/receive/:crypto`}
+						render={props => (
+							<ReceiveTransfer
+								cryptoCurrency={props.match.params.crypto.toUpperCase()}
+							/>
+						)}
 					/>
 				</Grid>
 			</Grid>
