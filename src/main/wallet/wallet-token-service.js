@@ -20,6 +20,14 @@ export class WalletTokenService {
 		const decimals = await tokenContract.methods.decimals().call();
 		return EthUtils.getBalanceDecimal(balanceWei, decimals);
 	}
+
+	createWalletToken(tokenId, walletId) {
+		return WalletToken.create({ tokenId, walletId });
+	}
+
+	updateState(id, state) {
+		return WalletToken.update({ id, recordState: state });
+	}
 }
 
 export default WalletTokenService;
