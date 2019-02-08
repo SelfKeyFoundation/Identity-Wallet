@@ -15,12 +15,12 @@ import {
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
+import ReceiveTransfer from '../../transaction/receive';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar';
 import { connect } from 'react-redux';
-import config from 'common/config';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
 
@@ -95,6 +95,14 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
+					/>
+					<Route
+						path={`${match.path}/transfer/receive/:crypto`}
+						render={props => (
+							<ReceiveTransfer
+								cryptoCurrency={props.match.params.crypto.toUpperCase()}
+							/>
+						)}
 					/>
 				</Grid>
 			</Grid>
