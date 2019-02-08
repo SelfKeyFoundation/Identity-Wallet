@@ -7,7 +7,7 @@ module.exports = {
 			{
 				test: /\.(jsx?|tsx?|vue)$/,
 				enforce: 'pre',
-				exclude: /node_modules/,
+				include: /src/,
 				loader: 'eslint-loader',
 				options: {
 					cwd: path.resolve(__dirname, '..'),

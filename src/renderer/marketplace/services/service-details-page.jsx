@@ -136,7 +136,10 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 		let unlockAction = this.unlockAction;
 		let item = this.props.item;
 		let { stake, transactionPopup } = this.props;
+		item = { ...item };
 		item.integration = 'Unlock marketplace';
+		// XXX disable exchanges staking
+		item.status = 'Inactive';
 		if (item.status === 'Inactive') {
 			item.integration = 'Coming Soon';
 			unlockAction = null;

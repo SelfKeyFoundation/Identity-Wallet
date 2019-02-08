@@ -1,5 +1,4 @@
 import React from 'react';
-import injectSheet from 'react-jss';
 import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -80,45 +79,25 @@ const styles = () => ({
 });
 
 export class CryptoChartBoxComponent extends React.Component {
-	constructor(props) {
-		super(props);
-		this.initActivations(props.tokens);
-		this.initSelection();
-		this.pieChart = React.createRef();
-	}
-
 	DEFAULT_COLLOR = '#2A3540';
 	OTHERS_COLOR = '#71a6b8';
-	activations = [];
-	state = {
-		activations: this.activations
-	};
-	selection = [];
-	chart;
+
+	chart = null;
 	refs = {
 		pieChart: null
 	};
-
-	initActivations = tokens => {
-		if (!tokens) {
-			return;
-		}
-		tokens.forEach((_token, index) => {
-			let activations = [...this.state.activations];
-			activations[index] = { active: false };
-			this.setState({ activations });
-		});
-	};
-
-	initSelection = () => {
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.state.activations = (props.tokens || []).map(token => ({ active: false }));
 		this.selection = [];
-		this.chart = {
-			setSelection: () => {}
-		};
-	};
+		this.pieChart = React.createRef();
+	}
 
 	componentDidUpdate(_prevProps) {
-		this.chart.setSelection(this.selection);
+		if (this.chart) {
+			this.chart.setSelection(this.selection);
+		}
 	}
 
 	selectEvent = {
@@ -446,9 +425,9 @@ const mapDispatchToProps = dispatch => {
 	return bindActionCreators(viewAllOperations, dispatch);
 };
 
-export const CryptoChartBox = injectSheet(styles)(CryptoChartBoxComponent);
-
-export default connect(
+export const CryptoChartBox = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withStyles(styles)(CryptoChartBox));
+)(withStyles(styles)(CryptoChartBoxComponent));
+
+export default CryptoChartBox;
