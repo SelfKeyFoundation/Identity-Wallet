@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TransactionBox, TransactionFeeBox, NumberFormat } from 'selfkey-ui';
+import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
+import { TransactionBox, NumberFormat } from 'selfkey-ui';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
@@ -8,6 +9,7 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Divider } from '@material-ui/core';
+import history from 'common/store/history';
 
 const styles = theme => ({
 	container: {
@@ -206,10 +208,12 @@ class TransactionSendBoxContainer extends Component {
 	async handleConfirmAction() {
 		// this.props.navigateToTransactionProgress();
 		await this.props.dispatch(transactionOperations.confirmSend());
+		history.getHistory().goBack();
 	}
 
-	handleCancelAction() {
-		this.props.dispatch(transactionOperations.cancelSend());
+	async handleCancelAction() {
+		await this.props.dispatch(transactionOperations.cancelSend());
+		history.getHistory().goBack();
 	}
 
 	// TransactionSendBox - Start
@@ -273,14 +277,7 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	renderButtons() {
-		const {
-			classes,
-			onSendAction,
-			sending,
-			confirmAction,
-			cancelAction,
-			addressError
-		} = this.props;
+		const { classes, onSendAction, sending, confirmAction, addressError } = this.props;
 		const sendBtnIsEnabled = this.state.address && +this.state.amount && !addressError;
 		if (sending) {
 			return (
@@ -298,7 +295,10 @@ class TransactionSendBoxContainer extends Component {
 						</button>
 					</Grid>
 					<Grid item>
-						<button className={classes.button} onClick={cancelAction}>
+						<button
+							className={classes.button}
+							onClick={() => this.handleCancelAction()}
+						>
 							CANCEL
 						</button>
 					</Grid>
@@ -330,7 +330,6 @@ class TransactionSendBoxContainer extends Component {
 
 	render() {
 		const {
-			closeAction,
 			isSendCustomToken,
 			classes,
 			addressError,
@@ -344,7 +343,10 @@ class TransactionSendBoxContainer extends Component {
 		let cryptoCurrencyText = cryptoCurrency || 'Send Custom Tokens';
 
 		return (
-			<TransactionBox cryptoCurrency={cryptoCurrencyText} closeAction={closeAction}>
+			<TransactionBox
+				cryptoCurrency={cryptoCurrencyText}
+				closeAction={() => this.handleCancelAction()}
+			>
 				<input
 					type="text"
 					onChange={e => this.handleAddressChange(e)}
