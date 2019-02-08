@@ -61,7 +61,7 @@ document.head.appendChild(iconApple);
 
 // open links externally by default
 window.openExternal = (event, href) => {
-	event.preventDefault();
+	event && event.preventDefault();
 	shell.openExternal(href);
 };
 

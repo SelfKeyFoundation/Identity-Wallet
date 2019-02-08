@@ -1,22 +1,32 @@
 import React from 'react';
-import { Modal, Typography } from '@material-ui/core';
+import { Modal, Typography, withStyles } from '@material-ui/core';
 import { ModalWrap, ModalCloseButton, ModalCloseIcon, ModalHeader, ModalBody } from 'selfkey-ui';
 
-export const Popup = ({ classes, children, closeAction, text, open = true }) => (
+const styles = theme => ({
+	title: {
+		// verticalAlign: 'middle',
+		// lineHeight: '30px'
+	}
+});
+
+export const Popup = withStyles(styles)(({ classes, children, closeAction, text, open = true }) => (
 	<Modal open={open}>
 		<ModalWrap>
 			<ModalCloseButton onClick={closeAction}>
 				<ModalCloseIcon />
 			</ModalCloseButton>
 			<ModalHeader>
-				<Typography variant="h6" id="modal-title">
-					{text}
-				</Typography>
+				{typeof text === 'string' ? (
+					<Typography variant="h6" className={classes.title}>
+						{text}
+					</Typography>
+				) : (
+					text
+				)}
 			</ModalHeader>
-
 			<ModalBody>{children}</ModalBody>
 		</ModalWrap>
 	</Modal>
-);
+));
 
 export default Popup;
