@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getExchangeLinks } from 'common/exchanges/selectors';
 import { Grid, List, ListItem, withStyles } from '@material-ui/core';
 import { H3, P, WarningShieldIcon } from 'selfkey-ui';
-import { Popup } from './popup';
+import { Popup } from '../../common/popup';
 
 const styles = theme => ({
 	headerText: {

@@ -6,7 +6,7 @@ const initialState = {
 
 const tokensReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.TOKENS_UPDATE:
+		case types.TOKENS_SET:
 			return {
 				...state,
 				tokens: action.payload

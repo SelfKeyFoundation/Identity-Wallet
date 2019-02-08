@@ -30,8 +30,14 @@ The Official SelfKey Identity Wallet for Desktop
 
 ## Prerequisites
 
-* [NodeJS](https://nodejs.org) version 9 or better.
+* [NodeJS](https://nodejs.org) version 9 or better
 * Wine and RPM packages for OSX/Linux
+
+### Using Windows?
+
+* [`patch.exe`](https://git-scm.com/download) (for [`snyk protect`](https://support.snyk.io/snyk-cli/snyk-protect-requires-the-patch-binary))
+* VC++ 2015.3 v14.00 (v140) toolset for desktop
+* [Windows-Build-Tools](https://www.npmjs.com/package/windows-build-tools/v/2.2.1)
 
 ### Install Dependencies
 
