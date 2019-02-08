@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Button } from '@material-ui/core';
-import { SelfkeyLogo, primary, HelpIcon, QuitIcon } from 'selfkey-ui';
+import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
 import { tokensOperations } from 'common/tokens';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 import { withStyles } from '@material-ui/core/styles';
@@ -65,10 +65,7 @@ class Home extends Component {
 							spacing={8}
 						>
 							<Grid item>
-								<SelfkeyLogo className={classes.logo} />
-							</Grid>
-							<Grid item>
-								<Typography variant="h1">SELFKEY</Typography>
+								<SelfkeyLogoTemp />
 							</Grid>
 							<Grid item>
 								<Typography variant="h2" className={classes.primaryTintText}>
