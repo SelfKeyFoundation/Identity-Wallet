@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalHeader,
-	ModalBody,
-	Copy,
-	DownloadIcon2,
-	SelfkeyLogoTemp
-} from 'selfkey-ui';
+import { ModalWrap, ModalHeader, ModalBody, Copy, DownloadIcon2 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
@@ -76,9 +69,7 @@ class BackupAddress extends Component {
 						spacing={8}
 						className={classes.logoSection}
 					>
-						<Grid item>
-							<SelfkeyLogoTemp />
-						</Grid>
+						<Grid item />
 					</Grid>
 					<Paper>
 						<ModalHeader>

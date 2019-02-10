@@ -11,8 +11,7 @@ import {
 	NewAddressIcon,
 	KeyIcon,
 	LedgerIcon,
-	TrezorIcon,
-	SelfkeyLogoTemp
+	TrezorIcon
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, Route } from 'react-router-dom';
@@ -150,9 +149,7 @@ class Unlock extends Component {
 						spacing={8}
 						className={classes.logoSection}
 					>
-						<Grid item>
-							<SelfkeyLogoTemp />
-						</Grid>
+						<Grid item />
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
 						<ModalCloseButton component={gotBackHome}>
