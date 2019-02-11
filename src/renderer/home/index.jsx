@@ -27,6 +27,21 @@ const styles = theme => ({
 		'&:hover': {
 			backgroundColor: 'transparent'
 		}
+	},
+	divider: {
+		background: 'linear-gradient(to bottom, #142a34 0%, #00c0d9 100%)',
+		height: '120px',
+		marginTop: '-80px',
+		position: 'absolute',
+		width: '1px'
+	},
+	footerQuit: {
+		marginLeft: '-50px',
+		marginTop: '-50px'
+	},
+	footerHelp: {
+		marginLeft: '50px',
+		marginTop: '-50px'
 	}
 });
 
@@ -43,7 +58,7 @@ class Home extends Component {
 				<Grid
 					container
 					direction="column"
-					justify="space-around"
+					justify="space-between"
 					alignItems="center"
 					spacing={40}
 					className={classes.parentGrid}
@@ -55,6 +70,7 @@ class Home extends Component {
 						justify="center"
 						alignItems="center"
 						spacing={40}
+						style={{ flexGrow: 1 }}
 					>
 						<Grid
 							container
@@ -123,6 +139,7 @@ class Home extends Component {
 									direction="column"
 									justify="center"
 									alignItems="center"
+									className={classes.footerHelp}
 								>
 									<Grid item>
 										<HelpIcon className={classes.icon} />
@@ -130,6 +147,9 @@ class Home extends Component {
 									<Grid item>HELP</Grid>
 								</Grid>
 							</Button>
+						</Grid>
+						<Grid item>
+							<div className={classes.divider} />
 						</Grid>
 						<Grid item>
 							<Button
@@ -143,6 +163,7 @@ class Home extends Component {
 									direction="column"
 									justify="center"
 									alignItems="center"
+									className={classes.footerQuit}
 								>
 									<Grid item>
 										<QuitIcon className={classes.icon} />
