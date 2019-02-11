@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
+import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { pricesSelectors } from 'common/prices';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
@@ -9,7 +11,7 @@ import TreatiesMap from '../common/treaties-map';
 import TreatiesTable from '../common/treaties-table';
 import IncorporationsCountryInfo from '../common/country-info';
 import IncorporationsKYC from '../common/kyc-requirements';
-import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import ProgramPrice from '../common/program-price';
 
 const styles = {
 	container: {
@@ -43,12 +45,10 @@ const styles = {
 	content: {
 		background: '#262F39',
 		padding: '22px 30px',
-		width: '100%'
+		width: '100%',
+		justifyContent: 'space-between'
 	},
 	resumeTable: {
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		background: '#2A3540',
 		'& div': {
 			padding: '10px 15px',
 			width: '125px'
@@ -63,12 +63,32 @@ const styles = {
 			color: '#00C0D9'
 		}
 	},
+	programBrief: {
+		display: 'flex',
+		border: '1px solid #303C49',
+		borderRadius: '4px',
+		background: '#2A3540'
+	},
 	applyButton: {
-		margin: '0 0.5em',
 		maxWidth: '250px',
+		textAlign: 'right',
 		'& button': {
 			width: '100%',
 			marginBottom: '1em'
+		},
+		'& div.price': {
+			fontFamily: 'Lato',
+			fontSize: '20px',
+			fontWeight: 'bold',
+			color: '#00C0D9'
+		},
+		'& span.price-key': {
+			color: '#93B0C1',
+			fontFamily: 'Lato',
+			fontSize: '12px',
+			display: 'block',
+			fontWeight: 'normal',
+			marginTop: '5px'
 		}
 	},
 	tabsRoot: {
@@ -128,9 +148,10 @@ function TabContainer({ children }) {
    ---------------
    countryCode: country two letter code
    programCode: program specific code (from airtable)
-   program: program details
-   isLoading: still loading data
+   program: program details object map
+   isLoading: boolean indicating if it's still loading data
    treaties: tax treaties for this specific country/jurisdiction
+   rate: USD/KEY current rate
    ==========================================================================
 */
 
@@ -155,7 +176,7 @@ class IncorporationsDetailView extends Component {
 
 	render() {
 		// const { program, countryCode, classes, isLoading, treaties } = this.props;
-		const { program, countryCode, classes, treaties } = this.props;
+		const { program, countryCode, classes, treaties, keyRate } = this.props;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
@@ -191,60 +212,67 @@ class IncorporationsDetailView extends Component {
 							alignItems="left"
 							className={classes.content}
 						>
-							<div className={classes.resumeTable}>
-								<div>
-									<label>Offshore Tax</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Offshore Income Tax Rate'] || '--'}
-									</Typography>
+							<div className={classes.programBrief}>
+								<div className={classes.resumeTable}>
+									<div>
+										<label>Offshore Tax</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Offshore Income Tax Rate'] || '--'}
+										</Typography>
+									</div>
+									<div>
+										<label>Dividends received</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Dividends Received'] || '--'}
+										</Typography>
+									</div>
 								</div>
-								<div>
-									<label>Dividends received</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Dividends Received'] || '--'}
-									</Typography>
+								<div className={classes.resumeTable}>
+									<div>
+										<label>Corp Income</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Corporate Tax Rate'] || '--'}
+										</Typography>
+									</div>
+									<div>
+										<label>Dividends paid</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Dividends Witholding Tax Rate'] || '--'}
+										</Typography>
+									</div>
 								</div>
-							</div>
-							<div className={classes.resumeTable}>
-								<div>
-									<label>Corp Income</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Corporate Tax Rate'] || '--'}
-									</Typography>
+								<div className={classes.resumeTable}>
+									<div>
+										<label>Capital Gains</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Capital Gains Tax Rate'] || '--'}
+										</Typography>
+									</div>
+									<div>
+										<label>Royalties paid</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Royalties Witholding Tax Rate'] || '--'}
+										</Typography>
+									</div>
 								</div>
-								<div>
-									<label>Dividends paid</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Dividends Witholding Tax Rate'] || '--'}
-									</Typography>
-								</div>
-							</div>
-							<div className={classes.resumeTable}>
-								<div>
-									<label>Capital Gains</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Capital Gains Tax Rate'] || '--'}
-									</Typography>
-								</div>
-								<div>
-									<label>Royalties paid</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Royalties Witholding Tax Rate'] || '--'}
-									</Typography>
-								</div>
-							</div>
-							<div className={classes.resumeTable}>
-								<div>
-									<label>Interests paid</label>
-									<Typography variant="h4" gutterBottom>
-										{tax['Interests Witholding Tax Rate'] || '--'}
-									</Typography>
+								<div className={classes.resumeTable}>
+									<div>
+										<label>Interests paid</label>
+										<Typography variant="h4" gutterBottom>
+											{tax['Interests Witholding Tax Rate'] || '--'}
+										</Typography>
+									</div>
 								</div>
 							</div>
 							<div className={classes.applyButton}>
 								<Button variant="contained" size="large">
 									Start Incorporation
 								</Button>
+								<ProgramPrice
+									price={program['Wallet Price']}
+									rate={keyRate}
+									label="Price:"
+								/>
 							</div>
 						</Grid>
 						<Grid
@@ -382,7 +410,8 @@ const mapStateToProps = (state, props) => {
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, props.countryCode),
-		isLoading: incorporationsSelectors.getLoading(state)
+		isLoading: incorporationsSelectors.getLoading(state),
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };
 

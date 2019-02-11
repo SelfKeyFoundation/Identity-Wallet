@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProgramPrice = props => {
-	const { price, rate } = props;
+	const { price, rate, label } = props;
 
 	if (!price) {
 		return null;
@@ -12,6 +12,7 @@ const ProgramPrice = props => {
 
 	return (
 		<div className="price">
+			{label}
 			{price}
 			<span className="price-key">{key} KEY</span>
 		</div>
