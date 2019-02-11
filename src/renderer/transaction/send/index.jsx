@@ -151,9 +151,9 @@ const getIconForTransaction = (statusIconName, sending) => {
 
 const getCustomStatusText = transaction => {
 	if (transaction.sending) {
-		return `Sent to ${transaction.address}`;
+		return `Sent to ${transaction.to}`;
 	} else {
-		return `Received from ${transaction.address}`;
+		return `Received from ${transaction.from}`;
 	}
 };
 
@@ -204,14 +204,11 @@ export class Transfer extends React.Component {
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
 
 		// Select only specific transactions
-		const selectedCryptoTransactions = transactions.filter(
-			t => t.cryptoCurrency === cryptoCurrency
-		);
+		// const selectedCryptoTransactions = transactions.filter(
+		// 	t => t.cryptoCurrency === cryptoCurrency
+		// );
 		// Filter only last 5
-		const lastCryptoTransactions = selectedCryptoTransactions.slice(
-			0,
-			NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW
-		);
+		const lastCryptoTransactions = transactions.slice(0, NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW);
 
 		return (
 			<Modal open={true}>
@@ -294,7 +291,7 @@ export class Transfer extends React.Component {
 														color="secondary"
 														gutterBottom
 													>
-														{this._renderDate(transaction.date)}
+														{this._renderDate(transaction.timeStamp)}
 													</Typography>
 												</div>
 												<div className={classes.transactionEntryIcon}>
@@ -312,7 +309,7 @@ export class Transfer extends React.Component {
 												<div className={classes.transactionEntryAmount}>
 													<Typography variant="body2" gutterBottom>
 														{transaction.sending ? '- ' : '+ '}
-														{transaction.amount}
+														{transaction.value}
 													</Typography>
 												</div>
 											</div>

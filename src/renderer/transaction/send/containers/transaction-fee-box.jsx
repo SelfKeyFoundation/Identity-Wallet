@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import injectSheet from 'react-jss';
 import { ActualTransactionFeeBox } from 'renderer/transaction/send/containers/actual-transaction-fee-box';
 import { Grid } from '@material-ui/core';
 import { Loop as LoopIcon } from '@material-ui/icons';
 
-const styles = theme => ({
+const styles = {
 	container: {
 		fontFamily: 'Lato, arial, sans-serif'
 	},
@@ -118,8 +118,9 @@ const styles = theme => ({
 			lineHeight: '26px',
 			margin: 0
 		}
-	}
-});
+	},
+	checked: {}
+};
 
 export class TransactionFeeBoxComponent extends Component {
 	timerToUpdateGasPrice = 0;
@@ -273,6 +274,6 @@ export class TransactionFeeBoxComponent extends Component {
 	}
 }
 
-export const TransactionFeeBox = withStyles(styles)(TransactionFeeBoxComponent);
+export const TransactionFeeBox = injectSheet(styles)(TransactionFeeBoxComponent);
 
 export default TransactionFeeBox;
