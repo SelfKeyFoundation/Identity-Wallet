@@ -9,27 +9,26 @@ import {
 	MenuItem,
 	FormControl
 } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
-	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
-	},
 	selectInput: {
-		width: '100%'
+		width: '500px'
 	},
+
 	passwordInput: {
-		width: '205%'
+		width: '500px'
 	},
+
 	menuItem: {
 		display: 'flex'
+	},
+
+	dropdown: {
+		width: '450px'
 	}
 });
 
@@ -89,7 +88,9 @@ class ExistingAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>1</Avatar>
+								<Avatar>
+									<Typography variant="overline">1</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -99,11 +100,7 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
+										<Typography variant="overline" gutterBottom>
 											SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY
 											WALLET
 										</Typography>
@@ -120,7 +117,7 @@ class ExistingAddress extends Component {
 												input={<Input disableUnderline fullWidth />}
 												autoWidth
 											>
-												<MenuItem value={-1}>
+												<MenuItem value={-1} className={classes.dropdown}>
 													<em>Choose...</em>
 												</MenuItem>
 												{wallets.map((wallet, index) => (
@@ -144,7 +141,9 @@ class ExistingAddress extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>2</Avatar>
+								<Avatar>
+									<Typography variant="overline">2</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -154,11 +153,7 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											gutterBottom
-										>
+										<Typography variant="overline" gutterBottom>
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>
@@ -185,7 +180,7 @@ class ExistingAddress extends Component {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" onClick={this.handleUnlockAction}>
+					<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
 						UNLOCK
 					</Button>
 				</Grid>

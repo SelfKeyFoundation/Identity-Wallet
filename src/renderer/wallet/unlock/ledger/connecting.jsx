@@ -75,12 +75,12 @@ class Connecting extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">
+								<Typography variant="h1">
 									Error: Can&#39;t Connect To Ledger
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="subtitle1">
+								<Typography variant="body1">
 									To ensure a successful connection, please check following:
 								</Typography>
 							</Grid>
@@ -140,10 +140,10 @@ class Connecting extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">Connecting To Ledger</Typography>
+								<Typography variant="h1">Connecting To Ledger</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="subtitle1">
+								<Typography variant="body1">
 									To ensure a successful connection, please check the following:
 								</Typography>
 							</Grid>
@@ -183,10 +183,10 @@ class Connecting extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Connecting</Typography>
+									<Typography variant="body1">Connecting</Typography>
 								</Grid>
 								<Grid item>
-									<CircularProgress />
+									<CircularProgress size={25} />
 								</Grid>
 							</Grid>
 						</ModalHeader>

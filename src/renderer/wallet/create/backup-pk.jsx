@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	ModalWrap,
 	ModalHeader,
 	ModalBody,
-	DownloadIcon2,
+	PrintIcon,
 	VisibilityOnIcon,
-	VisibilityOffIcon
+	VisibilityOffIcon,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -15,10 +15,6 @@ import { walletSelectors } from 'common/wallet';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
-	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -83,15 +79,12 @@ class BackupPK extends Component {
 							className={classes.logoSection}
 						>
 							<Grid item>
-								<SelfkeyLogo className={classes.logo} />
-							</Grid>
-							<Grid item>
-								<Typography variant="h1">SELFKEY</Typography>
+								<SelfkeyLogoTemp />
 							</Grid>
 						</Grid>
 						<Paper className="modalContent">
 							<ModalHeader>
-								<Typography variant="h6" id="modal-title">
+								<Typography variant="body1" id="modal-title">
 									Step 4: Backup Your Private Keys
 								</Typography>
 							</ModalHeader>
@@ -104,7 +97,7 @@ class BackupPK extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item xs={2}>
-										<DownloadIcon2 className={classes.downloadIcon} />
+										<PrintIcon className={classes.downloadIcon} />
 									</Grid>
 									<Grid item xs={10}>
 										<Typography variant="body1" gutterBottom>
@@ -117,7 +110,7 @@ class BackupPK extends Component {
 										</Typography>
 										<br />
 										<br />
-										<Typography variant="subtitle1" gutterBottom>
+										<Typography variant="overline" gutterBottom>
 											Your Private Key
 										</Typography>
 										<Input

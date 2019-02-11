@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Grid, Button, withStyles } from '@material-ui/core';
-import { P, H2 } from 'selfkey-ui';
+import { Grid, Button, withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	root: {
@@ -11,7 +10,8 @@ const styles = theme => ({
 		marginBottom: '30px',
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
-		fontFamily: 'Lato, arial, sans-serif'
+		fontFamily: 'Lato, arial, sans-serif',
+		backgroundColor: '#262F39'
 	},
 
 	title: {
@@ -23,7 +23,8 @@ const styles = theme => ({
 	},
 
 	header: {
-		backgroundColor: '#2a3540'
+		backgroundColor: '#2a3540',
+		height: '76px'
 	},
 
 	svgIcon: {
@@ -64,11 +65,11 @@ export const MarketplaceCategory = withStyles(styles)(
 						{svgIcon && <img src={svgIcon} className={classes.svgIcon} />}
 					</Grid>
 					<Grid item id="title" className={classes.title}>
-						<H2>{title}</H2>
+						<Typography variant="h2">{title}</Typography>
 					</Grid>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
-					<P>{description}</P>
+					<Typography variant="body2">{description}</Typography>
 				</Grid>
 				<Grid item id="footer" className={classes.footer}>
 					<Button
