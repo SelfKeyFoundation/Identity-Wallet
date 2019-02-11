@@ -1,13 +1,9 @@
 import React from 'react';
 import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
+		marginTop: 0
 	}
 });
 
@@ -30,7 +26,9 @@ const HelpStepsErrorSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>1</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">1</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -40,8 +38,8 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
-									Plug in the device via USB and unlock it with your PIN
+								<Typography variant="h5" color="secondary">
+									Is &#34;Browser Support&#34; disabled in settings?
 								</Typography>
 							</Grid>
 						</Grid>
@@ -57,7 +55,9 @@ const HelpStepsErrorSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>2</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">2</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -67,8 +67,8 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
-									&#34;Browser Support&#34; must be DISABLED in settings.
+								<Typography variant="h5" color="secondary">
+									Is &#34;Contract Data&#34; set to Yes in settings?
 								</Typography>
 							</Grid>
 						</Grid>
@@ -84,7 +84,9 @@ const HelpStepsErrorSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>3</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">3</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -94,8 +96,8 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
-									Also, make sure &#34;Contract Data&#34; is set to YES.
+								<Typography variant="h5" color="secondary">
+									Is it properly plugged in?
 								</Typography>
 							</Grid>
 						</Grid>
@@ -111,7 +113,9 @@ const HelpStepsErrorSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>4</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">4</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -121,8 +125,8 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
-									Open the Ethereum application on the device.
+								<Typography variant="h5" color="secondary">
+									Did you enter the PIN to unlock?
 								</Typography>
 							</Grid>
 						</Grid>
@@ -138,7 +142,9 @@ const HelpStepsErrorSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>5</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">5</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -148,8 +154,8 @@ const HelpStepsErrorSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
-									Press &#34;Connect To Ledger&#34;.
+								<Typography variant="h5" color="secondary">
+									Is the Ethereum application open?
 								</Typography>
 							</Grid>
 						</Grid>

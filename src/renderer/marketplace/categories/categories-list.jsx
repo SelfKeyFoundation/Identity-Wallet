@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid, withStyles } from '@material-ui/core';
-import { H1, MarketplaceIcon } from 'selfkey-ui';
+import { Grid, withStyles, Typography } from '@material-ui/core';
+import { MarketplaceIcon } from 'selfkey-ui';
 
 import { MarketplaceCategory } from './category';
 
@@ -46,7 +46,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 				<MarketplaceIcon className={classes.headerIcon} />
 			</Grid>
 			<Grid item>
-				<H1 className={classes.headerTitle}>SelfKey Marketplace</H1>
+				<Typography variant="h1">SelfKey Marketplace</Typography>
 			</Grid>
 		</Grid>
 		<Grid item id="body" xs={12}>
