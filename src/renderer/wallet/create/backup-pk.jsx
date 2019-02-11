@@ -7,7 +7,8 @@ import {
 	PrintIcon,
 	VisibilityOnIcon,
 	VisibilityOffIcon,
-	SelfkeyLogoTemp
+	SelfkeyLogoTemp,
+	warning
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -37,6 +38,15 @@ const styles = theme => ({
 	},
 	input: {
 		display: 'none'
+	},
+	orange: {
+		border: `1px solid ${warning}`,
+		background: 'transparent',
+		color: warning,
+		width: '100%',
+		'&:hover': {
+			border: `1px solid ${warning}`
+		}
 	}
 });
 
@@ -148,7 +158,7 @@ class BackupPK extends Component {
 											color="secondary"
 											component={main}
 											size="large"
-											className={classes.button}
+											className={classes.orange}
 										>
 											MY PRIVATE KEY IS BACKED UP, CONTINUE
 										</Button>
