@@ -28,7 +28,7 @@ export const handlePassword = (event, state) => {
 export const renderPasswordStrength = (password, strength) => {
 	if (password !== '') {
 		return (
-			<Typography variant="body1" align="center">
+			<Typography variant="body2" color="secondary" align="center">
 				{strength}
 			</Typography>
 		);
