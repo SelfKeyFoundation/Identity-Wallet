@@ -35,10 +35,26 @@ const styles = theme => ({
 		paddingBottom: '50px'
 	},
 	passwordScore: {
+		backgroundColor: '#1E262E',
+		borderRadius: 0,
+		height: '10px',
 		width: '100%'
 	},
 	passwordInput: {
 		width: '100%'
+	},
+	maskContainer: {
+		height: '10px',
+		justifyContent: 'space-evenly',
+		marginTop: '10px',
+		position: 'absolute',
+		width: '598px',
+		zIndex: 1
+	},
+	maskElement: {
+		backgroundColor: '#262F39',
+		height: '10px',
+		width: '8px'
 	}
 });
 
@@ -121,6 +137,11 @@ class PasswordConfirmation extends Component {
 											{this.state.error}
 										</Typography>
 									)}
+									<Grid container className={classes.maskContainer}>
+										<div className={classes.maskElement} />
+										<div className={classes.maskElement} />
+										<div className={classes.maskElement} />
+									</Grid>
 									<LinearProgress
 										variant="determinate"
 										value={this.state.passwordScore}
