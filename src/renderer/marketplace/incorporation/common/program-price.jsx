@@ -1,5 +1,12 @@
 import React from 'react';
 
+const formatNumber = (number) => {
+	let splitNum = number.toString().split('.');
+	// Format number with thousands separator
+	splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	return splitNum.join('.');
+}
+
 const ProgramPrice = props => {
 	const { price, rate, label } = props;
 
@@ -8,7 +15,7 @@ const ProgramPrice = props => {
 	}
 
 	const numeric = parseInt(price.replace(/\$/, '').replace(/,/, ''));
-	const key = Math.round(numeric / rate);
+	const key = formatNumber(numeric / rate);
 
 	return (
 		<div className="price">
