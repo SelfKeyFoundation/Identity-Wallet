@@ -63,7 +63,7 @@ class CryptoPriceTableComponent extends Component {
 		const { classes, toggleAction, alwaysVisible = [] } = this.props;
 		if (alwaysVisible.includes(token.address || '')) return;
 		let icon;
-		if (token.hidden) {
+		if (!token.recordState) {
 			icon = <VisibilityOffIcon className={classes.iconSize} />;
 		} else {
 			icon = <VisibilityOnIcon className={classes.iconSize} />;

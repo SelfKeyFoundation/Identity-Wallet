@@ -47,7 +47,11 @@ class CreateAttributeComponent extends Component {
 	get uiSchema() {
 		const type = this.type;
 		if (!type) return null;
-		return this.props.uiSchemas.find(ui => ui.repositoryId === type.defaultRepositoryId) || {};
+		return (
+			this.props.uiSchemas.find(
+				ui => ui.repositoryId === type.defaultRepositoryId && ui.attributeTypeId === type.id
+			) || {}
+		);
 	}
 	render() {
 		const { types, classes } = this.props;
