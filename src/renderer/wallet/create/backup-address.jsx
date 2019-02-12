@@ -6,7 +6,8 @@ import {
 	ModalBody,
 	Copy,
 	DownloadIcon2,
-	SelfkeyLogoTemp
+	SelfkeyLogoTemp,
+	warning
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -37,6 +38,15 @@ const styles = theme => ({
 	},
 	input: {
 		display: 'none'
+	},
+	orange: {
+		border: `1px solid ${warning}`,
+		background: 'transparent',
+		color: warning,
+		width: '100%',
+		'&:hover': {
+			border: `1px solid ${warning}`
+		}
 	}
 });
 
@@ -142,7 +152,7 @@ class BackupAddress extends Component {
 										variant="outlined"
 										component={backupPrivateKey}
 										size="large"
-										className={classes.button}
+										className={classes.orange}
 									>
 										MY ADDRESS IS BACKED UP, CONTINUE
 									</Button>
