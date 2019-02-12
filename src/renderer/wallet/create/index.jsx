@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography, Grid, Button } from '@material-ui/core';
+import { Modal, Typography, Grid, Button, withStyles } from '@material-ui/core';
 import history from 'common/store/history';
 import { Link } from 'react-router-dom';
 import {
@@ -8,12 +8,25 @@ import {
 	ModalCloseIcon,
 	ModalHeader,
 	ModalBody,
-	WarningShieldIcon
+	WarningShieldIcon,
+	warning
 } from 'selfkey-ui';
 
 const createPasswordLink = props => <Link to="/createPassword" {...props} />;
 
+const styles = theme => ({
+	orange: {
+		border: `1px solid ${warning}`,
+		background: 'transparent',
+		color: warning,
+		'&:hover': {
+			border: `1px solid ${warning}`
+		}
+	}
+});
+
 export const CreateWallet = props => {
+	const { classes } = props;
 	return (
 		<Modal open={true}>
 			<ModalWrap>
@@ -45,9 +58,9 @@ export const CreateWallet = props => {
 								<Grid item>
 									<Button
 										variant="outlined"
-										color="secondary"
 										component={createPasswordLink}
 										size="large"
+										className={classes.orange}
 									>
 										I UNDERSTAND, THERE IS NO WAY TO RECOVER THIS PASSWORD
 									</Button>
@@ -61,4 +74,4 @@ export const CreateWallet = props => {
 	);
 };
 
-export default CreateWallet;
+export default withStyles(styles)(CreateWallet);
