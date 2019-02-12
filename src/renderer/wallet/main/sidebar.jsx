@@ -59,7 +59,13 @@ const styles = theme => ({
 		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: '30px',
-		paddingLeft: '10px'
+		paddingLeft: '10px',
+		'&:hover': {
+			color: '#ffffff',
+			'& p': {
+				color: 'white'
+			}
+		}
 	},
 
 	secondaryButtons: {
