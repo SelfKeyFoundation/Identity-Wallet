@@ -179,6 +179,22 @@ const getAbrDateFromTimestamp = timestamp => {
 	return { month, day };
 };
 
+const filterTransactionByToken = (transaction, token) => {
+	let valid = false;
+	switch (token) {
+		case 'KEY':
+			valid = transaction.tokenSymbol === 'KI';
+			break;
+		case 'ETH':
+			valid = transaction.contractAddress === null;
+			break;
+		default:
+			// Custom Tokens
+			valid = transaction.tokenSymbol !== 'KI' && transaction.contractAddress !== null;
+	}
+	return valid;
+};
+
 export class Transfer extends React.Component {
 	componentDidMount() {
 		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
@@ -199,16 +215,72 @@ export class Transfer extends React.Component {
 		this.props.dispatch(push(`/main/advancedTransaction/${this.props.cryptoCurrency}`));
 	};
 
-	render() {
-		const { classes, cryptoCurrency, publicKey, transactions } = this.props;
+	renderActivity() {
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
+		const token = this.props.cryptoCurrency;
 
-		// Select only specific transactions
-		// const selectedCryptoTransactions = transactions.filter(
-		// 	t => t.cryptoCurrency === cryptoCurrency
-		// );
-		// Filter only last 5
-		const lastCryptoTransactions = transactions.slice(0, NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW);
+		const sortedTransactions = this.props.transactions.sort((a, b) => {
+			let timeStampA = a.timeStamp;
+			let timeStampB = b.timeStamp;
+			if (timeStampA < timeStampB) return 1;
+			if (timeStampA > timeStampB) return -1;
+			return 0;
+		});
+
+		const filteredTransactions = sortedTransactions.filter(transaction => {
+			return filterTransactionByToken(transaction, token);
+		});
+
+		const lastCryptoTransactions = filteredTransactions.slice(
+			0,
+			NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW
+		);
+
+		return (
+			<div>
+				<Typography variant="h4">Activity</Typography>
+				<div>
+					{lastCryptoTransactions.map(transaction => (
+						<div key={transaction.id}>
+							<div className={this.props.classes.transactionEntry}>
+								<div className={this.props.classes.transactionEntryDate}>
+									<Typography
+										component="span"
+										variant="body2"
+										color="secondary"
+										gutterBottom
+									>
+										{this._renderDate(transaction.timeStamp)}
+									</Typography>
+								</div>
+								<div className={this.props.classes.transactionEntryIcon}>
+									{getIconForTransaction(
+										transaction.statusIconName,
+										transaction.sending
+									)}
+								</div>
+								<div className={this.props.classes.transactionEntryStatus}>
+									<Typography component="span" variant="body2" gutterBottom>
+										{transaction.statusText || getCustomStatusText(transaction)}
+									</Typography>
+								</div>
+								<div className={this.props.classes.transactionEntryAmount}>
+									<Typography component="span" variant="body2" gutterBottom>
+										{transaction.sending ? '- ' : '+ '}
+										{transaction.value}
+									</Typography>
+								</div>
+							</div>
+							<Divider />
+						</div>
+					))}
+				</div>
+			</div>
+		);
+	}
+
+	render() {
+		const { classes, cryptoCurrency, publicKey } = this.props;
 
 		return (
 			<Modal open={true}>
@@ -278,47 +350,7 @@ export class Transfer extends React.Component {
 					</Paper>
 
 					<Paper className={classes.modalContentWrapper}>
-						<ModalBody>
-							<div>
-								<Typography variant="h4">Activity</Typography>
-								<div>
-									{lastCryptoTransactions.map(transaction => (
-										<div key={transaction.id}>
-											<div className={classes.transactionEntry}>
-												<div className={classes.transactionEntryDate}>
-													<Typography
-														variant="body2"
-														color="secondary"
-														gutterBottom
-													>
-														{this._renderDate(transaction.timeStamp)}
-													</Typography>
-												</div>
-												<div className={classes.transactionEntryIcon}>
-													{getIconForTransaction(
-														transaction.statusIconName,
-														transaction.sending
-													)}
-												</div>
-												<div className={classes.transactionEntryStatus}>
-													<Typography variant="body2" gutterBottom>
-														{transaction.statusText ||
-															getCustomStatusText(transaction)}
-													</Typography>
-												</div>
-												<div className={classes.transactionEntryAmount}>
-													<Typography variant="body2" gutterBottom>
-														{transaction.sending ? '- ' : '+ '}
-														{transaction.value}
-													</Typography>
-												</div>
-											</div>
-											<Divider />
-										</div>
-									))}
-								</div>
-							</div>
-						</ModalBody>
+						<ModalBody>{this.renderActivity()}</ModalBody>
 					</Paper>
 				</ModalWrap>
 			</Modal>
