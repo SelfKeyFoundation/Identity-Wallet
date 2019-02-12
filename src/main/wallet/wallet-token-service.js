@@ -10,7 +10,7 @@ export class WalletTokenService {
 	}
 
 	getWalletTokens(walletId) {
-		return WalletToken.findByWalletId(walletId);
+		return WalletToken.findByWalletId(walletId, true);
 	}
 
 	// TODO use the test ABI when in dev mode

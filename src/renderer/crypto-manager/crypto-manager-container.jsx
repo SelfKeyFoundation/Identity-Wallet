@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Button, Typography, withStyles } from '@material-ui/core';
-import { MyCryptoLargeIcon } from 'selfkey-ui';
+// import { MyCryptoLargeIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
@@ -41,9 +41,6 @@ class CryptoManagerContainerComponent extends Component {
 					‹ Back
 				</Button>
 
-				<Grid item>
-					<MyCryptoLargeIcon />
-				</Grid>
 				<Grid item>
 					<Typography variant="h1">Manage My Crypto</Typography>
 				</Grid>
