@@ -65,11 +65,30 @@ const styles = theme => ({
 	secondaryButtons: {
 		alignItems: 'flex-end',
 		display: 'flex',
-		flexGrow: 2
+		flexGrow: 2,
+		width: 'inherit'
+	},
+
+	inheritWidth: {
+		width: 'inherit'
 	},
 
 	inheritHeight: {
 		height: 'inherit'
+	},
+
+	textColor: {
+		color: '#fff',
+		opacity: 0.8
+	},
+
+	version: {
+		color: '#fff',
+		fontSize: '10px',
+		opacity: 0.6,
+		position: 'absolute',
+		right: 0,
+		width: 'auto'
 	}
 });
 
@@ -193,7 +212,7 @@ class Sidebar extends Component {
 				</Grid>
 				<Divider />
 				<Grid item className={classes.secondaryButtons}>
-					<List>
+					<List className={classes.inheritWidth}>
 						<ListItem
 							className={classes.listItem}
 							onClick={e => {
@@ -201,7 +220,7 @@ class Sidebar extends Component {
 							}}
 							key="switchAccount"
 						>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
 								Help & Support
 							</Typography>
 						</ListItem>
@@ -210,13 +229,18 @@ class Sidebar extends Component {
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
 								Switch Accounts
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
 								Quit
+							</Typography>
+						</ListItem>
+						<ListItem key="version">
+							<Typography variant="subtitle2" className={classes.version}>
+								V 0.0.2
 							</Typography>
 						</ListItem>
 					</List>
