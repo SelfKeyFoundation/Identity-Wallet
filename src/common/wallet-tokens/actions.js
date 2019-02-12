@@ -6,4 +6,9 @@ const updateWalletTokens = createAliasedAction(types.WALLET_TOKENS_UPDATE, walle
 	payload: walletTokens
 }));
 
-export { updateWalletTokens };
+const setWalletTokens = payload => ({
+	type: types.WALLET_TOKENS_SET,
+	payload
+});
+
+export { updateWalletTokens, setWalletTokens };

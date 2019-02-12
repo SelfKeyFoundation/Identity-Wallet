@@ -19,7 +19,7 @@ export const getTokens = state => {
 };
 
 const getTokensForDisplay = state => {
-	return getTokens(state).filter(token => token.hidden < 1);
+	return getTokens(state).filter(token => token.recordState);
 };
 
 const getFilteredTokens = state => {
