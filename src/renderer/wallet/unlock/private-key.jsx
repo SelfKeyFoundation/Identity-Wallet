@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar, Input, Button, Grid, Typography, InputAdornment } from '@material-ui/core';
-import { baseLight, VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
+import { VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
@@ -9,14 +9,13 @@ const styles = theme => ({
 	root: {
 		flexGrow: 1
 	},
-	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
-	},
+
 	input: {
 		width: '500px'
+	},
+
+	pointer: {
+		cursor: 'pointer'
 	}
 });
 
@@ -88,7 +87,9 @@ class PrivateKey extends Component {
 							spacing={16}
 						>
 							<Grid item>
-								<Avatar className={classes.avatar}>1</Avatar>
+								<Avatar>
+									<Typography variant="overline">1</Typography>
+								</Avatar>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -98,7 +99,7 @@ class PrivateKey extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="subtitle2" color="secondary">
+										<Typography variant="overline" gutterBottom>
 											ENTER YOUR PRIVATE KEY
 										</Typography>
 									</Grid>
@@ -107,7 +108,10 @@ class PrivateKey extends Component {
 											fullWidth
 											error={this.state.error !== ''}
 											endAdornment={
-												<InputAdornment position="start">
+												<InputAdornment
+													position="start"
+													className={classes.pointer}
+												>
 													<div onClick={this.handleVisibility}>
 														{this.state.visibilityComponent}
 													</div>
@@ -131,7 +135,7 @@ class PrivateKey extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						<Button variant="contained" onClick={this.handleUnlockAction}>
+						<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
 							UNLOCK
 						</Button>
 					</Grid>

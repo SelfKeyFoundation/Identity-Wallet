@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
-import { SelfkeyLogo, ModalWrap, ModalHeader, ModalBody, Copy, DownloadIcon2 } from 'selfkey-ui';
+import {
+	ModalWrap,
+	ModalHeader,
+	ModalBody,
+	Copy,
+	DownloadIcon2,
+	SelfkeyLogoTemp
+} from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
@@ -8,10 +15,6 @@ import { createWalletSelectors, createWalletOperations } from 'common/create-wal
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
-	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -74,15 +77,12 @@ class BackupAddress extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
 					<Paper>
 						<ModalHeader>
-							<Typography variant="h6" id="modal-title">
+							<Typography variant="body1" id="modal-title">
 								Step 3: Backup Your Ethereum Address
 							</Typography>
 						</ModalHeader>
@@ -108,7 +108,7 @@ class BackupAddress extends Component {
 									</Typography>
 									<br />
 									<br />
-									<Typography variant="subtitle1" gutterBottom>
+									<Typography variant="overline" gutterBottom>
 										Your Public Key
 									</Typography>
 									<Input

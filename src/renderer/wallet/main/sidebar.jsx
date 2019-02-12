@@ -22,10 +22,13 @@ import {
 
 const styles = theme => ({
 	list: {
-		width: 260
+		margin: 0,
+		width: 300
 	},
 
 	logoSection: {
+		marginBottom: '30px',
+		marginTop: '-30px',
 		paddingLeft: '16px'
 	},
 
@@ -34,8 +37,27 @@ const styles = theme => ({
 		height: '44px'
 	},
 
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px',
+		paddingTop: '3px'
+	},
+
 	closeSection: {
 		width: '100%'
+	},
+
+	pointer: {
+		cursor: 'pointer'
+	},
+
+	listItem: {
+		alignItems: 'end',
+		display: 'flex',
+		marginBottom: '30px',
+		paddingLeft: '10px'
 	}
 });
 
@@ -79,14 +101,14 @@ class Sidebar extends Component {
 				className={classes.list}
 				spacing={40}
 			>
-				<Grid item xs={12} className={classes.closeSection}>
+				<Grid item className={classes.closeSection}>
 					<Grid container direction="row" justify="flex-end" alignItems="flex-start">
 						<Grid item>
-							<Close />
+							<Close color="secondary" className={classes.pointer} />
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<Grid
 						container
 						direction="row"
@@ -99,42 +121,72 @@ class Sidebar extends Component {
 							<SelfkeyLogo className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<List>
-						<ListItem component={dashboard} key="dashboard">
+						<ListItem
+							className={classes.listItem}
+							component={dashboard}
+							key="dashboard"
+						>
 							<ListItemIcon>
 								<DashboardMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Dashboard" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Dashboard
+							</Typography>
 						</ListItem>
-						<ListItem component={marketplace} key="marketplace">
+						<ListItem
+							className={classes.listItem}
+							component={marketplace}
+							key="marketplace"
+						>
 							<ListItemIcon>
 								<MarketplaceMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Marketplace" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Marketplace
+							</Typography>
 						</ListItem>
-						<ListItem component={selfkeyID} key="selfkeyID">
+						<ListItem
+							className={classes.listItem}
+							component={selfkeyID}
+							key="selfkeyID"
+						>
 							<ListItemIcon>
 								<SelfkeyIDMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="SelfKey ID" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								SelfKey ID
+							</Typography>
 						</ListItem>
-						<ListItem component={addressBook} key="addressBook">
+						<ListItem
+							className={classes.listItem}
+							component={addressBook}
+							key="addressBook"
+						>
 							<ListItemIcon>
 								<AddressBookMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Address Book" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Address Book
+							</Typography>
 						</ListItem>
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item xs={12}>
+				<Grid item>
 					<List>
-						<ListItem component={switchAccount} key="switchAccount">
+						<ListItem
+							className={classes.listItem}
+							component={switchAccount}
+							key="switchAccount"
+						>
 							<ListItemText primary="Switch Account" />
 						</ListItem>
 					</List>

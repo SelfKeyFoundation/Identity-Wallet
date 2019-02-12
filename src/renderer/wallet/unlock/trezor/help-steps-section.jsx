@@ -1,13 +1,9 @@
 import React from 'react';
 import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
-import { baseLight } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
-		width: '20px',
-		height: '20px',
-		fontSize: '12px',
-		backgroundColor: baseLight
+		marginTop: 0
 	}
 });
 
@@ -30,7 +26,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>1</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">1</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -40,7 +38,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Plug in the device via USB
 								</Typography>
 							</Grid>
@@ -57,7 +55,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>2</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">2</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -67,7 +67,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Click &#34;Connect to Trezor&#34; button below
 								</Typography>
 							</Grid>
@@ -84,7 +84,9 @@ const HelpStepsSection = ({ classes }) => {
 					spacing={16}
 				>
 					<Grid item>
-						<Avatar className={classes.avatar}>3</Avatar>
+						<Avatar className={classes.avatar}>
+							<Typography variant="overline">3</Typography>
+						</Avatar>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -94,7 +96,7 @@ const HelpStepsSection = ({ classes }) => {
 							alignItems="flex-start"
 						>
 							<Grid item>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography variant="h5" color="secondary">
 									Look at the device for number positions and enter your PIN
 								</Typography>
 							</Grid>

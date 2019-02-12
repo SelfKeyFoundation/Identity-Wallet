@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Divider } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
@@ -25,10 +24,6 @@ import Ledger from './ledger';
 import Trezor from './trezor';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
-	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -52,6 +47,19 @@ const styles = theme => ({
 	passwordInput: {
 		width: '100%'
 	},
+	hr: {
+		backgroundColor: '#475768',
+		border: 'none',
+		boxSizing: 'border-box',
+		height: '1px',
+		margin: '5px 16px',
+		width: '100%'
+	},
+	divider: {
+		backgroundColor: '#475768',
+		marginBottom: '15px',
+		width: 'calc(100% - 50px)'
+	},
 	modalContentWrapper: {}
 });
 
@@ -59,9 +67,14 @@ const gotBackHome = props => <Link to="/home" {...props} />;
 
 const unlockOptionStyle = theme => ({
 	box: {
-		maxWidth: '110px',
-		minWidth: '110px',
-		minHeight: '88px',
+		backgroundColor: '#293743',
+		boxShadow: 'none',
+		borderColor: '#1D505F',
+		display: 'flex',
+		maxWidth: '133px',
+		minWidth: '133px',
+		minHeight: '110px',
+		margin: '16px 5px',
 		cursor: 'pointer',
 		'&:hover': {
 			borderColor: primaryTint
@@ -75,7 +88,8 @@ const unlockOptionStyle = theme => ({
 		lineHeight: '0px'
 	},
 	grid: {
-		marginTop: '10px'
+		marginBottom: '10px',
+		paddingTop: '20px'
 	},
 	selected: {
 		borderColor: primaryTint
@@ -87,23 +101,19 @@ const UnlockOption = props => {
 	const selectedClass = selected ? `${classes.box} ${classes.selected}` : classes.box;
 	return (
 		<Paper className={selectedClass} onClick={onClick}>
-			<Grid
-				container
-				direction="column"
-				justify="center"
-				alignItems="center"
-				className={classes.grid}
-			>
-				<Grid item>{icon}</Grid>
-				<Grid item>
-					<Typography variant="body1" className={classes.body1}>
-						{title}
-					</Typography>
+			<Grid container direction="column" justify="flex-start" alignItems="center">
+				<Grid item className={classes.grid}>
+					{icon}
 				</Grid>
-				<Grid item>
-					<Typography variant="body2" className={classes.body2}>
-						{subtitle}
-					</Typography>
+				<Grid container direction="column" justify="center" alignItems="center">
+					<Grid item>
+						<Typography variant="body2">{title}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography variant="subtitle2" color="secondary" gutterBottom>
+							{subtitle}
+						</Typography>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Paper>
@@ -139,12 +149,7 @@ class Unlock extends Component {
 						spacing={8}
 						className={classes.logoSection}
 					>
-						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
-						</Grid>
+						<Grid item />
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
 						<ModalCloseButton component={gotBackHome}>
@@ -152,7 +157,7 @@ class Unlock extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h3" id="modal-title">
+							<Typography variant="h2" color="textPrimary" id="modal-title">
 								Use An Existing ETH Address
 							</Typography>
 						</ModalHeader>
@@ -171,7 +176,6 @@ class Unlock extends Component {
 										direction="row"
 										justify="center"
 										alignItems="center"
-										spacing={32}
 									>
 										<Grid item>
 											<UnlockOptionWrapped
@@ -232,7 +236,7 @@ class Unlock extends Component {
 										</Grid>
 									</Grid>
 								</Grid>
-								<Divider />
+								<Divider className={classes.divider} />
 								<Grid item>
 									<Route
 										path={`${match.path}/existingAddress`}
