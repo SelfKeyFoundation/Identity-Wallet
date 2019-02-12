@@ -3,7 +3,6 @@ import {
 	withStyles,
 	List,
 	ListItem,
-	ListItemText,
 	Drawer,
 	ListItemIcon,
 	Grid,
@@ -22,6 +21,8 @@ import {
 
 const styles = theme => ({
 	list: {
+		height: 'inherit',
+		justifyContent: 'space-between',
 		margin: 0,
 		width: 300
 	},
@@ -55,9 +56,20 @@ const styles = theme => ({
 
 	listItem: {
 		alignItems: 'end',
+		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: '30px',
 		paddingLeft: '10px'
+	},
+
+	secondaryButtons: {
+		alignItems: 'flex-end',
+		display: 'flex',
+		flexGrow: 2
+	},
+
+	inheritHeight: {
+		height: 'inherit'
 	}
 });
 
@@ -180,14 +192,32 @@ class Sidebar extends Component {
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item>
+				<Grid item className={classes.secondaryButtons}>
 					<List>
+						<ListItem
+							className={classes.listItem}
+							onClick={e => {
+								window.openExternal(e, 'https://help.selfkey.org/');
+							}}
+							key="switchAccount"
+						>
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Help & Support
+							</Typography>
+						</ListItem>
 						<ListItem
 							className={classes.listItem}
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<ListItemText primary="Switch Account" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Switch Accounts
+							</Typography>
+						</ListItem>
+						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Quit
+							</Typography>
 						</ListItem>
 					</List>
 				</Grid>
@@ -201,6 +231,7 @@ class Sidebar extends Component {
 					role="button"
 					onClick={() => this.toggleDrawer(false)}
 					onKeyDown={() => this.toggleDrawer(false)}
+					className={classes.inheritHeight}
 				>
 					{sideList}
 				</div>
