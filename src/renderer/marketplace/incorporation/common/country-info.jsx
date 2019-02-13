@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import 'flag-icon-css/css/flag-icon.css';
 
-const styles = {
+const styles = theme => ({
 	countryName: {
 		textAlign: 'center',
 		marginBottom: '2em'
@@ -37,7 +38,7 @@ const styles = {
 			float: 'right'
 		}
 	}
-};
+});
 
 /* ==========================================================================
    Received props:
@@ -150,6 +151,12 @@ class IncorporationsCountryInfo extends Component {
 	}
 }
 
+IncorporationsCountryInfo.propTypes = {
+	countryCode: PropTypes.string,
+	isLoading: PropTypes.bool,
+	country: PropTypes.any
+};
+
 const mapStateToProps = (state, props) => {
 	return {
 		country: incorporationsSelectors.getCountry(state, props.countryCode),
@@ -157,4 +164,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsCountryInfo));
+const styledComponent = withStyles(styles)(IncorporationsCountryInfo);
+export default connect(mapStateToProps)(styledComponent);

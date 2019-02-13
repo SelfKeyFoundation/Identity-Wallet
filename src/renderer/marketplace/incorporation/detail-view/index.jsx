@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import injectSheet from 'react-jss';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
@@ -13,7 +13,7 @@ import IncorporationsCountryInfo from '../common/country-info';
 import IncorporationsKYC from '../common/kyc-requirements';
 import ProgramPrice from '../common/program-price';
 
-const styles = {
+const styles = theme => ({
 	container: {
 		width: '100%',
 		margin: '0 auto',
@@ -137,7 +137,7 @@ const styles = {
 	tabDescription: {
 		marginTop: '40px'
 	}
-};
+});
 
 function TabContainer({ children }) {
 	return <div>{children}</div>;
@@ -415,4 +415,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsDetailView));
+const styledComponent = withStyles(styles)(IncorporationsDetailView);
+export default connect(mapStateToProps)(styledComponent);

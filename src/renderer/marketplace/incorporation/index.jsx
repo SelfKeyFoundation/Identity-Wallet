@@ -3,16 +3,16 @@ import { Provider } from 'react-redux';
 import store from '../../common/store';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { Grid } from '@material-ui/core';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 
 import IncorporationsTable from './table';
 import IncorporationsDetailView from './detail-view';
 
-const styles = {
+const styles = theme => ({
 	body: {
 		minHeight: '90vh'
 	}
-};
+});
 
 class MarketplaceIncorporationComponent extends Component {
 	state = {
@@ -54,6 +54,6 @@ class MarketplaceIncorporationComponent extends Component {
 	}
 }
 
-const MarketplaceIncorporationPage = injectSheet(styles)(MarketplaceIncorporationComponent);
+const MarketplaceIncorporationPage = withStyles(styles)(MarketplaceIncorporationComponent);
 
 export { MarketplaceIncorporationPage };

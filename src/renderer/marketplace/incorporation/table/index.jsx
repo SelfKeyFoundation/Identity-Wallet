@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 import { pricesSelectors } from 'common/prices';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +15,7 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 import FlagCountryName from '../common/flag-country-name';
 import ProgramPrice from '../common/program-price';
 
-const styles = {
+const styles = theme => ({
 	header: {
 		borderBottom: 'solid 1px #475768',
 		display: 'flex',
@@ -83,7 +83,7 @@ const styles = {
 	loading: {
 		marginTop: '5em'
 	}
-};
+});
 
 class IncorporationsTable extends Component {
 	componentDidMount() {
@@ -209,4 +209,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsTable));
+const styledComponent = withStyles(styles)(IncorporationsTable);
+export default connect(mapStateToProps)(styledComponent);
