@@ -1,4 +1,5 @@
 import React from 'react';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import {
@@ -183,14 +184,16 @@ const filterTransactionByToken = (transaction, token) => {
 	let valid = false;
 	switch (token) {
 		case 'KEY':
-			valid = transaction.tokenSymbol === 'KI';
+			valid = transaction.tokenSymbol === config.constants.primaryToken;
 			break;
 		case 'ETH':
 			valid = transaction.contractAddress === null;
 			break;
 		default:
 			// Custom Tokens
-			valid = transaction.tokenSymbol !== 'KI' && transaction.contractAddress !== null;
+			valid =
+				transaction.tokenSymbol !== config.constants.primaryToken &&
+				transaction.contractAddress !== null;
 	}
 	return valid;
 };
