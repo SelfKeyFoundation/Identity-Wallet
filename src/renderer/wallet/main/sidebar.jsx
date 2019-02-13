@@ -3,7 +3,6 @@ import {
 	withStyles,
 	List,
 	ListItem,
-	ListItemText,
 	Drawer,
 	ListItemIcon,
 	Grid,
@@ -22,6 +21,8 @@ import {
 
 const styles = theme => ({
 	list: {
+		height: 'inherit',
+		justifyContent: 'space-between',
 		margin: 0,
 		width: 300
 	},
@@ -55,9 +56,45 @@ const styles = theme => ({
 
 	listItem: {
 		alignItems: 'end',
+		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: '30px',
-		paddingLeft: '10px'
+		paddingLeft: '10px',
+		'&:hover': {
+			color: '#ffffff',
+			'& p': {
+				color: 'white'
+			}
+		}
+	},
+
+	secondaryButtons: {
+		alignItems: 'flex-end',
+		display: 'flex',
+		flexGrow: 2,
+		width: 'inherit'
+	},
+
+	inheritWidth: {
+		width: 'inherit'
+	},
+
+	inheritHeight: {
+		height: 'inherit'
+	},
+
+	textColor: {
+		color: '#fff',
+		opacity: 0.8
+	},
+
+	version: {
+		color: '#fff',
+		fontSize: '10px',
+		opacity: 0.6,
+		position: 'absolute',
+		right: 0,
+		width: 'auto'
 	}
 });
 
@@ -180,14 +217,37 @@ class Sidebar extends Component {
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item>
-					<List>
+				<Grid item className={classes.secondaryButtons}>
+					<List className={classes.inheritWidth}>
+						<ListItem
+							className={classes.listItem}
+							onClick={e => {
+								window.openExternal(e, 'https://help.selfkey.org/');
+							}}
+							key="switchAccount"
+						>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Help & Support
+							</Typography>
+						</ListItem>
 						<ListItem
 							className={classes.listItem}
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<ListItemText primary="Switch Account" />
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Switch Accounts
+							</Typography>
+						</ListItem>
+						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Quit
+							</Typography>
+						</ListItem>
+						<ListItem key="version">
+							<Typography variant="subtitle2" className={classes.version}>
+								V 0.0.2
+							</Typography>
 						</ListItem>
 					</List>
 				</Grid>
@@ -201,6 +261,7 @@ class Sidebar extends Component {
 					role="button"
 					onClick={() => this.toggleDrawer(false)}
 					onKeyDown={() => this.toggleDrawer(false)}
+					className={classes.inheritHeight}
 				>
 					{sideList}
 				</div>
