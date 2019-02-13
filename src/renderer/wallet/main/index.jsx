@@ -24,6 +24,8 @@ import Toolbar from './toolbar';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
+import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
+import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
 
 const styles = theme => ({
 	headerSection: {
@@ -100,6 +102,11 @@ class Main extends Component {
 						path={`${match.path}/transaction-progress`}
 						component={TransactionSendProgress}
 					/>
+					<Route
+						path={`${match.path}/transaction-no-gas-error`}
+						component={TransactionNoGasError}
+					/>
+					<Route path={`${match.path}/transaction-error`} component={TransactionError} />
 					<Route
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
