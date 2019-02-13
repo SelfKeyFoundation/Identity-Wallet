@@ -77,14 +77,14 @@ const styles = {
 			marginBottom: '1em'
 		},
 		'& div.price': {
-			fontFamily: 'Lato',
+			fontFamily: 'Lato, arial, sans-serif',
 			fontSize: '20px',
 			fontWeight: 'bold',
 			color: '#00C0D9'
 		},
 		'& span.price-key': {
 			color: '#93B0C1',
-			fontFamily: 'Lato',
+			fontFamily: 'Lato, arial, sans-serif',
 			fontSize: '12px',
 			display: 'block',
 			fontWeight: 'normal',
