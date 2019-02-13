@@ -202,7 +202,7 @@ export class WalletService {
 		return this._getWallets();
 	}
 
-	async sendTransaction(transactionObject) {
+	sendTransaction(transactionObject) {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
 }

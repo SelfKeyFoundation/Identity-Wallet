@@ -161,31 +161,25 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
-	componentDidUpdate() {
-		if (this.props.status === 'NoBalance') {
-			this.props.navigateToTransactionNoGasError();
-		} else if (this.props.status === 'Error') {
-			this.props.navigateToTransactionError('Error');
-		} else if (this.props.status === 'Pending') {
-			this.props.navigateToTransactionProgress();
-		}
-	}
-
-	loadData() {
+	loadData = () => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-	}
+	};
 
 	handleSend = async () => {
 		this.setState({ sending: true });
 	};
 
-	handleGasPriceChange(value) {
-		this.props.dispatch(transactionOperations.setGasPrice(value));
-	}
+	handleCancelAction = () => {
+		history.getHistory().goBack();
+	};
 
-	handleGasLimitChange(value) {
+	handleGasPriceChange = value => {
+		this.props.dispatch(transactionOperations.setGasPrice(value));
+	};
+
+	handleGasLimitChange = value => {
 		this.props.dispatch(transactionOperations.setLimitPrice(value));
-	}
+	};
 
 	handleConfirm = async () => {
 		await this.props.dispatch(transactionOperations.confirmSend());
@@ -193,12 +187,18 @@ class TransactionSendBoxContainer extends Component {
 
 	handleCancel = () => {
 		this.setState({ sending: false });
-		history.getHistory().goBack();
 	};
 
 	// TransactionSendBox - Start
 	renderFeeBox() {
-		return <TransactionFeeBox {...this.props} />;
+		return (
+			<TransactionFeeBox
+				{...this.props}
+				changeGasLimitAction={this.handleGasLimitChange}
+				changeGasPriceAction={this.handleGasPriceChange}
+				reloadEthGasStationInfoAction={this.loadData}
+			/>
+		);
 	}
 
 	handleAllAmountClick() {
@@ -322,7 +322,7 @@ class TransactionSendBoxContainer extends Component {
 		return (
 			<TransactionBox
 				cryptoCurrency={cryptoCurrencyText}
-				closeAction={() => this.handleCancelAction()}
+				closeAction={this.handleCancelAction}
 			>
 				<input
 					type="text"

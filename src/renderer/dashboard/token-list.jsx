@@ -15,7 +15,9 @@ const TokenList = props => {
 					cryptoCurrencyShort={config.constants.primaryToken}
 					cryptoCurrencyName="Selfkey"
 					CryptoCurrencyIconComponent={SelfkeyIcon}
-					transferAction={() => props.dispatch(push('/main/transfer/key'))}
+					transferAction={() =>
+						props.dispatch(push(`/main/transfer/${config.constants.primaryToken}`))
+					}
 				>
 					<TokenPrice cryptoCurrency={config.constants.primaryToken} />
 				</TokenBox>

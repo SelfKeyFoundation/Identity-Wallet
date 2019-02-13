@@ -14,9 +14,6 @@ import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import { push } from 'connected-react-router';
 
-let txInfoCheckInterval = null;
-const TX_CHECK_INTERVAL = 1500;
-
 const chainId = config.chainId || 3;
 
 const transferHex = '0xa9059cbb';
@@ -39,9 +36,6 @@ const init = args => async dispatch => {
 			...args
 		})
 	);
-	if (txInfoCheckInterval) {
-		clearInterval(txInfoCheckInterval);
-	}
 };
 
 const setAddress = address => async dispatch => {
@@ -216,22 +210,25 @@ const confirmSend = () => async (dispatch, getState) => {
 		);
 		transactionObject.data = EthUtils.sanitizeHex(data);
 	}
-	try {
-		const transactionHash = await walletService.sendTransaction(transactionObject);
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	transactionEventEmitter.on('transactionHash', async hash => {
 		await dispatch(
 			actions.updateTransaction({
 				status: 'Pending',
-				transactionHash
+				transactionHash: hash
 			})
 		);
-
 		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
 
-		dispatch(createTxHistry(transactionHash));
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+	});
 
-		await dispatch(startTxBalanceUpdater(transactionHash));
-	} catch (error) {
-		console.log(error);
+	transactionEventEmitter.on('error', async error => {
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
 			await dispatch(
@@ -239,17 +236,19 @@ const confirmSend = () => async (dispatch, getState) => {
 					status: 'NoBalance'
 				})
 			);
+			await dispatch(push('/main/transaction-no-gas-error'));
 		} else {
 			await dispatch(
 				actions.updateTransaction({
 					status: 'Error'
 				})
 			);
+			await dispatch(push('/main/transaction-error'));
 		}
-	}
+	});
 };
 
-const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
+const updateBalances = () => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
 	// the first one is ETH
@@ -258,43 +257,11 @@ const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
 	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey));
 
-	const currentWallet = getWallet(getState());
-	if (oldBalance === currentWallet.balance) {
-		setTimeout(() => {
-			dispatch(updateBalances(oldBalance, txHash));
-		}, TX_CHECK_INTERVAL);
-	} else {
-		const transaction = getTransaction(getState());
-		if (transaction.transactionHash === txHash) {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'Sent!'
-				})
-			);
-		}
-	}
-};
-
-const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
-	txInfoCheckInterval = setInterval(async () => {
-		const txInfo = await (getGlobalContext() || {}).web3Service.waitForTicket({
-			method: 'getTransactionReceipt',
-			args: [txHash]
-		});
-
-		if (txInfo && txInfo.blockNumber !== null) {
-			const status = Number(txInfo.status);
-			if (status) {
-				dispatch(updateBalances(oldBalance, txHash));
-			}
-			clearInterval(txInfoCheckInterval);
-		}
-	}, TX_CHECK_INTERVAL);
-};
-
-const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
-	const currentWallet = getWallet(getState());
-	dispatch(startTxCheck(transactionHash, currentWallet.balance));
+	await dispatch(
+		actions.updateTransaction({
+			status: 'Sent!'
+		})
+	);
 };
 
 const createTxHistry = transactionHash => (dispatch, getState) => {
