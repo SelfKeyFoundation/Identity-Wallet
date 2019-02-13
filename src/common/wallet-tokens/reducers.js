@@ -15,6 +15,10 @@ const updateTokens = (oldTokens, newTokens) => {
 	return [...concatTokens];
 };
 
+const setWalletTokens = (state, action) => {
+	return { ...state, tokens: [...action.payload] };
+};
+
 const walletTokensReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case types.WALLET_TOKENS_UPDATE:
@@ -22,6 +26,8 @@ const walletTokensReducer = (state = initialState, action) => {
 				...state,
 				tokens: updateTokens(state.tokens, action.payload)
 			};
+		case types.WALLET_TOKENS_SET:
+			return setWalletTokens(state, action);
 		default:
 			return state;
 	}

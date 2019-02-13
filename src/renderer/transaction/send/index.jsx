@@ -199,6 +199,10 @@ export class Transfer extends React.Component {
 		this.props.dispatch(push(`/main/advancedTransaction/${this.props.cryptoCurrency}`));
 	};
 
+	handleReceive = () => {
+		this.props.dispatch(push(`/main/transfer/receive/${this.props.cryptoCurrency}`));
+	};
+
 	render() {
 		const { classes, cryptoCurrency, publicKey, transactions } = this.props;
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
@@ -265,7 +269,11 @@ export class Transfer extends React.Component {
 									alignItems="flex-start"
 									spacing={0}
 								>
-									<Button variant="outlined" size="large">
+									<Button
+										variant="outlined"
+										size="large"
+										onClick={this.handleReceive}
+									>
 										<CustomIcon /> Receive
 									</Button>
 									<Button
