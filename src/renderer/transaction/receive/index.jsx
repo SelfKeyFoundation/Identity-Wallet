@@ -91,6 +91,9 @@ export class ReceiveTransfer extends React.Component {
 	render() {
 		const { classes, cryptoCurrency, publicKey } = this.props;
 
+		// TODO: test if pulicKey and cryptoCurrency are available and valid
+		// Redirect to dashboard with error if not
+
 		return (
 			<Modal open={true}>
 				<ModalWrap className={classes.modalWrap}>
