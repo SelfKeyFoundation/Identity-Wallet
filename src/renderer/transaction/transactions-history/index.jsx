@@ -13,7 +13,6 @@ import {
 	IconButton,
 	TableRow,
 	TableCell,
-	Button,
 	TableFooter,
 	TablePagination,
 	Paper
@@ -154,21 +153,27 @@ class TransactionsHistory extends Component {
 										</Typography>
 									</TableCell>
 									<TableCell align="right">
-										<CopyToClipboard text={transaction.externalLink}>
-											<div>
-												<CopyIcon />
-												<Typography
-													variant="subtitle1"
-													color="secondary"
-													gutterBottom
-												>
-													Copy
-												</Typography>
-											</div>
-										</CopyToClipboard>
+										<IconButton>
+											<CopyToClipboard
+												text={`https://ropsten.etherscan.io/tx/${
+													transaction.hash
+												}`}
+											>
+												<div>
+													<CopyIcon />
+													<Typography
+														variant="subtitle1"
+														color="secondary"
+														gutterBottom
+													>
+														Copy
+													</Typography>
+												</div>
+											</CopyToClipboard>
+										</IconButton>
 									</TableCell>
 									<TableCell align="right">
-										<Button
+										<IconButton
 											onClick={e => {
 												window.openExternal(
 													e,
@@ -186,7 +191,7 @@ class TransactionsHistory extends Component {
 											>
 												View
 											</Typography>
-										</Button>
+										</IconButton>
 									</TableCell>
 								</TableRow>
 							);
