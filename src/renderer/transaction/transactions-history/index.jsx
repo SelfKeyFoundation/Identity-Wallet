@@ -17,6 +17,7 @@ import {
 	TablePagination,
 	Paper
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
@@ -84,6 +85,20 @@ const getAbrDateFromTimestamp = timestamp => {
 	return { year, month, day };
 };
 
+const styles = theme => ({
+	iconSpacing: {
+		marginRight: '10px'
+	},
+
+	toolbar: {
+		justifyContent: 'space-between'
+	},
+
+	rightSpace: {
+		marginRight: '20px'
+	}
+});
+
 class TransactionsHistory extends Component {
 	state = {
 		page: 0
@@ -107,11 +122,11 @@ class TransactionsHistory extends Component {
 	}
 
 	render() {
-		const { transactions } = this.props;
+		const { transactions, classes } = this.props;
 		const { page } = this.state;
 		return (
 			<Paper>
-				<Toolbar>
+				<Toolbar className={classes.toolbar}>
 					<Typography variant="h6">Transactions</Typography>
 					<IconButton aria-label="Refresh">
 						<RefreshIcon />
@@ -153,14 +168,14 @@ class TransactionsHistory extends Component {
 										</Typography>
 									</TableCell>
 									<TableCell align="right">
-										<IconButton>
+										<IconButton className={classes.rightSpace}>
 											<CopyToClipboard
 												text={`https://ropsten.etherscan.io/tx/${
 													transaction.hash
 												}`}
 											>
-												<div>
-													<CopyIcon />
+												<React.Fragment>
+													<CopyIcon className={classes.iconSpacing} />
 													<Typography
 														variant="subtitle1"
 														color="secondary"
@@ -168,11 +183,9 @@ class TransactionsHistory extends Component {
 													>
 														Copy
 													</Typography>
-												</div>
+												</React.Fragment>
 											</CopyToClipboard>
 										</IconButton>
-									</TableCell>
-									<TableCell align="right">
 										<IconButton
 											onClick={e => {
 												window.openExternal(
@@ -183,7 +196,7 @@ class TransactionsHistory extends Component {
 												);
 											}}
 										>
-											<ViewIcon />
+											<ViewIcon className={classes.iconSpacing} />
 											<Typography
 												variant="subtitle1"
 												color="secondary"
@@ -224,4 +237,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(TransactionsHistory);
+export default connect(mapStateToProps)(withStyles(styles)(TransactionsHistory));
