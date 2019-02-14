@@ -14,7 +14,7 @@ const hasTable = async (table, expected) => {
 };
 
 // const getAttribute = url => {
-// 	let found = selfkeyPlatform.attributes.filter(attr => attr.url === url);
+// 	let found = selfkeyPlatform.jsonSchemas.filter(attr => attr.url === url);
 // 	return found[0] || null;
 // };
 

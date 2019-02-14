@@ -3,7 +3,7 @@
 const selfkeyPlatform = require('../assets/data/selfkey-platform.json');
 
 const getAttribute = url => {
-	let found = selfkeyPlatform.attributes.filter(attr => attr.$id === url);
+	let found = selfkeyPlatform.jsonSchemas.filter(attr => attr.$id === url);
 	return found[0] || null;
 };
 
