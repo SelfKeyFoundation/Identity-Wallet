@@ -179,7 +179,6 @@ class ConnectingLedger extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	console.log('APP: ', appSelectors.selectApp(state));
 	return {
 		error: appSelectors.selectApp(state).error,
 		hasConnected: appSelectors.hasConnected(state)
