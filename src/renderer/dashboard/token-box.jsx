@@ -8,7 +8,10 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
 	paper: {
 		padding: 16,
-		maxWidth: 415
+		maxWidth: 350
+	},
+	publicKey: {
+		fontSize: 10.5
 	}
 });
 
@@ -24,12 +27,12 @@ const TokenBox = props => {
 	} = props;
 	return (
 		<Paper className={classes.paper}>
-			<Grid container spacing={8} xs={12}>
+			<Grid container spacing={8}>
 				<Grid item xs={12} container spacing={16}>
 					<Grid item>
 						<CryptoCurrencyIconComponent />
 					</Grid>
-					<Grid item xs={8}>
+					<Grid item xs={7}>
 						<Typography variant="h2">{cryptoCurrencyName}</Typography>
 						<Typography variant="h3">{cryptoCurrencyShort}</Typography>
 					</Grid>
@@ -47,7 +50,11 @@ const TokenBox = props => {
 				</Grid>
 				<Grid item xs={12} container>
 					<Grid item>
-						<Typography variant="subtitle2" color="secondary">
+						<Typography
+							className={classes.publicKey}
+							variant="subtitle2"
+							color="secondary"
+						>
 							{publicKey}
 						</Typography>
 					</Grid>
