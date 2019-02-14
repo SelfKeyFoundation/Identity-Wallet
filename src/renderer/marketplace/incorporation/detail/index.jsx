@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
-import FlagCountryName from '../common/flag-country-name';
-import TreatiesMap from '../common/treaties-map';
-import TreatiesTable from '../common/treaties-table';
-import IncorporationsCountryInfo from '../common/country-info';
-import IncorporationsKYC from '../common/kyc-requirements';
-import ProgramPrice from '../common/program-price';
+import {
+	FlagCountryName,
+	TreatiesMap,
+	TreatiesTable,
+	CountryInfo,
+	IncorporationsKYC,
+	ProgramPrice
+} from '../common';
 
 const styles = theme => ({
 	container: {
@@ -146,8 +149,8 @@ function TabContainer({ children }) {
 /* ==========================================================================
    Received props:
    ---------------
-   countryCode: country two letter code
-   programCode: program specific code (from airtable)
+   match.params.countryCode: country two letter code
+   match.params.programCode: program specific code (from airtable)
    program: program details object map
    isLoading: boolean indicating if it's still loading data
    treaties: tax treaties for this specific country/jurisdiction
@@ -164,7 +167,7 @@ class IncorporationsDetailView extends Component {
 		if (!this.props.treaties || !this.props.treaties.length) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
-					this.props.countryCode
+					this.props.match.params.countryCode
 				)
 			);
 		}
@@ -175,8 +178,8 @@ class IncorporationsDetailView extends Component {
 	};
 
 	render() {
-		// const { program, countryCode, classes, isLoading, treaties } = this.props;
-		const { program, countryCode, classes, treaties, keyRate } = this.props;
+		const { program, classes, treaties, keyRate } = this.props;
+		const { countryCode } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
@@ -186,18 +189,23 @@ class IncorporationsDetailView extends Component {
 		// console.log(treaties);
 
 		return (
-			<div>
+			<React.Fragment>
 				<div className={classes.backButtonContainer}>
 					<Button
 						variant="outlined"
 						size="small"
-						onClick={() => this.props.onBackClick(false, false)}
+						onClick={() => this.props.dispatch(push(`/main/marketplace-incorporation`))}
 					>
 						Back
 					</Button>
 				</div>
 				<div className={classes.container}>
-					<Grid container justify="left" alignItems="left" className={classes.title}>
+					<Grid
+						container
+						justify="flex-start"
+						alignItems="flex-start"
+						className={classes.title}
+					>
 						<div>
 							<FlagCountryName code={countryCode} />
 						</div>
@@ -208,8 +216,8 @@ class IncorporationsDetailView extends Component {
 					<div className={classes.contentContainer}>
 						<Grid
 							container
-							justify="left"
-							alignItems="left"
+							justify="flex-start"
+							alignItems="flex-start"
 							className={classes.content}
 						>
 							<div className={classes.programBrief}>
@@ -378,7 +386,7 @@ class IncorporationsDetailView extends Component {
 								)}
 								{selectedTab === 3 && (
 									<TabContainer className="country-details">
-										<IncorporationsCountryInfo
+										<CountryInfo
 											countryCode={countryCode}
 											translation={translation}
 										/>
@@ -401,15 +409,18 @@ class IncorporationsDetailView extends Component {
 						</Grid>
 					</div>
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, props.companyCode),
-		treaties: incorporationsSelectors.getTaxTreaties(state, props.countryCode),
+		program: incorporationsSelectors.getIncorporationsDetails(
+			state,
+			props.match.params.companyCode
+		),
+		treaties: incorporationsSelectors.getTaxTreaties(state, props.match.params.countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
