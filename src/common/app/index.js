@@ -5,6 +5,9 @@ import { push } from 'connected-react-router';
 import { identityOperations } from '../identity';
 import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
+import { Logger } from 'common/logger';
+
+const log = new Logger('app-redux');
 
 const eventEmitter = new EventEmitter();
 
@@ -114,10 +117,12 @@ const unlockWalletWithPublicKey = publicKey => async dispatch => {
 const loadLedgerWallets = page => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
-		const wallets = await timeoutPromise(20000, walletService.getLedgerWallets(page)).promise;
+		const wallets = await timeoutPromise(30000, walletService.getLedgerWallets(page)).promise;
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
 		await dispatch(appActions.setHardwareWalletType('ledger'));
+		await dispatch(push('/selectAddress'));
 	} catch (error) {
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
 	}
 };
