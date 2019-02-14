@@ -114,10 +114,12 @@ const unlockWalletWithPublicKey = publicKey => async dispatch => {
 const loadLedgerWallets = page => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
-		const wallets = await timeoutPromise(20000, walletService.getLedgerWallets(page)).promise;
+		const wallets = await timeoutPromise(30000, walletService.getLedgerWallets(page)).promise;
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
 		await dispatch(appActions.setHardwareWalletType('ledger'));
+		await dispatch(push('/selectAddress'));
 	} catch (error) {
+		console.error('loadLedgerWallets error: ', error);
 		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
 	}
 };
