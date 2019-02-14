@@ -6,6 +6,7 @@ import {
 } from 'common/transaction-history';
 import { connect } from 'react-redux';
 import {
+	Grid,
 	Table,
 	Toolbar,
 	Typography,
@@ -28,6 +29,20 @@ import {
 	CopyIcon
 } from 'selfkey-ui';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+const styles = theme => ({
+	iconSpacing: {
+		marginRight: '10px'
+	},
+
+	toolbar: {
+		justifyContent: 'space-between'
+	},
+
+	rightSpace: {
+		marginRight: '20px'
+	}
+});
 
 const getIconForTransaction = (statusIconName, sending) => {
 	switch (statusIconName) {
@@ -85,20 +100,6 @@ const getAbrDateFromTimestamp = timestamp => {
 	return { year, month, day };
 };
 
-const styles = theme => ({
-	iconSpacing: {
-		marginRight: '10px'
-	},
-
-	toolbar: {
-		justifyContent: 'space-between'
-	},
-
-	rightSpace: {
-		marginRight: '20px'
-	}
-});
-
 const paginate = (array, pageSize, pageNumber) => {
 	return array.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
 };
@@ -110,12 +111,16 @@ class TransactionsHistory extends Component {
 	};
 
 	componentDidMount() {
-		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+		this.loadData();
 	}
+
+	loadData = () => {
+		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+	};
 
 	handleRefresh = () => {
 		this.setState({ page: 0 });
-		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+		this.loadData();
 	};
 
 	handleChangePage = (event, page) => {
@@ -189,7 +194,7 @@ class TransactionsHistory extends Component {
 													transaction.hash
 												}`}
 											>
-												<React.Fragment>
+												<Grid container>
 													<CopyIcon className={classes.iconSpacing} />
 													<Typography
 														variant="subtitle1"
@@ -198,7 +203,7 @@ class TransactionsHistory extends Component {
 													>
 														Copy
 													</Typography>
-												</React.Fragment>
+												</Grid>
 											</CopyToClipboard>
 										</IconButton>
 										<IconButton
@@ -233,7 +238,6 @@ class TransactionsHistory extends Component {
 								onChangePage={this.handleChangePage}
 								rowsPerPage={rowsPerPage}
 								onChangeRowsPerPage={this.handleChangeRowsPerPage}
-								rowsPerPageOptions={[1, 10, 25, 50, 100]}
 								backIconButtonProps={{
 									'aria-label': 'Previous Page'
 								}}
