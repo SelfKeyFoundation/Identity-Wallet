@@ -166,4 +166,25 @@ jsonSchema.containsFile = (schema, maxDepth = 10) => {
 	return false;
 };
 
+jsonSchema.removeMeta = (schema, maxDepth = 10) => {
+	if (maxDepth < 0) {
+		return schema;
+	}
+	schema = { ...schema };
+	delete schema['$id'];
+	delete schema['$schema'];
+
+	if (schema.type === 'object' && schema.properties) {
+		schema.properties = { ...schema.properties };
+		for (let key in schema.properties) {
+			if (!schema.properties.hasOwnProperty(key)) continue;
+			schema.properties[key] = jsonSchema.removeMeta(schema.properties[key], maxDepth - 1);
+		}
+	}
+	if (schema.type === 'array') {
+		schema.items = jsonSchema.removeMeta(schema.items, maxDepth - 1);
+	}
+	return schema;
+};
+
 export default { identityAttributes, jsonSchema };

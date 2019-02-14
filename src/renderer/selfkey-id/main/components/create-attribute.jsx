@@ -4,6 +4,7 @@ import { withTheme } from 'react-jsonschema-form';
 import { TextField, withStyles, Divider, Button, Grid, MenuItem } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
 import theme from 'react-jsonschema-form-material-theme';
+import { jsonSchema } from '../../../../common/identity/utils';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -93,9 +94,11 @@ class CreateAttributeComponent extends Component {
 				{type && (
 					<div className={classes.section2}>
 						<Form
-							schema={_.omit(type.content, ['$id', 'schema', 'title'])}
+							schema={_.omit(jsonSchema.removeMeta(type.content), ['title'])}
 							formData={value}
 							uiSchema={uiSchema.content}
+							liveValidate={true}
+							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 						>
 							<Grid container spacing={24}>
