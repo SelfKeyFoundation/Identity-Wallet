@@ -6,7 +6,8 @@ import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
-import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
 import TrezorWalletSubProviderFactory from 'trezor-wallet-provider';
@@ -47,10 +48,16 @@ export class Web3Service {
 			accountsLength: accountsQuantity,
 			accountsOffset: accountsOffset
 		});
+		const subscriptionSubprovider = new SubscriptionSubprovider();
+		subscriptionSubprovider.on('data', (err, notification) => {
+			engine.emit('data', err, notification);
+		});
 
 		engine.addProvider(ledger);
-		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(subscriptionSubprovider);
+		engine.addProvider(new RpcSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
+
 		this.web3 = new Web3(engine);
 	}
 
@@ -63,7 +70,7 @@ export class Web3Service {
 		);
 		const engine = new ProviderEngine();
 		engine.addProvider(trezorWalletSubProvider);
-		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(new RpcSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
 
 		this.web3 = new Web3(engine);

@@ -229,6 +229,7 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 
 	transactionEventEmitter.on('error', async error => {
+		console.error(error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
 			await dispatch(
