@@ -220,20 +220,9 @@ export class Transfer extends React.Component {
 
 	renderActivity() {
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
-		const token = this.props.cryptoCurrency;
-
-		const sortedTransactions = this.props.transactions.sort((a, b) => {
-			let timeStampA = a.timeStamp;
-			let timeStampB = b.timeStamp;
-			if (timeStampA < timeStampB) return 1;
-			if (timeStampA > timeStampB) return -1;
-			return 0;
+		const filteredTransactions = this.props.transactions.filter(transaction => {
+			return filterTransactionByToken(transaction, this.props.cryptoCurrency);
 		});
-
-		const filteredTransactions = sortedTransactions.filter(transaction => {
-			return filterTransactionByToken(transaction, token);
-		});
-
 		const lastCryptoTransactions = filteredTransactions.slice(
 			0,
 			NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW

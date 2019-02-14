@@ -99,8 +99,13 @@ const styles = theme => ({
 	}
 });
 
+const paginate = (array, pageSize, pageNumber) => {
+	return array.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
+};
+
 class TransactionsHistory extends Component {
 	state = {
+		rowsPerPage: 10,
 		page: 0
 	};
 
@@ -108,8 +113,17 @@ class TransactionsHistory extends Component {
 		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
 	}
 
+	handleRefresh = () => {
+		this.setState({ page: 0 });
+		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+	};
+
 	handleChangePage = (event, page) => {
 		this.setState({ page });
+	};
+
+	handleChangeRowsPerPage = (event, rowsPerPage) => {
+		this.setState({ rowsPerPage: rowsPerPage.props.value });
 	};
 
 	renderDate(timestamp) {
@@ -123,18 +137,19 @@ class TransactionsHistory extends Component {
 
 	render() {
 		const { transactions, classes } = this.props;
-		const { page } = this.state;
+		const { rowsPerPage, page } = this.state;
+
 		return (
 			<Paper>
 				<Toolbar className={classes.toolbar}>
 					<Typography variant="h6">Transactions</Typography>
-					<IconButton aria-label="Refresh">
+					<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
 						<RefreshIcon />
 					</IconButton>
 				</Toolbar>
 				<Table>
 					<TableBody>
-						{transactions.slice(page).map(transaction => {
+						{paginate(transactions, rowsPerPage, page).map(transaction => {
 							return (
 								<TableRow key={transaction.id}>
 									<TableCell>
@@ -215,14 +230,16 @@ class TransactionsHistory extends Component {
 							<TablePagination
 								count={transactions.length}
 								page={page}
+								onChangePage={this.handleChangePage}
+								rowsPerPage={rowsPerPage}
+								onChangeRowsPerPage={this.handleChangeRowsPerPage}
+								rowsPerPageOptions={[1, 10, 25, 50, 100]}
 								backIconButtonProps={{
 									'aria-label': 'Previous Page'
 								}}
 								nextIconButtonProps={{
 									'aria-label': 'Next Page'
 								}}
-								onChangePage={this.handleChangePage}
-								rowsPerPage={10}
 							/>
 						</TableRow>
 					</TableFooter>
