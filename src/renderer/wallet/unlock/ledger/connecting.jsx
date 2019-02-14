@@ -13,31 +13,12 @@ import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
 import { appOperations, appSelectors } from 'common/app';
 import HelpStepsErrorSection from './help-steps-error-section';
+import { push } from 'connected-react-router';
 
-class Connecting extends Component {
-	state = {
-		isModalOpen: false,
-		isModalErrorOpen: false
-	};
-
-	componentDidMount() {
-		this.setState({ isModalOpen: this.props.open });
-	}
-
-	async componentDidUpdate(prevProps) {
-		if (prevProps.open !== this.props.open) {
-			this.setState({ isModalOpen: this.props.open });
-			if (this.props.open) {
-				await this.props.dispatch(appOperations.setHardwareWalletsAction([]));
-				await this.props.dispatch(appOperations.loadLedgerWalletsOperation());
-			}
-		}
-
-		if (prevProps.hasConnected !== this.props.hasConnected) {
-			if (this.props.hasConnected) {
-				this.handleClose();
-			}
-		}
+class ConnectingLedger extends Component {
+	async componentDidMount() {
+		await this.props.dispatch(appOperations.setHardwareWalletsAction([]));
+		await this.props.dispatch(appOperations.loadLedgerWalletsOperation());
 	}
 
 	handleTryAgain = async () => {
@@ -45,12 +26,11 @@ class Connecting extends Component {
 		await this.props.dispatch(appOperations.loadLedgerWalletsOperation());
 	};
 
-	handleClose = () => {
+	handleClose = async () => {
 		if (this.props.error !== '') {
 			this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
 		}
-		this.setState({ isModalOpen: false });
-		this.props.onClose();
+		await this.props.dispatch(push('/unlockWallet/ledger'));
 	};
 
 	renderModalBody = () => {
@@ -170,7 +150,7 @@ class Connecting extends Component {
 	render() {
 		return (
 			<div>
-				<Modal open={this.state.isModalOpen}>
+				<Modal open={true}>
 					<ModalWrap>
 						<ModalCloseButton onClick={this.handleClose}>
 							<ModalCloseIcon />
@@ -205,4 +185,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(Connecting);
+export default connect(mapStateToProps)(ConnectingLedger);

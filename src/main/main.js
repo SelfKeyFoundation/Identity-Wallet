@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* global __static */
 'use strict';
+import '@babel/polyfill';
 import path from 'path';
 import fs from 'fs';
 import isOnline from 'is-online';

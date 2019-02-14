@@ -21,15 +21,6 @@ class ConnectingToTrezor extends Component {
 		await this.props.dispatch(appOperations.loadTrezorWalletsOperation());
 	}
 
-	async componentDidUpdate(prevProps) {
-		if (prevProps.hasConnected !== this.props.hasConnected) {
-			if (this.props.hasConnected) {
-				this.props.dispatch(push('/selectAddress'));
-				console.log('HEY');
-			}
-		}
-	}
-
 	handleTryAgain = async () => {
 		await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
 		await this.props.dispatch(appOperations.loadTrezorWalletsOperation());
