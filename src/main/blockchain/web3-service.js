@@ -6,7 +6,7 @@ import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
-import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
 import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
@@ -55,7 +55,7 @@ export class Web3Service {
 
 		engine.addProvider(ledger);
 		engine.addProvider(subscriptionSubprovider);
-		engine.addProvider(new RpcSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
 
 		this.web3 = new Web3(engine);
@@ -70,7 +70,7 @@ export class Web3Service {
 		);
 		const engine = new ProviderEngine();
 		engine.addProvider(trezorWalletSubProvider);
-		engine.addProvider(new RpcSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
 
 		this.web3 = new Web3(engine);
