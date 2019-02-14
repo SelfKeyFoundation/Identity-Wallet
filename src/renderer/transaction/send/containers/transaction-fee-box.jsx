@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import { ActualTransactionFeeBox } from 'renderer/transaction/send/containers/actual-transaction-fee-box';
-import { Grid } from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import { Loop as LoopIcon } from '@material-ui/icons';
 
 const styles = theme => ({
@@ -118,7 +117,8 @@ const styles = theme => ({
 			lineHeight: '26px',
 			margin: 0
 		}
-	}
+	},
+	checked: {}
 });
 
 export class TransactionFeeBoxComponent extends Component {

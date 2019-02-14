@@ -29,6 +29,7 @@ import SelectAddress from './wallet/unlock/select-address';
 import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
 import Terms from './settings/terms';
 import Loading from './home/loading';
+import ConnectingToLedger from './wallet/unlock/ledger/connecting';
 
 import path from 'path';
 
@@ -87,6 +88,7 @@ render(
 						<Route path="/unlockWallet" component={Unlock} />
 						<Route path="/enterTrezorPin" component={EnterPin} />
 						<Route path="/selectAddress" component={SelectAddress} />
+						<Route path="/connectingToLedger" component={ConnectingToLedger} />
 						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
 						<Route path="/terms" component={Terms} />
 					</div>
