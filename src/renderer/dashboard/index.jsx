@@ -20,7 +20,7 @@ const Dashboard = connect()(props => {
 					manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
 				/>
 			</Grid>
-			<Grid item>
+			<Grid item style={{ width: '100%' }}>
 				<TransactionsHistory />
 			</Grid>
 		</Grid>
