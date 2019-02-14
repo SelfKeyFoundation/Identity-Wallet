@@ -148,6 +148,7 @@ export class WalletService {
 
 	async unlockWalletWithPublicKey(publicKey) {
 		let wallet = await Wallet.findByPublicKey(publicKey);
+		this.web3Service.web3.eth.defaultAccount = publicKey;
 
 		wallet = !wallet
 			? await Wallet.create({

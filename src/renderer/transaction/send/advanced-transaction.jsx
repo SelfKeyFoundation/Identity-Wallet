@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
-import { TransactionBox, NumberFormat } from 'selfkey-ui';
+import { TransactionBox, NumberFormat, HourGlassLargeIcon } from 'selfkey-ui';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Divider } from '@material-ui/core';
+import { Grid, Divider, Typography } from '@material-ui/core';
 import history from 'common/store/history';
+import { appSelectors } from 'common/app';
+import Popup from '../../common/popup';
 
 const styles = theme => ({
 	container: {
@@ -151,7 +153,8 @@ class TransactionSendBoxContainer extends Component {
 		amount: '',
 		address: '',
 		cryptoCurrency: this.props.match.params.cryptoCurrency,
-		sending: false
+		sending: false,
+		isLedgerConfirmationOpen: false
 	};
 
 	componentDidMount() {
@@ -183,6 +186,9 @@ class TransactionSendBoxContainer extends Component {
 
 	handleConfirm = async () => {
 		await this.props.dispatch(transactionOperations.confirmSend());
+		if (this.props.hardwareWalletType === 'ledger') {
+			this.setState({ isLedgerConfirmationOpen: true });
+		}
 	};
 
 	handleCancel = () => {
@@ -305,6 +311,44 @@ class TransactionSendBoxContainer extends Component {
 	}
 	// TransactionSendBox - End
 
+	renderLedgerConfirmationModal = () => {
+		return (
+			<Popup
+				open={this.state.isLedgerConfirmationOpen}
+				closeAction={() => this.setState({ isLedgerConfirmationOpen: false })}
+				text="Confirm Transaction on Ledger"
+			>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					spacing={40}
+				>
+					<Grid item xs={2}>
+						<HourGlassLargeIcon />
+					</Grid>
+					<Grid item xs={10}>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="flex-start"
+							spacing={40}
+						>
+							<Grid item>
+								<Typography variant="body1">
+									You have 30 seconds to confirm this transaction on the Ledger or
+									it will time out and automatically cancel.
+								</Typography>
+							</Grid>
+						</Grid>
+					</Grid>
+				</Grid>
+			</Popup>
+		);
+	};
+
 	render() {
 		const {
 			isSendCustomToken,
@@ -407,6 +451,7 @@ class TransactionSendBoxContainer extends Component {
 				</Grid>
 				{this.renderFeeBox()}
 				{this.renderButtons()}
+				{this.renderLedgerConfirmationModal()}
 			</TransactionBox>
 		);
 	}
@@ -419,7 +464,8 @@ const mapStateToProps = (state, props) => {
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		...transactionSelectors.getTransaction(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		cryptoCurrency: props.match.params.cryptoCurrency
+		cryptoCurrency: props.match.params.cryptoCurrency,
+		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
 	};
 };
 
