@@ -203,7 +203,7 @@ export class Transfer extends React.Component {
 		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
 	}
 
-	_renderDate(timestamp) {
+	renderDate(timestamp) {
 		const { day, month } = getAbrDateFromTimestamp(timestamp);
 		return (
 			<div>
@@ -253,7 +253,7 @@ export class Transfer extends React.Component {
 										color="secondary"
 										gutterBottom
 									>
-										{this._renderDate(transaction.timeStamp)}
+										{this.renderDate(transaction.timeStamp)}
 									</Typography>
 								</div>
 								<div className={this.props.classes.transactionEntryIcon}>
@@ -270,7 +270,9 @@ export class Transfer extends React.Component {
 								<div className={this.props.classes.transactionEntryAmount}>
 									<Typography component="span" variant="body2" gutterBottom>
 										{transaction.sending ? '- ' : '+ '}
-										{transaction.value}
+										{transaction.value
+											? transaction.value.toLocaleString()
+											: ''}
 									</Typography>
 								</div>
 							</div>

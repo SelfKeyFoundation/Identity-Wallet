@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import config from 'common/config';
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
@@ -28,10 +29,65 @@ import {
 } from 'selfkey-ui';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+const getIconForTransaction = (statusIconName, sending) => {
+	switch (statusIconName) {
+		case 'failed':
+			return <FailedIcon />;
+		case 'receive':
+			return <ReceiveIcon />;
+		case 'hourglass':
+			return <HourGlassIcon />;
+		case 'sent':
+			return <SentIcon />;
+		default:
+			return sending ? <SentIcon /> : <ReceiveIcon />;
+	}
+};
+
+const getCryptoType = transaction => {
+	if (transaction.tokenSymbol === config.constants.primaryToken) {
+		return 'KEY';
+	} else if (transaction.contractAddress === null) {
+		return 'ETH';
+	} else {
+		return 'CUSTOM';
+	}
+};
+
+const getCustomStatusText = transaction => {
+	let cryptoType = getCryptoType(transaction);
+	if (transaction.sending) {
+		return `Sent ${cryptoType}`;
+	} else {
+		return `Received ${cryptoType}`;
+	}
+};
+
+const getAbrDateFromTimestamp = timestamp => {
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	const date = new Date(timestamp);
+	const year = date.getFullYear();
+	const month = monthNames[date.getMonth()];
+	const day = date.getDate();
+	return { year, month, day };
+};
+
 class TransactionsHistory extends Component {
 	state = {
-		page: 0,
-		currentCopyValues: []
+		page: 0
 	};
 
 	componentDidMount() {
@@ -42,39 +98,18 @@ class TransactionsHistory extends Component {
 		this.setState({ page });
 	};
 
-	renderIcon(statusIconName) {
-		switch (statusIconName) {
-			case 'failed':
-				return <FailedIcon />;
-			case 'receive':
-				return <ReceiveIcon />;
-			case 'hourglass':
-				return <HourGlassIcon />;
-			case 'sent':
-				return <SentIcon />;
-			default:
-		}
-	}
-
-	updateCopyText(index, text) {
-		let currentCopyValuesClone = this.state.currentCopyValues.slice();
-		currentCopyValuesClone[index] = text;
-		this.setState({ currentCopyValues: currentCopyValuesClone });
-	}
-
-	handleOnCopy(itemIndex) {
-		return () => {
-			this.updateCopyText(itemIndex, this.copiedText);
-			const bounceTime = setTimeout(() => {
-				this.updateCopyText(itemIndex, this.copyText);
-				clearTimeout(bounceTime);
-			}, 1000);
-		};
+	renderDate(timestamp) {
+		const { year, month, day } = getAbrDateFromTimestamp(timestamp);
+		return (
+			<div>
+				{day} {month} {year}
+			</div>
+		);
 	}
 
 	render() {
 		const { transactions } = this.props;
-		const { page, currentCopyValues } = this.state;
+		const { page } = this.state;
 		return (
 			<Paper>
 				<Toolbar>
@@ -89,32 +124,68 @@ class TransactionsHistory extends Component {
 							return (
 								<TableRow key={transaction.id}>
 									<TableCell>
-										{this.renderIcon(transaction.statusIconName)}
+										{getIconForTransaction(
+											transaction.statusIconName,
+											transaction.sending
+										)}
 									</TableCell>
-									<TableCell>{transaction.date}</TableCell>
-									<TableCell>{transaction.statusText}</TableCell>
-									<TableCell align="right">
-										{transaction.cryptoCurrency}
-									</TableCell>
-									<TableCell align="right">
-										<CopyToClipboard
-											text={transaction.externalLink}
-											onCopy={this.handleOnCopy(transaction.id)}
+									<TableCell>
+										<Typography
+											component="span"
+											variant="body2"
+											color="secondary"
+											gutterBottom
 										>
+											{this.renderDate(transaction.timeStamp)}
+										</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography component="span" variant="body2" gutterBottom>
+											{transaction.statusText ||
+												getCustomStatusText(transaction)}
+										</Typography>
+									</TableCell>
+									<TableCell align="right">
+										<Typography component="span" variant="body2" gutterBottom>
+											{transaction.sending ? '- ' : '+ '}
+											{transaction.value
+												? transaction.value.toLocaleString()
+												: ''}
+										</Typography>
+									</TableCell>
+									<TableCell align="right">
+										<CopyToClipboard text={transaction.externalLink}>
 											<div>
 												<CopyIcon />
-												<span>
-													{' '}
-													{currentCopyValues[transaction.id] ||
-														this.copyText}{' '}
-												</span>
+												<Typography
+													variant="subtitle1"
+													color="secondary"
+													gutterBottom
+												>
+													Copy
+												</Typography>
 											</div>
 										</CopyToClipboard>
 									</TableCell>
 									<TableCell align="right">
-										<Button size="small" disableRipple>
+										<Button
+											onClick={e => {
+												window.openExternal(
+													e,
+													`https://ropsten.etherscan.io/tx/${
+														transaction.hash
+													}`
+												);
+											}}
+										>
 											<ViewIcon />
-											View
+											<Typography
+												variant="subtitle1"
+												color="secondary"
+												gutterBottom
+											>
+												View
+											</Typography>
 										</Button>
 									</TableCell>
 								</TableRow>
