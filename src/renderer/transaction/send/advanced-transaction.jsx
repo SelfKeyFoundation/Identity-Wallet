@@ -150,7 +150,8 @@ class TransactionSendBoxContainer extends Component {
 	state = {
 		amount: '',
 		address: '',
-		cryptoCurrency: this.props.match.params.cryptoCurrency
+		cryptoCurrency: this.props.match.params.cryptoCurrency,
+		sending: false
 	};
 
 	componentDidMount() {
@@ -160,65 +161,44 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
-	componentDidUpdate() {
-		if (this.props.status === 'NoBalance') {
-			this.props.navigateToTransactionNoGasError();
-		} else if (this.props.status === 'Error') {
-			this.props.navigateToTransactionError('Error');
-		} else if (this.props.status === 'Pending') {
-			this.props.navigateToTransactionProgress();
-		}
-	}
-
-	loadData() {
+	loadData = () => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-	}
+	};
 
-	processSignTxError(error) {
-		if (this.props.isHardwareWallet) {
-			this.props.norifySignTxFailure(error);
-		}
-		console.log('error', error);
-	}
+	handleSend = async () => {
+		this.setState({ sending: true });
+	};
 
-	async onSendAction() {
-		const { walletProfile } = this.props;
-		if (walletProfile === 'ledger') {
-			this.props.showConfirmTransactionInfoModal();
-		}
-		try {
-			await this.props.dispatch(transactionOperations.startSend());
-		} catch (error) {
-			this.processSignTxError(error);
-		}
+	handleCancelAction = () => {
+		history.getHistory().goBack();
+	};
 
-		if (walletProfile === 'ledger') {
-			this.props.closeModal();
-		}
-	}
-
-	handleGasPriceChange(value) {
+	handleGasPriceChange = value => {
 		this.props.dispatch(transactionOperations.setGasPrice(value));
-	}
+	};
 
-	handleGasLimitChange(value) {
+	handleGasLimitChange = value => {
 		this.props.dispatch(transactionOperations.setLimitPrice(value));
-	}
+	};
 
-	async handleConfirmAction() {
-		// this.props.navigateToTransactionProgress();
+	handleConfirm = async () => {
 		await this.props.dispatch(transactionOperations.confirmSend());
-		history.getHistory().goBack();
-	}
+	};
 
-	async handleCancelAction() {
-		await this.props.dispatch(transactionOperations.cancelSend());
-		history.getHistory().goBack();
-	}
+	handleCancel = () => {
+		this.setState({ sending: false });
+	};
 
 	// TransactionSendBox - Start
 	renderFeeBox() {
-		return <TransactionFeeBox {...this.props} />;
+		return (
+			<TransactionFeeBox
+				{...this.props}
+				changeGasLimitAction={this.handleGasLimitChange}
+				changeGasPriceAction={this.handleGasPriceChange}
+				reloadEthGasStationInfoAction={this.loadData}
+			/>
+		);
 	}
 
 	handleAllAmountClick() {
@@ -277,9 +257,9 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	renderButtons() {
-		const { classes, onSendAction, sending, confirmAction, addressError } = this.props;
+		const { classes, addressError } = this.props;
 		const sendBtnIsEnabled = this.state.address && +this.state.amount && !addressError;
-		if (sending) {
+		if (this.state.sending) {
 			return (
 				<Grid
 					container
@@ -290,15 +270,12 @@ class TransactionSendBoxContainer extends Component {
 					spacing={24}
 				>
 					<Grid item>
-						<button className={classes.button} onClick={confirmAction}>
+						<button className={classes.button} onClick={this.handleConfirm}>
 							CONFIRM
 						</button>
 					</Grid>
 					<Grid item>
-						<button
-							className={classes.button}
-							onClick={() => this.handleCancelAction()}
-						>
+						<button className={classes.button} onClick={this.handleCancel}>
 							CANCEL
 						</button>
 					</Grid>
@@ -317,7 +294,7 @@ class TransactionSendBoxContainer extends Component {
 						<button
 							disabled={!sendBtnIsEnabled}
 							className={classes.button}
-							onClick={onSendAction}
+							onClick={this.handleSend}
 						>
 							SEND
 						</button>
@@ -345,7 +322,7 @@ class TransactionSendBoxContainer extends Component {
 		return (
 			<TransactionBox
 				cryptoCurrency={cryptoCurrencyText}
-				closeAction={() => this.handleCancelAction()}
+				closeAction={this.handleCancelAction}
 			>
 				<input
 					type="text"
