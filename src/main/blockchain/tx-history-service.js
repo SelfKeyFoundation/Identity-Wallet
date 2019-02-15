@@ -20,6 +20,12 @@ export const ENDPOINT_CONFIG = {
 };
 export const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
 
+export const TX_HISTORY_ENDPOINT_CONFIG = {
+	1: { url: 'https://etherscan.io/tx' },
+	3: { url: 'https://ropsten.etherscan.io/tx' }
+};
+export const TX_HISTORY_API_ENDPOINT = TX_HISTORY_ENDPOINT_CONFIG[config.chainId].url;
+
 export let OFFSET = 1000;
 
 export const TX_LIST_ACTION = `?module=account&action=txlist&sort=desc&offset=${OFFSET}`;
