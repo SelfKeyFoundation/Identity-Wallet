@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 import { pricesSelectors } from 'common/prices';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,10 +13,9 @@ import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfkey-ui';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import FlagCountryName from '../common/flag-country-name';
-import ProgramPrice from '../common/program-price';
+import { FlagCountryName, ProgramPrice } from '../common';
 
-const styles = {
+const styles = theme => ({
 	header: {
 		borderBottom: 'solid 1px #475768',
 		display: 'flex',
@@ -32,7 +32,7 @@ const styles = {
 	tableHeaderRow: {
 		'& th': {
 			fontFamily: 'Lato, arial, sans-serif',
-			fontSize: '15px', // 12 px invision
+			fontSize: '15px',
 			fontWeight: 'bold',
 			color: '#7F8FA4',
 			textTransform: 'uppercase',
@@ -59,16 +59,18 @@ const styles = {
 		}
 	},
 	costCell: {
-		width: '50px'
+		width: '70px'
 	},
 	smallCell: {
-		width: '35px'
+		width: '35px',
+		padding: '0 10px'
 	},
 	flagCell: {
 		width: '10px'
 	},
 	regionCell: {
-		width: '60px'
+		width: '60px',
+		padding: '0'
 	},
 	detailsCell: {
 		width: '55px',
@@ -78,12 +80,13 @@ const styles = {
 		}
 	},
 	goodForCell: {
-		width: '325px'
+		width: '305px',
+		padding: '10px'
 	},
 	loading: {
 		marginTop: '5em'
 	}
-};
+});
 
 class IncorporationsTable extends Component {
 	componentDidMount() {
@@ -99,14 +102,14 @@ class IncorporationsTable extends Component {
 	);
 
 	render() {
-		const { classes, isLoading, incorporations, keyRate } = this.props;
+		const { classes, isLoading, incorporations, keyRate, match } = this.props;
 		if (isLoading) {
 			return this._renderLoadingScreen();
 		}
 		const data = incorporations.filter(program => Object.keys(program.tax).length !== 0);
 
 		return (
-			<div>
+			<React.Fragment>
 				<Grid item id="header" className={classes.header} xs={12}>
 					<IncorporationsIcon />
 					<Typography variant="h1" gutterBottom className={classes.headerTitle}>
@@ -130,7 +133,7 @@ class IncorporationsTable extends Component {
 								</TableCell>
 								<TableCell className={classes.smallCell}>
 									<Typography variant="overline" gutterBottom>
-										Offshore Tax
+										Offsh Tax
 									</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
@@ -177,9 +180,12 @@ class IncorporationsTable extends Component {
 									<TableCell className={classes.detailsCell}>
 										<span
 											onClick={() =>
-												this.props.onDetailClick(
-													inc['Company code'],
-													inc['Country code']
+												this.props.dispatch(
+													push(
+														`${match.path}/details/${
+															inc['Company code']
+														}/${inc['Country code']}`
+													)
 												)
 											}
 										>
@@ -191,7 +197,7 @@ class IncorporationsTable extends Component {
 						</TableBody>
 					</Table>
 				</Grid>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
@@ -209,4 +215,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(injectSheet(styles)(IncorporationsTable));
+const styledComponent = withStyles(styles)(IncorporationsTable);
+export default connect(mapStateToProps)(styledComponent);
