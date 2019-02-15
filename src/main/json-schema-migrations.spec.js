@@ -646,7 +646,7 @@ describe('migrations', () => {
 				});
 				await TestDb.knex('documents').insert({
 					id: 6,
-					name: 'Screen Shot 2018-11-16 at 15.27.17.png',
+					name: 'national_id_front.png',
 					mimeType: 'image/png',
 					size: 3711637,
 					buffer: Buffer.alloc(3711637),
@@ -671,7 +671,32 @@ describe('migrations', () => {
 				});
 				await TestDb.knex('documents').insert({
 					id: 7,
-					name: 'Screen Shot 2018-11-16 at 15.27.17.png',
+					name: 'national_id_back.png',
+					mimeType: 'image/png',
+					size: 3711637,
+					buffer: Buffer.alloc(3711637),
+					createdAt: 0
+				});
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'id_selfie',
+					category: 'id_document',
+					type: 'document',
+					entity: '["individual"]',
+					isInitial: 0,
+					createdAt: 0
+				});
+
+				await TestDb.knex('id_attributes').insert({
+					id: 20,
+					walletId: 1,
+					type: 'id_selfie',
+					data: '{}',
+					documentId: 8,
+					createdAt: 0
+				});
+				await TestDb.knex('documents').insert({
+					id: 8,
+					name: 'selfie.png',
 					mimeType: 'image/png',
 					size: 3711637,
 					buffer: Buffer.alloc(3711637),
@@ -686,14 +711,17 @@ describe('migrations', () => {
 					attr.data = JSON.parse(attr.data);
 					return attr;
 				});
+
 				expect(newType.length).toBe(1);
 				expect(newAttr.length).toBe(1);
-				expect(newDocs.length).toBe(2);
+				expect(newDocs.length).toBe(3);
 				expect(newAttr[0].typeId).toBe(newType[0].id);
+				expect(newAttr[0].name).toEqual('National ID');
 				expect(newAttr[0].data).toEqual({
 					value: {
 						front: '$document-6',
-						back: '$document-7'
+						back: '$document-7',
+						selfie: { image: '$document-8' }
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);

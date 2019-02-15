@@ -134,9 +134,11 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	);
 	await mergeAttributes(
 		attributeUrlForKey('national_id'),
+		'National ID',
 		{
 			[attributeUrlForKey('national_id')]: 'front',
-			[attributeUrlForKey('national_id_back')]: 'back'
+			[attributeUrlForKey('national_id_back')]: 'back',
+			[attributeUrlForKey('id_selfie')]: 'selfie.image'
 		},
 		knex,
 		ctx
@@ -146,7 +148,7 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	return ctx;
 };
 
-const mergeAttributes = async (target, attrs, knex, ctx) => {
+const mergeAttributes = async (target, name, attrs, knex, ctx) => {
 	let attrsToMerge = await knex('id_attribute_types')
 		.join('id_attributes', 'id_attributes.typeId', 'id_attribute_types.id')
 		.select('id_attributes.*', 'id_attribute_types.url')
@@ -176,6 +178,15 @@ const mergeAttributes = async (target, attrs, knex, ctx) => {
 		curr = { ...curr, data: JSON.parse(curr.data) };
 		let key = attrs[curr.url];
 		let value = curr.data ? curr.data.value : null;
+		if (key.includes('.')) {
+			key = key.split('.');
+			if (key.length > 1) {
+				for (let i = key.length - 1; i > 0; i--) {
+					value = { [key[i]]: value };
+				}
+			}
+			key = key[0];
+		}
 		acc[curr.walletId] = acc[curr.walletId] || {};
 		acc[curr.walletId][key] = value;
 		return acc;
@@ -195,6 +206,7 @@ const mergeAttributes = async (target, attrs, knex, ctx) => {
 		let targetAttr = {
 			typeId: targetAttrType.id,
 			data: JSON.stringify({ value: data[walletId] }),
+			name,
 			walletId: walletId,
 			createdAt: ctx.now,
 			updatedAt: ctx.now

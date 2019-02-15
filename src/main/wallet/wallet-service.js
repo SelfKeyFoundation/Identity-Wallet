@@ -70,7 +70,16 @@ export class WalletService {
 
 	async unlockWalletWithPassword(id, password) {
 		const wallet = await Wallet.findById(id);
-		const keystore = JSON.parse(await fs.promises.readFile(wallet.keystoreFilePath));
+		let keystoreFilePath = wallet.keystoreFilePath;
+		try {
+			await fs.promises.access(keystoreFilePath, fs.constants.R_OK);
+		} catch (error) {
+			keystoreFilePath = path.resolve(
+				getGlobalContext().config.walletsDirectoryPath,
+				keystoreFilePath
+			);
+		}
+		let keystore = JSON.parse(await fs.promises.readFile(keystoreFilePath));
 		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
 		this.web3Service.web3.eth.accounts.wallet.add(account);
 		this.web3Service.web3.eth.defaultAccount = account.address;
