@@ -4,6 +4,7 @@ import { withTheme } from 'react-jsonschema-form';
 import { TextField, withStyles, Divider, Button, Grid, MenuItem } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
 import theme from 'react-jsonschema-form-material-theme';
+import { jsonSchema } from '../../../../common/identity/utils';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -16,9 +17,12 @@ const styles = theme => ({
 });
 
 class CreateAttributeComponent extends Component {
-	state = { typeId: -1, label: '', value: null };
-	handleSave = () => {
-		const { typeId, label, value } = this.state;
+	state = { typeId: -1, label: '', value: null, disabled: false };
+	handleSave = ({ errors }) => {
+		let { typeId, label, value, disabled } = this.state;
+		if (!!errors.length || disabled) {
+			return this.setState({ errors, disabled: !!errors.length });
+		}
 		const type = this.type;
 		const normalized = identityAttributes.normalizeDocumentsSchema(type.content, value);
 		this.props.onSave({
@@ -37,8 +41,9 @@ class CreateAttributeComponent extends Component {
 		if (prop === 'typeId') value = null;
 		this.setState({ [prop]: evt.target.value, value });
 	};
-	handleFormChange = prop => ({ formData }) => {
-		this.setState({ [prop]: formData });
+	handleFormChange = prop => ({ formData, errors }) => {
+		const disabled = !!errors.length;
+		this.setState({ [prop]: formData, disabled });
 	};
 	get type() {
 		if (!this.state.typeId) return null;
@@ -55,7 +60,7 @@ class CreateAttributeComponent extends Component {
 	}
 	render() {
 		const { types, classes } = this.props;
-		const { typeId, label, value } = this.state;
+		const { typeId, label, value, disabled } = this.state;
 		const type = this.type;
 		const uiSchema = this.uiSchema;
 		return (
@@ -93,17 +98,21 @@ class CreateAttributeComponent extends Component {
 				{type && (
 					<div className={classes.section2}>
 						<Form
-							schema={_.omit(type.content, ['$id', 'schema', 'title'])}
+							schema={_.omit(jsonSchema.removeMeta(type.content), ['title'])}
 							formData={value}
 							uiSchema={uiSchema.content}
+							liveValidate={true}
+							showErrorList={false}
 							onChange={this.handleFormChange('value')}
+							onSubmit={this.handleSave}
 						>
 							<Grid container spacing={24}>
 								<Grid item>
 									<Button
 										variant="contained"
 										size="large"
-										onClick={this.handleSave}
+										type="submit"
+										disabled={disabled}
 									>
 										Save
 									</Button>

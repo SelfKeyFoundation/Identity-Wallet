@@ -132,7 +132,6 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 		serviceOwner,
 		serviceId
 	};
-	console.log(tx);
 	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
 	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmWithdrawTransaction'));
 };
