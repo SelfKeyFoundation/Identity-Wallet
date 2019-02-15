@@ -109,37 +109,75 @@ describe('migrations', () => {
 			beforeEach(async () => {
 				await TestDb.migrate('up', { to: prevMigration });
 			});
-			it('should migrate simple value', async () => {
-				await TestDb.knex('id_attribute_types').insert({
-					key: 'first_name',
-					category: 'global_attribute',
-					type: 'static_data',
-					entity: '["individual"]',
-					createdAt: 0,
-					isInitial: 1
-				});
-				await TestDb.knex('id_attributes').insert({
-					id: 1,
-					walletId: 1,
-					type: 'first_name',
-					data: '{"value":"First Name"}',
-					createdAt: 0,
-					documentId: null
-				});
-				await TestDb.migrate('up', { to: currMigration });
-				let newAttr = await TestDb.knex('id_attributes')
-					.select()
-					.where({ id: 1 });
+			describe('it should delete obsolate attributes', () => {
+				const t = type =>
+					it(type, async () => {
+						await TestDb.knex('id_attribute_types').insert({
+							key: type,
+							category: 'global_attribute',
+							type: 'static_data',
+							entity: '["individual"]',
+							createdAt: 0,
+							isInitial: 1
+						});
+						await TestDb.knex('id_attributes').insert({
+							id: 1,
+							walletId: 1,
+							type: type,
+							data: '{"value":"First Name"}',
+							createdAt: 0,
+							documentId: null
+						});
+						await TestDb.migrate('up', { to: currMigration });
+						let newAttr = await TestDb.knex('id_attributes')
+							.select()
+							.where({ id: 1 });
+						let idType = await TestDb.knex('id_attribute_types')
+							.select()
+							.where({ id: 1 });
 
-				expect(newAttr[0]).toEqual({
-					id: 1,
-					walletId: 1,
-					typeId: 1,
-					data: '{"value":"First Name"}',
-					createdAt: 0,
-					name: 'first name',
-					updatedAt: null
-				});
+						expect(newAttr.length).toEqual(0);
+						expect(idType.length).toEqual(0);
+					});
+				['public_key'].forEach(type => t(type));
+			});
+			describe('should migrate simple value', () => {
+				const t = type =>
+					it(type, async () => {
+						await TestDb.knex('id_attribute_types').insert({
+							key: type,
+							category: 'global_attribute',
+							type: 'static_data',
+							entity: '["individual"]',
+							createdAt: 0,
+							isInitial: 1
+						});
+						await TestDb.knex('id_attributes').insert({
+							id: 1,
+							walletId: 1,
+							type: type,
+							data: '{"value":"First Name"}',
+							createdAt: 0,
+							documentId: null
+						});
+						await TestDb.migrate('up', { to: currMigration });
+						let newAttr = await TestDb.knex('id_attributes')
+							.select()
+							.where({ id: 1 });
+
+						expect(newAttr[0]).toEqual({
+							id: 1,
+							walletId: 1,
+							typeId: 1,
+							data: '{"value":"First Name"}',
+							createdAt: 0,
+							name: type.replace(/_/g, ' '),
+							updatedAt: null
+						});
+					});
+				['first_name', 'last_name', 'middle_name', 'email', 'tax_id_number'].forEach(type =>
+					t(type)
+				);
 			});
 			it('should migrate address', async () => {
 				await TestDb.knex('id_attribute_types').insert({
@@ -274,79 +312,143 @@ describe('migrations', () => {
 
 				expect(newAttr[0].data).toEqual({ value: '+35512312123123123' });
 			});
-			it('should migrate simple documents', async () => {
-				await TestDb.knex('id_attribute_types').insert({
-					key: 'fingerprint',
-					category: 'global_attribute',
-					type: 'document',
-					entity: '["individual"]',
-					isInitial: 0,
-					createdAt: 0
-				});
-				await TestDb.knex('id_attribute_types').insert({
-					key: 'voice_id',
-					category: 'global_attribute',
-					type: 'document',
-					entity: '["individual"]',
-					isInitial: 0,
-					createdAt: 0
-				});
-				await TestDb.knex('id_attributes').insert({
-					id: 15,
-					walletId: 1,
-					type: 'fingerprint',
-					data: '{}',
-					documentId: 3,
-					createdAt: 0
-				});
-				await TestDb.knex('id_attributes').insert({
-					id: 16,
-					walletId: 1,
-					type: 'voice_id',
-					data: '{}',
-					documentId: 4,
-					createdAt: 0
-				});
-				await TestDb.knex('documents').insert({
-					id: 3,
-					name: 'Screen Shot 2018-11-16 at 17.12.55.png',
-					mimeType: 'image/png',
-					size: 17065,
-					buffer: Buffer.alloc(17065),
-					createdAt: 0
-				});
-				await TestDb.knex('documents').insert({
-					id: 4,
-					name: 'Screen Shot 2018-11-16 at 17.12.55.png',
-					mimeType: 'image/png',
-					size: 17065,
-					buffer: Buffer.alloc(17065),
-					createdAt: 0
-				});
-				await TestDb.migrate('up', { to: currMigration });
-				let newType = await TestDb.knex('id_attribute_types').select();
-				let newAttr = await TestDb.knex('id_attributes').select();
-				let newDocs = await TestDb.knex('documents').select();
+			describe('should migrate single image documents', () => {
+				const t = type =>
+					it(type, async () => {
+						await TestDb.knex('id_attribute_types').insert({
+							key: type,
+							category: 'global_attribute',
+							type: 'document',
+							entity: '["individual"]',
+							isInitial: 0,
+							createdAt: 0
+						});
+						await TestDb.knex('id_attributes').insert({
+							id: 16,
+							walletId: 1,
+							type: type,
+							data: '{}',
+							documentId: 3,
+							createdAt: 0
+						});
+						await TestDb.knex('documents').insert({
+							id: 3,
+							name: 'Screen Shot 2018-11-16 at 17.12.55.png',
+							mimeType: 'image/png',
+							size: 17065,
+							buffer: Buffer.alloc(17065),
+							createdAt: 0
+						});
+						await TestDb.migrate('up', { to: currMigration });
+						let newType = await TestDb.knex('id_attribute_types').select();
+						let newAttr = await TestDb.knex('id_attributes').select();
+						let newDocs = await TestDb.knex('documents').select();
 
-				newAttr = newAttr.map(attr => {
-					attr.data = JSON.parse(attr.data);
-					return attr;
-				});
+						newAttr = newAttr.map(attr => {
+							attr.data = JSON.parse(attr.data);
+							return attr;
+						});
 
-				expect(newAttr[0].typeId).toBe(newType[0].id);
-				expect(newAttr[0].data).toEqual({
-					value: {
-						image: '$document-3'
-					}
-				});
-				expect(newAttr[1].typeId).toBe(newType[1].id);
-				expect(newAttr[1].data).toEqual({
-					value: {
-						audio: '$document-4'
-					}
-				});
-				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
-				expect(newDocs[1].attributeId).toBe(newAttr[1].id);
+						expect(newAttr[0].typeId).toBe(newType[0].id);
+						expect(newAttr[0].data).toEqual({
+							value: { image: '$document-3' }
+						});
+						expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+					});
+
+				['passport', 'tax_certificate'].forEach(type => t(type));
+			});
+			describe('should migrate file array attribute', () => {
+				const t = type =>
+					it(type, async () => {
+						await TestDb.knex('id_attribute_types').insert({
+							key: type,
+							category: 'global_attribute',
+							type: 'document',
+							entity: '["individual"]',
+							isInitial: 0,
+							createdAt: 0
+						});
+						await TestDb.knex('id_attributes').insert({
+							id: 16,
+							walletId: 1,
+							type: type,
+							data: '{}',
+							documentId: 3,
+							createdAt: 0
+						});
+						await TestDb.knex('documents').insert({
+							id: 3,
+							name: 'Screen Shot 2018-11-16 at 17.12.55.png',
+							mimeType: 'image/png',
+							size: 17065,
+							buffer: Buffer.alloc(17065),
+							createdAt: 0
+						});
+						await TestDb.migrate('up', { to: currMigration });
+						let newType = await TestDb.knex('id_attribute_types').select();
+						let newAttr = await TestDb.knex('id_attributes').select();
+						let newDocs = await TestDb.knex('documents').select();
+
+						newAttr = newAttr.map(attr => {
+							attr.data = JSON.parse(attr.data);
+							return attr;
+						});
+
+						expect(newAttr[0].typeId).toBe(newType[0].id);
+						expect(newAttr[0].data).toEqual({
+							value: ['$document-3']
+						});
+						expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+					});
+
+				['voice_id'].forEach(type => t(type));
+			});
+			describe('should migrate multi image attributes', () => {
+				const t = type =>
+					it(type, async () => {
+						await TestDb.knex('id_attribute_types').insert({
+							key: type,
+							category: 'global_attribute',
+							type: 'document',
+							entity: '["individual"]',
+							isInitial: 0,
+							createdAt: 0
+						});
+						await TestDb.knex('id_attributes').insert({
+							id: 15,
+							walletId: 1,
+							type: type,
+							data: '{}',
+							documentId: 3,
+							createdAt: 0
+						});
+						await TestDb.knex('documents').insert({
+							id: 3,
+							name: 'Screen Shot 2018-11-16 at 17.12.55.png',
+							mimeType: 'image/png',
+							size: 17065,
+							buffer: Buffer.alloc(17065),
+							createdAt: 0
+						});
+						await TestDb.migrate('up', { to: currMigration });
+						let newType = await TestDb.knex('id_attribute_types').select();
+						let newAttr = await TestDb.knex('id_attributes').select();
+						let newDocs = await TestDb.knex('documents').select();
+
+						newAttr = newAttr.map(attr => {
+							attr.data = JSON.parse(attr.data);
+							return attr;
+						});
+
+						expect(newAttr[0].typeId).toBe(newType[0].id);
+						expect(newAttr[0].data).toEqual({
+							value: { images: ['$document-3'] }
+						});
+						expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+					});
+
+				['fingerprint', 'utility_bill', 'bank_statement'].forEach(type => t(type));
 			});
 			it('should migrate drivers license', async () => {
 				await TestDb.knex('id_attribute_types').insert({
@@ -391,6 +493,138 @@ describe('migrations', () => {
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+			});
+			describe('should migrate country of residency', () => {
+				it('if country in list it should contain iso code', async () => {
+					await TestDb.knex('id_attribute_types').insert({
+						key: 'country_of_residency',
+						category: 'global_attribute',
+						type: 'static_data',
+						entity: '["individual"]',
+						createdAt: 0,
+						isInitial: 1
+					});
+					await TestDb.knex('id_attributes').insert({
+						id: 1,
+						walletId: 1,
+						type: 'country_of_residency',
+						data: '{"value":"Canada"}',
+						createdAt: 0,
+						documentId: null
+					});
+					await TestDb.migrate('up', { to: currMigration });
+					let newAttr = await TestDb.knex('id_attributes')
+						.select()
+						.where({ id: 1 });
+
+					expect(newAttr[0]).toEqual({
+						id: 1,
+						walletId: 1,
+						typeId: 1,
+						data: '{"value":{"country":"CA"}}',
+						createdAt: 0,
+						name: 'country_of_residency'.replace(/_/g, ' '),
+						updatedAt: null
+					});
+				});
+				it('if country not in list it shouild delete attribute', async () => {
+					await TestDb.knex('id_attribute_types').insert({
+						key: 'country_of_residency',
+						category: 'global_attribute',
+						type: 'static_data',
+						entity: '["individual"]',
+						createdAt: 0,
+						isInitial: 1
+					});
+					await TestDb.knex('id_attributes').insert({
+						id: 1,
+						walletId: 1,
+						type: 'country_of_residency',
+						data: '{"value":"Canadda"}',
+						createdAt: 0,
+						documentId: null
+					});
+					await TestDb.migrate('up', { to: currMigration });
+					let newAttr = await TestDb.knex('id_attributes')
+						.select()
+						.where({ id: 1 });
+
+					expect(newAttr[0]).toEqual({
+						id: 1,
+						walletId: 1,
+						typeId: 1,
+						data: '{"value":{"country":""}}',
+						createdAt: 0,
+						name: 'country_of_residency'.replace(/_/g, ' '),
+						updatedAt: null
+					});
+				});
+			});
+			describe('should migrate nationality', () => {
+				it('if country in list it should contain iso code', async () => {
+					await TestDb.knex('id_attribute_types').insert({
+						key: 'nationality',
+						category: 'global_attribute',
+						type: 'static_data',
+						entity: '["individual"]',
+						createdAt: 0,
+						isInitial: 1
+					});
+					await TestDb.knex('id_attributes').insert({
+						id: 1,
+						walletId: 1,
+						type: 'nationality',
+						data: '{"value":"Canada"}',
+						createdAt: 0,
+						documentId: null
+					});
+					await TestDb.migrate('up', { to: currMigration });
+					let newAttr = await TestDb.knex('id_attributes')
+						.select()
+						.where({ id: 1 });
+
+					expect(newAttr[0]).toEqual({
+						id: 1,
+						walletId: 1,
+						typeId: 1,
+						data: '{"value":{"country":"CA","denonym":"Canada"}}',
+						createdAt: 0,
+						name: 'nationality'.replace(/_/g, ' '),
+						updatedAt: null
+					});
+				});
+				it('if country not in list it shouild delete attribute', async () => {
+					await TestDb.knex('id_attribute_types').insert({
+						key: 'nationality',
+						category: 'global_attribute',
+						type: 'static_data',
+						entity: '["individual"]',
+						createdAt: 0,
+						isInitial: 1
+					});
+					await TestDb.knex('id_attributes').insert({
+						id: 1,
+						walletId: 1,
+						type: 'nationality',
+						data: '{"value":"Canadda"}',
+						createdAt: 0,
+						documentId: null
+					});
+					await TestDb.migrate('up', { to: currMigration });
+					let newAttr = await TestDb.knex('id_attributes')
+						.select()
+						.where({ id: 1 });
+
+					expect(newAttr[0]).toEqual({
+						id: 1,
+						walletId: 1,
+						typeId: 1,
+						data: '{"value":{"country":"","denonym":"Canadda"}}',
+						createdAt: 0,
+						name: 'nationality'.replace(/_/g, ' '),
+						updatedAt: null
+					});
+				});
 			});
 			it('should migrate national id', async () => {
 				await TestDb.knex('id_attribute_types').insert({
@@ -463,6 +697,38 @@ describe('migrations', () => {
 					}
 				});
 				expect(newDocs[0].attributeId).toBe(newAttr[0].id);
+			});
+			it('should migrate birth date', async () => {
+				await TestDb.knex('id_attribute_types').insert({
+					key: 'birthdate',
+					category: 'global_attribute',
+					type: 'static_data',
+					entity: '["individual"]',
+					createdAt: 0,
+					isInitial: 1
+				});
+				await TestDb.knex('id_attributes').insert({
+					id: 1,
+					walletId: 1,
+					type: 'birthdate',
+					data: '{"value":1550237933843}',
+					createdAt: 0,
+					documentId: null
+				});
+				await TestDb.migrate('up', { to: currMigration });
+				let newAttr = await TestDb.knex('id_attributes')
+					.select()
+					.where({ id: 1 });
+
+				expect(newAttr[0]).toEqual({
+					id: 1,
+					walletId: 1,
+					typeId: 1,
+					data: '{"value":"2019-2-15"}',
+					createdAt: 0,
+					name: 'birthdate',
+					updatedAt: null
+				});
 			});
 		});
 
