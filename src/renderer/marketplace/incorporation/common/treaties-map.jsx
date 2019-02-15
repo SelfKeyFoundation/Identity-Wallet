@@ -1,12 +1,12 @@
 import React from 'react';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 
-const styles = {
+const styles = theme => ({
 	mapContainer: {
 		maxWidth: '80%',
 		margin: 'auto'
 	}
-};
+});
 
 const TreatiesMap = props => {
 	const { data, classes } = props;
@@ -1438,4 +1438,4 @@ const TreatiesMap = props => {
 	);
 };
 
-export default injectSheet(styles)(TreatiesMap);
+export default withStyles(styles)(TreatiesMap);

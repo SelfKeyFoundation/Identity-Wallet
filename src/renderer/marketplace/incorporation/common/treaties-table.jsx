@@ -1,5 +1,5 @@
 import React from 'react';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import { LargeTableHeadRow } from 'selfkey-ui';
 import FlagCountryName from '../common/flag-country-name';
 
-const styles = {
+const styles = theme => ({
 	table: {
 		marginTop: '50px'
 	},
@@ -30,7 +30,7 @@ const styles = {
 	loading: {
 		marginTop: '5em'
 	}
-};
+});
 
 const TreatiesTable = props => {
 	const { classes, data } = props;
@@ -83,4 +83,4 @@ const TreatiesTable = props => {
 	);
 };
 
-export default injectSheet(styles)(TreatiesTable);
+export default withStyles(styles)(TreatiesTable);

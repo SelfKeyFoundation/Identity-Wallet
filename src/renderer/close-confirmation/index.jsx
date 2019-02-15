@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, Typography, Grid, Button } from '@material-ui/core';
-import { ModalWrap, ModalCloseButton, ModalHeader, ModalBody, ModalCloseIcon } from 'selfkey-ui';
+import { Modal, Typography, Grid, Button, withStyles } from '@material-ui/core';
+import { ModalWrap, ModalBody, SelfkeyLogo } from 'selfkey-ui';
 import history from 'common/store/history';
 import { connect } from 'react-redux';
 import { closeOperations } from 'common/close';
@@ -10,28 +10,62 @@ const handleCancel = async props => {
 	history.getHistory().goBack();
 };
 
+const styles = theme => ({
+	closeModal: {
+		left: 0,
+		right: 0,
+		margin: '0 auto',
+		width: '360px'
+	},
+
+	shortButton: {
+		minWidth: 0,
+		width: '100px'
+	},
+
+	logo: {
+		height: '60px',
+		width: '53px'
+	},
+
+	bottomSpace: {
+		marginBottom: '30px'
+	}
+});
+
 export const CloseConfirmation = props => {
+	const { classes } = props;
 	return (
 		<Modal open={true}>
-			<ModalWrap>
-				<ModalCloseButton onClick={history.getHistory().goBack}>
-					<ModalCloseIcon />
-				</ModalCloseButton>
-				<ModalHeader>
-					<Typography variant="h6" id="modal-title">
-						Close Confirmation
-					</Typography>
-				</ModalHeader>
-
+			<ModalWrap className={classes.closeModal}>
 				<ModalBody>
-					<Typography variant="body1" gutterBottom>
-						Are you sure you want to close?
-					</Typography>
-					<br />
-					<br />
-					<Grid container spacing={24}>
+					<Grid
+						container
+						spacing={24}
+						direction="column"
+						justify="center"
+						alignItems="center"
+						className={classes.bottomSpace}
+					>
 						<Grid item>
-							<Button variant="contained" size="large" onClick={window.quit}>
+							<SelfkeyLogo className={classes.logo} />
+						</Grid>
+
+						<Grid item>
+							<Typography variant="body2" gutterBottom>
+								Are you sure you want to close?
+							</Typography>
+						</Grid>
+					</Grid>
+
+					<Grid container spacing={24} justify="center">
+						<Grid item>
+							<Button
+								variant="contained"
+								size="large"
+								className={classes.shortButton}
+								onClick={window.quit}
+							>
 								YES
 							</Button>
 						</Grid>
@@ -41,6 +75,7 @@ export const CloseConfirmation = props => {
 								variant="outlined"
 								size="large"
 								onClick={() => handleCancel(props)}
+								className={classes.shortButton}
 							>
 								CANCEL
 							</Button>
@@ -56,4 +91,4 @@ const mapStateToProps = (state, props) => {
 	return {};
 };
 
-export default connect(mapStateToProps)(CloseConfirmation);
+export default connect(mapStateToProps)(withStyles(styles)(CloseConfirmation));
