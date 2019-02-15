@@ -86,7 +86,7 @@ class SelfkeyIdOverviewComponent extends Component {
 		}
 
 		if (type.content.format === 'date') {
-			return moment(Math.min(+data.value, 0)).format('DD MMM YYYY');
+			return moment(data.value).format('DD MMM YYYY');
 		}
 
 		return data.value;

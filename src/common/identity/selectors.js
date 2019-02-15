@@ -32,7 +32,8 @@ const selectIdAttributeTypes = state =>
 		.selectIdentity(state)
 		.idAtrributeTypes.map(
 			id => identitySelectors.selectIdentity(state).idAtrributeTypesById[id]
-		);
+		)
+		.filter(t => t && t.content);
 
 const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();
@@ -101,7 +102,8 @@ const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 				defaultUiSchema,
 				documents: documents[attr.id] || []
 			};
-		});
+		})
+		.filter(attr => attr.type && attr.type.content);
 };
 
 const selectSelfkeyId = state => {

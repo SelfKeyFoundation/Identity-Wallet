@@ -3,8 +3,24 @@
 const selfkeyPlatform = require('../assets/data/selfkey-platform.json');
 
 const getAttribute = url => {
-	let found = selfkeyPlatform.attributes.filter(attr => attr.$id === url);
+	let found = selfkeyPlatform.jsonSchemas.filter(attr => attr.$id === url);
 	return found[0] || null;
+};
+
+const getCountryCode = country => {
+	const countryAttr = getAttribute(
+		'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
+	);
+
+	const countries = countryAttr.properties.country.enumNames;
+	const codes = countryAttr.properties.country.enum;
+
+	const countryIdx = countries.indexOf(country);
+
+	if (countryIdx > -1) {
+		return codes[countryIdx];
+	}
+	return '';
 };
 
 const populateInitialRepo = async (ctx, knex, Promise) => {
@@ -118,9 +134,11 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	);
 	await mergeAttributes(
 		attributeUrlForKey('national_id'),
+		'National ID',
 		{
 			[attributeUrlForKey('national_id')]: 'front',
-			[attributeUrlForKey('national_id_back')]: 'back'
+			[attributeUrlForKey('national_id_back')]: 'back',
+			[attributeUrlForKey('id_selfie')]: 'selfie.image'
 		},
 		knex,
 		ctx
@@ -130,7 +148,7 @@ const migrateAttributeTypes = async (ctx, knex, Promise) => {
 	return ctx;
 };
 
-const mergeAttributes = async (target, attrs, knex, ctx) => {
+const mergeAttributes = async (target, name, attrs, knex, ctx) => {
 	let attrsToMerge = await knex('id_attribute_types')
 		.join('id_attributes', 'id_attributes.typeId', 'id_attribute_types.id')
 		.select('id_attributes.*', 'id_attribute_types.url')
@@ -160,6 +178,15 @@ const mergeAttributes = async (target, attrs, knex, ctx) => {
 		curr = { ...curr, data: JSON.parse(curr.data) };
 		let key = attrs[curr.url];
 		let value = curr.data ? curr.data.value : null;
+		if (key.includes('.')) {
+			key = key.split('.');
+			if (key.length > 1) {
+				for (let i = key.length - 1; i > 0; i--) {
+					value = { [key[i]]: value };
+				}
+			}
+			key = key[0];
+		}
 		acc[curr.walletId] = acc[curr.walletId] || {};
 		acc[curr.walletId][key] = value;
 		return acc;
@@ -179,6 +206,7 @@ const mergeAttributes = async (target, attrs, knex, ctx) => {
 		let targetAttr = {
 			typeId: targetAttrType.id,
 			data: JSON.stringify({ value: data[walletId] }),
+			name,
 			walletId: walletId,
 			createdAt: ctx.now,
 			updatedAt: ctx.now
@@ -199,6 +227,12 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 	await knex.schema.renameTable('id_attributes', 'id_attributes_old');
 	await knex.schema.renameTable('documents', 'documents_old');
 	await knex.schema.renameTable('id_attribute_types', 'id_attribute_types_old');
+	await knex('id_attribute_types_old')
+		.where('key', 'public_key')
+		.del();
+	await knex('id_attributes_old')
+		.where('type', 'public_key')
+		.del();
 	await knex.schema.createTable('id_attribute_types', t => {
 		t.increments('id');
 		t.string('key');
@@ -306,14 +340,33 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		if (attr.documentId) {
 			data.value = `$document-${attr.documentId}`;
 		}
-		if (['fingerprint'].includes(attr.type)) {
+		if (['fingerprint', 'bank_statement', 'utility_bill'].includes(attr.type)) {
+			data.value = { images: [data.value] };
+		}
+		if (['passport', 'tax_certificate'].includes(attr.type)) {
 			data.value = { image: data.value };
 		}
 		if (['voice_id'].includes(attr.type)) {
-			data.value = { audio: data.value };
+			data.value = [data.value];
 		}
 		if (['drivers_license'].includes(attr.type)) {
 			data.value = { front: data.value };
+		}
+		if (attr.type === 'birthdate') {
+			try {
+				let date = new Date(+data.value);
+				data.value = `${date.getFullYear()}-${
+					date.getMonth() < 10 ? '0' : ''
+				}${date.getMonth() + 1}-${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
+			} catch (error) {
+				data.value = '';
+			}
+		}
+		if (attr.type === 'country_of_residency') {
+			data.value = { country: getCountryCode(data.value) };
+		}
+		if (attr.type === 'nationality') {
+			data.value = { country: getCountryCode(data.value), denonym: data.value };
 		}
 		attr.data = JSON.stringify(data);
 		delete attr.type;

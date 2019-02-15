@@ -3,95 +3,176 @@
 		"name": "Selfkey.org",
 		"identityAttributes": [
 			{
-				"json": "http://platform.selfkey.org/schema/attribute/public-key.json",
-				"ui": "http://platform.selfkey.org/ui/public-key.json"
+				"json": "http://platform.selfkey.org/schema/attribute/bank-statement.json"
 			},
-			"http://platform.selfkey.org/schema/attribute/bank-statement.json",
-			"http://platform.selfkey.org/schema/attribute/date-of-birth.json",
-			"http://platform.selfkey.org/schema/attribute/country-of-residency.json",
-			"http://platform.selfkey.org/schema/attribute/drivers-license.json",
-			"http://platform.selfkey.org/schema/attribute/email.json",
-			"http://platform.selfkey.org/schema/attribute/fingerprint.json",
-			"http://platform.selfkey.org/schema/attribute/first-name.json",
-			"http://platform.selfkey.org/schema/attribute/id-selfie.json",
-			"http://platform.selfkey.org/schema/attribute/last-name.json",
-			"http://platform.selfkey.org/schema/attribute/middle-name.json",
-			"http://platform.selfkey.org/schema/attribute/national-id.json",
-			"http://platform.selfkey.org/schema/attribute/nationality.json",
-			"http://platform.selfkey.org/schema/attribute/passport.json",
-			"http://platform.selfkey.org/schema/attribute/phone-number.json",
-			"http://platform.selfkey.org/schema/attribute/physical-address.json",
-			"http://platform.selfkey.org/schema/attribute/tax-certificate.json",
-			"http://platform.selfkey.org/schema/attribute/tax-id-number.json",
-			"http://platform.selfkey.org/schema/attribute/utility-bill.json",
-			"http://platform.selfkey.org/schema/attribute/voice-id.json",
-			"http://platform.selfkey.org/schema/attribute/work-place.json"
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/date-of-birth.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/country-of-residency.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/drivers-license.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/email.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/fingerprint.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/first-name.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/last-name.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/middle-name.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/national-id.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/nationality.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/passport.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/phone-number.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/physical-address.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/tax-certificate.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/tax-id-number.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/utility-bill.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/voice-id.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/work-place.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/btc-address.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/eth-address.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/dash-address.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/certificate-of-incorporation.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/registration-certificate.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/external-document.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/company-name.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/birth-certificate.json"
+			},
+			{
+				"json": "http://platform.selfkey.org/schema/attribute/member-register.json"
+			}
 		]
 	},
-	"attributes": [
-		{
-			"$id": "http://platform.selfkey.org/schema/attribute/public-key.json",
-			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
-			"identityAttribute": true,
-			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Public Key",
-			"description": "A cryptographic public key.",
-			"type": "string"
-		},
+	"jsonSchemas": [
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/bank-statement.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a copy of a recent bank statement. No older than 6 months.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Bank Statement",
-			"description": "A copy of a bank statement.",
-			"type": "object",
 			"properties": {
-				"image": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
 						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
 					},
-					"required": ["mimeType", "size", "content"]
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"images": {
+					"$id": "http://platform.selfkey.org/schema/file/multi-image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Multiple Images",
+					"type": "array"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
 				}
 			},
-			"required": ["image"]
+			"required": ["images", "issued"],
+			"title": "Bank Statement",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/date-of-birth.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your full date of birth.",
+			"format": "date",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "Date of Birth",
-			"description": "An individual's date of birth.",
-			"type": "string",
-			"format": "date"
+			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/country-of-residency.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please specify the country you are currently living in.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Country of Residency",
-			"description": "An individual's country of residency.",
-			"type": "object",
 			"properties": {
 				"country": {
 					"$id": "http://platform.selfkey.org/schema/misc/country.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"title": "Country",
-					"type": "string",
 					"enum": [
 						"AF",
 						"AX",
@@ -593,240 +674,327 @@
 						"Yemen",
 						"Zambia",
 						"Zimbabwe"
-					]
+					],
+					"title": "Country",
+					"type": "string"
 				}
 			},
-			"required": ["country"]
+			"required": ["country"],
+			"title": "Country of Residency",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/drivers-license.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide images of the front and back sides of your driver's license.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Drivers License",
-			"description": "A copy of an individuals drivers license.",
-			"type": "object",
 			"properties": {
-				"front": {
-					"title": "Front image",
-					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
-					},
-					"required": ["mimeType", "size", "content"]
-				},
 				"back": {
-					"title": "Back image",
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
 					"format": "file",
 					"properties": {
+						"content": { "type": "string" },
 						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
 							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Back image",
+					"type": "object"
+				},
+				"expires": {
+					"$id": "http://platform.selfkey.org/schema/misc/expiry-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Expiry Date",
+					"type": "string"
+				},
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"front": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "file",
+					"properties": {
+						"content": { "type": "string" },
+						"mimeType": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
+							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Front image",
+					"type": "object"
+				},
+				"selfie": {
+					"$id": "http://platform.selfkey.org/schema/misc/selfie.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Take a selfie, making sure the image is clear, and your face isn't covered by any items, such as glasses.",
+					"properties": {
+						"image": {
+							"$id": "http://platform.selfkey.org/schema/file/image.json",
+							"$schema": "http://json-schema.org/draft-07/schema",
+							"format": "file",
+							"properties": {
+								"content": { "type": "string" },
+								"mimeType": {
+									"enum": ["image/jpeg", "image/png", "application/pdf"],
+									"type": "string"
+								},
+								"size": { "maximum": 50000000, "type": "integer" }
+							},
+							"required": ["mimeType", "size", "content"],
+							"title": "Image",
+							"type": "object"
 						}
 					},
-					"required": ["mimeType", "size", "content"]
+					"required": ["image"],
+					"title": "Selfie",
+					"type": "object"
 				}
 			},
-			"required": ["front", "back"]
+			"required": ["front", "back", "expires"],
+			"title": "Drivers License",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/email.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your e-mail address.",
+			"format": "email",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"pattern": "(?!.*\\.{2})^([a-z\\d!#$%&'*+\\-\\/=?^_`{|}~\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]+(\\.[a-z\\d!#$%&'*+\\-\\/=?^_`{|}~\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]+)*|\"((([ \\t]*\\r\\n)?[ \\t]+)?([\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\x21\\x23-\\x5b\\x5d-\\x7e\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]))*(([ \\t]*\\r\\n)?[ \\t]+)?\")@(([a-z\\d\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]|[a-z\\d\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF][a-z\\d\\-._~\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]*[a-z\\d\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])\\.)+([a-z\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]|[a-z\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF][a-z\\d\\-._~\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]*[a-z\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])\\.?$",
 			"title": "Email",
-			"description": "An individual's email address",
-			"type": "string",
-			"format": "email"
+			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/fingerprint.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide an image with your fingerprint. It can be either your thumb or index finger.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Fingerprint",
-			"description": "An image copy of a fingerprint.",
-			"type": "object",
 			"properties": {
-				"image": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
 						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
 					},
-					"required": ["mimeType", "size", "content"]
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"images": {
+					"$id": "http://platform.selfkey.org/schema/file/multi-image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Multiple Images",
+					"type": "array"
 				}
 			},
-			"required": ["image"]
+			"required": ["images"],
+			"title": "Fingerprint",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/first-name.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Given Name.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "First Name",
-			"description": "An individual's first (given) name.",
 			"type": "string"
-		},
-		{
-			"$id": "http://platform.selfkey.org/schema/attribute/id-selfie.json",
-			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
-			"identityAttribute": true,
-			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "ID Selfie",
-			"description": "An selfie photo with a valid identification document.",
-			"type": "object",
-			"properties": {
-				"image": {
-					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
-					},
-					"required": ["mimeType", "size", "content"]
-				}
-			},
-			"required": ["image"]
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/last-name.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Family Name.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "Last Name",
-			"description": "An individual's last (family) name.",
 			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/middle-name.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Middle Name.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "Middle Name",
-			"description": "An individual's middle name.",
 			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/national-id.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a valid national identification document.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "National ID",
-			"description": "A copy of a national identification document.",
-			"type": "object",
 			"properties": {
-				"front": {
-					"title": "Front image",
-					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
-					},
-					"required": ["mimeType", "size", "content"]
-				},
 				"back": {
-					"title": "Back image",
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
 					"format": "file",
 					"properties": {
+						"content": { "type": "string" },
 						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
 							"type": "string"
-						}
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
 					},
-					"required": ["mimeType", "size", "content"]
+					"required": ["mimeType", "size", "content"],
+					"title": "Back image",
+					"type": "object"
 				},
-				"additional": {
-					"type": "array",
-					"title": "Additional images",
+				"expires": {
+					"$id": "http://platform.selfkey.org/schema/misc/expiry-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Expiry Date",
+					"type": "string"
+				},
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
 					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
 						"$schema": "http://json-schema.org/draft-07/schema",
-						"$id": "http://platform.selfkey.org/schema/document/image.json",
-						"type": "object",
-						"title": "Image",
 						"format": "file",
 						"properties": {
+							"content": { "type": "string" },
 							"mimeType": {
-								"type": "string",
-								"enum": ["image/jpg", "image/png", "application/pdf"]
-							},
-							"size": { "type": "integer", "max": 50000000 },
-							"content": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
 								"type": "string"
-							}
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
 						},
-						"required": ["mimeType", "size", "content"]
-					}
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"front": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "file",
+					"properties": {
+						"content": { "type": "string" },
+						"mimeType": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
+							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Front image",
+					"type": "object"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
+				},
+				"selfie": {
+					"$id": "http://platform.selfkey.org/schema/misc/selfie.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Take a selfie, making sure the image is clear, and your face isn't covered by any items, such as glasses.",
+					"properties": {
+						"image": {
+							"$id": "http://platform.selfkey.org/schema/file/image.json",
+							"$schema": "http://json-schema.org/draft-07/schema",
+							"format": "file",
+							"properties": {
+								"content": { "type": "string" },
+								"mimeType": {
+									"enum": ["image/jpeg", "image/png", "application/pdf"],
+									"type": "string"
+								},
+								"size": { "maximum": 50000000, "type": "integer" }
+							},
+							"required": ["mimeType", "size", "content"],
+							"title": "Image",
+							"type": "object"
+						}
+					},
+					"required": ["image"],
+					"title": "Selfie",
+					"type": "object"
 				}
 			},
-			"required": ["front"]
+			"required": ["front", "issued"],
+			"title": "National ID",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/nationality.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please specify your current nationality.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Nationality",
-			"description": "A country an individual holds citizenship in.",
-			"type": "object",
 			"properties": {
 				"country": {
 					"$id": "http://platform.selfkey.org/schema/misc/country.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"title": "Country",
-					"type": "string",
 					"enum": [
 						"AF",
 						"AX",
@@ -1328,194 +1496,646 @@
 						"Yemen",
 						"Zambia",
 						"Zimbabwe"
-					]
+					],
+					"title": "Country",
+					"type": "string"
 				},
 				"demonym": {
-					"type": "string",
+					"description": "The word used to identify citizens of the country",
 					"title": "Denonym",
-					"description": "The word used to identify citizens of the country"
+					"type": "string"
 				}
 			},
-			"required": ["country"]
+			"required": ["country"],
+			"title": "Nationality",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/passport.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide an image of your passport. It must still be valid.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Passport",
-			"description": "A copy of an individuals passport.",
-			"type": "object",
 			"properties": {
-				"image": {
+				"expires": {
+					"$id": "http://platform.selfkey.org/schema/misc/expiry-date.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
+					"format": "date",
+					"title": "Expiry Date",
+					"type": "string"
+				},
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"image": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
 					"format": "file",
 					"properties": {
+						"content": { "type": "string" },
 						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
 							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Image",
+					"type": "object"
+				},
+				"issue": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
+				},
+				"selfie": {
+					"$id": "http://platform.selfkey.org/schema/misc/selfie.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Take a selfie, making sure the image is clear, and your face isn't covered by any items, such as glasses.",
+					"properties": {
+						"image": {
+							"$id": "http://platform.selfkey.org/schema/file/image.json",
+							"$schema": "http://json-schema.org/draft-07/schema",
+							"format": "file",
+							"properties": {
+								"content": { "type": "string" },
+								"mimeType": {
+									"enum": ["image/jpeg", "image/png", "application/pdf"],
+									"type": "string"
+								},
+								"size": { "maximum": 50000000, "type": "integer" }
+							},
+							"required": ["mimeType", "size", "content"],
+							"title": "Image",
+							"type": "object"
 						}
 					},
-					"required": ["mimeType", "size", "content"]
+					"required": ["image"],
+					"title": "Selfie",
+					"type": "object"
 				}
 			},
-			"required": ["image"]
+			"required": ["image", "issue", "expires"],
+			"title": "Passport",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/phone-number.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your current phone number.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"pattern": "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$",
 			"title": "Phone Number",
-			"description": "An individual's phone number",
 			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/physical-address.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your current home address, including number, street, zip code and city",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Address",
-			"description": "An individual's address.",
-			"type": "object",
 			"properties": {
-				"address-line-1": {
-					"type": "string"
-				},
-				"address-line-2": {
-					"type": "string"
-				},
-				"address-line3": {
-					"type": "string"
-				}
+				"address_line_1": { "type": "string" },
+				"address_line_2": { "type": "string" },
+				"address_line_3": { "type": "string" }
 			},
-			"required": ["address-line-1", "address-line-2", "address-line-3"]
+			"required": ["address_line_1", "address_line_2", "address_line_3"],
+			"title": "Address",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/tax-certificate.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a copy of a recent tax certificate. No older than 12 months.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Tax Certificate",
-			"description": "A copy of a tax certificate.",
-			"type": "object",
 			"properties": {
-				"image": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"image": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
 					"format": "file",
 					"properties": {
+						"content": { "type": "string" },
 						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
 							"type": "string"
-						}
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
 					},
-					"required": ["mimeType", "size", "content"]
+					"required": ["mimeType", "size", "content"],
+					"title": "Image",
+					"type": "object"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
 				}
 			},
-			"required": ["image"]
+			"required": ["image", "issued"],
+			"title": "Tax Certificate",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/tax-id-number.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide your taxpayer identification number.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "Tax ID",
-			"description": "An individual's tax identification number.",
 			"type": "string"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/utility-bill.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide an image with a recent utility bill. No older than 3 months.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Utility Bill",
-			"description": "A copy of a utility bill.",
-			"type": "object",
 			"properties": {
-				"image": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
 					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/image.json",
-					"type": "object",
-					"title": "Image",
-					"format": "file",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["image/jpg", "image/png", "application/pdf"]
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
 						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
 					},
-					"required": ["mimeType", "size", "content"]
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"images": {
+					"$id": "http://platform.selfkey.org/schema/file/multi-image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Multiple Images",
+					"type": "array"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
 				}
 			},
-			"required": ["image"]
+			"required": ["images", "issued"],
+			"title": "Utility Bill",
+			"type": "object"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/voice-id.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a recording with your voice authentication phrase.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
-			"title": "Voice ID",
-			"description": "A voice identification document.",
-			"type": "object",
-			"properties": {
-				"audio": {
-					"$schema": "http://json-schema.org/draft-07/schema",
-					"$id": "http://platform.selfkey.org/schema/document/audio.json",
-					"type": "object",
-					"format": "file",
-					"title": "Audio",
-					"properties": {
-						"mimeType": {
-							"type": "string",
-							"enum": ["audio/mp3", "audio/mp4", "audio/ogg", "audio/x-wav"]
-						},
-						"size": { "type": "integer", "max": 50000000 },
-						"content": {
-							"type": "string"
-						}
+			"items": {
+				"$id": "http://platform.selfkey.org/schema/file/audio.json",
+				"$schema": "http://json-schema.org/draft-07/schema",
+				"format": "file",
+				"properties": {
+					"content": { "type": "string" },
+					"mimeType": {
+						"enum": ["audio/mp3", "audio/mp4", "audio/ogg", "audio/x-wav"],
+						"type": "string"
 					},
-					"required": ["mimeType", "size", "content"]
-				}
+					"size": { "maximum": 50000000, "type": "integer" }
+				},
+				"required": ["mimeType", "size", "content"],
+				"title": "Audio",
+				"type": "object"
 			},
-			"required": ["audio"]
+			"title": "Voice ID",
+			"type": "array"
 		},
 		{
 			"$id": "http://platform.selfkey.org/schema/attribute/work-place.json",
 			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please specify your current place of work. You can also state if you are un-employed or retired.",
 			"identityAttribute": true,
 			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
 			"title": "Workplace",
-			"description": "An individual's place of work.",
 			"type": "string"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/btc-address.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your Bitcoin Wallet Address.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"pattern": "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$",
+			"title": "BTC Wallet Address",
+			"type": "string"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/eth-address.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your Ethereum Wallet Address",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"pattern": "^0x[a-fA-F0-9]{40}$",
+			"title": "ETH Wallet Address",
+			"type": "string"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/dash-address.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please enter your Dash Wallet Address.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"pattern": "^X[1-9A-HJ-NP-Za-km-z]{33}",
+			"title": "Dash Wallet Address",
+			"type": "string"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/certificate-of-incorporation.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a copy of your company's certificate of incorporation.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"properties": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"image": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "file",
+					"properties": {
+						"content": { "type": "string" },
+						"mimeType": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
+							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Image",
+					"type": "object"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
+				}
+			},
+			"required": ["image", "issued"],
+			"title": "Certificate of Incorporation",
+			"type": "object"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/registration-certificate.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a copy of your company's registration certificate.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"properties": {
+				"company_name": { "title": "Compnay Name", "type": "string" },
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"image": {
+					"$id": "http://platform.selfkey.org/schema/file/image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "file",
+					"properties": {
+						"content": { "type": "string" },
+						"mimeType": {
+							"enum": ["image/jpeg", "image/png", "application/pdf"],
+							"type": "string"
+						},
+						"size": { "maximum": 50000000, "type": "integer" }
+					},
+					"required": ["mimeType", "size", "content"],
+					"title": "Image",
+					"type": "object"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
+				},
+				"registration_number": { "title": "Registration Number", "type": "integer" }
+			},
+			"required": ["image", "company_name", "registration_number", "issued"],
+			"title": "Registration Certificate",
+			"type": "object"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/external-document.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide any external documents requested.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"items": {
+				"$id": "http://platform.selfkey.org/schema/file/image.json",
+				"$schema": "http://json-schema.org/draft-07/schema",
+				"format": "file",
+				"properties": {
+					"content": { "type": "string" },
+					"mimeType": {
+						"enum": ["image/jpeg", "image/png", "application/pdf"],
+						"type": "string"
+					},
+					"size": { "maximum": 50000000, "type": "integer" }
+				},
+				"required": ["mimeType", "size", "content"],
+				"title": "Image",
+				"type": "object"
+			},
+			"title": "External Document",
+			"type": "array"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/company-name.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide the name of your company, as it appears in official documents.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"title": "Company Name",
+			"type": "string"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/birth-certificate.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide an image of your birth certificate.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"properties": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"images": {
+					"$id": "http://platform.selfkey.org/schema/file/multi-image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Multiple Images",
+					"type": "array"
+				},
+				"selfie": {
+					"$id": "http://platform.selfkey.org/schema/misc/selfie.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Take a selfie, making sure the image is clear, and your face isn't covered by any items, such as glasses.",
+					"properties": {
+						"image": {
+							"$id": "http://platform.selfkey.org/schema/file/image.json",
+							"$schema": "http://json-schema.org/draft-07/schema",
+							"format": "file",
+							"properties": {
+								"content": { "type": "string" },
+								"mimeType": {
+									"enum": ["image/jpeg", "image/png", "application/pdf"],
+									"type": "string"
+								},
+								"size": { "maximum": 50000000, "type": "integer" }
+							},
+							"required": ["mimeType", "size", "content"],
+							"title": "Image",
+							"type": "object"
+						}
+					},
+					"required": ["image"],
+					"title": "Selfie",
+					"type": "object"
+				}
+			},
+			"required": ["images"],
+			"title": "Birth Certificate",
+			"type": "object"
+		},
+		{
+			"$id": "http://platform.selfkey.org/schema/attribute/member-register.json",
+			"$schema": "http://platform.selfkey.org/schema/identity-attribute.json",
+			"description": "Please provide a copy of your members register.",
+			"identityAttribute": true,
+			"identityAttributeRepository": "http://platform.selfkey.org/repository.json",
+			"properties": {
+				"extra": {
+					"$id": "http://platform.selfkey.org/schema/misc/extra-images.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"description": "Please add any extra images that are relevant",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Extra Images",
+					"type": "array"
+				},
+				"images": {
+					"$id": "http://platform.selfkey.org/schema/file/multi-image.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"items": {
+						"$id": "http://platform.selfkey.org/schema/file/image.json",
+						"$schema": "http://json-schema.org/draft-07/schema",
+						"format": "file",
+						"properties": {
+							"content": { "type": "string" },
+							"mimeType": {
+								"enum": ["image/jpeg", "image/png", "application/pdf"],
+								"type": "string"
+							},
+							"size": { "maximum": 50000000, "type": "integer" }
+						},
+						"required": ["mimeType", "size", "content"],
+						"title": "Image",
+						"type": "object"
+					},
+					"title": "Multiple Images",
+					"type": "array"
+				},
+				"issued": {
+					"$id": "http://platform.selfkey.org/schema/misc/issue-date.json",
+					"$schema": "http://json-schema.org/draft-07/schema",
+					"format": "date",
+					"title": "Issue Date",
+					"type": "string"
+				},
+				"members": {
+					"items": {
+						"properties": {
+							"name": { "title": "Full Name", "type": "string" },
+							"positions": {
+								"description": "Position in the company.",
+								"title": "Position",
+								"type": "string"
+							}
+						},
+						"required": ["name", "position"],
+						"type": "object"
+					},
+					"title": "Members",
+					"type": "array"
+				}
+			},
+			"required": ["images", "issued", "members"],
+			"title": "Member Register",
+			"type": "object"
 		}
 	],
-	"uiSchemas": [
-		{
-			"id": "http://platform.selfkey.org/ui/public-key.json",
-			"schema": {
-				"ui:widget": "textarea",
-				"ui:options": {
-					"rows": 5
-				}
-			}
-		}
-	]
+	"uiSchemas": []
 }

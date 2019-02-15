@@ -1,7 +1,7 @@
 import platform from '../../main/assets/data/selfkey-platform.json';
 import { identityAttributes, jsonSchema } from './utils';
 const findAttributeType = id => {
-	let attrs = platform.attributes.filter(attr => attr['$id'] === id);
+	let attrs = platform.jsonSchemas.filter(attr => attr['$id'] === id);
 
 	if (!attrs.length) return null;
 	return attrs[0];
@@ -16,7 +16,7 @@ describe('Identity uitls', () => {
 				};
 				let documents = [];
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -32,7 +32,7 @@ describe('Identity uitls', () => {
 				let documents = [];
 
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -66,7 +66,7 @@ describe('Identity uitls', () => {
 					}
 				];
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -108,7 +108,7 @@ describe('Identity uitls', () => {
 				let value = {
 					front: '$document-15',
 					back: '$document-17',
-					additional: ['$document-#ref{document0.id}', '$document-#ref{document1.id}']
+					extra: ['$document-#ref{document0.id}', '$document-#ref{document1.id}']
 				};
 				let documents = [
 					{
@@ -141,7 +141,7 @@ describe('Identity uitls', () => {
 							id: 17,
 							content: 'abc2'
 						},
-						additional: [
+						extra: [
 							{
 								content: 'abc3'
 							},
@@ -162,7 +162,7 @@ describe('Identity uitls', () => {
 				};
 				let documents = [];
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -181,7 +181,7 @@ describe('Identity uitls', () => {
 				];
 
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -217,7 +217,7 @@ describe('Identity uitls', () => {
 					}
 				];
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -247,7 +247,7 @@ describe('Identity uitls', () => {
 				};
 				let documents = [];
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 
 				expect(
@@ -298,7 +298,7 @@ describe('Identity uitls', () => {
 						id: 17,
 						content: 'abc2'
 					},
-					additional: [
+					extra: [
 						{
 							content: 'abc3'
 						},
@@ -315,24 +315,24 @@ describe('Identity uitls', () => {
 					value: {
 						front: '$document-15',
 						back: '$document-17',
-						additional: ['$document-#ref{document2.id}', '$document-#ref{document3.id}']
+						extra: ['$document-#ref{document1.id}', '$document-#ref{document2.id}']
 					},
 					documents: [
-						{
-							id: 15,
-							content: 'abc'
-						},
 						{
 							id: 17,
 							content: 'abc2'
 						},
 						{
-							'#id': 'document2',
+							'#id': 'document1',
 							content: 'abc3'
 						},
 						{
-							'#id': 'document3',
+							'#id': 'document2',
 							content: 'abc4'
+						},
+						{
+							id: 15,
+							content: 'abc'
 						}
 					]
 				});
@@ -355,7 +355,7 @@ describe('Identity uitls', () => {
 			});
 			it('true if simple file schema', () => {
 				let attrTypeSchema = findAttributeType(
-					'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
 				);
 				expect(jsonSchema.containsFile(attrTypeSchema)).toBe(true);
 			});

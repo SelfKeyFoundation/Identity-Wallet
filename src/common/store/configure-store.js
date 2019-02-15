@@ -36,18 +36,21 @@ import {
 
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
-	let router;
+	let scopedReducers = {};
+	if (process.env.ENABLE_REDUX_LOGGER) {
+		const logger = createLogger({ collapsed: (getState, actions) => true });
+		middleware.push(logger);
+	}
 	if (scope === 'renderer') {
-		if (process.env.ENABLE_REDUX_LOGGER) {
-			const logger = createLogger({ collapsed: (getState, actions) => true });
-			middleware.push(logger);
-		}
 		middleware = [forwardToMain, ...middleware];
 
 		history.create();
-		router = connectRouter(history.getHistory());
+		let router = connectRouter(history.getHistory());
 
 		middleware = [forwardToMain, ...middleware, routerMiddleware(history.getHistory())];
+		scopedReducers = {
+			router
+		};
 	}
 
 	if (scope === 'main') {
@@ -70,12 +73,12 @@ export default (initialState, scope = 'main') => {
 		exchanges,
 		marketplaces,
 		identity,
-		router,
 		createWallet,
 		transactionHistory,
 		app,
 		kyc,
-		tokens
+		tokens,
+		...scopedReducers
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

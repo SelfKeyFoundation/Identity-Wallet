@@ -163,9 +163,9 @@ describe('Identity Duck', () => {
 	describe('IdAttributeTypes', () => {
 		let now = Date.now();
 		const testIdAttributeTypes = [
-			{ id: 1, url: 'test', expires: now - 50000 },
-			{ id: 2, url: 'test1', expires: now + 50000 },
-			{ id: 3, url: 'test2', expires: now - 50000 }
+			{ id: 1, url: 'test', expires: now - 50000, content: {} },
+			{ id: 2, url: 'test1', expires: now + 50000, content: {} },
+			{ id: 3, url: 'test2', expires: now - 50000, content: {} }
 		];
 		let expiredIdAttributeTypes = testIdAttributeTypes.filter(type => type.expires <= now);
 		describe('Operations', () => {
