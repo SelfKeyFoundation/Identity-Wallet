@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { getWallet } from 'common/wallet/selectors';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
@@ -40,6 +40,11 @@ const styles = theme => ({
 		borderRadius: '4px',
 		padding: '30px'
 	},
+	whatYouGet: {
+		paddingBottom: '30px',
+		marginBottom: '30px',
+		borderBottom: '2px solid #475768'
+	},
 	description: {
 		margin: '1em 1em 1em 0',
 		fontFamily: 'Lato, arial',
@@ -62,26 +67,68 @@ const styles = theme => ({
 			marginBottom: '1em'
 		}
 	},
+	howItWorks: {
+		paddingBottom: '30px',
+		marginBottom: '30px',
+		borderBottom: '2px solid #475768'
+	},
 	howItWorksBox: {
-		width: '25%',
-		padding: '2em 2%',
-		margin: '2em auto',
+		width: '26%',
+		padding: '2em 3%',
+		margin: '2em 0',
 		color: '#FFF',
 		background: '#313D49',
+		'& header h4': {
+			display: 'inline-block',
+			marginLeft: '0.5em',
+			fontSize: '16px'
+		},
 		'& header span': {
 			color: '#00C0D9',
 			fontWeight: 'bold',
 			fontSize: '20px'
 		},
-		'& div': {}
+		'& h3': {
+			fontSize: '13px'
+		}
+	},
+	serviceCost: {
+		width: '100%',
+		paddingBottom: '30px',
+		marginBottom: '30px'
 	},
 	priceTable: {
 		padding: '2em',
+		margin: '2em 0',
 		background: '#313D49'
 	},
 	priceRow: {
-		' & > div': {
-			width: '30%'
+		padding: '10px 0',
+		'& div.rowItem': {
+			width: '33%',
+			color: '#FFF'
+		},
+		'& div.price': {
+			color: '#00C0D9',
+			fontWeight: 'bold',
+			textAlign: 'right'
+		},
+		'& div.time': {
+			color: '#93B0C1',
+			fontSize: '13px'
+		},
+		'& div.rowItem.transactionFee': {
+			color: '#93B0C1'
+		}
+	},
+	rowSeparator: {
+		border: '1px solid #475768',
+		margin: '30px 0'
+	},
+	payButton: {
+		width: '100%',
+		'& button': {
+			marginRight: '30px'
 		}
 	}
 });
@@ -95,6 +142,8 @@ export class IncorporationCheckout extends React.Component {
 				}`
 			)
 		);
+
+	onPayClick = _ => console.log('pay click');
 
 	render() {
 		const { classes, program } = this.props;
@@ -123,7 +172,7 @@ export class IncorporationCheckout extends React.Component {
 						alignItems="center"
 						className={classes.content}
 					>
-						<div>
+						<div className={classes.whatYouGet}>
 							<Typography variant="body2" gutterBottom>
 								What you get
 							</Typography>
@@ -171,7 +220,7 @@ export class IncorporationCheckout extends React.Component {
 								</div>
 							</Grid>
 						</div>
-						<div>
+						<div className={classes.howItWorks}>
 							<Typography variant="body2" gutterBottom>
 								How the service works
 							</Typography>
@@ -181,7 +230,6 @@ export class IncorporationCheckout extends React.Component {
 								justify="space-between"
 								alignItems="center"
 								spacing={0}
-								className={classes.howItWorks}
 							>
 								<div className={classes.howItWorksBox}>
 									<header>
@@ -230,7 +278,7 @@ export class IncorporationCheckout extends React.Component {
 								</div>
 							</Grid>
 						</div>
-						<div>
+						<div className={classes.serviceCost}>
 							<Typography variant="body2" gutterBottom>
 								Service Costs
 							</Typography>
@@ -244,9 +292,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div>Incorporation Fee</div>
-										<div>-</div>
-										<div>$1600</div>
+										<div className="rowItem">Incorporation Fee</div>
+										<div className="rowItem time">-</div>
+										<div className="rowItem price">$1600</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -257,9 +305,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div>Singapore Mailing Address</div>
-										<div>1 year</div>
-										<div>$300</div>
+										<div className="rowItem">Singapore Mailing Address</div>
+										<div className="rowItem time">1 year</div>
+										<div className="rowItem price">$300</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -270,9 +318,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div>Singapore Local Director</div>
-										<div>-</div>
-										<div>$3000</div>
+										<div className="rowItem">Singapore Local Director</div>
+										<div className="rowItem time">-</div>
+										<div className="rowItem price">$3000</div>
 									</Grid>
 								</div>
 								<div className={classes.rowSeparator} />
@@ -284,9 +332,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div>Cost Fee</div>
-										<div />
-										<div>$1600</div>
+										<div className="rowItem">Cost</div>
+										<div className="rowItem time" />
+										<div className="rowItem price">Total: $1600</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -297,12 +345,22 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div>Network Transaction Fee</div>
-										<div />
-										<div>$1</div>
+										<div className="rowItem transactionFee">
+											Network Transaction Fee
+										</div>
+										<div className="rowItem time" />
+										<div className="rowItem price">$1</div>
 									</Grid>
 								</div>
 							</div>
+						</div>
+						<div className={classes.payButton}>
+							<Button variant="contained" size="large" onClick={this.onPayClick}>
+								Pay Incorporation
+							</Button>
+							<Button variant="outlined" size="large" onClick={this.onBackClick}>
+								Cancel
+							</Button>
 						</div>
 					</Grid>
 				</div>
