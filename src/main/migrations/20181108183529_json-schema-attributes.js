@@ -355,7 +355,9 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		if (attr.type === 'birthdate') {
 			try {
 				let date = new Date(+data.value);
-				data.value = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+				data.value = `${date.getFullYear()}-${
+					date.getMonth() < 10 ? '0' : ''
+				}${date.getMonth() + 1}-${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
 			} catch (error) {
 				data.value = '';
 			}

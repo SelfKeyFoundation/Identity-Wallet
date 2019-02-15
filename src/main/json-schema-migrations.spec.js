@@ -752,7 +752,7 @@ describe('migrations', () => {
 					id: 1,
 					walletId: 1,
 					typeId: 1,
-					data: '{"value":"2019-2-15"}',
+					data: '{"value":"2019-02-15"}',
 					createdAt: 0,
 					name: 'birthdate',
 					updatedAt: null
