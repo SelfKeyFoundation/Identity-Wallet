@@ -4,6 +4,7 @@ import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
+import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import { connect } from 'react-redux';
 import {
 	Grid,
@@ -190,7 +191,7 @@ class TransactionsHistory extends Component {
 									<TableCell align="right">
 										<IconButton className={classes.rightSpace}>
 											<CopyToClipboard
-												text={`https://ropsten.etherscan.io/tx/${
+												text={`${TX_HISTORY_API_ENDPOINT}/${
 													transaction.hash
 												}`}
 											>
@@ -210,9 +211,7 @@ class TransactionsHistory extends Component {
 											onClick={e => {
 												window.openExternal(
 													e,
-													`https://ropsten.etherscan.io/tx/${
-														transaction.hash
-													}`
+													`${TX_HISTORY_API_ENDPOINT}/${transaction.hash}`
 												);
 											}}
 										>
