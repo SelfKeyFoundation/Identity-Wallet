@@ -40,7 +40,7 @@ class EditAttributeComponent extends Component {
 	handleSave = ({ errors }) => {
 		let { label, value, schema, attribute, disabled } = this.state;
 		if (!!errors.length || disabled) {
-			return this.setState({ errors, disabled });
+			return this.setState({ errors, disabled: !!errors.length });
 		}
 		const normalized = identityAttributes.normalizeDocumentsSchema(schema, value, []);
 		const newAttr = {
@@ -59,7 +59,7 @@ class EditAttributeComponent extends Component {
 		this.setState({ [prop]: evt.target.value });
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
-		let disabled = !!errors.length;
+		const disabled = !!errors.length;
 		this.setState({ [prop]: formData, disabled });
 	};
 	render() {
