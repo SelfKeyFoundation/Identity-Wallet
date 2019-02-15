@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, List, ListItem, Typography } from '@material-ui/core';
 import { GreenTick, DeniedTick } from 'selfkey-ui';
 
@@ -74,7 +74,7 @@ const TAX_COLUMNS = [
 	]
 ];
 
-const styles = {
+const styles = theme => ({
 	booleanProp: {
 		'& h5': {
 			fontWeight: 'normal',
@@ -101,7 +101,7 @@ const styles = {
 			fill: '#697C95 !important'
 		}
 	}
-};
+});
 
 class IncorporationsTaxView extends Component {
 	render() {
@@ -164,4 +164,4 @@ class IncorporationsTaxView extends Component {
 	}
 }
 
-export default injectSheet(styles)(IncorporationsTaxView);
+export default withStyles(styles)(IncorporationsTaxView);
