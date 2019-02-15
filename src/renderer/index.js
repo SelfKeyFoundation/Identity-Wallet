@@ -25,6 +25,7 @@ import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
 import Unlock from './wallet/unlock';
 import EnterPin from './wallet/unlock/trezor/enter-pin';
+import EnterPassphrase from './wallet/unlock/trezor/enter-passphrase';
 import SelectAddress from './wallet/unlock/select-address';
 import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
 import Terms from './settings/terms';
@@ -87,6 +88,7 @@ render(
 						<Route path="/main" component={Main} />
 						<Route path="/unlockWallet" component={Unlock} />
 						<Route path="/enterTrezorPin" component={EnterPin} />
+						<Route path="/enterTrezorPassphrase" component={EnterPassphrase} />
 						<Route path="/selectAddress" component={SelectAddress} />
 						<Route path="/connectingToLedger" component={ConnectingToLedger} />
 						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
