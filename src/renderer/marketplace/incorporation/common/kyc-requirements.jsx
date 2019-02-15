@@ -1,9 +1,9 @@
 import React from 'react';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import { CheckedIcon } from 'selfkey-ui';
 
-const styles = {
+const styles = theme => ({
 	kyc: {
 		width: '100%',
 		paddingTop: '40px',
@@ -15,7 +15,7 @@ const styles = {
 			width: '30%'
 		}
 	}
-};
+});
 
 const IncorporationsKYC = props => {
 	const { classes } = props;
@@ -71,4 +71,4 @@ const IncorporationsKYC = props => {
 	);
 };
 
-export default injectSheet(styles)(IncorporationsKYC);
+export default withStyles(styles)(IncorporationsKYC);
