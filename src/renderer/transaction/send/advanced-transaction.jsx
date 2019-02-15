@@ -154,7 +154,7 @@ class TransactionSendBoxContainer extends Component {
 		address: '',
 		cryptoCurrency: this.props.match.params.cryptoCurrency,
 		sending: false,
-		isLedgerConfirmationOpen: false
+		isConfirmationOpen: false
 	};
 
 	componentDidMount() {
@@ -186,8 +186,8 @@ class TransactionSendBoxContainer extends Component {
 
 	handleConfirm = async () => {
 		await this.props.dispatch(transactionOperations.confirmSend());
-		if (this.props.hardwareWalletType === 'ledger') {
-			this.setState({ isLedgerConfirmationOpen: true });
+		if (this.props.hardwareWalletType !== '') {
+			this.setState({ isConfirmationOpen: true });
 		}
 	};
 
@@ -311,12 +311,14 @@ class TransactionSendBoxContainer extends Component {
 	}
 	// TransactionSendBox - End
 
-	renderLedgerConfirmationModal = () => {
+	renderConfirmationModal = () => {
+		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const text = `Confirm Transaction on ${typeText}`;
 		return (
 			<Popup
-				open={this.state.isLedgerConfirmationOpen}
-				closeAction={() => this.setState({ isLedgerConfirmationOpen: false })}
-				text="Confirm Transaction on Ledger"
+				open={this.state.isConfirmationOpen}
+				closeAction={() => this.setState({ isConfirmationOpen: false })}
+				text={text}
 			>
 				<Grid
 					container
@@ -338,8 +340,8 @@ class TransactionSendBoxContainer extends Component {
 						>
 							<Grid item>
 								<Typography variant="body1">
-									You have 30 seconds to confirm this transaction on the Ledger or
-									it will time out and automatically cancel.
+									You have 30 seconds to confirm this transaction on the{' '}
+									{typeText} or it will time out and automatically cancel.
 								</Typography>
 							</Grid>
 						</Grid>
@@ -451,7 +453,7 @@ class TransactionSendBoxContainer extends Component {
 				</Grid>
 				{this.renderFeeBox()}
 				{this.renderButtons()}
-				{this.renderLedgerConfirmationModal()}
+				{this.renderConfirmationModal()}
 			</TransactionBox>
 		);
 	}

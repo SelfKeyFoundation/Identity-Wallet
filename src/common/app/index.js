@@ -33,7 +33,8 @@ export const appTypes = {
 	APP_LOAD_TREZOR_WALLETS: 'app/load/trezor/WALLETS',
 	APP_LOAD_WALLETS: 'app/load/WALLETS',
 	APP_LOAD_OTHER_HARDWARE_WALLETS: 'app/load/other/hardware/WALLETS',
-	APP_ENTER_TREZOR_PIN: 'app/enter/trezor/pin',
+	APP_ENTER_TREZOR_PIN: 'app/enter/trezor/PIN',
+	APP_ENTER_TREZOR_PASSPHRASE: 'app/enter/trezor/PASSPHRASE',
 	APP_LOADING: 'app/LOADING',
 	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED'
 };
@@ -136,8 +137,14 @@ const loadTrezorWallets = page => async dispatch => {
 				await dispatch(push('/enterTrezorPin'));
 			});
 		}
+
+		if (eventEmitter.listenerCount('TREZOR_PASSPHRASE_REQUEST') === 0) {
+			eventEmitter.on('TREZOR_PASSPHRASE_REQUEST', async () => {
+				await dispatch(push('/enterTrezorPassphrase'));
+			});
+		}
 		const timeoutPromiseObject = timeoutPromise(
-			30000,
+			60000,
 			walletService.getTrezorWallets(page, eventEmitter)
 		);
 		timeoutId = timeoutPromiseObject.id;
@@ -173,6 +180,13 @@ const enterTrezorPin = (error, pin) => async () => {
 	eventEmitter.emit('ON_PIN', error, pin);
 };
 
+const enterTrezorPassphrase = (error, passphrase) => async () => {
+	if (error !== null) {
+		eventEmitter.off('TREZOR_PASSPHRASE_REQUEST', () => {});
+	}
+	eventEmitter.emit('ON_PASSPHRASE', error, passphrase);
+};
+
 const loading = () => async dispatch => {
 	const guideSettingsService = getGlobalContext().guideSettingsService;
 	const settings = await guideSettingsService.getSettings();
@@ -204,6 +218,7 @@ const operations = {
 	loadLedgerWallets,
 	loadTrezorWallets,
 	enterTrezorPin,
+	enterTrezorPassphrase,
 	loadOtherHardwareWallets,
 	loading,
 	setTermsAccepted
@@ -239,6 +254,10 @@ const appOperations = {
 	enterTrezorPinOperation: createAliasedAction(
 		appTypes.APP_ENTER_TREZOR_PIN,
 		operations.enterTrezorPin
+	),
+	enterTrezorPassphraseOperation: createAliasedAction(
+		appTypes.APP_ENTER_TREZOR_PASSPHRASE,
+		operations.enterTrezorPassphrase
 	),
 	loadOtherHardwareWalletsOperation: createAliasedAction(
 		appTypes.APP_LOAD_OTHER_HARDWARE_WALLETS,
