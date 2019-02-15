@@ -253,7 +253,7 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		SELECT
 			attr.id as id,
 			attr.walletId as walletId,
-			t.key as name,
+			replace(t.key, '_', ' ') as name,
 			t.id as typeId,
 			attr.data as data,
 			attr.createdAt,

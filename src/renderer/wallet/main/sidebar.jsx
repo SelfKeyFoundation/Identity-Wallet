@@ -3,7 +3,6 @@ import {
 	withStyles,
 	List,
 	ListItem,
-	ListItemText,
 	Drawer,
 	ListItemIcon,
 	Grid,
@@ -22,10 +21,15 @@ import {
 
 const styles = theme => ({
 	list: {
+		height: 'inherit',
+		justifyContent: 'space-between',
+		margin: 0,
 		width: 300
 	},
 
 	logoSection: {
+		marginBottom: '30px',
+		marginTop: '-30px',
 		paddingLeft: '16px'
 	},
 
@@ -34,8 +38,63 @@ const styles = theme => ({
 		height: '44px'
 	},
 
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px',
+		paddingTop: '3px'
+	},
+
 	closeSection: {
 		width: '100%'
+	},
+
+	pointer: {
+		cursor: 'pointer'
+	},
+
+	listItem: {
+		alignItems: 'end',
+		cursor: 'pointer',
+		display: 'flex',
+		marginBottom: '30px',
+		paddingLeft: '10px',
+		'&:hover': {
+			color: '#ffffff',
+			'& p': {
+				color: 'white'
+			}
+		}
+	},
+
+	secondaryButtons: {
+		alignItems: 'flex-end',
+		display: 'flex',
+		flexGrow: 2,
+		width: 'inherit'
+	},
+
+	inheritWidth: {
+		width: 'inherit'
+	},
+
+	inheritHeight: {
+		height: 'inherit'
+	},
+
+	textColor: {
+		color: '#fff',
+		opacity: 0.8
+	},
+
+	version: {
+		color: '#fff',
+		fontSize: '10px',
+		opacity: 0.6,
+		position: 'absolute',
+		right: 0,
+		width: 'auto'
 	}
 });
 
@@ -43,7 +102,7 @@ const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
 const selfkeyID = props => <Link to="/main/selfkeyID" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
-const switchAccount = props => <Link to="/" {...props} />;
+const switchAccount = props => <Link to="/home" {...props} />;
 
 class Sidebar extends Component {
 	state = {
@@ -79,14 +138,14 @@ class Sidebar extends Component {
 				className={classes.list}
 				spacing={40}
 			>
-				<Grid item xs={12} className={classes.closeSection}>
+				<Grid item className={classes.closeSection}>
 					<Grid container direction="row" justify="flex-end" alignItems="flex-start">
 						<Grid item>
-							<Close />
+							<Close color="secondary" className={classes.pointer} />
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<Grid
 						container
 						direction="row"
@@ -99,43 +158,96 @@ class Sidebar extends Component {
 							<SelfkeyLogo className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<List>
-						<ListItem component={dashboard} key="dashboard">
+						<ListItem
+							className={classes.listItem}
+							component={dashboard}
+							key="dashboard"
+						>
 							<ListItemIcon>
 								<DashboardMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Dashboard" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Dashboard
+							</Typography>
 						</ListItem>
-						<ListItem component={marketplace} key="marketplace">
+						<ListItem
+							className={classes.listItem}
+							component={marketplace}
+							key="marketplace"
+						>
 							<ListItemIcon>
 								<MarketplaceMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Marketplace" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Marketplace
+							</Typography>
 						</ListItem>
-						<ListItem component={selfkeyID} key="selfkeyID">
+						<ListItem
+							className={classes.listItem}
+							component={selfkeyID}
+							key="selfkeyID"
+						>
 							<ListItemIcon>
 								<SelfkeyIDMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="SelfKey ID" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								SelfKey ID
+							</Typography>
 						</ListItem>
-						<ListItem component={addressBook} key="addressBook">
+						<ListItem
+							className={classes.listItem}
+							component={addressBook}
+							key="addressBook"
+						>
 							<ListItemIcon>
 								<AddressBookMenuIcon />
 							</ListItemIcon>
-							<ListItemText primary="Address Book" />
+							<Typography variant="body2" color="secondary" gutterBottom>
+								Address Book
+							</Typography>
 						</ListItem>
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item xs={12}>
-					<List>
-						<ListItem component={switchAccount} key="switchAccount">
-							<ListItemText primary="Switch Account" />
+				<Grid item className={classes.secondaryButtons}>
+					<List className={classes.inheritWidth}>
+						<ListItem
+							className={classes.listItem}
+							onClick={e => {
+								window.openExternal(e, 'https://help.selfkey.org/');
+							}}
+							key="switchAccount"
+						>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Help & Support
+							</Typography>
+						</ListItem>
+						<ListItem
+							className={classes.listItem}
+							component={switchAccount}
+							key="switchAccount"
+						>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Switch Accounts
+							</Typography>
+						</ListItem>
+						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
+							<Typography variant="body2" className={classes.textColor} gutterBottom>
+								Quit
+							</Typography>
+						</ListItem>
+						<ListItem key="version">
+							<Typography variant="subtitle2" className={classes.version}>
+								V 0.0.2
+							</Typography>
 						</ListItem>
 					</List>
 				</Grid>
@@ -149,6 +261,7 @@ class Sidebar extends Component {
 					role="button"
 					onClick={() => this.toggleDrawer(false)}
 					onKeyDown={() => this.toggleDrawer(false)}
+					className={classes.inheritHeight}
 				>
 					{sideList}
 				</div>

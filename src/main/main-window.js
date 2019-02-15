@@ -45,6 +45,14 @@ export const createMainWindow = () => {
 		mainWindow.webContents.openDevTools();
 	}
 
+	if (isDevMode() && process.argv.indexOf('--noDevServer') === -1) {
+		const installer = require('electron-devtools-installer');
+		const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+		const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON'];
+
+		extensions.map(name => installer.default(installer[name], forceDownload));
+	}
+
 	mainWindow.on('close', event => {
 		if (mainWindow.shouldIgnoreCloseDialog) {
 			mainWindow.shouldIgnoreCloseDialog = false;

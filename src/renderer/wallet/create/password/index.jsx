@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
 import {
-	SelfkeyLogo,
 	PasswordIcon,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody
+	ModalBody,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -16,9 +16,11 @@ import { connect } from 'react-redux';
 import { createWalletOperations } from 'common/create-wallet';
 
 const styles = theme => ({
-	logo: {
-		width: '50px',
-		height: '65px'
+	logoText: {
+		fontFamily: 'Orbitron, arial, sans-serif',
+		fontSize: '18px',
+		letterSpacing: '2.77px',
+		lineHeight: '22px'
 	},
 	container: {
 		minHeight: '100vh'
@@ -38,10 +40,26 @@ const styles = theme => ({
 		paddingBottom: '50px'
 	},
 	passwordScore: {
+		backgroundColor: '#1E262E',
+		borderRadius: 0,
+		height: '10px',
 		width: '100%'
 	},
 	passwordInput: {
 		width: '100%'
+	},
+	maskContainer: {
+		height: '10px',
+		justifyContent: 'space-evenly',
+		marginTop: '10px',
+		position: 'absolute',
+		width: '598px',
+		zIndex: 1
+	},
+	maskElement: {
+		backgroundColor: '#262F39',
+		height: '10px',
+		width: '8px'
 	}
 });
 
@@ -49,7 +67,7 @@ const createPasswordConfirmationLink = props => (
 	<Link to="/createPasswordConfirmation" {...props} />
 );
 
-const gotBackHome = props => <Link to="/" {...props} />;
+const gotBackHome = props => <Link to="/home" {...props} />;
 
 class Password extends Component {
 	state = {
@@ -77,10 +95,7 @@ class Password extends Component {
 						className={classes.logoSection}
 					>
 						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
 					<Paper>
@@ -89,7 +104,7 @@ class Password extends Component {
 						</ModalCloseButton>
 
 						<ModalHeader>
-							<Typography variant="h6" id="modal-title">
+							<Typography variant="body1" id="modal-title">
 								Step 1: Create Password
 							</Typography>
 						</ModalHeader>
@@ -121,6 +136,11 @@ class Password extends Component {
 										onChange={e => this.setState(handlePassword(e, this.state))}
 										className={classes.passwordInput}
 									/>
+									<Grid container className={classes.maskContainer}>
+										<div className={classes.maskElement} />
+										<div className={classes.maskElement} />
+										<div className={classes.maskElement} />
+									</Grid>
 									<LinearProgress
 										variant="determinate"
 										value={this.state.passwordScore}

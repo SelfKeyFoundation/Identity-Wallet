@@ -43,6 +43,16 @@ export const kycSelectors = {
 		if (rp.session.ctx.token.data.exp > Date.now()) return true;
 
 		return false;
+	},
+	selectKYCAttributes(state, walletId, attributeIds) {
+		return identitySelectors
+			.selectFullIdAttributesByIds(state, walletId, attributeIds)
+			.map(attr => ({
+				id: attr.type.url,
+				schema: attr.type.schema,
+				value: attr.data,
+				documents: attr.documents
+			}));
 	}
 };
 
@@ -71,7 +81,11 @@ export const loadRelyingPartyOperation = rpName => async (dispatch, getState) =>
 	try {
 		const session = mpService.createRelyingPartySession(config);
 		await session.establish();
-		const templates = await session.listKYCTemplates();
+
+		const templates = await Promise.all(
+			(await session.listKYCTemplates()).map(tpl => session.getKYCTemplate(tpl.id))
+		);
+
 		const applications = await session.listKYCApplications();
 		await dispatch(
 			kycActions.updateRelyingParty({
@@ -105,11 +119,7 @@ export const createRelyingPartyKYCApplication = (rpName, templateId, attributeId
 
 	const wallet = walletSelectors.getWallet(getState());
 	if (!wallet) return;
-	const attributes = identitySelectors.selectFullIdAttributesByIds(
-		getState(),
-		wallet.id,
-		attributeIds
-	);
+	const attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributeIds);
 	const application = await rp.session.createKYCApplication(rpName, templateId, attributes);
 	await dispatch(kycActions.addKYCApplication(rpName, application));
 };

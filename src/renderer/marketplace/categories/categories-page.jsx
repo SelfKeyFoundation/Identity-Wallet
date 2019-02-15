@@ -19,6 +19,9 @@ class MarketplaceCategoriesPageComponent extends Component {
 	actions = {
 		exchanges: () => {
 			this.props.dispatch(push('/main/marketplace-exchanges'));
+		},
+		incorporation: () => {
+			this.props.dispatch(push('/main/marketplace-incorporation'));
 		}
 	};
 

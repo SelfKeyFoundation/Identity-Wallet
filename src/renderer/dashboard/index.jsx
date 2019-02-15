@@ -2,11 +2,12 @@ import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import TokenList from './token-list';
 import CryptoChartBox from './crypto-chart-box';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 import TransactionsHistory from '../transaction/transactions-history';
-
 import { KycManager } from '../kyc';
 
-const Dashboard = props => {
+const Dashboard = connect()(props => {
 	return (
 		<Grid container direction="column" justify="flex-start" alignItems="center" spacing={32}>
 			<KycManager relyingPartyName="B*Trade" />
@@ -17,12 +18,14 @@ const Dashboard = props => {
 				<TokenList />
 			</Grid>
 			<Grid item>
-				<CryptoChartBox />
+				<CryptoChartBox
+					manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
+				/>
 			</Grid>
-			<Grid item>
+			<Grid item style={{ width: '100%' }}>
 				<TransactionsHistory />
 			</Grid>
 		</Grid>
 	);
-};
+});
 export default Dashboard;

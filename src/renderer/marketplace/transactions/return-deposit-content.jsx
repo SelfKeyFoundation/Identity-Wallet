@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import { Grid, withStyles } from '@material-ui/core';
-import { P, StyledButton, ReturnIcon, TransactionFeeSelector } from 'selfkey-ui';
+import { P, StyledButton, ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
+import config from 'common/config';
 
 const styles = theme => ({
 	text: {
@@ -57,7 +58,7 @@ class ReturnDepositContentComponent extends Component {
 		const {
 			classes,
 			amount = 25,
-			token = 'KEY',
+			token = config.constants.primaryToken,
 			minGasPrice,
 			maxGasPrice,
 			gasLimit,
@@ -68,7 +69,7 @@ class ReturnDepositContentComponent extends Component {
 		return (
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
-					<ReturnIcon />
+					<ReturnLargeIcon />
 				</Grid>
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">

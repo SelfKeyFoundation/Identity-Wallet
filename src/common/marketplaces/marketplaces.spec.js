@@ -138,10 +138,6 @@ describe('marketplace selectors', () => {
 		state.marketplaces.displayedPopup = 'test';
 		expect(marketplacesSelectors.displayedPopupSelector(state)).toEqual('test');
 	});
-	it('displayedCategorySelector', () => {
-		state.marketplaces.displayedCategory = 'test';
-		expect(marketplacesSelectors.displayedCategorySelector(state)).toEqual('test');
-	});
 });
 
 describe('marketplace operations', () => {
@@ -638,19 +634,6 @@ describe('marketplaceReducers', () => {
 			displayedPopup: 'test'
 		});
 	});
-	it('setMarketplaceDisplayedStateReducer', () => {
-		let state = {
-			displayedState: null
-		};
-
-		let newState = reducers.setMarketplaceStateReducer(
-			state,
-			marketplacesActions.displayMarketplaceStateAction('test')
-		);
-		expect(newState).toEqual({
-			displayedState: 'test'
-		});
-	});
 	it('clearCurrentTransactionReducer', () => {
 		let state = {
 			currentTransaction: { test: 'test1', test2: 'test2' }
@@ -726,11 +709,6 @@ describe('marketplaceReducers', () => {
 		sinon.stub(reducers, 'setMarketplacePopupReducer');
 		reducer({}, marketplacesActions.showMarketplacePopupAction({}));
 		expect(reducers.setMarketplacePopupReducer.calledOnce).toBeTruthy();
-	});
-	it('envokes set marketplace state reducer', () => {
-		sinon.stub(reducers, 'setMarketplaceStateReducer');
-		reducer({}, marketplacesActions.displayMarketplaceStateAction({}));
-		expect(reducers.setMarketplaceStateReducer.calledOnce).toBeTruthy();
 	});
 	it('envokes set current transaction reducer', () => {
 		sinon.stub(reducers, 'setCurrentTransactionReducer');

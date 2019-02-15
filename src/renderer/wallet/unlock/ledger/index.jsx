@@ -3,7 +3,7 @@ import { Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
-import Connecting from './connecting';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	root: {
@@ -12,17 +12,8 @@ const styles = theme => ({
 });
 
 class Ledger extends Component {
-	state = {
-		isConnecting: false
-	};
-
-	handleConnectAction = () => {
-		this.setState({ isConnecting: true });
-	};
-
-	handleConnectingOnClose = () => {
-		console.log('HEYYY');
-		this.setState({ isConnecting: false });
+	handleConnectAction = async () => {
+		await this.props.dispatch(push('/connectingToLedger'));
 	};
 
 	render() {
@@ -38,12 +29,11 @@ class Ledger extends Component {
 				>
 					<HelpStepsSection />
 					<Grid item>
-						<Button variant="contained" onClick={this.handleConnectAction}>
+						<Button variant="contained" size="large" onClick={this.handleConnectAction}>
 							CONNECT TO LEDGER
 						</Button>
 					</Grid>
 				</Grid>
-				<Connecting open={this.state.isConnecting} onClose={this.handleConnectingOnClose} />
 			</div>
 		);
 	}

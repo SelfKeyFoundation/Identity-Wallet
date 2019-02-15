@@ -6,6 +6,10 @@ import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
 
 import { MarketplaceServiceDetails } from './service-details';
+import { MarketplaceDepositPopup } from '../transactions/deposit-popup';
+import { MarketplaceReturnDepositPopup } from '../transactions/return-deposit-popup';
+import { MarketplaceTransactionProcessingPopup } from '../transactions/transaction-processing-popup';
+import { MarketplaceWithoutBalancePopup } from '../transactions/without-balance-popup';
 
 const log = new Logger('marketplace-item-container');
 
@@ -27,7 +31,8 @@ const mapStateToProps = (state, props) => {
 		relyingPartyShouldUpdate: marketplacesSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			name
-		)
+		),
+		transactionPopup: marketplacesSelectors.displayedPopupSelector(state)
 	};
 };
 
@@ -71,26 +76,70 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 	}
 
 	unlockAction = () => {
-		if (this.props.hasBalance) {
-			this.props.dispatch(push('/main/marketplace-deposit'));
-		} else {
-			this.props.dispatch(push('/main/marketplace-no-balance'));
+		const { item, hasBalance, dispatch } = this.props;
+		if (!hasBalance) {
+			return dispatch(marketplacesOperations.showMarketplacePopupAction('noBalance'));
 		}
+		return dispatch(
+			marketplacesOperations.startStakeTransaction(
+				item.serviceOwner,
+				item.serviceId,
+				item.amount
+			)
+		);
+	};
+
+	closePopupAction = () => {
+		const { dispatch, transactionPopup } = this.props;
+		if (transactionPopup === 'pendingTransaction') {
+			return dispatch(marketplacesOperations.showMarketplacePopupAction(null));
+		}
+		return dispatch(marketplacesOperations.cancelCurrentTransaction());
 	};
 
 	returnAction = () => {
-		this.props.dispatch(push('/main/marketplace-return-deposit'));
+		const { item, dispatch } = this.props;
+
+		return dispatch(
+			marketplacesOperations.startWithdrawTransaction(
+				item.serviceOwner,
+				item.serviceId,
+				item.amount
+			)
+		);
 	};
 
 	backAction = () => {
 		this.props.dispatch(push('/main/marketplace-exchanges'));
 	};
 
+	renderPopup() {
+		const { transactionPopup } = this.props;
+		if (transactionPopup === 'confirmStakeTransaction') {
+			return <MarketplaceDepositPopup closeAction={this.closePopupAction} />;
+		}
+
+		if (transactionPopup === 'pendingTransaction') {
+			return <MarketplaceTransactionProcessingPopup closeAction={this.closePopupAction} />;
+		}
+
+		if (transactionPopup === 'confirmWithdrawTransaction') {
+			return <MarketplaceReturnDepositPopup closeAction={this.closePopupAction} />;
+		}
+		if (transactionPopup === 'noBalance') {
+			return <MarketplaceWithoutBalancePopup closeAction={this.closePopupAction} />;
+		}
+		return '';
+	}
+
 	render() {
 		let unlockAction = this.unlockAction;
 		let item = this.props.item;
-		let { stake } = this.props;
+		let { stake, transactionPopup } = this.props;
+		item = { ...item };
 		item.integration = 'Unlock marketplace';
+		// XXX disable exchanges staking
+		item.status = 'Inactive';
 		if (item.status === 'Inactive') {
 			item.integration = 'Coming Soon';
 			unlockAction = null;
@@ -112,11 +161,14 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 			unlockAction = this.returnAction;
 		}
 		return (
-			<MarketplaceServiceDetails
-				{...this.props}
-				unlockAction={unlockAction}
-				backAction={this.backAction}
-			/>
+			<div>
+				{transactionPopup ? this.renderPopup() : ''}
+				<MarketplaceServiceDetails
+					{...this.props}
+					unlockAction={unlockAction}
+					backAction={this.backAction}
+				/>
+			</div>
 		);
 	}
 }

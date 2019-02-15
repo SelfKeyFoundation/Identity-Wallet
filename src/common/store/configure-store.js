@@ -8,9 +8,11 @@ import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
+import tokens from '../tokens';
 import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
 import addressBook from '../address-book';
+import incorporations from '../incorporations';
 import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import marketplaces from '../marketplaces';
@@ -64,6 +66,7 @@ export default (initialState, scope = 'main') => {
 		ethGasStationInfo,
 		transaction,
 		addressBook,
+		incorporations,
 		exchanges,
 		marketplaces,
 		identity,
@@ -71,7 +74,8 @@ export default (initialState, scope = 'main') => {
 		createWallet,
 		transactionHistory,
 		app,
-		kyc
+		kyc,
+		tokens
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

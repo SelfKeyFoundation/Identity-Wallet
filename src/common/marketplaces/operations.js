@@ -14,7 +14,16 @@ export const loadTransactionsOperation = () => async (dispatch, getState) => {
 	transactions = transactions.reduce((acc, curr) => {
 		return acc.concat(curr);
 	}, []);
-	await dispatch(marketplacesActions.setTransactionsAction(transactions));
+
+	let sortedTransactions = transactions.sort((a, b) => {
+		let timeStampA = a.timeStamp;
+		let timeStampB = b.timeStamp;
+		if (timeStampA < timeStampB) return 1;
+		if (timeStampA > timeStampB) return -1;
+		return 0;
+	});
+
+	await dispatch(marketplacesActions.setTransactionsAction(sortedTransactions));
 };
 
 export const loadStakesOperation = () => async (dispatch, getState) => {
@@ -121,6 +130,7 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 		serviceOwner,
 		serviceId
 	};
+	console.log(tx);
 	await dispatch(marketplacesActions.setCurrentTransactionAction(tx));
 	await dispatch(marketplacesActions.showMarketplacePopupAction('confirmWithdrawTransaction'));
 };
@@ -181,5 +191,9 @@ export const marketplacesOperations = {
 	confirmWithdrawTransaction: createAliasedAction(
 		marketplacesTypes.MARKETPLACE_TRANSACTIONS_WITHDRAW_CONFIRM,
 		confirmWithdrawTransactionOperation
+	),
+	cancelCurrentTransaction: createAliasedAction(
+		marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CANCEL,
+		cancelCurrentTransactionOperation
 	)
 };

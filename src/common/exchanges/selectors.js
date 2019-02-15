@@ -65,7 +65,7 @@ export const hasBalance = (state, name) => {
 
 	const keyToken = getTokens(state).find(token => {
 		return token.symbol === CONFIG.constants.primaryToken.toUpperCase();
-	});
+	}) || { balance: 0 };
 
 	const requiredBalance = service.requiredBalance;
 

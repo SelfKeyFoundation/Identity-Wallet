@@ -18,10 +18,15 @@ const loadWalletTokens = createAliasedAction(
 const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 	const promises = walletTokens.map(async walletToken => {
 		const walletTokenService = getGlobalContext().walletTokenService;
-		const balance = await walletTokenService.getTokenBalance(
-			walletToken.address,
-			walletPublicKey
-		);
+		let balance = 0;
+		try {
+			balance = await walletTokenService.getTokenBalance(
+				walletToken.address,
+				walletPublicKey
+			);
+		} catch (error) {
+			console.error(error);
+		}
 
 		return {
 			...walletToken,
@@ -34,23 +39,41 @@ const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 };
 
 const updateWalletTokensWithBalance = (walletTokens, walletPublicKey) => async dispatch => {
-	await dispatch(
-		actions.updateWalletTokens(getWalletTokensWithBalance(walletTokens, walletPublicKey))
-	);
+	const tokens = await getWalletTokensWithBalance(walletTokens, walletPublicKey);
+	await dispatch(actions.setWalletTokens(tokens));
 };
 
 const refreshWalletTokensBalance = () => async (dispatch, getState) => {
 	const state = getState();
 	await dispatch(
-		actions.updateWalletTokens(
+		actions.setWalletTokens(
 			await getWalletTokensWithBalance(getTokens(state), getWallet(state).publicKey)
 		)
 	);
 };
 
+const createWalletTokenOperation = createAliasedAction(
+	types.WALLET_TOKENS_CREATE,
+	tokenId => async (dispatch, getState) => {
+		const wallet = getWallet(getState());
+		await getGlobalContext().walletTokenService.createWalletToken(tokenId, wallet.id);
+		await dispatch(loadWalletTokens());
+	}
+);
+
+const updateWalletTokenStateOperation = createAliasedAction(
+	types.WALLET_TOKENS_STATE_EDIT,
+	(state, wTokenId) => async (dispatch, getState) => {
+		await getGlobalContext().walletTokenService.updateState(wTokenId, state);
+		await dispatch(loadWalletTokens());
+	}
+);
+
 export default {
 	...actions,
 	updateWalletTokensWithBalance,
 	refreshWalletTokensBalance,
-	loadWalletTokens
+	loadWalletTokens,
+	createWalletTokenOperation,
+	updateWalletTokenStateOperation
 };

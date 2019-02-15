@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import config from 'common/config';
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
+import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import { connect } from 'react-redux';
 import {
+	Grid,
 	Table,
 	Toolbar,
 	Typography,
@@ -12,11 +15,11 @@ import {
 	IconButton,
 	TableRow,
 	TableCell,
-	Button,
 	TableFooter,
 	TablePagination,
 	Paper
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
@@ -28,94 +31,199 @@ import {
 } from 'selfkey-ui';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+const styles = theme => ({
+	iconSpacing: {
+		marginRight: '10px'
+	},
+
+	toolbar: {
+		justifyContent: 'space-between'
+	},
+
+	rightSpace: {
+		marginRight: '20px'
+	}
+});
+
+const getIconForTransaction = (statusIconName, sending) => {
+	switch (statusIconName) {
+		case 'failed':
+			return <FailedIcon />;
+		case 'receive':
+			return <ReceiveIcon />;
+		case 'hourglass':
+			return <HourGlassIcon />;
+		case 'sent':
+			return <SentIcon />;
+		default:
+			return sending ? <SentIcon /> : <ReceiveIcon />;
+	}
+};
+
+const getCryptoType = transaction => {
+	if (transaction.tokenSymbol === config.constants.primaryToken) {
+		return 'KEY';
+	} else if (transaction.contractAddress === null) {
+		return 'ETH';
+	} else {
+		return 'CUSTOM';
+	}
+};
+
+const getCustomStatusText = transaction => {
+	let cryptoType = getCryptoType(transaction);
+	if (transaction.sending) {
+		return `Sent ${cryptoType}`;
+	} else {
+		return `Received ${cryptoType}`;
+	}
+};
+
+const getAbrDateFromTimestamp = timestamp => {
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	const date = new Date(timestamp);
+	const year = date.getFullYear();
+	const month = monthNames[date.getMonth()];
+	const day = date.getDate();
+	return { year, month, day };
+};
+
+const paginate = (array, pageSize, pageNumber) => {
+	return array.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
+};
+
 class TransactionsHistory extends Component {
 	state = {
-		page: 0,
-		currentCopyValues: []
+		rowsPerPage: 10,
+		page: 0
 	};
 
 	componentDidMount() {
-		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+		this.loadData();
 	}
+
+	loadData = () => {
+		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+	};
+
+	handleRefresh = () => {
+		this.setState({ page: 0 });
+		this.loadData();
+	};
 
 	handleChangePage = (event, page) => {
 		this.setState({ page });
 	};
 
-	renderIcon(statusIconName) {
-		switch (statusIconName) {
-			case 'failed':
-				return <FailedIcon />;
-			case 'receive':
-				return <ReceiveIcon />;
-			case 'hourglass':
-				return <HourGlassIcon />;
-			case 'sent':
-				return <SentIcon />;
-			default:
-		}
-	}
+	handleChangeRowsPerPage = (event, rowsPerPage) => {
+		this.setState({ rowsPerPage: rowsPerPage.props.value });
+	};
 
-	updateCopyText(index, text) {
-		let currentCopyValuesClone = this.state.currentCopyValues.slice();
-		currentCopyValuesClone[index] = text;
-		this.setState({ currentCopyValues: currentCopyValuesClone });
-	}
-
-	handleOnCopy(itemIndex) {
-		return () => {
-			this.updateCopyText(itemIndex, this.copiedText);
-			const bounceTime = setTimeout(() => {
-				this.updateCopyText(itemIndex, this.copyText);
-				clearTimeout(bounceTime);
-			}, 1000);
-		};
+	renderDate(timestamp) {
+		const { year, month, day } = getAbrDateFromTimestamp(timestamp);
+		return (
+			<div>
+				{day} {month} {year}
+			</div>
+		);
 	}
 
 	render() {
-		const { transactions } = this.props;
-		const { page, currentCopyValues } = this.state;
+		const { transactions, classes } = this.props;
+		const { rowsPerPage, page } = this.state;
+
 		return (
 			<Paper>
-				<Toolbar>
+				<Toolbar className={classes.toolbar}>
 					<Typography variant="h6">Transactions</Typography>
-					<IconButton aria-label="Refresh">
+					<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
 						<RefreshIcon />
 					</IconButton>
 				</Toolbar>
 				<Table>
 					<TableBody>
-						{transactions.slice(page).map(transaction => {
+						{paginate(transactions, rowsPerPage, page).map(transaction => {
 							return (
 								<TableRow key={transaction.id}>
 									<TableCell>
-										{this.renderIcon(transaction.statusIconName)}
+										{getIconForTransaction(
+											transaction.statusIconName,
+											transaction.sending
+										)}
 									</TableCell>
-									<TableCell>{transaction.date}</TableCell>
-									<TableCell>{transaction.statusText}</TableCell>
-									<TableCell align="right">
-										{transaction.cryptoCurrency}
-									</TableCell>
-									<TableCell align="right">
-										<CopyToClipboard
-											text={transaction.externalLink}
-											onCopy={this.handleOnCopy(transaction.id)}
+									<TableCell>
+										<Typography
+											component="span"
+											variant="body2"
+											color="secondary"
+											gutterBottom
 										>
-											<div>
-												<CopyIcon />
-												<span>
-													{' '}
-													{currentCopyValues[transaction.id] ||
-														this.copyText}{' '}
-												</span>
-											</div>
-										</CopyToClipboard>
+											{this.renderDate(transaction.timeStamp)}
+										</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography component="span" variant="body2" gutterBottom>
+											{transaction.statusText ||
+												getCustomStatusText(transaction)}
+										</Typography>
 									</TableCell>
 									<TableCell align="right">
-										<Button size="small" disableRipple>
-											<ViewIcon />
-											View
-										</Button>
+										<Typography component="span" variant="body2" gutterBottom>
+											{transaction.sending ? '- ' : '+ '}
+											{transaction.value
+												? transaction.value.toLocaleString()
+												: ''}
+										</Typography>
+									</TableCell>
+									<TableCell align="right">
+										<IconButton className={classes.rightSpace}>
+											<CopyToClipboard
+												text={`${TX_HISTORY_API_ENDPOINT}/${
+													transaction.hash
+												}`}
+											>
+												<Grid container>
+													<CopyIcon className={classes.iconSpacing} />
+													<Typography
+														variant="subtitle1"
+														color="secondary"
+														gutterBottom
+													>
+														Copy
+													</Typography>
+												</Grid>
+											</CopyToClipboard>
+										</IconButton>
+										<IconButton
+											onClick={e => {
+												window.openExternal(
+													e,
+													`${TX_HISTORY_API_ENDPOINT}/${transaction.hash}`
+												);
+											}}
+										>
+											<ViewIcon className={classes.iconSpacing} />
+											<Typography
+												variant="subtitle1"
+												color="secondary"
+												gutterBottom
+											>
+												View
+											</Typography>
+										</IconButton>
 									</TableCell>
 								</TableRow>
 							);
@@ -126,14 +234,15 @@ class TransactionsHistory extends Component {
 							<TablePagination
 								count={transactions.length}
 								page={page}
+								onChangePage={this.handleChangePage}
+								rowsPerPage={rowsPerPage}
+								onChangeRowsPerPage={this.handleChangeRowsPerPage}
 								backIconButtonProps={{
 									'aria-label': 'Previous Page'
 								}}
 								nextIconButtonProps={{
 									'aria-label': 'Next Page'
 								}}
-								onChangePage={this.handleChangePage}
-								rowsPerPage={10}
 							/>
 						</TableRow>
 					</TableFooter>
@@ -148,4 +257,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(TransactionsHistory);
+export default connect(mapStateToProps)(withStyles(styles)(TransactionsHistory));

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import config from 'common/config';
 import {
 	Grid,
 	Checkbox,
@@ -70,7 +71,7 @@ class DepositContentComponent extends Component {
 		const {
 			classes,
 			amount = 25,
-			token = 'KEY',
+			token = config.constants.primaryToken,
 			days = 30,
 			minGasPrice,
 			maxGasPrice,

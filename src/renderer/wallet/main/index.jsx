@@ -1,52 +1,77 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Dashboard from '../../dashboard';
+import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
+import AddressBookAdd from '../../address-book/add';
+import AddressBookEdit from '../../address-book/edit';
+
 import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
-	MarketplaceServiceDetailsPage,
-	MarketplaceDepositPopup,
-	MarketplaceReturnDepositPopup,
-	MarketplaceWithoutBalancePopup
+	MarketplaceIncorporationPage,
+	MarketplaceServiceDetailsPage
 } from '../../marketplace';
 
+import { SelfkeyIdContainer } from '../../selfkey-id/main';
+import Transfer from '../../transaction/send';
+import AdvancedTransaction from '../../transaction/send/advanced-transaction';
+import ReceiveTransfer from '../../transaction/receive';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar';
 import { connect } from 'react-redux';
 
+import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
+import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
+import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
+
 const styles = theme => ({
 	headerSection: {
 		width: '100%'
 	},
 	bodySection: {
+		maxWidth: '1140px',
 		width: '100%'
-	}
+	},
+	page: {}
 });
 
+const contentWrapperStyle = {
+	marginBottom: '60px',
+	marginTop: '50px'
+};
+
 class Main extends Component {
-	componentDidMount() {
+	async componentDidMount() {
 		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
-
 	render() {
 		const { match, classes } = this.props;
 		return (
 			<Grid
 				container
 				direction="column"
-				justify="flex-start"
+				justify="space-between"
 				alignItems="center"
-				className={classes.wrapper}
+				className={classes.page}
+				spacing={24}
 			>
 				<Grid item xs={12} className={classes.headerSection}>
 					<Toolbar />
 				</Grid>
-				<Grid item xs={12} className={classes.bodySection}>
+				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
+					<Route
+						path={`${match.path}/crypto-manager`}
+						component={CryptoMangerContainer}
+					/>
+					<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
+					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
+					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
+					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
 						path={`${match.path}/marketplace-categories`}
 						component={MarketplaceCategoriesPage}
@@ -60,16 +85,39 @@ class Main extends Component {
 						component={MarketplaceServiceDetailsPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-deposit`}
-						component={MarketplaceDepositPopup}
+						path={`${match.path}/marketplace-incorporation`}
+						component={MarketplaceIncorporationPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-return-deposit`}
-						component={MarketplaceReturnDepositPopup}
+						path={`${match.path}/transfer/:crypto`}
+						render={props => (
+							<Transfer cryptoCurrency={props.match.params.crypto.toUpperCase()} />
+						)}
 					/>
 					<Route
-						path={`${match.path}/marketplace-no-balance`}
-						component={MarketplaceWithoutBalancePopup}
+						path={`${match.path}/transfer/eth`}
+						render={props => <Transfer cryptoCurrency="ETH" />}
+					/>
+					<Route
+						path={`${match.path}/transaction-progress`}
+						component={TransactionSendProgress}
+					/>
+					<Route
+						path={`${match.path}/transaction-no-gas-error`}
+						component={TransactionNoGasError}
+					/>
+					<Route path={`${match.path}/transaction-error`} component={TransactionError} />
+					<Route
+						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
+						component={AdvancedTransaction}
+					/>
+					<Route
+						path={`${match.path}/transfer/receive/:crypto`}
+						render={props => (
+							<ReceiveTransfer
+								cryptoCurrency={props.match.params.crypto.toUpperCase()}
+							/>
+						)}
 					/>
 				</Grid>
 			</Grid>

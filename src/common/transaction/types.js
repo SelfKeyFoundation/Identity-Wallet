@@ -9,8 +9,6 @@ const GAS_PRICE_SET = 'app/transaction/gasPrice/SET';
 const LIMIT_PRICE_SET = 'app/transaction/limitPrice/SET';
 const INIT = 'app/transaction/init';
 const TRANSACTION_FEE_SET = 'app/transaction/fee/SET';
-const START_SEND = 'app/transaction/startSend';
-const CANCEL_SEND = 'app/transaction/cancelSend';
 const CONFIRM_SEND = 'app/transaction/comfirmSend';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
 
@@ -25,8 +23,6 @@ export {
 	LIMIT_PRICE_SET,
 	INIT,
 	TRANSACTION_FEE_SET,
-	START_SEND,
-	CANCEL_SEND,
 	CONFIRM_SEND,
 	CRYPTO_CURRENCY_SET
 };

@@ -6,8 +6,11 @@ import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
-import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
-import LedgerWalletSubproviderFactory from 'ledger-wallet-provider';
+import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
+import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
+import Web3SubProvider from '@ledgerhq/web3-subprovider';
+import TrezorWalletSubProviderFactory from 'trezor-wallet-provider';
 
 const log = new Logger('Web3Service');
 
@@ -37,14 +40,47 @@ export class Web3Service {
 		this.abi = ABI;
 	}
 
-	async switchToLedgerWallet() {
+	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
 		const engine = new ProviderEngine();
-		this.web3 = new Web3(engine);
+		const getTransport = () => HWTransportNodeHid.create();
+		const ledger = Web3SubProvider(getTransport, {
+			networkId: CONFIG.chainId,
+			accountsLength: accountsQuantity,
+			accountsOffset: accountsOffset
+		});
+		const subscriptionSubprovider = new SubscriptionSubprovider();
+		subscriptionSubprovider.on('data', (err, notification) => {
+			engine.emit('data', err, notification);
+		});
 
-		const ledgerWalletSubProvider = LedgerWalletSubproviderFactory();
-		engine.addProvider(ledgerWalletSubProvider);
-		engine.addProvider(new RpcSubprovider({ rpcUrl: '/api' }));
+		engine.addProvider(ledger);
+		engine.addProvider(subscriptionSubprovider);
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
+
+		this.web3 = new Web3(engine);
+	}
+
+	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
+		const trezorWalletSubProvider = await TrezorWalletSubProviderFactory(
+			CONFIG.chainId,
+			accountsOffset,
+			accountsQuantity,
+			eventEmitter
+		);
+		const engine = new ProviderEngine();
+
+		const subscriptionSubprovider = new SubscriptionSubprovider();
+		subscriptionSubprovider.on('data', (err, notification) => {
+			engine.emit('data', err, notification);
+		});
+
+		engine.addProvider(trezorWalletSubProvider);
+		engine.addProvider(subscriptionSubprovider);
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.start();
+
+		this.web3 = new Web3(engine);
 	}
 
 	async handleTicket(data) {
@@ -164,12 +200,11 @@ export class Web3Service {
 		}
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
-			console.log('XXX', wallet, opts);
 		}
 		if (!wallet || wallet.publicKey !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
-		if (wallet.profile !== 'local') {
+		if ((wallet.profile && wallet.profile !== 'local') || wallet.isHardwareWallet) {
 			return contactMethodInstance.send(...args);
 		}
 		if (!wallet.privateKey) {
@@ -200,7 +235,7 @@ export class Web3Service {
 			...opts
 		};
 		const tx = new EtheriumTx(rawTx);
-		tx.sign(wallet.privateKey);
+		tx.sign(Buffer.from(wallet.privateKey.replace('0x', ''), 'hex'));
 		let serializedTx = '0x' + tx.serialize().toString('hex');
 		this.nonce = nonce;
 		return {
