@@ -203,7 +203,7 @@ export class Transfer extends React.Component {
 		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
 	}
 
-	_renderDate(timestamp) {
+	renderDate(timestamp) {
 		const { day, month } = getAbrDateFromTimestamp(timestamp);
 		return (
 			<div>
@@ -220,20 +220,9 @@ export class Transfer extends React.Component {
 
 	renderActivity() {
 		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
-		const token = this.props.cryptoCurrency;
-
-		const sortedTransactions = this.props.transactions.sort((a, b) => {
-			let timeStampA = a.timeStamp;
-			let timeStampB = b.timeStamp;
-			if (timeStampA < timeStampB) return 1;
-			if (timeStampA > timeStampB) return -1;
-			return 0;
+		const filteredTransactions = this.props.transactions.filter(transaction => {
+			return filterTransactionByToken(transaction, this.props.cryptoCurrency);
 		});
-
-		const filteredTransactions = sortedTransactions.filter(transaction => {
-			return filterTransactionByToken(transaction, token);
-		});
-
 		const lastCryptoTransactions = filteredTransactions.slice(
 			0,
 			NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW
@@ -253,7 +242,7 @@ export class Transfer extends React.Component {
 										color="secondary"
 										gutterBottom
 									>
-										{this._renderDate(transaction.timeStamp)}
+										{this.renderDate(transaction.timeStamp)}
 									</Typography>
 								</div>
 								<div className={this.props.classes.transactionEntryIcon}>
@@ -270,7 +259,9 @@ export class Transfer extends React.Component {
 								<div className={this.props.classes.transactionEntryAmount}>
 									<Typography component="span" variant="body2" gutterBottom>
 										{transaction.sending ? '- ' : '+ '}
-										{transaction.value}
+										{transaction.value
+											? transaction.value.toLocaleString()
+											: ''}
 									</Typography>
 								</div>
 							</div>
