@@ -69,7 +69,14 @@ export class Web3Service {
 			eventEmitter
 		);
 		const engine = new ProviderEngine();
+
+		const subscriptionSubprovider = new SubscriptionSubprovider();
+		subscriptionSubprovider.on('data', (err, notification) => {
+			engine.emit('data', err, notification);
+		});
+
 		engine.addProvider(trezorWalletSubProvider);
+		engine.addProvider(subscriptionSubprovider);
 		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
 
