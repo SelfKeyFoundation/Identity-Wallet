@@ -5,12 +5,10 @@ import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import TransactionsHistory from '../transaction/transactions-history';
-import { KycManager } from '../kyc';
 
 const Dashboard = connect()(props => {
 	return (
 		<Grid container direction="column" justify="flex-start" alignItems="center" spacing={32}>
-			<KycManager relyingPartyName="B*Trade" />
 			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
 				<Typography variant="h1">SelfKey Dashboard</Typography>
 			</Grid>

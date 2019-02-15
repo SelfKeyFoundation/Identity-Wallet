@@ -9,11 +9,14 @@ import {
 	withStyles
 } from '@material-ui/core';
 import { TickIcon, DocumentIcon } from 'selfkey-ui';
-import { kycSelectors } from '../../common/kyc';
+import { kycSelectors, kycOperations } from '../../common/kyc';
 
 const styles = theme => () => {};
 
 class KycManagerComponent extends Component {
+	componentDidMount() {
+		this.props.dispatch(kycOperations.loadRelyingParty(this.props.relyingPartyName));
+	}
 	renderTemplate(tpl) {
 		return (
 			<ListItem key={tpl.id}>
@@ -50,9 +53,8 @@ class KycManagerComponent extends Component {
 		);
 	}
 	render() {
-		console.log('Relying party', this.props.relyingParty);
 		const { relyingParty } = this.props;
-		if (relyingParty.error) {
+		if (!relyingParty || relyingParty.error) {
 			return <div>Error connecting to relying party</div>;
 		}
 		return (
@@ -63,8 +65,8 @@ class KycManagerComponent extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	relyingParty: kycSelectors.relyingPartySelector(state)
+const mapStateToProps = (state, props) => ({
+	relyingParty: kycSelectors.relyingPartySelector(state, props.relyingPartyName)
 });
 
 export const KycManager = connect(mapStateToProps)(withStyles(styles)(KycManagerComponent));

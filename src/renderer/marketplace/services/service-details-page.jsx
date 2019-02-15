@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
 
@@ -26,12 +27,9 @@ const mapStateToProps = (state, props) => {
 			item.serviceOwner,
 			item.serviceId
 		),
-		relyingParty: marketplacesSelectors.relyingPartySelector(state, name),
-		relyingPartyIsActive: marketplacesSelectors.relyingPartyIsActiveSelector(state, name),
-		relyingPartyShouldUpdate: marketplacesSelectors.relyingPartyShouldUpdateSelector(
-			state,
-			name
-		),
+		relyingParty: kycSelectors.relyingPartySelector(state, name),
+		relyingPartyIsActive: kycSelectors.relyingPartyIsActiveSelector(state, name),
+		relyingPartyShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, name),
 		transactionPopup: marketplacesSelectors.displayedPopupSelector(state)
 	};
 };
@@ -43,9 +41,7 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 			this.props.dispatch(marketplacesOperations.loadStakes())
 		]);
 		if (this.props.relyingPartyShouldUpdate) {
-			await this.props.dispatch(
-				marketplacesOperations.loadRelyingParty(this.props.item.name)
-			);
+			await this.props.dispatch(kycOperations.loadRelyingParty(this.props.item.name));
 		}
 		this.updatePendingTransaction();
 	}
@@ -165,6 +161,7 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 				{transactionPopup ? this.renderPopup() : ''}
 				<MarketplaceServiceDetails
 					{...this.props}
+					item={item}
 					unlockAction={unlockAction}
 					backAction={this.backAction}
 				/>

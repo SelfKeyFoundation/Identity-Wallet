@@ -37,11 +37,11 @@ import {
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
 	let scopedReducers = {};
-	if (process.env.ENABLE_REDUX_LOGGER) {
-		const logger = createLogger({ collapsed: (getState, actions) => true });
-		middleware.push(logger);
-	}
 	if (scope === 'renderer') {
+		if (process.env.ENABLE_REDUX_LOGGER) {
+			const logger = createLogger({ collapsed: (getState, actions) => true });
+			middleware.push(logger);
+		}
 		middleware = [forwardToMain, ...middleware];
 
 		history.create();
