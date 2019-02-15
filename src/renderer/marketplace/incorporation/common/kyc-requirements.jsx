@@ -25,7 +25,12 @@ const IncorporationsKYC = props => {
 			<Typography variant="h2" gutterBottom>
 				KYC Requirements and Forms
 			</Typography>
-			<Grid container justify="left" alignItems="left" className={classes.kycRequirements}>
+			<Grid
+				container
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.kycRequirements}
+			>
 				<div>
 					<div>
 						<List>

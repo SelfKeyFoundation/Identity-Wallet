@@ -35,9 +35,10 @@ const styles = theme => ({
 			display: 'inline-block',
 			color: '#FFF'
 		},
-		'& span.region': {
+		'& .region': {
 			marginLeft: '1em',
-			marginTop: '0.5em',
+			marginTop: '0.25em',
+			marginBottom: '0',
 			fontSize: '24px'
 		}
 	},
@@ -173,9 +174,18 @@ class IncorporationsDetailView extends Component {
 		}
 	}
 
-	handleChange = (event, selectedTab) => {
-		this.setState({ selectedTab });
-	};
+	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
+
+	onBackClick = _ => this.props.dispatch(push(`/main/marketplace-incorporation`));
+
+	onPayClick = _ =>
+		this.props.dispatch(
+			push(
+				`/main/marketplace-incorporation/pay/${this.props.match.params.companyCode}/${
+					this.props.match.params.countryCode
+				}`
+			)
+		);
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
@@ -191,11 +201,7 @@ class IncorporationsDetailView extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						size="small"
-						onClick={() => this.props.dispatch(push(`/main/marketplace-incorporation`))}
-					>
+					<Button variant="outlined" size="small" onClick={this.onBackClick}>
 						Back
 					</Button>
 				</div>
@@ -209,9 +215,9 @@ class IncorporationsDetailView extends Component {
 						<div>
 							<FlagCountryName code={countryCode} />
 						</div>
-						<div>
-							<span className="region">{program.Region}</span>
-						</div>
+						<Typography variant="body2" gutterBottom className="region">
+							{program.Region}
+						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
 						<Grid
@@ -273,7 +279,7 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								<Button variant="contained" size="large">
+								<Button variant="contained" size="large" onClick={this.onPayClick}>
 									Start Incorporation
 								</Button>
 								<ProgramPrice
@@ -285,13 +291,13 @@ class IncorporationsDetailView extends Component {
 						</Grid>
 						<Grid
 							container
-							justify="left"
-							alignItems="left"
+							justify="flex-start"
+							alignItems="center"
 							className={classes.content}
 						>
 							<Tabs
 								value={selectedTab}
-								onChange={this.handleChange}
+								onChange={this.onTabChange}
 								classes={{
 									root: classes.tabsRoot,
 									indicator: classes.tabsIndicator
