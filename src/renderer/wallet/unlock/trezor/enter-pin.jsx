@@ -55,7 +55,7 @@ const BoxComponent = withStyles(boxComponentStyles)(props => {
 	);
 });
 
-class SelectAddress extends Component {
+class EnterPIN extends Component {
 	state = {
 		pin: ''
 	};
@@ -268,4 +268,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(SelectAddress));
+export default connect(mapStateToProps)(withStyles(styles)(EnterPIN));
