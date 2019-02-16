@@ -137,7 +137,7 @@ export class IncorporationCheckout extends React.Component {
 	onBackClick = _ =>
 		this.props.dispatch(
 			push(
-				`/main/marketplace-incorporation/detail/${this.props.match.params.companyCode}/${
+				`/main/marketplace-incorporation/details/${this.props.match.params.companyCode}/${
 					this.props.match.params.countryCode
 				}`
 			)
@@ -288,7 +288,7 @@ export class IncorporationCheckout extends React.Component {
 									<Grid
 										container
 										direction="row"
-										justify="flext-start"
+										justify="flex-start"
 										alignItems="center"
 										spacing={0}
 									>
