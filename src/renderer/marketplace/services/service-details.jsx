@@ -352,11 +352,11 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 									<Grid item>
 										{relyingParty ? (
-											'KYC MANAGER HERE'
+											'RELYING PARTY LOADED, REQUIREMENTS COMING SOON'
 										) : relyingPartyIsActive ? (
 											<CircularProgress />
 										) : (
-											'None'
+											'COMING SOON'
 										)}
 									</Grid>
 								</Grid>
