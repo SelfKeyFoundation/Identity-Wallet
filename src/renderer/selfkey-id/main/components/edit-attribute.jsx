@@ -4,6 +4,7 @@ import { TextField, withStyles, Typography, Divider, Button, Grid } from '@mater
 import { identityAttributes } from 'common/identity/utils';
 import { withTheme } from 'react-jsonschema-form';
 import theme from 'react-jsonschema-form-material-theme';
+import { jsonSchema } from '../../../../common/identity/utils';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -25,10 +26,22 @@ class EditAttributeComponent extends Component {
 		let value = data ? _.cloneDeep(attribute.data).value : undefined;
 		let denormalized = identityAttributes.denormalizeDocumentsSchema(schema, value, documents);
 		value = denormalized.value;
-		this.state = { title, schema, label: name, value, type, attribute, uiSchema };
+		this.state = {
+			title,
+			schema,
+			label: name,
+			value,
+			type,
+			attribute,
+			uiSchema,
+			disabled: false
+		};
 	}
-	handleSave = () => {
-		const { label, value, schema, attribute } = this.state;
+	handleSave = ({ errors }) => {
+		let { label, value, schema, attribute, disabled } = this.state;
+		if (!!errors.length || disabled) {
+			return this.setState({ errors, disabled: !!errors.length });
+		}
 		const normalized = identityAttributes.normalizeDocumentsSchema(schema, value, []);
 		const newAttr = {
 			...attribute,
@@ -45,11 +58,12 @@ class EditAttributeComponent extends Component {
 	handleFieldChange = prop => evt => {
 		this.setState({ [prop]: evt.target.value });
 	};
-	handleFormChange = prop => ({ formData }) => {
-		this.setState({ [prop]: formData });
+	handleFormChange = prop => ({ formData, errors }) => {
+		const disabled = !!errors.length;
+		this.setState({ [prop]: formData, disabled });
 	};
 	render() {
-		const { type, label, value, schema, title, uiSchema } = this.state;
+		const { type, label, value, schema, title, uiSchema, disabled } = this.state;
 		const { classes } = this.props;
 		return (
 			<React.Fragment>
@@ -68,17 +82,21 @@ class EditAttributeComponent extends Component {
 				{type && (
 					<div className={classes.section2}>
 						<Form
-							schema={_.omit(schema, ['$id', 'schema', 'title'])}
+							schema={_.omit(jsonSchema.removeMeta(schema), ['title'])}
 							uiSchema={uiSchema.content}
 							formData={value}
+							liveValidate={true}
+							showErrorList={false}
 							onChange={this.handleFormChange('value')}
+							onSubmit={this.handleSave}
 						>
 							<Grid container spacing={24}>
 								<Grid item>
 									<Button
 										variant="contained"
 										size="large"
-										onClick={this.handleSave}
+										disabled={disabled}
+										type="submit"
 									>
 										Save
 									</Button>
