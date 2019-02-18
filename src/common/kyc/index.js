@@ -44,15 +44,29 @@ export const kycSelectors = {
 
 		return false;
 	},
-	selectKYCAttributes(state, walletId, attributeIds) {
-		return identitySelectors
-			.selectFullIdAttributesByIds(state, walletId, attributeIds)
-			.map(attr => ({
-				id: attr.type.url,
-				schema: attr.type.schema,
-				value: attr.data,
-				documents: attr.documents
-			}));
+	selectKYCAttributes(state, walletId, attributes = []) {
+		const kycAttributes = identitySelectors
+			.selectFullIdAttributesByIds(state, walletId, attributes.map(attr => attr.attributeId))
+			.reduce((acc, curr) => {
+				acc[curr.id] = curr;
+				return acc;
+			}, {});
+
+		return attributes.map(attr => {
+			const { id, attributeId, schemaId, schema, required } = attr;
+			const loadedAttr = kycAttributes[attributeId];
+			const finalAttr = {
+				id,
+				schemaId,
+				schema,
+				required
+			};
+			if (loadedAttr) {
+				finalAttr.data = { ...loadedAttr.data };
+				finalAttr.documents = [...loadedAttr.documents];
+			}
+			return finalAttr;
+		});
 	}
 };
 
@@ -109,7 +123,7 @@ export const loadRelyingPartyOperation = rpName => async (dispatch, getState) =>
 	}
 };
 
-export const createRelyingPartyKYCApplication = (rpName, templateId, attributeIds) => async (
+export const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => async (
 	dispatch,
 	getState
 ) => {
@@ -119,8 +133,8 @@ export const createRelyingPartyKYCApplication = (rpName, templateId, attributeId
 
 	const wallet = walletSelectors.getWallet(getState());
 	if (!wallet) return;
-	const attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributeIds);
-	const application = await rp.session.createKYCApplication(rpName, templateId, attributes);
+	attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+	const application = await rp.session.createKYCApplication(templateId, attributes);
 	await dispatch(kycActions.addKYCApplication(rpName, application));
 };
 
