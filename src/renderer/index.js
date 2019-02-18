@@ -34,6 +34,8 @@ import ConnectingToLedger from './wallet/unlock/ledger/connecting';
 
 import path from 'path';
 
+require('../../static/stylesheets/scss/main.scss');
+
 const ctx = configureContext('renderer').cradle;
 setGlobalContext(ctx);
 
