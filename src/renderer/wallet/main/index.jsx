@@ -95,10 +95,6 @@ class Main extends Component {
 						)}
 					/>
 					<Route
-						path={`${match.path}/transfer/eth`}
-						render={props => <Transfer cryptoCurrency="ETH" />}
-					/>
-					<Route
 						path={`${match.path}/transaction-progress`}
 						component={TransactionSendProgress}
 					/>
