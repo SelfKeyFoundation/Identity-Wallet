@@ -42,6 +42,9 @@ const selectExpiredIdAttributeTypes = state => {
 		.filter(attributeType => attributeType.expires <= now);
 };
 
+const selectIdAttributeTypeByUrl = (state, url) =>
+	identitySelectors.selectIdAttributeTypes(state).find(t => t.url === url);
+
 const selectUiSchemas = state =>
 	identitySelectors
 		.selectIdentity(state)
@@ -156,6 +159,7 @@ export const identitySelectors = {
 	selectExpiredRepositories,
 	selectIdAttributeTypes,
 	selectExpiredIdAttributeTypes,
+	selectIdAttributeTypeByUrl,
 	selectUiSchemas,
 	selectExpiredUiSchemas,
 	selectDocuments,
