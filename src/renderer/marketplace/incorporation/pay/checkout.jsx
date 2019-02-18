@@ -321,7 +321,7 @@ export class IncorporationCheckout extends React.Component {
 									<Grid
 										container
 										direction="row"
-										justify="flext-start"
+										justify="flex-start"
 										alignItems="center"
 										spacing={0}
 									>
@@ -335,7 +335,7 @@ export class IncorporationCheckout extends React.Component {
 									<Grid
 										container
 										direction="row"
-										justify="flext-start"
+										justify="flex-start"
 										alignItems="center"
 										spacing={0}
 									>
@@ -348,7 +348,7 @@ export class IncorporationCheckout extends React.Component {
 									<Grid
 										container
 										direction="row"
-										justify="flext-start"
+										justify="flex-start"
 										alignItems="center"
 										spacing={0}
 									>

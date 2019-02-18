@@ -43,21 +43,27 @@ const styles = theme => ({
 		width: '120px'
 	},
 	content: {
-		paddingBottom: '30px',
-		marginBottom: '30px',
 		width: 'calc(100% - 120px)'
 	},
 	description: {
-		margin: '1em 1em 1em 0',
 		fontFamily: 'Lato, arial',
 		color: '#FFF',
-		width: '60%',
-		borderRight: '1px solid #475768',
 		lineHeight: '1.5em',
 		fontSize: '14px',
 		'& p': {
 			marginBottom: '1em'
+		},
+		'& p.email': {
+			color: '#00C0D9',
+			padding: '10px 0 10px 0'
+		},
+		'& strong': {
+			fontWeight: '700'
 		}
+	},
+	instructions: {
+		padding: '30px 0',
+		borderTop: '1px solid #475768'
 	},
 	footer: {
 		width: '100%',
@@ -110,19 +116,29 @@ export class IncorporationProcessStarted extends React.Component {
 								Incorporation Process Started
 							</Typography>
 							<div className={classes.description}>
-								<p>
+								<Typography variant="body2" gutterBottom>
 									Thank you for providing the basic informations about yourself!
-								</p>
-								<p>
+								</Typography>
+								<Typography variant="body2" gutterBottom>
 									One of our our managers is reviewing the information you
-									submitted and will contact you shortly on the e-mail you
-									provided, to continue the process. If you have any questions in
-									the meantime, you can reach us at:
-								</p>
-								<p className="email">support@flagtheory.com</p>
+									submitted and{' '}
+									<strong>
+										will contact you shortly on the e-mail you provided
+									</strong>
+									, to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+								<Typography
+									variant="body2"
+									color="primary"
+									gutterBottom
+									className="email"
+								>
+									support@flagtheory.com
+								</Typography>
 							</div>
-							<div>
-								<Typography variant="body3" gutterBottom>
+							<div className={classes.instructions}>
+								<Typography variant="subtitle2" color="secondary" gutterBottom>
 									The application is available to you at any point under the
 									marketplace applications tab, in your SelfKey ID Profile.
 								</Typography>
