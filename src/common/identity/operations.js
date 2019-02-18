@@ -15,7 +15,7 @@ const updateExpiredRepositoriesOperation = () => async (dispatch, getState) => {
 	let expired = identitySelectors.selectExpiredRepositories(getState());
 	const identityService = getGlobalContext().identityService;
 	await identityService.updateRepositories(expired);
-	await operations.loadRepositoriesOperation(dispatch, getState);
+	await dispatch(operations.loadRepositoriesOperation());
 };
 
 const loadIdAttributeTypesOperation = () => async (dispatch, getState) => {
@@ -28,7 +28,7 @@ const updateExpiredIdAttributeTypesOperation = () => async (dispatch, getState) 
 	let expired = identitySelectors.selectExpiredIdAttributeTypes(getState());
 	const identityService = getGlobalContext().identityService;
 	await identityService.updateIdAttributeTypes(expired);
-	await operations.loadIdAttributeTypesOperation(dispatch, getState);
+	await dispatch(operations.loadIdAttributeTypesOperation());
 };
 
 const loadUiSchemasOperation = () => async (dispatch, getState) => {
@@ -41,7 +41,7 @@ const updateExpiredUiSchemasOperation = () => async (dispatch, getState) => {
 	let expired = identitySelectors.selectExpiredUiSchemas(getState());
 	const identityService = getGlobalContext().identityService;
 	await identityService.updateUiSchemas(expired);
-	await operations.loadUiSchemasOperation(dispatch, getState);
+	await dispatch(operations.loadUiSchemasOperation());
 };
 
 const loadDocumentsOperation = walletId => async (dispatch, getState) => {
