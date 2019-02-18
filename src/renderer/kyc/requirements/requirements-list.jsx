@@ -9,11 +9,6 @@ const styles = theme => ({
 		paddingTop: '40px',
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
-	},
-	kycRequirements: {
-		'& > div': {
-			width: '30%'
-		}
 	}
 });
 
@@ -34,7 +29,7 @@ const KycRequirementsListComponent = props => {
 		requirements,
 		title = 'KYC Requirements:',
 		subtitle,
-		cols = 2,
+		cols = 3,
 		loading
 	} = props;
 
@@ -55,7 +50,7 @@ const KycRequirementsListComponent = props => {
 				{title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}
-			<Grid container justify="left" alignItems="left" className={classes.kycRequirements}>
+			<Grid container justify="left" alignItems="left">
 				{requirementsPerCol.map((col, ind) => (
 					<Grid key={ind} item>
 						<List>
