@@ -11,7 +11,7 @@ afterEach(() => {
 	sinon.restore();
 });
 
-describe('RelyingPartyCtx', () => {
+xdescribe('RelyingPartyCtx', () => {
 	describe('mergeConfig', () => {});
 	describe('getEndpoing', () => {});
 	describe('getOrigin', () => {});
@@ -271,6 +271,46 @@ describe('RelyingPartyRest', () => {
 			]);
 		});
 	});
+	describe('updateKycApplication', () => {
+		it('should update application', async () => {
+			const testEndpoint = 'http://test/:id';
+			const application = {
+				id: 1,
+				attributes: [
+					{
+						test1: 'test1',
+						documents: [1]
+					},
+					{
+						test2: 'test2',
+						documents: [2]
+					}
+				]
+			};
+
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'put').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.updateKYCApplication(ctx, application);
+			expect(res).toEqual('ok');
+			expect(request.put.getCall(0).args).toEqual([
+				{
+					url: 'http://test/1',
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					body: application,
+					json: true
+				}
+			]);
+		});
+	});
 	describe('listKYCApplications', () => {
 		it('should return a list of KYC applications', async () => {
 			const testEndpoint = 'http://test';
@@ -471,7 +511,15 @@ describe('Relying Party session', () => {
 			let attributes = [
 				{
 					id: 1,
-					data: 'test1',
+					schemaId: 'http://test1',
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
+					data: { value: { front: '$document-1', back: '$document-2' } },
 					documents: [
 						{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
 						{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
@@ -479,7 +527,15 @@ describe('Relying Party session', () => {
 				},
 				{
 					id: 2,
-					data: 'test2',
+					schemaId: 'http://test2',
+					data: { value: { front: '$document-3', back: '$document-4' } },
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
 					documents: [
 						{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
 						{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
@@ -495,25 +551,46 @@ describe('Relying Party session', () => {
 				[
 					{
 						id: 1,
-						data: 'test1',
-						documents: [
-							{ id: 1, mimeType: 'test', size: 123, content: 'ok' },
-							{ id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
-						]
+						schemaId: 'http://test1',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							value: {
+								front: { id: 1, mimeType: 'test', size: 123, content: 'ok' },
+								back: { id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
+							}
+						},
+						documents: []
 					},
 					{
 						id: 2,
-						data: 'test2',
-						documents: [
-							{ id: 3, mimeType: 'test', size: 123, content: 'ok' },
-							{ id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
-						]
+						schemaId: 'http://test2',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							value: {
+								front: { id: 3, mimeType: 'test', size: 123, content: 'ok' },
+								back: { id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
+							}
+						},
+						documents: []
 					}
 				]
 			]);
 			expect(res).toEqual('ok');
 		});
 	});
-	describe('listKYCApplications', () => {});
-	describe('getKYCApplication', () => {});
+	xdescribe('updateKYCApplication', () => {});
+	xdescribe('listKYCApplications', () => {});
+	xdescribe('getKYCApplication', () => {});
 });
