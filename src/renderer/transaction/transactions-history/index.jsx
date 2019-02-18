@@ -42,6 +42,9 @@ const styles = theme => ({
 
 	rightSpace: {
 		marginRight: '20px'
+	},
+	paper: {
+		boxShadow: 'none'
 	}
 });
 
@@ -146,9 +149,9 @@ class TransactionsHistory extends Component {
 		const { rowsPerPage, page } = this.state;
 
 		return (
-			<Paper>
+			<Paper className={classes.paper}>
 				<Toolbar className={classes.toolbar}>
-					<Typography variant="h6">Transactions</Typography>
+					<Typography variant="h1">Transactions</Typography>
 					<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
 						<RefreshIcon />
 					</IconButton>
