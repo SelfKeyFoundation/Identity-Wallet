@@ -143,7 +143,14 @@ export class IncorporationCheckout extends React.Component {
 			)
 		);
 
-	onPayClick = _ => console.log('pay click');
+	onPayClick = _ =>
+		this.props.dispatch(
+			push(
+				`/main/marketplace-incorporation/process-started/${
+					this.props.match.params.companyCode
+				}/${this.props.match.params.countryCode}`
+			)
+		);
 
 	render() {
 		const { classes, program } = this.props;
@@ -301,7 +308,7 @@ export class IncorporationCheckout extends React.Component {
 									<Grid
 										container
 										direction="row"
-										justify="flext-start"
+										justify="flex-start"
 										alignItems="center"
 										spacing={0}
 									>

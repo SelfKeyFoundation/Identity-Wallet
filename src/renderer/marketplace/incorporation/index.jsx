@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 
 import IncorporationsTable from './table';
 import IncorporationsDetailView from './detail';
-import IncorporationCheckout from './pay';
+import { IncorporationCheckout, IncorporationProcessStarted } from './pay';
 
 class MarketplaceIncorporationComponent extends Component {
 	render() {
@@ -19,6 +19,10 @@ class MarketplaceIncorporationComponent extends Component {
 				<Route
 					path={`${path}/pay/:companyCode/:countryCode`}
 					component={IncorporationCheckout}
+				/>
+				<Route
+					path={`${path}/process-started/:companyCode/:countryCode`}
+					component={IncorporationProcessStarted}
 				/>
 			</div>
 		);
