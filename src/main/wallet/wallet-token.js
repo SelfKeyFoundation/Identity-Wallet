@@ -56,7 +56,6 @@ export class WalletToken extends BaseModel {
 	}
 
 	static update(itm) {
-		console.log('XXX', itm);
 		return this.query().patchAndFetchById(itm.id, itm);
 	}
 
