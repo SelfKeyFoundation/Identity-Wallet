@@ -192,6 +192,20 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
+		let url = ctx.getEndpoint('/applications/:id/payments');
+		url = url.replace(':id', applicationId);
+		return request.put({
+			url,
+			body: { transactionHash },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
 	static listKYCApplications(ctx) {
 		let url = ctx.getEndpoint('/applications');
 		return request.get({
@@ -328,6 +342,14 @@ export class RelyingPartySession {
 
 	updateKYCApplication(application) {
 		return RelyingPartyRest.updateKYCApplication(this.ctx, application);
+	}
+
+	updateKYCApplicationPayment(applicationId, transactionHash) {
+		return RelyingPartyRest.updateKYCApplicationPayment(
+			this.ctx,
+			applicationId,
+			transactionHash
+		);
 	}
 
 	listKYCTemplates() {
