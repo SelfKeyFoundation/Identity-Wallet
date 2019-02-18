@@ -315,12 +315,12 @@ export class RelyingPartySession {
 			let attrDocs = documents.filter(
 				doc => !!attr.documents.filter(d => d.id === doc.id).length
 			);
-			const denormalized = identityAttributes.denormalizeDocumentsSchema(
+			const { value } = identityAttributes.denormalizeDocumentsSchema(
 				attr.schema,
 				attr.data.value,
 				attrDocs
 			);
-			attr = { ...attr, data: { value: denormalized.value }, documents: [] };
+			attr = { ...attr, data: { value }, documents: [] };
 			return attr;
 		});
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
