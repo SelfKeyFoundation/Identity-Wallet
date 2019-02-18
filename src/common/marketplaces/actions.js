@@ -30,19 +30,6 @@ export const marketplacesActions = {
 	},
 	displayMarketplaceStateAction(payload) {
 		return { type: marketplacesTypes.MARKETPLACE_STATE_SHOW, payload };
-	},
-	updateRelyingParty(payload, error) {
-		if (error) {
-			payload = { ...payload, error: error.message };
-			error = true;
-		}
-		return { type: marketplacesTypes.MARKETPLACE_RP_UPDATE, payload, error };
-	},
-	addKYCApplication(rpName, application) {
-		return {
-			type: marketplacesTypes.MARKETPLACE_RP_APPLICATION_ADD,
-			payload: { name: rpName, application }
-		};
 	}
 };
 
