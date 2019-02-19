@@ -10,6 +10,22 @@ const Dashboard = connect()(props => {
 	return (
 		<Grid container direction="column" justify="flex-start" alignItems="center" spacing={32}>
 			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
+				<button
+					onClick={() => {
+						const { kycOperations } = require('common/kyc');
+						props.dispatch(
+							kycOperations.startCurrentApplicationOperation(
+								'B*Trade',
+								1,
+								window.location
+							)
+						);
+					}}
+				>
+					Apply
+				</button>
+			</Grid>
+			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
 				<Typography variant="h1">SelfKey Dashboard</Typography>
 			</Grid>
 			<Grid item style={{ width: '100%' }}>

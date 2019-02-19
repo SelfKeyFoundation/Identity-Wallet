@@ -143,13 +143,13 @@ export const kycActions = {
 			payload: { name: rpName, application }
 		};
 	},
-	currentSet(relyingPartyName, templateId, returnRoute) {
+	setCurrentApplication(relyingPartyName, templateId, returnRoute) {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET,
 			payload: { relyingPartyName, templateId, returnRoute }
 		};
 	},
-	currentClear() {
+	clearCurrentApplication() {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET
 		};
@@ -236,7 +236,6 @@ const startCurrentApplicationOperation = (rpName, templateId, returnRoute) => as
 	dispatch,
 	getState
 ) => {
-	returnRoute = returnRoute || window.location;
 	await dispatch(kycActions.setCurrentApplication(rpName, templateId, returnRoute));
 	await dispatch(push('/main/kyc/current-application'));
 };
@@ -284,18 +283,20 @@ export const addKYCApplicationReducer = (state, { payload }) => {
 	return { ...state, relyingPartiesByName: { ...state.relyingPartiesByName, [rp.name]: rp } };
 };
 
-export const setCurrentApplication = (state, { payload }) => {
+export const setCurrentApplicationReducer = (state, { payload }) => {
 	let currentApplication = { ...payload };
 	return { ...state, currentApplication };
 };
 
-export const clearCurrentApplication = state => {
+export const clearCurrentApplicationReducer = state => {
 	return { ...state, currentApplication: null };
 };
 
 export const reducers = {
 	updateRelyingPartyReducer,
-	addKYCApplicationReducer
+	addKYCApplicationReducer,
+	setCurrentApplicationReducer,
+	clearCurrentApplicationReducer
 };
 
 export const reducer = (state = initialState, action) => {
@@ -305,9 +306,9 @@ export const reducer = (state = initialState, action) => {
 		case kycTypes.KYC_RP_APPLICATION_ADD:
 			return reducers.addKYCApplicationReducer(state, action);
 		case kycTypes.KYC_APPLICATION_CURRENT_SET:
-			return reducers.setCurrentApplication(state, action);
+			return reducers.setCurrentApplicationReducer(state, action);
 		case kycTypes.KYC_APPLICATION_CURRENT_CLEAR:
-			return reducers.clearCurrentApplication(state, action);
+			return reducers.clearCurrentApplicationReducer(state, action);
 	}
 	return state;
 };
