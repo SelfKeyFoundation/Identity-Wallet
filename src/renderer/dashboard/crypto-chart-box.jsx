@@ -14,6 +14,8 @@ import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
 	paper: {
+		backgroundColor: '#262F39',
+		boxShadow: 'none',
 		padding: 16
 	},
 
@@ -75,6 +77,10 @@ const styles = () => ({
 
 	expandMore: {
 		verticalAlign: 'middle !important'
+	},
+
+	textRight: {
+		textAlign: 'right'
 	}
 });
 
@@ -344,7 +350,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							<Grid item xs={11}>
 								<Typography variant="h1">My Crypto</Typography>
 							</Grid>
-							<Grid item xs={1}>
+							<Grid item xs={1} className={classes.textRight}>
 								<IconButton onClick={manageCryptoAction}>
 									<GearIcon />
 								</IconButton>

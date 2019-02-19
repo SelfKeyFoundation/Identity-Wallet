@@ -29,6 +29,8 @@ import TransactionError from '../../transaction/transaction-error/containers/tra
 
 const styles = theme => ({
 	headerSection: {
+		marginLeft: 0,
+		marginRi: 0,
 		width: '100%'
 	},
 	bodySection: {
@@ -56,9 +58,8 @@ class Main extends Component {
 				justify="space-between"
 				alignItems="center"
 				className={classes.page}
-				spacing={24}
 			>
-				<Grid item xs={12} className={classes.headerSection}>
+				<Grid item className={classes.headerSection}>
 					<Toolbar />
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
@@ -93,10 +94,6 @@ class Main extends Component {
 						render={props => (
 							<Transfer cryptoCurrency={props.match.params.crypto.toUpperCase()} />
 						)}
-					/>
-					<Route
-						path={`${match.path}/transfer/eth`}
-						render={props => <Transfer cryptoCurrency="ETH" />}
 					/>
 					<Route
 						path={`${match.path}/transaction-progress`}

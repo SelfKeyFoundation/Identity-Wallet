@@ -4,6 +4,7 @@ import { Grid, Button, Typography, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
+import { MyCryptoLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	back: {
@@ -42,10 +43,13 @@ class CryptoManagerContainerComponent extends Component {
 				</Button>
 
 				<Grid item>
+					<MyCryptoLargeIcon />
+				</Grid>
+				<Grid item>
 					<Typography variant="h1">Manage My Crypto</Typography>
 				</Grid>
 				<Grid item>
-					<Typography variant="body1">
+					<Typography variant="body1" color="secondary">
 						Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
 					</Typography>
 				</Grid>

@@ -51,7 +51,6 @@ class Toolbar extends Component {
 					direction="row"
 					justify="space-between"
 					alignItems="center"
-					spacing={8}
 					className={classes.wrapper}
 				>
 					<Grid item xs={8}>
