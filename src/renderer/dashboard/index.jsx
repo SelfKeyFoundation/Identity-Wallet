@@ -12,10 +12,10 @@ const Dashboard = connect()(props => {
 			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
 				<Typography variant="h1">SelfKey Dashboard</Typography>
 			</Grid>
-			<Grid item>
+			<Grid item style={{ width: '100%' }}>
 				<TokenList />
 			</Grid>
-			<Grid item>
+			<Grid item style={{ width: '100%' }}>
 				<CryptoChartBox
 					manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
 				/>
