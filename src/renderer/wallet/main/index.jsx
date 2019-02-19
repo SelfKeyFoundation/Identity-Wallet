@@ -65,29 +65,6 @@ class Main extends Component {
 					<Toolbar />
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
-					<Route path={`${match.path}/dashboard`} component={CurrentApplication} />
-					<Route
-						path={`${match.path}/kyc/application-in-progress`}
-						component={ApplicationInProgress}
-					/>
-				</Grid>
-			</Grid>
-		);
-	}
-	render2() {
-		const { match, classes } = this.props;
-		return (
-			<Grid
-				container
-				direction="column"
-				justify="space-between"
-				alignItems="center"
-				className={classes.page}
-			>
-				<Grid item className={classes.headerSection}>
-					<Toolbar />
-				</Grid>
-				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
 					<Route
 						path={`${match.path}/crypto-manager`}
