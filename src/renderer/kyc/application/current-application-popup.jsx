@@ -17,7 +17,7 @@ import {
 	SmallTableHeadRow,
 	SmallTableCell,
 	MuiEditIcon,
-	MuiDeleteIcon,
+	MuiVisibilityIcon,
 	SmallTableRow
 } from 'selfkey-ui';
 import { Popup } from '../../common/popup';
@@ -130,25 +130,12 @@ const KycChecklist = withStyles(styles)(({ classes }) => {
 							</SmallTableCell>
 							<SmallTableCell>
 								<Typography variant="subtitle1" gutterBottom>
-									{row.disabled ? (
-										<IconButton aria-label="Edit" disabled>
-											<MuiEditIcon />
-										</IconButton>
-									) : (
-										<IconButton aria-label="Edit">
-											<MuiEditIcon />
-										</IconButton>
-									)}
-
-									{row.disabled ? (
-										<IconButton aria-label="Delete" disabled>
-											<MuiDeleteIcon />
-										</IconButton>
-									) : (
-										<IconButton aria-label="Delete">
-											<MuiDeleteIcon />
-										</IconButton>
-									)}
+									<IconButton aria-label="View">
+										<MuiVisibilityIcon />
+									</IconButton>
+									<IconButton aria-label="Edit">
+										<MuiEditIcon />
+									</IconButton>
 								</Typography>
 							</SmallTableCell>
 						</SmallTableRow>
@@ -165,6 +152,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 			return (
 				<Popup open={open} text="KYC Checklist" closeAction={onClose}>
 					<div className={classes.loading}>
+						<MuiVisibilityIcon />
 						<CircularProgress />
 					</div>
 				</Popup>
