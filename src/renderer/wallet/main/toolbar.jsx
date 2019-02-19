@@ -53,10 +53,10 @@ class Toolbar extends Component {
 					alignItems="center"
 					className={classes.wrapper}
 				>
-					<Grid item xs={8}>
+					<Grid item xs={5}>
 						<SelfkeyLogo className={classes.logo} />
 					</Grid>
-					<Grid item xs={3}>
+					<Grid item xs={6}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
 								<PriceBox cryptoCurrency={config.constants.primaryToken} />
