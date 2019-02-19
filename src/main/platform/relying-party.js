@@ -2,6 +2,7 @@ import request from 'request-promise-native';
 import config from 'common/config';
 import jwt from 'jsonwebtoken';
 import urljoin from 'url-join';
+import { identityAttributes } from '../../common/identity/utils';
 
 const { userAgent } = config;
 export class RelyingPartyError extends Error {
@@ -177,6 +178,34 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+	static updateKYCApplication(ctx, application) {
+		let url = ctx.getEndpoint('/applications/:id');
+		url = url.replace(':id', application.id);
+		return request.put({
+			url,
+			body: application,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
+		let url = ctx.getEndpoint('/applications/:id/payments');
+		url = url.replace(':id', applicationId);
+		return request.put({
+			url,
+			body: { transactionHash },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
 	static listKYCApplications(ctx) {
 		let url = ctx.getEndpoint('/applications');
 		return request.get({
@@ -294,13 +323,33 @@ export class RelyingPartySession {
 			})
 		);
 		attributes = attributes.map(attr => {
+			if (!attr.data) {
+				return attr;
+			}
 			let attrDocs = documents.filter(
 				doc => !!attr.documents.filter(d => d.id === doc.id).length
 			);
-			attr = { ...attr, documents: attrDocs };
+			const { value } = identityAttributes.denormalizeDocumentsSchema(
+				attr.schema,
+				attr.data.value,
+				attrDocs
+			);
+			attr = { ...attr, data: { value }, documents: [] };
 			return attr;
 		});
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
+	}
+
+	updateKYCApplication(application) {
+		return RelyingPartyRest.updateKYCApplication(this.ctx, application);
+	}
+
+	updateKYCApplicationPayment(applicationId, transactionHash) {
+		return RelyingPartyRest.updateKYCApplicationPayment(
+			this.ctx,
+			applicationId,
+			transactionHash
+		);
 	}
 
 	listKYCTemplates() {
