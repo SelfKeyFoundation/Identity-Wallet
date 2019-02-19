@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Grid, withStyles, Typography, Button } from '@material-ui/core';
+import { Grid, withStyles, Typography, Button, IconButton } from '@material-ui/core';
 
-import { ExchangeLargeIcon } from 'selfkey-ui';
+import { KeyTooltip, TooltipArrow, PaymentIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
@@ -44,7 +44,7 @@ class PaymentConfirmationContentComponent extends Component {
 		return (
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
-					<ExchangeLargeIcon />
+					<PaymentIcon />
 				</Grid>
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
@@ -84,7 +84,27 @@ class PaymentConfirmationContentComponent extends Component {
 										Total: ${usdFee.toLocaleString()}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary" gutterBottom>
-										{ethFee.toLocaleString()} {crypoCurrency} {'(icon)'}
+										{ethFee.toLocaleString()} {crypoCurrency}
+										<KeyTooltip
+											interactive
+											placement="top-start"
+											title={
+												<React.Fragment>
+													<span>
+														Tooltip test with link{' '}
+														<a
+															color="primary"
+															href="https://selfkey.org"
+														>
+															SelfKey
+														</a>
+													</span>
+													<TooltipArrow />
+												</React.Fragment>
+											}
+										>
+											<IconButton aria-label="Info" />
+										</KeyTooltip>
 									</Typography>
 								</Grid>
 							</Grid>
@@ -103,7 +123,27 @@ class PaymentConfirmationContentComponent extends Component {
 										${usdNetworkFee.toLocaleString()}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary" gutterBottom>
-										{ethNetworkFee.toLocaleString()} {crypoCurrency} {'(icon)'}
+										{ethNetworkFee.toLocaleString()} {crypoCurrency}
+										<KeyTooltip
+											interactive
+											placement="top-start"
+											title={
+												<React.Fragment>
+													<span>
+														Tooltip test with link{' '}
+														<a
+															color="primary"
+															href="https://selfkey.org"
+														>
+															SelfKey
+														</a>
+													</span>
+													<TooltipArrow />
+												</React.Fragment>
+											}
+										>
+											<IconButton aria-label="Info" />
+										</KeyTooltip>
 									</Typography>
 								</Grid>
 							</Grid>
