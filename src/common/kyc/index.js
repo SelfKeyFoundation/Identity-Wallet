@@ -56,9 +56,11 @@ export const kycSelectors = {
 		if (!templates) return null;
 		return templates.find(tpl => tpl.id === templateId);
 	},
-	selectAttributesForTemplate(state, rpName, templateId) {
-		const template = this.selectAttributesForTemplate(state, rpName, templateId);
-		const attributesBySchema = template.identity_atrributes.reduce((acc, curr) => {
+
+	selectRequirementsForTemplate(state, rpName, templateId) {
+		const template = this.oneTemplateSelector(state, rpName, templateId);
+		if (!template) return null;
+		const attributesBySchema = template.identity_attributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {
 				curr = { schemaId: curr };
 			}
@@ -66,22 +68,30 @@ export const kycSelectors = {
 			return acc;
 		}, {});
 		const wallet = walletSelectors.getWallet(state);
-		const walletAttributes = this.selectFullIdAttributesByIds(state, wallet.id).reduce(
-			(acc, curr) => {
-				if (!acc.hasOwnProperty(curr.type.url)) {
-					return acc;
-				}
+		const walletAttributes = identitySelectors
+			.selectFullIdAttributesByIds(state, wallet.id)
+			.reduce((acc, curr) => {
+				if (!curr || !curr.type || !curr.type.url) return acc;
+				if (!acc.hasOwnProperty(curr.type.url)) return acc;
+
 				acc[curr.type.url].push(curr);
 				return acc;
-			},
-			attributesBySchema
-		);
+			}, attributesBySchema);
 
-		return template.identity_atrributes.map(tplAttr => ({
-			id: tplAttr.id,
-			schemaId: tplAttr.schemaId,
-			options: walletAttributes[tplAttr.schemaId]
-		}));
+		return template.identity_attributes.map(tplAttr => {
+			if (typeof tplAttr === 'string') {
+				tplAttr = { schemaId: tplAttr };
+			}
+			return {
+				id: tplAttr.id,
+				schemaId: tplAttr.schemaId,
+				options: walletAttributes[tplAttr.schemaId],
+				type:
+					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
+						? walletAttributes[tplAttr.schemaId][0].type
+						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId)
+			};
+		});
 	},
 	selectKYCAttributes(state, walletId, attributes = []) {
 		const kycAttributes = identitySelectors
