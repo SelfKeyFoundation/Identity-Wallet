@@ -27,6 +27,8 @@ import TransactionSendProgress from '../../transaction/progress/containers/trans
 import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
 import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
 
+import { CurrentApplication, ApplicationInProgress } from '../../kyc';
+
 const styles = theme => ({
 	headerSection: {
 		marginLeft: 0,
@@ -50,6 +52,29 @@ class Main extends Component {
 		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
 	render() {
+		const { match, classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="column"
+				justify="space-between"
+				alignItems="center"
+				className={classes.page}
+			>
+				<Grid item className={classes.headerSection}>
+					<Toolbar />
+				</Grid>
+				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
+					<Route path={`${match.path}/dashboard`} component={CurrentApplication} />
+					<Route
+						path={`${match.path}/kyc/application-in-progress`}
+						component={ApplicationInProgress}
+					/>
+				</Grid>
+			</Grid>
+		);
+	}
+	render2() {
 		const { match, classes } = this.props;
 		return (
 			<Grid
@@ -115,6 +140,14 @@ class Main extends Component {
 								cryptoCurrency={props.match.params.crypto.toUpperCase()}
 							/>
 						)}
+					/>
+					<Route
+						path={`${match.path}/kyc/current-application`}
+						component={CurrentApplication}
+					/>
+					<Route
+						path={`${match.path}/kyc/application-in-progress`}
+						component={ApplicationInProgress}
 					/>
 				</Grid>
 			</Grid>
