@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-	ListItem,
-	List,
-	ListItemText,
-	Avatar,
-	ListItemAvatar,
-	withStyles
-} from '@material-ui/core';
-import { TickIcon, DocumentIcon } from 'selfkey-ui';
+import { ListItem, List, withStyles } from '@material-ui/core';
+import { KycRequirements } from './requirements/container';
 import { kycSelectors, kycOperations } from '../../common/kyc';
 
 const styles = theme => () => {};
@@ -20,38 +13,16 @@ class KycManagerComponent extends Component {
 	renderTemplate(tpl) {
 		return (
 			<ListItem key={tpl.id}>
-				<ListItemText>
-					<h3>{tpl.name}</h3>
-					<p>{tpl.description}</p>
-				</ListItemText>
-				<List>
-					{(tpl.identity_attributes || []).map((attr, index) =>
-						this.renderKycRequirement({ id: attr }, index)
-					)}
-				</List>
+				<KycRequirements
+					relyingPartyName={this.props.relyingPartyName}
+					templateId={tpl.id}
+					title={tpl.name}
+					subtitle={tpl.description}
+				/>
 			</ListItem>
 		);
 	}
-	renderKycRequirement(requirement, index) {
-		const { classes = {} } = this.props;
-		return (
-			<ListItem key={requirement.name} className={classes.requirementListItem}>
-				<ListItemAvatar>
-					{requirement.isEntered ? (
-						<Avatar className={classes.bullet}>
-							<TickIcon />
-						</Avatar>
-					) : (
-						<Avatar className={classes.notEnteredRequeriment}>
-							<div>{index + 1}</div>
-						</Avatar>
-					)}
-				</ListItemAvatar>
-				<ListItemText disableTypography={true}>{requirement.name}</ListItemText>
-				{requirement.type === 'document' && <DocumentIcon />}
-			</ListItem>
-		);
-	}
+
 	render() {
 		const { relyingParty } = this.props;
 		if (!relyingParty || relyingParty.error) {
