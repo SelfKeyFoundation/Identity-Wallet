@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import { H2, CopyIcon, DeleteIcon, EditTransparentIcon, AddressBookIcon } from 'selfkey-ui';
+import {
+	CopyIcon,
+	DeleteIcon,
+	EditTransparentIcon,
+	AddressBookIcon,
+	SmallTableHeadRow
+} from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import {
 	Grid,
@@ -19,11 +25,6 @@ import {
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
-	addressBook: {
-		width: '1140px',
-		minHeight: '100vh'
-	},
-
 	button: {
 		height: '44px',
 		width: '180px',
@@ -43,45 +44,6 @@ const styles = theme => ({
 		fontSize: '18px',
 		lineHeight: '28px',
 		textAlign: 'center'
-	},
-
-	table: {
-		borderSpacing: '0px',
-		minWidth: '900px',
-		'& tbody tr:nth-child(odd)': {
-			background: '#262f39'
-		}
-	},
-
-	headerTableRow: {
-		height: '38px',
-		'& th': {
-			fontSize: '12px',
-			fontWeight: 600,
-			textAlign: 'left',
-			color: '#7f8fa4',
-			textTransform: 'uppercase',
-			borderBottom: '0px',
-			paddingLeft: '0px'
-		},
-		'& th:first-child': {
-			paddingLeft: '24px !important'
-		}
-	},
-
-	bodyTableRow: {
-		height: '74px',
-		cursor: 'pointer',
-		'& td': {
-			padding: '0px',
-			fontSize: '15px',
-			textAlign: 'left',
-			color: '#ffffff',
-			borderBottom: '0px'
-		},
-		'& td:first-child': {
-			paddingLeft: '24px !important'
-		}
 	}
 });
 
@@ -124,16 +86,15 @@ class AddressBookContainer extends Component {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				className={classes.addressBook}
 				spacing={32}
 			>
 				<Grid item>
 					<AddressBookIcon />
 				</Grid>
 				<Grid item>
-					<H2>Address Book</H2>
+					<Typography variant="h1">Address Book</Typography>
 				</Grid>
-				<Grid item>
+				<Grid item xs={6}>
 					<Typography variant="body1" className={classes.descriptionText}>
 						Create and assign labels to save commonly used Ethereum addresses when
 						sending assets from the SelfKey Identity Wallet.
@@ -148,22 +109,36 @@ class AddressBookContainer extends Component {
 						ADD ADDRESS
 					</Button>
 				</Grid>
-				<Grid item>
-					<Table className={classes.table}>
+				<Grid item xs={12}>
+					<Table>
 						<TableHead>
-							<TableRow className={classes.headerTableRow}>
-								<TableCell>LABEL</TableCell>
-								<TableCell>ETH ADDRESS</TableCell>
-								<TableCell>ACTIONS</TableCell>
-							</TableRow>
+							<SmallTableHeadRow>
+								<TableCell>
+									<Typography variant="overline">Label</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Eth Address</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Actions</Typography>
+								</TableCell>
+							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
 							{addresses &&
 								addresses.map(address => {
 									return (
-										<TableRow key={address.id} className={classes.bodyTableRow}>
-											<TableCell id={address.id}>{address.label}</TableCell>
-											<TableCell>{address.address}</TableCell>
+										<TableRow key={address.id}>
+											<TableCell id={address.id}>
+												<Typography variant="h6">
+													{address.label}
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="h6">
+													{address.address}
+												</Typography>
+											</TableCell>
 											<TableCell>
 												<Grid
 													container
