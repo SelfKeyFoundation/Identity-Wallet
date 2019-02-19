@@ -171,6 +171,7 @@ export class IncorporationCheckout extends React.Component {
 		);
 
 	onPayClick = async _ => {
+		/*
 		// Forced KEY token
 		this.props.dispatch(transactionOperations.setCryptoCurrency('KEY'));
 
@@ -192,15 +193,14 @@ export class IncorporationCheckout extends React.Component {
 		if (this.props.hardwareWalletType !== '') {
 			this.setState({ isConfirmationOpen: true });
 		}
-		/*
+		*/
 		this.props.dispatch(
 			push(
-				`/main/marketplace-incorporation/process-started/${
+				`/main/marketplace-incorporation/pay-confirmation/${
 					this.props.match.params.companyCode
 				}/${this.props.match.params.countryCode}`
 			)
 		);
-		*/
 	};
 
 	renderConfirmationModal = () => {
