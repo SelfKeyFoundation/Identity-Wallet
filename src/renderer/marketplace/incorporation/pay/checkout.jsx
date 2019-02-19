@@ -4,10 +4,18 @@ import { push } from 'connected-react-router';
 import { getWallet } from 'common/wallet/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon } from 'selfkey-ui';
+import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { FlagCountryName } from '../common';
+
+import { getLocale } from 'common/locale/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
+import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
+import { appSelectors } from 'common/app';
+import { transactionSelectors, transactionOperations } from 'common/transaction';
+import Popup from '../../../common/popup';
 
 const styles = theme => ({
 	container: {
@@ -134,6 +142,25 @@ const styles = theme => ({
 });
 
 export class IncorporationCheckout extends React.Component {
+	state = {
+		sending: false,
+		isConfirmationOpen: false
+	};
+
+	componentDidMount() {
+		this.loadData();
+
+		// Initialize transaction
+		// Forced KEY token
+		const cryptoCurrency = 'KEY';
+		const { trezorAccountIndex } = this.props;
+		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
+	}
+
+	loadData = () => {
+		this.props.dispatch(ethGasStationInfoOperations.loadData());
+	};
+
 	onBackClick = _ =>
 		this.props.dispatch(
 			push(
@@ -143,7 +170,29 @@ export class IncorporationCheckout extends React.Component {
 			)
 		);
 
-	onPayClick = _ =>
+	onPayClick = async _ => {
+		// Forced KEY token
+		this.props.dispatch(transactionOperations.setCryptoCurrency('KEY'));
+
+		this.props.dispatch(transactionOperations.setGasPrice(this.props.ethGasStationInfo.fast));
+		this.props.dispatch(transactionOperations.setLimitPrice(this.props.ethGasStationInfo.fast));
+
+		const numeric = parseInt(
+			this.props.program['Wallet Price'].replace(/\$/, '').replace(/,/, '')
+		);
+		const keyValue = numeric / this.props.keyRate;
+		console.log(keyValue);
+		this.props.dispatch(transactionOperations.setAmount(keyValue));
+
+		const walletAddress =
+			this.props.program['Wallet Address'] || '0x3f6c041E10aC2a0069c1d717ec0d6571b4329Ec7';
+		this.props.dispatch(transactionOperations.setAddress(walletAddress));
+
+		await this.props.dispatch(transactionOperations.incorporationSend());
+		if (this.props.hardwareWalletType !== '') {
+			this.setState({ isConfirmationOpen: true });
+		}
+		/*
 		this.props.dispatch(
 			push(
 				`/main/marketplace-incorporation/process-started/${
@@ -151,8 +200,51 @@ export class IncorporationCheckout extends React.Component {
 				}/${this.props.match.params.countryCode}`
 			)
 		);
+		*/
+	};
+
+	renderConfirmationModal = () => {
+		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const text = `Confirm Transaction on ${typeText}`;
+		return (
+			<Popup
+				open={this.state.isConfirmationOpen}
+				closeAction={() => this.setState({ isConfirmationOpen: false })}
+				text={text}
+			>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					spacing={40}
+				>
+					<Grid item xs={2}>
+						<HourGlassLargeIcon />
+					</Grid>
+					<Grid item xs={10}>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="flex-start"
+							spacing={40}
+						>
+							<Grid item>
+								<Typography variant="body1">
+									You have 30 seconds to confirm this transaction on the{' '}
+									{typeText} or it will time out and automatically cancel.
+								</Typography>
+							</Grid>
+						</Grid>
+					</Grid>
+				</Grid>
+			</Popup>
+		);
+	};
 
 	render() {
+		console.log(this.props);
 		const { classes, program } = this.props;
 		const { countryCode } = this.props.match.params;
 
@@ -371,6 +463,7 @@ export class IncorporationCheckout extends React.Component {
 						</div>
 					</Grid>
 				</div>
+				{this.renderConfirmationModal()}
 			</div>
 		);
 	}
@@ -378,6 +471,12 @@ export class IncorporationCheckout extends React.Component {
 
 const mapStateToProps = (state, props) => {
 	return {
+		...getLocale(state),
+		...getFiatCurrency(state),
+		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
+		...transactionSelectors.getTransaction(state),
+		tokens: getTokens(state).splice(1), // remove ETH
+		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		program: incorporationsSelectors.getIncorporationsDetails(
