@@ -1,33 +1,13 @@
 import React, { Component } from 'react';
-import { Grid, FormHelperText, withStyles } from '@material-ui/core';
+import { Grid, withStyles, Typography, Button } from '@material-ui/core';
 
-import { StyledButton, ExchangeLargeIcon, P } from 'selfkey-ui';
+import { ExchangeLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	text: {
-		fontSize: '18px',
-		lineHeight: '30px'
-	},
 	footer: {
 		marginTop: '30px',
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
-	},
-	contentSection: {
-		marginBottom: '20px',
-		marginTop: '20px'
-	},
-	understandLabel: {
-		fontFamily: theme.typography.fontFamily,
-		fontSize: '14px',
-		lineHeight: '21px',
-		color: '#93B0C1'
-	},
-	understandCheckbox: {
-		color: '#00C0D9',
-		'&$primary$checked': {
-			color: '#00C0D9'
-		}
 	},
 	actions: {
 		'&>button': {
@@ -35,8 +15,15 @@ const styles = theme => ({
 			marginTop: '30px'
 		}
 	},
-	primary: {},
-	checked: {}
+	bold: {
+		fontWeight: 600
+	},
+	textRight: {
+		textAlign: 'right'
+	},
+	bottomSpace: {
+		marginBottom: '30px'
+	}
 });
 
 class PaymentConfirmationContentComponent extends Component {
@@ -61,42 +48,72 @@ class PaymentConfirmationContentComponent extends Component {
 				</Grid>
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
-						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>Payment Confirmation</P>
+						<Grid item>
+							<Typography variant="h1" gutterBottom>
+								Payment Confirmation
+							</Typography>
 						</Grid>
-						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>Transaction ID: {txId}</P>
+						<Grid item className={classes.bottomSpace}>
+							<Typography variant="subtitle2" color="secondary" gutterBottom>
+								Transaction ID: {txId}
+							</Typography>
 						</Grid>
-						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>
+						<Grid item>
+							<Typography variant="body1" gutterBottom>
 								You are about to pay the following amount to {name}.<br />
 								The payment will be done with {crypoCurrency} tokens, at the
 								provided exchange rate.
-							</P>
+							</Typography>
 						</Grid>
-						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>
+						<Grid item>
+							<Typography variant="subtitle2" color="secondary" gutterBottom>
 								Do not have {crypoCurrency} Tokens yet? Learn how you can get them.
-							</P>
+							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.footer }}>
-							<FormHelperText>Cost</FormHelperText>
-							<FormHelperText>Total: ${usdFee.toLocaleString()}</FormHelperText>
-							<FormHelperText>
-								{ethFee.toLocaleString()} {crypoCurrency} {'(icon)'}
-							</FormHelperText>
-							<FormHelperText>Network Transaction Fee</FormHelperText>
-							<FormHelperText>${usdNetworkFee.toLocaleString()}</FormHelperText>
-							<FormHelperText>
-								{ethNetworkFee.toLocaleString()} {crypoCurrency} {'(icon)'}
-							</FormHelperText>
+							<Grid container justify="space-between" className={classes.bottomSpace}>
+								<Grid item>
+									<Typography variant="h2">Cost</Typography>
+								</Grid>
+								<Grid item className={classes.textRight}>
+									<Typography
+										variant="body2"
+										color="primary"
+										className={classes.bold}
+									>
+										Total: ${usdFee.toLocaleString()}
+									</Typography>
+									<Typography variant="subtitle2" color="secondary" gutterBottom>
+										{ethFee.toLocaleString()} {crypoCurrency} {'(icon)'}
+									</Typography>
+								</Grid>
+							</Grid>
+							<Grid container justify="space-between">
+								<Grid item>
+									<Typography variant="h3" color="secondary">
+										Network Transaction Fee
+									</Typography>
+								</Grid>
+								<Grid item className={classes.textRight}>
+									<Typography
+										variant="body2"
+										color="primary"
+										className={classes.bold}
+									>
+										${usdNetworkFee.toLocaleString()}
+									</Typography>
+									<Typography variant="subtitle2" color="secondary" gutterBottom>
+										{ethNetworkFee.toLocaleString()} {crypoCurrency} {'(icon)'}
+									</Typography>
+								</Grid>
+							</Grid>
 							<div className={classes.actions}>
-								<StyledButton variant="contained" size="medium" onClick={onConfirm}>
+								<Button variant="contained" size="large" onClick={onConfirm}>
 									Confirm
-								</StyledButton>
-								<StyledButton variant="outlined" size="medium" onClick={onCancel}>
+								</Button>
+								<Button variant="outlined" size="large" onClick={onCancel}>
 									Cancel
-								</StyledButton>
+								</Button>
 							</div>
 						</Grid>
 					</Grid>
