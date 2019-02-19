@@ -22,8 +22,8 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_START: 'kyc/application/current/start',
 	KYC_APPLICATION_CURRENT_SET: 'kyc/application/current/set',
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
-	KYC_APPLICATION_CURRNET_CENCEL: 'kyc/application/current/cancel',
-	KYC_APPLICATION_CURRNET_SUBMIT: 'kyc/application/current/submit'
+	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
+	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit'
 };
 
 export const kycSelectors = {
@@ -31,9 +31,11 @@ export const kycSelectors = {
 		return state.kyc;
 	},
 	relyingPartySelector(state, rpName) {
+		if (!rpName) return null;
 		return this.kycSelector(state).relyingPartiesByName[rpName];
 	},
 	relyingPartyIsActiveSelector(state, rpName) {
+		if (!rpName) return false;
 		const rp = this.relyingPartySelector(state, rpName);
 		if (rp && !rp.disabled) {
 			return true;
@@ -241,8 +243,8 @@ const startCurrentApplicationOperation = (rpName, templateId, returnRoute) => as
 };
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
-	const currentApplication = kycSelectors.currentApplicationSelector(getState);
-	await dispatch(kycActions.clearCurrentApplication());
+	const currentApplication = kycSelectors.selectCurrentApplication(getState());
+	dispatch(kycActions.clearCurrentApplication());
 	await dispatch(push(currentApplication.returnRoute));
 };
 
@@ -258,7 +260,7 @@ export const kycOperations = {
 		updateRelyingPartyKYCApplicationPayment
 	),
 	cancelCurrentApplicationOperation: createAliasedAction(
-		kycTypes.KYC_APPLICATION_CURRENT_CANCEL,
+		kycTypes.KYC_APPLICATION_CURRENT_CENCEL,
 		cancelCurrentApplicationOperation
 	),
 	startCurrentApplicationOperation: createAliasedAction(

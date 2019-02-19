@@ -9,7 +9,7 @@ const styles = theme => ({
 export const CurrentApplicationPopup = withStyles(styles)(
 	({ currentApplication, classes, onClose, open = true }) => {
 		return (
-			<Popup open={open} onClose={onClose}>
+			<Popup open={open} closeAction={onClose}>
 				<div className={classes.root}>
 					Current application {currentApplication.relyingPartyName}
 				</div>

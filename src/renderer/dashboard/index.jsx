@@ -17,7 +17,7 @@ const Dashboard = connect()(props => {
 							kycOperations.startCurrentApplicationOperation(
 								'B*Trade',
 								1,
-								window.location
+								'/main/dashboard'
 							)
 						);
 					}}

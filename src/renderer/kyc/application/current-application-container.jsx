@@ -34,6 +34,7 @@ class CurrentApplicationComponent extends Component {
 
 const mapStateToProps = state => {
 	const currentApplication = kycSelectors.selectCurrentApplication(state);
+	if (!currentApplication) return {};
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, currentApplication.relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
