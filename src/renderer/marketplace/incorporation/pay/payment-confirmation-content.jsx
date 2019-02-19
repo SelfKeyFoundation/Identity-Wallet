@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, withStyles, Typography, Button, IconButton } from '@material-ui/core';
 
-import { KeyTooltip, TooltipArrow, PaymentIcon } from 'selfkey-ui';
+import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
@@ -98,20 +98,14 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>
-														Tooltip test with link{' '}
-														<a
-															color="primary"
-															href="https://selfkey.org"
-														>
-															SelfKey
-														</a>
-													</span>
+													<span>Tooltip test with link</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}
 										>
-											<IconButton aria-label="Info" />
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
 										</KeyTooltip>
 									</Typography>
 								</Grid>
@@ -137,20 +131,14 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>
-														Tooltip test with link{' '}
-														<a
-															color="primary"
-															href="https://selfkey.org"
-														>
-															SelfKey
-														</a>
-													</span>
+													<span>Tooltip test with link</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}
 										>
-											<IconButton aria-label="Info" />
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
 										</KeyTooltip>
 									</Typography>
 								</Grid>
