@@ -31,8 +31,11 @@ class PaymentConfirmationPopupComponent extends Component {
 					crypoCurrency={tx.crypoCurrency}
 					usdFee={tx.amount}
 					ethFee={tx.fee}
+					tooltipFee={'Cost tooltip text.'}
 					usdNetworkFee={tx.networkAmount}
 					ethNetworkFee={tx.networkFee}
+					tooltipNetworkFee={'Network tooltip text.'}
+					learnHowURL={'https://help.selfkey.org/'}
 					onConfirm={this.handleConfirmAction}
 					onCancel={this.handleCloseAction}
 				/>

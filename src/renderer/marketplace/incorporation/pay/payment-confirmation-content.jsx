@@ -25,6 +25,7 @@ const styles = theme => ({
 		marginBottom: '30px'
 	},
 	link: {
+		cursor: 'pointer',
 		color: '#00C0D9',
 		textDecoration: 'none'
 	}
@@ -39,8 +40,11 @@ class PaymentConfirmationContentComponent extends Component {
 			crypoCurrency,
 			usdFee,
 			ethFee,
+			tooltipFee,
 			usdNetworkFee,
 			ethNetworkFee,
+			tooltipNetworkFee,
+			learnHowURL,
 			onConfirm,
 			onCancel
 		} = this.props;
@@ -72,7 +76,12 @@ class PaymentConfirmationContentComponent extends Component {
 						<Grid item>
 							<Typography variant="subtitle2" color="secondary" gutterBottom>
 								Do not have {crypoCurrency} Tokens yet?{' '}
-								<a href="#" className={classes.link}>
+								<a
+									className={classes.link}
+									onClick={e => {
+										window.openExternal(e, learnHowURL);
+									}}
+								>
 									Learn how
 								</a>{' '}
 								you can get them.
@@ -98,7 +107,7 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>Tooltip test with link</span>
+													<span>{tooltipFee}</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}
@@ -131,7 +140,7 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>Tooltip test with link</span>
+													<span>{tooltipNetworkFee}</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}

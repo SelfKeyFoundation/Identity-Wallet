@@ -7,8 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import PaymentConfirmationPopup from '../marketplace/incorporation/pay/payment-confirmation-popup';
-
 const styles = theme => ({
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
@@ -82,9 +80,6 @@ class Home extends Component {
 							alignItems="center"
 							spacing={8}
 						>
-							<Grid item>
-								<PaymentConfirmationPopup />
-							</Grid>
 							<Grid item>
 								<SelfkeyLogoTemp />
 							</Grid>
