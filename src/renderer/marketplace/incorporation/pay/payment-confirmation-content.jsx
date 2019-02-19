@@ -23,6 +23,10 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '30px'
+	},
+	link: {
+		color: '#00C0D9',
+		textDecoration: 'none'
 	}
 });
 
@@ -67,7 +71,11 @@ class PaymentConfirmationContentComponent extends Component {
 						</Grid>
 						<Grid item>
 							<Typography variant="subtitle2" color="secondary" gutterBottom>
-								Do not have {crypoCurrency} Tokens yet? Learn how you can get them.
+								Do not have {crypoCurrency} Tokens yet?{' '}
+								<a href="#" className={classes.link}>
+									Learn how
+								</a>{' '}
+								you can get them.
 							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.footer }}>
