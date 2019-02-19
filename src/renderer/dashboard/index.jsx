@@ -17,7 +17,10 @@ const Dashboard = connect()(props => {
 							kycOperations.startCurrentApplicationOperation(
 								'B*Trade',
 								1,
-								'/main/dashboard'
+								'/main/dashboard',
+								'Incorporation Checklist: Singapure',
+								'You are about to being the incorporation process in Singapore. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.',
+								'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
 							)
 						);
 					}}

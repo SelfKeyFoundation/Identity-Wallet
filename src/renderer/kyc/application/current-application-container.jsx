@@ -21,6 +21,7 @@ class CurrentApplicationComponent extends Component {
 	};
 	render() {
 		const { currentApplication, relyingParty } = this.props;
+
 		return (
 			<CurrentApplicationPopup
 				currentApplication={currentApplication}

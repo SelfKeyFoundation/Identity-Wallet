@@ -145,10 +145,17 @@ export const kycActions = {
 			payload: { name: rpName, application }
 		};
 	},
-	setCurrentApplication(relyingPartyName, templateId, returnRoute) {
+	setCurrentApplication(
+		relyingPartyName,
+		templateId,
+		returnRoute,
+		title,
+		description,
+		agreement
+	) {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET,
-			payload: { relyingPartyName, templateId, returnRoute }
+			payload: { relyingPartyName, templateId, returnRoute, title, description, agreement }
 		};
 	},
 	clearCurrentApplication() {
@@ -176,6 +183,7 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 		await dispatch(
 			kycActions.updateRelyingParty({
 				name: rpName,
+				description: rp.description,
 				templates,
 				applications,
 				session,
@@ -234,18 +242,31 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 	await dispatch(kycActions.updateRelyingParty(rp));
 };
 
-const startCurrentApplicationOperation = (rpName, templateId, returnRoute) => async (
-	dispatch,
-	getState
-) => {
-	await dispatch(kycActions.setCurrentApplication(rpName, templateId, returnRoute));
+const startCurrentApplicationOperation = (
+	rpName,
+	templateId,
+	returnRoute,
+	title,
+	description,
+	agreement
+) => async (dispatch, getState) => {
+	await dispatch(
+		kycActions.setCurrentApplication(
+			rpName,
+			templateId,
+			returnRoute,
+			title,
+			description,
+			agreement
+		)
+	);
 	await dispatch(push('/main/kyc/current-application'));
 };
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(getState());
-	dispatch(kycActions.clearCurrentApplication());
-	await dispatch(push(currentApplication.returnRoute));
+	dispatch(push(currentApplication.returnRoute));
+	await dispatch(kycActions.clearCurrentApplication());
 };
 
 export const kycOperations = {
