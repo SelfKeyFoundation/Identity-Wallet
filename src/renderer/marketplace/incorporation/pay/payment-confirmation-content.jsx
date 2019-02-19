@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, withStyles, Typography, Button, IconButton } from '@material-ui/core';
 
-import { KeyTooltip, TooltipArrow, PaymentIcon } from 'selfkey-ui';
+import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
@@ -23,6 +23,10 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '30px'
+	},
+	link: {
+		color: '#00C0D9',
+		textDecoration: 'none'
 	}
 });
 
@@ -67,7 +71,11 @@ class PaymentConfirmationContentComponent extends Component {
 						</Grid>
 						<Grid item>
 							<Typography variant="subtitle2" color="secondary" gutterBottom>
-								Do not have {crypoCurrency} Tokens yet? Learn how you can get them.
+								Do not have {crypoCurrency} Tokens yet?{' '}
+								<a href="#" className={classes.link}>
+									Learn how
+								</a>{' '}
+								you can get them.
 							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.footer }}>
@@ -90,20 +98,14 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>
-														Tooltip test with link{' '}
-														<a
-															color="primary"
-															href="https://selfkey.org"
-														>
-															SelfKey
-														</a>
-													</span>
+													<span>Tooltip test with link</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}
 										>
-											<IconButton aria-label="Info" />
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
 										</KeyTooltip>
 									</Typography>
 								</Grid>
@@ -129,20 +131,14 @@ class PaymentConfirmationContentComponent extends Component {
 											placement="top-start"
 											title={
 												<React.Fragment>
-													<span>
-														Tooltip test with link{' '}
-														<a
-															color="primary"
-															href="https://selfkey.org"
-														>
-															SelfKey
-														</a>
-													</span>
+													<span>Tooltip test with link</span>
 													<TooltipArrow />
 												</React.Fragment>
 											}
 										>
-											<IconButton aria-label="Info" />
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
 										</KeyTooltip>
 									</Typography>
 								</Grid>

@@ -6,6 +6,9 @@ const styles = theme => ({
 	title: {
 		// verticalAlign: 'middle',
 		// lineHeight: '30px'
+	},
+	marginSpace: {
+		marginTop: '20px'
 	}
 });
 
@@ -13,7 +16,7 @@ export const Popup = withStyles(styles)(({ classes, children, closeAction, text,
 	<Modal open={open}>
 		<ModalWrap>
 			<ModalCloseButton onClick={closeAction}>
-				<ModalCloseIcon />
+				<ModalCloseIcon className={classes.marginSpace} />
 			</ModalCloseButton>
 			<ModalHeader>
 				{typeof text === 'string' ? (
