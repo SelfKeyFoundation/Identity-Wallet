@@ -15,6 +15,7 @@ import { SelfkeyLogo, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations } from 'common/app';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	logo: {
@@ -65,7 +66,7 @@ class Terms extends Component {
 	};
 
 	handleDisagree = () => {
-		window.quit();
+		this.props.dispatch(push('/termsWarning'));
 	};
 
 	toogleCrashReportAgreement = () => {
