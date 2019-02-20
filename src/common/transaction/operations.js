@@ -249,7 +249,7 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 };
 
-const incorporationSend = () => async (dispatch, getState) => {
+const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const state = getState();
 	const transaction = getTransaction(state);
@@ -290,7 +290,9 @@ const incorporationSend = () => async (dispatch, getState) => {
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
-		await dispatch(push('/main/transaction-complete'));
+		await dispatch(
+			push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+		);
 	});
 
 	transactionEventEmitter.on('error', async error => {
@@ -302,8 +304,7 @@ const incorporationSend = () => async (dispatch, getState) => {
 					status: 'NoBalance'
 				})
 			);
-			await dispatch(push('/main/transaction-complete'));
-			// await dispatch(push('/main/transaction-no-gas-error'));
+			await dispatch(push('/main/transaction-no-gas-error'));
 		} else {
 			await dispatch(
 				actions.updateTransaction({

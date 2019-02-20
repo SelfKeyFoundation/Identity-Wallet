@@ -7,6 +7,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
+import { transactionSelectors } from 'common/transaction';
 
 const styles = theme => ({
 	container: {
@@ -74,16 +75,14 @@ const styles = theme => ({
 });
 
 export class IncorporationProcessStarted extends React.Component {
-	onBackClick = _ =>
-		this.props.dispatch(
-			push(
-				`/main/marketplace-incorporation/details/${this.props.match.params.companyCode}/${
-					this.props.match.params.countryCode
-				}`
-			)
-		);
+	componentDidMount() {
+		// TODO: update KYC process on this.props.transaction
+		console.log(this.props);
+	}
 
-	onPayClick = _ => console.log('pay click');
+	onBackClick = _ => this.props.dispatch(push(`/main/dashboard`));
+
+	onSelfKeyClick = _ => this.props.dispatch(push(`/main/dashboard`));
 
 	render() {
 		const { classes } = this.props;
@@ -144,7 +143,11 @@ export class IncorporationProcessStarted extends React.Component {
 								</Typography>
 							</div>
 							<div className={classes.footer}>
-								<Button variant="contained" size="large" onClick={this.onPayClick}>
+								<Button
+									variant="contained"
+									size="large"
+									onClick={this.onSelfKeyClick}
+								>
 									Go to Selfkey ID
 								</Button>
 								<Button variant="outlined" size="large" onClick={this.onBackClick}>
@@ -163,6 +166,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		transaction: transactionSelectors.getTransaction(state),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode

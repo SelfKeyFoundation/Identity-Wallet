@@ -1,21 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import config from 'common/config';
 import { getWallet } from 'common/wallet/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
+import { CloseButtonIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { FlagCountryName } from '../common';
-
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { appSelectors } from 'common/app';
-import { transactionSelectors, transactionOperations } from 'common/transaction';
-import Popup from '../../../common/popup';
+import EthUnits from 'common/utils/eth-units';
+
+const FIXED_GAS_LIMIT_PRICE = 21000;
+const CRYPTOCURRENCY = config.constants.primaryToken;
 
 const styles = theme => ({
 	container: {
@@ -142,23 +143,38 @@ const styles = theme => ({
 });
 
 export class IncorporationCheckout extends React.Component {
-	state = {
-		sending: false,
-		isConfirmationOpen: false
-	};
-
 	componentDidMount() {
 		this.loadData();
-
-		// Initialize transaction
-		// Forced KEY token
-		const cryptoCurrency = 'KEY';
-		const { trezorAccountIndex } = this.props;
-		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
-	loadData = () => {
+	loadData = _ => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
+	};
+
+	getIncorporationPrice = _ => {
+		const { program } = this.props;
+		return parseInt(program['Wallet Price'].replace(/\$/, '').replace(/,/, ''));
+	};
+
+	getPaymentParameters = _ => {
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency } = this.props;
+		const gasPrice = ethGasStationInfo.fast;
+		const price = this.getIncorporationPrice();
+		const keyAmount = price / keyRate;
+		const gasLimit = FIXED_GAS_LIMIT_PRICE;
+		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+		const usdFee = ethFee * ethRate;
+
+		return {
+			cryptoCurrency,
+			keyRate,
+			gasPrice,
+			gasLimit,
+			price,
+			keyAmount,
+			ethFee,
+			usdFee
+		};
 	};
 
 	onBackClick = _ =>
@@ -171,29 +187,8 @@ export class IncorporationCheckout extends React.Component {
 		);
 
 	onPayClick = async _ => {
-		/*
-		// Forced KEY token
-		this.props.dispatch(transactionOperations.setCryptoCurrency('KEY'));
+		// TODO: create KYC process
 
-		this.props.dispatch(transactionOperations.setGasPrice(this.props.ethGasStationInfo.fast));
-		this.props.dispatch(transactionOperations.setLimitPrice(this.props.ethGasStationInfo.fast));
-
-		const numeric = parseInt(
-			this.props.program['Wallet Price'].replace(/\$/, '').replace(/,/, '')
-		);
-		const keyValue = numeric / this.props.keyRate;
-		console.log(keyValue);
-		this.props.dispatch(transactionOperations.setAmount(keyValue));
-
-		const walletAddress =
-			this.props.program['Wallet Address'] || '0x3f6c041E10aC2a0069c1d717ec0d6571b4329Ec7';
-		this.props.dispatch(transactionOperations.setAddress(walletAddress));
-
-		await this.props.dispatch(transactionOperations.incorporationSend());
-		if (this.props.hardwareWalletType !== '') {
-			this.setState({ isConfirmationOpen: true });
-		}
-		*/
 		this.props.dispatch(
 			push(
 				`/main/marketplace-incorporation/pay-confirmation/${
@@ -203,50 +198,10 @@ export class IncorporationCheckout extends React.Component {
 		);
 	};
 
-	renderConfirmationModal = () => {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
-		const text = `Confirm Transaction on ${typeText}`;
-		return (
-			<Popup
-				open={this.state.isConfirmationOpen}
-				closeAction={() => this.setState({ isConfirmationOpen: false })}
-				text={text}
-			>
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					spacing={40}
-				>
-					<Grid item xs={2}>
-						<HourGlassLargeIcon />
-					</Grid>
-					<Grid item xs={10}>
-						<Grid
-							container
-							direction="column"
-							justify="flex-start"
-							alignItems="flex-start"
-							spacing={40}
-						>
-							<Grid item>
-								<Typography variant="body1">
-									You have 30 seconds to confirm this transaction on the{' '}
-									{typeText} or it will time out and automatically cancel.
-								</Typography>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Popup>
-		);
-	};
-
 	render() {
-		console.log(this.props);
 		const { classes, program } = this.props;
 		const { countryCode } = this.props.match.params;
+		const { price, usdFee } = this.getPaymentParameters();
 
 		return (
 			<div className={classes.container}>
@@ -284,7 +239,7 @@ export class IncorporationCheckout extends React.Component {
 							>
 								<div className={classes.description}>
 									<p>
-										To start the Singapore incorporation process you are
+										To start the {program.Region} incorporation process you are
 										required to pay a fee. Our incorporation package includes:
 									</p>
 									<ul>
@@ -393,7 +348,7 @@ export class IncorporationCheckout extends React.Component {
 									>
 										<div className="rowItem">Incorporation Fee</div>
 										<div className="rowItem time">-</div>
-										<div className="rowItem price">$1600</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -404,9 +359,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div className="rowItem">Singapore Mailing Address</div>
+										<div className="rowItem">Mailing Address</div>
 										<div className="rowItem time">1 year</div>
-										<div className="rowItem price">$300</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -417,9 +372,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div className="rowItem">Singapore Local Director</div>
+										<div className="rowItem">Local Director</div>
 										<div className="rowItem time">-</div>
-										<div className="rowItem price">$3000</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.rowSeparator} />
@@ -433,7 +388,9 @@ export class IncorporationCheckout extends React.Component {
 									>
 										<div className="rowItem">Cost</div>
 										<div className="rowItem time" />
-										<div className="rowItem price">Total: $1600</div>
+										<div className="rowItem price">
+											Total: ${price.toLocaleString()}
+										</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -448,7 +405,9 @@ export class IncorporationCheckout extends React.Component {
 											Network Transaction Fee
 										</div>
 										<div className="rowItem time" />
-										<div className="rowItem price">$1</div>
+										<div className="rowItem price">
+											${usdFee.toLocaleString()}
+										</div>
 									</Grid>
 								</div>
 							</div>
@@ -463,7 +422,6 @@ export class IncorporationCheckout extends React.Component {
 						</div>
 					</Grid>
 				</div>
-				{this.renderConfirmationModal()}
 			</div>
 		);
 	}
@@ -474,11 +432,11 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		...transactionSelectors.getTransaction(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
+		cryptoCurrency: CRYPTOCURRENCY,
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode

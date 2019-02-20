@@ -61,7 +61,7 @@ class PaymentConfirmationContentComponent extends Component {
 								Payment Confirmation
 							</Typography>
 						</Grid>
-						<Grid item className={classes.bottomSpace}>
+						<Grid item className={classes.bottomSpace} style={{ display: 'none' }}>
 							<Typography variant="subtitle2" color="secondary" gutterBottom>
 								Transaction ID: {txId}
 							</Typography>
@@ -134,7 +134,7 @@ class PaymentConfirmationContentComponent extends Component {
 										${usdNetworkFee.toLocaleString()}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary" gutterBottom>
-										{ethNetworkFee.toLocaleString()} {crypoCurrency}
+										{ethNetworkFee.toLocaleString()} ETH
 										<KeyTooltip
 											interactive
 											placement="top-start"
@@ -169,5 +169,4 @@ class PaymentConfirmationContentComponent extends Component {
 }
 
 export const PaymentConfirmationContent = withStyles(styles)(PaymentConfirmationContentComponent);
-
 export default PaymentConfirmationContent;

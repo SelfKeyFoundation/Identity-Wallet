@@ -285,7 +285,7 @@ class IncorporationsDetailView extends Component {
 								<ProgramPrice
 									price={program['Wallet Price']}
 									rate={keyRate}
-									label="Price:"
+									label="Price: "
 								/>
 							</div>
 						</Grid>
