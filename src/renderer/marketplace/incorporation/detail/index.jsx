@@ -279,14 +279,22 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								<Button variant="contained" size="large" onClick={this.onPayClick}>
-									Start Incorporation
-								</Button>
-								<ProgramPrice
-									price={program['Wallet Price']}
-									rate={keyRate}
-									label="Price: "
-								/>
+								{program['Wallet Price'] && (
+									<React.Fragment>
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.onPayClick}
+										>
+											Start Incorporation
+										</Button>
+										<ProgramPrice
+											price={program['Wallet Price']}
+											rate={keyRate}
+											label="Price: "
+										/>
+									</React.Fragment>
+								)}
 							</div>
 						</Grid>
 						<Grid
