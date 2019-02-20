@@ -9,7 +9,15 @@ const loadTokens = () => async (dispatch, getState) => {
 	dispatch(actions.setTokens(tokens));
 };
 
+const addToken = contractAddress => async dispatch => {
+	const tokenService = getGlobalContext().tokenService;
+	const tokenInfo = await tokenService.getTokenInfo(contractAddress);
+	await tokenService.addToken(tokenInfo);
+	dispatch(loadTokens());
+};
+
 export default {
 	...actions,
-	loadTokensOperation: createAliasedAction(types.TOKENS_LOAD, loadTokens)
+	loadTokensOperation: createAliasedAction(types.TOKENS_LOAD, loadTokens),
+	addTokenOperation: createAliasedAction(types.TOKENS_ADD, addToken)
 };
