@@ -249,6 +249,73 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 };
 
+const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
+
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gasLimit: transaction.gasLimit
+	};
+
+	if (cryptoCurrency === 'ETH') {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
+	} else {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		transactionObject.data = EthUtils.sanitizeHex(data);
+	}
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash: hash
+			})
+		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+		await dispatch(
+			push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+		);
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		console.error('transactionEventEmitter ERROR: ', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
+};
+
 const updateBalances = () => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
@@ -301,5 +368,6 @@ export default {
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
+	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
 };

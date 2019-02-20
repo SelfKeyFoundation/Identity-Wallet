@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import config from 'common/config';
 import { getWallet } from 'common/wallet/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
@@ -8,6 +9,14 @@ import { CloseButtonIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { FlagCountryName } from '../common';
+import { getLocale } from 'common/locale/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
+import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
+import EthUnits from 'common/utils/eth-units';
+
+const FIXED_GAS_LIMIT_PRICE = 21000;
+const CRYPTOCURRENCY = config.constants.primaryToken;
 
 const styles = theme => ({
 	container: {
@@ -134,6 +143,40 @@ const styles = theme => ({
 });
 
 export class IncorporationCheckout extends React.Component {
+	componentDidMount() {
+		this.loadData();
+	}
+
+	loadData = _ => {
+		this.props.dispatch(ethGasStationInfoOperations.loadData());
+	};
+
+	getIncorporationPrice = _ => {
+		const { program } = this.props;
+		return parseInt(program['Wallet Price'].replace(/\$/, '').replace(/,/, ''));
+	};
+
+	getPaymentParameters = _ => {
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency } = this.props;
+		const gasPrice = ethGasStationInfo.fast;
+		const price = this.getIncorporationPrice();
+		const keyAmount = price / keyRate;
+		const gasLimit = FIXED_GAS_LIMIT_PRICE;
+		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+		const usdFee = ethFee * ethRate;
+
+		return {
+			cryptoCurrency,
+			keyRate,
+			gasPrice,
+			gasLimit,
+			price,
+			keyAmount,
+			ethFee,
+			usdFee
+		};
+	};
+
 	onBackClick = _ =>
 		this.props.dispatch(
 			push(
@@ -143,18 +186,22 @@ export class IncorporationCheckout extends React.Component {
 			)
 		);
 
-	onPayClick = _ =>
+	onPayClick = async _ => {
+		// TODO: create KYC process
+
 		this.props.dispatch(
 			push(
-				`/main/marketplace-incorporation/process-started/${
+				`/main/marketplace-incorporation/pay-confirmation/${
 					this.props.match.params.companyCode
 				}/${this.props.match.params.countryCode}`
 			)
 		);
+	};
 
 	render() {
 		const { classes, program } = this.props;
 		const { countryCode } = this.props.match.params;
+		const { price, usdFee } = this.getPaymentParameters();
 
 		return (
 			<div className={classes.container}>
@@ -192,7 +239,7 @@ export class IncorporationCheckout extends React.Component {
 							>
 								<div className={classes.description}>
 									<p>
-										To start the Singapore incorporation process you are
+										To start the {program.Region} incorporation process you are
 										required to pay a fee. Our incorporation package includes:
 									</p>
 									<ul>
@@ -301,7 +348,7 @@ export class IncorporationCheckout extends React.Component {
 									>
 										<div className="rowItem">Incorporation Fee</div>
 										<div className="rowItem time">-</div>
-										<div className="rowItem price">$1600</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -312,9 +359,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div className="rowItem">Singapore Mailing Address</div>
+										<div className="rowItem">Mailing Address</div>
 										<div className="rowItem time">1 year</div>
-										<div className="rowItem price">$300</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -325,9 +372,9 @@ export class IncorporationCheckout extends React.Component {
 										alignItems="center"
 										spacing={0}
 									>
-										<div className="rowItem">Singapore Local Director</div>
+										<div className="rowItem">Local Director</div>
 										<div className="rowItem time">-</div>
-										<div className="rowItem price">$3000</div>
+										<div className="rowItem price">-</div>
 									</Grid>
 								</div>
 								<div className={classes.rowSeparator} />
@@ -341,7 +388,9 @@ export class IncorporationCheckout extends React.Component {
 									>
 										<div className="rowItem">Cost</div>
 										<div className="rowItem time" />
-										<div className="rowItem price">Total: $1600</div>
+										<div className="rowItem price">
+											Total: ${price.toLocaleString()}
+										</div>
 									</Grid>
 								</div>
 								<div className={classes.priceRow}>
@@ -356,7 +405,9 @@ export class IncorporationCheckout extends React.Component {
 											Network Transaction Fee
 										</div>
 										<div className="rowItem time" />
-										<div className="rowItem price">$1</div>
+										<div className="rowItem price">
+											${usdFee.toLocaleString()}
+										</div>
 									</Grid>
 								</div>
 							</div>
@@ -378,8 +429,14 @@ export class IncorporationCheckout extends React.Component {
 
 const mapStateToProps = (state, props) => {
 	return {
+		...getLocale(state),
+		...getFiatCurrency(state),
+		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
+		tokens: getTokens(state).splice(1), // remove ETH
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
+		cryptoCurrency: CRYPTOCURRENCY,
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
