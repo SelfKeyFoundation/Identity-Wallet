@@ -39,17 +39,35 @@ class AddTokenContainerComponent extends Component {
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.tokens.length !== this.props.tokens.length) {
+			if (this.state.address !== '') {
+				this.findToken(this.state.address);
+			}
+		}
+	}
+
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/crypto-manager'));
 	};
-	handleFieldChange = evt => {
-		let { name, value } = evt.target;
+	handleFieldChange = async event => {
+		this.findToken(event.target.value);
+	};
+
+	findToken = async contractAddress => {
 		let found = (this.props.tokens || []).find(
-			t => (t[name] || '').toUpperCase() === (value || '').toUpperCase()
+			t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
 		);
 		if (!found) {
-			this.setState({ address: '', symbol: '', decimal: '', found, [name]: value });
+			await this.props.dispatch(tokensOperations.addTokenOperation(contractAddress));
+			this.setState({
+				symbol: '',
+				decimal: '',
+				found,
+				address: contractAddress
+			});
 			return;
 		}
 		this.setState({ ...found, found });

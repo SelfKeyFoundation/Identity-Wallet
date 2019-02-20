@@ -11,6 +11,7 @@ import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
 import { Logger } from '../common/logger';
 import db from './db/db';
 import { identityOperations } from '../common/identity';
+import { pricesOperations } from '../common/prices';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
 import config from 'common/config';
 import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
@@ -86,7 +87,9 @@ function onReady() {
 		app.config.userDataPath = electron.app.getPath('userData');
 
 		ctx.lwsService.startServer();
-		ctx.rpcHandler.startTokenPricesBroadcaster();
+		ctx.priceService.on('pricesUpdated', newPrices => {
+			ctx.store.dispatch(pricesOperations.updatePrices(newPrices));
+		});
 		ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
@@ -120,6 +123,7 @@ function onReady() {
 					loadIdentity(ctx)
 				]);
 				ctx.txHistoryService.startSyncingJob();
+
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
 				log.error('finish-load-error %s', error);
