@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, withStyles, Input } from '@material-ui/core';
+import { Grid, Button, Typography, withStyles, Input, IconButton } from '@material-ui/core';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { walletTokensOperations } from 'common/wallet-tokens';
-import { MyCryptoLargeIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
+import {
+	MyCryptoLargeIcon,
+	ModalWrap,
+	ModalHeader,
+	ModalBody,
+	KeyTooltip,
+	InfoTooltip
+} from 'selfkey-ui';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 
@@ -26,6 +33,10 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '30px'
+	},
+	link: {
+		color: '#00C0D9',
+		textDecoration: 'none'
 	}
 });
 
@@ -135,18 +146,28 @@ class AddTokenContainerComponent extends Component {
 							<Grid item>
 								<Typography variant="overline" gutterBottom>
 									Token Address
-									{/* <KeyTooltip interactive placement="top-start" 
+									<KeyTooltip
+										interactive
+										placement="top-start"
 										title={
 											<React.Fragment>
-												<span>Tooltip test with link <a color="primary" href="https://selfkey.org">SelfKey</a></span>
-												<TooltipArrow />
+												<span>
+													Every ERC-20 token has its own smart contract
+													address. To learn more,{' '}
+													<a
+														className={classes.link}
+														href="https://selfkey.org"
+													>
+														click here.
+													</a>
+												</span>
 											</React.Fragment>
 										}
 									>
 										<IconButton aria-label="Info">
 											<InfoTooltip />
 										</IconButton>
-									</KeyTooltip> */}
+									</KeyTooltip>
 								</Typography>
 								<Input
 									name="address"
