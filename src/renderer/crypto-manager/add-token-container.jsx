@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, withStyles, TextField } from '@material-ui/core';
+import { Grid, Button, Typography, withStyles, Input } from '@material-ui/core';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { walletTokensOperations } from 'common/wallet-tokens';
-import { MyCryptoLargeIcon } from 'selfkey-ui';
+import { MyCryptoLargeIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 
@@ -14,6 +14,18 @@ const styles = theme => ({
 	},
 	form: {
 		width: '400px'
+	},
+	textAlignCenter: {
+		textAlign: 'center'
+	},
+	modalPosition: {
+		position: 'static'
+	},
+	input: {
+		width: '100%'
+	},
+	bottomSpace: {
+		marginBottom: '30px'
 	}
 });
 
@@ -49,6 +61,7 @@ class AddTokenContainerComponent extends Component {
 		this.handleBackClick();
 	};
 	render() {
+		const { classes } = this.props;
 		const { address, symbol, decimal, found } = this.state;
 		return (
 			<Grid
@@ -73,65 +86,110 @@ class AddTokenContainerComponent extends Component {
 				<Grid item>
 					<Typography variant="h1">Add Custom Token</Typography>
 				</Grid>
-				<Grid item>
-					<Typography variant="body1">
+				<Grid item xs={6} className={classes.textAlignCenter}>
+					<Typography
+						variant="body1"
+						color="secondary"
+						className={classes.bottomSpace}
+						gutterBottom
+					>
 						Add ERC20 tokens to be displayed in the dashboard. After entering the token
 						address, the wallet will verify it exists on the blockchain and auto-fill
 						the remaining information of ticker and decimals.
 					</Typography>
 				</Grid>
-				<Grid item>
-					<Grid
-						container
-						direction="column"
-						justify="center"
-						alignItems="stretch"
-						spacing={8}
-					>
-						<Grid item>
-							<TextField
-								name="address"
-								label="Token Address"
-								value={address}
-								onChange={this.handleFieldChange}
-							/>
+				<ModalWrap className={classes.modalPosition}>
+					<ModalHeader>
+						<Grid container direction="row" justify="space-between" alignItems="center">
+							<Grid item>
+								<Typography variant="body1">Add Token</Typography>
+							</Grid>
 						</Grid>
-						<Grid item>
-							<TextField
-								name="symbol"
-								label="Symbol"
-								value={symbol}
-								onChange={this.handleFieldChange}
-							/>
-						</Grid>
-						<Grid item>
-							<TextField name="decimal" label="Decimal" value={decimal} disabled />
-						</Grid>
-						<Grid item>
-							<Grid container spacing={24}>
-								<Grid item>
-									<Button
-										variant="contained"
-										disabled={!found}
-										onClick={this.handleSubmit}
+					</ModalHeader>
+					<ModalBody>
+						<Grid
+							container
+							direction="column"
+							justify="center"
+							alignItems="stretch"
+							spacing={32}
+						>
+							<Grid item>
+								<Typography variant="overline" gutterBottom>
+									Token Address
+									{/* <KeyTooltip interactive placement="top-start" 
+										title={
+											<React.Fragment>
+												<span>Tooltip test with link <a color="primary" href="https://selfkey.org">SelfKey</a></span>
+												<TooltipArrow />
+											</React.Fragment>
+										}
 									>
-										Add Custom Token
-									</Button>
-								</Grid>
+										<IconButton aria-label="Info">
+											<InfoTooltip />
+										</IconButton>
+									</KeyTooltip> */}
+								</Typography>
+								<Input
+									name="address"
+									value={address}
+									onChange={this.handleFieldChange}
+									className={classes.input}
+									disableUnderline
+								/>
+							</Grid>
+							<Grid item>
+								<Typography variant="overline" gutterBottom>
+									Token Symbol
+								</Typography>
+								<Input
+									name="symbol"
+									value={symbol}
+									onChange={this.handleFieldChange}
+									className={classes.input}
+									disableUnderline
+								/>
+							</Grid>
+							<Grid item>
+								<Typography variant="overline" gutterBottom>
+									Decimal Places
+								</Typography>
+								<Input
+									name="decimal"
+									value={decimal}
+									className={classes.input}
+									disabled
+									disableUnderline
+								/>
+							</Grid>
+							<Grid item>
+								<Grid container spacing={24}>
+									<Grid item>
+										<Button
+											variant="contained"
+											disabled={!found}
+											size="large"
+											onClick={this.handleSubmit}
+										>
+											Add Custom Token
+										</Button>
+									</Grid>
 
-								<Grid item>
-									<Button
-										variant="outlined"
-										color="secondary"
-										onClick={this.handleBackClick}
-									>
-										Cancel
-									</Button>
+									<Grid item>
+										<Button
+											variant="outlined"
+											color="secondary"
+											size="large"
+											onClick={this.handleBackClick}
+										>
+											Cancel
+										</Button>
+									</Grid>
 								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
-				</Grid>
+					</ModalBody>
+				</ModalWrap>
 			</Grid>
 		);
 	}
