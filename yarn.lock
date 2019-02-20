@@ -14162,9 +14162,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#1e09b7b1151e854b3d00ffdf213ec56ea82a840d":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#7d3f7425b58af3fc83e1e876113ec6ceaade6e1c":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#1e09b7b1151e854b3d00ffdf213ec56ea82a840d"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#7d3f7425b58af3fc83e1e876113ec6ceaade6e1c"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
