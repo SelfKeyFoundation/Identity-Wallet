@@ -352,14 +352,7 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	render() {
-		const {
-			isSendCustomToken,
-			classes,
-			addressError,
-			amountUsd,
-			locale,
-			fiatCurrency
-		} = this.props;
+		const { classes, addressError, amountUsd, locale, fiatCurrency } = this.props;
 		let { cryptoCurrency } = this.state;
 		let sendAmountClass = `${classes.input} ${classes.amountInput}`;
 		let addressInputClass = `${classes.input} ${addressError ? classes.addressErrorColor : ''}`;
@@ -417,14 +410,19 @@ class TransactionSendBoxContainer extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						{isSendCustomToken && (
+						{this.state.cryptoCurrency === 'CUSTOM' && (
 							<select
 								value={this.state.cryptoCurrency}
 								onChange={e => this.handleCryptoCurrencyChange(e)}
 								name="cryptoCurrency"
 								className={classes.cryptoSelect}
 							>
-								<option value="" disabled selected className={classes.selectItem}>
+								<option
+									value="CUSTOM"
+									disabled
+									selected
+									className={classes.selectItem}
+								>
 									Custom Token
 								</option>
 								{this.renderSelectTokenItems()}
