@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Tabs, Tab } from '@material-ui/core';
 import SelfkeyIdOverview from './selfkey-id-overview';
+import SelfkeyIdCreate from './selfkey-id-create';
 // import SelfkeyIdApplications from './selfkey-id-applications';
 // import SelfkeyIdCompanies from './selfkey-id-companies';
 // import SelfkeyIdHistory from './selfkey-id-history';
 
 class SelfkeyId extends Component {
 	state = {
+		create: true,
 		tabValue: 0
+	};
+
+	handleCreate = (event, value) => {
+		this.setState({ create: value });
 	};
 
 	handleChange = (event, tabValue) => {
@@ -15,6 +21,12 @@ class SelfkeyId extends Component {
 	};
 
 	render() {
+		const { create } = this.state;
+
+		if (create) {
+			return <SelfkeyIdCreate {...this.props} />;
+		}
+
 		let component = <SelfkeyIdOverview {...this.props} />;
 
 		// if (this.state.tabValue === 1) {
