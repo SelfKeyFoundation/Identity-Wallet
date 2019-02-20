@@ -38,6 +38,10 @@ export class Token extends BaseModel {
 		return this.query();
 	}
 
+	static findByAddress(address) {
+		return this.query().where({ address });
+	}
+
 	static findBySymbol(symbol) {
 		return this.query().where({ symbol: (symbol || '').toUpperCase() });
 	}
