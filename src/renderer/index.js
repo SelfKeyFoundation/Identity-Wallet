@@ -1,38 +1,15 @@
 /* eslint-env browser */ /* global staticPath */
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+
 import store from './common/store';
 import history from 'common/store/history';
 import { shell } from 'electron';
-
-import { Route, HashRouter } from 'react-router-dom';
-import { ConnectedRouter } from 'connected-react-router';
-
-import { SelfkeyDarkTheme } from 'selfkey-ui';
 import registerServiceWorker from './registerServiceWorker';
-
 import { setGlobalContext, configureContext } from 'common/context';
-
-// Pages
-import Home from './home';
-import CreateWallet from './wallet/create';
-import CreatePassword from './wallet/create/password';
-import CloseConfirmation from './close-confirmation';
-import PasswordConfirmation from './wallet/create/password/confirmation';
-import BackupAddress from './wallet/create/backup-address';
-import BackupPK from './wallet/create/backup-pk';
-import Main from './wallet/main';
-import Unlock from './wallet/unlock';
-import EnterPin from './wallet/unlock/trezor/enter-pin';
-import EnterPassphrase from './wallet/unlock/trezor/enter-passphrase';
-import SelectAddress from './wallet/unlock/select-address';
-import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
-import Terms from './settings/terms';
-import Loading from './home/loading';
-import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-
 import path from 'path';
+
+import App from './app';
 
 require('../../static/stylesheets/scss/main.scss');
 
@@ -70,37 +47,7 @@ window.openExternal = (event, href) => {
 };
 
 window.store = store;
-render(
-	<SelfkeyDarkTheme>
-		<Provider store={store}>
-			<ConnectedRouter history={history.getHistory()}>
-				<HashRouter>
-					<div style={{ backgroundColor: '#262F39' }}>
-						<Route exact path="/" component={Loading} />
-						<Route exact path="/home" component={Home} />
-						<Route path="/closeConfirmation" component={CloseConfirmation} />
-						<Route path="/createWallet" component={CreateWallet} />
-						<Route path="/createPassword" component={CreatePassword} />
-						<Route
-							path="/createPasswordConfirmation"
-							component={PasswordConfirmation}
-						/>
-						<Route path="/backupAddress" component={BackupAddress} />
-						<Route path="/backupPrivateKey" component={BackupPK} />
-						<Route path="/main" component={Main} />
-						<Route path="/unlockWallet" component={Unlock} />
-						<Route path="/enterTrezorPin" component={EnterPin} />
-						<Route path="/enterTrezorPassphrase" component={EnterPassphrase} />
-						<Route path="/selectAddress" component={SelectAddress} />
-						<Route path="/connectingToLedger" component={ConnectingToLedger} />
-						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
-						<Route path="/terms" component={Terms} />
-					</div>
-				</HashRouter>
-			</ConnectedRouter>
-		</Provider>
-	</SelfkeyDarkTheme>,
-	document.getElementById('app')
-);
+
+render(<App store={store} history={history} />, document.getElementById('app'));
 
 registerServiceWorker();

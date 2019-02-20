@@ -166,6 +166,7 @@ export const kycActions = {
 };
 
 const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
+	if (!rpName) return null;
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	const ts = Date.now();
 	const rp = serviceSelectors.getServiceDetails(getState(), rpName);
