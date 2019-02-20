@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Grid, Button, Typography, withStyles } from '@material-ui/core';
-// import { MyCryptoLargeIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
@@ -11,6 +10,9 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '100px',
 		left: '20px'
+	},
+	bottomSpace: {
+		marginBottom: '15px'
 	}
 });
 
@@ -24,6 +26,7 @@ class CryptoManagerContainerComponent extends Component {
 		this.props.dispatch(push('/main/dashboard'));
 	};
 	render() {
+		const { classes } = this.props;
 		return (
 			<Grid
 				container
@@ -37,7 +40,7 @@ class CryptoManagerContainerComponent extends Component {
 					color="secondary"
 					size="small"
 					onClick={this.handleBackClick}
-					className={this.props.classes.back}
+					className={classes.back}
 				>
 					‹ Back
 				</Button>
@@ -53,7 +56,7 @@ class CryptoManagerContainerComponent extends Component {
 						Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
 					</Typography>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.bottomSpace}>
 					<Button variant="outlined" size="large" onClick={this.handleAddTokenClick}>
 						Add token
 					</Button>
