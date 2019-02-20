@@ -84,33 +84,88 @@ const styles = () => ({
 	}
 });
 
-export class CryptoChartBoxComponent extends React.Component {
+class ChartContainer extends React.Component {
 	DEFAULT_COLLOR = '#2A3540';
+
+	shouldComponentUpdate(nextProps) {
+		return false;
+	}
+
+	getChartData = tokens => {
+		const data = [['Content', 'percents']];
+		let dataPoints = null;
+		if (this.props.hasBalance) {
+			dataPoints = tokens.map(token => {
+				return [token.name, token.balanceInFiat];
+			});
+		} else {
+			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
+		}
+
+		return data.concat(dataPoints);
+	};
+
+	render() {
+		const { events, tokens, hasBalance, colors } = this.props;
+
+		const selectedColors = hasBalance ? colors : [this.DEFAULT_COLLOR];
+		let tooltip = hasBalance
+			? {
+					trigger: 'focus',
+					isHtml: true
+			  }
+			: { trigger: 'none' };
+
+		return (
+			<Chart
+				chartType="PieChart"
+				data={this.getChartData(tokens)}
+				options={{
+					backgroundColor: 'transparent',
+					title: '',
+					chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+					pieHole: 0.7,
+					pieSliceBorderColor: 'none',
+					colors: selectedColors,
+					legend: {
+						position: 'none'
+					},
+					pieSliceText: 'none',
+					tooltip: tooltip,
+					animation: {
+						startup: true
+					}
+				}}
+				graph_id="PieChart"
+				width="100%"
+				height="300px"
+				legend_toggle
+				chartEvents={events}
+				ref={c => {
+					this.pieChart = c;
+				}}
+			/>
+		);
+	}
+}
+
+export class CryptoChartBoxComponent extends React.Component {
 	OTHERS_COLOR = '#71a6b8';
 
-	chart = null;
-	refs = {
-		pieChart: null
+	state = {
+		activations: this.activations
 	};
+
 	constructor(props) {
 		super(props);
 		this.state = {};
 		this.state.activations = (props.tokens || []).map(token => ({ active: false }));
-		this.selection = [];
-		this.pieChart = React.createRef();
-	}
-
-	componentDidUpdate(_prevProps) {
-		if (this.chart) {
-			this.chart.setSelection(this.selection);
-		}
 	}
 
 	selectEvent = {
 		eventName: 'select',
-		callback: Chart => {
-			this.initSelection();
-			const selection = Chart.chart.getSelection();
+		callback: ({ chartWrapper }) => {
+			const selection = chartWrapper.getChart().getSelection();
 
 			if (!selection || !selection[0]) {
 				return;
@@ -120,7 +175,6 @@ export class CryptoChartBoxComponent extends React.Component {
 				if (index !== row) {
 					return { active: false };
 				} else {
-					this.selection = selection;
 					this.chart = Chart.chart;
 					return { active: true };
 				}
@@ -129,40 +183,48 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
-	onMouseOverEvent = {
-		eventName: 'onmouseover',
-		callback: (Chart, chartItem) => {
-			const selection = Chart.chart.getSelection();
-			let newTokens = this.state.activations.slice(0);
+	readyEvent = {
+		eventName: 'ready',
+		callback: ({ chartWrapper, google }) => {
+			const chart = chartWrapper.getChart();
+			google.visualization.events.addListener(chart, 'onmouseover', e => {
+				const { row } = e;
 
-			if (newTokens[chartItem.row] && newTokens[chartItem.row].active) {
-				return;
-			}
-			if (selection && selection.length && selection[0].row === chartItem.row) {
-				newTokens[chartItem.row] = { active: false };
-				this.setState({ activations: newTokens });
-				setTimeout(() => {
-					newTokens[chartItem.row] = { active: true };
+				const selection = chart.getSelection();
+				let newTokens = this.state.activations.slice(0);
+
+				if (newTokens[row] && newTokens[row].active) {
+					return;
+				}
+				if (selection && selection.length && selection[0].row === row) {
+					newTokens[row] = { active: false };
 					this.setState({ activations: newTokens });
-				}, 100);
-				return;
-			}
-			newTokens[chartItem.row] = { active: true };
-			this.setState({ activations: newTokens });
+					setTimeout(() => {
+						newTokens[row] = { active: true };
+						this.setState({ activations: newTokens });
+					}, 100);
+					return;
+				}
+				newTokens[row] = { active: true };
+				this.setState({ activations: newTokens });
+			});
+			google.visualization.events.addListener(chart, 'onmouseout', e => {
+				const { row } = e;
+				const selection = chart.getSelection();
+				if (selection && selection.length && selection[0].row === row) {
+					return;
+				}
+				const newTokens = this.state.activations.slice(0);
+				newTokens[row] = { active: false };
+				this.setState({ activations: newTokens });
+			});
 		}
 	};
 
-	onMouseOutEvent = {
-		eventName: 'onmouseout',
-		callback: (Chart, chartItem) => {
-			const selection = Chart.chart.getSelection();
-			if (selection && selection.length && selection[0].row === chartItem.row) {
-				return;
-			}
-			const newTokens = this.state.activations.slice(0);
-			newTokens[chartItem.row] = { active: false };
-			this.setState({ activations: newTokens });
-		}
+	getColors = () => ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+
+	getChartEvents = () => {
+		return this.hasBalance() ? [this.selectEvent, this.readyEvent] : [];
 	};
 
 	hasBalance = () => {
@@ -175,56 +237,10 @@ export class CryptoChartBoxComponent extends React.Component {
 		return !!check;
 	};
 
-	getColors = () => ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
-
-	getChartData = tokens => {
-		const data = [['Content', 'percents']];
-		let dataPoints = null;
-		if (this.hasBalance()) {
-			dataPoints = tokens.map(token => {
-				return [token.name, token.balanceInFiat];
-			});
-		} else {
-			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
-		}
-
-		return data.concat(dataPoints);
-	};
-
-	getChartEvents = () => {
-		return this.hasBalance()
-			? [this.selectEvent, this.onMouseOutEvent, this.onMouseOverEvent]
-			: [];
-	};
-
 	getTotalBalanceInFiat = tokens => {
 		return tokens.reduce((a, b) => {
 			return a + b['balanceInFiat'];
 		}, 0);
-	};
-
-	getChart = () => {
-		const wrapper = this.pieChart.wrapper;
-		if (!wrapper) {
-			return;
-		}
-		return wrapper.getChart();
-	};
-
-	onItemHoverEnter = index => {
-		const chart = this.getChart();
-		if (!chart || !this.hasBalance()) {
-			return;
-		}
-		chart.setSelection([{ row: index }]);
-	};
-
-	onItemHoverLeave = () => {
-		const chart = this.getChart();
-		if (!chart || !this.hasBalance()) {
-			return;
-		}
-		chart.setSelection([]);
 	};
 
 	getTokensLegend(classes, tokens, locale, fiatCurrency) {
@@ -239,8 +255,6 @@ export class CryptoChartBoxComponent extends React.Component {
 							? classes.active
 							: ''
 					}
-					onMouseEnter={() => this.onItemHoverEnter(index)}
-					onMouseLeave={() => this.onItemHoverLeave()}
 				>
 					<Grid container alignItems="flex-start">
 						<Grid item xs={2}>
@@ -333,15 +347,6 @@ export class CryptoChartBoxComponent extends React.Component {
 	render() {
 		const { classes, locale, fiatCurrency, tokens, manageCryptoAction } = this.props;
 
-		let hasBalance = this.hasBalance();
-		let colors = hasBalance ? this.getColors() : [this.DEFAULT_COLLOR];
-		let tooltip = hasBalance
-			? {
-					trigger: 'focus',
-					isHtml: true
-			  }
-			: { trigger: 'none' };
-
 		return (
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
@@ -363,33 +368,11 @@ export class CryptoChartBoxComponent extends React.Component {
 					<Grid item xs={12}>
 						<Grid container alignItems="flex-start" spacing={0}>
 							<Grid item xs={4} className={classes.chart}>
-								<Chart
-									chartType="PieChart"
-									data={this.getChartData(tokens)}
-									options={{
-										backgroundColor: 'transparent',
-										title: '',
-										chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-										pieHole: 0.7,
-										pieSliceBorderColor: 'none',
-										colors: colors,
-										legend: {
-											position: 'none'
-										},
-										pieSliceText: 'none',
-										tooltip: tooltip,
-										animation: {
-											startup: true
-										}
-									}}
-									graph_id="PieChart"
-									width="100%"
-									height="300px"
-									legend_toggle
-									chartEvents={this.getChartEvents()}
-									ref={c => {
-										this.pieChart = c;
-									}}
+								<ChartContainer
+									events={this.getChartEvents()}
+									tokens={tokens}
+									hasBalance={this.hasBalance()}
+									colors={this.getColors()}
 								/>
 								<div className={classes.chartCenterContainer}>
 									<Typography variant="h1">
