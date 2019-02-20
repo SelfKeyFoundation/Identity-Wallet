@@ -29,6 +29,7 @@ import EnterPassphrase from './wallet/unlock/trezor/enter-passphrase';
 import SelectAddress from './wallet/unlock/select-address';
 import ConnectingToTrezor from './wallet/unlock/trezor/connecting';
 import Terms from './settings/terms';
+import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
 
@@ -95,6 +96,7 @@ render(
 						<Route path="/connectingToLedger" component={ConnectingToLedger} />
 						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
 						<Route path="/terms" component={Terms} />
+						<Route path="/termsWarning" component={TermsWarning} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>
