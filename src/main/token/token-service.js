@@ -1,6 +1,7 @@
 'use strict';
 import Token from './token';
 import { getGlobalContext } from 'common/context';
+import { BigNumber } from 'bignumber.js';
 
 export class TokenService {
 	constructor() {
@@ -34,6 +35,18 @@ export class TokenService {
 			symbol,
 			decimal
 		};
+	}
+
+	async getGasLimit(contractAddress, address, amount, walletAddress) {
+		const tokenContract = new this.web3Service.web3.eth.Contract(
+			this.contractABI,
+			contractAddress
+		);
+		const MAX_GAS = 4500000;
+		const amountInWei = this.web3Service.web3.utils.toWei(new BigNumber(amount).toString());
+		return tokenContract.methods
+			.transfer(address, amountInWei)
+			.estimateGas(walletAddress, MAX_GAS);
 	}
 }
 

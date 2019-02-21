@@ -68,17 +68,8 @@ const getGasLimit = async (
 		return 21000;
 	}
 
-	const web3Utils = (getGlobalContext() || {}).web3Service.web3.utils;
-
-	const params = {
-		method: 'estimateGas',
-		contractAddress: tokenContract,
-		contractMethod: 'transfer',
-		contractMethodArgs: [address, web3Utils.toWei(amount)],
-		args: [{ from: walletAddress, gas: 4500000 }]
-	};
-
-	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
+	const tokenService = getGlobalContext().tokenService;
+	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
 };
 
 const getTransactionCount = async publicKey => {
@@ -96,27 +87,28 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 ) => {
 	try {
 		const state = getState();
-		const address = !newAddress ? state.transaction.address : newAddress;
-		const amount = !newAmount ? state.transaction.amount : newAmount;
+		const transaction = getTransaction(state);
+		const address = !newAddress ? transaction.address : newAddress;
+		const amount = !newAmount ? transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
 
 		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
-		} else if (state.transaction.gasPrice) {
-			gasPrice = state.transaction.gasPrice;
+		} else if (transaction.gasPrice) {
+			gasPrice = transaction.gasPrice;
 		}
 
 		if (address && amount) {
-			const tokenContract = state.transaction.contractAddress;
+			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
-			const cryptoCurrency = state.transaction.cryptoCurrency;
+			const cryptoCurrency = transaction.cryptoCurrency;
 
 			let gasLimit = 21000;
 			if (newGasLimit) {
 				gasLimit = newGasLimit;
-			} else if (state.transaction.gasLimit) {
-				gasLimit = state.transaction.gasLimit;
+			} else if (transaction.gasLimit) {
+				gasLimit = transaction.gasLimit;
 			} else {
 				gasLimit = await getGasLimit(
 					cryptoCurrency,

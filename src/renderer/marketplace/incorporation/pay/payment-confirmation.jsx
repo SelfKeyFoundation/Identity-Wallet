@@ -16,10 +16,10 @@ import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/
 import { appSelectors } from 'common/app';
 import EthUnits from 'common/utils/eth-units';
 
-const FIXED_GAS_LIMIT_PRICE = 21000;
+const FIXED_GAS_LIMIT_PRICE = 37680;
 const CRYPTOCURRENCY = config.constants.primaryToken;
 // FIXME: Not implemented in Airtable Yet
-const TEST_WALLET_ADDRESS = '0x9c74b96E7313F94c2C1ecE3A4142De5A0E84CDC3';
+const TEST_WALLET_ADDRESS = '0x27462DF3542882455E3bD6a23496a06E5E686162';
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationPaymentConfirmationComponent extends Component {
@@ -36,7 +36,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		);
 
 		// Initiate transaction
-		const { keyAmount, gasPrice, gasLimit, walletAddress } = this.getPaymentParameters();
+		const { keyAmount, gasPrice, walletAddress } = this.getPaymentParameters();
 
 		/*
 		// Log payment parameters
@@ -51,12 +51,9 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			price
 		);
 		*/
-
-		this.props.dispatch(transactionOperations.setCryptoCurrency(cryptoCurrency));
-		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
-		this.props.dispatch(transactionOperations.setLimitPrice(gasLimit));
-		this.props.dispatch(transactionOperations.setAmount(keyAmount));
 		this.props.dispatch(transactionOperations.setAddress(walletAddress));
+		this.props.dispatch(transactionOperations.setAmount(keyAmount));
+		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
 	}
 
 	getVendorName = _ => {
