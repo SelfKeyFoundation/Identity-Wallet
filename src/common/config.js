@@ -21,6 +21,8 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
+
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
 if (electron.app) {
@@ -31,6 +33,8 @@ if (electron.app) {
 const common = {
 	defaultLanguage: 'en',
 	userAgent: `SelfKeyIDW/${pkg.version}`,
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -85,6 +89,8 @@ const dev = {
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
 	node: 'infura',
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	}
