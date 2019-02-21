@@ -14,8 +14,7 @@ class CurrentApplicationComponent extends Component {
 		}
 	}
 	handleSubmit = () => {
-		console.log('XXX', 'Submit current application');
-		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		this.props.dispatch(kycOperations.submitCurrentApplicationOperation(this.state.selected));
 	};
 	handleClose = () => {
 		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
