@@ -3,6 +3,7 @@ import * as walletSelectors from '../wallet/selectors';
 import { identitySelectors } from '../identity';
 import { getGlobalContext } from '../context';
 import { push } from 'connected-react-router';
+import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
@@ -26,6 +27,18 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit'
 };
 
+const incorporationsRPDetails = {
+	name: 'Incorporations',
+	status: 'Active',
+	description: 'Incorporations',
+	relying_party_config: {
+		rootEndpoint: config.incorporationsInstance,
+		endpoints: {
+			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
+		}
+	}
+};
+
 export const kycSelectors = {
 	kycSelector(state) {
 		return state.kyc;
@@ -40,10 +53,16 @@ export const kycSelectors = {
 		if (rp && !rp.disabled) {
 			return true;
 		}
-		const service = serviceSelectors.getServiceDetails(state, rpName);
-		const config = service.relying_party_config;
+		let service;
+		if (rpName === 'incorporations') {
+			service = { ...incorporationsRPDetails };
+		} else {
+			service = serviceSelectors.getServiceDetails(state, rpName);
+		}
 
-		return service.status === 'Active' && config;
+		const rpConfig = service.relying_party_config;
+
+		return service.status === 'Active' && rpConfig;
 	},
 	relyingPartyShouldUpdateSelector(state, rpName) {
 		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
@@ -69,7 +88,8 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
-		const attributesBySchema = template.identity_attributes.reduce((acc, curr) => {
+		const templateAttributes = template.identity_attributes || [];
+		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {
 				curr = { schemaId: curr };
 			}
@@ -87,7 +107,7 @@ export const kycSelectors = {
 				return acc;
 			}, attributesBySchema);
 
-		return template.identity_attributes.map(tplAttr => {
+		return templateAttributes.map(tplAttr => {
 			if (typeof tplAttr === 'string') {
 				tplAttr = { schemaId: tplAttr };
 			}
@@ -169,15 +189,25 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 	if (!rpName) return null;
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	const ts = Date.now();
-	const rp = serviceSelectors.getServiceDetails(getState(), rpName);
+	let rp;
+	if (rpName === 'incorporations') {
+		rp = { ...incorporationsRPDetails };
+	} else {
+		rp = serviceSelectors.getServiceDetails(getState(), rpName);
+	}
 	const config = rp.relying_party_config;
 
 	try {
 		const session = mpService.createRelyingPartySession(config);
 		await session.establish();
-
-		const templates = await Promise.all(
-			(await session.listKYCTemplates()).map(tpl => session.getKYCTemplate(tpl.id))
+		let templates = await Promise.all(
+			(await session.listKYCTemplates()).map(async tpl => {
+				const id = tpl.id || tpl.templateId;
+				tpl = await session.getKYCTemplate(id);
+				if (tpl.identity_atrributes) tpl.identity_attributes = tpl.identity_atrributes;
+				tpl.id = id;
+				return tpl;
+			})
 		);
 
 		const applications = await session.listKYCApplications();

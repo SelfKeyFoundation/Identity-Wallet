@@ -15,8 +15,8 @@ const Dashboard = connect()(props => {
 						const { kycOperations } = require('common/kyc');
 						props.dispatch(
 							kycOperations.startCurrentApplicationOperation(
-								'B*Trade',
-								1,
+								'incorporations',
+								'5c3f3e9c3075d52f8f4ad613',
 								'/main/dashboard',
 								'Incorporation Checklist: Singapure',
 								'You are about to being the incorporation process in Singapore. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.',
