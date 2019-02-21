@@ -27,6 +27,8 @@ import TransactionSendProgress from '../../transaction/progress/containers/trans
 import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
 import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
 
+import { CurrentApplication, ApplicationInProgress } from '../../kyc';
+
 const styles = theme => ({
 	headerSection: {
 		marginLeft: 0,
@@ -115,6 +117,14 @@ class Main extends Component {
 								cryptoCurrency={props.match.params.crypto.toUpperCase()}
 							/>
 						)}
+					/>
+					<Route
+						path={`${match.path}/kyc/current-application`}
+						component={CurrentApplication}
+					/>
+					<Route
+						path={`${match.path}/kyc/application-in-progress`}
+						component={ApplicationInProgress}
 					/>
 				</Grid>
 			</Grid>

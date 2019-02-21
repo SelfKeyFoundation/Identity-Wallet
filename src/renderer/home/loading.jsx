@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Paper } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -9,7 +9,9 @@ import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 const styles = theme => ({
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
-		minHeight: '100vh'
+		minHeight: '100vh',
+		textAlign: 'center',
+		padddingTop: '50px'
 	}
 });
 
@@ -22,7 +24,7 @@ class Loading extends Component {
 		const { classes } = this.props;
 		return (
 			<Paper className={classes.container} square={true}>
-				<Typography variant="h5">LOADING...</Typography>
+				<CircularProgress />
 			</Paper>
 		);
 	}
