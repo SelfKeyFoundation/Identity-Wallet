@@ -10,10 +10,20 @@ import { Link } from 'react-router-dom';
 const styles = theme => ({
 	container: {
 		backgroundImage: `url(${backgroundImage})`,
+		backgroundPosition: 'center',
+		backgroundSize: 'cover',
+		border: 'none',
 		minHeight: '100vh'
 	},
 	parentGrid: {
-		minHeight: '100vh'
+		margin: 0,
+		minHeight: '100vh',
+		width: '100%'
+	},
+	insideGrid: {
+		flexGrow: 1,
+		margin: 0,
+		width: '100%'
 	},
 	primaryTintText: {
 		color: primary
@@ -31,7 +41,7 @@ const styles = theme => ({
 	divider: {
 		background: 'linear-gradient(to bottom, #142a34 0%, #00c0d9 100%)',
 		height: '120px',
-		marginTop: '-80px',
+		marginTop: '-88px',
 		position: 'absolute',
 		width: '1px'
 	},
@@ -42,6 +52,10 @@ const styles = theme => ({
 	footerHelp: {
 		marginLeft: '50px',
 		marginTop: '-50px'
+	},
+	scrollFix: {
+		margin: 0,
+		width: '100%'
 	}
 });
 
@@ -70,7 +84,7 @@ class Home extends Component {
 						justify="center"
 						alignItems="center"
 						spacing={40}
-						style={{ flexGrow: 1 }}
+						className={classes.insideGrid}
 					>
 						<Grid
 							container
@@ -79,6 +93,7 @@ class Home extends Component {
 							justify="flex-start"
 							alignItems="center"
 							spacing={8}
+							className={classes.scrollFix}
 						>
 							<Grid item>
 								<SelfkeyLogoTemp />
@@ -124,6 +139,7 @@ class Home extends Component {
 						justify="center"
 						alignItems="flex-end"
 						spacing={24}
+						className={classes.scrollFix}
 					>
 						<Grid item>
 							<Button
