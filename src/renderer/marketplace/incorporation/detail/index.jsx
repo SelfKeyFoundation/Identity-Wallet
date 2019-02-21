@@ -187,6 +187,7 @@ class IncorporationsDetailView extends Component {
 		// console.log(program);
 		// console.log(isLoading);
 		// console.log(treaties);
+		// console.log(program.details);
 
 		return (
 			<React.Fragment>
@@ -307,6 +308,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!program.details}
 									label="Legal"
 									classes={{
 										root: classes.tabRoot,
@@ -316,6 +318,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!tax}
 									label="Taxes"
 									classes={{
 										root: classes.tabRoot,
@@ -325,6 +328,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!translation}
 									label="Country Details"
 									classes={{
 										root: classes.tabRoot,
@@ -334,6 +338,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!treaties}
 									label="Tax Treaties"
 									classes={{
 										root: classes.tabRoot,
@@ -415,12 +420,10 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const { companyCode, countryCode } = props.match.params;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(
-			state,
-			props.match.params.companyCode
-		),
-		treaties: incorporationsSelectors.getTaxTreaties(state, props.match.params.countryCode),
+		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
