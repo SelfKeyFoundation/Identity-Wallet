@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -21,7 +21,9 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingBottom: '38px'
+		paddingBottom: '30px',
+		marginBottom: '40px',
+		marginTop: '50px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -85,6 +87,18 @@ const styles = theme => ({
 	},
 	loading: {
 		marginTop: '5em'
+	},
+	bold: {
+		fontWeight: 600
+	},
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	icon: {
+		height: '36px',
+		width: '36px'
 	}
 });
 
@@ -101,6 +115,8 @@ class IncorporationsTable extends Component {
 		</Grid>
 	);
 
+	onBackClick = _ => this.props.dispatch(push('/main/marketplace-categories'));
+
 	render() {
 		const { classes, isLoading, incorporations, keyRate, match } = this.props;
 		if (isLoading) {
@@ -110,9 +126,21 @@ class IncorporationsTable extends Component {
 
 		return (
 			<React.Fragment>
+				<div className={classes.backButtonContainer}>
+					<Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={this.onBackClick}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
 				<Grid item id="header" className={classes.header} xs={12}>
-					<IncorporationsIcon />
-					<Typography variant="h1" gutterBottom className={classes.headerTitle}>
+					<IncorporationsIcon className={classes.icon} />
+					<Typography variant="h1" className={classes.headerTitle}>
 						Incorporation Marketplace
 					</Typography>
 				</Grid>

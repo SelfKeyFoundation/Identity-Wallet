@@ -19,11 +19,16 @@ import {
 const styles = theme => ({
 	container: {
 		width: '100%',
-		margin: '0 auto',
+		margin: '50px auto 0',
 		maxWidth: '960px'
 	},
 	backButtonContainer: {
-		marginBottom: '1em'
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	bold: {
+		fontWeight: 600
 	},
 	flagCell: {
 		width: '10px'
@@ -193,10 +198,13 @@ class IncorporationsDetailView extends Component {
 				<div className={classes.backButtonContainer}>
 					<Button
 						variant="outlined"
+						color="secondary"
 						size="small"
 						onClick={() => this.props.dispatch(push(`/main/marketplace-incorporation`))}
 					>
-						Back
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
 					</Button>
 				</div>
 				<div className={classes.container}>
