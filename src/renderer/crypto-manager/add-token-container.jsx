@@ -156,7 +156,7 @@ class AddTokenContainerComponent extends Component {
 													address. To learn more,{' '}
 													<a
 														className={classes.link}
-														href="https://selfkey.org"
+														href="https://help.selfkey.org"
 													>
 														click here.
 													</a>
