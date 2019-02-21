@@ -37,6 +37,17 @@ const styles = theme => ({
 	link: {
 		color: '#00C0D9',
 		textDecoration: 'none'
+	},
+	bold: {
+		fontWeight: 600
+	},
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	topSpace: {
+		marginTop: '30px'
 	}
 });
 
@@ -100,16 +111,19 @@ class AddTokenContainerComponent extends Component {
 				alignItems="center"
 				spacing={32}
 			>
-				<Button
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={this.handleBackClick}
-					className={this.props.classes.back}
-				>
-					‹ Back
-				</Button>
-				<Grid item>
+				<div className={classes.backButtonContainer}>
+					<Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={this.handleBackClick}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
+				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
 				</Grid>
 				<Grid item>

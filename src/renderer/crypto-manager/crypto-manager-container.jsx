@@ -13,6 +13,17 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '15px'
+	},
+	bold: {
+		fontWeight: 600
+	},
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	topSpace: {
+		marginTop: '30px'
 	}
 });
 
@@ -35,17 +46,20 @@ class CryptoManagerContainerComponent extends Component {
 				alignItems="center"
 				spacing={32}
 			>
-				<Button
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={this.handleBackClick}
-					className={classes.back}
-				>
-					‹ Back
-				</Button>
+				<div className={classes.backButtonContainer}>
+					<Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={this.handleBackClick}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
 
-				<Grid item>
+				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
 				</Grid>
 				<Grid item>
