@@ -97,7 +97,7 @@ class SelfKeyIdCreateComponent extends Component {
 											>
 												<Grid
 													container
-													xs={3}
+													xs={2}
 													justify="end"
 													alignItems="center"
 													direction="column"
@@ -109,7 +109,7 @@ class SelfKeyIdCreateComponent extends Component {
 														<SKIDIcon />
 													</Grid>
 												</Grid>
-												<Grid item xs={9}>
+												<Grid item xs={10}>
 													<Grid item>
 														<Typography variant="body1" gutterBottom>
 															I am creating a new Selfkey Identity
