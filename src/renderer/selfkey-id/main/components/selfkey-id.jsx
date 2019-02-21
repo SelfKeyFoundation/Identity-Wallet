@@ -8,12 +8,7 @@ import SelfkeyIdCreate from './selfkey-id-create';
 
 class SelfkeyId extends Component {
 	state = {
-		create: true,
 		tabValue: 0
-	};
-
-	handleCreate = (event, value) => {
-		this.setState({ create: value });
 	};
 
 	handleChange = (event, tabValue) => {
@@ -21,9 +16,9 @@ class SelfkeyId extends Component {
 	};
 
 	render() {
-		const { create } = this.state;
+		const { wallet } = this.props;
 
-		if (create) {
+		if (!wallet.isSetupFinished) {
 			return <SelfkeyIdCreate {...this.props} />;
 		}
 

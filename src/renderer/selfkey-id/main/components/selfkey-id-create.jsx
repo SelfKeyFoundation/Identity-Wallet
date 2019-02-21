@@ -158,7 +158,7 @@ class SelfKeyIdCreateComponent extends Component {
 								</Grid>
 							</Grid>
 						</CardContent>
-						<hr className={classes.hr} />
+						{/* <hr className={classes.hr} />
 						<CardContent>
 							<Grid
 								container
@@ -210,7 +210,7 @@ class SelfKeyIdCreateComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-						</CardContent>
+						</CardContent> */}
 					</Card>
 				</Grid>
 			</Grid>
