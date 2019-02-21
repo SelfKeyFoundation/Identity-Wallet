@@ -5,6 +5,7 @@ import { getGlobalContext } from '../context';
 import { push } from 'connected-react-router';
 import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
+import uuidv1 from 'uuid/v1';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 
@@ -112,6 +113,7 @@ export const kycSelectors = {
 				tplAttr = { schemaId: tplAttr };
 			}
 			return {
+				uiId: tplAttr.id || uuidv1(),
 				id: tplAttr.id,
 				schemaId: tplAttr.schemaId,
 				options: walletAttributes[tplAttr.schemaId],
@@ -175,7 +177,15 @@ export const kycActions = {
 	) {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET,
-			payload: { relyingPartyName, templateId, returnRoute, title, description, agreement }
+			payload: {
+				relyingPartyName,
+				templateId,
+				returnRoute,
+				title,
+				description,
+				agreement,
+				attributes: []
+			}
 		};
 	},
 	clearCurrentApplication() {

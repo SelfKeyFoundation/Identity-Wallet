@@ -4,7 +4,7 @@ import { kycSelectors, kycOperations } from '../../../common/kyc';
 import { CurrentApplicationPopup } from './current-application-popup';
 
 class CurrentApplicationComponent extends Component {
-	state = { selected: [] };
+	state = { selected: {} };
 	componentDidMount() {
 		if (!this.props.currentApplication) return;
 		if (this.props.rpShouldUpdate) {
@@ -20,18 +20,22 @@ class CurrentApplicationComponent extends Component {
 	handleClose = () => {
 		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 	};
+	handleSelected = (uiId, item) => {
+		const { selected } = this.state;
+		if (selected[uiId] === item) return;
+		this.setState({ selected: { ...selected, [uiId]: item } });
+	};
 	render() {
 		const { currentApplication, relyingParty, requirements } = this.props;
 		return (
 			<CurrentApplicationPopup
 				currentApplication={currentApplication}
 				relyingParty={relyingParty}
-				requirements={(requirements || []).map((r, ind) => ({
-					...r,
-					selected: this.state.selected[ind] || null
-				}))}
+				requirements={requirements}
 				onClose={this.handleClose}
 				onSubmit={this.handleSubmit}
+				selectedAttributes={this.state.selected}
+				onSelected={this.handleSelected}
 			/>
 		);
 	}

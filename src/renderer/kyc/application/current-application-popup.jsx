@@ -64,30 +64,42 @@ const KycAgreement = withStyles(styles)(({ agreement, classes }) => {
 	);
 });
 
-const KycChecklistItemLabel = withStyles(styles)(({ item, className, classes }) => {
-	const { options } = item;
-	if (!options || options.length <= 1) {
+const KycChecklistItemLabel = withStyles(styles)(
+	({ item, className, classes, selectedAttributes, onSelected }) => {
+		const { options } = item;
+		if (!options || options.length <= 1) {
+			return (
+				<Typography variant="subtitle1" gutterBottom className={className}>
+					{options.length ? options[0].name : '...'}
+				</Typography>
+			);
+		}
+		const selectedAttr = selectedAttributes[item.uiId] || options[0];
 		return (
-			<Typography variant="subtitle1" gutterBottom className={className}>
-				{options.length ? options[0].name : '...'}
-			</Typography>
+			<RadioGroup
+				className={classes.radioGroup}
+				value={selectedAttr.id}
+				onChange={evt =>
+					onSelected(
+						item.uiId,
+						options.find(itm => '' + itm.id === '' + evt.target.value)
+					)
+				}
+			>
+				{options.map(opt => (
+					<FormControlLabel
+						key={opt.id}
+						value={opt.id}
+						control={<Radio />}
+						label={opt.name}
+					/>
+				))}
+			</RadioGroup>
 		);
 	}
-	return (
-		<RadioGroup className={classes.radioGroup} value={(item.selected || {}).id}>
-			{options.map(opt => (
-				<FormControlLabel
-					key={opt.id}
-					value={opt.id}
-					control={<Radio />}
-					label={opt.name}
-				/>
-			))}
-		</RadioGroup>
-	);
-});
+);
 
-const KycChecklistItem = withStyles(styles)(({ item, classes }) => {
+const KycChecklistItem = withStyles(styles)(({ item, classes, selectedAttributes, onSelected }) => {
 	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 	const warning = !item.options || !item.options.length;
 	const warningClassname = warning ? classes.rowWarning : '';
@@ -102,7 +114,12 @@ const KycChecklistItem = withStyles(styles)(({ item, classes }) => {
 				</Typography>
 			</SmallTableCell>
 			<SmallTableCell>
-				<KycChecklistItemLabel item={item} className={warningClassname} />
+				<KycChecklistItemLabel
+					item={item}
+					className={warningClassname}
+					selectedAttributes={selectedAttributes}
+					onSelected={onSelected}
+				/>
 			</SmallTableCell>
 			<SmallTableCell>
 				<Typography variant="subtitle1" gutterBottom>
@@ -115,38 +132,47 @@ const KycChecklistItem = withStyles(styles)(({ item, classes }) => {
 	);
 });
 
-const KycChecklist = withStyles(styles)(({ classes, requirements }) => {
-	return (
-		<Table classes={{ root: classes.checklist }}>
-			<TableHead>
-				<SmallTableHeadRow>
-					<SmallTableCell> </SmallTableCell>
-					<SmallTableCell>
-						<Typography variant="overline" gutterBottom>
-							Information
-						</Typography>
-					</SmallTableCell>
-					<SmallTableCell>
-						<Typography variant="overline" gutterBottom>
-							Label
-						</Typography>
-					</SmallTableCell>
-					<SmallTableCell>
-						<Typography variant="overline" gutterBottom>
-							Actions
-						</Typography>
-					</SmallTableCell>
-				</SmallTableHeadRow>
-			</TableHead>
+const KycChecklist = withStyles(styles)(
+	({ classes, requirements, selectedAttributes, onSelected }) => {
+		return (
+			<Table classes={{ root: classes.checklist }}>
+				<TableHead>
+					<SmallTableHeadRow>
+						<SmallTableCell> </SmallTableCell>
+						<SmallTableCell>
+							<Typography variant="overline" gutterBottom>
+								Information
+							</Typography>
+						</SmallTableCell>
+						<SmallTableCell>
+							<Typography variant="overline" gutterBottom>
+								Label
+							</Typography>
+						</SmallTableCell>
+						<SmallTableCell>
+							<Typography variant="overline" gutterBottom>
+								Actions
+							</Typography>
+						</SmallTableCell>
+					</SmallTableHeadRow>
+				</TableHead>
 
-			<TableBody>
-				{requirements.map((item, indx) => {
-					return <KycChecklistItem item={item} key={indx} />;
-				})}
-			</TableBody>
-		</Table>
-	);
-});
+				<TableBody>
+					{requirements.map((item, indx) => {
+						return (
+							<KycChecklistItem
+								item={item}
+								key={indx}
+								selectedAttributes={selectedAttributes}
+								onSelected={onSelected}
+							/>
+						);
+					})}
+				</TableBody>
+			</Table>
+		);
+	}
+);
 
 export const CurrentApplicationPopup = withStyles(styles)(
 	({
@@ -156,7 +182,9 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		onSubmit,
 		open = true,
 		relyingParty,
-		requirements
+		requirements,
+		selectedAttributes,
+		onSelected
 	}) => {
 		if (!relyingParty || !currentApplication)
 			return (
@@ -183,7 +211,11 @@ export const CurrentApplicationPopup = withStyles(styles)(
 						<Typography variant="body2">{description}</Typography>
 					</Grid>
 					<Grid item>
-						<KycChecklist requirements={requirements} />
+						<KycChecklist
+							requirements={requirements}
+							selectedAttributes={selectedAttributes}
+							onSelected={onSelected}
+						/>
 					</Grid>
 					{agreement ? (
 						<Grid item>
