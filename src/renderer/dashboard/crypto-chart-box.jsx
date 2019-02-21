@@ -36,7 +36,12 @@ const styles = () => ({
 	},
 
 	prices: {
-		paddingTop: '0px'
+		margin: 0,
+		width: '100%',
+		padding: 0,
+		'& >div': {
+			paddingRight: '0 !important'
+		}
 	},
 
 	texts: {
@@ -81,6 +86,17 @@ const styles = () => ({
 
 	textRight: {
 		textAlign: 'right'
+	},
+
+	smallText: {
+		marginTop: '0 !important',
+		'& >div': {
+			fontSize: '14px'
+		}
+	},
+
+	textColor: {
+		color: 'rgba(255, 255, 255, 0.7)'
 	}
 });
 
@@ -274,7 +290,9 @@ export class CryptoChartBoxComponent extends React.Component {
 									<Typography variant="h2">{token.name}</Typography>
 								</Grid>
 								<Grid item xs={12}>
-									<Typography variant="h2">{token.symbol}</Typography>
+									<Typography variant="subtitle1" className={classes.textColor}>
+										{token.symbol}
+									</Typography>
 								</Grid>
 							</Grid>
 						</Grid>
@@ -296,7 +314,7 @@ export class CryptoChartBoxComponent extends React.Component {
 										locale={locale}
 										style="currency"
 										currency={fiatCurrency}
-										className={classes.prices}
+										className={classes.smallText}
 										valueClass={classes.texts}
 										value={token.balanceInFiat}
 										justify="flex-end"
