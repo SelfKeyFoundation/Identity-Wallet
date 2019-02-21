@@ -3,6 +3,12 @@ import { Modal, Typography, withStyles } from '@material-ui/core';
 import { ModalWrap, ModalCloseButton, ModalCloseIcon, ModalHeader, ModalBody } from 'selfkey-ui';
 
 const styles = theme => ({
+	modal: {
+		overflow: 'auto'
+	},
+	closeButton: {
+		top: '20px'
+	},
 	title: {
 		// verticalAlign: 'middle',
 		// lineHeight: '30px'
@@ -10,9 +16,9 @@ const styles = theme => ({
 });
 
 export const Popup = withStyles(styles)(({ classes, children, closeAction, text, open = true }) => (
-	<Modal open={open}>
+	<Modal open={open} className={classes.modal}>
 		<ModalWrap>
-			<ModalCloseButton onClick={closeAction}>
+			<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
 				<ModalCloseIcon />
 			</ModalCloseButton>
 			<ModalHeader>

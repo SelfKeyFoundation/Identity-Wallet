@@ -39,7 +39,7 @@ describe('RelyingPartyRest', () => {
 			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
-					url: `${testEndpoint}/test`,
+					url: `${testEndpoint}/0xtest`,
 					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
 					json: true
 				}

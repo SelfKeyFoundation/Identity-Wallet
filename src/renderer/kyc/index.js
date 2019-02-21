@@ -1,2 +1,3 @@
 export { KycManager } from './kyc-manager';
-export { KycRequirements } from './requirements/container';
+export { KycRequirements } from './requirements';
+export { CurrentApplication, ApplicationInProgress } from './application';

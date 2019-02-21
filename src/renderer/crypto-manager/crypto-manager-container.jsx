@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Grid, Button, Typography, withStyles } from '@material-ui/core';
-// import { MyCryptoLargeIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
@@ -11,6 +10,20 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '100px',
 		left: '20px'
+	},
+	bottomSpace: {
+		marginBottom: '15px'
+	},
+	bold: {
+		fontWeight: 600
+	},
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	topSpace: {
+		marginTop: '30px'
 	}
 });
 
@@ -24,6 +37,7 @@ class CryptoManagerContainerComponent extends Component {
 		this.props.dispatch(push('/main/dashboard'));
 	};
 	render() {
+		const { classes } = this.props;
 		return (
 			<Grid
 				container
@@ -32,17 +46,20 @@ class CryptoManagerContainerComponent extends Component {
 				alignItems="center"
 				spacing={32}
 			>
-				<Button
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={this.handleBackClick}
-					className={this.props.classes.back}
-				>
-					‹ Back
-				</Button>
+				<div className={classes.backButtonContainer}>
+					<Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={this.handleBackClick}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
 
-				<Grid item>
+				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
 				</Grid>
 				<Grid item>
@@ -53,7 +70,7 @@ class CryptoManagerContainerComponent extends Component {
 						Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
 					</Typography>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.bottomSpace}>
 					<Button variant="outlined" size="large" onClick={this.handleAddTokenClick}>
 						Add token
 					</Button>
