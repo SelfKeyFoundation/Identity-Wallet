@@ -55,6 +55,9 @@ const styles = theme => ({
 		backgroundColor: '#262F39',
 		height: '10px',
 		width: '8px'
+	},
+	root: {
+		top: '-50px'
 	}
 });
 
@@ -80,7 +83,7 @@ class PasswordConfirmation extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Modal open={true}>
+			<Modal open={true} className={classes.root}>
 				<ModalWrap className={classes.modalWrap}>
 					<Grid
 						container

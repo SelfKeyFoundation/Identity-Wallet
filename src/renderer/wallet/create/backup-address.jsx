@@ -16,12 +16,6 @@ import { createWalletSelectors, createWalletOperations } from 'common/create-wal
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
-	container: {
-		minHeight: '100vh'
-	},
-	parentGrid: {
-		minHeight: '100vh'
-	},
 	downloadIcon: {
 		width: '66px',
 		height: '71px'
@@ -47,6 +41,10 @@ const styles = theme => ({
 		'&:hover': {
 			border: `1px solid ${warning}`
 		}
+	},
+
+	root: {
+		top: '-50px'
 	}
 });
 
@@ -76,7 +74,7 @@ class BackupAddress extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Modal open={true}>
+			<Modal open={true} className={classes.root}>
 				<ModalWrap className={classes.modalWrap}>
 					<Grid
 						container
@@ -117,7 +115,6 @@ class BackupAddress extends Component {
 										this address in a convenient location.
 									</Typography>
 									<br />
-									<br />
 									<Typography variant="overline" gutterBottom>
 										Your Public Key
 									</Typography>
@@ -132,8 +129,6 @@ class BackupAddress extends Component {
 										}
 										disabled
 									/>
-									<br />
-									<br />
 									<br />
 									<br />
 									<Button
