@@ -1,60 +1,29 @@
 import React, { Component } from 'react';
-import { withStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
-import { PriceSummary, VisibilityOnIcon, VisibilityOffIcon } from 'selfkey-ui';
+import {
+	withStyles,
+	Table,
+	TableBody,
+	TableHead,
+	TableCell,
+	TableRow,
+	Typography
+} from '@material-ui/core';
+import { PriceSummary, VisibilityOnIcon, VisibilityOffIcon, SmallTableHeadRow } from 'selfkey-ui';
 
 export const styles = theme => ({
-	cryptoPriceTable: {
-		fontFamily: 'Lato, arial, sans-serif',
-		width: '1140px',
-		'& td, & th': {
-			fontFamily: 'Lato, arial, sans-serif!important'
-		}
-	},
-	table: {
-		borderSpacing: '0px',
-		width: '100%',
-		'& tbody tr:nth-child(odd)': {
-			background: '#262f39'
-		}
-	},
-
-	headerTableRow: {
-		height: '38px',
-		'& th': {
-			fontSize: '12px',
-			fontWeight: 600,
-			textAlign: 'left',
-			color: '#7f8fa4',
-			textTransform: 'uppercase',
-			borderBottom: '0px',
-			paddingLeft: '0px'
-		},
-		'& th:first-child': {
-			paddingLeft: '24px !important'
-		}
-	},
-
-	bodyTableRow: {
-		height: '74px',
-		cursor: 'pointer',
-		'& td': {
-			padding: '0px',
-			fontSize: '15px',
-			textAlign: 'left',
-			color: '#ffffff',
-			borderBottom: '0px',
-			'& svg g': {
-				fill: '#ffffff'
-			}
-		},
-		'& td:first-child': {
-			paddingLeft: '24px !important'
-		}
-	},
-
 	iconSize: {
 		width: '19.6px !important',
 		height: '23.1px !important'
+	},
+	summary: {
+		fontSize: '15px',
+		fontWeight: 500,
+		lineHeight: '18px',
+		'& >div': {
+			fontSize: '15px !important',
+			fontWeight: '500 !important',
+			lineHeight: '18px !important'
+		}
 	}
 });
 
@@ -76,15 +45,19 @@ class CryptoPriceTableComponent extends Component {
 		const visibilityButton = this.renderVisibilityButton(token);
 		return (
 			<TableRow key={index} className={classes.bodyTableRow}>
-				<TableCell>{token.name}</TableCell>
-				<TableCell>{token.symbol}</TableCell>
+				<TableCell>
+					<Typography variant="h6">{token.name}</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="h6">{token.symbol}</Typography>
+				</TableCell>
 				<TableCell numeric>
 					<PriceSummary
-						className={classes.test}
 						locale={locale}
 						style="decimal"
 						currency={token.symbol}
 						value={token.balance}
+						className={classes.summary}
 					/>
 				</TableCell>
 				<TableCell numeric>
@@ -93,6 +66,7 @@ class CryptoPriceTableComponent extends Component {
 						style="currency"
 						currency={fiatCurrency}
 						value={token.price}
+						className={classes.summary}
 					/>
 				</TableCell>
 				<TableCell numeric>
@@ -101,10 +75,15 @@ class CryptoPriceTableComponent extends Component {
 						style="currency"
 						currency={fiatCurrency}
 						value={token.balanceInFiat}
+						className={classes.summary}
 					/>
 				</TableCell>
-				<TableCell>{token.address}</TableCell>
-				<TableCell>{visibilityButton}</TableCell>
+				<TableCell>
+					<Typography variant="h6">{token.address}</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="h6">{visibilityButton}</Typography>
+				</TableCell>
 			</TableRow>
 		);
 	}
@@ -116,16 +95,29 @@ class CryptoPriceTableComponent extends Component {
 
 		return (
 			<div className={classes.cryptoPriceTable}>
-				<Table className={classes.table}>
+				<Table>
 					<TableHead>
-						<TableRow className={classes.headerTableRow}>
-							<TableCell>NAME</TableCell>
-							<TableCell numeric>TOKEN SYMBOL</TableCell>
-							<TableCell numeric>BALANCE</TableCell>
-							<TableCell numeric>LAST PRICE</TableCell>
-							<TableCell numeric>TOTAL VALUE</TableCell>
-							<TableCell numeric>TOKEN CONTRACT ADDRESS</TableCell>
-						</TableRow>
+						<SmallTableHeadRow>
+							<TableCell>
+								<Typography variant="overline">Name</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Token Symbol</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Balance</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Last Price</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Total Value</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Token Contract Address</Typography>
+							</TableCell>
+							<TableCell>&nbsp;</TableCell>
+						</SmallTableHeadRow>
 					</TableHead>
 					<TableBody>{tokenRows}</TableBody>
 				</Table>
