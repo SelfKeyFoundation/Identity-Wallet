@@ -169,6 +169,9 @@ class IncorporationsDetailView extends Component {
 	};
 
 	componentDidMount() {
+		// Reset scrolling, issue #694
+		window.scrollTo(0, 0);
+
 		if (!this.props.treaties || !this.props.treaties.length) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
@@ -423,12 +426,10 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const { companyCode, countryCode } = props.match.params;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(
-			state,
-			props.match.params.companyCode
-		),
-		treaties: incorporationsSelectors.getTaxTreaties(state, props.match.params.countryCode),
+		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

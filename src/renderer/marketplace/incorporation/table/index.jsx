@@ -109,7 +109,10 @@ class IncorporationsTable extends Component {
 		}
 	}
 
-	_renderLoadingScreen = () => (
+	onDetailsClick = ({ countryCode, companyCode }) =>
+		this.props.dispatch(push(`${this.props.match.path}/details/${companyCode}/${countryCode}`));
+
+	renderLoadingScreen = () => (
 		<Grid container justify="center" alignItems="center">
 			<CircularProgress size={50} className={this.props.classes.loading} />
 		</Grid>
@@ -118,11 +121,12 @@ class IncorporationsTable extends Component {
 	onBackClick = _ => this.props.dispatch(push('/main/marketplace-categories'));
 
 	render() {
-		const { classes, isLoading, incorporations, keyRate, match } = this.props;
+		const { classes, isLoading, incorporations, keyRate } = this.props;
 		if (isLoading) {
-			return this._renderLoadingScreen();
+			return this.renderLoadingScreen();
 		}
-		const data = incorporations.filter(program => Object.keys(program.tax).length !== 0);
+
+		const data = incorporations.filter(program => program.show_in_wallet);
 
 		return (
 			<React.Fragment>
@@ -208,13 +212,10 @@ class IncorporationsTable extends Component {
 									<TableCell className={classes.detailsCell}>
 										<span
 											onClick={() =>
-												this.props.dispatch(
-													push(
-														`${match.path}/details/${
-															inc['Company code']
-														}/${inc['Country code']}`
-													)
-												)
+												this.onDetailsClick({
+													companyCode: inc['Company code'],
+													countryCode: inc['Country code']
+												})
 											}
 										>
 											Details
