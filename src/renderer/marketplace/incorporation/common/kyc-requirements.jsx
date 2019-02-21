@@ -10,15 +10,31 @@ const styles = theme => ({
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
 	},
-	kycRequirements: {
-		'& > div': {
-			width: '30%'
-		}
-	}
+	kycRequirements: {}
 });
 
+const IncorporationsKYCItem = ({ item }) => {
+	console.log(item);
+	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
+	const warning = !item.options || !item.options.length;
+	// const icon = warning ? <CheckEmptyIcon /> : <CheckedIcon item="verified" />;
+	const icon = warning ? <CheckedIcon item="unverified" /> : <CheckedIcon item="verified" />;
+
+	return (
+		<ListItem>
+			{icon}
+			<Typography variant="body2" color="textSecondary" gutterBottom>
+				{type}
+			</Typography>
+		</ListItem>
+	);
+};
+
 const IncorporationsKYC = props => {
-	const { classes } = props;
+	const { classes, requirements } = props;
+
+	// Requirements might take a while to load
+	if (!requirements) return null;
 
 	return (
 		<div className={classes.kyc}>
@@ -29,46 +45,14 @@ const IncorporationsKYC = props => {
 				container
 				justify="flex-start"
 				alignItems="flex-start"
+				direction="column"
 				className={classes.kycRequirements}
 			>
 				<div>
-					<div>
-						<List>
-							<ListItem>
-								<CheckedIcon item="verified" />
-								<Typography variant="body2" color="textSecondary" gutterBottom>
-									Full Legal Name
-								</Typography>
-							</ListItem>
-							<ListItem>
-								<CheckedIcon item="verified" />
-								<Typography variant="body2" color="textSecondary" gutterBottom>
-									Email address
-								</Typography>
-							</ListItem>
-							<ListItem>
-								<CheckedIcon item="unverfied" />
-								<Typography variant="body2" color="textSecondary" gutterBottom>
-									Country of Residence
-								</Typography>
-							</ListItem>
-						</List>
-					</div>
-				</div>
-				<div>
 					<List>
-						<ListItem>
-							<CheckedIcon item="unverfied" />
-							<Typography variant="body2" color="textSecondary" gutterBottom>
-								Passport
-							</Typography>
-						</ListItem>
-						<ListItem>
-							<CheckedIcon item="unverfied" />
-							<Typography variant="body2" color="textSecondary" gutterBottom>
-								Utility Bill (proof of residence)
-							</Typography>
-						</ListItem>
+						{requirements.map(r => (
+							<IncorporationsKYCItem key={r.id} item={r} />
+						))}
 					</List>
 				</div>
 			</Grid>

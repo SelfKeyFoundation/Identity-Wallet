@@ -14,6 +14,7 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import EthUnits from 'common/utils/eth-units';
+import { kycOperations } from 'common/kyc';
 
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -145,10 +146,15 @@ const styles = theme => ({
 export class IncorporationCheckout extends React.Component {
 	componentDidMount() {
 		this.loadData();
+		this.startKYC();
 	}
 
 	loadData = _ => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
+	};
+
+	startKYC = _ => {
+		this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
 	};
 
 	getIncorporationPrice = _ => {
@@ -187,8 +193,22 @@ export class IncorporationCheckout extends React.Component {
 		);
 
 	onPayClick = async _ => {
+		console.log(this.props);
 		// TODO: create KYC process
+		this.props.dispatch(
+			kycOperations.startCurrentApplicationOperation(
+				'incorporations',
+				'5c49ad03c3007baa04673fef',
+				`/main/marketplace-incorporation/pay-confirmation/${
+					this.props.match.params.companyCode
+				}/${this.props.match.params.countryCode}`,
+				'Incorporation Checklist: Singapure',
+				'You are about to being the incorporation process in Singapore. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.',
+				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
+			)
+		);
 
+		/*
 		this.props.dispatch(
 			push(
 				`/main/marketplace-incorporation/pay-confirmation/${
@@ -196,6 +216,7 @@ export class IncorporationCheckout extends React.Component {
 				}/${this.props.match.params.countryCode}`
 			)
 		);
+		*/
 	};
 
 	render() {

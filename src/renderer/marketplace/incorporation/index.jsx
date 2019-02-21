@@ -6,7 +6,8 @@ import IncorporationsDetailView from './detail';
 import {
 	IncorporationCheckout,
 	IncorporationProcessStarted,
-	IncorporationPaymentConfirmation
+	IncorporationPaymentConfirmation,
+	IncorporationKYC
 } from './pay';
 
 class MarketplaceIncorporationComponent extends Component {
@@ -25,12 +26,16 @@ class MarketplaceIncorporationComponent extends Component {
 					component={IncorporationCheckout}
 				/>
 				<Route
-					path={`${path}/process-started/:companyCode/:countryCode`}
-					component={IncorporationProcessStarted}
-				/>
-				<Route
 					path={`${path}/pay-confirmation/:companyCode/:countryCode`}
 					component={IncorporationPaymentConfirmation}
+				/>
+				<Route
+					path={`${path}/kyc/:companyCode/:countryCode`}
+					component={IncorporationKYC}
+				/>
+				<Route
+					path={`${path}/process-started/:companyCode/:countryCode`}
+					component={IncorporationProcessStarted}
 				/>
 			</div>
 		);

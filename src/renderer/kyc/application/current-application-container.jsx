@@ -6,6 +6,7 @@ import { CurrentApplicationPopup } from './current-application-popup';
 class CurrentApplicationComponent extends Component {
 	state = { selected: [] };
 	componentDidMount() {
+		console.log(this.props);
 		if (!this.props.currentApplication) return;
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(

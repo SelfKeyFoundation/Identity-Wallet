@@ -283,7 +283,8 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
 		await dispatch(
-			push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+			// push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+			push(`/main/marketplace-incorporation/kyc-requirements/${companyCode}/${countryCode}`)
 		);
 	});
 

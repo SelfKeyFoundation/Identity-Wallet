@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
@@ -165,6 +166,7 @@ class IncorporationsDetailView extends Component {
 	};
 
 	componentDidMount() {
+		// FIXME: refactor name to loadIncorporationsTaxTreaties
 		if (!this.props.treaties || !this.props.treaties.length) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
@@ -172,6 +174,8 @@ class IncorporationsDetailView extends Component {
 				)
 			);
 		}
+
+		this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
 	}
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
@@ -197,6 +201,7 @@ class IncorporationsDetailView extends Component {
 		// console.log(program);
 		// console.log(isLoading);
 		// console.log(treaties);
+		console.log(this.props);
 
 		return (
 			<React.Fragment>
@@ -419,7 +424,7 @@ class IncorporationsDetailView extends Component {
 								)}
 							</div>
 
-							<IncorporationsKYC />
+							<IncorporationsKYC requirements={this.props.requirements} />
 						</Grid>
 					</div>
 				</div>
@@ -436,7 +441,12 @@ const mapStateToProps = (state, props) => {
 		),
 		treaties: incorporationsSelectors.getTaxTreaties(state, props.match.params.countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		requirements: kycSelectors.selectRequirementsForTemplate(
+			state,
+			'incorporations',
+			'5c3f3e9c3075d52f8f4ad613'
+		)
 	};
 };
 
