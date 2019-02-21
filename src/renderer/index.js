@@ -49,5 +49,4 @@ window.openExternal = (event, href) => {
 window.store = store;
 
 render(<App store={store} history={history} />, document.getElementById('app'));
-
 registerServiceWorker();

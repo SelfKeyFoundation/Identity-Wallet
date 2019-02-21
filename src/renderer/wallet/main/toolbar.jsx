@@ -18,10 +18,16 @@ const styles = theme => ({
 		marginLeft: '20px'
 	},
 
+	sepVertContainer: {
+		display: 'flex',
+		justifyContent: 'space-around'
+	},
+
 	sepVert: {
+		background: 'linear-gradient(180deg, rgba(94, 11, 128, 0) 0%, #475768 100%)',
 		height: '59px',
-		width: '3px',
-		boxShadow: '1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)'
+		marginTop: '16px',
+		width: '1px'
 	},
 
 	menuButton: {
@@ -53,10 +59,10 @@ class Toolbar extends Component {
 					alignItems="center"
 					className={classes.wrapper}
 				>
-					<Grid item xs={8}>
+					<Grid item xs={5}>
 						<SelfkeyLogo className={classes.logo} />
 					</Grid>
-					<Grid item xs={3}>
+					<Grid item xs={6}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
 								<PriceBox cryptoCurrency={config.constants.primaryToken} />
@@ -74,7 +80,7 @@ class Toolbar extends Component {
 							alignItems="center"
 							spacing={0}
 						>
-							<Grid item xs={5}>
+							<Grid item xs={5} className={classes.sepVertContainer}>
 								<div className={classes.sepVert} />
 							</Grid>
 							<Grid item xs={7}>

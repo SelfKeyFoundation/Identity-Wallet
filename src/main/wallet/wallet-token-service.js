@@ -4,9 +4,8 @@ import EthUtils from 'common/utils/eth-utils';
 
 export class WalletTokenService {
 	constructor() {
-		const web3Service = getGlobalContext().web3Service;
-		this.web3 = web3Service.web3;
-		this.contractABI = web3Service.abi;
+		this.web3Service = getGlobalContext().web3Service;
+		this.contractABI = this.web3Service.abi;
 	}
 
 	getWalletTokens(walletId) {
@@ -15,7 +14,10 @@ export class WalletTokenService {
 
 	// TODO use the test ABI when in dev mode
 	async getTokenBalance(contractAddress, address) {
-		const tokenContract = new this.web3.eth.Contract(this.contractABI, contractAddress);
+		const tokenContract = new this.web3Service.web3.eth.Contract(
+			this.contractABI,
+			contractAddress
+		);
 		const balanceWei = await tokenContract.methods.balanceOf(address).call();
 		const decimals = await tokenContract.methods.decimals().call();
 		return EthUtils.getBalanceDecimal(balanceWei, decimals);
