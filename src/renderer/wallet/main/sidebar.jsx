@@ -224,7 +224,7 @@ class Sidebar extends Component {
 							onClick={e => {
 								window.openExternal(e, 'https://help.selfkey.org/');
 							}}
-							key="switchAccount"
+							key="helpAndSupport"
 						>
 							<Typography variant="body2" className={classes.textColor} gutterBottom>
 								Help & Support

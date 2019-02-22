@@ -2,6 +2,7 @@ import request from 'request-promise-native';
 import config from 'common/config';
 import jwt from 'jsonwebtoken';
 import urljoin from 'url-join';
+import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
 
 const { userAgent } = config;
@@ -77,7 +78,7 @@ export class RelyingPartyRest {
 	}
 	static getChallenge(ctx) {
 		let url = ctx.getEndpoint('auth/challenge');
-		url = urljoin(url, ctx.identity.publicKey);
+		url = urljoin(url, `0x${ctx.identity.publicKey.replace('0x', '')}`);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
@@ -268,7 +269,9 @@ export class RelyingPartySession {
 		if (this.isActive()) return this.ctx.token;
 		let challenge = await RelyingPartyRest.getChallenge(this.ctx);
 		let challengeToken = RelyingPartyToken.fromString(challenge.jwt);
-		let signature = await this.identity.genSignatureForMessage(challengeToken.data.challenge);
+		let signature = await this.identity.genSignatureForMessage(
+			challengeToken.data.challenge || challengeToken.data.nonce
+		);
 		let challengeReply = await RelyingPartyRest.postChallengeReply(
 			this.ctx,
 			challenge.jwt,
@@ -309,12 +312,16 @@ export class RelyingPartySession {
 	}
 
 	async createKYCApplication(templateId, attributes) {
-		let documents = attributes.reduce((acc, curr) => {
+		let docs = attributes.reduce((acc, curr) => {
+			if (!curr || !curr.documents) return acc;
 			acc = acc.concat(curr.documents);
 			return acc;
 		}, []);
-		documents = await Promise.all(
-			documents.map(async doc => {
+		let documents = await Promise.all(
+			docs.map(async doc => {
+				if (doc.content) {
+					doc.buffer = bufferFromDataUrl(doc.content);
+				}
 				const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
 				let newDoc = { ...doc };
 				delete newDoc.buffer;
@@ -334,7 +341,7 @@ export class RelyingPartySession {
 				attr.data.value,
 				attrDocs
 			);
-			attr = { ...attr, data: { value }, documents: [] };
+			attr = { ...attr, data: value, documents: [] };
 			return attr;
 		});
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);

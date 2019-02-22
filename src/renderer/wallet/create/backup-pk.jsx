@@ -47,6 +47,9 @@ const styles = theme => ({
 		'&:hover': {
 			border: `1px solid ${warning}`
 		}
+	},
+	root: {
+		top: '-50px'
 	}
 });
 
@@ -78,7 +81,7 @@ class BackupPK extends Component {
 		const { classes } = this.props;
 		return (
 			<div>
-				<Modal open={true}>
+				<Modal open={true} className={classes.root}>
 					<ModalWrap className={`${classes.modalWrap} modalWrap`}>
 						<Grid
 							container
@@ -119,7 +122,6 @@ class BackupPK extends Component {
 											&#34;cold storage&#34;.
 										</Typography>
 										<br />
-										<br />
 										<Typography variant="overline" gutterBottom>
 											Your Private Key
 										</Typography>
@@ -137,8 +139,6 @@ class BackupPK extends Component {
 											type={this.state.inputType}
 											disabled
 										/>
-										<br />
-										<br />
 										<br />
 										<br />
 										<Button
