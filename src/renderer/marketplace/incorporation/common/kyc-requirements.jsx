@@ -14,7 +14,6 @@ const styles = theme => ({
 });
 
 const IncorporationsKYCItem = ({ item }) => {
-	console.log(item);
 	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 	const warning = !item.options || !item.options.length;
 	// const icon = warning ? <CheckEmptyIcon /> : <CheckedIcon item="verified" />;

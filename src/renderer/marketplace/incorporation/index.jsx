@@ -30,7 +30,7 @@ class MarketplaceIncorporationComponent extends Component {
 					component={IncorporationPaymentConfirmation}
 				/>
 				<Route
-					path={`${path}/kyc/:companyCode/:countryCode`}
+					path={`${path}/kyc-requirements/:companyCode/:countryCode`}
 					component={IncorporationKYC}
 				/>
 				<Route

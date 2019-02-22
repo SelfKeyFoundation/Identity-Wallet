@@ -5,6 +5,7 @@ import { getGlobalContext } from '../context';
 import { push } from 'connected-react-router';
 import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
+import uuidv1 from 'uuid/v1';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 
@@ -112,9 +113,12 @@ export const kycSelectors = {
 				tplAttr = { schemaId: tplAttr };
 			}
 			return {
+				uiId: tplAttr.id || uuidv1(),
 				id: tplAttr.id,
+				required: !!tplAttr.required,
 				schemaId: tplAttr.schemaId,
 				options: walletAttributes[tplAttr.schemaId],
+				tType: tplAttr.type,
 				type:
 					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
 						? walletAttributes[tplAttr.schemaId][0].type
@@ -175,7 +179,15 @@ export const kycActions = {
 	) {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET,
-			payload: { relyingPartyName, templateId, returnRoute, title, description, agreement }
+			payload: {
+				relyingPartyName,
+				templateId,
+				returnRoute,
+				title,
+				description,
+				agreement,
+				attributes: []
+			}
 		};
 	},
 	clearCurrentApplication() {
@@ -240,7 +252,9 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 ) => {
 	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
 	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.templates[templateId]) throw new Error('template does not exist');
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
 
 	const wallet = walletSelectors.getWallet(getState());
 	if (!wallet) return;
@@ -250,8 +264,12 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 	}
 
 	attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
-	const application = await rp.session.createKYCApplication(templateId, attributes);
-	await dispatch(kycActions.addKYCApplication(rpName, application));
+	try {
+		const application = await rp.session.createKYCApplication(templateId, attributes);
+		await dispatch(kycActions.addKYCApplication(rpName, application));
+	} catch (error) {
+		console.log(error.message);
+	}
 };
 
 const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transactionHash) => async (
@@ -294,6 +312,33 @@ const startCurrentApplicationOperation = (
 	await dispatch(push('/main/kyc/current-application'));
 };
 
+const submitCurrentApplicationOperation = selected => async (dispatch, getState) => {
+	const state = getState();
+	const currentApplication = kycSelectors.selectCurrentApplication(state);
+	const { relyingPartyName, templateId } = currentApplication;
+	const requirements = kycSelectors.selectRequirementsForTemplate(
+		state,
+		relyingPartyName,
+		templateId
+	);
+	const attributes = requirements.map(r => {
+		const sel = !r.options || !r.options.length ? null : selected[r.uiId] || r.options[0];
+		return {
+			id: r.id,
+			attributeId: sel ? sel.id : undefined,
+			schemaId: r.schemaId,
+			schema: r.schema || r.type ? r.type.content : undefined,
+			required: r.required,
+			type: r.tType || 'individual'
+		};
+	});
+
+	await dispatch(
+		kycOperations.createRelyingPartyKYCApplication(relyingPartyName, templateId, attributes)
+	);
+	await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
+};
+
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(getState());
 	dispatch(push(currentApplication.returnRoute));
@@ -318,6 +363,10 @@ export const kycOperations = {
 	startCurrentApplicationOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATION_CURRENT_START,
 		startCurrentApplicationOperation
+	),
+	submitCurrentApplicationOperation: createAliasedAction(
+		kycTypes.KYC_APPLICATION_CURRENT_SUBMIT,
+		submitCurrentApplicationOperation
 	)
 };
 

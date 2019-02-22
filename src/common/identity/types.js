@@ -29,7 +29,9 @@ export const identityTypes = {
 	IDENTITY_DOCUMENT_REMOVE: 'identity/documents/REMOVE',
 	IDENTITY_UNLOCK: 'identity/UNLOCK',
 	IDENTITY_LOCK: 'identity/LOCK',
-	PROFILE_PICTURE_UPDATE: 'identity/profile-picture/update'
+	PROFILE_PICTURE_UPDATE: 'identity/profile-picture/update',
+	IDENTITY_COUNTRIES_LOAD: 'identity/countries/load',
+	IDENTITY_COUNTRIES_SET: 'identity/countries/set'
 };
 
 export default identityTypes;

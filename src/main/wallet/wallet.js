@@ -124,6 +124,16 @@ export class Wallet extends BaseModel {
 		return wallet;
 	}
 
+	static async updateName({ id, name }) {
+		let wallet = await this.query().patchAndFetchById(id, { name });
+		return wallet;
+	}
+
+	static async updateSetup({ id, setup }) {
+		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
+		return wallet;
+	}
+
 	static async selectProfilePictureById(id) {
 		let itm = await this.query().findById(id);
 		if (!itm) return null;

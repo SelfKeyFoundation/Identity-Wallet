@@ -103,12 +103,19 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		const { companyCode, countryCode } = this.props.match.params;
 
 		await this.props.dispatch(
+			// push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+			push(`/main/marketplace-incorporation/kyc-requirements/${companyCode}/${countryCode}`)
+		);
+
+		/*
+		await this.props.dispatch(
 			transactionOperations.incorporationSend(companyCode, countryCode)
 		);
 
 		if (this.props.hardwareWalletType !== '') {
 			this.setState({ isConfirmationOpen: true });
 		}
+		*/
 	};
 
 	handleCloseAction = _ => {

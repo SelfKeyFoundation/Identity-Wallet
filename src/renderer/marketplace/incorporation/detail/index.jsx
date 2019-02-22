@@ -20,11 +20,16 @@ import {
 const styles = theme => ({
 	container: {
 		width: '100%',
-		margin: '0 auto',
+		margin: '50px auto 0',
 		maxWidth: '960px'
 	},
 	backButtonContainer: {
-		marginBottom: '1em'
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+	bold: {
+		fontWeight: 600
 	},
 	flagCell: {
 		width: '10px'
@@ -167,6 +172,9 @@ class IncorporationsDetailView extends Component {
 
 	componentDidMount() {
 		// FIXME: refactor name to loadIncorporationsTaxTreaties
+		// Reset scrolling, issue #694
+		window.scrollTo(0, 0);
+
 		if (!this.props.treaties || !this.props.treaties.length) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
@@ -201,13 +209,20 @@ class IncorporationsDetailView extends Component {
 		// console.log(program);
 		// console.log(isLoading);
 		// console.log(treaties);
-		console.log(this.props);
+		// console.log(program.details);
 
 		return (
 			<React.Fragment>
 				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" size="small" onClick={this.onBackClick}>
-						Back
+					<Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={() => this.props.dispatch(push(`/main/marketplace-incorporation`))}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
 					</Button>
 				</div>
 				<div className={classes.container}>
@@ -326,6 +341,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!program.details}
 									label="Legal"
 									classes={{
 										root: classes.tabRoot,
@@ -335,6 +351,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!tax}
 									label="Taxes"
 									classes={{
 										root: classes.tabRoot,
@@ -344,6 +361,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!translation}
 									label="Country Details"
 									classes={{
 										root: classes.tabRoot,
@@ -353,6 +371,7 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 								<Tab
+									disabled={!treaties}
 									label="Tax Treaties"
 									classes={{
 										root: classes.tabRoot,
@@ -434,12 +453,10 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const { companyCode, countryCode } = props.match.params;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(
-			state,
-			props.match.params.companyCode
-		),
-		treaties: incorporationsSelectors.getTaxTreaties(state, props.match.params.countryCode),
+		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		requirements: kycSelectors.selectRequirementsForTemplate(

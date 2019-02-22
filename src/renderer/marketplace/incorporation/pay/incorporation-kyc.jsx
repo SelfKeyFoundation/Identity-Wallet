@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { transactionSelectors } from 'common/transaction';
+import { kycOperations } from 'common/kyc';
 
 const styles = theme => ({
 	container: {
@@ -75,13 +76,37 @@ const styles = theme => ({
 });
 
 export class IncorporationKYC extends React.Component {
-	componentDidMount() {
-		// TODO: update KYC process on this.props.transaction
-		console.log(this.props);
+	componentWillMount() {
+		this.startKYC();
 	}
 
+	startKYC = _ => {
+		this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+	};
+
 	render() {
-		return null;
+		// TODO: update KYC process on this.props.transaction
+		const { program } = this.props;
+
+		// 5c6fadbf77c33d5c28718d7b
+		// console.log(this.props);
+
+		this.props.dispatch(
+			kycOperations.startCurrentApplicationOperation(
+				'incorporations',
+				'5c6fadbf77c33d5c28718d7b',
+				`/main/marketplace-incorporation/process-started/${
+					this.props.match.params.companyCode
+				}/${this.props.match.params.countryCode}`,
+				'Incorporation Checklist: Singapure',
+				`You are about to being the incorporation process in ${
+					program.Region
+				}. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.`,
+				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
+			)
+		);
+
+		return <div />;
 	}
 }
 

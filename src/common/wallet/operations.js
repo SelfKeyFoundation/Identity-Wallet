@@ -34,9 +34,30 @@ const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
 	}
 };
 
+const updateWalletName = (name, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		await walletService.updateWalletName(name, walletId);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const updateWalletSetup = (setup, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		const wallet = await walletService.updateWalletSetup(setup, walletId);
+		await dispatch(updateWalletWithBalance(wallet));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 export default {
 	...actions,
 	updateWalletWithBalance,
 	refreshWalletBalance,
-	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar)
+	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar),
+	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
+	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup)
 };
