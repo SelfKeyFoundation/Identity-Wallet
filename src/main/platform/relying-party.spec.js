@@ -561,10 +561,8 @@ describe('Relying Party session', () => {
 							}
 						},
 						data: {
-							value: {
-								front: { id: 1, mimeType: 'test', size: 123, content: 'ok' },
-								back: { id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
-							}
+							front: { id: 1, mimeType: 'test', size: 123, content: 'ok' },
+							back: { id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
 						},
 						documents: []
 					},
@@ -579,10 +577,8 @@ describe('Relying Party session', () => {
 							}
 						},
 						data: {
-							value: {
-								front: { id: 3, mimeType: 'test', size: 123, content: 'ok' },
-								back: { id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
-							}
+							front: { id: 3, mimeType: 'test', size: 123, content: 'ok' },
+							back: { id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
 						},
 						documents: []
 					}
