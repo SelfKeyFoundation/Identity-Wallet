@@ -100,7 +100,7 @@ const styles = theme => ({
 
 const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
-const selfkeyID = props => <Link to="/main/selfkeyID" {...props} />;
+const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
 
@@ -192,8 +192,8 @@ class Sidebar extends Component {
 						</ListItem>
 						<ListItem
 							className={classes.listItem}
-							component={selfkeyID}
-							key="selfkeyID"
+							component={selfkeyId}
+							key="selfkeyId"
 						>
 							<ListItemIcon>
 								<SelfkeyIDMenuIcon />

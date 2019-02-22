@@ -10,7 +10,12 @@ export const initialState = {
 	documents: [],
 	documentsById: {},
 	attributes: [],
-	attributesById: {}
+	attributesById: {},
+	countries: []
+};
+
+const setCountries = (state, action) => {
+	return { ...state, countries: action.payload };
 };
 
 const setRepositoriesReducer = (state, action) => {
@@ -171,6 +176,7 @@ const deleteIdAttributeReducer = (state, action) => {
 };
 
 export const identityReducers = {
+	setCountries,
 	setRepositoriesReducer,
 	setIdAttributeTypesReducer,
 	setUiSchemasReducer,
@@ -190,6 +196,8 @@ export const identityReducers = {
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
+		case identityTypes.IDENTITY_COUNTRIES_SET:
+			return identityReducers.setCountries(state, action);
 		case identityTypes.IDENTITY_REPOSITORIES_SET:
 			return identityReducers.setRepositoriesReducer(state, action);
 		case identityTypes.IDENTITY_ID_ATTRIBUTE_TYPES_SET:

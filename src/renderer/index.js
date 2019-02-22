@@ -32,6 +32,10 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
+import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create';
+import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-create-about';
+import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
+import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 
 import path from 'path';
 
@@ -97,6 +101,13 @@ render(
 						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
 						<Route path="/terms" component={Terms} />
 						<Route path="/termsWarning" component={TermsWarning} />
+						<Route path="/selfkeyIdCreateAbout" component={SelfKeyIdCreateAbout} />
+						<Route
+							path="/selfkeyIdCreateDisclaimer"
+							component={SelfKeyIdCreateDisclaimer}
+						/>
+						<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
+						<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>

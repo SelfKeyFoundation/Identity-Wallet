@@ -16,6 +16,7 @@ import TokenService from './token/token-service';
 import WalletTokenService from './wallet/wallet-token-service';
 import IncorporationsService from './marketplace/incorporations-service';
 import GuideSettingsService from './settings/guide-settings-service';
+import CountryService from './country/country-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -40,6 +41,7 @@ export const registerMainServices = container => {
 		tokenService: asClass(TokenService).singleton(),
 		walletTokenService: asClass(WalletTokenService).singleton(),
 		incorporationsService: asClass(IncorporationsService).singleton(),
-		guideSettingsService: asClass(GuideSettingsService).singleton()
+		guideSettingsService: asClass(GuideSettingsService).singleton(),
+		countryService: asClass(CountryService).singleton()
 	});
 };
