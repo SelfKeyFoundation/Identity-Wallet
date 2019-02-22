@@ -17,6 +17,8 @@ const BASIC_ATTRIBUTES = {
 
 const selectIdentity = state => state.identity;
 
+const selectCountries = state => identitySelectors.selectIdentity(state).countries;
+
 const selectRepositories = state =>
 	identitySelectors
 		.selectIdentity(state)
@@ -155,6 +157,7 @@ const selectSelfkeyId = state => {
 
 export const identitySelectors = {
 	selectIdentity,
+	selectCountries,
 	selectRepositories,
 	selectExpiredRepositories,
 	selectIdAttributeTypes,

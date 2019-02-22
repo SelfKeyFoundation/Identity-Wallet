@@ -23,7 +23,7 @@ const styles = theme => ({
 	}
 });
 
-const selfkeyIdCreateDisclaimer = props => <Link to="/main/selfkeyIdCreateDisclaimer" {...props} />;
+const selfkeyIdCreateDisclaimer = props => <Link to="/selfkeyIdCreateDisclaimer" {...props} />;
 
 const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
 

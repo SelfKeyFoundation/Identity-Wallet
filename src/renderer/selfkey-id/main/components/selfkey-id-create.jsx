@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Grid, Modal, Button, Typography, Card, CardContent, withStyles } from '@material-ui/core';
 import { IdCardIcon, SKIDIcon, ModalWrap } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	container: {
@@ -35,25 +34,16 @@ const styles = theme => ({
 	}
 });
 
-const selfkeyIdCreateAbout = props => <Link to="/main/selfkeyIdCreateAbout" {...props} />;
+const selfkeyIdForm = props => <Link to="/selfkeyIdForm" {...props} />;
+const back = props => <Link to="/main/dashboard" {...props} />;
 
 class SelfKeyIdCreateComponent extends Component {
-	handleBackClick = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/dashboard'));
-	};
-
 	render() {
 		const { classes } = this.props;
 		return (
 			<>
 				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						color="secondary"
-						size="small"
-						onClick={this.handleBackClick}
-					>
+					<Button variant="outlined" color="secondary" size="small" component={back}>
 						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
 							‹ Back
 						</Typography>
@@ -130,7 +120,7 @@ class SelfKeyIdCreateComponent extends Component {
 															variant="contained"
 															size="large"
 															className={classes.create}
-															component={selfkeyIdCreateAbout}
+															component={selfkeyIdForm}
 														>
 															Create Selfkey ID
 														</Button>

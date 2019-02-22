@@ -5,6 +5,12 @@ import identitySelectors from './selectors';
 import identityActions from './actions';
 import identityTypes from './types';
 
+const loadCountriesOperation = () => async (dispatch, getState) => {
+	const countryService = getGlobalContext().countryService;
+	const countries = await countryService.getCountries();
+	await dispatch(identityActions.setCountriesAction(countries));
+};
+
 const loadRepositoriesOperation = () => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let repos = await identityService.loadRepositories();
@@ -107,6 +113,7 @@ const unlockIdentityOperation = walletId => async (dispatch, getState) => {
 };
 
 export const operations = {
+	loadCountriesOperation,
 	loadRepositoriesOperation,
 	updateExpiredRepositoriesOperation,
 	loadIdAttributeTypesOperation,
@@ -190,6 +197,10 @@ export const identityOperations = {
 	updateProfilePictureOperation: createAliasedAction(
 		identityTypes.PROFILE_PICTURE_UPDATE,
 		operations.updateProfilePictureOperation
+	),
+	loadCountriesOperation: createAliasedAction(
+		identityTypes.IDENTITY_COUNTRIES_LOAD,
+		operations.loadCountriesOperation
 	)
 };
 

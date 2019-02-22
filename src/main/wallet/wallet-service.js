@@ -201,6 +201,20 @@ export class WalletService {
 		});
 	}
 
+	updateWalletName(name, id) {
+		return Wallet.updateName({
+			id,
+			name: name
+		});
+	}
+
+	updateWalletSetup(setup, id) {
+		return Wallet.updateSetup({
+			id,
+			setup: setup
+		});
+	}
+
 	async getLedgerWallets(page) {
 		await this.web3Service.switchToLedgerWallet(page);
 		return this._getWallets();

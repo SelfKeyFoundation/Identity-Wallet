@@ -14,8 +14,6 @@ import {
 } from '../../marketplace';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
-import { SelfKeyIdCreateAbout } from '../../selfkey-id/main/components/selfkey-id-create-about';
-import { SelfKeyIdCreateDisclaimer } from '../../selfkey-id/main/components/selfkey-id-create-disclaimer';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
@@ -73,14 +71,6 @@ class Main extends Component {
 					<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
 					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
-					<Route
-						path={`${match.path}/selfkeyIdCreateAbout`}
-						component={SelfKeyIdCreateAbout}
-					/>
-					<Route
-						path={`${match.path}/selfkeyIdCreateDisclaimer`}
-						component={SelfKeyIdCreateDisclaimer}
-					/>
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
