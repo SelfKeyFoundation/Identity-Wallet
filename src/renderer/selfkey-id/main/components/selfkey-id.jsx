@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Tabs, Tab } from '@material-ui/core';
 import SelfkeyIdOverview from './selfkey-id-overview';
+import { connect } from 'react-redux';
+import { walletSelectors } from 'common/wallet';
+import { push } from 'connected-react-router';
+
 // import SelfkeyIdApplications from './selfkey-id-applications';
 // import SelfkeyIdCompanies from './selfkey-id-companies';
 // import SelfkeyIdHistory from './selfkey-id-history';
 
-class SelfkeyId extends Component {
+class SelfkeyIdComponent extends Component {
 	state = {
 		tabValue: 0
 	};
+
+	async componentDidMount() {
+		const { wallet, dispatch } = this.props;
+
+		if (!wallet.isSetupFinished) {
+			await dispatch(push('/selfkeyIdCreate'));
+		}
+	}
 
 	handleChange = (event, tabValue) => {
 		this.setState({ tabValue });
@@ -44,5 +56,13 @@ class SelfkeyId extends Component {
 		);
 	}
 }
+
+const mapStateToProps = (state, props) => {
+	return {
+		wallet: walletSelectors.getWallet(state)
+	};
+};
+
+export const SelfkeyId = connect(mapStateToProps)(SelfkeyIdComponent);
 
 export default SelfkeyId;

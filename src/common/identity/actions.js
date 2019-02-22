@@ -1,6 +1,10 @@
 import identityTypes from './types';
 
 export const identityActions = {
+	setCountriesAction: countries => ({
+		type: identityTypes.IDENTITY_COUNTRIES_SET,
+		payload: countries
+	}),
 	setRepositoriesAction: repos => ({
 		type: identityTypes.IDENTITY_REPOSITORIES_SET,
 		payload: repos
