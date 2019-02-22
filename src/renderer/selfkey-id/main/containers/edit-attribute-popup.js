@@ -28,6 +28,7 @@ class EditAttributePopupComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	const { attribute } = props;
+	console.log('attribute', attribute);
 	let uiSchema = null;
 	if (attribute) {
 		uiSchema = identitySelectors.selectUiSchema(

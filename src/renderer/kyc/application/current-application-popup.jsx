@@ -99,41 +99,43 @@ const KycChecklistItemLabel = withStyles(styles)(
 	}
 );
 
-const KycChecklistItem = withStyles(styles)(({ item, classes, selectedAttributes, onSelected }) => {
-	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
-	const warning = !item.options || !item.options.length;
-	const warningClassname = warning ? classes.rowWarning : '';
-	let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
+const KycChecklistItem = withStyles(styles)(
+	({ item, classes, selectedAttributes, onSelected, editItem }) => {
+		const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
+		const warning = !item.options || !item.options.length;
+		const warningClassname = warning ? classes.rowWarning : '';
+		let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
 
-	return (
-		<SmallTableRow>
-			<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
-			<SmallTableCell>
-				<Typography variant="subtitle1" gutterBottom className={warningClassname}>
-					{type}
-				</Typography>
-			</SmallTableCell>
-			<SmallTableCell>
-				<KycChecklistItemLabel
-					item={item}
-					className={warningClassname}
-					selectedAttributes={selectedAttributes}
-					onSelected={onSelected}
-				/>
-			</SmallTableCell>
-			<SmallTableCell>
-				<Typography variant="subtitle1" gutterBottom>
-					<IconButton aria-label="Edit">
-						<MuiEditIcon />
-					</IconButton>
-				</Typography>
-			</SmallTableCell>
-		</SmallTableRow>
-	);
-});
+		return (
+			<SmallTableRow>
+				<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
+				<SmallTableCell>
+					<Typography variant="subtitle1" gutterBottom className={warningClassname}>
+						{type}
+					</Typography>
+				</SmallTableCell>
+				<SmallTableCell>
+					<KycChecklistItemLabel
+						item={item}
+						className={warningClassname}
+						selectedAttributes={selectedAttributes}
+						onSelected={onSelected}
+					/>
+				</SmallTableCell>
+				<SmallTableCell>
+					<Typography variant="subtitle1" gutterBottom>
+						<IconButton aria-label="Edit" onClick={event => editItem(item)}>
+							<MuiEditIcon />
+						</IconButton>
+					</Typography>
+				</SmallTableCell>
+			</SmallTableRow>
+		);
+	}
+);
 
 const KycChecklist = withStyles(styles)(
-	({ classes, requirements, selectedAttributes, onSelected }) => {
+	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
 		return (
 			<Table classes={{ root: classes.checklist }}>
 				<TableHead>
@@ -165,6 +167,7 @@ const KycChecklist = withStyles(styles)(
 								key={indx}
 								selectedAttributes={selectedAttributes}
 								onSelected={onSelected}
+								editItem={editItem}
 							/>
 						);
 					})}
@@ -184,7 +187,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		relyingParty,
 		requirements,
 		selectedAttributes,
-		onSelected
+		onSelected,
+		editItem
 	}) => {
 		if (!relyingParty || !currentApplication)
 			return (
@@ -215,6 +219,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 							requirements={requirements}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
+							editItem={editItem}
 						/>
 					</Grid>
 					{agreement ? (
