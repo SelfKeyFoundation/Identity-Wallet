@@ -8,7 +8,6 @@ import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { transactionSelectors } from 'common/transaction';
-import { kycOperations, kycSelectors } from 'common/kyc';
 
 const styles = theme => ({
 	container: {
@@ -76,18 +75,6 @@ const styles = theme => ({
 });
 
 export class IncorporationProcessStarted extends React.Component {
-	componentDidMount() {
-		// TODO: update KYC process on this.props.transaction
-		// console.log(this.props);
-		this.props.dispatch(
-			kycOperations.updateRelyingPartyKYCApplicationPayment(
-				'incorporations',
-				this.props.application.id,
-				'test-hash'
-			)
-		);
-	}
-
 	onBackClick = _ => this.props.dispatch(push(`/main/dashboard`));
 
 	onSelfKeyClick = _ => this.props.dispatch(push(`/main/dashboard`));
@@ -178,8 +165,7 @@ const mapStateToProps = (state, props) => {
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
-		),
-		application: kycSelectors.selectCurrentApplication(state)
+		)
 	};
 };
 

@@ -267,6 +267,13 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 	try {
 		const application = await rp.session.createKYCApplication(templateId, attributes);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
+		await dispatch(
+			kycOperations.updateRelyingPartyKYCApplicationPayment(
+				'incorporations',
+				application.id,
+				'test-hash'
+			)
+		);
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -278,13 +285,12 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 ) => {
 	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
 	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.applications[applicationId]) throw new Error('application does not exist');
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
 	}
 
-	await rp.session.updateRelyingPartyKYCApplicationPayment(applicationId, transactionHash);
+	await rp.session.updateKYCApplicationPayment(applicationId, transactionHash);
 
 	rp.applications = await rp.session.listKYCApplications();
 

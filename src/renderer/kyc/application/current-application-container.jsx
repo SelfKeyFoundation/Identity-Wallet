@@ -21,10 +21,11 @@ class CurrentApplicationComponent extends Component {
 			);
 		}
 	}
-	handleSubmit = () => {
-		this.props.dispatch(kycOperations.submitCurrentApplicationOperation(this.state.selected));
-		// FIXME: override for testing
-		this.props.dispatch(push(this.props.currentApplication.returnRoute));
+	handleSubmit = async () => {
+		await this.props.dispatch(
+			kycOperations.submitCurrentApplicationOperation(this.state.selected)
+		);
+		await this.props.dispatch(push(this.props.currentApplication.returnRoute));
 	};
 	handleClose = () => {
 		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());

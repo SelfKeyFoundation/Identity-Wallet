@@ -196,7 +196,7 @@ export class RelyingPartyRest {
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
 		let url = ctx.getEndpoint('/applications/:id/payments');
 		url = url.replace(':id', applicationId);
-		return request.put({
+		return request.post({
 			url,
 			body: { transactionHash },
 			headers: {
