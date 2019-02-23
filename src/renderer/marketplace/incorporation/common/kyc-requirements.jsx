@@ -10,7 +10,13 @@ const styles = theme => ({
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
 	},
-	kycRequirements: {}
+
+	kycRequirements: {},
+
+	listItem: {
+		columns: 2,
+		width: '100%'
+	}
 });
 
 const IncorporationsKYCItem = ({ item }) => {
@@ -47,12 +53,11 @@ const IncorporationsKYC = props => {
 				direction="column"
 				className={classes.kycRequirements}
 			>
-				<div>
-					<List>
-						{requirements.map(r => (
-							<IncorporationsKYCItem key={r.id} item={r} />
-						))}
-					</List>
+				<List className={classes.listItem}>
+					{requirements.map(r => (
+						<IncorporationsKYCItem key={r.id} item={r} />
+					))}
+				</List>
 				</div>
 			</Grid>
 		</div>
