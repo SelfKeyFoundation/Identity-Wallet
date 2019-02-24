@@ -109,7 +109,7 @@ class AddressBookContainer extends Component {
 						ADD ADDRESS
 					</Button>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid container xs={9}>
 					<Table>
 						<TableHead>
 							<SmallTableHeadRow>
