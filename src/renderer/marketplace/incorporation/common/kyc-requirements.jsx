@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
-import { CheckedIcon } from 'selfkey-ui';
+import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	kyc: {
@@ -10,14 +10,25 @@ const styles = theme => ({
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
 	},
-	kycRequirements: {}
+
+	list: {
+		columns: 2,
+		width: '100%'
+	},
+
+	checkedStyle: {
+		height: '44px',
+		marginRight: '13px',
+		marginTop: '-10px',
+		paddingTop: '17px',
+		width: '30px'
+	}
 });
 
-const IncorporationsKYCItem = ({ item }) => {
+const IncorporationsKYCItem = ({ item, index }) => {
 	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 	const warning = !item.options || !item.options.length;
-	// const icon = warning ? <CheckEmptyIcon /> : <CheckedIcon item="verified" />;
-	const icon = warning ? <CheckedIcon item="unverified" /> : <CheckedIcon item="verified" />;
+	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
 
 	return (
 		<ListItem>
@@ -40,20 +51,12 @@ const IncorporationsKYC = props => {
 			<Typography variant="h2" gutterBottom>
 				KYC Requirements and Forms
 			</Typography>
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				direction="column"
-				className={classes.kycRequirements}
-			>
-				<div>
-					<List>
-						{requirements.map(r => (
-							<IncorporationsKYCItem key={r.id} item={r} />
-						))}
-					</List>
-				</div>
+			<Grid container justify="flex-start" alignItems="flex-start" direction="column">
+				<List className={classes.list}>
+					{requirements.map((r, index) => (
+						<IncorporationsKYCItem key={r.id} item={r} index={index} />
+					))}
+				</List>
 			</Grid>
 		</div>
 	);
