@@ -455,7 +455,6 @@ class IncorporationsDetailView extends Component {
 
 const mapStateToProps = (state, props) => {
 	const { companyCode, countryCode, templateId } = props.match.params;
-	console.log(`Loading program data for ${companyCode} - templateId ${templateId}`);
 
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),

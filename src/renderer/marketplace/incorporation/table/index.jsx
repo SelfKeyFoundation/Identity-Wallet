@@ -103,13 +103,13 @@ const styles = theme => ({
 	}
 });
 
+const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+
 class IncorporationsTable extends Component {
 	componentDidMount() {
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
-
-		console.log(conf);
 	}
 
 	generateRoute({ countryCode, companyCode, templateID }) {
@@ -129,7 +129,7 @@ class IncorporationsTable extends Component {
 		</Grid>
 	);
 
-	onBackClick = _ => this.props.dispatch(push('/main/marketplace-categories'));
+	onBackClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	render() {
 		const { classes, isLoading, incorporations, keyRate } = this.props;
