@@ -15,6 +15,14 @@ const styles = theme => ({
 
 	menuItem: {
 		display: 'flex'
+	},
+
+	filePath: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		maxWidth: '500px',
+		whiteSpace: 'nowrap',
+		marginLeft: '40px'
 	}
 });
 
@@ -58,6 +66,9 @@ class NewAddress extends Component {
 
 	render() {
 		const { classes } = this.props;
+		const { filePath, password } = this.state;
+		const fileSelected = filePath !== '';
+
 		return (
 			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
 				<Grid
@@ -108,6 +119,13 @@ class NewAddress extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
+					{fileSelected && (
+						<Grid item>
+							<Typography variant="caption" className={classes.filePath}>
+								{filePath}
+							</Typography>
+						</Grid>
+					)}
 					<Grid item>
 						<Grid
 							container
@@ -156,7 +174,12 @@ class NewAddress extends Component {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
+					<Button
+						variant="contained"
+						size="large"
+						onClick={this.handleUnlockAction}
+						disabled={!fileSelected || !password}
+					>
 						UNLOCK
 					</Button>
 				</Grid>

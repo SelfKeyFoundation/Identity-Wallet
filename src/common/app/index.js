@@ -11,6 +11,13 @@ const log = new Logger('app-redux');
 
 const eventEmitter = new EventEmitter();
 
+const transformErrorMessage = msg => {
+	if (msg === 'Key derivation failed - possibly wrong password') {
+		return 'Wrong password. Please try again';
+	}
+	return msg;
+};
+
 export const initialState = {
 	wallets: [],
 	hardwareWallets: [],
@@ -88,7 +95,8 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
-		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
+		const message = transformErrorMessage(error.message);
+		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
 
@@ -100,7 +108,8 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
-		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
+		const message = transformErrorMessage(error.message);
+		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
 
@@ -111,7 +120,8 @@ const unlockWalletWithPublicKey = publicKey => async dispatch => {
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
-		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
+		const message = transformErrorMessage(error.message);
+		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
 
@@ -124,7 +134,8 @@ const loadLedgerWallets = page => async dispatch => {
 		await dispatch(push('/selectAddress'));
 	} catch (error) {
 		log.error(error);
-		await dispatch(appActions.setUnlockWalletErrorAction(error.message));
+		const message = transformErrorMessage(error.message);
+		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
 
@@ -156,7 +167,8 @@ const loadTrezorWallets = page => async dispatch => {
 		clearTimeout(timeoutId);
 		eventEmitter.off('TREZOR_PIN_REQUEST', () => {});
 		if (error.message.indexOf('PIN canceled') === -1) {
-			await dispatch(appActions.setUnlockWalletErrorAction(error.message));
+			const message = transformErrorMessage(error.message);
+			await dispatch(appActions.setUnlockWalletErrorAction(message));
 		}
 		if (error.message.indexOf('PIN invalid') !== -1) {
 			await dispatch(loadTrezorWallets(page));
