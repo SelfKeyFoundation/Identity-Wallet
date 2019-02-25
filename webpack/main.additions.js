@@ -1,5 +1,4 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const path = require('path');
 
@@ -20,7 +19,6 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new HardSourceWebpackPlugin(),
 		new CopyWebpackPlugin([
 			{
 				from: path.join(__dirname, '/../src/main/migrations'),
