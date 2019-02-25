@@ -1,5 +1,5 @@
 import { walletSelectors } from '../wallet';
-import { jsonSchema } from './utils';
+import { jsonSchema, identityAttributes } from './utils';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -99,13 +99,15 @@ const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 				type.id,
 				defaultRepository.id
 			);
-
+			const attrDocs = documents[attr.id] || [];
+			const isValid = identityAttributes.validate(type.content, attr.data.value, attrDocs);
 			return {
 				...attr,
 				type,
 				defaultRepository,
 				defaultUiSchema,
-				documents: documents[attr.id] || []
+				isValid,
+				documents: attrDocs
 			};
 		})
 		.filter(attr => attr.type && attr.type.content);

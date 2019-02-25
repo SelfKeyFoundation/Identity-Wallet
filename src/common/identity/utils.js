@@ -1,3 +1,8 @@
+import Ajv from 'ajv';
+import { Logger } from 'common/logger';
+
+const log = new Logger('identity-utils');
+
 export const identityAttributes = {};
 
 identityAttributes.denormalizeDocumentsSchema = (
@@ -142,6 +147,24 @@ identityAttributes.normalizeDocumentsSchema = (
 	}
 
 	return { value, documents };
+};
+
+identityAttributes.validate = (schema, attribute, documents) => {
+	const ajv = new Ajv({ validateSchema: true, allErrors: true });
+	ajv.addFormat('file', () => {});
+	try {
+		schema = jsonSchema.removeMeta(schema);
+		if (!ajv.validateSchema(schema)) return false;
+		const denormalized = identityAttributes.denormalizeDocumentsSchema(
+			schema,
+			attribute,
+			documents
+		);
+		return ajv.validate(schema, denormalized.value);
+	} catch (error) {
+		log.error(error);
+		return false;
+	}
 };
 
 export const jsonSchema = {};
