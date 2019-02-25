@@ -338,6 +338,41 @@ describe('Identity uitls', () => {
 				});
 			});
 		});
+		describe('validate id attributes', () => {
+			it('should succeed when schema and data are valid', () => {
+				const attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/email.json'
+				);
+				const email = 'support@selfkey.org';
+				expect(identityAttributes.validate(attrTypeSchema, email)).toBe(true);
+			});
+			it('should validate file attributes', () => {
+				const attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
+				);
+				const cert = {
+					image: {
+						size: 16,
+						mimeType: 'image/jpeg',
+						content: 'test content'
+					},
+					issued: '2017-01-02'
+				};
+				expect(identityAttributes.validate(attrTypeSchema, cert)).toBe(true);
+			});
+			xit('should fail if schema is incorrect', () => {
+				const attrTypeSchema = { format: 'unknown' };
+				const email = 'support@selfkey.org';
+				expect(identityAttributes.validate(attrTypeSchema, email)).toBe(false);
+			});
+			it('should fail if data is not valid', () => {
+				const attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/email.json'
+				);
+				const email = 'supportAselfkey.org';
+				expect(identityAttributes.validate(attrTypeSchema, email)).toBe(false);
+			});
+		});
 	});
 	describe('Json Schema', () => {
 		describe('containsFile', () => {
