@@ -8,6 +8,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
+import { kycOperations } from 'common/kyc';
 import { FlagCountryName } from '../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -177,18 +178,32 @@ export class IncorporationCheckout extends React.Component {
 		};
 	};
 
-	onBackClick = _ =>
+	getCancelRoute = _ => {
+		const { companyCode, countryCode } = this.props.match.params;
+		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}`;
+	};
+
+	onBackClick = _ => this.props.dispatch(push(this.getCancelRoute()));
+
+	onStartClick = _ => {
+		const { program } = this.props;
+		const { countryCode, companyCode } = this.props.match.params;
+
 		this.props.dispatch(
-			push(
-				`/main/marketplace-incorporation/details/${this.props.match.params.companyCode}/${
-					this.props.match.params.countryCode
-				}`
+			kycOperations.startCurrentApplicationOperation(
+				'incorporations',
+				'5c6fadbf77c33d5c28718d7b',
+				`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`,
+				this.getCancelRoute(),
+				`Incorporation Checklist: ${program.Region}`,
+				`You are about to being the incorporation process in ${
+					program.Region
+				}. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.`,
+				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
 			)
 		);
 
-	onPayClick = async _ => {
-		// TODO: create KYC process
-
+		/*
 		this.props.dispatch(
 			push(
 				`/main/marketplace-incorporation/pay-confirmation/${
@@ -196,6 +211,7 @@ export class IncorporationCheckout extends React.Component {
 				}/${this.props.match.params.countryCode}`
 			)
 		);
+		*/
 	};
 
 	render() {
@@ -413,8 +429,8 @@ export class IncorporationCheckout extends React.Component {
 							</div>
 						</div>
 						<div className={classes.payButton}>
-							<Button variant="contained" size="large" onClick={this.onPayClick}>
-								Pay Incorporation
+							<Button variant="contained" size="large" onClick={this.onStartClick}>
+								Start Incorporation
 							</Button>
 							<Button variant="outlined" size="large" onClick={this.onBackClick}>
 								Cancel

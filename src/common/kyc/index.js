@@ -173,6 +173,7 @@ export const kycActions = {
 		relyingPartyName,
 		templateId,
 		returnRoute,
+		cancelRoute,
 		title,
 		description,
 		agreement
@@ -183,6 +184,7 @@ export const kycActions = {
 				relyingPartyName,
 				templateId,
 				returnRoute,
+				cancelRoute,
 				title,
 				description,
 				agreement,
@@ -301,6 +303,7 @@ const startCurrentApplicationOperation = (
 	rpName,
 	templateId,
 	returnRoute,
+	cancelRoute,
 	title,
 	description,
 	agreement
@@ -310,6 +313,7 @@ const startCurrentApplicationOperation = (
 			rpName,
 			templateId,
 			returnRoute,
+			cancelRoute,
 			title,
 			description,
 			agreement
@@ -347,7 +351,7 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(getState());
-	dispatch(push(currentApplication.returnRoute));
+	dispatch(push(currentApplication.cancelRoute));
 	await dispatch(kycActions.clearCurrentApplication());
 };
 
