@@ -62,7 +62,11 @@ class SelfkeyIdOverviewComponent extends Component {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
 	handleAddAttribute = () => {
-		this.setState({ popup: 'create-attribute' });
+		this.setState({ popup: 'create-attribute', isDocument: false });
+	};
+
+	handleAddDocument = () => {
+		this.setState({ popup: 'create-attribute', isDocument: true });
 	};
 	handleDeleteAttribute = attribute => {
 		this.setState({ popup: 'delete-attribute', deleteAttribute: attribute });
@@ -141,7 +145,11 @@ class SelfkeyIdOverviewComponent extends Component {
 		return (
 			<Grid container direction="column" spacing={32}>
 				{popup === 'create-attribute' && (
-					<CreateAttributePopup open={true} onClose={this.handlePopupClose} />
+					<CreateAttributePopup
+						open={true}
+						onClose={this.handlePopupClose}
+						isDocument={this.state.isDocument}
+					/>
 				)}
 				{popup === 'edit-attribute' && (
 					<EditAttributePopup
@@ -555,7 +563,7 @@ class SelfkeyIdOverviewComponent extends Component {
 													variant="outlined"
 													size="large"
 													color="secondary"
-													onClick={this.handleAddAttribute}
+													onClick={this.handleAddDocument}
 												>
 													Add Documents
 												</Button>
