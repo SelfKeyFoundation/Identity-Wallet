@@ -4,7 +4,17 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
 	mapContainer: {
 		maxWidth: '80%',
-		margin: 'auto'
+		margin: 'auto',
+		'& .land': {
+			fill: '#697c95',
+			fillOpacity: '1',
+			stroke: 'white',
+			strokeOpacity: '1',
+			strokeWidth: '0.5'
+		},
+		'& .land.selected': {
+			fill: '#00c0d9'
+		}
 	}
 });
 
@@ -13,10 +23,6 @@ const TreatiesMap = props => {
 
 	return (
 		<div className={classes.mapContainer}>
-			<style>
-				{`.land { fill: #697c95; fill-opacity: 1; stroke: white; stroke-opacity: 1; stroke-width: 0.5 }`}
-				{`.land.selected { fill: #00c0d9; }`}
-			</style>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				xmlnsXlink="http://www.w3.org/1999/xlink"
