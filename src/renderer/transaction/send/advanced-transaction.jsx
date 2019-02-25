@@ -152,7 +152,8 @@ class TransactionSendBoxContainer extends Component {
 	state = {
 		amount: '',
 		address: '',
-		cryptoCurrency: this.props.match.params.cryptoCurrency,
+		isCustomView: this.props.match.params.cryptoCurrency,
+		cryptoCurrency: '',
 		sending: false,
 		isConfirmationOpen: false
 	};
@@ -410,19 +411,14 @@ class TransactionSendBoxContainer extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						{this.state.cryptoCurrency === 'CUSTOM' && (
+						{this.state.isCustomView === 'custom' && (
 							<select
 								value={this.state.cryptoCurrency}
 								onChange={e => this.handleCryptoCurrencyChange(e)}
 								name="cryptoCurrency"
 								className={classes.cryptoSelect}
 							>
-								<option
-									value="CUSTOM"
-									disabled
-									selected
-									className={classes.selectItem}
-								>
+								<option value="" disabled selected className={classes.selectItem}>
 									Custom Token
 								</option>
 								{this.renderSelectTokenItems()}
