@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Button, withStyles } from '@material-ui/core';
+import { Grid, Button, withStyles, Typography } from '@material-ui/core';
 import { H1 } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
@@ -22,7 +22,7 @@ const styles = theme => ({
 	},
 
 	headerContent: {
-		marginTop: '30px'
+		marginTop: '50px'
 	},
 
 	button: {
@@ -31,6 +31,16 @@ const styles = theme => ({
 		'&:disabled': {
 			color: '#48565f'
 		}
+	},
+
+	bold: {
+		fontWeight: 600
+	},
+
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
 	}
 });
 
@@ -54,9 +64,13 @@ export const MarketplaceServicesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction }) => (
 		<Grid container>
 			<Grid item>
-				<Button variant="outlined" className={classes.button} onClick={backAction}>
-					&#60; Back
-				</Button>
+				<div className={classes.backButtonContainer}>
+					<Button variant="outlined" color="secondary" size="small" onClick={backAction}>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
 			</Grid>
 			<Grid item>
 				<Grid
