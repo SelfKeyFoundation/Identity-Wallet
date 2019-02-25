@@ -360,7 +360,25 @@ describe('Identity uitls', () => {
 				};
 				expect(identityAttributes.validate(attrTypeSchema, cert)).toBe(true);
 			});
-			xit('should fail if schema is incorrect', () => {
+			it('should validate normalized attributes', () => {
+				const attrTypeSchema = findAttributeType(
+					'http://platform.selfkey.org/schema/attribute/tax-certificate.json'
+				);
+				const cert = {
+					image: '$document-1',
+					issued: '2017-01-02'
+				};
+				const documents = [
+					{
+						id: 1,
+						size: 16,
+						mimeType: 'image/jpeg',
+						content: 'test content'
+					}
+				];
+				expect(identityAttributes.validate(attrTypeSchema, cert, documents)).toBe(true);
+			});
+			it('should fail if schema is incorrect', () => {
 				const attrTypeSchema = { format: 'unknown' };
 				const email = 'support@selfkey.org';
 				expect(identityAttributes.validate(attrTypeSchema, email)).toBe(false);

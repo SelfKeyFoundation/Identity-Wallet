@@ -149,13 +149,18 @@ identityAttributes.normalizeDocumentsSchema = (
 	return { value, documents };
 };
 
-identityAttributes.validate = (schema, attribute) => {
+identityAttributes.validate = (schema, attribute, documents) => {
 	const ajv = new Ajv({ validateSchema: true, allErrors: true });
 	ajv.addFormat('file', () => {});
 	try {
 		schema = jsonSchema.removeMeta(schema);
+		const denormalized = identityAttributes.denormalizeDocumentsSchema(
+			schema,
+			attribute,
+			documents
+		);
 		if (!ajv.validateSchema(schema)) return false;
-		return ajv.validate(schema, attribute);
+		return ajv.validate(schema, denormalized.value);
 	} catch (error) {
 		console.log(error);
 		log.error(error);
