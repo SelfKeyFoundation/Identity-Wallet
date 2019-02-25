@@ -23,7 +23,7 @@ export const Popup = withStyles(styles)(({ classes, children, closeAction, text,
 			</ModalCloseButton>
 			<ModalHeader>
 				{typeof text === 'string' ? (
-					<Typography variant="h6" className={classes.title}>
+					<Typography variant="body1" className={classes.title}>
 						{text}
 					</Typography>
 				) : (
