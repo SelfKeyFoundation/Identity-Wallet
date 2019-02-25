@@ -39,10 +39,6 @@ class ExistingAddress extends Component {
 		error: ''
 	};
 
-	componentDidMount() {
-		this.props.dispatch(appOperations.loadWalletsOperation());
-	}
-
 	componentDidUpdate(prevProps) {
 		if (prevProps.error !== this.props.error) {
 			this.setState({ error: this.props.error });

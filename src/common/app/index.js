@@ -12,6 +12,7 @@ const log = new Logger('app-redux');
 const eventEmitter = new EventEmitter();
 
 export const initialState = {
+	walletsLoading: false,
 	wallets: [],
 	hardwareWallets: [],
 	error: '',
@@ -21,6 +22,7 @@ export const initialState = {
 
 export const appTypes = {
 	APP_SET_WALLETS: 'app/set/WALLETS',
+	APP_SET_WALLETS_LOADING: 'app/set/WALLETS_LOADING',
 	APP_SET_SETTINGS: 'app/set/SETTINGS',
 	APP_SET_HARDWARE_WALLETS: 'app/set/hardware/WALLETS',
 	APP_SET_HARDWARE_WALLET_TYPE: 'app/set/hardware/wallet/TYPE',
@@ -59,13 +61,22 @@ const appActions = {
 	setHardwareWalletType: type => ({
 		type: appTypes.APP_SET_HARDWARE_WALLET_TYPE,
 		payload: type
+	}),
+	setWalletsLoading: isLoading => ({
+		type: appTypes.APP_SET_WALLETS_LOADING,
+		payload: isLoading
 	})
 };
 
 const loadWallets = () => async dispatch => {
-	const walletService = getGlobalContext().walletService;
-	const wallets = await walletService.getWallets();
-	await dispatch(appActions.setWalletsAction(wallets));
+	await dispatch(appActions.setWalletsLoading(true));
+	try {
+		const walletService = getGlobalContext().walletService;
+		const wallets = await walletService.getWallets();
+		await dispatch(appActions.setWalletsAction(wallets));
+	} finally {
+		await dispatch(appActions.setWalletsLoading(false));
+	}
 };
 
 const unlockWalletWithPassword = (walletId, password) => async dispatch => {
@@ -274,8 +285,16 @@ const setWalletsReducer = (state, action) => {
 	return { ...state, wallets: action.payload };
 };
 
+const setWalletsLoadingReducer = (state, action) => {
+	return { ...state, walletsLoading: action.payload };
+};
+
 const setHardwareWalletsReducer = (state, action) => {
 	return { ...state, hardwareWallets: action.payload };
+};
+
+const setSettingsReducer = (state, action) => {
+	return { ...state, settings: action.payload };
 };
 
 const setUnlockWalletErrorReducer = (state, action) => {
@@ -286,12 +305,9 @@ const setHardwareWalletTypeReducer = (state, action) => {
 	return { ...state, hardwareWalletType: action.payload };
 };
 
-const setSettingsReducer = (state, action) => {
-	return { ...state, settings: action.payload };
-};
-
 const appReducers = {
 	setWalletsReducer,
+	setWalletsLoadingReducer,
 	setSettingsReducer,
 	setHardwareWalletsReducer,
 	setUnlockWalletErrorReducer,
@@ -302,6 +318,8 @@ const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case appTypes.APP_SET_WALLETS:
 			return appReducers.setWalletsReducer(state, action);
+		case appTypes.APP_SET_WALLETS_LOADING:
+			return appReducers.setWalletsLoadingReducer(state, action);
 		case appTypes.APP_SET_SETTINGS:
 			return appReducers.setSettingsReducer(state, action);
 		case appTypes.APP_SET_HARDWARE_WALLETS:
