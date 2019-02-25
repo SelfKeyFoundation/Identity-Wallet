@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import config from 'common/config';
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
@@ -64,12 +63,10 @@ const getIconForTransaction = (statusIconName, sending) => {
 };
 
 const getCryptoType = transaction => {
-	if (transaction.tokenSymbol === config.constants.primaryToken) {
-		return 'KEY';
-	} else if (transaction.contractAddress === null) {
+	if (transaction.contractAddress === null) {
 		return 'ETH';
 	} else {
-		return 'CUSTOM';
+		return transaction.tokenSymbol;
 	}
 };
 
