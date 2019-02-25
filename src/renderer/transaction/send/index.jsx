@@ -34,6 +34,10 @@ const styles = theme => ({
 		fontSize: '14px',
 		fontWeight: 'normal'
 	},
+	modal: {
+		height: '100%',
+		overflow: 'auto'
+	},
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent'
@@ -281,7 +285,7 @@ export class Transfer extends React.Component {
 		const { classes, cryptoCurrency, publicKey } = this.props;
 
 		return (
-			<Modal open={true}>
+			<Modal open={true} className={classes.modal}>
 				<ModalWrap className={classes.modalWrap}>
 					<Paper className={classes.modalContentWrapper}>
 						<ModalCloseButton className={classes.closeIcon} component={goBackDashboard}>
