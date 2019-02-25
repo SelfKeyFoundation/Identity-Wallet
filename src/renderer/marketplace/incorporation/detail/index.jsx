@@ -158,6 +158,7 @@ function TabContainer({ children }) {
    ---------------
    match.params.countryCode: country two letter code
    match.params.programCode: program specific code (from airtable)
+   match.params.templateID: KYC-Chain template ID for this jurisdiction (from airtable)
    program: program details object map
    isLoading: boolean indicating if it's still loading data
    treaties: tax treaties for this specific country/jurisdiction
@@ -453,7 +454,9 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, countryCode } = props.match.params;
+	const { companyCode, countryCode, templateId } = props.match.params;
+	console.log(`Loading program data for ${companyCode} - templateId ${templateId}`);
+
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
@@ -462,7 +465,7 @@ const mapStateToProps = (state, props) => {
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
 			'incorporations',
-			'5c3f3e9c3075d52f8f4ad613'
+			templateId
 		)
 	};
 };

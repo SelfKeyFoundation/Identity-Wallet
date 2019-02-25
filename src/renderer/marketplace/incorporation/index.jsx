@@ -18,7 +18,7 @@ class MarketplaceIncorporationComponent extends Component {
 			<div>
 				<Route exact path={`${path}`} component={IncorporationsTable} />
 				<Route
-					path={`${path}/details/:companyCode/:countryCode`}
+					path={`${path}/details/:companyCode/:countryCode/:templateId?`}
 					component={IncorporationsDetailView}
 				/>
 				<Route
