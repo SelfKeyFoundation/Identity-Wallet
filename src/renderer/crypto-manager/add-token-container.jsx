@@ -36,6 +36,7 @@ const styles = theme => ({
 	},
 	link: {
 		color: '#00C0D9',
+		cursor: 'pointer',
 		textDecoration: 'none'
 	},
 	bold: {
@@ -170,7 +171,12 @@ class AddTokenContainerComponent extends Component {
 													address. To learn more,{' '}
 													<a
 														className={classes.link}
-														href="https://help.selfkey.org"
+														onClick={e => {
+															window.openExternal(
+																e,
+																'https://help.selfkey.org/'
+															);
+														}}
 													>
 														click here.
 													</a>
