@@ -162,7 +162,6 @@ identityAttributes.validate = (schema, attribute, documents) => {
 		);
 		return ajv.validate(schema, denormalized.value);
 	} catch (error) {
-		console.log(error);
 		log.error(error);
 		return false;
 	}
