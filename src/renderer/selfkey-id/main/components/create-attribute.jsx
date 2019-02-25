@@ -18,7 +18,7 @@ const styles = theme => ({
 });
 
 class CreateAttributeComponent extends Component {
-	state = { typeId: -1, label: '', value: null, disabled: false };
+	state = { typeId: -1, label: '', value: undefined, disabled: false };
 	handleSave = ({ errors }) => {
 		let { typeId, label, value, disabled } = this.state;
 		if (!!errors.length || disabled) {
@@ -39,12 +39,12 @@ class CreateAttributeComponent extends Component {
 	};
 	hadnleFieldChange = prop => evt => {
 		let { value } = this.state;
-		if (prop === 'typeId') value = null;
+		if (prop === 'typeId') value = undefined;
 		this.setState({ [prop]: evt.target.value, value });
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
 		const disabled = !!errors.length;
-		this.setState({ [prop]: formData, disabled });
+		this.setState({ [prop]: formData, disabled, errors });
 	};
 	get type() {
 		if (!this.state.typeId) return null;
@@ -59,8 +59,15 @@ class CreateAttributeComponent extends Component {
 			) || {}
 		);
 	}
+
+	get types() {
+		return this.props.isDocument
+			? this.props.types.filter(type => jsonSchema.containsFile(type.content))
+			: this.props.types.filter(type => !jsonSchema.containsFile(type.content));
+	}
 	render() {
-		const { types, classes } = this.props;
+		const { classes } = this.props;
+		const types = this.types;
 		const { typeId, label, value, disabled } = this.state;
 		const type = this.type;
 		const uiSchema = this.uiSchema;
@@ -86,14 +93,16 @@ class CreateAttributeComponent extends Component {
 							</MenuItem>
 						))}
 					</TextField>
-					<TextField
-						label="Label"
-						value={label}
-						margin="normal"
-						variant="filled"
-						onChange={this.hadnleFieldChange('label')}
-						fullWidth
-					/>
+					{this.state.typeId > -1 && (
+						<TextField
+							label="Label"
+							value={label}
+							margin="normal"
+							variant="filled"
+							onChange={this.hadnleFieldChange('label')}
+							fullWidth
+						/>
+					)}
 				</div>
 				{type && <Divider variant="middle" />}
 				{type && (
