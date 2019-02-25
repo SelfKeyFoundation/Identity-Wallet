@@ -5,6 +5,7 @@ import { TextField, withStyles, Divider, Button, Grid, MenuItem } from '@materia
 import { identityAttributes } from 'common/identity/utils';
 import theme from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
+import transformErrors from './transform-errors';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -114,6 +115,7 @@ class CreateAttributeComponent extends Component {
 							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
+							transformErrors={transformErrors}
 						>
 							<Grid container spacing={24}>
 								<Grid item>
