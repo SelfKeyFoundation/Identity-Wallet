@@ -18,6 +18,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	hexagonIn2: {
+		backgroundColor: '#313D49',
 		backgroundPosition: '50%',
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: 'cover',
@@ -34,8 +35,8 @@ export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlacehol
 			<div
 				className={classes.hexagonIn2}
 				style={{
-					backgroundImage: `url(${src})`,
-					backgroundSize: src === avatarPlaceholder ? 'auto' : 'cover'
+					backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
+					backgroundSize: src === null ? 'auto' : 'cover'
 				}}
 			/>
 		</div>
