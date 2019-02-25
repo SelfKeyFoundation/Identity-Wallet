@@ -20,6 +20,7 @@ const FIXED_GAS_LIMIT_PRICE = 37680;
 const CRYPTOCURRENCY = config.constants.primaryToken;
 // FIXME: Not implemented in Airtable Yet
 const TEST_WALLET_ADDRESS = '0x27462DF3542882455E3bD6a23496a06E5E686162';
+// const TEST_WALLET_ADDRESS = '0x23d233933c86f93b74705cf0d236b39f474249f8';
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationPaymentConfirmationComponent extends Component {
@@ -36,24 +37,15 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		);
 
 		// Initiate transaction
-		const { keyAmount, gasPrice, walletAddress } = this.getPaymentParameters();
+		const { keyAmount, gasPrice, walletAddress, gasLimit } = this.getPaymentParameters();
 
-		/*
 		// Log payment parameters
-		console.log(
-			cryptoCurrency,
-			gasPrice,
-			gasLimit,
-			keyAmount,
-			walletAddress,
-			ethFee,
-			usdFee,
-			price
-		);
-		*/
+		console.log(gasPrice, gasLimit, keyAmount);
+
 		this.props.dispatch(transactionOperations.setAddress(walletAddress));
 		this.props.dispatch(transactionOperations.setAmount(keyAmount));
 		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
+		this.props.dispatch(transactionOperations.setLimitPrice(gasLimit));
 	}
 
 	getVendorName = _ => {
@@ -103,19 +95,12 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		const { companyCode, countryCode } = this.props.match.params;
 
 		await this.props.dispatch(
-			// push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
-			push(`/main/marketplace-incorporation/kyc-requirements/${companyCode}/${countryCode}`)
-		);
-
-		/*
-		await this.props.dispatch(
 			transactionOperations.incorporationSend(companyCode, countryCode)
 		);
 
 		if (this.props.hardwareWalletType !== '') {
 			this.setState({ isConfirmationOpen: true });
 		}
-		*/
 	};
 
 	handleCloseAction = _ => {

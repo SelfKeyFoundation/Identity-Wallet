@@ -4,6 +4,13 @@ import jwt from 'jsonwebtoken';
 import urljoin from 'url-join';
 import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
+import { Logger } from 'common/logger';
+
+const log = new Logger('kyc');
+
+if (config.dev) {
+	request.debug = true;
+}
 
 const { userAgent } = config;
 export class RelyingPartyError extends Error {
@@ -168,6 +175,9 @@ export class RelyingPartyRest {
 	}
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint('/applications');
+		log.info(
+			`[createKYCApplication] POST ${url} : auth:${ctx.token.toString()} : ${attributes}`
+		);
 		return request.post({
 			url,
 			body: { attributes, templateId },

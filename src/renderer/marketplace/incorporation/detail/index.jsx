@@ -171,7 +171,7 @@ class IncorporationsDetailView extends Component {
 		selectedTab: 0
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
 		// FIXME: refactor name to loadIncorporationsTaxTreaties
 		// Reset scrolling, issue #694
 		window.scrollTo(0, 0);
@@ -184,7 +184,7 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 
-		this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
 	}
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });

@@ -269,13 +269,6 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 	try {
 		const application = await rp.session.createKYCApplication(templateId, attributes);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-		await dispatch(
-			kycOperations.updateRelyingPartyKYCApplicationPayment(
-				'incorporations',
-				application.id,
-				'test-hash'
-			)
-		);
 	} catch (error) {
 		console.log(error.message);
 	}

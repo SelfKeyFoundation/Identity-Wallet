@@ -15,6 +15,7 @@ class CurrentApplicationComponent extends Component {
 	};
 	componentDidMount() {
 		if (!this.props.currentApplication) return;
+
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(
 				kycOperations.loadRelyingParty(this.props.currentApplication.relyingPartyName)

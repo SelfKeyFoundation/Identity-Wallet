@@ -223,7 +223,6 @@ class IncorporationsTable extends Component {
 									<TableCell className={classes.detailsCell}>
 										<span
 											onClick={() => {
-												console.log(inc, conf.dev);
 												this.onDetailsClick({
 													companyCode: inc['Company code'],
 													countryCode: inc['Country code'],

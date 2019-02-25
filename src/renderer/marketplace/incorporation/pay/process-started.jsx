@@ -8,6 +8,7 @@ import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
 import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { transactionSelectors } from 'common/transaction';
+import { kycSelectors, kycOperations } from 'common/kyc';
 
 const styles = theme => ({
 	container: {
@@ -75,9 +76,31 @@ const styles = theme => ({
 });
 
 export class IncorporationProcessStarted extends React.Component {
-	onBackClick = _ => this.props.dispatch(push(`/main/dashboard`));
+	componentDidMount() {
+		this.saveTransactionHash();
+	}
 
-	onSelfKeyClick = _ => this.props.dispatch(push(`/main/dashboard`));
+	saveTransactionHash = async () => {
+		const { currentApplication, transaction } = this.props;
+
+		console.log(this.props);
+
+		if (currentApplication && transaction) {
+			await this.props.dispatch(
+				kycOperations.updateRelyingPartyKYCApplicationPayment(
+					'incorporations',
+					currentApplication.id,
+					transaction.transactionHash
+				)
+			);
+		} else {
+			// TODO: what to do if no transaction or currentApplication exists?
+		}
+	};
+
+	onBackClick = () => this.props.dispatch(push(`/main/dashboard`));
+
+	onSelfKeyClick = () => this.props.dispatch(push(`/main/dashboard`));
 
 	render() {
 		const { classes } = this.props;
@@ -162,6 +185,7 @@ const mapStateToProps = (state, props) => {
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		transaction: transactionSelectors.getTransaction(state),
+		currentApplication: kycSelectors.selectCurrentApplication(state),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode

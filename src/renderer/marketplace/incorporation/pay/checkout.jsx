@@ -183,17 +183,23 @@ export class IncorporationCheckout extends React.Component {
 		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}`;
 	};
 
+	getPayRoute = _ => {
+		const { companyCode, countryCode } = this.props.match.params;
+		return `/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`;
+	};
+
 	onBackClick = _ => this.props.dispatch(push(this.getCancelRoute()));
 
 	onStartClick = _ => {
 		const { program } = this.props;
-		const { countryCode, companyCode } = this.props.match.params;
 
+		// TODO: some of this info should be loaded from airtable
+		// FIXME: replace test wallet in production
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				'incorporations',
 				'5c6fadbf77c33d5c28718d7b',
-				`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`,
+				this.getPayRoute(),
 				this.getCancelRoute(),
 				`Incorporation Checklist: ${program.Region}`,
 				`You are about to being the incorporation process in ${
@@ -202,16 +208,6 @@ export class IncorporationCheckout extends React.Component {
 				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
 			)
 		);
-
-		/*
-		this.props.dispatch(
-			push(
-				`/main/marketplace-incorporation/pay-confirmation/${
-					this.props.match.params.companyCode
-				}/${this.props.match.params.countryCode}`
-			)
-		);
-		*/
 	};
 
 	render() {
