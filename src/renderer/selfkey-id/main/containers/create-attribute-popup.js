@@ -20,6 +20,7 @@ class CreateAttributePopupComponent extends Component {
 					onCancel={this.handleCancel}
 					types={types}
 					uiSchemas={uiSchemas}
+					isDocument={this.props.isDocument}
 				/>
 			</Popup>
 		);
