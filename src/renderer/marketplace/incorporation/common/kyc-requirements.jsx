@@ -10,12 +10,10 @@ const styles = theme => ({
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
 	},
-
 	list: {
 		columns: 2,
 		width: '100%'
 	},
-
 	checkedStyle: {
 		height: '44px',
 		marginRight: '13px',
@@ -44,7 +42,18 @@ const IncorporationsKYC = props => {
 	const { classes, requirements } = props;
 
 	// Requirements might take a while to load
-	if (!requirements) return null;
+	if (!requirements) {
+		return (
+			<div className={classes.kyc}>
+				<Typography variant="h2" gutterBottom>
+					KYC Requirements and Forms
+				</Typography>
+				<Grid container justify="center" alignItems="center">
+					<CircularProgress size={50} />
+				</Grid>
+			</div>
+		);
+	}
 
 	return (
 		<div className={classes.kyc}>
