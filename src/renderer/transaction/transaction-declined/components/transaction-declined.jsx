@@ -8,20 +8,20 @@ const styles = theme => ({
 	}
 });
 
-export const TransactionError = withStyles(styles)(
-	({ classes, message, publicKey, closeAction }) => {
+export const TransactionDeclined = withStyles(styles)(
+	({ classes, publicKey, closeAction, match }) => {
 		return (
 			<TransactionErrorBox
 				publicKey={publicKey}
 				closeAction={closeAction}
-				subtitle="Transaction Failed"
+				subtitle="Transaction Declined"
 			>
 				<Typography variant="body1" className={classes.bodyText}>
-					{message}
+					You declined this transaction on your {match.params.device} device
 				</Typography>
 			</TransactionErrorBox>
 		);
 	}
 );
 
-export default TransactionError;
+export default TransactionDeclined;
