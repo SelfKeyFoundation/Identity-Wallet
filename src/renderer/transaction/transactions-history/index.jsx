@@ -262,10 +262,6 @@ class TransactionsHistory extends Component {
 	}
 }
 const mapStateToProps = (state, props) => {
-	console.log(
-		'transactions',
-		transactionHistorySelectors.selectTransactionHistory(state).transactions
-	);
 	return {
 		transactions: transactionHistorySelectors.selectTransactionHistory(state).transactions,
 		wallet: walletSelectors.getWallet(state)
