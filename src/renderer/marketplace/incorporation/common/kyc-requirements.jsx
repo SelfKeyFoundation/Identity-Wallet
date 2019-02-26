@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
