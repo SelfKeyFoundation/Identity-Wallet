@@ -13,10 +13,13 @@ import { BigNumber } from 'bignumber.js';
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import { push } from 'connected-react-router';
+import { appSelectors } from 'common/app';
 
 const chainId = config.chainId || 3;
 
 const transferHex = '0xa9059cbb';
+
+const hardwalletConfirmationTime = '30000';
 
 const init = args => async dispatch => {
 	await dispatch(
@@ -213,7 +216,19 @@ const confirmSend = () => async (dispatch, getState) => {
 
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
+	let hardwalletConfirmationTimeout = null;
+	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
 	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(
 			actions.updateTransaction({
 				status: 'Pending',
@@ -229,6 +244,7 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 
 	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		console.error('transactionEventEmitter ERROR: ', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
@@ -238,6 +254,12 @@ const confirmSend = () => async (dispatch, getState) => {
 				})
 			);
 			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
 		} else {
 			await dispatch(
 				actions.updateTransaction({
