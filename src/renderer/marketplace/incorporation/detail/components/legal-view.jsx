@@ -150,7 +150,7 @@ class IncorporationsLegalView extends Component {
 		// console.log(data);
 
 		return (
-			<Grid container justify="left" alignItems="left">
+			<Grid container justify="flex-start" alignItems="flex-start">
 				<div>
 					<List>
 						{LEGAL_COLUMNS[0].map(prop => (

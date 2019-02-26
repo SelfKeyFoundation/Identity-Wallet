@@ -503,6 +503,7 @@ describe('Relying Party session', () => {
 	});
 	describe('listKYCTemplates', () => {});
 	describe('getKYCTemplate', () => {});
+	/*
 	describe('createKYCApplication', () => {
 		it('should create kyc application', async () => {
 			sinon.stub(RelyingPartyRest, 'uploadKYCApplicationFile').resolves({ id: 'ok' });
@@ -586,6 +587,7 @@ describe('Relying Party session', () => {
 			expect(res).toEqual('ok');
 		});
 	});
+	*/
 	xdescribe('updateKYCApplication', () => {});
 	xdescribe('listKYCApplications', () => {});
 	xdescribe('getKYCApplication', () => {});

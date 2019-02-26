@@ -1,5 +1,6 @@
 import React from 'react';
 
+/*
 const formatNumber = number => {
 	// 4 decimal places for KEY values ?
 	const numeric = Math.abs(number).toFixed(2);
@@ -8,6 +9,7 @@ const formatNumber = number => {
 	splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	return splitNum.join('.');
 };
+*/
 
 const ProgramPrice = props => {
 	const { price, rate, label } = props;
@@ -17,13 +19,13 @@ const ProgramPrice = props => {
 	}
 
 	const numeric = parseInt(price.replace(/\$/, '').replace(/,/, ''));
-	const key = formatNumber(numeric / rate);
+	const key = numeric / rate;
 
 	return (
 		<div className="price">
 			{label}
 			{price}
-			<span className="price-key">{key} KEY</span>
+			<span className="price-key">{key.toLocaleString()} KEY</span>
 		</div>
 	);
 };

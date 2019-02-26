@@ -50,6 +50,9 @@ const styles = theme => ({
 	},
 	agreementError: {
 		marginLeft: '30px'
+	},
+	editColumn: {
+		textAlign: 'right'
 	}
 });
 
@@ -61,7 +64,6 @@ const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error
 					<Checkbox
 						value={value}
 						onChange={(evt, checked) => {
-							console.log('XXX', checked);
 							onChange && onChange(checked);
 						}}
 					/>
@@ -78,7 +80,7 @@ const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error
 });
 
 const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttr, onSelected }) => {
+	({ item, className, classes, selectedAttributes, onSelected }) => {
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
@@ -87,6 +89,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 				</Typography>
 			);
 		}
+		const selectedAttr = selectedAttributes[item.uiId] || options[0];
 
 		return (
 			<RadioGroup
@@ -112,42 +115,43 @@ const KycChecklistItemLabel = withStyles(styles)(
 	}
 );
 
-const KycChecklistItem = withStyles(styles)(({ item, classes, selectedAttributes, onSelected }) => {
-	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
-	const selectedAttr = selectedAttributes[item.uiId] || (item.options || [null])[0];
-	const warning = !selectedAttr || !selectedAttr.isValid;
-	const warningClassname = warning ? classes.rowWarning : '';
-	let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
+const KycChecklistItem = withStyles(styles)(
+	({ item, classes, selectedAttributes, onSelected, editItem }) => {
+		const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
+		const warning = !item.options || !item.options.length;
+		const warningClassname = warning ? classes.rowWarning : '';
+		let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
 
-	return (
-		<SmallTableRow>
-			<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
-			<SmallTableCell>
-				<Typography variant="subtitle1" gutterBottom className={warningClassname}>
-					{type}
-				</Typography>
-			</SmallTableCell>
-			<SmallTableCell>
-				<KycChecklistItemLabel
-					item={item}
-					className={warningClassname}
-					selectedAttr={selectedAttr}
-					onSelected={onSelected}
-				/>
-			</SmallTableCell>
-			<SmallTableCell>
-				<Typography variant="subtitle1" gutterBottom>
-					<IconButton aria-label="Edit">
-						<MuiEditIcon />
-					</IconButton>
-				</Typography>
-			</SmallTableCell>
-		</SmallTableRow>
-	);
-});
+		return (
+			<SmallTableRow>
+				<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
+				<SmallTableCell>
+					<Typography variant="subtitle1" gutterBottom className={warningClassname}>
+						{type}
+					</Typography>
+				</SmallTableCell>
+				<SmallTableCell>
+					<KycChecklistItemLabel
+						item={item}
+						className={warningClassname}
+						selectedAttributes={selectedAttributes}
+						onSelected={onSelected}
+					/>
+				</SmallTableCell>
+				<SmallTableCell className={classes.editColumn}>
+					<Typography variant="subtitle1" gutterBottom>
+						<IconButton aria-label="Edit" onClick={event => editItem(item)}>
+							<MuiEditIcon />
+						</IconButton>
+					</Typography>
+				</SmallTableCell>
+			</SmallTableRow>
+		);
+	}
+);
 
 const KycChecklist = withStyles(styles)(
-	({ classes, requirements, selectedAttributes, onSelected }) => {
+	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
 		return (
 			<Table classes={{ root: classes.checklist }}>
 				<TableHead>
@@ -163,7 +167,7 @@ const KycChecklist = withStyles(styles)(
 								Label
 							</Typography>
 						</SmallTableCell>
-						<SmallTableCell>
+						<SmallTableCell className={classes.editColumn}>
 							<Typography variant="overline" gutterBottom>
 								Actions
 							</Typography>
@@ -179,6 +183,7 @@ const KycChecklist = withStyles(styles)(
 								key={indx}
 								selectedAttributes={selectedAttributes}
 								onSelected={onSelected}
+								editItem={editItem}
 							/>
 						);
 					})}
@@ -203,9 +208,10 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		onAgreementChange,
 		agreementValue,
 		error,
-		onSelected
+		onSelected,
+		editItem
 	}) => {
-		if (!relyingParty || !currentApplication)
+		if (!relyingParty || !currentApplication || !requirements)
 			return (
 				<Popup open={open} text="KYC Checklist" closeAction={onClose}>
 					<div className={classes.loading}>
@@ -216,6 +222,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
 		const description = currentApplication.description || `${relyingParty.description || ''}`;
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
+
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
 				<Grid
@@ -234,6 +241,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 							requirements={requirements}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
+							editItem={editItem}
 						/>
 					</Grid>
 					{agreement ? (

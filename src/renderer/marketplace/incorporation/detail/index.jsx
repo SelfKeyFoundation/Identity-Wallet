@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
@@ -40,9 +41,10 @@ const styles = theme => ({
 			display: 'inline-block',
 			color: '#FFF'
 		},
-		'& span.region': {
+		'& .region': {
 			marginLeft: '1em',
-			marginTop: '0.5em',
+			marginTop: '0.25em',
+			marginBottom: '0',
 			fontSize: '24px'
 		}
 	},
@@ -156,6 +158,7 @@ function TabContainer({ children }) {
    ---------------
    match.params.countryCode: country two letter code
    match.params.programCode: program specific code (from airtable)
+   match.params.templateID: KYC-Chain template ID for this jurisdiction (from airtable)
    program: program details object map
    isLoading: boolean indicating if it's still loading data
    treaties: tax treaties for this specific country/jurisdiction
@@ -168,7 +171,8 @@ class IncorporationsDetailView extends Component {
 		selectedTab: 0
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
+		// FIXME: refactor name to loadIncorporationsTaxTreaties
 		// Reset scrolling, issue #694
 		window.scrollTo(0, 0);
 
@@ -179,10 +183,20 @@ class IncorporationsDetailView extends Component {
 				)
 			);
 		}
+
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
 	}
 
-	handleChange = (event, selectedTab) => {
-		this.setState({ selectedTab });
+	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
+
+	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
+
+	onPayClick = () => {
+		const { countryCode, companyCode, templateId } = this.props.match.params;
+
+		this.props.dispatch(
+			push(`/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`)
+		);
 	};
 
 	render() {
@@ -221,9 +235,9 @@ class IncorporationsDetailView extends Component {
 						<div>
 							<FlagCountryName code={countryCode} />
 						</div>
-						<div>
-							<span className="region">{program.Region}</span>
-						</div>
+						<Typography variant="body2" gutterBottom className="region">
+							{program.Region}
+						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
 						<Grid
@@ -285,25 +299,33 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								<Button variant="contained" size="large">
-									Start Incorporation
-								</Button>
-								<ProgramPrice
-									price={program['Wallet Price']}
-									rate={keyRate}
-									label="Price:"
-								/>
+								{program['Wallet Price'] && (
+									<React.Fragment>
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.onPayClick}
+										>
+											Start Incorporation
+										</Button>
+										<ProgramPrice
+											price={program['Wallet Price']}
+											rate={keyRate}
+											label="Price: "
+										/>
+									</React.Fragment>
+								)}
 							</div>
 						</Grid>
 						<Grid
 							container
-							justify="left"
-							alignItems="left"
+							justify="flex-start"
+							alignItems="center"
 							className={classes.content}
 						>
 							<Tabs
 								value={selectedTab}
-								onChange={this.handleChange}
+								onChange={this.onTabChange}
 								classes={{
 									root: classes.tabsRoot,
 									indicator: classes.tabsIndicator
@@ -421,7 +443,7 @@ class IncorporationsDetailView extends Component {
 								)}
 							</div>
 
-							<IncorporationsKYC />
+							<IncorporationsKYC requirements={this.props.requirements} />
 						</Grid>
 					</div>
 				</div>
@@ -431,12 +453,18 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, countryCode } = props.match.params;
+	const { companyCode, countryCode, templateId } = props.match.params;
+
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		requirements: kycSelectors.selectRequirementsForTemplate(
+			state,
+			'incorporations',
+			templateId
+		)
 	};
 };
 

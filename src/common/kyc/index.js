@@ -173,6 +173,7 @@ export const kycActions = {
 		relyingPartyName,
 		templateId,
 		returnRoute,
+		cancelRoute,
 		title,
 		description,
 		agreement
@@ -183,6 +184,7 @@ export const kycActions = {
 				relyingPartyName,
 				templateId,
 				returnRoute,
+				cancelRoute,
 				title,
 				description,
 				agreement,
@@ -278,13 +280,12 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 ) => {
 	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
 	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.applications[applicationId]) throw new Error('application does not exist');
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
 	}
 
-	await rp.session.updateRelyingPartyKYCApplicationPayment(applicationId, transactionHash);
+	await rp.session.updateKYCApplicationPayment(applicationId, transactionHash);
 
 	rp.applications = await rp.session.listKYCApplications();
 
@@ -295,6 +296,7 @@ const startCurrentApplicationOperation = (
 	rpName,
 	templateId,
 	returnRoute,
+	cancelRoute,
 	title,
 	description,
 	agreement
@@ -304,6 +306,7 @@ const startCurrentApplicationOperation = (
 			rpName,
 			templateId,
 			returnRoute,
+			cancelRoute,
 			title,
 			description,
 			agreement
@@ -341,7 +344,7 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(getState());
-	dispatch(push(currentApplication.returnRoute));
+	dispatch(push(currentApplication.cancelRoute));
 	await dispatch(kycActions.clearCurrentApplication());
 };
 

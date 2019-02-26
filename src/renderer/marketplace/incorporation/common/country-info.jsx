@@ -79,7 +79,7 @@ class IncorporationsCountryInfo extends Component {
 				<Typography variant="h1" gutterBottom className={classes.countryName}>
 					{country[0].name}
 				</Typography>
-				<Grid container justify="left" alignItems="left">
+				<Grid container justify="flex-start" alignItems="flex-start">
 					<div className={classes.details}>
 						<List>
 							<ListItem>
