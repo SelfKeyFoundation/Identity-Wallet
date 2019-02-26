@@ -6,6 +6,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
+import { WarningIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -146,6 +147,10 @@ const styles = theme => ({
 	},
 	tabDescription: {
 		marginTop: '40px'
+	},
+	warningBar: {
+		padding: '22px 30px',
+		border: '1px solid #E98548'
 	}
 });
 
@@ -191,12 +196,105 @@ class IncorporationsDetailView extends Component {
 
 	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
 
-	onPayClick = () => {
+	onStartClick = () => {
 		const { countryCode, companyCode, templateId } = this.props.match.params;
 
 		this.props.dispatch(
 			push(`/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`)
 		);
+	};
+
+	onPayClick = () => {
+		const { countryCode, companyCode } = this.props.match.params;
+
+		this.props.dispatch(
+			push(`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`)
+		);
+	};
+
+	getLastApplication = () => {
+		const { templateId } = this.props.match.params;
+		// const templateId = '5c6fadbf77c33d5c28718d7b';
+		if (!this.props.rp) return false;
+
+		const { applications } = this.props.rp;
+		if (applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	userHasPaid = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return !!application.payments.length;
+	};
+
+	renderPartialStatus = () => {
+		const { classes } = this.props;
+		if (this.userHasPaid()) {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					className={classes.warningBar}
+				>
+					<Grid item xs={1}>
+						<WarningIcon />
+					</Grid>
+					<Grid item xs={11}>
+						<Typography variant="body2" color="secondary">
+							You have an existing <strong>In Progress</strong> application, please
+							contact support@flagtheory.com for further details
+						</Typography>
+					</Grid>
+				</Grid>
+			);
+		}
+
+		if (this.userHasApplied()) {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					className={classes.warningBar}
+				>
+					<Grid item xs={1}>
+						<WarningIcon />
+					</Grid>
+					<Grid item xs={8}>
+						<Typography variant="body2" color="secondary">
+							You have an existing <strong>unpaid</strong> application
+						</Typography>
+					</Grid>
+					<Grid item xs={3} style={{ textAlign: 'right' }}>
+						<Button variant="contained" onClick={this.onPayClick}>
+							Pay
+						</Button>
+					</Grid>
+				</Grid>
+			);
+		}
+
+		return null;
 	};
 
 	render() {
@@ -240,6 +338,7 @@ class IncorporationsDetailView extends Component {
 						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
+						{this.renderPartialStatus()}
 						<Grid
 							container
 							justify="flex-start"
@@ -301,13 +400,15 @@ class IncorporationsDetailView extends Component {
 							<div className={classes.applyButton}>
 								{program['Wallet Price'] && (
 									<React.Fragment>
-										<Button
-											variant="contained"
-											size="large"
-											onClick={this.onPayClick}
-										>
-											Start Incorporation
-										</Button>
+										{!this.userHasApplied() && (
+											<Button
+												variant="contained"
+												size="large"
+												onClick={this.onStartClick}
+											>
+												Start Incorporation
+											</Button>
+										)}
 										<ProgramPrice
 											price={program['Wallet Price']}
 											rate={keyRate}
@@ -460,6 +561,7 @@ const mapStateToProps = (state, props) => {
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
 			'incorporations',

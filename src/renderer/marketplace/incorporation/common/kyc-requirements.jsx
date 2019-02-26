@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -10,12 +11,10 @@ const styles = theme => ({
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
 	},
-
 	list: {
 		columns: 2,
 		width: '100%'
 	},
-
 	checkedStyle: {
 		height: '44px',
 		marginRight: '13px',
@@ -44,7 +43,18 @@ const IncorporationsKYC = props => {
 	const { classes, requirements } = props;
 
 	// Requirements might take a while to load
-	if (!requirements) return null;
+	if (!requirements) {
+		return (
+			<div className={classes.kyc}>
+				<Typography variant="h2" gutterBottom>
+					KYC Requirements and Forms
+				</Typography>
+				<Grid container justify="center" alignItems="center">
+					<CircularProgress size={50} />
+				</Grid>
+			</div>
+		);
+	}
 
 	return (
 		<div className={classes.kyc}>

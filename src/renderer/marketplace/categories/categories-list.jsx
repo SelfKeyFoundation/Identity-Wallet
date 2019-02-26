@@ -40,7 +40,7 @@ const getItems = items => {
 };
 
 export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children, items }) => (
-	<Grid container direction="column" justify="space-between" alignItems="stretcht" spacing={24}>
+	<Grid container direction="column" justify="space-between" alignItems="stretch" spacing={24}>
 		<Grid container item className={classes.header} xs={12} direction="row" alignItems="center">
 			<Grid item>
 				<MarketplaceIcon className={classes.headerIcon} />
