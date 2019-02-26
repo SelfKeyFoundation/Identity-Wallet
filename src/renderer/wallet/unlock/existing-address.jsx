@@ -39,10 +39,6 @@ class ExistingAddress extends Component {
 		error: ''
 	};
 
-	componentDidMount() {
-		this.props.dispatch(appOperations.loadWalletsOperation());
-	}
-
 	componentDidUpdate(prevProps) {
 		if (prevProps.error !== this.props.error) {
 			this.setState({ error: this.props.error });
@@ -69,6 +65,7 @@ class ExistingAddress extends Component {
 
 	render() {
 		const { classes, wallets } = this.props;
+		const { wallet, password } = this.state;
 		return (
 			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
 				<Grid
@@ -108,7 +105,7 @@ class ExistingAddress extends Component {
 									<Grid item className={classes.selectInput}>
 										<FormControl variant="filled" fullWidth>
 											<Select
-												value={this.state.wallet}
+												value={wallet}
 												onChange={this.handleWalletSelection}
 												displayEmpty
 												name="wallet"
@@ -180,7 +177,12 @@ class ExistingAddress extends Component {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
+					<Button
+						variant="contained"
+						size="large"
+						onClick={this.handleUnlockAction}
+						disabled={wallet < 0 || !password}
+					>
 						UNLOCK
 					</Button>
 				</Grid>
