@@ -223,6 +223,11 @@
 			"webpackConfig": "webpack/main.additions.js"
 		},
 		"renderer": {
+			"dll": [
+				"react",
+				"@material-ui/core",
+				"@material-ui/icons"
+			],
 			"webpackConfig": "webpack/renderer.additions.js"
 		}
 	},
