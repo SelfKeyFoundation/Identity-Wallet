@@ -3,6 +3,7 @@ import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
+import { walletSelectors } from 'common/wallet';
 import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import { connect } from 'react-redux';
 import {
@@ -29,6 +30,7 @@ import {
 	CopyIcon
 } from 'selfkey-ui';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 
 const styles = theme => ({
 	iconSpacing: {
@@ -47,7 +49,7 @@ const styles = theme => ({
 	}
 });
 
-const getIconForTransaction = (statusIconName, sending) => {
+const getIconForTransaction = (statusIconName, sent) => {
 	switch (statusIconName) {
 		case 'failed':
 			return <FailedIcon />;
@@ -58,7 +60,7 @@ const getIconForTransaction = (statusIconName, sending) => {
 		case 'sent':
 			return <SentIcon />;
 		default:
-			return sending ? <SentIcon /> : <ReceiveIcon />;
+			return sent ? <SentIcon /> : <ReceiveIcon />;
 	}
 };
 
@@ -70,9 +72,9 @@ const getCryptoType = transaction => {
 	}
 };
 
-const getCustomStatusText = transaction => {
+const getCustomStatusText = (transaction, sent) => {
 	let cryptoType = getCryptoType(transaction);
-	if (transaction.sending) {
+	if (sent) {
 		return `Sent ${cryptoType}`;
 	} else {
 		return `Received ${cryptoType}`;
@@ -98,7 +100,9 @@ const getAbrDateFromTimestamp = timestamp => {
 	const year = date.getFullYear();
 	const month = monthNames[date.getMonth()];
 	const day = date.getDate();
-	return { year, month, day };
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+	return { year, month, day, hours, minutes };
 };
 
 const paginate = (array, pageSize, pageNumber) => {
@@ -132,11 +136,16 @@ class TransactionsHistory extends Component {
 		this.setState({ rowsPerPage: rowsPerPage.props.value });
 	};
 
+	hasSent = transaction => {
+		const publicKey = this.props.wallet.publicKey || '';
+		return transaction.from.toLowerCase() === publicKey.toLowerCase();
+	};
+
 	renderDate(timestamp) {
-		const { year, month, day } = getAbrDateFromTimestamp(timestamp);
+		const { year, month, day, hours, minutes } = getAbrDateFromTimestamp(timestamp);
 		return (
 			<div>
-				{day} {month} {year}
+				{day} {month} {year} {hours}:{minutes}
 			</div>
 		);
 	}
@@ -161,7 +170,7 @@ class TransactionsHistory extends Component {
 									<TableCell>
 										{getIconForTransaction(
 											transaction.statusIconName,
-											transaction.sending
+											this.hasSent(transaction)
 										)}
 									</TableCell>
 									<TableCell>
@@ -177,15 +186,16 @@ class TransactionsHistory extends Component {
 									<TableCell>
 										<Typography component="span" variant="body2" gutterBottom>
 											{transaction.statusText ||
-												getCustomStatusText(transaction)}
+												getCustomStatusText(
+													transaction,
+													this.hasSent(transaction)
+												)}
 										</Typography>
 									</TableCell>
 									<TableCell align="right">
 										<Typography component="span" variant="body2" gutterBottom>
-											{transaction.sending ? '- ' : '+ '}
-											{transaction.value
-												? transaction.value.toLocaleString()
-												: ''}
+											{this.hasSent(transaction) ? '- ' : '+ '}
+											{convertExponentialToDecimal(transaction.value)}
 										</Typography>
 									</TableCell>
 									<TableCell align="right">
@@ -252,8 +262,13 @@ class TransactionsHistory extends Component {
 	}
 }
 const mapStateToProps = (state, props) => {
+	console.log(
+		'transactions',
+		transactionHistorySelectors.selectTransactionHistory(state).transactions
+	);
 	return {
-		transactions: transactionHistorySelectors.selectTransactionHistory(state).transactions
+		transactions: transactionHistorySelectors.selectTransactionHistory(state).transactions,
+		wallet: walletSelectors.getWallet(state)
 	};
 };
 
