@@ -12,9 +12,10 @@ import {
 	Input,
 	MenuItem,
 	FormControl,
-	Modal
+	Modal,
+	IconButton
 } from '@material-ui/core';
-import { IdCardIcon, ModalWrap } from 'selfkey-ui';
+import { IdCardIcon, ModalWrap, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { identitySelectors, identityOperations } from 'common/identity';
@@ -249,6 +250,30 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			gutterBottom
 																		>
 																			SELFKEY ID NICKNAME
+																			<KeyTooltip
+																				interactive
+																				placement="top-start"
+																				title={
+																					<React.Fragment>
+																						<span>
+																							With
+																							nicknames
+																							it is
+																							very
+																							easy to
+																							switch
+																							between
+																							multiple
+																							accounts.
+																						</span>
+																						<TooltipArrow />
+																					</React.Fragment>
+																				}
+																			>
+																				<IconButton aria-label="Info">
+																					<InfoTooltip />
+																				</IconButton>
+																			</KeyTooltip>
 																		</Typography>
 																	</Grid>
 																	<Grid
@@ -265,6 +290,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				this
 																					.handleNickNameChange
 																			}
+																			placeholder="Alias for this account"
 																		/>
 																		{this.state.error !==
 																			'' && (
@@ -315,6 +341,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				this
 																					.handleFirstNameChange
 																			}
+																			placeholder="Given Name"
 																		/>
 																	</Grid>
 																</Grid>
@@ -344,6 +371,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				this
 																					.handleLastNameChange
 																			}
+																			placeholder="Family Name"
 																		/>
 																	</Grid>
 																</Grid>
