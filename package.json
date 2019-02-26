@@ -178,7 +178,6 @@
 		"eslint-plugin-promise": "4.0.1",
 		"eslint-plugin-react": "7.11.1",
 		"eslint-plugin-standard": "4.0.0",
-		"hard-source-webpack-plugin": "0.13.1",
 		"husky": "1.2.0",
 		"jest": "23.6.0",
 		"jest-cucumber": "1.0.11",
@@ -224,6 +223,19 @@
 			"webpackConfig": "webpack/main.additions.js"
 		},
 		"renderer": {
+			"dll": [
+				"react",
+				"@material-ui/core",
+				"@material-ui/icons",
+				"ajv",
+				"react-jsonschema-form",
+				"selfkey-ui",
+				"redux",
+				"redux-logger",
+				"redux-promise",
+				"web3",
+				"sqlite3"
+			],
 			"webpackConfig": "webpack/renderer.additions.js"
 		}
 	},

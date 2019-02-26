@@ -43,7 +43,7 @@ const TokenList = props => {
 					cryptoCurrencyShort=""
 					cryptoCurrencyName="Custom Tokens"
 					CryptoCurrencyIconComponent={CustomIcon}
-					transferAction={() => props.dispatch(push('/main/transfer/custom'))}
+					transferAction={() => props.dispatch(push('/main/advancedTransaction/custom'))}
 				>
 					<CustomTokenText>Send or receive any custom ERC-20 token.</CustomTokenText>
 				</TokenBox>
