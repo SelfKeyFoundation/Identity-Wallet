@@ -189,16 +189,15 @@ class IncorporationsDetailView extends Component {
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
 
-	onBackClick = _ => this.props.dispatch(push(`/main/marketplace-incorporation`));
+	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
 
-	onPayClick = _ =>
+	onPayClick = () => {
+		const { countryCode, companyCode, templateId } = this.props.match.params;
+
 		this.props.dispatch(
-			push(
-				`/main/marketplace-incorporation/pay/${this.props.match.params.companyCode}/${
-					this.props.match.params.countryCode
-				}`
-			)
+			push(`/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`)
 		);
+	};
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;

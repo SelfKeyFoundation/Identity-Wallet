@@ -28,6 +28,11 @@ const styles = theme => ({
 		cursor: 'pointer',
 		color: '#00C0D9',
 		textDecoration: 'none'
+	},
+	content: {
+		'& p': {
+			marginBottom: '1em'
+		}
 	}
 });
 
@@ -66,9 +71,12 @@ class PaymentConfirmationContentComponent extends Component {
 								Transaction ID: {txId}
 							</Typography>
 						</Grid>
-						<Grid item>
+						<Grid item className={classes.content}>
 							<Typography variant="body1" gutterBottom>
-								You are about to pay the following amount to {name}.<br />
+								Thank you for providing the basic informations about yourself!
+							</Typography>
+							<Typography variant="body2" gutterBottom>
+								You are about to initiate a payment to {name}.<br />
 								The payment will be done with {crypoCurrency} tokens, at the
 								provided exchange rate.
 							</Typography>
@@ -154,7 +162,7 @@ class PaymentConfirmationContentComponent extends Component {
 							</Grid>
 							<div className={classes.actions}>
 								<Button variant="contained" size="large" onClick={onConfirm}>
-									Confirm
+									Pay Incorporation
 								</Button>
 								<Button variant="outlined" size="large" onClick={onCancel}>
 									Cancel

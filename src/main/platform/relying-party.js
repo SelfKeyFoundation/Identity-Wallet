@@ -5,12 +5,12 @@ import urljoin from 'url-join';
 import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
 import { Logger } from 'common/logger';
-
-const log = new Logger('kyc');
-
+/*
 if (config.dev) {
 	request.debug = true;
 }
+*/
+const log = new Logger('kyc');
 
 const { userAgent } = config;
 export class RelyingPartyError extends Error {
@@ -206,6 +206,9 @@ export class RelyingPartyRest {
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
 		let url = ctx.getEndpoint('/applications/:id/payments');
 		url = url.replace(':id', applicationId);
+		log.info(
+			`[updateKYCApplicationPayment] POST ${url} : auth:${ctx.token.toString()} : ${transactionHash}`
+		);
 		return request.post({
 			url,
 			body: { transactionHash },
@@ -362,6 +365,10 @@ export class RelyingPartySession {
 	}
 
 	updateKYCApplicationPayment(applicationId, transactionHash) {
+		if (config.dev) {
+			request.debug = true;
+		}
+
 		return RelyingPartyRest.updateKYCApplicationPayment(
 			this.ctx,
 			applicationId,
@@ -370,6 +377,9 @@ export class RelyingPartySession {
 	}
 
 	listKYCTemplates() {
+		if (config.dev) {
+			request.debug = false;
+		}
 		return RelyingPartyRest.listKYCTemplates(this.ctx);
 	}
 

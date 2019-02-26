@@ -76,20 +76,26 @@ const styles = theme => ({
 });
 
 export class IncorporationProcessStarted extends React.Component {
+	async componentWillMount() {
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+	}
+
 	componentDidMount() {
 		this.saveTransactionHash();
 	}
 
 	saveTransactionHash = async () => {
-		const { currentApplication, transaction } = this.props;
+		const { currentApplication, transaction, rp } = this.props;
 
 		console.log(this.props);
 
 		if (currentApplication && transaction) {
+			const application = rp.applications[rp.applications.length - 1];
+			console.log(application);
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					'incorporations',
-					currentApplication.id,
+					application.id,
 					transaction.transactionHash
 				)
 			);
@@ -104,6 +110,8 @@ export class IncorporationProcessStarted extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+
+		console.log(this.props);
 
 		return (
 			<div className={classes.container}>
@@ -129,12 +137,9 @@ export class IncorporationProcessStarted extends React.Component {
 							<HourGlassLargeIcon />
 						</div>
 						<div className={classes.content}>
-							<Typography variant="body1" gutterBottom>
-								Incorporation Process Started
-							</Typography>
 							<div className={classes.description}>
-								<Typography variant="body2" gutterBottom>
-									Thank you for providing the basic informations about yourself!
+								<Typography variant="body1" gutterBottom>
+									Thank you for payment!
 								</Typography>
 								<Typography variant="body2" gutterBottom>
 									One of our our managers is reviewing the information you
@@ -166,7 +171,7 @@ export class IncorporationProcessStarted extends React.Component {
 									size="large"
 									onClick={this.onSelfKeyClick}
 								>
-									Go to Selfkey ID
+									Go to Profile
 								</Button>
 								<Button variant="outlined" size="large" onClick={this.onBackClick}>
 									Close
@@ -186,6 +191,7 @@ const mapStateToProps = (state, props) => {
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		transaction: transactionSelectors.getTransaction(state),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode

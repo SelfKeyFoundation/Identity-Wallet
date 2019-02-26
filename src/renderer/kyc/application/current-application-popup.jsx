@@ -50,16 +50,31 @@ const styles = theme => ({
 	},
 	agreementError: {
 		marginLeft: '30px'
+	},
+	editColumn: {
+		textAlign: 'right'
 	}
 });
 
-const KycAgreement = withStyles(styles)(({ agreement, classes }) => {
+const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error }) => {
 	return (
 		<FormControl>
-			<FormControlLabel control={<Checkbox />} label={agreement} />
-			<FormHelperText error={true} className={classes.agreementError}>
-				Please confirm you understand what happens with your information
-			</FormHelperText>
+			<FormControlLabel
+				control={
+					<Checkbox
+						value={value}
+						onChange={(evt, checked) => {
+							onChange && onChange(checked);
+						}}
+					/>
+				}
+				label={text}
+			/>
+			{error && !value ? (
+				<FormHelperText error={true} className={classes.agreementError}>
+					Please confirm you understand what happens with your information
+				</FormHelperText>
+			) : null}
 		</FormControl>
 	);
 });
@@ -75,6 +90,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 			);
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
+
 		return (
 			<RadioGroup
 				className={classes.radioGroup}
@@ -122,7 +138,7 @@ const KycChecklistItem = withStyles(styles)(
 						onSelected={onSelected}
 					/>
 				</SmallTableCell>
-				<SmallTableCell>
+				<SmallTableCell className={classes.editColumn}>
 					<Typography variant="subtitle1" gutterBottom>
 						<IconButton aria-label="Edit" onClick={event => editItem(item)}>
 							<MuiEditIcon />
@@ -151,7 +167,7 @@ const KycChecklist = withStyles(styles)(
 								Label
 							</Typography>
 						</SmallTableCell>
-						<SmallTableCell>
+						<SmallTableCell className={classes.editColumn}>
 							<Typography variant="overline" gutterBottom>
 								Actions
 							</Typography>
@@ -187,10 +203,15 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		relyingParty,
 		requirements,
 		selectedAttributes,
+		agreement,
+		agreementError,
+		onAgreementChange,
+		agreementValue,
+		error,
 		onSelected,
 		editItem
 	}) => {
-		if (!relyingParty || !currentApplication)
+		if (!relyingParty || !currentApplication || !requirements)
 			return (
 				<Popup open={open} text="KYC Checklist" closeAction={onClose}>
 					<div className={classes.loading}>
@@ -200,7 +221,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 			);
 		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
 		const description = currentApplication.description || `${relyingParty.description || ''}`;
-		const agreement = currentApplication.agreement;
+		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
+
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
 				<Grid
@@ -224,21 +246,33 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					</Grid>
 					{agreement ? (
 						<Grid item>
-							<KycAgreement agreement={agreement} />
+							<KycAgreement
+								text={agreement}
+								value={agreementValue}
+								error={agreementError}
+								onChange={onAgreementChange}
+							/>
 						</Grid>
 					) : (
 						''
 					)}
-					<Grid item>
-						<Typography variant="body2" color="error">
-							Error: You must provide all required information to proceed. Please
-							update any missing details.
-						</Typography>
-					</Grid>
+					{error ? (
+						<Grid item>
+							<Typography variant="body2" color="error">
+								Error: You must provide all required information to proceed. Please
+								update any missing details.
+							</Typography>
+						</Grid>
+					) : null}
 					<Grid item>
 						<Grid container spacing={24}>
 							<Grid item>
-								<Button variant="contained" size="large" onClick={onSubmit}>
+								<Button
+									variant="contained"
+									size="large"
+									onClick={onSubmit}
+									disabled={submitDisabled}
+								>
 									Submit
 								</Button>
 							</Grid>

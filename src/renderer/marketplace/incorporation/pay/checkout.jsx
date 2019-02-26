@@ -179,8 +179,8 @@ export class IncorporationCheckout extends React.Component {
 	};
 
 	getCancelRoute = _ => {
-		const { companyCode, countryCode } = this.props.match.params;
-		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}`;
+		const { companyCode, countryCode, templateId } = this.props.match.params;
+		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 	};
 
 	getPayRoute = _ => {
@@ -192,13 +192,17 @@ export class IncorporationCheckout extends React.Component {
 
 	onStartClick = _ => {
 		const { program } = this.props;
+		const { templateId } = this.props.match.params;
+
+		// For easy kyc testing, use the following test templateId
+		// templateId = 5c6fadbf77c33d5c28718d7b';
 
 		// TODO: some of this info should be loaded from airtable
 		// FIXME: replace test wallet in production
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				'incorporations',
-				'5c6fadbf77c33d5c28718d7b',
+				templateId,
 				this.getPayRoute(),
 				this.getCancelRoute(),
 				`Incorporation Checklist: ${program.Region}`,
