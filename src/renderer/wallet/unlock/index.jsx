@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Divider } from '@material-ui/core';
+import { appOperations, appSelectors } from 'common/app';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -14,7 +15,7 @@ import {
 	TrezorIcon
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import ExistingAddress from './existing-address';
@@ -128,7 +129,7 @@ class Unlock extends Component {
 	};
 
 	componentDidMount() {
-		this.props.dispatch(push('/unlockWallet/existingAddress'));
+		this.props.dispatch(appOperations.loadWalletsOperation());
 	}
 
 	switchUnlockOptions = (href, index) => event => {
@@ -137,7 +138,10 @@ class Unlock extends Component {
 	};
 
 	render() {
-		const { classes, match } = this.props;
+		const { classes, match, app } = this.props;
+		const { walletsLoading, wallets } = app;
+		let { selected } = this.state;
+		if (!wallets.length && !selected) selected = 1;
 		return (
 			<Modal open={true}>
 				<ModalWrap className={classes.modalWrap}>
@@ -162,99 +166,121 @@ class Unlock extends Component {
 							</Typography>
 						</ModalHeader>
 
-						<ModalBody>
-							<Grid
-								container
-								direction="column"
-								justify="center"
-								alignItems="center"
-								spacing={40}
-							>
-								<Grid item>
-									<Grid
-										container
-										direction="row"
-										justify="center"
-										alignItems="center"
-									>
-										<Grid item>
-											<UnlockOptionWrapped
-												selected={this.state.selected === 0}
-												icon={<ExistingAddressIcon />}
-												title="Existing Address"
-												subtitle="Keystore File"
-												onClick={this.switchUnlockOptions(
-													'/unlockWallet/existingAddress',
-													0
-												)}
-											/>
-										</Grid>
-										<Grid item>
-											<UnlockOptionWrapped
-												selected={this.state.selected === 1}
-												icon={<NewAddressIcon />}
-												title="New Address"
-												subtitle="Keystore File"
-												onClick={this.switchUnlockOptions(
-													'/unlockWallet/newAddress',
-													1
-												)}
-											/>
-										</Grid>
-										<Grid item>
-											<UnlockOptionWrapped
-												selected={this.state.selected === 2}
-												icon={<KeyIcon />}
-												title="Private Key"
-												onClick={this.switchUnlockOptions(
-													'/unlockWallet/privateKey',
-													2
-												)}
-											/>
-										</Grid>
-										<Grid item>
-											<UnlockOptionWrapped
-												selected={this.state.selected === 3}
-												icon={<LedgerIcon />}
-												title="Ledger"
-												onClick={this.switchUnlockOptions(
-													'/unlockWallet/ledger',
-													3
-												)}
-											/>
-										</Grid>
-										<Grid item>
-											<UnlockOptionWrapped
-												selected={this.state.selected === 4}
-												icon={<TrezorIcon />}
-												title="Trezor"
-												onClick={this.switchUnlockOptions(
-													'/unlockWallet/trezor',
-													4
-												)}
-											/>
+						{walletsLoading ? (
+							<ModalBody>Loading...</ModalBody>
+						) : (
+							<ModalBody>
+								<Grid
+									container
+									direction="column"
+									justify="center"
+									alignItems="center"
+									spacing={40}
+								>
+									<Grid item>
+										<Grid
+											container
+											direction="row"
+											justify="center"
+											alignItems="center"
+										>
+											{wallets.length ? (
+												<Grid item>
+													<UnlockOptionWrapped
+														selected={selected === 0}
+														icon={<ExistingAddressIcon />}
+														title="Existing Address"
+														subtitle="Keystore File"
+														onClick={this.switchUnlockOptions(
+															'/unlockWallet/existingAddress',
+															0
+														)}
+													/>
+												</Grid>
+											) : (
+												''
+											)}
+											<Grid item>
+												<UnlockOptionWrapped
+													selected={selected === 1}
+													icon={<NewAddressIcon />}
+													title="New Address"
+													subtitle="Keystore File"
+													onClick={this.switchUnlockOptions(
+														'/unlockWallet/newAddress',
+														1
+													)}
+												/>
+											</Grid>
+
+											<Grid item>
+												<UnlockOptionWrapped
+													selected={selected === 2}
+													icon={<KeyIcon />}
+													title="Private Key"
+													onClick={this.switchUnlockOptions(
+														'/unlockWallet/privateKey',
+														2
+													)}
+												/>
+											</Grid>
+
+											<Grid item>
+												<UnlockOptionWrapped
+													selected={selected === 3}
+													icon={<LedgerIcon />}
+													title="Ledger"
+													onClick={this.switchUnlockOptions(
+														'/unlockWallet/ledger',
+														3
+													)}
+												/>
+											</Grid>
+											<Grid item>
+												<UnlockOptionWrapped
+													selected={selected === 4}
+													icon={<TrezorIcon />}
+													title="Trezor"
+													onClick={this.switchUnlockOptions(
+														'/unlockWallet/trezor',
+														4
+													)}
+												/>
+											</Grid>
 										</Grid>
 									</Grid>
+									<Divider className={classes.divider} />
+									<Grid item>
+										{wallets.length ? (
+											<Route
+												path={`${match.path}/existingAddress`}
+												component={ExistingAddress}
+											/>
+										) : (
+											''
+										)}
+										<Route
+											path={`${match.path}/newAddress`}
+											component={NewAddress}
+										/>
+										<Route
+											path={`${match.path}/privateKey`}
+											component={PrivateKey}
+										/>
+										<Route path={`${match.path}/ledger`} component={Ledger} />
+										<Route path={`${match.path}/trezor`} component={Trezor} />
+										<Redirect
+											from={`${match.path}/`}
+											to={
+												wallets.length
+													? `${match.path}/existingAddress`
+													: `${match.path}/newAddress`
+											}
+										/>
+									</Grid>
 								</Grid>
-								<Divider className={classes.divider} />
-								<Grid item>
-									<Route
-										path={`${match.path}/existingAddress`}
-										component={ExistingAddress}
-									/>
-									<Route
-										path={`${match.path}/newAddress`}
-										component={NewAddress}
-									/>
-									<Route
-										path={`${match.path}/privateKey`}
-										component={PrivateKey}
-									/>
-									<Route path={`${match.path}/ledger`} component={Ledger} />
-									<Route path={`${match.path}/trezor`} component={Trezor} />
-								</Grid>
-							</Grid>
-						</ModalBody>
+							</ModalBody>
+						)}
 					</Paper>
 				</ModalWrap>
 			</Modal>
@@ -263,7 +289,9 @@ class Unlock extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		app: appSelectors.selectApp(state)
+	};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(Unlock));

@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
+import EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-model');
 export class WalletService {
@@ -133,6 +134,9 @@ export class WalletService {
 	}
 
 	async unlockWalletWithPrivateKey(privateKey) {
+		if (!EthUtil.isValidPrivate(Buffer.from(privateKey.replace('0x', ''), 'hex'))) {
+			throw new Error('The private key you entered is incorrect. Please try again!');
+		}
 		const account = this.web3Service.web3.eth.accounts.privateKeyToAccount(privateKey);
 		this.web3Service.web3.eth.accounts.wallet.add(account);
 		this.web3Service.web3.eth.defaultAccount = account.address;

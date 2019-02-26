@@ -223,6 +223,19 @@
 			"webpackConfig": "webpack/main.additions.js"
 		},
 		"renderer": {
+			"dll": [
+				"react",
+				"@material-ui/core",
+				"@material-ui/icons",
+				"ajv",
+				"react-jsonschema-form",
+				"selfkey-ui",
+				"redux",
+				"redux-logger",
+				"redux-promise",
+				"web3",
+				"sqlite3"
+			],
 			"webpackConfig": "webpack/renderer.additions.js"
 		}
 	},

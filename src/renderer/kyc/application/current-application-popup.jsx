@@ -53,19 +53,32 @@ const styles = theme => ({
 	}
 });
 
-const KycAgreement = withStyles(styles)(({ agreement, classes }) => {
+const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error }) => {
 	return (
 		<FormControl>
-			<FormControlLabel control={<Checkbox />} label={agreement} />
-			<FormHelperText error={true} className={classes.agreementError}>
-				Please confirm you understand what happens with your information
-			</FormHelperText>
+			<FormControlLabel
+				control={
+					<Checkbox
+						value={value}
+						onChange={(evt, checked) => {
+							console.log('XXX', checked);
+							onChange && onChange(checked);
+						}}
+					/>
+				}
+				label={text}
+			/>
+			{error && !value ? (
+				<FormHelperText error={true} className={classes.agreementError}>
+					Please confirm you understand what happens with your information
+				</FormHelperText>
+			) : null}
 		</FormControl>
 	);
 });
 
 const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttributes, onSelected }) => {
+	({ item, className, classes, selectedAttr, onSelected }) => {
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
@@ -74,7 +87,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 				</Typography>
 			);
 		}
-		const selectedAttr = selectedAttributes[item.uiId] || options[0];
+
 		return (
 			<RadioGroup
 				className={classes.radioGroup}
@@ -101,7 +114,8 @@ const KycChecklistItemLabel = withStyles(styles)(
 
 const KycChecklistItem = withStyles(styles)(({ item, classes, selectedAttributes, onSelected }) => {
 	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
-	const warning = !item.options || !item.options.length;
+	const selectedAttr = selectedAttributes[item.uiId] || (item.options || [null])[0];
+	const warning = !selectedAttr || !selectedAttr.isValid;
 	const warningClassname = warning ? classes.rowWarning : '';
 	let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
 
@@ -117,7 +131,7 @@ const KycChecklistItem = withStyles(styles)(({ item, classes, selectedAttributes
 				<KycChecklistItemLabel
 					item={item}
 					className={warningClassname}
-					selectedAttributes={selectedAttributes}
+					selectedAttr={selectedAttr}
 					onSelected={onSelected}
 				/>
 			</SmallTableCell>
@@ -184,6 +198,11 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		relyingParty,
 		requirements,
 		selectedAttributes,
+		agreement,
+		agreementError,
+		onAgreementChange,
+		agreementValue,
+		error,
 		onSelected
 	}) => {
 		if (!relyingParty || !currentApplication)
@@ -196,7 +215,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 			);
 		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
 		const description = currentApplication.description || `${relyingParty.description || ''}`;
-		const agreement = currentApplication.agreement;
+		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
 				<Grid
@@ -219,21 +238,33 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					</Grid>
 					{agreement ? (
 						<Grid item>
-							<KycAgreement agreement={agreement} />
+							<KycAgreement
+								text={agreement}
+								value={agreementValue}
+								error={agreementError}
+								onChange={onAgreementChange}
+							/>
 						</Grid>
 					) : (
 						''
 					)}
-					<Grid item>
-						<Typography variant="body2" color="error">
-							Error: You must provide all required information to proceed. Please
-							update any missing details.
-						</Typography>
-					</Grid>
+					{error ? (
+						<Grid item>
+							<Typography variant="body2" color="error">
+								Error: You must provide all required information to proceed. Please
+								update any missing details.
+							</Typography>
+						</Grid>
+					) : null}
 					<Grid item>
 						<Grid container spacing={24}>
 							<Grid item>
-								<Button variant="contained" size="large" onClick={onSubmit}>
+								<Button
+									variant="contained"
+									size="large"
+									onClick={onSubmit}
+									disabled={submitDisabled}
+								>
 									Submit
 								</Button>
 							</Grid>

@@ -4,7 +4,7 @@ import { kycSelectors, kycOperations } from '../../../common/kyc';
 import { CurrentApplicationPopup } from './current-application-popup';
 
 class CurrentApplicationComponent extends Component {
-	state = { selected: {} };
+	state = { selected: {}, agreementError: false, agreementValue: false };
 	componentDidMount() {
 		if (!this.props.currentApplication) return;
 		if (this.props.rpShouldUpdate) {
@@ -13,7 +13,27 @@ class CurrentApplicationComponent extends Component {
 			);
 		}
 	}
+	handleAgreementChange = agreementValue => {
+		this.setState({ agreementValue });
+	};
 	handleSubmit = () => {
+		const { currentApplication, requirements } = this.props;
+		const { agreementValue, selected } = this.state;
+		if (currentApplication.agreement && !agreementValue) {
+			this.setState({ agreementError: true });
+			return;
+		}
+		const error = requirements.reduce((acc, curr) => {
+			if (acc) return acc;
+			if (!curr.options || !curr.options.length) return true;
+			const attribute = selected[curr.uiId] || curr.options[0];
+			if (!attribute || !attribute.isValid) return true;
+			return false;
+		}, false);
+		if (error) {
+			this.setState({ error });
+			return;
+		}
 		this.props.dispatch(kycOperations.submitCurrentApplicationOperation(this.state.selected));
 	};
 	handleClose = () => {
@@ -29,6 +49,11 @@ class CurrentApplicationComponent extends Component {
 		return (
 			<CurrentApplicationPopup
 				currentApplication={currentApplication}
+				agreement={currentApplication.agreement}
+				agreementValue={this.state.agreementValue}
+				agreementError={this.state.agreementError}
+				onAgreementChange={this.handleAgreementChange}
+				error={this.state.error}
 				relyingParty={relyingParty}
 				requirements={requirements}
 				onClose={this.handleClose}
