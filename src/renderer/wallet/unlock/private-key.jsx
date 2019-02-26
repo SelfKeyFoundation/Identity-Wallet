@@ -69,6 +69,7 @@ class PrivateKey extends Component {
 
 	render() {
 		const { classes } = this.props;
+		const { privateKey } = this.state;
 		return (
 			<div className={classes.root}>
 				<Grid
@@ -107,6 +108,7 @@ class PrivateKey extends Component {
 										<Input
 											fullWidth
 											error={this.state.error !== ''}
+											placeholder="0x"
 											endAdornment={
 												<InputAdornment
 													position="start"
@@ -135,9 +137,19 @@ class PrivateKey extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						<Button variant="contained" size="large" onClick={this.handleUnlockAction}>
+						<Button
+							variant="contained"
+							size="large"
+							onClick={this.handleUnlockAction}
+							disabled={!privateKey}
+						>
 							UNLOCK
 						</Button>
+					</Grid>
+					<Grid item>
+						<Typography variant="body2" color="secondary">
+							Warning: Please keep your private keys safe and secure.
+						</Typography>
 					</Grid>
 				</Grid>
 			</div>
