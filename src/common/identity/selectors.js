@@ -1,5 +1,6 @@
 import { walletSelectors } from '../wallet';
 import { jsonSchema, identityAttributes } from './utils';
+import { forceUpdateAttributes } from 'common/config';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -26,7 +27,9 @@ const selectRepositories = state =>
 
 const selectExpiredRepositories = state => {
 	let now = Date.now();
-	return identitySelectors.selectRepositories(state).filter(repo => repo.expires <= now);
+	return identitySelectors
+		.selectRepositories(state)
+		.filter(repo => forceUpdateAttributes || repo.expires <= now);
 };
 
 const selectIdAttributeTypes = state =>
@@ -41,7 +44,7 @@ const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();
 	return identitySelectors
 		.selectIdAttributeTypes(state)
-		.filter(attributeType => attributeType.expires <= now);
+		.filter(attributeType => forceUpdateAttributes || attributeType.expires <= now);
 };
 
 const selectIdAttributeTypeByUrl = (state, url) =>
@@ -56,7 +59,7 @@ const selectExpiredUiSchemas = state => {
 	let now = Date.now();
 	return identitySelectors
 		.selectUiSchemas(state)
-		.filter(uiSelectors => uiSelectors.expires <= now);
+		.filter(uiSelectors => forceUpdateAttributes || uiSelectors.expires <= now);
 };
 
 const selectDocuments = state =>
