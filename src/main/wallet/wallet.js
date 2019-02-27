@@ -74,6 +74,7 @@ export class Wallet extends BaseModel {
 	}
 
 	static async create(itm) {
+		itm.publicKey = itm.publicKey.toLowerCase();
 		const tx = await transaction.start(this.knex());
 		try {
 			let insertedItm = await this.query(tx).insertGraphAndFetch(
@@ -116,7 +117,7 @@ export class Wallet extends BaseModel {
 	}
 
 	static findByPublicKey(publicKey) {
-		return this.query().findOne({ publicKey });
+		return this.query().findOne({ publicKey: publicKey.toLowerCase() });
 	}
 
 	static async updateProfilePicture({ id, profilePicture }) {

@@ -317,7 +317,9 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		WHERE attr.id == old.id;
 	`)).map(attr => {
 		let data = JSON.parse(attr.data);
-		if (!data.value) {
+		if (Object.entries(data).length === 0 && data.constructor === Object) {
+			data = {};
+		} else if (!data.value) {
 			data = { value: data };
 		}
 		if (attr.type === 'phonenumber_countrycode') {

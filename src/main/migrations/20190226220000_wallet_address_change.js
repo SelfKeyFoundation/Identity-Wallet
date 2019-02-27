@@ -1,0 +1,18 @@
+/* istanbul ignore file */
+exports.up = async (knex, Promise) => {
+	const wallets = await knex('wallets').select();
+	wallets.map(async wallet => {
+		await knex('wallets')
+			.update({ publicKey: `0x${wallet.publicKey}` })
+			.where({ id: wallet.id });
+	});
+};
+
+exports.down = async (knex, Promise) => {
+	const wallets = await knex('wallets').select();
+	wallets.map(async wallet => {
+		await knex('wallets')
+			.update({ publicKey: wallet.publicKey.substring(2) })
+			.where({ id: wallet.id });
+	});
+};
