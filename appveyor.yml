@@ -27,7 +27,7 @@ cache:
   - '%LOCALAPPDATA%/Yarn'
 install:
   - ps: Start-FileDownload 'https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe'
-  - ps: Start-Process 'Win64OpenSSL-1_0_2q.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+  - ps: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
   - choco install gcloudsdk
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
