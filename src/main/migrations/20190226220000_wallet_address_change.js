@@ -2,9 +2,11 @@
 exports.up = async (knex, Promise) => {
 	const wallets = await knex('wallets').select();
 	wallets.map(async wallet => {
-		await knex('wallets')
-			.update({ publicKey: `0x${wallet.publicKey}` })
-			.where({ id: wallet.id });
+		if (wallet.publicKey.indexOf('0x') === -1) {
+			await knex('wallets')
+				.update({ publicKey: `0x${wallet.publicKey}` })
+				.where({ id: wallet.id });
+		}
 	});
 };
 
