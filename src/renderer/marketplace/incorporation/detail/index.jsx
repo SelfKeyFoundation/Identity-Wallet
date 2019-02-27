@@ -309,7 +309,7 @@ class IncorporationsDetailView extends Component {
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
-		const { countryCode } = this.props.match.params;
+		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
@@ -554,7 +554,10 @@ class IncorporationsDetailView extends Component {
 								)}
 							</div>
 
-							<IncorporationsKYC requirements={this.props.requirements} />
+							<IncorporationsKYC
+								requirements={this.props.requirements}
+								templateId={templateId}
+							/>
 						</Grid>
 					</div>
 				</div>
