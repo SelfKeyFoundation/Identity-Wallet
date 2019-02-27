@@ -89,7 +89,7 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
-		const templateAttributes = template.identity_attributes || [];
+		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {
 				curr = { schemaId: curr };
