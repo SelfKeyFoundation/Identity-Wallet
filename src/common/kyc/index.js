@@ -89,7 +89,7 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
-		const templateAttributes = template.identity_attributes || [];
+		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {
 				curr = { schemaId: curr };
@@ -218,7 +218,6 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 			(await session.listKYCTemplates()).map(async tpl => {
 				const id = tpl.id || tpl.templateId;
 				tpl = await session.getKYCTemplate(id);
-				if (tpl.identity_atrributes) tpl.identity_attributes = tpl.identity_atrributes;
 				tpl.id = id;
 				return tpl;
 			})
