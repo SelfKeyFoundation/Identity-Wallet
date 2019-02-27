@@ -20,6 +20,11 @@ const styles = theme => ({
 	},
 	cancel: {
 		paddingLeft: '20px'
+	},
+	link: {
+		color: '#00C0D9',
+		cursor: 'pointer',
+		textDecoration: 'none'
 	}
 });
 
@@ -80,7 +85,16 @@ class SelfKeyIdCreateAboutComponent extends Component {
 										tokens. Think of staking like a refundable deposit. Staking{' '}
 										is required to prevent spam and to secure all parties{' '}
 										interact in a professional and respectable manner. To learn{' '}
-										more about this, click here.
+										more about this,{' '}
+										<a
+											className={classes.link}
+											onClick={e => {
+												window.openExternal(e, 'https://help.selfkey.org/');
+											}}
+										>
+											click here
+										</a>
+										.
 									</Typography>
 									<br />
 									<br />

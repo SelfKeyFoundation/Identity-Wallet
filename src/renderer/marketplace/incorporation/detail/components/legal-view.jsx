@@ -110,6 +110,36 @@ const LEGAL_COLUMNS = [
 			id: 'AEOI',
 			text: 'AEOI'
 		}
+	],
+	[
+		{
+			id: 'Members not disclosed in a public registry',
+			text: 'Members not disclosed'
+		},
+		{
+			id: 'Managers not disclosed in a public registry',
+			text: 'Managers not disclosed'
+		},
+		{
+			id: 'Corporate members permitted',
+			text: 'Corporate members permitted'
+		},
+		{
+			id: 'Corporate manager permitted',
+			text: 'Corporate manager permitted'
+		},
+		{
+			id: 'Local manager required',
+			text: 'Local manager required'
+		},
+		{
+			id: 'Registered office or agent required',
+			text: 'Registered office/agent required'
+		},
+		{
+			id: 'Annual meeting required',
+			text: 'Annual meeting required'
+		}
 	]
 ];
 
@@ -146,6 +176,7 @@ class IncorporationsLegalView extends Component {
 	render() {
 		const { classes, data } = this.props;
 
+		const index = data.LLC ? 3 : 0;
 		// Troubleshooting log
 		// console.log(data);
 
@@ -153,7 +184,7 @@ class IncorporationsLegalView extends Component {
 			<Grid container justify="flex-start" alignItems="flex-start">
 				<div>
 					<List>
-						{LEGAL_COLUMNS[0].map(prop => (
+						{LEGAL_COLUMNS[index].map(prop => (
 							<ListItem key={prop.id} className={classes.booleanProp}>
 								{data[prop.id] ? (
 									<GreenTick />

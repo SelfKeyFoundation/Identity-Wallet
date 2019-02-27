@@ -26,6 +26,9 @@ import { connect } from 'react-redux';
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
 import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
 import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
+import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
+import TransactionUnlock from '../../transaction/transaction-unlock';
+import TransactionTimeout from '../../transaction/transaction-timeout';
 
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
@@ -106,6 +109,18 @@ class Main extends Component {
 						component={TransactionNoGasError}
 					/>
 					<Route path={`${match.path}/transaction-error`} component={TransactionError} />
+					<Route
+						path={`${match.path}/transaction-declined/:device`}
+						component={TransactionDeclined}
+					/>
+					<Route
+						path={`${match.path}/transaction-unlock`}
+						component={TransactionUnlock}
+					/>
+					<Route
+						path={`${match.path}/transaction-timeout`}
+						component={TransactionTimeout}
+					/>
 					<Route
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}

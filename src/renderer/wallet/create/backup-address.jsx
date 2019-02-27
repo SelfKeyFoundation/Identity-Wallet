@@ -65,9 +65,9 @@ class BackupAddress extends Component {
 
 	showFileDownloadedResult = () => {
 		if (this.props.fileDownloaded) {
-			return <Typography variant="body1">File Downloaded Successfuly</Typography>;
+			return <Typography variant="body1">File Downloaded Successfully</Typography>;
 		} else {
-			return <Typography variant="body1">File NOT Downloaded Successfuly</Typography>;
+			return <Typography variant="body1">File NOT Downloaded Successfully</Typography>;
 		}
 	};
 
