@@ -408,7 +408,7 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								{program['Wallet Price'] && (
+								{program['Wallet Price'] && templateId && (
 									<React.Fragment>
 										{!this.userHasApplied() && (
 											<Button
