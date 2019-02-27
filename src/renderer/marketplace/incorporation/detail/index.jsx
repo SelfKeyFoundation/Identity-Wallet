@@ -228,7 +228,7 @@ class IncorporationsDetailView extends Component {
 		if (!this.props.rp) return false;
 
 		const { applications } = this.props.rp;
-		if (applications.length === 0) return false;
+		if (!applications || applications.length === 0) return false;
 
 		let application;
 		let index = applications.length - 1;
