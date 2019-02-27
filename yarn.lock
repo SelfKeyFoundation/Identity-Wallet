@@ -13070,14 +13070,14 @@ react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#2ff7549a32b9122db2482b255514e6d1e3f542c3":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#9a3ad3aee909ca0f256bf9d3bba8ede7471d28f4":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#2ff7549a32b9122db2482b255514e6d1e3f542c3"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#9a3ad3aee909ca0f256bf9d3bba8ede7471d28f4"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#e6c6fbf380b1837a9ee6af401f46aa019813f2bf"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb"
 
 "react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f":
   version "1.0.4"
@@ -14148,9 +14148,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#e6c6fbf380b1837a9ee6af401f46aa019813f2bf":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#e6c6fbf380b1837a9ee6af401f46aa019813f2bf"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
