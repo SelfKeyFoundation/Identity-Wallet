@@ -218,7 +218,6 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 			(await session.listKYCTemplates()).map(async tpl => {
 				const id = tpl.id || tpl.templateId;
 				tpl = await session.getKYCTemplate(id);
-				if (tpl.identity_atrributes) tpl.identity_attributes = tpl.identity_atrributes;
 				tpl.id = id;
 				return tpl;
 			})
