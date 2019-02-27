@@ -315,24 +315,24 @@ describe('Identity uitls', () => {
 					value: {
 						front: '$document-15',
 						back: '$document-17',
-						extra: ['$document-#ref{document1.id}', '$document-#ref{document2.id}']
+						extra: ['$document-#ref{document2.id}', '$document-#ref{document3.id}']
 					},
 					documents: [
+						{
+							id: 15,
+							content: 'abc'
+						},
 						{
 							id: 17,
 							content: 'abc2'
 						},
 						{
-							'#id': 'document1',
+							'#id': 'document2',
 							content: 'abc3'
 						},
 						{
-							'#id': 'document2',
+							'#id': 'document3',
 							content: 'abc4'
-						},
-						{
-							id: 15,
-							content: 'abc'
 						}
 					]
 				});

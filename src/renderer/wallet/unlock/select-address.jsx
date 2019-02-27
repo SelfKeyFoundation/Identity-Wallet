@@ -8,7 +8,8 @@ import {
 	TableHead,
 	Radio,
 	TableBody,
-	CircularProgress
+	CircularProgress,
+	withStyles
 } from '@material-ui/core';
 import {
 	ModalWrap,
@@ -28,11 +29,22 @@ import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 
+const styles = theme => ({
+	modalWrap: {
+		width: '800px'
+	},
+	closeButton: {
+		top: '20px',
+		left: '20px'
+	}
+});
+
 class SelectAddress extends Component {
 	state = {
 		page: 0,
 		loading: false,
-		selectedAddress: ''
+		selectedAddress: '',
+		selected: -1
 	};
 
 	componentDidMount() {
@@ -61,8 +73,8 @@ class SelectAddress extends Component {
 		this.props.dispatch(push('/unlockWallet'));
 	};
 
-	handleChange = event => {
-		this.setState({ selectedAddress: event.target.value });
+	handleChange = (event, index) => {
+		this.setState({ selectedAddress: event.target.value, selected: index });
 	};
 
 	handleSelectedAddress = async () => {
@@ -112,10 +124,11 @@ class SelectAddress extends Component {
 								<SmallTableRow key={index}>
 									<SmallTableCell>
 										<Radio
-											onChange={this.handleChange}
+											onChange={e => this.handleChange(e, index)}
 											value={wallet.address}
 											name="radio-button-address"
 											aria-label={wallet.address}
+											checked={this.state.selected === index}
 										/>
 									</SmallTableCell>
 									<SmallTableCell>
@@ -209,8 +222,11 @@ class SelectAddress extends Component {
 		return (
 			<div>
 				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleClose}>
+					<ModalWrap className={this.props.classes.modalWrap}>
+						<ModalCloseButton
+							onClick={this.handleClose}
+							className={this.props.classes.closeButton}
+						>
 							<ModalCloseIcon />
 						</ModalCloseButton>
 						<ModalHeader>
@@ -241,4 +257,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(SelectAddress);
+export default connect(mapStateToProps)(withStyles(styles)(SelectAddress));
