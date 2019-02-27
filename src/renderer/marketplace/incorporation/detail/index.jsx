@@ -143,6 +143,16 @@ const styles = theme => ({
 			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '1em'
+		},
+		'& ul': {
+			listStyle: 'outside',
+			lineHeight: '1.4em',
+			marginLeft: '1.5em',
+			marginBottom: '1.5em'
+		},
+		'& ul li': {
+			lineHeight: '1.4em',
+			marginBottom: '0.5em'
 		}
 	},
 	tabDescription: {
