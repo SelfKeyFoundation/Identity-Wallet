@@ -73,7 +73,13 @@ const TreatiesTable = props => {
 							<TableCell>{treaty.typeEOI}</TableCell>
 							<TableCell>{treaty.dateSigned}</TableCell>
 							<TableCell className={classes.detailsCell}>
-								<a href="{treaty.pdfUrl}">Download</a>
+								<a
+									onClick={e => {
+										window.openExternal(e, treaty.pdfUrl);
+									}}
+								>
+									Download
+								</a>
 							</TableCell>
 						</TableRow>
 					))}
