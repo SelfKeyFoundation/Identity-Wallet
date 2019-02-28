@@ -30,7 +30,8 @@ export class WalletService {
 		}
 		const wallet = await Wallet.create({
 			publicKey: address,
-			keystoreFilePath: keystoreFileFullPath
+			keystoreFilePath: keystoreFileFullPath,
+			profile: 'local'
 		});
 
 		const newWallet = {
@@ -118,7 +119,8 @@ export class WalletService {
 		wallet = !wallet
 			? await Wallet.create({
 					publicKey: account.address,
-					keystoreFilePath: keystoreFileFullPath
+					keystoreFilePath: keystoreFileFullPath,
+					profile: 'local'
 			  })
 			: wallet;
 
@@ -145,7 +147,8 @@ export class WalletService {
 
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey: account.address
+					publicKey: account.address,
+					profile: 'local'
 			  })
 			: wallet;
 
@@ -159,37 +162,35 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async unlockWalletWithPublicKey(publicKey) {
+	async unlockWalletWithPublicKey(publicKey, path, profile) {
 		let wallet = await Wallet.findByPublicKey(publicKey);
 		this.web3Service.web3.eth.defaultAccount = publicKey;
 
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey
+					publicKey,
+					profile,
+					path
 			  })
 			: wallet;
 
-		const newWallet = {
-			id: wallet.id,
-			isSetupFinished: wallet.isSetupFinished,
-			publicKey: wallet.publicKey
-		};
-
-		return newWallet;
+		return wallet;
 	}
 
-	async _getWallets() {
+	async _getWallets(page, accountsQuantity) {
+		console.log('PAGE and accountsQuantity', page, accountsQuantity);
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
 					log.info('error: %j', error);
 					reject(error);
 				} else {
-					const promises = accounts.map(async address => {
+					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
 						return {
 							address,
-							balance: EthUnits.toEther(balanceInWei, 'wei')
+							balance: EthUnits.toEther(balanceInWei, 'wei'),
+							path: `44'/60'/0'/${page * accountsQuantity + index}`
 						};
 					});
 					resolve(Promise.all(promises));
@@ -219,15 +220,14 @@ export class WalletService {
 		});
 	}
 
-	async getLedgerWallets(page) {
-		await this.web3Service.switchToLedgerWallet(page);
-		return this._getWallets();
+	async getLedgerWallets(page, accountsQuantity) {
+		await this.web3Service.switchToLedgerWallet(page, accountsQuantity);
+		return this._getWallets(page, accountsQuantity);
 	}
 
-	async getTrezorWallets(page, eventEmitter) {
-		await this.web3Service.switchToTrezorWallet(page, 6, eventEmitter);
-
-		return this._getWallets();
+	async getTrezorWallets(page, accountsQuantity, eventEmitter) {
+		await this.web3Service.switchToTrezorWallet(page, accountsQuantity, eventEmitter);
+		return this._getWallets(page, accountsQuantity);
 	}
 
 	sendTransaction(transactionObject) {

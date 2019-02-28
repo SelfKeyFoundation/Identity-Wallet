@@ -26,7 +26,8 @@ export class Wallet extends BaseModel {
 				keystoreFilePath: { type: 'string' },
 				profilePicture: { type: 'binary' },
 				isSetupFinished: { type: 'integer' },
-				profile: { type: 'string' }
+				profile: { type: 'string' },
+				path: { type: 'string' }
 			}
 		};
 	}

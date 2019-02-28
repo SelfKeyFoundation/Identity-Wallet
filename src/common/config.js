@@ -4,13 +4,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const electron = require('electron');
 
-const {
-	isDevMode,
-	isDebugMode,
-	isTestMode,
-	getSetupFilePath,
-	getUserDataPath
-} = require('./utils/common');
+const { isDevMode, isTestMode, getSetupFilePath, getUserDataPath } = require('./utils/common');
 const pkg = require('../../package.json');
 
 dotenv.config();
@@ -137,7 +131,7 @@ if (isTestMode()) {
 
 let conf = prod;
 
-if (isDevMode() || isDebugMode()) {
+if (isDevMode()) {
 	conf = dev;
 }
 
