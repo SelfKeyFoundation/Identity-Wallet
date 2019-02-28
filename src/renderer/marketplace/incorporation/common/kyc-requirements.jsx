@@ -40,7 +40,13 @@ const IncorporationsKYCItem = ({ item, index }) => {
 };
 
 const IncorporationsKYC = props => {
-	const { classes, requirements } = props;
+	const { classes, requirements, templateId } = props;
+
+	// No kyc-chain templateId is associated with this program
+	// Hide the kyc requirements block
+	if (!templateId) {
+		return null;
+	}
 
 	// Requirements might take a while to load
 	if (!requirements) {
