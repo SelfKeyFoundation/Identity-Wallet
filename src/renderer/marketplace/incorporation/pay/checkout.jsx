@@ -61,10 +61,31 @@ const styles = theme => ({
 		color: '#FFF',
 		width: '60%',
 		borderRight: '1px solid #475768',
-		lineHeight: '1.5em',
+		lineHeight: '1.4em',
 		fontSize: '14px',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: '1.5em',
+			lineHeight: '1.4em',
+			maxWidth: '90%'
+		},
+		'& strong': {
+			fontWeight: 'bold',
+			color: '#93B0C1',
+			display: 'block',
+			padding: '6px',
+			borderBottom: '1px solid #435160',
+			marginBottom: '0.5em',
+			marginTop: '1em'
+		},
+		'& ul': {
+			listStyle: 'outside',
+			lineHeight: '1.4em',
+			marginLeft: '1.5em',
+			marginBottom: '1.5em'
+		},
+		'& ul li': {
+			lineHeight: '1.4em',
+			marginBottom: '0.5em'
 		}
 	},
 	descriptionHelp: {
@@ -154,7 +175,10 @@ export class IncorporationCheckout extends React.Component {
 
 	getIncorporationPrice = _ => {
 		const { program } = this.props;
-		return parseInt(program['Wallet Price'].replace(/\$/, '').replace(/,/, ''));
+		const price = program['active_test_price']
+			? program['test_price']
+			: program['Wallet Price'];
+		return parseInt(price.replace(/\$/, '').replace(/,/, ''));
 	};
 
 	getPaymentParameters = _ => {
@@ -217,7 +241,7 @@ export class IncorporationCheckout extends React.Component {
 	render() {
 		const { classes, program } = this.props;
 		const { countryCode } = this.props.match.params;
-		const { price, usdFee } = this.getPaymentParameters();
+		const { price, keyAmount, usdFee, ethFee } = this.getPaymentParameters();
 
 		return (
 			<div className={classes.container}>
@@ -406,6 +430,9 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem time" />
 										<div className="rowItem price">
 											Total: ${price.toLocaleString()}
+											<div className="time">
+												${keyAmount.toLocaleString()}
+											</div>
 										</div>
 									</Grid>
 								</div>
@@ -423,6 +450,7 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem time" />
 										<div className="rowItem price">
 											${usdFee.toLocaleString()}
+											<div className="time">${ethFee.toLocaleString()}</div>
 										</div>
 									</Grid>
 								</div>
