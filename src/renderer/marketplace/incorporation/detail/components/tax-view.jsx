@@ -108,7 +108,7 @@ class IncorporationsTaxView extends Component {
 		const { classes, tax } = this.props;
 
 		return (
-			<Grid container justify="left" alignItems="left">
+			<Grid container justify="flex-start" alignItems="flex-start">
 				<div>
 					<List>
 						{TAX_COLUMNS[0].map(prop => (

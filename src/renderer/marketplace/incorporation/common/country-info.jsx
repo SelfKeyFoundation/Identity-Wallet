@@ -58,7 +58,7 @@ class IncorporationsCountryInfo extends Component {
 		}
 	}
 
-	_renderLoadingScreen = () => (
+	renderLoadingScreen = () => (
 		<Grid container justify="center" alignItems="center">
 			<CircularProgress size={50} className={this.props.classes.loading} />
 		</Grid>
@@ -71,7 +71,7 @@ class IncorporationsCountryInfo extends Component {
 		// console.log(country);
 
 		if (!country) {
-			return this._renderLoadingScreen();
+			return this.renderLoadingScreen();
 		}
 
 		return (
@@ -79,7 +79,7 @@ class IncorporationsCountryInfo extends Component {
 				<Typography variant="h1" gutterBottom className={classes.countryName}>
 					{country[0].name}
 				</Typography>
-				<Grid container justify="left" alignItems="left">
+				<Grid container justify="flex-start" alignItems="flex-start">
 					<div className={classes.details}>
 						<List>
 							<ListItem>

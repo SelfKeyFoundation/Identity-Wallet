@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
+import { WarningIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -40,9 +42,10 @@ const styles = theme => ({
 			display: 'inline-block',
 			color: '#FFF'
 		},
-		'& span.region': {
+		'& .region': {
 			marginLeft: '1em',
-			marginTop: '0.5em',
+			marginTop: '0.25em',
+			marginBottom: '0',
 			fontSize: '24px'
 		}
 	},
@@ -140,10 +143,24 @@ const styles = theme => ({
 			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '1em'
+		},
+		'& ul': {
+			listStyle: 'outside',
+			lineHeight: '1.4em',
+			marginLeft: '1.5em',
+			marginBottom: '1.5em'
+		},
+		'& ul li': {
+			lineHeight: '1.4em',
+			marginBottom: '0.5em'
 		}
 	},
 	tabDescription: {
 		marginTop: '40px'
+	},
+	warningBar: {
+		padding: '22px 30px',
+		border: '1px solid #E98548'
 	}
 });
 
@@ -156,6 +173,7 @@ function TabContainer({ children }) {
    ---------------
    match.params.countryCode: country two letter code
    match.params.programCode: program specific code (from airtable)
+   match.params.templateID: KYC-Chain template ID for this jurisdiction (from airtable)
    program: program details object map
    isLoading: boolean indicating if it's still loading data
    treaties: tax treaties for this specific country/jurisdiction
@@ -168,7 +186,8 @@ class IncorporationsDetailView extends Component {
 		selectedTab: 0
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
+		// FIXME: refactor name to loadIncorporationsTaxTreaties
 		// Reset scrolling, issue #694
 		window.scrollTo(0, 0);
 
@@ -179,15 +198,118 @@ class IncorporationsDetailView extends Component {
 				)
 			);
 		}
+
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
 	}
 
-	handleChange = (event, selectedTab) => {
-		this.setState({ selectedTab });
+	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
+
+	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
+
+	onStartClick = () => {
+		const { countryCode, companyCode, templateId } = this.props.match.params;
+
+		this.props.dispatch(
+			push(`/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`)
+		);
+	};
+
+	onPayClick = () => {
+		const { countryCode, companyCode } = this.props.match.params;
+
+		this.props.dispatch(
+			push(`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`)
+		);
+	};
+
+	getLastApplication = () => {
+		const { templateId } = this.props.match.params;
+		// const templateId = '5c6fadbf77c33d5c28718d7b';
+		if (!this.props.rp) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	userHasPaid = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return !!application.payments.length;
+	};
+
+	renderPartialStatus = () => {
+		const { classes } = this.props;
+		if (this.userHasPaid()) {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					className={classes.warningBar}
+				>
+					<Grid item xs={1}>
+						<WarningIcon />
+					</Grid>
+					<Grid item xs={11}>
+						<Typography variant="body2" color="secondary">
+							You have an existing <strong>In Progress</strong> application, please
+							contact support@flagtheory.com for further details
+						</Typography>
+					</Grid>
+				</Grid>
+			);
+		}
+
+		if (this.userHasApplied()) {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					className={classes.warningBar}
+				>
+					<Grid item xs={1}>
+						<WarningIcon />
+					</Grid>
+					<Grid item xs={8}>
+						<Typography variant="body2" color="secondary">
+							You have an existing <strong>unpaid</strong> application
+						</Typography>
+					</Grid>
+					<Grid item xs={3} style={{ textAlign: 'right' }}>
+						<Button variant="contained" onClick={this.onPayClick}>
+							Pay
+						</Button>
+					</Grid>
+				</Grid>
+			);
+		}
+
+		return null;
 	};
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
-		const { countryCode } = this.props.match.params;
+		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
@@ -221,11 +343,12 @@ class IncorporationsDetailView extends Component {
 						<div>
 							<FlagCountryName code={countryCode} />
 						</div>
-						<div>
-							<span className="region">{program.Region}</span>
-						</div>
+						<Typography variant="body2" gutterBottom className="region">
+							{program.Region}
+						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
+						{this.renderPartialStatus()}
 						<Grid
 							container
 							justify="flex-start"
@@ -285,25 +408,35 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								<Button variant="contained" size="large">
-									Start Incorporation
-								</Button>
-								<ProgramPrice
-									price={program['Wallet Price']}
-									rate={keyRate}
-									label="Price:"
-								/>
+								{program['Wallet Price'] && templateId && (
+									<React.Fragment>
+										{!this.userHasApplied() && (
+											<Button
+												variant="contained"
+												size="large"
+												onClick={this.onStartClick}
+											>
+												Start Incorporation
+											</Button>
+										)}
+										<ProgramPrice
+											price={program['Wallet Price']}
+											rate={keyRate}
+											label="Price: "
+										/>
+									</React.Fragment>
+								)}
 							</div>
 						</Grid>
 						<Grid
 							container
-							justify="left"
-							alignItems="left"
+							justify="flex-start"
+							alignItems="center"
 							className={classes.content}
 						>
 							<Tabs
 								value={selectedTab}
-								onChange={this.handleChange}
+								onChange={this.onTabChange}
 								classes={{
 									root: classes.tabsRoot,
 									indicator: classes.tabsIndicator
@@ -421,7 +554,10 @@ class IncorporationsDetailView extends Component {
 								)}
 							</div>
 
-							<IncorporationsKYC />
+							<IncorporationsKYC
+								requirements={this.props.requirements}
+								templateId={templateId}
+							/>
 						</Grid>
 					</div>
 				</div>
@@ -431,12 +567,19 @@ class IncorporationsDetailView extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, countryCode } = props.match.params;
+	const { companyCode, countryCode, templateId } = props.match.params;
+
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		requirements: kycSelectors.selectRequirementsForTemplate(
+			state,
+			'incorporations',
+			templateId
+		)
 	};
 };
 

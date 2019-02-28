@@ -13,10 +13,13 @@ import { BigNumber } from 'bignumber.js';
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import { push } from 'connected-react-router';
+import { appSelectors } from 'common/app';
 
 const chainId = config.chainId || 3;
 
 const transferHex = '0xa9059cbb';
+
+const hardwalletConfirmationTime = '30000';
 
 const init = args => async dispatch => {
 	await dispatch(
@@ -68,17 +71,8 @@ const getGasLimit = async (
 		return 21000;
 	}
 
-	const web3Utils = (getGlobalContext() || {}).web3Service.web3.utils;
-
-	const params = {
-		method: 'estimateGas',
-		contractAddress: tokenContract,
-		contractMethod: 'transfer',
-		contractMethodArgs: [address, web3Utils.toWei(amount)],
-		args: [{ from: walletAddress, gas: 4500000 }]
-	};
-
-	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
+	const tokenService = getGlobalContext().tokenService;
+	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
 };
 
 const getTransactionCount = async publicKey => {
@@ -96,27 +90,28 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 ) => {
 	try {
 		const state = getState();
-		const address = !newAddress ? state.transaction.address : newAddress;
-		const amount = !newAmount ? state.transaction.amount : newAmount;
+		const transaction = getTransaction(state);
+		const address = !newAddress ? transaction.address : newAddress;
+		const amount = !newAmount ? transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
 
 		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
-		} else if (state.transaction.gasPrice) {
-			gasPrice = state.transaction.gasPrice;
+		} else if (transaction.gasPrice) {
+			gasPrice = transaction.gasPrice;
 		}
 
 		if (address && amount) {
-			const tokenContract = state.transaction.contractAddress;
+			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
-			const cryptoCurrency = state.transaction.cryptoCurrency;
+			const cryptoCurrency = transaction.cryptoCurrency;
 
 			let gasLimit = 21000;
 			if (newGasLimit) {
 				gasLimit = newGasLimit;
-			} else if (state.transaction.gasLimit) {
-				gasLimit = state.transaction.gasLimit;
+			} else if (transaction.gasLimit) {
+				gasLimit = transaction.gasLimit;
 			} else {
 				gasLimit = await getGasLimit(
 					cryptoCurrency,
@@ -213,7 +208,19 @@ const confirmSend = () => async (dispatch, getState) => {
 
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
+	let hardwalletConfirmationTimeout = null;
+	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
 	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(
 			actions.updateTransaction({
 				status: 'Pending',
@@ -229,6 +236,7 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 
 	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		console.error('transactionEventEmitter ERROR: ', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
@@ -238,6 +246,98 @@ const confirmSend = () => async (dispatch, getState) => {
 				})
 			);
 			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
+};
+
+const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
+
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gasLimit: transaction.gasLimit
+	};
+
+	if (cryptoCurrency === 'ETH') {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
+	} else {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		transactionObject.data = EthUtils.sanitizeHex(data);
+	}
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	let hardwalletConfirmationTimeout = null;
+	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash: hash
+			})
+		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+		await dispatch(
+			push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+		);
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		console.error('transactionEventEmitter ERROR: ', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
 		} else {
 			await dispatch(
 				actions.updateTransaction({
@@ -301,5 +401,6 @@ export default {
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
+	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
 };

@@ -89,7 +89,7 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
-		const templateAttributes = template.identity_attributes || [];
+		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {
 				curr = { schemaId: curr };
@@ -173,6 +173,7 @@ export const kycActions = {
 		relyingPartyName,
 		templateId,
 		returnRoute,
+		cancelRoute,
 		title,
 		description,
 		agreement
@@ -183,6 +184,7 @@ export const kycActions = {
 				relyingPartyName,
 				templateId,
 				returnRoute,
+				cancelRoute,
 				title,
 				description,
 				agreement,
@@ -216,7 +218,6 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 			(await session.listKYCTemplates()).map(async tpl => {
 				const id = tpl.id || tpl.templateId;
 				tpl = await session.getKYCTemplate(id);
-				if (tpl.identity_atrributes) tpl.identity_attributes = tpl.identity_atrributes;
 				tpl.id = id;
 				return tpl;
 			})
@@ -278,13 +279,12 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 ) => {
 	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
 	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.applications[applicationId]) throw new Error('application does not exist');
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
 	}
 
-	await rp.session.updateRelyingPartyKYCApplicationPayment(applicationId, transactionHash);
+	await rp.session.updateKYCApplicationPayment(applicationId, transactionHash);
 
 	rp.applications = await rp.session.listKYCApplications();
 
@@ -295,6 +295,7 @@ const startCurrentApplicationOperation = (
 	rpName,
 	templateId,
 	returnRoute,
+	cancelRoute,
 	title,
 	description,
 	agreement
@@ -304,6 +305,7 @@ const startCurrentApplicationOperation = (
 			rpName,
 			templateId,
 			returnRoute,
+			cancelRoute,
 			title,
 			description,
 			agreement
@@ -341,7 +343,7 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(getState());
-	dispatch(push(currentApplication.returnRoute));
+	dispatch(push(currentApplication.cancelRoute));
 	await dispatch(kycActions.clearCurrentApplication());
 };
 

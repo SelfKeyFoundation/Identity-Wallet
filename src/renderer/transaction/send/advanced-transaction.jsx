@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
-import { TransactionBox, NumberFormat, HourGlassLargeIcon } from 'selfkey-ui';
+import { NumberFormat, HourGlassLargeIcon } from 'selfkey-ui';
+import { TransactionBox } from '../common/transaction-box';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
@@ -152,8 +153,8 @@ class TransactionSendBoxContainer extends Component {
 	state = {
 		amount: '',
 		address: '',
-		isCustomView: this.props.match.params.cryptoCurrency,
-		cryptoCurrency: '',
+		isCustomView: this.props.match.params.cryptoCurrency === 'custom',
+		cryptoCurrency: this.props.match.params.cryptoCurrency,
 		sending: false,
 		isConfirmationOpen: false
 	};
@@ -352,17 +353,21 @@ class TransactionSendBoxContainer extends Component {
 		);
 	};
 
+	getTitle = cryptoCurrency => {
+		return cryptoCurrency !== 'custom' ? `Send ${cryptoCurrency}` : 'Send Custom Token';
+	};
+
 	render() {
 		const { classes, addressError, amountUsd, locale, fiatCurrency } = this.props;
 		let { cryptoCurrency } = this.state;
 		let sendAmountClass = `${classes.input} ${classes.amountInput}`;
 		let addressInputClass = `${classes.input} ${addressError ? classes.addressErrorColor : ''}`;
-		let cryptoCurrencyText = cryptoCurrency || 'Send Custom Tokens';
-
+		const title = this.getTitle(cryptoCurrency);
 		return (
 			<TransactionBox
-				cryptoCurrency={cryptoCurrencyText}
+				cryptoCurrency={cryptoCurrency}
 				closeAction={this.handleCancelAction}
+				title={title}
 			>
 				<input
 					type="text"
@@ -411,14 +416,19 @@ class TransactionSendBoxContainer extends Component {
 						</Grid>
 					</Grid>
 					<Grid item>
-						{this.state.isCustomView === 'custom' && (
+						{this.state.isCustomView && (
 							<select
 								value={this.state.cryptoCurrency}
 								onChange={e => this.handleCryptoCurrencyChange(e)}
 								name="cryptoCurrency"
 								className={classes.cryptoSelect}
 							>
-								<option value="" disabled selected className={classes.selectItem}>
+								<option
+									value="custom"
+									disabled
+									selected
+									className={classes.selectItem}
+								>
 									Custom Token
 								</option>
 								{this.renderSelectTokenItems()}

@@ -105,7 +105,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#2ff7549a32b9122db2482b255514e6d1e3f542c3",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#9a3ad3aee909ca0f256bf9d3bba8ede7471d28f4",
 		"react-redux": "6.0.0",
 		"react-router-dom": "4.3.1",
 		"react-to-print": "2.0.0-alpha-6",
@@ -117,7 +117,7 @@
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#6baceb47b9328e304d0db13a1cd7e1fc905894b6",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#fbe6397",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -223,6 +223,19 @@
 			"webpackConfig": "webpack/main.additions.js"
 		},
 		"renderer": {
+			"dll": [
+				"react",
+				"@material-ui/core",
+				"@material-ui/icons",
+				"ajv",
+				"react-jsonschema-form",
+				"selfkey-ui",
+				"redux",
+				"redux-logger",
+				"redux-promise",
+				"web3",
+				"sqlite3"
+			],
 			"webpackConfig": "webpack/renderer.additions.js"
 		}
 	},

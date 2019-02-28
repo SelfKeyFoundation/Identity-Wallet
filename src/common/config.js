@@ -32,6 +32,7 @@ if (electron.app) {
 
 const common = {
 	defaultLanguage: 'en',
+	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true',
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',

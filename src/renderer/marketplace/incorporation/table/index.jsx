@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
+import conf from 'common/config';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
@@ -102,6 +103,8 @@ const styles = theme => ({
 	}
 });
 
+const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+
 class IncorporationsTable extends Component {
 	componentDidMount() {
 		if (!this.props.incorporations || !this.props.incorporations.length) {
@@ -109,8 +112,16 @@ class IncorporationsTable extends Component {
 		}
 	}
 
-	onDetailsClick = ({ countryCode, companyCode }) =>
-		this.props.dispatch(push(`${this.props.match.path}/details/${companyCode}/${countryCode}`));
+	generateRoute({ countryCode, companyCode, templateID }) {
+		let url = `${this.props.match.path}/details/${companyCode}/${countryCode}`;
+		if (templateID) {
+			url += `/${templateID}`;
+		}
+		return url;
+	}
+
+	onDetailsClick = ({ countryCode, companyCode, templateID }) =>
+		this.props.dispatch(push(this.generateRoute({ countryCode, companyCode, templateID })));
 
 	renderLoadingScreen = () => (
 		<Grid container justify="center" alignItems="center">
@@ -118,7 +129,7 @@ class IncorporationsTable extends Component {
 		</Grid>
 	);
 
-	onBackClick = _ => this.props.dispatch(push('/main/marketplace-categories'));
+	onBackClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	render() {
 		const { classes, isLoading, incorporations, keyRate } = this.props;
@@ -211,12 +222,15 @@ class IncorporationsTable extends Component {
 									</TableCell>
 									<TableCell className={classes.detailsCell}>
 										<span
-											onClick={() =>
+											onClick={() => {
 												this.onDetailsClick({
 													companyCode: inc['Company code'],
-													countryCode: inc['Country code']
-												})
-											}
+													countryCode: inc['Country code'],
+													templateID: conf.dev
+														? inc['test_template_id']
+														: inc['template_id']
+												});
+											}}
 										>
 											Details
 										</span>

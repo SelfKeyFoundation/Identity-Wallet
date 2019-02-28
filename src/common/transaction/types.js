@@ -10,6 +10,7 @@ const LIMIT_PRICE_SET = 'app/transaction/limitPrice/SET';
 const INIT = 'app/transaction/init';
 const TRANSACTION_FEE_SET = 'app/transaction/fee/SET';
 const CONFIRM_SEND = 'app/transaction/comfirmSend';
+const INCORPORATION_SEND = 'app/transaction/incorporationSend';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
 
 export {
@@ -24,5 +25,6 @@ export {
 	INIT,
 	TRANSACTION_FEE_SET,
 	CONFIRM_SEND,
+	INCORPORATION_SEND,
 	CRYPTO_CURRENCY_SET
 };
