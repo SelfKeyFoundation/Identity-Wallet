@@ -21,7 +21,6 @@ const CRYPTOCURRENCY = config.constants.primaryToken;
 // FIXME: Not implemented in Airtable Yet
 const TEST_WALLET_ADDRESS = '0x27462DF3542882455E3bD6a23496a06E5E686162';
 // const TEST_WALLET_ADDRESS = '0x23d233933c86f93b74705cf0d236b39f474249f8';
-const TEST_AMOUNT = 10;
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationPaymentConfirmationComponent extends Component {
@@ -37,22 +36,10 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			transactionOperations.init({ trezorAccountIndex, cryptoCurrency })
 		);
 
-		// Initiate transaction
-		// const { keyAmount, gasPrice, walletAddress, gasLimit } = this.getPaymentParameters();
-		const {
-			keyAmount,
-			testAmount,
-			gasPrice,
-			walletAddress,
-			gasLimit
-		} = this.getPaymentParameters();
-
-		// Log payment parameters
-		// console.log(gasPrice, gasLimit, keyAmount, testAmount);
-		const amount = config.dev ? testAmount : keyAmount;
+		const { keyAmount, gasPrice, walletAddress, gasLimit } = this.getPaymentParameters();
 
 		this.props.dispatch(transactionOperations.setAddress(walletAddress));
-		this.props.dispatch(transactionOperations.setAmount(amount));
+		this.props.dispatch(transactionOperations.setAmount(keyAmount));
 		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
 		this.props.dispatch(transactionOperations.setLimitPrice(gasLimit));
 	}
@@ -64,7 +51,10 @@ class IncorporationPaymentConfirmationComponent extends Component {
 
 	getIncorporationPrice = _ => {
 		const { program } = this.props;
-		return parseInt(program['Wallet Price'].replace(/\$/, '').replace(/,/, ''));
+		const price = program['active_test_price']
+			? program['test_price']
+			: program['Wallet Price'];
+		return parseInt(price.replace(/\$/, '').replace(/,/, ''));
 	};
 
 	getVendorWalletAddress = _ => {
@@ -85,7 +75,6 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			? transaction.ethFee
 			: EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		const usdFee = ethFee * ethRate;
-		const testAmount = TEST_AMOUNT;
 
 		return {
 			cryptoCurrency,
@@ -97,8 +86,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			price,
 			keyAmount,
 			ethFee,
-			usdFee,
-			testAmount
+			usdFee
 		};
 	};
 
