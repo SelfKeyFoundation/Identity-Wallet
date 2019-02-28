@@ -6,7 +6,7 @@ module.exports = {
 			{
 				test: /\.(jsx?|tsx?|vue)$/,
 				enforce: 'pre',
-				include: /src/,
+				include: [/src/],
 				loader: 'eslint-loader',
 				options: {
 					fix: true,
@@ -17,23 +17,37 @@ module.exports = {
 			{
 				test: /\.jsx?$/,
 				loader: 'babel-loader',
-				include: /src/,
+				include: [
+					path.resolve(__dirname, '../src'),
+					path.resolve(__dirname, '../node_modules/selfkey-ui/')
+				],
 				options: {
 					presets: ['@babel/react']
 				}
 			},
 			{
+				test: /\.svg$/,
+				include: [
+					path.resolve(__dirname, '../src'),
+					path.resolve(__dirname, '../node_modules/selfkey-ui/')
+				],
+				loader: 'svg-inline-loader'
+			},
+			{
 				test: /\.css$/,
 				include: [
-					path.resolve(__dirname, 'src'),
-					path.resolve(__dirname, 'node_modules/selfkey-ui/')
+					path.resolve(__dirname, '../src'),
+					path.resolve(__dirname, '../node_modules/selfkey-ui/')
 				],
 				use: ['style-loader', 'css-loader']
 			}
 		]
 	},
 	resolve: {
-		modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
-		extensions: ['.js', '.jsx', '.css']
+		modules: [
+			path.resolve(__dirname, '..', 'src'),
+			path.resolve(__dirname, '..', 'node_modules')
+		],
+		extensions: ['.js', '.jsx', '.css', '.svg']
 	}
 };

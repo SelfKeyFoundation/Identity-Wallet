@@ -112,6 +112,13 @@ class IncorporationsTable extends Component {
 		}
 	}
 
+	getPrice = program => {
+		const price = program['active_test_price']
+			? program['test_price']
+			: program['Wallet Price'];
+		return price;
+	};
+
 	generateRoute({ countryCode, companyCode, templateID }) {
 		let url = `${this.props.match.path}/details/${companyCode}/${countryCode}`;
 		if (templateID) {
@@ -218,7 +225,7 @@ class IncorporationsTable extends Component {
 											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
-										<ProgramPrice price={inc['Wallet Price']} rate={keyRate} />
+										<ProgramPrice price={this.getPrice(inc)} rate={keyRate} />
 									</TableCell>
 									<TableCell className={classes.detailsCell}>
 										<span

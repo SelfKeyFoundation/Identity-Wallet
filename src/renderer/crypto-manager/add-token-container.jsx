@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Button, Typography, withStyles, Input, IconButton } from '@material-ui/core';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
+import { addressBookSelectors, addressBookOperations } from 'common/address-book';
+import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import {
 	MyCryptoLargeIcon,
@@ -28,8 +30,37 @@ const styles = theme => ({
 	modalPosition: {
 		position: 'static'
 	},
+	errorText: {
+		height: '19px',
+		width: '242px',
+		color: '#FE4B61',
+		fontFamily: 'Lato',
+		fontSize: '13px',
+		lineHeight: '19px'
+	},
+	errorColor: {
+		color: '#FE4B61 !important',
+		border: '2px solid #FE4B61 !important',
+		backgroundColor: 'rgba(255,46,99,0.09) !important'
+	},
 	input: {
-		width: '100%'
+		boxSizing: 'border-box',
+		width: '100%',
+		border: '1px solid #384656',
+		borderRadius: '4px',
+		backgroundColor: '#1E262E',
+		color: '#a9c5d6',
+		fontSize: '14px',
+		boxShadow:
+			'inset -1px 0 0 0 rgba(0,0,0,0.24), 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
+		paddingLeft: '10px',
+		'&::-webkit-input-placeholder': {
+			fontSize: '14px',
+			color: '#93B0C1'
+		}
+	},
+	inputError: {
+		borderBottom: '2px solid #FE4B61 !important'
 	},
 	bottomSpace: {
 		marginBottom: '30px'
@@ -57,53 +88,79 @@ class AddTokenContainerComponent extends Component {
 		address: '',
 		symbol: '',
 		decimal: '',
-		found: null
+		found: null,
+		duplicate: null
 	};
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
-	}
-
-	componentDidUpdate(prevProps) {
-		if (prevProps.tokens.length !== this.props.tokens.length) {
-			if (this.state.address !== '') {
-				this.findToken(this.state.address);
-			}
-		}
+		this.props.dispatch(addressBookOperations.resetAdd());
 	}
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/crypto-manager'));
 	};
+
 	handleFieldChange = async event => {
 		this.findToken(event.target.value);
 	};
 
 	findToken = async contractAddress => {
-		let found = (this.props.tokens || []).find(
-			t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
-		);
-		if (!found) {
-			await this.props.dispatch(tokensOperations.addTokenOperation(contractAddress));
+		await this.props.dispatch(addressBookOperations.resetAdd());
+		if (contractAddress !== '') {
+			await this.props.dispatch(addressBookOperations.validateAddress(contractAddress));
+			let found = (this.props.tokens || []).find(
+				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
+			);
+			let duplicate = (this.props.existingTokens || []).find(
+				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
+			);
+			if (found && duplicate && duplicate['recordState'] === 0) {
+				duplicate = null;
+			}
 			this.setState({
+				address: contractAddress,
+				symbol: found ? found.symbol : '',
+				decimal: found ? found.decimal : '',
+				found: found,
+				duplicate: duplicate
+			});
+		} else {
+			this.setState({
+				address: contractAddress,
 				symbol: '',
 				decimal: '',
-				found,
-				address: contractAddress
+				found: null,
+				duplicate: null
 			});
-			return;
 		}
-		this.setState({ ...found, found });
 	};
+
 	handleSubmit = () => {
 		const { found } = this.state;
 		if (!found || !found.id) return;
-		this.props.dispatch(walletTokensOperations.createWalletTokenOperation(found.id));
+		if (found.recordState === 0) {
+			this.props.dispatch(
+				walletTokensOperations.updateWalletTokenStateOperation(
+					1 + +found.recordState,
+					found.id
+				)
+			);
+		} else {
+			this.props.dispatch(walletTokensOperations.createWalletTokenOperation(found.id));
+		}
 		this.handleBackClick();
 	};
+
 	render() {
-		const { classes } = this.props;
-		const { address, symbol, decimal, found } = this.state;
+		const { classes, addressError } = this.props;
+		const { address, symbol, decimal, found, duplicate } = this.state;
+		const hasAddressError = addressError !== '' && addressError !== undefined && address !== '';
+		const notFound = !found && address !== '' && !hasAddressError && !duplicate;
+		const addressInputClass = `${classes.input} ${
+			hasAddressError || notFound || duplicate ? classes.errorColor : ''
+		}`;
+
 		return (
 			<Grid
 				container
@@ -193,9 +250,24 @@ class AddTokenContainerComponent extends Component {
 									name="address"
 									value={address}
 									onChange={this.handleFieldChange}
-									className={classes.input}
+									className={addressInputClass}
 									disableUnderline
 								/>
+								{hasAddressError && (
+									<span id="addressError" className={classes.errorText}>
+										{addressError}
+									</span>
+								)}
+								{notFound && (
+									<span id="notFound" className={classes.errorText}>
+										{`Token contract does not exist. Please double check and try again.`}
+									</span>
+								)}
+								{duplicate && (
+									<span id="duplicate" className={classes.errorText}>
+										{`Address is already being used.`}
+									</span>
+								)}
 							</Grid>
 							<Grid item>
 								<Typography variant="overline" gutterBottom>
@@ -204,8 +276,8 @@ class AddTokenContainerComponent extends Component {
 								<Input
 									name="symbol"
 									value={symbol}
-									onChange={this.handleFieldChange}
 									className={classes.input}
+									disabled
 									disableUnderline
 								/>
 							</Grid>
@@ -226,7 +298,7 @@ class AddTokenContainerComponent extends Component {
 									<Grid item>
 										<Button
 											variant="contained"
-											disabled={!found}
+											disabled={!found || duplicate || hasAddressError}
 											size="large"
 											onClick={this.handleSubmit}
 										>
@@ -255,7 +327,11 @@ class AddTokenContainerComponent extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return { tokens: tokensSelectors.allTokens(state) };
+	return {
+		tokens: tokensSelectors.allTokens(state),
+		existingTokens: getTokens(state),
+		addressError: addressBookSelectors.getAddressError(state)
+	};
 };
 
 export const AddTokenContainer = connect(mapStateToProps)(
