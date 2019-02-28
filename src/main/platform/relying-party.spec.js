@@ -197,7 +197,6 @@ describe('RelyingPartyRest', () => {
 				{
 					url: `${testEndpoint}`,
 					headers: {
-						// Authorization: 'Bearer test',
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
@@ -223,7 +222,6 @@ describe('RelyingPartyRest', () => {
 				{
 					url: `http://test/${id}`,
 					headers: {
-						// Authorization: 'Bearer test',
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
