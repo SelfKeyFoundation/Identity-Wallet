@@ -44,7 +44,8 @@ class SelectAddress extends Component {
 		page: 0,
 		loading: false,
 		selectedAddress: '',
-		selected: -1
+		selected: -1,
+		path: ''
 	};
 
 	componentDidMount() {
@@ -74,12 +75,19 @@ class SelectAddress extends Component {
 	};
 
 	handleChange = (event, index) => {
-		this.setState({ selectedAddress: event.target.value, selected: index });
+		this.setState({
+			selectedAddress: event.target.value,
+			selected: index,
+			path: this.props.hardwareWallets[index].path
+		});
 	};
 
 	handleSelectedAddress = async () => {
 		await this.props.dispatch(
-			appOperations.unlockWalletWithPublicKeyOperation(this.state.selectedAddress)
+			appOperations.unlockWalletWithPublicKeyOperation(
+				this.state.selectedAddress,
+				this.state.path
+			)
 		);
 	};
 

@@ -83,9 +83,10 @@ export class RelyingPartyRest {
 	static getAuthorizationHeader(token) {
 		return `Bearer ${token}`;
 	}
-	static getChallenge(ctx) {
+	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('auth/challenge');
-		url = urljoin(url, `0x${ctx.identity.publicKey.replace('0x', '')}`);
+		const publicKey = await ctx.identity.publicKey;
+		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
