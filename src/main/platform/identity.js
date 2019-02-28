@@ -1,11 +1,10 @@
 import ethUtil from 'ethereumjs-util';
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
+import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import AppEth from '@ledgerhq/hw-app-eth';
-const trezor = require('trezor.js');
-const deviceList = new trezor.DeviceList();
 let transport = null;
 
 const log = new Logger('Identity');
@@ -35,44 +34,37 @@ export class Identity {
 
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
-			try {
-				const appEth = await this.getLedgerAppEth();
-				const address = await appEth.getAddress(this.path);
-				return address.publicKey;
-			} catch (error) {
-				log.error(error);
-			}
+			const appEth = await this.getLedgerAppEth();
+			const address = await appEth.getAddress(this.path);
+			return address.publicKey;
 		} else if (this.profile === 'trezor') {
-			try {
-				const { session } = await deviceList.acquireFirstDevice(true);
-				const publicKey = await session.getPublicKey(this.path, 'ethereum');
-				console.log('TREZOR ', publicKey);
-				return publicKey;
-			} catch (error) {
-				log.error(error);
-			}
+			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
+				this.address
+			);
+			console.log('TREZOR ', publicKey);
+			return publicKey;
 		}
 	}
 
 	async genSignatureForMessage(msg) {
 		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(msg));
 		let signature = {};
-		try {
-			switch (this.profile) {
-				case 'ledger':
-					const appEth = await this.getLedgerAppEth();
-					signature = await appEth.signPersonalMessage(this.path, msgHash);
-					return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
-				case 'trezor':
-					break;
-				case 'local':
-				default:
-					signature = ethUtil.ecsign(msgHash, Buffer.from(this.privateKey, 'hex'));
-					return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
-			}
-		} catch (error) {
-			log.error(error);
+		switch (this.profile) {
+			case 'ledger':
+				const appEth = await this.getLedgerAppEth();
+				signature = await appEth.signPersonalMessage(this.path, msgHash);
+				break;
+			case 'trezor':
+				const trezorSignature = await getGlobalContext().web3Service.trezorWalletSubProvider.signPersonalMessage(
+					this.address,
+					msgHash
+				);
+				return ethUtil.addHexPrefix(trezorSignature.message.signature);
+			case 'local':
+			default:
+				signature = ethUtil.ecsign(msgHash, Buffer.from(this.privateKey, 'hex'));
 		}
+		return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
 	}
 
 	async unlock(config) {
