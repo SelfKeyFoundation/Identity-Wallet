@@ -1,11 +1,22 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { withTheme } from 'react-jsonschema-form';
-import { TextField, withStyles, Divider, Button, Grid, MenuItem } from '@material-ui/core';
+import {
+	TextField,
+	withStyles,
+	Divider,
+	Button,
+	Grid,
+	MenuItem,
+	Select,
+	Typography,
+	Input
+} from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
 import theme from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
 import transformErrors from './transform-errors';
+import { KeyboardArrowDown } from '@material-ui/icons';
 
 const Form = withTheme('MyTheme', {
 	widgets: theme.widgets,
@@ -74,15 +85,18 @@ class CreateAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<TextField
+					<Typography variant="overline" gutterBottom>
+						Information
+					</Typography>
+					<Select
 						select
-						label="Information"
-						placeholder="Information"
-						margin="normal"
 						fullWidth
 						value={typeId}
-						variant="filled"
 						onChange={this.hadnleFieldChange('typeId')}
+						displayEmpty
+						disableUnderline
+						IconComponent={KeyboardArrowDown}
+						input={<Input disableUnderline gutterBottom />}
 					>
 						<MenuItem value={-1}>
 							<em>Choose...</em>
@@ -92,7 +106,7 @@ class CreateAttributeComponent extends Component {
 								{option.content.title}
 							</MenuItem>
 						))}
-					</TextField>
+					</Select>
 					{this.state.typeId > -1 && (
 						<TextField
 							label="Label"
