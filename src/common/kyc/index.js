@@ -199,9 +199,20 @@ export const kycActions = {
 	}
 };
 
-const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
-	if (!rpName) return null;
+const getSession = async (config, authenticate) => {
 	let mpService = (getGlobalContext() || {}).marketplaceService;
+	const session = mpService.createRelyingPartySession(config);
+
+	if (authenticate) {
+		await session.establish();
+	}
+
+	return session;
+};
+
+const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispatch, getState) => {
+	if (!rpName) return null;
+
 	const ts = Date.now();
 	let rp;
 	if (rpName === 'incorporations') {
@@ -212,8 +223,8 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 	const config = rp.relying_party_config;
 
 	try {
-		const session = mpService.createRelyingPartySession(config);
-		await session.establish();
+		const session = await getSession(config, authenticate);
+
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
 				const id = tpl.id || tpl.templateId;
@@ -223,7 +234,11 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 			})
 		);
 
-		const applications = await session.listKYCApplications();
+		let applications = [];
+		if (authenticate) {
+			applications = await session.listKYCApplications();
+		}
+
 		await dispatch(
 			kycActions.updateRelyingParty({
 				name: rpName,
