@@ -125,10 +125,15 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	}
 };
 
-const unlockWalletWithPublicKey = publicKey => async dispatch => {
+const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
+	const hardwareWalletType = selectApp(getState()).hardwareWalletType;
 	try {
-		const wallet = await walletService.unlockWalletWithPublicKey(publicKey);
+		const wallet = await walletService.unlockWalletWithPublicKey(
+			publicKey,
+			path,
+			hardwareWalletType
+		);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
@@ -137,10 +142,14 @@ const unlockWalletWithPublicKey = publicKey => async dispatch => {
 	}
 };
 
-const loadLedgerWallets = page => async dispatch => {
+const loadLedgerWallets = (page = 0) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
-		const wallets = await timeoutPromise(30000, walletService.getLedgerWallets(page)).promise;
+		const accountsQuantity = 6;
+		const wallets = await timeoutPromise(
+			30000,
+			walletService.getLedgerWallets(page, accountsQuantity)
+		).promise;
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
 		await dispatch(appActions.setHardwareWalletType('ledger'));
 		await dispatch(push('/selectAddress'));
@@ -151,7 +160,7 @@ const loadLedgerWallets = page => async dispatch => {
 	}
 };
 
-const loadTrezorWallets = page => async dispatch => {
+const loadTrezorWallets = (page = 0) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	let timeoutId = '';
 	try {
@@ -166,9 +175,10 @@ const loadTrezorWallets = page => async dispatch => {
 				await dispatch(push('/enterTrezorPassphrase'));
 			});
 		}
+		const accountsQuantity = 6;
 		const timeoutPromiseObject = timeoutPromise(
 			60000,
-			walletService.getTrezorWallets(page, eventEmitter)
+			walletService.getTrezorWallets(page, accountsQuantity, eventEmitter)
 		);
 		timeoutId = timeoutPromiseObject.id;
 		const wallets = await timeoutPromiseObject.promise;
