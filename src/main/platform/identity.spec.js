@@ -21,11 +21,6 @@ describe('identity', () => {
 		getPrivateKey.mockRestore();
 		sinon.restore();
 	});
-	it('isUnlocked', async () => {
-		expect(await id.isUnlocked()).toBeTruthy();
-		id.privateKey = null;
-		expect(await id.isUnlocked()).toBeFalsy();
-	});
 	it('genSignatureForMessage', async () => {
 		let signature = await id.genSignatureForMessage('test');
 		expect(signature).toEqual(

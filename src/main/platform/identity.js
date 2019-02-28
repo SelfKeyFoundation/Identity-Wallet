@@ -27,7 +27,7 @@ export class Identity {
 		} else {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		}
-		this.web3Service = getGlobalContext().web3Service;
+		this.web3Service = (getGlobalContext() || {}).web3Service;
 	}
 
 	async getLedgerAppEth() {
