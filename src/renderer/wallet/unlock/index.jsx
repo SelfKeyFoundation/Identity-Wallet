@@ -61,7 +61,9 @@ const styles = theme => ({
 		marginBottom: '15px',
 		width: 'calc(100% - 50px)'
 	},
-	modalContentWrapper: {}
+	closeIcon: {
+		marginTop: '20px'
+	}
 });
 
 const gotBackHome = props => <Link to="/home" {...props} />;
@@ -157,7 +159,7 @@ class Unlock extends Component {
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
 						<ModalCloseButton component={gotBackHome}>
-							<ModalCloseIcon />
+							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
 
 						<ModalHeader>
