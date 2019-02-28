@@ -223,7 +223,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 	const config = rp.relying_party_config;
 
 	try {
-		const session = getSession(config, authenticate);
+		const session = await getSession(config, authenticate);
 
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
