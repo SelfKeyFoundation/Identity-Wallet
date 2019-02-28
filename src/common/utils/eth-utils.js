@@ -1,4 +1,6 @@
 import { BigNumber } from 'bignumber.js';
+import Web3 from 'web3';
+
 let web3;
 
 class EthUtils {
@@ -29,7 +31,20 @@ class EthUtils {
 		}
 	}
 
+	static isValidAddress(address) {
+		try {
+			const web3Utils = this.getWeb3().utils;
+			let toChecksumAddress = web3Utils.toChecksumAddress(address);
+			return web3Utils.isHex(address) && web3Utils.isAddress(toChecksumAddress);
+		} catch (e) {
+			return false;
+		}
+	}
+
 	static getWeb3() {
+		if (web3 === null || web3 === undefined) {
+			web3 = new Web3();
+		}
 		return web3;
 	}
 
