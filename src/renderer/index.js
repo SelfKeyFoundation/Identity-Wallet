@@ -12,6 +12,7 @@ import path from 'path';
 import App from './app';
 
 require('../../static/stylesheets/scss/main.scss');
+console.log(require('../../node_modules/selfkey-ui/build/lib/assets/icon-calendar.svg'));
 
 const ctx = configureContext('renderer').cradle;
 setGlobalContext(ctx);

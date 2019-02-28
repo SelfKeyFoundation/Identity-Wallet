@@ -1590,7 +1590,7 @@
 						"Zimbabwe"
 					]
 				},
-				"demonym": {
+				"denonym": {
 					"type": "string",
 					"title": "Denonym",
 					"description": "The word used to identify citizens of the country"
@@ -2289,7 +2289,7 @@
 								"title": "Full Name",
 								"type": "string"
 							},
-							"positions": {
+							"position": {
 								"title": "Position",
 								"description": "Position in the company.",
 								"type": "string"
@@ -2349,7 +2349,7 @@
 			"ui:order": ["front", "back", "expires", "selfie", "extra"]
 		},
 		{
-			"ui:order": ["images", "issued", "extra"]
+			"ui:order": ["front", "back", "issued", "expires", "selfie", "extra"]
 		},
 		{
 			"ui:order": ["country", "denonym"]

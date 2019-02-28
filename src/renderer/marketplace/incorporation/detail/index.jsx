@@ -222,6 +222,14 @@ class IncorporationsDetailView extends Component {
 		);
 	};
 
+	getPrice = () => {
+		const { program } = this.props;
+		const price = program['active_test_price']
+			? program['test_price']
+			: program['Wallet Price'];
+		return price;
+	};
+
 	getLastApplication = () => {
 		const { templateId } = this.props.match.params;
 		// const templateId = '5c6fadbf77c33d5c28718d7b';
@@ -252,6 +260,14 @@ class IncorporationsDetailView extends Component {
 			return false;
 		}
 		return !!application.payments.length;
+	};
+
+	// Can only incorporate if there is a price
+	// And templateId exists for this jurisdiction
+	canIncorporate = () => {
+		const { templateId } = this.props.match.params;
+		const price = this.getPrice();
+		return !!(templateId && price);
 	};
 
 	renderPartialStatus = () => {
@@ -410,7 +426,7 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								{program['Wallet Price'] && templateId && (
+								{this.canIncorporate() && (
 									<React.Fragment>
 										{!this.userHasApplied() && (
 											<Button
@@ -422,7 +438,7 @@ class IncorporationsDetailView extends Component {
 											</Button>
 										)}
 										<ProgramPrice
-											price={program['Wallet Price']}
+											price={this.getPrice()}
 											rate={keyRate}
 											label="Price: "
 										/>
