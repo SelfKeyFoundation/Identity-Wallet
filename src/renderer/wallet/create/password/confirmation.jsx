@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
 import {
-	PasswordIcon,
+	PasswordConfirmIcon,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
@@ -22,10 +22,6 @@ const styles = theme => ({
 	},
 	parentGrid: {
 		minHeight: '100vh'
-	},
-	passwordIcon: {
-		width: '66px',
-		height: '76px'
 	},
 	modalWrap: {
 		border: 'none',
@@ -119,7 +115,7 @@ class PasswordConfirmation extends Component {
 								alignItems="flex-start"
 							>
 								<Grid item xs={2}>
-									<PasswordIcon className={classes.passwordIcon} />
+									<PasswordConfirmIcon />
 								</Grid>
 								<Grid item xs={10}>
 									<Typography variant="body1" gutterBottom>
