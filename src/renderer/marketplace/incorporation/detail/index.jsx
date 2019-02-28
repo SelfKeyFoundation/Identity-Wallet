@@ -329,8 +329,6 @@ class IncorporationsDetailView extends Component {
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
-		console.log(this.props.rp);
-
 		// Troubleshooting log
 		// console.log(program);
 		// console.log(isLoading);

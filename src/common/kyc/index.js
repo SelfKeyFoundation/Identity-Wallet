@@ -199,9 +199,20 @@ export const kycActions = {
 	}
 };
 
+const getSession = async (config, authenticate) => {
+	let mpService = (getGlobalContext() || {}).marketplaceService;
+	const session = mpService.createRelyingPartySession(config);
+
+	if (authenticate) {
+		await session.establish();
+	}
+
+	return session;
+};
+
 const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispatch, getState) => {
 	if (!rpName) return null;
-	let mpService = (getGlobalContext() || {}).marketplaceService;
+
 	const ts = Date.now();
 	let rp;
 	if (rpName === 'incorporations') {
@@ -211,76 +222,43 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 	}
 	const config = rp.relying_party_config;
 
-	if (!authenticate) {
-		try {
-			const session = mpService.createRelyingPartySession(config);
-			let templates = await Promise.all(
-				(await session.listKYCTemplates()).map(async tpl => {
-					const id = tpl.id || tpl.templateId;
-					tpl = await session.getKYCTemplate(id);
-					tpl.id = id;
-					return tpl;
-				})
-			);
+	try {
+		const session = getSession(config, authenticate);
 
-			const applications = [];
+		let templates = await Promise.all(
+			(await session.listKYCTemplates()).map(async tpl => {
+				const id = tpl.id || tpl.templateId;
+				tpl = await session.getKYCTemplate(id);
+				tpl.id = id;
+				return tpl;
+			})
+		);
 
-			await dispatch(
-				kycActions.updateRelyingParty({
-					name: rpName,
-					description: rp.description,
-					templates,
-					applications,
-					session,
-					lastUpdated: ts
-				})
-			);
-		} catch (error) {
-			await dispatch(
-				kycActions.updateRelyingParty(
-					{
-						name: rpName,
-						lastUpdated: ts
-					},
-					error
-				)
-			);
+		let applications = [];
+		if (authenticate) {
+			applications = await session.listKYCApplications();
 		}
-	} else {
-		try {
-			const session = mpService.createRelyingPartySession(config);
-			await session.establish();
-			let templates = await Promise.all(
-				(await session.listKYCTemplates()).map(async tpl => {
-					const id = tpl.id || tpl.templateId;
-					tpl = await session.getKYCTemplate(id);
-					tpl.id = id;
-					return tpl;
-				})
-			);
 
-			const applications = await session.listKYCApplications();
-			await dispatch(
-				kycActions.updateRelyingParty({
+		await dispatch(
+			kycActions.updateRelyingParty({
+				name: rpName,
+				description: rp.description,
+				templates,
+				applications,
+				session,
+				lastUpdated: ts
+			})
+		);
+	} catch (error) {
+		await dispatch(
+			kycActions.updateRelyingParty(
+				{
 					name: rpName,
-					description: rp.description,
-					templates,
-					applications,
-					session,
 					lastUpdated: ts
-				})
-			);
-		} catch (error) {
-			await dispatch(
-				kycActions.updateRelyingParty(
-					{
-						name: rpName,
-						lastUpdated: ts
-					},
-					error
-				)
-			);
-		}
+				},
+				error
+			)
+		);
 	}
 };
 
