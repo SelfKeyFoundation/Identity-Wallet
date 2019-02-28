@@ -2,7 +2,6 @@ import ethUtil from 'ethereumjs-util';
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { Logger } from 'common/logger';
-import { getGlobalContext } from 'common/context';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import AppEth from '@ledgerhq/hw-app-eth';
 const trezor = require('trezor.js');
@@ -27,7 +26,6 @@ export class Identity {
 		} else {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		}
-		this.web3Service = (getGlobalContext() || {}).web3Service;
 	}
 
 	async getLedgerAppEth() {
