@@ -62,7 +62,7 @@ export class Web3Service {
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
-		const trezorWalletSubProvider = await TrezorWalletSubProviderFactory(
+		this.trezorWalletSubProvider = await TrezorWalletSubProviderFactory(
 			CONFIG.chainId,
 			accountsOffset,
 			accountsQuantity,
@@ -75,7 +75,7 @@ export class Web3Service {
 			engine.emit('data', err, notification);
 		});
 
-		engine.addProvider(trezorWalletSubProvider);
+		engine.addProvider(this.trezorWalletSubProvider);
 		engine.addProvider(subscriptionSubprovider);
 		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
