@@ -1,5 +1,4 @@
 import React from 'react';
-import config from 'common/config';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import {
@@ -12,9 +11,6 @@ import {
 	EthereumIcon,
 	CustomIcon,
 	SentIcon,
-	FailedIcon,
-	HourGlassIcon,
-	ReceiveIcon,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
@@ -25,6 +21,7 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import TokenPrice from '../../common/token-price';
 import { push } from 'connected-react-router';
+import TransactionsHistory from '../transactions-history';
 
 const styles = theme => ({
 	cryptoIcon: {
@@ -40,7 +37,9 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		width: '850px',
+		left: 'calc(50% - 425px)'
 	},
 	modalContentWrapper: {
 		boxShadow: 'none',
@@ -49,7 +48,8 @@ const styles = theme => ({
 	closeIcon: {
 		'& svg': {
 			position: 'relative',
-			top: '20px'
+			top: '20px',
+			left: '70px'
 		}
 	},
 	tokenPrice: {
@@ -139,83 +139,9 @@ const getNameForToken = token => {
 	return name;
 };
 
-const getIconForTransaction = (statusIconName, sending) => {
-	switch (statusIconName) {
-		case 'failed':
-			return <FailedIcon />;
-		case 'receive':
-			return <ReceiveIcon />;
-		case 'hourglass':
-			return <HourGlassIcon />;
-		case 'sent':
-			return <SentIcon />;
-		default:
-			return sending ? <SentIcon /> : <ReceiveIcon />;
-	}
-};
-
-const getCustomStatusText = transaction => {
-	if (transaction.sending) {
-		return `Sent to ${transaction.to}`;
-	} else {
-		return `Received from ${transaction.from}`;
-	}
-};
-
-const getAbrDateFromTimestamp = timestamp => {
-	const monthNames = [
-		'JAN',
-		'FEB',
-		'MAR',
-		'APR',
-		'MAY',
-		'JUN',
-		'JUL',
-		'AUG',
-		'SEP',
-		'OCT',
-		'NOV',
-		'DEC'
-	];
-	const date = new Date(timestamp);
-	const month = monthNames[date.getMonth()];
-	const day = date.getDate();
-
-	return { month, day };
-};
-
-const filterTransactionByToken = (transaction, token) => {
-	let valid = false;
-	switch (token) {
-		case 'KEY':
-			valid = transaction.tokenSymbol === config.constants.primaryToken;
-			break;
-		case 'ETH':
-			valid = transaction.contractAddress === null;
-			break;
-		default:
-			// Custom Tokens
-			valid =
-				transaction.tokenSymbol !== config.constants.primaryToken &&
-				transaction.contractAddress !== null;
-	}
-	return valid;
-};
-
 export class Transfer extends React.Component {
 	componentDidMount() {
 		this.props.dispatch(transactionHistoryOperations.loadTransactionsOperation());
-	}
-
-	renderDate(timestamp) {
-		const { day, month } = getAbrDateFromTimestamp(timestamp);
-		return (
-			<div>
-				{month}
-				<br />
-				{day}
-			</div>
-		);
 	}
 
 	handleSend = () => {
@@ -225,61 +151,6 @@ export class Transfer extends React.Component {
 	handleReceive = _ => {
 		this.props.dispatch(push(`/main/transfer/receive/${this.props.cryptoCurrency}`));
 	};
-
-	renderActivity() {
-		const NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW = 5;
-		const filteredTransactions = this.props.transactions.filter(transaction => {
-			return filterTransactionByToken(transaction, this.props.cryptoCurrency);
-		});
-		const lastCryptoTransactions = filteredTransactions.slice(
-			0,
-			NUMBER_OF_LAST_TRANSACTIONS_TO_SHOW
-		);
-
-		return (
-			<div>
-				<Typography variant="h4">Activity</Typography>
-				<div>
-					{lastCryptoTransactions.map(transaction => (
-						<div key={transaction.id}>
-							<div className={this.props.classes.transactionEntry}>
-								<div className={this.props.classes.transactionEntryDate}>
-									<Typography
-										component="span"
-										variant="body2"
-										color="secondary"
-										gutterBottom
-									>
-										{this.renderDate(transaction.timeStamp)}
-									</Typography>
-								</div>
-								<div className={this.props.classes.transactionEntryIcon}>
-									{getIconForTransaction(
-										transaction.statusIconName,
-										transaction.sending
-									)}
-								</div>
-								<div className={this.props.classes.transactionEntryStatus}>
-									<Typography component="span" variant="body2" gutterBottom>
-										{transaction.statusText || getCustomStatusText(transaction)}
-									</Typography>
-								</div>
-								<div className={this.props.classes.transactionEntryAmount}>
-									<Typography component="span" variant="body2" gutterBottom>
-										{transaction.sending ? '- ' : '+ '}
-										{transaction.value
-											? transaction.value.toLocaleString()
-											: ''}
-									</Typography>
-								</div>
-							</div>
-							<Divider />
-						</div>
-					))}
-				</div>
-			</div>
-		);
-	}
 
 	render() {
 		const { classes, cryptoCurrency, publicKey } = this.props;
@@ -355,9 +226,7 @@ export class Transfer extends React.Component {
 						</ModalBody>
 					</Paper>
 
-					<Paper className={classes.modalContentWrapper}>
-						<ModalBody>{this.renderActivity()}</ModalBody>
-					</Paper>
+					<TransactionsHistory cryptoCurrency={cryptoCurrency} />
 				</ModalWrap>
 			</Modal>
 		);
