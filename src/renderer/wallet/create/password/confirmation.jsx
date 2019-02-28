@@ -61,6 +61,9 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		marginTop: '20px'
+	},
+	next: {
+		minWidth: '120px'
 	}
 });
 
@@ -163,6 +166,8 @@ class PasswordConfirmation extends Component {
 										variant="contained"
 										disabled={this.state.password === ''}
 										onClick={this.handleNext}
+										className={classes.next}
+										size="large"
 									>
 										NEXT
 									</Button>
