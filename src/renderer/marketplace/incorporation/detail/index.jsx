@@ -199,7 +199,7 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 
-		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations', false));
 	}
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });

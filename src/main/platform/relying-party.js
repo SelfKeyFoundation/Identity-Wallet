@@ -154,7 +154,6 @@ export class RelyingPartyRest {
 		return request.get({
 			url,
 			headers: {
-				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
@@ -167,7 +166,6 @@ export class RelyingPartyRest {
 		return request.get({
 			url,
 			headers: {
-				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
