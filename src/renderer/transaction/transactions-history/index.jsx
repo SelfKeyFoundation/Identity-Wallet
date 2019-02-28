@@ -6,6 +6,7 @@ import {
 import { walletSelectors } from 'common/wallet';
 import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import { connect } from 'react-redux';
+import config from 'common/config';
 import {
 	Grid,
 	Table,
@@ -109,6 +110,27 @@ const paginate = (array, pageSize, pageNumber) => {
 	return array.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
 };
 
+const filterTransactionByToken = (transaction, token) => {
+	let valid = false;
+	switch (token) {
+		case 'KI':
+			valid = transaction.tokenSymbol === config.constants.primaryToken;
+			break;
+		case 'KEY':
+			valid = transaction.tokenSymbol === config.constants.primaryToken;
+			break;
+		case 'ETH':
+			valid = transaction.contractAddress === null;
+			break;
+		default:
+			// Custom Tokens
+			valid =
+				transaction.tokenSymbol !== config.constants.primaryToken &&
+				transaction.contractAddress !== null;
+	}
+	return valid;
+};
+
 class TransactionsHistory extends Component {
 	state = {
 		rowsPerPage: 10,
@@ -151,7 +173,12 @@ class TransactionsHistory extends Component {
 	}
 
 	render() {
-		const { transactions, classes } = this.props;
+		const { classes, cryptoCurrency } = this.props;
+		const transactions = cryptoCurrency
+			? this.props.transactions.filter(transaction =>
+					filterTransactionByToken(transaction, cryptoCurrency)
+			  )
+			: this.props.transactions;
 		const { rowsPerPage, page } = this.state;
 
 		return (

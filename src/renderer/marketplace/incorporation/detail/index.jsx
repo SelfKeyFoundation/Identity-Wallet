@@ -228,7 +228,7 @@ class IncorporationsDetailView extends Component {
 		if (!this.props.rp) return false;
 
 		const { applications } = this.props.rp;
-		if (applications.length === 0) return false;
+		if (!applications || applications.length === 0) return false;
 
 		let application;
 		let index = applications.length - 1;
@@ -309,7 +309,7 @@ class IncorporationsDetailView extends Component {
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
-		const { countryCode } = this.props.match.params;
+		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
@@ -408,7 +408,7 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								{program['Wallet Price'] && (
+								{program['Wallet Price'] && templateId && (
 									<React.Fragment>
 										{!this.userHasApplied() && (
 											<Button
@@ -554,7 +554,10 @@ class IncorporationsDetailView extends Component {
 								)}
 							</div>
 
-							<IncorporationsKYC requirements={this.props.requirements} />
+							<IncorporationsKYC
+								requirements={this.props.requirements}
+								templateId={templateId}
+							/>
 						</Grid>
 					</div>
 				</div>
