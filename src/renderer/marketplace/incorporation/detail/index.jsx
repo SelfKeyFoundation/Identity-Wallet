@@ -199,7 +199,7 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 
-		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations', false));
 	}
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
@@ -312,6 +312,8 @@ class IncorporationsDetailView extends Component {
 		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
+
+		console.log(this.props.rp);
 
 		// Troubleshooting log
 		// console.log(program);

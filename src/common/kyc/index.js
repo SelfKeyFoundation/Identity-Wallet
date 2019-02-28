@@ -199,7 +199,7 @@ export const kycActions = {
 	}
 };
 
-const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
+const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispatch, getState) => {
 	if (!rpName) return null;
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	const ts = Date.now();
@@ -211,39 +211,76 @@ const loadRelyingPartyOperation = rpName => async (dispatch, getState) => {
 	}
 	const config = rp.relying_party_config;
 
-	try {
-		const session = mpService.createRelyingPartySession(config);
-		await session.establish();
-		let templates = await Promise.all(
-			(await session.listKYCTemplates()).map(async tpl => {
-				const id = tpl.id || tpl.templateId;
-				tpl = await session.getKYCTemplate(id);
-				tpl.id = id;
-				return tpl;
-			})
-		);
+	if (!authenticate) {
+		try {
+			const session = mpService.createRelyingPartySession(config);
+			let templates = await Promise.all(
+				(await session.listKYCTemplates()).map(async tpl => {
+					const id = tpl.id || tpl.templateId;
+					tpl = await session.getKYCTemplate(id);
+					tpl.id = id;
+					return tpl;
+				})
+			);
 
-		const applications = await session.listKYCApplications();
-		await dispatch(
-			kycActions.updateRelyingParty({
-				name: rpName,
-				description: rp.description,
-				templates,
-				applications,
-				session,
-				lastUpdated: ts
-			})
-		);
-	} catch (error) {
-		await dispatch(
-			kycActions.updateRelyingParty(
-				{
+			const applications = [];
+
+			await dispatch(
+				kycActions.updateRelyingParty({
 					name: rpName,
+					description: rp.description,
+					templates,
+					applications,
+					session,
 					lastUpdated: ts
-				},
-				error
-			)
-		);
+				})
+			);
+		} catch (error) {
+			await dispatch(
+				kycActions.updateRelyingParty(
+					{
+						name: rpName,
+						lastUpdated: ts
+					},
+					error
+				)
+			);
+		}
+	} else {
+		try {
+			const session = mpService.createRelyingPartySession(config);
+			await session.establish();
+			let templates = await Promise.all(
+				(await session.listKYCTemplates()).map(async tpl => {
+					const id = tpl.id || tpl.templateId;
+					tpl = await session.getKYCTemplate(id);
+					tpl.id = id;
+					return tpl;
+				})
+			);
+
+			const applications = await session.listKYCApplications();
+			await dispatch(
+				kycActions.updateRelyingParty({
+					name: rpName,
+					description: rp.description,
+					templates,
+					applications,
+					session,
+					lastUpdated: ts
+				})
+			);
+		} catch (error) {
+			await dispatch(
+				kycActions.updateRelyingParty(
+					{
+						name: rpName,
+						lastUpdated: ts
+					},
+					error
+				)
+			);
+		}
 	}
 };
 
