@@ -81,7 +81,7 @@ class EditAttributeComponent extends Component {
 							uiSchema={uiSchema.content}
 							formData={value}
 							liveValidate={true}
-							showErrorList={true}
+							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
 							transformErrors={transformErrors}
