@@ -15840,9 +15840,9 @@ trezor-link@1.6.0:
     semver-compare "^1.0.0"
     whatwg-fetch "0.11.0"
 
-"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#a243334":
+"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#9c65907":
   version "0.2.0"
-  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#a243334d66d6501ca0a90913391888e33dde558e"
+  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#9c65907deea91d860a8b342ef6ae917174e67fc7"
   dependencies:
     bignumber.js "^8.0.2"
     ethereumjs-tx "^1.3.7"
@@ -15856,21 +15856,6 @@ trezor.js@^6.19.4:
   version "6.19.4"
   resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-6.19.4.tgz#d9a0a79afddccca6758173c38e6983cf0be2fbd7"
   integrity sha512-p1WPTk6dvmmVKWCw7a1n3mSjq6Tv+s/GFatIHw9xsVhKnc4LfKR3YibS7S/QLhwaf1V/0BU4zFEpRf1BSau1NA==
-  dependencies:
-    bchaddrjs "^0.2.1"
-    bitcoinjs-lib-zcash "^3.5.2"
-    ecurve "^1.0.2"
-    node-fetch "^1.6.0"
-    randombytes "^2.0.1"
-    semver-compare "1.0.0"
-    trezor-link "1.6.0"
-    unorm "^1.3.3"
-    whatwg-fetch "0.11.0"
-
-trezor.js@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-8.0.1.tgz#89358f00dce353c7de4de6844a71c0ff9fd6b237"
-  integrity sha512-8ZJv7khZ996/ZSrFMZue4dGVT6UHj45ZJoVXRYRWVAW+mqzLGFZA3TXsOOxtz3lQrPm2SyEG9NpjVxoVFKYo/A==
   dependencies:
     bchaddrjs "^0.2.1"
     bitcoinjs-lib-zcash "^3.5.2"
