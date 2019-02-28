@@ -2,15 +2,9 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { TextField, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
-import { withTheme } from 'react-jsonschema-form';
-import theme from 'react-jsonschema-form-material-theme';
+import Form from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
 import transformErrors from './transform-errors';
-
-const Form = withTheme('MyTheme', {
-	widgets: theme.widgets,
-	templates: theme.templates
-});
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
@@ -87,7 +81,7 @@ class EditAttributeComponent extends Component {
 							uiSchema={uiSchema.content}
 							formData={value}
 							liveValidate={true}
-							showErrorList={false}
+							showErrorList={true}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
 							transformErrors={transformErrors}

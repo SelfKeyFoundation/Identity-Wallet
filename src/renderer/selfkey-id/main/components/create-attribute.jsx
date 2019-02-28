@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { withTheme } from 'react-jsonschema-form';
 import {
 	TextField,
 	withStyles,
@@ -13,15 +12,10 @@ import {
 	Input
 } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
-import theme from 'react-jsonschema-form-material-theme';
+import Form from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
 import transformErrors from './transform-errors';
 import { KeyboardArrowDown } from '@material-ui/icons';
-
-const Form = withTheme('MyTheme', {
-	widgets: theme.widgets,
-	templates: theme.templates
-});
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },

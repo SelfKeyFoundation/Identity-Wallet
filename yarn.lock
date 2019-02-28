@@ -1245,6 +1245,11 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/samsam/-/samsam-2.1.3.tgz#62cf2a9b624edc795134135fe37fc2ae8ea36be3"
   integrity sha512-8zNeBkSKhU9a5cRNbpCKau2WWPfan+Q2zDlcXvXyhn9EsMqgYs4qzo0XHNVlXC6ABQL8fT6nV+zzo5RTHJzyXw==
 
+"@types/classnames@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.7.tgz#fb68cc9be8487e6ea5b13700e759bfbab7e0fefd"
+  integrity sha512-rzOhiQ55WzAiFgXRtitP/ZUT8iVNyllEpylJ5zHzR4vArUvMB39GTk+Zon/uAM0JxEFAWnwsxC2gH8s+tZ3Myg==
+
 "@types/google.visualization@0.0.46":
   version "0.0.46"
   resolved "https://registry.yarnpkg.com/@types/google.visualization/-/google.visualization-0.0.46.tgz#b19625723a5e46aeafd445d585266a816c24e3c9"
@@ -3753,7 +3758,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -13098,14 +13103,14 @@ react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#b9825ca347e6c8f7b639b1e87a2c4dd8a9bc4202":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#d42b8cbf0d781412279b594cc627608178ea6540":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#b9825ca347e6c8f7b639b1e87a2c4dd8a9bc4202"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#d42b8cbf0d781412279b594cc627608178ea6540"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#08d61c4d11c39cdd90374ac31f486a35e248c87b"
     svg-inline-loader "^0.8.0"
 
 "react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f":
@@ -14177,16 +14182,18 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#08d61c4d11c39cdd90374ac31f486a35e248c87b":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#08d61c4d11c39cdd90374ac31f486a35e248c87b"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
     "@material-ui/lab" "3.0.0-alpha.29"
+    "@types/classnames" "^2.2.7"
     "@types/google.visualization" "0.0.46"
     "@types/react-dom" "16.0.11"
     bignumber.js "8.0.1"
+    classnames "^2.2.6"
     jss "9.8.7"
     jss-compose "5.0.0"
     jss-expand "5.3.0"
