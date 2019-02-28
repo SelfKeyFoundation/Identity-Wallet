@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles, Grid, IconButton } from '@material-ui/core';
 import { SelfkeyLogo, MenuButtonIcon } from 'selfkey-ui';
+import { Link } from 'react-router-dom';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import config from 'common/config';
@@ -15,7 +16,23 @@ const styles = theme => ({
 	logo: {
 		width: '38px',
 		height: '44px',
-		marginLeft: '20px'
+		marginLeft: '20px',
+		cursor: 'pointer',
+		transition: '1.0s',
+		'-webkit-transition': '1.0s',
+		'&:hover': {
+			transition: '1.0s',
+			'-webkit-transition': '1.0s',
+			transform: 'rotate(90deg)',
+			'-webkit-transform': 'rotate(90deg)'
+		}
+	},
+
+	link: {
+		outline: 'none',
+		'&:focus': {
+			outline: 'none'
+		}
 	},
 
 	sepVertContainer: {
@@ -60,7 +77,9 @@ class Toolbar extends Component {
 					className={classes.wrapper}
 				>
 					<Grid item xs={5}>
-						<SelfkeyLogo className={classes.logo} />
+						<Link to="/main/dashboard" className={classes.link}>
+							<SelfkeyLogo className={classes.logo} />
+						</Link>
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
