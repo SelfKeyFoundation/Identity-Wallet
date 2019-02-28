@@ -58,6 +58,9 @@ const styles = theme => ({
 	},
 	root: {
 		top: '-50px'
+	},
+	closeIcon: {
+		marginTop: '20px'
 	}
 });
 
@@ -99,7 +102,7 @@ class PasswordConfirmation extends Component {
 					</Grid>
 					<Paper>
 						<ModalCloseButton component={goBackCreatePassword}>
-							<ModalCloseIcon />
+							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
 
 						<ModalHeader>
