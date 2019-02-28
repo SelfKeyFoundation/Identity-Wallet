@@ -22,17 +22,20 @@ class DeleteAttributeComponent extends Component {
 		return (
 			<Grid container direction="column" spacing={8}>
 				<Grid item>
-					<Typography variant="h4">
-						Are you shour you want to delete this attribute?
+					<Typography variant="body1" gutterBottom>
+						You are deleting this information and all related history. Once deleted, you
+						cannot recover the history.
 					</Typography>
-					<Typography variant="body1">Type: {type.content.title}</Typography>
-					<Typography variant="body1">Label: {name}</Typography>
+					<Typography variant="body2">Type: {type.content.title}</Typography>
+					<Typography variant="body2" gutterBottom>
+						Label: {name}
+					</Typography>
 				</Grid>
 				<Grid item>
 					<Grid container spacing={24}>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleConfirm}>
-								Confirm
+								Delete Information
 							</Button>
 						</Grid>
 
