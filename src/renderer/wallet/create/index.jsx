@@ -22,6 +22,9 @@ const styles = theme => ({
 		'&:hover': {
 			border: `1px solid ${warning}`
 		}
+	},
+	closeIcon: {
+		marginTop: '20px'
 	}
 });
 
@@ -31,7 +34,7 @@ export const CreateWallet = props => {
 		<Modal open={true}>
 			<ModalWrap>
 				<ModalCloseButton onClick={history.getHistory().goBack}>
-					<ModalCloseIcon />
+					<ModalCloseIcon className={classes.closeIcon} />
 				</ModalCloseButton>
 				<ModalHeader>
 					<Typography variant="body1" id="modal-title">
