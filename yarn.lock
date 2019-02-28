@@ -10101,7 +10101,7 @@ loader-runner@^2.3.0:
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.4.0.tgz#ed47066bfe534d7e84c4c7b9998c2a75607d9357"
   integrity sha512-Jsmr89RcXGIwivFY21FcRrisYZfvLMTWx5kOLc+JTxtpBOG6xML0vzbc6SEQG2FO9/4Fc3wW4LVcB5DmGflaRw==
 
-loader-utils@^0.2.16:
+loader-utils@^0.2.11, loader-utils@^0.2.16:
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.17.tgz#f86e6374d43205a6e6c60e9196f17c0299bfb348"
   integrity sha1-+G5jdNQyBabmxg6RlvF8Apm/s0g=
@@ -13070,14 +13070,15 @@ react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#9a3ad3aee909ca0f256bf9d3bba8ede7471d28f4":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#b9825ca347e6c8f7b639b1e87a2c4dd8a9bc4202":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#9a3ad3aee909ca0f256bf9d3bba8ede7471d28f4"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#b9825ca347e6c8f7b639b1e87a2c4dd8a9bc4202"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd"
+    svg-inline-loader "^0.8.0"
 
 "react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f":
   version "1.0.4"
@@ -14148,37 +14149,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#2436b0445a09ca352139ce45efbd428c6fa0d1fb"
-  dependencies:
-    "@material-ui/core" "3.9.2"
-    "@material-ui/icons" "3.0.2"
-    "@material-ui/lab" "3.0.0-alpha.29"
-    "@types/google.visualization" "0.0.46"
-    "@types/react-dom" "16.0.11"
-    bignumber.js "8.0.1"
-    jss "9.8.7"
-    jss-compose "5.0.0"
-    jss-expand "5.3.0"
-    jss-extend "6.2.0"
-    jss-global "3.0.0"
-    jss-preset-default "4.5.0"
-    jss-template "1.0.1"
-    lodash "4.17.11"
-    moment "^2.23.0"
-    react "16.6.3"
-    react-copy-to-clipboard "5.0.1"
-    react-datetime "^2.16.3"
-    react-dom "16.6.3"
-    react-google-charts "3.0.10"
-    react-jss "8.6.1"
-    react-truncate "2.4.0"
-    reset-jss "1.0.0"
-
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#fbe6397":
-  version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#fbe639751d6d58cf53d1132927274071a67df50f"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#02727d26329f4fc7f90a5a757ce2a3fdb4ef3dfd"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
@@ -14465,6 +14438,11 @@ simple-git@^1.85.0:
   integrity sha512-t4OK1JRlp4ayKRfcW6owrWcRVLyHRUlhGd0uN6ZZTqfDq8a5XpcUdOKiGRNobHEuMtNqzp0vcJNvhYWwh5PsQA==
   dependencies:
     debug "^4.0.1"
+
+simple-html-tokenizer@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/simple-html-tokenizer/-/simple-html-tokenizer-0.1.1.tgz#05c2eec579ffffe145a030ac26cfea61b980fabe"
+  integrity sha1-BcLuxXn//+FFoDCsJs/qYbmA+r4=
 
 single-line-log@^1.1.2:
   version "1.1.2"
@@ -15341,6 +15319,15 @@ supports-color@~5.0.0:
   integrity sha512-7FQGOlSQ+AQxBNXJpVDj8efTA/FtyB5wcNE1omXXJ0cq6jm1jjDwuROlYDbnzHqdNPqliWFhcioCWSyav+xBnA==
   dependencies:
     has-flag "^2.0.0"
+
+svg-inline-loader@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/svg-inline-loader/-/svg-inline-loader-0.8.0.tgz#7e9d905d80d0b4e68d2df21afcd08ee9e9a3ea6e"
+  integrity sha512-rynplY2eXFrdNomL1FvyTFQlP+dx0WqbzHglmNtA9M4IHRC3no2aPAl3ny9lUpJzFzFMZfWRK5YIclNU+FRePA==
+  dependencies:
+    loader-utils "^0.2.11"
+    object-assign "^4.0.1"
+    simple-html-tokenizer "^0.1.1"
 
 svgo@^0.7.0:
   version "0.7.2"
