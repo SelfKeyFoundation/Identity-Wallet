@@ -945,10 +945,22 @@
   dependencies:
     "@ledgerhq/errors" "^4.39.0"
 
+"@ledgerhq/devices@^4.41.1":
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-4.41.1.tgz#a5bfa17aa9d0f0dc48506d765356d36edeef1fd9"
+  integrity sha512-8WDj38iR1Fow2JoEG9w8rJouJcXXObw3KeTrh3fUzZ0qap4o8Q3HIc8i1Hr6XGxAjX64YmtebTJil3HjiNNMtQ==
+  dependencies:
+    "@ledgerhq/errors" "^4.41.1"
+
 "@ledgerhq/errors@^4.39.0":
   version "4.39.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.39.0.tgz#10b9889f78df94ce36a4b34d9a3a45aac77be0e9"
   integrity sha512-kBr2rnoYDACRCxTLtEufE4oCvYj6vx2oFWVVjwskBxYsF5LC9R8Mbg5C4GgvDweiWW4Io8HA9p9jCsOfdCDygg==
+
+"@ledgerhq/errors@^4.41.1":
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.41.1.tgz#8047464bf81c755dc7239b0ffb73fbf17a1c97aa"
+  integrity sha512-MKYzYNT5AKKZu2Ss0QrMXUS7Zri1F0HpNI3yKGjnhXEVxtr2fvxFXKgqdw7sdo+cLtkbNTJhiclemt0e0HtL0Q==
 
 "@ledgerhq/hw-app-eth@^4.24.0":
   version "4.39.0"
@@ -956,6 +968,13 @@
   integrity sha512-IKPcLTcGohh/S6Z1LaAfn2pGyxfT6xu958/xV+5H4a3Ej0CWKaxcno4FkhaxH4OiViF0F5SEFzxtH+UntH2jdg==
   dependencies:
     "@ledgerhq/hw-transport" "^4.39.0"
+
+"@ledgerhq/hw-app-eth@^4.41.1":
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-4.41.1.tgz#286777a5620fde5cfa23de3dab43600bcd95df55"
+  integrity sha512-G38appZPtScWZzgZnDo6+hh9MUwJxWIaAbTng0Y+ravulSjrwJgOYPUQ+rEbkt0tej5t7lcsev7CQHMxFageEQ==
+  dependencies:
+    "@ledgerhq/hw-transport" "^4.41.1"
 
 "@ledgerhq/hw-transport-node-hid@4.24.0":
   version "4.24.0"
@@ -983,6 +1002,15 @@
   dependencies:
     "@ledgerhq/devices" "^4.39.0"
     "@ledgerhq/errors" "^4.39.0"
+    events "^3.0.0"
+
+"@ledgerhq/hw-transport@^4.41.1":
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.41.1.tgz#1c5cfa38a87d58bbb9fcc9fa0b4e8763365afeb9"
+  integrity sha512-0Q4djKCebQ0EAtkrYtD5vN7az580RY0LG3hzDwUabN8EqLWdSJElgB6OfYJk+wHUZAnVNFwXKRZ15cCFdbXExw==
+  dependencies:
+    "@ledgerhq/devices" "^4.41.1"
+    "@ledgerhq/errors" "^4.41.1"
     events "^3.0.0"
 
 "@ledgerhq/web3-subprovider@4.28.0":
@@ -15821,6 +15849,21 @@ trezor.js@^6.19.4:
   version "6.19.4"
   resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-6.19.4.tgz#d9a0a79afddccca6758173c38e6983cf0be2fbd7"
   integrity sha512-p1WPTk6dvmmVKWCw7a1n3mSjq6Tv+s/GFatIHw9xsVhKnc4LfKR3YibS7S/QLhwaf1V/0BU4zFEpRf1BSau1NA==
+  dependencies:
+    bchaddrjs "^0.2.1"
+    bitcoinjs-lib-zcash "^3.5.2"
+    ecurve "^1.0.2"
+    node-fetch "^1.6.0"
+    randombytes "^2.0.1"
+    semver-compare "1.0.0"
+    trezor-link "1.6.0"
+    unorm "^1.3.3"
+    whatwg-fetch "0.11.0"
+
+trezor.js@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-8.0.1.tgz#89358f00dce353c7de4de6844a71c0ff9fd6b237"
+  integrity sha512-8ZJv7khZ996/ZSrFMZue4dGVT6UHj45ZJoVXRYRWVAW+mqzLGFZA3TXsOOxtz3lQrPm2SyEG9NpjVxoVFKYo/A==
   dependencies:
     bchaddrjs "^0.2.1"
     bitcoinjs-lib-zcash "^3.5.2"
