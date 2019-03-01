@@ -187,8 +187,6 @@ class IncorporationsDetailView extends Component {
 	};
 
 	async componentDidMount() {
-		// FIXME: refactor name to loadIncorporationsTaxTreaties
-		// Reset scrolling, issue #694
 		window.scrollTo(0, 0);
 
 		if (!this.props.treaties || !this.props.treaties.length) {
@@ -329,12 +327,6 @@ class IncorporationsDetailView extends Component {
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
-		// Troubleshooting log
-		// console.log(program);
-		// console.log(isLoading);
-		// console.log(treaties);
-		// console.log(program.details);
-
 		return (
 			<React.Fragment>
 				<div className={classes.backButtonContainer}>
@@ -424,24 +416,22 @@ class IncorporationsDetailView extends Component {
 								</div>
 							</div>
 							<div className={classes.applyButton}>
-								{this.canIncorporate() && (
-									<React.Fragment>
-										{!this.userHasApplied() && (
-											<Button
-												variant="contained"
-												size="large"
-												onClick={this.onStartClick}
-											>
-												Start Incorporation
-											</Button>
-										)}
-										<ProgramPrice
-											price={this.getPrice()}
-											rate={keyRate}
-											label="Price: "
-										/>
-									</React.Fragment>
-								)}
+								<React.Fragment>
+									{this.canIncorporate() && (
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.onStartClick}
+										>
+											Start Incorporation
+										</Button>
+									)}
+									<ProgramPrice
+										price={this.getPrice()}
+										rate={keyRate}
+										label="Price: "
+									/>
+								</React.Fragment>
 							</div>
 						</Grid>
 						<Grid
