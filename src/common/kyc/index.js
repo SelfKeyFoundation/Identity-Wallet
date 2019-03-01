@@ -231,7 +231,10 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 	return session;
 };
 
-const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispatch, getState) => {
+const loadRelyingPartyOperation = (rpName, authenticate = true, afterAuthRoute) => async (
+	dispatch,
+	getState
+) => {
 	const hardwareWalletType = appSelectors.selectApp(getState()).hardwareWalletType;
 	if (!rpName) return null;
 
@@ -275,7 +278,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 
 		if (authenticate && hardwareWalletType !== '') {
 			clearTimeout(hardwalletConfirmationTimeout);
-			await dispatch(push(`/main/kyc/current-application/${rpName}`));
+			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
 		await dispatch(

@@ -20,7 +20,13 @@ class CurrentApplicationComponent extends Component {
 
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(
-				kycOperations.loadRelyingParty(this.props.currentApplication.relyingPartyName)
+				kycOperations.loadRelyingParty(
+					this.props.currentApplication.relyingPartyName,
+					true,
+					`/main/kyc/current-application/${
+						this.props.currentApplication.relyingPartyName
+					}`
+				)
 			);
 		}
 	}
