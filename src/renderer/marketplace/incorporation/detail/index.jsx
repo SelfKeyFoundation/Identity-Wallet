@@ -198,11 +198,7 @@ class IncorporationsDetailView extends Component {
 		}
 
 		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty(
-					kycOperations.loadRelyingParty('incorporations', false)
-				)
-			);
+			await this.props.dispatch(kycOperations.loadRelyingParty('incorporations', false));
 		}
 	}
 
