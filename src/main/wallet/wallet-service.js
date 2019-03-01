@@ -178,7 +178,6 @@ export class WalletService {
 	}
 
 	async _getWallets(page, accountsQuantity) {
-		console.log('PAGE and accountsQuantity', page, accountsQuantity);
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {

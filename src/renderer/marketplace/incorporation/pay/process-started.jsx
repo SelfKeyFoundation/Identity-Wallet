@@ -77,7 +77,9 @@ const styles = theme => ({
 
 export class IncorporationProcessStarted extends React.Component {
 	async componentWillMount() {
-		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+		}
 	}
 
 	componentDidMount() {
@@ -192,6 +194,7 @@ const mapStateToProps = (state, props) => {
 		transaction: transactionSelectors.getTransaction(state),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, 'incorporations'),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode

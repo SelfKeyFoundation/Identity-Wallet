@@ -41,7 +41,6 @@ export class Identity {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
 			);
-			console.log('TREZOR ', publicKey);
 			return publicKey;
 		}
 	}

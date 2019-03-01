@@ -29,6 +29,10 @@ import TransactionError from '../../transaction/transaction-error/containers/tra
 import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
 import TransactionUnlock from '../../transaction/transaction-unlock';
 import TransactionTimeout from '../../transaction/transaction-timeout';
+import HardwareWalletTimer from '../../marketplace/authentication/hardware-wallet/timer';
+import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wallet/timeout';
+import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
+import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wallet/unlock';
 
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
@@ -134,13 +138,17 @@ class Main extends Component {
 						)}
 					/>
 					<Route
-						path={`${match.path}/kyc/current-application`}
+						path={`${match.path}/kyc/current-application/:rpName`}
 						component={CurrentApplication}
 					/>
 					<Route
 						path={`${match.path}/kyc/application-in-progress`}
 						component={ApplicationInProgress}
 					/>
+					<Route path={`${match.path}/hd-timer`} component={HardwareWalletTimer} />
+					<Route path={`${match.path}/hd-timeout`} component={HardwareWalletTimeout} />
+					<Route path={`${match.path}/hd-declined`} component={HardwareWalletDeclined} />
+					<Route path={`${match.path}/hd-unlock`} component={HardwareWalletUnlock} />
 				</Grid>
 			</Grid>
 		);
