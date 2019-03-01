@@ -8,7 +8,9 @@ const styles = theme => () => {};
 
 class KycManagerComponent extends Component {
 	componentDidMount() {
-		this.props.dispatch(kycOperations.loadRelyingParty(this.props.relyingPartyName));
+		if (this.props.rpShouldUpdate) {
+			this.props.dispatch(kycOperations.loadRelyingParty(this.props.relyingPartyName));
+		}
 	}
 	renderTemplate(tpl) {
 		return (
@@ -37,7 +39,8 @@ class KycManagerComponent extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-	relyingParty: kycSelectors.relyingPartySelector(state, props.relyingPartyName)
+	relyingParty: kycSelectors.relyingPartySelector(state, props.relyingPartyName),
+	rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, props.relyingPartyName)
 });
 
 export const KycManager = connect(mapStateToProps)(withStyles(styles)(KycManagerComponent));

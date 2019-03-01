@@ -197,7 +197,13 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 
-		await this.props.dispatch(kycOperations.loadRelyingParty('incorporations', false));
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty(
+					kycOperations.loadRelyingParty('incorporations', false)
+				)
+			);
+		}
 	}
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
@@ -581,6 +587,7 @@ const mapStateToProps = (state, props) => {
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, 'incorporations'),
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
 			'incorporations',
