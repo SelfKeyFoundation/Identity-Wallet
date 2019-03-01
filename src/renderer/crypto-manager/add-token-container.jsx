@@ -108,13 +108,33 @@ class AddTokenContainerComponent extends Component {
 	findToken = async contractAddress => {
 		await this.props.dispatch(addressBookOperations.resetAdd());
 		if (contractAddress !== '') {
+			// Validate address with library call
 			await this.props.dispatch(addressBookOperations.validateAddress(contractAddress));
+			// Try to find it on the current tokens list
 			let found = (this.props.tokens || []).find(
 				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
 			);
+			// Search for duplicate token
 			let duplicate = (this.props.existingTokens || []).find(
 				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
 			);
+			if (!found) {
+				try {
+					// Search token info on blockchain and add it to tokens list
+					await this.props.dispatch(
+						tokensOperations.addTokenOperation(contractAddress.toLowerCase())
+					);
+					// Now try to find it again
+					found = (this.props.tokens || []).find(
+						t =>
+							(t['address'] || '').toUpperCase() ===
+							(contractAddress || '').toUpperCase()
+					);
+				} catch (e) {
+					console.log(e);
+				}
+			}
+			// Check if the duplicate was removed
 			if (found && duplicate && duplicate['recordState'] === 0) {
 				duplicate = null;
 			}
