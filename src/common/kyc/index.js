@@ -225,6 +225,8 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 				await dispatch(push('/main/hd-declined'));
 			} else if (error.statusText === 'UNKNOWN_ERROR') {
 				await dispatch(push('/main/hd-unlock'));
+			} else {
+				await dispatch(push('/main/hd-error'));
 			}
 		}
 	}
@@ -281,6 +283,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true, afterAuthRoute) 
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
+		console.log(error);
 		await dispatch(
 			kycActions.updateRelyingParty(
 				{
@@ -333,7 +336,6 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 	await rp.session.updateKYCApplicationPayment(applicationId, transactionHash);
 
 	rp.applications = await rp.session.listKYCApplications();
-
 	await dispatch(kycActions.updateRelyingParty(rp));
 };
 
@@ -384,7 +386,10 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 	await dispatch(
 		kycOperations.createRelyingPartyKYCApplication(relyingPartyName, templateId, attributes)
 	);
-	await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
+
+	if (kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName)) {
+		await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
+	}
 };
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
