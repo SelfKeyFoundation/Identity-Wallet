@@ -327,12 +327,6 @@ class IncorporationsDetailView extends Component {
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
 
-		// Troubleshooting log
-		// console.log(program);
-		// console.log(isLoading);
-		// console.log(treaties);
-		// console.log(program.details);
-
 		return (
 			<React.Fragment>
 				<div className={classes.backButtonContainer}>
