@@ -33,6 +33,7 @@ import HardwareWalletTimer from '../../marketplace/authentication/hardware-walle
 import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wallet/timeout';
 import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
 import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wallet/unlock';
+import HardwareWalletError from '../../marketplace/authentication/hardware-wallet/error';
 
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
@@ -149,6 +150,7 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-timeout`} component={HardwareWalletTimeout} />
 					<Route path={`${match.path}/hd-declined`} component={HardwareWalletDeclined} />
 					<Route path={`${match.path}/hd-unlock`} component={HardwareWalletUnlock} />
+					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
 				</Grid>
 			</Grid>
 		);
