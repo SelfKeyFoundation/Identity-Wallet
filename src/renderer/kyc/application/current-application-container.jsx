@@ -104,19 +104,17 @@ class CurrentApplicationComponent extends Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(state);
 	if (!currentApplication) return {};
+	const relyingPartyName = props.match.params.rpName;
 	return {
-		relyingParty: kycSelectors.relyingPartySelector(state, currentApplication.relyingPartyName),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
-			state,
-			currentApplication.relyingPartyName
-		),
+		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName),
 		currentApplication,
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
-			currentApplication.relyingPartyName,
+			relyingPartyName,
 			currentApplication.templateId
 		)
 	};

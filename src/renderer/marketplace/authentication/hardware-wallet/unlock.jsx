@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import history from 'common/store/history';
 import Popup from '../../../common/popup';
 import { appSelectors } from 'common/app';
 import { UnlockLargeIcon } from 'selfkey-ui';
+import { kycOperations } from 'common/kyc';
 
 const styles = theme => ({
 	unlockIcon: {
@@ -13,7 +13,7 @@ const styles = theme => ({
 });
 class HardwareWalletUnlock extends Component {
 	handleClose = () => {
-		history.getHistory().goBack();
+		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 	};
 
 	render() {

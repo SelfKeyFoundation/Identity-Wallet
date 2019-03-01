@@ -275,7 +275,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 
 		if (authenticate && hardwareWalletType !== '') {
 			clearTimeout(hardwalletConfirmationTimeout);
-			await dispatch(push('/main/kyc/current-application'));
+			await dispatch(push(`/main/kyc/current-application/${rpName}`));
 		}
 	} catch (error) {
 		await dispatch(
@@ -354,7 +354,7 @@ const startCurrentApplicationOperation = (
 			agreement
 		)
 	);
-	await dispatch(push('/main/kyc/current-application'));
+	await dispatch(push(`/main/kyc/current-application/${rpName}`));
 };
 
 const submitCurrentApplicationOperation = selected => async (dispatch, getState) => {
@@ -416,7 +416,7 @@ export const kycOperations = {
 };
 
 export const updateRelyingPartyReducer = (state, { error, payload }) => {
-	let relyingParties = [state.relyingParties];
+	let relyingParties = [...state.relyingParties];
 	let relyingPartiesByName = { ...state.relyingPartiesByName };
 	if (!relyingPartiesByName[payload.name]) {
 		relyingParties.push(payload.name);
