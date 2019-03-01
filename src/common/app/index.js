@@ -135,6 +135,7 @@ const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState
 			hardwareWalletType
 		);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
