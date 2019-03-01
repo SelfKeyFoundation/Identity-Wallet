@@ -246,6 +246,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 				templates,
 				applications,
 				session,
+				authenticated: authenticate,
 				lastUpdated: ts
 			})
 		);

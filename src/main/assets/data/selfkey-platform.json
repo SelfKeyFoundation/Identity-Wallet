@@ -2332,41 +2332,60 @@
 	],
 	"uiSchemas": [
 		{
-			"ui:order": ["images", "issued", "extra"]
+			"ui:order": ["images", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{},
 		{
-			"ui:order": ["front", "back", "expires", "selfie", "extra"]
+			"ui:order": ["front", "back", "expires", "selfie", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{
-			"ui:order": ["images", "extra"]
+			"ui:order": ["images", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{},
+		{},
 		{
-			"ui:order": ["front", "back", "expires", "selfie", "extra"]
-		},
-		{
-			"ui:order": ["front", "back", "issued", "expires", "selfie", "extra"]
+			"ui:order": ["front", "back", "issued", "expires", "selfie", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{
 			"ui:order": ["country", "denonym"]
 		},
 		{
-			"ui:order": ["image", "issued", "expires", "selfie", "extra"]
+			"ui:order": ["image", "issued", "expires", "selfie", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{
 			"ui:order": ["address_line_1", "address_line_2", "address_line_3"]
 		},
 		{
-			"ui:order": ["image", "issued", "extra"]
+			"ui:order": ["image", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{
-			"ui:order": ["images", "issued", "extra"]
+			"ui:order": ["images", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{},
@@ -2374,15 +2393,24 @@
 		{},
 		{},
 		{
-			"ui:order": ["image", "issued", "extra"]
+			"ui:order": ["image", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{
-			"ui:order": ["image", "company_name", "registration_number", "issued", "extra"]
+			"ui:order": ["image", "company_name", "registration_number", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{},
 		{},
 		{
-			"ui:order": ["images", "issued", "extra"]
+			"ui:order": ["images", "issued", "extra"],
+			"extra": {
+				"ui:hidden": true
+			}
 		},
 		{
 			"ui:order": ["images", "issued", "members", "extra"],
@@ -2390,6 +2418,9 @@
 				"items": {
 					"ui:order": ["name", "position"]
 				}
+			},
+			"extra": {
+				"ui:hidden": true
 			}
 		}
 	]
