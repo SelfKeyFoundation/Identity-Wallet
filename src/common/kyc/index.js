@@ -1,5 +1,6 @@
 import * as serviceSelectors from '../exchanges/selectors';
 import * as walletSelectors from '../wallet/selectors';
+import { appSelectors } from '../app';
 import { identitySelectors } from '../identity';
 import { getGlobalContext } from '../context';
 import { push } from 'connected-react-router';
@@ -8,6 +9,7 @@ import { createAliasedAction } from 'electron-redux';
 import uuidv1 from 'uuid/v1';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
+let hardwalletConfirmationTimeout = null;
 
 export const initialState = {
 	relyingParties: [],
@@ -199,18 +201,38 @@ export const kycActions = {
 	}
 };
 
-const getSession = async (config, authenticate) => {
+const getSession = async (config, authenticate, dispatch, hardwareWalletType) => {
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	const session = mpService.createRelyingPartySession(config);
 
 	if (authenticate) {
-		await session.establish();
+		try {
+			if (hardwareWalletType !== '') {
+				const hardwalletConfirmationTime = '30000';
+				hardwalletConfirmationTimeout = setTimeout(async () => {
+					clearTimeout(hardwalletConfirmationTimeout);
+					await dispatch(push('/main/hd-timeout'));
+				}, hardwalletConfirmationTime);
+				await dispatch(push('/main/hd-timer'));
+			}
+			await session.establish();
+		} catch (error) {
+			console.log(error);
+			clearTimeout(hardwalletConfirmationTimeout);
+			if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+				await dispatch(push('/main/hd-declined'));
+			} else if (error.code === 'Failure_ActionCancelled') {
+				await dispatch(push('/main/hd-declined'));
+			} else if (error.statusText === 'UNKNOWN_ERROR') {
+				await dispatch(push('/main/hd-unlock'));
+			}
+		}
 	}
-
 	return session;
 };
 
 const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispatch, getState) => {
+	const hardwareWalletType = appSelectors.selectApp(getState()).hardwareWalletType;
 	if (!rpName) return null;
 
 	const ts = Date.now();
@@ -223,7 +245,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 	const config = rp.relying_party_config;
 
 	try {
-		const session = await getSession(config, authenticate);
+		const session = await getSession(config, authenticate, dispatch, hardwareWalletType);
 
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
@@ -250,6 +272,11 @@ const loadRelyingPartyOperation = (rpName, authenticate = true) => async (dispat
 				lastUpdated: ts
 			})
 		);
+
+		if (authenticate && hardwareWalletType !== '') {
+			clearTimeout(hardwalletConfirmationTimeout);
+			await dispatch(push('/main/kyc/current-application'));
+		}
 	} catch (error) {
 		await dispatch(
 			kycActions.updateRelyingParty(
