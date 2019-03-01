@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import {
-	TextField,
 	withStyles,
 	Divider,
 	Button,
@@ -11,9 +10,8 @@ import {
 	Typography,
 	Input
 } from '@material-ui/core';
-import { identityAttributes } from 'common/identity/utils';
+import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
-import { jsonSchema } from '../../../../common/identity/utils';
 import transformErrors from './transform-errors';
 import { KeyboardArrowDown } from '@material-ui/icons';
 
@@ -24,6 +22,9 @@ const styles = theme => ({
 
 class CreateAttributeComponent extends Component {
 	state = { typeId: -1, label: '', value: undefined, disabled: false };
+	componentDidMount() {
+		this.setState({ typeId: this.props.typeId });
+	}
 	handleSave = ({ errors }) => {
 		let { typeId, label, value, disabled } = this.state;
 		if (!!errors.length || disabled) {
@@ -101,15 +102,23 @@ class CreateAttributeComponent extends Component {
 							</MenuItem>
 						))}
 					</Select>
+
 					{this.state.typeId > -1 && (
-						<TextField
-							label="Label"
-							value={label}
-							margin="normal"
-							variant="filled"
-							onChange={this.hadnleFieldChange('label')}
-							fullWidth
-						/>
+						<>
+							<br />
+							<br />
+							<Typography variant="overline" gutterBottom>
+								Label
+							</Typography>
+							<Input
+								label="Label"
+								value={label}
+								margin="normal"
+								variant="filled"
+								onChange={this.hadnleFieldChange('label')}
+								fullWidth
+							/>
+						</>
 					)}
 				</div>
 				{type && <Divider variant="middle" />}
