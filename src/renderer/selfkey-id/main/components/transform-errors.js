@@ -1,5 +1,4 @@
 export default errors => {
-	console.log('XXX errors', errors);
 	return errors.map(error => {
 		if (error.name === 'pattern') {
 			error.message = 'Invalid format';
