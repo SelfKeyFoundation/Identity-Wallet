@@ -33,8 +33,8 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		position: 'absolute',
-		right: '-24px',
-		top: '-24px'
+		right: '-19px',
+		top: '-20px'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -166,7 +166,7 @@ export class IncorporationProcessStarted extends React.Component {
 									support@incorporations.io
 								</Typography>
 							</div>
-							<div className={classes.instructions}>
+							<div className={classes.instructions} style={{ display: 'none' }}>
 								<Typography variant="subtitle2" color="secondary" gutterBottom>
 									The application is available to you at any point under the
 									marketplace applications tab, in your SelfKey ID Profile.
