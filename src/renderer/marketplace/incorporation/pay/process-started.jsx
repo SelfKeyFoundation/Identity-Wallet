@@ -163,7 +163,7 @@ export class IncorporationProcessStarted extends React.Component {
 									gutterBottom
 									className="email"
 								>
-									support@incorporations.io
+									support@flagtheory.com
 								</Typography>
 							</div>
 							<div className={classes.instructions} style={{ display: 'none' }}>
