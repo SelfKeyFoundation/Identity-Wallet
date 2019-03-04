@@ -223,7 +223,7 @@ class IncorporationsDetailView extends Component {
 		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
 		this.setState({ loading: true }, async () => {
-			if (!rp.authenticated) {
+			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty('incorporations', authenticated, payRoute)
 				);
