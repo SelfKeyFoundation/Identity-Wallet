@@ -289,7 +289,8 @@
 				"@material-ui/core",
 				"@material-ui/icons",
 				"@sentry/electron",
-				"flag-icon-css/css/flag-icon.css"
+				"flag-icon-css/css/flag-icon.css",
+				"./static/stylesheets/scss/main.scss"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",
 			"webpackDllConfig": "webpack/dll.additions.js"
