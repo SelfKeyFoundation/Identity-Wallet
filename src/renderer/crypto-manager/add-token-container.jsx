@@ -122,11 +122,14 @@ class AddTokenContainerComponent extends Component {
 			let found = (this.props.tokens || []).find(
 				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
 			);
-			// Search for duplicate token
+			// Search for active duplicate token (recordState = 1)
 			let duplicate = (this.props.existingTokens || []).find(
-				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
+				t =>
+					(t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase() &&
+					(t['recordState'] || 0) === 1
 			);
 			if (found && duplicate && duplicate['recordState'] === 0) {
+				found['recordState'] = duplicate['recordState'];
 				duplicate = null;
 			}
 			if (!found) {
