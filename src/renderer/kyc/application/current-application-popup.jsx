@@ -51,6 +51,9 @@ const styles = theme => ({
 	agreementError: {
 		marginLeft: '30px'
 	},
+	labelColumn: {
+		whiteSpace: 'normal'
+	},
 	editColumn: {
 		textAlign: 'right'
 	},
@@ -135,7 +138,7 @@ const KycChecklistItem = withStyles(styles)(
 						{type}
 					</Typography>
 				</SmallTableCell>
-				<SmallTableCell>
+				<SmallTableCell className={classes.labelColumn}>
 					<KycChecklistItemLabel
 						item={item}
 						className={warningClassname}
@@ -221,7 +224,7 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsUR
 				window.openExternal(e, termsURL);
 			}}
 		>
-			terms and conditions
+			terms and conditions.
 		</a>
 	</Typography>
 );
