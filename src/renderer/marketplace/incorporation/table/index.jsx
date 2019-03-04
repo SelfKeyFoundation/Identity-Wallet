@@ -225,7 +225,11 @@ class IncorporationsTable extends Component {
 											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
-										<ProgramPrice price={this.getPrice(inc)} rate={keyRate} />
+										<ProgramPrice
+											label="USD"
+											price={this.getPrice(inc)}
+											rate={keyRate}
+										/>
 									</TableCell>
 									<TableCell className={classes.detailsCell}>
 										<span
