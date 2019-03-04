@@ -153,25 +153,25 @@ const KycChecklistItem = withStyles(styles)(
 const KycChecklist = withStyles(styles)(
 	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
 		return (
-			<Table classes={{ root: classes.checklist }}>
+			<Table>
 				<TableHead>
 					<SmallTableHeadRow>
-						<SmallTableCell> </SmallTableCell>
-						<SmallTableCell>
+						<TableCell> </TableCell>
+						<TableCell>
 							<Typography variant="overline" gutterBottom>
 								Information
 							</Typography>
-						</SmallTableCell>
-						<SmallTableCell>
+						</TableCell>
+						<TableCell>
 							<Typography variant="overline" gutterBottom>
 								Label
 							</Typography>
-						</SmallTableCell>
-						<SmallTableCell className={classes.editColumn}>
+						</TableCell>
+						<TableCell className={classes.editColumn}>
 							<Typography variant="overline" gutterBottom>
 								Actions
 							</Typography>
-						</SmallTableCell>
+						</TableCell>
 					</SmallTableHeadRow>
 				</TableHead>
 
