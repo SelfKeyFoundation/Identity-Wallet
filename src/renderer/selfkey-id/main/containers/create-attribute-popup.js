@@ -12,7 +12,7 @@ class CreateAttributePopupComponent extends Component {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		const { types, open = true, text = 'Add Information', uiSchemas } = this.props;
+		const { types, open = true, text = 'Add Information', uiSchemas, typeId } = this.props;
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<CreateAttribute
@@ -21,6 +21,7 @@ class CreateAttributePopupComponent extends Component {
 					types={types}
 					uiSchemas={uiSchemas}
 					isDocument={this.props.isDocument}
+					typeId={typeId}
 				/>
 			</Popup>
 		);

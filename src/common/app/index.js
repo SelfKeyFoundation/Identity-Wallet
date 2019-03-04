@@ -77,6 +77,9 @@ const appActions = {
 
 const loadWallets = () => async dispatch => {
 	await dispatch(appActions.setWalletsLoading(true));
+	await dispatch(appActions.setHardwareWalletsAction([]));
+	await dispatch(appActions.setWalletsLoading(''));
+
 	try {
 		const walletService = getGlobalContext().walletService;
 		const wallets = await walletService.getWallets();

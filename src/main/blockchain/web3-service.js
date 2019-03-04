@@ -42,8 +42,8 @@ export class Web3Service {
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
 		const engine = new ProviderEngine();
-		const getTransport = () => HWTransportNodeHid.create();
-		const ledger = Web3SubProvider(getTransport, {
+		this.getLedgerTransport = () => HWTransportNodeHid.create();
+		const ledger = Web3SubProvider(this.getLedgerTransport, {
 			networkId: CONFIG.chainId,
 			accountsLength: accountsQuantity,
 			accountsOffset: accountsOffset

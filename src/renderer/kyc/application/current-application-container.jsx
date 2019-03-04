@@ -5,6 +5,7 @@ import { CurrentApplicationPopup } from './current-application-popup';
 import { push } from 'connected-react-router';
 import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
+import { jsonSchema } from 'common/identity/utils';
 
 class CurrentApplicationComponent extends Component {
 	state = {
@@ -13,16 +14,19 @@ class CurrentApplicationComponent extends Component {
 		showEditAttribute: false,
 		agreementError: false,
 		agreementValue: false,
-		editAttribute: {}
+		editAttribute: {},
+		typeId: -1,
+		isDocument: false
 	};
 	componentDidMount() {
 		if (!this.props.currentApplication) return;
 
+		const authenticated = true;
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(
 				kycOperations.loadRelyingParty(
 					this.props.currentApplication.relyingPartyName,
-					true,
+					authenticated,
 					`/main/kyc/current-application/${
 						this.props.currentApplication.relyingPartyName
 					}`
@@ -69,7 +73,11 @@ class CurrentApplicationComponent extends Component {
 		if (item.options && item.options.length) {
 			this.setState({ showEditAttribute: true, editAttribute: item.options[0] });
 		} else {
-			this.setState({ showCreateAttribute: true });
+			this.setState({
+				showCreateAttribute: true,
+				typeId: item.type.id,
+				isDocument: jsonSchema.containsFile(item.type.content)
+			});
 		}
 	};
 	handlePopupClose = () => {
@@ -77,7 +85,6 @@ class CurrentApplicationComponent extends Component {
 	};
 	render() {
 		const { currentApplication, relyingParty, requirements } = this.props;
-		console.log(this.props);
 		return (
 			<div>
 				<CurrentApplicationPopup
@@ -96,7 +103,12 @@ class CurrentApplicationComponent extends Component {
 					editItem={this.handleEdit}
 				/>
 				{this.state.showCreateAttribute && (
-					<CreateAttributePopup open={true} onClose={this.handlePopupClose} />
+					<CreateAttributePopup
+						open={true}
+						onClose={this.handlePopupClose}
+						typeId={this.state.typeId}
+						isDocument={this.state.isDocument}
+					/>
 				)}
 				{this.state.showEditAttribute && (
 					<EditAttributePopup
@@ -114,9 +126,14 @@ const mapStateToProps = (state, props) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(state);
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
+	const authenticated = true;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			relyingPartyName,
+			authenticated
+		),
 		currentApplication,
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,

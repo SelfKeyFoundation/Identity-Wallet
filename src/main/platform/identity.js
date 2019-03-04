@@ -3,9 +3,7 @@ import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
-import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import AppEth from '@ledgerhq/hw-app-eth';
-let transport = null;
 
 const log = new Logger('Identity');
 export class Identity {
@@ -26,17 +24,16 @@ export class Identity {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		}
 	}
-
-	async getLedgerAppEth() {
-		if (!transport) transport = await HWTransportNodeHid.create();
-		return new AppEth(transport);
-	}
-
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
-			const appEth = await this.getLedgerAppEth();
-			const address = await appEth.getAddress(this.path);
-			return address.publicKey;
+			const transport = await getGlobalContext().web3Service.getLedgerTransport();
+			try {
+				const appEth = new AppEth(transport);
+				const address = await appEth.getAddress(this.path);
+				return address.publicKey;
+			} finally {
+				transport.close();
+			}
 		} else if (this.profile === 'trezor') {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
@@ -50,8 +47,13 @@ export class Identity {
 		let signature = {};
 		switch (this.profile) {
 			case 'ledger':
-				const appEth = await this.getLedgerAppEth();
-				signature = await appEth.signPersonalMessage(this.path, msgHash);
+				const transport = await getGlobalContext().web3Service.getLedgerTransport();
+				try {
+					const appEth = new AppEth(transport);
+					signature = await appEth.signPersonalMessage(this.path, msgHash);
+				} finally {
+					transport.close();
+				}
 				break;
 			case 'trezor':
 				const trezorSignature = await getGlobalContext().web3Service.trezorWalletSubProvider.signPersonalMessage(
