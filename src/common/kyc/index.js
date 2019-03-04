@@ -67,14 +67,18 @@ export const kycSelectors = {
 
 		return service.status === 'Active' && rpConfig;
 	},
-	relyingPartyShouldUpdateSelector(state, rpName) {
+	relyingPartyShouldUpdateSelector(state, rpName, authenticate = true) {
 		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
 		const rp = this.relyingPartySelector(state, rpName);
 		if (!rp) return true;
 		if (Date.now() - rp.lastUpdated > RP_UPDATE_INTERVAL) return true;
-		if (!rp.session || !rp.session.ctx || !rp.session.ctx.token) return true;
-		if (rp.session.ctx.token.data.exp > Date.now()) return true;
-
+		// RP should update if current session is not authenticated
+		// and we are asking for authenticated access
+		if (authenticate) {
+			if (!rp.authenticated) return true;
+			if (!rp.session || !rp.session.ctx || !rp.session.ctx.token) return true;
+			if (rp.session.ctx.token.data.exp > Date.now()) return true;
+		}
 		return false;
 	},
 	templatesSelector(state, rpName) {
@@ -278,8 +282,10 @@ const loadRelyingPartyOperation = (rpName, authenticate = true, afterAuthRoute) 
 			})
 		);
 
-		if (authenticate && hardwareWalletType !== '') {
-			clearTimeout(hardwalletConfirmationTimeout);
+		if (authenticate && afterAuthRoute) {
+			if (hardwareWalletType !== '') {
+				clearTimeout(hardwalletConfirmationTimeout);
+			}
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
