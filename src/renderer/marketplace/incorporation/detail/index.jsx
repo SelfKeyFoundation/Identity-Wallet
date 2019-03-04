@@ -6,7 +6,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
-import { WarningIcon } from 'selfkey-ui';
+import { WarningIcon, CertificateIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -161,6 +161,9 @@ const styles = theme => ({
 	warningBar: {
 		padding: '22px 30px',
 		border: '1px solid #E98548'
+	},
+	certificateIcon: {
+		marginRight: '20px'
 	}
 });
 
@@ -448,7 +451,8 @@ class IncorporationsDetailView extends Component {
 											size="large"
 											onClick={this.onStartClick}
 										>
-											Start Incorporation
+											<CertificateIcon className={classes.certificateIcon} />
+											Incorporate Now
 										</Button>
 									)}
 
