@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import config from 'common/config';
 import { getWallet } from 'common/wallet/selectors';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { incorporationsSelectors } from 'common/incorporations';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
-import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
-import { kycOperations } from 'common/kyc';
 import { FlagCountryName } from '../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -165,15 +165,55 @@ const styles = theme => ({
 });
 
 export class IncorporationCheckout extends React.Component {
-	componentDidMount() {
+	async componentDidMount() {
+		const authenticated = true;
+		// If session is not authenticated, reauthenticate with KYC-Chain
+		// Otherwise, just check if user has already applied to redirect
+		// back to incorporations page
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', authenticated)
+			);
+		} else {
+			await this.checkIfUserHasApplied();
+		}
 		this.loadData();
 	}
 
-	loadData = _ => {
+	loadData = () => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	};
 
-	getIncorporationPrice = _ => {
+	checkIfUserHasApplied = async () => {
+		if (this.userHasApplied()) await this.props.dispatch(push(this.getCancelRoute()));
+	};
+
+	getLastApplication = () => {
+		const { templateId } = this.props.match.params;
+		// For easy kyc testing, use the following test templateId
+		// const templateId = '5c6fadbf77c33d5c28718d7b';
+		if (!this.props.rp) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	getIncorporationPrice = () => {
 		const { program } = this.props;
 		const price = program['active_test_price']
 			? program['test_price']
@@ -202,17 +242,17 @@ export class IncorporationCheckout extends React.Component {
 		};
 	};
 
-	getCancelRoute = _ => {
+	getCancelRoute = () => {
 		const { companyCode, countryCode, templateId } = this.props.match.params;
 		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 	};
 
-	getPayRoute = _ => {
+	getPayRoute = () => {
 		const { companyCode, countryCode } = this.props.match.params;
 		return `/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`;
 	};
 
-	onBackClick = _ => this.props.dispatch(push(this.getCancelRoute()));
+	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
 	onStartClick = _ => {
 		const { program } = this.props;
@@ -472,6 +512,7 @@ export class IncorporationCheckout extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const authenticated = true;
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
@@ -484,6 +525,12 @@ const mapStateToProps = (state, props) => {
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
+		),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			authenticated
 		)
 	};
 };

@@ -21,11 +21,12 @@ class CurrentApplicationComponent extends Component {
 	componentDidMount() {
 		if (!this.props.currentApplication) return;
 
+		const authenticated = true;
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(
 				kycOperations.loadRelyingParty(
 					this.props.currentApplication.relyingPartyName,
-					true,
+					authenticated,
 					`/main/kyc/current-application/${
 						this.props.currentApplication.relyingPartyName
 					}`
@@ -125,9 +126,14 @@ const mapStateToProps = (state, props) => {
 	const currentApplication = kycSelectors.selectCurrentApplication(state);
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
+	const authenticated = true;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			relyingPartyName,
+			authenticated
+		),
 		currentApplication,
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
