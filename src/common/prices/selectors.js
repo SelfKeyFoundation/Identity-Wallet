@@ -6,6 +6,7 @@ export const getBySymbol = (state, symbol) => {
 };
 export const getRate = (state, symbol, fiat) => {
 	let price = getBySymbol(state, symbol);
+	if (!price) return 0;
 	let key = `price${(fiat || 'usd').toUpperCase()}`;
 	if (key in price) return price[key];
 	return 0;
