@@ -77,8 +77,12 @@ const styles = theme => ({
 
 export class IncorporationProcessStarted extends React.Component {
 	async componentWillMount() {
+		const authenticated = true;
+
 		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', authenticated)
+			);
 		}
 	}
 
@@ -112,8 +116,6 @@ export class IncorporationProcessStarted extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-
-		console.log(this.props);
 
 		return (
 			<div className={classes.container}>
@@ -188,13 +190,18 @@ export class IncorporationProcessStarted extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const authenticated = true;
 	return {
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		transaction: transactionSelectors.getTransaction(state),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			authenticated
+		),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
