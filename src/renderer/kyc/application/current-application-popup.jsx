@@ -14,7 +14,8 @@ import {
 	FormControl,
 	FormHelperText,
 	Radio,
-	RadioGroup
+	RadioGroup,
+	TableCell
 } from '@material-ui/core';
 
 import {
@@ -34,7 +35,6 @@ import { Popup } from '../../common/popup';
 const styles = theme => ({
 	root: {},
 	loading: { textAlign: 'center', paddingTop: '30px' },
-	checklist: {},
 	rowWarning: {
 		color: `${warning} !important;`
 	},
@@ -53,6 +53,12 @@ const styles = theme => ({
 	},
 	editColumn: {
 		textAlign: 'right'
+	},
+	formControlLabel: {
+		'& span': {
+			fontSize: '14px',
+			lineHeight: '17px'
+		}
 	}
 });
 
@@ -108,6 +114,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 						value={opt.id}
 						control={<Radio />}
 						label={opt.name}
+						className={classes.formControlLabel}
 					/>
 				))}
 			</RadioGroup>
