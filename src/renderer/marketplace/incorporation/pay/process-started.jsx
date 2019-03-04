@@ -142,6 +142,9 @@ export class IncorporationProcessStarted extends React.Component {
 						</div>
 						<div className={classes.content}>
 							<div className={classes.description}>
+								<Typography variant="h1" gutterBottom>
+									Incorporation Process Started
+								</Typography>
 								<Typography variant="body1" gutterBottom>
 									Thank you for payment!
 								</Typography>
