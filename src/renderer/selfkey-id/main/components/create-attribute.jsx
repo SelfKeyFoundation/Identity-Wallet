@@ -112,6 +112,8 @@ class CreateAttributeComponent extends Component {
 							</Typography>
 							<Input
 								label="Label"
+								placeholder="Internal naming for the information you are adding "
+								type="text"
 								value={label}
 								margin="normal"
 								variant="filled"
