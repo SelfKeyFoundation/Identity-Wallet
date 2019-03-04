@@ -376,7 +376,7 @@ export class IncorporationCheckout extends React.Component {
 										<Typography variant="h3" gutterBottom>
 											You will be required to provide a few basic informations
 											about yourself like full name and email. This will be
-											done trough SelfKey ID Wallet.
+											done through SelfKey ID Wallet.
 										</Typography>
 									</div>
 								</div>
@@ -404,9 +404,9 @@ export class IncorporationCheckout extends React.Component {
 									</header>
 									<div>
 										<Typography variant="h3" gutterBottom>
-											You will undergo a standard KYC process and our team
-											will get in touch with you to make sure we have all the
-											information needed.
+											Once the incorporations process is done you will receive
+											all the relevant documents, for your new company, on
+											your email.
 										</Typography>
 									</div>
 								</div>
