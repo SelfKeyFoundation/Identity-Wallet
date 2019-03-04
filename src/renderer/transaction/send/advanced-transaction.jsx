@@ -26,8 +26,6 @@ const styles = theme => ({
 		border: '1px solid #0FB8D0',
 		borderRadius: '4px',
 		background: 'linear-gradient(0deg, #09A8BA 0%, #0ABBD0 100%)',
-		boxShadow:
-			'inset -1px 0 0 0 rgba(0,0,0,0.24), 0 2px 2px 0 #07C1DC, 2px 0 2px 0 rgba(0,0,0,0.2)',
 		color: '#FFFFFF',
 		fontSize: '16px',
 		fontWeight: 600,
@@ -52,9 +50,7 @@ const styles = theme => ({
 		width: '37px',
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		backgroundColor: '#202932',
-		boxShadow:
-			'inset -1px 0 0 0 rgba(0,0,0,0.24), 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)'
+		backgroundColor: '#202932'
 	},
 	actionButtonsContainer: {
 		paddingTop: '50px'
@@ -124,6 +120,7 @@ const styles = theme => ({
 	},
 
 	divider: {
+		backgroundColor: 'transparent',
 		borderBottom: '2px solid #93b0c1',
 		paddingTop: '10px'
 	},
