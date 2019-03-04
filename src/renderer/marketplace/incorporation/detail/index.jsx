@@ -6,7 +6,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
-import { WarningIcon } from 'selfkey-ui';
+import { WarningIcon, CertificateIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -161,6 +161,9 @@ const styles = theme => ({
 	warningBar: {
 		padding: '22px 30px',
 		border: '1px solid #E98548'
+	},
+	certificateIcon: {
+		marginRight: '20px'
 	}
 });
 
@@ -183,22 +186,27 @@ function TabContainer({ children }) {
 
 class IncorporationsDetailView extends Component {
 	state = {
-		selectedTab: 0
+		selectedTab: 0,
+		loading: false
 	};
 
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 
-		if (!this.props.treaties || !this.props.treaties.length) {
+		const { treaties, rpShouldUpdate } = this.props;
+		const { countryCode } = this.props.match.params;
+		const notAuthenticated = false;
+
+		if (!treaties || !treaties.length) {
 			this.props.dispatch(
-				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(
-					this.props.match.params.countryCode
-				)
+				incorporationsOperations.loadIncorporationsTaxTreatiesOperation(countryCode)
 			);
 		}
 
-		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(kycOperations.loadRelyingParty('incorporations', false));
+		if (rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
+			);
 		}
 	}
 
@@ -207,11 +215,22 @@ class IncorporationsDetailView extends Component {
 	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
 
 	onStartClick = () => {
+		const { rp } = this.props;
 		const { countryCode, companyCode, templateId } = this.props.match.params;
+		const payRoute = `/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`;
+		const authenticated = true;
 
-		this.props.dispatch(
-			push(`/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`)
-		);
+		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
+		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
+		this.setState({ loading: true }, async () => {
+			if (!rp || !rp.authenticated) {
+				await this.props.dispatch(
+					kycOperations.loadRelyingParty('incorporations', authenticated, payRoute)
+				);
+			} else {
+				await this.props.dispatch(push(payRoute));
+			}
+		});
 	};
 
 	onPayClick = () => {
@@ -231,9 +250,11 @@ class IncorporationsDetailView extends Component {
 	};
 
 	getLastApplication = () => {
+		const { rp } = this.props;
 		const { templateId } = this.props.match.params;
+		// For easy kyc testing, use the following test templateId
 		// const templateId = '5c6fadbf77c33d5c28718d7b';
-		if (!this.props.rp) return false;
+		if (!rp || !rp.authenticated) return false;
 
 		const { applications } = this.props.rp;
 		if (!applications || applications.length === 0) return false;
@@ -267,7 +288,12 @@ class IncorporationsDetailView extends Component {
 	canIncorporate = () => {
 		const { templateId } = this.props.match.params;
 		const price = this.getPrice();
-		return !!(templateId && price);
+
+		if (this.props.rp && this.props.rp.authenticated) {
+			return !!(templateId && price && !this.userHasApplied());
+		} else {
+			return !!(templateId && price);
+		}
 	};
 
 	renderPartialStatus = () => {
@@ -419,13 +445,20 @@ class IncorporationsDetailView extends Component {
 							</div>
 							<div className={classes.applyButton}>
 								<React.Fragment>
-									{this.canIncorporate() && (
+									{this.canIncorporate() && !this.state.loading && (
 										<Button
 											variant="contained"
 											size="large"
 											onClick={this.onStartClick}
 										>
-											Start Incorporation
+											<CertificateIcon className={classes.certificateIcon} />
+											Incorporate Now
+										</Button>
+									)}
+
+									{this.canIncorporate() && this.state.loading && (
+										<Button variant="contained" size="large" disabled>
+											Loading ...
 										</Button>
 									)}
 									<ProgramPrice
@@ -576,14 +609,18 @@ class IncorporationsDetailView extends Component {
 
 const mapStateToProps = (state, props) => {
 	const { companyCode, countryCode, templateId } = props.match.params;
-
+	const notAuthenticated = false;
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			notAuthenticated
+		),
 		requirements: kycSelectors.selectRequirementsForTemplate(
 			state,
 			'incorporations',

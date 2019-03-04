@@ -21,23 +21,27 @@ const styles = theme => ({
 		marginTop: '-10px',
 		paddingTop: '17px',
 		width: '30px'
+	},
+	listItem: {
+		breakInside: 'avoid',
+		pageBreakInside: 'avoid'
 	}
 });
 
-const IncorporationsKYCItem = ({ item, index }) => {
+const IncorporationsKYCItem = withStyles(styles)(({ classes, item, index }) => {
 	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 	const warning = !item.options || !item.options.length;
 	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
 
 	return (
-		<ListItem>
+		<ListItem className={classes.listItem}>
 			{icon}
 			<Typography variant="body2" color="textSecondary" gutterBottom>
 				{type}
 			</Typography>
 		</ListItem>
 	);
-};
+});
 
 const IncorporationsKYC = props => {
 	const { classes, requirements, templateId } = props;
