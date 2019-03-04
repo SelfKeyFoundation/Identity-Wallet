@@ -128,7 +128,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 					'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
 				),
 				name: 'Country of Residence',
-				data: { value: this.state.country }
+				data: { value: { country: this.state.country } }
 			})
 		);
 
@@ -431,10 +431,10 @@ class SelfKeyIdCreateFormComponent extends Component {
 																					country => (
 																						<MenuItem
 																							key={
-																								country.id
+																								country.code
 																							}
 																							value={
-																								country.name
+																								country.code
 																							}
 																						>
 																							{
