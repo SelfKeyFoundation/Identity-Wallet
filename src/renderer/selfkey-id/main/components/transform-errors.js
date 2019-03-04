@@ -6,6 +6,9 @@ export default errors => {
 		if (error.message === 'should be string') {
 			error.message = 'This field is required';
 		}
+		if (error.name === 'format' && error.message === 'should match format "email"') {
+			error.message = 'Email provided is invalid';
+		}
 		return error;
 	});
 };
