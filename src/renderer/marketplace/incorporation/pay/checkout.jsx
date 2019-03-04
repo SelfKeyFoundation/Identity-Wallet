@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import config from 'common/config';
 import { getWallet } from 'common/wallet/selectors';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { incorporationsSelectors } from 'common/incorporations';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
-import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
-import { kycOperations } from 'common/kyc';
 import { FlagCountryName } from '../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -166,11 +166,22 @@ const styles = theme => ({
 });
 
 export class IncorporationCheckout extends React.Component {
-	componentDidMount() {
+	async componentDidMount() {
+		const authenticated = true;
+		// If session is not authenticated, reauthenticate with KYC-Chain
+		// Otherwise, just check if user has already applied to redirect
+		// back to incorporations page
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', authenticated)
+			);
+		} else {
+			await this.checkIfUserHasApplied();
+		}
 		this.loadData();
 	}
 
-	loadData = _ => {
+	loadData = () => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	};
 
@@ -179,7 +190,36 @@ export class IncorporationCheckout extends React.Component {
 		return program['Wallet Vendor Name'] || VENDOR_NAME;
 	};
 
-	getIncorporationPrice = _ => {
+	checkIfUserHasApplied = async () => {
+		if (this.userHasApplied()) await this.props.dispatch(push(this.getCancelRoute()));
+	};
+
+	getLastApplication = () => {
+		const { templateId } = this.props.match.params;
+		// For easy kyc testing, use the following test templateId
+		// const templateId = '5c6fadbf77c33d5c28718d7b';
+		if (!this.props.rp) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	getIncorporationPrice = () => {
 		const { program } = this.props;
 		const price = program['active_test_price']
 			? program['test_price']
@@ -208,17 +248,17 @@ export class IncorporationCheckout extends React.Component {
 		};
 	};
 
-	getCancelRoute = _ => {
+	getCancelRoute = () => {
 		const { companyCode, countryCode, templateId } = this.props.match.params;
 		return `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 	};
 
-	getPayRoute = _ => {
+	getPayRoute = () => {
 		const { companyCode, countryCode } = this.props.match.params;
 		return `/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`;
 	};
 
-	onBackClick = _ => this.props.dispatch(push(this.getCancelRoute()));
+	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
 	getDescription = program => {
 		// FIXME: TBD if this info should be stored on Airtable
@@ -228,7 +268,7 @@ export class IncorporationCheckout extends React.Component {
 		const purpose = 'conducting KYC';
 
 		return (
-			<React.Fragment>
+			<div>
 				By clicking this button, I consent to share my information with {vendor}, for the
 				purposes of {purpose}
 				and that they may further share this information with partners and affiliates in
@@ -244,7 +284,7 @@ export class IncorporationCheckout extends React.Component {
 				double check your required documents are Certified True or Notarized where
 				necessary. Failure to do so will result in delays in the incorporation process. You
 				may also be asked to provide more information by the service provider.
-			</React.Fragment>
+			</div>
 		);
 	};
 
@@ -256,7 +296,7 @@ export class IncorporationCheckout extends React.Component {
 		const purpose = 'conducting KYC';
 
 		return (
-			<React.Fragment>
+			<div>
 				I consent to share my information with ${vendor}, for the purposes of ${purpose} in
 				accordance with their{' '}
 				<a href={privacyURL} target={'_blank'}>
@@ -267,7 +307,7 @@ export class IncorporationCheckout extends React.Component {
 					terms and conditions
 				</a>
 				.
-			</React.Fragment>
+			</div>
 		);
 	};
 
@@ -287,8 +327,13 @@ export class IncorporationCheckout extends React.Component {
 				this.getPayRoute(),
 				this.getCancelRoute(),
 				`Incorporation Checklist: ${program.Region}`,
-				this.getDescription(program),
-				this.getAgreement()
+				`You are about to being the incorporation process in ${
+					program.Region
+				}. Please double check your
+				required documents are Certified True or Notarized where necessary. Failure to do so
+				will result in delays in the incorporation process. You may also be asked to provide
+				more information by the service provider`,
+				'conducting KYC'
 			)
 		);
 	};
@@ -391,7 +436,7 @@ export class IncorporationCheckout extends React.Component {
 										<Typography variant="h3" gutterBottom>
 											You will be required to provide a few basic informations
 											about yourself like full name and email. This will be
-											done trough SelfKey ID Wallet.
+											done through SelfKey ID Wallet.
 										</Typography>
 									</div>
 								</div>
@@ -419,9 +464,9 @@ export class IncorporationCheckout extends React.Component {
 									</header>
 									<div>
 										<Typography variant="h3" gutterBottom>
-											You will undergo a standard KYC process and our team
-											will get in touch with you to make sure we have all the
-											information needed.
+											Once the incorporations process is done you will receive
+											all the relevant documents, for your new company, on
+											your email.
 										</Typography>
 									</div>
 								</div>
@@ -527,6 +572,7 @@ export class IncorporationCheckout extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const authenticated = true;
 	return {
 		...getLocale(state),
 		...getFiatCurrency(state),
@@ -539,6 +585,12 @@ const mapStateToProps = (state, props) => {
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
+		),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			authenticated
 		)
 	};
 };

@@ -33,8 +33,8 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		position: 'absolute',
-		right: '-24px',
-		top: '-24px'
+		right: '-19px',
+		top: '-20px'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -77,8 +77,12 @@ const styles = theme => ({
 
 export class IncorporationProcessStarted extends React.Component {
 	async componentWillMount() {
+		const authenticated = true;
+
 		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(kycOperations.loadRelyingParty('incorporations'));
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', authenticated)
+			);
 		}
 	}
 
@@ -113,8 +117,6 @@ export class IncorporationProcessStarted extends React.Component {
 	render() {
 		const { classes } = this.props;
 
-		console.log(this.props);
-
 		return (
 			<div className={classes.container}>
 				<CloseButtonIcon onClick={this.onBackClick} className={classes.closeIcon} />
@@ -140,6 +142,9 @@ export class IncorporationProcessStarted extends React.Component {
 						</div>
 						<div className={classes.content}>
 							<div className={classes.description}>
+								<Typography variant="h1" gutterBottom>
+									Incorporation Process Started
+								</Typography>
 								<Typography variant="body1" gutterBottom>
 									Thank you for payment!
 								</Typography>
@@ -158,10 +163,10 @@ export class IncorporationProcessStarted extends React.Component {
 									gutterBottom
 									className="email"
 								>
-									support@flagtheory.com
+									support@incorporations.io
 								</Typography>
 							</div>
-							<div className={classes.instructions}>
+							<div className={classes.instructions} style={{ display: 'none' }}>
 								<Typography variant="subtitle2" color="secondary" gutterBottom>
 									The application is available to you at any point under the
 									marketplace applications tab, in your SelfKey ID Profile.
@@ -188,13 +193,18 @@ export class IncorporationProcessStarted extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+	const authenticated = true;
 	return {
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		transaction: transactionSelectors.getTransaction(state),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			authenticated
+		),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
