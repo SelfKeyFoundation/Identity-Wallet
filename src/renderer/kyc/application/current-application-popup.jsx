@@ -22,7 +22,7 @@ import {
 	SmallTableCell,
 	MuiEditIcon,
 	SmallTableRow,
-	WarningIcon,
+	AttributeAlertIcon,
 	warning,
 	success
 } from 'selfkey-ui';
@@ -120,7 +120,11 @@ const KycChecklistItem = withStyles(styles)(
 		const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 		const warning = !item.options || !item.options.length;
 		const warningClassname = warning ? classes.rowWarning : '';
-		let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
+		let icon = warning ? (
+			<AttributeAlertIcon />
+		) : (
+			<CheckOutlined className={classes.checkIcon} />
+		);
 
 		return (
 			<SmallTableRow>
