@@ -66,7 +66,8 @@ const styles = theme => ({
 		padding: '0 10px'
 	},
 	flagCell: {
-		width: '10px'
+		width: '10px',
+		paddingRight: '0'
 	},
 	regionCell: {
 		width: '60px',
