@@ -270,7 +270,7 @@ export class IncorporationCheckout extends React.Component {
 				this.getPayRoute(),
 				this.getCancelRoute(),
 				`Incorporation Checklist: ${program.Region}`,
-				`You are about to being the incorporation process in ${
+				`You are about to begin the incorporation process in ${
 					program.Region
 				}. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.`,
 				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
