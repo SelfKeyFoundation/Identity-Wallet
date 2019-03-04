@@ -448,7 +448,7 @@ class IncorporationsDetailView extends Component {
 											size="large"
 											onClick={this.onStartClick}
 										>
-											Start Incorporation
+											Incorporate Now
 										</Button>
 									)}
 
