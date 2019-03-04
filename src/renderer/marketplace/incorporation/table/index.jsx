@@ -29,9 +29,6 @@ const styles = theme => ({
 	headerTitle: {
 		paddingLeft: '21px'
 	},
-	table: {
-		tableLayout: 'fixed'
-	},
 	tableHeaderRow: {
 		'& th': {
 			fontFamily: 'Lato, arial, sans-serif',
@@ -167,7 +164,7 @@ class IncorporationsTable extends Component {
 					</Typography>
 				</Grid>
 				<Grid container direction="row" justify="space-evenly" alignItems="center">
-					<Table className={classes.table}>
+					<Table>
 						<TableHead>
 							<LargeTableHeadRow>
 								<TableCell className={classes.flagCell} />
