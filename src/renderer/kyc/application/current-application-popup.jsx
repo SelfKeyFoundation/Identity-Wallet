@@ -201,14 +201,10 @@ const KycChecklist = withStyles(styles)(
 	}
 );
 
-const getAgreement = ({ vendor, purpose }) =>
-	`I consent to share my information with ${vendor}, for the purposes of ${purpose} in accordance with their privacy policy and terms and conditions.`;
-
 const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsURL }) => (
-	<Typography variant="body2">
-		By clicking this button, I consent to share my information with {vendor}, for the purposes
-		of {purpose} and that they may further share this information with partners and affiliates
-		in accordance with their{' '}
+	<Typography variant="h3">
+		I consent to share my information with {vendor}, for the purposes of {purpose} and that they
+		may further share this information with partners and affiliates in accordance with their{' '}
 		<a
 			className={classes.link}
 			onClick={e => {
@@ -266,7 +262,6 @@ export const CurrentApplicationPopup = withStyles(styles)(
 
 		const purpose = agreement;
 		const description = currentApplication.description;
-		const agreeText = getAgreement({ vendor, purpose });
 
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
@@ -292,7 +287,13 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					{agreement ? (
 						<Grid item>
 							<KycAgreement
-								text={agreeText}
+								text={renderPrivacyPolicyText({
+									classes,
+									vendor,
+									purpose,
+									privacyURL,
+									termsURL
+								})}
 								value={agreementValue}
 								error={agreementError}
 								onChange={onAgreementChange}
@@ -301,15 +302,6 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					) : (
 						''
 					)}
-					<Grid item>
-						{renderPrivacyPolicyText({
-							classes,
-							vendor,
-							purpose,
-							privacyURL,
-							termsURL
-						})}
-					</Grid>
 					{error ? (
 						<Grid item>
 							<Typography variant="body2" color="error">
