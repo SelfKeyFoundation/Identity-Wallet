@@ -248,7 +248,6 @@
 			"connected-react-router",
 			"@material-ui/core",
 			"@material-ui/icons",
-			"@sentry/electron",
 			"flag-icon-css/css/flag-icon.css"
 		],
 		"main": {
@@ -288,7 +287,6 @@
 				"connected-react-router",
 				"@material-ui/core",
 				"@material-ui/icons",
-				"@sentry/electron",
 				"flag-icon-css/css/flag-icon.css"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",
