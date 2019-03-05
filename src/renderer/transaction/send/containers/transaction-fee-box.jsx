@@ -83,8 +83,6 @@ const styles = theme => ({
 		border: '1px solid #384656',
 		borderRadius: '4px',
 		backgroundColor: '#1E262E',
-		boxShadow:
-			'inset -1px 0 0 0 rgba(0,0,0,0.24), 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
 		color: '#FFFFFF',
 		fontSize: '14px',
 		lineHeight: '14px',

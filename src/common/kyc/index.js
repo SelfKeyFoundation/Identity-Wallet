@@ -14,17 +14,20 @@ let hardwalletConfirmationTimeout = null;
 export const initialState = {
 	relyingParties: [],
 	relyingPartiesByName: {},
-	currentApplication: null
+	currentApplication: null,
+	cancelRoute: ''
 };
 
 export const kycTypes = {
 	KYC_RP_LOAD: 'kyx/rp/load',
 	KYC_RP_UPDATE: 'kyc/rp/update',
+	KYC_RP_CLEAR: 'kyc/rp/clear',
 	KYC_RP_APPLICATION_ADD: 'kyc/rp/application/add',
 	KYC_RP_APPLICATION_CREATE: 'kyc/rp/application/create',
 	KYC_RP_APPLICATION_PAYMENT_UPDATE: 'kyc/rp/application/payment/update',
 	KYC_APPLICATION_CURRENT_START: 'kyc/application/current/start',
 	KYC_APPLICATION_CURRENT_SET: 'kyc/application/current/set',
+	KYC_APPLICATION_CANCEL_ROUTE_SET: 'kyc/application/cancel/route/set',
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
 	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit'
@@ -158,6 +161,9 @@ export const kycSelectors = {
 	},
 	selectCurrentApplication(state) {
 		return this.kycSelector(state).currentApplication;
+	},
+	selectCancelRoute(state) {
+		return this.kycSelector(state).cancelRoute;
 	}
 };
 
@@ -173,6 +179,12 @@ export const kycActions = {
 		return {
 			type: kycTypes.KYC_RP_APPLICATION_ADD,
 			payload: { name: rpName, application }
+		};
+	},
+	setCancelRoute(route) {
+		return {
+			type: kycTypes.KYC_APPLICATION_CANCEL_ROUTE_SET,
+			payload: route
 		};
 	},
 	setCurrentApplication(
@@ -222,25 +234,31 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 			await session.establish();
 		} catch (error) {
 			console.log(error);
-			clearTimeout(hardwalletConfirmationTimeout);
-			if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
-				await dispatch(push('/main/hd-declined'));
-			} else if (error.code === 'Failure_ActionCancelled') {
-				await dispatch(push('/main/hd-declined'));
-			} else if (error.statusText === 'UNKNOWN_ERROR') {
-				await dispatch(push('/main/hd-unlock'));
+			if (hardwareWalletType !== '') {
+				clearTimeout(hardwalletConfirmationTimeout);
+				if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+					await dispatch(push('/main/hd-declined'));
+				} else if (error.code === 'Failure_ActionCancelled') {
+					await dispatch(push('/main/hd-declined'));
+				} else if (error.statusText === 'UNKNOWN_ERROR') {
+					await dispatch(push('/main/hd-unlock'));
+				} else {
+					await dispatch(push('/main/hd-error'));
+				}
 			} else {
-				await dispatch(push('/main/hd-error'));
+				await dispatch(push('/main/auth-error'));
 			}
 		}
 	}
 	return session;
 };
 
-const loadRelyingPartyOperation = (rpName, authenticate = true, afterAuthRoute) => async (
-	dispatch,
-	getState
-) => {
+const loadRelyingPartyOperation = (
+	rpName,
+	authenticate = true,
+	afterAuthRoute,
+	cancelRoute
+) => async (dispatch, getState) => {
 	const hardwareWalletType = appSelectors.selectApp(getState()).hardwareWalletType;
 	if (!rpName) return null;
 
@@ -254,6 +272,7 @@ const loadRelyingPartyOperation = (rpName, authenticate = true, afterAuthRoute) 
 	const config = rp.relying_party_config;
 
 	try {
+		await dispatch(kycActions.setCancelRoute(cancelRoute));
 		const session = await getSession(config, authenticate, dispatch, hardwareWalletType);
 
 		let templates = await Promise.all(
@@ -404,6 +423,10 @@ const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	await dispatch(kycActions.clearCurrentApplication());
 };
 
+const clearRelyingPartyOperation = () => async dispatch => {
+	await dispatch(kycActions.updateRelyingParty({}));
+};
+
 export const kycOperations = {
 	...kycActions,
 	loadRelyingParty: createAliasedAction(kycTypes.KYC_RP_LOAD, loadRelyingPartyOperation),
@@ -426,10 +449,17 @@ export const kycOperations = {
 	submitCurrentApplicationOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATION_CURRENT_SUBMIT,
 		submitCurrentApplicationOperation
+	),
+	clearRelyingPartyOperation: createAliasedAction(
+		kycTypes.KYC_RP_CLEAR,
+		clearRelyingPartyOperation
 	)
 };
 
 export const updateRelyingPartyReducer = (state, { error, payload }) => {
+	if (Object.entries(payload).length === 0 && payload.constructor === Object) {
+		return { ...state, relyingPartiesByName: {}, relyingParties: [] };
+	}
 	let relyingParties = [...state.relyingParties];
 	let relyingPartiesByName = { ...state.relyingPartiesByName };
 	if (!relyingPartiesByName[payload.name]) {
@@ -454,11 +484,16 @@ export const clearCurrentApplicationReducer = state => {
 	return { ...state, currentApplication: null };
 };
 
+export const setCancelRoute = (state, { payload }) => {
+	return { ...state, cancelRoute: payload };
+};
+
 export const reducers = {
 	updateRelyingPartyReducer,
 	addKYCApplicationReducer,
 	setCurrentApplicationReducer,
-	clearCurrentApplicationReducer
+	clearCurrentApplicationReducer,
+	setCancelRoute
 };
 
 export const reducer = (state = initialState, action) => {
@@ -471,6 +506,8 @@ export const reducer = (state = initialState, action) => {
 			return reducers.setCurrentApplicationReducer(state, action);
 		case kycTypes.KYC_APPLICATION_CURRENT_CLEAR:
 			return reducers.clearCurrentApplicationReducer(state, action);
+		case kycTypes.KYC_APPLICATION_CANCEL_ROUTE_SET:
+			return reducers.setCancelRoute(state, action);
 	}
 	return state;
 };

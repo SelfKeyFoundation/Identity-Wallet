@@ -71,7 +71,7 @@ class CurrentApplicationComponent extends Component {
 	};
 	handleEdit = item => {
 		if (item.options && item.options.length) {
-			this.setState({ showEditAttribute: true, editAttribute: item.options[0] });
+			this.setState({ showEditAttribute: true, editAttribute: this.state.selected[item.id] });
 		} else {
 			this.setState({
 				showCreateAttribute: true,

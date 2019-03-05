@@ -29,9 +29,6 @@ const styles = theme => ({
 	headerTitle: {
 		paddingLeft: '21px'
 	},
-	table: {
-		tableLayout: 'fixed'
-	},
 	tableHeaderRow: {
 		'& th': {
 			fontFamily: 'Lato, arial, sans-serif',
@@ -69,7 +66,8 @@ const styles = theme => ({
 		padding: '0 10px'
 	},
 	flagCell: {
-		width: '10px'
+		width: '10px',
+		paddingRight: '0'
 	},
 	regionCell: {
 		width: '60px',
@@ -167,7 +165,7 @@ class IncorporationsTable extends Component {
 					</Typography>
 				</Grid>
 				<Grid container direction="row" justify="space-evenly" alignItems="center">
-					<Table className={classes.table}>
+					<Table>
 						<TableHead>
 							<LargeTableHeadRow>
 								<TableCell className={classes.flagCell} />
@@ -225,7 +223,11 @@ class IncorporationsTable extends Component {
 											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
-										<ProgramPrice price={this.getPrice(inc)} rate={keyRate} />
+										<ProgramPrice
+											label="USD"
+											price={this.getPrice(inc)}
+											rate={keyRate}
+										/>
 									</TableCell>
 									<TableCell className={classes.detailsCell}>
 										<span
