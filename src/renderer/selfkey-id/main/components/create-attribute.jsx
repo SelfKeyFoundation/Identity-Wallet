@@ -21,12 +21,15 @@ const styles = theme => ({
 });
 
 class CreateAttributeComponent extends Component {
-	state = { typeId: -1, label: '', value: undefined, disabled: false };
+	state = { typeId: -1, label: '', errorLabel: '', value: undefined, disabled: false };
 	componentDidMount() {
 		this.setState({ typeId: this.props.typeId });
 	}
 	handleSave = ({ errors }) => {
 		let { typeId, label, value, disabled } = this.state;
+		if (label === '') {
+			return this.setState({ errorLabel: 'Label is required', disabled: true });
+		}
 		if (!!errors.length || disabled) {
 			return this.setState({ errors, disabled: !!errors.length });
 		}
@@ -46,7 +49,7 @@ class CreateAttributeComponent extends Component {
 	hadnleFieldChange = prop => evt => {
 		let { value } = this.state;
 		if (prop === 'typeId') value = undefined;
-		this.setState({ [prop]: evt.target.value, value });
+		this.setState({ [prop]: evt.target.value, value, disabled: false });
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
 		const disabled = !!errors.length;
@@ -111,6 +114,7 @@ class CreateAttributeComponent extends Component {
 								Label
 							</Typography>
 							<Input
+								error={this.state.errorLabel !== ''}
 								label="Label"
 								value={label}
 								margin="normal"
@@ -118,6 +122,11 @@ class CreateAttributeComponent extends Component {
 								onChange={this.hadnleFieldChange('label')}
 								fullWidth
 							/>
+							{this.state.errorLabel !== '' && (
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{this.state.errorLabel}
+								</Typography>
+							)}
 						</>
 					)}
 				</div>
