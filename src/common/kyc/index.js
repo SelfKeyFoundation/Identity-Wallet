@@ -21,6 +21,7 @@ export const initialState = {
 export const kycTypes = {
 	KYC_RP_LOAD: 'kyx/rp/load',
 	KYC_RP_UPDATE: 'kyc/rp/update',
+	KYC_RP_CLEAR: 'kyc/rp/clear',
 	KYC_RP_APPLICATION_ADD: 'kyc/rp/application/add',
 	KYC_RP_APPLICATION_CREATE: 'kyc/rp/application/create',
 	KYC_RP_APPLICATION_PAYMENT_UPDATE: 'kyc/rp/application/payment/update',
@@ -422,6 +423,10 @@ const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
 	await dispatch(kycActions.clearCurrentApplication());
 };
 
+const clearRelyingPartyOperation = () => async dispatch => {
+	await dispatch(kycActions.updateRelyingParty({}));
+};
+
 export const kycOperations = {
 	...kycActions,
 	loadRelyingParty: createAliasedAction(kycTypes.KYC_RP_LOAD, loadRelyingPartyOperation),
@@ -444,10 +449,17 @@ export const kycOperations = {
 	submitCurrentApplicationOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATION_CURRENT_SUBMIT,
 		submitCurrentApplicationOperation
+	),
+	clearRelyingPartyOperation: createAliasedAction(
+		kycTypes.KYC_RP_CLEAR,
+		clearRelyingPartyOperation
 	)
 };
 
 export const updateRelyingPartyReducer = (state, { error, payload }) => {
+	if (Object.entries(payload).length === 0 && payload.constructor === Object) {
+		return { ...state, relyingPartiesByName: {}, relyingParties: [] };
+	}
 	let relyingParties = [...state.relyingParties];
 	let relyingPartiesByName = { ...state.relyingPartiesByName };
 	if (!relyingPartiesByName[payload.name]) {
