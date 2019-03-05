@@ -18,6 +18,7 @@ import EthUnits from 'common/utils/eth-units';
 
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
+const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 const styles = theme => ({
 	container: {
@@ -184,6 +185,11 @@ export class IncorporationCheckout extends React.Component {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	};
 
+	getVendorName = _ => {
+		const { program } = this.props;
+		return program['Wallet Vendor Name'] || VENDOR_NAME;
+	};
+
 	checkIfUserHasApplied = async () => {
 		if (this.userHasApplied()) await this.props.dispatch(push(this.getCancelRoute()));
 	};
@@ -254,6 +260,57 @@ export class IncorporationCheckout extends React.Component {
 
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
+	getDescription = program => {
+		// FIXME: TBD if this info should be stored on Airtable
+		const vendor = this.getVendorName();
+		const privacyURL = 'https://flagtheory.com/privacy-policy';
+		const termsURL = 'http://flagtheory.com/terms-and-conditions';
+		const purpose = 'conducting KYC';
+
+		return (
+			<div>
+				By clicking this button, I consent to share my information with {vendor}, for the
+				purposes of {purpose}
+				and that they may further share this information with partners and affiliates in
+				accordance with their
+				<a href={privacyURL} target={'_blank'}>
+					privacy policy
+				</a>{' '}
+				and{' '}
+				<a href={termsURL} target={'_blank'}>
+					terms and conditions
+				</a>
+				. You are about to being the incorporation process in {program.Region}. Please
+				double check your required documents are Certified True or Notarized where
+				necessary. Failure to do so will result in delays in the incorporation process. You
+				may also be asked to provide more information by the service provider.
+			</div>
+		);
+	};
+
+	getAgreement = program => {
+		// FIXME: TBD if this info should be stored on Airtable
+		const vendor = this.getVendorName();
+		const privacyURL = 'https://flagtheory.com/privacy-policy';
+		const termsURL = 'http://flagtheory.com/terms-and-conditions';
+		const purpose = 'conducting KYC';
+
+		return (
+			<div>
+				I consent to share my information with ${vendor}, for the purposes of ${purpose} in
+				accordance with their{' '}
+				<a href={privacyURL} target={'_blank'}>
+					privacy policy
+				</a>{' '}
+				and{' '}
+				<a href={termsURL} target={'_blank'}>
+					terms and conditions
+				</a>
+				.
+			</div>
+		);
+	};
+
 	onStartClick = _ => {
 		const { program } = this.props;
 		const { templateId } = this.props.match.params;
@@ -272,8 +329,11 @@ export class IncorporationCheckout extends React.Component {
 				`Incorporation Checklist: ${program.Region}`,
 				`You are about to being the incorporation process in ${
 					program.Region
-				}. Please double check your required documents are Certified True or Notarized where necessary. Failure to do so will result in delays in the incorporation process. You may also be asked to provide more information by the service provider.`,
-				'I understand SelfKey Wallet LLC will pass this information to Far Horizon Capital Inc, that will provide incorporation services in Singapore at my request and will communicate with me at my submitted email address above.'
+				}. Please double check your
+				required documents are Certified True or Notarized where necessary. Failure to do so
+				will result in delays in the incorporation process. You may also be asked to provide
+				more information by the service provider`,
+				'conducting KYC'
 			)
 		);
 	};
@@ -376,7 +436,7 @@ export class IncorporationCheckout extends React.Component {
 										<Typography variant="h3" gutterBottom>
 											You will be required to provide a few basic informations
 											about yourself like full name and email. This will be
-											done trough SelfKey ID Wallet.
+											done through SelfKey ID Wallet.
 										</Typography>
 									</div>
 								</div>
@@ -404,9 +464,9 @@ export class IncorporationCheckout extends React.Component {
 									</header>
 									<div>
 										<Typography variant="h3" gutterBottom>
-											You will undergo a standard KYC process and our team
-											will get in touch with you to make sure we have all the
-											information needed.
+											Once the incorporations process is done you will receive
+											all the relevant documents, for your new company, on
+											your email.
 										</Typography>
 									</div>
 								</div>

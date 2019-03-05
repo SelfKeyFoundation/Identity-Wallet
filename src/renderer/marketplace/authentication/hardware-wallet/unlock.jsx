@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
-import { appSelectors } from 'common/app';
 import { UnlockLargeIcon } from 'selfkey-ui';
-import { kycOperations } from 'common/kyc';
+import { kycSelectors } from 'common/kyc';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	unlockIcon: {
@@ -13,7 +13,7 @@ const styles = theme => ({
 });
 class HardwareWalletUnlock extends Component {
 	handleClose = () => {
-		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		this.props.dispatch(push(this.props.cancelRoute));
 	};
 
 	render() {
@@ -64,7 +64,7 @@ class HardwareWalletUnlock extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		cancelRoute: kycSelectors.selectCancelRoute(state)
 	};
 };
 

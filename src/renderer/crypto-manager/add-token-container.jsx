@@ -96,6 +96,14 @@ class AddTokenContainerComponent extends Component {
 		this.props.dispatch(addressBookOperations.resetAdd());
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.tokens.length !== this.props.tokens.length) {
+			if (this.state.address !== '') {
+				this.findToken(this.state.address);
+			}
+		}
+	}
+
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/crypto-manager'));
@@ -108,23 +116,48 @@ class AddTokenContainerComponent extends Component {
 	findToken = async contractAddress => {
 		await this.props.dispatch(addressBookOperations.resetAdd());
 		if (contractAddress !== '') {
+			// Validate address with library call
 			await this.props.dispatch(addressBookOperations.validateAddress(contractAddress));
+			// Try to find it on the current tokens list
 			let found = (this.props.tokens || []).find(
 				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
 			);
+			// Search for active duplicate token (recordState = 1)
 			let duplicate = (this.props.existingTokens || []).find(
-				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
+				t =>
+					(t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase() &&
+					(t['recordState'] || 0) === 1
 			);
 			if (found && duplicate && duplicate['recordState'] === 0) {
+				found['recordState'] = duplicate['recordState'];
 				duplicate = null;
 			}
-			this.setState({
-				address: contractAddress,
-				symbol: found ? found.symbol : '',
-				decimal: found ? found.decimal : '',
-				found: found,
-				duplicate: duplicate
-			});
+			if (!found) {
+				try {
+					// Search token info on blockchain and add it to tokens list
+					await this.props.dispatch(
+						tokensOperations.addTokenOperation(contractAddress.toLowerCase())
+					);
+
+					this.setState({
+						address: contractAddress,
+						symbol: '',
+						decimal: '',
+						found: found,
+						duplicate: duplicate
+					});
+				} catch (e) {
+					console.log(e);
+				}
+			} else {
+				this.setState({
+					address: contractAddress,
+					symbol: found ? found.symbol : '',
+					decimal: found ? found.decimal : '',
+					found: found,
+					duplicate: duplicate
+				});
+			}
 		} else {
 			this.setState({
 				address: contractAddress,

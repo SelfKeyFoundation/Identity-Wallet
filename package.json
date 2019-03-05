@@ -46,8 +46,7 @@
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
-		"prepare": "npm run snyk-protect",
-		"postinstall": "electron-webpack dll --env.production=false"
+		"prepare": "npm run snyk-protect"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -119,7 +118,7 @@
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#33cc721c5c8ee62a5f7ec62b4d9491f3f3bc8575",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2a7de53804d70ac94da900f3b6c405d699c55ee6",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -180,7 +179,6 @@
 		"eslint-plugin-promise": "4.0.1",
 		"eslint-plugin-react": "7.11.1",
 		"eslint-plugin-standard": "4.0.0",
-		"hard-source-webpack-plugin": "^0.13.1",
 		"husky": "1.2.0",
 		"jest": "23.6.0",
 		"jest-cucumber": "1.0.11",
@@ -260,17 +258,12 @@
 		"renderer": {
 			"dll": [
 				"react",
-				"react-dom",
-				"react-redux",
-				"react-router-dom",
-				"react-to-print",
+				"@material-ui/core",
+				"@material-ui/icons",
 				"ajv",
 				"react-jsonschema-form",
-				"redux",
-				"redux-thunk",
-				"reselect",
-				"request-promise-native",
 				"selfkey-ui",
+				"redux",
 				"redux-logger",
 				"redux-promise",
 				"electron-dl",
@@ -291,8 +284,7 @@
 				"flag-icon-css/css/flag-icon.css",
 				"fs-extra"
 			],
-			"webpackConfig": "webpack/renderer.additions.js",
-			"webpackDllConfig": "webpack/dll.additions.js"
+			"webpackConfig": "webpack/renderer.additions.js"
 		}
 	},
 	"config": {
