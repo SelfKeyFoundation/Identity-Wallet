@@ -221,7 +221,7 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsUR
 				window.openExternal(e, termsURL);
 			}}
 		>
-			terms and conditions
+			terms and conditions.
 		</a>
 	</Typography>
 );
