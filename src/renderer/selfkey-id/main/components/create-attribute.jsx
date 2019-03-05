@@ -1,15 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import {
-	withStyles,
-	Divider,
-	Button,
-	Grid,
-	MenuItem,
-	Select,
-	Typography,
-	Input
-} from '@material-ui/core';
+import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
@@ -48,16 +39,22 @@ class CreateAttributeComponent extends Component {
 	};
 	hadnleFieldChange = prop => evt => {
 		let { value } = this.state;
-		if (prop === 'typeId') value = undefined;
-		this.setState({ [prop]: evt.target.value, value, disabled: false });
+		let propValue = evt.target.value;
+		if (prop === 'typeId') {
+			value = undefined;
+			propValue = +propValue;
+		}
+		this.setState({ [prop]: propValue, value, disabled: false });
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
 		const disabled = !!errors.length;
 		this.setState({ [prop]: formData, disabled, errors });
 	};
+
+	getType = _.memoize((id, types) => types.find(type => +type.id === +id));
 	get type() {
 		if (!this.state.typeId) return null;
-		return this.props.types.find(type => type.id === this.state.typeId);
+		return this.getType(this.state.typeId, this.types);
 	}
 	get uiSchema() {
 		const type = this.type;
@@ -69,10 +66,17 @@ class CreateAttributeComponent extends Component {
 		);
 	}
 
+	getTypes = _.memoize((isDocument, types) =>
+		(isDocument
+			? types.filter(type => jsonSchema.containsFile(type.content))
+			: types.filter(type => !jsonSchema.containsFile(type.content))
+		).sort((a, b) =>
+			a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
+		)
+	);
+
 	get types() {
-		return this.props.isDocument
-			? this.props.types.filter(type => jsonSchema.containsFile(type.content))
-			: this.props.types.filter(type => !jsonSchema.containsFile(type.content));
+		return this.getTypes(this.props.isDocument, this.props.types);
 	}
 	render() {
 		const { classes } = this.props;
@@ -87,22 +91,18 @@ class CreateAttributeComponent extends Component {
 						Information
 					</Typography>
 					<Select
-						select
+						native
 						fullWidth
 						value={typeId}
 						onChange={this.hadnleFieldChange('typeId')}
 						displayEmpty
-						disableUnderline
 						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline gutterBottom />}
 					>
-						<MenuItem value={-1}>
-							<em>Choose...</em>
-						</MenuItem>
+						<option value={-1}>Choose...</option>
 						{types.map(option => (
-							<MenuItem key={option.id} value={option.id}>
+							<option key={option.id} value={option.id}>
 								{option.content.title}
-							</MenuItem>
+							</option>
 						))}
 					</Select>
 
@@ -119,7 +119,6 @@ class CreateAttributeComponent extends Component {
 								placeholder="Internal naming for the information you are adding "
 								type="text"
 								value={label}
-								margin="normal"
 								variant="filled"
 								onChange={this.hadnleFieldChange('label')}
 								fullWidth
