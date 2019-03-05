@@ -464,7 +464,7 @@ class IncorporationsDetailView extends Component {
 									<ProgramPrice
 										price={this.getPrice()}
 										rate={keyRate}
-										label="Price: "
+										label="USD"
 									/>
 								</React.Fragment>
 							</div>
