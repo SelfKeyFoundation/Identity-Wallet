@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { TextField, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
+import { Input, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
@@ -25,17 +25,32 @@ class EditAttributeComponent extends Component {
 			title,
 			schema,
 			label: name,
+			errorLabel: null,
 			value,
 			type,
 			attribute,
 			uiSchema,
-			disabled: false
+			disabled: false,
+			liveValidate: false
 		};
 	}
 	handleSave = ({ errors }) => {
 		let { label, value, schema, attribute, disabled } = this.state;
+		if (!label) {
+			return this.setState({
+				errorLabel: 'Label is required',
+				disabled: true,
+				liveValidate: true,
+				errors
+			});
+		}
 		if (!!errors.length || disabled) {
-			return this.setState({ errors, disabled: !!errors.length });
+			return this.setState({
+				errors,
+				disabled: !!errors.length,
+				liveValidate: true,
+				errorLabel: null
+			});
 		}
 		const normalized = identityAttributes.normalizeDocumentsSchema(schema, value, []);
 		const newAttr = {
@@ -47,31 +62,62 @@ class EditAttributeComponent extends Component {
 		this.props.onSave(newAttr);
 		this.props.onCancel();
 	};
+	handleErrors = errors => {
+		let { label, disabled } = this.state;
+		if (!label) {
+			this.setState({
+				errorLabel: 'Label is required',
+				disabled: true,
+				liveValidate: true,
+				errors
+			});
+			return true;
+		}
+		if (!!errors.length || disabled) {
+			this.setState({
+				errorLabel: null,
+				errors,
+				disabled: !!errors.length,
+				liveValidate: true
+			});
+			return true;
+		}
+		return false;
+	};
 	handleCancel = () => {
 		this.props.onCancel();
 	};
 	handleFieldChange = prop => evt => {
-		this.setState({ [prop]: evt.target.value });
+		let { value, errors, liveValidate } = this.state;
+		if (prop === 'typeId') value = undefined;
+		this.setState({ [prop]: evt.target.value, value });
+		if (liveValidate) this.handleErrors(errors);
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
-		const disabled = !!errors.length;
-		this.setState({ [prop]: formData, disabled });
+		this.setState({ [prop]: formData });
+		if (this.state.liveValidate) this.handleErrors(errors);
 	};
 	render() {
-		const { type, label, value, schema, title, uiSchema, disabled } = this.state;
+		const { type, label, value, schema, title, uiSchema, disabled, liveValidate } = this.state;
 		const { classes } = this.props;
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
 					<Typography variant="h3">{title}</Typography>
-					<TextField
+					<Input
+						error={!!this.state.errorLabel}
 						label="Label"
 						value={label}
-						margin="normal"
-						variant="outlined"
+						variant="filled"
 						onChange={this.handleFieldChange('label')}
+						onBlur={this.handleFieldChange('label')}
 						fullWidth
 					/>
+					{this.state.errorLabel && (
+						<Typography variant="subtitle2" color="error" gutterBottom>
+							{this.state.errorLabel}
+						</Typography>
+					)}
 				</div>
 				{type && <Divider variant="middle" />}
 				{type && (
@@ -80,10 +126,11 @@ class EditAttributeComponent extends Component {
 							schema={_.omit(jsonSchema.removeMeta(schema), ['title'])}
 							uiSchema={uiSchema.content}
 							formData={value}
-							liveValidate={true}
+							liveValidate={liveValidate}
 							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
+							onError={this.handleErrors}
 							transformErrors={transformErrors}
 						>
 							<Grid container spacing={24}>
