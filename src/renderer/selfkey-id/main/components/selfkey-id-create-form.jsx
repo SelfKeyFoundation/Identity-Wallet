@@ -10,7 +10,6 @@ import {
 	Divider,
 	Select,
 	Input,
-	MenuItem,
 	FormControl,
 	Modal,
 	IconButton
@@ -401,6 +400,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																		>
 																			<Select
 																				autoWidth
+																				native
 																				onChange={
 																					this
 																						.handleCountryChange
@@ -417,19 +417,17 @@ class SelfKeyIdCreateFormComponent extends Component {
 																					/>
 																				}
 																			>
-																				<MenuItem
+																				<option
 																					value="choose"
 																					className={
 																						classes.dropdown
 																					}
 																				>
-																					<em>
-																						Choose...
-																					</em>
-																				</MenuItem>
+																					Choose...
+																				</option>
 																				{this.props.countries.map(
 																					country => (
-																						<MenuItem
+																						<option
 																							key={
 																								country.code
 																							}
@@ -440,7 +438,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																							{
 																								country.name
 																							}
-																						</MenuItem>
+																						</option>
 																					)
 																				)}
 																			</Select>
