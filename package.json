@@ -46,7 +46,8 @@
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
-		"prepare": "npm run snyk-protect"
+		"prepare": "npm run snyk-protect",
+		"postinstall": "electron-webpack dll --env.production=false"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -179,6 +180,7 @@
 		"eslint-plugin-promise": "4.0.1",
 		"eslint-plugin-react": "7.11.1",
 		"eslint-plugin-standard": "4.0.0",
+		"hard-source-webpack-plugin": "^0.13.1",
 		"husky": "1.2.0",
 		"jest": "23.6.0",
 		"jest-cucumber": "1.0.11",
@@ -216,7 +218,38 @@
 	},
 	"electronWebpack": {
 		"whiteListedModules": [
-			"source-map-support"
+			"source-map-support",
+			"react",
+			"react-dom",
+			"react-redux",
+			"react-router-dom",
+			"react-to-print",
+			"ajv",
+			"react-jsonschema-form",
+			"redux",
+			"redux-thunk",
+			"reselect",
+			"request-promise-native",
+			"selfkey-ui",
+			"redux-logger",
+			"redux-promise",
+			"electron-dl",
+			"electron-is",
+			"lodash",
+			"normalizr",
+			"socket.io-client",
+			"striptags",
+			"trezor-wallet-provider",
+			"web3-provider-engine",
+			"prop-types",
+			"serialize-error",
+			"moment",
+			"bignumber.js",
+			"connected-react-router",
+			"@material-ui/core",
+			"@material-ui/icons",
+			"@sentry/electron",
+			"flag-icon-css/css/flag-icon.css"
 		],
 		"main": {
 			"extraEntries": [
@@ -227,18 +260,39 @@
 		"renderer": {
 			"dll": [
 				"react",
-				"@material-ui/core",
-				"@material-ui/icons",
+				"react-dom",
+				"react-redux",
+				"react-router-dom",
+				"react-to-print",
 				"ajv",
 				"react-jsonschema-form",
-				"selfkey-ui",
 				"redux",
+				"redux-thunk",
+				"reselect",
+				"request-promise-native",
+				"selfkey-ui",
 				"redux-logger",
 				"redux-promise",
-				"web3",
-				"sqlite3"
+				"electron-dl",
+				"electron-is",
+				"lodash",
+				"normalizr",
+				"socket.io-client",
+				"striptags",
+				"trezor-wallet-provider",
+				"web3-provider-engine",
+				"prop-types",
+				"serialize-error",
+				"moment",
+				"bignumber.js",
+				"connected-react-router",
+				"@material-ui/core",
+				"@material-ui/icons",
+				"@sentry/electron",
+				"flag-icon-css/css/flag-icon.css"
 			],
-			"webpackConfig": "webpack/renderer.additions.js"
+			"webpackConfig": "webpack/renderer.additions.js",
+			"webpackDllConfig": "webpack/dll.additions.js"
 		}
 	},
 	"config": {
