@@ -15,7 +15,7 @@ import {
 	TrezorIcon
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import ExistingAddress from './existing-address';
@@ -134,16 +134,29 @@ class Unlock extends Component {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.app !== this.props.app) {
+			const { wallets } = this.props.app;
+			let { selected } = this.state;
+			if (!wallets.length && !selected) {
+				this.setState({ selected: 1 });
+			}
+		}
+	}
+
 	switchUnlockOptions = (href, index) => event => {
+		let location = this.props.location;
+		let currentPath = location ? location['pathname'] || '' : '';
 		this.setState({ selected: index });
-		this.props.dispatch(push(href));
+		if (href !== currentPath) {
+			this.props.dispatch(push(href));
+		}
 	};
 
 	render() {
 		const { classes, match, app } = this.props;
 		const { walletsLoading, wallets } = app;
 		let { selected } = this.state;
-		if (!wallets.length && !selected) selected = 1;
 		return (
 			<Modal open={true}>
 				<ModalWrap className={classes.modalWrap}>
@@ -253,32 +266,40 @@ class Unlock extends Component {
 									</Grid>
 									<Divider className={classes.divider} />
 									<Grid item>
-										{wallets.length ? (
+										<Switch>
+											{wallets.length ? (
+												<Route
+													path={`${match.path}/existingAddress`}
+													component={ExistingAddress}
+												/>
+											) : (
+												''
+											)}
 											<Route
-												path={`${match.path}/existingAddress`}
-												component={ExistingAddress}
+												path={`${match.path}/newAddress`}
+												component={NewAddress}
 											/>
-										) : (
-											''
-										)}
-										<Route
-											path={`${match.path}/newAddress`}
-											component={NewAddress}
-										/>
-										<Route
-											path={`${match.path}/privateKey`}
-											component={PrivateKey}
-										/>
-										<Route path={`${match.path}/ledger`} component={Ledger} />
-										<Route path={`${match.path}/trezor`} component={Trezor} />
-										<Redirect
-											from={`${match.path}/`}
-											to={
-												wallets.length
-													? `${match.path}/existingAddress`
-													: `${match.path}/newAddress`
-											}
-										/>
+											<Route
+												path={`${match.path}/privateKey`}
+												component={PrivateKey}
+											/>
+											<Route
+												path={`${match.path}/ledger`}
+												component={Ledger}
+											/>
+											<Route
+												path={`${match.path}/trezor`}
+												component={Trezor}
+											/>
+											<Redirect
+												from={`${match.path}/`}
+												to={
+													wallets.length
+														? `${match.path}/existingAddress`
+														: `${match.path}/newAddress`
+												}
+											/>
+										</Switch>
 									</Grid>
 								</Grid>
 							</ModalBody>
