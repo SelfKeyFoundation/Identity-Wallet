@@ -260,34 +260,6 @@ export class IncorporationCheckout extends React.Component {
 
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
-	getDescription = program => {
-		// FIXME: TBD if this info should be stored on Airtable
-		const vendor = this.getVendorName();
-		const privacyURL = 'https://flagtheory.com/privacy-policy';
-		const termsURL = 'http://flagtheory.com/terms-and-conditions';
-		const purpose = 'conducting KYC';
-
-		return (
-			<div>
-				By clicking this button, I consent to share my information with {vendor}, for the
-				purposes of {purpose}
-				and that they may further share this information with partners and affiliates in
-				accordance with their
-				<a href={privacyURL} target={'_blank'}>
-					privacy policy
-				</a>{' '}
-				and{' '}
-				<a href={termsURL} target={'_blank'}>
-					terms and conditions
-				</a>
-				. You are about to being the incorporation process in {program.Region}. Please
-				double check your required documents are Certified True or Notarized where
-				necessary. Failure to do so will result in delays in the incorporation process. You
-				may also be asked to provide more information by the service provider.
-			</div>
-		);
-	};
-
 	getAgreement = program => {
 		// FIXME: TBD if this info should be stored on Airtable
 		const vendor = this.getVendorName();
@@ -327,7 +299,7 @@ export class IncorporationCheckout extends React.Component {
 				this.getPayRoute(),
 				this.getCancelRoute(),
 				`Incorporation Checklist: ${program.Region}`,
-				`You are about to being the incorporation process in ${
+				`You are about to begin the incorporation process in ${
 					program.Region
 				}. Please double check your
 				required documents are Certified True or Notarized where necessary. Failure to do so
