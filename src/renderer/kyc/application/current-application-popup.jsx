@@ -98,7 +98,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 			);
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
-
+		onSelected(item.uiId, selectedAttr);
 		return (
 			<RadioGroup
 				className={classes.radioGroup}
