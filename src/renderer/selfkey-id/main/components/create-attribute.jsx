@@ -75,7 +75,7 @@ class CreateAttributeComponent extends Component {
 			: this.props.types.filter(type => !jsonSchema.containsFile(type.content));
 	}
 	render() {
-		const { classes } = this.props;
+		const { classes, subtitle } = this.props;
 		const types = this.types;
 		const { typeId, label, value, disabled } = this.state;
 		const type = this.type;
@@ -84,7 +84,7 @@ class CreateAttributeComponent extends Component {
 			<React.Fragment>
 				<div className={classes.section1}>
 					<Typography variant="overline" gutterBottom>
-						Information
+						{subtitle}
 					</Typography>
 					<Select
 						select
