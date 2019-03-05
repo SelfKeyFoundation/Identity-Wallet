@@ -51,6 +51,9 @@ const styles = theme => ({
 		backgroundImage: `url(${backgroundImage})`,
 		backgroundPosition: '90% 50%',
 		backgroundRepeat: 'no-repeat'
+	},
+	labelCell: {
+		whiteSpace: 'normal'
 	}
 });
 
@@ -286,7 +289,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</SmallTableCell>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{this.renderAttributeName(
 																					entry
