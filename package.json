@@ -248,7 +248,8 @@
 			"connected-react-router",
 			"@material-ui/core",
 			"@material-ui/icons",
-			"flag-icon-css/css/flag-icon.css"
+			"flag-icon-css/css/flag-icon.css",
+			"fs-extra"
 		],
 		"main": {
 			"extraEntries": [
@@ -287,7 +288,8 @@
 				"connected-react-router",
 				"@material-ui/core",
 				"@material-ui/icons",
-				"flag-icon-css/css/flag-icon.css"
+				"flag-icon-css/css/flag-icon.css",
+				"fs-extra"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",
 			"webpackDllConfig": "webpack/dll.additions.js"
