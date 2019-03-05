@@ -6,6 +6,7 @@ import { identityOperations } from '../identity';
 import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
 import { Logger } from 'common/logger';
+import { kycOperations } from '../kyc';
 
 const log = new Logger('app-redux');
 
@@ -79,6 +80,7 @@ const loadWallets = () => async dispatch => {
 	await dispatch(appActions.setWalletsLoading(true));
 	await dispatch(appActions.setHardwareWalletsAction([]));
 	await dispatch(appActions.setWalletsLoading(''));
+	await dispatch(kycOperations.clearRelyingPartyOperation());
 
 	try {
 		const walletService = getGlobalContext().walletService;
