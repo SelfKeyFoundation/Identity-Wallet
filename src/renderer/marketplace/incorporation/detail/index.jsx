@@ -218,6 +218,7 @@ class IncorporationsDetailView extends Component {
 		const { rp } = this.props;
 		const { countryCode, companyCode, templateId } = this.props.match.params;
 		const payRoute = `/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`;
+		const cancelRoute = `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
 
 		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
@@ -225,7 +226,12 @@ class IncorporationsDetailView extends Component {
 		this.setState({ loading: true }, async () => {
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
-					kycOperations.loadRelyingParty('incorporations', authenticated, payRoute)
+					kycOperations.loadRelyingParty(
+						'incorporations',
+						authenticated,
+						payRoute,
+						cancelRoute
+					)
 				);
 			} else {
 				await this.props.dispatch(push(payRoute));

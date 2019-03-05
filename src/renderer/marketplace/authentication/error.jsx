@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import Popup from '../../../common/popup';
+import Popup from '../../common/popup';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 import { kycSelectors } from 'common/kyc';
 import { push } from 'connected-react-router';
 
 const styles = theme => ({});
 
-class HardwareWalletTimeout extends Component {
+class AuthenticationError extends Component {
 	handleClose = () => {
 		this.props.dispatch(push(this.props.cancelRoute));
 	};
 
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Authentication Confirmation">
 				<Grid
@@ -36,13 +35,10 @@ class HardwareWalletTimeout extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h2">
-									Confirm Authentication on {typeText}
-								</Typography>
+								<Typography variant="h2">Authentication Error</Typography>
 								<Typography variant="body1">
-									You did not confirm this authentication on your {typeText} so it
-									was not sent to the network. Please try again and confirm the
-									transaction on your device.
+									There was an error when authenticating with the service. Please
+									try again.
 								</Typography>
 							</Grid>
 							<Grid item>
@@ -51,7 +47,7 @@ class HardwareWalletTimeout extends Component {
 									variant="outlined"
 									onClick={this.handleClose}
 								>
-									BACK
+									Back
 								</Button>
 							</Grid>
 						</Grid>
@@ -68,4 +64,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(HardwareWalletTimeout));
+export default connect(mapStateToProps)(withStyles(styles)(AuthenticationError));

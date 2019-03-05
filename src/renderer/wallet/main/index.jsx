@@ -34,7 +34,7 @@ import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wal
 import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
 import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wallet/unlock';
 import HardwareWalletError from '../../marketplace/authentication/hardware-wallet/error';
-
+import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
 const styles = theme => ({
@@ -151,6 +151,7 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-declined`} component={HardwareWalletDeclined} />
 					<Route path={`${match.path}/hd-unlock`} component={HardwareWalletUnlock} />
 					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
+					<Route path={`${match.path}/auth-error`} component={AuthenticationError} />
 				</Grid>
 			</Grid>
 		);
