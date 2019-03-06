@@ -1,15 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import {
-	withStyles,
-	Divider,
-	Button,
-	Grid,
-	MenuItem,
-	Select,
-	Typography,
-	Input
-} from '@material-ui/core';
+import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
@@ -21,17 +12,34 @@ const styles = theme => ({
 });
 
 class CreateAttributeComponent extends Component {
-	state = { typeId: -1, label: '', errorLabel: '', value: undefined, disabled: false };
+	state = {
+		typeId: -1,
+		label: '',
+		errorLabel: null,
+		value: undefined,
+		disabled: false,
+		liveValidate: false
+	};
 	componentDidMount() {
 		this.setState({ typeId: this.props.typeId });
 	}
 	handleSave = ({ errors }) => {
 		let { typeId, label, value, disabled } = this.state;
-		if (label === '') {
-			return this.setState({ errorLabel: 'Label is required', disabled: true });
+		if (!label) {
+			return this.setState({
+				errorLabel: 'Label is required',
+				disabled: true,
+				liveValidate: true,
+				errors
+			});
 		}
 		if (!!errors.length || disabled) {
-			return this.setState({ errors, disabled: !!errors.length });
+			return this.setState({
+				errors,
+				disabled: !!errors.length,
+				liveValidate: true,
+				errorLabel: null
+			});
 		}
 		const type = this.type;
 		const normalized = identityAttributes.normalizeDocumentsSchema(type.content, value);
@@ -46,18 +54,47 @@ class CreateAttributeComponent extends Component {
 	handleCancel = () => {
 		this.props.onCancel();
 	};
-	hadnleFieldChange = prop => evt => {
-		let { value } = this.state;
-		if (prop === 'typeId') value = undefined;
-		this.setState({ [prop]: evt.target.value, value, disabled: false });
+	handleErrors = errors => {
+		let { label, disabled } = this.state;
+		if (!label) {
+			this.setState({
+				errorLabel: 'Label is required',
+				disabled: true,
+				liveValidate: true,
+				errors
+			});
+			return true;
+		}
+		if (!!errors.length || disabled) {
+			this.setState({
+				errorLabel: null,
+				errors,
+				disabled: !!errors.length,
+				liveValidate: true
+			});
+			return true;
+		}
+		return false;
+	};
+	handleFieldChange = prop => evt => {
+		let { value, errors, liveValidate } = this.state;
+		let propValue = evt.target.value;
+		if (prop === 'typeId') {
+			value = undefined;
+			propValue = +propValue;
+		}
+		this.setState({ [prop]: propValue, value });
+		if (liveValidate) this.handleErrors(errors);
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
-		const disabled = !!errors.length;
-		this.setState({ [prop]: formData, disabled, errors });
+		this.setState({ [prop]: formData });
+		if (this.state.liveValidate) this.handleErrors(errors);
 	};
+
+	getType = _.memoize((id, types) => types.find(type => +type.id === +id));
 	get type() {
 		if (!this.state.typeId) return null;
-		return this.props.types.find(type => type.id === this.state.typeId);
+		return this.getType(this.state.typeId, this.types);
 	}
 	get uiSchema() {
 		const type = this.type;
@@ -69,40 +106,43 @@ class CreateAttributeComponent extends Component {
 		);
 	}
 
+	getTypes = _.memoize((isDocument, types) =>
+		(isDocument
+			? types.filter(type => jsonSchema.containsFile(type.content))
+			: types.filter(type => !jsonSchema.containsFile(type.content))
+		).sort((a, b) =>
+			a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
+		)
+	);
+
 	get types() {
-		return this.props.isDocument
-			? this.props.types.filter(type => jsonSchema.containsFile(type.content))
-			: this.props.types.filter(type => !jsonSchema.containsFile(type.content));
+		return this.getTypes(this.props.isDocument, this.props.types);
 	}
 	render() {
-		const { classes } = this.props;
+		const { classes, subtitle } = this.props;
 		const types = this.types;
-		const { typeId, label, value, disabled } = this.state;
+		const { typeId, label, value, disabled, liveValidate } = this.state;
 		const type = this.type;
 		const uiSchema = this.uiSchema;
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
 					<Typography variant="overline" gutterBottom>
-						Information
+						{subtitle}
 					</Typography>
 					<Select
-						select
+						native
 						fullWidth
 						value={typeId}
-						onChange={this.hadnleFieldChange('typeId')}
+						onChange={this.handleFieldChange('typeId')}
 						displayEmpty
-						disableUnderline
 						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline gutterBottom />}
 					>
-						<MenuItem value={-1}>
-							<em>Choose...</em>
-						</MenuItem>
+						<option value={-1}>Choose...</option>
 						{types.map(option => (
-							<MenuItem key={option.id} value={option.id}>
+							<option key={option.id} value={option.id}>
 								{option.content.title}
-							</MenuItem>
+							</option>
 						))}
 					</Select>
 
@@ -114,15 +154,17 @@ class CreateAttributeComponent extends Component {
 								Label
 							</Typography>
 							<Input
-								error={this.state.errorLabel !== ''}
+								error={!!this.state.errorLabel}
 								label="Label"
+								placeholder="Internal naming for the information you are adding "
+								type="text"
 								value={label}
-								margin="normal"
 								variant="filled"
-								onChange={this.hadnleFieldChange('label')}
+								onChange={this.handleFieldChange('label')}
+								onBlur={this.handleFieldChange('label')}
 								fullWidth
 							/>
-							{this.state.errorLabel !== '' && (
+							{this.state.errorLabel && (
 								<Typography variant="subtitle2" color="error" gutterBottom>
 									{this.state.errorLabel}
 								</Typography>
@@ -137,10 +179,11 @@ class CreateAttributeComponent extends Component {
 							schema={_.omit(jsonSchema.removeMeta(type.content), ['title'])}
 							formData={value}
 							uiSchema={uiSchema.content}
-							liveValidate={true}
+							liveValidate={liveValidate}
 							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
+							onError={this.handleErrors}
 							transformErrors={transformErrors}
 						>
 							<Grid container spacing={24}>

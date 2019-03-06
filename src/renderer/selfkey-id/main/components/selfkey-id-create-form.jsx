@@ -10,7 +10,6 @@ import {
 	Divider,
 	Select,
 	Input,
-	MenuItem,
 	FormControl,
 	Modal,
 	IconButton
@@ -124,7 +123,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 					'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
 				),
 				name: 'Country of Residence',
-				data: { value: this.state.country }
+				data: { value: { country: this.state.country } }
 			})
 		);
 
@@ -397,6 +396,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																		>
 																			<Select
 																				autoWidth
+																				native
 																				onChange={
 																					this
 																						.handleCountryChange
@@ -413,30 +413,28 @@ class SelfKeyIdCreateFormComponent extends Component {
 																					/>
 																				}
 																			>
-																				<MenuItem
+																				<option
 																					value="choose"
 																					className={
 																						classes.dropdown
 																					}
 																				>
-																					<em>
-																						Choose...
-																					</em>
-																				</MenuItem>
+																					Choose...
+																				</option>
 																				{this.props.countries.map(
 																					country => (
-																						<MenuItem
+																						<option
 																							key={
-																								country.id
+																								country.code
 																							}
 																							value={
-																								country.name
+																								country.code
 																							}
 																						>
 																							{
 																								country.name
 																							}
-																						</MenuItem>
+																						</option>
 																					)
 																				)}
 																			</Select>
