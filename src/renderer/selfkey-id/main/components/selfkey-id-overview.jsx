@@ -54,7 +54,22 @@ const styles = theme => ({
 		backgroundRepeat: 'no-repeat'
 	},
 	labelCell: {
-		whiteSpace: 'normal'
+		whiteSpace: 'normal',
+		wordBreak: 'break-all',
+		'& > div': {
+			alignItems: 'center'
+		}
+	},
+	cardHeader: {
+		whiteSpace: 'normal',
+		wordBreak: 'break-all'
+	},
+	documentColumn: {
+		display: 'flex',
+		alignItems: 'center',
+		'& .file-icon': {
+			marginRight: '15px'
+		}
 	}
 });
 
@@ -89,14 +104,14 @@ class SelfkeyIdOverviewComponent extends Component {
 	renderAttributeName({ name }) {
 		return name || 'No label provided';
 	}
-	renderDocumentName(doc) {
+	renderDocumentName({ entry, classes }) {
 		let fileType = null;
 		let fileName = null;
 		let FileIcon = FileDefaultIcon;
 
-		if (typeof doc.data.value === 'string' && doc.documents.length === 1) {
-			fileName = doc.documents[0].name;
-			fileType = doc.documents[0].mimeType;
+		if (typeof entry.data.value === 'string' && entry.documents.length === 1) {
+			fileName = entry.documents[0].name;
+			fileType = entry.documents[0].mimeType;
 		}
 
 		if (fileType) {
@@ -105,19 +120,17 @@ class SelfkeyIdOverviewComponent extends Component {
 		}
 
 		return (
-			<Grid container>
-				<Grid item xs={3}>
+			<div className={classes.documentColumn}>
+				<div className="file-icon">
 					<FileIcon />
-				</Grid>
-
-				<Grid item xs={6}>
-					<Typography variant="h6">{doc.name}</Typography>
-
+				</div>
+				<div>
+					<Typography variant="h6">{entry.name}</Typography>
 					<Typography variant="subtitle1" color="secondary">
-						{fileName || `${doc.documents.length} files`}
+						{fileName || `${entry.documents.length} files`}
 					</Typography>
-				</Grid>
-			</Grid>
+				</div>
+			</div>
 		);
 	}
 
@@ -176,6 +189,7 @@ class SelfkeyIdOverviewComponent extends Component {
 									title={`${firstName} ${middleName} ${lastName}`}
 									subheader={email}
 									onClick={this.handleAvatarClick}
+									className={classes.cardHeader}
 								/>
 							</Card>
 						</Grid>
@@ -531,7 +545,10 @@ class SelfkeyIdOverviewComponent extends Component {
 																			}
 																		>
 																			{this.renderDocumentName(
-																				entry
+																				{
+																					entry,
+																					classes
+																				}
 																			)}
 																		</TableCell>
 																		<TableCell> - </TableCell>
