@@ -1,7 +1,7 @@
 import { Country } from './country';
 
 export class CountryService {
-	getCountries() {
+	async getCountries() {
 		return Country.findAll();
 	}
 }

@@ -89,8 +89,12 @@ class EditAttributeComponent extends Component {
 	};
 	handleFieldChange = prop => evt => {
 		let { value, errors, liveValidate } = this.state;
-		if (prop === 'typeId') value = undefined;
-		this.setState({ [prop]: evt.target.value, value });
+		let propValue = evt.target.value;
+		if (prop === 'typeId') {
+			value = undefined;
+			propValue = +propValue;
+		}
+		this.setState({ [prop]: propValue, value });
 		if (liveValidate) this.handleErrors(errors);
 	};
 	handleFormChange = prop => ({ formData, errors }) => {
@@ -103,12 +107,16 @@ class EditAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<Typography variant="h3">{title}</Typography>
+					<Typography variant="overline" gutterBottom>
+						{title}
+					</Typography>
 					<Input
-						error={!!this.state.errorLabel}
 						label="Label"
+						placeholder="Internal naming for the information you are adding"
+						type="text"
 						value={label}
 						variant="filled"
+						error={!!this.state.errorLabel}
 						onChange={this.handleFieldChange('label')}
 						onBlur={this.handleFieldChange('label')}
 						fullWidth
