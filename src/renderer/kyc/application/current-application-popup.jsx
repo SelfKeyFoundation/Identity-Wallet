@@ -52,7 +52,8 @@ const styles = theme => ({
 		marginLeft: '30px'
 	},
 	labelColumn: {
-		whiteSpace: 'normal'
+		whiteSpace: 'normal',
+		wordBreak: 'break-all'
 	},
 	editColumn: {
 		textAlign: 'right'
