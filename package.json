@@ -107,7 +107,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#c92ab26",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#d0e72b94dea37a9ebefbded375f434f4a405ce2a",
 		"react-redux": "6.0.0",
 		"react-router-dom": "4.3.1",
 		"react-to-print": "2.0.0-alpha-6",
