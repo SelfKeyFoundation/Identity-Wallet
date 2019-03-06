@@ -137,7 +137,11 @@ const KycChecklistItemLabel = withStyles(styles)(
 
 const KycChecklistItem = withStyles(styles)(
 	({ item, classes, selectedAttributes, onSelected, editItem }) => {
-		const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
+		const type = item.title
+			? item.title
+			: item.type && item.type.content
+			? item.type.content.title
+			: item.schemaId;
 		const warning = !item.options || !item.options.length;
 		const warningClassname = warning ? classes.rowWarning : '';
 		let icon = warning ? (
