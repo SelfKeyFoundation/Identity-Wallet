@@ -211,7 +211,7 @@ class IncorporationsTable extends Component {
 							{data.map(inc => (
 								<TableRow key={inc.id}>
 									<TableCell className={classes.flagCell}>
-										<FlagCountryName code={inc['Country code']} />
+										<FlagCountryName code={inc['Country code']} size="small" />
 									</TableCell>
 									<TableCell>{inc.Region}</TableCell>
 									<TableCell className={classes.regionCell}>
