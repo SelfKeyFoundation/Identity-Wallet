@@ -327,9 +327,9 @@ const migrateIdentityAttributes = async (ctx, knex, Promise) => {
 		}
 		if (['physical_address', 'work_place'].includes(attr.type)) {
 			data.value = {
-				'address-line-1': data.value.address1 || '',
-				'address-line-2': data.value.address2 || '',
-				'address-line-3': [
+				address_line_1: data.value.address1 || '',
+				address_line_2: [
+					data.value.address2 || '',
 					data.value.zip,
 					data.value.city,
 					data.value.region,
