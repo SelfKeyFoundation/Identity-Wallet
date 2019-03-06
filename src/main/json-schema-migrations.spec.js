@@ -229,16 +229,15 @@ describe('migrations', () => {
 				expect(newAttr[0].typeId).toBe(newType[0].id);
 				expect(newAttr[0].name).toEqual('physical address');
 				expect(newAttr[0].data.value).toEqual({
-					'address-line-1': 'street address 1',
-					'address-line-2': 'street address 2',
-					'address-line-3': 'zip, city, state, Anguilla'
+					address_line_1: 'street address 1',
+					address_line_2: 'street address 2, zip, city, state, Anguilla'
 				});
 				expect(newAttr[1].typeId).toEqual(newType[0].id);
 				expect(newAttr[1].name).toEqual('work place');
 				expect(newAttr[1].data.value).toEqual({
-					'address-line-1': 'workplace str 1',
-					'address-line-2': 'workplace str 2',
-					'address-line-3': 'workplace zip, workplace city, workplace state, Andorra'
+					address_line_1: 'workplace str 1',
+					address_line_2:
+						'workplace str 2, workplace zip, workplace city, workplace state, Andorra'
 				});
 			});
 			it('should migrate work address', async () => {
@@ -276,9 +275,9 @@ describe('migrations', () => {
 					'http://platform.selfkey.org/schema/attribute/physical-address.json'
 				);
 				expect(newAttr[0].data.value).toEqual({
-					'address-line-1': 'workplace str 1',
-					'address-line-2': 'workplace str 2',
-					'address-line-3': 'workplace zip, workplace city, workplace state, Andorra'
+					address_line_1: 'workplace str 1',
+					address_line_2:
+						'workplace str 2, workplace zip, workplace city, workplace state, Andorra'
 				});
 			});
 			it('should migrate phone number', async () => {
