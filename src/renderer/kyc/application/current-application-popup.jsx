@@ -51,6 +51,9 @@ const styles = theme => ({
 	agreementError: {
 		marginLeft: '30px'
 	},
+	labelColumn: {
+		whiteSpace: 'normal'
+	},
 	editColumn: {
 		textAlign: 'right'
 	},
@@ -59,6 +62,11 @@ const styles = theme => ({
 			fontSize: '14px',
 			lineHeight: '17px'
 		}
+	},
+	link: {
+		color: '#00C0D9',
+		cursor: 'pointer',
+		textDecoration: 'none'
 	}
 });
 
@@ -96,7 +104,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 			);
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
-
+		onSelected(item.uiId, selectedAttr);
 		return (
 			<RadioGroup
 				className={classes.radioGroup}
@@ -141,7 +149,7 @@ const KycChecklistItem = withStyles(styles)(
 						{type}
 					</Typography>
 				</SmallTableCell>
-				<SmallTableCell>
+				<SmallTableCell className={classes.labelColumn}>
 					<KycChecklistItemLabel
 						item={item}
 						className={warningClassname}
@@ -204,6 +212,30 @@ const KycChecklist = withStyles(styles)(
 	}
 );
 
+const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsURL }) => (
+	<Typography variant="h3">
+		I consent to share my information with {vendor}, for the purposes of {purpose} and that they
+		may further share this information with partners and affiliates in accordance with their{' '}
+		<a
+			className={classes.link}
+			onClick={e => {
+				window.openExternal(e, privacyURL);
+			}}
+		>
+			privacy policy
+		</a>{' '}
+		and{' '}
+		<a
+			className={classes.link}
+			onClick={e => {
+				window.openExternal(e, termsURL);
+			}}
+		>
+			terms and conditions.
+		</a>
+	</Typography>
+);
+
 export const CurrentApplicationPopup = withStyles(styles)(
 	({
 		currentApplication,
@@ -231,8 +263,16 @@ export const CurrentApplicationPopup = withStyles(styles)(
 				</Popup>
 			);
 		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
-		const description = currentApplication.description || `${relyingParty.description || ''}`;
+		// const description = currentApplication.description || `${relyingParty.description || ''}`;
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
+
+		// FIXME: TBD if this info should be stored on Airtable
+		const vendor = 'Far Horizon Capital Inc';
+		const privacyURL = 'https://flagtheory.com/privacy-policy';
+		const termsURL = 'http://flagtheory.com/terms-and-conditions';
+
+		const purpose = agreement;
+		const description = currentApplication.description;
 
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
@@ -258,7 +298,13 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					{agreement ? (
 						<Grid item>
 							<KycAgreement
-								text={agreement}
+								text={renderPrivacyPolicyText({
+									classes,
+									vendor,
+									purpose,
+									privacyURL,
+									termsURL
+								})}
 								value={agreementValue}
 								error={agreementError}
 								onChange={onAgreementChange}

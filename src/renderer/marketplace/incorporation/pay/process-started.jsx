@@ -112,7 +112,7 @@ export class IncorporationProcessStarted extends React.Component {
 
 	onBackClick = () => this.props.dispatch(push(`/main/dashboard`));
 
-	onSelfKeyClick = () => this.props.dispatch(push(`/main/dashboard`));
+	onSelfKeyClick = () => this.props.dispatch(push(`/main/selfkeyId`));
 
 	render() {
 		const { classes } = this.props;
@@ -163,7 +163,7 @@ export class IncorporationProcessStarted extends React.Component {
 									gutterBottom
 									className="email"
 								>
-									support@incorporations.io
+									support@flagtheory.com
 								</Typography>
 							</div>
 							<div className={classes.instructions} style={{ display: 'none' }}>

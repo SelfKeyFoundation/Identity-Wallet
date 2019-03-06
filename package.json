@@ -107,7 +107,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#5c1292bafc239df26d9f6406f875b487cd29f252",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#d0e72b94dea37a9ebefbded375f434f4a405ce2a",
 		"react-redux": "6.0.0",
 		"react-router-dom": "4.3.1",
 		"react-to-print": "2.0.0-alpha-6",
@@ -119,7 +119,7 @@
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2a7de53804d70ac94da900f3b6c405d699c55ee6",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2a1a2db6db4e8e9ffea932fa0e8482dc360a6223",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -248,8 +248,8 @@
 			"connected-react-router",
 			"@material-ui/core",
 			"@material-ui/icons",
-			"@sentry/electron",
-			"flag-icon-css/css/flag-icon.css"
+			"flag-icon-css/css/flag-icon.css",
+			"fs-extra"
 		],
 		"main": {
 			"extraEntries": [
@@ -288,8 +288,8 @@
 				"connected-react-router",
 				"@material-ui/core",
 				"@material-ui/icons",
-				"@sentry/electron",
-				"flag-icon-css/css/flag-icon.css"
+				"flag-icon-css/css/flag-icon.css",
+				"fs-extra"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",
 			"webpackDllConfig": "webpack/dll.additions.js"
