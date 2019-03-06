@@ -246,7 +246,7 @@ class Sidebar extends Component {
 						</ListItem>
 						<ListItem key="version">
 							<Typography variant="subtitle2" className={classes.version}>
-								V 0.0.2
+								V {window.appVersion}
 							</Typography>
 						</ListItem>
 					</List>
