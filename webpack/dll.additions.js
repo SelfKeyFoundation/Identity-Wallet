@@ -1,6 +1,4 @@
 const path = require('path');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-
 module.exports = {
 	module: {
 		rules: [
@@ -44,7 +42,6 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [new HardSourceWebpackPlugin()],
 	resolve: {
 		modules: [
 			path.resolve(__dirname, '..', 'src'),

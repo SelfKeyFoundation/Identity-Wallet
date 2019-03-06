@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { push } from 'connected-react-router';
 import {
 	Grid,
 	CardHeader,
@@ -51,8 +52,13 @@ const styles = theme => ({
 		backgroundImage: `url(${backgroundImage})`,
 		backgroundPosition: '90% 50%',
 		backgroundRepeat: 'no-repeat'
+	},
+	labelCell: {
+		whiteSpace: 'normal'
 	}
 });
+
+const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
 
 class SelfkeyIdOverviewComponent extends Component {
 	state = {
@@ -64,7 +70,6 @@ class SelfkeyIdOverviewComponent extends Component {
 	handleAddAttribute = () => {
 		this.setState({ popup: 'create-attribute', isDocument: false });
 	};
-
 	handleAddDocument = () => {
 		this.setState({ popup: 'create-attribute', isDocument: true });
 	};
@@ -77,6 +82,7 @@ class SelfkeyIdOverviewComponent extends Component {
 	handleAvatarClick = () => {
 		this.setState({ popup: 'edit-avatar' });
 	};
+	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -189,11 +195,10 @@ class SelfkeyIdOverviewComponent extends Component {
 							<Card className={classes.card}>
 								<CardContent>
 									<Typography variant="body2">
-										{/* You have not applied for any service in the marketplace yet. */}
-										Selfkey Marketplace is coming soon...
+										Selfkey Marketplace is now launched and operational.
 									</Typography>
 									<br />
-									<Button variant="contained" disabled>
+									<Button variant="contained" onClick={this.handleAccessClick}>
 										Access Marketplace
 									</Button>
 								</CardContent>
@@ -277,7 +282,11 @@ class SelfkeyIdOverviewComponent extends Component {
 															basicAttributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{
 																					entry.type
@@ -286,7 +295,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</SmallTableCell>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{this.renderAttributeName(
 																					entry
@@ -389,7 +402,11 @@ class SelfkeyIdOverviewComponent extends Component {
 															attributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{
 																					entry.type
@@ -398,7 +415,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</SmallTableCell>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{this.renderAttributeName(
 																					entry
@@ -516,7 +537,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</TableCell>
-																		<TableCell>
+																		<TableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			{this.renderDocumentName(
 																				entry
 																			)}

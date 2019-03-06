@@ -39,20 +39,14 @@ class NewAddress extends Component {
 		}
 	}
 
-	resetErrorState = async () => {
-		if (this.state.error !== '') {
-			await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
-		}
-	};
-
 	handleSelectFile = async event => {
 		event.persist();
-		await this.resetErrorState();
 		const filePath = await window.openFileSelectDialog(event);
 		this.setState({ filePath });
 	};
 
 	handleUnlockAction = async () => {
+		await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
 		await this.props.dispatch(
 			appOperations.unlockWalletWithNewFileOperation(this.state.filePath, this.state.password)
 		);
@@ -60,7 +54,6 @@ class NewAddress extends Component {
 
 	handlePasswordChange = async event => {
 		event.persist();
-		await this.resetErrorState();
 		this.setState({ password: event.target.value, error: '' });
 	};
 

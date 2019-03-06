@@ -46,7 +46,8 @@
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
-		"prepare": "npm run snyk-protect"
+		"prepare": "npm run snyk-protect",
+		"postinstall": "electron-webpack dll --env.production=false"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -106,7 +107,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#5c1292bafc239df26d9f6406f875b487cd29f252",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#d0e72b94dea37a9ebefbded375f434f4a405ce2a",
 		"react-redux": "6.0.0",
 		"react-router-dom": "4.3.1",
 		"react-to-print": "2.0.0-alpha-6",
@@ -118,7 +119,7 @@
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#33cc721c5c8ee62a5f7ec62b4d9491f3f3bc8575",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2a1a2db6db4e8e9ffea932fa0e8482dc360a6223",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
@@ -179,6 +180,7 @@
 		"eslint-plugin-promise": "4.0.1",
 		"eslint-plugin-react": "7.11.1",
 		"eslint-plugin-standard": "4.0.0",
+		"hard-source-webpack-plugin": "^0.13.1",
 		"husky": "1.2.0",
 		"jest": "23.6.0",
 		"jest-cucumber": "1.0.11",
@@ -216,7 +218,38 @@
 	},
 	"electronWebpack": {
 		"whiteListedModules": [
-			"source-map-support"
+			"source-map-support",
+			"react",
+			"react-dom",
+			"react-redux",
+			"react-router-dom",
+			"react-to-print",
+			"ajv",
+			"react-jsonschema-form",
+			"redux",
+			"redux-thunk",
+			"reselect",
+			"request-promise-native",
+			"selfkey-ui",
+			"redux-logger",
+			"redux-promise",
+			"electron-dl",
+			"electron-is",
+			"lodash",
+			"normalizr",
+			"socket.io-client",
+			"striptags",
+			"trezor-wallet-provider",
+			"web3-provider-engine",
+			"prop-types",
+			"serialize-error",
+			"moment",
+			"bignumber.js",
+			"connected-react-router",
+			"@material-ui/core",
+			"@material-ui/icons",
+			"flag-icon-css/css/flag-icon.css",
+			"fs-extra"
 		],
 		"main": {
 			"extraEntries": [
@@ -227,18 +260,39 @@
 		"renderer": {
 			"dll": [
 				"react",
-				"@material-ui/core",
-				"@material-ui/icons",
+				"react-dom",
+				"react-redux",
+				"react-router-dom",
+				"react-to-print",
 				"ajv",
 				"react-jsonschema-form",
-				"selfkey-ui",
 				"redux",
+				"redux-thunk",
+				"reselect",
+				"request-promise-native",
+				"selfkey-ui",
 				"redux-logger",
 				"redux-promise",
-				"web3",
-				"sqlite3"
+				"electron-dl",
+				"electron-is",
+				"lodash",
+				"normalizr",
+				"socket.io-client",
+				"striptags",
+				"trezor-wallet-provider",
+				"web3-provider-engine",
+				"prop-types",
+				"serialize-error",
+				"moment",
+				"bignumber.js",
+				"connected-react-router",
+				"@material-ui/core",
+				"@material-ui/icons",
+				"flag-icon-css/css/flag-icon.css",
+				"fs-extra"
 			],
-			"webpackConfig": "webpack/renderer.additions.js"
+			"webpackConfig": "webpack/renderer.additions.js",
+			"webpackDllConfig": "webpack/dll.additions.js"
 		}
 	},
 	"config": {

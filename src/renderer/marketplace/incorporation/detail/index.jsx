@@ -6,7 +6,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
-import { WarningIcon } from 'selfkey-ui';
+import { WarningIcon, CertificateIcon } from 'selfkey-ui';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -161,6 +161,9 @@ const styles = theme => ({
 	warningBar: {
 		padding: '22px 30px',
 		border: '1px solid #E98548'
+	},
+	certificateIcon: {
+		marginRight: '20px'
 	}
 });
 
@@ -215,14 +218,20 @@ class IncorporationsDetailView extends Component {
 		const { rp } = this.props;
 		const { countryCode, companyCode, templateId } = this.props.match.params;
 		const payRoute = `/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`;
+		const cancelRoute = `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
 
 		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
 		this.setState({ loading: true }, async () => {
-			if (!rp.authenticated) {
+			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
-					kycOperations.loadRelyingParty('incorporations', authenticated, payRoute)
+					kycOperations.loadRelyingParty(
+						'incorporations',
+						authenticated,
+						payRoute,
+						cancelRoute
+					)
 				);
 			} else {
 				await this.props.dispatch(push(payRoute));
@@ -448,7 +457,8 @@ class IncorporationsDetailView extends Component {
 											size="large"
 											onClick={this.onStartClick}
 										>
-											Start Incorporation
+											<CertificateIcon className={classes.certificateIcon} />
+											Incorporate Now
 										</Button>
 									)}
 
@@ -460,7 +470,7 @@ class IncorporationsDetailView extends Component {
 									<ProgramPrice
 										price={this.getPrice()}
 										rate={keyRate}
-										label="Price: "
+										label="USD"
 									/>
 								</React.Fragment>
 							</div>

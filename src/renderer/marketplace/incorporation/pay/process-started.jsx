@@ -33,8 +33,8 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		position: 'absolute',
-		right: '-24px',
-		top: '-24px'
+		right: '-19px',
+		top: '-20px'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -112,7 +112,7 @@ export class IncorporationProcessStarted extends React.Component {
 
 	onBackClick = () => this.props.dispatch(push(`/main/dashboard`));
 
-	onSelfKeyClick = () => this.props.dispatch(push(`/main/dashboard`));
+	onSelfKeyClick = () => this.props.dispatch(push(`/main/selfkeyId`));
 
 	render() {
 		const { classes } = this.props;
@@ -142,6 +142,9 @@ export class IncorporationProcessStarted extends React.Component {
 						</div>
 						<div className={classes.content}>
 							<div className={classes.description}>
+								<Typography variant="h1" gutterBottom>
+									Incorporation Process Started
+								</Typography>
 								<Typography variant="body1" gutterBottom>
 									Thank you for payment!
 								</Typography>
@@ -163,7 +166,7 @@ export class IncorporationProcessStarted extends React.Component {
 									support@flagtheory.com
 								</Typography>
 							</div>
-							<div className={classes.instructions}>
+							<div className={classes.instructions} style={{ display: 'none' }}>
 								<Typography variant="subtitle2" color="secondary" gutterBottom>
 									The application is available to you at any point under the
 									marketplace applications tab, in your SelfKey ID Profile.

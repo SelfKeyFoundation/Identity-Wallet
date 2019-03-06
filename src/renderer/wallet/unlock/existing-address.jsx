@@ -50,6 +50,7 @@ class ExistingAddress extends Component {
 	};
 
 	handleUnlockAction = async () => {
+		await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
 		await this.props.dispatch(
 			appOperations.unlockWalletWithPasswordOperation(this.state.wallet, this.state.password)
 		);
@@ -57,9 +58,6 @@ class ExistingAddress extends Component {
 
 	handlePasswordChange = async event => {
 		event.persist();
-		if (this.state.error !== '') {
-			await this.props.dispatch(appOperations.setUnlockWalletErrorAction(''));
-		}
 		this.setState({ password: event.target.value, error: '' });
 	};
 
