@@ -67,6 +67,9 @@ const styles = theme => ({
 		color: '#00C0D9',
 		cursor: 'pointer',
 		textDecoration: 'none'
+	},
+	headCell: {
+		paddingLeft: '15px'
 	}
 });
 
@@ -175,13 +178,13 @@ const KycChecklist = withStyles(styles)(
 			<Table>
 				<TableHead>
 					<SmallTableHeadRow>
-						<TableCell> </TableCell>
-						<TableCell>
+						<TableCell className={classes.headCell}> </TableCell>
+						<TableCell className={classes.headCell}>
 							<Typography variant="overline" gutterBottom>
 								Information
 							</Typography>
 						</TableCell>
-						<TableCell>
+						<TableCell className={classes.headCell}>
 							<Typography variant="overline" gutterBottom>
 								Label
 							</Typography>
