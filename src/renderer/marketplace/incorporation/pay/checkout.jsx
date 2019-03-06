@@ -43,8 +43,8 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		position: 'absolute',
-		right: '-24px',
-		top: '-24px'
+		right: '-20px',
+		top: '-20px'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
