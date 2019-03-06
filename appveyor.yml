@@ -28,7 +28,8 @@ cache:
 install:
   - ps: Start-FileDownload 'https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe'
   - ps: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
-  - choco install gcloudsdk
+  - ps: Start-FileDownload 'https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe'
+  - ps: Start-Process 'GoogleCloudSDKInstaller.exe' -ArgumentList '/S' -Wait
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
   - npm config set msvs_version 2015 --global

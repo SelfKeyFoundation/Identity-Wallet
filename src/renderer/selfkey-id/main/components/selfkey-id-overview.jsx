@@ -282,7 +282,11 @@ class SelfkeyIdOverviewComponent extends Component {
 															basicAttributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{
 																					entry.type
@@ -398,7 +402,11 @@ class SelfkeyIdOverviewComponent extends Component {
 															attributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{
 																					entry.type
@@ -407,7 +415,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</SmallTableCell>
-																		<SmallTableCell>
+																		<SmallTableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			<Typography variant="subtitle1">
 																				{this.renderAttributeName(
 																					entry
@@ -525,7 +537,11 @@ class SelfkeyIdOverviewComponent extends Component {
 																				}
 																			</Typography>
 																		</TableCell>
-																		<TableCell>
+																		<TableCell
+																			className={
+																				classes.labelCell
+																			}
+																		>
 																			{this.renderDocumentName(
 																				entry
 																			)}
