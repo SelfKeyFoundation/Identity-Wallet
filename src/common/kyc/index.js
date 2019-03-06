@@ -127,6 +127,8 @@ export const kycSelectors = {
 				required: !!tplAttr.required,
 				schemaId: tplAttr.schemaId,
 				options: walletAttributes[tplAttr.schemaId],
+				title: tplAttr.title,
+				description: tplAttr.description,
 				tType: tplAttr.type,
 				type:
 					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
