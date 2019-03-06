@@ -12,7 +12,7 @@ class EditAttributePopupComponent extends PureComponent {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		const { open = true, attribute, text = 'Edit information', uiSchema } = this.props;
+		const { open = true, attribute, text = 'Edit Information', uiSchema } = this.props;
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<EditAttribute
