@@ -13127,9 +13127,9 @@ react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#a0f39667743914c16a9073685801851668b3e922":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#c92ab26":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#a0f39667743914c16a9073685801851668b3e922"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#c92ab2632169864f4bbce5ece6f49da1bde2a23c"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
@@ -14205,6 +14205,36 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
+
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#3ff015f96d8df5294c91dd83279ad98d4eac3738":
+  version "1.0.0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#3ff015f96d8df5294c91dd83279ad98d4eac3738"
+  dependencies:
+    "@material-ui/core" "3.9.2"
+    "@material-ui/icons" "3.0.2"
+    "@material-ui/lab" "3.0.0-alpha.29"
+    "@types/classnames" "^2.2.7"
+    "@types/google.visualization" "0.0.46"
+    "@types/react-dom" "16.0.11"
+    bignumber.js "8.0.1"
+    classnames "^2.2.6"
+    jss "9.8.7"
+    jss-compose "5.0.0"
+    jss-expand "5.3.0"
+    jss-extend "6.2.0"
+    jss-global "3.0.0"
+    jss-preset-default "4.5.0"
+    jss-template "1.0.1"
+    lodash "4.17.11"
+    moment "^2.23.0"
+    react "16.6.3"
+    react-copy-to-clipboard "5.0.1"
+    react-datetime "^2.16.3"
+    react-dom "16.6.3"
+    react-google-charts "3.0.10"
+    react-jss "8.6.1"
+    react-truncate "2.4.0"
+    reset-jss "1.0.0"
 
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#df133afdffb0002c07a8bd3746cba4b6d55de6af":
   version "1.0.0"
