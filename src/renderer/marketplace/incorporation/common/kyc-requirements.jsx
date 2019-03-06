@@ -29,7 +29,11 @@ const styles = theme => ({
 });
 
 const IncorporationsKYCItem = withStyles(styles)(({ classes, item, index }) => {
-	const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
+	const type = item.title
+		? item.title
+		: item.type && item.type.content
+		? item.type.content.title
+		: item.schemaId;
 	const warning = !item.options || !item.options.length;
 	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
 
