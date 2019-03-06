@@ -1,10 +1,12 @@
-import React from 'react';
-
-import { Provider } from 'react-redux';
+import React, { Component } from 'react';
+import { Logger } from 'common/logger';
+import { Provider, connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
-import { ConnectedRouter } from 'connected-react-router';
-
+import { ConnectedRouter, push } from 'connected-react-router';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
+import { walletTokensOperations } from 'common/wallet-tokens';
+import { appOperations } from 'common/app';
+import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
 import CreateWallet from './wallet/create';
@@ -28,10 +30,32 @@ import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-cr
 import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 
-const App = ({ store, history }) => (
-	<SelfkeyDarkTheme>
-		<Provider store={store}>
-			<ConnectedRouter history={history.getHistory()}>
+const log = new Logger('AppComponent');
+
+class AppContainerComponent extends Component {
+	state = { hasError: false };
+	handleRefresh = async () => {
+		await this.props.dispatch(push('/'));
+		this.setState({ hasError: false });
+	};
+	static getDerivedStateFromError() {
+		return { hasError: true };
+	}
+	componentDidCatch(error, info) {
+		// You can also log the error to an error reporting service
+		log.error('Global react error occured %s, %2j', error, info);
+	}
+	componentDidMount() {
+		this.props.dispatch(appOperations.loadWalletsOperation());
+		this.props.dispatch(walletTokensOperations.loadWalletTokens());
+	}
+	render() {
+		const { hasError } = this.state;
+		if (hasError) {
+			return <GlobalError onRefresh={this.handleRefresh} />;
+		}
+		return (
+			<ConnectedRouter history={this.props.history.getHistory()}>
 				<HashRouter>
 					<div style={{ backgroundColor: '#262F39' }}>
 						<Route exact path="/" component={Loading} />
@@ -64,6 +88,16 @@ const App = ({ store, history }) => (
 					</div>
 				</HashRouter>
 			</ConnectedRouter>
+		);
+	}
+}
+
+const AppContainer = connect()(AppContainerComponent);
+
+const App = ({ store, history }) => (
+	<SelfkeyDarkTheme>
+		<Provider store={store}>
+			<AppContainer history={history} />
 		</Provider>
 	</SelfkeyDarkTheme>
 );
