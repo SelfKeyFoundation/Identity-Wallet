@@ -55,10 +55,6 @@ const styles = theme => ({
 		width: '322px'
 	},
 	container: {},
-	modal: {
-		height: '100%',
-		overflow: 'auto'
-	},
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent'
@@ -187,7 +183,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 						</Typography>
 					</Button>
 				</div>
-				<Modal open={true} className={classes.modal}>
+				<Modal open={true}>
 					<ModalWrap className={classes.modalWrap}>
 						<Grid
 							container
