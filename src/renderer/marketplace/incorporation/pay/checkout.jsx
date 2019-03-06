@@ -503,7 +503,7 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem price">
 											Total: ${price.toLocaleString()}
 											<div className="time">
-												${keyAmount.toLocaleString()}
+												{keyAmount.toLocaleString()} KEY
 											</div>
 										</div>
 									</Grid>
@@ -522,7 +522,9 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem time" />
 										<div className="rowItem price">
 											${usdFee.toLocaleString()}
-											<div className="time">${ethFee.toLocaleString()}</div>
+											<div className="time">
+												{ethFee.toLocaleString()} ETH
+											</div>
 										</div>
 									</Grid>
 								</div>
