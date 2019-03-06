@@ -101,20 +101,8 @@ class SelfkeyIdOverviewComponent extends Component {
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
-	renderAttributeName({ data, name, type }) {
-		if (!data.value || typeof data.value === 'object') {
-			return name;
-		}
-
-		if (!type.content) {
-			return data.value;
-		}
-
-		if (type.content.format === 'date') {
-			return moment(data.value).format('DD MMM YYYY');
-		}
-
-		return data.value;
+	renderAttributeName({ name }) {
+		return name || 'No label provided';
 	}
 	renderDocumentName({ entry, classes }) {
 		let fileType = null;

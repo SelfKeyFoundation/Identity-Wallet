@@ -6,19 +6,34 @@ const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
 const LAST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/last-name.json';
 const MIDDLE_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/middle-name.json';
+const COUNTRY_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/country-of-residency.json';
 
 const BASIC_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
 	[LAST_NAME_ATTRIBUTE]: 1,
 	[MIDDLE_NAME_ATTRIBUTE]: 1,
 	[EMAIL_ATTRIBUTE]: 1,
-	'http://platform.selfkey.org/schema/attribute/country-of-residency.json': 1,
+	[COUNTRY_ATTRIBUTE]: 1,
 	'http://platform.selfkey.org/schema/attribute/address.json': 1
 };
 
 const selectIdentity = state => state.identity;
 
-const selectCountries = state => identitySelectors.selectIdentity(state).countries;
+const selectCountries = state => {
+	const type = identitySelectors.selectIdAttributeTypeByUrl(state, COUNTRY_ATTRIBUTE);
+	if (
+		!type ||
+		!type.content ||
+		!type.content.properties ||
+		!type.content.properties.country ||
+		!type.content.properties.country.enum
+	) {
+		return identitySelectors.selectIdentity(state).countries;
+	}
+	const codes = type.content.properties.country.enum;
+	const names = type.content.properties.country.enumNames;
+	return codes.map((code, index) => ({ code, name: names[index] }));
+};
 
 const selectRepositories = state =>
 	identitySelectors

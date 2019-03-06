@@ -9,13 +9,15 @@ import WalletToken from '../wallet/wallet-token';
 
 const log = new Logger('PriceService');
 
-// Update every 10 minutes
-export const PRICE_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
+// Update every 1 minutes
+export const PRICE_UPDATE_INTERVAL = 60 * 1000;
 export class PriceService extends EventEmitter {
 	constructor() {
 		super();
 		this.socket = null;
 		this.existing = {};
+		this.updatedPrices = [];
+		this.broadcastTimeout = null;
 	}
 	async loadPriceData() {
 		log.info('fetching price data');
@@ -103,21 +105,35 @@ export class PriceService extends EventEmitter {
 					updatedAt: Date.now()
 				};
 				await TokenPrice.bulkEdit([tokenPrice]);
-
-				this.emit('pricesUpdated', [await TokenPrice.findBySymbol(tokenPrice.symbol)]);
+				this.updatedPrices.push(await TokenPrice.findBySymbol(tokenPrice.symbol));
 			}
 		});
+	}
+
+	startPriceBroadcast() {
+		if (this.broadcastTimeout) {
+			clearTimeout(this.broadcastTimeout);
+		}
+		if (this.updatedPrices.length) {
+			this.emit('pricesUpdated', this.updatedPrices);
+			this.updatedPrices = [];
+		}
+		this.broadcastTimeout = setTimeout(() => this.startPriceBroadcast(), PRICE_UPDATE_INTERVAL);
 	}
 
 	async startUpdateData() {
 		await this.loadPriceData();
 		await this.startStream();
+		this.startPriceBroadcast();
 	}
 
 	destroy() {
 		if (!this.socket) return;
 		this.socket.off();
 		this.socket.disconnect();
+		if (this.broadcastTimeout) {
+			clearTimeout(this.broadcastTimeout);
+		}
 	}
 }
 export default PriceService;

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { TextField, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
+import { Input, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
 import { identityAttributes } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import { jsonSchema } from '../../../../common/identity/utils';
@@ -63,9 +63,13 @@ class EditAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<Typography variant="h3">{title}</Typography>
-					<TextField
+					<Typography variant="overline" gutterBottom>
+						{title}
+					</Typography>
+					<Input
 						label="Label"
+						placeholder="Internal naming for the information you are adding"
+						type="text"
 						value={label}
 						margin="normal"
 						variant="outlined"
