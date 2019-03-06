@@ -133,6 +133,11 @@ class SelfkeyIdOverviewComponent extends Component {
 		);
 	}
 
+	renderExpiryDate(doc) {
+		if (!doc || !doc.data || !doc.data.value || !doc.data.value.expires) return '-';
+		return moment(doc.data.value.expires).format('DD MMM YYYY');
+	}
+
 	render() {
 		const {
 			classes,
@@ -530,7 +535,12 @@ class SelfkeyIdOverviewComponent extends Component {
 																				entry
 																			)}
 																		</TableCell>
-																		<TableCell> - </TableCell>
+																		<TableCell>
+																			{' '}
+																			{this.renderExpiryDate(
+																				entry
+																			)}{' '}
+																		</TableCell>
 																		<TableCell>
 																			<Typography variant="h6">
 																				{this.renderLastUpdateDate(
