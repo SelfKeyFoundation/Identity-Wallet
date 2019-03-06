@@ -11,6 +11,9 @@ const styles = theme => ({
 	section2: { marginTop: '10px' },
 	buttonContainer: {
 		margin: '40px -12px 0'
+	},
+	divider: {
+		margin: '30px 0'
 	}
 });
 
@@ -175,7 +178,7 @@ class CreateAttributeComponent extends Component {
 						</>
 					)}
 				</div>
-				{type && <Divider variant="middle" />}
+				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
 						<Form

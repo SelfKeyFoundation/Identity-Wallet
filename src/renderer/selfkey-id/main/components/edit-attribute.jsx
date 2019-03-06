@@ -11,6 +11,12 @@ const styles = theme => ({
 	section2: { marginTop: '10px' },
 	buttonContainer: {
 		margin: '40px -12px 0'
+	},
+	label: {
+		marginBottom: '10px'
+	},
+	divider: {
+		margin: '30px 0'
 	}
 });
 
@@ -110,7 +116,7 @@ class EditAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.label}>
 						{title}
 					</Typography>
 					<Input
@@ -130,7 +136,7 @@ class EditAttributeComponent extends Component {
 						</Typography>
 					)}
 				</div>
-				{type && <Divider variant="middle" />}
+				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
 						<Form
