@@ -17,7 +17,6 @@ import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
-import { walletTokensOperations } from 'common/wallet-tokens';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar';
@@ -56,9 +55,6 @@ const contentWrapperStyle = {
 };
 
 class Main extends Component {
-	async componentDidMount() {
-		this.props.dispatch(walletTokensOperations.loadWalletTokens());
-	}
 	render() {
 		const { match, classes } = this.props;
 		return (
