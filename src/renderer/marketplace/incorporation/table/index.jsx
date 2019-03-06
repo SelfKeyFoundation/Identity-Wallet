@@ -229,7 +229,7 @@ class IncorporationsTable extends Component {
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
 										<ProgramPrice
-											label="USD"
+											label="$"
 											price={this.getPrice(inc)}
 											rate={keyRate}
 										/>
