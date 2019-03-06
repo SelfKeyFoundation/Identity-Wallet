@@ -46,7 +46,8 @@ const styles = theme => ({
 	},
 	radioGroup: {
 		backgroundColor: 'transparent',
-		paddingTop: '30px'
+		marginBottom: 0,
+		paddingTop: '10px'
 	},
 	agreementError: {
 		marginLeft: '30px'
