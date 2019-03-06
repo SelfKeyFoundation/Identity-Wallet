@@ -14,7 +14,8 @@ import {
 	FormControl,
 	FormHelperText,
 	Radio,
-	RadioGroup
+	RadioGroup,
+	TableCell
 } from '@material-ui/core';
 
 import {
@@ -22,7 +23,7 @@ import {
 	SmallTableCell,
 	MuiEditIcon,
 	SmallTableRow,
-	WarningIcon,
+	AttributeAlertIcon,
 	warning,
 	success
 } from 'selfkey-ui';
@@ -34,7 +35,6 @@ import { Popup } from '../../common/popup';
 const styles = theme => ({
 	root: {},
 	loading: { textAlign: 'center', paddingTop: '30px' },
-	checklist: {},
 	rowWarning: {
 		color: `${warning} !important;`
 	},
@@ -57,10 +57,19 @@ const styles = theme => ({
 	editColumn: {
 		textAlign: 'right'
 	},
+	formControlLabel: {
+		'& span': {
+			fontSize: '14px',
+			lineHeight: '17px'
+		}
+	},
 	link: {
 		color: '#00C0D9',
 		cursor: 'pointer',
 		textDecoration: 'none'
+	},
+	headCell: {
+		paddingLeft: '15px'
 	}
 });
 
@@ -116,6 +125,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 						value={opt.id}
 						control={<Radio />}
 						label={opt.name}
+						className={classes.formControlLabel}
 					/>
 				))}
 			</RadioGroup>
@@ -128,7 +138,11 @@ const KycChecklistItem = withStyles(styles)(
 		const type = item.type && item.type.content ? item.type.content.title : item.schemaId;
 		const warning = !item.options || !item.options.length;
 		const warningClassname = warning ? classes.rowWarning : '';
-		let icon = warning ? <WarningIcon /> : <CheckOutlined className={classes.checkIcon} />;
+		let icon = warning ? (
+			<AttributeAlertIcon />
+		) : (
+			<CheckOutlined className={classes.checkIcon} />
+		);
 
 		return (
 			<SmallTableRow>
@@ -161,25 +175,25 @@ const KycChecklistItem = withStyles(styles)(
 const KycChecklist = withStyles(styles)(
 	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
 		return (
-			<Table classes={{ root: classes.checklist }}>
+			<Table>
 				<TableHead>
 					<SmallTableHeadRow>
-						<SmallTableCell> </SmallTableCell>
-						<SmallTableCell>
+						<TableCell className={classes.headCell}> </TableCell>
+						<TableCell className={classes.headCell}>
 							<Typography variant="overline" gutterBottom>
 								Information
 							</Typography>
-						</SmallTableCell>
-						<SmallTableCell>
+						</TableCell>
+						<TableCell className={classes.headCell}>
 							<Typography variant="overline" gutterBottom>
 								Label
 							</Typography>
-						</SmallTableCell>
-						<SmallTableCell className={classes.editColumn}>
+						</TableCell>
+						<TableCell className={classes.editColumn}>
 							<Typography variant="overline" gutterBottom>
 								Actions
 							</Typography>
-						</SmallTableCell>
+						</TableCell>
 					</SmallTableHeadRow>
 				</TableHead>
 
