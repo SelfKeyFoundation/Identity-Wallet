@@ -5,14 +5,21 @@ import history from 'common/store/history';
 import Popup from '../../common/popup';
 import { appSelectors } from 'common/app';
 import { HourGlassLargeIcon } from 'selfkey-ui';
+import { kycOperations } from 'common/kyc';
 
 const styles = theme => ({});
 
 class TransactionTimeout extends Component {
+	componentDidMount() {
+		this.clearRelyingParty();
+	}
+	clearRelyingParty = async () => {
+		// Clear relying party session after an application failure
+		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
+	};
 	handleClose = () => {
 		history.getHistory().goBack();
 	};
-
 	render() {
 		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
 		const text = `${typeText} Timed Out`;
