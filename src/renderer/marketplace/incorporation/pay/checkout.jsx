@@ -43,8 +43,8 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		position: 'absolute',
-		right: '-24px',
-		top: '-24px'
+		right: '-20px',
+		top: '-20px'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -503,7 +503,7 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem price">
 											Total: ${price.toLocaleString()}
 											<div className="time">
-												${keyAmount.toLocaleString()}
+												{keyAmount.toLocaleString()} KEY
 											</div>
 										</div>
 									</Grid>
@@ -522,7 +522,9 @@ export class IncorporationCheckout extends React.Component {
 										<div className="rowItem time" />
 										<div className="rowItem price">
 											${usdFee.toLocaleString()}
-											<div className="time">${ethFee.toLocaleString()}</div>
+											<div className="time">
+												{ethFee.toLocaleString()} ETH
+											</div>
 										</div>
 									</Grid>
 								</div>
