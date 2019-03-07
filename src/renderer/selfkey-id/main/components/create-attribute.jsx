@@ -8,7 +8,13 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
-	section2: { marginTop: '10px' }
+	section2: { marginTop: '10px' },
+	buttonContainer: {
+		margin: '40px -12px 0'
+	},
+	divider: {
+		margin: '30px 0'
+	}
 });
 
 class CreateAttributeComponent extends Component {
@@ -172,7 +178,7 @@ class CreateAttributeComponent extends Component {
 						</>
 					)}
 				</div>
-				{type && <Divider variant="middle" />}
+				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
 						<Form
@@ -186,7 +192,7 @@ class CreateAttributeComponent extends Component {
 							onError={this.handleErrors}
 							transformErrors={transformErrors}
 						>
-							<Grid container spacing={24}>
+							<Grid container spacing={24} className={classes.buttonContainer}>
 								<Grid item>
 									<Button
 										variant="contained"
