@@ -132,8 +132,7 @@ const styles = theme => ({
 		color: '#FFFFFF',
 		'& p': {
 			marginBottom: '1.5em',
-			lineHeight: '1.4em',
-			maxWidth: '90%'
+			lineHeight: '1.4em'
 		},
 		'& strong': {
 			fontWeight: 'bold',
