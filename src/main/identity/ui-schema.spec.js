@@ -62,7 +62,7 @@ describe('UiSchema model', () => {
 		};
 		let testUrl = 'https://test-url/ui-schema.json';
 		fetch.mockResolvedValue({
-			statusCode: 200,
+			status: 200,
 			json() {
 				return testScchema;
 			}
