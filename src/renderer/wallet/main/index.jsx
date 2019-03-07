@@ -5,6 +5,7 @@ import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
+import { walletTokensOperations } from 'common/wallet-tokens';
 
 import {
 	MarketplaceCategoriesPage,
@@ -55,6 +56,10 @@ const contentWrapperStyle = {
 };
 
 class Main extends Component {
+	async componentDidMount() {
+		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
+	}
+
 	render() {
 		const { match, classes } = this.props;
 		return (
