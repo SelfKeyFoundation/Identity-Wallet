@@ -98,6 +98,8 @@ const prod = {
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
 	node: 'infura',
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://flagtheory-v2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
 	}
