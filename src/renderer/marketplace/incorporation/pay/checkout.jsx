@@ -283,6 +283,32 @@ export class IncorporationCheckout extends React.Component {
 		);
 	};
 
+	getProgramOptions = options => {
+		if (!options) return [];
+		const strArray = options.split('-');
+
+		const optionsArray = strArray.map((text, idx) => {
+			if (!text) return false;
+
+			let price = text.match(/\(.*\)/);
+			let notes = text.match(/\[.*\]/);
+			const id = `options-${idx}`;
+
+			price = price ? price[0].replace('(', '').replace(')', '') : '';
+			price = price ? parseInt(price) : '';
+			notes = notes ? notes[0].replace('[', '').replace(']', '') : '';
+
+			let description = text
+				.replace(/\(.*\)/, '')
+				.replace(/\[.*\]/, '')
+				.trim();
+
+			return { price, notes, description, id };
+		});
+
+		return optionsArray.filter(el => el !== false);
+	};
+
 	onStartClick = _ => {
 		const { program } = this.props;
 		const { templateId } = this.props.match.params;
@@ -290,8 +316,6 @@ export class IncorporationCheckout extends React.Component {
 		// For easy kyc testing, use the following test templateId
 		// templateId = 5c6fadbf77c33d5c28718d7b';
 
-		// TODO: some of this info should be loaded from airtable
-		// FIXME: replace test wallet in production
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				'incorporations',
@@ -314,6 +338,9 @@ export class IncorporationCheckout extends React.Component {
 		const { classes, program } = this.props;
 		const { countryCode } = this.props.match.params;
 		const { price, keyAmount, usdFee, ethFee } = this.getPaymentParameters();
+		const options = this.getProgramOptions(program.wallet_options);
+
+		console.log(program);
 
 		return (
 			<div className={classes.container}>
@@ -349,33 +376,14 @@ export class IncorporationCheckout extends React.Component {
 								alignItems="center"
 								spacing={0}
 							>
-								<div className={classes.description}>
-									<p>
-										To start the {program.Region} incorporation process you are
-										required to pay a fee. Our incorporation package includes:
-									</p>
-									<ul>
-										<li>Registration and Government Fees</li>
-										<li>Corporate Secretary (1 year), which includes:</li>
-										<ul>
-											<li>Change of Registered Business Address</li>
-											<li>
-												Appointment/Resignation of Corporate Representative
-											</li>
-											<li>Appointment/Change of Auditors</li>
-											<li>Change of Financial year end</li>
-											<li>AGM & Annual returns</li>
-											<li>Allotment of share options to employees</li>
-										</ul>
-										<li>
-											Certified Copies of Constitutional Documents for bank
-											account opening
-										</li>
-										<li>Courier fees</li>
-									</ul>
-								</div>
+								<div
+									className={classes.description}
+									dangerouslySetInnerHTML={{
+										__html: program.wallet_description
+									}}
+								/>
 								<div className={classes.descriptionHelp}>
-									<p>Time to form: 1 week.</p>
+									<p>Time to form: {program['Time to form (days)']} days.</p>
 									<p>
 										All our incorporation services include a yearly consulting
 										session, a dedicated account manager and access to our
@@ -450,45 +458,27 @@ export class IncorporationCheckout extends React.Component {
 							</Typography>
 
 							<div className={classes.priceTable}>
-								<div className={classes.priceRow}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={0}
-									>
-										<div className="rowItem">Incorporation Fee</div>
-										<div className="rowItem time">-</div>
-										<div className="rowItem price">-</div>
-									</Grid>
-								</div>
-								<div className={classes.priceRow}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={0}
-									>
-										<div className="rowItem">Mailing Address</div>
-										<div className="rowItem time">1 year</div>
-										<div className="rowItem price">-</div>
-									</Grid>
-								</div>
-								<div className={classes.priceRow}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={0}
-									>
-										<div className="rowItem">Local Director</div>
-										<div className="rowItem time">-</div>
-										<div className="rowItem price">-</div>
-									</Grid>
-								</div>
+								{options.map(option => (
+									<div key={option.id} className={classes.priceRow}>
+										<Grid
+											container
+											direction="row"
+											justify="flex-start"
+											alignItems="center"
+											spacing={0}
+										>
+											<div className="rowItem">{option.description}</div>
+											<div className="rowItem time">{option.notes}</div>
+											<div className="rowItem price">
+												{option.price && (
+													<React.Fragment>
+														${option.price.toLocaleString()}
+													</React.Fragment>
+												)}
+											</div>
+										</Grid>
+									</div>
+								))}
 								<div className={classes.rowSeparator} />
 								<div className={classes.priceRow}>
 									<Grid
