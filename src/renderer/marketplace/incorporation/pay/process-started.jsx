@@ -98,7 +98,6 @@ export class IncorporationProcessStarted extends React.Component {
 
 		if (currentApplication && transaction) {
 			const application = rp.applications[rp.applications.length - 1];
-			console.log(application);
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					'incorporations',

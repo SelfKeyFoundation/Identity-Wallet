@@ -71,7 +71,7 @@ describe('IdAttributeType model', () => {
 		};
 		let testUrl = 'https://test-url/id-attribute-type.json';
 		fetch.mockResolvedValue({
-			statusCode: 200,
+			status: 200,
 			json() {
 				return testScchema;
 			}

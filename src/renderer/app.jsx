@@ -4,7 +4,6 @@ import { Provider, connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
-import { walletTokensOperations } from 'common/wallet-tokens';
 import { appOperations } from 'common/app';
 import { GlobalError } from './global-error';
 // Pages
@@ -47,7 +46,6 @@ class AppContainerComponent extends Component {
 	}
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
-		this.props.dispatch(walletTokensOperations.loadWalletTokens());
 	}
 	render() {
 		const { hasError } = this.state;
