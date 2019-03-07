@@ -66,7 +66,7 @@ export class Logger {
 		}
 	}
 
-	log(level, msg, ...args) {
+	log = (level, msg, ...args) => {
 		if (process.env.MODE === 'test' && !Logger.TEST) return;
 		if (!this.checkLevels(level)) return;
 		let formattedMsg = this.fmtMessage(level, msg, args);
@@ -74,31 +74,31 @@ export class Logger {
 		this.sentryLog(level, msg, args, formattedMsg);
 		if (level === 'trace') level = 'silly';
 		elog[level](formattedMsg);
-	}
+	};
 
-	info(msg, ...args) {
+	info = (msg, ...args) => {
 		this.log('info', msg, ...args);
-	}
+	};
 
-	warn(msg, ...args) {
+	warn = (msg, ...args) => {
 		this.log('warn', msg, ...args);
-	}
+	};
 
-	error(msg, ...args) {
+	error = (msg, ...args) => {
 		this.log('error', msg, ...args);
-	}
+	};
 
-	verbose(msg, ...args) {
+	verbose = (msg, ...args) => {
 		this.log('verbose', msg, ...args);
-	}
+	};
 
-	debug(msg, ...args) {
+	debug = (msg, ...args) => {
 		this.log('debug', msg, ...args);
-	}
+	};
 
-	trace(msg, ...args) {
+	trace = (msg, ...args) => {
 		this.log('trace', msg, ...args);
-	}
+	};
 }
 
 export default Logger;
