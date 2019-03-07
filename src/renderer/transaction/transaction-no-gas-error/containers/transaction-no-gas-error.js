@@ -3,12 +3,19 @@ import { connect } from 'react-redux';
 import { TransactionNoGasError } from '../components/transaction-no-gas-error';
 import { getWallet } from 'common/wallet/selectors';
 import { push } from 'connected-react-router';
+import { kycOperations } from 'common/kyc';
 
 class TransactionNoGasErrorContainer extends Component {
+	componentDidMount() {
+		this.clearRelyingParty();
+	}
+	clearRelyingParty = async () => {
+		// Clear relying party session after an application failure
+		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
+	};
 	openLink = url => {
 		window.openExternal(null, url);
 	};
-
 	closeAction = () => {
 		this.props.dispatch(push('/main/dashboard'));
 	};

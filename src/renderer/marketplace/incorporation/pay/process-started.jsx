@@ -88,6 +88,7 @@ export class IncorporationProcessStarted extends React.Component {
 
 	componentDidMount() {
 		this.saveTransactionHash();
+		this.clearRelyingParty();
 	}
 
 	saveTransactionHash = async () => {
@@ -108,6 +109,11 @@ export class IncorporationProcessStarted extends React.Component {
 		} else {
 			// TODO: what to do if no transaction or currentApplication exists?
 		}
+	};
+
+	clearRelyingParty = async () => {
+		// Clear relying party session after a payment
+		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 
 	onBackClick = () => this.props.dispatch(push(`/main/dashboard`));
