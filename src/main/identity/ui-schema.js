@@ -70,7 +70,7 @@ export class UiSchema extends BaseModel {
 
 	static async loadRemote(url) {
 		let res = await fetch(url);
-		if (res.statusCode >= 400) {
+		if (res.status >= 400) {
 			throw new Error('Failed to fetch ui-schema from remote');
 		}
 		let remote = await res.json();
