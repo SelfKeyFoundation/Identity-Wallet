@@ -76,7 +76,7 @@ describe('Repository model', () => {
 		};
 		let testUrl = 'https://test-url/repository.json';
 		fetch.mockResolvedValue({
-			statusCode: 200,
+			status: 200,
 			json() {
 				return testRepo;
 			}

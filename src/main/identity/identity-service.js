@@ -5,6 +5,10 @@ import { IdAttribute } from './id-attribute';
 import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import { UiSchema } from './ui-schema';
 
+import { Logger } from 'common/logger';
+
+const log = new Logger('identity-service');
+
 export class IdentityService {
 	loadRepositories() {
 		return Repository.findAll();
@@ -24,15 +28,33 @@ export class IdentityService {
 
 	updateUiSchemas(schemas) {
 		return Promise.all(
-			schemas.map(schema =>
-				UiSchema.addRemote(schema.url, schema.repositoryId, schema.attributeTypeId)
-			)
+			schemas.map(async schema => {
+				try {
+					let res = await UiSchema.addRemote(
+						schema.url,
+						schema.repositoryId,
+						schema.attributeTypeId
+					);
+					return res;
+				} catch (error) {
+					log.error('%s, %s', schema.url, error);
+				}
+				return null;
+			})
 		);
 	}
 
 	updateIdAttributeTypes(idAttributeTypes) {
 		return Promise.all(
-			idAttributeTypes.map(attrType => IdAttributeType.addRemote(attrType.url))
+			idAttributeTypes.map(async attrType => {
+				try {
+					let res = await IdAttributeType.addRemote(attrType.url);
+					return res;
+				} catch (error) {
+					log.error('%s, %s', attrType.url, error);
+				}
+				return null;
+			})
 		);
 	}
 

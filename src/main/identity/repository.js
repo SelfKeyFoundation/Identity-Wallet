@@ -75,7 +75,7 @@ export class Repository extends BaseModel {
 
 	static async loadRemote(url) {
 		let res = await fetch(url);
-		if (res.statusCode >= 400) {
+		if (res.status >= 400) {
 			throw new Error('Failed to fetch repository from remote');
 		}
 		let remoteRepo = await res.json();
@@ -125,13 +125,14 @@ export class Repository extends BaseModel {
 				delete existingMap[curr.json];
 				return acc;
 			},
-			{ delete: [], add: [] }
+			{
+				delete: [],
+				add: []
+			}
 		);
-
 		for (let attr in existingMap) {
 			updates.delete.push(existingMap[attr]);
 		}
-
 		return updates;
 	}
 
@@ -167,6 +168,7 @@ export class Repository extends BaseModel {
 	}
 
 	async deleteAttribute(attr, tx) {
+		log.info('deleting attribute type %j', attr);
 		if (attr.ui) {
 			let uiSchema = await UiSchema.findByUrl(attr.ui, this.id, tx);
 			if (uiSchema) await uiSchema.$query(tx).delete();
@@ -175,10 +177,11 @@ export class Repository extends BaseModel {
 
 		let attrType = await IdAttributeType.findByUrl(attr.json, tx).eager('idAttributes');
 		if (!attrType) return;
-		await this.relatedQuery('attributeTypes', tx)
+		await this.$relatedQuery('attributeTypes', tx)
 			.unrelate()
 			.where('id', attrType.id);
-		await attrType.$loadRelated('[repositories, idAttributes]', tx);
+		await attrType.$loadRelated('[repositories, idAttributes]', null, tx);
+
 		if (!attrType.repositories.length && !attrType.idAttributes.length)
 			await attrType.$query(tx).delete();
 	}
