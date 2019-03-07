@@ -143,7 +143,10 @@ const styles = theme => ({
 		'& div.price': {
 			color: '#00C0D9',
 			fontWeight: 'bold',
-			textAlign: 'right'
+			textAlign: 'right',
+			'& .time': {
+				marginTop: '5px'
+			}
 		},
 		'& div.time': {
 			color: '#93B0C1',
@@ -340,8 +343,6 @@ export class IncorporationCheckout extends React.Component {
 		const { price, keyAmount, usdFee, ethFee } = this.getPaymentParameters();
 		const options = this.getProgramOptions(program.wallet_options);
 
-		console.log(program);
-
 		return (
 			<div className={classes.container}>
 				<CloseButtonIcon onClick={this.onBackClick} className={classes.closeIcon} />
@@ -383,7 +384,7 @@ export class IncorporationCheckout extends React.Component {
 									}}
 								/>
 								<div className={classes.descriptionHelp}>
-									<p>Time to form: {program['Time to form (days)']} days.</p>
+									<p>Time to form: {program['Time to form (weeks)']} week(s).</p>
 									<p>
 										All our incorporation services include a yearly consulting
 										session, a dedicated account manager and access to our
