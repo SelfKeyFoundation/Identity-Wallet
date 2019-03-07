@@ -24,7 +24,10 @@ const styles = theme => ({
 	},
 	listItem: {
 		breakInside: 'avoid',
-		pageBreakInside: 'avoid'
+		pageBreakInside: 'avoid',
+		'& p': {
+			fontWeight: 'bold'
+		}
 	}
 });
 

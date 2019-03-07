@@ -89,7 +89,7 @@ const styles = theme => ({
 		},
 		'& div.price': {
 			fontFamily: 'Lato, arial, sans-serif',
-			fontSize: '20px',
+			fontSize: '16px',
 			fontWeight: 'bold',
 			color: '#00C0D9'
 		},
@@ -132,8 +132,7 @@ const styles = theme => ({
 		color: '#FFFFFF',
 		'& p': {
 			marginBottom: '1.5em',
-			lineHeight: '1.4em',
-			maxWidth: '90%'
+			lineHeight: '1.4em'
 		},
 		'& strong': {
 			fontWeight: 'bold',
@@ -470,7 +469,7 @@ class IncorporationsDetailView extends Component {
 									<ProgramPrice
 										price={this.getPrice()}
 										rate={keyRate}
-										label="$"
+										label="Pricing: $"
 									/>
 								</React.Fragment>
 							</div>
