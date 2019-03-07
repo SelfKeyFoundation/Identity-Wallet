@@ -120,6 +120,7 @@ const db = {
 	seeds: {
 		directory: path.join(setupFilesPath, 'main', 'seeds')
 	}
+	// acquireConnectionTimeout: 6000
 };
 if (isTestMode()) {
 	db.connection = ':memory:';

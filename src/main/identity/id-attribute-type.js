@@ -98,7 +98,7 @@ export class IdAttributeType extends BaseModel {
 		const Repository = require('./repository').default;
 		let defaultRepo = null;
 		let res = await fetch(url);
-		if (res.statusCode >= 400) {
+		if (res.status >= 400) {
 			throw new Error('Failed to fetch repository from remote');
 		}
 		let remote = await res.json();

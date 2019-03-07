@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import store from './common/store';
 import history from 'common/store/history';
 import { shell } from 'electron';
-import registerServiceWorker from './registerServiceWorker';
 import { setGlobalContext, configureContext } from 'common/context';
 import path from 'path';
 
@@ -50,4 +49,3 @@ window.openExternal = (event, href) => {
 window.store = store;
 
 render(<App store={store} history={history} />, document.getElementById('app'));
-registerServiceWorker();
