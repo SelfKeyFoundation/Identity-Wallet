@@ -175,7 +175,7 @@ export class Repository extends BaseModel {
 
 		let attrType = await IdAttributeType.findByUrl(attr.json, tx).eager('idAttributes');
 		if (!attrType) return;
-		await this.$relatedQuery('attributeTypes', tx)
+		await this.relatedQuery('attributeTypes', tx)
 			.unrelate()
 			.where('id', attrType.id);
 		await attrType.$loadRelated('[repositories, idAttributes]', tx);
