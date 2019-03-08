@@ -595,7 +595,21 @@ class IncorporationsDetailView extends Component {
 								)}
 								{selectedTab === 5 && (
 									<TabContainer className="Services">
-										{program['Wallet description']}
+										<div
+											dangerouslySetInnerHTML={{
+												__html: program.wallet_description
+											}}
+										/>
+										<p>
+											Time to form: {program['Time to form (weeks)']} week(s).
+										</p>
+										<p>
+											All our incorporation services include a yearly
+											consulting session, a dedicated account manager and
+											access to our global network of trusted business
+											services, including introductions to accountants,
+											financial, tax and legal advisors at no cost.
+										</p>
 									</TabContainer>
 								)}
 							</div>
