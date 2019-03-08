@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { kycSelectors, kycOperations } from 'common/kyc';
+import { walletSelectors } from 'common/wallet';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
@@ -214,8 +215,9 @@ class IncorporationsDetailView extends Component {
 	onBackClick = () => this.props.dispatch(push(`/main/marketplace-incorporation`));
 
 	onStartClick = () => {
-		const { rp } = this.props;
+		const { rp, wallet } = this.props;
 		const { countryCode, companyCode, templateId } = this.props.match.params;
+		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const payRoute = `/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`;
 		const cancelRoute = `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
@@ -223,6 +225,9 @@ class IncorporationsDetailView extends Component {
 		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
 		this.setState({ loading: true }, async () => {
+			if (!wallet.isSetupFinished) {
+				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
@@ -630,7 +635,8 @@ const mapStateToProps = (state, props) => {
 			state,
 			'incorporations',
 			templateId
-		)
+		),
+		wallet: walletSelectors.getWallet(state)
 	};
 };
 
