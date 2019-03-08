@@ -6,3 +6,4 @@ export { MarketplaceReturnDepositPopup } from './transactions/return-deposit-pop
 export { MarketplaceTransactionProcessingPopup } from './transactions/transaction-processing-popup';
 export { MarketplaceWithoutBalancePopup } from './transactions/without-balance-popup';
 export { MarketplaceIncorporationPage } from './incorporation';
+export { MarketplaceSelfkeyIdRequired } from './selfkey-id-required';
