@@ -50,15 +50,22 @@ export class Identity {
 				const transport = await getGlobalContext().web3Service.getLedgerTransport();
 				try {
 					const appEth = new AppEth(transport);
-					signature = await appEth.signPersonalMessage(this.path, msgHash);
+					const msgBufferHex = Buffer.from(msg).toString('hex');
+					const result = await appEth.signPersonalMessage(this.path, msgBufferHex);
+					const v = parseInt(result.v, 10) - 27;
+					let vHex = v.toString(16);
+					if (vHex.length < 2) {
+						vHex = `0${v}`;
+					}
+					return `0x${result.r}${result.s}${vHex}`;
 				} finally {
 					transport.close();
 				}
-				break;
 			case 'trezor':
+				const msgBufferHex = Buffer.from(msg).toString('hex');
 				const trezorSignature = await getGlobalContext().web3Service.trezorWalletSubProvider.signPersonalMessage(
 					this.address,
-					msgHash
+					msgBufferHex
 				);
 				return ethUtil.addHexPrefix(trezorSignature.message.signature);
 			case 'local':
