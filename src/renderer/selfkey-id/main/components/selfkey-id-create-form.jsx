@@ -336,6 +336,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																		>
 																			<Input
 																				fullWidth
+																				required
 																				onChange={
 																					this
 																						.handleFirstNameChange
@@ -368,6 +369,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																		>
 																			<Input
 																				fullWidth
+																				required
 																				onChange={
 																					this
 																						.handleLastNameChange
@@ -376,38 +378,38 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			/>
 																		</Grid>
 																	</Grid>
-																	<Grid item>
-																		<Grid
-																			container
-																			direction="column"
-																			justify="flex-start"
-																			alignItems="flex-start"
-																		>
-																			<Grid item>
-																				<Typography
-																					variant="overline"
-																					gutterBottom
-																				>
-																					EMAIL*
-																				</Typography>
-																			</Grid>
-																			<Grid
-																				item
-																				className={
-																					classes.input
-																				}
+																</Grid>
+																<Grid item>
+																	<Grid
+																		container
+																		direction="column"
+																		justify="flex-start"
+																		alignItems="flex-start"
+																	>
+																		<Grid item>
+																			<Typography
+																				variant="overline"
+																				gutterBottom
 																			>
-																				<Input
-																					fullWidth
-																					type="email"
-																					required
-																					onChange={
-																						this
-																							.handleEmailChange
-																					}
-																					placeholder="Email"
-																				/>
-																			</Grid>
+																				EMAIL*
+																			</Typography>
+																		</Grid>
+																		<Grid
+																			item
+																			className={
+																				classes.input
+																			}
+																		>
+																			<Input
+																				fullWidth
+																				type="email"
+																				required
+																				onChange={
+																					this
+																						.handleEmailChange
+																				}
+																				placeholder="Email"
+																			/>
 																		</Grid>
 																	</Grid>
 																</Grid>
