@@ -37,7 +37,9 @@ const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
 const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 	try {
 		const walletService = getGlobalContext().walletService;
-		await walletService.updateWalletName(name, walletId);
+		const wallet = await walletService.updateWalletName(name, walletId);
+		const walletFromStore = getWallet(getState());
+		await dispatch(updateWalletWithBalance({ ...walletFromStore, name: wallet.name }));
 	} catch (error) {
 		console.error(error);
 	}
@@ -47,7 +49,10 @@ const updateWalletSetup = (setup, walletId) => async (dispatch, getState) => {
 	try {
 		const walletService = getGlobalContext().walletService;
 		const wallet = await walletService.updateWalletSetup(setup, walletId);
-		await dispatch(updateWalletWithBalance(wallet));
+		const walletFromStore = getWallet(getState());
+		await dispatch(
+			updateWalletWithBalance({ ...walletFromStore, isSetupFinished: wallet.isSetupFinished })
+		);
 	} catch (error) {
 		console.error(error);
 	}
