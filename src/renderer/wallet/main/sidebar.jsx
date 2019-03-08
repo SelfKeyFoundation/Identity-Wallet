@@ -21,9 +21,10 @@ import {
 
 const styles = theme => ({
 	list: {
-		height: 'inherit',
 		justifyContent: 'space-between',
 		margin: 0,
+		minHeight: '100%',
+		overflow: 'scroll',
 		width: 300
 	},
 
