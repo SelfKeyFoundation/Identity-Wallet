@@ -238,7 +238,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				variant="overline"
 																				gutterBottom
 																			>
-																				SELFKEY ID NICKNAME
+																				SELFKEY ID NICKNAME*
 																				<KeyTooltip
 																					interactive
 																					placement="top-start"
@@ -325,7 +325,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				variant="overline"
 																				gutterBottom
 																			>
-																				FIRST NAME
+																				FIRST NAME*
 																			</Typography>
 																		</Grid>
 																		<Grid
@@ -357,7 +357,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				variant="overline"
 																				gutterBottom
 																			>
-																				LAST NAME
+																				LAST NAME*
 																			</Typography>
 																		</Grid>
 																		<Grid
@@ -388,7 +388,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																					variant="overline"
 																					gutterBottom
 																				>
-																					EMAIL
+																					EMAIL*
 																				</Typography>
 																			</Grid>
 																			<Grid
