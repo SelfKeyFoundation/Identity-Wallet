@@ -8,9 +8,7 @@ import {
 	withStyles,
 	CardHeader,
 	Divider,
-	Select,
 	Input,
-	FormControl,
 	Modal,
 	IconButton
 } from '@material-ui/core';
@@ -75,13 +73,9 @@ class SelfKeyIdCreateFormComponent extends Component {
 		nickName: '',
 		firstName: '',
 		lastName: '',
-		country: 'choose',
+		email: '',
 		isDisabled: true
 	};
-
-	componentDidMount() {
-		this.props.dispatch(identityOperations.loadCountriesOperation());
-	}
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
@@ -92,7 +86,8 @@ class SelfKeyIdCreateFormComponent extends Component {
 		return this.props.idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
 
-	handleSave = async () => {
+	handleSave = async evt => {
+		evt.preventDefault();
 		await this.props.dispatch(
 			walletOperations.updateWalletName(this.state.nickName, this.props.wallet.id)
 		);
@@ -119,11 +114,9 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 		await this.props.dispatch(
 			identityOperations.createIdAttributeOperation({
-				typeId: this.getTypeId(
-					'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
-				),
-				name: 'Country of Residence',
-				data: { value: { country: this.state.country } }
+				typeId: this.getTypeId('http://platform.selfkey.org/schema/attribute/email.json'),
+				name: 'Email',
+				data: { value: this.state.email }
 			})
 		);
 
@@ -150,8 +143,8 @@ class SelfKeyIdCreateFormComponent extends Component {
 		});
 	};
 
-	handleCountryChange = event => {
-		this.setState({ country: event.target.value }, () => {
+	handleEmailChange = event => {
+		this.setState({ email: event.target.value }, () => {
 			this.isDisabled();
 		});
 	};
@@ -162,7 +155,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 				!this.state.nickName ||
 				!this.state.firstName ||
 				!this.state.lastName ||
-				this.state.country === 'choose'
+				!this.state.email
 		});
 	};
 
@@ -209,255 +202,232 @@ class SelfKeyIdCreateFormComponent extends Component {
 										className={classes.cardHeader}
 									/>
 									<CardContent>
-										<Grid
-											container
-											direction="column"
-											justify="center"
-											alignItems="center"
-											spacing={32}
-										>
-											<Grid item>
-												<Grid
-													container
-													direction="column"
-													spacing={40}
-													justify="flex-start"
-													alignItems="flex-start"
-												>
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															spacing={0}
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Grid
-																	container
-																	direction="column"
-																	justify="flex-start"
-																	alignItems="flex-start"
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			SELFKEY ID NICKNAME
-																			<KeyTooltip
-																				interactive
-																				placement="top-start"
-																				title={
-																					<React.Fragment>
-																						<span>
-																							With
-																							nicknames
-																							it is
-																							very
-																							easy to
-																							switch
-																							between
-																							multiple
-																							accounts.
-																						</span>
-																						<TooltipArrow />
-																					</React.Fragment>
-																				}
-																			>
-																				<IconButton aria-label="Info">
-																					<InfoTooltip />
-																				</IconButton>
-																			</KeyTooltip>
-																		</Typography>
-																	</Grid>
+										<form onSubmit={this.handleSave}>
+											<Grid
+												container
+												direction="column"
+												justify="center"
+												alignItems="center"
+												spacing={32}
+											>
+												<Grid item>
+													<Grid
+														container
+														direction="column"
+														spacing={40}
+														justify="flex-start"
+														alignItems="flex-start"
+													>
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																spacing={0}
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
 																	<Grid
-																		item
-																		className={classes.input}
+																		container
+																		direction="column"
+																		justify="flex-start"
+																		alignItems="flex-start"
 																	>
-																		<Input
-																			fullWidth
-																			error={
-																				this.state.error !==
-																				''
-																			}
-																			onChange={
-																				this
-																					.handleNickNameChange
-																			}
-																			placeholder="Alias for this account"
-																		/>
-																		{this.state.error !==
-																			'' && (
+																		<Grid item>
 																			<Typography
-																				variant="subtitle2"
-																				color="error"
+																				variant="overline"
 																				gutterBottom
 																			>
-																				{this.state.error}
-																			</Typography>
-																		)}
-																	</Grid>
-																</Grid>
-															</Grid>
-														</Grid>
-													</Grid>
-													<Divider className={classes.divider} />
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															spacing={32}
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Grid
-																	container
-																	direction="column"
-																	justify="flex-start"
-																	alignItems="flex-start"
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			FIRST NAME
-																		</Typography>
-																	</Grid>
-																	<Grid
-																		item
-																		className={classes.input}
-																	>
-																		<Input
-																			fullWidth
-																			onChange={
-																				this
-																					.handleFirstNameChange
-																			}
-																			placeholder="Given Name"
-																		/>
-																	</Grid>
-																</Grid>
-															</Grid>
-															<Grid item>
-																<Grid
-																	container
-																	direction="column"
-																	justify="flex-start"
-																	alignItems="flex-start"
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			LAST NAME
-																		</Typography>
-																	</Grid>
-																	<Grid
-																		item
-																		className={classes.input}
-																	>
-																		<Input
-																			fullWidth
-																			onChange={
-																				this
-																					.handleLastNameChange
-																			}
-																			placeholder="Family Name"
-																		/>
-																	</Grid>
-																</Grid>
-															</Grid>
-															<Grid item>
-																<Grid
-																	container
-																	direction="column"
-																	justify="flex-start"
-																	alignItems="flex-start"
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			COUNTRY OF RESIDENCE
-																		</Typography>
-																	</Grid>
-																	<Grid
-																		item
-																		className={classes.input}
-																	>
-																		<FormControl
-																			variant="filled"
-																			fullWidth
-																		>
-																			<Select
-																				autoWidth
-																				native
-																				onChange={
-																					this
-																						.handleCountryChange
-																				}
-																				value={
-																					this.state
-																						.country
-																				}
-																				disableUnderline
-																				input={
-																					<Input
-																						disableUnderline
-																						fullWidth
-																					/>
-																				}
-																			>
-																				<option
-																					value="choose"
-																					className={
-																						classes.dropdown
+																				SELFKEY ID NICKNAME
+																				<KeyTooltip
+																					interactive
+																					placement="top-start"
+																					title={
+																						<React.Fragment>
+																							<span>
+																								With
+																								nicknames
+																								it
+																								is
+																								very
+																								easy
+																								to
+																								switch
+																								between
+																								multiple
+																								accounts.
+																							</span>
+																							<TooltipArrow />
+																						</React.Fragment>
 																					}
 																				>
-																					Choose...
-																				</option>
-																				{this.props.countries.map(
-																					country => (
-																						<option
-																							key={
-																								country.code
-																							}
-																							value={
-																								country.code
-																							}
-																						>
-																							{
-																								country.name
-																							}
-																						</option>
-																					)
-																				)}
-																			</Select>
-																		</FormControl>
+																					<IconButton aria-label="Info">
+																						<InfoTooltip />
+																					</IconButton>
+																				</KeyTooltip>
+																			</Typography>
+																		</Grid>
+																		<Grid
+																			item
+																			className={
+																				classes.input
+																			}
+																		>
+																			<Input
+																				fullWidth
+																				error={
+																					this.state
+																						.error !==
+																					''
+																				}
+																				onChange={
+																					this
+																						.handleNickNameChange
+																				}
+																				placeholder="Alias for this account"
+																			/>
+																			{this.state.error !==
+																				'' && (
+																				<Typography
+																					variant="subtitle2"
+																					color="error"
+																					gutterBottom
+																				>
+																					{
+																						this.state
+																							.error
+																					}
+																				</Typography>
+																			)}
+																		</Grid>
 																	</Grid>
 																</Grid>
 															</Grid>
 														</Grid>
-													</Grid>
-													<Grid item container justify="center">
-														<Button
-															variant="contained"
-															size="large"
-															className={classes.create}
-															disabled={this.state.isDisabled}
-															onClick={this.handleSave}
-														>
-															CREATE SELFKEY ID
-														</Button>
+														<Divider className={classes.divider} />
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																spacing={32}
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
+																	<Grid
+																		container
+																		direction="column"
+																		justify="flex-start"
+																		alignItems="flex-start"
+																	>
+																		<Grid item>
+																			<Typography
+																				variant="overline"
+																				gutterBottom
+																			>
+																				FIRST NAME
+																			</Typography>
+																		</Grid>
+																		<Grid
+																			item
+																			className={
+																				classes.input
+																			}
+																		>
+																			<Input
+																				fullWidth
+																				onChange={
+																					this
+																						.handleFirstNameChange
+																				}
+																				placeholder="Given Name"
+																			/>
+																		</Grid>
+																	</Grid>
+																</Grid>
+																<Grid item>
+																	<Grid
+																		container
+																		direction="column"
+																		justify="flex-start"
+																		alignItems="flex-start"
+																	>
+																		<Grid item>
+																			<Typography
+																				variant="overline"
+																				gutterBottom
+																			>
+																				LAST NAME
+																			</Typography>
+																		</Grid>
+																		<Grid
+																			item
+																			className={
+																				classes.input
+																			}
+																		>
+																			<Input
+																				fullWidth
+																				onChange={
+																					this
+																						.handleLastNameChange
+																				}
+																				placeholder="Family Name"
+																			/>
+																		</Grid>
+																	</Grid>
+																	<Grid item>
+																		<Grid
+																			container
+																			direction="column"
+																			justify="flex-start"
+																			alignItems="flex-start"
+																		>
+																			<Grid item>
+																				<Typography
+																					variant="overline"
+																					gutterBottom
+																				>
+																					EMAIL
+																				</Typography>
+																			</Grid>
+																			<Grid
+																				item
+																				className={
+																					classes.input
+																				}
+																			>
+																				<Input
+																					fullWidth
+																					type="email"
+																					required
+																					onChange={
+																						this
+																							.handleEmailChange
+																					}
+																					placeholder="Email"
+																				/>
+																			</Grid>
+																		</Grid>
+																	</Grid>
+																</Grid>
+															</Grid>
+														</Grid>
+														<Grid item container justify="center">
+															<Button
+																variant="contained"
+																size="large"
+																type="submit"
+																className={classes.create}
+																disabled={this.state.isDisabled}
+															>
+																CREATE SELFKEY ID
+															</Button>
+														</Grid>
 													</Grid>
 												</Grid>
 											</Grid>
-										</Grid>
+										</form>
 									</CardContent>
 								</Card>
 							</Grid>
@@ -471,7 +441,6 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		countries: identitySelectors.selectCountries(state),
 		idAttributeTypes: identitySelectors.selectIdAttributeTypes(state),
 		wallet: walletSelectors.getWallet(state)
 	};
