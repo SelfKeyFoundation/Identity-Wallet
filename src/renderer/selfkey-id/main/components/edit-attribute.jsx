@@ -119,6 +119,11 @@ class EditAttributeComponent extends Component {
 					<Typography variant="overline" className={classes.label}>
 						{title}
 					</Typography>
+					<br />
+					<br />
+					<Typography variant="overline" gutterBottom>
+						Label
+					</Typography>
 					<Input
 						label="Label"
 						placeholder="Internal naming for the information you are adding"
