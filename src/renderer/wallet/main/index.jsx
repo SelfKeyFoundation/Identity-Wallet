@@ -11,7 +11,8 @@ import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
 	MarketplaceIncorporationPage,
-	MarketplaceServiceDetailsPage
+	MarketplaceServiceDetailsPage,
+	MarketplaceSelfkeyIdRequired
 } from '../../marketplace';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
@@ -84,6 +85,10 @@ class Main extends Component {
 					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
+					<Route
+						path={`${match.path}/marketplace-selfkey-id-required`}
+						component={MarketplaceSelfkeyIdRequired}
+					/>
 					<Route
 						path={`${match.path}/marketplace-categories`}
 						component={MarketplaceCategoriesPage}
