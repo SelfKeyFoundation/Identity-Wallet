@@ -240,8 +240,9 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsUR
 				window.openExternal(e, termsURL);
 			}}
 		>
-			terms and conditions, and by clicking the box, hereby agree to.
+			terms and conditions
 		</a>
+		, and by clicking the box, hereby agree to.
 	</Typography>
 );
 
