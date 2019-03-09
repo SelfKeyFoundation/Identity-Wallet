@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- NB: Various Webpack settings are exposed in the template through the htmlWebpackPlugin object -->
+    <!-- The title property maps onto whatever title you set in electron-webpack.json. -->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- Set your CSP to only load resources from webpack-dev-server in development. -->
+    <!-- Allow XMLHttpRequest and WebSocket to connect anywhere. (WebSocket needed for HMR.) -->
+    <!-- Modify to suite your needs: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy -->
+    <% if (process.env.NODE_ENV === 'development') { %>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src *"
+    />
+    <% } else { %>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; connect-src *"
+    />
+    <% } %>
+  </head>
+  <body>
+     <!-- HtmlWebpackPlugin will inject a script tag to load your renderer bundle inside here. -->
+  </body>
+</html>

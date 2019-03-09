@@ -1,6 +1,9 @@
 /* istanbul ignore file */
 /* eslint-env node */ /* global window */
 // eslint-disable-next-line
+const sourceMapSupport = require('source-map-support');
+window.sourceMapSupport = sourceMapSupport;
+
 const common = require('../common/utils/common');
 const appPackage = require(`${__dirname}'/../../package.json`);
 const config = require('../common/config');

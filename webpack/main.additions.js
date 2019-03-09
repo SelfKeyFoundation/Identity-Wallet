@@ -3,6 +3,9 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+	node: {
+		fs: 'empty'
+	},
 	module: {
 		rules: [
 			{

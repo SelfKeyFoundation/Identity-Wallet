@@ -48,4 +48,6 @@ window.openExternal = (event, href) => {
 
 window.store = store;
 
+window.sourceMapSupport.install();
+
 render(<App store={store} history={history} />, document.getElementById('app'));

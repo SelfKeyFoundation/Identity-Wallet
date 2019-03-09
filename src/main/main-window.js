@@ -21,7 +21,7 @@ export const createMainWindow = () => {
 		minWidth: 1170,
 		minHeight: 800,
 		webPreferences: {
-			nodeIntegration: true,
+			nodeIntegration: false,
 			webSecurity: true,
 			disableBlinkFeatures: 'Auxclick',
 			preload: path.resolve(__dirname, 'preload.js')
