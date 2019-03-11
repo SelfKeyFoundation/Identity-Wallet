@@ -5,7 +5,8 @@ export default errors => {
 		}
 		if (
 			error.message === 'should be string' ||
-			error.message === 'should NOT have fewer than 1 items'
+			error.message === 'should NOT have fewer than 1 items' ||
+			error.message === 'is a required property'
 		) {
 			error.message = 'This field is required';
 		}
