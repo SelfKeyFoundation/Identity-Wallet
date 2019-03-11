@@ -174,10 +174,14 @@ class IncorporationPaymentConfirmationComponent extends Component {
 						crypoCurrency={cryptoCurrency}
 						usdFee={price}
 						ethFee={keyAmount}
-						tooltipFee={'Cost tooltip text - TBD.'}
+						tooltipFee={
+							'Payment will be done using KEY tokens, at the day’s exchange rate.'
+						}
 						usdNetworkFee={usdFee}
 						ethNetworkFee={ethFee}
-						tooltipNetworkFee={'Network tooltip text - TBD.'}
+						tooltipNetworkFee={
+							'The fee will be payed in ETH, at the day’s exchange rate.'
+						}
 						learnHowURL={'https://help.selfkey.org/'}
 						onConfirm={this.handleTransferAction}
 						onCancel={this.handleCloseAction}
