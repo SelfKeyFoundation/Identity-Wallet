@@ -5,11 +5,7 @@ import urljoin from 'url-join';
 import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
 import { Logger } from 'common/logger';
-/*
-if (config.dev) {
-	request.debug = true;
-}
-*/
+
 const log = new Logger('kyc');
 
 const { userAgent } = config;
@@ -364,10 +360,6 @@ export class RelyingPartySession {
 	}
 
 	updateKYCApplicationPayment(applicationId, transactionHash) {
-		if (config.dev) {
-			request.debug = true;
-		}
-
 		return RelyingPartyRest.updateKYCApplicationPayment(
 			this.ctx,
 			applicationId,
@@ -376,9 +368,6 @@ export class RelyingPartySession {
 	}
 
 	listKYCTemplates() {
-		if (config.dev) {
-			request.debug = false;
-		}
 		return RelyingPartyRest.listKYCTemplates(this.ctx);
 	}
 
