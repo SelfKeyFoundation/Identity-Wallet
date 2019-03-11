@@ -159,7 +159,7 @@
 		"coveralls": "3.0.2",
 		"cz-conventional-changelog": "2.1.0",
 		"delay": "4.1.0",
-		"electron": "3.0.10",
+		"electron": "3.1.6",
 		"electron-builder": "20.36.2",
 		"electron-download": "4.1.1",
 		"electron-log": "2.2.17",
