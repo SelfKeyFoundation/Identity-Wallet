@@ -88,7 +88,6 @@ class SelfKeyIdCreateComponent extends Component {
 												<Grid
 													container
 													xs={2}
-													justify="end"
 													alignItems="center"
 													direction="column"
 													wrap="nowrap"
