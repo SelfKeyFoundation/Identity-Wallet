@@ -116,7 +116,7 @@ class EditAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.label}>
 						Type
 					</Typography>
 					<Input
@@ -128,7 +128,7 @@ class EditAttributeComponent extends Component {
 						disabled
 					/>
 					<Divider className={classes.divider} />
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.label}>
 						Label
 					</Typography>
 					<Input
@@ -151,7 +151,7 @@ class EditAttributeComponent extends Component {
 				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
-						<Typography variant="overline" gutterBottom>
+						<Typography variant="overline" className={classes.label}>
 							Content
 						</Typography>
 						<Form
