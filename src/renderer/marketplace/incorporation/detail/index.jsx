@@ -287,7 +287,7 @@ class IncorporationsDetailView extends Component {
 
 	userHasPaid = () => {
 		const application = this.getLastApplication();
-		if (!application) {
+		if (!application || !application.payments) {
 			return false;
 		}
 		return !!application.payments.length;
