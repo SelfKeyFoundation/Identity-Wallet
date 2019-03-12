@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { pricesSelectors } from 'common/prices';
-import { FlagCountryName } from '../common';
+import { FlagCountryName, sanitize } from '../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
@@ -73,10 +73,10 @@ const styles = theme => ({
 			fontWeight: 'bold',
 			color: '#93B0C1',
 			display: 'block',
-			padding: '6px',
+			padding: '0',
 			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
-			marginTop: '1em'
+			marginTop: '0em'
 		},
 		'& ul': {
 			listStyle: 'outside',
@@ -380,7 +380,7 @@ export class IncorporationCheckout extends React.Component {
 								<div
 									className={classes.description}
 									dangerouslySetInnerHTML={{
-										__html: program.wallet_description
+										__html: sanitize(program.wallet_description)
 									}}
 								/>
 								<div className={classes.descriptionHelp}>

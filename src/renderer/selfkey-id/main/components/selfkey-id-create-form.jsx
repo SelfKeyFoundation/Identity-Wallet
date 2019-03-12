@@ -15,9 +15,8 @@ import {
 import { IdCardIcon, ModalWrap, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
-import { identitySelectors, identityOperations } from 'common/identity';
-import { walletOperations, walletSelectors } from 'common/wallet';
-import { push } from 'connected-react-router';
+import { identityOperations } from 'common/identity';
+import { walletSelectors } from 'common/wallet';
 
 const styles = theme => ({
 	back: {
@@ -86,43 +85,11 @@ class SelfKeyIdCreateFormComponent extends Component {
 		return this.props.idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
 
-	handleSave = async evt => {
+	handleSave = evt => {
 		evt.preventDefault();
-		await this.props.dispatch(
-			walletOperations.updateWalletName(this.state.nickName, this.props.wallet.id)
+		this.props.dispatch(
+			identityOperations.createSelfkeyIdOperation(this.props.wallet.id, { ...this.state })
 		);
-
-		await this.props.dispatch(
-			identityOperations.createIdAttributeOperation({
-				typeId: this.getTypeId(
-					'http://platform.selfkey.org/schema/attribute/first-name.json'
-				),
-				name: 'First Name',
-				data: { value: this.state.firstName }
-			})
-		);
-
-		await this.props.dispatch(
-			identityOperations.createIdAttributeOperation({
-				typeId: this.getTypeId(
-					'http://platform.selfkey.org/schema/attribute/last-name.json'
-				),
-				name: 'Last Name',
-				data: { value: this.state.lastName }
-			})
-		);
-
-		await this.props.dispatch(
-			identityOperations.createIdAttributeOperation({
-				typeId: this.getTypeId('http://platform.selfkey.org/schema/attribute/email.json'),
-				name: 'Email',
-				data: { value: this.state.email }
-			})
-		);
-
-		await this.props.dispatch(walletOperations.updateWalletSetup(true, this.props.wallet.id));
-
-		await this.props.dispatch(push('/selfkeyIdCreateAbout'));
 	};
 
 	handleNickNameChange = event => {
@@ -443,7 +410,6 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		idAttributeTypes: identitySelectors.selectIdAttributeTypes(state),
 		wallet: walletSelectors.getWallet(state)
 	};
 };

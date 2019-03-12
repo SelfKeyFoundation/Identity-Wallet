@@ -118,6 +118,7 @@
 		"request": "2.88.0",
 		"request-promise-native": "1.0.5",
 		"reselect": "4.0.0",
+		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
 		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#0396c7455b14dbfe90f65358614050910548dc5c",
 		"selfkey.js": "1.0.24",
