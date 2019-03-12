@@ -66,23 +66,6 @@ export class Identity {
 					this.address,
 					msgBufferHex
 				);
-				// XXX recover address
-				let sig = ethUtil.fromRpcSig(
-					ethUtil.addHexPrefix(trezorSignature.message.signature)
-				);
-
-				let addr = ethUtil.bufferToHex(
-					ethUtil.pubToAddress('0x' + (await this.getPublicKeyFromHardwareWallet()), true)
-				);
-				let pk = ethUtil.ecrecover(
-					ethUtil.hashPersonalMessage(Buffer.from(msg)),
-					sig.v,
-					sig.r,
-					sig.s
-				);
-				let addr2 = ethUtil.pubToAddress(ethUtil.bufferToHex(pk), true);
-				console.log('XXX', this.address, addr, ethUtil.bufferToHex(addr2));
-				// XXX end recover address
 				return ethUtil.addHexPrefix(trezorSignature.message.signature);
 			case 'local':
 			default:
