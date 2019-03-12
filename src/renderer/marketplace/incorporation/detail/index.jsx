@@ -16,7 +16,8 @@ import {
 	TreatiesTable,
 	CountryInfo,
 	IncorporationsKYC,
-	ProgramPrice
+	ProgramPrice,
+	sanitize
 } from '../common';
 
 const styles = theme => ({
@@ -139,10 +140,10 @@ const styles = theme => ({
 			fontWeight: 'bold',
 			color: '#93B0C1',
 			display: 'block',
-			padding: '6px',
+			padding: '0',
 			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
-			marginTop: '1em'
+			marginTop: '0em'
 		},
 		'& ul': {
 			listStyle: 'outside',
@@ -287,7 +288,7 @@ class IncorporationsDetailView extends Component {
 
 	userHasPaid = () => {
 		const application = this.getLastApplication();
-		if (!application) {
+		if (!application || !application.payments) {
 			return false;
 		}
 		return !!application.payments.length;
@@ -557,7 +558,7 @@ class IncorporationsDetailView extends Component {
 									<TabContainer className="description">
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['introduction']
+												__html: sanitize(translation.introduction)
 											}}
 										/>
 									</TabContainer>
@@ -567,7 +568,7 @@ class IncorporationsDetailView extends Component {
 										<IncorporationsLegalView data={program.details} />
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['legal_paragraph']
+												__html: sanitize(translation.legal_paragraph)
 											}}
 											className={classes.tabDescription}
 										/>
@@ -578,7 +579,7 @@ class IncorporationsDetailView extends Component {
 										<IncorporationsTaxView tax={tax} />
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['taxes_paragraph']
+												__html: sanitize(translation.taxes_paragraph)
 											}}
 											className={classes.tabDescription}
 										/>
@@ -600,7 +601,11 @@ class IncorporationsDetailView extends Component {
 								)}
 								{selectedTab === 5 && (
 									<TabContainer className="Services">
-										{program['Wallet description']}
+										<div
+											dangerouslySetInnerHTML={{
+												__html: sanitize(program.wallet_description)
+											}}
+										/>
 									</TabContainer>
 								)}
 							</div>
