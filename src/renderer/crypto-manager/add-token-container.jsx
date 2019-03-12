@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, withStyles, Input, IconButton } from '@material-ui/core';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import {
+	Grid,
+	Button,
+	Typography,
+	withStyles,
+	Input,
+	IconButton,
+	CircularProgress
+} from '@material-ui/core';
 import {
 	MyCryptoLargeIcon,
 	ModalWrap,
@@ -12,8 +22,6 @@ import {
 	KeyTooltip,
 	InfoTooltip
 } from 'selfkey-ui';
-import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
 
 const styles = theme => ({
 	back: {
@@ -29,6 +37,18 @@ const styles = theme => ({
 	},
 	modalPosition: {
 		position: 'static'
+	},
+	label: {
+		marginBottom: '10px'
+	},
+	tooltip: {
+		position: 'relative',
+		top: '-2px'
+	},
+	loading: {
+		position: 'relative',
+		marginLeft: '10px',
+		top: '5px'
 	},
 	searching: {
 		height: '19px',
@@ -271,6 +291,7 @@ class AddTokenContainerComponent extends Component {
 									<KeyTooltip
 										interactive
 										placement="top-start"
+										className={classes.tooltip}
 										title={
 											<React.Fragment>
 												<span>
@@ -295,8 +316,11 @@ class AddTokenContainerComponent extends Component {
 											<InfoTooltip />
 										</IconButton>
 									</KeyTooltip>
-									{searching && (
+									{true && (
 										<React.Fragment>
+											<span className={classes.loading}>
+												<CircularProgress size={20} />
+											</span>
 											<span id="searching" className={classes.searching}>
 												Please wait. Checking the blockchain for ERC-20{' '}
 												token information.
@@ -328,7 +352,7 @@ class AddTokenContainerComponent extends Component {
 								)}
 							</Grid>
 							<Grid item>
-								<Typography variant="overline" gutterBottom>
+								<Typography variant="overline" className={classes.label}>
 									Token Symbol
 								</Typography>
 								<Input
@@ -340,7 +364,7 @@ class AddTokenContainerComponent extends Component {
 								/>
 							</Grid>
 							<Grid item>
-								<Typography variant="overline" gutterBottom>
+								<Typography variant="overline" className={classes.label}>
 									Decimal Places
 								</Typography>
 								<Input
