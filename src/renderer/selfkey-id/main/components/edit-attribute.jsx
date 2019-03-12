@@ -117,11 +117,18 @@ class EditAttributeComponent extends Component {
 			<React.Fragment>
 				<div className={classes.section1}>
 					<Typography variant="overline" className={classes.label}>
-						{title}
+						Type
 					</Typography>
-					<br />
-					<br />
-					<Typography variant="overline" gutterBottom>
+					<Input
+						label="Type"
+						type="text"
+						value={title}
+						variant="filled"
+						fullWidth
+						disabled
+					/>
+					<Divider className={classes.divider} />
+					<Typography variant="overline" className={classes.label}>
 						Label
 					</Typography>
 					<Input
@@ -144,6 +151,9 @@ class EditAttributeComponent extends Component {
 				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
+						<Typography variant="overline" className={classes.label}>
+							Content
+						</Typography>
 						<Form
 							schema={_.omit(jsonSchema.removeMeta(schema), ['title'])}
 							uiSchema={uiSchema.content}

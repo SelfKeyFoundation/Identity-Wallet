@@ -261,7 +261,7 @@ class SelfkeyIdOverviewComponent extends Component {
 														<SmallTableHeadRow>
 															<SmallTableCell variant="head">
 																<Typography variant="overline">
-																	Information
+																	Type
 																</Typography>
 															</SmallTableCell>
 															<SmallTableCell variant="head">
@@ -381,7 +381,7 @@ class SelfkeyIdOverviewComponent extends Component {
 														<SmallTableHeadRow>
 															<SmallTableCell variant="head">
 																<Typography variant="overline">
-																	Information
+																	Type
 																</Typography>
 															</SmallTableCell>
 															<SmallTableCell variant="head">
