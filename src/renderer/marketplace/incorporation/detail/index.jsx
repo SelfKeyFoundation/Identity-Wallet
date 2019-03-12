@@ -139,10 +139,10 @@ const styles = theme => ({
 			fontWeight: 'bold',
 			color: '#93B0C1',
 			display: 'block',
-			padding: '6px',
+			padding: '0',
 			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
-			marginTop: '1em'
+			marginTop: '0em'
 		},
 		'& ul': {
 			listStyle: 'outside',
@@ -600,7 +600,11 @@ class IncorporationsDetailView extends Component {
 								)}
 								{selectedTab === 5 && (
 									<TabContainer className="Services">
-										{program['Wallet description']}
+										<div
+											dangerouslySetInnerHTML={{
+												__html: program['wallet_description']
+											}}
+										/>
 									</TabContainer>
 								)}
 							</div>
