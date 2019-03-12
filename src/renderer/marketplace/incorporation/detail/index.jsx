@@ -16,7 +16,8 @@ import {
 	TreatiesTable,
 	CountryInfo,
 	IncorporationsKYC,
-	ProgramPrice
+	ProgramPrice,
+	sanitize
 } from '../common';
 
 const styles = theme => ({
@@ -557,7 +558,7 @@ class IncorporationsDetailView extends Component {
 									<TabContainer className="description">
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['introduction']
+												__html: sanitize(translation.introduction)
 											}}
 										/>
 									</TabContainer>
@@ -567,7 +568,7 @@ class IncorporationsDetailView extends Component {
 										<IncorporationsLegalView data={program.details} />
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['legal_paragraph']
+												__html: sanitize(translation.legal_paragraph)
 											}}
 											className={classes.tabDescription}
 										/>
@@ -578,7 +579,7 @@ class IncorporationsDetailView extends Component {
 										<IncorporationsTaxView tax={tax} />
 										<div
 											dangerouslySetInnerHTML={{
-												__html: translation['taxes_paragraph']
+												__html: sanitize(translation.taxes_paragraph)
 											}}
 											className={classes.tabDescription}
 										/>
@@ -602,7 +603,7 @@ class IncorporationsDetailView extends Component {
 									<TabContainer className="Services">
 										<div
 											dangerouslySetInnerHTML={{
-												__html: program['wallet_description']
+												__html: sanitize(program.wallet_description)
 											}}
 										/>
 									</TabContainer>
