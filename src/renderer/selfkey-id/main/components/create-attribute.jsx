@@ -12,6 +12,9 @@ const styles = theme => ({
 	buttonContainer: {
 		margin: '40px -12px 0'
 	},
+	label: {
+		marginBottom: '10px'
+	},
 	divider: {
 		margin: '30px 0'
 	}
@@ -133,7 +136,7 @@ class CreateAttributeComponent extends Component {
 		return (
 			<React.Fragment>
 				<div className={classes.section1}>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.label}>
 						{subtitle}
 					</Typography>
 					<Select
@@ -151,12 +154,10 @@ class CreateAttributeComponent extends Component {
 							</option>
 						))}
 					</Select>
-
+					<Divider className={classes.divider} />
 					{this.state.typeId > -1 && (
 						<>
-							<br />
-							<br />
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" className={classes.label}>
 								Label
 							</Typography>
 							<Input
@@ -181,11 +182,15 @@ class CreateAttributeComponent extends Component {
 				{type && <Divider className={classes.divider} />}
 				{type && (
 					<div className={classes.section2}>
+						<Typography variant="overline" className={classes.label}>
+							Content
+						</Typography>
 						<Form
 							schema={_.omit(jsonSchema.removeMeta(type.content), ['title'])}
 							formData={value}
 							uiSchema={uiSchema.content}
 							liveValidate={liveValidate}
+							noHtml5Validate={true}
 							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
