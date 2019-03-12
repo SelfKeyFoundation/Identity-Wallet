@@ -14,7 +14,7 @@ const ProgramPrice = props => {
 	return (
 		<div className="price">
 			{formattedLabel}
-			{price}
+			{numeric.toLocaleString()}
 			<span className="price-key">{key.toLocaleString()} KEY</span>
 		</div>
 	);
