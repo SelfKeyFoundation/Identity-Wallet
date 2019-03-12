@@ -1,7 +1,7 @@
 import BaseModel from '../common/base-model';
-
+import { isDevMode } from 'common/utils/common';
 const TABLE_NAME = 'exchange_data';
-
+const env = isDevMode() ? 'development' : 'production';
 export class Exchange extends BaseModel {
 	static get tableName() {
 		return TABLE_NAME;
@@ -17,17 +17,18 @@ export class Exchange extends BaseModel {
 			required: ['name', 'data'],
 			properties: {
 				name: { type: 'string' },
-				data: { type: 'object' }
+				data: { type: 'object' },
+				env: { type: 'string', enum: ['production', 'development'] }
 			}
 		};
 	}
 
 	static create(data) {
-		return this.query().insert(data);
+		return this.query().insert({ ...data, env });
 	}
 
 	static findAll() {
-		return this.query();
+		return this.query().where({ env });
 	}
 
 	static async import(data) {
@@ -40,11 +41,11 @@ export class Exchange extends BaseModel {
 
 		data.forEach(row => {
 			if (existing[row.name]) {
-				updates.push(row);
+				updates.push({ ...row, env });
 				return;
 			}
 
-			inserts.push(row);
+			inserts.push({ ...row, env });
 		});
 
 		await this.insertMany(inserts);
