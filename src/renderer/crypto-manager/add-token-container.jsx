@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, withStyles, Input, IconButton } from '@material-ui/core';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import {
+	Grid,
+	Button,
+	Typography,
+	withStyles,
+	Input,
+	IconButton,
+	CircularProgress
+} from '@material-ui/core';
 import {
 	MyCryptoLargeIcon,
 	ModalWrap,
@@ -12,8 +22,6 @@ import {
 	KeyTooltip,
 	InfoTooltip
 } from 'selfkey-ui';
-import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
 
 const styles = theme => ({
 	back: {
@@ -29,6 +37,28 @@ const styles = theme => ({
 	},
 	modalPosition: {
 		position: 'static'
+	},
+	label: {
+		marginBottom: '10px'
+	},
+	tooltip: {
+		position: 'relative',
+		top: '-2px'
+	},
+	loading: {
+		position: 'relative',
+		marginLeft: '10px',
+		top: '5px'
+	},
+	searching: {
+		height: '19px',
+		width: '242px',
+		color: '#00C0D9',
+		fontFamily: 'Lato',
+		fontSize: '13px',
+		lineHeight: '19px',
+		textTransform: 'none',
+		marginLeft: '10px'
 	},
 	errorText: {
 		height: '19px',
@@ -89,8 +119,10 @@ class AddTokenContainerComponent extends Component {
 		symbol: '',
 		decimal: '',
 		found: null,
-		duplicate: null
+		duplicate: null,
+		searching: false
 	};
+
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 		this.props.dispatch(addressBookOperations.resetAdd());
@@ -102,6 +134,11 @@ class AddTokenContainerComponent extends Component {
 				this.findToken(this.state.address);
 			}
 		}
+		if (prevProps.addressError !== this.props.addressError) {
+			if (this.state.searching) {
+				this.setState({ searching: false });
+			}
+		}
 	}
 
 	handleBackClick = evt => {
@@ -110,7 +147,10 @@ class AddTokenContainerComponent extends Component {
 	};
 
 	handleFieldChange = async event => {
-		this.findToken(event.target.value);
+		let value = event.target.value;
+		this.setState({ searching: true, found: true }, async () => {
+			await this.findToken(value);
+		});
 	};
 
 	findToken = async contractAddress => {
@@ -133,29 +173,25 @@ class AddTokenContainerComponent extends Component {
 				duplicate = null;
 			}
 			if (!found) {
-				try {
-					// Search token info on blockchain and add it to tokens list
-					await this.props.dispatch(
-						tokensOperations.addTokenOperation(contractAddress.toLowerCase())
-					);
-
-					this.setState({
-						address: contractAddress,
-						symbol: '',
-						decimal: '',
-						found: found,
-						duplicate: duplicate
-					});
-				} catch (e) {
-					console.log(e);
-				}
+				// Search token info on blockchain and add it to tokens list
+				await this.props.dispatch(
+					tokensOperations.addTokenOperation(contractAddress.toLowerCase())
+				);
+				this.setState({
+					address: contractAddress,
+					symbol: '',
+					decimal: '',
+					found: found,
+					duplicate: duplicate
+				});
 			} else {
 				this.setState({
 					address: contractAddress,
 					symbol: found ? found.symbol : '',
 					decimal: found ? found.decimal : '',
 					found: found,
-					duplicate: duplicate
+					duplicate: duplicate,
+					searching: false
 				});
 			}
 		} else {
@@ -164,7 +200,8 @@ class AddTokenContainerComponent extends Component {
 				symbol: '',
 				decimal: '',
 				found: null,
-				duplicate: null
+				duplicate: null,
+				searching: false
 			});
 		}
 	};
@@ -187,11 +224,11 @@ class AddTokenContainerComponent extends Component {
 
 	render() {
 		const { classes, addressError } = this.props;
-		const { address, symbol, decimal, found, duplicate } = this.state;
+		const { address, symbol, decimal, found, duplicate, searching } = this.state;
 		const hasAddressError = addressError !== '' && addressError !== undefined && address !== '';
 		const notFound = !found && address !== '' && !hasAddressError && !duplicate;
 		const addressInputClass = `${classes.input} ${
-			hasAddressError || notFound || duplicate ? classes.errorColor : ''
+			(hasAddressError || notFound || duplicate) && !searching ? classes.errorColor : ''
 		}`;
 
 		return (
@@ -254,6 +291,7 @@ class AddTokenContainerComponent extends Component {
 									<KeyTooltip
 										interactive
 										placement="top-start"
+										className={classes.tooltip}
 										title={
 											<React.Fragment>
 												<span>
@@ -278,6 +316,17 @@ class AddTokenContainerComponent extends Component {
 											<InfoTooltip />
 										</IconButton>
 									</KeyTooltip>
+									{true && (
+										<React.Fragment>
+											<span className={classes.loading}>
+												<CircularProgress size={20} />
+											</span>
+											<span id="searching" className={classes.searching}>
+												Please wait. Checking the blockchain for ERC-20{' '}
+												token information.
+											</span>
+										</React.Fragment>
+									)}
 								</Typography>
 								<Input
 									name="address"
@@ -286,24 +335,24 @@ class AddTokenContainerComponent extends Component {
 									className={addressInputClass}
 									disableUnderline
 								/>
-								{hasAddressError && (
+								{!searching && hasAddressError && (
 									<span id="addressError" className={classes.errorText}>
 										{addressError}
 									</span>
 								)}
-								{notFound && (
+								{!searching && notFound && (
 									<span id="notFound" className={classes.errorText}>
 										{`Token contract does not exist. Please double check and try again.`}
 									</span>
 								)}
-								{duplicate && (
+								{!searching && duplicate && (
 									<span id="duplicate" className={classes.errorText}>
 										{`Address is already being used.`}
 									</span>
 								)}
 							</Grid>
 							<Grid item>
-								<Typography variant="overline" gutterBottom>
+								<Typography variant="overline" className={classes.label}>
 									Token Symbol
 								</Typography>
 								<Input
@@ -315,7 +364,7 @@ class AddTokenContainerComponent extends Component {
 								/>
 							</Grid>
 							<Grid item>
-								<Typography variant="overline" gutterBottom>
+								<Typography variant="overline" className={classes.label}>
 									Decimal Places
 								</Typography>
 								<Input
