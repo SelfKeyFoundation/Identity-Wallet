@@ -31,7 +31,8 @@ export const identityTypes = {
 	IDENTITY_LOCK: 'identity/LOCK',
 	PROFILE_PICTURE_UPDATE: 'identity/profile-picture/update',
 	IDENTITY_COUNTRIES_LOAD: 'identity/countries/load',
-	IDENTITY_COUNTRIES_SET: 'identity/countries/set'
+	IDENTITY_COUNTRIES_SET: 'identity/countries/set',
+	IDENTITY_SELFKEY_ID_CREATE: 'identity/selfkey-id/CREATE'
 };
 
 export default identityTypes;
