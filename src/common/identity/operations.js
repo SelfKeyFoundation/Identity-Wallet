@@ -1,6 +1,7 @@
 import { walletSelectors, walletOperations } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
+import { push } from 'connected-react-router';
 import identitySelectors from './selectors';
 import identityActions from './actions';
 import identityTypes from './types';
@@ -112,6 +113,42 @@ const unlockIdentityOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityOperations.loadIdAttributesOperation(walletId));
 };
 
+const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) => {
+	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState());
+	const getTypeId = url => {
+		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
+	};
+	await dispatch(walletOperations.updateWalletName(data.nickName, walletId));
+
+	await dispatch(
+		identityOperations.createIdAttributeOperation({
+			typeId: getTypeId('http://platform.selfkey.org/schema/attribute/first-name.json'),
+			name: 'First Name',
+			data: { value: data.firstName }
+		})
+	);
+
+	await dispatch(
+		identityOperations.createIdAttributeOperation({
+			typeId: getTypeId('http://platform.selfkey.org/schema/attribute/last-name.json'),
+			name: 'Last Name',
+			data: { value: data.lastName }
+		})
+	);
+
+	await dispatch(
+		identityOperations.createIdAttributeOperation({
+			typeId: getTypeId('http://platform.selfkey.org/schema/attribute/email.json'),
+			name: 'Email',
+			data: { value: data.email }
+		})
+	);
+
+	await dispatch(walletOperations.updateWalletSetup(true, walletId));
+
+	await dispatch(push('/selfkeyIdCreateAbout'));
+};
+
 export const operations = {
 	loadCountriesOperation,
 	loadRepositoriesOperation,
@@ -129,7 +166,8 @@ export const operations = {
 	editIdAttributeOperation,
 	unlockIdentityOperation,
 	lockIdentityOperation,
-	updateProfilePictureOperation
+	updateProfilePictureOperation,
+	createSelfkeyIdOperation
 };
 
 export const identityOperations = {
@@ -201,6 +239,10 @@ export const identityOperations = {
 	loadCountriesOperation: createAliasedAction(
 		identityTypes.IDENTITY_COUNTRIES_LOAD,
 		operations.loadCountriesOperation
+	),
+	createSelfkeyIdOperation: createAliasedAction(
+		identityTypes.IDENTITY_SELFKEY_ID_CREATE,
+		operations.createSelfkeyIdOperation
 	)
 };
 
