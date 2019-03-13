@@ -243,7 +243,7 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 			}
 			await session.establish();
 		} catch (error) {
-			log.error('getSession trezor %s', error);
+			log.error('getSession HD %s', error);
 			if (hardwareWalletType !== '') {
 				clearTimeout(hardwalletConfirmationTimeout);
 				if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
