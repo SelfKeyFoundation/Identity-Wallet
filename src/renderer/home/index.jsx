@@ -6,6 +6,7 @@ import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { appOperations } from 'common/app';
 
 const styles = theme => ({
 	container: {
@@ -63,6 +64,7 @@ const createWalletLink = props => <Link to="/createWallet" {...props} />;
 const unlockWalletLink = props => <Link to="/unlockWallet" {...props} />;
 class Home extends Component {
 	componentDidMount() {
+		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 	}
 	render() {
