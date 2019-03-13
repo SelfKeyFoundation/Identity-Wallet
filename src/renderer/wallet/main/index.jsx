@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
 import TransactionNoGasError from '../../transaction/transaction-no-gas-error/containers/transaction-no-gas-error';
+import TransactionNoKeyError from '../../transaction/transaction-no-key-error/containers/transaction-no-key-error';
 import TransactionError from '../../transaction/transaction-error/containers/transaction-error';
 import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
 import TransactionUnlock from '../../transaction/transaction-unlock';
@@ -118,6 +119,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/transaction-no-gas-error`}
 						component={TransactionNoGasError}
+					/>
+					<Route
+						path={`${match.path}/transaction-no-key-error`}
+						component={TransactionNoKeyError}
 					/>
 					<Route path={`${match.path}/transaction-error`} component={TransactionError} />
 					<Route
