@@ -17,10 +17,12 @@ import WalletTokenService from './wallet/wallet-token-service';
 import IncorporationsService from './marketplace/incorporations-service';
 import GuideSettingsService from './settings/guide-settings-service';
 import CountryService from './country/country-service';
+import NetworkService from './application/network-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
+		networkService: asClass(NetworkService).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),

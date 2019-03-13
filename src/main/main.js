@@ -4,7 +4,6 @@
 import '@babel/polyfill';
 import path from 'path';
 import fs from 'fs';
-import isOnline from 'is-online';
 import electron from 'electron';
 import { localeUpdate } from 'common/locale/actions';
 import { fiatCurrencyUpdate } from 'common/fiatCurrency/actions';
@@ -106,15 +105,9 @@ function onReady() {
 
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
-				let online = await isOnline();
-				log.info('is-online %s', online);
-				if (!online) {
-					mainWindow.webContents.send('SHOW_IS_OFFLINE_WARNING');
-					return;
-				}
-
 				log.info('did-finish-load');
 				mainWindow.webContents.send('APP_START_LOADING');
+				ctx.networkService.start();
 				// start update cmc data
 				Promise.all([
 					ctx.priceService.startUpdateData(),

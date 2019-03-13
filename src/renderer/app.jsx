@@ -11,6 +11,7 @@ import Home from './home';
 import CreateWallet from './wallet/create';
 import CreatePassword from './wallet/create/password';
 import CloseConfirmation from './close-confirmation';
+import NoConnection from './no-connection';
 import PasswordConfirmation from './wallet/create/password/confirmation';
 import BackupAddress from './wallet/create/backup-address';
 import BackupPK from './wallet/create/backup-pk';
@@ -59,6 +60,7 @@ class AppContainerComponent extends Component {
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
+						<Route path="/no-connection" component={NoConnection} />
 						<Route path="/createWallet" component={CreateWallet} />
 						<Route path="/createPassword" component={CreatePassword} />
 						<Route
