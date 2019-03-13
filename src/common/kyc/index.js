@@ -198,7 +198,9 @@ export const kycActions = {
 		cancelRoute,
 		title,
 		description,
-		agreement
+		agreement,
+		attributes = [],
+		error
 	) {
 		return {
 			type: kycTypes.KYC_APPLICATION_CURRENT_SET,
@@ -210,7 +212,8 @@ export const kycActions = {
 				title,
 				description,
 				agreement,
-				attributes: []
+				attributes,
+				error
 			}
 		};
 	},
@@ -355,6 +358,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 		await dispatch(kycActions.addKYCApplication(rpName, application));
 	} catch (error) {
 		log.error('createKycApplication %s', error);
+		throw error;
 	}
 };
 
@@ -401,13 +405,22 @@ const startCurrentApplicationOperation = (
 const submitCurrentApplicationOperation = selected => async (dispatch, getState) => {
 	const state = getState();
 	const currentApplication = kycSelectors.selectCurrentApplication(state);
-	const { relyingPartyName, templateId } = currentApplication;
+	const {
+		relyingPartyName,
+		templateId,
+		returnRoute,
+		cancelRoute,
+		title,
+		description,
+		agreement,
+		attributes
+	} = currentApplication;
 	const requirements = kycSelectors.selectRequirementsForTemplate(
 		state,
 		relyingPartyName,
 		templateId
 	);
-	const attributes = requirements.map(r => {
+	const requiredAttributes = requirements.map(r => {
 		const sel = !r.options || !r.options.length ? null : selected[r.uiId] || r.options[0];
 		return {
 			id: r.id,
@@ -419,9 +432,46 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		};
 	});
 
-	await dispatch(
-		kycOperations.createRelyingPartyKYCApplication(relyingPartyName, templateId, attributes)
-	);
+	try {
+		await dispatch(
+			kycActions.setCurrentApplication(
+				relyingPartyName,
+				templateId,
+				returnRoute,
+				cancelRoute,
+				title,
+				description,
+				agreement,
+				attributes
+			)
+		);
+		await dispatch(
+			kycOperations.createRelyingPartyKYCApplication(
+				relyingPartyName,
+				templateId,
+				requiredAttributes
+			)
+		);
+		await dispatch(push(currentApplication.returnRoute));
+	} catch (error) {
+		let applicationError = error;
+		if (error.error) {
+			applicationError = error.error;
+		}
+		await dispatch(
+			kycActions.setCurrentApplication(
+				relyingPartyName,
+				templateId,
+				returnRoute,
+				cancelRoute,
+				title,
+				description,
+				agreement,
+				attributes,
+				applicationError
+			)
+		);
+	}
 
 	if (kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName)) {
 		await dispatch(kycOperations.loadRelyingParty(relyingPartyName));

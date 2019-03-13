@@ -7,7 +7,8 @@ import { walletSelectors } from 'common/wallet';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
-import { WarningIcon, CertificateIcon } from 'selfkey-ui';
+import { WarningIcon, CertificateIcon, success, warning } from 'selfkey-ui';
+import { CheckOutlined } from '@material-ui/icons';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
@@ -161,7 +162,32 @@ const styles = theme => ({
 	},
 	warningBar: {
 		padding: '22px 30px',
-		border: '1px solid #E98548'
+		border: '2px solid',
+		borderColor: warning,
+		alignItems: 'center',
+		'& p': {
+			display: 'inline-block',
+			marginLeft: '1em'
+		},
+		'& svg': {
+			verticalAlign: 'middle'
+		}
+	},
+	successBar: {
+		padding: '22px 30px',
+		border: '2px solid',
+		borderColor: success,
+		alignItems: 'center',
+		'& p': {
+			display: 'inline-block',
+			marginLeft: '1em'
+		},
+		'& svg': {
+			verticalAlign: 'middle'
+		}
+	},
+	checkIcon: {
+		fill: success
 	},
 	certificateIcon: {
 		marginRight: '20px'
@@ -296,70 +322,138 @@ class IncorporationsDetailView extends Component {
 		return !!application.payments.length;
 	};
 
-	// Can only incorporate if there is a price
-	// And templateId exists for this jurisdiction
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	applicationCompleted = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 2;
+	};
+
+	// Can only incorporate if:
+	// - there is a valid price for this jurisdiction (from airtable)
+	// - templateId exists for this jurisdiction (from airtable)
+	// - user has not applied before or previous application was rejected
 	canIncorporate = () => {
 		const { templateId } = this.props.match.params;
 		const price = this.getPrice();
 
 		if (this.props.rp && this.props.rp.authenticated) {
-			return !!(templateId && price && !this.userHasApplied());
+			return !!(
+				templateId &&
+				price &&
+				(!this.userHasApplied() || this.applicationWasRejected())
+			);
 		} else {
 			return !!(templateId && price);
 		}
 	};
 
-	renderPartialStatus = () => {
-		const { classes } = this.props;
-		if (this.userHasPaid()) {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.warningBar}
-				>
-					<Grid item xs={1}>
-						<WarningIcon />
-					</Grid>
-					<Grid item xs={11}>
-						<Typography variant="body2" color="secondary">
-							You have an existing <strong>In Progress</strong> application, please
-							contact support@flagtheory.com for further details
-						</Typography>
-					</Grid>
-				</Grid>
-			);
-		}
+	renderApplicationStatus = () => {
+		if (this.applicationCompleted()) return this.renderApplicationCompletedAlert();
 
-		if (this.userHasApplied()) {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.warningBar}
-				>
-					<Grid item xs={1}>
-						<WarningIcon />
-					</Grid>
-					<Grid item xs={8}>
-						<Typography variant="body2" color="secondary">
-							You have an existing <strong>unpaid</strong> application
-						</Typography>
-					</Grid>
-					<Grid item xs={3} style={{ textAlign: 'right' }}>
-						<Button variant="contained" onClick={this.onPayClick}>
-							Pay
-						</Button>
-					</Grid>
-				</Grid>
-			);
-		}
+		if (this.applicationWasRejected()) return this.renderApplicationRejectedAlert();
+
+		if (this.userHasPaid()) return this.renderInProgressAlert();
+
+		if (this.userHasApplied()) return this.renderUnpaidAlert();
 
 		return null;
+	};
+
+	renderApplicationCompletedAlert = () => {
+		const { classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.successBar}
+			>
+				<Grid item xs={12}>
+					<CheckOutlined className={classes.checkIcon} />
+					<Typography variant="body2" color="secondary">
+						Your application was successful
+					</Typography>
+				</Grid>
+			</Grid>
+		);
+	};
+
+	renderApplicationRejectedAlert = () => {
+		const { classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.warningBar}
+			>
+				<Grid item xs={12}>
+					<WarningIcon />
+					<Typography variant="body2" color="secondary">
+						Your previous application was rejected
+					</Typography>
+				</Grid>
+			</Grid>
+		);
+	};
+
+	renderInProgressAlert = () => {
+		const { classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.warningBar}
+			>
+				<Grid item xs={12}>
+					<WarningIcon />
+					<Typography variant="body2" color="secondary">
+						You have an existing <strong>in progress</strong> application, please
+						contact support@flagtheory.com for further details
+					</Typography>
+				</Grid>
+			</Grid>
+		);
+	};
+
+	renderUnpaidAlert = () => {
+		const { classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.warningBar}
+			>
+				<Grid item xs={9}>
+					<WarningIcon />
+					<Typography variant="body2" color="secondary">
+						You have an existing <strong>unpaid</strong> application
+					</Typography>
+				</Grid>
+				<Grid item xs={3} style={{ textAlign: 'right' }}>
+					<Button variant="contained" onClick={this.onPayClick}>
+						Pay
+					</Button>
+				</Grid>
+			</Grid>
+		);
 	};
 
 	render() {
@@ -397,7 +491,7 @@ class IncorporationsDetailView extends Component {
 						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
-						{this.renderPartialStatus()}
+						{this.renderApplicationStatus()}
 						<Grid
 							container
 							justify="flex-start"

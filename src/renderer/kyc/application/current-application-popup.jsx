@@ -323,11 +323,15 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					) : (
 						''
 					)}
-					{error ? (
+					{error || currentApplication.error ? (
 						<Grid item>
 							<Typography variant="body2" color="error">
-								Error: You must provide all required information to proceed. Please
-								update any missing details.
+								Error:{' '}
+								{error && error.message
+									? error.message
+									: currentApplication.error && currentApplication.error.message
+									? currentApplication.error.message
+									: 'You must provide all required information to proceed. Please update any missing details.'}
 							</Typography>
 						</Grid>
 					) : null}
