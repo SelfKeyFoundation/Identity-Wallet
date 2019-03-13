@@ -326,38 +326,28 @@ export class RelyingPartySession {
 	}
 
 	async createKYCApplication(templateId, attributes) {
-		let docs = attributes.reduce((acc, curr) => {
-			if (!curr || !curr.documents) return acc;
-			acc = acc.concat(curr.documents);
-			return acc;
-		}, []);
-		let documents = await Promise.all(
-			docs.map(async doc => {
-				if (doc.content) {
-					doc.buffer = bufferFromDataUrl(doc.content);
-				}
-				const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
-				let newDoc = { ...doc };
-				delete newDoc.buffer;
-				newDoc.content = res.id;
-				return newDoc;
+		attributes = await Promise.all(
+			attributes.map(async attr => {
+				const attrDocs = await Promise.all(
+					attr.documents.map(async doc => {
+						if (doc.content) {
+							doc.buffer = bufferFromDataUrl(doc.content);
+						}
+						const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+						let newDoc = { ...doc };
+						delete newDoc.buffer;
+						newDoc.content = res.id;
+						return newDoc;
+					})
+				);
+				const { value } = identityAttributes.denormalizeDocumentsSchema(
+					attr.schema,
+					(attr.data || {}).value,
+					attrDocs
+				);
+				return { ...attr, data: value, documents: undefined };
 			})
 		);
-		attributes = attributes.map(attr => {
-			if (!attr.data) {
-				return attr;
-			}
-			let attrDocs = documents.filter(
-				doc => !!attr.documents.filter(d => d.id === doc.id).length
-			);
-			const { value } = identityAttributes.denormalizeDocumentsSchema(
-				attr.schema,
-				attr.data.value,
-				attrDocs
-			);
-			attr = { ...attr, data: value, documents: [] };
-			return attr;
-		});
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
 	}
 

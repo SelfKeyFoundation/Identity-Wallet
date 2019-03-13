@@ -179,7 +179,7 @@ export class IncorporationCheckout extends React.Component {
 				kycOperations.loadRelyingParty('incorporations', authenticated)
 			);
 		} else {
-			await this.checkIfUserHasApplied();
+			await this.checkIfUserCanIncorporate();
 		}
 		this.loadData();
 	}
@@ -193,8 +193,9 @@ export class IncorporationCheckout extends React.Component {
 		return program['Wallet Vendor Name'] || VENDOR_NAME;
 	};
 
-	checkIfUserHasApplied = async () => {
-		if (this.userHasApplied()) await this.props.dispatch(push(this.getCancelRoute()));
+	checkIfUserCanIncorporate = async () => {
+		if (this.userHasApplied() && !this.applicationWasRejected())
+			await this.props.dispatch(push(this.getCancelRoute()));
 	};
 
 	getLastApplication = () => {
@@ -220,6 +221,15 @@ export class IncorporationCheckout extends React.Component {
 	userHasApplied = () => {
 		const application = this.getLastApplication();
 		return !!application;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
 	};
 
 	getIncorporationPrice = () => {
