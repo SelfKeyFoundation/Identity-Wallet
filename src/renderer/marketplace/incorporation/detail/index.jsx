@@ -307,57 +307,64 @@ class IncorporationsDetailView extends Component {
 		}
 	};
 
-	renderPartialStatus = () => {
+	renderApplicationStatus = () => {
+		let view = null;
+
+		if (this.userHasPaid()) view = this.renderInProgressAlert();
+
+		if (this.userHasApplied()) view = this.renderUnpaidAlert();
+
+		return view;
+	};
+
+	renderInProgressAlert = () => {
 		const { classes } = this.props;
-		if (this.userHasPaid()) {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.warningBar}
-				>
-					<Grid item xs={1}>
-						<WarningIcon />
-					</Grid>
-					<Grid item xs={11}>
-						<Typography variant="body2" color="secondary">
-							You have an existing <strong>In Progress</strong> application, please
-							contact support@flagtheory.com for further details
-						</Typography>
-					</Grid>
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.warningBar}
+			>
+				<Grid item xs={1}>
+					<WarningIcon />
 				</Grid>
-			);
-		}
-
-		if (this.userHasApplied()) {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.warningBar}
-				>
-					<Grid item xs={1}>
-						<WarningIcon />
-					</Grid>
-					<Grid item xs={8}>
-						<Typography variant="body2" color="secondary">
-							You have an existing <strong>unpaid</strong> application
-						</Typography>
-					</Grid>
-					<Grid item xs={3} style={{ textAlign: 'right' }}>
-						<Button variant="contained" onClick={this.onPayClick}>
-							Pay
-						</Button>
-					</Grid>
+				<Grid item xs={11}>
+					<Typography variant="body2" color="secondary">
+						You have an existing <strong>In Progress</strong> application, please
+						contact support@flagtheory.com for further details
+					</Typography>
 				</Grid>
-			);
-		}
+			</Grid>
+		);
+	};
 
-		return null;
+	renderUnpaidAlert = () => {
+		const { classes } = this.props;
+		return (
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.warningBar}
+			>
+				<Grid item xs={1}>
+					<WarningIcon />
+				</Grid>
+				<Grid item xs={8}>
+					<Typography variant="body2" color="secondary">
+						You have an existing <strong>unpaid</strong> application
+					</Typography>
+				</Grid>
+				<Grid item xs={3} style={{ textAlign: 'right' }}>
+					<Button variant="contained" onClick={this.onPayClick}>
+						Pay
+					</Button>
+				</Grid>
+			</Grid>
+		);
 	};
 
 	render() {
@@ -395,7 +402,7 @@ class IncorporationsDetailView extends Component {
 						</Typography>
 					</Grid>
 					<div className={classes.contentContainer}>
-						{this.renderPartialStatus()}
+						{this.renderApplicationStatus()}
 						<Grid
 							container
 							justify="flex-start"
