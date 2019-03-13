@@ -15,6 +15,7 @@ import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { appSelectors } from 'common/app';
 import EthUnits from 'common/utils/eth-units';
+import { getCryptoValue } from '../../../common/price-utils';
 
 const FIXED_GAS_LIMIT_PRICE = 37680;
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -92,6 +93,11 @@ class IncorporationPaymentConfirmationComponent extends Component {
 
 	handleTransferAction = async _ => {
 		const { companyCode, countryCode } = this.props.match.params;
+
+		const { keyAmount } = this.getPaymentParameters();
+		if (keyAmount > this.props.keyBalance) {
+			return this.props.dispatch(push('/main/transaction-no-key-error'));
+		}
 
 		await this.props.dispatch(
 			transactionOperations.incorporationSend(companyCode, countryCode)
@@ -207,7 +213,8 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		transaction: transactionSelectors.getTransaction(state),
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
+		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY })
 	};
 };
 
