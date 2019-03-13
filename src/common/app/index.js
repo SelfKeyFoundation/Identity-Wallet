@@ -25,7 +25,8 @@ export const initialState = {
 	hardwareWallets: [],
 	error: '',
 	hardwareWalletType: '',
-	settings: {}
+	settings: {},
+	isOnline: true
 };
 
 export const appTypes = {
@@ -46,7 +47,9 @@ export const appTypes = {
 	APP_ENTER_TREZOR_PIN: 'app/enter/trezor/PIN',
 	APP_ENTER_TREZOR_PASSPHRASE: 'app/enter/trezor/PASSPHRASE',
 	APP_LOADING: 'app/LOADING',
-	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED'
+	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED',
+	APP_UPDATE_NETWORK_STATUS: 'app/network/status/UPDATE',
+	APP_SET_NETWORK_STATUS: 'app/network/status/SET'
 };
 
 const appActions = {
@@ -73,6 +76,10 @@ const appActions = {
 	setWalletsLoading: isLoading => ({
 		type: appTypes.APP_SET_WALLETS_LOADING,
 		payload: isLoading
+	}),
+	setNetworkStatus: isOnline => ({
+		type: appTypes.APP_SET_NETWORK_STATUS,
+		payload: isOnline
 	})
 };
 
@@ -240,6 +247,18 @@ const loading = () => async dispatch => {
 	}
 };
 
+const networkStatusUpdateOperation = isOnline => async (dispatch, getState) => {
+	const app = appSelectors.selectApp(getState());
+	if (app.isOnline === isOnline) return;
+	if (app.isOnline && !isOnline) {
+		await dispatch(push('/no-connection'));
+	}
+	if (!app.isOnline && isOnline) {
+		await dispatch(push('/'));
+	}
+	await dispatch(appOperations.setNetworkStatus(isOnline));
+};
+
 const setTermsAccepted = (isTermsAccepted, crashReportAgreement) => async (dispatch, getState) => {
 	const guideSettingsService = getGlobalContext().guideSettingsService;
 	const settings = selectApp(getState()).settings;
@@ -262,7 +281,8 @@ const operations = {
 	enterTrezorPassphrase,
 	loadOtherHardwareWallets,
 	loading,
-	setTermsAccepted
+	setTermsAccepted,
+	networkStatusUpdateOperation
 };
 
 const appOperations = {
@@ -308,6 +328,10 @@ const appOperations = {
 	setTermsAcceptedOperation: createAliasedAction(
 		appTypes.APP_SET_TERMS_ACCEPTED,
 		operations.setTermsAccepted
+	),
+	networkStatusUpdateOperation: createAliasedAction(
+		appTypes.APP_SET_NETWORK_STATUS,
+		operations.networkStatusUpdateOperation
 	)
 };
 
@@ -335,13 +359,18 @@ const setHardwareWalletTypeReducer = (state, action) => {
 	return { ...state, hardwareWalletType: action.payload };
 };
 
+const setNetworkStatusReducer = (state, action) => {
+	return { ...state, isOnline: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
 	setSettingsReducer,
 	setHardwareWalletsReducer,
 	setUnlockWalletErrorReducer,
-	setHardwareWalletTypeReducer
+	setHardwareWalletTypeReducer,
+	setNetworkStatusReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -358,6 +387,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setUnlockWalletErrorReducer(state, action);
 		case appTypes.APP_SET_HARDWARE_WALLET_TYPE:
 			return appReducers.setHardwareWalletTypeReducer(state, action);
+		case appTypes.APP_SET_NETWORK_STATUS:
+			return appReducers.setNetworkStatusReducer(state, action);
 	}
 	return state;
 };
