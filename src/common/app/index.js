@@ -88,6 +88,7 @@ const loadWallets = () => async dispatch => {
 	await dispatch(appActions.setHardwareWalletsAction([]));
 	await dispatch(appActions.setWalletsLoading(''));
 	await dispatch(kycOperations.clearRelyingPartyOperation());
+	await dispatch(appActions.setHardwareWalletType(''));
 
 	try {
 		const walletService = getGlobalContext().walletService;

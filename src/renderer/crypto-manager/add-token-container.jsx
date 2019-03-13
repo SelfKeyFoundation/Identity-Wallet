@@ -74,16 +74,7 @@ const styles = theme => ({
 		backgroundColor: 'rgba(255,46,99,0.09) !important'
 	},
 	input: {
-		boxSizing: 'border-box',
 		width: '100%',
-		border: '1px solid #384656',
-		borderRadius: '4px',
-		backgroundColor: '#1E262E',
-		color: '#a9c5d6',
-		fontSize: '14px',
-		boxShadow:
-			'inset -1px 0 0 0 rgba(0,0,0,0.24), 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
-		paddingLeft: '10px',
 		'&::-webkit-input-placeholder': {
 			fontSize: '14px',
 			color: '#93B0C1'
