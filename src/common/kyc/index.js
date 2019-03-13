@@ -354,7 +354,8 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 
 	attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
 	try {
-		const application = await rp.session.createKYCApplication(templateId, attributes);
+		let application = await rp.session.createKYCApplication(templateId, attributes);
+		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
 	} catch (error) {
 		log.error('createKycApplication %s', error);
