@@ -257,8 +257,8 @@ export class IncorporationCheckout extends React.Component {
 	};
 
 	getPayRoute = () => {
-		const { companyCode, countryCode } = this.props.match.params;
-		return `/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`;
+		const { companyCode, countryCode, templateId } = this.props.match.params;
+		return `/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}/${templateId}`;
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));

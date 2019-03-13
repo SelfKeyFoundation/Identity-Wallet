@@ -109,9 +109,11 @@ class IncorporationPaymentConfirmationComponent extends Component {
 	};
 
 	handleCloseAction = _ => {
-		const { companyCode, countryCode } = this.props.match.params;
+		const { companyCode, countryCode, templateId } = this.props.match.params;
 		this.props.dispatch(
-			push(`/main/marketplace-incorporation/details/${companyCode}/${countryCode}`)
+			push(
+				`/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`
+			)
 		);
 	};
 
