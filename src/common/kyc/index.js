@@ -357,7 +357,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 		const application = await rp.session.createKYCApplication(templateId, attributes);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
 	} catch (error) {
-    log.error('createKycApplication %s', error);
+		log.error('createKycApplication %s', error);
 		throw error;
 	}
 };
