@@ -6,7 +6,7 @@ import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
 import { Logger } from 'common/logger';
 
-const log = new Logger('kyc');
+const log = new Logger('relying-party');
 
 const { userAgent } = config;
 export class RelyingPartyError extends Error {
@@ -275,19 +275,25 @@ export class RelyingPartySession {
 	}
 	async establish() {
 		if (this.isActive()) return this.ctx.token;
-		let challenge = await RelyingPartyRest.getChallenge(this.ctx);
-		let challengeToken = RelyingPartyToken.fromString(challenge.jwt);
-		let signature = await this.identity.genSignatureForMessage(
-			challengeToken.data.challenge || challengeToken.data.nonce
-		);
-		let challengeReply = await RelyingPartyRest.postChallengeReply(
-			this.ctx,
-			challenge.jwt,
-			signature
-		);
-		let token = RelyingPartyToken.fromString(challengeReply.jwt);
-		this.ctx.token = token;
-		return token;
+		try {
+			let challenge = await RelyingPartyRest.getChallenge(this.ctx);
+			let challengeToken = RelyingPartyToken.fromString(challenge.jwt);
+			let signature = await this.identity.genSignatureForMessage(
+				challengeToken.data.challenge || challengeToken.data.nonce
+			);
+			let challengeReply = await RelyingPartyRest.postChallengeReply(
+				this.ctx,
+				challenge.jwt,
+				signature
+			);
+			let token = RelyingPartyToken.fromString(challengeReply.jwt);
+			this.ctx.token = token;
+
+			return token;
+		} catch (error) {
+			log.error('Error establishing session %s', error);
+			throw error;
+		}
 	}
 	getUserLoginPayload() {
 		return RelyingPartyRest.getUserToken(this.ctx);

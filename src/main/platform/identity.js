@@ -43,7 +43,6 @@ export class Identity {
 	}
 
 	async genSignatureForMessage(msg) {
-		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(msg));
 		let signature = {};
 		switch (this.profile) {
 			case 'ledger':
@@ -70,6 +69,7 @@ export class Identity {
 				return ethUtil.addHexPrefix(trezorSignature.message.signature);
 			case 'local':
 			default:
+				const msgHash = ethUtil.hashPersonalMessage(Buffer.from(msg));
 				signature = ethUtil.ecsign(msgHash, Buffer.from(this.privateKey, 'hex'));
 		}
 		return ethUtil.toRpcSig(signature.v, signature.r, signature.s);

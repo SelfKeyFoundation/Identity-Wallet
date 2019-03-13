@@ -7,8 +7,10 @@ import { push } from 'connected-react-router';
 import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
 import uuidv1 from 'uuid/v1';
+import { Logger } from 'common/logger';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
+const log = new Logger('kyc-duck');
 let hardwalletConfirmationTimeout = null;
 
 export const initialState = {
@@ -224,7 +226,13 @@ export const kycActions = {
 
 const getSession = async (config, authenticate, dispatch, hardwareWalletType) => {
 	let mpService = (getGlobalContext() || {}).marketplaceService;
-	const session = mpService.createRelyingPartySession(config);
+	let session;
+	try {
+		session = mpService.createRelyingPartySession(config);
+	} catch (error) {
+		log.error('getSession createRelyingPartySession %s', error);
+		throw error;
+	}
 
 	if (authenticate) {
 		try {
@@ -238,7 +246,7 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 			}
 			await session.establish();
 		} catch (error) {
-			console.log(error);
+			log.error('getSession HD %s', error);
 			if (hardwareWalletType !== '') {
 				clearTimeout(hardwalletConfirmationTimeout);
 				if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
@@ -253,6 +261,7 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 			} else {
 				await dispatch(push('/main/auth-error'));
 			}
+			throw error;
 		}
 	}
 	return session;
@@ -313,7 +322,7 @@ const loadRelyingPartyOperation = (
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
-		console.log(error.message);
+		log.error('loadRelyingParty %s', error);
 		await dispatch(
 			kycActions.updateRelyingParty(
 				{
@@ -348,7 +357,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 		const application = await rp.session.createKYCApplication(templateId, attributes);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
 	} catch (error) {
-		console.log(error.message);
+    log.error('createKycApplication %s', error);
 		throw error;
 	}
 };
