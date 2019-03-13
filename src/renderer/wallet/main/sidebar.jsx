@@ -24,7 +24,7 @@ const styles = theme => ({
 		justifyContent: 'space-between',
 		margin: 0,
 		minHeight: '100%',
-		overflow: 'scroll',
+		overflow: 'auto',
 		width: 300
 	},
 
