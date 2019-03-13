@@ -310,11 +310,11 @@ class IncorporationsDetailView extends Component {
 	renderApplicationStatus = () => {
 		let view = null;
 
-		if (this.userHasPaid()) view = this.renderInProgressAlert();
+		if (this.userHasPaid()) return this.renderInProgressAlert();
 
-		if (this.userHasApplied()) view = this.renderUnpaidAlert();
+		if (this.userHasApplied()) return this.renderUnpaidAlert();
 
-		return view;
+		return null;
 	};
 
 	renderInProgressAlert = () => {
