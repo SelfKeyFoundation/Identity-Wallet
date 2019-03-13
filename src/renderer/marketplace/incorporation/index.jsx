@@ -25,11 +25,11 @@ class MarketplaceIncorporationComponent extends Component {
 					component={IncorporationCheckout}
 				/>
 				<Route
-					path={`${path}/pay-confirmation/:companyCode/:countryCode`}
+					path={`${path}/pay-confirmation/:companyCode/:countryCode/:templateId?`}
 					component={IncorporationPaymentConfirmation}
 				/>
 				<Route
-					path={`${path}/process-started/:companyCode/:countryCode`}
+					path={`${path}/process-started/:companyCode/:countryCode/:templateId?`}
 					component={IncorporationProcessStarted}
 				/>
 			</div>
