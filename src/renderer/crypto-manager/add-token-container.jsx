@@ -316,7 +316,7 @@ class AddTokenContainerComponent extends Component {
 											<InfoTooltip />
 										</IconButton>
 									</KeyTooltip>
-									{true && (
+									{searching && (
 										<React.Fragment>
 											<span className={classes.loading}>
 												<CircularProgress size={20} />
