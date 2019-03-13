@@ -12,7 +12,7 @@ class DeleteAttributePopupComponent extends Component {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		const { attribute, open = true, text = 'Delete Attribute' } = this.props;
+		const { attribute, open = true, text = 'Delete Information and History' } = this.props;
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<DeleteAttribute
