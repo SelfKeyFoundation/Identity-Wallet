@@ -271,10 +271,12 @@ class IncorporationsDetailView extends Component {
 	};
 
 	onPayClick = () => {
-		const { countryCode, companyCode } = this.props.match.params;
+		const { countryCode, companyCode, templateId } = this.props.match.params;
 
 		this.props.dispatch(
-			push(`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}`)
+			push(
+				`/main/marketplace-incorporation/pay-confirmation/${companyCode}/${countryCode}/${templateId}`
+			)
 		);
 	};
 
