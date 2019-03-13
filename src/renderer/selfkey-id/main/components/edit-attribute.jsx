@@ -159,6 +159,7 @@ class EditAttributeComponent extends Component {
 							uiSchema={uiSchema.content}
 							formData={value}
 							liveValidate={liveValidate}
+							noHtml5Validate={true}
 							showErrorList={false}
 							onChange={this.handleFormChange('value')}
 							onSubmit={this.handleSave}
