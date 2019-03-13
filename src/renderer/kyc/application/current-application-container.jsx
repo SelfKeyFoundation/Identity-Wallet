@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { kycSelectors, kycOperations } from '../../../common/kyc';
 import { CurrentApplicationPopup } from './current-application-popup';
-import { push } from 'connected-react-router';
 import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
 import { jsonSchema } from 'common/identity/utils';
@@ -59,7 +58,6 @@ class CurrentApplicationComponent extends Component {
 		await this.props.dispatch(
 			kycOperations.submitCurrentApplicationOperation(this.state.selected)
 		);
-		await this.props.dispatch(push(this.props.currentApplication.returnRoute));
 	};
 	handleClose = () => {
 		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());

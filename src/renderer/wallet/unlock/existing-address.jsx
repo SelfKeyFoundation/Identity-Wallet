@@ -117,7 +117,9 @@ class ExistingAddress extends Component {
 												</MenuItem>
 												{wallets.map((wallet, index) => (
 													<MenuItem key={index} value={wallet.id}>
-														{wallet.publicKey}
+														{wallet.name
+															? `${wallet.name} - ${wallet.publicKey}`
+															: wallet.publicKey}
 													</MenuItem>
 												))}
 											</Select>
