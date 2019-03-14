@@ -65,7 +65,7 @@ jobs:
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
             - run:
                   name: Unit Tests
                   command: yarn test:unit:coverage
@@ -93,9 +93,6 @@ jobs:
                   command: |
                       sudo mkdir -p ~/.config
                       sudo chown -R $USER:$GROUP ~/.config
-            - run:
-                  name: Install Gulp
-                  command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
                   command: yarn install-all
@@ -130,9 +127,6 @@ jobs:
                       sudo apt-get update
                       sudo apt-get install libudev-dev
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-            - run:
-                  name: Install Gulp
-                  command: sudo npm i -g gulp-cli
             - run:
                   name: Install Node Packages
                   command: yarn install-all
@@ -217,6 +211,34 @@ jobs:
                   name: Publish App to Github
                   command: yarn publish-build
 
+    'publish-linux':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - *step_setup_nvm
+            - *step_yarn_upgrade
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
+                  name: Install Node Packages
+                  command: yarn install-all
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Publish App to Github
+                  command: yarn publish-build
+
 workflows:
     version: 2
     workflow1:
@@ -258,3 +280,10 @@ workflows:
                       branches:
                           only:
                               - master
+            - 'publish-linux':
+                  requires:
+                      - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - release
