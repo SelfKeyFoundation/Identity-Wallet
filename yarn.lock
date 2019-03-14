@@ -15792,7 +15792,7 @@ trezor-link@1.6.0:
     trezor-connect "^6.0.3"
     trezor.js "^8.1.0"
 
-trezor.js@^8.1.0:
+trezor.js@8.1.0, trezor.js@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-8.1.0.tgz#c93386ff170825d172a729dca82ea928511288c2"
   integrity sha512-yDpY3hHHFw8b0yFot3hsYKGWPdghrm28Ztz6nwqnKifFojvNh2FaBDJEG6xrr7ef0nhUutmR3SXWca+9V5JPGg==
