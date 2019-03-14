@@ -7,4 +7,9 @@ const setTokens = tokens => {
 	};
 };
 
-export { setTokens };
+const setTokenError = error => ({
+	type: types.TOKENS_TOKEN_ERROR_SET,
+	payload: error
+});
+
+export { setTokens, setTokenError };

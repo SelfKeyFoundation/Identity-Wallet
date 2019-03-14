@@ -11,13 +11,26 @@ const loadTokens = () => async (dispatch, getState) => {
 
 const addToken = contractAddress => async dispatch => {
 	const tokenService = getGlobalContext().tokenService;
-	const tokenInfo = await tokenService.getTokenInfo(contractAddress);
-	await tokenService.addToken(tokenInfo);
+	try {
+		const tokenInfo = await tokenService.getTokenInfo(contractAddress);
+		await tokenService.addToken(tokenInfo);
+	} catch (error) {
+		await dispatch(
+			actions.setTokenError(
+				`Sorry, an error occurred while adding the current token: ${error}`
+			)
+		);
+	}
 	dispatch(loadTokens());
+};
+
+const resetTokenError = () => async dispatch => {
+	await dispatch(actions.setTokenError(''));
 };
 
 export default {
 	...actions,
 	loadTokensOperation: createAliasedAction(types.TOKENS_LOAD, loadTokens),
-	addTokenOperation: createAliasedAction(types.TOKENS_ADD, addToken)
+	addTokenOperation: createAliasedAction(types.TOKENS_ADD, addToken),
+	resetTokenError
 };
