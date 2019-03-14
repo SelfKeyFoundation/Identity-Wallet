@@ -65,7 +65,7 @@ jobs:
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
             - run:
                   name: Install Node Packages
-                  command: yarn
+                  command: yarn install-all
             - run:
                   name: Unit Tests
                   command: yarn test:unit:coverage
@@ -223,6 +223,15 @@ jobs:
             - *step_restore_cache
             - *step_setup_nvm
             - *step_yarn_upgrade
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
+                  name: Install Node Packages
+                  command: yarn install-all
             - run:
                   name: Set Sentry
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
