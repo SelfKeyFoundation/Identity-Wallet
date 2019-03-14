@@ -212,8 +212,7 @@ jobs:
                   command: yarn publish-build
 
     'publish-linux':
-        docker: &GGLOUDIMAGE
-            - image: google/cloud-sdk:latest
+        docker: *DOCKERIMAGE
         environment:
             CACHE_VERSION: *cache_version
         steps:
