@@ -126,8 +126,8 @@ class SelfKeyIdCreateFormComponent extends Component {
 				!this.state.nickName ||
 				!this.state.firstName ||
 				!this.state.lastName ||
-				!this.state.error ||
-				this.state.errorEmail
+				!this.state.email ||
+				!this.isValidEmail(this.state.email)
 		});
 	};
 
