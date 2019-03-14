@@ -283,3 +283,7 @@ workflows:
             - 'publish-linux':
                   requires:
                       - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - release
