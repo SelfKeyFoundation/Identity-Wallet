@@ -49,7 +49,8 @@ const styles = theme => ({
 	paper: {
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
-		padding: 16
+		boxSizing: 'border-box',
+		padding: '16px 30px'
 	},
 
 	tableRow: {
