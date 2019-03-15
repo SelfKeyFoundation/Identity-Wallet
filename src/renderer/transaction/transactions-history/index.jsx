@@ -131,12 +131,13 @@ const getAbrDateFromTimestamp = timestamp => {
 		'Nov',
 		'Dec'
 	];
+	const leadingZero = num => `0${num}`.slice(-2);
 	const date = new Date(timestamp);
 	const year = date.getFullYear();
 	const month = monthNames[date.getMonth()];
 	const day = date.getDate();
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
+	const hours = leadingZero(date.getHours());
+	const minutes = leadingZero(date.getMinutes());
 	return { year, month, day, hours, minutes };
 };
 
