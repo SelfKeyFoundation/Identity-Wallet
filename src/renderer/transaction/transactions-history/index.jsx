@@ -72,6 +72,15 @@ const styles = theme => ({
 
 	zeroRightPadding: {
 		paddingRight: '0 !important'
+	},
+
+	iconWrap: {
+		display: 'flex',
+		justifyContent: 'flex-end'
+	},
+
+	bottomSpace: {
+		marginBottom: '30px'
 	}
 });
 
@@ -209,18 +218,14 @@ class TransactionsHistory extends Component {
 		return (
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
-					<Grid item xs={12} className={classes.bottomSpace}>
+					<Grid item xs={12}>
 						<Grid container justify="space-between" alignItems="center">
 							<Grid item xs={11}>
 								<Typography variant="h1" className={classes.title}>
 									Transactions
 								</Typography>
 							</Grid>
-							<Grid
-								item
-								xs={1}
-								style={{ display: 'flex', justifyContent: 'flex-end' }}
-							>
+							<Grid item xs={1} className={classes.iconWrap}>
 								<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
 									<RefreshIcon />
 								</IconButton>
@@ -231,7 +236,7 @@ class TransactionsHistory extends Component {
 						<Divider />
 					</Grid>
 					<Grid item xs={12}>
-						<Table style={{ marginBottom: '30px' }}>
+						<Table className={classes.bottomSpace}>
 							<TableBody>
 								{paginate(transactions, rowsPerPage, page).map(transaction => {
 									return (
@@ -243,20 +248,12 @@ class TransactionsHistory extends Component {
 												)}
 											</TableCell>
 											<TableCell className={classes.smallPadding}>
-												<Typography
-													component="span"
-													variant="body2"
-													gutterBottom
-												>
+												<Typography component="span" variant="body2">
 													{this.renderDate(transaction.timeStamp)}
 												</Typography>
 											</TableCell>
 											<TableCell>
-												<Typography
-													component="span"
-													variant="body2"
-													gutterBottom
-												>
+												<Typography component="span" variant="body2">
 													{transaction.statusText ||
 														getCustomStatusText(
 															transaction,
@@ -265,11 +262,7 @@ class TransactionsHistory extends Component {
 												</Typography>
 											</TableCell>
 											<TableCell align="right">
-												<Typography
-													component="span"
-													variant="body2"
-													gutterBottom
-												>
+												<Typography component="span" variant="body2">
 													{this.hasSent(transaction) ? '- ' : '+ '}
 													{convertExponentialToDecimal(transaction.value)}
 												</Typography>
@@ -291,7 +284,6 @@ class TransactionsHistory extends Component {
 															<Typography
 																variant="subtitle1"
 																color="secondary"
-																gutterBottom
 															>
 																Copy
 															</Typography>
@@ -312,7 +304,6 @@ class TransactionsHistory extends Component {
 													<Typography
 														variant="subtitle1"
 														color="secondary"
-														gutterBottom
 													>
 														View
 													</Typography>
