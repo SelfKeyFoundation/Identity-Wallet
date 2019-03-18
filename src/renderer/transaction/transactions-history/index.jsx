@@ -10,7 +10,6 @@ import config from 'common/config';
 import {
 	Grid,
 	Table,
-	Toolbar,
 	Typography,
 	TableBody,
 	IconButton,
@@ -18,7 +17,8 @@ import {
 	TableCell,
 	TableFooter,
 	TablePagination,
-	Paper
+	Paper,
+	Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -45,8 +45,42 @@ const styles = theme => ({
 	rightSpace: {
 		marginRight: '20px'
 	},
+
 	paper: {
-		boxShadow: 'none'
+		backgroundColor: '#262F39',
+		boxShadow: 'none',
+		boxSizing: 'border-box',
+		padding: '16px 30px'
+	},
+
+	tableRow: {
+		backgroundColor: 'transparent !important',
+		borderBottom: '1px solid #303C49'
+	},
+
+	title: {
+		fontSize: '20px'
+	},
+
+	narrowCell: {
+		padding: 0
+	},
+
+	smallPadding: {
+		padding: '0 10px'
+	},
+
+	zeroRightPadding: {
+		paddingRight: '0 !important'
+	},
+
+	iconWrap: {
+		display: 'flex',
+		justifyContent: 'flex-end'
+	},
+
+	bottomSpace: {
+		marginBottom: '30px'
 	}
 });
 
@@ -97,12 +131,13 @@ const getAbrDateFromTimestamp = timestamp => {
 		'Nov',
 		'Dec'
 	];
+	const leadingZero = num => `0${num}`.slice(-2);
 	const date = new Date(timestamp);
 	const year = date.getFullYear();
 	const month = monthNames[date.getMonth()];
 	const day = date.getDate();
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
+	const hours = leadingZero(date.getHours());
+	const minutes = leadingZero(date.getMinutes());
 	return { year, month, day, hours, minutes };
 };
 
@@ -183,107 +218,122 @@ class TransactionsHistory extends Component {
 
 		return (
 			<Paper className={classes.paper}>
-				<Toolbar className={classes.toolbar}>
-					<Typography variant="h1">Transactions</Typography>
-					<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
-						<RefreshIcon />
-					</IconButton>
-				</Toolbar>
-				<Table>
-					<TableBody>
-						{paginate(transactions, rowsPerPage, page).map(transaction => {
-							return (
-								<TableRow key={transaction.id}>
-									<TableCell>
-										{getIconForTransaction(
-											transaction.statusIconName,
-											this.hasSent(transaction)
-										)}
-									</TableCell>
-									<TableCell>
-										<Typography
-											component="span"
-											variant="body2"
-											color="secondary"
-											gutterBottom
-										>
-											{this.renderDate(transaction.timeStamp)}
-										</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography component="span" variant="body2" gutterBottom>
-											{transaction.statusText ||
-												getCustomStatusText(
-													transaction,
+				<Grid container alignItems="center" spacing={16}>
+					<Grid item xs={12}>
+						<Grid container justify="space-between" alignItems="center">
+							<Grid item xs={11}>
+								<Typography variant="h1" className={classes.title}>
+									Transactions
+								</Typography>
+							</Grid>
+							<Grid item xs={1} className={classes.iconWrap}>
+								<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
+									<RefreshIcon />
+								</IconButton>
+							</Grid>
+						</Grid>
+					</Grid>
+					<Grid item xs={12}>
+						<Divider />
+					</Grid>
+					<Grid item xs={12}>
+						<Table className={classes.bottomSpace}>
+							<TableBody>
+								{paginate(transactions, rowsPerPage, page).map(transaction => {
+									return (
+										<TableRow key={transaction.id} className={classes.tableRow}>
+											<TableCell className={classes.narrowCell}>
+												{getIconForTransaction(
+													transaction.statusIconName,
 													this.hasSent(transaction)
 												)}
-										</Typography>
-									</TableCell>
-									<TableCell align="right">
-										<Typography component="span" variant="body2" gutterBottom>
-											{this.hasSent(transaction) ? '- ' : '+ '}
-											{convertExponentialToDecimal(transaction.value)}
-										</Typography>
-									</TableCell>
-									<TableCell align="right">
-										<IconButton className={classes.rightSpace}>
-											<CopyToClipboard
-												text={`${TX_HISTORY_API_ENDPOINT}/${
-													transaction.hash
-												}`}
+											</TableCell>
+											<TableCell className={classes.smallPadding}>
+												<Typography component="span" variant="body2">
+													{this.renderDate(transaction.timeStamp)}
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography component="span" variant="body2">
+													{transaction.statusText ||
+														getCustomStatusText(
+															transaction,
+															this.hasSent(transaction)
+														)}
+												</Typography>
+											</TableCell>
+											<TableCell align="right">
+												<Typography component="span" variant="body2">
+													{this.hasSent(transaction) ? '- ' : '+ '}
+													{convertExponentialToDecimal(transaction.value)}
+												</Typography>
+											</TableCell>
+											<TableCell
+												align="right"
+												className={classes.zeroRightPadding}
 											>
-												<Grid container>
-													<CopyIcon className={classes.iconSpacing} />
+												<IconButton className={classes.rightSpace}>
+													<CopyToClipboard
+														text={`${TX_HISTORY_API_ENDPOINT}/${
+															transaction.hash
+														}`}
+													>
+														<Grid container>
+															<CopyIcon
+																className={classes.iconSpacing}
+															/>
+															<Typography
+																variant="subtitle1"
+																color="secondary"
+															>
+																Copy
+															</Typography>
+														</Grid>
+													</CopyToClipboard>
+												</IconButton>
+												<IconButton
+													onClick={e => {
+														window.openExternal(
+															e,
+															`${TX_HISTORY_API_ENDPOINT}/${
+																transaction.hash
+															}`
+														);
+													}}
+												>
+													<ViewIcon className={classes.iconSpacing} />
 													<Typography
 														variant="subtitle1"
 														color="secondary"
-														gutterBottom
 													>
-														Copy
+														View
 													</Typography>
-												</Grid>
-											</CopyToClipboard>
-										</IconButton>
-										<IconButton
-											onClick={e => {
-												window.openExternal(
-													e,
-													`${TX_HISTORY_API_ENDPOINT}/${transaction.hash}`
-												);
-											}}
-										>
-											<ViewIcon className={classes.iconSpacing} />
-											<Typography
-												variant="subtitle1"
-												color="secondary"
-												gutterBottom
-											>
-												View
-											</Typography>
-										</IconButton>
-									</TableCell>
+												</IconButton>
+											</TableCell>
+										</TableRow>
+									);
+								})}
+							</TableBody>
+							<TableFooter>
+								<TableRow>
+									<TablePagination
+										count={transactions.length}
+										page={page}
+										onChangePage={this.handleChangePage}
+										rowsPerPage={rowsPerPage}
+										onChangeRowsPerPage={this.handleChangeRowsPerPage}
+										backIconButtonProps={{
+											'aria-label': 'Previous Page'
+										}}
+										nextIconButtonProps={{
+											'aria-label': 'Next Page'
+										}}
+									/>
 								</TableRow>
-							);
-						})}
-					</TableBody>
-					<TableFooter>
-						<TableRow>
-							<TablePagination
-								count={transactions.length}
-								page={page}
-								onChangePage={this.handleChangePage}
-								rowsPerPage={rowsPerPage}
-								onChangeRowsPerPage={this.handleChangeRowsPerPage}
-								backIconButtonProps={{
-									'aria-label': 'Previous Page'
-								}}
-								nextIconButtonProps={{
-									'aria-label': 'Next Page'
-								}}
-							/>
-						</TableRow>
-					</TableFooter>
-				</Table>
+							</TableFooter>
+						</Table>
+					</Grid>
+				</Grid>
 			</Paper>
 		);
 	}
