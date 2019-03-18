@@ -345,7 +345,7 @@ class AddTokenContainerComponent extends Component {
 								)}
 								{!searching && notFound && (
 									<span id="notFound" className={classes.errorText}>
-										{`Token contract does not exist. Please double check and try again.`}
+										{`Token contract does not exist or not supported. Please double check and try again.`}
 									</span>
 								)}
 								{!searching && duplicate && (
