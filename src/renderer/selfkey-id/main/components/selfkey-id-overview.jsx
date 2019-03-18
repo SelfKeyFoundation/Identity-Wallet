@@ -70,6 +70,9 @@ const styles = theme => ({
 		'& .file-icon': {
 			marginRight: '15px'
 		}
+	},
+	button: {
+		marginBottom: '16px'
 	}
 });
 
@@ -476,6 +479,7 @@ class SelfkeyIdOverviewComponent extends Component {
 													size="large"
 													color="secondary"
 													onClick={this.handleAddAttribute}
+													className={classes.button}
 												>
 													Add Information
 												</Button>
@@ -604,6 +608,7 @@ class SelfkeyIdOverviewComponent extends Component {
 													size="large"
 													color="secondary"
 													onClick={this.handleAddDocument}
+													className={classes.button}
 												>
 													Add Documents
 												</Button>
