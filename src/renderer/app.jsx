@@ -5,7 +5,8 @@ import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
-import { appOperations /*, appSelectors, isDevMode, isTestMode */ } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
+import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
 import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
@@ -39,6 +40,10 @@ const piwik = new ReactPiwik({
 	trackErrors: true
 });
 
+const includeTracking = () => {
+	return appSelectors.hasAcceptedTracking() && !isDevMode() && !isTestMode() && !isDebugMode();
+};
+
 class AppContainerComponent extends Component {
 	state = { hasError: false };
 	handleRefresh = async () => {
@@ -63,11 +68,9 @@ class AppContainerComponent extends Component {
 		return (
 			<ConnectedRouter
 				history={
-					/* appSelectors.hasAcceptedTracking() && !isDevMode && !isTestMode
-				? */ piwik.connectToHistory(
-						this.props.history.getHistory()
-					)
-					/*: this.props.history.getHistory() */
+					includeTracking()
+						? piwik.connectToHistory(this.props.history.getHistory())
+						: this.props.history.getHistory()
 				}
 			>
 				<HashRouter>
