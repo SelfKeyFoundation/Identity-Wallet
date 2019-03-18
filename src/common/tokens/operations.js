@@ -21,7 +21,7 @@ const addToken = contractAddress => async dispatch => {
 		log.error(e);
 		await dispatch(
 			actions.setTokenError(
-				`Sorry, an error occurred while adding the provided token. Please try again later.`
+				`Token contract does not exist or not supported. Please double check and try again.`
 			)
 		);
 	}
