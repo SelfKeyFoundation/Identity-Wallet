@@ -25,19 +25,7 @@ import {
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
-	button: {
-		height: '44px',
-		width: '180px',
-		border: '2px solid #1CA9BA',
-		borderRadius: '3px',
-		boxShadow: 'inset 3px 3px 10px 0 rgba(0,0,0,0.1)',
-		color: '#1CA9BA',
-		fontSize: '16px',
-		fontWeight: 'bold',
-		letterSpacing: '0.67px',
-		lineHeight: '19px',
-		textAlign: 'center'
-	},
+	button: {},
 
 	descriptionText: {
 		color: '#93B0C1',
@@ -104,6 +92,8 @@ class AddressBookContainer extends Component {
 					<Button
 						id="addAddressButton"
 						className={classes.button}
+						size="large"
+						variant="outlined"
 						onClick={this.handleAdd}
 					>
 						ADD ADDRESS
