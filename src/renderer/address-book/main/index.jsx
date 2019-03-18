@@ -25,7 +25,9 @@ import {
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
-	button: {},
+	button: {
+		marginBottom: '34px'
+	},
 
 	descriptionText: {
 		color: '#93B0C1',
