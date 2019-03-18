@@ -73,6 +73,11 @@ const styles = theme => ({
 	},
 	button: {
 		marginBottom: '16px'
+	},
+	regularText: {
+		'& span': {
+			fontWeight: 400
+		}
 	}
 });
 
@@ -221,7 +226,10 @@ class SelfkeyIdOverviewComponent extends Component {
 					<Grid container direction="column" spacing={32}>
 						<Grid item>
 							<Card>
-								<CardHeader title="Basic Information" />
+								<CardHeader
+									title="Basic Information"
+									className={classes.regularText}
+								/>
 								<hr className={classes.hr} />
 								<CardContent>
 									<Grid
@@ -344,7 +352,10 @@ class SelfkeyIdOverviewComponent extends Component {
 									</Grid>
 								</CardContent>
 
-								<CardHeader title="Additional Information" />
+								<CardHeader
+									title="Additional Information"
+									className={classes.regularText}
+								/>
 								<hr className={classes.hr} />
 								<CardContent>
 									<Grid
@@ -491,7 +502,7 @@ class SelfkeyIdOverviewComponent extends Component {
 						</Grid>
 						<Grid item>
 							<Card>
-								<CardHeader title="Documents" />
+								<CardHeader title="Documents" className={classes.regularText} />
 								<hr className={classes.hr} />
 
 								<CardContent>
