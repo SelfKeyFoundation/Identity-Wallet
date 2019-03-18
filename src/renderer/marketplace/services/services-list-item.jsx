@@ -9,8 +9,6 @@ const styles = theme => ({
 	root: {
 		width: '360px',
 		height: '326px',
-		marginTop: '30px',
-		marginBottom: '30px',
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
 		fontFamily: 'Lato, arial, sans-serif'
@@ -29,14 +27,14 @@ const styles = theme => ({
 		marginLeft: '20px'
 	},
 
-	button: {
-		color: '#93b0c1',
-		borderColor: '#3b4a5a',
-		fontFamily: 'Lato, arial, sans-serif',
-		'&:disabled': {
-			color: '#48565f'
-		}
-	},
+	// button: {
+	// 	color: '#93b0c1',
+	// 	borderColor: '#3b4a5a',
+	// 	fontFamily: 'Lato, arial, sans-serif',
+	// 	'&:disabled': {
+	// 		color: '#48565f'
+	// 	}
+	// },
 
 	header: {
 		backgroundColor: '#2a3540'
@@ -87,9 +85,10 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 					<Button
 						variant="outlined"
 						className={classes.button}
+						disabled
 						onClick={() => (viewAction ? viewAction(name) : '')}
 					>
-						View
+						Coming Soon
 					</Button>
 				</Grid>
 			</Grid>
