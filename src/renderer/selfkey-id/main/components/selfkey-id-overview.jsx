@@ -22,11 +22,13 @@ import {
 	FilePdfIcon,
 	FileImageIcon,
 	FileDefaultIcon,
+	FileMultipleIcon,
 	BookIcon,
 	IdCardIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
-	SmallTableCell
+	SmallTableCell,
+	FileAudioIcon
 } from 'selfkey-ui';
 import { CreateAttributePopup } from '../containers/create-attribute-popup';
 import { EditAttributePopup } from '../containers/edit-attribute-popup';
@@ -78,6 +80,12 @@ const styles = theme => ({
 		'& span': {
 			fontWeight: 400
 		}
+	},
+	ellipsis: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap',
+		maxWidth: '222px'
 	}
 });
 
@@ -117,14 +125,17 @@ class SelfkeyIdOverviewComponent extends Component {
 		let fileName = null;
 		let FileIcon = FileDefaultIcon;
 
-		if (typeof entry.data.value === 'string' && entry.documents.length === 1) {
+		if (entry.documents.length === 1) {
 			fileName = entry.documents[0].name;
 			fileType = entry.documents[0].mimeType;
-		}
-
-		if (fileType) {
-			if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
-			else if (fileType.startsWith('image')) FileIcon = FileImageIcon;
+			if (fileType) {
+				if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
+				else if (fileType.startsWith('audio')) FileIcon = FileAudioIcon;
+				else if (fileType.startsWith('image')) FileIcon = FileImageIcon;
+			}
+		} else if (entry.documents.length > 1) {
+			fileName = `${entry.documents.length} files`;
+			FileIcon = FileMultipleIcon;
 		}
 
 		return (
@@ -134,8 +145,13 @@ class SelfkeyIdOverviewComponent extends Component {
 				</div>
 				<div>
 					<Typography variant="h6">{entry.name}</Typography>
-					<Typography variant="subtitle1" color="secondary">
-						{fileName || `${entry.documents.length} files`}
+					<Typography
+						variant="subtitle1"
+						color="secondary"
+						className={classes.ellipsis}
+						title={fileName}
+					>
+						{fileName}
 					</Typography>
 				</div>
 			</div>
