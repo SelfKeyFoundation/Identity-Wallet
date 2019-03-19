@@ -71,7 +71,7 @@ const styles = theme => ({
 		},
 		'& strong': {
 			fontWeight: 'bold',
-			color: '#93B0C1',
+			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
 			borderBottom: '1px solid #435160',
@@ -89,12 +89,12 @@ const styles = theme => ({
 			marginBottom: '0.5em'
 		},
 		'& a': {
-			color: '#93B0C1'
+			color: theme.palette.secondary.main
 		}
 	},
 	descriptionHelp: {
 		width: '35%',
-		color: '#93B0C1',
+		color: theme.palette.secondary.main,
 		fontFamily: 'Lato, arial',
 		fontSize: '12px',
 		lineHeight: '1.5em',
@@ -152,11 +152,11 @@ const styles = theme => ({
 			}
 		},
 		'& div.time': {
-			color: '#93B0C1',
+			color: theme.palette.secondary.main,
 			fontSize: '13px'
 		},
 		'& div.rowItem.transactionFee': {
-			color: '#93B0C1'
+			color: theme.palette.secondary.main
 		}
 	},
 	rowSeparator: {

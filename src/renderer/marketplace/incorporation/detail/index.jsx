@@ -139,7 +139,7 @@ const styles = theme => ({
 		},
 		'& strong': {
 			fontWeight: 'bold',
-			color: '#93B0C1',
+			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
 			borderBottom: '1px solid #435160',
@@ -157,7 +157,7 @@ const styles = theme => ({
 			marginBottom: '0.5em'
 		},
 		'& a': {
-			color: '#93B0C1'
+			color: theme.palette.secondary.main
 		}
 	},
 	tabDescription: {
