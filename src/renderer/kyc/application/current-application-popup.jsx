@@ -22,6 +22,7 @@ import {
 	SmallTableHeadRow,
 	SmallTableCell,
 	MuiEditIcon,
+	MuiAddIcon,
 	SmallTableRow,
 	AttributeAlertIcon,
 	warning,
@@ -136,7 +137,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 );
 
 const KycChecklistItem = withStyles(styles)(
-	({ item, classes, selectedAttributes, onSelected, editItem }) => {
+	({ item, classes, selectedAttributes, onSelected, editItem, addItem }) => {
 		const type = item.title
 			? item.title
 			: item.type && item.type.content
@@ -168,9 +169,14 @@ const KycChecklistItem = withStyles(styles)(
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
 					<Typography variant="subtitle1" gutterBottom>
-						<IconButton aria-label="Edit" onClick={event => editItem(item)}>
-							<MuiEditIcon />
+						<IconButton aria-label="Add" onClick={event => addItem(item)}>
+							<MuiAddIcon />
 						</IconButton>
+						{!warning ? (
+							<IconButton aria-label="Edit" onClick={event => editItem(item)}>
+								<MuiEditIcon />
+							</IconButton>
+						) : null}
 					</Typography>
 				</SmallTableCell>
 			</SmallTableRow>
@@ -179,7 +185,7 @@ const KycChecklistItem = withStyles(styles)(
 );
 
 const KycChecklist = withStyles(styles)(
-	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
+	({ classes, requirements, selectedAttributes, onSelected, editItem, addItem }) => {
 		return (
 			<Table>
 				<TableHead>
@@ -212,6 +218,7 @@ const KycChecklist = withStyles(styles)(
 								selectedAttributes={selectedAttributes}
 								onSelected={onSelected}
 								editItem={editItem}
+								addItem={addItem}
 							/>
 						);
 					})}
@@ -262,7 +269,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		agreementValue,
 		error,
 		onSelected,
-		editItem
+		editItem,
+		addItem
 	}) => {
 		if (!relyingParty || !currentApplication || !requirements)
 			return (
@@ -303,6 +311,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
+							addItem={addItem}
 						/>
 					</Grid>
 					{agreement ? (

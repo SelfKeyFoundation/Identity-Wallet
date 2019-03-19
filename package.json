@@ -47,7 +47,8 @@
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
 		"prepare": "npm run snyk-protect",
-		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll"
+		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll",
+		"build-dev-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -120,7 +121,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#698199dc8f38202adf2be59119a30efa53b523bd",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#833e528",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
