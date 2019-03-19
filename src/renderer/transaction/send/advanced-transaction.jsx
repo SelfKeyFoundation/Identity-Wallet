@@ -159,12 +159,13 @@ class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
 
-		let { trezorAccountIndex, cryptoCurrency } = this.props;
-		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
-
 		if (this.props.confirmation === 'true') {
 			this.setState({ isConfirmationOpen: true });
+			return;
 		}
+
+		let { trezorAccountIndex, cryptoCurrency } = this.props;
+		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
 
 	loadData = () => {
