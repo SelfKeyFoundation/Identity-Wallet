@@ -75,6 +75,9 @@ class EnterPassphrase extends Component {
 			await this.props.dispatch(
 				appOperations.enterTrezorPassphraseOperation(null, this.state.passphrase)
 			);
+			if (this.props.goNextPath !== '') {
+				await this.props.dispatch(push(this.props.goNextPath));
+			}
 		}
 	};
 
@@ -219,7 +222,8 @@ class EnterPassphrase extends Component {
 const mapStateToProps = (state, props) => {
 	const app = appSelectors.selectApp(state);
 	return {
-		error: app.error
+		error: app.error,
+		goNextPath: appSelectors.selectGoNextPath(state)
 	};
 };
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import history from 'common/store/history';
 import Popup from '../../common/popup';
 import { appSelectors } from 'common/app';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 import { kycOperations } from 'common/kyc';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({});
 
@@ -17,8 +17,8 @@ class TransactionTimeout extends Component {
 		// Clear relying party session after an application failure
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
-	handleClose = () => {
-		history.getHistory().goBack();
+	handleClose = async () => {
+		await this.props.dispatch(push(this.props.goBackPath));
 	};
 	render() {
 		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
@@ -69,7 +69,8 @@ class TransactionTimeout extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
+		goBackPath: appSelectors.selectGoBackPath(state)
 	};
 };
 
