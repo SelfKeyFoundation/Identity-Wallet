@@ -155,6 +155,9 @@ const styles = theme => ({
 		'& ul li': {
 			lineHeight: '1.4em',
 			marginBottom: '0.5em'
+		},
+		'& a': {
+			color: '#93B0C1'
 		}
 	},
 	tabDescription: {
@@ -236,6 +239,14 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 	}
+
+	handleExternalLinks = e => {
+		if (e.target && e.target.getAttribute('href')) {
+			e.stopPropagation();
+			e.preventDefault();
+			window.openExternal(e, e.target.getAttribute('href'));
+		}
+	};
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
 
@@ -649,7 +660,10 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 							</Tabs>
-							<div className={classes.tabContainer}>
+							<div
+								className={classes.tabContainer}
+								onClickCapture={this.handleExternalLinks}
+							>
 								{selectedTab === 0 && (
 									<TabContainer className="description">
 										<div

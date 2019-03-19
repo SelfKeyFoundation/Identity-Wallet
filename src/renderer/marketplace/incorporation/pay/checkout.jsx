@@ -87,6 +87,9 @@ const styles = theme => ({
 		'& ul li': {
 			lineHeight: '1.4em',
 			marginBottom: '0.5em'
+		},
+		'& a': {
+			color: '#93B0C1'
 		}
 	},
 	descriptionHelp: {
