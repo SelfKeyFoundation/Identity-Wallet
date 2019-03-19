@@ -16,7 +16,8 @@ const styles = () => ({
 	paper: {
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
-		padding: 16
+		boxSizing: 'border-box',
+		padding: '16px 30px'
 	},
 
 	coloredBox: {
@@ -97,6 +98,10 @@ const styles = () => ({
 
 	textColor: {
 		color: 'rgba(255, 255, 255, 0.7)'
+	},
+
+	title: {
+		fontSize: '20px'
 	}
 });
 
@@ -369,9 +374,11 @@ export class CryptoChartBoxComponent extends React.Component {
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
 					<Grid item xs={12}>
-						<Grid container justify="space-between" alignItems="flex-end">
+						<Grid container justify="space-between" alignItems="center">
 							<Grid item xs={11}>
-								<Typography variant="h1">My Crypto</Typography>
+								<Typography variant="h1" className={classes.title}>
+									My Crypto
+								</Typography>
 							</Grid>
 							<Grid item xs={1} className={classes.textRight}>
 								<IconButton onClick={manageCryptoAction}>

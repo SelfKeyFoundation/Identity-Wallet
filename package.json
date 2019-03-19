@@ -47,7 +47,7 @@
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
 		"prepare": "npm run snyk-protect",
-		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false"
+		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -107,7 +107,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#0073e1d2ffbfc425342d7175d4c2f8761f4ec063",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#64d89b9",
 		"react-redux": "6.0.0",
 		"react-router-dom": "4.3.1",
 		"react-to-print": "2.0.0-alpha-6",
@@ -120,7 +120,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#caa4821d8d0816090f201b49ececed0acf93353e",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#267c8cd",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
