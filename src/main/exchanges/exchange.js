@@ -36,10 +36,12 @@ export class Exchange extends BaseModel {
 			lookup[row.name] = true;
 			return lookup;
 		}, {});
+		const incoming = {};
 		const inserts = [];
 		const updates = [];
 
 		data.forEach(row => {
+			incoming[row.name] = true;
 			if (existing[row.name]) {
 				updates.push({ ...row, env });
 				return;
@@ -48,8 +50,11 @@ export class Exchange extends BaseModel {
 			inserts.push({ ...row, env });
 		});
 
+		const toDelete = Object.keys(existing).filter(name => !incoming[name]);
+
 		await this.insertMany(inserts);
 		await this.updateMany(updates);
+		await this.deleteMany(toDelete);
 	}
 }
 

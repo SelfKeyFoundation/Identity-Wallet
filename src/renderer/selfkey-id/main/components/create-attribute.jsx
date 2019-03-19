@@ -17,6 +17,11 @@ const styles = theme => ({
 	},
 	divider: {
 		margin: '30px 0'
+	},
+	selectItem: {
+		border: 0,
+		backgroundColor: '#1E262E !important',
+		color: '#FFFFFF !important'
 	}
 });
 
@@ -147,9 +152,15 @@ class CreateAttributeComponent extends Component {
 						displayEmpty
 						IconComponent={KeyboardArrowDown}
 					>
-						<option value={-1}>Choose...</option>
+						<option value={-1} className={classes.selectItem}>
+							Choose...
+						</option>
 						{types.map(option => (
-							<option key={option.id} value={option.id}>
+							<option
+								key={option.id}
+								value={option.id}
+								className={classes.selectItem}
+							>
 								{option.content.title}
 							</option>
 						))}

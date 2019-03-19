@@ -26,7 +26,9 @@ export const initialState = {
 	error: '',
 	hardwareWalletType: '',
 	settings: {},
-	isOnline: true
+	isOnline: true,
+	goBackPath: '',
+	goNextPath: ''
 };
 
 export const appTypes = {
@@ -49,7 +51,9 @@ export const appTypes = {
 	APP_LOADING: 'app/LOADING',
 	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED',
 	APP_UPDATE_NETWORK_STATUS: 'app/network/status/UPDATE',
-	APP_SET_NETWORK_STATUS: 'app/network/status/SET'
+	APP_SET_NETWORK_STATUS: 'app/network/status/SET',
+	APP_SET_GO_NEXT_PATH: 'app/go/next/path/SET',
+	APP_SET_GO_BACK_PATH: 'app/go/back/path/SET'
 };
 
 const appActions = {
@@ -80,6 +84,14 @@ const appActions = {
 	setNetworkStatus: isOnline => ({
 		type: appTypes.APP_SET_NETWORK_STATUS,
 		payload: isOnline
+	}),
+	setGoBackPath: path => ({
+		type: appTypes.APP_SET_GO_BACK_PATH,
+		payload: path
+	}),
+	setGoNextPath: path => ({
+		type: appTypes.APP_SET_GO_NEXT_PATH,
+		payload: path
 	})
 };
 
@@ -89,6 +101,8 @@ const loadWallets = () => async dispatch => {
 	await dispatch(appActions.setWalletsLoading(''));
 	await dispatch(kycOperations.clearRelyingPartyOperation());
 	await dispatch(appActions.setHardwareWalletType(''));
+	await dispatch(appActions.setGoBackPath(''));
+	await dispatch(appActions.setGoNextPath(''));
 
 	try {
 		const walletService = getGlobalContext().walletService;
@@ -363,6 +377,14 @@ const setNetworkStatusReducer = (state, action) => {
 	return { ...state, isOnline: action.payload };
 };
 
+const setGoBackPathReducer = (state, action) => {
+	return { ...state, goBackPath: action.payload };
+};
+
+const setGoNextPathReducer = (state, action) => {
+	return { ...state, goNextPath: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -370,7 +392,9 @@ const appReducers = {
 	setHardwareWalletsReducer,
 	setUnlockWalletErrorReducer,
 	setHardwareWalletTypeReducer,
-	setNetworkStatusReducer
+	setNetworkStatusReducer,
+	setGoNextPathReducer,
+	setGoBackPathReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -389,6 +413,10 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setHardwareWalletTypeReducer(state, action);
 		case appTypes.APP_SET_NETWORK_STATUS:
 			return appReducers.setNetworkStatusReducer(state, action);
+		case appTypes.APP_SET_GO_BACK_PATH:
+			return appReducers.setGoBackPathReducer(state, action);
+		case appTypes.APP_SET_GO_NEXT_PATH:
+			return appReducers.setGoNextPathReducer(state, action);
 	}
 	return state;
 };
@@ -400,9 +428,19 @@ const hasConnected = state => {
 	return app.hardwareWallets.length > 0;
 };
 
+const selectGoBackPath = state => {
+	return selectApp(state).goBackPath;
+};
+
+const selectGoNextPath = state => {
+	return selectApp(state).goNextPath;
+};
+
 const appSelectors = {
 	selectApp,
-	hasConnected
+	hasConnected,
+	selectGoBackPath,
+	selectGoNextPath
 };
 
 export { appSelectors, appReducers, appActions, appOperations };
