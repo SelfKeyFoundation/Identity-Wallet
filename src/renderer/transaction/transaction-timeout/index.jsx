@@ -4,19 +4,11 @@ import { connect } from 'react-redux';
 import Popup from '../../common/popup';
 import { appSelectors } from 'common/app';
 import { HourGlassLargeIcon } from 'selfkey-ui';
-import { kycOperations } from 'common/kyc';
 import { push } from 'connected-react-router';
 
 const styles = theme => ({});
 
 class TransactionTimeout extends Component {
-	componentDidMount() {
-		this.clearRelyingParty();
-	}
-	clearRelyingParty = async () => {
-		// Clear relying party session after an application failure
-		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
-	};
 	handleClose = async () => {
 		await this.props.dispatch(push(this.props.goBackPath));
 	};
