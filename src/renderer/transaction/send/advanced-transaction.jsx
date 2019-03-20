@@ -10,9 +10,9 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Divider, Typography } from '@material-ui/core';
-import history from 'common/store/history';
 import { appOperations, appSelectors } from 'common/app';
 import Popup from '../../common/popup';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	container: {
@@ -177,7 +177,11 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleCancelAction = () => {
-		history.getHistory().goBack();
+		if (this.state.cryptoCurrency !== 'custom') {
+			this.props.dispatch(push(`/main/transfer/${this.state.cryptoCurrency}`));
+		} else {
+			this.props.dispatch(push(`/main/dashboard`));
+		}
 	};
 
 	handleGasPriceChange = value => {
