@@ -22,8 +22,8 @@ export const SERVER_CONFIG = {
 		3: { url: 'https://api.myetherapi.com/rop' }
 	},
 	infura: {
-		1: { url: 'https://mainnet.infura.io' },
-		3: { url: 'https://ropsten.infura.io' }
+		1: { url: 'https://mainnet.infura.io/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
+		3: { url: 'https://ropsten.infura.io/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
 	}
 };
 
