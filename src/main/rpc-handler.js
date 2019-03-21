@@ -2,6 +2,8 @@
 const { walletOperations } = require('common/wallet');
 const { tokensOperations } = require('common/tokens');
 const { walletTokensOperations } = require('common/wallet-tokens');
+const { exchangesOperations } = require('common/exchanges');
+
 const { pricesOperations } = require('common/prices');
 
 const { Logger } = require('common/logger');
@@ -21,7 +23,6 @@ const { WalletSetting } = require('./wallet/wallet-setting');
 const { GuideSetting } = require('./settings/guide-setting');
 const { Exchange } = require('./exchanges/exchange');
 const { TxHistory } = require('./blockchain/tx-history');
-const serializeError = require('serialize-error');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -38,16 +39,7 @@ const RPC_METHOD = 'ON_RPC';
 const RPC_ON_DATA_CHANGE_METHOD = 'ON_DATA_CHANGE';
 
 module.exports = function(cradle) {
-	const {
-		app,
-		store,
-		ledgerService,
-		trezorService,
-		txHistoryService,
-		TxHistoryService,
-		web3Service,
-		priceService
-	} = cradle;
+	const { app, store, txHistoryService, TxHistoryService, web3Service, priceService } = cradle;
 	const controller = function() {};
 
 	const userDataDirectoryPath = electron.app.getPath('userData');
@@ -270,7 +262,7 @@ module.exports = function(cradle) {
 			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
 			publicKey = publicKey.toString('hex');
 
-			let privateKeyBuffer = Buffer.from(args.privateKey.replace('0x', ''), 'hex');
+			let privateKeyBuffer = Buffer.from(args.privateKey, 'hex');
 			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
 			let profile = 'local';
 
@@ -1146,7 +1138,6 @@ module.exports = function(cradle) {
 	// DONE !!!!!
 	controller.prototype.getIdAttributes = function(event, actionId, actionName, args) {
 		IdAttribute.findAllByWalletId(args.walletId)
-			.eager('document')
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1194,101 +1185,7 @@ module.exports = function(cradle) {
 	controller.prototype.findAllExchangeData = function(event, actionId, actionName, args) {
 		Exchange.findAll(args)
 			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.getLedgerAccounts = function(event, actionId, actionName, args) {
-		ledgerService
-			.getAccounts(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-	controller.prototype.getTrezorAccounts = function(event, actionId, actionName, args) {
-		trezorService
-			.getAccounts(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(
-					RPC_METHOD,
-					actionId,
-					actionName,
-					serializeError(error),
-					null
-				);
-			});
-	};
-
-	controller.prototype.startTrezorBroadcaster = function() {
-		let pinEvent = 'TREZOR_PIN_REQUEST';
-		trezorService.eventEmitter.on(pinEvent, () => {
-			app.win.webContents.send(pinEvent);
-		});
-
-		let passphraseEvent = 'TREZOR_PASSPHRASE_REQUEST';
-		trezorService.eventEmitter.on(passphraseEvent, () => {
-			app.win.webContents.send(passphraseEvent);
-		});
-
-		let signSuccessEvent = 'TREZOR_SIGN_SUCCESS';
-		trezorService.eventEmitter.on(signSuccessEvent, () => {
-			app.win.webContents.send(signSuccessEvent);
-		});
-
-		let signFailureEvent = 'TREZOR_SIGN_FAILURE';
-		trezorService.eventEmitter.on(signFailureEvent, err => {
-			app.win.webContents.send(signFailureEvent, err);
-		});
-
-		let signReqEvent = 'TREZOR_SIGN_REQUEST';
-		trezorService.eventEmitter.on(signReqEvent, () => {
-			app.win.webContents.send(signReqEvent);
-		});
-	};
-
-	controller.prototype.onTrezorPin = function(event, actionId, actionName, args) {
-		trezorService.eventEmitter.emit('ON_PIN', args.error, args.pin);
-	};
-
-	controller.prototype.onTrezorPassphrase = function(event, actionId, actionName, args) {
-		trezorService.eventEmitter.emit('ON_PASSPHRASE', args.error, args.passphrase);
-	};
-
-	controller.prototype.signTransactionWithLedger = function(event, actionId, actionName, args) {
-		ledgerService
-			.signTransaction(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.testTrezorConnection = function(event, actionId, actionName, args) {
-		trezorService
-			.testConnection(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {});
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.signTransactionWithTrezor = function(event, actionId, actionName, args) {
-		trezorService
-			.signTransaction(args)
-			.then(data => {
+				store.dispatch(exchangesOperations.updateExchanges(data));
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

@@ -7,20 +7,22 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getTransaction } from './selectors';
 import EthUnits from 'common/utils/eth-units';
 import EthUtils from 'common/utils/eth-utils';
-import LedgerService from 'main/blockchain/leadger-service';
 import config from 'common/config';
-import Tx from 'ethereumjs-tx';
 import { BigNumber } from 'bignumber.js';
 
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { push } from 'connected-react-router';
+import { appSelectors } from 'common/app';
+import { Logger } from 'common/logger';
 
-let txInfoCheckInterval = null;
-const TX_CHECK_INTERVAL = 1500;
+const log = new Logger('transaction-duck');
 
 const chainId = config.chainId || 3;
 
 const transferHex = '0xa9059cbb';
+
+const hardwalletConfirmationTime = '30000';
 
 const init = args => async dispatch => {
 	await dispatch(
@@ -40,9 +42,6 @@ const init = args => async dispatch => {
 			...args
 		})
 	);
-	if (txInfoCheckInterval) {
-		clearInterval(txInfoCheckInterval);
-	}
 };
 
 const setAddress = address => async dispatch => {
@@ -57,7 +56,7 @@ const setAddress = address => async dispatch => {
 			await dispatch(actions.setAddressError(true));
 		}
 	} catch (e) {
-		console.log(e);
+		log.error(e);
 		await dispatch(actions.setAddressError(true));
 	}
 };
@@ -75,17 +74,8 @@ const getGasLimit = async (
 		return 21000;
 	}
 
-	const web3Utils = (getGlobalContext() || {}).web3Service.web3.utils;
-
-	const params = {
-		method: 'estimateGas',
-		contractAddress: tokenContract,
-		contractMethod: 'transfer',
-		contractMethodArgs: [address, web3Utils.toWei(amount)],
-		args: [{ from: walletAddress, gas: 4500000 }]
-	};
-
-	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
+	const tokenService = getGlobalContext().tokenService;
+	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
 };
 
 const getTransactionCount = async publicKey => {
@@ -103,27 +93,28 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 ) => {
 	try {
 		const state = getState();
-		const address = !newAddress ? state.transaction.address : newAddress;
-		const amount = !newAmount ? state.transaction.amount : newAmount;
+		const transaction = getTransaction(state);
+		const address = !newAddress ? transaction.address : newAddress;
+		const amount = !newAmount ? transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
 
 		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
-		} else if (state.transaction.gasPrice) {
-			gasPrice = state.transaction.gasPrice;
+		} else if (transaction.gasPrice) {
+			gasPrice = transaction.gasPrice;
 		}
 
 		if (address && amount) {
-			const tokenContract = state.transaction.contractAddress;
+			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
-			const cryptoCurrency = state.transaction.cryptoCurrency;
+			const cryptoCurrency = transaction.cryptoCurrency;
 
 			let gasLimit = 21000;
 			if (newGasLimit) {
 				gasLimit = newGasLimit;
-			} else if (state.transaction.gasLimit) {
-				gasLimit = state.transaction.gasLimit;
+			} else if (transaction.gasLimit) {
+				gasLimit = transaction.gasLimit;
 			} else {
 				gasLimit = await getGasLimit(
 					cryptoCurrency,
@@ -152,7 +143,7 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			);
 		}
 	} catch (e) {
-		console.log(e);
+		log.error(e);
 	}
 };
 
@@ -183,33 +174,6 @@ const setLimitPrice = gasLimit => async dispatch => {
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
 };
 
-const signTransaction = async (rawTx, transaction, wallet, dispatch) => {
-	if (wallet.profile === 'ledger') {
-		const ledgerService = new LedgerService({
-			web3Service: (getGlobalContext() || {}).web3Service
-		});
-		let signed = await ledgerService.signTransaction({
-			dataToSign: rawTx,
-			address: `0x${wallet.publicKey}`
-		});
-		return signed.raw;
-	}
-
-	if (wallet.profile === 'trezor') {
-		await dispatch(
-			actions.signTxWithTrezor({
-				dataToSign: rawTx,
-				accountIndex: transaction.trezorAccountIndex
-			})
-		);
-		return null;
-	}
-
-	const eTx = new Tx(rawTx);
-	eTx.sign(wallet.privateKey);
-	return `0x${eTx.serialize().toString('hex')}`;
-};
-
 const generateContractData = (toAddress, value, decimal) => {
 	value = EthUtils.padLeft(
 		new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16),
@@ -219,57 +183,176 @@ const generateContractData = (toAddress, value, decimal) => {
 	return transferHex + toAddress + value;
 };
 
-const startSend = () => async (dispatch, getState) => {
+const confirmSend = () => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
 	const state = getState();
-	const wallet = getWallet(state);
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
 
-	const rawTx = {
-		nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.nonce)),
-		gasPrice: EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'))
-		),
-		gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(transaction.gasLimit)),
-		chainId
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gasLimit: transaction.gasLimit
 	};
 
 	if (cryptoCurrency === 'ETH') {
-		rawTx.to = EthUtils.sanitizeHex(transaction.address);
-		rawTx.value = EthUtils.sanitizeHex(
-			EthUtils.decimalToHex(EthUnits.unitToUnit(transaction.amount, 'ether', 'wei'))
-		);
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
 	} else {
-		rawTx.to = EthUtils.sanitizeHex(transaction.contractAddress);
-		rawTx.value = EthUtils.sanitizeHex(0);
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
 		const data = generateContractData(
 			transaction.address,
 			transaction.amount,
 			transaction.tokenDecimal
 		);
-		rawTx.data = EthUtils.sanitizeHex(data);
+		transactionObject.data = EthUtils.sanitizeHex(data);
 	}
-	const signedHex = await signTransaction(rawTx, transaction, wallet, dispatch);
-	if (signedHex) {
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	let hardwalletConfirmationTimeout = null;
+	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(
 			actions.updateTransaction({
-				signedHex,
-				sending: true
+				status: 'Pending',
+				transactionHash: hash
 			})
 		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error('transactionEventEmitter ERROR: %j', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
+};
+
+const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
+
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gasLimit: transaction.gasLimit
+	};
+
+	if (cryptoCurrency === 'ETH') {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
+	} else {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		transactionObject.data = EthUtils.sanitizeHex(data);
 	}
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	let hardwalletConfirmationTimeout = null;
+	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash: hash
+			})
+		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+		await dispatch(
+			push(`/main/marketplace-incorporation/process-started/${companyCode}/${countryCode}`)
+		);
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error('transactionEventEmitter ERROR: %j', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
 };
 
-const cancelSend = () => async dispatch => {
-	await dispatch(
-		actions.updateTransaction({
-			signedHex: '',
-			sending: false
-		})
-	);
-};
-
-const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
+const updateBalances = () => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
 	// the first one is ETH
@@ -278,43 +361,11 @@ const updateBalances = (oldBalance, txHash) => async (dispatch, getState) => {
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
 	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey));
 
-	const currentWallet = getWallet(getState());
-	if (oldBalance === currentWallet.balance) {
-		setTimeout(() => {
-			dispatch(updateBalances(oldBalance, txHash));
-		}, TX_CHECK_INTERVAL);
-	} else {
-		const transaction = getTransaction(getState());
-		if (transaction.transactionHash === txHash) {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'Sent!'
-				})
-			);
-		}
-	}
-};
-
-const startTxCheck = (txHash, oldBalance) => (dispatch, getState) => {
-	txInfoCheckInterval = setInterval(async () => {
-		const txInfo = await (getGlobalContext() || {}).web3Service.waitForTicket({
-			method: 'getTransactionReceipt',
-			args: [txHash]
-		});
-
-		if (txInfo && txInfo.blockNumber !== null) {
-			const status = Number(txInfo.status);
-			if (status) {
-				dispatch(updateBalances(oldBalance, txHash));
-			}
-			clearInterval(txInfoCheckInterval);
-		}
-	}, TX_CHECK_INTERVAL);
-};
-
-const startTxBalanceUpdater = transactionHash => (dispatch, getState) => {
-	const currentWallet = getWallet(getState());
-	dispatch(startTxCheck(transactionHash, currentWallet.balance));
+	await dispatch(
+		actions.updateTransaction({
+			status: 'Sent!'
+		})
+	);
 };
 
 const createTxHistry = transactionHash => (dispatch, getState) => {
@@ -336,48 +387,6 @@ const createTxHistry = transactionHash => (dispatch, getState) => {
 	dispatch(actions.createTxHistory(data));
 };
 
-const confirmSend = () => async (dispatch, getState) => {
-	const transaction = getTransaction(getState());
-	const params = {
-		method: 'sendSignedTransaction',
-		args: [transaction.signedHex],
-		contractAddress: null,
-		contractMethod: null,
-		onceListenerName: 'transactionHash'
-	};
-
-	try {
-		const transactionHash = await (getGlobalContext() || {}).web3Service.waitForTicket(params);
-
-		await dispatch(
-			actions.updateTransaction({
-				status: 'Pending',
-				transactionHash
-			})
-		);
-
-		dispatch(createTxHistry(transactionHash));
-
-		await dispatch(startTxBalanceUpdater(transactionHash));
-	} catch (err) {
-		console.log(err);
-		const message = err.toString().toLowerCase();
-		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'NoBalance'
-				})
-			);
-		} else {
-			await dispatch(
-				actions.updateTransaction({
-					status: 'Error'
-				})
-			);
-		}
-	}
-};
-
 const setCryptoCurrency = cryptoCurrency => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -394,8 +403,7 @@ export default {
 	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
-	startSend: createAliasedAction(types.START_SEND, startSend),
-	cancelSend: createAliasedAction(types.CANCEL_SEND, cancelSend),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
+	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
 };

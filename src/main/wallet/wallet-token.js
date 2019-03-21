@@ -95,12 +95,16 @@ export class WalletToken extends BaseModel {
 			.where(where);
 	}
 
-	static findByWalletId(walletId) {
-		return this.find({ walletId, recordState: 1 });
+	static findByWalletId(walletId, all = false) {
+		const search = { walletId };
+		if (!all) search.recordState = 1;
+		return this.find(search);
 	}
 
-	static findByTokenId(tokenId) {
-		return this.find({ tokenId, recordState: 1 });
+	static findByTokenId(tokenId, all = false) {
+		const search = { tokenId };
+		if (!all) search.recordState = 1;
+		return this.find(search);
 	}
 }
 

@@ -1,18 +1,17 @@
 import * as actions from './actions';
 import { getWallet } from './selectors';
-import EthUnits from 'common/utils/eth-units';
-import Web3Service from 'main/blockchain/web3-service';
-const web3Service = new Web3Service();
+
+import { getGlobalContext } from 'common/context';
+import * as types from './types';
+import { createAliasedAction } from 'electron-redux';
 
 const getWalletWithBalance = async wallet => {
-	const balanceWei = await web3Service.waitForTicket({
-		method: 'getBalance',
-		args: [`0x${wallet.publicKey}`]
-	});
+	const walletService = getGlobalContext().walletService;
+	const balance = await walletService.getBalance(wallet.id);
 
 	return {
 		...wallet,
-		balance: EthUnits.toEther(balanceWei, 'wei')
+		balance
 	};
 };
 
@@ -24,4 +23,46 @@ const refreshWalletBalance = () => async (dispatch, getState) => {
 	await dispatch(actions.updateWallet(await getWalletWithBalance(getWallet(getState()))));
 };
 
-export default { ...actions, updateWalletWithBalance, refreshWalletBalance };
+const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		await walletService.updateWalletAvatar(avatar, walletId);
+		const wallet = getWallet(getState());
+		await dispatch(updateWalletWithBalance({ ...wallet, profilePicture: avatar }));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const updateWalletName = (name, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		const wallet = await walletService.updateWalletName(name, walletId);
+		const walletFromStore = getWallet(getState());
+		await dispatch(updateWalletWithBalance({ ...walletFromStore, name: wallet.name }));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const updateWalletSetup = (setup, walletId) => async (dispatch, getState) => {
+	try {
+		const walletService = getGlobalContext().walletService;
+		const wallet = await walletService.updateWalletSetup(setup, walletId);
+		const walletFromStore = getWallet(getState());
+		await dispatch(
+			updateWalletWithBalance({ ...walletFromStore, isSetupFinished: wallet.isSetupFinished })
+		);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export default {
+	...actions,
+	updateWalletWithBalance,
+	refreshWalletBalance,
+	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar),
+	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
+	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup)
+};

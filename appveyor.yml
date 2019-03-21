@@ -15,7 +15,7 @@ environment:
   MM_URL:
     secure: QfAI68E/qnE7UZMvjqIQIkiMASDooWknt2psZWeawGTa8iu4cuNWd5P+ronxVphBXYAPuwEywIadwnxAj4WmIkL6rfGd/OQo1hlsNfEwYCo=
   SENTRY_DSN:
-    secure: gSaaWHq0v1X7SY/HWJlmSVPmxZb/6JhO5N1bPJXLQ41JzGrP+YmGKWazLaZkrb+oGiB4Z1alNWJHK/gyBwPa8A==
+    secure: z2HN+AfLblFuqEDtdIOzj9ngBI0H+JWU2A7EdUX70iUfTU/dQYoDkCQAnLG87K90TYcsQF7eXzQ0dhZvfuRWFmD2iQfXJnTc2fnbe4trtd0=
   nodejs_version: 10.11.0
 platform:
   - x64
@@ -26,12 +26,12 @@ cache:
   # - node_modules
   - '%LOCALAPPDATA%/Yarn'
 install:
-  - ps: Start-FileDownload 'http://slproweb.com/download/Win64OpenSSL-1_0_2p.exe'
-  - ps: Start-Process 'Win64OpenSSL-1_0_2p.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
-  - choco install gcloudsdk
+  - ps: Start-FileDownload 'https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe'
+  - ps: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+  - ps: Start-FileDownload 'https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe'
+  - ps: Start-Process 'GoogleCloudSDKInstaller.exe' -ArgumentList '/S' -Wait
   - refreshenv
   - ps: Install-Product node $env:nodejs_version x64
-  - npm i -g --production windows-build-tools
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
   - gem install sass compass
@@ -48,6 +48,7 @@ deploy_script:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[nightly] set _tempvar=1
+    - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if NOT [%APPVEYOR_REPO_BRANCH%]==[%APPVEYOR_REPO_BRANCH:staging=%] set _tempvar=1
 
     - if defined _tempvar for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
     - if defined _tempvar set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%

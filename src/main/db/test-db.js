@@ -1,20 +1,41 @@
 /* istanbul ignore file */
-import { db as config } from 'common/config';
+import knexMigrate from 'knex-migrate';
+import fs from 'fs';
 import { Model } from 'objection';
 import Knex from 'knex';
+import { db as config } from 'common/config';
 
 export class TestDb {
+	static config = config;
 	static async init() {
 		try {
-			this.knex = Knex(config);
-			Model.knex(this.knex);
-			await this.aquireConnection();
+			await this.initRaw();
 			await this.knex.migrate.latest();
 			await this.knex.seed.run();
 		} catch (error) {
 			console.log(error);
 		}
 	}
+	static async initRaw(dbName) {
+		try {
+			if (dbName) {
+				this.config.connection = dbName;
+			}
+			this.knex = Knex(config);
+			Model.knex(this.knex);
+			await this.aquireConnection();
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	static migrate(cmd, flags = {}) {
+		if (!flags.config) {
+			flags.config = this.config;
+		}
+		return knexMigrate(cmd, flags);
+	}
+
 	static async aquireConnection(attempt = 0) {
 		try {
 			await this.knex.raw('select 1+1 as result');
@@ -29,7 +50,13 @@ export class TestDb {
 	static async reset() {
 		try {
 			await this.knex.destroy();
+			if (this.config.connection !== ':memory:') {
+				await fs.promises.unlink(this.config.connection);
+			}
 		} catch (error) {
+			if (this.config.connection !== ':memory:') {
+				await fs.promises.unlink(this.config.connection);
+			}
 			console.log(error);
 		}
 	}

@@ -14,6 +14,8 @@ describe('Exchange model', () => {
 	};
 	const testItem2 = { ...testItem, name: `${testItem.name}2` };
 
+	const testItem3 = { ...testItem, name: `${testItem.name}3` };
+
 	beforeEach(async () => {
 		await TestDb.init();
 	});
@@ -46,14 +48,15 @@ describe('Exchange model', () => {
 
 	it('import', async () => {
 		await Exchange.create(testItem);
+		await Exchange.create(testItem2);
+		await Exchange.create(testItem3);
 		const changedItem = { name: 'test', data: { changed: true } };
 		await Exchange.import([changedItem, testItem2]);
 		const all = await Exchange.query();
+		expect(all.length).toBe(2);
 		const changedInDb = _.find(all, { name: 'test' });
 		expect(changedInDb.data).toEqual(changedItem.data);
-
 		const inserted = _.find(all, { name: 'test2' });
-
 		expect(inserted.data).toEqual(testItem2.data);
 	});
 });

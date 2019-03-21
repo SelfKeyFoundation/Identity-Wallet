@@ -1,4 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
 			{
 				test: /\.(jsx?|tsx?|vue)$/,
 				enforce: 'pre',
-				exclude: /node_modules/,
+				include: /src/,
 				loader: 'eslint-loader',
 				options: {
 					cwd: path.resolve(__dirname, '..'),
@@ -18,6 +19,8 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new HardSourceWebpackPlugin(),
+
 		new CopyWebpackPlugin([
 			{
 				from: path.join(__dirname, '/../src/main/migrations'),

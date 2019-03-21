@@ -1,20 +1,38 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
-const {
-	isDevMode,
-	isDebugMode,
-	isTestMode,
-	getSetupFilePath,
-	getUserDataPath
-} = require('./utils/common');
+const dotenv = require('dotenv');
+const electron = require('electron');
 
+const { isDevMode, isTestMode, getSetupFilePath, getUserDataPath } = require('./utils/common');
+const pkg = require('../../package.json');
+
+dotenv.config();
+const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1';
+if (DEBUG_REQUEST) {
+	require('request').debug = true;
+}
 const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
 const NODE = process.env.NODE_OVERRIDE;
-const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE;
+const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
+	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
+	: null;
+
+const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
+
+let userDataDirectoryPath = '';
+let walletsDirectoryPath = '';
+if (electron.app) {
+	userDataDirectoryPath = electron.app.getPath('userData');
+	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
+}
 
 const common = {
 	defaultLanguage: 'en',
+	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
+	userAgent: `SelfKeyIDW/${pkg.version}`,
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -29,7 +47,7 @@ const common = {
 			notary: 'addition_with_notary',
 			certified_true_copy: 'addition_with_certified_true_copy'
 		},
-		primaryToken: PRIMARY_TOKEN || 'key'
+		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},
 	notificationTypes: {
 		wallet: {
@@ -68,7 +86,12 @@ const dev = {
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
-	node: 'infura'
+	node: 'infura',
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+	constants: {
+		primaryToken: PRIMARY_TOKEN || 'KI'
+	}
 };
 
 const prod = {
@@ -77,7 +100,12 @@ const prod = {
 	updateEndpoint: 'https://release.selfkey.org',
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
-	node: 'infura'
+	node: 'infura',
+	incorporationsInstance:
+		INCORPORATION_KYCC_INSTANCE || 'https://flagtheory-v2.instance.kyc-chain.com/api/v2/',
+	constants: {
+		primaryToken: PRIMARY_TOKEN || 'KEY'
+	}
 };
 
 const setupFilesPath = getSetupFilePath();
@@ -95,6 +123,7 @@ const db = {
 	seeds: {
 		directory: path.join(setupFilesPath, 'main', 'seeds')
 	}
+	// acquireConnectionTimeout: 6000
 };
 if (isTestMode()) {
 	db.connection = ':memory:';
@@ -108,7 +137,7 @@ if (isTestMode()) {
 
 let conf = prod;
 
-if (isDevMode() || isDebugMode()) {
+if (isDevMode()) {
 	conf = dev;
 }
 
@@ -124,5 +153,7 @@ module.exports = {
 	common,
 	...common,
 	db,
-	...conf
+	...conf,
+	userDataDirectoryPath,
+	walletsDirectoryPath
 };

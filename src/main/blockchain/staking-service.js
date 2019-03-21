@@ -1,13 +1,16 @@
 import fetch from 'node-fetch';
-
 import CONFIG from 'common/config';
 import { abi as SELFKEY_ABI } from 'main/assets/data/abi.json';
 import { Token } from '../token/token';
 import BN from 'bignumber.js';
+import { Logger } from 'common/logger';
+
+const log = new Logger('staking-service');
 
 // TODO: use selfkey domain here
-const CONFIG_URL =
-	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=Contracts';
+const AIRTABLE_NAME = CONFIG.chainId === 1 ? 'Contracts' : 'ContractsTest';
+
+const CONFIG_URL = `https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=${AIRTABLE_NAME}`;
 
 export class StakingService {
 	constructor({ web3Service }) {
@@ -24,6 +27,7 @@ export class StakingService {
 			try {
 				balance = await contracts[i].getBalance(serviceAddress, serviceId, options);
 			} catch (error) {
+				log.error('balance error %s, %2j', error, info);
 				balance = 0;
 			}
 			if (!balance) continue;
@@ -40,7 +44,7 @@ export class StakingService {
 		}
 		return info;
 	}
-	async placeStake(ammount, serviceAddress, serviceId, options) {
+	async placeStake(amount, serviceAddress, serviceId, options) {
 		let hashes = {};
 		options = { ...options };
 		let totalGas = options.gas;
@@ -50,32 +54,32 @@ export class StakingService {
 				from: options.from
 			})
 		);
-		let hasAllowance = allowance.gte(new BN(ammount));
+		let hasAllowance = allowance.gte(new BN(amount));
 		if (!hasAllowance && totalGas) {
-			approveGas = await this.tokenContract.approve(this.activeContract.address, ammount, {
-				from: options.from,
-				method: 'estimateGas',
-				value: '0x00'
-			});
+			approveGas = (
+				(await this.tokenContract.approve(this.activeContract.address, amount, {
+					from: options.from,
+					method: 'estimateGas',
+					value: '0x00'
+				})) || {}
+			).gas;
 			depositGas = totalGas - approveGas;
 		}
 		if (!hasAllowance) {
-			hashes.approve = await this.tokenContract.approve(
-				this.activeContract.address,
-				ammount,
-				{
-					...options,
-					gas: approveGas
-				}
-			);
+			hashes.approve = await this.tokenContract.approve(this.activeContract.address, amount, {
+				...options,
+				gas: approveGas
+			});
 		}
-		hashes.deposit = await this.activeContract.deposit(ammount, serviceAddress, serviceId, {
+		hashes.deposit = await this.activeContract.deposit(amount, serviceAddress, serviceId, {
 			...options,
 			gas: depositGas
 		});
 		return hashes;
 	}
 	async withdrawStake(serviceAddress, serviceId, options) {
+		log.info('withdrawing stake for %s, %s, %2j', serviceAddress, serviceId, options);
+		serviceId = this.web3.ensureStrHex(serviceId);
 		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
 		if (!info.contract) throw new Error('no contract to withdraw from');
 		if (!info.contract.isDeprecated && Date.now() < info.releaseDate)
@@ -133,7 +137,7 @@ export class StakingService {
 					!!contract.deprecated
 				)
 		);
-		let token = await Token.findOneBySymbol(CONFIG.constants.primaryToken);
+		let token = await Token.findOneBySymbol(CONFIG.constants.primaryToken.toUpperCase());
 		this.tokenContract = new SelfKeyTokenContract(this.web3, token);
 	}
 }
@@ -151,9 +155,10 @@ export class EtheriumContract {
 		const opt = options.options;
 		const method = opt.method || 'send';
 		const onceListenerName = method === 'send' ? 'transactionHash' : null;
+		let resName = method === 'estimateGas' ? 'gas' : 'hash';
 		if (method === 'estimateGas') {
 			// TODO: fix generic gas estimation
-			return 100000;
+			return { [resName]: 100000, contract: this.address };
 		}
 		if (!opt.gas) {
 			opt.gas = 100000;
@@ -168,18 +173,21 @@ export class EtheriumContract {
 			args: [opt]
 		});
 		// TODO: add pending transactions to db
-		return hash;
+		return { [resName]: hash, contract: this.address };
 	}
 
-	call(options) {
-		return this.web3.waitForTicket({
-			method: 'call',
-			contractMethodArgs: options.args || [],
-			contractAddress: this.address,
-			contractMethod: options.method,
-			customAbi: this.abi,
-			args: [options.options || {}]
-		});
+	async call(options) {
+		return {
+			res: await this.web3.waitForTicket({
+				method: 'call',
+				contractMethodArgs: options.args || [],
+				contractAddress: this.address,
+				contractMethod: options.method,
+				customAbi: this.abi,
+				args: [options.options || {}]
+			}),
+			contract: this.address
+		};
 	}
 }
 
@@ -189,46 +197,55 @@ export class StakingContract extends EtheriumContract {
 		this.isDeprecated = isDeprecated;
 	}
 
-	getBalance(serviceAddress, serviceId, options) {
-		return this.call({
+	async getBalance(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
+		let res = await this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
 			method: 'balances'
 		});
+		return res.res;
 	}
 
-	deposit(ammount, serviceAddress, serviceId, options) {
+	deposit(amount, serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
+		amount = this.web3.ensureIntHex(amount);
 		options = { method: 'send', ...options };
-		return this[options.method]({
-			args: [ammount, serviceAddress, serviceId],
+		return this.send({
+			args: [amount, serviceAddress, serviceId],
 			options,
 			method: 'deposit'
 		});
 	}
 
 	withdraw(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
 		options = { method: 'send', ...options };
-		return this[options.method]({
+		return this.send({
 			args: [serviceAddress, serviceId],
 			options,
 			method: 'withdraw'
 		});
 	}
 
-	getReleaseDate(serviceAddress, serviceId, options) {
-		return this.call({
+	async getReleaseDate(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
+		let res = await this.call({
 			args: [options.from, serviceAddress, serviceId],
 			options,
 			method: 'releaseDates'
 		});
+		return res.res;
 	}
 
-	getLockPeriod(serviceAddress, serviceId, options) {
-		return this.call({
+	async getLockPeriod(serviceAddress, serviceId, options) {
+		serviceId = this.web3.ensureStrHex(serviceId);
+		let res = await this.call({
 			args: [serviceAddress, serviceId],
 			options: { ...options },
 			method: 'lockPeriods'
 		});
+		return res.res;
 	}
 }
 
@@ -237,10 +254,11 @@ export class SelfKeyTokenContract extends EtheriumContract {
 		super(web3, token.address, SELFKEY_ABI);
 		this.token = token;
 	}
-	approve(depositVaultAddress, maxAmmount, options) {
+	approve(depositVaultAddress, maxAmount, options) {
 		options = { method: 'send', ...options };
-		return this[options.method]({
-			args: [depositVaultAddress, maxAmmount],
+		maxAmount = this.web3.ensureIntHex(maxAmount);
+		return this.send({
+			args: [depositVaultAddress, maxAmount],
 			options,
 			method: 'approve'
 		});
@@ -251,7 +269,7 @@ export class SelfKeyTokenContract extends EtheriumContract {
 			args: [options.from, depositVaultAddress],
 			options: { ...options },
 			method: 'allowance'
-		});
+		}).res;
 	}
 }
 

@@ -1,38 +1,33 @@
 {
-    "extends": [
-       "standard",
-       "prettier",
-	   "prettier/standard",
-       "plugin:react/recommended"
-    ],
-    "plugins": [
-       "prettier",
-       "standard",
-       "mocha",
-       "react",
-	   "jest"
-    ],
-    "parserOptions": {
-       "sourceType": "module",
-       "ecmaFeatures": {
-		 "jsx": true
-       }
+	"extends": ["standard", "prettier", "prettier/standard", "plugin:react/recommended"],
+	"plugins": ["prettier", "standard", "mocha", "react", "jest"],
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
 	},
 	"parser": "babel-eslint",
-    "env": {
-       "es6": true,
-       "node": true,
-       "mocha": true,
-       "jest": true
-    },
-    "rules": {
-       "prettier/prettier": [
-          "error",
-          {
-             "singleQuote": true,
-             "semi": true
-          }
-	   ],
-	   "react/prop-types": 0
-    }
- }
+	"env": {
+		"es6": true,
+		"node": true,
+		"mocha": true,
+		"jest": true
+	},
+	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": true,
+				"semi": true,
+				"endOfLine": "auto"
+			}
+		],
+		"react/prop-types": 0
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	}
+}

@@ -1,52 +1,79 @@
 import * as actions from './actions';
 import { getTokens } from './selectors';
 import { getWallet } from 'common/wallet/selectors';
-import EthUtils from '../utils/eth-utils';
-import Web3Service from 'main/blockchain/web3-service';
-const web3Service = new Web3Service();
-const balanceHex = '0x70a08231';
+import { getGlobalContext } from 'common/context';
+import * as types from './types';
+import { createAliasedAction } from 'electron-redux';
 
-const generateBalanceData = (contractAddress, walletPublicKey) => {
-	const data = EthUtils.getDataObj(contractAddress, balanceHex, [walletPublicKey]);
-	return data;
-};
-
-const getBalanceDecimal = (balanceHex, decimal) => {
-	return EthUtils.getBalanceDecimal(EthUtils.hexToDecimal(balanceHex), decimal);
-};
+const loadWalletTokens = createAliasedAction(
+	types.WALLET_TOKENS_LOAD,
+	() => async (dispatch, getState) => {
+		const walletTokenService = getGlobalContext().walletTokenService;
+		const wallet = getWallet(getState());
+		const tokens = await walletTokenService.getWalletTokens(wallet.id);
+		await dispatch(updateWalletTokensWithBalance(tokens, wallet.publicKey));
+	}
+);
 
 const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
-	const promises = walletTokens.map(walletToken => {
-		return web3Service
-			.waitForTicket({
-				method: 'call',
-				args: [generateBalanceData(walletToken.address, walletPublicKey)]
-			})
-			.then(balanceHex => {
-				return {
-					...walletToken,
-					balance: getBalanceDecimal(balanceHex, walletToken.decimal),
-					balanceInFiat: walletToken.balance * walletToken.priceUSD
-				};
-			});
+	const promises = walletTokens.map(async walletToken => {
+		const walletTokenService = getGlobalContext().walletTokenService;
+		let balance = 0;
+		try {
+			balance = await walletTokenService.getTokenBalance(
+				walletToken.address,
+				walletPublicKey
+			);
+		} catch (error) {
+			console.error(error);
+		}
+
+		return {
+			...walletToken,
+			balance,
+			balanceInFiat: balance * walletToken.priceUSD
+		};
 	});
 
 	return Promise.all(promises);
 };
 
 const updateWalletTokensWithBalance = (walletTokens, walletPublicKey) => async dispatch => {
-	await dispatch(
-		actions.updateWalletTokens(await getWalletTokensWithBalance(walletTokens, walletPublicKey))
-	);
+	const tokens = await getWalletTokensWithBalance(walletTokens, walletPublicKey);
+	await dispatch(actions.setWalletTokens(tokens));
 };
 
 const refreshWalletTokensBalance = () => async (dispatch, getState) => {
 	const state = getState();
 	await dispatch(
-		actions.updateWalletTokens(
+		actions.setWalletTokens(
 			await getWalletTokensWithBalance(getTokens(state), getWallet(state).publicKey)
 		)
 	);
 };
 
-export default { ...actions, updateWalletTokensWithBalance, refreshWalletTokensBalance };
+const createWalletTokenOperation = createAliasedAction(
+	types.WALLET_TOKENS_CREATE,
+	tokenId => async (dispatch, getState) => {
+		const wallet = getWallet(getState());
+		await getGlobalContext().walletTokenService.createWalletToken(tokenId, wallet.id);
+		await dispatch(loadWalletTokens());
+	}
+);
+
+const updateWalletTokenStateOperation = createAliasedAction(
+	types.WALLET_TOKENS_STATE_EDIT,
+	(state, wTokenId) => async (dispatch, getState) => {
+		await getGlobalContext().walletTokenService.updateState(wTokenId, state);
+		await dispatch(loadWalletTokens());
+	}
+);
+
+export default {
+	...actions,
+	updateWalletTokensWithBalance,
+	refreshWalletTokensBalance,
+	loadWalletTokens,
+	createWalletTokenOperation,
+	updateWalletTokenStateOperation
+};

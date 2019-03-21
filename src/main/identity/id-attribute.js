@@ -1,6 +1,7 @@
-import _ from 'lodash';
 import { Model, transaction } from 'objection';
+import _ from 'lodash';
 import BaseModel from '../common/base-model';
+import Document from './document';
 
 const TABLE_NAME = 'id_attributes';
 
@@ -16,26 +17,15 @@ export class IdAttribute extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['walletId', 'type'],
+			required: ['walletId', 'typeId'],
 			properties: {
 				id: { type: 'integer' },
+				name: { type: 'string' },
 				walletId: { type: 'integer' },
-				type: { type: 'string' },
-				data: { type: 'object' },
-				documentId: { type: ['integer', null] }
+				typeId: { type: 'integer' },
+				data: { type: 'object' }
 			}
 		};
-	}
-
-	hasDocument() {
-		return this.documentId !== null;
-	}
-
-	async loadDocumentDataUrl() {
-		if (!this.document) {
-			await this.$loadRelated('document');
-		}
-		return this.document.getDataUrl();
 	}
 
 	static get relationMappings() {
@@ -55,16 +45,16 @@ export class IdAttribute extends BaseModel {
 				relation: Model.BelongsToOneRelation,
 				modelClass: IdAttributeType,
 				join: {
-					from: `${this.tableName}.type`,
-					to: `${IdAttributeType.tableName}.key`
+					from: `${this.tableName}.typeId`,
+					to: `${IdAttributeType.tableName}.id`
 				}
 			},
-			document: {
-				relation: Model.BelongsToOneRelation,
+			documents: {
+				relation: Model.HasManyRelation,
 				modelClass: Document,
 				join: {
-					from: `${this.tableName}.documentId`,
-					to: `${Document.tableName}.id`
+					from: `${this.tableName}.id`,
+					to: `${Document.tableName}.attributeId`
 				}
 			}
 		};
@@ -72,8 +62,11 @@ export class IdAttribute extends BaseModel {
 
 	static async create(attr) {
 		const tx = await transaction.start(this.knex());
+		attr = { ...attr };
 		try {
-			attr = await this.query(tx).insertGraphAndFetch(attr);
+			let newAttr = await this.query(tx).insertAndFetch(_.omit(attr, ['documents']));
+			attr.id = newAttr.id;
+			attr = await this.update(attr, tx);
 			await tx.commit();
 			return attr;
 		} catch (error) {
@@ -82,28 +75,32 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static addDocument(id, document) {
-		return this.update({ id, document });
-	}
-
-	static addData(id, data) {
-		return this.update({ id, data });
+	static async update(attr, txRunning) {
+		const tx = txRunning || (await transaction.start(this.knex()));
+		try {
+			const documents = await Promise.all(
+				(attr.documents || []).map(async doc => {
+					let newDoc = await Document.query(tx).upsertGraphAndFetch({
+						...doc,
+						attributeId: attr.id
+					});
+					if (doc['#id']) {
+						newDoc['#id'] = doc['#id'];
+					}
+					return newDoc;
+				})
+			);
+			attr = await this.query(tx).upsertGraphAndFetch({ ...attr, documents });
+			if (!txRunning) await tx.commit();
+			return attr;
+		} catch (error) {
+			if (!txRunning) await tx.rollback();
+			throw error;
+		}
 	}
 
 	static findAllByWalletId(walletId) {
 		return this.query().where({ walletId });
-	}
-
-	static async update(attr) {
-		const tx = await transaction.start(this.knex());
-		try {
-			attr = await this.query(tx).upsertGraphAndFetch(attr);
-			await tx.commit();
-			return attr;
-		} catch (error) {
-			await tx.rollback();
-			throw error;
-		}
 	}
 
 	static async delete(id) {
@@ -111,8 +108,9 @@ export class IdAttribute extends BaseModel {
 		try {
 			let attr = await this.query(tx)
 				.findById(id)
-				.eager('document');
-			if (attr.document) await attr.document.$query(tx).delete();
+				.eager('documents');
+			// TODO: fix for multiple documents
+			if (attr.documents) await Promise.all(attr.documents.map(d => d.$query(tx).delete()));
 			await attr.$query(tx).delete();
 			await tx.commit();
 			return attr;
@@ -122,117 +120,12 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static async addImportedIdAttributes(
-		walletId,
-		exportCode,
-		requiredDocuments,
-		requiredStaticData
-	) {
-		const WalletSetting = require('../wallet/wallet-setting').default;
-		const tx = await transaction.start(this.knex());
-		try {
-			let walletSetting = await WalletSetting.findByWalletId(walletId, tx);
-
-			let docAttrs = requiredDocuments
-				.filter(req => !!req.attributeType)
-				.map(req =>
-					req.docs.reduce((acc, doc) => {
-						acc.concat(
-							doc.fileItems.map(f => ({
-								type: req.attributeType,
-								walletId,
-								document: {
-									name: f.name,
-									mimeType: f.mimeType,
-									size: f.size,
-									buffer: f.buffer
-								}
-							}))
-						);
-						return acc;
-					}, [])
-				)
-				.reduce((acc, docs) => {
-					acc.concat(docs);
-					return acc;
-				}, []);
-
-			let dataAttrs = requiredStaticData.filter(req => !!req.attributeType).map(req => {
-				let staticData = {};
-				for (let j in req.staticDatas) {
-					let answer = req.staticDatas[j];
-					staticData['line' + (parseInt(j) + 1).toString()] = answer;
-				}
-				return {
-					walletId,
-					type: req.attributeType,
-					data: staticData
-				};
-			});
-
-			walletSetting.airDropCode = exportCode;
-
-			await Promise.all(
-				[...docAttrs, ...dataAttrs].map(attr => this.query(tx).insertGraph(attr))
-			);
-
-			walletSetting = await WalletSetting.updateById(walletSetting.id, walletSetting, tx);
-			await tx.commit();
-			return walletSetting;
-		} catch (error) {
-			await tx.rollback();
-			throw error;
-		}
-	}
-
-	static async genInitial(walletId, initialIdAttributes, tx) {
-		const IdAttributeTypes = require('./id-attribute-type').default;
-		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
-		const attrs = [];
-		for (let i in idAttributeTypes) {
-			let type = idAttributeTypes[i];
-
-			let item = {
-				walletId,
-				type: type.key,
-				data: { value: initialIdAttributes[type.key] },
-				createdAt: Date.now()
-			};
-			attrs.push(item);
-		}
-		return attrs;
-	}
-
-	static async initializeImported(walletId, initialIdAttributes, tx) {
-		const IdAttributeTypes = require('./id-attribute-type').default;
-		let idAttributeTypes = await IdAttributeTypes.findInitial(tx);
-		let typeKeys = _.map(idAttributeTypes, ({ key }) => key);
-		let attributes = await this.query(tx)
+	static findByTypeUrls(walletId, urls = []) {
+		return this.query()
+			.select(`${TABLE_NAME}.*`)
+			.join('id_attribute_types', `${TABLE_NAME}.typeId`, 'id_attribute_types.id')
 			.where({ walletId })
-			.whereIn('type', typeKeys);
-		let existingTypes = {};
-
-		attributes = attributes.map(attr => {
-			const type = attr.type;
-			existingTypes[type] = true;
-			if (initialIdAttributes[type]) {
-				attr.data.value = initialIdAttributes[type];
-			}
-			return attr;
-		});
-
-		typeKeys.forEach(type => {
-			if (existingTypes[type]) return;
-			let attr = {
-				walletId,
-				type,
-				data: { value: initialIdAttributes[type] }
-			};
-
-			attributes.push(attr);
-		});
-		return attributes;
+			.whereIn('id_attribute_types.url', urls);
 	}
 }
-
 export default IdAttribute;

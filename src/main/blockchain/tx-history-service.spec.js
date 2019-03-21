@@ -6,6 +6,7 @@ import TxHistoryService, {
 	TX_LIST_ACTION,
 	TX_RECEIPT_ACTION
 } from './tx-history-service';
+import config from 'common/config';
 import request from 'request';
 
 const web3ServiceMock = {
@@ -161,7 +162,7 @@ describe('TxHistoryService', () => {
 			input:
 				'0xa9059cbb000000000000000000000000ddbd2b932c763ba5b1b7ae3b362eac3e8d40121a0000000000000000000000000000000000000000000000000de0b6b3a7640000',
 			isError: undefined,
-			networkId: 1,
+			networkId: config.chainId,
 			nonce: '10753',
 			timeStamp: 1504784559000,
 			to: '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',
@@ -207,7 +208,7 @@ describe('TxHistoryService', () => {
 			hash: 'GENESIS_ddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',
 			input: '',
 			isError: '0',
-			networkId: 1,
+			networkId: config.chainId,
 			nonce: '',
 			timeStamp: 1438269973000,
 			to: '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',

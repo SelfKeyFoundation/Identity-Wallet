@@ -8,9 +8,23 @@ import wallet from '../wallet';
 import prices from '../prices';
 import walletTokens from '../wallet-tokens';
 import viewAll from '../view-all-tokens';
+import tokens from '../tokens';
 import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
 import addressBook from '../address-book';
+import incorporations from '../incorporations';
+import exchanges from '../exchanges';
+import { createLogger } from 'redux-logger';
+import marketplaces from '../marketplaces';
+import kyc from '../kyc';
+import identity from '../identity';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import history from './history';
+import createWallet from '../create-wallet';
+import transactionHistory from '../transaction-history';
+import app from '../app';
+// eslint-disable-next-line
+import { closeOperations } from '../close';
 
 import {
 	forwardToMain,
@@ -22,9 +36,21 @@ import {
 
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
-
+	let scopedReducers = {};
 	if (scope === 'renderer') {
+		if (process.env.ENABLE_REDUX_LOGGER) {
+			const logger = createLogger({ collapsed: (getState, actions) => true });
+			middleware.push(logger);
+		}
 		middleware = [forwardToMain, ...middleware];
+
+		history.create();
+		let router = connectRouter(history.getHistory());
+
+		middleware = [forwardToMain, ...middleware, routerMiddleware(history.getHistory())];
+		scopedReducers = {
+			router
+		};
 	}
 
 	if (scope === 'main') {
@@ -42,7 +68,17 @@ export default (initialState, scope = 'main') => {
 		prices,
 		ethGasStationInfo,
 		transaction,
-		addressBook
+		addressBook,
+		incorporations,
+		exchanges,
+		marketplaces,
+		identity,
+		createWallet,
+		transactionHistory,
+		app,
+		kyc,
+		tokens,
+		...scopedReducers
 	});
 	const enhancer = compose(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);

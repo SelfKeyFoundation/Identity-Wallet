@@ -23,9 +23,11 @@ export class BaseModel extends Model {
 		let properties = this.constructor.jsonSchema ? this.constructor.jsonSchema.properties : {};
 		let relations = this.constructor.relationMappings || {};
 		Object.keys(json).forEach(key => {
+			// delete any field not in schema or relations
 			if (!(key in properties) && !(key in relations)) {
 				delete json[key];
 			}
+			// convert numeric fields to boolean if defined as boolean in schema
 			if (key in json && this.isPropertyType(key, 'boolean')) {
 				json[key] = !!json[key];
 			}
@@ -37,6 +39,8 @@ export class BaseModel extends Model {
 	$parseDatabaseJson(db) {
 		let json = super.$parseDatabaseJson(db);
 		for (let prop in json) {
+			// convert numeric fields in database to boolean if defined as boolean
+			// in schema
 			if (this.isPropertyType(prop, 'boolean')) {
 				json[prop] = !!json[prop];
 			}
@@ -58,6 +62,12 @@ export class BaseModel extends Model {
 		const updateFn = (record, tx) =>
 			this.query(tx).patchAndFetchById(record[this.idColumn], record);
 		return this.queryMany(records, updateFn, tx);
+	}
+
+	static deleteMany(ids, tx) {
+		return this.query(tx)
+			.whereIn(this.idColumn, ids)
+			.del();
 	}
 
 	static async queryMany(records, queryFn, externalTx) {
