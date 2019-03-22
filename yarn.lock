@@ -4925,6 +4925,11 @@ deep-equal@^1.0.1, deep-equal@~1.0.1:
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
   integrity sha1-9dJgKStmDghO/0zbyfCK0yR0SLU=
 
+deep-extend@^0.4.1:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
+  integrity sha1-SLaZwn4zS/ifEIkr5DL25MfTSn8=
+
 deep-extend@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
@@ -5523,6 +5528,17 @@ electron-osx-sign@0.4.11:
     isbinaryfile "^3.0.2"
     minimist "^1.2.0"
     plist "^3.0.1"
+
+electron-pdf-window@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/electron-pdf-window/-/electron-pdf-window-1.0.12.tgz#47475c40c25bc2fb18ca152345ad3d58382f4ff2"
+  integrity sha512-A9bWEXh7Ch5fnOu+EIrV4PdMIypkOfrQ44pejJnoY5p7fWElYYnGaAtWT4oTpHyEJePVomK9Bc40PVPlZQYVpg==
+  dependencies:
+    deep-extend "^0.4.1"
+    file-type "^3.9.0"
+    got "^7.1.0"
+    is-electron-renderer "^2.0.1"
+    read-chunk "^2.0.0"
 
 electron-publish@20.36.0:
   version "20.36.0"
@@ -6870,7 +6886,7 @@ file-loader@^2.0.0:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
 
-file-type@^3.8.0:
+file-type@^3.8.0, file-type@^3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-3.9.0.tgz#257a078384d1db8087bc449d107d52a52672b9e9"
   integrity sha1-JXoHg4TR24CHvESdEH1SpSZyuek=
@@ -8576,6 +8592,11 @@ is-dotfile@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-dotfile/-/is-dotfile-1.0.3.tgz#a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
   integrity sha1-pqLzL/0t+wT1yiXs0Pa4PPeYoeE=
+
+is-electron-renderer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/is-electron-renderer/-/is-electron-renderer-2.0.1.tgz#a469d056f975697c58c98c6023eb0aa79af895a2"
+  integrity sha1-pGnQVvl1aXxYyYxgI+sKp5r4laI=
 
 is-equal-shallow@^0.1.3:
   version "0.1.3"
@@ -13153,15 +13174,15 @@ react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#87efec8":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#c09471f":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#87efec8f1c8eb3155c4f84a2a70c02ac25e5d242"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#c09471f2cb3968abc10592a2e6a3a10d3484738a"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     mime "^2.4.0"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#a48792f8155407c86b23765bd88b1583a94796b6"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#d3f2923"
     svg-inline-loader "^0.8.0"
 
 "react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f":
@@ -13268,6 +13289,14 @@ react@16.6.3:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.11.2"
+
+read-chunk@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/read-chunk/-/read-chunk-2.1.0.tgz#6a04c0928005ed9d42e1a6ac5600e19cbc7ff655"
+  integrity sha1-agTAkoAF7Z1C4aasVgDhnLx/9lU=
+  dependencies:
+    pify "^3.0.0"
+    safe-buffer "^5.1.1"
 
 read-config-file@3.2.0:
   version "3.2.0"
@@ -14258,39 +14287,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#2a9099ddc3fa2c4f827525f9444a43ecdfa6232d":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#d3f2923":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#2a9099ddc3fa2c4f827525f9444a43ecdfa6232d"
-  dependencies:
-    "@material-ui/core" "3.9.2"
-    "@material-ui/icons" "3.0.2"
-    "@material-ui/lab" "3.0.0-alpha.29"
-    "@types/classnames" "^2.2.7"
-    "@types/google.visualization" "0.0.46"
-    "@types/react-dom" "16.0.11"
-    bignumber.js "8.0.1"
-    classnames "^2.2.6"
-    jss "9.8.7"
-    jss-compose "5.0.0"
-    jss-expand "5.3.0"
-    jss-extend "6.2.0"
-    jss-global "3.0.0"
-    jss-preset-default "4.5.0"
-    jss-template "1.0.1"
-    lodash "4.17.11"
-    moment "^2.23.0"
-    react "16.6.3"
-    react-copy-to-clipboard "5.0.1"
-    react-datetime "^2.16.3"
-    react-dom "16.6.3"
-    react-google-charts "3.0.10"
-    react-jss "8.6.1"
-    react-truncate "2.4.0"
-    reset-jss "1.0.0"
-
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#a48792f8155407c86b23765bd88b1583a94796b6":
-  version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#a48792f8155407c86b23765bd88b1583a94796b6"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#d3f2923298ced89f7cbd671ecaa39f63388c0787"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
