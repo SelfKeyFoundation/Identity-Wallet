@@ -62,10 +62,12 @@ const contentWrapperStyle = {
 };
 
 class Main extends Component {
+	setMatomoId = () => {
+		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
-		console.log(md5(this.props.publicKey));
-		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+		this.setMatomoId();
 	}
 
 	render() {
