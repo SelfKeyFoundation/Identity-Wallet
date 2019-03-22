@@ -47,7 +47,7 @@
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
 		"prepare": "npm run snyk-protect",
-		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false"
+		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll"
 	},
 	"lint-staged": {
 		"*.js": [
