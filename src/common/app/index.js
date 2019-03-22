@@ -400,9 +400,15 @@ const hasConnected = state => {
 	return app.hardwareWallets.length > 0;
 };
 
+const hasAcceptedTracking = state => {
+	const app = selectApp(state);
+	return app.settings.crashReportAgreement === 1;
+};
+
 const appSelectors = {
 	selectApp,
-	hasConnected
+	hasConnected,
+	hasAcceptedTracking
 };
 
 export { appSelectors, appReducers, appActions, appOperations };
