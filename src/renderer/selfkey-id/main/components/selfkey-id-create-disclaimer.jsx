@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactPiwik from 'react-piwik';
 import { Grid, Modal, Typography, Paper, Button, withStyles } from '@material-ui/core';
 import { SelfkeyLogoTemp, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
@@ -29,6 +30,10 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		history.getHistory().goBack();
+	};
+
+	sendMatomoGoal = () => {
+		ReactPiwik.push(['trackGoal', 1]);
 	};
 
 	render() {
@@ -84,7 +89,12 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 									<br />
 								</Grid>
 								<Grid item>
-									<Button variant="contained" size="large" component={selfkeyId}>
+									<Button
+										variant="contained"
+										size="large"
+										component={selfkeyId}
+										onClick={this.sendMatomoGoal}
+									>
 										Continue
 									</Button>
 								</Grid>
