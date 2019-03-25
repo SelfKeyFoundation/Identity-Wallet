@@ -19,6 +19,7 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	: null;
 
 const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
+const MATOMO_SITE = process.env.MATOMO_SITE;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
@@ -83,6 +84,7 @@ const common = {
 const dev = {
 	debug: true,
 	dev: true,
+	qa: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
@@ -97,6 +99,7 @@ const dev = {
 const prod = {
 	debug: false,
 	dev: false,
+	qa: true,
 	updateEndpoint: 'https://release.selfkey.org',
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
@@ -143,6 +146,10 @@ if (isDevMode()) {
 
 if (CHAIN_ID) {
 	conf.chainId = Number(CHAIN_ID);
+}
+
+if (MATOMO_SITE) {
+	conf.matomoSite = Number(MATOMO_SITE);
 }
 
 if (NODE) {
