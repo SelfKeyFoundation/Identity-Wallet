@@ -3,8 +3,10 @@ import { Logger } from 'common/logger';
 import { Provider, connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
+import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
-import { appOperations } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
+import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
 import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
@@ -32,11 +34,20 @@ import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-cre
 
 const log = new Logger('AppComponent');
 
+const piwik = new ReactPiwik({
+	url: 'https://analytics.selfkey.org',
+	siteId: 1,
+	trackErrors: true
+});
+
 class AppContainerComponent extends Component {
 	state = { hasError: false };
 	handleRefresh = async () => {
 		await this.props.dispatch(push('/'));
 		this.setState({ hasError: false });
+	};
+	includeTracking = () => {
+		return this.props.hasAcceptedTracking && !isDevMode() && !isTestMode() && !isDebugMode();
 	};
 	static getDerivedStateFromError() {
 		return { hasError: true };
@@ -54,7 +65,13 @@ class AppContainerComponent extends Component {
 			return <GlobalError onRefresh={this.handleRefresh} />;
 		}
 		return (
-			<ConnectedRouter history={this.props.history.getHistory()}>
+			<ConnectedRouter
+				history={
+					this.includeTracking()
+						? piwik.connectToHistory(this.props.history.getHistory())
+						: this.props.history.getHistory()
+				}
+			>
 				<HashRouter>
 					<div style={{ backgroundColor: '#262F39' }}>
 						<Route exact path="/" component={Loading} />
@@ -92,7 +109,13 @@ class AppContainerComponent extends Component {
 	}
 }
 
-const AppContainer = connect()(AppContainerComponent);
+const mapStateToProps = (state, props) => {
+	return {
+		hasAcceptedTracking: appSelectors.hasAcceptedTracking(state)
+	};
+};
+
+const AppContainer = connect(mapStateToProps)(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
