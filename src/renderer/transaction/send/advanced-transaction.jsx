@@ -10,9 +10,9 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Divider, Typography } from '@material-ui/core';
-import history from 'common/store/history';
-import { appSelectors } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
 import Popup from '../../common/popup';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	container: {
@@ -159,6 +159,11 @@ class TransactionSendBoxContainer extends Component {
 	componentDidMount() {
 		this.loadData();
 
+		if (this.props.confirmation === 'true') {
+			this.setState({ isConfirmationOpen: true });
+			return;
+		}
+
 		let { trezorAccountIndex, cryptoCurrency } = this.props;
 		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
 	}
@@ -172,7 +177,11 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleCancelAction = () => {
-		history.getHistory().goBack();
+		if (this.state.cryptoCurrency !== 'custom') {
+			this.props.dispatch(push(`/main/transfer/${this.state.cryptoCurrency}`));
+		} else {
+			this.props.dispatch(push(`/main/dashboard`));
+		}
 	};
 
 	handleGasPriceChange = value => {
@@ -184,8 +193,12 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleConfirm = async () => {
+		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
 		await this.props.dispatch(transactionOperations.confirmSend());
 		if (this.props.hardwareWalletType !== '') {
+			await this.props.dispatch(
+				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
+			);
 			this.setState({ isConfirmationOpen: true });
 		}
 	};
@@ -468,6 +481,7 @@ const mapStateToProps = (state, props) => {
 		...transactionSelectors.getTransaction(state),
 		tokens: getTokens(state).splice(1), // remove ETH
 		cryptoCurrency: props.match.params.cryptoCurrency,
+		confirmation: props.match.params.confirmation,
 		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
 	};
 };

@@ -1,7 +1,8 @@
 import * as types from './types';
 
 const initialState = {
-	tokens: []
+	tokens: [],
+	tokenError: ''
 };
 
 const tokensReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const tokensReducer = (state = initialState, action) => {
 			return {
 				...state,
 				tokens: action.payload
+			};
+		case types.TOKENS_TOKEN_ERROR_SET:
+			return {
+				...state,
+				tokenError: action.payload
 			};
 		default:
 			return state;
