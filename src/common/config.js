@@ -149,11 +149,17 @@ if (NODE) {
 	conf.node = NODE;
 }
 
+const matomoGoals = {
+	CreateSelfKeyId: 1
+	// TODO: implement more goals in feature/910
+};
+
 module.exports = {
 	common,
 	...common,
 	db,
 	...conf,
 	userDataDirectoryPath,
-	walletsDirectoryPath
+	walletsDirectoryPath,
+	matomoGoals
 };
