@@ -81,6 +81,12 @@ const styles = theme => ({
 
 	bottomSpace: {
 		marginBottom: '30px'
+	},
+
+	transparent: {
+		'&:nth-of-type(odd)': {
+			backgroundColor: 'transparent'
+		}
 	}
 });
 
@@ -315,7 +321,7 @@ class TransactionsHistory extends Component {
 								})}
 							</TableBody>
 							<TableFooter>
-								<TableRow>
+								<TableRow className={classes.transparent}>
 									<TablePagination
 										count={transactions.length}
 										page={page}
