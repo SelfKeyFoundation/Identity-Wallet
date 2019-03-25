@@ -64,6 +64,12 @@ export class BaseModel extends Model {
 		return this.queryMany(records, updateFn, tx);
 	}
 
+	static deleteMany(ids, tx) {
+		return this.query(tx)
+			.whereIn(this.idColumn, ids)
+			.del();
+	}
+
 	static async queryMany(records, queryFn, externalTx) {
 		const tx = externalTx || (await transaction.start(this.knex()));
 		try {

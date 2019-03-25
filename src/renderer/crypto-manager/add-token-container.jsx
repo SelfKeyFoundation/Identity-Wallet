@@ -116,7 +116,7 @@ class AddTokenContainerComponent extends Component {
 
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
-		this.props.dispatch(addressBookOperations.resetAdd());
+		this.resetErrors();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -130,7 +130,17 @@ class AddTokenContainerComponent extends Component {
 				this.setState({ searching: false });
 			}
 		}
+		if (prevProps.tokenError !== this.props.tokenError) {
+			if (this.state.searching) {
+				this.setState({ searching: false });
+			}
+		}
 	}
+
+	resetErrors = () => {
+		this.props.dispatch(addressBookOperations.resetAdd());
+		this.props.dispatch(tokensOperations.resetTokenError());
+	};
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
@@ -145,7 +155,7 @@ class AddTokenContainerComponent extends Component {
 	};
 
 	findToken = async contractAddress => {
-		await this.props.dispatch(addressBookOperations.resetAdd());
+		this.resetErrors();
 		if (contractAddress !== '') {
 			// Validate address with library call
 			await this.props.dispatch(addressBookOperations.validateAddress(contractAddress));
@@ -214,9 +224,11 @@ class AddTokenContainerComponent extends Component {
 	};
 
 	render() {
-		const { classes, addressError } = this.props;
+		const { classes, addressError, tokenError } = this.props;
 		const { address, symbol, decimal, found, duplicate, searching } = this.state;
-		const hasAddressError = addressError !== '' && addressError !== undefined && address !== '';
+		const hasAddressError =
+			(addressError !== '' && addressError !== undefined && address !== '') ||
+			(tokenError !== '' && tokenError !== undefined && address !== '');
 		const notFound = !found && address !== '' && !hasAddressError && !duplicate;
 		const addressInputClass = `${classes.input} ${
 			(hasAddressError || notFound || duplicate) && !searching ? classes.errorColor : ''
@@ -328,12 +340,12 @@ class AddTokenContainerComponent extends Component {
 								/>
 								{!searching && hasAddressError && (
 									<span id="addressError" className={classes.errorText}>
-										{addressError}
+										{addressError || tokenError}
 									</span>
 								)}
 								{!searching && notFound && (
 									<span id="notFound" className={classes.errorText}>
-										{`Token contract does not exist. Please double check and try again.`}
+										{`Token contract does not exist or not supported. Please double check and try again.`}
 									</span>
 								)}
 								{!searching && duplicate && (
@@ -403,7 +415,8 @@ const mapStateToProps = (state, props) => {
 	return {
 		tokens: tokensSelectors.allTokens(state),
 		existingTokens: getTokens(state),
-		addressError: addressBookSelectors.getAddressError(state)
+		addressError: addressBookSelectors.getAddressError(state),
+		tokenError: tokensSelectors.getTokenError(state)
 	};
 };
 

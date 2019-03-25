@@ -5,6 +5,7 @@ import Popup from '../../../common/popup';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { kycSelectors } from 'common/kyc';
 import { push } from 'connected-react-router';
+import { appSelectors } from 'common/app';
 
 const styles = theme => ({});
 
@@ -60,7 +61,8 @@ class HardwareWalletTimeout extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		cancelRoute: kycSelectors.selectCancelRoute(state)
+		cancelRoute: kycSelectors.selectCancelRoute(state),
+		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
 	};
 };
 

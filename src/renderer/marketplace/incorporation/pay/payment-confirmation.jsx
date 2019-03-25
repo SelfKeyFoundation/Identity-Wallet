@@ -13,7 +13,7 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { appSelectors } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
 import EthUnits from 'common/utils/eth-units';
 import { getCryptoValue } from '../../../common/price-utils';
 
@@ -43,6 +43,10 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		this.props.dispatch(transactionOperations.setAmount(keyAmount));
 		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
 		this.props.dispatch(transactionOperations.setLimitPrice(gasLimit));
+
+		if (this.props.confirmation === 'true') {
+			this.setState({ isConfirmationOpen: true });
+		}
 	}
 
 	getVendorName = _ => {
@@ -99,11 +103,16 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			return this.props.dispatch(push('/main/transaction-no-key-error'));
 		}
 
+		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
+
 		await this.props.dispatch(
 			transactionOperations.incorporationSend(companyCode, countryCode)
 		);
 
 		if (this.props.hardwareWalletType !== '') {
+			await this.props.dispatch(
+				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
+			);
 			this.setState({ isConfirmationOpen: true });
 		}
 	};
@@ -216,7 +225,8 @@ const mapStateToProps = (state, props) => {
 		...getFiatCurrency(state),
 		transaction: transactionSelectors.getTransaction(state),
 		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
-		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY })
+		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY }),
+		confirmation: props.match.params.confirmation
 	};
 };
 

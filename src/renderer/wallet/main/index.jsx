@@ -146,7 +146,7 @@ class Main extends Component {
 						component={TransactionTimeout}
 					/>
 					<Route
-						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
+						path={`${match.path}/advancedTransaction/:cryptoCurrency/:confirmation?`}
 						component={AdvancedTransaction}
 					/>
 					<Route
