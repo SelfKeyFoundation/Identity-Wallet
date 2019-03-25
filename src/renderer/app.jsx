@@ -7,6 +7,8 @@ import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations, appSelectors } from 'common/app';
 import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
+import config from 'common/config';
+
 import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
@@ -36,7 +38,7 @@ const log = new Logger('AppComponent');
 
 const piwik = new ReactPiwik({
 	url: 'https://analytics.selfkey.org',
-	siteId: 1,
+	siteId: config.matomoSite | 1,
 	trackErrors: true
 });
 
