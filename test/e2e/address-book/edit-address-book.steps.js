@@ -18,7 +18,7 @@ defineFeature(feature, test => {
 		givenThereIsAlreadyAnAddressAddedWithLabelTest(given);
 
 		when('user clicks on pencil icon', () => {
-			return tools.regStep(tools.app, '#editButton');
+			return tools.regStep(tools.app, '#editButtonTest');
 		});
 
 		when('enters existing label', () => {
@@ -36,7 +36,7 @@ defineFeature(feature, test => {
 		givenThereIsAlreadyAnAddressAddedWithLabelTest(given);
 
 		when('user clicks on pencil icon', () => {
-			return tools.regStep(tools.app, '#editButton');
+			return tools.regStep(tools.app, '#editButtonTest');
 		});
 
 		when('enters correct new label', () => {

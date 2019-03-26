@@ -1,7 +1,8 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import {
 	givenUserHasOpenedAddressBookScreen,
-	givenThereIsAlreadyAnAddressAddedWithLabelTest
+	givenThereIsAlreadyAnAddressAddedWithLabelTest,
+	givenThereIsAlreadyAnAddressAddedWithLabelTest2
 } from './common-steps';
 const tools = require('../../utils/tools.js');
 jest.setTimeout(120000);
@@ -17,8 +18,10 @@ defineFeature(feature, test => {
 
 		givenThereIsAlreadyAnAddressAddedWithLabelTest(given);
 
+		givenThereIsAlreadyAnAddressAddedWithLabelTest2(given);
+
 		when('user clicks on x icon of an address', () => {
-			return tools.regStep(tools.app, '#deleteButton');
+			return tools.regStep(tools.app, '#deleteButtonTest');
 		});
 
 		then('user could no longer see address on Address Book table', () => {

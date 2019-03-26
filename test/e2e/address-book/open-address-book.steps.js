@@ -14,12 +14,12 @@ defineFeature(feature, test => {
 
 		when('user clicks on Hamburger icon > Address Book', () => {
 			return tools
-				.regStep(tools.app, '.sk-icon-button')
+				.regStep(tools.app, '#drawer')
 				.then(() => tools.regStep(tools.app, '#addressBookButton'));
 		});
 
 		then('Address Book screen is displayed', () => {
-			return tools.app.client.waitForVisible('.address-book', 10000);
+			return tools.app.client.waitForVisible('#viewAddressBook', 10000);
 		});
 	});
 });

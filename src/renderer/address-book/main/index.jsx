@@ -148,7 +148,7 @@ class AddressBookContainer extends Component {
 													</Grid>
 													<Grid item>
 														<IconButton
-															id="editButton"
+															id={`editButton${address.id}`}
 															onClick={() =>
 																this.handleEdit(address.id)
 															}
@@ -158,7 +158,7 @@ class AddressBookContainer extends Component {
 													</Grid>
 													<Grid item>
 														<IconButton
-															id="deleteButton"
+															id={`deleteButton${address.id}`}
 															onClick={() =>
 																this.handleDelete(address.id)
 															}
