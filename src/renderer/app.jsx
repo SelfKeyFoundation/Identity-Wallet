@@ -75,7 +75,12 @@ class AppContainerComponent extends Component {
 				}
 			>
 				<HashRouter>
-					<div style={{ backgroundColor: '#262F39' }}>
+					<div
+						style={{
+							background:
+								'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)'
+						}}
+					>
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
