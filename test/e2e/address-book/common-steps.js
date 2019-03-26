@@ -5,9 +5,7 @@ const delay = require('delay');
 export const givenUserHasOpenedAddressBookScreen = given => {
 	given('user has opened Address Book screen', () => {
 		return tools
-			.scrollContainerToBottom(tools.app, '#container')
-			.then(() => tools.regStep(tools.app, '#agree'))
-			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+			.regStep(tools.app, '#agree')
 			.then(() => tools.regStep(tools.app, '#createWallet'))
 			.then(() => tools.regStep(tools.app, '#protectWallet'))
 			.then(() => delay(2000))
@@ -22,7 +20,7 @@ export const givenUserHasOpenedAddressBookScreen = given => {
 			.then(() => tools.app.client.getValue('#privateKey'))
 			.then(() => tools.regStep(tools.app, '#printWalletNext'))
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
-			.then(() => tools.regStep(tools.app, '.sk-icon-button'))
+			.then(() => tools.regStep(tools.app, '#drawer'))
 			.then(() => tools.regStep(tools.app, '#addressBookButton'))
 			.then(() => delay(5000));
 	});
@@ -31,15 +29,13 @@ export const givenUserHasOpenedAddressBookScreen = given => {
 export const givenUserHasOpenedAddressBookScreenWithAPrivateKey = given => {
 	given('user has opened Address Book screen with pirvate key', () => {
 		return tools
-			.scrollContainerToBottom(tools.app, '#container')
-			.then(() => tools.regStep(tools.app, '#agree'))
-			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+			.regStep(tools.app, '#agree')
 			.then(() => tools.regStep(tools.app, '#useExistingWalletButton'))
 			.then(() => tools.regStep(tools.app, '#privateKey'))
 			.then(() => tools.app.client.setValue('#privateKeyInput', data[1].privKey))
-			.then(() => tools.regStep(tools.app, '#unlockButton'))
+			.then(() => tools.regStep(tools.app, '#unlockPrivateKeyButton'))
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
-			.then(() => tools.regStep(tools.app, '.sk-icon-button'))
+			.then(() => tools.regStep(tools.app, '#drawer'))
 			.then(() => tools.regStep(tools.app, '#addressBookButton'))
 			.then(() => delay(5000));
 	});
@@ -48,7 +44,7 @@ export const givenUserHasOpenedAddressBookScreenWithAPrivateKey = given => {
 export const givenThereIsAlreadyAnAddressAddedWithLabelTest = given => {
 	given('there is already an address added with label Test', () => {
 		return tools.app.client
-			.waitForVisible('md-backdrop', 10000, true)
+			.waitForVisible('#viewAddressBook', 10000, true)
 			.then(() => tools.app.client.element('#addAddressButton').click())
 			.then(() => delay(2000))
 			.then(() => tools.app.client.setValue('#labelInput', 'Test'))
@@ -61,7 +57,7 @@ export const givenThereIsAlreadyAnAddressAddedWithLabelTest = given => {
 export const whenUserClicksOnAddAddressButton = when => {
 	when('user clicks on Add Address button', () => {
 		return tools.app.client
-			.waitForVisible('md-backdrop', 10000, true)
+			.waitForVisible('#viewAddressBook', 10000, true)
 			.then(tools.app.client.element('#addAddressButton').click());
 	});
 };

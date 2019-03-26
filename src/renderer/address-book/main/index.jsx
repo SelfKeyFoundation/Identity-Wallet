@@ -82,6 +82,7 @@ class AddressBookContainer extends Component {
 		const { addresses } = this.state;
 		return (
 			<Grid
+				id="viewAddressBook"
 				container
 				direction="column"
 				justify="flex-start"

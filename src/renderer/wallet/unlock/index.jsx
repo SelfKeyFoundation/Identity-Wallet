@@ -230,6 +230,7 @@ class Unlock extends Component {
 
 											<Grid item>
 												<UnlockOptionWrapped
+													id="privateKey"
 													selected={selected === 2}
 													icon={<KeyIcon />}
 													title="Private Key"

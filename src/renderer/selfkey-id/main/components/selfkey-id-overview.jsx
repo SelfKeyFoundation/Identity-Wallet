@@ -155,7 +155,7 @@ class SelfkeyIdOverviewComponent extends Component {
 		const { popup } = this.state;
 
 		return (
-			<Grid container direction="column" spacing={32}>
+			<Grid id="viewOverview" container direction="column" spacing={32}>
 				{popup === 'create-attribute' && (
 					<CreateAttributePopup
 						open={true}

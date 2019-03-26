@@ -116,6 +116,7 @@ class Home extends Component {
 						>
 							<Grid item>
 								<Button
+									id="createWallet"
 									variant="contained"
 									component={createWalletLink}
 									size="large"
@@ -125,6 +126,7 @@ class Home extends Component {
 							</Grid>
 							<Grid item>
 								<Button
+									id="useExistingWalletButton"
 									variant="outlined"
 									component={unlockWalletLink}
 									size="large"

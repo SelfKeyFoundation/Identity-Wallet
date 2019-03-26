@@ -144,6 +144,7 @@ class BackupAddress extends Component {
 									<br />
 									<br />
 									<Button
+										id="keystoreNext"
 										variant="outlined"
 										component={backupPrivateKey}
 										size="large"
