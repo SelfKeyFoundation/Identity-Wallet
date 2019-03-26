@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import ReactPiwik from 'react-piwik';
 import { Grid, Modal, Typography, Paper, Button, withStyles } from '@material-ui/core';
 import { SelfkeyLogoTemp, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
 import history from 'common/store/history';
-import { matomoGoals } from 'common/config';
+import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
 	container: {
@@ -34,7 +33,7 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 	};
 
 	sendMatomoGoal = () => {
-		ReactPiwik.push(['trackGoal', matomoGoals.CreateSelfKeyId]);
+		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
 	};
 
 	render() {
