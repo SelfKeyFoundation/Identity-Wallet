@@ -1,7 +1,16 @@
 import React from 'react';
 
-import { Grid, Button, withStyles, Typography } from '@material-ui/core';
-import { H1 } from 'selfkey-ui';
+import {
+	Grid,
+	Button,
+	withStyles,
+	Typography,
+	Table,
+	TableHead,
+	TableBody,
+	TableCell
+} from '@material-ui/core';
+import { H1, LargeTableHeadRow } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
@@ -49,7 +58,7 @@ const styles = theme => ({
 const getServices = (items, viewAction) => {
 	return items.map(item => {
 		return (
-			<Grid item key={item.id || item.name} xs={4}>
+			<React.Fragment key={item.id || item.name}>
 				<MarketplaceServicesListItem
 					id={item.id || item.name}
 					name={item.name}
@@ -58,7 +67,7 @@ const getServices = (items, viewAction) => {
 					logoUrl={item.logoUrl}
 					viewAction={viewAction}
 				/>
-			</Grid>
+			</React.Fragment>
 		);
 	});
 };
@@ -106,7 +115,40 @@ export const MarketplaceServicesList = withStyles(styles)(
 							spacing={24}
 							className={classes.content}
 						>
-							{getServices(items, viewAction)}
+							<Table>
+								<TableHead>
+									<LargeTableHeadRow>
+										<TableCell>&nbsp;</TableCell>
+										<TableCell>
+											<Typography variant="overline">Exchange</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Location</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Fees</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">
+												Fiat Supported
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">
+												Fiat Payments
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">
+												Excluded Residents
+											</Typography>
+										</TableCell>
+										<TableCell>&nbsp;</TableCell>
+									</LargeTableHeadRow>
+								</TableHead>
+
+								<TableBody>{getServices(items, viewAction)}</TableBody>
+							</Table>
 						</Grid>
 					</Grid>
 				</Grid>
