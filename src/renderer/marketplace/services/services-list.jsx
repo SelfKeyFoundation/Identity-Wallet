@@ -10,7 +10,7 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
-import { H1, LargeTableHeadRow } from 'selfkey-ui';
+import { LargeTableHeadRow } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
@@ -102,7 +102,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 						>
 							<Grid item>{category.icon}</Grid>
 							<Grid item>
-								<H1>{category.title}</H1>
+								<Typography variant="h1">{category.title}</Typography>
 							</Grid>
 						</Grid>
 					</Grid>
