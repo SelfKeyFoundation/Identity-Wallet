@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Grid, Divider, FormGroup, FormControl, Button, CircularProgress } from '@material-ui/core';
 import {
-	P,
-	H3,
-	H2,
-	UnlockIcon,
-	ReturnIcon,
-	HourGlassSmallIcon,
-	CalendarIcon,
-	StyledButton
-} from 'selfkey-ui';
+	Grid,
+	Divider,
+	FormGroup,
+	FormControl,
+	Button,
+	CircularProgress,
+	Typography
+} from '@material-ui/core';
+import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
 const styles = theme => ({
 	root: {
 		width: '946px',
 		height: '100%',
-		marginTop: '50px',
-		marginBottom: '30px',
+		margin: '50px auto 30px',
 		border: 'solid 1px #303c49',
 		borderRadius: '4px'
 	},
@@ -43,7 +41,8 @@ const styles = theme => ({
 		fontFamily: 'Lato, arial, sans-serif',
 		fontSize: '16px',
 		fontWeight: 400,
-		lineHeight: 1.67
+		lineHeight: 1.67,
+		width: '100%'
 	},
 
 	formControl: {
@@ -59,6 +58,7 @@ const styles = theme => ({
 	},
 
 	formGroup: {
+		backgroundColor: 'transparent',
 		'& span': {
 			fontSize: '14px',
 			lineHeight: '35px'
@@ -93,7 +93,8 @@ const styles = theme => ({
 
 	button: {
 		color: '#93b0c1',
-		borderColor: '#3b4a5a',
+		border: '1px solid #3b4a5a',
+		fontWeight: 400,
 		'&:disabled': {
 			color: '#48565f'
 		}
@@ -101,7 +102,7 @@ const styles = theme => ({
 
 	buttonDescription: {
 		fontSize: '12px',
-		width: '620px'
+		width: '100%'
 	},
 
 	requirementListItem: {
@@ -130,6 +131,28 @@ const styles = theme => ({
 	daysLeft: {
 		color: '#93B0C1',
 		fontSize: '13px'
+	},
+
+	bold: {
+		fontWeight: 600
+	},
+
+	backButtonContainer: {
+		left: '15px',
+		position: 'absolute',
+		top: '120px'
+	},
+
+	descriptionContainer: {
+		width: '100%'
+	},
+
+	fullWidth: {
+		width: '100%'
+	},
+
+	bottomSpace: {
+		marginBottom: '20px'
 	}
 });
 
@@ -173,10 +196,23 @@ class MarketplaceServiceDetailsComponent extends Component {
 		}
 		return (
 			<Grid container>
-				<Grid item className={classes.buttonWrapper}>
-					<Button variant="outlined" className={classes.button} onClick={backAction}>
-						&#60; Back
-					</Button>
+				<Grid item>
+					<div className={classes.backButtonContainer}>
+						<Button
+							variant="outlined"
+							color="secondary"
+							size="small"
+							onClick={backAction}
+						>
+							<Typography
+								variant="subtitle2"
+								color="secondary"
+								className={classes.bold}
+							>
+								‹ Back
+							</Typography>
+						</Button>
+					</div>
 				</Grid>
 				<Grid container className={classes.root}>
 					<Grid
@@ -191,19 +227,29 @@ class MarketplaceServiceDetailsComponent extends Component {
 							<img src={item.logo[0].url} />
 						</Grid>
 						<Grid item id="title" className={classes.title}>
-							<H2>{item.name}</H2>
+							<Grid container alignItems="center">
+								<Typography variant="h1">{item.name}</Typography>
+								<Typography variant="h1">&nbsp;</Typography>
+								<Typography variant="subtitle2" color="secondary">
+									- Exchange
+								</Typography>
+							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item id="body" className={classes.body} xs={12}>
+					<Grid item id="body" className={classes.body}>
 						<Grid
 							container
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
 							spacing={32}
-							xs={12}
 						>
-							<Grid item id="description" xs={12}>
+							<Grid
+								item
+								id="description"
+								xs={12}
+								className={classes.descriptionContainer}
+							>
 								<Grid
 									container
 									direction="row"
@@ -212,9 +258,9 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={40}
 								>
 									<Grid item xs={8}>
-										<P className={classes.description}>
+										<Typography variant="body1" className={classes.bottomSpace}>
 											{this.renderDescription(item.description)}
-										</P>
+										</Typography>
 										<Button
 											variant="outlined"
 											className={`${classes.button} ${
@@ -228,13 +274,14 @@ class MarketplaceServiceDetailsComponent extends Component {
 										</Button>
 									</Grid>
 									<Grid item xs={4}>
-										<StyledButton
+										<Button
 											disabled={['pending', 'Inactive'].includes(item.status)}
 											variant={
 												['unlocked', 'locked'].includes(item.status)
 													? 'outlined'
 													: 'contained'
 											}
+											size="large"
 											onClick={() =>
 												this.unlockActionCall(
 													unlockAction,
@@ -242,6 +289,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 													hasBalance
 												)
 											}
+											className={classes.fullWidth}
 										>
 											{item.status === 'Active' && <UnlockIcon />}
 											{item.status === 'pending' && (
@@ -261,7 +309,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 													</span>
 												)}
 											</div>
-										</StyledButton>
+										</Button>
 									</Grid>
 								</Grid>
 							</Grid>
@@ -277,7 +325,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={16}
 								>
 									<Grid item>
-										<H3>Highlights</H3>
+										<Typography variant="h2">Exchange Highlights</Typography>
 									</Grid>
 									<Grid item>
 										<FormControl className={classes.formControl}>
@@ -348,7 +396,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={16}
 								>
 									<Grid item>
-										<H3>KYC Requirements</H3>
+										<Typography variant="h2">KYC Requirements</Typography>
 									</Grid>
 									<Grid item>
 										{relyingParty ? (
