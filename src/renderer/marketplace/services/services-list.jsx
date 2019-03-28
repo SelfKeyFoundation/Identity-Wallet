@@ -23,9 +23,6 @@ const styles = theme => ({
 		'& h1': {
 			marginLeft: '20px'
 		},
-		'& svg': {
-			marginLeft: '20px'
-		},
 		width: '100%',
 		height: '120px'
 	},
@@ -34,7 +31,11 @@ const styles = theme => ({
 		marginTop: '50px'
 	},
 
-	content: { marginTop: '30px' },
+	content: {
+		marginTop: '30px',
+		margin: 0,
+		width: '100%'
+	},
 
 	button: {
 		color: '#93b0c1',
@@ -52,6 +53,11 @@ const styles = theme => ({
 		left: '15px',
 		position: 'absolute',
 		top: '120px'
+	},
+
+	listContent: {
+		margin: 0,
+		width: '100%'
 	}
 });
 
@@ -62,8 +68,8 @@ const getServices = (items, viewAction) => {
 				<MarketplaceServicesListItem
 					id={item.id || item.name}
 					name={item.name}
-					description={item.description}
-					status={item.status}
+					/* description={item.description} */
+					/* status={item.status} */
 					logoUrl={item.logoUrl}
 					viewAction={viewAction}
 				/>
@@ -106,7 +112,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item className={classes.listContent} xs={12}>
 						<Grid
 							container
 							direction="row"
