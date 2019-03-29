@@ -430,7 +430,7 @@ const hasConnected = state => {
 
 const hasAcceptedTracking = state => {
 	const app = selectApp(state);
-	return app.settings.crashReportAgreement === 1;
+	return app.settings && app.settings.crashReportAgreement === 1;
 };
 
 const selectGoBackPath = state => {
