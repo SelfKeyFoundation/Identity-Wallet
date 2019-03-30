@@ -109,7 +109,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			transactionOperations.incorporationSend(companyCode, countryCode)
 		);
 
-		if (this.props.hardwareWalletType !== '') {
+		if (this.props.walletType !== '') {
 			await this.props.dispatch(
 				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
 			);
@@ -128,7 +128,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 
 	// REFACTOR: extract to common popup to be used in multiple places
 	renderConfirmationModal = () => {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
 		const text = `Confirm Transaction on ${typeText}`;
 		return (
 			<Popup
@@ -224,7 +224,7 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		transaction: transactionSelectors.getTransaction(state),
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
+		walletType: appSelectors.selectWalletType(state),
 		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY }),
 		confirmation: props.match.params.confirmation
 	};

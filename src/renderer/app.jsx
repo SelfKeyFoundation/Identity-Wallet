@@ -37,7 +37,7 @@ const log = new Logger('AppComponent');
 
 const piwik = new ReactPiwik({
 	url: 'https://analytics.selfkey.org',
-	siteId: config.matomoSite | 1,
+	siteId: config.matomoSite || 1,
 	trackErrors: true
 });
 ReactPiwik.push(['requireConsent']);
@@ -58,6 +58,9 @@ class AppContainerComponent extends Component {
 	}
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
+		ReactPiwik.push(['trackPageView']);
+		ReactPiwik.push(['enableHeartBeatTimer']);
+		ReactPiwik.push(['trackAllContentImpressions']);
 	}
 	render() {
 		const { hasError } = this.state;

@@ -93,7 +93,8 @@ const dev = {
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
-	}
+	},
+	matomoSite: 2
 };
 
 const prod = {
@@ -108,7 +109,8 @@ const prod = {
 		INCORPORATION_KYCC_INSTANCE || 'https://flagtheory-v2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
-	}
+	},
+	matomoSite: 1
 };
 
 const setupFilesPath = getSetupFilePath();

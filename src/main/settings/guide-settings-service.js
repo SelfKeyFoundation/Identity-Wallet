@@ -8,7 +8,7 @@ export class GuideSettingsService {
 
 	async setSettings(settings) {
 		const newSettings = await GuideSetting.updateById(settings.id, settings);
-		return newSettings[0];
+		return newSettings;
 	}
 }
 
