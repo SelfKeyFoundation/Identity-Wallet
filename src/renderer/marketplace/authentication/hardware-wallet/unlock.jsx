@@ -18,7 +18,7 @@ class HardwareWalletUnlock extends Component {
 	};
 
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Unlock Device">
 				<Grid
@@ -66,7 +66,7 @@ class HardwareWalletUnlock extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		cancelRoute: kycSelectors.selectCancelRoute(state),
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 

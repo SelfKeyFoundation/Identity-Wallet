@@ -97,6 +97,7 @@
 		"mime-types": "2.1.21",
 		"moment": "2.24.0",
 		"node-fetch": "2.3.0",
+		"node-machine-id": "1.1.10",
 		"node-powershell": "3.3.1",
 		"node-pre-gyp": "0.12.0",
 		"normalizr": "3.3.0",
@@ -258,7 +259,8 @@
 			"@material-ui/core",
 			"@material-ui/icons",
 			"flag-icon-css/css/flag-icon.css",
-			"fs-extra"
+			"fs-extra",
+			"node-machine-id"
 		],
 		"main": {
 			"extraEntries": [
@@ -299,6 +301,7 @@
 				"@material-ui/icons",
 				"flag-icon-css/css/flag-icon.css",
 				"fs-extra",
+				"node-machine-id",
 				"./static/stylesheets/scss/main.scss"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",
