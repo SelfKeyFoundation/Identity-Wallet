@@ -295,12 +295,6 @@ class IncorporationsDetailView extends Component {
 	getPrice = () => {
 		const { program } = this.props;
 		return getIncorporationPrice(program);
-		/*
-		const price = config.dev
-			? program['test_price']
-			: (program['active_test_price'] ? program['test_price'] : program['Wallet Price']);
-		return price;
-		*/
 	};
 
 	getLastApplication = () => {
