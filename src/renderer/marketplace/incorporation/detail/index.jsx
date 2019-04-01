@@ -534,7 +534,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Dividends paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Dividends Witholding Tax Rate'] || '--'}
+											{tax['Dividends Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
@@ -548,7 +548,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Royalties paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Royalties Witholding Tax Rate'] || '--'}
+											{tax['Royalties Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
@@ -556,7 +556,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Interests paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Interests Witholding Tax Rate'] || '--'}
+											{tax['Interests Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
