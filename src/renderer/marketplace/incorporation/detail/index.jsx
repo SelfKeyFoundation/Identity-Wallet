@@ -18,7 +18,8 @@ import {
 	CountryInfo,
 	IncorporationsKYC,
 	ProgramPrice,
-	sanitize
+	sanitize,
+	getIncorporationPrice
 } from '../common';
 
 const styles = theme => ({
@@ -293,10 +294,13 @@ class IncorporationsDetailView extends Component {
 
 	getPrice = () => {
 		const { program } = this.props;
-		const price = program['active_test_price']
+		return getIncorporationPrice(program);
+		/*
+		const price = config.dev
 			? program['test_price']
-			: program['Wallet Price'];
+			: (program['active_test_price'] ? program['test_price'] : program['Wallet Price']);
 		return price;
+		*/
 	};
 
 	getLastApplication = () => {

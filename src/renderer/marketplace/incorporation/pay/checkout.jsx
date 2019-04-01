@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { pricesSelectors } from 'common/prices';
-import { FlagCountryName, sanitize } from '../common';
+import { FlagCountryName, sanitize, getIncorporationPrice } from '../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
@@ -235,18 +235,21 @@ export class IncorporationCheckout extends React.Component {
 		return application.currentStatus === 3 || application.currentStatus === 8;
 	};
 
-	getIncorporationPrice = () => {
+	getPrice = () => {
 		const { program } = this.props;
-		const price = program['active_test_price']
+		return getIncorporationPrice(program);
+		/*
+		const price = config.dev
 			? program['test_price']
-			: program['Wallet Price'];
+			: (program['active_test_price'] ? program['test_price'] : program['Wallet Price']);
 		return parseInt(price.replace(/\$/, '').replace(/,/, ''));
+		*/
 	};
 
 	getPaymentParameters = _ => {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
-		const price = this.getIncorporationPrice();
+		const price = this.getPrice();
 		const keyAmount = price / keyRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
