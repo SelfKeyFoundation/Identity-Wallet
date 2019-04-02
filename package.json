@@ -72,14 +72,12 @@
 		"bignumber.js": "8.0.1",
 		"bluebird": "3.5.3",
 		"bufferutil": "4.0.0",
-		"connected-react-router": "6.0.0",
+		"connected-react-router": "6.3.2",
 		"decompress": "4.2.0",
 		"electron-devtools-installer": "2.2.4",
 		"electron-dl": "1.12.0",
 		"electron-is": "3.0.0",
 		"electron-redux": "1.3.1",
-		"enzyme": "3.9.0",
-		"enzyme-adapter-react-16": "1.11.2",
 		"eslint-loader": "2.1.0",
 		"ethereumjs-tx": "1.3.7",
 		"ethereumjs-util": "6.0.0",
@@ -99,6 +97,7 @@
 		"mime-types": "2.1.21",
 		"moment": "2.24.0",
 		"node-fetch": "2.3.0",
+		"node-machine-id": "1.1.10",
 		"node-powershell": "3.3.1",
 		"node-pre-gyp": "0.12.0",
 		"normalizr": "3.3.0",
@@ -174,6 +173,8 @@
 		"electron-updater": "4.0.4",
 		"electron-webpack": "2.6.1",
 		"electron-webpack-eslint": "4.0.0",
+		"enzyme": "3.9.0",
+		"enzyme-adapter-react-16": "1.11.2",
 		"eslint": "5.9.0",
 		"eslint-config-prettier": "3.3.0",
 		"eslint-config-standard": "12.0.0",
@@ -258,7 +259,8 @@
 			"@material-ui/core",
 			"@material-ui/icons",
 			"flag-icon-css/css/flag-icon.css",
-			"fs-extra"
+			"fs-extra",
+			"node-machine-id"
 		],
 		"main": {
 			"extraEntries": [
@@ -299,6 +301,7 @@
 				"@material-ui/icons",
 				"flag-icon-css/css/flag-icon.css",
 				"fs-extra",
+				"node-machine-id",
 				"./static/stylesheets/scss/main.scss"
 			],
 			"webpackConfig": "webpack/renderer.additions.js",

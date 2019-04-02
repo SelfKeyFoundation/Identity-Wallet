@@ -195,7 +195,7 @@ class TransactionSendBoxContainer extends Component {
 	handleConfirm = async () => {
 		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
 		await this.props.dispatch(transactionOperations.confirmSend());
-		if (this.props.hardwareWalletType !== '') {
+		if (this.props.walletType !== '') {
 			await this.props.dispatch(
 				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
 			);
@@ -324,7 +324,7 @@ class TransactionSendBoxContainer extends Component {
 	// TransactionSendBox - End
 
 	renderConfirmationModal = () => {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
 		const text = `Confirm Transaction on ${typeText}`;
 		return (
 			<Popup
@@ -482,7 +482,7 @@ const mapStateToProps = (state, props) => {
 		tokens: getTokens(state).splice(1), // remove ETH
 		cryptoCurrency: props.match.params.cryptoCurrency,
 		confirmation: props.match.params.confirmation,
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 

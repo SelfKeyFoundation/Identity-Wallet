@@ -5,8 +5,7 @@ import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
-import { appOperations, appSelectors } from 'common/app';
-import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
+import { appOperations } from 'common/app';
 import config from 'common/config';
 
 import { GlobalError } from './global-error';
@@ -38,18 +37,17 @@ const log = new Logger('AppComponent');
 
 const piwik = new ReactPiwik({
 	url: 'https://analytics.selfkey.org',
-	siteId: config.matomoSite | 1,
+	siteId: config.matomoSite || 1,
 	trackErrors: true
 });
+ReactPiwik.push(['requireConsent']);
+ReactPiwik.push(['trackPageView']);
 
 class AppContainerComponent extends Component {
 	state = { hasError: false };
 	handleRefresh = async () => {
 		await this.props.dispatch(push('/'));
 		this.setState({ hasError: false });
-	};
-	includeTracking = () => {
-		return this.props.hasAcceptedTracking && !isDevMode() && !isTestMode() && !isDebugMode();
 	};
 	static getDerivedStateFromError() {
 		return { hasError: true };
@@ -60,6 +58,9 @@ class AppContainerComponent extends Component {
 	}
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
+		ReactPiwik.push(['trackPageView']);
+		ReactPiwik.push(['enableHeartBeatTimer']);
+		ReactPiwik.push(['trackAllContentImpressions']);
 	}
 	render() {
 		const { hasError } = this.state;
@@ -67,13 +68,7 @@ class AppContainerComponent extends Component {
 			return <GlobalError onRefresh={this.handleRefresh} />;
 		}
 		return (
-			<ConnectedRouter
-				history={
-					this.includeTracking()
-						? piwik.connectToHistory(this.props.history.getHistory())
-						: this.props.history.getHistory()
-				}
-			>
+			<ConnectedRouter history={piwik.connectToHistory(this.props.history.getHistory())}>
 				<HashRouter>
 					<div
 						style={{
@@ -116,13 +111,7 @@ class AppContainerComponent extends Component {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {
-		hasAcceptedTracking: appSelectors.hasAcceptedTracking(state)
-	};
-};
-
-const AppContainer = connect(mapStateToProps)(AppContainerComponent);
+const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
