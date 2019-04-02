@@ -18,7 +18,6 @@ const styles = theme => ({
 		width: '946px',
 		height: '100%',
 		margin: '50px auto 30px',
-		border: 'solid 1px #303c49',
 		borderRadius: '4px'
 	},
 
@@ -31,17 +30,25 @@ const styles = theme => ({
 	},
 
 	header: {
-		backgroundColor: '#2a3540'
+		backgroundColor: '#2a3540',
+		border: '1px solid #303C49',
+		borderRadius: '4px 4px 0 0'
 	},
 
 	body: {
-		textAlign: 'justify',
-		margin: '20px',
+		backgroundColor: '#262F39',
+		border: '1px solid #303C49',
+		borderRadius: '0 0 4px 4px',
+		borderTop: 0,
 		color: '#fff',
 		fontFamily: 'Lato, arial, sans-serif',
 		fontSize: '16px',
 		fontWeight: 400,
 		lineHeight: 1.67,
+		// margin: '20px',
+		margin: 0,
+		padding: '16px',
+		textAlign: 'justify',
 		width: '100%'
 	},
 
@@ -153,6 +160,10 @@ const styles = theme => ({
 
 	bottomSpace: {
 		marginBottom: '20px'
+	},
+
+	exchange: {
+		paddingTop: '3px'
 	}
 });
 
@@ -230,7 +241,11 @@ class MarketplaceServiceDetailsComponent extends Component {
 							<Grid container alignItems="center">
 								<Typography variant="h1">{item.name}</Typography>
 								<Typography variant="h1">&nbsp;</Typography>
-								<Typography variant="subtitle2" color="secondary">
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									className={classes.exchange}
+								>
 									- Exchange
 								</Typography>
 							</Grid>
