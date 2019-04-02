@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, TableRow, TableCell, Typography, withStyles } from '@material-ui/core';
-import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
 	icon: {
@@ -27,7 +26,18 @@ const styles = theme => ({
 });
 
 export const MarketplaceServicesListItem = withStyles(styles)(
-	({ classes, children, name, logoUrl, viewAction }) => (
+	({
+		classes,
+		children,
+		name,
+		location,
+		fees,
+		fiatSupported,
+		fiatPayments,
+		excludedResidents,
+		logoUrl,
+		viewAction
+	}) => (
 		<TableRow key={name}>
 			<TableCell className={classes.noRightPadding}>
 				<img src={logoUrl} className={classes.icon} />
@@ -36,21 +46,19 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 				<Typography variant="h6">{name}</Typography>
 			</TableCell>
 			<TableCell>
-				<Typography variant="h6">Location</Typography>
+				<Typography variant="h6">{location}</Typography>
 			</TableCell>
 			<TableCell>
-				<Typography variant="h6">Fees</Typography>
+				<Typography variant="h6">{fees}</Typography>
 			</TableCell>
 			<TableCell>
-				<Typography variant="h6">
-					<Tag>EUR</Tag> <Tag>USD</Tag> <Tag>GBP</Tag>
-				</Typography>
+				<Typography variant="h6">{fiatSupported}</Typography>
 			</TableCell>
 			<TableCell>
-				<Typography variant="h6">Fiat Payments</Typography>
+				<Typography variant="h6">{fiatPayments}</Typography>
 			</TableCell>
 			<TableCell>
-				<Typography variant="h6">Excluded Residents</Typography>
+				<Typography variant="h6">{excludedResidents}</Typography>
 			</TableCell>
 			<TableCell>
 				<Button

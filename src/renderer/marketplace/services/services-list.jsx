@@ -68,8 +68,11 @@ const getServices = (items, viewAction) => {
 				<MarketplaceServicesListItem
 					id={item.id || item.name}
 					name={item.name}
-					/* description={item.description} */
-					/* status={item.status} */
+					location={item.location || '-'}
+					fees={items.fees || '-'}
+					fiatSupported={items.fiats || '-'}
+					fiatPayments={item.fiatp || '-'}
+					excludedResidents={item.excludedResidents || '-'}
 					logoUrl={item.logoUrl}
 					viewAction={viewAction}
 				/>
