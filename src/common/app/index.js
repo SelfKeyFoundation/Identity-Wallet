@@ -123,6 +123,7 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -137,6 +138,7 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -165,6 +167,7 @@ const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -183,6 +186,7 @@ const loadLedgerWallets = (page = 0) => async dispatch => {
 	} catch (error) {
 		log.error(error);
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -215,6 +219,7 @@ const loadTrezorWallets = (page = 0) => async dispatch => {
 	} catch (error) {
 		clearTimeout(timeoutId);
 		eventEmitter.off('TREZOR_PIN_REQUEST', () => {});
+		log.error(error);
 		if (error.message.indexOf('PIN canceled') === -1) {
 			const message = transformErrorMessage(error.message);
 			await dispatch(appActions.setUnlockWalletErrorAction(message));
