@@ -20,6 +20,8 @@ import {
 	ProgramPrice,
 	sanitize
 } from '../common';
+import ReactPiwik from 'react-piwik';
+import config from 'common/config';
 
 const styles = theme => ({
 	container: {
@@ -223,7 +225,7 @@ class IncorporationsDetailView extends Component {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 
-		const { treaties, rpShouldUpdate } = this.props;
+		const { treaties, rpShouldUpdate, program } = this.props;
 		const { countryCode } = this.props.match.params;
 		const notAuthenticated = false;
 
@@ -238,6 +240,18 @@ class IncorporationsDetailView extends Component {
 				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
 			);
 		}
+
+		ReactPiwik.push([
+			'setEcommerceView',
+			program['Company code'],
+			program.Region,
+			'Incorporation',
+			program['Wallet Price']
+		]);
+	}
+
+	componentWillUnmount() {
+		ReactPiwik.push(['clearEcommerceCart']);
 	}
 
 	handleExternalLinks = e => {
@@ -293,9 +307,10 @@ class IncorporationsDetailView extends Component {
 
 	getPrice = () => {
 		const { program } = this.props;
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
+		const price =
+			program['active_test_price'] || config.dev
+				? program['test_price']
+				: program['Wallet Price'];
 		return price;
 	};
 
@@ -469,6 +484,7 @@ class IncorporationsDetailView extends Component {
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
+		console.log('program', program);
 		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;

@@ -116,9 +116,10 @@ class IncorporationsTable extends Component {
 	}
 
 	getPrice = program => {
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
+		const price =
+			program['active_test_price'] || conf.dev
+				? program['test_price']
+				: program['Wallet Price'];
 		return price;
 	};
 

@@ -236,7 +236,7 @@ const getSession = async (config, authenticate, dispatch, walletType) => {
 
 	if (authenticate) {
 		try {
-			if (walletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				const hardwalletConfirmationTime = '30000';
 				hardwalletConfirmationTimeout = setTimeout(async () => {
 					clearTimeout(hardwalletConfirmationTimeout);
@@ -247,7 +247,7 @@ const getSession = async (config, authenticate, dispatch, walletType) => {
 			await session.establish();
 		} catch (error) {
 			log.error('getSession HD %s', error);
-			if (walletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				clearTimeout(hardwalletConfirmationTimeout);
 				if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
 					await dispatch(push('/main/hd-declined'));
@@ -316,7 +316,7 @@ const loadRelyingPartyOperation = (
 		);
 
 		if (authenticate && afterAuthRoute) {
-			if (walletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				clearTimeout(hardwalletConfirmationTimeout);
 			}
 			await dispatch(push(afterAuthRoute));

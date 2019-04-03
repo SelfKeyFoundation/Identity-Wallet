@@ -237,9 +237,10 @@ export class IncorporationCheckout extends React.Component {
 
 	getIncorporationPrice = () => {
 		const { program } = this.props;
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
+		const price =
+			program['active_test_price'] || config.dev
+				? program['test_price']
+				: program['Wallet Price'];
 		return parseInt(price.replace(/\$/, '').replace(/,/, ''));
 	};
 
