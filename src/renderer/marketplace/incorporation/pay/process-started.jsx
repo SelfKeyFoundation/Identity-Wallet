@@ -110,8 +110,6 @@ export class IncorporationProcessStarted extends React.Component {
 	saveTransactionHash = async () => {
 		const { currentApplication, transaction, rp } = this.props;
 
-		console.log(this.props);
-
 		if (currentApplication && transaction) {
 			const application = rp.applications[rp.applications.length - 1];
 			await this.props.dispatch(
