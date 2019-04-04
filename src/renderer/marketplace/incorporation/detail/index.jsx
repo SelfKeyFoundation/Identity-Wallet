@@ -222,10 +222,26 @@ class IncorporationsDetailView extends Component {
 		loading: false
 	};
 
+	setEcommerceView = () => {
+		const { program } = this.props;
+
+		ReactPiwik.push([
+			'setEcommerceView',
+			program['Company code'],
+			program.Region,
+			'Incorporation',
+			program['Wallet Price']
+		]);
+	};
+
+	clearEcommerceCart = () => {
+		ReactPiwik.push(['clearEcommerceCart']);
+	};
+
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 
-		const { treaties, rpShouldUpdate, program } = this.props;
+		const { treaties, rpShouldUpdate } = this.props;
 		const { countryCode } = this.props.match.params;
 		const notAuthenticated = false;
 
@@ -241,17 +257,11 @@ class IncorporationsDetailView extends Component {
 			);
 		}
 
-		ReactPiwik.push([
-			'setEcommerceView',
-			program['Company code'],
-			program.Region,
-			'Incorporation',
-			program['Wallet Price']
-		]);
+		this.setEcommerceView();
 	}
 
 	componentWillUnmount() {
-		ReactPiwik.push(['clearEcommerceCart']);
+		this.clearEcommerceCart();
 	}
 
 	handleExternalLinks = e => {
@@ -484,7 +494,6 @@ class IncorporationsDetailView extends Component {
 
 	render() {
 		const { program, classes, treaties, keyRate } = this.props;
-		console.log('program', program);
 		const { countryCode, templateId } = this.props.match.params;
 		const { selectedTab } = this.state;
 		const { translation, tax } = program;
