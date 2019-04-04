@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
-import conf from 'common/config';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
@@ -14,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfkey-ui';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import { FlagCountryName, ProgramPrice } from '../common';
+import { FlagCountryName, ProgramPrice, getIncorporationPrice, getTemplateID } from '../common';
 
 const styles = theme => ({
 	header: {
@@ -114,13 +113,6 @@ class IncorporationsTable extends Component {
 			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
 	}
-
-	getPrice = program => {
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
-		return price;
-	};
 
 	generateRoute({ countryCode, companyCode, templateID }) {
 		let url = `${this.props.match.path}/details/${companyCode}/${countryCode}`;
@@ -230,7 +222,7 @@ class IncorporationsTable extends Component {
 									<TableCell className={classes.costCell}>
 										<ProgramPrice
 											label="$"
-											price={this.getPrice(inc)}
+											price={getIncorporationPrice(inc)}
 											rate={keyRate}
 										/>
 									</TableCell>
@@ -240,9 +232,7 @@ class IncorporationsTable extends Component {
 												this.onDetailsClick({
 													companyCode: inc['Company code'],
 													countryCode: inc['Country code'],
-													templateID: conf.dev
-														? inc['test_template_id']
-														: inc['template_id']
+													templateID: getTemplateID(inc)
 												});
 											}}
 										>

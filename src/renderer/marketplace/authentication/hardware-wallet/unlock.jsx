@@ -5,6 +5,7 @@ import Popup from '../../../common/popup';
 import { UnlockLargeIcon } from 'selfkey-ui';
 import { kycSelectors } from 'common/kyc';
 import { push } from 'connected-react-router';
+import { appSelectors } from 'common/app';
 
 const styles = theme => ({
 	unlockIcon: {
@@ -17,7 +18,7 @@ class HardwareWalletUnlock extends Component {
 	};
 
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Unlock Device">
 				<Grid
@@ -64,7 +65,8 @@ class HardwareWalletUnlock extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		cancelRoute: kycSelectors.selectCancelRoute(state)
+		cancelRoute: kycSelectors.selectCancelRoute(state),
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 

@@ -70,6 +70,7 @@ const styles = theme => ({
 class SelfKeyIdCreateFormComponent extends Component {
 	state = {
 		error: '',
+		errorEmail: false,
 		nickName: '',
 		firstName: '',
 		lastName: '',
@@ -113,7 +114,10 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 	handleEmailChange = event => {
 		this.setState({ email: event.target.value }, () => {
-			this.isDisabled();
+			let valid = this.isValidEmail(this.state.email);
+			this.setState({ errorEmail: !valid }, () => {
+				this.isDisabled();
+			});
 		});
 	};
 
@@ -123,12 +127,18 @@ class SelfKeyIdCreateFormComponent extends Component {
 				!this.state.nickName ||
 				!this.state.firstName ||
 				!this.state.lastName ||
-				!this.state.email
+				!this.state.email ||
+				!this.isValidEmail(this.state.email)
 		});
 	};
 
 	sendMatomoGoal = () => {
 		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
+  }
+  
+	isValidEmail = email => {
+		var re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+		return email ? re.test(String(email).toLowerCase()) : true;
 	};
 
 	render() {
@@ -174,7 +184,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 										className={classes.cardHeader}
 									/>
 									<CardContent>
-										<form onSubmit={this.handleSave}>
+										<form onSubmit={this.handleSave} noValidate>
 											<Grid
 												container
 												direction="column"
@@ -375,6 +385,10 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			<Input
 																				fullWidth
 																				type="email"
+																				error={
+																					this.state
+																						.errorEmail
+																				}
 																				required
 																				onChange={
 																					this
@@ -382,6 +396,18 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				}
 																				placeholder="Email"
 																			/>
+																			{this.state
+																				.errorEmail && (
+																				<Typography
+																					variant="subtitle2"
+																					color="error"
+																					gutterBottom
+																				>
+																					{
+																						'Email provided is invalid'
+																					}
+																				</Typography>
+																			)}
 																		</Grid>
 																	</Grid>
 																</Grid>

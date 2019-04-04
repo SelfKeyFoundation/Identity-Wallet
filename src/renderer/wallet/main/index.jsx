@@ -7,6 +7,7 @@ import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import { walletSelectors } from 'common/wallet';
+import { appSelectors } from 'common/app';
 
 import {
 	MarketplaceCategoriesPage,
@@ -64,6 +65,9 @@ const contentWrapperStyle = {
 class Main extends Component {
 	setMatomoId = () => {
 		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
+		ReactPiwik.push(['setCustomVariable', 2, 'walletType', this.props.walletType, 'visit']);
+		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
 	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
@@ -146,7 +150,7 @@ class Main extends Component {
 						component={TransactionTimeout}
 					/>
 					<Route
-						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
+						path={`${match.path}/advancedTransaction/:cryptoCurrency/:confirmation?`}
 						component={AdvancedTransaction}
 					/>
 					<Route
@@ -179,7 +183,8 @@ class Main extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		publicKey: walletSelectors.getWallet(state).publicKey
+		publicKey: walletSelectors.getWallet(state).publicKey,
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 

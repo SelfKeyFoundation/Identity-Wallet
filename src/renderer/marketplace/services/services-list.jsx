@@ -25,6 +25,8 @@ const styles = theme => ({
 		marginTop: '50px'
 	},
 
+	content: { marginTop: '30px' },
+
 	button: {
 		color: '#93b0c1',
 		borderColor: '#3b4a5a',
@@ -47,15 +49,16 @@ const styles = theme => ({
 const getServices = (items, viewAction) => {
 	return items.map(item => {
 		return (
-			<MarketplaceServicesListItem
-				id={item.id || item.name}
-				key={item.id || item.name}
-				name={item.name}
-				description={item.description}
-				status={item.status}
-				logoUrl={item.logoUrl}
-				viewAction={viewAction}
-			/>
+			<Grid item key={item.id || item.name} xs={4}>
+				<MarketplaceServicesListItem
+					id={item.id || item.name}
+					name={item.name}
+					description={item.description}
+					status={item.status}
+					logoUrl={item.logoUrl}
+					viewAction={viewAction}
+				/>
+			</Grid>
 		);
 	});
 };
@@ -94,8 +97,15 @@ export const MarketplaceServicesList = withStyles(styles)(
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={12} spacing={24}>
-						<Grid container direction="row" justify="space-between" alignItems="center">
+					<Grid item xs={12}>
+						<Grid
+							container
+							direction="row"
+							justify="start"
+							alignItems="center"
+							spacing={24}
+							className={classes.content}
+						>
 							{getServices(items, viewAction)}
 						</Grid>
 					</Grid>

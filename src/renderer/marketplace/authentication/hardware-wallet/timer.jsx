@@ -5,6 +5,7 @@ import Popup from '../../../common/popup';
 import { kycSelectors } from 'common/kyc';
 import { push } from 'connected-react-router';
 import { HourGlassLargeIcon } from 'selfkey-ui';
+import { appSelectors } from 'common/app';
 
 const styles = theme => ({});
 
@@ -14,7 +15,7 @@ class HardwareWalletTimer extends Component {
 	};
 
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Authentication Confirmation">
 				<Grid
@@ -63,7 +64,8 @@ class HardwareWalletTimer extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		cancelRoute: kycSelectors.selectCancelRoute(state)
+		cancelRoute: kycSelectors.selectCancelRoute(state),
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 
