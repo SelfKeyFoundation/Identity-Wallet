@@ -24,6 +24,7 @@ const styles = theme => ({
 });
 
 const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
+const main = props => <Link to="/main/dashboard" {...props} />;
 
 class SelfKeyIdCreateDisclaimerComponent extends Component {
 	handleBackClick = evt => {
@@ -89,7 +90,7 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 									</Button>
 								</Grid>
 								<Grid item className={classes.cancel}>
-									<Button variant="outlined" size="large" component={selfkeyId}>
+									<Button variant="outlined" size="large" component={main}>
 										Cancel
 									</Button>
 								</Grid>

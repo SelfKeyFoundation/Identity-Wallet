@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { identityOperations } from 'common/identity';
 import { walletSelectors } from 'common/wallet';
+import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
 	back: {
@@ -129,6 +130,10 @@ class SelfKeyIdCreateFormComponent extends Component {
 				!this.state.email ||
 				!this.isValidEmail(this.state.email)
 		});
+	};
+
+	sendMatomoGoal = () => {
+		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
 	};
 
 	isValidEmail = email => {
@@ -415,6 +420,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																type="submit"
 																className={classes.create}
 																disabled={this.state.isDisabled}
+																onClick={this.sendMatomoGoal}
 															>
 																CREATE SELFKEY ID
 															</Button>
