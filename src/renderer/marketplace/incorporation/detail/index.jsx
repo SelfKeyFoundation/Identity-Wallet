@@ -22,7 +22,6 @@ import {
 	getIncorporationPrice
 } from '../common';
 import ReactPiwik from 'react-piwik';
-import config from 'common/config';
 
 const styles = theme => ({
 	container: {
