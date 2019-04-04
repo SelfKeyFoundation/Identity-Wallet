@@ -3,7 +3,6 @@ import { Grid, Modal, Typography, Paper, Button, withStyles } from '@material-ui
 import { SelfkeyLogoTemp, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
 import history from 'common/store/history';
-import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
 	container: {
@@ -25,15 +24,12 @@ const styles = theme => ({
 });
 
 const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
+const main = props => <Link to="/main/dashboard" {...props} />;
 
 class SelfKeyIdCreateDisclaimerComponent extends Component {
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		history.getHistory().goBack();
-	};
-
-	sendMatomoGoal = () => {
-		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
 	};
 
 	render() {
@@ -89,17 +85,12 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 									<br />
 								</Grid>
 								<Grid item>
-									<Button
-										variant="contained"
-										size="large"
-										component={selfkeyId}
-										onClick={this.sendMatomoGoal}
-									>
+									<Button variant="contained" size="large" component={selfkeyId}>
 										Continue
 									</Button>
 								</Grid>
 								<Grid item className={classes.cancel}>
-									<Button variant="outlined" size="large" component={selfkeyId}>
+									<Button variant="outlined" size="large" component={main}>
 										Cancel
 									</Button>
 								</Grid>

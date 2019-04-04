@@ -6,7 +6,7 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations, appSelectors } from 'common/app';
-// import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
+import { isDevMode, isTestMode, isDebugMode } from 'common/utils/common';
 import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
@@ -47,7 +47,7 @@ class AppContainerComponent extends Component {
 		this.setState({ hasError: false });
 	};
 	includeTracking = () => {
-		return this.props.hasAcceptedTracking; // && !isDevMode() && !isTestMode() && !isDebugMode();
+		return this.props.hasAcceptedTracking && !isDevMode() && !isTestMode() && !isDebugMode();
 	};
 	static getDerivedStateFromError() {
 		return { hasError: true };
