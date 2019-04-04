@@ -134,8 +134,8 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 	sendMatomoGoal = () => {
 		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
-  }
-  
+	};
+
 	isValidEmail = email => {
 		var re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 		return email ? re.test(String(email).toLowerCase()) : true;
