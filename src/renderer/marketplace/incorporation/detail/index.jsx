@@ -21,6 +21,7 @@ import {
 	sanitize,
 	getIncorporationPrice
 } from '../common';
+import ReactPiwik from 'react-piwik';
 
 const styles = theme => ({
 	container: {
@@ -221,6 +222,22 @@ class IncorporationsDetailView extends Component {
 		loading: false
 	};
 
+	setEcommerceView = () => {
+		const { program } = this.props;
+
+		ReactPiwik.push([
+			'setEcommerceView',
+			program['Company code'],
+			program.Region,
+			'Incorporation',
+			program['Wallet Price']
+		]);
+	};
+
+	clearEcommerceCart = () => {
+		ReactPiwik.push(['clearEcommerceCart']);
+	};
+
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 
@@ -239,6 +256,12 @@ class IncorporationsDetailView extends Component {
 				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
 			);
 		}
+
+		this.setEcommerceView();
+	}
+
+	componentWillUnmount() {
+		this.clearEcommerceCart();
 	}
 
 	handleExternalLinks = e => {

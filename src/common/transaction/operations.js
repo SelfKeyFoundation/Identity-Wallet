@@ -212,7 +212,8 @@ const confirmSend = () => async (dispatch, getState) => {
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	let hardwalletConfirmationTimeout = null;
-	if (appSelectors.selectWalletType(state) !== '') {
+	const walletType = appSelectors.selectWalletType(state);
+	if (walletType === 'ledget' || walletType === 'trezor') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
