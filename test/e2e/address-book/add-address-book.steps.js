@@ -24,7 +24,8 @@ defineFeature(feature, test => {
 		when('enters invalid ETH address', () => {
 			return tools.app.client
 				.waitForVisible('#addressInput')
-				.then(tools.app.client.setValue('#addressInput', 'invalidValue'));
+				.then(tools.app.client.setValue('#addressInput', 'invalidValue'))
+				.then(() => delay(5000));
 		});
 
 		then('user can see error message informing of invalid ETH address entered', () => {
@@ -40,7 +41,8 @@ defineFeature(feature, test => {
 		when('enters current wallet ETH address', () => {
 			return tools.app.client
 				.waitForVisible('#addressInput')
-				.then(tools.app.client.setValue('#addressInput', data[1].pubKey));
+				.then(tools.app.client.setValue('#addressInput', data[1].pubKey))
+				.then(() => delay(5000));
 		});
 
 		then(`user can see error message that current eth address can't be saved`, () => {
@@ -61,7 +63,8 @@ defineFeature(feature, test => {
 						'#labelInput',
 						'invalidValueinvalidValueinvalidValueinvalidValueinvalidValueinvalidValueinvalidValueinvalidValue'
 					)
-				);
+				)
+				.then(() => delay(5000));
 		});
 
 		then('user can see error message to enter 25 characters or less for label', () => {
@@ -79,7 +82,8 @@ defineFeature(feature, test => {
 		when('enters existing label Test', () => {
 			return tools.app.client
 				.waitForVisible('#addressInput')
-				.then(tools.app.client.setValue('#labelInput', 'Test'));
+				.then(tools.app.client.setValue('#labelInput', 'Test'))
+				.then(() => delay(5000));
 		});
 
 		then('user can see error message informing that label already exists', () => {
@@ -97,7 +101,8 @@ defineFeature(feature, test => {
 		when('enters existing eth address', () => {
 			return tools.app.client
 				.waitForVisible('#addressInput')
-				.then(() => tools.app.client.setValue('#addressInput', data[1].pubKey));
+				.then(() => tools.app.client.setValue('#addressInput', data[1].pubKey))
+				.then(() => delay(5000));
 		});
 
 		then('user can see error message informing that eth address already exists', () => {
@@ -114,7 +119,7 @@ defineFeature(feature, test => {
 			return tools.app.client
 				.setValue('#labelInput', 'Test')
 				.then(() => tools.app.client.setValue('#addressInput', data[1].pubKey))
-				.then(() => delay(2000));
+				.then(() => delay(5000));
 		});
 
 		when('clicks Save button', () => {

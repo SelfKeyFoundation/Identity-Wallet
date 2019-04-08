@@ -27,10 +27,11 @@ export const givenUserHasOpenedAddressBookScreen = given => {
 };
 
 export const givenUserHasOpenedAddressBookScreenWithAPrivateKey = given => {
-	given('user has opened Address Book screen with pirvate key', () => {
+	given('user has opened Address Book screen with a private key', () => {
 		return tools
 			.regStep(tools.app, '#agree')
 			.then(() => tools.regStep(tools.app, '#useExistingWalletButton'))
+			.then(() => delay(5000))
 			.then(() => tools.regStep(tools.app, '#privateKey'))
 			.then(() => tools.app.client.setValue('#privateKeyInput', data[1].privKey))
 			.then(() => tools.regStep(tools.app, '#unlockPrivateKeyButton'))

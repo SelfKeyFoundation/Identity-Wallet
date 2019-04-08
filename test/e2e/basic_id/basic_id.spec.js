@@ -57,6 +57,7 @@ describe('Creates a New Wallet with Basic ID Details and a Password', () => {
 			.then(() => tools.app.client.waitForVisible('#nickName', 10000))
 			.then(() => tools.app.client.setValue('#nickName', data[0].nickName))
 			.then(() => tools.app.client.setValue('#firstName', data[0].firstName))
+			.then(() => tools.app.client.setValue('#lastName', data[0].lastName))
 			.then(() => tools.app.client.setValue('#email', data[0].email))
 			.then(() => tools.regStep(tools.app, '#selfkeyIdCreateButton'));
 	});
