@@ -42,6 +42,8 @@ const piwik = new ReactPiwik({
 });
 ReactPiwik.push(['requireConsent']);
 ReactPiwik.push(['trackPageView']);
+ReactPiwik.push(['enableHeartBeatTimer']);
+ReactPiwik.push(['trackAllContentImpressions']);
 
 class AppContainerComponent extends Component {
 	state = { hasError: false };
@@ -58,9 +60,6 @@ class AppContainerComponent extends Component {
 	}
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
-		ReactPiwik.push(['trackPageView']);
-		ReactPiwik.push(['enableHeartBeatTimer']);
-		ReactPiwik.push(['trackAllContentImpressions']);
 	}
 	render() {
 		const { hasError } = this.state;
