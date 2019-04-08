@@ -9,6 +9,7 @@ import { incorporationsSelectors } from 'common/incorporations';
 import { pricesSelectors } from 'common/prices';
 import { transactionSelectors } from 'common/transaction';
 import { kycSelectors, kycOperations } from 'common/kyc';
+import ReactPiwik from 'react-piwik';
 
 const styles = theme => ({
 	container: {
@@ -89,12 +90,25 @@ export class IncorporationProcessStarted extends React.Component {
 	componentDidMount() {
 		this.saveTransactionHash();
 		this.clearRelyingParty();
+
+		ReactPiwik.push([
+			'addEcommerceItem',
+			this.props.program['Company code'],
+			this.props.program.Region,
+			'Incorporation',
+			this.props.program['Wallet Price'],
+			1
+		]);
+
+		ReactPiwik.push([
+			'trackEcommerceOrder',
+			this.props.transaction.transactionHash,
+			this.props.program['Wallet Price']
+		]);
 	}
 
 	saveTransactionHash = async () => {
 		const { currentApplication, transaction, rp } = this.props;
-
-		console.log(this.props);
 
 		if (currentApplication && transaction) {
 			const application = rp.applications[rp.applications.length - 1];

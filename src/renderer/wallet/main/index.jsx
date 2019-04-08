@@ -6,6 +6,8 @@ import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { walletSelectors } from 'common/wallet';
+import { appSelectors } from 'common/app';
 
 import {
 	MarketplaceCategoriesPage,
@@ -39,6 +41,9 @@ import HardwareWalletError from '../../marketplace/authentication/hardware-walle
 import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
+import md5 from 'md5';
+import ReactPiwik from 'react-piwik';
+
 const styles = theme => ({
 	headerSection: {
 		marginLeft: 0,
@@ -58,8 +63,15 @@ const contentWrapperStyle = {
 };
 
 class Main extends Component {
+	setMatomoId = () => {
+		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
+		ReactPiwik.push(['setCustomVariable', 2, 'walletType', this.props.walletType, 'visit']);
+		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
+	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
+		this.setMatomoId();
 	}
 
 	render() {
@@ -170,7 +182,10 @@ class Main extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		publicKey: walletSelectors.getWallet(state).publicKey,
+		walletType: appSelectors.selectWalletType(state)
+	};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(Main));

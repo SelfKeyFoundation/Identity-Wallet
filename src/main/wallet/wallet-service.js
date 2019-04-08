@@ -81,8 +81,12 @@ export class WalletService {
 				keystoreFilePath
 			);
 		}
-		let keystore = JSON.parse(await fs.promises.readFile(keystoreFilePath));
-		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
+		let keystore = await fs.promises.readFile(keystoreFilePath);
+		const account = this.web3Service.web3.eth.accounts.decrypt(
+			keystore.toString('utf8'),
+			password,
+			true
+		);
 		this.web3Service.web3.eth.accounts.wallet.add(account);
 		this.web3Service.web3.eth.defaultAccount = account.address;
 
@@ -98,8 +102,12 @@ export class WalletService {
 	}
 
 	async unlockWalletWithNewFile(filePath, password) {
-		const keystore = JSON.parse(await fs.promises.readFile(filePath));
-		const account = this.web3Service.web3.eth.accounts.decrypt(keystore, password);
+		const keystore = await fs.promises.readFile(filePath);
+		const account = this.web3Service.web3.eth.accounts.decrypt(
+			keystore.toString('utf8'),
+			password,
+			true
+		);
 		this.web3Service.web3.eth.accounts.wallet.add(account);
 		this.web3Service.web3.eth.defaultAccount = account.address;
 

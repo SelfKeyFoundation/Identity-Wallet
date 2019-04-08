@@ -7,7 +7,7 @@ const ProgramPrice = props => {
 		return null;
 	}
 
-	const numeric = parseInt(price.replace(/\$/, '').replace(/,/, ''));
+	const numeric = price;
 	const key = numeric / rate;
 	const formattedLabel = label ? `${label} ` : '';
 

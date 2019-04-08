@@ -13,7 +13,8 @@ class TransactionTimeout extends Component {
 		await this.props.dispatch(push(this.props.goBackPath));
 	};
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText =
+			this.props.walletType.charAt(0).toUpperCase() + this.props.walletType.slice(1);
 		const text = `${typeText} Timed Out`;
 		return (
 			<Popup open={true} closeAction={this.handleClose} text={text}>
@@ -61,7 +62,7 @@ class TransactionTimeout extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
+		walletType: appSelectors.selectWalletType(state),
 		goBackPath: appSelectors.selectGoBackPath(state)
 	};
 };

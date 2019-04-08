@@ -212,7 +212,8 @@ const confirmSend = () => async (dispatch, getState) => {
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	let hardwalletConfirmationTimeout = null;
-	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+	const walletType = appSelectors.selectWalletType(state);
+	if (walletType === 'ledget' || walletType === 'trezor') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
@@ -295,7 +296,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	let hardwalletConfirmationTimeout = null;
-	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+	if (appSelectors.selectWalletType(state) !== '') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
