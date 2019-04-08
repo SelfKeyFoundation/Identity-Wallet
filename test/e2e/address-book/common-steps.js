@@ -46,7 +46,7 @@ export const givenThereIsAlreadyAnAddressAddedWithLabelTest = given => {
 	given('there is already an address added with label Test', () => {
 		return tools.app.client
 			.waitForVisible('#viewAddressBook', 10000, true)
-			.then(() => tools.app.client.element('#addAddressButton').click())
+			.then(tools.app.client.element('#addAddressButton').click())
 			.then(() => delay(2000))
 			.then(() => tools.app.client.setValue('#labelInput', 'Test'))
 			.then(() => tools.app.client.setValue('#addressInput', data[1].pubKey))
@@ -59,7 +59,7 @@ export const givenThereIsAlreadyAnAddressAddedWithLabelTest2 = given => {
 	given('there is already an address added with label Test2', () => {
 		return tools.app.client
 			.waitForVisible('#viewAddressBook', 10000, true)
-			.then(() => tools.app.client.element('#addAddressButton').click())
+			.then(tools.app.client.element('#addAddressButton').click())
 			.then(() => delay(2000))
 			.then(() => tools.app.client.setValue('#labelInput', 'Test2'))
 			.then(() => tools.app.client.setValue('#addressInput', data[2].pubKey))

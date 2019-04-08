@@ -5,6 +5,7 @@ import {
 	givenThereIsAlreadyAnAddressAddedWithLabelTest2
 } from './common-steps';
 const tools = require('../../utils/tools.js');
+const delay = require('delay');
 jest.setTimeout(120000);
 
 const feature = loadFeature('./test/e2e/address-book/delete-address-book.feature');
@@ -21,11 +22,11 @@ defineFeature(feature, test => {
 		givenThereIsAlreadyAnAddressAddedWithLabelTest2(given);
 
 		when('user clicks on x icon of an address', () => {
-			return tools.regStep(tools.app, '#deleteButtonTest');
+			return tools.regStep(tools.app, '#deleteButtonTest').then(() => delay(5000));
 		});
 
 		then('user could no longer see address on Address Book table', () => {
-			return tools.app.client.waitForVisible('#Test2', 10000, true);
+			return tools.app.client.waitForVisible('#Test2');
 		});
 	});
 });

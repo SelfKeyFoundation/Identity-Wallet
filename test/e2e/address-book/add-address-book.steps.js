@@ -29,7 +29,7 @@ defineFeature(feature, test => {
 		});
 
 		then('user can see error message informing of invalid ETH address entered', () => {
-			return tools.app.client.waitForVisible('#addressError', 10000);
+			return tools.app.client.waitForVisible('#addressError', 10000).then(() => delay(5000));
 		});
 	});
 
@@ -46,7 +46,7 @@ defineFeature(feature, test => {
 		});
 
 		then(`user can see error message that current eth address can't be saved`, () => {
-			return tools.app.client.waitForVisible('#addressError', 10000);
+			return tools.app.client.waitForVisible('#addressError', 10000).then(() => delay(5000));
 		});
 	});
 
@@ -68,7 +68,7 @@ defineFeature(feature, test => {
 		});
 
 		then('user can see error message to enter 25 characters or less for label', () => {
-			return tools.app.client.waitForVisible('#labelError', 10000);
+			return tools.app.client.waitForVisible('#labelError', 10000).then(() => delay(5000));
 		});
 	});
 
@@ -87,7 +87,7 @@ defineFeature(feature, test => {
 		});
 
 		then('user can see error message informing that label already exists', () => {
-			return tools.app.client.waitForVisible('#labelError', 10000);
+			return tools.app.client.waitForVisible('#labelError', 10000).then(() => delay(5000));
 		});
 	});
 
@@ -106,7 +106,7 @@ defineFeature(feature, test => {
 		});
 
 		then('user can see error message informing that eth address already exists', () => {
-			return tools.app.client.waitForVisible('#addressError', 10000);
+			return tools.app.client.waitForVisible('#addressError', 10000).then(() => delay(5000));
 		});
 	});
 
@@ -127,7 +127,7 @@ defineFeature(feature, test => {
 		});
 
 		then('user can see added address on the Address Book table', () => {
-			return tools.app.client.waitForVisible('#Test', 10000);
+			return tools.app.client.waitForVisible('#Test', 10000).then(() => delay(5000));
 		});
 	});
 });
