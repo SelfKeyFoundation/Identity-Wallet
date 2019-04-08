@@ -15,7 +15,8 @@ class HardwareWalletTimer extends Component {
 	};
 
 	render() {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText =
+			this.props.walletType.charAt(0).toUpperCase() + this.props.walletType.slice(1);
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Authentication Confirmation">
 				<Grid
@@ -65,7 +66,7 @@ class HardwareWalletTimer extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		cancelRoute: kycSelectors.selectCancelRoute(state),
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType
+		walletType: appSelectors.selectWalletType(state)
 	};
 };
 

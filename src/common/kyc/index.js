@@ -224,7 +224,7 @@ export const kycActions = {
 	}
 };
 
-const getSession = async (config, authenticate, dispatch, hardwareWalletType) => {
+const getSession = async (config, authenticate, dispatch, walletType) => {
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	let session;
 	try {
@@ -236,7 +236,7 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 
 	if (authenticate) {
 		try {
-			if (hardwareWalletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				const hardwalletConfirmationTime = '30000';
 				hardwalletConfirmationTimeout = setTimeout(async () => {
 					clearTimeout(hardwalletConfirmationTimeout);
@@ -247,7 +247,7 @@ const getSession = async (config, authenticate, dispatch, hardwareWalletType) =>
 			await session.establish();
 		} catch (error) {
 			log.error('getSession HD %s', error);
-			if (hardwareWalletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				clearTimeout(hardwalletConfirmationTimeout);
 				if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
 					await dispatch(push('/main/hd-declined'));
@@ -273,7 +273,7 @@ const loadRelyingPartyOperation = (
 	afterAuthRoute,
 	cancelRoute
 ) => async (dispatch, getState) => {
-	const hardwareWalletType = appSelectors.selectApp(getState()).hardwareWalletType;
+	const walletType = appSelectors.selectApp(getState()).walletType;
 	if (!rpName) return null;
 
 	const ts = Date.now();
@@ -287,7 +287,7 @@ const loadRelyingPartyOperation = (
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
-		const session = await getSession(config, authenticate, dispatch, hardwareWalletType);
+		const session = await getSession(config, authenticate, dispatch, walletType);
 
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
@@ -316,7 +316,7 @@ const loadRelyingPartyOperation = (
 		);
 
 		if (authenticate && afterAuthRoute) {
-			if (hardwareWalletType !== '') {
+			if (walletType === 'ledger' || walletType === 'trezor') {
 				clearTimeout(hardwalletConfirmationTimeout);
 			}
 			await dispatch(push(afterAuthRoute));

@@ -49,6 +49,9 @@ const styles = theme => ({
 		}
 	},
 	tokenPublicKey: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'center',
 		'& > p': {
 			display: 'inline'
 		},
@@ -67,6 +70,12 @@ const styles = theme => ({
 			background: '#FFF',
 			padding: '10px'
 		}
+	},
+	publicKey: {
+		fontSize: '20px'
+	},
+	bottomSpace: {
+		marginBottom: '20px'
 	}
 });
 
@@ -122,11 +131,15 @@ export class ReceiveTransfer extends React.Component {
 								<div className={classes.qrCode}>
 									<QRCode value={publicKey} />
 								</div>
-								<Typography variant="body2" gutterBottom>
+								<Typography
+									variant="h1"
+									color="secondary"
+									className={classes.bottomSpace}
+								>
 									Your Ethereum address to receive {cryptoCurrency}
 								</Typography>
 								<div className={classes.tokenPublicKey}>
-									<Typography variant="body2" color="secondary" gutterBottom>
+									<Typography variant="body2" className={classes.publicKey}>
 										{publicKey}
 									</Typography>
 									<Copy text={publicKey} />

@@ -18,7 +18,13 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const INCORPORATIONS_TEMPLATE_OVERRIDE = process.env.INCORPORATIONS_TEMPLATE_OVERRIDE;
+const INCORPORATIONS_PRICE_OVERRIDE = process.env.INCORPORATIONS_PRICE_OVERRIDE;
 const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
+const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
+const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
+const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
+const MATOMO_SITE = process.env.MATOMO_SITE;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
@@ -31,8 +37,15 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
+
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
+	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,
+	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
+	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
+	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -83,20 +96,24 @@ const common = {
 const dev = {
 	debug: true,
 	dev: true,
+	qa: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
 	node: 'infura',
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
-	}
+	},
+	matomoSite: 2
 };
 
 const prod = {
 	debug: false,
 	dev: false,
+	qa: true,
 	updateEndpoint: 'https://release.selfkey.org',
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
@@ -105,7 +122,8 @@ const prod = {
 		INCORPORATION_KYCC_INSTANCE || 'https://flagtheory-v2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
-	}
+	},
+	matomoSite: 1
 };
 
 const setupFilesPath = getSetupFilePath();
@@ -143,6 +161,10 @@ if (isDevMode()) {
 
 if (CHAIN_ID) {
 	conf.chainId = Number(CHAIN_ID);
+}
+
+if (MATOMO_SITE) {
+	conf.matomoSite = Number(MATOMO_SITE);
 }
 
 if (NODE) {

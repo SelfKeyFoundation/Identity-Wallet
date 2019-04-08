@@ -9,7 +9,7 @@ const styles = theme => ({
 	paper: {
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
-		padding: 16,
+		padding: 20,
 		maxWidth: 350
 	},
 	publicKey: {

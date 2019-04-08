@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* eslint-env node */ /* global window */
 // eslint-disable-next-line
+const nodeMachineId = require('node-machine-id');
 const common = require('../common/utils/common');
 const appPackage = require(`${__dirname}'/../../package.json`);
 const config = require('../common/config');
@@ -12,6 +13,7 @@ window.electron = electron;
 window.appName = appPackage.productName;
 window.appVersion = appPackage.version;
 window.isTestMode = common.isTestMode();
+window.machineId = nodeMachineId.machineIdSync();
 
 process.once('loaded', function() {
 	window.setImmediate = async.setImmediate;
