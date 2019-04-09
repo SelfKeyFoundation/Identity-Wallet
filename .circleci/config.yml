@@ -260,9 +260,9 @@ workflows:
             - 'build-mac':
                   requires:
                       - unit-test
-            #            - 'e2e-mac':
-            #                  requires:
-            #                      - build-mac
+            - 'e2e-mac':
+                  requires:
+                      - build-mac
             - 'stage-mac':
                   requires:
                       - build-mac
