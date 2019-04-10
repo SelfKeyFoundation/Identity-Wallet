@@ -2,6 +2,9 @@ const tools = require('../../utils/tools.js');
 const data = require('../../data/data.json');
 const delay = require('delay');
 
+let publicKey;
+let privateKey;
+
 export const givenUserHasOpenedAddressBookScreen = given => {
 	given('user has opened Address Book screen', () => {
 		return tools
@@ -16,9 +19,17 @@ export const givenUserHasOpenedAddressBookScreen = given => {
 			.then(() => tools.app.client.waitForVisible('#pwd2', 10000))
 			.then(() => tools.app.client.setValue('#pwd2', data[0].strongPass))
 			.then(() => tools.app.client.click('#pwd2Next'))
-			.then(() => tools.regStep(tools.app, '#keystoreNext'))
+			.then(() => delay(2000))
+			.then(() => tools.app.client.getValue('#publicKey'))
+			.then(pubKey => {
+				publicKey = pubKey;
+				return tools.regStep(tools.app, '#keystoreNext');
+			})
 			.then(() => tools.app.client.getValue('#privateKey'))
-			.then(() => tools.regStep(tools.app, '#printWalletNext'))
+			.then(privKey => {
+				privateKey = privKey;
+				return tools.regStep(tools.app, '#printWalletNext');
+			})
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
 			.then(() => tools.regStep(tools.app, '#drawer'))
 			.then(() => tools.regStep(tools.app, '#addressBookButton'))
@@ -33,7 +44,7 @@ export const givenUserHasOpenedAddressBookScreenWithAPrivateKey = given => {
 			.then(() => tools.regStep(tools.app, '#useExistingWalletButton'))
 			.then(() => delay(5000))
 			.then(() => tools.regStep(tools.app, '#privateKey'))
-			.then(() => tools.app.client.setValue('#privateKeyInput', data[1].privKey))
+			.then(() => tools.app.client.setValue('#privateKeyInput', privateKey))
 			.then(() => tools.regStep(tools.app, '#unlockPrivateKeyButton'))
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'))
 			.then(() => tools.regStep(tools.app, '#drawer'))
@@ -74,4 +85,8 @@ export const whenUserClicksOnAddAddressButton = when => {
 			.waitForVisible('#viewAddressBook', 10000, true)
 			.then(tools.app.client.element('#addAddressButton').click());
 	});
+};
+
+export const getPublicKey = () => {
+	return publicKey;
 };

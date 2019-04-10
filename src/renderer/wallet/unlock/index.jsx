@@ -228,9 +228,8 @@ class Unlock extends Component {
 												/>
 											</Grid>
 
-											<Grid item>
+											<Grid item id="privateKey">
 												<UnlockOptionWrapped
-													id="privateKey"
 													selected={selected === 2}
 													icon={<KeyIcon />}
 													title="Private Key"
