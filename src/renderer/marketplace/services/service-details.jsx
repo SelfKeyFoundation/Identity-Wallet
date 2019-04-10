@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Grid, Divider, FormGroup, FormControl, Button, CircularProgress } from '@material-ui/core';
 import {
-	P,
-	H3,
-	H2,
-	UnlockIcon,
-	ReturnIcon,
-	HourGlassSmallIcon,
-	CalendarIcon,
-	StyledButton
-} from 'selfkey-ui';
+	Grid,
+	Divider,
+	FormGroup,
+	FormControl,
+	Button,
+	CircularProgress,
+	Typography
+} from '@material-ui/core';
+import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon, StyledButton } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
 const styles = theme => ({
@@ -191,7 +190,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 							<img src={item.logo[0].url} />
 						</Grid>
 						<Grid item id="title" className={classes.title}>
-							<H2>{item.name}</H2>
+							<Typography variant="h2">{item.name}</Typography>
 						</Grid>
 					</Grid>
 					<Grid item id="body" className={classes.body} xs={12}>
@@ -212,9 +211,9 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={40}
 								>
 									<Grid item xs={8}>
-										<P className={classes.description}>
+										<Typography variant="body2" className={classes.description}>
 											{this.renderDescription(item.description)}
-										</P>
+										</Typography>
 										<Button
 											variant="outlined"
 											className={`${classes.button} ${
@@ -277,7 +276,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={16}
 								>
 									<Grid item>
-										<H3>Highlights</H3>
+										<Typography variant="h2">Highlights</Typography>
 									</Grid>
 									<Grid item>
 										<FormControl className={classes.formControl}>
@@ -348,7 +347,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={16}
 								>
 									<Grid item>
-										<H3>KYC Requirements</H3>
+										<Typography variant="h2">KYC Requirements</Typography>
 									</Grid>
 									<Grid item>
 										{relyingParty ? (
