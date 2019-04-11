@@ -22,8 +22,8 @@ if (osEnv === 'circle-mac') {
 }
 
 if (osEnv === 'circle-linux') {
-	chmodCmd = 'chmod a+x ' + pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
-	appPath = '/tmp/linux/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
+	chmodCmd = 'chmod a+x ' + path.join(pwd, 'dist', 'linux-unpacked', 'selfkey-identity-wallet');
+	appPath = path.join(pwd, 'dist', 'linux-unpacked', 'selfkey-identity-wallet');
 }
 
 if (osEnv === 'linux') {
