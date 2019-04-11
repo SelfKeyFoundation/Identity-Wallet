@@ -60,6 +60,7 @@ export const CreateWallet = props => {
 							<Grid container spacing={24}>
 								<Grid item>
 									<Button
+										id="protectWallet"
 										variant="outlined"
 										component={createPasswordLink}
 										size="large"

@@ -165,6 +165,22 @@ jobs:
                   name: E2E Tests
                   command: OSENV=circle-mac yarn test:e2e
 
+    'e2e-linux':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - *step_setup_nvm
+            - *step_yarn_upgrade
+            - run:
+                  name: E2E Tests
+                  command: OSENV=circle-linux yarn test:e2e
+
     'stage-mac':
         docker: &GGLOUDIMAGE
             - image: google/cloud-sdk:latest
@@ -247,9 +263,12 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
-            - 'stage-linux':
+            - 'e2e-linux':
                   requires:
                       - build-linux
+            - 'stage-linux':
+                  requires:
+                      - e2e-linux
                   filters:
                       branches:
                           only:
@@ -260,12 +279,12 @@ workflows:
             - 'build-mac':
                   requires:
                       - unit-test
-            #            - 'e2e-mac':
-            #                  requires:
-            #                      - build-mac
-            - 'stage-mac':
+            - 'e2e-mac':
                   requires:
                       - build-mac
+            - 'stage-mac':
+                  requires:
+                      - e2e-mac
                   filters:
                       branches:
                           only:
@@ -275,14 +294,14 @@ workflows:
                               - /staging.*/
             - 'publish-mac':
                   requires:
-                      - build-mac
+                      - e2e-mac
                   filters:
                       branches:
                           only:
                               - master
             - 'publish-linux':
                   requires:
-                      - build-linux
+                      - e2e-linux
                   filters:
                       branches:
                           only:

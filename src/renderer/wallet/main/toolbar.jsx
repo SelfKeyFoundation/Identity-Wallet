@@ -105,6 +105,7 @@ class Toolbar extends Component {
 							<Grid item xs={7}>
 								<IconButton disableRipple>
 									<MenuButtonIcon
+										id="drawer"
 										className={classes.menuButton}
 										onClick={() => this.toggleDrawer(true)}
 									/>
