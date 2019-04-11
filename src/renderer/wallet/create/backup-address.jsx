@@ -119,6 +119,7 @@ class BackupAddress extends Component {
 										Your Public Key
 									</Typography>
 									<Input
+										id="publicKey"
 										fullWidth
 										disableUnderline={true}
 										value={this.props.publicKey}
@@ -144,6 +145,7 @@ class BackupAddress extends Component {
 									<br />
 									<br />
 									<Button
+										id="keystoreNext"
 										variant="outlined"
 										component={backupPrivateKey}
 										size="large"

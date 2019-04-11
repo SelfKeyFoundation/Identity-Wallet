@@ -138,6 +138,7 @@ class Password extends Component {
 									<br />
 									<br />
 									<Input
+										id="pwd1"
 										disableUnderline={true}
 										placeholder="Password"
 										type="password"
@@ -162,6 +163,7 @@ class Password extends Component {
 									<br />
 									<br />
 									<Button
+										id="pwdNext"
 										variant="contained"
 										component={createPasswordConfirmationLink}
 										disabled={this.state.password === ''}

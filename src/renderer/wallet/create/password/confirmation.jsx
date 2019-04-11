@@ -129,6 +129,7 @@ class PasswordConfirmation extends Component {
 									<br />
 									<br />
 									<Input
+										id="pwd2"
 										error={this.state.error !== ''}
 										disableUnderline={true}
 										placeholder="Password"
@@ -159,6 +160,7 @@ class PasswordConfirmation extends Component {
 									<br />
 									<br />
 									<Button
+										id="pwd2Next"
 										variant="contained"
 										disabled={this.state.password === ''}
 										onClick={this.handleNext}

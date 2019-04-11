@@ -1,4 +1,5 @@
 let config = require('../src/common/config');
+let testConfig = require('./config/config.js');
 let { Model } = require('objection');
 let Knex = require('knex');
 let knex;
@@ -19,3 +20,5 @@ afterAll(async () => {
 	await knex.destroy();
 	Model.knex(null);
 });
+
+testConfig.consoleNotes();
