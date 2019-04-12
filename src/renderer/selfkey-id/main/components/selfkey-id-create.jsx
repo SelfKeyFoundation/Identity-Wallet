@@ -116,6 +116,7 @@ class SelfKeyIdCreateComponent extends Component {
 													</Grid>
 													<Grid item>
 														<Button
+															id="selfkeyIdDialogButton"
 															variant="contained"
 															size="large"
 															className={classes.create}

@@ -15,7 +15,8 @@ class HardwareWalletError extends Component {
 	};
 
 	render() {
-		const typeText = this.props.walletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText =
+			this.props.walletType.charAt(0).toUpperCase() + this.props.walletType.slice(1);
 		return (
 			<Popup open={true} closeAction={this.handleClose} text="Authentication Confirmation">
 				<Grid

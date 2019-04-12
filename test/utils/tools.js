@@ -24,7 +24,11 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV === 'windows' || process.env.OSENV === 'linux') {
+		if (
+			process.env.OSENV === 'windows' ||
+			process.env.OSENV === 'linux' ||
+			process.env.OSENV === 'circle-linux'
+		) {
 			resolve(app.start());
 		} else {
 			init().then(() => resolve(app.start()));
