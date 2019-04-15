@@ -3,8 +3,11 @@ import { Logger } from 'common/logger';
 import { Provider, connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
+import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations } from 'common/app';
+import config from 'common/config';
+
 import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
@@ -32,6 +35,16 @@ import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-cre
 
 const log = new Logger('AppComponent');
 
+const piwik = new ReactPiwik({
+	url: 'https://analytics.selfkey.org',
+	siteId: config.matomoSite || 1,
+	trackErrors: true
+});
+ReactPiwik.push(['requireConsent']);
+ReactPiwik.push(['trackPageView']);
+ReactPiwik.push(['enableHeartBeatTimer']);
+ReactPiwik.push(['trackAllContentImpressions']);
+
 class AppContainerComponent extends Component {
 	state = { hasError: false };
 	handleRefresh = async () => {
@@ -54,9 +67,14 @@ class AppContainerComponent extends Component {
 			return <GlobalError onRefresh={this.handleRefresh} />;
 		}
 		return (
-			<ConnectedRouter history={this.props.history.getHistory()}>
+			<ConnectedRouter history={piwik.connectToHistory(this.props.history.getHistory())}>
 				<HashRouter>
-					<div style={{ backgroundColor: '#262F39' }}>
+					<div
+						style={{
+							background:
+								'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)'
+						}}
+					>
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />

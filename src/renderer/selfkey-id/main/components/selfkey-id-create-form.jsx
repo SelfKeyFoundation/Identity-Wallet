@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { identityOperations } from 'common/identity';
 import { walletSelectors } from 'common/wallet';
+import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
 	back: {
@@ -69,6 +70,7 @@ const styles = theme => ({
 class SelfKeyIdCreateFormComponent extends Component {
 	state = {
 		error: '',
+		errorEmail: false,
 		nickName: '',
 		firstName: '',
 		lastName: '',
@@ -112,7 +114,10 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 	handleEmailChange = event => {
 		this.setState({ email: event.target.value }, () => {
-			this.isDisabled();
+			let valid = this.isValidEmail(this.state.email);
+			this.setState({ errorEmail: !valid }, () => {
+				this.isDisabled();
+			});
 		});
 	};
 
@@ -122,8 +127,18 @@ class SelfKeyIdCreateFormComponent extends Component {
 				!this.state.nickName ||
 				!this.state.firstName ||
 				!this.state.lastName ||
-				!this.state.email
+				!this.state.email ||
+				!this.isValidEmail(this.state.email)
 		});
+	};
+
+	sendMatomoGoal = () => {
+		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
+	};
+
+	isValidEmail = email => {
+		var re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+		return email ? re.test(String(email).toLowerCase()) : true;
 	};
 
 	render() {
@@ -169,7 +184,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 										className={classes.cardHeader}
 									/>
 									<CardContent>
-										<form onSubmit={this.handleSave}>
+										<form onSubmit={this.handleSave} noValidate>
 											<Grid
 												container
 												direction="column"
@@ -241,6 +256,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			}
 																		>
 																			<Input
+																				id="nickName"
 																				fullWidth
 																				error={
 																					this.state
@@ -302,6 +318,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			}
 																		>
 																			<Input
+																				id="firstName"
 																				fullWidth
 																				required
 																				onChange={
@@ -335,6 +352,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			}
 																		>
 																			<Input
+																				id="lastName"
 																				fullWidth
 																				required
 																				onChange={
@@ -368,8 +386,13 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			}
 																		>
 																			<Input
+																				id="email"
 																				fullWidth
 																				type="email"
+																				error={
+																					this.state
+																						.errorEmail
+																				}
 																				required
 																				onChange={
 																					this
@@ -377,6 +400,18 @@ class SelfKeyIdCreateFormComponent extends Component {
 																				}
 																				placeholder="Email"
 																			/>
+																			{this.state
+																				.errorEmail && (
+																				<Typography
+																					variant="subtitle2"
+																					color="error"
+																					gutterBottom
+																				>
+																					{
+																						'Email provided is invalid'
+																					}
+																				</Typography>
+																			)}
 																		</Grid>
 																	</Grid>
 																</Grid>
@@ -384,11 +419,13 @@ class SelfKeyIdCreateFormComponent extends Component {
 														</Grid>
 														<Grid item container justify="center">
 															<Button
+																id="selfkeyIdCreateButton"
 																variant="contained"
 																size="large"
 																type="submit"
 																className={classes.create}
 																disabled={this.state.isDisabled}
+																onClick={this.sendMatomoGoal}
 															>
 																CREATE SELFKEY ID
 															</Button>

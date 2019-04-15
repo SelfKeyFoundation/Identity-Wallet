@@ -5,6 +5,7 @@ import TreatiesTable from './treaties-table';
 import CountryInfo from './country-info';
 import IncorporationsKYC from './kyc-requirements';
 import sanitize from './sanitize-airtable-html';
+import { getIncorporationPrice, getTemplateID } from './helpers';
 
 export {
 	FlagCountryName,
@@ -13,5 +14,7 @@ export {
 	TreatiesTable,
 	CountryInfo,
 	IncorporationsKYC,
-	sanitize
+	sanitize,
+	getIncorporationPrice,
+	getTemplateID
 };

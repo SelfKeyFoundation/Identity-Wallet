@@ -6,7 +6,9 @@ import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { appOperations } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
+import { isTestMode } from 'common/utils/common';
+import ReactPiwik from 'react-piwik';
 
 const styles = theme => ({
 	container: {
@@ -63,9 +65,17 @@ const styles = theme => ({
 const createWalletLink = props => <Link to="/createWallet" {...props} />;
 const unlockWalletLink = props => <Link to="/unlockWallet" {...props} />;
 class Home extends Component {
+	includeTracking = () => {
+		return this.props.hasAcceptedTracking && !isTestMode();
+	};
+
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
+
+		if (this.includeTracking()) {
+			ReactPiwik.push(['setConsentGiven']);
+		}
 	}
 	render() {
 		const { classes } = this.props;
@@ -116,6 +126,7 @@ class Home extends Component {
 						>
 							<Grid item>
 								<Button
+									id="createWallet"
 									variant="contained"
 									component={createWalletLink}
 									size="large"
@@ -125,6 +136,7 @@ class Home extends Component {
 							</Grid>
 							<Grid item>
 								<Button
+									id="useExistingWalletButton"
 									variant="outlined"
 									component={unlockWalletLink}
 									size="large"
@@ -197,4 +209,10 @@ class Home extends Component {
 	}
 }
 
-export default connect()(withStyles(styles)(Home));
+const mapStateToProps = (state, props) => {
+	return {
+		hasAcceptedTracking: appSelectors.hasAcceptedTracking(state)
+	};
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(Home));

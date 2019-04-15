@@ -5,6 +5,7 @@ import config from 'common/config';
 import { Popup } from '../../../common/popup';
 import { Grid, Typography } from '@material-ui/core';
 import { HourGlassLargeIcon } from 'selfkey-ui';
+import { getIncorporationPrice } from '../common';
 import { PaymentConfirmationContent } from './payment-confirmation-content';
 import { incorporationsSelectors } from 'common/incorporations';
 import { transactionSelectors, transactionOperations } from 'common/transaction';
@@ -13,7 +14,7 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { appSelectors } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
 import EthUnits from 'common/utils/eth-units';
 import { getCryptoValue } from '../../../common/price-utils';
 
@@ -43,6 +44,10 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		this.props.dispatch(transactionOperations.setAmount(keyAmount));
 		this.props.dispatch(transactionOperations.setGasPrice(gasPrice));
 		this.props.dispatch(transactionOperations.setLimitPrice(gasLimit));
+
+		if (this.props.confirmation === 'true') {
+			this.setState({ isConfirmationOpen: true });
+		}
 	}
 
 	getVendorName = _ => {
@@ -50,12 +55,9 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		return program['Wallet Vendor Name'] || VENDOR_NAME;
 	};
 
-	getIncorporationPrice = _ => {
+	getPrice = _ => {
 		const { program } = this.props;
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
-		return parseInt(price.replace(/\$/, '').replace(/,/, ''));
+		return getIncorporationPrice(program);
 	};
 
 	getVendorWalletAddress = _ => {
@@ -68,7 +70,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, transaction } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
 		const walletAddress = this.getVendorWalletAddress();
-		const price = this.getIncorporationPrice();
+		const price = this.getPrice();
 		const vendorName = this.getVendorName();
 		const keyAmount = price / keyRate;
 		const gasLimit = transaction.gasLimit ? transaction.gasLimit : FIXED_GAS_LIMIT_PRICE;
@@ -99,11 +101,16 @@ class IncorporationPaymentConfirmationComponent extends Component {
 			return this.props.dispatch(push('/main/transaction-no-key-error'));
 		}
 
+		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
+
 		await this.props.dispatch(
 			transactionOperations.incorporationSend(companyCode, countryCode)
 		);
 
-		if (this.props.hardwareWalletType !== '') {
+		if (this.props.walletType === 'ledger' || this.props.walletType === 'trezor') {
+			await this.props.dispatch(
+				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
+			);
 			this.setState({ isConfirmationOpen: true });
 		}
 	};
@@ -119,7 +126,8 @@ class IncorporationPaymentConfirmationComponent extends Component {
 
 	// REFACTOR: extract to common popup to be used in multiple places
 	renderConfirmationModal = () => {
-		const typeText = this.props.hardwareWalletType === 'ledger' ? 'Ledger' : 'Trezor';
+		const typeText =
+			this.props.walletType.charAt(0).toUpperCase() + this.props.walletType.slice(1);
 		const text = `Confirm Transaction on ${typeText}`;
 		return (
 			<Popup
@@ -215,8 +223,9 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		transaction: transactionSelectors.getTransaction(state),
-		hardwareWalletType: appSelectors.selectApp(state).hardwareWalletType,
-		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY })
+		walletType: appSelectors.selectWalletType(state),
+		keyBalance: getCryptoValue(state, { cryptoCurrency: CRYPTOCURRENCY }),
+		confirmation: props.match.params.confirmation
 	};
 };
 

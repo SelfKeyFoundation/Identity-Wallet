@@ -24,9 +24,11 @@ export const initialState = {
 	wallets: [],
 	hardwareWallets: [],
 	error: '',
-	hardwareWalletType: '',
+	walletType: '',
 	settings: {},
-	isOnline: true
+	isOnline: true,
+	goBackPath: '',
+	goNextPath: ''
 };
 
 export const appTypes = {
@@ -34,7 +36,7 @@ export const appTypes = {
 	APP_SET_WALLETS_LOADING: 'app/set/WALLETS_LOADING',
 	APP_SET_SETTINGS: 'app/set/SETTINGS',
 	APP_SET_HARDWARE_WALLETS: 'app/set/hardware/WALLETS',
-	APP_SET_HARDWARE_WALLET_TYPE: 'app/set/hardware/wallet/TYPE',
+	APP_SET_WALLET_TYPE: 'app/set/wallet/TYPE',
 	APP_SET_UNLOCK_WALLET_ERROR: 'app/set/unlock/wallet/ERROR',
 	APP_UNLOCK_WALLET_WITH_PASSWORD: 'app/unlock/wallet/with/PASSWORD',
 	APP_UNLOCK_WALLET_WITH_NEW_FILE: 'app/unlock/wallet/with/new/FILE',
@@ -49,7 +51,9 @@ export const appTypes = {
 	APP_LOADING: 'app/LOADING',
 	APP_SET_TERMS_ACCEPTED: 'app/set/term/ACCEPTED',
 	APP_UPDATE_NETWORK_STATUS: 'app/network/status/UPDATE',
-	APP_SET_NETWORK_STATUS: 'app/network/status/SET'
+	APP_SET_NETWORK_STATUS: 'app/network/status/SET',
+	APP_SET_GO_NEXT_PATH: 'app/go/next/path/SET',
+	APP_SET_GO_BACK_PATH: 'app/go/back/path/SET'
 };
 
 const appActions = {
@@ -69,8 +73,8 @@ const appActions = {
 		type: appTypes.APP_SET_UNLOCK_WALLET_ERROR,
 		payload: error
 	}),
-	setHardwareWalletType: type => ({
-		type: appTypes.APP_SET_HARDWARE_WALLET_TYPE,
+	setWalletType: type => ({
+		type: appTypes.APP_SET_WALLET_TYPE,
 		payload: type
 	}),
 	setWalletsLoading: isLoading => ({
@@ -80,6 +84,14 @@ const appActions = {
 	setNetworkStatus: isOnline => ({
 		type: appTypes.APP_SET_NETWORK_STATUS,
 		payload: isOnline
+	}),
+	setGoBackPath: path => ({
+		type: appTypes.APP_SET_GO_BACK_PATH,
+		payload: path
+	}),
+	setGoNextPath: path => ({
+		type: appTypes.APP_SET_GO_NEXT_PATH,
+		payload: path
 	})
 };
 
@@ -88,7 +100,9 @@ const loadWallets = () => async dispatch => {
 	await dispatch(appActions.setHardwareWalletsAction([]));
 	await dispatch(appActions.setWalletsLoading(''));
 	await dispatch(kycOperations.clearRelyingPartyOperation());
-	await dispatch(appActions.setHardwareWalletType(''));
+	await dispatch(appActions.setWalletType(''));
+	await dispatch(appActions.setGoBackPath(''));
+	await dispatch(appActions.setGoNextPath(''));
 
 	try {
 		const walletService = getGlobalContext().walletService;
@@ -105,9 +119,11 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 		const wallet = await walletService.unlockWalletWithPassword(walletId, password);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
+		await dispatch(appActions.setWalletType('existingAddress'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -118,9 +134,11 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 		const wallet = await walletService.unlockWalletWithNewFile(filePath, password);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
+		await dispatch(appActions.setWalletType('newAddress'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -131,6 +149,7 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
+		await dispatch(appActions.setWalletType('privateKey'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -140,18 +159,15 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 
 const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
-	const hardwareWalletType = selectApp(getState()).hardwareWalletType;
+	const walletType = selectApp(getState()).walletType;
 	try {
-		const wallet = await walletService.unlockWalletWithPublicKey(
-			publicKey,
-			path,
-			hardwareWalletType
-		);
+		const wallet = await walletService.unlockWalletWithPublicKey(publicKey, path, walletType);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -165,11 +181,12 @@ const loadLedgerWallets = (page = 0) => async dispatch => {
 			walletService.getLedgerWallets(page, accountsQuantity)
 		).promise;
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
-		await dispatch(appActions.setHardwareWalletType('ledger'));
+		await dispatch(appActions.setWalletType('ledger'));
 		await dispatch(push('/selectAddress'));
 	} catch (error) {
 		log.error(error);
 		const message = transformErrorMessage(error.message);
+		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -197,11 +214,12 @@ const loadTrezorWallets = (page = 0) => async dispatch => {
 		timeoutId = timeoutPromiseObject.id;
 		const wallets = await timeoutPromiseObject.promise;
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
-		await dispatch(appActions.setHardwareWalletType('trezor'));
+		await dispatch(appActions.setWalletType('trezor'));
 		await dispatch(push('/selectAddress'));
 	} catch (error) {
 		clearTimeout(timeoutId);
 		eventEmitter.off('TREZOR_PIN_REQUEST', () => {});
+		log.error(error);
 		if (error.message.indexOf('PIN canceled') === -1) {
 			const message = transformErrorMessage(error.message);
 			await dispatch(appActions.setUnlockWalletErrorAction(message));
@@ -213,10 +231,10 @@ const loadTrezorWallets = (page = 0) => async dispatch => {
 };
 
 const loadOtherHardwareWallets = page => async (dispatch, getState) => {
-	const hardwareWalletType = selectApp(getState()).hardwareWalletType;
-	if (hardwareWalletType === 'ledger') {
+	const walletType = selectApp(getState()).walletType;
+	if (walletType === 'ledger') {
 		await dispatch(loadLedgerWallets(page));
-	} else if (hardwareWalletType === 'trezor') {
+	} else if (walletType === 'trezor') {
 		await dispatch(loadTrezorWallets(page));
 	}
 };
@@ -355,12 +373,20 @@ const setUnlockWalletErrorReducer = (state, action) => {
 	return { ...state, error: action.payload };
 };
 
-const setHardwareWalletTypeReducer = (state, action) => {
-	return { ...state, hardwareWalletType: action.payload };
+const setWalletTypeReducer = (state, action) => {
+	return { ...state, walletType: action.payload };
 };
 
 const setNetworkStatusReducer = (state, action) => {
 	return { ...state, isOnline: action.payload };
+};
+
+const setGoBackPathReducer = (state, action) => {
+	return { ...state, goBackPath: action.payload };
+};
+
+const setGoNextPathReducer = (state, action) => {
+	return { ...state, goNextPath: action.payload };
 };
 
 const appReducers = {
@@ -369,8 +395,10 @@ const appReducers = {
 	setSettingsReducer,
 	setHardwareWalletsReducer,
 	setUnlockWalletErrorReducer,
-	setHardwareWalletTypeReducer,
-	setNetworkStatusReducer
+	setWalletTypeReducer,
+	setNetworkStatusReducer,
+	setGoNextPathReducer,
+	setGoBackPathReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -385,10 +413,14 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setHardwareWalletsReducer(state, action);
 		case appTypes.APP_SET_UNLOCK_WALLET_ERROR:
 			return appReducers.setUnlockWalletErrorReducer(state, action);
-		case appTypes.APP_SET_HARDWARE_WALLET_TYPE:
-			return appReducers.setHardwareWalletTypeReducer(state, action);
+		case appTypes.APP_SET_WALLET_TYPE:
+			return appReducers.setWalletTypeReducer(state, action);
 		case appTypes.APP_SET_NETWORK_STATUS:
 			return appReducers.setNetworkStatusReducer(state, action);
+		case appTypes.APP_SET_GO_BACK_PATH:
+			return appReducers.setGoBackPathReducer(state, action);
+		case appTypes.APP_SET_GO_NEXT_PATH:
+			return appReducers.setGoNextPathReducer(state, action);
 	}
 	return state;
 };
@@ -400,9 +432,30 @@ const hasConnected = state => {
 	return app.hardwareWallets.length > 0;
 };
 
+const hasAcceptedTracking = state => {
+	const app = selectApp(state);
+	return app.settings && app.settings.crashReportAgreement === 1;
+};
+
+const selectGoBackPath = state => {
+	return selectApp(state).goBackPath;
+};
+
+const selectGoNextPath = state => {
+	return selectApp(state).goNextPath;
+};
+
+const selectWalletType = state => {
+	return selectApp(state).walletType;
+};
+
 const appSelectors = {
 	selectApp,
-	hasConnected
+	hasConnected,
+	hasAcceptedTracking,
+	selectGoBackPath,
+	selectGoNextPath,
+	selectWalletType
 };
 
 export { appSelectors, appReducers, appActions, appOperations };

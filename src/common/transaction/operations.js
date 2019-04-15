@@ -14,6 +14,9 @@ import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
+import { Logger } from 'common/logger';
+
+const log = new Logger('transaction-duck');
 
 const chainId = config.chainId || 3;
 
@@ -53,7 +56,7 @@ const setAddress = address => async dispatch => {
 			await dispatch(actions.setAddressError(true));
 		}
 	} catch (e) {
-		console.log(e);
+		log.error(e);
 		await dispatch(actions.setAddressError(true));
 	}
 };
@@ -140,7 +143,7 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			);
 		}
 	} catch (e) {
-		console.log(e);
+		log.error(e);
 	}
 };
 
@@ -209,7 +212,8 @@ const confirmSend = () => async (dispatch, getState) => {
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	let hardwalletConfirmationTimeout = null;
-	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+	const walletType = appSelectors.selectWalletType(state);
+	if (walletType === 'ledget' || walletType === 'trezor') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
@@ -237,7 +241,7 @@ const confirmSend = () => async (dispatch, getState) => {
 
 	transactionEventEmitter.on('error', async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
-		console.error('transactionEventEmitter ERROR: ', error);
+		log.error('transactionEventEmitter ERROR: %j', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
 			await dispatch(
@@ -292,7 +296,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	let hardwalletConfirmationTimeout = null;
-	if (appSelectors.selectApp(state).hardwareWalletType !== '') {
+	if (appSelectors.selectWalletType(state) !== '') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
@@ -323,7 +327,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 
 	transactionEventEmitter.on('error', async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
-		console.error('transactionEventEmitter ERROR: ', error);
+		log.error('transactionEventEmitter ERROR: %j', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
 			await dispatch(

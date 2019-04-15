@@ -126,6 +126,7 @@ class BackupPK extends Component {
 											Your Private Key
 										</Typography>
 										<Input
+											id="privateKey"
 											fullWidth
 											disableUnderline={true}
 											value={this.props.privateKey}
@@ -154,6 +155,7 @@ class BackupPK extends Component {
 										<br />
 										<br />
 										<Button
+											id="printWalletNext"
 											variant="outlined"
 											color="secondary"
 											component={main}

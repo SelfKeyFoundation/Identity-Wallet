@@ -18,8 +18,10 @@ import {
 	CountryInfo,
 	IncorporationsKYC,
 	ProgramPrice,
-	sanitize
+	sanitize,
+	getIncorporationPrice
 } from '../common';
+import ReactPiwik from 'react-piwik';
 
 const styles = theme => ({
 	container: {
@@ -139,7 +141,7 @@ const styles = theme => ({
 		},
 		'& strong': {
 			fontWeight: 'bold',
-			color: '#93B0C1',
+			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
 			borderBottom: '1px solid #435160',
@@ -155,6 +157,9 @@ const styles = theme => ({
 		'& ul li': {
 			lineHeight: '1.4em',
 			marginBottom: '0.5em'
+		},
+		'& a': {
+			color: theme.palette.secondary.main
 		}
 	},
 	tabDescription: {
@@ -217,6 +222,22 @@ class IncorporationsDetailView extends Component {
 		loading: false
 	};
 
+	setEcommerceView = () => {
+		const { program } = this.props;
+
+		ReactPiwik.push([
+			'setEcommerceView',
+			program['Company code'],
+			program.Region,
+			'Incorporation',
+			program['Wallet Price']
+		]);
+	};
+
+	clearEcommerceCart = () => {
+		ReactPiwik.push(['clearEcommerceCart']);
+	};
+
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 
@@ -235,7 +256,21 @@ class IncorporationsDetailView extends Component {
 				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
 			);
 		}
+
+		this.setEcommerceView();
 	}
+
+	componentWillUnmount() {
+		this.clearEcommerceCart();
+	}
+
+	handleExternalLinks = e => {
+		if (e.target && e.target.getAttribute('href')) {
+			e.stopPropagation();
+			e.preventDefault();
+			window.openExternal(e, e.target.getAttribute('href'));
+		}
+	};
 
 	onTabChange = (event, selectedTab) => this.setState({ selectedTab });
 
@@ -282,10 +317,7 @@ class IncorporationsDetailView extends Component {
 
 	getPrice = () => {
 		const { program } = this.props;
-		const price = program['active_test_price']
-			? program['test_price']
-			: program['Wallet Price'];
-		return price;
+		return getIncorporationPrice(program);
 	};
 
 	getLastApplication = () => {
@@ -523,7 +555,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Dividends paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Dividends Witholding Tax Rate'] || '--'}
+											{tax['Dividends Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
@@ -537,7 +569,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Royalties paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Royalties Witholding Tax Rate'] || '--'}
+											{tax['Royalties Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
@@ -545,7 +577,7 @@ class IncorporationsDetailView extends Component {
 									<div>
 										<label>Interests paid</label>
 										<Typography variant="h4" gutterBottom>
-											{tax['Interests Witholding Tax Rate'] || '--'}
+											{tax['Interests Withholding Tax Rate'] || '--'}
 										</Typography>
 									</div>
 								</div>
@@ -649,7 +681,10 @@ class IncorporationsDetailView extends Component {
 									}}
 								/>
 							</Tabs>
-							<div className={classes.tabContainer}>
+							<div
+								className={classes.tabContainer}
+								onClickCapture={this.handleExternalLinks}
+							>
 								{selectedTab === 0 && (
 									<TabContainer className="description">
 										<div
