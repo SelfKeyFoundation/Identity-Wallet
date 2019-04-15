@@ -119,6 +119,21 @@ export const kycSelectors = {
 				return acc;
 			}, attributesBySchema);
 
+		// // XXX dev only, remove
+		// if (
+		// 	templateAttributes[templateAttributes.length - 1].schemaId !==
+		// 	templateAttributes[0].schemaId
+		// ) {
+		// 	templateAttributes.push({ ...templateAttributes[0], id: 'test123' });
+		// }
+		// XXX end
+
+		const tplOccurrence = templateAttributes.reduce((acc, curr) => {
+			const schemaId = curr.schemaId || curr;
+			acc[schemaId] = (acc[curr.schemaId] || 0) + 1;
+			return acc;
+		}, {});
+
 		return templateAttributes.map(tplAttr => {
 			if (typeof tplAttr === 'string') {
 				tplAttr = { schemaId: tplAttr };
@@ -135,7 +150,8 @@ export const kycSelectors = {
 				type:
 					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
 						? walletAttributes[tplAttr.schemaId][0].type
-						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId)
+						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId),
+				duplicateType: tplOccurrence[tplAttr.schemaId] > 1
 			};
 		});
 	},

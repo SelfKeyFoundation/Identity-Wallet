@@ -25,6 +25,7 @@ import {
 	MuiAddIcon,
 	SmallTableRow,
 	AttributeAlertIcon,
+	MultilineSelect,
 	warning,
 	success
 } from 'selfkey-ui';
@@ -100,9 +101,9 @@ const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error
 });
 
 const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttributes, onSelected }) => {
+	({ item, className, classes, selectedAttributes, onSelected, addItem }) => {
 		const { options } = item;
-		if (!options || options.length <= 1) {
+		if (!item.duplicateType && (!options || options.length <= 1)) {
 			return (
 				<Typography variant="subtitle1" gutterBottom className={className}>
 					{options.length ? options[0].name : '...'}
@@ -111,27 +112,48 @@ const KycChecklistItemLabel = withStyles(styles)(
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
 		onSelected(item.uiId, selectedAttr);
+		if (!item.duplicateType) {
+			return (
+				<RadioGroup
+					className={classes.radioGroup}
+					value={selectedAttr.id}
+					onChange={evt =>
+						onSelected(
+							item.uiId,
+							options.find(itm => '' + itm.id === '' + evt.target.value)
+						)
+					}
+				>
+					{options.map(opt => (
+						<FormControlLabel
+							key={opt.id}
+							value={opt.id}
+							control={<Radio />}
+							label={opt.name}
+							className={classes.formControlLabel}
+						/>
+					))}
+				</RadioGroup>
+			);
+		}
+		const selectItems = options.map(opt => ({ key: opt.id, value: opt.name }));
+		const selectedItem = [selectedAttr.id];
+		const handleSelectUpdated = selected => {
+			if (!selected.length || selectedAttr.id === selected[0]) {
+				return;
+			}
+			const newSelected = options.find(opt => opt.id === selected[0]);
+			if (!newSelected) return;
+			onSelected(item.uiId, newSelected);
+		};
+		const handleAdd = () => addItem(item);
 		return (
-			<RadioGroup
-				className={classes.radioGroup}
-				value={selectedAttr.id}
-				onChange={evt =>
-					onSelected(
-						item.uiId,
-						options.find(itm => '' + itm.id === '' + evt.target.value)
-					)
-				}
-			>
-				{options.map(opt => (
-					<FormControlLabel
-						key={opt.id}
-						value={opt.id}
-						control={<Radio />}
-						label={opt.name}
-						className={classes.formControlLabel}
-					/>
-				))}
-			</RadioGroup>
+			<MultilineSelect
+				items={selectItems}
+				selected={selectedItem}
+				onSelectUpdated={handleSelectUpdated}
+				onAdd={handleAdd}
+			/>
 		);
 	}
 );
@@ -165,6 +187,7 @@ const KycChecklistItem = withStyles(styles)(
 						className={warningClassname}
 						selectedAttributes={selectedAttributes}
 						onSelected={onSelected}
+						addItem={addItem}
 					/>
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
