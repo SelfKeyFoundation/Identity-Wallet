@@ -10,7 +10,7 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
-import { LargeTableHeadRow } from 'selfkey-ui';
+import { LargeTableHeadRow, UnlockIcon } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
@@ -28,7 +28,10 @@ const styles = theme => ({
 	},
 
 	headerContent: {
-		marginTop: '50px'
+		marginTop: '50px',
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'nowrap'
 	},
 
 	content: {
@@ -62,6 +65,10 @@ const styles = theme => ({
 
 	icon: {
 		padding: 0
+	},
+
+	unlockIcon: {
+		marginRight: '10px'
 	}
 });
 
@@ -110,13 +117,23 @@ export const MarketplaceServicesList = withStyles(styles)(
 						<Grid
 							container
 							direction="row"
-							justify="flex-start"
+							justify="space-between"
 							alignItems="center"
 							className={classes.headerContent}
 						>
-							<Grid item>{category.icon}</Grid>
-							<Grid item>
-								<Typography variant="h1">{category.title}</Typography>
+							<Grid container>
+								<Grid item>{category.icon}</Grid>
+								<Grid item>
+									<Typography variant="h1">{category.title}</Typography>
+								</Grid>
+							</Grid>
+							<Grid container justify="flex-end">
+								<Grid item>
+									<Button variant="contained" size="large">
+										<UnlockIcon className={classes.unlockIcon} />
+										Unlock Marketplace
+									</Button>
+								</Grid>
 							</Grid>
 						</Grid>
 					</Grid>
