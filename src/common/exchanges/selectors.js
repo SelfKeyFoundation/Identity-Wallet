@@ -12,7 +12,12 @@ export const getExchanges = ({ exchanges }) => {
 			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
 			serviceId: data.serviceId || 'global',
 			lockPeriod: data.lockPeriod || 2592000000, // 30 days
-			amount: data.requiredBalance || 25
+			amount: data.requiredBalance || 25,
+			location: data.location || '',
+			fees: data['maker_fee'] || '',
+			fiatSupported: data['fiat_supported'] || [],
+			fiatPayments: data['fiat_payments'] || [],
+			excludedResidents: data['excluded_residents'] || []
 		};
 	});
 };

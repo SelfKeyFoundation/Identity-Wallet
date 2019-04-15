@@ -69,11 +69,12 @@ const getServices = (items, viewAction) => {
 					id={item.id || item.name}
 					name={item.name}
 					location={item.location || '-'}
-					fees={items.fees || '-'}
-					fiatSupported={items.fiats || '-'}
-					fiatPayments={item.fiatp || '-'}
+					fees={item.fees || '-'}
+					fiatSupported={item.fiatSupported || '-'}
+					fiatPayments={item.fiatPayments || '-'}
 					excludedResidents={item.excludedResidents || '-'}
 					logoUrl={item.logoUrl}
+					status={item.status}
 					viewAction={viewAction}
 				/>
 			</React.Fragment>
