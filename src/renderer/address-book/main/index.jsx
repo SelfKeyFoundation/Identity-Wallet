@@ -72,6 +72,7 @@ class AddressBookContainer extends Component {
 		const { addresses } = this.state;
 		return (
 			<Grid
+				id="viewAddressBook"
 				container
 				direction="column"
 				justify="flex-start"
@@ -120,7 +121,7 @@ class AddressBookContainer extends Component {
 							{addresses &&
 								addresses.map(address => {
 									return (
-										<TableRow key={address.id}>
+										<TableRow id={address.label} key={address.id}>
 											<TableCell id={address.id}>
 												<Typography variant="h6">
 													{address.label}
@@ -147,7 +148,7 @@ class AddressBookContainer extends Component {
 													</Grid>
 													<Grid item>
 														<IconButton
-															id="editButton"
+															id={`editButton${address.label}`}
 															onClick={() =>
 																this.handleEdit(address.id)
 															}
@@ -157,7 +158,7 @@ class AddressBookContainer extends Component {
 													</Grid>
 													<Grid item>
 														<IconButton
-															id="deleteButton"
+															id={`deleteButton${address.label}`}
 															onClick={() =>
 																this.handleDelete(address.id)
 															}

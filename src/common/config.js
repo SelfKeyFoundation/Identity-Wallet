@@ -18,7 +18,12 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const INCORPORATIONS_TEMPLATE_OVERRIDE = process.env.INCORPORATIONS_TEMPLATE_OVERRIDE;
+const INCORPORATIONS_PRICE_OVERRIDE = process.env.INCORPORATIONS_PRICE_OVERRIDE;
 const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
+const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
+const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
+const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 
 let userDataDirectoryPath = '';
@@ -32,8 +37,15 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
+
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
+	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,
+	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
+	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
+	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -91,6 +103,7 @@ const dev = {
 	node: 'infura',
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},

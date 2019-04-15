@@ -192,6 +192,7 @@ class Sidebar extends Component {
 							</Typography>
 						</ListItem>
 						<ListItem
+							id="selfkeyIdButton"
 							className={classes.listItem}
 							component={selfkeyId}
 							key="selfkeyId"
@@ -204,6 +205,7 @@ class Sidebar extends Component {
 							</Typography>
 						</ListItem>
 						<ListItem
+							id="addressBookButton"
 							className={classes.listItem}
 							component={addressBook}
 							key="addressBook"

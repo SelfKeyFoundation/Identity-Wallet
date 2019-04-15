@@ -5,9 +5,7 @@ const delay = require('delay');
 export const givenUserHasOpenedSelfKeyWallet = given => {
 	given('user has opened SelfKey Wallet', () => {
 		return tools
-			.scrollContainerToBottom(tools.app, '#container')
-			.then(() => tools.regStep(tools.app, '#agree'))
-			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+			.regStep(tools.app, '#agree')
 			.then(() => tools.regStep(tools.app, '#createWallet'))
 			.then(() => tools.regStep(tools.app, '#protectWallet'))
 			.then(() => delay(2000))
@@ -28,13 +26,11 @@ export const givenUserHasOpenedSelfKeyWallet = given => {
 export const givenUserHasOpenedSelfKeyWalletWithAPrivateKey = given => {
 	given('user has opened SelfKey Wallet with pirvate key', () => {
 		return tools
-			.scrollContainerToBottom(tools.app, '#container')
-			.then(() => tools.regStep(tools.app, '#agree'))
-			.then(() => tools.regStep(tools.app, '#setupWallet', 10000))
+			.regStep(tools.app, '#agree')
 			.then(() => tools.regStep(tools.app, '#useExistingWalletButton'))
 			.then(() => tools.regStep(tools.app, '#privateKey'))
 			.then(() => tools.app.client.setValue('#privateKeyInput', data[1].privKey))
-			.then(() => tools.regStep(tools.app, '#unlockButton'))
+			.then(() => tools.regStep(tools.app, '#unlockPrivateKeyButton'))
 			.then(() => tools.app.client.waitForVisible('#viewDashboard'));
 	});
 };

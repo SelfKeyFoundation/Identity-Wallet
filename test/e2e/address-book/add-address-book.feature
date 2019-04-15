@@ -9,7 +9,7 @@ Background: Given the user has created a SelfKey wallet
         Then user can see error message informing of invalid ETH address entered
 
     Scenario: Adding current user address
-        Given user has opened Address Book screen with pirvate key
+        Given user has opened Address Book screen with a private key
         When user clicks on Add Address button
         And enters current wallet ETH address
         Then user can see error message that current eth address can't be saved
