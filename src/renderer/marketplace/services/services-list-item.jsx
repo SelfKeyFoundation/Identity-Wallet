@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, TableRow, TableCell, Typography, withStyles } from '@material-ui/core';
+import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
 	icon: {
@@ -8,7 +9,7 @@ const styles = theme => ({
 	},
 
 	noRightPadding: {
-		paddingRight: 0
+		padding: '0 0 0 20px'
 	},
 
 	link: {
@@ -22,6 +23,48 @@ const styles = theme => ({
 	button: {
 		minWidth: 0,
 		textTransform: 'capitalize'
+	},
+
+	inline: {
+		display: 'flex',
+		flexWrap: 'wrap'
+	},
+
+	smallCell: {
+		padding: '0 10px',
+		whiteSpace: 'normal',
+		width: '100px',
+		wordBreak: 'break-word'
+	},
+
+	excluded: {
+		padding: '10px',
+		whiteSpace: 'normal',
+		width: '100px',
+		wordBreak: 'break-word'
+	},
+
+	goodForCell: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		height: 'initial',
+		justifyContent: 'flex-start',
+		maxWidth: '143px',
+		padding: '10px',
+		width: '143px'
+	},
+
+	fee: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis'
+	},
+
+	feeWrap: {
+		textOverflow: 'ellipsis',
+		overflow: 'hidden',
+		maxWidth: '90px'
 	}
 });
 
@@ -43,28 +86,49 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 			return status === 'Inactive' ? 'Coming Soon' : 'Details';
 		};
 
+		const isNotExcludedResidents =
+			excludedResidents.length === 0 || excludedResidents[0] === 'None';
+
+		const isFiatSupported = fiatSupported.length !== 0;
+		const isFiatPayments = fiatPayments.length !== 0;
+
 		return (
 			<TableRow key={name}>
 				<TableCell className={classes.noRightPadding}>
 					<img src={logoUrl} className={classes.icon} />
 				</TableCell>
-				<TableCell>
+				<TableCell className={classes.lofasz}>
 					<Typography variant="h6">{name}</Typography>
 				</TableCell>
 				<TableCell>
 					<Typography variant="h6">{location}</Typography>
 				</TableCell>
-				<TableCell>
-					<Typography variant="h6">{fees}</Typography>
+				<TableCell className={classes.feeWrap}>
+					<Typography variant="h6" className={classes.fee} title={fees}>
+						{fees === 'N.A.' ? '-' : fees}
+					</Typography>
 				</TableCell>
 				<TableCell>
-					<Typography variant="h6">{fiatSupported.join(' ')}</Typography>
+					{isFiatSupported
+						? fiatSupported.map((fiat, index) => <Tag key={index}>{fiat}</Tag>)
+						: '-'}
 				</TableCell>
 				<TableCell>
-					<Typography variant="h6">{fiatPayments.join(' ')}</Typography>
+					{isFiatPayments
+						? fiatPayments.map((payment, index) => (
+								<Typography variant="h6" key={index} className={classes.excluded}>
+									{payment}
+									{index !== excludedResidents.length - 1 ? ',' : ''}
+								</Typography>
+						  ))
+						: '-'}
 				</TableCell>
-				<TableCell>
-					<Typography variant="h6">{excludedResidents}</Typography>
+				<TableCell className={isNotExcludedResidents ? '' : classes.goodForCell}>
+					{isNotExcludedResidents
+						? '-'
+						: excludedResidents.map((excluded, index) => (
+								<Tag key={index}>{excluded}</Tag>
+						  ))}
 				</TableCell>
 				<TableCell>
 					<Button

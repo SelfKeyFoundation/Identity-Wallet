@@ -58,6 +58,10 @@ const styles = theme => ({
 	listContent: {
 		margin: 0,
 		width: '100%'
+	},
+
+	icon: {
+		padding: 0
 	}
 });
 
@@ -128,7 +132,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 							<Table>
 								<TableHead>
 									<LargeTableHeadRow>
-										<TableCell>&nbsp;</TableCell>
+										<TableCell className={classes.icon}>&nbsp;</TableCell>
 										<TableCell>
 											<Typography variant="overline">Exchange</Typography>
 										</TableCell>
