@@ -25,7 +25,6 @@ import {
 	MuiAddIcon,
 	SmallTableRow,
 	AttributeAlertIcon,
-	MultilineSelect,
 	warning,
 	success
 } from 'selfkey-ui';
@@ -56,7 +55,8 @@ const styles = theme => ({
 	},
 	labelColumn: {
 		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+		wordBreak: 'break-all',
+		padding: '5px'
 	},
 	editColumn: {
 		textAlign: 'right'
@@ -74,6 +74,14 @@ const styles = theme => ({
 	},
 	headCell: {
 		paddingLeft: '15px'
+	},
+	duplicateAddItemBtn: {
+		width: '100px'
+	},
+	duplicateAddItemBtnSmall: {
+		width: '86px',
+		marginTop: '5px',
+		padding: 0
 	}
 });
 
@@ -103,57 +111,58 @@ const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error
 const KycChecklistItemLabel = withStyles(styles)(
 	({ item, className, classes, selectedAttributes, onSelected, addItem }) => {
 		const { options } = item;
-		if (!item.duplicateType && (!options || options.length <= 1)) {
+		if (!options || options.length <= 1) {
 			return (
 				<Typography variant="subtitle1" gutterBottom className={className}>
 					{options.length ? options[0].name : '...'}
+					{item.duplicateType && <br />}
+					{item.duplicateType && (
+						<Button
+							color="primary"
+							size="small"
+							onClick={() => addItem(item)}
+							className={classes.duplicateAddItemBtnSmall}
+						>
+							+ Add Item
+						</Button>
+					)}
 				</Typography>
 			);
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
 		onSelected(item.uiId, selectedAttr);
-		if (!item.duplicateType) {
-			return (
-				<RadioGroup
-					className={classes.radioGroup}
-					value={selectedAttr.id}
-					onChange={evt =>
-						onSelected(
-							item.uiId,
-							options.find(itm => '' + itm.id === '' + evt.target.value)
-						)
-					}
-				>
-					{options.map(opt => (
-						<FormControlLabel
-							key={opt.id}
-							value={opt.id}
-							control={<Radio />}
-							label={opt.name}
-							className={classes.formControlLabel}
-						/>
-					))}
-				</RadioGroup>
-			);
-		}
-		const selectItems = options.map(opt => ({ key: opt.id, value: opt.name }));
-		const selectedItem = [selectedAttr.id];
-		const handleSelectUpdated = selected => {
-			if (!selected.length || selectedAttr.id === selected[0]) {
-				return;
-			}
-			const newSelected = options.find(opt => opt.id === selected[0]);
-			if (!newSelected) return;
-			onSelected(item.uiId, newSelected);
-		};
-		const handleAdd = () => addItem(item);
+
 		return (
-			<MultilineSelect
-				items={selectItems}
-				selected={selectedItem}
-				onSelectUpdated={handleSelectUpdated}
-				onAdd={handleAdd}
-			/>
+			<RadioGroup
+				className={classes.radioGroup}
+				value={selectedAttr.id}
+				onChange={evt =>
+					onSelected(
+						item.uiId,
+						options.find(itm => '' + itm.id === '' + evt.target.value)
+					)
+				}
+			>
+				{options.map(opt => (
+					<FormControlLabel
+						key={opt.id}
+						value={opt.id}
+						control={<Radio />}
+						label={opt.name}
+						className={classes.formControlLabel}
+					/>
+				))}
+				{item.duplicateType && (
+					<Button
+						color="primary"
+						size="small"
+						onClick={() => addItem(item)}
+						className={classes.duplicateAddItemBtnSmall}
+					>
+						+ Add Item
+					</Button>
+				)}
+			</RadioGroup>
 		);
 	}
 );
