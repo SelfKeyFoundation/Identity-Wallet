@@ -119,15 +119,6 @@ export const kycSelectors = {
 				return acc;
 			}, attributesBySchema);
 
-		// // XXX dev only, remove
-		// if (
-		// 	templateAttributes[templateAttributes.length - 1].schemaId !==
-		// 	templateAttributes[0].schemaId
-		// ) {
-		// 	templateAttributes.push({ ...templateAttributes[0], id: 'test123' });
-		// }
-		// XXX end
-
 		const tplOccurrence = templateAttributes.reduce((acc, curr) => {
 			const schemaId = curr.schemaId || curr;
 			acc[schemaId] = (acc[curr.schemaId] || 0) + 1;
