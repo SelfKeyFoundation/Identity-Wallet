@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	CardHeader,
 	Card,
 	CardContent,
 	Typography,
@@ -11,23 +10,12 @@ import {
 	ExpansionPanelDetails,
 	List,
 	ListItem,
-	Button,
 	withStyles
 } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { GreenTick, FailedIcon, AttributeAlertIcon, HourGlassIcon, warning } from 'selfkey-ui';
+import { CheckMaIcon, DeniedIcon, HourGlassIcon, StatusInfo } from 'selfkey-ui';
 
 const styles = theme => ({
-	orange: {
-		width: 'auto',
-		margin: '30px 24px 24px 24px',
-		border: `1px solid ${warning}`,
-		background: 'transparent',
-		color: warning,
-		'&:hover': {
-			border: `1px solid ${warning}`
-		}
-	},
 	statusIcon: {
 		width: '36px !important',
 		height: '36px !important'
@@ -36,11 +24,35 @@ const styles = theme => ({
 		paddingRight: '10px'
 	},
 	label: {
+		minWidth: '130px',
 		paddingRight: '20px'
+	},
+	statusInfoWrap: {
+		padding: '30px 24px'
+	},
+	statusInfo: {
+		width: '100%'
+	},
+	headerIcon: {
+		marginRight: '13px'
+	},
+	list: {
+		paddingLeft: 0,
+		paddingRight: 0
+	},
+	listItem: {
+		alignItems: 'baseline',
+		padding: 0
+	},
+	noRightPadding: {
+		paddingRight: '0 !important'
+	},
+	title: {
+		padding: '16px'
 	}
 });
 
-const HeaderIcon = withStyles(styles)(({ status }) => {
+const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	let icon = null;
 	switch (status) {
 		case 'Documents Required':
@@ -50,62 +62,13 @@ const HeaderIcon = withStyles(styles)(({ status }) => {
 			icon = <HourGlassIcon />;
 			break;
 		case 'Denied':
-			icon = <FailedIcon />;
+			icon = <DeniedIcon className={classes.headerIcon} />;
 			break;
 		default:
-			icon = <GreenTick />;
+			icon = <CheckMaIcon className={classes.headerIcon} />;
 	}
 
 	return icon;
-});
-
-const StatusComponent = withStyles(styles)(({ status, classes }) => {
-	let icon = null;
-	let message = null;
-	switch (status) {
-		case 'Documents Required':
-			icon = <AttributeAlertIcon className={{ root: classes.statusIcon }} />;
-			message = 'Application started. Missing required documents.';
-			break;
-		case 'Documents Submitted':
-			icon = <AttributeAlertIcon className={{ root: classes.statusIcon }} />;
-			message =
-				'Application started. Documents submitted. Please check your email for further instructions.';
-			break;
-		case 'Denied':
-			icon = <AttributeAlertIcon className={{ root: classes.statusIcon }} />;
-			message = 'Application denied. Please check your email for the reject reason.';
-			break;
-		default:
-			icon = <AttributeAlertIcon className={{ root: classes.statusIcon }} />;
-			message =
-				'Application completed. Please check your email to receive relevant documents and information.';
-	}
-
-	return (
-		<Grid
-			container
-			direction="row"
-			justify="flex-start"
-			alignItems="center"
-			className={classes.orange}
-		>
-			<Grid item>{icon}</Grid>
-			<Grid item>
-				<Typography variant="body1" gutterBottom>
-					Status
-				</Typography>
-				<Typography variant="body2" color="secondary" gutterBottom>
-					{message}
-				</Typography>
-			</Grid>
-			<Grid item justify="flex-end">
-				<Button variant="contained" size="large">
-					Add Documents
-				</Button>
-			</Grid>
-		</Grid>
-	);
 });
 
 export const SelfkeyIdApplications = props => {
@@ -125,92 +88,99 @@ export const SelfkeyIdApplications = props => {
 								<Typography variant="h2" className={classes.type}>
 									{item.type}
 								</Typography>
-								<Typography variant="subtitle2" color="secondary" gutterBottom>
+								<Typography variant="subtitle2" color="secondary">
 									- {item.country}
 								</Typography>
 							</Grid>
-							<Grid container direction="row" justify="flex-end" alignItems="center">
+							<Grid
+								container
+								direction="row"
+								justify="flex-end"
+								alignItems="center"
+								className={classes.noRightPadding}
+							>
 								<HeaderIcon status={item.status} />
-								<Typography variant="subtitle2" color="secondary" gutterBottom>
+								<Typography variant="subtitle2" color="secondary">
 									{item.status}
 								</Typography>
 							</Grid>
 						</ExpansionPanelSummary>
 						<Divider />
-						<StatusComponent status={item.status} classes={classes} />
+						<Grid
+							className={classes.statusInfoWrap}
+							container
+							direction="row"
+							alignItems="center"
+						>
+							<StatusInfo status={item.status} />
+						</Grid>
 						<ExpansionPanelDetails>
 							<Grid container spacing={32}>
 								<Grid item xs>
 									<Card>
-										<CardHeader title="Application Details" />
-										<Divider />
+										<Typography variant="h2" className={classes.title}>
+											Application Details
+										</Typography>
+										<Divider variant="middle" />
 										<CardContent>
-											<List>
-												<ListItem key="applicationDate">
+											<List className={classes.list}>
+												<ListItem
+													key="applicationDate"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Application Date
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.applicationDate}
 													</Typography>
 												</ListItem>
-												<ListItem key="serviceProvider">
+												<ListItem
+													key="serviceProvider"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Service Provider
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.serviceProvider}
 													</Typography>
 												</ListItem>
-												<ListItem key="providerContact">
+												<ListItem
+													key="providerContact"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Provider Contact
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.providerContact}
 													</Typography>
 												</ListItem>
-												<ListItem key="address">
+												<ListItem
+													key="address"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Address
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.address}
 													</Typography>
 												</ListItem>
@@ -220,75 +190,66 @@ export const SelfkeyIdApplications = props => {
 								</Grid>
 								<Grid item xs>
 									<Card>
-										<CardHeader title="Payment Details" />
-										<Divider />
+										<Typography variant="h2" className={classes.title}>
+											Payment Details
+										</Typography>
+										<Divider variant="middle" />
 										<CardContent>
-											<List>
-												<ListItem key="transactionId">
+											<List className={classes.list}>
+												<ListItem
+													key="transactionId"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Transaction ID
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.transactionId}
 													</Typography>
 												</ListItem>
-												<ListItem key="transactionDate">
+												<ListItem
+													key="transactionDate"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Transaction Date
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.transactionDate}
 													</Typography>
 												</ListItem>
-												<ListItem key="amount">
+												<ListItem key="amount" className={classes.listItem}>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Amount
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.amount}
 													</Typography>
 												</ListItem>
-												<ListItem key="paymentStatus">
+												<ListItem
+													key="paymentStatus"
+													className={classes.listItem}
+												>
 													<Typography
 														variant="body2"
 														color="secondary"
-														gutterBottom
 														className={classes.label}
 													>
 														Payment Status
 													</Typography>
-													<Typography
-														variant="body2"
-														align="right"
-														gutterBottom
-													>
+													<Typography variant="body2">
 														{item.paymentStatus}
 													</Typography>
 												</ListItem>
