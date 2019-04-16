@@ -118,7 +118,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#637-manage-applications-status",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#48c5870c3a7f426cc21523b5ac5fca0749295bdf",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
