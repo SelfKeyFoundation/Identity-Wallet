@@ -5872,7 +5872,6 @@ electron-osx-sign@0.4.11:
     minimist "^1.2.0"
     plist "^3.0.1"
 
-
 "electron-pdf-window@https://github.com/SelfKeyFoundation/electron-pdf-window.git#15ef0b0":
   version "1.0.13"
   resolved "https://github.com/SelfKeyFoundation/electron-pdf-window.git#15ef0b0e718cd98d69df53c3bdacab9c7f5cc847"
@@ -14285,15 +14284,15 @@ react-is@^16.8.5:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.5.tgz#c54ac229dd66b5afe0de5acbe47647c3da692ff8"
   integrity sha512-sudt2uq5P/2TznPV4Wtdi+Lnq3yaYW8LfvPKLM9BKD8jJNBkxMVyB0C9/GmVhLw7Jbdmndk/73n7XQGeN9A3QQ==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#2282122a08f616c9c8efcde69d4c86662a2e8809":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#344b9ee":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#2282122a08f616c9c8efcde69d4c86662a2e8809"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#344b9ee82ce809a2638e98f44ebc2e583a1caf2e"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     mime "^2.4.0"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#80671e941cab89fdce2381476d3f4359bf379710"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#cecab6970ac6429fb050e201c396599eae1b4cad"
     svg-inline-loader "^0.8.0"
 
 "react-jsonschema-form@https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f":
@@ -15456,9 +15455,9 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#80671e941cab89fdce2381476d3f4359bf379710":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#cecab6970ac6429fb050e201c396599eae1b4cad":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#80671e941cab89fdce2381476d3f4359bf379710"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#cecab6970ac6429fb050e201c396599eae1b4cad"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
