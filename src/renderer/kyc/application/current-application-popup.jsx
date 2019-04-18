@@ -22,6 +22,7 @@ import {
 	SmallTableHeadRow,
 	SmallTableCell,
 	MuiEditIcon,
+	MuiAddIcon,
 	SmallTableRow,
 	AttributeAlertIcon,
 	warning,
@@ -54,7 +55,8 @@ const styles = theme => ({
 	},
 	labelColumn: {
 		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+		wordBreak: 'break-all',
+		padding: '5px'
 	},
 	editColumn: {
 		textAlign: 'right'
@@ -72,6 +74,14 @@ const styles = theme => ({
 	},
 	headCell: {
 		paddingLeft: '15px'
+	},
+	duplicateAddItemBtn: {
+		width: '100px'
+	},
+	duplicateAddItemBtnSmall: {
+		width: '86px',
+		marginTop: '5px',
+		padding: 0
 	}
 });
 
@@ -99,17 +109,29 @@ const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error
 });
 
 const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttributes, onSelected }) => {
+	({ item, className, classes, selectedAttributes, onSelected, addItem }) => {
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
 				<Typography variant="subtitle1" gutterBottom className={className}>
 					{options.length ? options[0].name : '...'}
+					{item.duplicateType && <br />}
+					{item.duplicateType && (
+						<Button
+							color="primary"
+							size="small"
+							onClick={() => addItem(item)}
+							className={classes.duplicateAddItemBtnSmall}
+						>
+							+ Add Item
+						</Button>
+					)}
 				</Typography>
 			);
 		}
 		const selectedAttr = selectedAttributes[item.uiId] || options[0];
 		onSelected(item.uiId, selectedAttr);
+
 		return (
 			<RadioGroup
 				className={classes.radioGroup}
@@ -130,13 +152,23 @@ const KycChecklistItemLabel = withStyles(styles)(
 						className={classes.formControlLabel}
 					/>
 				))}
+				{item.duplicateType && (
+					<Button
+						color="primary"
+						size="small"
+						onClick={() => addItem(item)}
+						className={classes.duplicateAddItemBtnSmall}
+					>
+						+ Add Item
+					</Button>
+				)}
 			</RadioGroup>
 		);
 	}
 );
 
 const KycChecklistItem = withStyles(styles)(
-	({ item, classes, selectedAttributes, onSelected, editItem }) => {
+	({ item, classes, selectedAttributes, onSelected, editItem, addItem }) => {
 		const type = item.title
 			? item.title
 			: item.type && item.type.content
@@ -164,13 +196,19 @@ const KycChecklistItem = withStyles(styles)(
 						className={warningClassname}
 						selectedAttributes={selectedAttributes}
 						onSelected={onSelected}
+						addItem={addItem}
 					/>
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
 					<Typography variant="subtitle1" gutterBottom>
-						<IconButton aria-label="Edit" onClick={event => editItem(item)}>
-							<MuiEditIcon />
+						<IconButton aria-label="Add" onClick={event => addItem(item)}>
+							<MuiAddIcon />
 						</IconButton>
+						{!warning ? (
+							<IconButton aria-label="Edit" onClick={event => editItem(item)}>
+								<MuiEditIcon />
+							</IconButton>
+						) : null}
 					</Typography>
 				</SmallTableCell>
 			</SmallTableRow>
@@ -179,7 +217,7 @@ const KycChecklistItem = withStyles(styles)(
 );
 
 const KycChecklist = withStyles(styles)(
-	({ classes, requirements, selectedAttributes, onSelected, editItem }) => {
+	({ classes, requirements, selectedAttributes, onSelected, editItem, addItem }) => {
 		return (
 			<Table>
 				<TableHead>
@@ -212,6 +250,7 @@ const KycChecklist = withStyles(styles)(
 								selectedAttributes={selectedAttributes}
 								onSelected={onSelected}
 								editItem={editItem}
+								addItem={addItem}
 							/>
 						);
 					})}
@@ -262,7 +301,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		agreementValue,
 		error,
 		onSelected,
-		editItem
+		editItem,
+		addItem
 	}) => {
 		if (!relyingParty || !currentApplication || !requirements)
 			return (
@@ -303,6 +343,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
+							addItem={addItem}
 						/>
 					</Grid>
 					{agreement ? (
