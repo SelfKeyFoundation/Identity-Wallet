@@ -20,6 +20,8 @@ export class KycApplication extends BaseModel {
 				owner: { type: 'string' },
 				scope: { type: 'string' },
 				rpName: { type: 'string' },
+				title: { type: 'string' },
+				subtitle: { type: 'string' },
 				currentStatus: { type: 'integer' },
 				currentStatusName: { type: 'string' },
 				applicationDate: { type: 'string' },
