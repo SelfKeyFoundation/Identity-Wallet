@@ -36,7 +36,8 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
-	KYC_APPLICATIONS_SET: 'kyc/applications/set'
+	KYC_APPLICATIONS_SET: 'kyc/applications/set',
+	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update'
 };
 
 const incorporationsRPDetails = {
@@ -505,8 +506,8 @@ const clearRelyingPartyOperation = () => async dispatch => {
 };
 
 const loadApplicationsOperation = () => async (dispatch, getState) => {
-	let applicationService = getGlobalContext().applicationService;
-	let applications = await applicationService.loadApplications();
+	let kycApplicationService = getGlobalContext().kycApplicationService;
+	let applications = await kycApplicationService.load();
 	await dispatch(kycActions.setApplicationsAction(applications));
 };
 

@@ -46,6 +46,6 @@ export const registerMainServices = container => {
 		incorporationsService: asClass(IncorporationsService).singleton(),
 		guideSettingsService: asClass(GuideSettingsService).singleton(),
 		countryService: asClass(CountryService).singleton(),
-		KycApplicationService: asClass(KycApplicationService).singleton()
+		kycApplicationService: asClass(KycApplicationService).singleton()
 	});
 };
