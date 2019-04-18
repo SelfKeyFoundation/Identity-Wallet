@@ -1,18 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getExchangeLinks } from 'common/exchanges/selectors';
-import { Grid, List, ListItem, withStyles } from '@material-ui/core';
-import { H3, P, WarningShieldIcon } from 'selfkey-ui';
+import { Grid, List, ListItem, withStyles, Typography } from '@material-ui/core';
+import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common/popup';
 
 const styles = theme => ({
-	headerText: {
-		color: '#E98548',
-		fontFamily: 'Proxima Nova',
-		fontSize: '16px',
-		lineHeight: '24px'
-	},
-
 	exchangeItem: {
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
@@ -63,9 +56,9 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 		<Grid item xs={10}>
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<Grid item id="header">
-					<H3 className={classes.headerText}>
+					<Typography variant="caption">
 						You need at least 25 KEY tokens to unlock this listing.
-					</H3>
+					</Typography>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
 					<Grid
@@ -76,11 +69,11 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 						spacing={16}
 					>
 						<Grid item>
-							<P>
+							<Typography variant="body2">
 								To access this marketplace, you will need a deposit of 25 KEY
 								tokens. This deposit is reclaimable after 30 days. KEY tokens are
 								listed on many exchanges worldwide:
-							</P>
+							</Typography>
 						</Grid>
 						<List className={classes.exchanges}>
 							{getExchanges(exchanges, classes)}

@@ -1,8 +1,5 @@
 import React from 'react';
-
-import { Grid, Button, withStyles } from '@material-ui/core';
-import { P, H2 } from 'selfkey-ui';
-
+import { Grid, Button, withStyles, Typography } from '@material-ui/core';
 import Truncate from 'react-truncate';
 
 const styles = theme => ({
@@ -73,13 +70,13 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 						<img src={logoUrl} />
 					</Grid>
 					<Grid item id="title" className={classes.title}>
-						<H2>{name}</H2>
+						<Typography variant="h2">{name}</Typography>
 					</Grid>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
-					<P>
+					<Typography variant="body2">
 						<Truncate lines={5}>{description}</Truncate>
-					</P>
+					</Typography>
 				</Grid>
 				<Grid item id="footer" className={classes.footer}>
 					<Button
