@@ -25,6 +25,9 @@ const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
 const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
+const APPLICATIONS_PROVIDER_NAME = process.env.APPLICATIONS_PROVIDER_NAME;
+const APPLICATIONS_PROVIDER_CONTACT = process.env.APPLICATIONS_PROVIDER_CONTACT;
+const APPLICATIONS_PROVIDER_ADDRESS = process.env.APPLICATIONS_PROVIDER_ADDRESS;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
@@ -45,6 +48,12 @@ const common = {
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+
+	applicationsProviderName: APPLICATIONS_PROVIDER_NAME || 'Far Horizon Capital Inc',
+	appplicationProviderContact: APPLICATIONS_PROVIDER_CONTACT || 'support@flagtheory.com',
+	applicationsProviderAddress:
+		APPLICATIONS_PROVIDER_ADDRESS ||
+		'10 Anson Road International Plaza #27-15 Singapore 079903',
 
 	constants: {
 		initialIdAttributes: {

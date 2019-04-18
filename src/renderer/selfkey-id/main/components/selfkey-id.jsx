@@ -10,56 +10,64 @@ import SelfkeyIdApplications from './selfkey-id-applications';
 
 const dummyApplications = [
 	{
-		type: 'Incorporation',
-		country: 'Singapore',
-		status: 'Documents Required',
+		id: '1',
+		owner: 'owner',
+		scope: 'Singapore',
+		rpName: 'incorporations',
+		currentStatus: 1,
+		currentStatusName: 'Documents Required',
 		applicationDate: '08 May 2018',
-		serviceProvider: 'Far Horizon Capintal Inc',
-		providerContact: 'support@flagtheory.com',
-		address: '10 Anson Rd Int Plaza #27-15 Singapore 079903',
-		transactionId: 'asdasds21312',
-		transactionDate: '08 May 2018 12:48AM',
-		amount: '746,234,43.00 KEY',
-		paymentStatus: 'Sent KEY'
+		payments: {
+			amount: '123',
+			amountKey: '746,234,43.00 KEY',
+			transactionHash: 'asdasds21312',
+			transactionDate: '08 May 2018 12:48AM'
+		}
 	},
 	{
-		type: 'Incorporation',
-		country: 'France',
-		status: 'Documents Submitted',
+		id: '2',
+		owner: 'owner',
+		scope: 'France',
+		rpName: 'incorporations',
+		currentStatus: 2,
+		currentStatusName: 'Documents Submitted',
 		applicationDate: '07 May 2018',
-		serviceProvider: 'Far Horizon Capintal Inc',
-		providerContact: 'support@flagtheory.com',
-		address: '10 Anson Rd Int Plaza #27-15 France 079903',
-		transactionId: 'asdasds21312',
-		transactionDate: '07 May 2018 12:48AM',
-		amount: '746,234,43.00 ETH',
-		paymentStatus: 'Sent ETH'
+		payments: {
+			amount: '123',
+			amountKey: '746,234,40.00 KEY',
+			transactionHash: 'asdasds21311',
+			transactionDate: '07 May 2018 12:48AM'
+		}
 	},
 	{
-		type: 'Incorporation',
-		country: 'Malta',
-		status: 'Approved',
-		applicationDate: '09 May 2018',
-		serviceProvider: 'Far Horizon Capintal Inc',
-		providerContact: 'support@flagtheory.com',
-		address: '10 Anson Rd Int Plaza #27-15 Malta 079903',
-		transactionId: 'asdasds2131313',
-		transactionDate: '09 May 2018 12:48AM',
-		amount: '746,234,49.00 KEY',
-		paymentStatus: 'Sent KEY'
+		id: '3',
+		owner: 'owner',
+		scope: 'Malta',
+		rpName: 'incorporations',
+		currentStatus: 3,
+		currentStatusName: 'Approved',
+		applicationDate: '06 May 2018',
+		payments: {
+			amount: '123',
+			amountKey: '746,234,41.00 KEY',
+			transactionHash: 'asdasds21313',
+			transactionDate: '06 May 2018 12:48AM'
+		}
 	},
 	{
-		type: 'Incorporation',
-		country: 'Brazil',
-		status: 'Denied',
-		applicationDate: '10 May 2018',
-		serviceProvider: 'Far Horizon Capintal Inc',
-		providerContact: 'support@flagtheory.com',
-		address: '10 Anson Rd Int Plaza #27-15 Brazil 079903',
-		transactionId: 'asdasds2131111',
-		transactionDate: '10 May 2018 12:48AM',
-		amount: '746,234,10.00 KEY',
-		paymentStatus: 'Sent ETH'
+		id: '4',
+		owner: 'owner',
+		scope: 'Brazil',
+		rpName: 'incorporations',
+		currentStatus: 4,
+		currentStatusName: 'Denied',
+		applicationDate: '05 May 2018',
+		payments: {
+			amount: '123',
+			amountKey: '746,234,44.00 KEY',
+			transactionHash: 'asdasds21314',
+			transactionDate: '05 May 2018 12:48AM'
+		}
 	}
 ];
 

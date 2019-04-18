@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { CheckMaIcon, DeniedIcon, HourGlassIcon, StatusInfo } from 'selfkey-ui';
+import config from 'common/config';
 
 const styles = theme => ({
 	statusIcon: {
@@ -86,10 +87,10 @@ export const SelfkeyIdApplications = props => {
 								alignItems="baseline"
 							>
 								<Typography variant="h2" className={classes.type}>
-									{item.type}
+									{item.rpName}
 								</Typography>
 								<Typography variant="subtitle2" color="secondary">
-									- {item.country}
+									- {item.scope}
 								</Typography>
 							</Grid>
 							<Grid
@@ -99,9 +100,9 @@ export const SelfkeyIdApplications = props => {
 								alignItems="center"
 								className={classes.noRightPadding}
 							>
-								<HeaderIcon status={item.status} />
+								<HeaderIcon status={item.currentStatusName} />
 								<Typography variant="subtitle2" color="secondary">
-									{item.status}
+									{item.currentStatusName}
 								</Typography>
 							</Grid>
 						</ExpansionPanelSummary>
@@ -112,7 +113,7 @@ export const SelfkeyIdApplications = props => {
 							direction="row"
 							alignItems="center"
 						>
-							<StatusInfo status={item.status} />
+							<StatusInfo status={item.currentStatusName} />
 						</Grid>
 						<ExpansionPanelDetails>
 							<Grid container spacing={32}>
@@ -151,7 +152,7 @@ export const SelfkeyIdApplications = props => {
 														Service Provider
 													</Typography>
 													<Typography variant="body2">
-														{item.serviceProvider}
+														{config.applicationsProviderName}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -166,7 +167,7 @@ export const SelfkeyIdApplications = props => {
 														Provider Contact
 													</Typography>
 													<Typography variant="body2">
-														{item.providerContact}
+														{config.appplicationProviderContact}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -181,7 +182,7 @@ export const SelfkeyIdApplications = props => {
 														Address
 													</Typography>
 													<Typography variant="body2">
-														{item.address}
+														{config.applicationsProviderAddress}
 													</Typography>
 												</ListItem>
 											</List>
@@ -208,7 +209,7 @@ export const SelfkeyIdApplications = props => {
 														Transaction ID
 													</Typography>
 													<Typography variant="body2">
-														{item.transactionId}
+														{item.payments.transactionHash}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -223,7 +224,7 @@ export const SelfkeyIdApplications = props => {
 														Transaction Date
 													</Typography>
 													<Typography variant="body2">
-														{item.transactionDate}
+														{item.payments.transactionDate}
 													</Typography>
 												</ListItem>
 												<ListItem key="amount" className={classes.listItem}>
@@ -235,7 +236,7 @@ export const SelfkeyIdApplications = props => {
 														Amount
 													</Typography>
 													<Typography variant="body2">
-														{item.amount}
+														{item.payments.amountKey}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -250,7 +251,7 @@ export const SelfkeyIdApplications = props => {
 														Payment Status
 													</Typography>
 													<Typography variant="body2">
-														{item.paymentStatus}
+														Sent KEY
 													</Typography>
 												</ListItem>
 											</List>
