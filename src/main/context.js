@@ -18,6 +18,7 @@ import IncorporationsService from './marketplace/incorporations-service';
 import GuideSettingsService from './settings/guide-settings-service';
 import CountryService from './country/country-service';
 import NetworkService from './application/network-service';
+import KycApplicationService from './kyc/kyc-application-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -44,6 +45,7 @@ export const registerMainServices = container => {
 		walletTokenService: asClass(WalletTokenService).singleton(),
 		incorporationsService: asClass(IncorporationsService).singleton(),
 		guideSettingsService: asClass(GuideSettingsService).singleton(),
-		countryService: asClass(CountryService).singleton()
+		countryService: asClass(CountryService).singleton(),
+		KycApplicationService: asClass(KycApplicationService).singleton()
 	});
 };
