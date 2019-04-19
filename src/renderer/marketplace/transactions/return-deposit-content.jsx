@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 
-import { Grid, withStyles } from '@material-ui/core';
-import { P, StyledButton, ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
+import { Grid, withStyles, Typography } from '@material-ui/core';
+import { StyledButton, ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
 import config from 'common/config';
 
 const styles = theme => ({
-	text: {
-		fontSize: '18px',
-		lineHeight: '30px'
-	},
 	footer: {
 		marginTop: '30px',
 		paddingTop: '30px',
@@ -74,11 +70,11 @@ class ReturnDepositContentComponent extends Component {
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
 						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>
+							<Typography variant="body2">
 								You can now get your deposit of {amount} {token} tokens back. After
 								the transaction is confirmed, you will lose access to this
 								marketplace.
-							</P>
+							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.contentSection }}>
 							<TransactionFeeSelector
