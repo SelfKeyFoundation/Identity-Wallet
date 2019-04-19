@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import config from 'common/config';
 import {
 	Card,
 	CardContent,
@@ -54,20 +55,32 @@ const styles = theme => ({
 	}
 });
 
+const getRpInfo = (rpName, field) => {
+	return config.relyingPartyInfo[rpName][field];
+};
+
 const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	let icon = null;
+	// Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
 	switch (status) {
-		case 'Documents Required':
-			icon = <HourGlassIcon />;
+		case 2:
+			icon = <CheckMaIcon className={classes.headerIcon} />;
 			break;
-		case 'Documents Submitted':
-			icon = <HourGlassIcon />;
-			break;
-		case 'Denied':
+
+		case 3:
+		case 8:
 			icon = <DeniedIcon className={classes.headerIcon} />;
 			break;
+
+		case 1:
+		case 6:
+		case 9:
+		case 11:
+			icon = <HourGlassIcon />;
+			break;
+
 		default:
-			icon = <CheckMaIcon className={classes.headerIcon} />;
+			icon = <HourGlassIcon />;
 	}
 
 	return icon;
@@ -100,7 +113,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 		return (
 			<React.Fragment>
 				{this.props.applications.map((item, index) => (
-					<React.Fragment key={item.country}>
+					<React.Fragment key={item.id}>
 						<ExpansionPanel defaultExpanded={index === 0}>
 							<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
 								<Grid
@@ -113,7 +126,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 										{item.rpName.charAt(0).toUpperCase() + item.rpName.slice(1)}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary">
-										- {item.country}
+										- {item.title}
 									</Typography>
 								</Grid>
 								<Grid
@@ -182,7 +195,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Service Provider
 														</Typography>
 														<Typography variant="body2">
-															{config.applicationsProviderName}
+															{getRpInfo(item.rpName, 'name')}
 														</Typography>
 													</ListItem>
 													<ListItem
@@ -197,7 +210,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Provider Contact
 														</Typography>
 														<Typography variant="body2">
-															{config.appplicationProviderContact}
+															{getRpInfo(item.rpName, 'email')}
 														</Typography>
 													</ListItem>
 													<ListItem
@@ -212,7 +225,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Address
 														</Typography>
 														<Typography variant="body2">
-															{config.applicationsProviderAddress}
+															{getRpInfo(item.rpName, 'address')}
 														</Typography>
 													</ListItem>
 												</List>
@@ -239,7 +252,8 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Transaction ID
 														</Typography>
 														<Typography variant="body2">
-															{item.payments.transactionHash}
+															{item.payments &&
+																item.payments.transactionHash}
 														</Typography>
 													</ListItem>
 													<ListItem
@@ -254,9 +268,10 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Transaction Date
 														</Typography>
 														<Typography variant="body2">
-															{moment(
-																item.payments.transactionDate
-															).format('DD MMM YYYY')}
+															{item.payments &&
+																moment(
+																	item.payments.transactionDate
+																).format('DD MMM YYYY')}
 														</Typography>
 													</ListItem>
 													<ListItem
@@ -271,7 +286,8 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Amount
 														</Typography>
 														<Typography variant="body2">
-															{item.payments.amountKey}
+															{item.payments &&
+																item.payments.amountKey}
 														</Typography>
 													</ListItem>
 													<ListItem
@@ -286,7 +302,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 															Payment Status
 														</Typography>
 														<Typography variant="body2">
-															Sent KEY
+															{item.payments && item.payments.status}
 														</Typography>
 													</ListItem>
 												</List>
@@ -296,7 +312,6 @@ class SelfkeyIdApplicationsComponent extends Component {
 								</Grid>
 							</ExpansionPanelDetails>
 						</ExpansionPanel>
-						<br />
 					</React.Fragment>
 				))}
 			</React.Fragment>

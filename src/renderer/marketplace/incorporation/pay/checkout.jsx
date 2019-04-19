@@ -335,7 +335,7 @@ export class IncorporationCheckout extends React.Component {
 				templateId,
 				this.getPayRoute(),
 				this.getCancelRoute(),
-				`Incorporation Checklist: ${program.Region}`,
+				program.Region,
 				`You are about to begin the incorporation process in ${
 					program.Region
 				}. Please double check your

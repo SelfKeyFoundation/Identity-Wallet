@@ -10,9 +10,11 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
 import { Popup } from '../../../common/popup';
+import { kycSelectors, kycOperations } from 'common/kyc';
 // import SelfkeyIdCompanies from './selfkey-id-companies';
 // import SelfkeyIdHistory from './selfkey-id-history';
 
+/*
 const dummyApplications = [
 	{
 		id: '5c8a88eacb05f40134eb14a5',
@@ -79,6 +81,7 @@ const dummyApplications = [
 		updatedAt: '2019-04-01T17:02:01.123Z'
 	}
 ];
+*/
 
 const styles = theme => ({
 	loading: {
@@ -102,15 +105,20 @@ class SelfkeyIdComponent extends Component {
 
 		if (!wallet.isSetupFinished) {
 			await dispatch(push('/selfkeyIdCreate'));
+		} else {
+			await this.props.dispatch(kycOperations.loadApplicationsOperation());
 		}
 
 		if (tabValue) {
 			this.setState({ tabValue: parseInt(tabValue) });
 		}
 
+		// FIXME: I dont think this is needed
+		/*
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
+		*/
 
 		if (rpShouldUpdate) {
 			await this.props.dispatch(
@@ -158,6 +166,10 @@ class SelfkeyIdComponent extends Component {
 				);
 			});
 		} else {
+			// FIXME: sync of RP applications with local database is done automatically
+			// FIXME: check kyc/index.js line 327
+			// FIXME: if you authenticate it should sync automatically
+			/*
 			// get stored application from local database
 			let application = this.props.applications.find(app => {
 				return app.id === id;
@@ -192,6 +204,7 @@ class SelfkeyIdComponent extends Component {
 				// reset id
 				this.setState({ applicationId: null });
 			}
+			*/
 		}
 	};
 
@@ -302,7 +315,7 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			notAuthenticated
 		),
-		applications: dummyApplications
+		applications: kycSelectors.selectApplications(state)
 	};
 };
 
