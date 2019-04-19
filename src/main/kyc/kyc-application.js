@@ -14,14 +14,14 @@ export class KycApplication extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			// required: ['walletId', 'label', 'address'],
+			required: ['id', 'rpName'],
 			properties: {
 				id: { type: 'string' },
 				owner: { type: 'string' },
 				scope: { type: 'string' },
 				rpName: { type: 'string' },
 				title: { type: 'string' },
-				subtitle: { type: 'string' },
+				sub_title: { type: 'string' },
 				currentStatus: { type: 'integer' },
 				currentStatusName: { type: 'string' },
 				applicationDate: { type: 'string' },
@@ -31,17 +31,27 @@ export class KycApplication extends BaseModel {
 		};
 	}
 
+	static async findById(id) {
+		return this.query().where({ id });
+	}
+
 	static findAll() {
 		return this.query();
 	}
 
-	static create(itm) {
-		return this.query().insertAndFetch(itm);
+	static async create(itm) {
+		itm.title = itm.title ? itm.title : itm.rpName;
+		try {
+			await this.query().insert(itm);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
-	static update(itm) {
+	static async update(itm) {
 		const id = itm.id;
 		delete itm.id;
+		itm.title = itm.title ? itm.title : itm.rpName;
 		return this.query().patchAndFetchById(id, itm);
 	}
 

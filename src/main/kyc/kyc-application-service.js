@@ -1,9 +1,15 @@
 import KycApplication from './kyc-application';
+// import { Logger } from 'common/logger';
 // import { getGlobalContext } from 'common/context';
+// const log = new Logger('kyc-applications-service');
 
 export class KycApplicationService {
 	addEntry = entry => {
-		return KycApplication.create(entry);
+		if (this.findById(entry.id)) {
+			return this.editEntry(entry);
+		} else {
+			return KycApplication.create(entry);
+		}
 	};
 
 	editEntry = entry => {
@@ -12,6 +18,10 @@ export class KycApplicationService {
 
 	deleteEntryById = id => {
 		return KycApplication.delete(id);
+	};
+
+	findById = id => {
+		return KycApplication.findById(id);
 	};
 
 	load = _ => {

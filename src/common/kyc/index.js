@@ -317,6 +317,16 @@ const loadRelyingPartyOperation = (
 		let applications = [];
 		if (authenticate) {
 			applications = await session.listKYCApplications();
+			for (const application of applications) {
+				await dispatch(
+					kycOperations.updateApplicationsOperation({
+						id: application.id,
+						rpName: rpName,
+						currentStatus: application.currentStatus,
+						currentStatusName: application.statusName
+					})
+				);
+			}
 		}
 
 		await dispatch(
@@ -351,7 +361,7 @@ const loadRelyingPartyOperation = (
 	}
 };
 
-const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => async (
+const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title) => async (
 	dispatch,
 	getState
 ) => {
@@ -373,6 +383,19 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes) => asy
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
+
+		await dispatch(
+			kycOperations.updateApplicationsOperation({
+				id: application.id,
+				rpName: rpName,
+				currentStatus: application.currentStatus,
+				currentStatusName: application.statusName,
+				owner: application.owner,
+				scope: application.scope,
+				applicationDate: application.createdAt,
+				title: title || rpName
+			})
+		);
 	} catch (error) {
 		log.error('createKycApplication %s', error);
 		throw error;
@@ -466,9 +489,11 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 			kycOperations.createRelyingPartyKYCApplication(
 				relyingPartyName,
 				templateId,
-				requiredAttributes
+				requiredAttributes,
+				title
 			)
 		);
+
 		await dispatch(push(currentApplication.returnRoute));
 	} catch (error) {
 		let applicationError = error;
@@ -511,6 +536,12 @@ const loadApplicationsOperation = () => async (dispatch, getState) => {
 	await dispatch(kycActions.setApplicationsAction(applications));
 };
 
+const updateApplicationsOperation = application => async (dispatch, getState) => {
+	let kycApplicationService = getGlobalContext().kycApplicationService;
+	kycApplicationService.addEntry(application);
+	loadApplicationsOperation();
+};
+
 export const kycOperations = {
 	...kycActions,
 	loadRelyingParty: createAliasedAction(kycTypes.KYC_RP_LOAD, loadRelyingPartyOperation),
@@ -541,11 +572,16 @@ export const kycOperations = {
 	loadApplicationsOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_LOAD,
 		loadApplicationsOperation
+	),
+	updateApplicationsOperation: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_UPDATE,
+		updateApplicationsOperation
 	)
 };
 
 export const operations = {
-	loadApplicationsOperation
+	loadApplicationsOperation,
+	updateApplicationsOperation
 };
 
 export const updateRelyingPartyReducer = (state, { error, payload }) => {

@@ -119,6 +119,19 @@ export class IncorporationProcessStarted extends React.Component {
 					transaction.transactionHash
 				)
 			);
+
+			await this.props.dispatch(
+				kycOperations.updateApplicationsOperation({
+					id: application.id,
+					payments: {
+						amount: this.props.program['Wallet Price'],
+						amountKey: transaction.amount,
+						transactionHash: transaction.transactionHash,
+						date: Date.now(),
+						status: 'Sent KEY'
+					}
+				})
+			);
 		} else {
 			// TODO: what to do if no transaction or currentApplication exists?
 		}

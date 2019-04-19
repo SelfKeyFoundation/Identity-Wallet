@@ -1,4 +1,5 @@
 import React from 'react';
+import config from 'common/config';
 import {
 	Card,
 	CardContent,
@@ -52,20 +53,32 @@ const styles = theme => ({
 	}
 });
 
+const getRpInfo = (rpName, field) => {
+	return config.relyingPartyInfo[rpName][field];
+};
+
 const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	let icon = null;
+	// Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
 	switch (status) {
-		case 'Documents Required':
-			icon = <HourGlassIcon />;
+		case 2:
+			icon = <CheckMaIcon className={classes.headerIcon} />;
 			break;
-		case 'Documents Submitted':
-			icon = <HourGlassIcon />;
-			break;
-		case 'Denied':
+
+		case 3:
+		case 8:
 			icon = <DeniedIcon className={classes.headerIcon} />;
 			break;
+
+		case 1:
+		case 6:
+		case 9:
+		case 11:
+			icon = <HourGlassIcon />;
+			break;
+
 		default:
-			icon = <CheckMaIcon className={classes.headerIcon} />;
+			icon = <HourGlassIcon />;
 	}
 
 	return icon;
@@ -85,11 +98,11 @@ export const SelfkeyIdApplications = props => {
 								justify="flex-start"
 								alignItems="baseline"
 							>
-								<Typography variant="h2" className={classes.type}>
-									{item.type}
+								<Typography variant="h2" className={classes.rpName}>
+									{item.rpName}
 								</Typography>
 								<Typography variant="subtitle2" color="secondary">
-									- {item.country}
+									- {item.title}
 								</Typography>
 							</Grid>
 							<Grid
@@ -99,9 +112,9 @@ export const SelfkeyIdApplications = props => {
 								alignItems="center"
 								className={classes.noRightPadding}
 							>
-								<HeaderIcon status={item.status} />
+								<HeaderIcon status={item.currentStatus} />
 								<Typography variant="subtitle2" color="secondary">
-									{item.status}
+									{item.currentStatusName}
 								</Typography>
 							</Grid>
 						</ExpansionPanelSummary>
@@ -112,7 +125,7 @@ export const SelfkeyIdApplications = props => {
 							direction="row"
 							alignItems="center"
 						>
-							<StatusInfo status={item.status} />
+							<StatusInfo status={item.currentStatusName} />
 						</Grid>
 						<ExpansionPanelDetails>
 							<Grid container spacing={32}>
@@ -151,7 +164,7 @@ export const SelfkeyIdApplications = props => {
 														Service Provider
 													</Typography>
 													<Typography variant="body2">
-														{item.serviceProvider}
+														{getRpInfo(item.rpName, 'name')}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -166,7 +179,7 @@ export const SelfkeyIdApplications = props => {
 														Provider Contact
 													</Typography>
 													<Typography variant="body2">
-														{item.providerContact}
+														{getRpInfo(item.rpName, 'email')}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -181,7 +194,7 @@ export const SelfkeyIdApplications = props => {
 														Address
 													</Typography>
 													<Typography variant="body2">
-														{item.address}
+														{getRpInfo(item.rpName, 'address')}
 													</Typography>
 												</ListItem>
 											</List>
@@ -208,7 +221,8 @@ export const SelfkeyIdApplications = props => {
 														Transaction ID
 													</Typography>
 													<Typography variant="body2">
-														{item.transactionId}
+														{item.payments &&
+															item.payments.transactionHash}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -235,7 +249,7 @@ export const SelfkeyIdApplications = props => {
 														Amount
 													</Typography>
 													<Typography variant="body2">
-														{item.amount}
+														{item.payments && item.payments.amountKey}
 													</Typography>
 												</ListItem>
 												<ListItem
@@ -250,7 +264,7 @@ export const SelfkeyIdApplications = props => {
 														Payment Status
 													</Typography>
 													<Typography variant="body2">
-														{item.paymentStatus}
+														{item.payments && item.payments.status}
 													</Typography>
 												</ListItem>
 											</List>

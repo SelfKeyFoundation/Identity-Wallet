@@ -46,6 +46,14 @@ const common = {
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
 
+	relyingPartyInfo: {
+		incorporations: {
+			name: 'Far Horizon Capital Inc',
+			email: 'support@flagtheory.com',
+			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
+		}
+	},
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },

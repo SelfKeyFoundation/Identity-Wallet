@@ -5,9 +5,11 @@ import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
+import { kycSelectors, kycOperations } from 'common/kyc';
 // import SelfkeyIdCompanies from './selfkey-id-companies';
 // import SelfkeyIdHistory from './selfkey-id-history';
 
+/*
 const dummyApplications = [
 	{
 		type: 'Incorporation',
@@ -62,6 +64,7 @@ const dummyApplications = [
 		paymentStatus: 'Sent ETH'
 	}
 ];
+*/
 
 class SelfkeyIdComponent extends Component {
 	state = {
@@ -73,6 +76,8 @@ class SelfkeyIdComponent extends Component {
 
 		if (!wallet.isSetupFinished) {
 			await dispatch(push('/selfkeyIdCreate'));
+		} else {
+			await this.props.dispatch(kycOperations.loadApplicationsOperation());
 		}
 	}
 
@@ -81,6 +86,8 @@ class SelfkeyIdComponent extends Component {
 	};
 
 	render() {
+		console.log(this.props);
+
 		let component = <SelfkeyIdOverview {...this.props} />;
 
 		if (this.state.tabValue === 1) {
@@ -114,7 +121,7 @@ class SelfkeyIdComponent extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		wallet: walletSelectors.getWallet(state),
-		applications: dummyApplications
+		applications: kycSelectors.selectApplications(state)
 	};
 };
 
