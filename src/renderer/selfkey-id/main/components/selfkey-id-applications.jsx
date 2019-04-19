@@ -86,6 +86,8 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	return icon;
 });
 
+// FIXME: // Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses and adjust accordingly
+// FIXME: default should not be Documents required buy application in progress
 const getStatusName = status => {
 	let name = '';
 	switch (status) {
