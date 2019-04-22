@@ -7,6 +7,7 @@ const appPackage = require(`${__dirname}'/../../package.json`);
 const config = require('../common/config');
 const defaultWindowOpen = window.open;
 const electron = require('electron');
+const PDFWindow = require('electron-pdf-window');
 
 window.electron = electron;
 window.appName = appPackage.productName;
@@ -78,4 +79,11 @@ window.openFileSelectDialog = event => {
 			reject(e);
 		}
 	});
+};
+
+window.openPDF = href => {
+	const { BrowserWindow } = electron.remote;
+	const win = new BrowserWindow({ width: 800, height: 600 });
+	PDFWindow.addSupport(win);
+	win.loadURL(href);
 };

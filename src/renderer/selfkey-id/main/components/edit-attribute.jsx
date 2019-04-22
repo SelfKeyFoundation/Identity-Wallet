@@ -165,6 +165,7 @@ class EditAttributeComponent extends Component {
 							onSubmit={this.handleSave}
 							onError={this.handleErrors}
 							transformErrors={transformErrors}
+							onPDFOpen={file => window.openPDF(file.content)}
 						>
 							<Grid container spacing={24} className={classes.buttonContainer}>
 								<Grid item>
