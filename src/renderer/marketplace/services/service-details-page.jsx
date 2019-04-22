@@ -27,6 +27,7 @@ const mapStateToProps = (state, props) => {
 			item.serviceOwner,
 			item.serviceId
 		),
+		relyingPartyName: name,
 		relyingParty: kycSelectors.relyingPartySelector(state, name),
 		relyingPartyIsActive: kycSelectors.relyingPartyIsActiveSelector(state, name),
 		relyingPartyShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, name),
@@ -134,8 +135,6 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 		let { stake, transactionPopup } = this.props;
 		item = { ...item };
 		item.integration = 'Unlock marketplace';
-		// XXX disable exchanges staking
-		item.status = 'Inactive';
 		if (item.status === 'Inactive') {
 			item.integration = 'Coming Soon';
 			unlockAction = null;

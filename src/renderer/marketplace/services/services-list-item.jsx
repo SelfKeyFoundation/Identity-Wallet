@@ -82,10 +82,10 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 					<Button
 						variant="outlined"
 						className={classes.button}
-						disabled
+						disabled={status !== 'Active'}
 						onClick={() => (viewAction ? viewAction(name) : '')}
 					>
-						Coming Soon
+						{status !== 'Active' ? 'Coming Soon' : 'View'}
 					</Button>
 				</Grid>
 			</Grid>

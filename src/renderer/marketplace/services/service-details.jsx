@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-	Grid,
-	Divider,
-	FormGroup,
-	FormControl,
-	Button,
-	CircularProgress,
-	Typography
-} from '@material-ui/core';
+import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
+import { KycManager } from '../../kyc';
 import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon, StyledButton } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
@@ -163,8 +156,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 			unlockAction,
 			hasBalance,
 			backAction,
-			relyingParty,
-			relyingPartyIsActive
+			relyingPartyName
 		} = this.props;
 		let daysLeft = 0;
 		if (item.status === 'locked' && item.releaseDate) {
@@ -350,13 +342,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<Typography variant="h2">KYC Requirements</Typography>
 									</Grid>
 									<Grid item>
-										{relyingParty ? (
-											'RELYING PARTY LOADED, REQUIREMENTS COMING SOON'
-										) : relyingPartyIsActive ? (
-											<CircularProgress />
-										) : (
-											'COMING SOON'
-										)}
+										<KycManager relyingPartyName={relyingPartyName} />
 									</Grid>
 								</Grid>
 							</Grid>
