@@ -1,96 +1,149 @@
 import React from 'react';
-import { Grid, Button, withStyles, Typography } from '@material-ui/core';
-import Truncate from 'react-truncate';
+import { Button, TableRow, TableCell, Typography, withStyles } from '@material-ui/core';
+import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
-	root: {
-		width: '360px',
-		height: '326px',
-		border: 'solid 1px #303c49',
-		borderRadius: '4px',
-		fontFamily: 'Lato, arial, sans-serif'
-	},
-
-	svgIcon: {
-		fontSize: '50px',
-		color: '#FFF'
-	},
-
-	title: {
-		margin: '20px'
-	},
-
 	icon: {
-		marginLeft: '20px'
+		height: '30px',
+		width: '30px'
 	},
 
-	// button: {
-	// 	color: '#93b0c1',
-	// 	borderColor: '#3b4a5a',
-	// 	fontFamily: 'Lato, arial, sans-serif',
-	// 	'&:disabled': {
-	// 		color: '#48565f'
-	// 	}
-	// },
-
-	header: {
-		backgroundColor: '#2a3540'
+	noRightPadding: {
+		padding: '0 0 0 20px'
 	},
 
-	body: {
-		width: '320px',
-		textAlign: 'left',
-		margin: '20px',
-		color: '#fff',
-		fontFamily: 'Lato, arial, sans-serif',
-		fontSize: '16px',
-		fontWeight: 400,
-		lineHeight: 1.5,
-		height: '130px'
+	link: {
+		cursor: 'pointer'
 	},
 
 	footer: {
 		margin: '20px'
+	},
+
+	button: {
+		minWidth: 0,
+		textTransform: 'capitalize'
+	},
+
+	inline: {
+		display: 'flex',
+		flexWrap: 'wrap'
+	},
+
+	smallCell: {
+		padding: '0 10px',
+		whiteSpace: 'normal',
+		width: '100px',
+		wordBreak: 'break-word'
+	},
+
+	excluded: {
+		padding: '10px',
+		whiteSpace: 'normal',
+		width: '100px',
+		wordBreak: 'break-word'
+	},
+
+	goodForCell: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		height: 'initial',
+		justifyContent: 'flex-start',
+		maxWidth: '143px',
+		padding: '10px',
+		width: '143px'
+	},
+
+	fee: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis'
+	},
+
+	feeWrap: {
+		textOverflow: 'ellipsis',
+		overflow: 'hidden',
+		maxWidth: '90px'
 	}
 });
 
 export const MarketplaceServicesListItem = withStyles(styles)(
-	({ classes, children, name, description, status, logoUrl, viewAction }) => (
-		<Grid container className={classes.root}>
-			<Grid item>
-				<Grid
-					container
-					id="header"
-					direction="row"
-					justify="flex-start"
-					alignItems="center"
-					className={classes.header}
-				>
-					<Grid item id="icon" className={classes.icon}>
-						<img src={logoUrl} />
-					</Grid>
-					<Grid item id="title" className={classes.title}>
-						<Typography variant="h2">{name}</Typography>
-					</Grid>
-				</Grid>
-				<Grid item id="body" className={classes.body}>
-					<Typography variant="body2">
-						<Truncate lines={5}>{description}</Truncate>
+	({
+		classes,
+		children,
+		name,
+		location,
+		fees,
+		fiatSupported,
+		fiatPayments,
+		excludedResidents,
+		logoUrl,
+		status,
+		viewAction
+	}) => {
+		const getButtonText = status => {
+			return status === 'Inactive' ? 'Coming Soon' : 'Details';
+		};
+
+		const isNotExcludedResidents =
+			excludedResidents.length === 0 || excludedResidents[0] === 'None';
+
+		const isFiatSupported = fiatSupported.length !== 0;
+		const isFiatPayments = fiatPayments.length !== 0;
+
+		return (
+			<TableRow key={name}>
+				<TableCell className={classes.noRightPadding}>
+					<img src={logoUrl} className={classes.icon} />
+				</TableCell>
+				<TableCell className={classes.lofasz}>
+					<Typography variant="h6">{name}</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="h6">{location}</Typography>
+				</TableCell>
+				<TableCell className={classes.feeWrap}>
+					<Typography variant="h6" className={classes.fee} title={fees}>
+						{fees === 'N.A.' ? '-' : fees}
 					</Typography>
-				</Grid>
-				<Grid item id="footer" className={classes.footer}>
+				</TableCell>
+				<TableCell>
+					{isFiatSupported
+						? fiatSupported.map((fiat, index) => <Tag key={index}>{fiat}</Tag>)
+						: '-'}
+				</TableCell>
+				<TableCell>
+					{isFiatPayments
+						? fiatPayments.map((payment, index) => (
+								<Typography variant="h6" key={index} className={classes.excluded}>
+									{payment}
+									{index !== excludedResidents.length - 1 ? ',' : ''}
+								</Typography>
+						  ))
+						: '-'}
+				</TableCell>
+				<TableCell className={isNotExcludedResidents ? '' : classes.goodForCell}>
+					{isNotExcludedResidents
+						? '-'
+						: excludedResidents.map((excluded, index) => (
+								<Tag key={index}>{excluded}</Tag>
+						  ))}
+				</TableCell>
+				<TableCell>
 					<Button
-						variant="outlined"
+						disabled={status === 'Inactive'}
+						variant="text"
+						color="secondary"
 						className={classes.button}
-						disabled={status !== 'Active'}
 						onClick={() => (viewAction ? viewAction(name) : '')}
 					>
-						{status !== 'Active' ? 'Coming Soon' : 'View'}
+						{getButtonText(status)}
 					</Button>
-				</Grid>
-			</Grid>
-		</Grid>
-	)
+				</TableCell>
+			</TableRow>
+		);
+	}
 );
 
 export default MarketplaceServicesListItem;

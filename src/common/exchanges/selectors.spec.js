@@ -8,9 +8,9 @@ describe('selectors', () => {
 				data: {
 					logo: [{ url: 'https://logo.jpg' }],
 					title: 'Co-founder & CEO',
-					location: [Array],
+					location: [],
 					'Good for': [Array],
-					fiat_payments: [Array],
+					fiat_payments: [],
 					taker_fee: '0.35%',
 					Wallet: true,
 					'key person': 'Brian Armstrong',
@@ -18,7 +18,7 @@ describe('selectors', () => {
 					exchange_id: 1,
 					'email 2': 'brian@coinbase.com',
 					status: 'Active',
-					fiat_supported: [Array],
+					fiat_supported: [],
 					'KYC/AML': 'Yes',
 					'Currency Pairs': [Array],
 					email: 'support@gatecoin.com',
@@ -42,7 +42,7 @@ describe('selectors', () => {
 					'Accepts Fiat': true,
 					'Personal Account': true,
 					Languages: [Array],
-					excluded_residents: [Array],
+					excluded_residents: [],
 					kyc_template: ['test'],
 					'Fiat Withdrawal methods': [Array]
 				},
@@ -153,7 +153,12 @@ describe('selectors', () => {
 				serviceOwner: '0x0000000000000000000000000000000000000000',
 				serviceId: 'global',
 				amount: 25,
-				lockPeriod: 2592000000
+				lockPeriod: 2592000000,
+				excludedResidents: [],
+				fees: '0.25%',
+				fiatPayments: [],
+				fiatSupported: [],
+				location: []
 			}
 		];
 		expect(getExchanges({ exchanges })).toEqual(expectedExchanges);
@@ -173,9 +178,9 @@ describe('selectors', () => {
 		const expectedExchangeDetails = {
 			logo: [{ url: 'https://logo.jpg' }],
 			title: 'Co-founder & CEO',
-			location: [Array],
+			location: [],
 			'Good for': [Array],
-			fiat_payments: [Array],
+			fiat_payments: [],
 			taker_fee: '0.35%',
 			Wallet: true,
 			'key person': 'Brian Armstrong',
@@ -183,7 +188,7 @@ describe('selectors', () => {
 			exchange_id: 1,
 			'email 2': 'brian@coinbase.com',
 			status: 'Active',
-			fiat_supported: [Array],
+			fiat_supported: [],
 			'KYC/AML': 'Yes',
 			'Currency Pairs': [Array],
 			email: 'support@gatecoin.com',
@@ -211,7 +216,7 @@ describe('selectors', () => {
 			'Accepts Fiat': true,
 			'Personal Account': true,
 			Languages: [Array],
-			excluded_residents: [Array],
+			excluded_residents: [],
 			kyc_template: [{ isEntered: false, name: 'test', type: 'metadata' }],
 			'Fiat Withdrawal methods': [Array]
 		};
