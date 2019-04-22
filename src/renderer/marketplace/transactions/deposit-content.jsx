@@ -6,16 +6,13 @@ import {
 	FormControlLabel,
 	FormControl,
 	FormHelperText,
-	withStyles
+	withStyles,
+	Typography
 } from '@material-ui/core';
 
-import { StyledButton, TransactionFeeSelector, ExchangeLargeIcon, P } from 'selfkey-ui';
+import { StyledButton, TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	text: {
-		fontSize: '18px',
-		lineHeight: '30px'
-	},
 	footer: {
 		marginTop: '30px',
 		paddingTop: '30px',
@@ -90,10 +87,10 @@ class DepositContentComponent extends Component {
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
 						<Grid item classes={{ item: classes.contentSection }}>
-							<P className={classes.text}>
+							<Typography variant="body2">
 								A refundable deposit of {amount} {token} tokens is required to
 								unlock this marketplace for {days} days.
-							</P>
+							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.contentSection }}>
 							<TransactionFeeSelector
