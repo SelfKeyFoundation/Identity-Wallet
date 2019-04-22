@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { CheckedIcon, StepIcon } from 'selfkey-ui';
+import { CheckedIcon, StepIcon, DocumentIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	kyc: {
@@ -28,6 +28,12 @@ const styles = theme => ({
 		'& p': {
 			fontWeight: 'bold'
 		}
+	},
+	documentType: {
+		display: 'flex'
+	},
+	documentIcon: {
+		marginLeft: '10px'
 	}
 });
 
@@ -39,12 +45,13 @@ const IncorporationsKYCItem = withStyles(styles)(({ classes, item, index }) => {
 		: item.schemaId;
 	const warning = !item.options || !item.options.length;
 	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
+	const typeIcon = warning ? <DocumentIcon className={classes.documentIcon} /> : '';
 
 	return (
 		<ListItem className={classes.listItem}>
 			{icon}
-			<Typography variant="body2" color="textSecondary" gutterBottom>
-				{type}
+			<Typography variant="body2" color="textSecondary" className={classes.documentType}>
+				{type} {typeIcon}
 			</Typography>
 		</ListItem>
 	);
