@@ -10,78 +10,8 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
 import { Popup } from '../../../common/popup';
-import { kycSelectors, kycOperations } from 'common/kyc';
 // import SelfkeyIdCompanies from './selfkey-id-companies';
 // import SelfkeyIdHistory from './selfkey-id-history';
-
-/*
-const dummyApplications = [
-	{
-		id: '5c8a88eacb05f40134eb14a5',
-		owner: 'owner',
-		country: 'Singapore',
-		rpName: 'incorporations',
-		currentStatus: 1,
-		currentStatusName: 'Documents Required',
-		applicationDate: '2019-03-01T17:02:01.123Z',
-		payments: {
-			amount: '123',
-			amountKey: '746,234,43.00 KEY',
-			transactionHash: 'asdasds21312',
-			transactionDate: '2019-03-01T17:02:01.123Z'
-		},
-		updatedAt: '2019-03-01T17:02:01.123Z'
-	},
-	{
-		id: '2',
-		owner: 'owner',
-		country: 'France',
-		rpName: 'incorporations',
-		currentStatus: 4,
-		currentStatusName: 'Documents Submitted',
-		applicationDate: '2019-03-02T17:02:01.123Z',
-		payments: {
-			amount: '123',
-			amountKey: '746,234,40.00 KEY',
-			transactionHash: 'asdasds21311',
-			transactionDate: '2019-03-02T17:02:01.123Z'
-		},
-		updatedAt: '2019-03-02T17:02:01.123Z'
-	},
-	{
-		id: '3',
-		owner: 'owner',
-		country: 'Malta',
-		rpName: 'incorporations',
-		currentStatus: 2,
-		currentStatusName: 'Approved',
-		applicationDate: '2019-03-03T17:02:01.123Z',
-		payments: {
-			amount: '123',
-			amountKey: '746,234,41.00 KEY',
-			transactionHash: 'asdasds21313',
-			transactionDate: '2019-03-03T17:02:01.123Z'
-		},
-		updatedAt: '2019-03-03T17:02:01.123Z'
-	},
-	{
-		id: '4',
-		owner: 'owner',
-		country: 'Brazil',
-		rpName: 'incorporations',
-		currentStatus: 3,
-		currentStatusName: 'Denied',
-		applicationDate: '2019-04-01T17:02:01.123Z',
-		payments: {
-			amount: '123',
-			amountKey: '746,234,44.00 KEY',
-			transactionHash: 'asdasds21314',
-			transactionDate: '2019-04-01T17:02:01.123Z'
-		},
-		updatedAt: '2019-04-01T17:02:01.123Z'
-	}
-];
-*/
 
 const styles = theme => ({
 	loading: {
@@ -94,8 +24,7 @@ class SelfkeyIdComponent extends Component {
 		tabValue: 0,
 		loading: false,
 		applicationId: null,
-		showApplicationRefreshModal: false,
-		messageApplicationRefreshModal: null
+		showApplicationRefreshModal: false
 	};
 
 	async componentDidMount() {
@@ -113,12 +42,10 @@ class SelfkeyIdComponent extends Component {
 			this.setState({ tabValue: parseInt(tabValue) });
 		}
 
-		// FIXME: I dont think this is needed
-		/*
+		// this is needed otherwise the rp keeps loading (stuck)
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
-		*/
 
 		if (rpShouldUpdate) {
 			await this.props.dispatch(
@@ -143,8 +70,9 @@ class SelfkeyIdComponent extends Component {
 	};
 
 	handleApplicationAddDocuments = id => {
-		// TODO: add documents
-		console.log(id);
+		this.setState({ tabValue: 0 }, () => {
+			this.overview.handleAddDocument();
+		});
 	};
 
 	handleApplicationRefresh = id => {
@@ -166,10 +94,6 @@ class SelfkeyIdComponent extends Component {
 				);
 			});
 		} else {
-			// FIXME: sync of RP applications with local database is done automatically
-			// FIXME: check kyc/index.js line 327
-			// FIXME: if you authenticate it should sync automatically
-			/*
 			// get stored application from local database
 			let application = this.props.applications.find(app => {
 				return app.id === id;
@@ -179,32 +103,18 @@ class SelfkeyIdComponent extends Component {
 				return app.id === id;
 			});
 
-			let message;
-
 			if (application && kycApplication) {
 				// update stored application
 				application.currentStatus = kycApplication.currentStatus;
 				application.currentStatusName = kycApplication.statusName;
 				application.updatedAt = kycApplication.updatedAt;
-
-				// TODO: update local database
-
-				message = 'Application status updated successfully.';
-			} else {
-				message = 'Could not update your application. Please try again later.';
 			}
 
-			// all done, show modal
+			// sync of RP applications with local database is done automatically, all done, show modal
 			this.setState({
-				showApplicationRefreshModal: true,
-				messageApplicationRefreshModal: message
+				applicationId: null,
+				showApplicationRefreshModal: true
 			});
-
-			if (this.state.applicationId) {
-				// reset id
-				this.setState({ applicationId: null });
-			}
-			*/
 		}
 	};
 
@@ -237,7 +147,7 @@ class SelfkeyIdComponent extends Component {
 				>
 					<Grid item>
 						<Typography variant="overline">
-							{this.state.messageApplicationRefreshModal}
+							Application status updated successfully.
 						</Typography>
 					</Grid>
 					<Grid item>
@@ -262,7 +172,7 @@ class SelfkeyIdComponent extends Component {
 		const { isLoading } = this.props;
 		const { showApplicationRefreshModal } = this.state;
 
-		let component = <SelfkeyIdOverview {...this.props} />;
+		let component = <SelfkeyIdOverview {...this.props} onRef={ref => (this.overview = ref)} />;
 
 		if (this.state.tabValue === 1) {
 			if (isLoading || this.state.loading) {

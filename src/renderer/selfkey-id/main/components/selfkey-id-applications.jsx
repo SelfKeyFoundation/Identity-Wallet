@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import config from 'common/config';
 import {
+	Button,
 	Card,
 	CardContent,
 	Typography,
@@ -11,12 +12,28 @@ import {
 	ExpansionPanelDetails,
 	List,
 	ListItem,
+	createStyles,
 	withStyles
 } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { CheckMaIcon, DeniedIcon, HourGlassIcon, StatusInfo } from 'selfkey-ui';
-import config from 'common/config';
+import {
+	KeyTooltip,
+	TooltipArrow,
+	CheckMaIcon,
+	DeniedIcon,
+	HourGlassIcon,
+	SimpleCheckIcon,
+	SimpleDeniedIcon,
+	SimpleHourglassIcon,
+	AttributeAlertLargeIcon,
+	NewRefreshIcon,
+	success,
+	warning,
+	typography,
+	error
+} from 'selfkey-ui';
 import moment from 'moment';
+import classNames from 'classnames';
 
 const styles = theme => ({
 	statusIcon: {
@@ -55,58 +72,162 @@ const styles = theme => ({
 	}
 });
 
-const getRpInfo = (rpName, field) => {
-	return config.relyingPartyInfo[rpName][field];
-};
+const statusInfoStyle = theme =>
+	createStyles({
+		defaultStatus: {
+			border: `1px solid ${success}`,
+			borderRadius: '4px',
+			boxSizing: 'border-box',
+			padding: '25px 30px'
+		},
+		grow: {
+			flexGrow: 1
+		},
+		statusIcon: {
+			marginRight: '25px'
+		},
+		iconContainer: {
+			marginRight: '25px',
+			textAlign: 'center',
+			width: '38px'
+		},
+		attribute: {
+			height: '45px',
+			width: '38px'
+		},
+		statusWrap: {
+			width: '100%',
+			'& .required': {
+				border: `1px solid ${warning}`
+			},
+			'& .submitted': {
+				border: `1px solid ${typography}`
+			},
+			'& .denied': {
+				border: `1px solid ${error}`
+			}
+		},
+		refresh: {
+			cursor: 'pointer',
+			marginLeft: '30px'
+		}
+	});
+
+const StatusInfo = withStyles(statusInfoStyle)(
+	({ classes, status, onClick, handleRefresh, tooltip }) => {
+		let icon;
+		let message;
+		let statusStyle;
+		let button = null;
+		switch (status) {
+			case 2:
+				icon = <SimpleCheckIcon className={classes.statusIcon} />;
+				message =
+					'Application completed. Please check your email to receive relevant documents and information.';
+				break;
+			case 3:
+			case 7:
+			case 8:
+				icon = <SimpleDeniedIcon className={classes.statusIcon} />;
+				message = 'Application denied. Please check your email for the reject reason.';
+				statusStyle = 'denied';
+				break;
+			case 9:
+				icon = <AttributeAlertLargeIcon className={classes.statusIcon} />;
+				message = 'Application started. Missing required documents.';
+				button = (
+					<Button variant="contained" size="large" onClick={onClick}>
+						Add Documents
+					</Button>
+				);
+				statusStyle = 'required';
+				break;
+			default:
+				icon = <SimpleHourglassIcon className={classes.statusIcon} />;
+				message =
+					'Application started. Documents submitted. Please check your email for further instructions.';
+				statusStyle = 'submitted';
+				break;
+		}
+
+		return (
+			<div className={classes.statusWrap}>
+				<Grid item className={classNames(classes.defaultStatus, status, statusStyle)}>
+					<Grid
+						container
+						direction="row"
+						justify="space-between"
+						alignItems="center"
+						wrap="nowrap"
+					>
+						<Grid item className={classes.iconContainer}>
+							{icon}
+						</Grid>
+						<Grid item className={classes.grow}>
+							<Typography variant="h2">Status</Typography>
+							<Typography variant="subtitle2" color="secondary">
+								{message}
+							</Typography>
+						</Grid>
+						<Grid item>{button || <span />}</Grid>
+						<Grid item style={{ height: '23px' }}>
+							<KeyTooltip
+								interactive
+								placement="top-start"
+								title={
+									<React.Fragment>
+										<span>{tooltip}</span>
+										<TooltipArrow />
+									</React.Fragment>
+								}
+							>
+								<span className={classes.refresh} onClick={handleRefresh}>
+									<NewRefreshIcon />
+								</span>
+							</KeyTooltip>
+						</Grid>
+					</Grid>
+				</Grid>
+			</div>
+		);
+	}
+);
 
 const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	let icon = null;
-	// Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
+	/* Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
+	 *	 1 In progress: HourGlassIcon
+	 *	 2 Approved: CheckMaIcon
+	 *	 3 Rejected: DeniedIcon
+	 *	 4 Uploaded: HourGlassIcon
+	 *	 5 Invited: HourGlassIcon
+	 *	 6 User processing: HourGlassIcon
+	 *	 7 User declined: DeniedIcon
+	 *	 8 Cancelled: DeniedIcon
+	 *	 9 Additional requested: HourGlassIcon
+	 *	10 Corporate details: HourGlassIcon
+	 *	11 User processing requirement: HourGlassIcon
+	 *	12 Partially approved: HourGlassIcon
+	 *	13 Send tokens: HourGlassIcon
+	 *	14 Manager assigned: HourGlassIcon
+	 */
 	switch (status) {
 		case 2:
 			icon = <CheckMaIcon className={classes.headerIcon} />;
 			break;
-
 		case 3:
+		case 7:
 		case 8:
 			icon = <DeniedIcon className={classes.headerIcon} />;
 			break;
-
-		case 1:
-		case 6:
-		case 9:
-		case 11:
-			icon = <HourGlassIcon />;
-			break;
-
 		default:
 			icon = <HourGlassIcon />;
 	}
-
 	return icon;
 });
 
-// FIXME: // Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses and adjust accordingly
-// FIXME: default should not be Documents required buy application in progress
-const getStatusName = status => {
-	let name = '';
-	switch (status) {
-		case 2:
-			name = 'Approved';
-			break;
-		case 3:
-			name = 'Denied';
-			break;
-		case 8:
-			name = 'Denied';
-			break;
-		case 4:
-			name = 'Documents Submitted';
-			break;
-		default:
-			name = 'Documents Required';
-	}
-	return name;
+const getRpInfo = (rpName, field) => {
+	return config.relyingPartyInfo[rpName][field];
 };
 
 class SelfkeyIdApplicationsComponent extends Component {
@@ -138,9 +259,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 									alignItems="center"
 									className={classes.noRightPadding}
 								>
-									<HeaderIcon status={getStatusName(item.currentStatus)} />
+									<HeaderIcon status={item.currentStatus} />
 									<Typography variant="subtitle2" color="secondary">
-										{getStatusName(item.currentStatus)}
+										{item.currentStatusName}
 									</Typography>
 								</Grid>
 							</ExpansionPanelSummary>
@@ -152,7 +273,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 								alignItems="center"
 							>
 								<StatusInfo
-									status={getStatusName(item.currentStatus)}
+									status={item.currentStatus}
 									onClick={() => this.props.handleAddDocuments(item.id)}
 									handleRefresh={() => this.props.handleRefresh(item.id)}
 									tooltip={moment(item.updatedAt).format('DD MMM YYYY')}
@@ -314,6 +435,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 								</Grid>
 							</ExpansionPanelDetails>
 						</ExpansionPanel>
+						<br />
 					</React.Fragment>
 				))}
 			</React.Fragment>
