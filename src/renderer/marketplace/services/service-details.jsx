@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
-import { KycManager } from '../../kyc';
+import { KycRequirements } from '../../kyc';
 import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon, StyledButton } from 'selfkey-ui';
 import Truncate from 'react-truncate';
 
@@ -156,7 +156,8 @@ class MarketplaceServiceDetailsComponent extends Component {
 			unlockAction,
 			hasBalance,
 			backAction,
-			relyingPartyName
+			relyingPartyName,
+			templates
 		} = this.props;
 		let daysLeft = 0;
 		if (item.status === 'locked' && item.releaseDate) {
@@ -327,9 +328,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-							<Grid item className={classes.dividerWrapper}>
-								<Divider className={classes.divider} />
-							</Grid>
 							<Grid item id="requirements">
 								<Grid
 									container
@@ -339,10 +337,10 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={16}
 								>
 									<Grid item>
-										<Typography variant="h2">KYC Requirements</Typography>
-									</Grid>
-									<Grid item>
-										<KycManager relyingPartyName={relyingPartyName} />
+										<KycRequirements
+											relyingPartyName={relyingPartyName}
+											templateId={templates[0]}
+										/>
 									</Grid>
 								</Grid>
 							</Grid>

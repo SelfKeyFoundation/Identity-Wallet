@@ -18,6 +18,10 @@ const mapStateToProps = (state, props) => {
 	const name = props.match.params.name;
 	let item = getServiceDetails(state, name);
 	let serviceId = `${item.serviceOwner}_${item.serviceId}`;
+	let templates = [];
+	if (item.relying_party_config && item.relying_party_config.templates) {
+		templates = item.relying_party_config.templates;
+	}
 	return {
 		item,
 		hasBalance: hasBalance(state, name),
@@ -28,6 +32,7 @@ const mapStateToProps = (state, props) => {
 			item.serviceId
 		),
 		relyingPartyName: name,
+		templates,
 		relyingParty: kycSelectors.relyingPartySelector(state, name),
 		relyingPartyIsActive: kycSelectors.relyingPartyIsActiveSelector(state, name),
 		relyingPartyShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, name),
