@@ -47,7 +47,7 @@ export const marketplacesSelectors = {
 	currentTransactionSelector(state) {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat);
+		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
 		let tx = this.marketplacesSelector(state).currentTransaction;
 		if (!tx) tx = { action: 'none', gasLimit: 0, gasPrice: gasPriceEstimates.average };
 		let fee = new BN(tx.gasPrice || 0).multipliedBy(tx.gasLimit || 0).toString();

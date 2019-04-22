@@ -38,7 +38,7 @@ class ReturnDepositPopupComponent extends Component {
 					maxGasPrice={tx.gasPriceEstimates.fast}
 					defaultValue={tx.gasPriceEstimates.avarage}
 					gasLimit={tx.gasLimit}
-					fiat={tx.fiat}
+					fiat={tx.fiat && tx.fiat.fiatCurrency ? tx.fiat.fiatCurrency : 'USD'}
 					fiatRate={tx.fiatRate}
 					onCancel={closeAction}
 					onConfirm={gasLimit => this.handleConfirmAction(gasLimit)}
