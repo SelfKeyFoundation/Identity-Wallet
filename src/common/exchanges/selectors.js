@@ -43,6 +43,16 @@ const getType = template => {
 };
 
 export const getServiceDetails = ({ exchanges }, name) => {
+	if (name === 'exchanges') {
+		return {
+			serviceOwner: '0x0000000000000000000000000000000000000000',
+			serviceId: 'global',
+			lockPeriod: 2592000000,
+			amount: 25,
+			requiredBalance: 25,
+			status: 'Active'
+		};
+	}
 	let details = {
 		serviceOwner: '0x0000000000000000000000000000000000000000',
 		serviceId: 'global',

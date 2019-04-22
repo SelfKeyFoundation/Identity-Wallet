@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
-import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon } from 'selfkey-ui';
+
 import Truncate from 'react-truncate';
 
 const styles = theme => ({
@@ -121,18 +121,6 @@ const styles = theme => ({
 		backgroundColor: '#F5A623'
 	},
 
-	unlockButtonText: {
-		display: 'flex',
-		flexFlow: 'column',
-		minWidth: '180px',
-		textAlign: 'center'
-	},
-
-	daysLeft: {
-		color: '#93B0C1',
-		fontSize: '13px'
-	},
-
 	bold: {
 		fontWeight: 600
 	},
@@ -144,10 +132,6 @@ const styles = theme => ({
 	},
 
 	descriptionContainer: {
-		width: '100%'
-	},
-
-	fullWidth: {
 		width: '100%'
 	},
 
@@ -165,13 +149,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		isDescriptionTruncated: true
 	};
 
-	unlockActionCall(unlockAction, item, hasBalance) {
-		if (!unlockAction) {
-			return;
-		}
-		unlockAction(hasBalance);
-	}
-
 	handleViewAllDetails() {
 		this.setState({ isDescriptionTruncated: !this.state.isDescriptionTruncated });
 	}
@@ -185,19 +162,8 @@ class MarketplaceServiceDetailsComponent extends Component {
 	}
 
 	render() {
-		const {
-			classes,
-			item,
-			unlockAction,
-			hasBalance,
-			backAction,
-			relyingPartyName,
-			templates
-		} = this.props;
-		let daysLeft = 0;
-		if (item.status === 'locked' && item.releaseDate) {
-			daysLeft = Math.ceil((item.releaseDate - Date.now()) / 1000 / 60 / 60 / 24);
-		}
+		const { classes, item, backAction, relyingPartyName, templates } = this.props;
+
 		return (
 			<Grid container>
 				<Grid item>
@@ -281,44 +247,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 												: 'COLLAPSE DETAILS'}
 										</Button>
 									</Grid>
-									<Grid item xs={4}>
-										<Button
-											disabled={['pending', 'Inactive'].includes(item.status)}
-											variant={
-												['unlocked', 'locked'].includes(item.status)
-													? 'outlined'
-													: 'contained'
-											}
-											size="large"
-											onClick={() =>
-												this.unlockActionCall(
-													unlockAction,
-													item,
-													hasBalance
-												)
-											}
-											className={classes.fullWidth}
-										>
-											{item.status === 'Active' && <UnlockIcon />}
-											{item.status === 'pending' && (
-												<HourGlassSmallIcon
-													width="10px"
-													height="14px"
-													fill="rgba(0, 0, 0, 0.26)"
-												/>
-											)}
-											{item.status === 'locked' && <CalendarIcon />}
-											{item.status === 'unlocked' && <ReturnIcon />}
-											<div className={classes.unlockButtonText}>
-												<span>{item.integration}</span>
-												{item.status === 'locked' && daysLeft && (
-													<span className={classes.daysLeft}>
-														{daysLeft} days left
-													</span>
-												)}
-											</div>
-										</Button>
-									</Grid>
+									<Grid item xs={4} />
 								</Grid>
 							</Grid>
 							<Grid item className={classes.dividerWrapper}>
