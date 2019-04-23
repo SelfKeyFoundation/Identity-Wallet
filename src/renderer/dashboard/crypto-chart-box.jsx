@@ -109,7 +109,7 @@ class ChartContainer extends React.Component {
 	DEFAULT_COLLOR = '#2A3540';
 
 	shouldComponentUpdate(nextProps) {
-		return false;
+		return nextProps.tokens !== this.props.tokens;
 	}
 
 	getChartData = tokens => {
