@@ -10,5 +10,8 @@ module.exports = {
 	},
 	privateToPublic(b) {
 		return b;
+	},
+	isValidPrivate() {
+		return true;
 	}
 };

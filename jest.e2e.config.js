@@ -12,5 +12,6 @@ module.exports = {
 	coverageReporters: ['json', 'lcov', 'text', 'html'],
 	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
 	coverageDirectory: 'dist/coverage',
-	coverageThreshold: {}
+	coverageThreshold: {},
+	automock: false
 };
