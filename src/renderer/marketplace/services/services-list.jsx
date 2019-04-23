@@ -10,8 +10,9 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
-import { LargeTableHeadRow, UnlockIcon } from 'selfkey-ui';
+import { LargeTableHeadRow } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
+import { DepositManager } from '../../deposit';
 
 const styles = theme => ({
 	wrapper: {
@@ -129,10 +130,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 							</Grid>
 							<Grid container justify="flex-end">
 								<Grid item>
-									<Button variant="contained" size="large">
-										<UnlockIcon className={classes.unlockIcon} />
-										Unlock Marketplace
-									</Button>
+									<DepositManager relyingPartyName="exchanges" />
 								</Grid>
 							</Grid>
 						</Grid>
