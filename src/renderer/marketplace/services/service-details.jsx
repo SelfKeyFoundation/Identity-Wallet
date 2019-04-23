@@ -57,6 +57,10 @@ const styles = theme => ({
 		width: '100%'
 	},
 
+	fullWidth: {
+		width: '100%'
+	},
+
 	formGroup: {
 		backgroundColor: 'transparent',
 		'& span': {
@@ -256,7 +260,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 							<Grid item className={classes.dividerWrapper}>
 								<Divider className={classes.divider} />
 							</Grid>
-							<Grid item id="highlights">
+							<Grid item id="highlights" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="column"
@@ -353,7 +357,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-							<Grid item id="requirements">
+							<Grid item id="requirements" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="column"
@@ -361,7 +365,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									alignItems="flex-start"
 									spacing={16}
 								>
-									<Grid item>
+									<Grid item style={{ width: '100%' }}>
 										<KycRequirements
 											relyingPartyName={relyingPartyName}
 											templateId={templates[0]}
