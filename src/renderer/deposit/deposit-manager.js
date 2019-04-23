@@ -160,7 +160,7 @@ class DepositMangerComponent extends Component {
 			unlockAction = this.returnAction;
 		}
 		return (
-			<>
+			<React.Fragment>
 				{transactionPopup ? this.renderPopup() : ''}
 				<Button
 					disabled={['pending', 'Inactive'].includes(item.status)}
@@ -184,7 +184,7 @@ class DepositMangerComponent extends Component {
 						)}
 					</div>
 				</Button>
-			</>
+			</React.Fragment>
 		);
 	}
 }
