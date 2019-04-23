@@ -44,9 +44,10 @@ export class TokenService {
 		);
 		const MAX_GAS = 4500000;
 		const amountInWei = this.web3Service.web3.utils.toWei(new BigNumber(amount).toString());
-		return tokenContract.methods
+		const estimate = await tokenContract.methods
 			.transfer(address, amountInWei)
 			.estimateGas(walletAddress, MAX_GAS);
+		return Math.min(estimate * 1.1, MAX_GAS);
 	}
 }
 
