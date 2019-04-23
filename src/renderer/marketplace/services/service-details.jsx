@@ -57,6 +57,10 @@ const styles = theme => ({
 		width: '100%'
 	},
 
+	fullWidth: {
+		width: '100%'
+	},
+
 	formGroup: {
 		backgroundColor: 'transparent',
 		'& span': {
@@ -141,6 +145,9 @@ const styles = theme => ({
 
 	exchange: {
 		paddingTop: '3px'
+	},
+	strong: {
+		fontWeight: '600'
 	}
 });
 
@@ -253,7 +260,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 							<Grid item className={classes.dividerWrapper}>
 								<Divider className={classes.divider} />
 							</Grid>
-							<Grid item id="highlights">
+							<Grid item id="highlights" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="column"
@@ -268,34 +275,53 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<FormControl className={classes.formControl}>
 											<FormGroup className={classes.formGroup}>
 												<span>
-													<strong>Location:</strong> {item.location}{' '}
+													<strong className={classes.strong}>
+														Location:
+													</strong>{' '}
+													{item.location}{' '}
 												</span>
 												<span>
-													<strong>Year Launched:</strong>{' '}
+													<strong className={classes.strong}>
+														Year Launched:
+													</strong>{' '}
 													{item.year_launched}{' '}
 												</span>
 												<span>
-													<strong>Coin Pairs:</strong> {item.coin_pairs}{' '}
+													<strong className={classes.strong}>
+														Coin Pairs:
+													</strong>{' '}
+													{item.coin_pairs}{' '}
 												</span>
 												<span>
-													<strong>Maker Fee:</strong> {item.maker_fee}{' '}
+													<strong className={classes.strong}>
+														Maker Fee:
+													</strong>{' '}
+													{item.maker_fee}{' '}
 												</span>
 												<span>
-													<strong>Taker Fee:</strong> {item.taker_fee}{' '}
+													<strong className={classes.strong}>
+														Taker Fee:
+													</strong>{' '}
+													{item.taker_fee}{' '}
 												</span>
 												<span>
-													<strong>URL:</strong> {item.url}{' '}
+													<strong className={classes.strong}>URL:</strong>{' '}
+													{item.url}{' '}
 												</span>
 											</FormGroup>
 										</FormControl>
 										<FormControl className={classes.formControl}>
 											<FormGroup className={classes.formGroup}>
 												<span>
-													<strong>FIAT Payment:</strong>{' '}
+													<strong className={classes.strong}>
+														FIAT Payment:
+													</strong>{' '}
 													{item.fiat_payments}{' '}
 												</span>
 												<span>
-													<strong>FIAT Supported:</strong>{' '}
+													<strong className={classes.strong}>
+														FIAT Supported:
+													</strong>{' '}
 													{item.fiat_supported
 														? item.fiat_supported
 																.toString()
@@ -303,25 +329,35 @@ class MarketplaceServiceDetailsComponent extends Component {
 														: ''}{' '}
 												</span>
 												<span>
-													<strong>Margin Trading:</strong>{' '}
+													<strong className={classes.strong}>
+														Margin Trading:
+													</strong>{' '}
 													{item.margin_trading}{' '}
 												</span>
 												<span>
-													<strong>KYC/AML:</strong> {item.kyc_aml}{' '}
+													<strong className={classes.strong}>
+														KYC/AML:
+													</strong>{' '}
+													{item.kyc_aml}{' '}
 												</span>
 												<span>
-													<strong>Excluded Resident:</strong>{' '}
+													<strong className={classes.strong}>
+														Excluded Resident:
+													</strong>{' '}
 													{item.excluded_residents}{' '}
 												</span>
 												<span>
-													<strong>Contact:</strong> {item.email}{' '}
+													<strong className={classes.strong}>
+														Contact:
+													</strong>{' '}
+													{item.email}{' '}
 												</span>
 											</FormGroup>
 										</FormControl>
 									</Grid>
 								</Grid>
 							</Grid>
-							<Grid item id="requirements">
+							<Grid item id="requirements" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="column"
@@ -329,7 +365,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									alignItems="flex-start"
 									spacing={16}
 								>
-									<Grid item>
+									<Grid item style={{ width: '100%' }}>
 										<KycRequirements
 											relyingPartyName={relyingPartyName}
 											templateId={templates[0]}
