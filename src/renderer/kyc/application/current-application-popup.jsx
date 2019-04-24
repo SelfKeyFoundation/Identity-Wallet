@@ -296,6 +296,9 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		requirements,
 		selectedAttributes,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		agreementError,
 		onAgreementChange,
 		agreementValue,
@@ -317,9 +320,11 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 
 		// FIXME: TBD if this info should be stored on Airtable
-		const vendor = 'Far Horizon Capital Inc';
-		const privacyURL = 'https://flagtheory.com/privacy-policy';
-		const termsURL = 'http://flagtheory.com/terms-and-conditions';
+		vendor = !vendor ? 'Far Horizon Capital Inc' : vendor;
+		const privacyURL = !privacyPolicy ? 'https://flagtheory.com/privacy-policy' : privacyPolicy;
+		const termsURL = !termsOfService
+			? 'http://flagtheory.com/terms-and-conditions'
+			: termsOfService;
 
 		const purpose = agreement;
 		const description = currentApplication.description;

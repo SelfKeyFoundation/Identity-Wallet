@@ -3,6 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
+import { kycOperations } from 'common/kyc';
+import { push } from 'connected-react-router';
 
 import Truncate from 'react-truncate';
 
@@ -168,6 +170,34 @@ class MarketplaceServiceDetailsComponent extends Component {
 		return description;
 	}
 
+	handleSignup = () => {
+		const { item, templates, wallet } = this.props;
+
+		if (!wallet.isSetupFinished) {
+			return this.props.dispatch(push('/main/marketplace-selfkey-id-required'));
+		}
+
+		this.props.dispatch(
+			kycOperations.startCurrentApplicationOperation(
+				item.name,
+				templates[0],
+				'/main/kyc/application-in-progress',
+				`/main/marketplace-services/${item.name}`,
+				`${item.name} Application Checklist:`,
+				`You are about to begin the application process for ${
+					item.name
+				}. Please double check your
+				required documents. Failure to do so
+				will result in delays in the application process. You may also be asked to provide
+				more information by the service provider`,
+				'conducting KYC',
+				item.name,
+				item.privacyPolicy,
+				item.termsOfService
+			)
+		);
+	};
+
 	render() {
 		const { classes, item, backAction, relyingPartyName, templates } = this.props;
 
@@ -254,7 +284,16 @@ class MarketplaceServiceDetailsComponent extends Component {
 												: 'COLLAPSE DETAILS'}
 										</Button>
 									</Grid>
-									<Grid item xs={4} />
+									<Grid item xs={4}>
+										<Button
+											disabled={['pending', 'Inactive'].includes(item.status)}
+											variant="contained"
+											size="large"
+											onClick={this.handleSignup}
+										>
+											SIGN UP
+										</Button>
+									</Grid>
 								</Grid>
 							</Grid>
 							<Grid item className={classes.dividerWrapper}>
