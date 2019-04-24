@@ -9,9 +9,7 @@ const styles = theme => ({
 	exchangeItem: {
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
-		fontFamily: 'Proxima Nova',
-		fontSize: '18px',
-		lineHeight: '3px',
+		marginBottom: 0,
 		'& a': {
 			textDecoration: 'none',
 			color: '#FFFFFF'
@@ -33,6 +31,10 @@ const styles = theme => ({
 	circle: {
 		fontSize: '16px',
 		paddingRight: '10px'
+	},
+
+	bottomSpace: {
+		marginBottom: '15px'
 	}
 });
 
@@ -41,7 +43,9 @@ const getExchanges = (exchanges, classes) => {
 		return (
 			<ListItem key={exchange.name} className={classes.exchangeItem}>
 				<a href={exchange.url} target="_blank" rel="noopener noreferrer">
-					<span className={classes.circle}>&#9675;</span> {exchange.name}
+					<Typography variant="body1">
+						<span className={classes.circle}>&#9675;</span> {exchange.name}
+					</Typography>
 				</a>
 			</ListItem>
 		);
@@ -56,7 +60,7 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 		<Grid item xs={10}>
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<Grid item id="header">
-					<Typography variant="caption">
+					<Typography variant="caption" className={classes.bottomSpace}>
 						You need at least 25 KEY tokens to unlock this listing.
 					</Typography>
 				</Grid>
@@ -69,7 +73,7 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 						spacing={16}
 					>
 						<Grid item>
-							<Typography variant="body2">
+							<Typography variant="body1" className={classes.bottomSpace}>
 								To access this marketplace, you will need a deposit of 25 KEY
 								tokens. This deposit is reclaimable after 30 days. KEY tokens are
 								listed on many exchanges worldwide:
