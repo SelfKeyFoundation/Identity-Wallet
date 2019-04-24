@@ -43,7 +43,9 @@ describe('selectors', () => {
 					'Personal Account': true,
 					Languages: [Array],
 					excluded_residents: [],
-					kyc_template: ['test'],
+					relying_party_config: {
+						templates: ['test']
+					},
 					'Fiat Withdrawal methods': [Array]
 				},
 				createdAt: 1536761705179,
