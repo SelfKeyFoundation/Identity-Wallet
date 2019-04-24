@@ -12,7 +12,7 @@ export const getExchanges = ({ exchanges }) => {
 			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
 			serviceId: data.serviceId || 'global',
 			lockPeriod: data.lockPeriod || 2592000000, // 30 days
-			amount: data.requiredBalance || 25,
+			amount: data.requiredBalance || CONFIG.depositPriceOverride || 25,
 			location: data.location || '',
 			fees: data['maker_fee'] || '',
 			fiatSupported: data['fiat_supported'] || [],
@@ -48,8 +48,8 @@ export const getServiceDetails = ({ exchanges }, name) => {
 			serviceOwner: '0x0000000000000000000000000000000000000000',
 			serviceId: 'global',
 			lockPeriod: 2592000000,
-			amount: 25,
-			requiredBalance: 25,
+			amount: CONFIG.depositPriceOverride || 25,
+			requiredBalance: CONFIG.depositPriceOverride || 25,
 			status: 'Active'
 		};
 	}
@@ -57,7 +57,7 @@ export const getServiceDetails = ({ exchanges }, name) => {
 		serviceOwner: '0x0000000000000000000000000000000000000000',
 		serviceId: 'global',
 		lockPeriod: 2592000000,
-		amount: 25,
+		amount: CONFIG.depositPriceOverride || 25,
 		...exchanges.byId[name].data
 	};
 	if (details.requiredBalance) {
