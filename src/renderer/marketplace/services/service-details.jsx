@@ -213,7 +213,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 
 	renderActionButton = () => {
 		const application = this.getLastApplication();
-
 		// FIXME: Troubleshooting and overriding
 		// FIXME: remove for final commit
 		console.log(application);
@@ -222,6 +221,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 		// if (application) application.currentStatus = APPLICATION_UPLOAD_REQUIRED;
 
 		if (!this.props.relyingParty) {
+			// Nothing should be shown because we don't have RP data just yet
 			return null;
 		} else if (
 			!application ||
@@ -331,6 +331,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 			return this.props.dispatch(push('/main/marketplace-selfkey-id-required'));
 		}
 
+		// TODO: hardware wallet support
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				item.name,
@@ -354,7 +355,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 
 	render() {
 		const { classes, item, backAction, relyingPartyName, templates } = this.props;
-		console.log(this.props);
 
 		return (
 			<Grid container>
