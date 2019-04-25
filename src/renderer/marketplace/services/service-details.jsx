@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { UserPlusIcon, primary } from 'selfkey-ui';
+import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
@@ -158,16 +158,26 @@ const styles = theme => ({
 		fontWeight: '600'
 	},
 	ctaButton: {
+		marginBottom: '15px',
 		width: '100%'
+	},
+	pendingApprovalButton: {
+		height: 'initial',
+		marginBottom: '15px',
+		opacity: '1 !important',
+		padding: '3px 0',
+		'& span': {
+			display: 'flex',
+			justifyContent: 'space-around'
+		}
 	},
 	signUpButton: {
 		display: 'flex',
-		justifyContent: 'space-between',
-		width: '100%'
+		justifyContent: 'space-between'
 	},
 	ctaArea: {
 		'& div': {
-			marginTop: '1em'
+			// marginTop: '1em'
 		},
 		'& div h3': {
 			textAlign: 'left',
@@ -181,6 +191,18 @@ const styles = theme => ({
 	link: {
 		color: primary,
 		textDecoration: 'none'
+	},
+	pending: {
+		color: primary,
+		fontSize: '16px !important',
+		textTransform: 'uppercase'
+	},
+	pendingSubtitle: {
+		color: typography,
+		fontSize: '13px !important',
+		fontWeight: 400,
+		marginTop: '-6px',
+		textTransform: 'initial'
 	}
 });
 
@@ -257,7 +279,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 					disabled={['pending', 'Inactive'].includes(item.status)}
 					variant="contained"
 					size="large"
-					className={classes.signUpButton}
+					className={`${classes.signUpButton} ${classes.ctaButton}`}
 					onClick={this.handleSignup}
 				>
 					<UserPlusIcon />
@@ -320,11 +342,17 @@ class MarketplaceServiceDetailsComponent extends Component {
 					disabled="1"
 					variant="outlined"
 					size="large"
-					className={classes.ctaButton}
+					className={`${classes.pendingApprovalButton} ${classes.ctaButton}`}
 					onClick={this.linkToServiceProvider}
 				>
-					PENDING APPROVAL
-					<Typography variant="h3">KYC in progress</Typography>
+					<div>
+						<CalendarDepositIcon />
+					</div>
+					<div>
+						<p className={classes.pending}>PENDING APPROVAL</p>
+						<p className={classes.pendingSubtitle}>KYC in progress</p>
+					</div>
+					<div />
 				</Button>
 				<div>
 					<Typography variant="h3" gutterBottom>
