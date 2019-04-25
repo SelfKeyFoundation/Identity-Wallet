@@ -261,7 +261,11 @@ class TransactionSendBoxContainer extends Component {
 	renderSelectTokenItems() {
 		const { tokens, classes } = this.props;
 
-		return tokens.map(token => {
+		let activeTokens = tokens.filter(token => {
+			return token.recordState === 1;
+		});
+
+		return activeTokens.map(token => {
 			return (
 				<option key={token.symbol} value={token.symbol} className={classes.selectItem}>{`${
 					token.name
