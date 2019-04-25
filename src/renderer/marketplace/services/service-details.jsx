@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { UserPlusIcon } from 'selfkey-ui';
+import { UserPlusIcon, primary } from 'selfkey-ui';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
@@ -47,7 +47,6 @@ const styles = theme => ({
 		fontSize: '16px',
 		fontWeight: 400,
 		lineHeight: 1.67,
-		// margin: '20px',
 		margin: 0,
 		padding: '16px',
 		textAlign: 'justify',
@@ -95,7 +94,7 @@ const styles = theme => ({
 	},
 
 	description: {
-		marginTop: '0px',
+		marginTop: 0,
 		textAlign: 'left',
 		maxWidth: '620px'
 	},
@@ -161,15 +160,27 @@ const styles = theme => ({
 	ctaButton: {
 		width: '100%'
 	},
+	signUpButton: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		width: '100%'
+	},
 	ctaArea: {
 		'& div': {
-			marginTop: '0.5em'
+			marginTop: '1em'
 		},
 		'& div h3': {
 			textAlign: 'left',
 			fontSize: '13px',
 			lineHeight: '18px'
 		}
+	},
+	topSpace: {
+		marginTop: '15px'
+	},
+	link: {
+		color: primary,
+		textDecoration: 'none'
 	}
 });
 
@@ -241,16 +252,27 @@ class MarketplaceServiceDetailsComponent extends Component {
 	renderApplicationButton = () => {
 		const { classes, item } = this.props;
 		return (
-			<Button
-				disabled={['pending', 'Inactive'].includes(item.status)}
-				variant="contained"
-				size="large"
-				className={classes.ctaButton}
-				onClick={this.handleSignup}
-			>
-				<UserPlusIcon />
-				SIGN UP
-			</Button>
+			<React.Fragment>
+				<Button
+					disabled={['pending', 'Inactive'].includes(item.status)}
+					variant="contained"
+					size="large"
+					className={classes.signUpButton}
+					onClick={this.handleSignup}
+				>
+					<UserPlusIcon />
+					<span>SIGN UP</span>
+					<span />
+				</Button>
+				<div className={classes.topSpace}>
+					<Typography variant="h3" gutterBottom>
+						You have to unlock the marketplace first to signup for this service.{' '}
+						<a href="#" className={classes.link}>
+							Unlock now!
+						</a>
+					</Typography>
+				</div>
+			</React.Fragment>
 		);
 	};
 
