@@ -396,22 +396,24 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-							<Grid item id="requirements" className={classes.fullWidth}>
-								<Grid
-									container
-									direction="column"
-									justify="flex-start"
-									alignItems="flex-start"
-									spacing={16}
-								>
-									<Grid item style={{ width: '100%' }}>
-										<KycRequirements
-											relyingPartyName={relyingPartyName}
-											templateId={templates[0]}
-										/>
+							{templates[0] && (
+								<Grid item id="requirements" className={classes.fullWidth}>
+									<Grid
+										container
+										direction="column"
+										justify="flex-start"
+										alignItems="flex-start"
+										spacing={16}
+									>
+										<Grid item style={{ width: '100%' }}>
+											<KycRequirements
+												relyingPartyName={relyingPartyName}
+												templateId={templates[0]}
+											/>
+										</Grid>
 									</Grid>
 								</Grid>
-							</Grid>
+							)}
 						</Grid>
 					</Grid>
 				</Grid>
