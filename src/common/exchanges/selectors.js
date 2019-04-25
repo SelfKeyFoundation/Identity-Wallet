@@ -63,13 +63,15 @@ export const getServiceDetails = ({ exchanges }, name) => {
 	if (details.requiredBalance) {
 		details.amount = details.requiredBalance;
 	}
-	const kycTemplate = details.kyc_template.map(template => {
-		return {
-			name: template,
-			type: getType(template),
-			isEntered: false
-		};
-	});
+	const kycTemplate = details.relying_party_config
+		? (details.relying_party_config.templates || []).map(template => {
+				return {
+					name: template,
+					type: getType(template),
+					isEntered: false
+				};
+		  })
+		: undefined;
 
 	details = { ...details, kyc_template: kycTemplate };
 	return details;
