@@ -177,11 +177,7 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleCancelAction = () => {
-		if (this.state.cryptoCurrency !== 'custom') {
-			this.props.dispatch(push(`/main/transfer/${this.state.cryptoCurrency}`));
-		} else {
-			this.props.dispatch(push(`/main/dashboard`));
-		}
+		this.props.dispatch(push(`/main/dashboard`));
 	};
 
 	handleGasPriceChange = value => {
