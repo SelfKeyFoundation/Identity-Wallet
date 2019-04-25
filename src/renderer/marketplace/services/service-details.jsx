@@ -5,6 +5,12 @@ import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@mate
 import { KycRequirements } from '../../kyc';
 import { kycOperations } from 'common/kyc';
 import { push } from 'connected-react-router';
+import {
+	APPLICATION_REJECTED,
+	APPLICATION_CANCELLED,
+	APPLICATION_APPROVED,
+	APPLICATION_UPLOAD_REQUIRED
+} from 'common/kyc/status_codes';
 
 import Truncate from 'react-truncate';
 
@@ -150,12 +156,160 @@ const styles = theme => ({
 	},
 	strong: {
 		fontWeight: '600'
+	},
+	ctaButton: {
+		width: '100%'
+	},
+	ctaArea: {
+		'& div': {
+			marginTop: '0.5em'
+		},
+		'& div h3': {
+			textAlign: 'left',
+			fontSize: '13px',
+			lineHeight: '18px'
+		}
 	}
 });
 
 class MarketplaceServiceDetailsComponent extends Component {
 	state = {
 		isDescriptionTruncated: true
+	};
+
+	getLastApplication = () => {
+		const { relyingParty } = this.props;
+		// const { templateId } = this.props.match.params;
+		if (!relyingParty || !relyingParty.authenticated) return false;
+
+		const { applications } = this.props.relyingParty;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			// Support for multiple templates for single exchange
+			/*
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+      }
+      */
+			application = applications[index];
+			break;
+		}
+		return application;
+	};
+
+	linkToRelyingParty = () => {
+		// TODO: link to rp
+		return false;
+	};
+
+	linkToServiceProvider = () => {
+		// TODO: link to sp
+		return false;
+	};
+
+	renderActionButton = () => {
+		const application = this.getLastApplication();
+
+		// FIXME: Troubleshooting and overriding
+		// FIXME: remove for final commit
+		console.log(application);
+		console.log(this.props);
+		// Force status
+		// if (application) application.currentStatus = APPLICATION_UPLOAD_REQUIRED;
+
+		if (!this.props.relyingParty) {
+			return null;
+		} else if (
+			!application ||
+			[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(application.currentStatus)
+		) {
+			return this.renderApplicationButton();
+		} else if (application.currentStatus === APPLICATION_UPLOAD_REQUIRED) {
+			return this.renderLinkToRelyingParty();
+		} else if (application.currentStatus === APPLICATION_APPROVED) {
+			return this.renderLinkToServiceProvider();
+		} else {
+			return this.renderPendingApplication();
+		}
+	};
+
+	renderApplicationButton = () => {
+		const { classes, item } = this.props;
+		return (
+			<Button
+				disabled={['pending', 'Inactive'].includes(item.status)}
+				variant="contained"
+				size="large"
+				className={classes.ctaButton}
+				onClick={this.handleSignup}
+			>
+				SIGN UP
+			</Button>
+		);
+	};
+
+	renderLinkToRelyingParty = () => {
+		const { classes } = this.props;
+		return (
+			<React.Fragment>
+				<Button
+					variant="contained"
+					size="large"
+					className={classes.ctaButton}
+					onClick={this.linkToRelyingParty}
+				>
+					COMPLETE REQUIREMENTS
+				</Button>
+				<div>
+					<Typography variant="h3" gutterBottom>
+						After clicking the button above, you will be redirected to a web page to
+						complete the KYC requirements needed
+					</Typography>
+				</div>
+			</React.Fragment>
+		);
+	};
+
+	renderLinkToServiceProvider = () => {
+		const { classes } = this.props;
+		return (
+			<Button
+				variant="contained"
+				size="large"
+				className={classes.ctaButton}
+				onClick={this.linkToServiceProvider}
+			>
+				ACCESS YOUR ACCOUNT
+			</Button>
+		);
+	};
+
+	renderPendingApplication = () => {
+		const { classes } = this.props;
+		return (
+			<React.Fragment>
+				<Button
+					disabled="1"
+					variant="outlined"
+					size="large"
+					className={classes.ctaButton}
+					onClick={this.linkToServiceProvider}
+				>
+					PENDING APPROVAL
+					<Typography variant="h3">KYC in progress</Typography>
+				</Button>
+				<div>
+					<Typography variant="h3" gutterBottom>
+						The application can take up to a week. Check your email for account creation
+						confirmation.
+					</Typography>
+				</div>
+			</React.Fragment>
+		);
 	};
 
 	handleViewAllDetails() {
@@ -200,6 +354,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 
 	render() {
 		const { classes, item, backAction, relyingPartyName, templates } = this.props;
+		console.log(this.props);
 
 		return (
 			<Grid container>
@@ -284,15 +439,8 @@ class MarketplaceServiceDetailsComponent extends Component {
 												: 'COLLAPSE DETAILS'}
 										</Button>
 									</Grid>
-									<Grid item xs={4}>
-										<Button
-											disabled={['pending', 'Inactive'].includes(item.status)}
-											variant="contained"
-											size="large"
-											onClick={this.handleSignup}
-										>
-											SIGN UP
-										</Button>
+									<Grid item xs={4} className={classes.ctaArea}>
+										{this.renderActionButton()}
 									</Grid>
 								</Grid>
 							</Grid>
