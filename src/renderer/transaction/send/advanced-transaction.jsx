@@ -177,11 +177,7 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleCancelAction = () => {
-		if (this.state.cryptoCurrency !== 'custom') {
-			this.props.dispatch(push(`/main/transfer/${this.state.cryptoCurrency}`));
-		} else {
-			this.props.dispatch(push(`/main/dashboard`));
-		}
+		this.props.dispatch(push(`/main/dashboard`));
 	};
 
 	handleGasPriceChange = value => {
@@ -265,7 +261,11 @@ class TransactionSendBoxContainer extends Component {
 	renderSelectTokenItems() {
 		const { tokens, classes } = this.props;
 
-		return tokens.map(token => {
+		let activeTokens = tokens.filter(token => {
+			return token.recordState === 1;
+		});
+
+		return activeTokens.map(token => {
 			return (
 				<option key={token.symbol} value={token.symbol} className={classes.selectItem}>{`${
 					token.name
