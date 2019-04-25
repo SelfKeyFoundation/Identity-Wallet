@@ -90,6 +90,9 @@ class CurrentApplicationComponent extends Component {
 				<CurrentApplicationPopup
 					currentApplication={currentApplication}
 					agreement={currentApplication.agreement}
+					vendor={currentApplication.vendor}
+					privacyPolicy={currentApplication.privacyPolicy}
+					termsOfService={currentApplication.termsOfService}
 					agreementValue={this.state.agreementValue}
 					agreementError={this.state.agreementError}
 					onAgreementChange={this.handleAgreementChange}
