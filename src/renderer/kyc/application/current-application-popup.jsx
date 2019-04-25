@@ -260,14 +260,14 @@ const KycChecklist = withStyles(styles)(
 	}
 );
 
-const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsURL }) => (
+const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyPolicy, termsOfService }) => (
 	<Typography variant="h3">
 		I consent to share my information with {vendor}, for the purposes of {purpose} and that they
 		may further share this information with partners and affiliates in accordance with their{' '}
 		<a
 			className={classes.link}
 			onClick={e => {
-				window.openExternal(e, privacyURL);
+				window.openExternal(e, privacyPolicy);
 			}}
 		>
 			privacy policy
@@ -276,7 +276,7 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsUR
 		<a
 			className={classes.link}
 			onClick={e => {
-				window.openExternal(e, termsURL);
+				window.openExternal(e, termsOfService);
 			}}
 		>
 			terms and conditions
@@ -319,13 +319,6 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		// const description = currentApplication.description || `${relyingParty.description || ''}`;
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 
-		// FIXME: TBD if this info should be stored on Airtable
-		vendor = !vendor ? 'Far Horizon Capital Inc' : vendor;
-		const privacyURL = !privacyPolicy ? 'https://flagtheory.com/privacy-policy' : privacyPolicy;
-		const termsURL = !termsOfService
-			? 'http://flagtheory.com/terms-and-conditions'
-			: termsOfService;
-
 		const purpose = agreement;
 		const description = currentApplication.description;
 
@@ -358,8 +351,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									classes,
 									vendor,
 									purpose,
-									privacyURL,
-									termsURL
+									privacyPolicy,
+									termsOfService
 								})}
 								value={agreementValue}
 								error={agreementError}
