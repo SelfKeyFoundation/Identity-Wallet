@@ -4,6 +4,7 @@ import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { Popup } from '../../common/popup';
 import { DepositContent } from './deposit-content';
+import ReactPiwik from 'react-piwik';
 
 const mapStateToProps = state => {
 	return {
@@ -23,6 +24,7 @@ class DepositPopupComponent extends Component {
 			marketplacesOperations.updateCurrentTransactionAction({ gasPrice })
 		);
 		await this.props.dispatch(marketplacesOperations.confirmStakeTransaction());
+		ReactPiwik.push(['trackEvent', 'Staking', 'Confirm', 'Deposit']);
 	}
 
 	render() {

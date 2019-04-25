@@ -5,6 +5,7 @@ import { marketplacesOperations, marketplacesSelectors } from 'common/marketplac
 
 import { ReturnDepositContent } from './return-deposit-content';
 import { Popup } from '../../common/popup';
+import ReactPiwik from 'react-piwik';
 
 const mapStateToProps = state => {
 	return {
@@ -24,6 +25,7 @@ class ReturnDepositPopupComponent extends Component {
 			marketplacesOperations.updateCurrentTransactionAction({ gasPrice })
 		);
 		await this.props.dispatch(marketplacesOperations.confirmWithdrawTransaction());
+		ReactPiwik.push(['trackEvent', 'Staking', 'Confirm', 'Withdraw']);
 	}
 
 	render() {
