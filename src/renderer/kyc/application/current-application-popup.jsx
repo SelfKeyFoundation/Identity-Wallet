@@ -260,14 +260,14 @@ const KycChecklist = withStyles(styles)(
 	}
 );
 
-const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsURL }) => (
+const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyPolicy, termsOfService }) => (
 	<Typography variant="h3">
 		I consent to share my information with {vendor}, for the purposes of {purpose} and that they
 		may further share this information with partners and affiliates in accordance with their{' '}
 		<a
 			className={classes.link}
 			onClick={e => {
-				window.openExternal(e, privacyURL);
+				window.openExternal(e, privacyPolicy);
 			}}
 		>
 			privacy policy
@@ -276,7 +276,7 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyURL, termsUR
 		<a
 			className={classes.link}
 			onClick={e => {
-				window.openExternal(e, termsURL);
+				window.openExternal(e, termsOfService);
 			}}
 		>
 			terms and conditions
@@ -296,6 +296,9 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		requirements,
 		selectedAttributes,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		agreementError,
 		onAgreementChange,
 		agreementValue,
@@ -315,11 +318,6 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
 		// const description = currentApplication.description || `${relyingParty.description || ''}`;
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
-
-		// FIXME: TBD if this info should be stored on Airtable
-		const vendor = 'Far Horizon Capital Inc';
-		const privacyURL = 'https://flagtheory.com/privacy-policy';
-		const termsURL = 'http://flagtheory.com/terms-and-conditions';
 
 		const purpose = agreement;
 		const description = currentApplication.description;
@@ -353,8 +351,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									classes,
 									vendor,
 									purpose,
-									privacyURL,
-									termsURL
+									privacyPolicy,
+									termsOfService
 								})}
 								value={agreementValue}
 								error={agreementError}

@@ -43,7 +43,9 @@ describe('selectors', () => {
 					'Personal Account': true,
 					Languages: [Array],
 					excluded_residents: [],
-					kyc_template: ['test'],
+					relying_party_config: {
+						templates: ['test']
+					},
 					'Fiat Withdrawal methods': [Array]
 				},
 				createdAt: 1536761705179,
@@ -220,7 +222,11 @@ describe('selectors', () => {
 			kyc_template: [{ isEntered: false, name: 'test', type: 'metadata' }],
 			'Fiat Withdrawal methods': [Array]
 		};
-		expect(getServiceDetails({ exchanges }, 'Gatecoin')).toEqual(expectedExchangeDetails);
+
+		let details = getServiceDetails({ exchanges }, 'Gatecoin');
+		delete details.relying_party_config;
+
+		expect(details).toEqual(expectedExchangeDetails);
 	});
 
 	it('should return exchange hasBalance when amount of key is over the required balance', () => {
