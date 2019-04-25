@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { UserPlusIcon } from 'selfkey-ui';
 
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
@@ -247,6 +248,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 				className={classes.ctaButton}
 				onClick={this.handleSignup}
 			>
+				<UserPlusIcon />
 				SIGN UP
 			</Button>
 		);
