@@ -48,7 +48,7 @@ const styles = theme => ({
 		fontWeight: 400,
 		lineHeight: 1.67,
 		margin: 0,
-		padding: '16px',
+		padding: '44px 16px 16px',
 		textAlign: 'justify',
 		width: '100%'
 	},
@@ -165,7 +165,7 @@ const styles = theme => ({
 		height: 'initial',
 		marginBottom: '15px',
 		opacity: '1 !important',
-		padding: '3px 0',
+		padding: '6px 0',
 		'& span': {
 			display: 'flex',
 			justifyContent: 'space-around'
