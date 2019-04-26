@@ -74,7 +74,13 @@ const styles = theme => ({
 		backgroundColor: 'transparent',
 		'& span': {
 			fontSize: '14px',
-			lineHeight: '35px'
+			lineHeight: '35px',
+			'& h5': {
+				display: 'inline'
+			},
+			'& p': {
+				display: 'inline'
+			}
 		},
 
 		'& span strong': {
@@ -204,6 +210,14 @@ const styles = theme => ({
 		fontWeight: 400,
 		marginTop: '-6px',
 		textTransform: 'initial'
+	},
+	kyc: {
+		'& div:first-child': {
+			marginTop: 0
+		}
+	},
+	leftAlign: {
+		textAlign: 'left'
 	}
 });
 
@@ -481,11 +495,17 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={40}
 								>
 									<Grid item xs={8}>
-										<Typography variant="body1" className={classes.bottomSpace}>
+										<Typography
+											variant="body1"
+											className={`${classes.bottomSpace} ${
+												classes.leftAlign
+											}`}
+										>
 											{this.renderDescription(item.description)}
 										</Typography>
 										<Button
 											variant="outlined"
+											color="secondary"
 											className={`${classes.button} ${
 												classes.buttonDescription
 											}`}
@@ -519,82 +539,96 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<FormControl className={classes.formControl}>
 											<FormGroup className={classes.formGroup}>
 												<span>
-													<strong className={classes.strong}>
-														Location:
-													</strong>{' '}
-													{item.location}{' '}
+													<Typography variant="h5">Location:</Typography>{' '}
+													<Typography variant="body2">
+														{item.location}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														Year Launched:
-													</strong>{' '}
-													{item.year_launched}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.year_launched}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														Coin Pairs:
-													</strong>{' '}
-													{item.coin_pairs}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.coin_pairs}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
-														Maker Fee:
-													</strong>{' '}
-													{item.maker_fee}{' '}
+													<Typography variant="h5">Maker Fee:</Typography>{' '}
+													<Typography variant="body2">
+														{item.maker_fee}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
-														Taker Fee:
-													</strong>{' '}
-													{item.taker_fee}{' '}
+													<Typography variant="h5">Taker Fee:</Typography>{' '}
+													<Typography variant="body2">
+														{item.taker_fee}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>URL:</strong>{' '}
-													{item.url}{' '}
+													<Typography variant="h5">URL:</Typography>{' '}
+													<Typography variant="body2">
+														{item.url}{' '}
+													</Typography>
 												</span>
 											</FormGroup>
 										</FormControl>
 										<FormControl className={classes.formControl}>
 											<FormGroup className={classes.formGroup}>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														FIAT Payment:
-													</strong>{' '}
-													{item.fiat_payments}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.fiat_payments}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														FIAT Supported:
-													</strong>{' '}
-													{item.fiat_supported
-														? item.fiat_supported
-																.toString()
-																.replace(/,/g, ' ')
-														: ''}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.fiat_supported
+															? item.fiat_supported
+																	.toString()
+																	.replace(/,/g, ' ')
+															: ''}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														Margin Trading:
-													</strong>{' '}
-													{item.margin_trading}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.margin_trading}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
-														KYC/AML:
-													</strong>{' '}
-													{item.kyc_aml}{' '}
+													<Typography variant="h5">KYC/AML:</Typography>{' '}
+													<Typography variant="body2">
+														{item.kyc_aml}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
+													<Typography variant="h5">
 														Excluded Resident:
-													</strong>{' '}
-													{item.excluded_residents}{' '}
+													</Typography>{' '}
+													<Typography variant="body2">
+														{item.excluded_residents}{' '}
+													</Typography>
 												</span>
 												<span>
-													<strong className={classes.strong}>
-														Contact:
-													</strong>{' '}
-													{item.email}{' '}
+													<Typography variant="h5">Contact:</Typography>{' '}
+													<Typography variant="body2">
+														{item.email}{' '}
+													</Typography>
 												</span>
 											</FormGroup>
 										</FormControl>
@@ -610,7 +644,11 @@ class MarketplaceServiceDetailsComponent extends Component {
 										alignItems="flex-start"
 										spacing={16}
 									>
-										<Grid item style={{ width: '100%' }}>
+										<Grid
+											item
+											style={{ width: '100%' }}
+											className={classes.kyc}
+										>
 											<KycRequirements
 												relyingPartyName={relyingPartyName}
 												templateId={templates[0]}
