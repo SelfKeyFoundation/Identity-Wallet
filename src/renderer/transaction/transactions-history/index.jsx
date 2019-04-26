@@ -90,16 +90,12 @@ const styles = theme => ({
 	}
 });
 
-const getIconForTransaction = (statusIconName, sent) => {
-	switch (statusIconName) {
-		case 'failed':
+const getIconForTransaction = (isError, sent) => {
+	switch (isError) {
+		case 1:
 			return <FailedIcon />;
-		case 'receive':
-			return <ReceiveIcon />;
-		case 'hourglass':
+		case undefined:
 			return <HourGlassIcon />;
-		case 'sent':
-			return <SentIcon />;
 		default:
 			return sent ? <SentIcon /> : <ReceiveIcon />;
 	}
@@ -250,7 +246,7 @@ class TransactionsHistory extends Component {
 										<TableRow key={transaction.id} className={classes.tableRow}>
 											<TableCell className={classes.narrowCell}>
 												{getIconForTransaction(
-													transaction.statusIconName,
+													transaction.isError,
 													this.hasSent(transaction)
 												)}
 											</TableCell>
