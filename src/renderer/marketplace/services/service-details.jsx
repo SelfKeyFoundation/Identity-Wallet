@@ -293,6 +293,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 										</Typography>
 										<Button
 											variant="outlined"
+											color="secondary"
 											className={`${classes.button} ${
 												classes.buttonDescription
 											}`}
