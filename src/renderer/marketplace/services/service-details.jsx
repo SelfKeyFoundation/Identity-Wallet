@@ -161,6 +161,9 @@ const styles = theme => ({
 		'& div:first-child': {
 			marginTop: 0
 		}
+	},
+	leftAlign: {
+		textAlign: 'left'
 	}
 });
 
@@ -280,7 +283,12 @@ class MarketplaceServiceDetailsComponent extends Component {
 									spacing={40}
 								>
 									<Grid item xs={8}>
-										<Typography variant="body1" className={classes.bottomSpace}>
+										<Typography
+											variant="body1"
+											className={`${classes.bottomSpace} ${
+												classes.leftAlign
+											}`}
+										>
 											{this.renderDescription(item.description)}
 										</Typography>
 										<Button
