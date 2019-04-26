@@ -10,7 +10,8 @@ import {
 	APPLICATION_REJECTED,
 	APPLICATION_CANCELLED,
 	APPLICATION_APPROVED,
-	APPLICATION_UPLOAD_REQUIRED
+	APPLICATION_UPLOAD_REQUIRED,
+	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
 
 import Truncate from 'react-truncate';
@@ -236,13 +237,14 @@ class MarketplaceServiceDetailsComponent extends Component {
 	};
 
 	linkToRelyingParty = () => {
-		// TODO: link to rp
-		return false;
+		const { relyingParty } = this.props;
+		const url = new URL(relyingParty.session.ctx.config.rootEndpoint);
+		return window.openExternal(null, `https://${url.hostname}`);
 	};
 
 	linkToServiceProvider = () => {
-		// TODO: link to sp
-		return false;
+		const { item } = this.props;
+		return window.openExternal(null, item.URL);
 	};
 
 	renderActionButton = () => {
@@ -262,7 +264,10 @@ class MarketplaceServiceDetailsComponent extends Component {
 			[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(application.currentStatus)
 		) {
 			return this.renderApplicationButton();
-		} else if (application.currentStatus === APPLICATION_UPLOAD_REQUIRED) {
+		} else if (
+			application.currentStatus === APPLICATION_UPLOAD_REQUIRED ||
+			application.currentStatus === APPLICATION_ANSWER_REQUIRED
+		) {
 			return this.renderLinkToRelyingParty();
 		} else if (application.currentStatus === APPLICATION_APPROVED) {
 			return this.renderLinkToServiceProvider();
