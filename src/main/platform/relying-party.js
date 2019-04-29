@@ -359,9 +359,10 @@ export class RelyingPartySession {
 							return newDoc;
 						})
 					);
+					const data = (attr.data && attr.data.value ? attr.data.value : attr.data) || {};
 					const { value } = identityAttributes.denormalizeDocumentsSchema(
 						attr.schema,
-						(attr.data || {}).value,
+						data,
 						attrDocs
 					);
 					return { ...attr, data: value, documents: undefined };
