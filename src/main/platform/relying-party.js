@@ -80,7 +80,7 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static async getChallenge(ctx) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		const publicKey = await ctx.identity.publicKey;
 		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
 		return request.get({
@@ -90,7 +90,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		return request.post({
 			url,
 			body: { signature },
@@ -105,7 +105,7 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('auth/token');
+		let url = ctx.getEndpoint('/auth/token');
 		return request.get({
 			url,
 			headers: {
@@ -118,7 +118,7 @@ export class RelyingPartyRest {
 	}
 	static createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('users');
+		let url = ctx.getEndpoint('/users');
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
