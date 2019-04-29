@@ -126,9 +126,44 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static createUser(ctx, attributes, documents = []) {
+	static async uploadUserFile(ctx, doc) {
+		let url = ctx.getEndpoint('/users/file');
+		let formData = {
+			document: {
+				value: doc.buffer,
+				options: {
+					contentType: doc.mimeType,
+					filename: doc.name || 'document'
+				}
+			}
+		};
+		return request.post({
+			url,
+			formData,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static async createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let url = ctx.getEndpoint('users');
+		if (ctx.hasUserFileEndpoint()) {
+			await Promise.all(documents.map(doc => this.uploadUserFile(ctx, doc)));
+			return request.post({
+				url,
+				body: attributes,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+		}
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {

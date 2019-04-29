@@ -124,8 +124,51 @@ describe('RelyingPartyRest', () => {
 		xit('should throw 401 on invalid or expired token', () => {});
 		xit('should throw on failed request', () => {});
 	});
+	describe('uploadUserFile', () => {
+		it('should upload user file', async () => {
+			const testEndpoint = 'http://test';
+
+			const doc = {
+				id: 1,
+				mimeType: 'test1',
+				size: 1231,
+				buffer: Buffer.from('test1'),
+				name: 'test.png'
+			};
+
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.uploadUserFile(ctx, doc);
+			expect(res).toEqual('ok');
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true,
+					formData: {
+						document: {
+							value: doc.buffer,
+							options: {
+								contentType: doc.mimeType,
+								filename: doc.name
+							}
+						}
+					}
+				}
+			]);
+		});
+	});
 	describe('createUser', () => {
-		it('Should return 201 if user successfully created/updated', async () => {
+		it('Should create multipart request if no file endpoint', async () => {
 			const testEndpoint = 'http://test';
 			let attributes = [
 				{
@@ -150,6 +193,7 @@ describe('RelyingPartyRest', () => {
 			};
 			sinon.stub(request, 'post').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			sinon.stub(ctx, 'hasUserFileEndpoint').returns(false);
 			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
 			expect(res).toEqual('ok');
 			expect(request.post.getCall(0).args).toEqual([
@@ -195,6 +239,49 @@ describe('RelyingPartyRest', () => {
 					}
 				}
 			]);
+		});
+		it('shuld upload files and create json post if there is file endpoint', async () => {
+			const testEndpoint = 'http://test';
+			let attributes = [
+				{
+					test1: 'test1',
+					documents: [1]
+				},
+				{
+					test2: 'test2',
+					documents: [2]
+				}
+			];
+
+			let documents = [
+				{ id: 1, mimeType: 'test1', size: 1231, buffer: Buffer.from('test1') },
+				{ id: 2, mimeType: 'test2', size: 1111, buffer: Buffer.from('test2') }
+			];
+
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			sinon.stub(ctx, 'hasUserFileEndpoint').returns(true);
+			sinon.stub(RelyingPartyRest, 'uploadUserFile').resolves('ok');
+			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
+			expect(res).toEqual('ok');
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: testEndpoint,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true,
+					body: attributes
+				}
+			]);
+			expect(RelyingPartyRest.uploadUserFile.getCalls().length).toBe(documents.length);
 		});
 		xit('Should throw 400 if request was not accepted (or is invalid)', () => {});
 		xit('should throw 401 if token is invalid/expired', () => {});
