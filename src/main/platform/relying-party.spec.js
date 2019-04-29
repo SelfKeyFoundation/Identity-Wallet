@@ -106,7 +106,7 @@ describe('RelyingPartyRest', () => {
 				}
 			};
 			let res = await RelyingPartyRest.getUserToken(ctx);
-			expect(ctx.getEndpoint.calledOnceWith('auth/token')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('/users/token')).toBeTruthy();
 			expect(res).toEqual(testUserToken);
 			expect(request.get.getCall(0).args).toEqual([
 				{
@@ -240,7 +240,7 @@ describe('RelyingPartyRest', () => {
 				}
 			]);
 		});
-		it('shuld upload files and create json post if there is file endpoint', async () => {
+		it('shuld create json request if there is file endpoint', async () => {
 			const testEndpoint = 'http://test';
 			let attributes = [
 				{
@@ -266,7 +266,6 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(request, 'post').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			sinon.stub(ctx, 'hasUserFileEndpoint').returns(true);
-			sinon.stub(RelyingPartyRest, 'uploadUserFile').resolves('ok');
 			let res = await RelyingPartyRest.createUser(ctx, attributes, documents);
 			expect(res).toEqual('ok');
 			expect(request.post.getCall(0).args).toEqual([
@@ -281,7 +280,6 @@ describe('RelyingPartyRest', () => {
 					body: attributes
 				}
 			]);
-			expect(RelyingPartyRest.uploadUserFile.getCalls().length).toBe(documents.length);
 		});
 		xit('Should throw 400 if request was not accepted (or is invalid)', () => {});
 		xit('should throw 401 if token is invalid/expired', () => {});
@@ -602,11 +600,177 @@ describe('Relying Party session', () => {
 		});
 	});
 	describe('createUser', () => {
-		// send user attributes and service JWT to RelyingPartyRest.createUser
+		it('should create user with file endpoint', async () => {
+			sinon.stub(RelyingPartyRest, 'uploadUserFile').resolves({ id: 'ok' });
+			sinon.stub(RelyingPartyRest, 'createUser').resolves('ok');
+			sinon.stub(session.ctx, 'hasUserFileEndpoint').returns(true);
+
+			let attributes = [
+				{
+					id: 1,
+					schemaId: 'http://test1',
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
+					data: { value: { front: '$document-1', back: '$document-2' } },
+					documents: [
+						{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+						{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+					]
+				},
+				{
+					id: 2,
+					schemaId: 'http://test2',
+					data: { value: { front: '$document-3', back: '$document-4' } },
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
+					documents: [
+						{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+						{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+					]
+				}
+			];
+
+			let res = await session.createUser(attributes);
+
+			expect(RelyingPartyRest.createUser.getCall(0).args).toEqual([
+				session.ctx,
+				[
+					{
+						id: 1,
+						schemaId: 'http://test1',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							front: { id: 1, mimeType: 'test', size: 123, content: 'ok' },
+							back: { id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
+						},
+						documents: undefined
+					},
+					{
+						id: 2,
+						schemaId: 'http://test2',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							front: { id: 3, mimeType: 'test', size: 123, content: 'ok' },
+							back: { id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
+						},
+						documents: undefined
+					}
+				]
+			]);
+			expect(res).toEqual('ok');
+		});
+		it('should create user with no file endpoint', async () => {
+			sinon.stub(RelyingPartyRest, 'uploadUserFile').resolves({ id: 'ok' });
+			sinon.stub(RelyingPartyRest, 'createUser').resolves('ok');
+			sinon.stub(session.ctx, 'hasUserFileEndpoint').returns(false);
+
+			const documents = [
+				{ id: 1, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+				{ id: 2, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') },
+				{ id: 3, mimeType: 'test', size: 123, buffer: Buffer.from('test1') },
+				{ id: 4, mimeType: 'test2', size: 1223, buffer: Buffer.from('test2') }
+			];
+
+			let attributes = [
+				{
+					id: 1,
+					schemaId: 'http://test1',
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
+					data: { value: { front: '$document-1', back: '$document-2' } },
+					documents: [documents[0], documents[1]]
+				},
+				{
+					id: 2,
+					schemaId: 'http://test2',
+					data: { value: { front: '$document-3', back: '$document-4' } },
+					schema: {
+						type: 'object',
+						properties: {
+							front: { type: 'object', format: 'file' },
+							back: { type: 'object', format: 'file' }
+						}
+					},
+					documents: [documents[2], documents[3]]
+				}
+			];
+
+			let res = await session.createUser(attributes);
+
+			expect(RelyingPartyRest.createUser.getCall(0).args).toEqual([
+				session.ctx,
+				[
+					{
+						id: 1,
+						schemaId: 'http://test1',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							value: {
+								front: '$document-1',
+								back: '$document-2'
+							}
+						},
+						documents: [1, 2]
+					},
+					{
+						id: 2,
+						schemaId: 'http://test2',
+						schema: {
+							type: 'object',
+							properties: {
+								front: { type: 'object', format: 'file' },
+								back: { type: 'object', format: 'file' }
+							}
+						},
+						data: {
+							value: {
+								front: '$document-3',
+								back: '$document-4'
+							}
+						},
+						documents: [3, 4]
+					}
+				],
+				documents
+			]);
+			expect(res).toEqual('ok');
+		});
 	});
 	describe('listKYCTemplates', () => {});
 	describe('getKYCTemplate', () => {});
-	/*
 	describe('createKYCApplication', () => {
 		it('should create kyc application', async () => {
 			sinon.stub(RelyingPartyRest, 'uploadKYCApplicationFile').resolves({ id: 'ok' });
@@ -667,7 +831,7 @@ describe('Relying Party session', () => {
 							front: { id: 1, mimeType: 'test', size: 123, content: 'ok' },
 							back: { id: 2, mimeType: 'test2', size: 1223, content: 'ok' }
 						},
-						documents: []
+						documents: undefined
 					},
 					{
 						id: 2,
@@ -683,14 +847,13 @@ describe('Relying Party session', () => {
 							front: { id: 3, mimeType: 'test', size: 123, content: 'ok' },
 							back: { id: 4, mimeType: 'test2', size: 1223, content: 'ok' }
 						},
-						documents: []
+						documents: undefined
 					}
 				]
 			]);
 			expect(res).toEqual('ok');
 		});
 	});
-	*/
 	xdescribe('updateKYCApplication', () => {});
 	xdescribe('listKYCApplications', () => {});
 	xdescribe('getKYCApplication', () => {});

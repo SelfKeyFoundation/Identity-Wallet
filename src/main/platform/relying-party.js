@@ -115,7 +115,7 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('auth/token');
+		let url = ctx.getEndpoint('/users/token');
 		return request.get({
 			url,
 			headers: {
@@ -152,7 +152,6 @@ export class RelyingPartyRest {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let url = ctx.getEndpoint('users');
 		if (ctx.hasUserFileEndpoint()) {
-			await Promise.all(documents.map(doc => this.uploadUserFile(ctx, doc)));
 			return request.post({
 				url,
 				body: attributes,
@@ -344,7 +343,32 @@ export class RelyingPartySession {
 		return RelyingPartyRest.getUserToken(this.ctx);
 	}
 
-	createUser(attributes = []) {
+	async createUser(attributes = []) {
+		if (this.ctx.hasUserFileEndpoint()) {
+			attributes = await Promise.all(
+				attributes.map(async attr => {
+					const attrDocs = await Promise.all(
+						attr.documents.map(async doc => {
+							if (doc.content) {
+								doc.buffer = bufferFromDataUrl(doc.content);
+							}
+							const res = await RelyingPartyRest.uploadUserFile(this.ctx, doc);
+							let newDoc = { ...doc };
+							delete newDoc.buffer;
+							newDoc.content = res.id;
+							return newDoc;
+						})
+					);
+					const { value } = identityAttributes.denormalizeDocumentsSchema(
+						attr.schema,
+						(attr.data || {}).value,
+						attrDocs
+					);
+					return { ...attr, data: value, documents: undefined };
+				})
+			);
+			return RelyingPartyRest.createUser(this.ctx, attributes);
+		}
 		let documents = attributes.reduce((acc, curr) => {
 			acc = acc.concat(curr.documents);
 			return acc;
@@ -355,6 +379,7 @@ export class RelyingPartySession {
 		});
 		let attributesData = attributes.map(attr => ({
 			id: attr.id,
+			schemaId: attr.schemaId,
 			data: attr.data,
 			schema: attr.schema,
 			documents: attr.documents
