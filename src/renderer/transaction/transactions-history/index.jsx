@@ -111,10 +111,24 @@ const getCryptoType = transaction => {
 
 const getCustomStatusText = (transaction, sent) => {
 	let cryptoType = getCryptoType(transaction);
-	if (sent) {
-		return `Sent ${cryptoType}`;
+	if (transaction.isError === 1) {
+		if (sent) {
+			return `Failed to send ${cryptoType}`;
+		} else {
+			return `Failed to receive ${cryptoType}`;
+		}
 	} else {
-		return `Received ${cryptoType}`;
+		if (sent) {
+			return `Sent ${cryptoType}`;
+		} else {
+			return `Received ${cryptoType}`;
+		}
+	}
+};
+
+const getCustomValue = (transaction, sent) => {
+	if (transaction.isError !== 1) {
+		return `${sent ? '-' : '+'}${convertExponentialToDecimal(transaction.value)}`;
 	}
 };
 
@@ -266,8 +280,10 @@ class TransactionsHistory extends Component {
 											</TableCell>
 											<TableCell align="right">
 												<Typography component="span" variant="body2">
-													{this.hasSent(transaction) ? '- ' : '+ '}
-													{convertExponentialToDecimal(transaction.value)}
+													{getCustomValue(
+														transaction,
+														this.hasSent(transaction)
+													)}
 												</Typography>
 											</TableCell>
 											<TableCell
