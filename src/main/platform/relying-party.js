@@ -42,6 +42,16 @@ export class RelyingPartyCtx {
 		}
 		return root;
 	}
+	hasUserFileEndpoint() {
+		const { config } = this;
+		if (!config.endpoints || !config.endpoints.hasOwnProperty('/users/file')) {
+			return true;
+		}
+		if (config.endpoints['/users/file'] === false) {
+			return false;
+		}
+		return true;
+	}
 }
 
 export class RelyingPartyToken {

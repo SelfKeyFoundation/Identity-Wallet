@@ -11,10 +11,28 @@ afterEach(() => {
 	sinon.restore();
 });
 
-xdescribe('RelyingPartyCtx', () => {
+describe('RelyingPartyCtx', () => {
 	describe('mergeConfig', () => {});
 	describe('getEndpoing', () => {});
 	describe('getOrigin', () => {});
+	describe('hasUserFileEndpoint', () => {
+		let ctx = null;
+		beforeEach(() => {
+			ctx = new RelyingPartyCtx({});
+		});
+
+		it('buy default should have file endpoint', () => {
+			expect(ctx.hasUserFileEndpoint()).toBe(true);
+		});
+		it('if file endpoint is overrided, still it should return true', () => {
+			ctx.config.endpoints = { '/users/file': '/test/file/endpoint' };
+			expect(ctx.hasUserFileEndpoint()).toBe(true);
+		});
+		it('returns false if does not have user file endpoint', () => {
+			ctx.config.endpoints = { '/users/file': false };
+			expect(ctx.hasUserFileEndpoint()).toBe(false);
+		});
+	});
 });
 
 describe('RelyingPartyRest', () => {
