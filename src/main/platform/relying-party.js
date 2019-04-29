@@ -28,9 +28,9 @@ export class RelyingPartyCtx {
 	getEndpoint(name) {
 		let rootEndpoint = this.getRootEndpoint();
 		let endpoints = this.config.endpoints || {};
-		let url = endpoints[name];
-		if (!url) {
-			url = urljoin(rootEndpoint, name);
+		let url = endpoints[name] || name;
+		if (!url || !url.match(/^https?:/)) {
+			url = urljoin(rootEndpoint, url);
 		}
 		return url;
 	}
