@@ -118,7 +118,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#fix/unlock-icon",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#daead31f01f9eebeb4022653ab50c1b81c0ce620",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"sinon": "7.1.1",
