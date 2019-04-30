@@ -19,8 +19,11 @@ const styles = theme => ({
 		borderTop: '1px solid #475768'
 	},
 	contentSection: {
-		marginBottom: '20px',
-		marginTop: '20px'
+		marginBottom: '50px',
+		'& [role="slider"]': {
+			marginBottom: '5px',
+			marginTop: '10px'
+		}
 	},
 	understandLabel: {
 		fontFamily: theme.typography.fontFamily,
@@ -87,7 +90,7 @@ class DepositContentComponent extends Component {
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
 						<Grid item classes={{ item: classes.contentSection }}>
-							<Typography variant="body2">
+							<Typography variant="body1">
 								A refundable deposit of {amount} {token} tokens is required to
 								unlock this marketplace for {days} days.
 							</Typography>
