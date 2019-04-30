@@ -7,14 +7,15 @@ import {
 	FormControl,
 	FormHelperText,
 	withStyles,
+	Button,
 	Typography
 } from '@material-ui/core';
 
-import { StyledButton, TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
+import { TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
-		marginTop: '30px',
+		marginTop: '10px',
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
 	},
@@ -134,16 +135,12 @@ class DepositContentComponent extends Component {
 									)}
 								</FormControl>
 								<div className={classes.actions}>
-									<StyledButton variant="contained" size="medium" type="submit">
+									<Button variant="contained" size="large" type="submit">
 										Confirm
-									</StyledButton>
-									<StyledButton
-										variant="outlined"
-										size="medium"
-										onClick={onCancel}
-									>
+									</Button>
+									<Button variant="outlined" size="large" onClick={onCancel}>
 										Cancel
-									</StyledButton>
+									</Button>
 								</div>
 							</form>
 						</Grid>
