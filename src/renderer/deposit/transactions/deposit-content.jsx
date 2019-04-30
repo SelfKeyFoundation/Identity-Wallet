@@ -43,9 +43,7 @@ const styles = theme => ({
 			marginRight: '20px',
 			marginTop: '30px'
 		}
-	},
-	primary: {},
-	checked: {}
+	}
 });
 
 class DepositContentComponent extends Component {
@@ -114,19 +112,10 @@ class DepositContentComponent extends Component {
 										checked={understood}
 										value="understood"
 										onChange={this.handleUnderstoodChange}
-										control={
-											<Checkbox
-												color="primary"
-												classes={{
-													root: classes.understandCheckbox,
-													colorPrimary: classes.primary,
-													checked: classes.checked
-												}}
-											/>
-										}
+										control={<Checkbox />}
 										label={`OK, I understand that this deposit is refundable after ${days} days.`}
 									/>
-									{error ? (
+									{error && !understood ? (
 										<FormHelperText>
 											Please confirm you understand how the deposit works.
 										</FormHelperText>
