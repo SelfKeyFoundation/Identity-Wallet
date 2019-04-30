@@ -221,7 +221,8 @@ export class LWSService {
 					attr.value
 				);
 				return {
-					id: attr.url,
+					id: attr.id,
+					schemaId: attr.url,
 					schema: attr.schema,
 					data: normalized.value,
 					documents: normalized.documents.map(doc => {
