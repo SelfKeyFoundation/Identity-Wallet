@@ -167,7 +167,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 												Fiat Payments
 											</Typography>
 										</TableCell>
-										<TableCell>
+										<TableCell style={{ padding: '10px' }}>
 											<Typography variant="overline">
 												Excluded Residents
 											</Typography>
