@@ -112,7 +112,11 @@ class DepositContentComponent extends Component {
 										checked={understood}
 										value="understood"
 										onChange={this.handleUnderstoodChange}
-										control={<Checkbox />}
+										control={
+											<Checkbox
+												color={error && !understood ? 'primary' : ''}
+											/>
+										}
 										label={`OK, I understand that this deposit is refundable after ${days} days.`}
 									/>
 									{error && !understood ? (
