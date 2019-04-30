@@ -91,7 +91,7 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 
 const WithoutBalancePopupComponent = props => {
 	return (
-		<Popup closeAction={props.closeAction}>
+		<Popup closeAction={props.closeAction} text="Unlock This Marketplace: Crypto Exchanges">
 			<WithoutBalanceContent {...props} />
 		</Popup>
 	);

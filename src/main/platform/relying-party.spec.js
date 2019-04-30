@@ -88,7 +88,7 @@ describe('RelyingPartyRest', () => {
 				}
 			};
 			let res = await RelyingPartyRest.getUserToken(ctx);
-			expect(ctx.getEndpoint.calledOnceWith('/auth/token')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('/users/token')).toBeTruthy();
 			expect(res).toEqual(testUserToken);
 			expect(request.get.getCall(0).args).toEqual([
 				{

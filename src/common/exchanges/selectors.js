@@ -8,7 +8,7 @@ export const getExchanges = ({ exchanges }) => {
 			name: data.name,
 			status: data.status,
 			description: data.description,
-			logoUrl: data.logo[0].url,
+			logoUrl: data.logo && data.logo[0] ? data.logo[0].url : false,
 			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
 			serviceId: data.serviceId || 'global',
 			lockPeriod: data.lockPeriod || 2592000000, // 30 days

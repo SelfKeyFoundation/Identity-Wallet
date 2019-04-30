@@ -105,7 +105,7 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('/auth/token');
+		let url = ctx.getEndpoint('/users/token');
 		return request.get({
 			url,
 			headers: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem, CircularProgress } from '@material-ui/core';
-import { CheckedIcon, StepIcon, DocumentIcon } from 'selfkey-ui';
+import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	kyc: {
@@ -31,13 +31,12 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 
 	const warning = !requirement.options || !requirement.options.length;
 	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
-	const typeIcon = warning ? <DocumentIcon className={classes.documentIcon} /> : '';
 
 	return (
 		<ListItem>
 			{icon}
 			<Typography variant="body2" color="textSecondary" className={classes.documentType}>
-				{type} {typeIcon}
+				{type}
 			</Typography>
 		</ListItem>
 	);
