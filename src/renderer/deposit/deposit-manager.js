@@ -32,6 +32,10 @@ const styles = theme => ({
 		flexFlow: 'column',
 		minWidth: '180px',
 		textAlign: 'center'
+	},
+
+	unlockIcon: {
+		marginRight: '10px'
 	}
 });
 
@@ -175,7 +179,7 @@ class DepositMangerComponent extends Component {
 					onClick={() => this.unlockActionCall(unlockAction, item, hasBalance)}
 					className={classes.fullWidth}
 				>
-					{item.status === 'Active' && <UnlockIcon />}
+					{item.status === 'Active' && <UnlockIcon className={classes.unlockIcon} />}
 					{item.status === 'pending' && (
 						<HourGlassSmallIcon width="10px" height="14px" fill="rgba(0, 0, 0, 0.26)" />
 					)}
