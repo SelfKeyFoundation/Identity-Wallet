@@ -36,7 +36,7 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(request, 'get').resolves(testChallnage);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.getChallenge(ctx);
-			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
 					url: `${testEndpoint}/0xtest`,
@@ -57,7 +57,7 @@ describe('RelyingPartyRest', () => {
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.postChallengeReply(ctx, testChallenge, testSignature);
-			expect(ctx.getEndpoint.calledOnceWith('auth/challenge')).toBeTruthy();
+			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
