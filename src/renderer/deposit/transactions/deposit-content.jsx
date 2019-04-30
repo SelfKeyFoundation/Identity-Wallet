@@ -115,6 +115,13 @@ class DepositContentComponent extends Component {
 										control={
 											<Checkbox
 												color={error && !understood ? 'primary' : ''}
+												style={{
+													color: 'transparent',
+													border:
+														error && !understood
+															? '1px solid #FE4B61'
+															: '1px solid #697C95'
+												}}
 											/>
 										}
 										label={`OK, I understand that this deposit is refundable after ${days} days.`}
