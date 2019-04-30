@@ -21,6 +21,8 @@ const styles = theme => ({
 	},
 
 	button: {
+		fontSize: '14px',
+		fontWeight: 400,
 		minWidth: 0,
 		textTransform: 'capitalize'
 	},
@@ -65,6 +67,12 @@ const styles = theme => ({
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
 		maxWidth: '90px'
+	},
+
+	resident: {
+		marginBottom: '3px',
+		marginRight: '5px',
+		marginTop: '3px'
 	}
 });
 
@@ -123,18 +131,31 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 						  ))
 						: '-'}
 				</TableCell>
-				<TableCell className={isNotExcludedResidents ? '' : classes.goodForCell}>
+				<TableCell
+					className={
+						isNotExcludedResidents || excludedResidents.length < 2
+							? ''
+							: classes.goodForCell
+					}
+					style={{ height: 'auto', padding: '10px' }}
+				>
 					{isNotExcludedResidents
 						? '-'
-						: excludedResidents.map((excluded, index) => (
-								<Tag key={index}>{excluded}</Tag>
-						  ))}
+						: excludedResidents.map((excluded, index) =>
+								excludedResidents.length - 1 > index ? (
+									<p key={index} className={classes.resident}>
+										{excluded},
+									</p>
+								) : (
+									excluded
+								)
+						  )}
 				</TableCell>
 				<TableCell>
 					<Button
 						disabled={status === 'Inactive'}
 						variant="text"
-						color="secondary"
+						color={status === 'Inactive' ? 'secondary' : 'primary'}
 						className={classes.button}
 						onClick={() => (viewAction ? viewAction(name) : '')}
 					>

@@ -28,9 +28,9 @@ export class RelyingPartyCtx {
 	getEndpoint(name) {
 		let rootEndpoint = this.getRootEndpoint();
 		let endpoints = this.config.endpoints || {};
-		let url = endpoints[name];
-		if (!url) {
-			url = urljoin(rootEndpoint, name);
+		let url = endpoints[name] || name;
+		if (!url || !url.match(/^https?:/)) {
+			url = urljoin(rootEndpoint, url);
 		}
 		return url;
 	}
@@ -90,7 +90,7 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static async getChallenge(ctx) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		const publicKey = await ctx.identity.publicKey;
 		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
 		return request.get({
@@ -100,7 +100,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		return request.post({
 			url,
 			body: { signature },
@@ -150,7 +150,7 @@ export class RelyingPartyRest {
 	}
 	static async createUser(ctx, attributes, documents = []) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('users');
+		let url = ctx.getEndpoint('/users');
 		if (ctx.hasUserFileEndpoint()) {
 			return request.post({
 				url,
