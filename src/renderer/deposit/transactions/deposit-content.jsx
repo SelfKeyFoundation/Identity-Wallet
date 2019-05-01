@@ -7,20 +7,24 @@ import {
 	FormControl,
 	FormHelperText,
 	withStyles,
+	Button,
 	Typography
 } from '@material-ui/core';
 
-import { StyledButton, TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
+import { TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
-		marginTop: '30px',
+		marginTop: '10px',
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
 	},
 	contentSection: {
-		marginBottom: '20px',
-		marginTop: '20px'
+		marginBottom: '50px',
+		'& [role="slider"]': {
+			marginBottom: '5px',
+			marginTop: '10px'
+		}
 	},
 	understandLabel: {
 		fontFamily: theme.typography.fontFamily,
@@ -39,9 +43,7 @@ const styles = theme => ({
 			marginRight: '20px',
 			marginTop: '30px'
 		}
-	},
-	primary: {},
-	checked: {}
+	}
 });
 
 class DepositContentComponent extends Component {
@@ -87,7 +89,7 @@ class DepositContentComponent extends Component {
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
 						<Grid item classes={{ item: classes.contentSection }}>
-							<Typography variant="body2">
+							<Typography variant="body1">
 								A refundable deposit of {amount} {token} tokens is required to
 								unlock this marketplace for {days} days.
 							</Typography>
@@ -112,17 +114,19 @@ class DepositContentComponent extends Component {
 										onChange={this.handleUnderstoodChange}
 										control={
 											<Checkbox
-												color="primary"
-												classes={{
-													root: classes.understandCheckbox,
-													colorPrimary: classes.primary,
-													checked: classes.checked
+												color={error && !understood ? 'primary' : ''}
+												style={{
+													color: 'transparent',
+													border:
+														error && !understood
+															? '1px solid #FE4B61'
+															: '1px solid #697C95'
 												}}
 											/>
 										}
 										label={`OK, I understand that this deposit is refundable after ${days} days.`}
 									/>
-									{error ? (
+									{error && !understood ? (
 										<FormHelperText>
 											Please confirm you understand how the deposit works.
 										</FormHelperText>
@@ -131,16 +135,12 @@ class DepositContentComponent extends Component {
 									)}
 								</FormControl>
 								<div className={classes.actions}>
-									<StyledButton variant="contained" size="medium" type="submit">
+									<Button variant="contained" size="large" type="submit">
 										Confirm
-									</StyledButton>
-									<StyledButton
-										variant="outlined"
-										size="medium"
-										onClick={onCancel}
-									>
+									</Button>
+									<Button variant="outlined" size="large" onClick={onCancel}>
 										Cancel
-									</StyledButton>
+									</Button>
 								</div>
 							</form>
 						</Grid>

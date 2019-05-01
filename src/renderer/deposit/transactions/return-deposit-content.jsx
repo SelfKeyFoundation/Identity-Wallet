@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 
-import { Grid, withStyles, Typography } from '@material-ui/core';
-import { StyledButton, ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
+import { Button, Grid, withStyles, Typography } from '@material-ui/core';
+import { ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
 import config from 'common/config';
 
 const styles = theme => ({
-	footer: {
-		marginTop: '30px',
-		paddingTop: '30px',
-		borderTop: '1px solid #475768'
-	},
 	contentSection: {
-		marginBottom: '20px',
-		marginTop: '20px'
+		marginBottom: '50px',
+		'& [role="slider"]': {
+			marginBottom: '5px',
+			marginTop: '10px'
+		}
 	},
 	understandLabel: {
 		fontFamily: theme.typography.fontFamily,
@@ -70,7 +68,7 @@ class ReturnDepositContentComponent extends Component {
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="stretch">
 						<Grid item classes={{ item: classes.contentSection }}>
-							<Typography variant="body2">
+							<Typography variant="body1">
 								You can now get your deposit of {amount} {token} tokens back. After
 								the transaction is confirmed, you will lose access to this
 								marketplace.
@@ -88,16 +86,16 @@ class ReturnDepositContentComponent extends Component {
 						</Grid>
 						<Grid item classes={{ item: classes.footer }}>
 							<div className={classes.actions}>
-								<StyledButton
+								<Button
 									variant="contained"
-									size="medium"
+									size="large"
 									onClick={this.handleConfirm}
 								>
 									Confirm
-								</StyledButton>
-								<StyledButton variant="outlined" size="medium" onClick={onCancel}>
+								</Button>
+								<Button variant="outlined" size="large" onClick={onCancel}>
 									Cancel
-								</StyledButton>
+								</Button>
 							</div>
 						</Grid>
 					</Grid>
