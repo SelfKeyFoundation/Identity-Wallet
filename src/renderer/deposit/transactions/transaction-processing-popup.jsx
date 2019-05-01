@@ -17,7 +17,7 @@ export const TransactionProcessingContent = withStyles(styles)(({ classes }) => 
 		<Grid item xs={10}>
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<Grid item id="header">
-					<Typography variant="h2">Transaction Processing</Typography>
+					<Typography variant="h1">Transaction Processing</Typography>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
 					<Typography variant="body1">
@@ -32,7 +32,7 @@ export const TransactionProcessingContent = withStyles(styles)(({ classes }) => 
 
 export const MarketplaceTransactionProcessingPopup = props => {
 	return (
-		<Popup closeAction={props.closeAction}>
+		<Popup closeAction={props.closeAction} text="KEY Deposit">
 			<TransactionProcessingContent {...props} />
 		</Popup>
 	);

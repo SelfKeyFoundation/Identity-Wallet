@@ -33,7 +33,7 @@ class DepositPopupComponent extends Component {
 			return <div>Loading</div>;
 		}
 		return (
-			<Popup closeAction={closeAction}>
+			<Popup closeAction={closeAction} text="Unlock This Marketplace: Crypto Exchanges">
 				<DepositContent
 					minGasPrice={tx.gasPriceEstimates.safeLow}
 					maxGasPrice={tx.gasPriceEstimates.fast}
