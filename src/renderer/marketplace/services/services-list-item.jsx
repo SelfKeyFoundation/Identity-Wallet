@@ -23,8 +23,14 @@ const styles = theme => ({
 	button: {
 		fontSize: '14px',
 		fontWeight: 400,
-		minWidth: 0,
-		textTransform: 'capitalize'
+		letterSpacing: 0,
+		minWidth: '70px',
+		padding: '6px 8px',
+		textAlign: 'left',
+		textTransform: 'capitalize',
+		whiteSpace: 'normal',
+		wordBreak: 'break-word',
+		wordWrap: 'normal'
 	},
 
 	inline: {
@@ -151,7 +157,9 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 								)
 						  )}
 				</TableCell>
-				<TableCell>
+				<TableCell
+					style={status === 'Inactive' ? { padding: '0 20px' } : { padding: '0 15px' }}
+				>
 					<Button
 						disabled={status === 'Inactive'}
 						variant="text"
