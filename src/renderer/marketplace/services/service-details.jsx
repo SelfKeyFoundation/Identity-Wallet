@@ -438,7 +438,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
 		let random = Math.floor(Math.random() * 4);
 
-		const icon = !item.logo[0].url ? (
+		const icon = item.logo[0].url ? (
 			<img src={item.logo[0].url} className={classes.defaultIcon} />
 		) : (
 			<div
