@@ -89,7 +89,11 @@ export class LWSService {
 			log.error(error);
 			conn.send(
 				{
-					payload: error
+					error: true,
+					payload: {
+						code: 'ledger_error',
+						message: error.message
+					}
 				},
 				msg
 			);
