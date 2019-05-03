@@ -117,7 +117,7 @@
 		"socket.io-client": "2.2.0",
 		"source-map-support": "0.5.12",
 		"sprintf-js": "1.1.2",
-		"sqlite3": "4.0.4",
+		"sqlite3": "4.0.6",
 		"striptags": "3.1.1",
 		"sudo-prompt": "8.2.3",
 		"tcp-port-used": "1.0.1",
