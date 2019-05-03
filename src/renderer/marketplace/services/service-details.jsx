@@ -219,6 +219,15 @@ const styles = theme => ({
 	},
 	leftAlign: {
 		textAlign: 'left'
+	},
+	defaultIcon: {
+		alignItems: 'center',
+		borderRadius: '8px',
+		color: '#FFFFFF',
+		display: 'flex',
+		height: '44px',
+		justifyContent: 'center',
+		width: '44px'
 	}
 });
 
@@ -437,6 +446,21 @@ class MarketplaceServiceDetailsComponent extends Component {
 
 	render() {
 		const { classes, item, backAction, relyingPartyName, templates } = this.props;
+		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
+		let random = Math.floor(Math.random() * 4);
+
+		const icon = item.logo[0].url ? (
+			<img src={item.logo[0].url} className={classes.defaultIcon} />
+		) : (
+			<div
+				className={classes.defaultIcon}
+				style={{
+					backgroundColor: getColors()[random]
+				}}
+			>
+				{item.name.charAt(0)}
+			</div>
+		);
 
 		return (
 			<Grid container>
@@ -468,7 +492,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 						className={classes.header}
 					>
 						<Grid item id="icon" className={classes.icon}>
-							<img src={item.logo[0].url} />
+							{icon}
 						</Grid>
 						<Grid item id="title" className={classes.title}>
 							<Grid container alignItems="center">
