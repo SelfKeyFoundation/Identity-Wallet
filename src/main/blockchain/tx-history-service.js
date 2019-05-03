@@ -255,7 +255,7 @@ export class TxHistoryService {
 	getWalletSetting(walletId) {
 		return WalletSetting.findByWalletId(walletId);
 	}
-	async syncByWallet(address, walletId, showProgress) {
+	async syncByWallet(address, walletId, showProgress, reload = false) {
 		let self = this.constructor;
 		if (showProgress) {
 			self.isSyncingMap[address] = true;
@@ -263,7 +263,7 @@ export class TxHistoryService {
 		let endblock = await this.getMostResentBlock();
 		endblock = parseInt(endblock, 16);
 		let walletSetting = await this.getWalletSetting(walletId);
-		let startBlock = walletSetting.txHistoryLastSyncedBlock || 0;
+		let startBlock = reload ? 0 : walletSetting.txHistoryLastSyncedBlock || 0;
 		let page = 1;
 		let txHashes = {};
 		return new Promise((resolve, reject) => {
@@ -332,6 +332,13 @@ export class TxHistoryService {
 
 	async getTransactions(publicKey) {
 		return TxHistory.findByPublicKey(publicKey);
+	}
+
+	async reload(wallet) {
+		let address = wallet.publicKey.toLowerCase();
+		address = address.startsWith('0x') ? address : `0x${address}`;
+		await this.syncByWallet(address, wallet.id, true, true);
+		await this.removeNotMinedPendingTxs(address);
 	}
 }
 
