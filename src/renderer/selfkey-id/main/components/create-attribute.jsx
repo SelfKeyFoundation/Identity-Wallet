@@ -169,7 +169,7 @@ class CreateAttributeComponent extends Component {
 					{this.state.typeId > -1 && (
 						<>
 							<Typography variant="overline" className={classes.label}>
-								Label
+								Label *
 							</Typography>
 							<Input
 								error={!!this.state.errorLabel}
