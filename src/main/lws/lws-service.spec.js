@@ -3,6 +3,7 @@ import { Wallet } from '../wallet/wallet';
 import sinon from 'sinon';
 import Identity from '../platform/identity';
 import RelyingPartySession from '../platform/relying-party';
+import { setGlobalContext } from '../../common/context';
 
 jest.mock('../keystorage');
 jest.mock('node-fetch');
@@ -78,8 +79,47 @@ describe('lws-service', () => {
 				]);
 			});
 		});
+
+		describe('reqLedgerWallets', () => {
+			it('returns wallets', async () => {
+				// sinon.stub(walletService, 'getLedgerWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(Wallet, 'findByPublicKey');
+				Wallet.findByPublicKey.resolves({
+					publicKey: 'test',
+					profile: 'ledger',
+					hasSignedUpTo() {
+						return false;
+					}
+				});
+
+				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				sinon.stub(conn, 'send');
+
+				const msg = {
+					type: 'test',
+					payload: { config: { website: { url: 'test' }, page: 6 } }
+				};
+
+				await service.reqLedgerWallets(msg, conn);
+
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						payload: [
+							{
+								publicKey: 'test',
+								profile: 'ledger',
+								unlocked: false,
+								signedUp: false
+							}
+						]
+					},
+					msg
+				]);
+			});
+		});
+
 		describe('reqUnlock', () => {
-			const t = (msg, wallet, expected) =>
+			const t = (msg, profile, wallet, expected) =>
 				it(msg, async () => {
 					sinon.stub(Wallet, 'findByPublicKey').resolves(wallet);
 					const conn = connMock(wallet);
@@ -94,7 +134,8 @@ describe('lws-service', () => {
 						{
 							payload: {
 								publicKey: wallet.publicKey,
-								config: { website: { url: 'test' } }
+								config: { website: { url: 'test' } },
+								profile
 							}
 						},
 						conn
@@ -124,6 +165,7 @@ describe('lws-service', () => {
 				});
 			t(
 				'sends unlocked if password correct',
+				'local',
 				{
 					publicKey: 'unlocked',
 					privateKey: 'ok',
@@ -134,12 +176,23 @@ describe('lws-service', () => {
 			);
 			t(
 				'sends locked if password incorrect',
+				'local',
 				{
 					publicKey: 'locked',
 					profile: 'local',
 					hasSignedUpTo: sinon.stub().resolves(true)
 				},
 				false
+			);
+			t(
+				'sends unlocked if ledger wallet',
+				'ledger',
+				{
+					publicKey: 'unlocked',
+					profile: 'ledger',
+					hasSignedUpTo: sinon.stub().resolves(true)
+				},
+				true
 			);
 		});
 		describe('reqAttributes', () => {
@@ -332,6 +385,18 @@ describe('lws-service', () => {
 		});
 
 		describe('reqAuth', () => {
+			it('send wait_hw_confirmation when profile is ledger', async () => {
+				setGlobalContext({});
+				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
+				const conn = {
+					send: () => {},
+					getIdentity: publicKey => identity
+				};
+				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
+				await service.reqAuth(msg, conn);
+				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();
+			});
+
 			it('send auth error if wallet is locked', async () => {
 				const conn = {};
 				const msg = { payload: { publicKey: 'test' } };
@@ -353,7 +418,7 @@ describe('lws-service', () => {
 				).toBeTruthy();
 			});
 			it('send session_establish error if challange failed', async () => {
-				const conn = {};
+				const conn = { send: () => {} };
 				const msg = { payload: { publicKey: 'test', config: { website: {} } } };
 				const error = new Error('Session Establish Error');
 				sinon.stub(RelyingPartySession.prototype, 'establish').throws(error);
@@ -375,7 +440,7 @@ describe('lws-service', () => {
 				).toBeTruthy();
 			});
 			it('send token_error on token fetch error', async () => {
-				const conn = {};
+				const conn = { send: () => {} };
 				const msg = {
 					payload: { publicKey: 'test', config: { website: {} } }
 				};
@@ -401,8 +466,21 @@ describe('lws-service', () => {
 		});
 
 		describe('reqSignUp', () => {
+			it('send wait_hw_confirmation when profile is ledger', async () => {
+				setGlobalContext({});
+				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
+				const conn = {
+					send: () => {},
+					getIdentity: publicKey => identity
+				};
+				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
+				sinon.stub(conn, 'send');
+				await service.reqSignup(msg, conn);
+				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();
+			});
+
 			it('send user create error if could not create user', async () => {
-				const conn = {};
+				const conn = { send: () => {} };
 				const msg = {
 					payload: { publicKey: 'test', attributes: [], config: { website: {} } }
 				};

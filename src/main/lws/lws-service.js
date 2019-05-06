@@ -187,7 +187,7 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
-		const { publicKey, config } = msg.payload;
+		const { publicKey, config, profile } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 		if (!identity) {
 			return this.authResp(
@@ -204,7 +204,9 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
-			conn.send({ type: 'wait_hw_confirmation' });
+			if (profile === 'ledger') {
+				conn.send({ type: 'wait_hw_confirmation' });
+			}
 			await session.establish();
 		} catch (error) {
 			log.error(error);
@@ -234,7 +236,7 @@ export class LWSService {
 	}
 
 	async reqSignup(msg, conn) {
-		const { publicKey, config, attributes } = msg.payload;
+		const { publicKey, config, attributes, profile } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 		if (!identity) {
 			return this.authResp(
@@ -251,6 +253,9 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
+			if (profile === 'ledger') {
+				conn.send({ type: 'wait_hw_confirmation' });
+			}
 			await session.establish();
 		} catch (error) {
 			log.error(error);
