@@ -4,6 +4,10 @@ import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
 	icon: {
+		alignItems: 'center',
+		borderRadius: '5px',
+		display: 'flex',
+		justifyContent: 'center',
 		height: '30px',
 		width: '30px'
 	},
@@ -94,6 +98,22 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 			return status === 'Inactive' ? 'Coming Soon' : 'Details';
 		};
 
+		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
+		let random = Math.floor(Math.random() * 4);
+
+		const icon = logoUrl ? (
+			<img src={logoUrl} className={classes.icon} />
+		) : (
+			<div
+				className={classes.icon}
+				style={{
+					backgroundColor: getColors()[random]
+				}}
+			>
+				{name.charAt(0)}
+			</div>
+		);
+
 		const isNotExcludedResidents =
 			excludedResidents.length === 0 || excludedResidents[0] === 'None';
 
@@ -102,10 +122,8 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 
 		return (
 			<TableRow key={name}>
-				<TableCell className={classes.noRightPadding}>
-					<img src={logoUrl} className={classes.icon} />
-				</TableCell>
-				<TableCell className={classes.lofasz}>
+				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
+				<TableCell>
 					<Typography variant="h6">{name}</Typography>
 				</TableCell>
 				<TableCell>
