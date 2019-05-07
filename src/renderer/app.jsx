@@ -69,12 +69,7 @@ class AppContainerComponent extends Component {
 		return (
 			<ConnectedRouter history={piwik.connectToHistory(this.props.history.getHistory())}>
 				<HashRouter>
-					<div
-						style={{
-							background:
-								'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)'
-						}}
-					>
+					<div>
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
