@@ -64,7 +64,11 @@ const styles = theme => ({
 		'&:hover': {
 			color: '#ffffff',
 			'& p': {
-				color: 'white'
+				color: '#ffffff'
+			},
+			'& svg': {
+				color: '#ffffff',
+				stroke: '#ffffff'
 			}
 		}
 	},
@@ -86,7 +90,10 @@ const styles = theme => ({
 
 	textColor: {
 		color: '#fff',
-		opacity: 0.8
+		opacity: 0.8,
+		'&:hover': {
+			opacity: 1
+		}
 	},
 
 	version: {

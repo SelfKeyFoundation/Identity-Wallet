@@ -195,8 +195,7 @@ const styles = theme => ({
 		fill: success
 	},
 	certificateIcon: {
-		marginRight: '18px',
-		paddingTop: '3px'
+		marginRight: '18px'
 	}
 });
 
