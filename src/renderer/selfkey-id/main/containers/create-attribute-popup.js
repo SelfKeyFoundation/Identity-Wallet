@@ -24,9 +24,9 @@ class CreateAttributePopupComponent extends Component {
 
 		if (!subtitle) {
 			if (isDocument) {
-				subtitle = 'Document Type';
+				subtitle = 'Document Type *';
 			} else {
-				subtitle = 'Information Type';
+				subtitle = 'Information Type *';
 			}
 		}
 

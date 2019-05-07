@@ -98,7 +98,7 @@
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#97c8d3402fd936ba8d66f23eb8abbb6a8a36b491",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#5745b513583613f49bf9853ea977bbfc40c1cf60",
 		"react-piwik": "1.6.0",
 		"react-redux": "6.0.1",
 		"react-router-dom": "5.0.0",
