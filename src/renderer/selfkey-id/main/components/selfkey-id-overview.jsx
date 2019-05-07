@@ -28,7 +28,8 @@ import {
 	SmallTableHeadRow,
 	SmallTableRow,
 	SmallTableCell,
-	FileAudioIcon
+	FileAudioIcon,
+	DIDIcon
 } from 'selfkey-ui';
 import { CreateAttributePopup } from '../containers/create-attribute-popup';
 import { EditAttributePopup } from '../containers/edit-attribute-popup';
@@ -86,10 +87,15 @@ const styles = theme => ({
 		textOverflow: 'ellipsis',
 		whiteSpace: 'nowrap',
 		maxWidth: '222px'
+	},
+	didButtons: {
+		marginTop: '20px'
 	}
 });
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+const GET_DID_PATH = '/main/get-did';
+const ENTER_DID_PATH = '/main/enter-did';
 
 class SelfkeyIdOverviewComponent extends Component {
 	state = {
@@ -114,6 +120,8 @@ class SelfkeyIdOverviewComponent extends Component {
 		this.setState({ popup: 'edit-avatar' });
 	};
 	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+	handleGetDid = _ => this.props.dispatch(push(GET_DID_PATH));
+	handleEnterDid = _ => this.props.dispatch(push(ENTER_DID_PATH));
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -237,9 +245,92 @@ class SelfkeyIdOverviewComponent extends Component {
 						</Grid>
 					</Grid>
 				</Grid>
-
 				<Grid item>
 					<Grid container direction="column" spacing={32}>
+						<Grid item>
+							<Card>
+								<CardHeader
+									title="Descentralised ID"
+									className={classes.regularText}
+								/>
+								<hr className={classes.hr} />
+								<CardContent>
+									<Grid
+										container
+										direction="column"
+										justify="center"
+										alignItems="center"
+										spacing={24}
+									>
+										<Grid container item spacing={0} justify="space-between">
+											<Grid
+												container
+												xs={3}
+												justify="end"
+												alignItems="center"
+												direction="column"
+												wrap="nowrap"
+												spacing={24}
+												className={classes.info}
+											>
+												<Grid item>
+													<DIDIcon />
+												</Grid>
+
+												<Grid item>
+													<Typography
+														variant="subtitle2"
+														color="secondary"
+														gutterBottom
+													>
+														Register on the SelfKey Network to get your
+														DID.
+													</Typography>
+												</Grid>
+											</Grid>
+
+											<Grid item xs={9}>
+												<Typography variant="h2">
+													Use a DID when accesing different services in
+													the marketplace. Once created you’ll see it
+													under your profile.
+												</Typography>
+												<Typography
+													variant="subtitle2"
+													color="secondary"
+													gutterBottom
+												>
+													Getting a DID requires an Ethereum transaction.
+													This is a one time only transaction.
+												</Typography>
+												<Grid
+													container
+													spacing={32}
+													className={classes.didButtons}
+												>
+													<Grid item>
+														<Button
+															variant="contained"
+															onClick={this.handleGetDid}
+														>
+															GET DID
+														</Button>
+													</Grid>
+													<Grid item>
+														<Button
+															variant="outlined"
+															onClick={this.handleEnterDid}
+														>
+															I HAVE ONE
+														</Button>
+													</Grid>
+												</Grid>
+											</Grid>
+										</Grid>
+									</Grid>
+								</CardContent>
+							</Card>
+						</Grid>
 						<Grid item>
 							<Card>
 								<CardHeader
