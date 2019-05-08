@@ -9,7 +9,8 @@ describe('DIDService', () => {
 				return {
 					send: () => {
 						return { events: { CreatedDID: { returnValues: { id: 'id' } } } };
-					}
+					},
+					estimateGas: () => 1000
 				};
 			},
 			getController: () => {
@@ -38,7 +39,7 @@ describe('DIDService', () => {
 	it('createDID', async () => {
 		const contractSpy = jest.spyOn(web3Service.web3.eth, 'Contract');
 		const createDIDSpy = jest.spyOn(ledger.methods, 'createDID');
-		const transaction = await service.createDID();
+		const transaction = await service.createDID('walet');
 		expect(contractSpy).toHaveBeenCalled();
 		expect(createDIDSpy).toHaveBeenCalled();
 		expect(transaction.events.CreatedDID.returnValues.id).toEqual('id');
@@ -51,5 +52,14 @@ describe('DIDService', () => {
 		expect(contractSpy).toHaveBeenCalled();
 		expect(getControllerSpy).toHaveBeenCalled();
 		expect(controllerAddress).toEqual('controller');
+	});
+
+	it('getGasLimit', async () => {
+		const contractSpy = jest.spyOn(web3Service.web3.eth, 'Contract');
+		const createDIDSpy = jest.spyOn(ledger.methods, 'createDID');
+		const gasLimit = await service.getGasLimit('walet');
+		expect(contractSpy).toHaveBeenCalled();
+		expect(createDIDSpy).toHaveBeenCalled();
+		expect(gasLimit).toEqual(1100);
 	});
 });

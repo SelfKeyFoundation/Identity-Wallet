@@ -36,19 +36,16 @@ const styles = theme => ({
 	}
 });
 
-class CreateDIDComponent extends Component {
+class CreateDIDContentComponent extends Component {
 	render() {
 		const {
 			classes,
-			crypoCurrency,
-			usdFee,
-			ethFee,
-			tooltipFee,
 			usdNetworkFee,
 			ethNetworkFee,
 			tooltipNetworkFee,
 			onConfirm,
-			onCancel
+			onCancel,
+			learnHowURL
 		} = this.props;
 
 		return (
@@ -65,43 +62,20 @@ class CreateDIDComponent extends Component {
 						</Grid>
 						<Grid item className={classes.content}>
 							<Typography variant="body1" gutterBottom>
-								Getting your DID (what’s this?) and registering on the SelfKey
-								Network requires an Ethereum transaction. This is a one time only
-								transaction.
+								Getting your DID (
+								<a
+									className={classes.link}
+									onClick={e => {
+										window.openExternal(e, learnHowURL);
+									}}
+								>
+									what’s this?
+								</a>
+								) and registering on the SelfKey Network requires an Ethereum
+								transaction. This is a one time only transaction.
 							</Typography>
 						</Grid>
 						<Grid item classes={{ item: classes.footer }}>
-							<Grid container justify="space-between" className={classes.bottomSpace}>
-								<Grid item>
-									<Typography variant="h2">Cost</Typography>
-								</Grid>
-								<Grid item className={classes.textRight}>
-									<Typography
-										variant="body2"
-										color="primary"
-										className={classes.bold}
-									>
-										Total: ${usdFee.toLocaleString()}
-									</Typography>
-									<Typography variant="subtitle2" color="secondary" gutterBottom>
-										{ethFee.toLocaleString()} {crypoCurrency}
-										<KeyTooltip
-											interactive
-											placement="top-start"
-											title={
-												<React.Fragment>
-													<span>{tooltipFee}</span>
-													<TooltipArrow />
-												</React.Fragment>
-											}
-										>
-											<IconButton aria-label="Info">
-												<InfoTooltip />
-											</IconButton>
-										</KeyTooltip>
-									</Typography>
-								</Grid>
-							</Grid>
 							<Grid container justify="space-between">
 								<Grid item>
 									<Typography variant="h3" color="secondary">
@@ -151,5 +125,5 @@ class CreateDIDComponent extends Component {
 	}
 }
 
-export const CreateDID = withStyles(styles)(CreateDIDComponent);
-export default CreateDID;
+export const CreateDIDContent = withStyles(styles)(CreateDIDContentComponent);
+export default CreateDIDContent;
