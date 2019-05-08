@@ -170,6 +170,17 @@ class SelfkeyIdOverviewComponent extends Component {
 		if (!doc || !doc.data || !doc.data.value || !doc.data.value.expires) return '-';
 		return moment(doc.data.value.expires).format('DD MMM YYYY');
 	}
+	renderSubheading(email, did) {
+		return (
+			<>
+				<Typography variant="subtitle1">{email}</Typography>
+				<br />
+				<Typography variant="subtitle1" color="secondary">
+					did:selfkey:{did}
+				</Typography>
+			</>
+		);
+	}
 
 	render() {
 		const {
@@ -219,18 +230,22 @@ class SelfkeyIdOverviewComponent extends Component {
 				)}
 				<Grid item>
 					<Grid container direction="row" spacing={32}>
-						<Grid item xs={8}>
+						<Grid item xs={9}>
 							<Card>
 								<CardHeader
-									avatar={<HexagonAvatar src={profilePicture} />}
+									avatar={
+										<HexagonAvatar
+											src={profilePicture}
+											onClick={this.handleAvatarClick}
+										/>
+									}
 									title={`${firstName} ${middleName} ${lastName}`}
-									subheader={email}
-									onClick={this.handleAvatarClick}
+									subheader={this.renderSubheading(email, wallet.did)}
 									className={classes.cardHeader}
 								/>
 							</Card>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={3}>
 							<Card className={classes.card}>
 								<CardContent>
 									<Typography variant="body2">
@@ -247,90 +262,100 @@ class SelfkeyIdOverviewComponent extends Component {
 				</Grid>
 				<Grid item>
 					<Grid container direction="column" spacing={32}>
-						<Grid item>
-							<Card>
-								<CardHeader
-									title="Descentralised ID"
-									className={classes.regularText}
-								/>
-								<hr className={classes.hr} />
-								<CardContent>
-									<Grid
-										container
-										direction="column"
-										justify="center"
-										alignItems="center"
-										spacing={24}
-									>
-										<Grid container item spacing={0} justify="space-between">
+						{!wallet.did && (
+							<Grid item>
+								<Card>
+									<CardHeader
+										title="Descentralised ID"
+										className={classes.regularText}
+									/>
+									<hr className={classes.hr} />
+									<CardContent>
+										<Grid
+											container
+											direction="column"
+											justify="center"
+											alignItems="center"
+											spacing={24}
+										>
 											<Grid
 												container
-												xs={3}
-												justify="end"
-												alignItems="center"
-												direction="column"
-												wrap="nowrap"
-												spacing={24}
-												className={classes.info}
+												item
+												spacing={0}
+												justify="space-between"
 											>
-												<Grid item>
-													<DIDIcon />
+												<Grid
+													container
+													xs={3}
+													justify="end"
+													alignItems="center"
+													direction="column"
+													wrap="nowrap"
+													spacing={24}
+													className={classes.info}
+												>
+													<Grid item>
+														<DIDIcon />
+													</Grid>
+
+													<Grid item>
+														<Typography
+															variant="subtitle2"
+															color="secondary"
+															gutterBottom
+														>
+															Register on the SelfKey Network to get
+															your DID.
+														</Typography>
+													</Grid>
 												</Grid>
 
-												<Grid item>
+												<Grid item xs={9}>
+													<Typography variant="h2">
+														Use a DID when accesing different services
+														in the marketplace. Once created you’ll see
+														it under your profile.
+													</Typography>
 													<Typography
 														variant="subtitle2"
 														color="secondary"
 														gutterBottom
 													>
-														Register on the SelfKey Network to get your
-														DID.
+														Getting a DID requires an Ethereum
+														transaction. This is a one time only
+														transaction.
 													</Typography>
-												</Grid>
-											</Grid>
-
-											<Grid item xs={9}>
-												<Typography variant="h2">
-													Use a DID when accesing different services in
-													the marketplace. Once created you’ll see it
-													under your profile.
-												</Typography>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													gutterBottom
-												>
-													Getting a DID requires an Ethereum transaction.
-													This is a one time only transaction.
-												</Typography>
-												<Grid
-													container
-													spacing={32}
-													className={classes.didButtons}
-												>
-													<Grid item>
-														<Button
-															variant="contained"
-															onClick={this.handleGetDid}
-														>
-															GET DID
-														</Button>
-													</Grid>
-													<Grid item>
-														<Button
-															variant="outlined"
-															onClick={this.handleEnterDid}
-														>
-															I HAVE ONE
-														</Button>
+													<Grid
+														container
+														spacing={32}
+														className={classes.didButtons}
+													>
+														<Grid item>
+															<Button
+																disabled={wallet.didPending}
+																variant="contained"
+																onClick={this.handleGetDid}
+															>
+																GET DID
+															</Button>
+														</Grid>
+														<Grid item>
+															<Button
+																disabled={wallet.didPending}
+																variant="outlined"
+																onClick={this.handleEnterDid}
+															>
+																I HAVE ONE
+															</Button>
+														</Grid>
 													</Grid>
 												</Grid>
 											</Grid>
 										</Grid>
-									</Grid>
-								</CardContent>
-							</Card>
-						</Grid>
+									</CardContent>
+								</Card>
+							</Grid>
+						)}
 						<Grid item>
 							<Card>
 								<CardHeader

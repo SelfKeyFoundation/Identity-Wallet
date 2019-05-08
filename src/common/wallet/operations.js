@@ -4,6 +4,7 @@ import { getWallet } from './selectors';
 import { getGlobalContext } from 'common/context';
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
+import { push } from 'connected-react-router';
 
 const getWalletWithBalance = async wallet => {
 	const walletService = getGlobalContext().walletService;
@@ -45,16 +46,20 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 	}
 };
 
-const createWalletDID = walletId => async (dispatch, getState) => {
+const createWalletDID = () => async (dispatch, getState) => {
 	try {
-		const DIDService = getGlobalContext().DIDService;
-		const transaction = await DIDService.createDID();
-		const did = transaction.events.CreatedDID.returnValues.id;
-
-		const walletService = getGlobalContext().walletService;
-		const wallet = await walletService.updateDID(walletId, did);
 		const walletFromStore = getWallet(getState());
-		await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
+		const didService = getGlobalContext().didService;
+		await dispatch(push('/main/create-did-processing'));
+		await dispatch(updateWalletWithBalance({ ...walletFromStore, didPending: true }));
+		const transaction = await didService.createDID(walletFromStore.publicKey);
+		const did = transaction.events.CreatedDID.returnValues.id;
+		const walletService = getGlobalContext().walletService;
+		const wallet = await walletService.updateDID(walletFromStore.id, did);
+		await dispatch(
+			updateWalletWithBalance({ ...walletFromStore, did: wallet.did, didPending: false })
+		);
+		await dispatch(push('/main/selfkeyId'));
 	} catch (error) {
 		console.error(error);
 	}
@@ -63,7 +68,7 @@ const createWalletDID = walletId => async (dispatch, getState) => {
 const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 	try {
 		const walletFromStore = getWallet(getState());
-		const DIDService = getGlobalContext().DIDService;
+		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress();
 
 		if (walletFromStore.publicKey === controllerAddress) {
