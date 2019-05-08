@@ -227,6 +227,13 @@ export class WalletService {
 		});
 	}
 
+	async updateDID(id, did) {
+		return Wallet.updateDID({
+			id,
+			did
+		});
+	}
+
 	async getLedgerWallets(page, accountsQuantity) {
 		await this.web3Service.switchToLedgerWallet(page, accountsQuantity);
 		return this._getWallets(page, accountsQuantity);

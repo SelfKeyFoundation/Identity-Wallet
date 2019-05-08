@@ -45,6 +45,39 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 	}
 };
 
+const createWalletDID = walletId => async (dispatch, getState) => {
+	try {
+		const DIDService = getGlobalContext().DIDService;
+		const transaction = await DIDService.createDID();
+		const did = transaction.events.CreatedDID.returnValues.id;
+
+		const walletService = getGlobalContext().walletService;
+		const wallet = await walletService.updateDID(walletId, did);
+		const walletFromStore = getWallet(getState());
+		await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
+	try {
+		const walletFromStore = getWallet(getState());
+		const DIDService = getGlobalContext().DIDService;
+		const controllerAddress = await DIDService.getControllerAddress();
+
+		if (walletFromStore.publicKey === controllerAddress) {
+			const walletService = getGlobalContext().walletService;
+			const wallet = await walletService.updateDID(walletId, did);
+			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
+		} else {
+			// TODO - dispatch action with error to show that DID is not devived from the current wallet
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 const updateWalletSetup = (setup, walletId) => async (dispatch, getState) => {
 	try {
 		const walletService = getGlobalContext().walletService;
@@ -64,5 +97,7 @@ export default {
 	refreshWalletBalance,
 	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar),
 	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
-	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup)
+	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup),
+	createWalletDID: createAliasedAction(types.WALLET_DID_CREATE, createWalletDID),
+	updateWalletDID: createAliasedAction(types.WALLET_DID_UPDATE, updateWalletDID)
 };
