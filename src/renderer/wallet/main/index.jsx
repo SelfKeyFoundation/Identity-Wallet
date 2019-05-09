@@ -43,6 +43,8 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
+import CreateDID from '../../selfkey-id/main/components/create-did';
+import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 
 const styles = theme => ({
 	headerSection: {
@@ -175,6 +177,12 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-unlock`} component={HardwareWalletUnlock} />
 					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
 					<Route path={`${match.path}/auth-error`} component={AuthenticationError} />
+
+					<Route path={`${match.path}/get-did`} component={CreateDID} />
+					<Route
+						path={`${match.path}/create-did-processing`}
+						component={CreateDIDProcessing}
+					/>
 				</Grid>
 			</Grid>
 		);

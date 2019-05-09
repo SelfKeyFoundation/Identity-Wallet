@@ -23,6 +23,7 @@ import history from './history';
 import createWallet from '../create-wallet';
 import transactionHistory from '../transaction-history';
 import app from '../app';
+import gas from '../gas';
 // eslint-disable-next-line
 import { closeOperations } from '../close';
 
@@ -76,6 +77,7 @@ export default (initialState, scope = 'main') => {
 		createWallet,
 		transactionHistory,
 		app,
+		gas,
 		kyc,
 		tokens,
 		...scopedReducers
