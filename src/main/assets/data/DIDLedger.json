@@ -1,0 +1,5626 @@
+{
+	"contractName": "DIDLedger",
+	"abi": [
+		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"name": "dids",
+			"outputs": [
+				{
+					"name": "controller",
+					"type": "address"
+				},
+				{
+					"name": "created",
+					"type": "uint256"
+				},
+				{
+					"name": "updated",
+					"type": "uint256"
+				},
+				{
+					"name": "metadata",
+					"type": "bytes32"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function",
+			"signature": "0x7e00c7b0"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "nonce",
+			"outputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function",
+			"signature": "0xaffed0e0"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "id",
+					"type": "bytes32"
+				},
+				{
+					"indexed": false,
+					"name": "metadata",
+					"type": "bytes32"
+				}
+			],
+			"name": "CreatedDID",
+			"type": "event",
+			"signature": "0xb6a24994a870a1375dc4e9089f3231a7b48c0cbfdb6f294043aac35a47a4cb25"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "id",
+					"type": "bytes32"
+				}
+			],
+			"name": "DeletedDID",
+			"type": "event",
+			"signature": "0x86466f9af23681b95d04bca6b25296160cfca9eec0a4dd275bc43e707f641562"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "id",
+					"type": "bytes32"
+				},
+				{
+					"indexed": false,
+					"name": "metadata",
+					"type": "bytes32"
+				}
+			],
+			"name": "SetMetadata",
+			"type": "event",
+			"signature": "0x50de84553b95cc9ab1cd14ae270f3790552cb6bc6d238e49d890b3296a1eefae"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "id",
+					"type": "bytes32"
+				},
+				{
+					"indexed": false,
+					"name": "newController",
+					"type": "address"
+				}
+			],
+			"name": "SetController",
+			"type": "event",
+			"signature": "0x81fcb69f59c044d5fe0e96b4fa4441219eea0609e09f9455ba7c649bf8c1d34c"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_metadata",
+					"type": "bytes32"
+				}
+			],
+			"name": "createDID",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function",
+			"signature": "0x945ffb0e"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "id",
+					"type": "bytes32"
+				},
+				{
+					"name": "_metadata",
+					"type": "bytes32"
+				}
+			],
+			"name": "setMetadata",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function",
+			"signature": "0xd3525adf"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "id",
+					"type": "bytes32"
+				}
+			],
+			"name": "deleteDID",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function",
+			"signature": "0xf0123124"
+		},
+		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "id",
+					"type": "bytes32"
+				}
+			],
+			"name": "getController",
+			"outputs": [
+				{
+					"name": "",
+					"type": "address"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function",
+			"signature": "0x8f1815b2"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "id",
+					"type": "bytes32"
+				},
+				{
+					"name": "newController",
+					"type": "address"
+				}
+			],
+			"name": "setController",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function",
+			"signature": "0xd3156905"
+		}
+	],
+	"bytecode": "0x6080604052600060015534801561001557600080fd5b50610905806100256000396000f3fe608060405234801561001057600080fd5b506004361061009a576000357c010000000000000000000000000000000000000000000000000000000090048063affed0e011610078578063affed0e0146101d2578063d3156905146101f0578063d3525adf1461023e578063f0123124146102765761009a565b80637e00c7b01461009f5780638f1815b214610122578063945ffb0e14610190575b600080fd5b6100cb600480360360208110156100b557600080fd5b81019080803590602001909291905050506102a4565b604051808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200184815260200183815260200182815260200194505050505060405180910390f35b61014e6004803603602081101561013857600080fd5b81019080803590602001909291905050506102f4565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101bc600480360360208110156101a657600080fd5b8101908080359060200190929190505050610333565b6040518082815260200191505060405180910390f35b6101da610499565b6040518082815260200191505060405180910390f35b61023c6004803603604081101561020657600080fd5b8101908080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061049f565b005b6102746004803603604081101561025457600080fd5b810190808035906020019092919080359060200190929190505050610639565b005b6102a26004803603602081101561028c57600080fd5b810190808035906020019092919050505061076d565b005b60006020528060005260406000206000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060010154908060020154908060030154905084565b600080600083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60008033600154604051602001808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401828152602001925050506040516020818303038152906040528051906020012090503360008083815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555042600080838152602001908152602001600020600101819055504260008083815260200190815260200160002060020181905550826000808381526020019081526020016000206003018190555060018054016001819055507fb6a24994a870a1375dc4e9089f3231a7b48c0cbfdb6f294043aac35a47a4cb258184604051808381526020018281526020019250505060405180910390a180915050919050565b60015481565b813373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561055b576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b8160008085815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555042600080858152602001908152602001600020600201819055507f81fcb69f59c044d5fe0e96b4fa4441219eea0609e09f9455ba7c649bf8c1d34c8383604051808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a1505050565b813373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff161415156106f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b816000808581526020019081526020016000206003018190555042600080858152602001908152602001600020600201819055507f50de84553b95cc9ab1cd14ae270f3790552cb6bc6d238e49d890b3296a1eefae8383604051808381526020018281526020019250505060405180910390a1505050565b803373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610829576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b600080838152602001908152602001600020600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905560018201600090556002820160009055600382016000905550507f86466f9af23681b95d04bca6b25296160cfca9eec0a4dd275bc43e707f641562826040518082815260200191505060405180910390a1505056fe73656e64657220686173206e6f20636f6e74726f6c206f66207468697320444944a165627a7a7230582083a9c334ca69d9dcf9e9553816830123382d9145fb670979ba632d094755adbf0029",
+	"deployedBytecode": "0x608060405234801561001057600080fd5b506004361061009a576000357c010000000000000000000000000000000000000000000000000000000090048063affed0e011610078578063affed0e0146101d2578063d3156905146101f0578063d3525adf1461023e578063f0123124146102765761009a565b80637e00c7b01461009f5780638f1815b214610122578063945ffb0e14610190575b600080fd5b6100cb600480360360208110156100b557600080fd5b81019080803590602001909291905050506102a4565b604051808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200184815260200183815260200182815260200194505050505060405180910390f35b61014e6004803603602081101561013857600080fd5b81019080803590602001909291905050506102f4565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101bc600480360360208110156101a657600080fd5b8101908080359060200190929190505050610333565b6040518082815260200191505060405180910390f35b6101da610499565b6040518082815260200191505060405180910390f35b61023c6004803603604081101561020657600080fd5b8101908080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061049f565b005b6102746004803603604081101561025457600080fd5b810190808035906020019092919080359060200190929190505050610639565b005b6102a26004803603602081101561028c57600080fd5b810190808035906020019092919050505061076d565b005b60006020528060005260406000206000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060010154908060020154908060030154905084565b600080600083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60008033600154604051602001808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401828152602001925050506040516020818303038152906040528051906020012090503360008083815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555042600080838152602001908152602001600020600101819055504260008083815260200190815260200160002060020181905550826000808381526020019081526020016000206003018190555060018054016001819055507fb6a24994a870a1375dc4e9089f3231a7b48c0cbfdb6f294043aac35a47a4cb258184604051808381526020018281526020019250505060405180910390a180915050919050565b60015481565b813373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561055b576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b8160008085815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555042600080858152602001908152602001600020600201819055507f81fcb69f59c044d5fe0e96b4fa4441219eea0609e09f9455ba7c649bf8c1d34c8383604051808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a1505050565b813373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff161415156106f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b816000808581526020019081526020016000206003018190555042600080858152602001908152602001600020600201819055507f50de84553b95cc9ab1cd14ae270f3790552cb6bc6d238e49d890b3296a1eefae8383604051808381526020018281526020019250505060405180910390a1505050565b803373ffffffffffffffffffffffffffffffffffffffff1660008083815260200190815260200160002060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610829576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001806108b96021913960400191505060405180910390fd5b600080838152602001908152602001600020600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905560018201600090556002820160009055600382016000905550507f86466f9af23681b95d04bca6b25296160cfca9eec0a4dd275bc43e707f641562826040518082815260200191505060405180910390a1505056fe73656e64657220686173206e6f20636f6e74726f6c206f66207468697320444944a165627a7a7230582083a9c334ca69d9dcf9e9553816830123382d9145fb670979ba632d094755adbf0029",
+	"sourceMap": "247:2595:0:-;;;465:1;442:24;;247:2595;8:9:-1;5:2;;;30:1;27;20:12;5:2;247:2595:0;;;;;;;",
+	"deployedSourceMap": "247:2595:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;247:2595:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;401:35;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;401:35:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2255:136;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2255:136:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;963:413;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;963:413:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;442:24;;;:::i;:::-;;;;;;;;;;;;;;;;;;;2605:235;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2605:235:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;1600:217;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1600:217:0;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;1952:138;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1952:138:0;;;;;;;;;;;;;;;;;:::i;:::-;;401:35;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;2255:136::-;2335:7;2365:4;:8;2370:2;2365:8;;;;;;;;;;;:19;;;;;;;;;;;;2358:26;;2255:136;;;:::o;963:413::-;1033:7;1056:13;1099:10;1111:5;;1082:35;;;;;;;;;;;;;;;;;;;;;;;;;;;49:4:-1;39:7;30;26:21;22:32;13:7;6:49;1082:35:0;;;1072:46;;;;;;1056:62;;1154:10;1129:4;:11;1134:5;1129:11;;;;;;;;;;;:22;;;:35;;;;;;;;;;;;;;;;;;1196:3;1174:4;:11;1179:5;1174:11;;;;;;;;;;;:19;;:25;;;;1231:3;1209:4;:11;1214:5;1209:11;;;;;;;;;;;:19;;:25;;;;1267:9;1244:4;:11;1249:5;1244:11;;;;;;;;;;;:20;;:32;;;;1302:1;1294:5;;:9;1286:5;:17;;;;1319:28;1330:5;1337:9;1319:28;;;;;;;;;;;;;;;;;;;;;;;;1364:5;1357:12;;;963:413;;;:::o;442:24::-;;;;:::o;2605:235::-;2701:2;750:10;727:33;;:4;:8;732:2;727:8;;;;;;;;;;;:19;;;;;;;;;;;;:33;;;719:79;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2741:13;2719:4;:8;2724:2;2719:8;;;;;;;;;;;:19;;;:35;;;;;;;;;;;;;;;;;;2783:3;2764:4;:8;2769:2;2764:8;;;;;;;;;;;:16;;:22;;;;2801:32;2815:2;2819:13;2801:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;2605:235;;;:::o;1600:217::-;1690:2;750:10;727:33;;:4;:8;732:2;727:8;;;;;;;;;;;:19;;;;;;;;;;;;:33;;;719:79;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1728:9;1708:4;:8;1713:2;1708:8;;;;;;;;;;;:17;;:29;;;;1766:3;1747:4;:8;1752:2;1747:8;;;;;;;;;;;:16;;:22;;;;1784:26;1796:2;1800:9;1784:26;;;;;;;;;;;;;;;;;;;;;;;;1600:217;;;:::o;1952:138::-;2021:2;750:10;727:33;;:4;:8;732:2;727:8;;;;;;;;;;;:19;;;;;;;;;;;;:33;;;719:79;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2046:4;:8;2051:2;2046:8;;;;;;;;;;;;2039:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2069:14;2080:2;2069:14;;;;;;;;;;;;;;;;;;1952:138;;:::o",
+	"source": "pragma solidity ^0.5.4;\n\n\n/**\n * @title DIDLedger\n * @dev DID Ledger for the SelfKey DID method.\n * A DID is controlled by their creator address by default, but control can be assigned to any\n * different adddress by their current controller.\n */\ncontract DIDLedger {\n\n    struct DID {\n        address controller;\n        uint256 created;\n        uint256 updated;\n        bytes32 metadata;\n    }\n\n    mapping(bytes32 => DID) public dids;\n    uint256 public nonce = 0;\n\n    event CreatedDID(bytes32 id, bytes32 metadata);\n    event DeletedDID(bytes32 id);\n    event SetMetadata(bytes32 id, bytes32 metadata);\n    event SetController(bytes32 id, address newController);\n\n    modifier onlyController(bytes32 id) {\n        require(dids[id].controller == msg.sender, \"sender has no control of this DID\");\n        _;\n    }\n\n    /**\n     * @dev Register new DID.\n     * @param _metadata — Arbitrary 32-byte data field. Can be later changed by their owner.\n     */\n    function createDID(bytes32 _metadata)\n        public\n        returns (bytes32)\n    {\n        bytes32 _hash = keccak256(abi.encodePacked(msg.sender, nonce));\n\n        dids[_hash].controller = msg.sender;\n        dids[_hash].created = now;\n        dids[_hash].updated = now;\n        dids[_hash].metadata = _metadata;\n        nonce = nonce + 1;\n\n        emit CreatedDID(_hash, _metadata);\n        return _hash;\n    }\n\n    /**\n     * @dev Update DID metadata. Only callable by DID controller.\n     * @param id — The identifier (DID) to be updated\n     * @param _metadata — Arbitrary 32-byte value to be assigned as metadata.\n     */\n    function setMetadata(bytes32 id, bytes32 _metadata)\n        public\n        onlyController(id)\n    {\n        dids[id].metadata = _metadata;\n        dids[id].updated = now;\n        emit SetMetadata(id, _metadata);\n    }\n\n    /**\n     * @dev Remove DID. Only callable by DID controller.\n     * @param id — The identifier (DID) to be deleted\n     */\n    function deleteDID(bytes32 id)\n        public\n        onlyController(id)\n    {\n        delete dids[id];\n        emit DeletedDID(id);\n    }\n\n\n    /**\n     * @dev Returns corresponding controller for given DID\n     * @param id — The identifier (DID) to be resolved to its controller address\n     */\n    function getController(bytes32 id)\n        public\n        view\n        returns (address)\n    {\n        return dids[id].controller;\n    }\n\n    /**\n     * @dev Change controller address. Only callable by current DID controller.\n     * @param id — The identifier (DID) to be updated\n     * @param newController — New controller addresss\n     */\n    function setController(bytes32 id, address newController)\n        public\n        onlyController(id)\n    {\n        dids[id].controller = newController;\n        dids[id].updated = now;\n        emit SetController(id, newController);\n    }\n}\n",
+	"sourcePath": "/home/carlos/work/dev/github/cbruguera/selfkey-identity/contracts/DIDLedger.sol",
+	"ast": {
+		"absolutePath": "/home/carlos/work/dev/github/cbruguera/selfkey-identity/contracts/DIDLedger.sol",
+		"exportedSymbols": {
+			"DIDLedger": [209]
+		},
+		"id": 210,
+		"nodeType": "SourceUnit",
+		"nodes": [
+			{
+				"id": 1,
+				"literals": ["solidity", "^", "0.5", ".4"],
+				"nodeType": "PragmaDirective",
+				"src": "0:23:0"
+			},
+			{
+				"baseContracts": [],
+				"contractDependencies": [],
+				"contractKind": "contract",
+				"documentation": "@title DIDLedger\n@dev DID Ledger for the SelfKey DID method.\nA DID is controlled by their creator address by default, but control can be assigned to any\ndifferent adddress by their current controller.",
+				"fullyImplemented": true,
+				"id": 209,
+				"linearizedBaseContracts": [209],
+				"name": "DIDLedger",
+				"nodeType": "ContractDefinition",
+				"nodes": [
+					{
+						"canonicalName": "DIDLedger.DID",
+						"id": 10,
+						"members": [
+							{
+								"constant": false,
+								"id": 3,
+								"name": "controller",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "294:18:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_address",
+									"typeString": "address"
+								},
+								"typeName": {
+									"id": 2,
+									"name": "address",
+									"nodeType": "ElementaryTypeName",
+									"src": "294:7:0",
+									"stateMutability": "nonpayable",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 5,
+								"name": "created",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "322:15:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_uint256",
+									"typeString": "uint256"
+								},
+								"typeName": {
+									"id": 4,
+									"name": "uint256",
+									"nodeType": "ElementaryTypeName",
+									"src": "322:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 7,
+								"name": "updated",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "347:15:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_uint256",
+									"typeString": "uint256"
+								},
+								"typeName": {
+									"id": 6,
+									"name": "uint256",
+									"nodeType": "ElementaryTypeName",
+									"src": "347:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 9,
+								"name": "metadata",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "372:16:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_bytes32",
+									"typeString": "bytes32"
+								},
+								"typeName": {
+									"id": 8,
+									"name": "bytes32",
+									"nodeType": "ElementaryTypeName",
+									"src": "372:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							}
+						],
+						"name": "DID",
+						"nodeType": "StructDefinition",
+						"scope": 209,
+						"src": "273:122:0",
+						"visibility": "public"
+					},
+					{
+						"constant": false,
+						"id": 14,
+						"name": "dids",
+						"nodeType": "VariableDeclaration",
+						"scope": 209,
+						"src": "401:35:0",
+						"stateVariable": true,
+						"storageLocation": "default",
+						"typeDescriptions": {
+							"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+							"typeString": "mapping(bytes32 => struct DIDLedger.DID)"
+						},
+						"typeName": {
+							"id": 13,
+							"keyType": {
+								"id": 11,
+								"name": "bytes32",
+								"nodeType": "ElementaryTypeName",
+								"src": "409:7:0",
+								"typeDescriptions": {
+									"typeIdentifier": "t_bytes32",
+									"typeString": "bytes32"
+								}
+							},
+							"nodeType": "Mapping",
+							"src": "401:23:0",
+							"typeDescriptions": {
+								"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+								"typeString": "mapping(bytes32 => struct DIDLedger.DID)"
+							},
+							"valueType": {
+								"contractScope": null,
+								"id": 12,
+								"name": "DID",
+								"nodeType": "UserDefinedTypeName",
+								"referencedDeclaration": 10,
+								"src": "420:3:0",
+								"typeDescriptions": {
+									"typeIdentifier": "t_struct$_DID_$10_storage_ptr",
+									"typeString": "struct DIDLedger.DID"
+								}
+							}
+						},
+						"value": null,
+						"visibility": "public"
+					},
+					{
+						"constant": false,
+						"id": 17,
+						"name": "nonce",
+						"nodeType": "VariableDeclaration",
+						"scope": 209,
+						"src": "442:24:0",
+						"stateVariable": true,
+						"storageLocation": "default",
+						"typeDescriptions": {
+							"typeIdentifier": "t_uint256",
+							"typeString": "uint256"
+						},
+						"typeName": {
+							"id": 15,
+							"name": "uint256",
+							"nodeType": "ElementaryTypeName",
+							"src": "442:7:0",
+							"typeDescriptions": {
+								"typeIdentifier": "t_uint256",
+								"typeString": "uint256"
+							}
+						},
+						"value": {
+							"argumentTypes": null,
+							"hexValue": "30",
+							"id": 16,
+							"isConstant": false,
+							"isLValue": false,
+							"isPure": true,
+							"kind": "number",
+							"lValueRequested": false,
+							"nodeType": "Literal",
+							"src": "465:1:0",
+							"subdenomination": null,
+							"typeDescriptions": {
+								"typeIdentifier": "t_rational_0_by_1",
+								"typeString": "int_const 0"
+							},
+							"value": "0"
+						},
+						"visibility": "public"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 23,
+						"name": "CreatedDID",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 22,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 19,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 23,
+									"src": "490:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 18,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "490:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 21,
+									"indexed": false,
+									"name": "metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 23,
+									"src": "502:16:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 20,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "502:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "489:30:0"
+						},
+						"src": "473:47:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 27,
+						"name": "DeletedDID",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 26,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 25,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 27,
+									"src": "542:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 24,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "542:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "541:12:0"
+						},
+						"src": "525:29:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 33,
+						"name": "SetMetadata",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 32,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 29,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 33,
+									"src": "577:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 28,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "577:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 31,
+									"indexed": false,
+									"name": "metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 33,
+									"src": "589:16:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 30,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "589:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "576:30:0"
+						},
+						"src": "559:48:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 39,
+						"name": "SetController",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 38,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 35,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 39,
+									"src": "632:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 34,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "632:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 37,
+									"indexed": false,
+									"name": "newController",
+									"nodeType": "VariableDeclaration",
+									"scope": 39,
+									"src": "644:21:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 36,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "644:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "631:35:0"
+						},
+						"src": "612:55:0"
+					},
+					{
+						"body": {
+							"id": 55,
+							"nodeType": "Block",
+							"src": "709:107:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"commonType": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"id": 50,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": false,
+												"lValueRequested": false,
+												"leftExpression": {
+													"argumentTypes": null,
+													"expression": {
+														"argumentTypes": null,
+														"baseExpression": {
+															"argumentTypes": null,
+															"id": 44,
+															"name": "dids",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 14,
+															"src": "727:4:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+																"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+															}
+														},
+														"id": 46,
+														"indexExpression": {
+															"argumentTypes": null,
+															"id": 45,
+															"name": "id",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 41,
+															"src": "732:2:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_bytes32",
+																"typeString": "bytes32"
+															}
+														},
+														"isConstant": false,
+														"isLValue": true,
+														"isPure": false,
+														"lValueRequested": false,
+														"nodeType": "IndexAccess",
+														"src": "727:8:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_struct$_DID_$10_storage",
+															"typeString": "struct DIDLedger.DID storage ref"
+														}
+													},
+													"id": 47,
+													"isConstant": false,
+													"isLValue": true,
+													"isPure": false,
+													"lValueRequested": false,
+													"memberName": "controller",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": 3,
+													"src": "727:19:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"nodeType": "BinaryOperation",
+												"operator": "==",
+												"rightExpression": {
+													"argumentTypes": null,
+													"expression": {
+														"argumentTypes": null,
+														"id": 48,
+														"name": "msg",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 281,
+														"src": "750:3:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_magic_message",
+															"typeString": "msg"
+														}
+													},
+													"id": 49,
+													"isConstant": false,
+													"isLValue": false,
+													"isPure": false,
+													"lValueRequested": false,
+													"memberName": "sender",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": null,
+													"src": "750:10:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address_payable",
+														"typeString": "address payable"
+													}
+												},
+												"src": "727:33:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"hexValue": "73656e64657220686173206e6f20636f6e74726f6c206f66207468697320444944",
+												"id": 51,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": true,
+												"kind": "string",
+												"lValueRequested": false,
+												"nodeType": "Literal",
+												"src": "762:35:0",
+												"subdenomination": null,
+												"typeDescriptions": {
+													"typeIdentifier": "t_stringliteral_ffdeb850908619aca71696186d190a888e901bd473dbf3fc52793e8c3b94ecdb",
+													"typeString": "literal_string \"sender has no control of this DID\""
+												},
+												"value": "sender has no control of this DID"
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												{
+													"typeIdentifier": "t_stringliteral_ffdeb850908619aca71696186d190a888e901bd473dbf3fc52793e8c3b94ecdb",
+													"typeString": "literal_string \"sender has no control of this DID\""
+												}
+											],
+											"id": 43,
+											"name": "require",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [284, 285],
+											"referencedDeclaration": 285,
+											"src": "719:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+												"typeString": "function (bool,string memory) pure"
+											}
+										},
+										"id": 52,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "719:79:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 53,
+									"nodeType": "ExpressionStatement",
+									"src": "719:79:0"
+								},
+								{
+									"id": 54,
+									"nodeType": "PlaceholderStatement",
+									"src": "808:1:0"
+								}
+							]
+						},
+						"documentation": null,
+						"id": 56,
+						"name": "onlyController",
+						"nodeType": "ModifierDefinition",
+						"parameters": {
+							"id": 42,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 41,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 56,
+									"src": "697:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 40,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "697:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "696:12:0"
+						},
+						"src": "673:143:0",
+						"visibility": "internal"
+					},
+					{
+						"body": {
+							"id": 116,
+							"nodeType": "Block",
+							"src": "1046:330:0",
+							"statements": [
+								{
+									"assignments": [64],
+									"declarations": [
+										{
+											"constant": false,
+											"id": 64,
+											"name": "_hash",
+											"nodeType": "VariableDeclaration",
+											"scope": 116,
+											"src": "1056:13:0",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											},
+											"typeName": {
+												"id": 63,
+												"name": "bytes32",
+												"nodeType": "ElementaryTypeName",
+												"src": "1056:7:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"value": null,
+											"visibility": "internal"
+										}
+									],
+									"id": 73,
+									"initialValue": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"arguments": [
+													{
+														"argumentTypes": null,
+														"expression": {
+															"argumentTypes": null,
+															"id": 68,
+															"name": "msg",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 281,
+															"src": "1099:3:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_magic_message",
+																"typeString": "msg"
+															}
+														},
+														"id": 69,
+														"isConstant": false,
+														"isLValue": false,
+														"isPure": false,
+														"lValueRequested": false,
+														"memberName": "sender",
+														"nodeType": "MemberAccess",
+														"referencedDeclaration": null,
+														"src": "1099:10:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_address_payable",
+															"typeString": "address payable"
+														}
+													},
+													{
+														"argumentTypes": null,
+														"id": 70,
+														"name": "nonce",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 17,
+														"src": "1111:5:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_uint256",
+															"typeString": "uint256"
+														}
+													}
+												],
+												"expression": {
+													"argumentTypes": [
+														{
+															"typeIdentifier": "t_address_payable",
+															"typeString": "address payable"
+														},
+														{
+															"typeIdentifier": "t_uint256",
+															"typeString": "uint256"
+														}
+													],
+													"expression": {
+														"argumentTypes": null,
+														"id": 66,
+														"name": "abi",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 268,
+														"src": "1082:3:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_magic_abi",
+															"typeString": "abi"
+														}
+													},
+													"id": 67,
+													"isConstant": false,
+													"isLValue": false,
+													"isPure": true,
+													"lValueRequested": false,
+													"memberName": "encodePacked",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": null,
+													"src": "1082:16:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_function_abiencodepacked_pure$__$returns$_t_bytes_memory_ptr_$",
+														"typeString": "function () pure returns (bytes memory)"
+													}
+												},
+												"id": 71,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": false,
+												"kind": "functionCall",
+												"lValueRequested": false,
+												"names": [],
+												"nodeType": "FunctionCall",
+												"src": "1082:35:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes_memory_ptr",
+													"typeString": "bytes memory"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes_memory_ptr",
+													"typeString": "bytes memory"
+												}
+											],
+											"id": 65,
+											"name": "keccak256",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 275,
+											"src": "1072:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+												"typeString": "function (bytes memory) pure returns (bytes32)"
+											}
+										},
+										"id": 72,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1072:46:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"nodeType": "VariableDeclarationStatement",
+									"src": "1056:62:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 80,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 74,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1129:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 76,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 75,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1134:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1129:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 77,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "controller",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 3,
+											"src": "1129:22:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"id": 78,
+												"name": "msg",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 281,
+												"src": "1154:3:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_magic_message",
+													"typeString": "msg"
+												}
+											},
+											"id": 79,
+											"isConstant": false,
+											"isLValue": false,
+											"isPure": false,
+											"lValueRequested": false,
+											"memberName": "sender",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": null,
+											"src": "1154:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address_payable",
+												"typeString": "address payable"
+											}
+										},
+										"src": "1129:35:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"id": 81,
+									"nodeType": "ExpressionStatement",
+									"src": "1129:35:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 87,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 82,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1174:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 84,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 83,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1179:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1174:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 85,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "created",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 5,
+											"src": "1174:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 86,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1196:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1174:25:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 88,
+									"nodeType": "ExpressionStatement",
+									"src": "1174:25:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 94,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 89,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1209:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 91,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 90,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1214:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1209:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 92,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "1209:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 93,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1231:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1209:25:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 95,
+									"nodeType": "ExpressionStatement",
+									"src": "1209:25:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 101,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 96,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1244:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 98,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 97,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1249:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1244:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 99,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "metadata",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 9,
+											"src": "1244:20:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 100,
+											"name": "_metadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 58,
+											"src": "1267:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"src": "1244:32:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"id": 102,
+									"nodeType": "ExpressionStatement",
+									"src": "1244:32:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 107,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"id": 103,
+											"name": "nonce",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 17,
+											"src": "1286:5:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"commonType": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											},
+											"id": 106,
+											"isConstant": false,
+											"isLValue": false,
+											"isPure": false,
+											"lValueRequested": false,
+											"leftExpression": {
+												"argumentTypes": null,
+												"id": 104,
+												"name": "nonce",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 17,
+												"src": "1294:5:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint256",
+													"typeString": "uint256"
+												}
+											},
+											"nodeType": "BinaryOperation",
+											"operator": "+",
+											"rightExpression": {
+												"argumentTypes": null,
+												"hexValue": "31",
+												"id": 105,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": true,
+												"kind": "number",
+												"lValueRequested": false,
+												"nodeType": "Literal",
+												"src": "1302:1:0",
+												"subdenomination": null,
+												"typeDescriptions": {
+													"typeIdentifier": "t_rational_1_by_1",
+													"typeString": "int_const 1"
+												},
+												"value": "1"
+											},
+											"src": "1294:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1286:17:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 108,
+									"nodeType": "ExpressionStatement",
+									"src": "1286:17:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 110,
+												"name": "_hash",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 64,
+												"src": "1330:5:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 111,
+												"name": "_metadata",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 58,
+												"src": "1337:9:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 109,
+											"name": "CreatedDID",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 23,
+											"src": "1319:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32,bytes32)"
+											}
+										},
+										"id": 112,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1319:28:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 113,
+									"nodeType": "EmitStatement",
+									"src": "1314:33:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 114,
+										"name": "_hash",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 64,
+										"src": "1364:5:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"functionReturnParameters": 62,
+									"id": 115,
+									"nodeType": "Return",
+									"src": "1357:12:0"
+								}
+							]
+						},
+						"documentation": "@dev Register new DID.\n@param _metadata — Arbitrary 32-byte data field. Can be later changed by their owner.",
+						"id": 117,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [],
+						"name": "createDID",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 59,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 58,
+									"name": "_metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 117,
+									"src": "982:17:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 57,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "982:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "981:19:0"
+						},
+						"returnParameters": {
+							"id": 62,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 61,
+									"name": "",
+									"nodeType": "VariableDeclaration",
+									"scope": 117,
+									"src": "1033:7:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 60,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1033:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1032:9:0"
+						},
+						"scope": 209,
+						"src": "963:413:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 146,
+							"nodeType": "Block",
+							"src": "1698:119:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 132,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 127,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1708:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 129,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 128,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 119,
+													"src": "1713:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1708:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 130,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "metadata",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 9,
+											"src": "1708:17:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 131,
+											"name": "_metadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 121,
+											"src": "1728:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"src": "1708:29:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"id": 133,
+									"nodeType": "ExpressionStatement",
+									"src": "1708:29:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 139,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 134,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1747:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 136,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 135,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 119,
+													"src": "1752:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1747:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 137,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "1747:16:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 138,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1766:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1747:22:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 140,
+									"nodeType": "ExpressionStatement",
+									"src": "1747:22:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 142,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 119,
+												"src": "1796:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 143,
+												"name": "_metadata",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 121,
+												"src": "1800:9:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 141,
+											"name": "SetMetadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 33,
+											"src": "1784:11:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32,bytes32)"
+											}
+										},
+										"id": 144,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1784:26:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 145,
+									"nodeType": "EmitStatement",
+									"src": "1779:31:0"
+								}
+							]
+						},
+						"documentation": "@dev Update DID metadata. Only callable by DID controller.\n@param id — The identifier (DID) to be updated\n@param _metadata — Arbitrary 32-byte value to be assigned as metadata.",
+						"id": 147,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 124,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 119,
+										"src": "1690:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 125,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 123,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "1675:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "1675:18:0"
+							}
+						],
+						"name": "setMetadata",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 122,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 119,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 147,
+									"src": "1621:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 118,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1621:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 121,
+									"name": "_metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 147,
+									"src": "1633:17:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 120,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1633:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1620:31:0"
+						},
+						"returnParameters": {
+							"id": 126,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "1698:0:0"
+						},
+						"scope": 209,
+						"src": "1600:217:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 164,
+							"nodeType": "Block",
+							"src": "2029:61:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 158,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"nodeType": "UnaryOperation",
+										"operator": "delete",
+										"prefix": true,
+										"src": "2039:15:0",
+										"subExpression": {
+											"argumentTypes": null,
+											"baseExpression": {
+												"argumentTypes": null,
+												"id": 155,
+												"name": "dids",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 14,
+												"src": "2046:4:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+													"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+												}
+											},
+											"id": 157,
+											"indexExpression": {
+												"argumentTypes": null,
+												"id": 156,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 149,
+												"src": "2051:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"nodeType": "IndexAccess",
+											"src": "2046:8:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_struct$_DID_$10_storage",
+												"typeString": "struct DIDLedger.DID storage ref"
+											}
+										},
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 159,
+									"nodeType": "ExpressionStatement",
+									"src": "2039:15:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 161,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 149,
+												"src": "2080:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 160,
+											"name": "DeletedDID",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 27,
+											"src": "2069:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32)"
+											}
+										},
+										"id": 162,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "2069:14:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 163,
+									"nodeType": "EmitStatement",
+									"src": "2064:19:0"
+								}
+							]
+						},
+						"documentation": "@dev Remove DID. Only callable by DID controller.\n@param id — The identifier (DID) to be deleted",
+						"id": 165,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 152,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 149,
+										"src": "2021:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 153,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 151,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "2006:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "2006:18:0"
+							}
+						],
+						"name": "deleteDID",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 150,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 149,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 165,
+									"src": "1971:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 148,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1971:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1970:12:0"
+						},
+						"returnParameters": {
+							"id": 154,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "2029:0:0"
+						},
+						"scope": 209,
+						"src": "1952:138:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 177,
+							"nodeType": "Block",
+							"src": "2348:43:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"expression": {
+											"argumentTypes": null,
+											"baseExpression": {
+												"argumentTypes": null,
+												"id": 172,
+												"name": "dids",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 14,
+												"src": "2365:4:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+													"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+												}
+											},
+											"id": 174,
+											"indexExpression": {
+												"argumentTypes": null,
+												"id": 173,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 167,
+												"src": "2370:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": false,
+											"nodeType": "IndexAccess",
+											"src": "2365:8:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_struct$_DID_$10_storage",
+												"typeString": "struct DIDLedger.DID storage ref"
+											}
+										},
+										"id": 175,
+										"isConstant": false,
+										"isLValue": true,
+										"isPure": false,
+										"lValueRequested": false,
+										"memberName": "controller",
+										"nodeType": "MemberAccess",
+										"referencedDeclaration": 3,
+										"src": "2365:19:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"functionReturnParameters": 171,
+									"id": 176,
+									"nodeType": "Return",
+									"src": "2358:26:0"
+								}
+							]
+						},
+						"documentation": "@dev Returns corresponding controller for given DID\n@param id — The identifier (DID) to be resolved to its controller address",
+						"id": 178,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [],
+						"name": "getController",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 168,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 167,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 178,
+									"src": "2278:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 166,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "2278:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2277:12:0"
+						},
+						"returnParameters": {
+							"id": 171,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 170,
+									"name": "",
+									"nodeType": "VariableDeclaration",
+									"scope": 178,
+									"src": "2335:7:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 169,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "2335:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2334:9:0"
+						},
+						"scope": 209,
+						"src": "2255:136:0",
+						"stateMutability": "view",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 207,
+							"nodeType": "Block",
+							"src": "2709:131:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 193,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 188,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "2719:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 190,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 189,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 180,
+													"src": "2724:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "2719:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 191,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "controller",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 3,
+											"src": "2719:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 192,
+											"name": "newController",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 182,
+											"src": "2741:13:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"src": "2719:35:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"id": 194,
+									"nodeType": "ExpressionStatement",
+									"src": "2719:35:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 200,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 195,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "2764:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 197,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 196,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 180,
+													"src": "2769:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "2764:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 198,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "2764:16:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 199,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "2783:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "2764:22:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 201,
+									"nodeType": "ExpressionStatement",
+									"src": "2764:22:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 203,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 180,
+												"src": "2815:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 204,
+												"name": "newController",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 182,
+												"src": "2819:13:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											],
+											"id": 202,
+											"name": "SetController",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 39,
+											"src": "2801:13:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_address_$returns$__$",
+												"typeString": "function (bytes32,address)"
+											}
+										},
+										"id": 205,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "2801:32:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 206,
+									"nodeType": "EmitStatement",
+									"src": "2796:37:0"
+								}
+							]
+						},
+						"documentation": "@dev Change controller address. Only callable by current DID controller.\n@param id — The identifier (DID) to be updated\n@param newController — New controller addresss",
+						"id": 208,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 185,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 180,
+										"src": "2701:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 186,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 184,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "2686:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "2686:18:0"
+							}
+						],
+						"name": "setController",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 183,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 180,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 208,
+									"src": "2628:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 179,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "2628:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 182,
+									"name": "newController",
+									"nodeType": "VariableDeclaration",
+									"scope": 208,
+									"src": "2640:21:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 181,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "2640:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2627:35:0"
+						},
+						"returnParameters": {
+							"id": 187,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "2709:0:0"
+						},
+						"scope": 209,
+						"src": "2605:235:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					}
+				],
+				"scope": 210,
+				"src": "247:2595:0"
+			}
+		],
+		"src": "0:2843:0"
+	},
+	"legacyAST": {
+		"absolutePath": "/home/carlos/work/dev/github/cbruguera/selfkey-identity/contracts/DIDLedger.sol",
+		"exportedSymbols": {
+			"DIDLedger": [209]
+		},
+		"id": 210,
+		"nodeType": "SourceUnit",
+		"nodes": [
+			{
+				"id": 1,
+				"literals": ["solidity", "^", "0.5", ".4"],
+				"nodeType": "PragmaDirective",
+				"src": "0:23:0"
+			},
+			{
+				"baseContracts": [],
+				"contractDependencies": [],
+				"contractKind": "contract",
+				"documentation": "@title DIDLedger\n@dev DID Ledger for the SelfKey DID method.\nA DID is controlled by their creator address by default, but control can be assigned to any\ndifferent adddress by their current controller.",
+				"fullyImplemented": true,
+				"id": 209,
+				"linearizedBaseContracts": [209],
+				"name": "DIDLedger",
+				"nodeType": "ContractDefinition",
+				"nodes": [
+					{
+						"canonicalName": "DIDLedger.DID",
+						"id": 10,
+						"members": [
+							{
+								"constant": false,
+								"id": 3,
+								"name": "controller",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "294:18:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_address",
+									"typeString": "address"
+								},
+								"typeName": {
+									"id": 2,
+									"name": "address",
+									"nodeType": "ElementaryTypeName",
+									"src": "294:7:0",
+									"stateMutability": "nonpayable",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 5,
+								"name": "created",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "322:15:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_uint256",
+									"typeString": "uint256"
+								},
+								"typeName": {
+									"id": 4,
+									"name": "uint256",
+									"nodeType": "ElementaryTypeName",
+									"src": "322:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 7,
+								"name": "updated",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "347:15:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_uint256",
+									"typeString": "uint256"
+								},
+								"typeName": {
+									"id": 6,
+									"name": "uint256",
+									"nodeType": "ElementaryTypeName",
+									"src": "347:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							},
+							{
+								"constant": false,
+								"id": 9,
+								"name": "metadata",
+								"nodeType": "VariableDeclaration",
+								"scope": 10,
+								"src": "372:16:0",
+								"stateVariable": false,
+								"storageLocation": "default",
+								"typeDescriptions": {
+									"typeIdentifier": "t_bytes32",
+									"typeString": "bytes32"
+								},
+								"typeName": {
+									"id": 8,
+									"name": "bytes32",
+									"nodeType": "ElementaryTypeName",
+									"src": "372:7:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									}
+								},
+								"value": null,
+								"visibility": "internal"
+							}
+						],
+						"name": "DID",
+						"nodeType": "StructDefinition",
+						"scope": 209,
+						"src": "273:122:0",
+						"visibility": "public"
+					},
+					{
+						"constant": false,
+						"id": 14,
+						"name": "dids",
+						"nodeType": "VariableDeclaration",
+						"scope": 209,
+						"src": "401:35:0",
+						"stateVariable": true,
+						"storageLocation": "default",
+						"typeDescriptions": {
+							"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+							"typeString": "mapping(bytes32 => struct DIDLedger.DID)"
+						},
+						"typeName": {
+							"id": 13,
+							"keyType": {
+								"id": 11,
+								"name": "bytes32",
+								"nodeType": "ElementaryTypeName",
+								"src": "409:7:0",
+								"typeDescriptions": {
+									"typeIdentifier": "t_bytes32",
+									"typeString": "bytes32"
+								}
+							},
+							"nodeType": "Mapping",
+							"src": "401:23:0",
+							"typeDescriptions": {
+								"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+								"typeString": "mapping(bytes32 => struct DIDLedger.DID)"
+							},
+							"valueType": {
+								"contractScope": null,
+								"id": 12,
+								"name": "DID",
+								"nodeType": "UserDefinedTypeName",
+								"referencedDeclaration": 10,
+								"src": "420:3:0",
+								"typeDescriptions": {
+									"typeIdentifier": "t_struct$_DID_$10_storage_ptr",
+									"typeString": "struct DIDLedger.DID"
+								}
+							}
+						},
+						"value": null,
+						"visibility": "public"
+					},
+					{
+						"constant": false,
+						"id": 17,
+						"name": "nonce",
+						"nodeType": "VariableDeclaration",
+						"scope": 209,
+						"src": "442:24:0",
+						"stateVariable": true,
+						"storageLocation": "default",
+						"typeDescriptions": {
+							"typeIdentifier": "t_uint256",
+							"typeString": "uint256"
+						},
+						"typeName": {
+							"id": 15,
+							"name": "uint256",
+							"nodeType": "ElementaryTypeName",
+							"src": "442:7:0",
+							"typeDescriptions": {
+								"typeIdentifier": "t_uint256",
+								"typeString": "uint256"
+							}
+						},
+						"value": {
+							"argumentTypes": null,
+							"hexValue": "30",
+							"id": 16,
+							"isConstant": false,
+							"isLValue": false,
+							"isPure": true,
+							"kind": "number",
+							"lValueRequested": false,
+							"nodeType": "Literal",
+							"src": "465:1:0",
+							"subdenomination": null,
+							"typeDescriptions": {
+								"typeIdentifier": "t_rational_0_by_1",
+								"typeString": "int_const 0"
+							},
+							"value": "0"
+						},
+						"visibility": "public"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 23,
+						"name": "CreatedDID",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 22,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 19,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 23,
+									"src": "490:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 18,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "490:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 21,
+									"indexed": false,
+									"name": "metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 23,
+									"src": "502:16:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 20,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "502:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "489:30:0"
+						},
+						"src": "473:47:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 27,
+						"name": "DeletedDID",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 26,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 25,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 27,
+									"src": "542:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 24,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "542:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "541:12:0"
+						},
+						"src": "525:29:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 33,
+						"name": "SetMetadata",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 32,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 29,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 33,
+									"src": "577:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 28,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "577:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 31,
+									"indexed": false,
+									"name": "metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 33,
+									"src": "589:16:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 30,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "589:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "576:30:0"
+						},
+						"src": "559:48:0"
+					},
+					{
+						"anonymous": false,
+						"documentation": null,
+						"id": 39,
+						"name": "SetController",
+						"nodeType": "EventDefinition",
+						"parameters": {
+							"id": 38,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 35,
+									"indexed": false,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 39,
+									"src": "632:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 34,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "632:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 37,
+									"indexed": false,
+									"name": "newController",
+									"nodeType": "VariableDeclaration",
+									"scope": 39,
+									"src": "644:21:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 36,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "644:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "631:35:0"
+						},
+						"src": "612:55:0"
+					},
+					{
+						"body": {
+							"id": 55,
+							"nodeType": "Block",
+							"src": "709:107:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"commonType": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"id": 50,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": false,
+												"lValueRequested": false,
+												"leftExpression": {
+													"argumentTypes": null,
+													"expression": {
+														"argumentTypes": null,
+														"baseExpression": {
+															"argumentTypes": null,
+															"id": 44,
+															"name": "dids",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 14,
+															"src": "727:4:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+																"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+															}
+														},
+														"id": 46,
+														"indexExpression": {
+															"argumentTypes": null,
+															"id": 45,
+															"name": "id",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 41,
+															"src": "732:2:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_bytes32",
+																"typeString": "bytes32"
+															}
+														},
+														"isConstant": false,
+														"isLValue": true,
+														"isPure": false,
+														"lValueRequested": false,
+														"nodeType": "IndexAccess",
+														"src": "727:8:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_struct$_DID_$10_storage",
+															"typeString": "struct DIDLedger.DID storage ref"
+														}
+													},
+													"id": 47,
+													"isConstant": false,
+													"isLValue": true,
+													"isPure": false,
+													"lValueRequested": false,
+													"memberName": "controller",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": 3,
+													"src": "727:19:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"nodeType": "BinaryOperation",
+												"operator": "==",
+												"rightExpression": {
+													"argumentTypes": null,
+													"expression": {
+														"argumentTypes": null,
+														"id": 48,
+														"name": "msg",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 281,
+														"src": "750:3:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_magic_message",
+															"typeString": "msg"
+														}
+													},
+													"id": 49,
+													"isConstant": false,
+													"isLValue": false,
+													"isPure": false,
+													"lValueRequested": false,
+													"memberName": "sender",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": null,
+													"src": "750:10:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address_payable",
+														"typeString": "address payable"
+													}
+												},
+												"src": "727:33:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"hexValue": "73656e64657220686173206e6f20636f6e74726f6c206f66207468697320444944",
+												"id": 51,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": true,
+												"kind": "string",
+												"lValueRequested": false,
+												"nodeType": "Literal",
+												"src": "762:35:0",
+												"subdenomination": null,
+												"typeDescriptions": {
+													"typeIdentifier": "t_stringliteral_ffdeb850908619aca71696186d190a888e901bd473dbf3fc52793e8c3b94ecdb",
+													"typeString": "literal_string \"sender has no control of this DID\""
+												},
+												"value": "sender has no control of this DID"
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												{
+													"typeIdentifier": "t_stringliteral_ffdeb850908619aca71696186d190a888e901bd473dbf3fc52793e8c3b94ecdb",
+													"typeString": "literal_string \"sender has no control of this DID\""
+												}
+											],
+											"id": 43,
+											"name": "require",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [284, 285],
+											"referencedDeclaration": 285,
+											"src": "719:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+												"typeString": "function (bool,string memory) pure"
+											}
+										},
+										"id": 52,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "719:79:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 53,
+									"nodeType": "ExpressionStatement",
+									"src": "719:79:0"
+								},
+								{
+									"id": 54,
+									"nodeType": "PlaceholderStatement",
+									"src": "808:1:0"
+								}
+							]
+						},
+						"documentation": null,
+						"id": 56,
+						"name": "onlyController",
+						"nodeType": "ModifierDefinition",
+						"parameters": {
+							"id": 42,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 41,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 56,
+									"src": "697:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 40,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "697:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "696:12:0"
+						},
+						"src": "673:143:0",
+						"visibility": "internal"
+					},
+					{
+						"body": {
+							"id": 116,
+							"nodeType": "Block",
+							"src": "1046:330:0",
+							"statements": [
+								{
+									"assignments": [64],
+									"declarations": [
+										{
+											"constant": false,
+											"id": 64,
+											"name": "_hash",
+											"nodeType": "VariableDeclaration",
+											"scope": 116,
+											"src": "1056:13:0",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											},
+											"typeName": {
+												"id": 63,
+												"name": "bytes32",
+												"nodeType": "ElementaryTypeName",
+												"src": "1056:7:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"value": null,
+											"visibility": "internal"
+										}
+									],
+									"id": 73,
+									"initialValue": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"arguments": [
+													{
+														"argumentTypes": null,
+														"expression": {
+															"argumentTypes": null,
+															"id": 68,
+															"name": "msg",
+															"nodeType": "Identifier",
+															"overloadedDeclarations": [],
+															"referencedDeclaration": 281,
+															"src": "1099:3:0",
+															"typeDescriptions": {
+																"typeIdentifier": "t_magic_message",
+																"typeString": "msg"
+															}
+														},
+														"id": 69,
+														"isConstant": false,
+														"isLValue": false,
+														"isPure": false,
+														"lValueRequested": false,
+														"memberName": "sender",
+														"nodeType": "MemberAccess",
+														"referencedDeclaration": null,
+														"src": "1099:10:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_address_payable",
+															"typeString": "address payable"
+														}
+													},
+													{
+														"argumentTypes": null,
+														"id": 70,
+														"name": "nonce",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 17,
+														"src": "1111:5:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_uint256",
+															"typeString": "uint256"
+														}
+													}
+												],
+												"expression": {
+													"argumentTypes": [
+														{
+															"typeIdentifier": "t_address_payable",
+															"typeString": "address payable"
+														},
+														{
+															"typeIdentifier": "t_uint256",
+															"typeString": "uint256"
+														}
+													],
+													"expression": {
+														"argumentTypes": null,
+														"id": 66,
+														"name": "abi",
+														"nodeType": "Identifier",
+														"overloadedDeclarations": [],
+														"referencedDeclaration": 268,
+														"src": "1082:3:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_magic_abi",
+															"typeString": "abi"
+														}
+													},
+													"id": 67,
+													"isConstant": false,
+													"isLValue": false,
+													"isPure": true,
+													"lValueRequested": false,
+													"memberName": "encodePacked",
+													"nodeType": "MemberAccess",
+													"referencedDeclaration": null,
+													"src": "1082:16:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_function_abiencodepacked_pure$__$returns$_t_bytes_memory_ptr_$",
+														"typeString": "function () pure returns (bytes memory)"
+													}
+												},
+												"id": 71,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": false,
+												"kind": "functionCall",
+												"lValueRequested": false,
+												"names": [],
+												"nodeType": "FunctionCall",
+												"src": "1082:35:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes_memory_ptr",
+													"typeString": "bytes memory"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes_memory_ptr",
+													"typeString": "bytes memory"
+												}
+											],
+											"id": 65,
+											"name": "keccak256",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 275,
+											"src": "1072:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+												"typeString": "function (bytes memory) pure returns (bytes32)"
+											}
+										},
+										"id": 72,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1072:46:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"nodeType": "VariableDeclarationStatement",
+									"src": "1056:62:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 80,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 74,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1129:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 76,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 75,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1134:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1129:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 77,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "controller",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 3,
+											"src": "1129:22:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"id": 78,
+												"name": "msg",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 281,
+												"src": "1154:3:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_magic_message",
+													"typeString": "msg"
+												}
+											},
+											"id": 79,
+											"isConstant": false,
+											"isLValue": false,
+											"isPure": false,
+											"lValueRequested": false,
+											"memberName": "sender",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": null,
+											"src": "1154:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address_payable",
+												"typeString": "address payable"
+											}
+										},
+										"src": "1129:35:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"id": 81,
+									"nodeType": "ExpressionStatement",
+									"src": "1129:35:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 87,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 82,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1174:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 84,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 83,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1179:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1174:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 85,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "created",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 5,
+											"src": "1174:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 86,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1196:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1174:25:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 88,
+									"nodeType": "ExpressionStatement",
+									"src": "1174:25:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 94,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 89,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1209:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 91,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 90,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1214:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1209:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 92,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "1209:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 93,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1231:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1209:25:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 95,
+									"nodeType": "ExpressionStatement",
+									"src": "1209:25:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 101,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 96,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1244:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 98,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 97,
+													"name": "_hash",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 64,
+													"src": "1249:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1244:11:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 99,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "metadata",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 9,
+											"src": "1244:20:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 100,
+											"name": "_metadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 58,
+											"src": "1267:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"src": "1244:32:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"id": 102,
+									"nodeType": "ExpressionStatement",
+									"src": "1244:32:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 107,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"id": 103,
+											"name": "nonce",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 17,
+											"src": "1286:5:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"commonType": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											},
+											"id": 106,
+											"isConstant": false,
+											"isLValue": false,
+											"isPure": false,
+											"lValueRequested": false,
+											"leftExpression": {
+												"argumentTypes": null,
+												"id": 104,
+												"name": "nonce",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 17,
+												"src": "1294:5:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint256",
+													"typeString": "uint256"
+												}
+											},
+											"nodeType": "BinaryOperation",
+											"operator": "+",
+											"rightExpression": {
+												"argumentTypes": null,
+												"hexValue": "31",
+												"id": 105,
+												"isConstant": false,
+												"isLValue": false,
+												"isPure": true,
+												"kind": "number",
+												"lValueRequested": false,
+												"nodeType": "Literal",
+												"src": "1302:1:0",
+												"subdenomination": null,
+												"typeDescriptions": {
+													"typeIdentifier": "t_rational_1_by_1",
+													"typeString": "int_const 1"
+												},
+												"value": "1"
+											},
+											"src": "1294:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1286:17:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 108,
+									"nodeType": "ExpressionStatement",
+									"src": "1286:17:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 110,
+												"name": "_hash",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 64,
+												"src": "1330:5:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 111,
+												"name": "_metadata",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 58,
+												"src": "1337:9:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 109,
+											"name": "CreatedDID",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 23,
+											"src": "1319:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32,bytes32)"
+											}
+										},
+										"id": 112,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1319:28:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 113,
+									"nodeType": "EmitStatement",
+									"src": "1314:33:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 114,
+										"name": "_hash",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 64,
+										"src": "1364:5:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"functionReturnParameters": 62,
+									"id": 115,
+									"nodeType": "Return",
+									"src": "1357:12:0"
+								}
+							]
+						},
+						"documentation": "@dev Register new DID.\n@param _metadata — Arbitrary 32-byte data field. Can be later changed by their owner.",
+						"id": 117,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [],
+						"name": "createDID",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 59,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 58,
+									"name": "_metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 117,
+									"src": "982:17:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 57,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "982:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "981:19:0"
+						},
+						"returnParameters": {
+							"id": 62,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 61,
+									"name": "",
+									"nodeType": "VariableDeclaration",
+									"scope": 117,
+									"src": "1033:7:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 60,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1033:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1032:9:0"
+						},
+						"scope": 209,
+						"src": "963:413:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 146,
+							"nodeType": "Block",
+							"src": "1698:119:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 132,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 127,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1708:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 129,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 128,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 119,
+													"src": "1713:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1708:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 130,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "metadata",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 9,
+											"src": "1708:17:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 131,
+											"name": "_metadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 121,
+											"src": "1728:9:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bytes32",
+												"typeString": "bytes32"
+											}
+										},
+										"src": "1708:29:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"id": 133,
+									"nodeType": "ExpressionStatement",
+									"src": "1708:29:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 139,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 134,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "1747:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 136,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 135,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 119,
+													"src": "1752:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "1747:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 137,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "1747:16:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 138,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "1766:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "1747:22:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 140,
+									"nodeType": "ExpressionStatement",
+									"src": "1747:22:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 142,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 119,
+												"src": "1796:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 143,
+												"name": "_metadata",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 121,
+												"src": "1800:9:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 141,
+											"name": "SetMetadata",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 33,
+											"src": "1784:11:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32,bytes32)"
+											}
+										},
+										"id": 144,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "1784:26:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 145,
+									"nodeType": "EmitStatement",
+									"src": "1779:31:0"
+								}
+							]
+						},
+						"documentation": "@dev Update DID metadata. Only callable by DID controller.\n@param id — The identifier (DID) to be updated\n@param _metadata — Arbitrary 32-byte value to be assigned as metadata.",
+						"id": 147,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 124,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 119,
+										"src": "1690:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 125,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 123,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "1675:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "1675:18:0"
+							}
+						],
+						"name": "setMetadata",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 122,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 119,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 147,
+									"src": "1621:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 118,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1621:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 121,
+									"name": "_metadata",
+									"nodeType": "VariableDeclaration",
+									"scope": 147,
+									"src": "1633:17:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 120,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1633:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1620:31:0"
+						},
+						"returnParameters": {
+							"id": 126,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "1698:0:0"
+						},
+						"scope": 209,
+						"src": "1600:217:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 164,
+							"nodeType": "Block",
+							"src": "2029:61:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 158,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"nodeType": "UnaryOperation",
+										"operator": "delete",
+										"prefix": true,
+										"src": "2039:15:0",
+										"subExpression": {
+											"argumentTypes": null,
+											"baseExpression": {
+												"argumentTypes": null,
+												"id": 155,
+												"name": "dids",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 14,
+												"src": "2046:4:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+													"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+												}
+											},
+											"id": 157,
+											"indexExpression": {
+												"argumentTypes": null,
+												"id": 156,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 149,
+												"src": "2051:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"nodeType": "IndexAccess",
+											"src": "2046:8:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_struct$_DID_$10_storage",
+												"typeString": "struct DIDLedger.DID storage ref"
+											}
+										},
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 159,
+									"nodeType": "ExpressionStatement",
+									"src": "2039:15:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 161,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 149,
+												"src": "2080:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											],
+											"id": 160,
+											"name": "DeletedDID",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 27,
+											"src": "2069:10:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$returns$__$",
+												"typeString": "function (bytes32)"
+											}
+										},
+										"id": 162,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "2069:14:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 163,
+									"nodeType": "EmitStatement",
+									"src": "2064:19:0"
+								}
+							]
+						},
+						"documentation": "@dev Remove DID. Only callable by DID controller.\n@param id — The identifier (DID) to be deleted",
+						"id": 165,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 152,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 149,
+										"src": "2021:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 153,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 151,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "2006:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "2006:18:0"
+							}
+						],
+						"name": "deleteDID",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 150,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 149,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 165,
+									"src": "1971:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 148,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "1971:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "1970:12:0"
+						},
+						"returnParameters": {
+							"id": 154,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "2029:0:0"
+						},
+						"scope": 209,
+						"src": "1952:138:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 177,
+							"nodeType": "Block",
+							"src": "2348:43:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"expression": {
+											"argumentTypes": null,
+											"baseExpression": {
+												"argumentTypes": null,
+												"id": 172,
+												"name": "dids",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 14,
+												"src": "2365:4:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+													"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+												}
+											},
+											"id": 174,
+											"indexExpression": {
+												"argumentTypes": null,
+												"id": 173,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 167,
+												"src": "2370:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": false,
+											"nodeType": "IndexAccess",
+											"src": "2365:8:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_struct$_DID_$10_storage",
+												"typeString": "struct DIDLedger.DID storage ref"
+											}
+										},
+										"id": 175,
+										"isConstant": false,
+										"isLValue": true,
+										"isPure": false,
+										"lValueRequested": false,
+										"memberName": "controller",
+										"nodeType": "MemberAccess",
+										"referencedDeclaration": 3,
+										"src": "2365:19:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"functionReturnParameters": 171,
+									"id": 176,
+									"nodeType": "Return",
+									"src": "2358:26:0"
+								}
+							]
+						},
+						"documentation": "@dev Returns corresponding controller for given DID\n@param id — The identifier (DID) to be resolved to its controller address",
+						"id": 178,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [],
+						"name": "getController",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 168,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 167,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 178,
+									"src": "2278:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 166,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "2278:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2277:12:0"
+						},
+						"returnParameters": {
+							"id": 171,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 170,
+									"name": "",
+									"nodeType": "VariableDeclaration",
+									"scope": 178,
+									"src": "2335:7:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 169,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "2335:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2334:9:0"
+						},
+						"scope": 209,
+						"src": "2255:136:0",
+						"stateMutability": "view",
+						"superFunction": null,
+						"visibility": "public"
+					},
+					{
+						"body": {
+							"id": 207,
+							"nodeType": "Block",
+							"src": "2709:131:0",
+							"statements": [
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 193,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 188,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "2719:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 190,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 189,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 180,
+													"src": "2724:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "2719:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 191,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "controller",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 3,
+											"src": "2719:19:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 192,
+											"name": "newController",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 182,
+											"src": "2741:13:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"src": "2719:35:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"id": 194,
+									"nodeType": "ExpressionStatement",
+									"src": "2719:35:0"
+								},
+								{
+									"expression": {
+										"argumentTypes": null,
+										"id": 200,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"lValueRequested": false,
+										"leftHandSide": {
+											"argumentTypes": null,
+											"expression": {
+												"argumentTypes": null,
+												"baseExpression": {
+													"argumentTypes": null,
+													"id": 195,
+													"name": "dids",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 14,
+													"src": "2764:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_DID_$10_storage_$",
+														"typeString": "mapping(bytes32 => struct DIDLedger.DID storage ref)"
+													}
+												},
+												"id": 197,
+												"indexExpression": {
+													"argumentTypes": null,
+													"id": 196,
+													"name": "id",
+													"nodeType": "Identifier",
+													"overloadedDeclarations": [],
+													"referencedDeclaration": 180,
+													"src": "2769:2:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes32",
+														"typeString": "bytes32"
+													}
+												},
+												"isConstant": false,
+												"isLValue": true,
+												"isPure": false,
+												"lValueRequested": false,
+												"nodeType": "IndexAccess",
+												"src": "2764:8:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_struct$_DID_$10_storage",
+													"typeString": "struct DIDLedger.DID storage ref"
+												}
+											},
+											"id": 198,
+											"isConstant": false,
+											"isLValue": true,
+											"isPure": false,
+											"lValueRequested": true,
+											"memberName": "updated",
+											"nodeType": "MemberAccess",
+											"referencedDeclaration": 7,
+											"src": "2764:16:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"nodeType": "Assignment",
+										"operator": "=",
+										"rightHandSide": {
+											"argumentTypes": null,
+											"id": 199,
+											"name": "now",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 283,
+											"src": "2783:3:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"src": "2764:22:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"id": 201,
+									"nodeType": "ExpressionStatement",
+									"src": "2764:22:0"
+								},
+								{
+									"eventCall": {
+										"argumentTypes": null,
+										"arguments": [
+											{
+												"argumentTypes": null,
+												"id": 203,
+												"name": "id",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 180,
+												"src": "2815:2:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												}
+											},
+											{
+												"argumentTypes": null,
+												"id": 204,
+												"name": "newController",
+												"nodeType": "Identifier",
+												"overloadedDeclarations": [],
+												"referencedDeclaration": 182,
+												"src": "2819:13:0",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											}
+										],
+										"expression": {
+											"argumentTypes": [
+												{
+													"typeIdentifier": "t_bytes32",
+													"typeString": "bytes32"
+												},
+												{
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											],
+											"id": 202,
+											"name": "SetController",
+											"nodeType": "Identifier",
+											"overloadedDeclarations": [],
+											"referencedDeclaration": 39,
+											"src": "2801:13:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_address_$returns$__$",
+												"typeString": "function (bytes32,address)"
+											}
+										},
+										"id": 205,
+										"isConstant": false,
+										"isLValue": false,
+										"isPure": false,
+										"kind": "functionCall",
+										"lValueRequested": false,
+										"names": [],
+										"nodeType": "FunctionCall",
+										"src": "2801:32:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_tuple$__$",
+											"typeString": "tuple()"
+										}
+									},
+									"id": 206,
+									"nodeType": "EmitStatement",
+									"src": "2796:37:0"
+								}
+							]
+						},
+						"documentation": "@dev Change controller address. Only callable by current DID controller.\n@param id — The identifier (DID) to be updated\n@param newController — New controller addresss",
+						"id": 208,
+						"implemented": true,
+						"kind": "function",
+						"modifiers": [
+							{
+								"arguments": [
+									{
+										"argumentTypes": null,
+										"id": 185,
+										"name": "id",
+										"nodeType": "Identifier",
+										"overloadedDeclarations": [],
+										"referencedDeclaration": 180,
+										"src": "2701:2:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									}
+								],
+								"id": 186,
+								"modifierName": {
+									"argumentTypes": null,
+									"id": 184,
+									"name": "onlyController",
+									"nodeType": "Identifier",
+									"overloadedDeclarations": [],
+									"referencedDeclaration": 56,
+									"src": "2686:14:0",
+									"typeDescriptions": {
+										"typeIdentifier": "t_modifier$_t_bytes32_$",
+										"typeString": "modifier (bytes32)"
+									}
+								},
+								"nodeType": "ModifierInvocation",
+								"src": "2686:18:0"
+							}
+						],
+						"name": "setController",
+						"nodeType": "FunctionDefinition",
+						"parameters": {
+							"id": 183,
+							"nodeType": "ParameterList",
+							"parameters": [
+								{
+									"constant": false,
+									"id": 180,
+									"name": "id",
+									"nodeType": "VariableDeclaration",
+									"scope": 208,
+									"src": "2628:10:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bytes32",
+										"typeString": "bytes32"
+									},
+									"typeName": {
+										"id": 179,
+										"name": "bytes32",
+										"nodeType": "ElementaryTypeName",
+										"src": "2628:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bytes32",
+											"typeString": "bytes32"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 182,
+									"name": "newController",
+									"nodeType": "VariableDeclaration",
+									"scope": 208,
+									"src": "2640:21:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 181,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "2640:7:0",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"value": null,
+									"visibility": "internal"
+								}
+							],
+							"src": "2627:35:0"
+						},
+						"returnParameters": {
+							"id": 187,
+							"nodeType": "ParameterList",
+							"parameters": [],
+							"src": "2709:0:0"
+						},
+						"scope": 209,
+						"src": "2605:235:0",
+						"stateMutability": "nonpayable",
+						"superFunction": null,
+						"visibility": "public"
+					}
+				],
+				"scope": 210,
+				"src": "247:2595:0"
+			}
+		],
+		"src": "0:2843:0"
+	},
+	"compiler": {
+		"name": "solc",
+		"version": "0.5.4+commit.9549d8ff.Emscripten.clang"
+	},
+	"networks": {
+		"3": {
+			"events": {
+				"0x907f6b20e473bfa01de04a83e2c9e4903d753b1b1207dca5cd4c6aa6f519b0cd": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": false,
+							"name": "id",
+							"type": "bytes32"
+						},
+						{
+							"indexed": false,
+							"name": "issuedBy",
+							"type": "address"
+						},
+						{
+							"indexed": false,
+							"name": "datetime",
+							"type": "uint256"
+						}
+					],
+					"name": "CreatedDID",
+					"type": "event",
+					"signature": "0x907f6b20e473bfa01de04a83e2c9e4903d753b1b1207dca5cd4c6aa6f519b0cd"
+				},
+				"0x73c9b4757ec763de57f763e2b4195da75f51fba7df92abd3cd2529172161ef48": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": false,
+							"name": "id",
+							"type": "bytes32"
+						},
+						{
+							"indexed": false,
+							"name": "datetime",
+							"type": "uint256"
+						}
+					],
+					"name": "UpdatedDID",
+					"type": "event",
+					"signature": "0x73c9b4757ec763de57f763e2b4195da75f51fba7df92abd3cd2529172161ef48"
+				},
+				"0xd68d4b8ea6bade77360da4162b029f5f7204c6d373a901accf3527000084dcd3": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": false,
+							"name": "id",
+							"type": "bytes32"
+						},
+						{
+							"indexed": false,
+							"name": "datetime",
+							"type": "uint256"
+						}
+					],
+					"name": "DeletedDID",
+					"type": "event",
+					"signature": "0xd68d4b8ea6bade77360da4162b029f5f7204c6d373a901accf3527000084dcd3"
+				},
+				"0x7399868af1281d3b4ff7d1effd133810d26dad51c4db379881d8df7b3e301a0e": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": false,
+							"name": "id",
+							"type": "bytes32"
+						},
+						{
+							"indexed": false,
+							"name": "newController",
+							"type": "address"
+						},
+						{
+							"indexed": false,
+							"name": "datetime",
+							"type": "uint256"
+						}
+					],
+					"name": "ChangedDIDController",
+					"type": "event",
+					"signature": "0x7399868af1281d3b4ff7d1effd133810d26dad51c4db379881d8df7b3e301a0e"
+				},
+				"0xee1504a83b6d4a361f4c1dc78ab59bfa30d6a3b6612c403e86bb01ef2984295f": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": true,
+							"name": "account",
+							"type": "address"
+						}
+					],
+					"name": "WhitelistedAdded",
+					"type": "event",
+					"signature": "0xee1504a83b6d4a361f4c1dc78ab59bfa30d6a3b6612c403e86bb01ef2984295f"
+				},
+				"0x270d9b30cf5b0793bbfd54c9d5b94aeb49462b8148399000265144a8722da6b6": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": true,
+							"name": "account",
+							"type": "address"
+						}
+					],
+					"name": "WhitelistedRemoved",
+					"type": "event",
+					"signature": "0x270d9b30cf5b0793bbfd54c9d5b94aeb49462b8148399000265144a8722da6b6"
+				},
+				"0x22380c05984257a1cb900161c713dd71d39e74820f1aea43bd3f1bdd20961299": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": true,
+							"name": "account",
+							"type": "address"
+						}
+					],
+					"name": "WhitelistAdminAdded",
+					"type": "event",
+					"signature": "0x22380c05984257a1cb900161c713dd71d39e74820f1aea43bd3f1bdd20961299"
+				},
+				"0x0a8eb35e5ca14b3d6f28e4abf2f128dbab231a58b56e89beb5d636115001e165": {
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": true,
+							"name": "account",
+							"type": "address"
+						}
+					],
+					"name": "WhitelistAdminRemoved",
+					"type": "event",
+					"signature": "0x0a8eb35e5ca14b3d6f28e4abf2f128dbab231a58b56e89beb5d636115001e165"
+				}
+			},
+			"links": {},
+			"address": "0x24512422CF6AD1c0C465cBF0Bbd5155EaA3DA634",
+			"transactionHash": "0x7e7a4a9b546f118846c7385fed11c3717cebf995d119537ffb69b3dd64aaefc8"
+		},
+		"1553518989018": {
+			"events": {},
+			"links": {},
+			"address": "0xAEafb3f6a1BD1312372dE4715B3014141068412b",
+			"transactionHash": "0x9eb880879311a7b529f819eb727d0d717c3c742c180aba8efa9804a0dc4702da"
+		}
+	},
+	"schemaVersion": "3.0.5",
+	"updatedAt": "2019-04-09T08:43:13.241Z",
+	"devdoc": {
+		"details": "DID Ledger for the SelfKey DID method. A DID is controlled by their creator address by default, but control can be assigned to any different adddress by their current controller.",
+		"methods": {
+			"createDID(bytes32)": {
+				"details": "Register new DID.",
+				"params": {
+					"_metadata": "— Arbitrary 32-byte data field. Can be later changed by their owner."
+				}
+			},
+			"deleteDID(bytes32)": {
+				"details": "Remove DID. Only callable by DID controller.",
+				"params": {
+					"id": "— The identifier (DID) to be deleted"
+				}
+			},
+			"getController(bytes32)": {
+				"details": "Returns corresponding controller for given DID",
+				"params": {
+					"id": "— The identifier (DID) to be resolved to its controller address"
+				}
+			},
+			"setController(bytes32,address)": {
+				"details": "Change controller address. Only callable by current DID controller.",
+				"params": {
+					"id": "— The identifier (DID) to be updated",
+					"newController": "— New controller addresss"
+				}
+			},
+			"setMetadata(bytes32,bytes32)": {
+				"details": "Update DID metadata. Only callable by DID controller.",
+				"params": {
+					"_metadata": "— Arbitrary 32-byte value to be assigned as metadata.",
+					"id": "— The identifier (DID) to be updated"
+				}
+			}
+		},
+		"title": "DIDLedger"
+	},
+	"userdoc": {
+		"methods": {}
+	}
+}

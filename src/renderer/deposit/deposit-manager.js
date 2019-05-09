@@ -9,7 +9,7 @@ import ReactPiwik from 'react-piwik';
 import {
 	MarketplaceReturnDepositPopup,
 	MarketplaceDepositPopup,
-	MarketplaceTransactionProcessingPopup,
+	TransactionProcessingPopup,
 	MarketplaceWithoutBalancePopup
 } from './transactions';
 
@@ -134,7 +134,12 @@ class DepositMangerComponent extends Component {
 		}
 
 		if (transactionPopup === 'pendingTransaction') {
-			return <MarketplaceTransactionProcessingPopup closeAction={this.closePopupAction} />;
+			return (
+				<TransactionProcessingPopup
+					closeAction={this.closePopupAction}
+					title="KEY Deposit"
+				/>
+			);
 		}
 
 		if (transactionPopup === 'confirmWithdrawTransaction') {

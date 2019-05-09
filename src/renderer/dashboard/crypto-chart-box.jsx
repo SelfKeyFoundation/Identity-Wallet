@@ -50,10 +50,11 @@ const styles = () => ({
 	},
 
 	active: {
+		backgroundColor: '#313D49',
 		borderRadius: '4px',
-		boxShadow: '0px 0px 5px 1px #0dc7dd',
 		outlineWidth: 0,
-		border: 'none'
+		border: 'none',
+		padding: '10px'
 	},
 
 	chartCenterContainer: {
@@ -102,10 +103,29 @@ const styles = () => ({
 
 	title: {
 		fontSize: '20px'
+	},
+
+	chartWrap: {
+		'& div.google-visualization-tooltip': {
+			backgroundColor: '#1F2830',
+			border: '1px solid #43505B',
+			boxShadow: 'none',
+			top: '40px !important',
+			'& .google-visualization-tooltip-item span': {
+				fontSize: '13px !important',
+				fontWeight: 400
+			},
+			'& .google-visualization-tooltip-item-list li:first-child span': {
+				color: '#93B0C1 !important'
+			},
+			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
+				color: '#FFFFFF !important'
+			}
+		}
 	}
 });
 
-class ChartContainer extends React.Component {
+class ChartContainerComponent extends React.Component {
 	DEFAULT_COLLOR = '#2A3540';
 
 	shouldComponentUpdate(nextProps) {
@@ -127,7 +147,7 @@ class ChartContainer extends React.Component {
 	};
 
 	render() {
-		const { events, tokens, hasBalance, colors } = this.props;
+		const { events, tokens, hasBalance, colors, classes } = this.props;
 
 		const selectedColors = hasBalance ? colors : [this.DEFAULT_COLLOR];
 		let tooltip = hasBalance
@@ -138,37 +158,41 @@ class ChartContainer extends React.Component {
 			: { trigger: 'none' };
 
 		return (
-			<Chart
-				chartType="PieChart"
-				data={this.getChartData(tokens)}
-				options={{
-					backgroundColor: 'transparent',
-					title: '',
-					chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-					pieHole: 0.7,
-					pieSliceBorderColor: 'none',
-					colors: selectedColors,
-					legend: {
-						position: 'none'
-					},
-					pieSliceText: 'none',
-					tooltip: tooltip,
-					animation: {
-						startup: true
-					}
-				}}
-				graph_id="PieChart"
-				width="100%"
-				height="300px"
-				legend_toggle
-				chartEvents={events}
-				ref={c => {
-					this.pieChart = c;
-				}}
-			/>
+			<div className={classes.chartWrap}>
+				<Chart
+					chartType="PieChart"
+					data={this.getChartData(tokens)}
+					options={{
+						backgroundColor: 'transparent',
+						title: '',
+						chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+						pieHole: 0.7,
+						pieSliceBorderColor: 'none',
+						colors: selectedColors,
+						legend: {
+							position: 'none'
+						},
+						pieSliceText: 'none',
+						tooltip: tooltip,
+						animation: {
+							startup: true
+						}
+					}}
+					graph_id="PieChart"
+					width="100%"
+					height="300px"
+					legend_toggle
+					chartEvents={events}
+					ref={c => {
+						this.pieChart = c;
+					}}
+				/>
+			</div>
 		);
 	}
 }
+
+export const ChartContainer = connect()(withStyles(styles)(ChartContainerComponent));
 
 export class CryptoChartBoxComponent extends React.Component {
 	OTHERS_COLOR = '#71a6b8';
@@ -277,7 +301,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							: ''
 					}
 				>
-					<Grid container alignItems="flex-start">
+					<Grid container alignItems="flex-start" justify="space-between">
 						<Grid item xs={2}>
 							<div
 								className={classes.coloredBox}
@@ -289,7 +313,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
 							</div>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={5}>
 							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
 									<Typography variant="h2">{token.name}</Typography>
@@ -301,7 +325,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								</Grid>
 							</Grid>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={5}>
 							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
 									<PriceSummary
@@ -412,7 +436,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								</div>
 							</Grid>
 							<Grid item xs={8}>
-								<Grid container spacing={16}>
+								<Grid container spacing={16} justify="space-between">
 									{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
 								</Grid>
 							</Grid>

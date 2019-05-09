@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from '../../common/popup';
+import { Popup } from './popup';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 
@@ -30,12 +30,12 @@ export const TransactionProcessingContent = withStyles(styles)(({ classes }) => 
 	</Grid>
 ));
 
-export const MarketplaceTransactionProcessingPopup = props => {
+export const TransactionProcessingPopup = props => {
 	return (
-		<Popup closeAction={props.closeAction} text="KEY Deposit">
+		<Popup closeAction={props.closeAction} text={props.title}>
 			<TransactionProcessingContent {...props} />
 		</Popup>
 	);
 };
 
-export default MarketplaceTransactionProcessingPopup;
+export default TransactionProcessingPopup;
