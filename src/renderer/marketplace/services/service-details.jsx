@@ -14,8 +14,6 @@ import {
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
 
-import Truncate from 'react-truncate';
-
 const styles = theme => ({
 	root: {
 		width: '946px',
@@ -232,10 +230,6 @@ const styles = theme => ({
 });
 
 class MarketplaceServiceDetailsComponent extends Component {
-	state = {
-		isDescriptionTruncated: true
-	};
-
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
@@ -403,18 +397,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		);
 	};
 
-	handleViewAllDetails() {
-		this.setState({ isDescriptionTruncated: !this.state.isDescriptionTruncated });
-	}
-
-	renderDescription(description) {
-		if (this.state.isDescriptionTruncated) {
-			return <Truncate lines={5}>{description}</Truncate>;
-		}
-
-		return description;
-	}
-
 	handleSignup = () => {
 		const { item, templates, wallet } = this.props;
 
@@ -536,20 +518,8 @@ class MarketplaceServiceDetailsComponent extends Component {
 												classes.leftAlign
 											}`}
 										>
-											{this.renderDescription(item.description)}
+											{item.description}
 										</Typography>
-										<Button
-											variant="outlined"
-											color="secondary"
-											className={`${classes.button} ${
-												classes.buttonDescription
-											}`}
-											onClick={() => this.handleViewAllDetails()}
-										>
-											{this.state.isDescriptionTruncated
-												? 'VIEW ALL DETAILS'
-												: 'COLLAPSE DETAILS'}
-										</Button>
 									</Grid>
 									<Grid item xs={4} className={classes.ctaArea}>
 										{this.renderActionButton()}
