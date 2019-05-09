@@ -301,7 +301,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							: ''
 					}
 				>
-					<Grid container alignItems="flex-start">
+					<Grid container alignItems="flex-start" justify="space-between">
 						<Grid item xs={2}>
 							<div
 								className={classes.coloredBox}
@@ -313,7 +313,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
 							</div>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={5}>
 							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
 									<Typography variant="h2">{token.name}</Typography>
@@ -325,7 +325,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								</Grid>
 							</Grid>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={5}>
 							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
 									<PriceSummary
@@ -436,7 +436,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								</div>
 							</Grid>
 							<Grid item xs={8}>
-								<Grid container spacing={16}>
+								<Grid container spacing={16} justify="space-between">
 									{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
 								</Grid>
 							</Grid>
