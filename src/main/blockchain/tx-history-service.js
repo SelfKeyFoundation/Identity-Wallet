@@ -147,7 +147,7 @@ export class TxHistoryService {
 			return {
 				tokenDecimal: Number.isInteger(tokenDecimal)
 					? tokenDecimal
-					: tokenDecimal
+					: tokenDecimal && typeof tokenDecimal === 'object'
 					? tokenDecimal.toNumber()
 					: tokenDecimal,
 				tokenSymbol,
