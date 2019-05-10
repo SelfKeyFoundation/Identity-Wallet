@@ -10,9 +10,8 @@ export class DIDService {
 		);
 	}
 
-	async createDID(walletAddress) {
+	createDID(walletAddress, gas) {
 		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
-		const gas = await this.getGasLimit(walletAddress);
 		return ledger.methods.createDID(this.zero).send({ from: walletAddress, gas });
 	}
 
@@ -21,12 +20,10 @@ export class DIDService {
 		return ledger.methods.getController(did).call();
 	}
 
-	async getGasLimit(walletAddress) {
+	async getGasLimit(from) {
 		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
 		const MAX_GAS = 4500000;
-		const estimate = await ledger.methods
-			.createDID(this.zero)
-			.estimateGas(walletAddress, MAX_GAS);
+		const estimate = await ledger.methods.createDID(this.zero).estimateGas({ from });
 		return Math.round(Math.min(estimate * 1.1, MAX_GAS));
 	}
 }
