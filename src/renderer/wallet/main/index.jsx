@@ -45,6 +45,7 @@ import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
+import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 
 const styles = theme => ({
 	headerSection: {
@@ -153,7 +154,11 @@ class Main extends Component {
 						component={TransactionTimeout}
 					/>
 					<Route
-						path={`${match.path}/advancedTransaction/:cryptoCurrency/:confirmation?`}
+						path={`${match.path}/hd-transaction-timer`}
+						component={HardwareWalletTransactionTimer}
+					/>
+					<Route
+						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
 					/>
 					<Route

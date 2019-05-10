@@ -175,9 +175,11 @@ class SelfkeyIdOverviewComponent extends Component {
 			<>
 				<Typography variant="subtitle1">{email}</Typography>
 				<br />
-				<Typography variant="subtitle1" color="secondary">
-					did:selfkey:{did}
-				</Typography>
+				{did && (
+					<Typography variant="subtitle1" color="secondary">
+						did:selfkey:{did}
+					</Typography>
+				)}
 			</>
 		);
 	}
@@ -266,7 +268,7 @@ class SelfkeyIdOverviewComponent extends Component {
 							<Grid item>
 								<Card>
 									<CardHeader
-										title="Descentralised ID"
+										title="Decentralised ID"
 										className={classes.regularText}
 									/>
 									<hr className={classes.hr} />
@@ -311,11 +313,12 @@ class SelfkeyIdOverviewComponent extends Component {
 												</Grid>
 
 												<Grid item xs={9}>
-													<Typography variant="h2">
+													<Typography variant="h5">
 														Use a DID when accesing different services
 														in the marketplace. Once created you’ll see
 														it under your profile.
 													</Typography>
+													<br />
 													<Typography
 														variant="subtitle2"
 														color="secondary"
@@ -349,6 +352,12 @@ class SelfkeyIdOverviewComponent extends Component {
 															</Button>
 														</Grid>
 													</Grid>
+													{wallet.didPending && (
+														<Typography variant="h3" gutterBottom>
+															Transaction is processing. Please
+															wait...
+														</Typography>
+													)}
 												</Grid>
 											</Grid>
 										</Grid>
