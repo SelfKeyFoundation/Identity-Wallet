@@ -138,12 +138,21 @@ export class TxHistoryService {
 				contractAddress,
 				contractMethod: 'symbol'
 			});
+
 			let tokenName = await this.web3Service.waitForTicket({
 				method: 'call',
 				contractAddress,
 				contractMethod: 'name'
 			});
-			return { tokenDecimal, tokenSymbol, tokenName };
+			return {
+				tokenDecimal: Number.isInteger(tokenDecimal)
+					? tokenDecimal
+					: tokenDecimal
+					? tokenDecimal.toNumber()
+					: tokenDecimal,
+				tokenSymbol,
+				tokenName
+			};
 		} catch (err) {
 			log.error('IS NOT CONTRACT ADDRESS, %s, %s', contractAddress, err);
 			return null;

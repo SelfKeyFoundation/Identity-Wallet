@@ -175,9 +175,11 @@ class SelfkeyIdOverviewComponent extends Component {
 			<>
 				<Typography variant="subtitle1">{email}</Typography>
 				<br />
-				<Typography variant="subtitle1" color="secondary">
-					did:selfkey:{did}
-				</Typography>
+				{did && (
+					<Typography variant="subtitle1" color="secondary">
+						did:selfkey:{did}
+					</Typography>
+				)}
 			</>
 		);
 	}
@@ -349,6 +351,12 @@ class SelfkeyIdOverviewComponent extends Component {
 															</Button>
 														</Grid>
 													</Grid>
+													{wallet.didPending && (
+														<Typography variant="h3" gutterBottom>
+															Transaction is processing. Please
+															wait...
+														</Typography>
+													)}
 												</Grid>
 											</Grid>
 										</Grid>
