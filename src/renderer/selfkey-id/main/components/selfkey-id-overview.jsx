@@ -268,7 +268,7 @@ class SelfkeyIdOverviewComponent extends Component {
 							<Grid item>
 								<Card>
 									<CardHeader
-										title="Descentralised ID"
+										title="Decentralised ID"
 										className={classes.regularText}
 									/>
 									<hr className={classes.hr} />
@@ -313,11 +313,12 @@ class SelfkeyIdOverviewComponent extends Component {
 												</Grid>
 
 												<Grid item xs={9}>
-													<Typography variant="h2">
+													<Typography variant="h5">
 														Use a DID when accesing different services
 														in the marketplace. Once created you’ll see
 														it under your profile.
 													</Typography>
+													<br />
 													<Typography
 														variant="subtitle2"
 														color="secondary"
