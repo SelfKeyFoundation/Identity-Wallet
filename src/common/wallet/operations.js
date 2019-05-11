@@ -26,6 +26,10 @@ const refreshWalletBalance = () => async (dispatch, getState) => {
 	await dispatch(actions.updateWallet(await getWalletWithBalance(getWallet(getState()))));
 };
 
+const resetAssociateDID = () => async dispatch => {
+	await dispatch(actions.setAssociateError(''));
+};
+
 const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
 	try {
 		const walletService = getGlobalContext().walletService;
@@ -100,16 +104,26 @@ const createWalletDID = () => async (dispatch, getState) => {
 
 const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 	try {
+		console.log('walletId: ', walletId);
+		console.log('did: ', did);
 		const walletFromStore = getWallet(getState());
+		console.log('walletFromStore: ', walletFromStore);
 		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress();
-
+		console.log('controllerAddress: ', controllerAddress);
 		if (walletFromStore.publicKey === controllerAddress) {
+			console.log('same');
 			const walletService = getGlobalContext().walletService;
 			const wallet = await walletService.updateDID(walletId, did);
 			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
+			await dispatch(actions.setAssociateError(''));
 		} else {
-			// TODO - dispatch action with error to show that DID is not devived from the current wallet
+			console.log('diff');
+			await dispatch(
+				actions.setAssociateError(
+					'The DID provided is not derived from the current wallet.'
+				)
+			);
 		}
 	} catch (error) {
 		console.error(error);
@@ -133,6 +147,7 @@ export default {
 	...actions,
 	updateWalletWithBalance,
 	refreshWalletBalance,
+	resetAssociateDID,
 	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar),
 	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
 	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup),

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { tokensOperations, tokensSelectors } from 'common/tokens';
-import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import { getTokens } from 'common/wallet-tokens/selectors';
-import { walletTokensOperations } from 'common/wallet-tokens';
+import { walletOperations, walletSelectors } from 'common/wallet';
 import {
 	Grid,
 	Button,
@@ -63,11 +60,6 @@ const styles = theme => ({
 	bold: {
 		fontWeight: 600
 	},
-	backButtonContainer: {
-		left: '15px',
-		position: 'absolute',
-		top: '120px'
-	},
 	closeIcon: {
 		position: 'absolute',
 		right: '329px',
@@ -84,40 +76,27 @@ const styles = theme => ({
 
 class AssociateDIDComponent extends Component {
 	state = {
-		address: '',
-		symbol: '',
-		decimal: '',
-		found: null,
-		duplicate: null,
+		did: '',
 		searching: false
 	};
 
 	componentDidMount() {
-		this.props.dispatch(tokensOperations.loadTokensOperation());
 		this.resetErrors();
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.tokens.length !== this.props.tokens.length) {
-			if (this.state.address !== '') {
-				this.findToken(this.state.address);
-			}
-		}
-		if (prevProps.addressError !== this.props.addressError) {
+		if (prevProps.associateError !== this.props.associateError) {
 			if (this.state.searching) {
-				this.setState({ searching: false });
-			}
-		}
-		if (prevProps.tokenError !== this.props.tokenError) {
-			if (this.state.searching) {
+				if (this.props.associateError === '') {
+					this.handleBackClick();
+				}
 				this.setState({ searching: false });
 			}
 		}
 	}
 
 	resetErrors = () => {
-		this.props.dispatch(addressBookOperations.resetAdd());
-		this.props.dispatch(tokensOperations.resetTokenError());
+		this.props.dispatch(walletOperations.resetAssociateDID());
 	};
 
 	handleBackClick = evt => {
@@ -127,89 +106,33 @@ class AssociateDIDComponent extends Component {
 
 	handleFieldChange = async event => {
 		let value = event.target.value;
-		this.setState({ searching: true, found: true }, async () => {
-			await this.findToken(value);
-		});
+		this.setState({ did: value });
 	};
 
-	findToken = async contractAddress => {
-		this.resetErrors();
-		if (contractAddress !== '') {
-			// Validate address with library call
-			await this.props.dispatch(addressBookOperations.validateAddress(contractAddress));
-			// Try to find it on the current tokens list
-			let found = (this.props.tokens || []).find(
-				t => (t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase()
-			);
-			// Search for active duplicate token (recordState = 1)
-			let duplicate = (this.props.existingTokens || []).find(
-				t =>
-					(t['address'] || '').toUpperCase() === (contractAddress || '').toUpperCase() &&
-					(t['recordState'] || 0) === 1
-			);
-			if (found && duplicate && duplicate['recordState'] === 0) {
-				found['recordState'] = duplicate['recordState'];
-				duplicate = null;
-			}
-			if (!found) {
-				// Search token info on blockchain and add it to tokens list
-				await this.props.dispatch(
-					tokensOperations.addTokenOperation(contractAddress.toLowerCase())
-				);
-				this.setState({
-					address: contractAddress,
-					symbol: '',
-					decimal: '',
-					found: found,
-					duplicate: duplicate
-				});
-			} else {
-				this.setState({
-					address: contractAddress,
-					symbol: found ? found.symbol : '',
-					decimal: found ? found.decimal : '',
-					found: found,
-					duplicate: duplicate,
-					searching: false
-				});
-			}
+	associateDID = async () => {
+		await this.resetErrors();
+		let did = this.state.did;
+		if (did !== '') {
+			await this.props.dispatch(walletOperations.updateWalletDID(this.props.wallet.id, did));
 		} else {
-			this.setState({
-				address: contractAddress,
-				symbol: '',
-				decimal: '',
-				found: null,
-				duplicate: null,
-				searching: false
-			});
+			this.setState({ searching: false });
 		}
 	};
 
 	handleSubmit = () => {
-		const { found } = this.state;
-		if (!found || !found.id) return;
-		if (found.recordState === 0) {
-			this.props.dispatch(
-				walletTokensOperations.updateWalletTokenStateOperation(
-					1 + +found.recordState,
-					found.id
-				)
-			);
-		} else {
-			this.props.dispatch(walletTokensOperations.createWalletTokenOperation(found.id));
-		}
-		this.handleBackClick();
+		this.setState({ searching: true }, async () => {
+			await this.associateDID();
+		});
 	};
 
 	render() {
-		const { classes, addressError, tokenError } = this.props;
-		const { address, found, duplicate, searching } = this.state;
-		const hasAddressError =
-			(addressError !== '' && addressError !== undefined && address !== '') ||
-			(tokenError !== '' && tokenError !== undefined && address !== '');
-		const notFound = !found && address !== '' && !hasAddressError && !duplicate;
-		const addressInputClass = `${classes.input} ${
-			(hasAddressError || notFound || duplicate) && !searching ? classes.errorColor : ''
+		const { classes, associateError } = this.props;
+		const { did, searching } = this.state;
+		const isEmpty = did === '' || did === undefined;
+		const hasAssociateError =
+			associateError !== '' && associateError !== undefined && did !== '';
+		const didInputClass = `${classes.input} ${
+			hasAssociateError && !searching ? classes.errorColor : ''
 		}`;
 
 		return (
@@ -220,18 +143,6 @@ class AssociateDIDComponent extends Component {
 				alignItems="center"
 				spacing={32}
 			>
-				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						color="secondary"
-						size="small"
-						onClick={this.handleBackClick}
-					>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
 				<ModalWrap className={classes.modalPosition}>
 					<Paper>
 						<ModalHeader>
@@ -281,40 +192,30 @@ class AssociateDIDComponent extends Component {
 													<CircularProgress size={20} />
 												</span>
 												<span id="searching" className={classes.searching}>
-													Please wait. Checking the blockchain for ERC-20{' '}
-													token information.
+													Please wait. Checking the blockchain for DID{' '}
+													information.
 												</span>
 											</React.Fragment>
 										)}
 									</Typography>
 									<Input
-										placeholder="did:key:"
-										name="address"
-										value={address}
+										placeholder="did:selfkey:"
+										name="did"
+										value={did}
 										onChange={this.handleFieldChange}
-										className={addressInputClass}
+										className={didInputClass}
 										disableUnderline
 									/>
-									{!searching && hasAddressError && (
-										<span id="addressError" className={classes.errorText}>
-											{addressError || tokenError}
-										</span>
-									)}
-									{!searching && notFound && (
-										<span id="notFound" className={classes.errorText}>
-											{`Token contract does not exist or not supported. Please double check and try again.`}
-										</span>
-									)}
-									{!searching && duplicate && (
-										<span id="duplicate" className={classes.errorText}>
-											{`Address is already being used.`}
+									{!searching && hasAssociateError && (
+										<span id="associateError" className={classes.errorText}>
+											{associateError}
 										</span>
 									)}
 									<Grid container spacing={24} className={classes.buttoms}>
 										<Grid item>
 											<Button
 												variant="contained"
-												disabled={!found || duplicate || hasAddressError}
+												disabled={hasAssociateError || isEmpty || searching}
 												size="large"
 												onClick={this.handleSubmit}
 											>
@@ -344,10 +245,8 @@ class AssociateDIDComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		tokens: tokensSelectors.allTokens(state),
-		existingTokens: getTokens(state),
-		addressError: addressBookSelectors.getAddressError(state),
-		tokenError: tokensSelectors.getTokenError(state)
+		wallet: walletSelectors.getWallet(state),
+		associateError: walletSelectors.getAssociateError(state)
 	};
 };
 
