@@ -9,7 +9,7 @@ import ReactPiwik from 'react-piwik';
 import {
 	MarketplaceReturnDepositPopup,
 	MarketplaceDepositPopup,
-	MarketplaceTransactionProcessingPopup,
+	TransactionProcessingPopup,
 	MarketplaceWithoutBalancePopup
 } from './transactions';
 
@@ -36,6 +36,15 @@ const styles = theme => ({
 
 	unlockIcon: {
 		marginRight: '10px'
+	},
+
+	hourGlassIcon: {
+		marginRight: '10px',
+		paddingTop: '1px'
+	},
+
+	returnIcon: {
+		marginRight: '20px'
 	}
 });
 
@@ -125,7 +134,12 @@ class DepositMangerComponent extends Component {
 		}
 
 		if (transactionPopup === 'pendingTransaction') {
-			return <MarketplaceTransactionProcessingPopup closeAction={this.closePopupAction} />;
+			return (
+				<TransactionProcessingPopup
+					closeAction={this.closePopupAction}
+					title="KEY Deposit"
+				/>
+			);
 		}
 
 		if (transactionPopup === 'confirmWithdrawTransaction') {
@@ -181,10 +195,15 @@ class DepositMangerComponent extends Component {
 				>
 					{item.status === 'Active' && <UnlockIcon className={classes.unlockIcon} />}
 					{item.status === 'pending' && (
-						<HourGlassSmallIcon width="10px" height="14px" fill="rgba(0, 0, 0, 0.26)" />
+						<HourGlassSmallIcon
+							width="12px"
+							height="16px"
+							fill="#FFFFFF"
+							className={classes.hourGlassIcon}
+						/>
 					)}
 					{item.status === 'locked' && <CalendarIcon />}
-					{item.status === 'unlocked' && <ReturnIcon />}
+					{item.status === 'unlocked' && <ReturnIcon className={classes.returnIcon} />}
 					<div className={classes.unlockButtonText}>
 						<span>{item.integration}</span>
 						{item.status === 'locked' && daysLeft && (

@@ -14,8 +14,6 @@ import {
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
 
-import Truncate from 'react-truncate';
-
 const styles = theme => ({
 	root: {
 		width: '946px',
@@ -197,6 +195,7 @@ const styles = theme => ({
 	},
 	link: {
 		color: primary,
+		cursor: 'pointer',
 		textDecoration: 'none'
 	},
 	pending: {
@@ -218,14 +217,19 @@ const styles = theme => ({
 	},
 	leftAlign: {
 		textAlign: 'left'
+	},
+	defaultIcon: {
+		alignItems: 'center',
+		borderRadius: '8px',
+		color: '#FFFFFF',
+		display: 'flex',
+		height: '44px',
+		justifyContent: 'center',
+		width: '44px'
 	}
 });
 
 class MarketplaceServiceDetailsComponent extends Component {
-	state = {
-		isDescriptionTruncated: true
-	};
-
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
@@ -277,7 +281,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 			!application ||
 			[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(application.currentStatus)
 		) {
-			return this.renderApplicationButton();
+			return this.renderApplicationButton(application);
 		} else if (
 			application.currentStatus === APPLICATION_UPLOAD_REQUIRED ||
 			application.currentStatus === APPLICATION_ANSWER_REQUIRED
@@ -290,12 +294,17 @@ class MarketplaceServiceDetailsComponent extends Component {
 		}
 	};
 
-	renderApplicationButton = () => {
-		const { classes, item } = this.props;
+	renderApplicationButton = application => {
+		const { classes } = this.props;
 		return (
 			<React.Fragment>
 				<Button
-					disabled={['pending', 'Inactive'].includes(item.status)}
+					disabled={
+						!application ||
+						[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
+							application.currentStatus
+						)
+					}
 					variant="contained"
 					size="large"
 					className={`${classes.signUpButton} ${classes.ctaButton}`}
@@ -308,7 +317,12 @@ class MarketplaceServiceDetailsComponent extends Component {
 				<div className={classes.topSpace}>
 					<Typography variant="h3" gutterBottom>
 						You have to unlock the marketplace first to signup for this service.{' '}
-						<a href="#" className={classes.link}>
+						<a
+							className={classes.link}
+							onClick={() => {
+								this.props.dispatch(push('/main/marketplace-exchanges'));
+							}}
+						>
 							Unlock now!
 						</a>
 					</Typography>
@@ -383,18 +397,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		);
 	};
 
-	handleViewAllDetails() {
-		this.setState({ isDescriptionTruncated: !this.state.isDescriptionTruncated });
-	}
-
-	renderDescription(description) {
-		if (this.state.isDescriptionTruncated) {
-			return <Truncate lines={5}>{description}</Truncate>;
-		}
-
-		return description;
-	}
-
 	handleSignup = () => {
 		const { item, templates, wallet } = this.props;
 
@@ -426,6 +428,21 @@ class MarketplaceServiceDetailsComponent extends Component {
 
 	render() {
 		const { classes, item, backAction, relyingPartyName, templates } = this.props;
+		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
+		let random = Math.floor(Math.random() * 4);
+
+		const icon = item.logo[0].url ? (
+			<img src={item.logo[0].url} className={classes.defaultIcon} />
+		) : (
+			<div
+				className={classes.defaultIcon}
+				style={{
+					backgroundColor: getColors()[random]
+				}}
+			>
+				{item.name.charAt(0)}
+			</div>
+		);
 
 		return (
 			<Grid container>
@@ -457,7 +474,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 						className={classes.header}
 					>
 						<Grid item id="icon" className={classes.icon}>
-							<img src={item.logo[0].url} />
+							{icon}
 						</Grid>
 						<Grid item id="title" className={classes.title}>
 							<Grid container alignItems="center">
@@ -501,20 +518,8 @@ class MarketplaceServiceDetailsComponent extends Component {
 												classes.leftAlign
 											}`}
 										>
-											{this.renderDescription(item.description)}
+											{item.description}
 										</Typography>
-										<Button
-											variant="outlined"
-											color="secondary"
-											className={`${classes.button} ${
-												classes.buttonDescription
-											}`}
-											onClick={() => this.handleViewAllDetails()}
-										>
-											{this.state.isDescriptionTruncated
-												? 'VIEW ALL DETAILS'
-												: 'COLLAPSE DETAILS'}
-										</Button>
 									</Grid>
 									<Grid item xs={4} className={classes.ctaArea}>
 										{this.renderActionButton()}
