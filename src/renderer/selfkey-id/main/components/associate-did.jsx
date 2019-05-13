@@ -61,10 +61,10 @@ const styles = theme => ({
 		fontWeight: 600
 	},
 	closeIcon: {
+		cursor: 'pointer',
 		position: 'absolute',
-		right: '329px',
-		top: '123px',
-		cursor: 'pointer'
+		marginLeft: '759px',
+		marginTop: '-20px'
 	},
 	label: {
 		marginBottom: '10px'
@@ -144,11 +144,11 @@ class AssociateDIDComponent extends Component {
 			>
 				<ModalWrap className={classes.modalPosition}>
 					<Paper>
+						<CloseButtonIcon
+							onClick={this.handleBackClick}
+							className={classes.closeIcon}
+						/>
 						<ModalHeader>
-							<CloseButtonIcon
-								onClick={this.handleBackClick}
-								className={classes.closeIcon}
-							/>
 							<Grid
 								container
 								direction="row"
