@@ -36,6 +36,56 @@ const styles = theme => ({
 	closeButton: {
 		top: '20px',
 		left: '20px'
+	},
+	hrWrapper: {
+		padding: '10px 20px !important',
+		width: '100%'
+	},
+	hr: {
+		backgroundColor: '#303C49',
+		border: 0,
+		height: '1px',
+		width: '100%'
+	},
+	h4: {
+		fontWeight: 400
+	},
+	viewIcon: {
+		marginRight: '7px'
+	},
+	viewButton: {
+		paddingLeft: 0,
+		textTransform: 'capitalize',
+		'&:hover': {
+			backgroundColor: 'transparent',
+			'& h6': {
+				color: '#FFFFFF'
+			},
+			'& svg': {
+				fill: '#FFFFFF'
+			}
+		}
+	},
+	radioButton: {
+		paddingRight: 0,
+		'& span': {
+			marginRight: 0
+		}
+	},
+	tableCellPadding: {
+		padding: '0 15px 0 10px'
+	},
+	paginationWrap: {
+		padding: '0 20px 10px !important'
+	},
+	pagination: {
+		padding: '4px 0 !important'
+	},
+	keyIconButton: {
+		margin: '0 3px'
+	},
+	topSpace: {
+		paddingBottom: '0 !important'
 	}
 });
 
@@ -100,37 +150,34 @@ class SelectAddress extends Component {
 				alignItems="flex-start"
 				spacing={40}
 			>
-				<Grid item>
-					<Typography variant="h4">
+				<Grid item className={this.props.classes.topSpace}>
+					<Typography variant="h4" className={this.props.classes.h4}>
 						Select an Ethereum (ETH) address you would like to use:
 					</Typography>
 				</Grid>
-				<Grid container item justify="center" alignItems="center">
+				<Grid item className={this.props.classes.hrWrapper}>
+					<hr className={this.props.classes.hr} />
+				</Grid>
+				<Grid container item justify="center" alignItems="center" style={{ paddingTop: 0 }}>
 					<Table>
 						<TableHead>
 							<SmallTableHeadRow>
 								<SmallTableCell />
-								<SmallTableCell>
-									<Typography variant="overline" gutterBottom>
-										YOUR ADDRESS
-									</Typography>
+								<SmallTableCell className={this.props.classes.tableCellPadding}>
+									<Typography variant="overline">YOUR ADDRESS</Typography>
 								</SmallTableCell>
 								<SmallTableCell>
-									<Typography variant="overline" gutterBottom>
-										BALANCE
-									</Typography>
+									<Typography variant="overline">BALANCE</Typography>
 								</SmallTableCell>
 								<SmallTableCell>
-									<Typography variant="overline" gutterBottom>
-										TOKEN BALANCES
-									</Typography>
+									<Typography variant="overline">TOKEN BALANCES</Typography>
 								</SmallTableCell>
 							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
 							{this.props.hardwareWallets.map((wallet, index) => (
 								<SmallTableRow key={index}>
-									<SmallTableCell>
+									<SmallTableCell className={this.props.classes.radioButton}>
 										<Radio
 											onChange={e => this.handleChange(e, index)}
 											value={wallet.address}
@@ -139,13 +186,13 @@ class SelectAddress extends Component {
 											checked={this.state.selected === index}
 										/>
 									</SmallTableCell>
-									<SmallTableCell>
-										<Typography variant="subtitle1" gutterBottom>
+									<SmallTableCell className={this.props.classes.tableCellPadding}>
+										<Typography variant="subtitle1">
 											{wallet.address}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
-										<Typography variant="subtitle1" gutterBottom>
+										<Typography variant="subtitle1">
 											{wallet.balance}
 										</Typography>
 									</SmallTableCell>
@@ -157,13 +204,10 @@ class SelectAddress extends Component {
 													`https://etherscan.io/address/${wallet.address}`
 												);
 											}}
+											className={this.props.classes.viewButton}
 										>
-											<ViewIcon />
-											<Typography
-												variant="subtitle1"
-												color="secondary"
-												gutterBottom
-											>
+											<ViewIcon className={this.props.classes.viewIcon} />
+											<Typography variant="subtitle1" color="secondary">
 												View on Etherscan
 											</Typography>
 										</Button>
@@ -173,7 +217,12 @@ class SelectAddress extends Component {
 						</TableBody>
 					</Table>
 				</Grid>
-				<Grid item container justify="flex-end">
+				<Grid
+					item
+					container
+					justify="flex-end"
+					className={this.props.classes.paginationWrap}
+				>
 					<Grid
 						container
 						direction="row"
@@ -181,18 +230,23 @@ class SelectAddress extends Component {
 						alignItems="flex-end"
 						spacing={8}
 					>
-						<Grid item>
+						<Grid item className={this.props.classes.pagination}>
 							<KeyIconButton
 								aria-label="Previous Page"
 								onClick={this.handlePrevious}
 								disabled={this.state.page === 0}
+								className={this.props.classes.keyIconButton}
 							>
 								<KeyboardArrowLeft />
 							</KeyIconButton>
 						</Grid>
 
-						<Grid item>
-							<KeyIconButton aria-label="Next Page" onClick={this.handleNext}>
+						<Grid item className={this.props.classes.pagination}>
+							<KeyIconButton
+								aria-label="Next Page"
+								onClick={this.handleNext}
+								className={this.props.classes.keyIconButton}
+							>
 								<KeyboardArrowRight />
 							</KeyIconButton>
 						</Grid>
@@ -245,7 +299,9 @@ class SelectAddress extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Choose An Ethereum Address</Typography>
+									<Typography variant="body1">
+										Choose An Ethereum Address
+									</Typography>
 								</Grid>
 								<Grid item>{this.state.loading && <CircularProgress />}</Grid>
 							</Grid>
