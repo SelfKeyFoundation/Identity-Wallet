@@ -104,21 +104,15 @@ const createWalletDID = () => async (dispatch, getState) => {
 
 const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 	try {
-		console.log('walletId: ', walletId);
-		console.log('did: ', did);
 		const walletFromStore = getWallet(getState());
-		console.log('walletFromStore: ', walletFromStore);
 		const DIDService = getGlobalContext().didService;
-		const controllerAddress = await DIDService.getControllerAddress();
-		console.log('controllerAddress: ', controllerAddress);
+		const controllerAddress = await DIDService.getControllerAddress(did);
 		if (walletFromStore.publicKey === controllerAddress) {
-			console.log('same');
 			const walletService = getGlobalContext().walletService;
 			const wallet = await walletService.updateDID(walletId, did);
 			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
-			await dispatch(actions.setAssociateError(''));
+			await dispatch(actions.setAssociateError('none'));
 		} else {
-			console.log('diff');
 			await dispatch(
 				actions.setAssociateError(
 					'The DID provided is not derived from the current wallet.'
@@ -127,6 +121,13 @@ const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 		}
 	} catch (error) {
 		console.error(error);
+		await dispatch(
+			actions.setAssociateError(
+				`Could not associate DID due an error${
+					error.reason ? `:${error.reason}` : ''
+				}. Please try again later.`
+			)
+		);
 	}
 };
 

@@ -87,7 +87,7 @@ class AssociateDIDComponent extends Component {
 	componentDidUpdate(prevProps) {
 		if (prevProps.associateError !== this.props.associateError) {
 			if (this.state.searching) {
-				if (this.props.associateError === '') {
+				if (this.props.associateError === 'none') {
 					this.handleBackClick();
 				}
 				this.setState({ searching: false });
@@ -129,8 +129,7 @@ class AssociateDIDComponent extends Component {
 		const { classes, associateError } = this.props;
 		const { did, searching } = this.state;
 		const isEmpty = did === '' || did === undefined;
-		const hasAssociateError =
-			associateError !== '' && associateError !== undefined && did !== '';
+		const hasAssociateError = associateError !== '' && associateError !== 'none' && did !== '';
 		const didInputClass = `${classes.input} ${
 			hasAssociateError && !searching ? classes.errorColor : ''
 		}`;
