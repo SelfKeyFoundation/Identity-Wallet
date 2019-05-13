@@ -82,7 +82,11 @@ describe('lws-service', () => {
 
 		describe('reqLedgerWallets', () => {
 			it('returns wallets', async () => {
-				// sinon.stub(walletService, 'getLedgerWallets').returns([{ publicKey: 'test' }]);
+				const walletService = {
+					getLedgerWallets: () => {}
+				};
+				setGlobalContext({ walletService });
+				sinon.stub(walletService, 'getLedgerWallets').returns([{ publicKey: 'test' }]);
 				sinon.stub(Wallet, 'findByPublicKey');
 				Wallet.findByPublicKey.resolves({
 					publicKey: 'test',
@@ -121,6 +125,18 @@ describe('lws-service', () => {
 		describe('reqUnlock', () => {
 			const t = (msg, profile, wallet, expected) =>
 				it(msg, async () => {
+					const web3Service = {
+						getLedgerTransport: () => {}
+					};
+					setGlobalContext({ web3Service });
+					const transport = {
+						decorateAppAPIMethods: () => {},
+						close: () => {},
+						send: () => {}
+					};
+					sinon.stub(web3Service, 'getLedgerTransport').returns(transport);
+					sinon.stub(transport, 'send').resolves('true');
+
 					sinon.stub(Wallet, 'findByPublicKey').resolves(wallet);
 					const conn = connMock(wallet);
 					sinon.stub(conn, 'send');
@@ -190,7 +206,8 @@ describe('lws-service', () => {
 				{
 					publicKey: 'unlocked',
 					profile: 'ledger',
-					hasSignedUpTo: sinon.stub().resolves(true)
+					hasSignedUpTo: sinon.stub().resolves(true),
+					path: `44'/60'/0'/0`
 				},
 				true
 			);
@@ -386,7 +403,6 @@ describe('lws-service', () => {
 
 		describe('reqAuth', () => {
 			it('send wait_hw_confirmation when profile is ledger', async () => {
-				setGlobalContext({});
 				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
