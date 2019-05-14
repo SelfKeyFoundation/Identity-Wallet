@@ -6,7 +6,6 @@ import { MarketplaceCategory } from './category';
 
 const styles = theme => ({
 	header: {
-		borderBottom: 'solid 1px #475768',
 		'& h1': {
 			marginLeft: '20px'
 		},
@@ -21,6 +20,13 @@ const styles = theme => ({
 	},
 	headerTitle: {
 		paddingLeft: '21px'
+	},
+	hr: {
+		backgroundColor: '#475768',
+		border: 0,
+		height: '1px',
+		margin: 0,
+		width: '100%'
 	}
 });
 
@@ -48,6 +54,9 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 			<Grid item>
 				<Typography variant="h1">SelfKey Marketplace</Typography>
 			</Grid>
+		</Grid>
+		<Grid container xs={12} style={{ padding: '0 30px' }}>
+			<hr className={classes.hr} />
 		</Grid>
 		<Grid item id="body" xs={12}>
 			<Grid container direction="row" justify="space-evenly" alignItems="flex-start">
