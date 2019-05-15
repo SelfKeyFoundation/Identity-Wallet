@@ -269,8 +269,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 		const application = this.getLastApplication();
 		// FIXME: Troubleshooting and overriding
 		// FIXME: remove for final commit
-		console.log(application);
-		console.log(this.props);
 		// Force status
 		// if (application) application.currentStatus = APPLICATION_UPLOAD_REQUIRED;
 
@@ -300,10 +298,12 @@ class MarketplaceServiceDetailsComponent extends Component {
 			<React.Fragment>
 				<Button
 					disabled={
-						!application ||
-						[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
-							application.currentStatus
-						)
+						// Disabled as we don't have any Exchange integrated yet!
+						true ||
+						(application &&
+							[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
+								application.currentStatus
+							))
 					}
 					variant="contained"
 					size="large"
@@ -314,19 +314,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 					<span>SIGN UP</span>
 					<span />
 				</Button>
-				<div className={classes.topSpace}>
-					<Typography variant="h3" gutterBottom>
-						You have to unlock the marketplace first to signup for this service.{' '}
-						<a
-							className={classes.link}
-							onClick={() => {
-								this.props.dispatch(push('/main/marketplace-exchanges'));
-							}}
-						>
-							Unlock now!
-						</a>
-					</Typography>
-				</div>
 			</React.Fragment>
 		);
 	};
