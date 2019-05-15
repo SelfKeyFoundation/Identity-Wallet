@@ -220,6 +220,12 @@ describe('RelyingPartyRest', () => {
 								contentType: 'application/json'
 							}
 						},
+						meta: {
+							value: JSON.stringify({}),
+							options: {
+								contentType: 'application/json'
+							}
+						},
 						'$document-1': {
 							value: documents[0].buffer,
 							options: {
@@ -277,7 +283,7 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					json: true,
-					body: attributes
+					body: { attributes, meta: {} }
 				}
 			]);
 		});
@@ -677,7 +683,9 @@ describe('Relying Party session', () => {
 						},
 						documents: undefined
 					}
-				]
+				],
+				undefined,
+				{}
 			]);
 			expect(res).toEqual('ok');
 		});
@@ -764,7 +772,8 @@ describe('Relying Party session', () => {
 						documents: [3, 4]
 					}
 				],
-				documents
+				documents,
+				{}
 			]);
 			expect(res).toEqual('ok');
 		});
