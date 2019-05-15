@@ -148,13 +148,13 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static async createUser(ctx, attributes, documents = []) {
+	static async createUser(ctx, attributes, documents = [], meta = {}) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let url = ctx.getEndpoint('/users');
 		if (ctx.hasUserFileEndpoint()) {
 			return request.post({
 				url,
-				body: attributes,
+				body: { attributes, meta },
 				headers: {
 					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 					'User-Agent': this.userAgent,
@@ -177,6 +177,10 @@ export class RelyingPartyRest {
 		}, {});
 		formData.attributes = {
 			value: JSON.stringify(attributes),
+			options: { contentType: 'application/json' }
+		};
+		formData.meta = {
+			value: JSON.stringify(meta),
 			options: { contentType: 'application/json' }
 		};
 		return request.post({
@@ -343,7 +347,7 @@ export class RelyingPartySession {
 		return RelyingPartyRest.getUserToken(this.ctx);
 	}
 
-	async createUser(attributes = []) {
+	async createUser(attributes = [], meta = {}) {
 		if (this.ctx.hasUserFileEndpoint()) {
 			attributes = await Promise.all(
 				attributes.map(async attr => {
@@ -368,7 +372,7 @@ export class RelyingPartySession {
 					return { ...attr, data: value, documents: undefined };
 				})
 			);
-			return RelyingPartyRest.createUser(this.ctx, attributes);
+			return RelyingPartyRest.createUser(this.ctx, attributes, undefined, meta);
 		}
 		let documents = attributes.reduce((acc, curr) => {
 			acc = acc.concat(curr.documents);
@@ -385,7 +389,7 @@ export class RelyingPartySession {
 			schema: attr.schema,
 			documents: attr.documents
 		}));
-		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
+		return RelyingPartyRest.createUser(this.ctx, attributesData, documents, meta);
 	}
 
 	listKYCApplications() {
