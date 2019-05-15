@@ -231,7 +231,7 @@ export class LWSService {
 					})
 				};
 			});
-			await session.createUser(rpAttributes);
+			await session.createUser(rpAttributes, config.meta || {});
 			return this.authResp(
 				{
 					payload: 'ok'
