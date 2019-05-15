@@ -1,7 +1,8 @@
 import * as types from './types';
 
 const initialState = {
-	wallet: {}
+	wallet: {},
+	associateError: ''
 };
 
 const walletReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const walletReducer = (state = initialState, action) => {
 			return {
 				...state,
 				...action.payload
+			};
+		case types.WALLET_ASSOCIATE_DID_ERROR_SET:
+			return {
+				...state,
+				associateError: action.payload
 			};
 		default:
 			return state;
