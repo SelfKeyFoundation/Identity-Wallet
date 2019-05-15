@@ -1,6 +1,11 @@
 import { getGlobalContext } from 'common/context';
 import { abi as ledgerABI } from 'main/assets/data/DIDLedger.json';
-const ledgerAddress = '0x24512422CF6AD1c0C465cBF0Bbd5155EaA3DA634';
+import config from 'common/config';
+
+const ledgerAddress =
+	config.chainId === 1
+		? '0x0cb853331293d689c95187190e09bb46cb4e533e'
+		: '0x24512422CF6AD1c0C465cBF0Bbd5155EaA3DA634';
 
 export class DIDService {
 	constructor() {
@@ -12,6 +17,7 @@ export class DIDService {
 
 	createDID(walletAddress, gas) {
 		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
+		this.web3Service.web3.transactionConfirmationBlocks = 2;
 		return ledger.methods.createDID(this.zero).send({ from: walletAddress, gas });
 	}
 
