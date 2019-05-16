@@ -150,7 +150,7 @@ export class LWSService {
 	}
 
 	enterTrezorPin(msg, conn) {
-		const { error, pin } = msg.payload.config;
+		const { error, pin } = msg.payload;
 		if (error !== null) {
 			eventEmitter.off('TREZOR_PIN_REQUEST', () => {});
 		}
@@ -158,7 +158,7 @@ export class LWSService {
 	}
 
 	enterTrezorPassphrase(msg, conn) {
-		const { error, passphrase } = msg.payload.config;
+		const { error, passphrase } = msg.payload;
 		if (error !== null) {
 			eventEmitter.off('TREZOR_PASSPHRASE_REQUEST', () => {});
 		}
