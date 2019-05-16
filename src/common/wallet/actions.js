@@ -6,4 +6,9 @@ const updateWallet = createAliasedAction(types.WALLET_UPDATE, wallet => ({
 	payload: wallet
 }));
 
-export { updateWallet };
+const setAssociateError = error => ({
+	type: types.WALLET_ASSOCIATE_DID_ERROR_SET,
+	payload: error
+});
+
+export { updateWallet, setAssociateError };
