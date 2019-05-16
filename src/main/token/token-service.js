@@ -37,16 +37,17 @@ export class TokenService {
 		};
 	}
 
-	async getGasLimit(contractAddress, address, amount, walletAddress) {
+	async getGasLimit(contractAddress, address, amount, from) {
 		const tokenContract = new this.web3Service.web3.eth.Contract(
 			this.contractABI,
 			contractAddress
 		);
 		const MAX_GAS = 4500000;
 		const amountInWei = this.web3Service.web3.utils.toWei(new BigNumber(amount).toString());
-		return tokenContract.methods
+		const estimate = await tokenContract.methods
 			.transfer(address, amountInWei)
-			.estimateGas(walletAddress, MAX_GAS);
+			.estimateGas({ from });
+		return Math.round(Math.min(estimate * 1.1, MAX_GAS));
 	}
 }
 

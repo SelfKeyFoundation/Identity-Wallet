@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
-import { NumberFormat, HourGlassLargeIcon } from 'selfkey-ui';
+import { NumberFormat } from 'selfkey-ui';
 import { TransactionBox } from '../common/transaction-box';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
@@ -9,9 +9,8 @@ import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Divider, Typography } from '@material-ui/core';
+import { Grid, Divider } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
-import Popup from '../../common/popup';
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
@@ -152,17 +151,11 @@ class TransactionSendBoxContainer extends Component {
 		address: '',
 		isCustomView: this.props.match.params.cryptoCurrency === 'custom',
 		cryptoCurrency: this.props.match.params.cryptoCurrency,
-		sending: false,
-		isConfirmationOpen: false
+		sending: false
 	};
 
 	componentDidMount() {
 		this.loadData();
-
-		if (this.props.confirmation === 'true') {
-			this.setState({ isConfirmationOpen: true });
-			return;
-		}
 
 		let { trezorAccountIndex, cryptoCurrency } = this.props;
 		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
@@ -177,11 +170,7 @@ class TransactionSendBoxContainer extends Component {
 	};
 
 	handleCancelAction = () => {
-		if (this.state.cryptoCurrency !== 'custom') {
-			this.props.dispatch(push(`/main/transfer/${this.state.cryptoCurrency}`));
-		} else {
-			this.props.dispatch(push(`/main/dashboard`));
-		}
+		this.props.dispatch(push(`/main/dashboard`));
 	};
 
 	handleGasPriceChange = value => {
@@ -196,10 +185,8 @@ class TransactionSendBoxContainer extends Component {
 		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
 		await this.props.dispatch(transactionOperations.confirmSend());
 		if (this.props.walletType === 'ledger' || this.props.walletType === 'trezor') {
-			await this.props.dispatch(
-				appOperations.setGoNextPath(`${this.props.location.pathname}/true`)
-			);
-			this.setState({ isConfirmationOpen: true });
+			await this.props.dispatch(push('/main/hd-transaction-timer'));
+			await this.props.dispatch(appOperations.setGoNextPath('/main/hd-transaction-timer'));
 		}
 	};
 
@@ -265,7 +252,11 @@ class TransactionSendBoxContainer extends Component {
 	renderSelectTokenItems() {
 		const { tokens, classes } = this.props;
 
-		return tokens.map(token => {
+		let activeTokens = tokens.filter(token => {
+			return token.recordState === 1;
+		});
+
+		return activeTokens.map(token => {
 			return (
 				<option key={token.symbol} value={token.symbol} className={classes.selectItem}>{`${
 					token.name
@@ -322,47 +313,6 @@ class TransactionSendBoxContainer extends Component {
 		}
 	}
 	// TransactionSendBox - End
-
-	renderConfirmationModal = () => {
-		const typeText =
-			this.props.walletType.charAt(0).toUpperCase() + this.props.walletType.slice(1);
-		const text = `Confirm Transaction on ${typeText}`;
-		return (
-			<Popup
-				open={this.state.isConfirmationOpen}
-				closeAction={() => this.setState({ isConfirmationOpen: false })}
-				text={text}
-			>
-				<Grid
-					container
-					direction="row"
-					justify="flex-start"
-					alignItems="flex-start"
-					spacing={40}
-				>
-					<Grid item xs={2}>
-						<HourGlassLargeIcon />
-					</Grid>
-					<Grid item xs={10}>
-						<Grid
-							container
-							direction="column"
-							justify="flex-start"
-							alignItems="flex-start"
-							spacing={40}
-						>
-							<Grid item>
-								<Typography variant="body1">
-									You have 30 seconds to confirm this transaction on the{' '}
-									{typeText} or it will time out and automatically cancel.
-								</Typography>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Popup>
-		);
-	};
 
 	getTitle = cryptoCurrency => {
 		return cryptoCurrency !== 'custom' ? `Send ${cryptoCurrency}` : 'Send Custom Token';
@@ -468,7 +418,6 @@ class TransactionSendBoxContainer extends Component {
 				</Grid>
 				{this.renderFeeBox()}
 				{this.renderButtons()}
-				{this.renderConfirmationModal()}
 			</TransactionBox>
 		);
 	}

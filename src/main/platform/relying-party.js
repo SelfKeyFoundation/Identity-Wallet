@@ -28,9 +28,9 @@ export class RelyingPartyCtx {
 	getEndpoint(name) {
 		let rootEndpoint = this.getRootEndpoint();
 		let endpoints = this.config.endpoints || {};
-		let url = endpoints[name];
-		if (!url) {
-			url = urljoin(rootEndpoint, name);
+		let url = endpoints[name] || name;
+		if (!url || !url.match(/^https?:/)) {
+			url = urljoin(rootEndpoint, url);
 		}
 		return url;
 	}
@@ -41,6 +41,16 @@ export class RelyingPartyCtx {
 			root = urljoin(url, root);
 		}
 		return root;
+	}
+	hasUserFileEndpoint() {
+		const { config } = this;
+		if (!config.endpoints || !config.endpoints.hasOwnProperty('/users/file')) {
+			return true;
+		}
+		if (config.endpoints['/users/file'] === false) {
+			return false;
+		}
+		return true;
 	}
 }
 
@@ -80,7 +90,7 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static async getChallenge(ctx) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		const publicKey = await ctx.identity.publicKey;
 		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
 		return request.get({
@@ -90,7 +100,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature) {
-		let url = ctx.getEndpoint('auth/challenge');
+		let url = ctx.getEndpoint('/auth/challenge');
 		return request.post({
 			url,
 			body: { signature },
@@ -105,7 +115,7 @@ export class RelyingPartyRest {
 	static getUserToken(ctx) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('auth/token');
+		let url = ctx.getEndpoint('/users/token');
 		return request.get({
 			url,
 			headers: {
@@ -116,9 +126,43 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static createUser(ctx, attributes, documents = []) {
+	static async uploadUserFile(ctx, doc) {
+		let url = ctx.getEndpoint('/users/file');
+		let formData = {
+			document: {
+				value: doc.buffer,
+				options: {
+					contentType: doc.mimeType,
+					filename: doc.name || 'document'
+				}
+			}
+		};
+		return request.post({
+			url,
+			formData,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static async createUser(ctx, attributes, documents = [], meta = {}) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('users');
+		let url = ctx.getEndpoint('/users');
+		if (ctx.hasUserFileEndpoint()) {
+			return request.post({
+				url,
+				body: { attributes, meta },
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+		}
 		let formData = documents.reduce((acc, curr) => {
 			let key = `$document-${curr.id}`;
 			acc[key] = {
@@ -133,6 +177,10 @@ export class RelyingPartyRest {
 		}, {});
 		formData.attributes = {
 			value: JSON.stringify(attributes),
+			options: { contentType: 'application/json' }
+		};
+		formData.meta = {
+			value: JSON.stringify(meta),
 			options: { contentType: 'application/json' }
 		};
 		return request.post({
@@ -299,7 +347,33 @@ export class RelyingPartySession {
 		return RelyingPartyRest.getUserToken(this.ctx);
 	}
 
-	createUser(attributes = []) {
+	async createUser(attributes = [], meta = {}) {
+		if (this.ctx.hasUserFileEndpoint()) {
+			attributes = await Promise.all(
+				attributes.map(async attr => {
+					const attrDocs = await Promise.all(
+						attr.documents.map(async doc => {
+							if (doc.content) {
+								doc.buffer = bufferFromDataUrl(doc.content);
+							}
+							const res = await RelyingPartyRest.uploadUserFile(this.ctx, doc);
+							let newDoc = { ...doc };
+							delete newDoc.buffer;
+							newDoc.content = res.id;
+							return newDoc;
+						})
+					);
+					const data = (attr.data && attr.data.value ? attr.data.value : attr.data) || {};
+					const { value } = identityAttributes.denormalizeDocumentsSchema(
+						attr.schema,
+						data,
+						attrDocs
+					);
+					return { ...attr, data: value, documents: undefined };
+				})
+			);
+			return RelyingPartyRest.createUser(this.ctx, attributes, undefined, meta);
+		}
 		let documents = attributes.reduce((acc, curr) => {
 			acc = acc.concat(curr.documents);
 			return acc;
@@ -310,11 +384,12 @@ export class RelyingPartySession {
 		});
 		let attributesData = attributes.map(attr => ({
 			id: attr.id,
+			schemaId: attr.schemaId,
 			data: attr.data,
 			schema: attr.schema,
 			documents: attr.documents
 		}));
-		return RelyingPartyRest.createUser(this.ctx, attributesData, documents);
+		return RelyingPartyRest.createUser(this.ctx, attributesData, documents, meta);
 	}
 
 	listKYCApplications() {

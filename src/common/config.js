@@ -25,6 +25,7 @@ const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
 const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
+const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
@@ -45,6 +46,7 @@ const common = {
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+	depositPriceOverride: DEPOSIT_PRICE_OVERRIDE,
 
 	relyingPartyInfo: {
 		incorporations: {

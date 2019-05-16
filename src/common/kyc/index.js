@@ -216,6 +216,9 @@ export const kycActions = {
 		title,
 		description,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		attributes = [],
 		error
 	) {
@@ -229,6 +232,9 @@ export const kycActions = {
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes,
 				error
 			}
@@ -433,7 +439,10 @@ const startCurrentApplicationOperation = (
 	cancelRoute,
 	title,
 	description,
-	agreement
+	agreement,
+	vendor,
+	privacyPolicy,
+	termsOfService
 ) => async (dispatch, getState) => {
 	await dispatch(
 		kycActions.setCurrentApplication(
@@ -443,7 +452,10 @@ const startCurrentApplicationOperation = (
 			cancelRoute,
 			title,
 			description,
-			agreement
+			agreement,
+			vendor,
+			privacyPolicy,
+			termsOfService
 		)
 	);
 	await dispatch(push(`/main/kyc/current-application/${rpName}`));

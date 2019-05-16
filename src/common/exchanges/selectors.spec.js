@@ -8,9 +8,9 @@ describe('selectors', () => {
 				data: {
 					logo: [{ url: 'https://logo.jpg' }],
 					title: 'Co-founder & CEO',
-					location: [Array],
+					location: [],
 					'Good for': [Array],
-					fiat_payments: [Array],
+					fiat_payments: [],
 					taker_fee: '0.35%',
 					Wallet: true,
 					'key person': 'Brian Armstrong',
@@ -18,7 +18,7 @@ describe('selectors', () => {
 					exchange_id: 1,
 					'email 2': 'brian@coinbase.com',
 					status: 'Active',
-					fiat_supported: [Array],
+					fiat_supported: [],
 					'KYC/AML': 'Yes',
 					'Currency Pairs': [Array],
 					email: 'support@gatecoin.com',
@@ -42,8 +42,10 @@ describe('selectors', () => {
 					'Accepts Fiat': true,
 					'Personal Account': true,
 					Languages: [Array],
-					excluded_residents: [Array],
-					kyc_template: ['test'],
+					excluded_residents: [],
+					relying_party_config: {
+						templates: ['test']
+					},
 					'Fiat Withdrawal methods': [Array]
 				},
 				createdAt: 1536761705179,
@@ -153,7 +155,12 @@ describe('selectors', () => {
 				serviceOwner: '0x0000000000000000000000000000000000000000',
 				serviceId: 'global',
 				amount: 25,
-				lockPeriod: 2592000000
+				lockPeriod: 2592000000,
+				excludedResidents: [],
+				fees: '0.25%',
+				fiatPayments: [],
+				fiatSupported: [],
+				location: []
 			}
 		];
 		expect(getExchanges({ exchanges })).toEqual(expectedExchanges);
@@ -173,9 +180,9 @@ describe('selectors', () => {
 		const expectedExchangeDetails = {
 			logo: [{ url: 'https://logo.jpg' }],
 			title: 'Co-founder & CEO',
-			location: [Array],
+			location: [],
 			'Good for': [Array],
-			fiat_payments: [Array],
+			fiat_payments: [],
 			taker_fee: '0.35%',
 			Wallet: true,
 			'key person': 'Brian Armstrong',
@@ -183,7 +190,7 @@ describe('selectors', () => {
 			exchange_id: 1,
 			'email 2': 'brian@coinbase.com',
 			status: 'Active',
-			fiat_supported: [Array],
+			fiat_supported: [],
 			'KYC/AML': 'Yes',
 			'Currency Pairs': [Array],
 			email: 'support@gatecoin.com',
@@ -211,11 +218,15 @@ describe('selectors', () => {
 			'Accepts Fiat': true,
 			'Personal Account': true,
 			Languages: [Array],
-			excluded_residents: [Array],
+			excluded_residents: [],
 			kyc_template: [{ isEntered: false, name: 'test', type: 'metadata' }],
 			'Fiat Withdrawal methods': [Array]
 		};
-		expect(getServiceDetails({ exchanges }, 'Gatecoin')).toEqual(expectedExchangeDetails);
+
+		let details = getServiceDetails({ exchanges }, 'Gatecoin');
+		delete details.relying_party_config;
+
+		expect(details).toEqual(expectedExchangeDetails);
 	});
 
 	it('should return exchange hasBalance when amount of key is over the required balance', () => {

@@ -342,7 +342,10 @@ export class IncorporationCheckout extends React.Component {
 				required documents are Certified True or Notarized where necessary. Failure to do so
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
-				'conducting KYC'
+				'conducting KYC',
+				'Far Horizon Capital Inc',
+				'https://flagtheory.com/privacy-policy',
+				'http://flagtheory.com/terms-and-conditions'
 			)
 		);
 	};

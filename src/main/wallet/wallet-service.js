@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
-import EthUtil from 'ethereumjs-util';
+import * as EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-model');
 export class WalletService {
@@ -224,6 +224,13 @@ export class WalletService {
 		return Wallet.updateSetup({
 			id,
 			setup: setup
+		});
+	}
+
+	async updateDID(id, did) {
+		return Wallet.updateDID({
+			id,
+			did
 		});
 	}
 
