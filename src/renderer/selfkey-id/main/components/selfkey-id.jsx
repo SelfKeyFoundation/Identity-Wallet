@@ -69,9 +69,15 @@ class SelfkeyIdComponent extends Component {
 		this.setState({ tabValue });
 	};
 
-	handleApplicationAddDocuments = id => {
-		this.setState({ tabValue: 0 }, () => {
-			this.overview.handleAddDocument();
+	handleApplicationAddDocuments = (id, rpName) => {
+		this.setState({ tabValue: 1 }, () => {
+			this.props.dispatch(
+				kycOperations.loadRelyingParty(
+					rpName,
+					true,
+					`/main/kyc/current-application/${rpName}/${id}`
+				)
+			);
 		});
 	};
 

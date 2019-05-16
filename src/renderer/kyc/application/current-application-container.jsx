@@ -5,6 +5,7 @@ import { CurrentApplicationPopup } from './current-application-popup';
 import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
 import { jsonSchema } from 'common/identity/utils';
+import { push } from 'connected-react-router';
 
 class CurrentApplicationComponent extends Component {
 	state = {
@@ -60,6 +61,9 @@ class CurrentApplicationComponent extends Component {
 		);
 	};
 	handleClose = () => {
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyId'));
+		}
 		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 	};
 	handleSelected = (uiId, item) => {
@@ -131,6 +135,7 @@ const mapStateToProps = (state, props) => {
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
 	const authenticated = true;
+	const existingApplicationId = props.match.params.id || undefined;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
@@ -143,7 +148,8 @@ const mapStateToProps = (state, props) => {
 			state,
 			relyingPartyName,
 			currentApplication.templateId
-		)
+		),
+		existingApplicationId
 	};
 };
 

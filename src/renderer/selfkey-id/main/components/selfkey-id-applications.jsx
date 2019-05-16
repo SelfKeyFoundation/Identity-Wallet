@@ -274,7 +274,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 							>
 								<StatusInfo
 									status={item.currentStatus}
-									onClick={() => this.props.handleAddDocuments(item.id)}
+									onClick={() =>
+										this.props.handleAddDocuments(item.id, item.rpName)
+									}
 									handleRefresh={() => this.props.handleRefresh(item.id)}
 									tooltip={moment(item.updatedAt).format('DD MMM YYYY')}
 								/>

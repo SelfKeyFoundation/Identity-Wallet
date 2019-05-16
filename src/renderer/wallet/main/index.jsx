@@ -170,7 +170,7 @@ class Main extends Component {
 						)}
 					/>
 					<Route
-						path={`${match.path}/kyc/current-application/:rpName`}
+						path={`${match.path}/kyc/current-application/:rpName/:id`}
 						component={CurrentApplication}
 					/>
 					<Route
