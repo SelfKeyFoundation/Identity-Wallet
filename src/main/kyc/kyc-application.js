@@ -51,7 +51,6 @@ export class KycApplication extends BaseModel {
 	static async update(itm) {
 		const id = itm.id;
 		delete itm.id;
-		itm.title = itm.title ? itm.title : itm.rpName;
 		return this.query().patchAndFetchById(id, itm);
 	}
 

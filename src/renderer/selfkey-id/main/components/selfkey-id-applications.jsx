@@ -114,7 +114,7 @@ const statusInfoStyle = theme =>
 	});
 
 const StatusInfo = withStyles(statusInfoStyle)(
-	({ classes, status, onClick, handleRefresh, tooltip }) => {
+	({ classes, status, onClick, handleRefresh, tooltip, loading }) => {
 		let icon;
 		let message;
 		let statusStyle;
@@ -136,8 +136,8 @@ const StatusInfo = withStyles(statusInfoStyle)(
 				icon = <AttributeAlertLargeIcon className={classes.statusIcon} />;
 				message = 'Application started. Missing required documents.';
 				button = (
-					<Button variant="contained" size="large" onClick={onClick}>
-						Add Documents
+					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
+						{loading ? 'Loading' : 'Add Documents'}
 					</Button>
 				);
 				statusStyle = 'required';
@@ -181,7 +181,11 @@ const StatusInfo = withStyles(statusInfoStyle)(
 									</React.Fragment>
 								}
 							>
-								<span className={classes.refresh} onClick={handleRefresh}>
+								<span
+									className={classes.refresh}
+									onClick={handleRefresh}
+									disabled={loading}
+								>
 									<NewRefreshIcon />
 								</span>
 							</KeyTooltip>
@@ -232,7 +236,7 @@ const getRpInfo = (rpName, field) => {
 
 class SelfkeyIdApplicationsComponent extends Component {
 	render() {
-		const { classes } = this.props;
+		const { classes, loading } = this.props;
 		return (
 			<React.Fragment>
 				{this.props.applications.map((item, index) => (
@@ -249,7 +253,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 										{item.rpName.charAt(0).toUpperCase() + item.rpName.slice(1)}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary">
-										- {item.title}
+										- {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
 									</Typography>
 								</Grid>
 								<Grid
@@ -278,7 +282,8 @@ class SelfkeyIdApplicationsComponent extends Component {
 										this.props.handleAddDocuments(item.id, item.rpName)
 									}
 									handleRefresh={() => this.props.handleRefresh(item.id)}
-									tooltip={moment(item.updatedAt).format('DD MMM YYYY')}
+									tooltip={moment(new Date(item.updatedAt)).format('DD MMM YYYY')}
+									loading={loading}
 								/>
 							</Grid>
 							<ExpansionPanelDetails>

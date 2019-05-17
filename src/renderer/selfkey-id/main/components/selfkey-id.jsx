@@ -24,6 +24,9 @@ class SelfkeyIdComponent extends Component {
 		tabValue: 0,
 		loading: false,
 		applicationId: null,
+		addingDocuments: false,
+		rpName: null,
+		refreshing: false,
 		showApplicationRefreshModal: false
 	};
 
@@ -57,9 +60,20 @@ class SelfkeyIdComponent extends Component {
 	componentDidUpdate(prevProps) {
 		if (prevProps.rp !== this.props.rp) {
 			this.setState({ loading: false }, () => {
-				if (this.state.applicationId) {
-					// try to refresh again after loading relying party
-					this.handleApplicationRefresh(this.state.applicationId);
+				if (this.state.refreshing) {
+					if (this.state.applicationId) {
+						// try to refresh again after loading relying party
+						this.handleApplicationRefresh(this.state.applicationId);
+					}
+				}
+				if (this.state.addingDocuments) {
+					if (this.state.applicationId) {
+						// try to refresh again after loading relying party
+						this.handleApplicationAddDocuments(
+							this.state.applicationId,
+							this.state.rpName
+						);
+					}
 				}
 			});
 		}
@@ -70,48 +84,86 @@ class SelfkeyIdComponent extends Component {
 	};
 
 	handleApplicationAddDocuments = (id, rpName) => {
-		let self = this;
-		this.setState({ tabValue: 1 }, async () => {
-			// get current application info from kyc
-			let currentApplication = self.props.rp.applications.find(app => {
-				return app.id === id;
-			});
-			// get stored application from local database
-			let application =
-				currentApplication ||
-				this.props.applications.find(app => {
-					return app.id === id;
-				});
-			const {
-				relyingPartyName,
-				templateId,
-				returnRoute,
-				cancelRoute,
-				title,
-				description,
-				agreement,
-				attributes
-			} = application;
-			await self.props.dispatch(
-				kycActions.setCurrentApplication(
-					relyingPartyName,
-					templateId,
-					returnRoute,
-					cancelRoute,
-					title,
-					description,
-					agreement,
-					attributes
-				)
+		const { rp } = this.props;
+		const afterAuthRoute = `/main/selfkeyId?tabValue=1`;
+		const cancelRoute = `/main/selfkeyId?tabValue=1`;
+		const authenticated = true;
+
+		// if relying party not loaded, try again
+		if (!rp || !rp.authenticated) {
+			this.setState(
+				{ loading: true, addingDocuments: true, applicationId: id, rpName },
+				async () => {
+					await this.props.dispatch(
+						kycOperations.loadRelyingParty(
+							'incorporations',
+							authenticated,
+							afterAuthRoute,
+							cancelRoute
+						)
+					);
+				}
 			);
-			await self.props.dispatch(
-				kycOperations.loadRelyingParty(
-					rpName,
-					true,
-					`/main/kyc/current-application/${rpName}?applicationId=${id}`
-				)
+		} else {
+			let self = this;
+			this.setState(
+				{
+					loading: true,
+					tabValue: 1,
+					addingDocuments: false,
+					applicationId: null,
+					rpName: null
+				},
+				async () => {
+					// Get current application info from kyc
+					let currentApplication = self.props.rp.applications.find(app => {
+						return app.id === id;
+					});
+					// get stored application from local database
+					let application = this.props.applications.find(app => {
+						return app.id === id;
+					});
+					const {
+						template,
+						vendor,
+						privacyPolicy,
+						termsOfService,
+						attributes
+					} = currentApplication;
+					const { rpName, title } = application;
+					/* eslint-disable camelcase */
+					const description = application.sub_title;
+					/* eslint-enable camelcase */
+					const agreement = true;
+
+					// Set application data
+					await self.props.dispatch(
+						kycActions.setCurrentApplication(
+							rpName,
+							template,
+							afterAuthRoute,
+							cancelRoute,
+							title,
+							description,
+							agreement,
+							vendor,
+							privacyPolicy,
+							termsOfService,
+							attributes
+						)
+					);
+
+					// Open add documents modal
+					await self.props.dispatch(
+						kycOperations.loadRelyingParty(
+							rpName,
+							true,
+							`/main/kyc/current-application/${rpName}?applicationId=${id}`
+						)
+					);
+				}
 			);
-		});
+		}
 	};
 
 	handleApplicationRefresh = id => {
@@ -122,7 +174,7 @@ class SelfkeyIdComponent extends Component {
 
 		// if relying party not loaded, try again
 		if (!rp || !rp.authenticated) {
-			this.setState({ loading: true, applicationId: id }, async () => {
+			this.setState({ loading: true, refreshing: true, applicationId: id }, async () => {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
 						'incorporations',
@@ -151,6 +203,7 @@ class SelfkeyIdComponent extends Component {
 
 			// sync of RP applications with local database is done automatically, all done, show modal
 			this.setState({
+				refreshing: false,
 				applicationId: null,
 				showApplicationRefreshModal: true
 			});
@@ -222,6 +275,7 @@ class SelfkeyIdComponent extends Component {
 					{...this.props}
 					handleAddDocuments={this.handleApplicationAddDocuments}
 					handleRefresh={this.handleApplicationRefresh}
+					loading={this.state.loading}
 				/>
 			);
 		}

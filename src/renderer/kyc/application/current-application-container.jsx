@@ -56,10 +56,13 @@ class CurrentApplicationComponent extends Component {
 			this.setState({ error });
 			return;
 		}
-
-		await this.props.dispatch(
-			kycOperations.submitCurrentApplicationOperation(this.state.selected)
-		);
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+		} else {
+			await this.props.dispatch(
+				kycOperations.submitCurrentApplicationOperation(this.state.selected)
+			);
+		}
 	};
 	handleClose = () => {
 		if (this.props.existingApplicationId) {
@@ -90,7 +93,12 @@ class CurrentApplicationComponent extends Component {
 		this.setState({ showEditAttribute: false, showCreateAttribute: false });
 	};
 	render() {
-		const { currentApplication, relyingParty, requirements } = this.props;
+		const {
+			currentApplication,
+			relyingParty,
+			requirements,
+			existingApplicationId
+		} = this.props;
 		return (
 			<div>
 				<CurrentApplicationPopup
@@ -111,6 +119,7 @@ class CurrentApplicationComponent extends Component {
 					onSelected={this.handleSelected}
 					editItem={this.handleEdit}
 					addItem={this.handleAdd}
+					existingApplicationId={existingApplicationId}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributePopup
