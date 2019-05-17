@@ -6,7 +6,7 @@ import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import qs from 'query-string';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import { kycSelectors, kycOperations } from 'common/kyc';
+import { kycSelectors, kycOperations, kycActions } from 'common/kyc';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
 import { Popup } from '../../../common/popup';
@@ -70,12 +70,45 @@ class SelfkeyIdComponent extends Component {
 	};
 
 	handleApplicationAddDocuments = (id, rpName) => {
-		this.setState({ tabValue: 1 }, () => {
-			this.props.dispatch(
+		let self = this;
+		this.setState({ tabValue: 1 }, async () => {
+			// get current application info from kyc
+			let currentApplication = self.props.rp.applications.find(app => {
+				return app.id === id;
+			});
+			// get stored application from local database
+			let application =
+				currentApplication ||
+				this.props.applications.find(app => {
+					return app.id === id;
+				});
+			const {
+				relyingPartyName,
+				templateId,
+				returnRoute,
+				cancelRoute,
+				title,
+				description,
+				agreement,
+				attributes
+			} = application;
+			await self.props.dispatch(
+				kycActions.setCurrentApplication(
+					relyingPartyName,
+					templateId,
+					returnRoute,
+					cancelRoute,
+					title,
+					description,
+					agreement,
+					attributes
+				)
+			);
+			await self.props.dispatch(
 				kycOperations.loadRelyingParty(
 					rpName,
 					true,
-					`/main/kyc/current-application/${rpName}/${id}`
+					`/main/kyc/current-application/${rpName}?applicationId=${id}`
 				)
 			);
 		});

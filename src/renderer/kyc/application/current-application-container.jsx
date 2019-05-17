@@ -6,6 +6,7 @@ import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-at
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
 import { jsonSchema } from 'common/identity/utils';
 import { push } from 'connected-react-router';
+import qs from 'query-string';
 
 class CurrentApplicationComponent extends Component {
 	state = {
@@ -62,9 +63,10 @@ class CurrentApplicationComponent extends Component {
 	};
 	handleClose = () => {
 		if (this.props.existingApplicationId) {
-			this.props.dispatch(push('/main/selfkeyId'));
+			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+		} else {
+			this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 		}
-		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 	};
 	handleSelected = (uiId, item) => {
 		const { selected } = this.state;
@@ -135,7 +137,8 @@ const mapStateToProps = (state, props) => {
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
 	const authenticated = true;
-	const existingApplicationId = props.match.params.id || undefined;
+	const existingApplicationId =
+		qs.parse(props.location.search, { ignoreQueryPrefix: true }).applicationId || undefined;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
