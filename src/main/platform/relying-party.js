@@ -22,6 +22,9 @@ export class RelyingPartyCtx {
 		this.token = token;
 	}
 	mergeWithConfig() {}
+	supportsDID() {
+		return !!this.config.did;
+	}
 	getOrigin() {
 		return this.config.origin || 'IDW';
 	}
@@ -91,7 +94,7 @@ export class RelyingPartyRest {
 	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('/auth/challenge');
-		const did = ctx.identity.did;
+		const did = ctx.supportsDID() ? ctx.identity.did : ctx.identity.publicKey;
 		url = urljoin(url, did);
 		return request.get({
 			url,

@@ -24,6 +24,18 @@ export class Identity {
 		} else {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		}
+		if (typeof this.publicKey === 'string') {
+			this.publicKey = ethUtil.addHexPrefix(this.publicKey);
+		}
+		if (this.publicKey && this.publicKey.then) {
+			this.publicKey.then(publicKey => {
+				if (typeof publicKey !== 'string') {
+					return publicKey;
+				}
+				this.publicKey = ethUtil.addHexPrefix(publicKey);
+				return this.publicKey;
+			});
+		}
 	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
@@ -82,9 +94,10 @@ export class Identity {
 		}
 		try {
 			this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
-			this.publicKey = ethUtil
-				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
-				.toString('hex');
+			console.log('XXX', this.privateKey);
+			this.publicKey = ethUtil.addHexPrefix(
+				ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
+			);
 		} catch (error) {
 			log.error(error);
 			throw new Error('INVALID_PASSWORD');
