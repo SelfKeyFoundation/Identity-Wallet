@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { LargeTableHeadRow } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
-import { DepositManager } from '../../deposit';
 
 const styles = theme => ({
 	wrapper: {
@@ -126,11 +125,6 @@ export const MarketplaceServicesList = withStyles(styles)(
 								<Grid item>{category.icon}</Grid>
 								<Grid item>
 									<Typography variant="h1">{category.title}</Typography>
-								</Grid>
-							</Grid>
-							<Grid container justify="flex-end">
-								<Grid item>
-									<DepositManager relyingPartyName="exchanges" />
 								</Grid>
 							</Grid>
 						</Grid>
