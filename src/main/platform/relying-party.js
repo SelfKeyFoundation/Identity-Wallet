@@ -91,19 +91,19 @@ export class RelyingPartyRest {
 	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('/auth/challenge');
-		const publicKey = await ctx.identity.publicKey;
-		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
+		const did = ctx.identity.did;
+		url = urljoin(url, did);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
 			json: true
 		});
 	}
-	static postChallengeReply(ctx, challenge, signature) {
+	static postChallengeReply(ctx, challenge, signature, keyid) {
 		let url = ctx.getEndpoint('/auth/challenge');
 		return request.post({
 			url,
-			body: { signature },
+			body: { signature: { value: signature, keyid } },
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
 				'User-Agent': this.userAgent,

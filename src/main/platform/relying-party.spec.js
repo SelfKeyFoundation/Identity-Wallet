@@ -41,7 +41,7 @@ describe('RelyingPartyRest', () => {
 
 	beforeEach(() => {
 		config = { origin: 'test' };
-		ctx = new RelyingPartyCtx(config, { publicKey: 'test' });
+		ctx = new RelyingPartyCtx(config, { publicKey: 'test', did: 'did:eth:0xtest' });
 	});
 	it('getAuthorizationHeader', () => {
 		let token = 'test';
@@ -57,7 +57,7 @@ describe('RelyingPartyRest', () => {
 			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
-					url: `${testEndpoint}/0xtest`,
+					url: `${testEndpoint}/did:eth:0xtest`,
 					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
 					json: true
 				}
@@ -71,15 +71,21 @@ describe('RelyingPartyRest', () => {
 			const testEndpoint = 'http://test';
 			const testToken = 'testToken';
 			const testChallenge = 'test';
+			const keyid = 'test';
 			const testSignature = 'test sig';
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.postChallengeReply(ctx, testChallenge, testSignature);
+			let res = await RelyingPartyRest.postChallengeReply(
+				ctx,
+				testChallenge,
+				testSignature,
+				keyid
+			);
 			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
-					body: { signature: testSignature },
+					body: { signature: { value: testSignature, keyid } },
 					headers: {
 						Authorization: `Bearer ${testChallenge}`,
 						'User-Agent': RelyingPartyRest.userAgent,
