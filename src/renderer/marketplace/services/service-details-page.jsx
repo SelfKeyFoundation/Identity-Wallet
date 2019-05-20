@@ -49,37 +49,12 @@ class MarketplaceServiceDetailsPageComponent extends Component {
 	};
 
 	render() {
-		let unlockAction = this.unlockAction;
 		let item = this.props.item;
-		let { stake } = this.props;
-		item = { ...item };
-		item.integration = 'Unlock marketplace';
-		if (item.status === 'Inactive') {
-			item.integration = 'Coming Soon';
-			unlockAction = null;
-		} else if (this.props.pendingTransaction) {
-			item.status = 'pending';
-			item.integration = 'Pending KEY deposit';
-			if (this.props.pendingTransaction.action === 'withdrawStake') {
-				item.integration = 'Pending KEY return';
-			}
-			unlockAction = null;
-		} else if (stake && +stake.balance && +stake.releaseDate) {
-			item.status = 'locked';
-			item.integration = 'KEY Deposit';
-			item.releaseDate = stake.releaseDate;
-			unlockAction = null;
-		} else if (stake && +stake.balance && !+stake.releaseDay) {
-			item.status = 'unlocked';
-			item.integration = 'Return KEY Deposit';
-			unlockAction = this.returnAction;
-		}
 		return (
 			<div>
 				<MarketplaceServiceDetails
 					{...this.props}
 					item={item}
-					unlockAction={unlockAction}
 					backAction={this.backAction}
 				/>
 			</div>
