@@ -157,7 +157,7 @@ const getIconForToken = token => {
 export class ReceiveTransfer extends React.Component {
 	render() {
 		const { classes, cryptoCurrency, publicKey } = this.props;
-		let linkl = `mailto:designhorf@gmail.com?body=${publicKey}`;
+		let link = `mailto:?body=${publicKey}`;
 
 		let printDiv = () => {
 			window.print();
@@ -214,7 +214,7 @@ export class ReceiveTransfer extends React.Component {
 										<CopyWithIcon text={publicKey} />
 									</div>
 									<a
-										href={linkl}
+										href={link}
 										className={`${classes.space} ${classes.padding} ${
 											classes.icon
 										}`}
