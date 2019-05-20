@@ -123,8 +123,8 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 		const isNotExcludedResidents =
 			excludedResidents.length === 0 || excludedResidents[0] === 'None';
 
-		const isFiatSupported = fiatSupported.length !== 0;
-		const isFiatPayments = fiatPayments.length !== 0;
+		const isFiatSupported = fiatSupported.length !== 0 && fiatSupported[0] !== 'Not Available';
+		const isFiatPayments = fiatPayments.length !== 0 && fiatPayments[0] !== 'Not Available';
 
 		return (
 			<TableRow key={name}>
