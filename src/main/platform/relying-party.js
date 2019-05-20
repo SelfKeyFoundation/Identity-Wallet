@@ -104,6 +104,14 @@ export class RelyingPartyRest {
 	}
 	static postChallengeReply(ctx, challenge, signature, keyid) {
 		let url = ctx.getEndpoint('/auth/challenge');
+		const body = {};
+
+		if (ctx.supportsDID()) {
+			body.signature = { value: signature, keyid };
+		} else {
+			body.signature = signature;
+		}
+
 		return request.post({
 			url,
 			body: { signature: { value: signature, keyid } },

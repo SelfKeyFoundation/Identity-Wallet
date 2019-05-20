@@ -94,7 +94,6 @@ export class Identity {
 		}
 		try {
 			this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
-			console.log('XXX', this.privateKey);
 			this.publicKey = ethUtil.addHexPrefix(
 				ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
 			);

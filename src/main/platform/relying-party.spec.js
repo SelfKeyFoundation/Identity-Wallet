@@ -40,7 +40,7 @@ describe('RelyingPartyRest', () => {
 	let config = null;
 
 	beforeEach(() => {
-		config = { origin: 'test' };
+		config = { origin: 'test', did: true };
 		ctx = new RelyingPartyCtx(config, { publicKey: 'test', did: 'did:eth:0xtest' });
 	});
 	it('getAuthorizationHeader', () => {
@@ -513,7 +513,7 @@ describe('RelyingPartyRest', () => {
 });
 
 describe('Relying Party session', () => {
-	const config = {};
+	const config = { did: true };
 	const identity = {
 		genSignatureForMessage() {}
 	};
