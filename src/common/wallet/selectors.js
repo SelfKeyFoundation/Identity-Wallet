@@ -13,3 +13,7 @@ export const getWallet = state => {
 	wallet.isHardwareWallet = wallet.profile === 'ledger' || wallet.profile === 'trezor';
 	return wallet;
 };
+
+export const getAssociateError = state => {
+	return state.wallet.associateError;
+};

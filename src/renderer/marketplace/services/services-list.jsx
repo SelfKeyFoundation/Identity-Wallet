@@ -1,7 +1,16 @@
 import React from 'react';
 
-import { Grid, Button, withStyles, Typography } from '@material-ui/core';
-import { H1 } from 'selfkey-ui';
+import {
+	Grid,
+	Button,
+	withStyles,
+	Typography,
+	Table,
+	TableHead,
+	TableBody,
+	TableCell
+} from '@material-ui/core';
+import { LargeTableHeadRow } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
@@ -14,18 +23,22 @@ const styles = theme => ({
 		'& h1': {
 			marginLeft: '20px'
 		},
-		'& svg': {
-			marginLeft: '20px'
-		},
 		width: '100%',
 		height: '120px'
 	},
 
 	headerContent: {
-		marginTop: '50px'
+		marginTop: '50px',
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'nowrap'
 	},
 
-	content: { marginTop: '30px' },
+	content: {
+		marginTop: '30px',
+		margin: 0,
+		width: '100%'
+	},
 
 	button: {
 		color: '#93b0c1',
@@ -43,22 +56,39 @@ const styles = theme => ({
 		left: '15px',
 		position: 'absolute',
 		top: '120px'
+	},
+
+	listContent: {
+		margin: 0,
+		width: '100%'
+	},
+
+	icon: {
+		padding: 0
+	},
+
+	unlockIcon: {
+		marginRight: '10px'
 	}
 });
 
 const getServices = (items, viewAction) => {
 	return items.map(item => {
 		return (
-			<Grid item key={item.id || item.name} xs={4}>
+			<React.Fragment key={item.id || item.name}>
 				<MarketplaceServicesListItem
 					id={item.id || item.name}
 					name={item.name}
-					description={item.description}
-					status={item.status}
+					location={item.location || '-'}
+					fees={item.fees || '-'}
+					fiatSupported={item.fiatSupported || '-'}
+					fiatPayments={item.fiatPayments || '-'}
+					excludedResidents={item.excludedResidents || '-'}
 					logoUrl={item.logoUrl}
+					status={item.status}
 					viewAction={viewAction}
 				/>
-			</Grid>
+			</React.Fragment>
 		);
 	});
 };
@@ -87,17 +117,19 @@ export const MarketplaceServicesList = withStyles(styles)(
 						<Grid
 							container
 							direction="row"
-							justify="flex-start"
+							justify="space-between"
 							alignItems="center"
 							className={classes.headerContent}
 						>
-							<Grid item>{category.icon}</Grid>
-							<Grid item>
-								<H1>{category.title}</H1>
+							<Grid container>
+								<Grid item>{category.icon}</Grid>
+								<Grid item>
+									<Typography variant="h1">{category.title}</Typography>
+								</Grid>
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item className={classes.listContent} xs={12}>
 						<Grid
 							container
 							direction="row"
@@ -106,7 +138,40 @@ export const MarketplaceServicesList = withStyles(styles)(
 							spacing={24}
 							className={classes.content}
 						>
-							{getServices(items, viewAction)}
+							<Table>
+								<TableHead>
+									<LargeTableHeadRow>
+										<TableCell className={classes.icon}>&nbsp;</TableCell>
+										<TableCell>
+											<Typography variant="overline">Exchange</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Location</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Fees</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">
+												Fiat Supported
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">
+												Fiat Payments
+											</Typography>
+										</TableCell>
+										<TableCell style={{ padding: '10px' }}>
+											<Typography variant="overline">
+												Excluded Residents
+											</Typography>
+										</TableCell>
+										<TableCell>&nbsp;</TableCell>
+									</LargeTableHeadRow>
+								</TableHead>
+
+								<TableBody>{getServices(items, viewAction)}</TableBody>
+							</Table>
 						</Grid>
 					</Grid>
 				</Grid>

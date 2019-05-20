@@ -68,18 +68,17 @@ class CurrentApplicationComponent extends Component {
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};
 	handleEdit = item => {
-		if (item.options && item.options.length) {
-			this.setState({
-				showEditAttribute: true,
-				editAttribute: this.state.selected[item.id] || item.options[0]
-			});
-		} else {
-			this.setState({
-				showCreateAttribute: true,
-				typeId: item.type.id,
-				isDocument: jsonSchema.containsFile(item.type.content)
-			});
-		}
+		this.setState({
+			showEditAttribute: true,
+			editAttribute: this.state.selected[item.id] || item.options[0]
+		});
+	};
+	handleAdd = item => {
+		this.setState({
+			showCreateAttribute: true,
+			typeId: item.type.id,
+			isDocument: jsonSchema.containsFile(item.type.content)
+		});
 	};
 	handlePopupClose = () => {
 		this.setState({ showEditAttribute: false, showCreateAttribute: false });
@@ -91,6 +90,9 @@ class CurrentApplicationComponent extends Component {
 				<CurrentApplicationPopup
 					currentApplication={currentApplication}
 					agreement={currentApplication.agreement}
+					vendor={currentApplication.vendor}
+					privacyPolicy={currentApplication.privacyPolicy}
+					termsOfService={currentApplication.termsOfService}
 					agreementValue={this.state.agreementValue}
 					agreementError={this.state.agreementError}
 					onAgreementChange={this.handleAgreementChange}
@@ -102,6 +104,7 @@ class CurrentApplicationComponent extends Component {
 					selectedAttributes={this.state.selected}
 					onSelected={this.handleSelected}
 					editItem={this.handleEdit}
+					addItem={this.handleAdd}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributePopup

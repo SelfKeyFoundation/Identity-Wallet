@@ -1,6 +1,7 @@
 /* istanbul ignore file file */
 import keythereum from 'keythereum';
 import path from 'path';
+import fs from 'fs';
 import { getWalletsDir } from 'common/utils/common';
 
 export const keystorage = keythereum;
@@ -20,8 +21,12 @@ keystorage.importFromFile = function(filepath, cb) {
 };
 
 export const getPrivateKey = (keystoreFilePath, password) => {
-	let keystoreFileFullPath = path.join(getWalletsDir(), keystoreFilePath);
-	let keystore = keystorage.importFromFile(keystoreFileFullPath);
+	try {
+		fs.accessSync(keystoreFilePath, fs.constants.R_OK);
+	} catch (error) {
+		keystoreFilePath = path.resolve(getWalletsDir(), keystoreFilePath);
+	}
+	let keystore = keystorage.importFromFile(keystoreFilePath);
 	return keystorage.recover(password, keystore);
 };
 

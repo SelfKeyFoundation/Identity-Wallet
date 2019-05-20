@@ -18,12 +18,14 @@ import {
 	TableFooter,
 	TablePagination,
 	Paper,
-	Divider
+	Divider,
+	CircularProgress
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
+	HourGlassSmallIcon,
 	ViewIcon,
 	FailedIcon,
 	ReceiveIcon,
@@ -87,19 +89,32 @@ const styles = theme => ({
 		'&:nth-of-type(odd)': {
 			backgroundColor: 'transparent'
 		}
+	},
+
+	loading: {
+		position: 'relative',
+		marginLeft: '10px',
+		top: '5px'
+	},
+
+	searching: {
+		height: '19px',
+		width: '242px',
+		color: '#00C0D9',
+		fontFamily: 'Lato',
+		fontSize: '13px',
+		lineHeight: '19px',
+		textTransform: 'none',
+		marginLeft: '10px'
 	}
 });
 
-const getIconForTransaction = (statusIconName, sent) => {
-	switch (statusIconName) {
-		case 'failed':
+const getIconForTransaction = (isError, sent) => {
+	switch (isError) {
+		case 1:
 			return <FailedIcon />;
-		case 'receive':
-			return <ReceiveIcon />;
-		case 'hourglass':
+		case undefined:
 			return <HourGlassIcon />;
-		case 'sent':
-			return <SentIcon />;
 		default:
 			return sent ? <SentIcon /> : <ReceiveIcon />;
 	}
@@ -115,10 +130,24 @@ const getCryptoType = transaction => {
 
 const getCustomStatusText = (transaction, sent) => {
 	let cryptoType = getCryptoType(transaction);
-	if (sent) {
-		return `Sent ${cryptoType}`;
+	if (transaction.isError === 1) {
+		if (sent) {
+			return `Failed to send ${cryptoType}`;
+		} else {
+			return `Failed to receive ${cryptoType}`;
+		}
 	} else {
-		return `Received ${cryptoType}`;
+		if (sent) {
+			return `Sent ${cryptoType}`;
+		} else {
+			return `Received ${cryptoType}`;
+		}
+	}
+};
+
+const getCustomValue = (transaction, sent) => {
+	if (transaction.isError !== 1) {
+		return `${sent ? '-' : '+'}${convertExponentialToDecimal(transaction.value)}`;
 	}
 };
 
@@ -188,7 +217,7 @@ class TransactionsHistory extends Component {
 
 	handleRefresh = () => {
 		this.setState({ page: 0 });
-		this.loadData();
+		this.props.dispatch(transactionHistoryOperations.reloadTransactionsOperation());
 	};
 
 	handleChangePage = (event, page) => {
@@ -214,7 +243,7 @@ class TransactionsHistory extends Component {
 	}
 
 	render() {
-		const { classes, cryptoCurrency } = this.props;
+		const { classes, cryptoCurrency, processing } = this.props;
 		const transactions = cryptoCurrency
 			? this.props.transactions.filter(transaction =>
 					filterTransactionByToken(transaction, cryptoCurrency)
@@ -233,8 +262,12 @@ class TransactionsHistory extends Component {
 								</Typography>
 							</Grid>
 							<Grid item xs={1} className={classes.iconWrap}>
-								<IconButton aria-label="Refresh" onClick={this.handleRefresh}>
-									<RefreshIcon />
+								<IconButton
+									aria-label="Refresh"
+									onClick={this.handleRefresh}
+									disabled={processing}
+								>
+									{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
 								</IconButton>
 							</Grid>
 						</Grid>
@@ -243,101 +276,118 @@ class TransactionsHistory extends Component {
 						<Divider />
 					</Grid>
 					<Grid item xs={12}>
-						<Table className={classes.bottomSpace}>
-							<TableBody>
-								{paginate(transactions, rowsPerPage, page).map(transaction => {
-									return (
-										<TableRow key={transaction.id} className={classes.tableRow}>
-											<TableCell className={classes.narrowCell}>
-												{getIconForTransaction(
-													transaction.statusIconName,
-													this.hasSent(transaction)
-												)}
-											</TableCell>
-											<TableCell className={classes.smallPadding}>
-												<Typography component="span" variant="body2">
-													{this.renderDate(transaction.timeStamp)}
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography component="span" variant="body2">
-													{transaction.statusText ||
-														getCustomStatusText(
+						{processing ? (
+							<React.Fragment>
+								<span className={classes.loading}>
+									<CircularProgress size={20} />
+								</span>
+								<span id="searching" className={classes.searching}>
+									Please wait. Checking the blockchain for transactions history
+									information.
+								</span>
+							</React.Fragment>
+						) : (
+							<Table className={classes.bottomSpace}>
+								<TableBody>
+									{paginate(transactions, rowsPerPage, page).map(transaction => {
+										return (
+											<TableRow
+												key={transaction.id}
+												className={classes.tableRow}
+											>
+												<TableCell className={classes.narrowCell}>
+													{getIconForTransaction(
+														transaction.isError,
+														this.hasSent(transaction)
+													)}
+												</TableCell>
+												<TableCell className={classes.smallPadding}>
+													<Typography component="span" variant="body2">
+														{this.renderDate(transaction.timeStamp)}
+													</Typography>
+												</TableCell>
+												<TableCell>
+													<Typography component="span" variant="body2">
+														{transaction.statusText ||
+															getCustomStatusText(
+																transaction,
+																this.hasSent(transaction)
+															)}
+													</Typography>
+												</TableCell>
+												<TableCell align="right">
+													<Typography component="span" variant="body2">
+														{getCustomValue(
 															transaction,
 															this.hasSent(transaction)
 														)}
-												</Typography>
-											</TableCell>
-											<TableCell align="right">
-												<Typography component="span" variant="body2">
-													{this.hasSent(transaction) ? '- ' : '+ '}
-													{convertExponentialToDecimal(transaction.value)}
-												</Typography>
-											</TableCell>
-											<TableCell
-												align="right"
-												className={classes.zeroRightPadding}
-											>
-												<IconButton className={classes.rightSpace}>
-													<CopyToClipboard
-														text={`${TX_HISTORY_API_ENDPOINT}/${
-															transaction.hash
-														}`}
-													>
-														<Grid container>
-															<CopyIcon
-																className={classes.iconSpacing}
-															/>
-															<Typography
-																variant="subtitle1"
-																color="secondary"
-															>
-																Copy
-															</Typography>
-														</Grid>
-													</CopyToClipboard>
-												</IconButton>
-												<IconButton
-													onClick={e => {
-														window.openExternal(
-															e,
-															`${TX_HISTORY_API_ENDPOINT}/${
-																transaction.hash
-															}`
-														);
-													}}
-												>
-													<ViewIcon className={classes.iconSpacing} />
-													<Typography
-														variant="subtitle1"
-														color="secondary"
-													>
-														View
 													</Typography>
-												</IconButton>
-											</TableCell>
-										</TableRow>
-									);
-								})}
-							</TableBody>
-							<TableFooter>
-								<TableRow className={classes.transparent}>
-									<TablePagination
-										count={transactions.length}
-										page={page}
-										onChangePage={this.handleChangePage}
-										rowsPerPage={rowsPerPage}
-										onChangeRowsPerPage={this.handleChangeRowsPerPage}
-										backIconButtonProps={{
-											'aria-label': 'Previous Page'
-										}}
-										nextIconButtonProps={{
-											'aria-label': 'Next Page'
-										}}
-									/>
-								</TableRow>
-							</TableFooter>
-						</Table>
+												</TableCell>
+												<TableCell
+													align="right"
+													className={classes.zeroRightPadding}
+												>
+													<IconButton className={classes.rightSpace}>
+														<CopyToClipboard
+															text={`${TX_HISTORY_API_ENDPOINT}/${
+																transaction.hash
+															}`}
+														>
+															<Grid container>
+																<CopyIcon
+																	className={classes.iconSpacing}
+																/>
+																<Typography
+																	variant="subtitle1"
+																	color="secondary"
+																>
+																	Copy
+																</Typography>
+															</Grid>
+														</CopyToClipboard>
+													</IconButton>
+													<IconButton
+														onClick={e => {
+															window.openExternal(
+																e,
+																`${TX_HISTORY_API_ENDPOINT}/${
+																	transaction.hash
+																}`
+															);
+														}}
+													>
+														<ViewIcon className={classes.iconSpacing} />
+														<Typography
+															variant="subtitle1"
+															color="secondary"
+														>
+															View
+														</Typography>
+													</IconButton>
+												</TableCell>
+											</TableRow>
+										);
+									})}
+								</TableBody>
+								<TableFooter>
+									<TableRow className={classes.transparent}>
+										<TablePagination
+											count={transactions.length}
+											page={page}
+											onChangePage={this.handleChangePage}
+											rowsPerPage={rowsPerPage}
+											onChangeRowsPerPage={this.handleChangeRowsPerPage}
+											backIconButtonProps={{
+												'aria-label': 'Previous Page'
+											}}
+											nextIconButtonProps={{
+												'aria-label': 'Next Page'
+											}}
+										/>
+									</TableRow>
+								</TableFooter>
+							</Table>
+						)}
 					</Grid>
 				</Grid>
 			</Paper>
@@ -347,6 +397,7 @@ class TransactionsHistory extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		transactions: transactionHistorySelectors.selectTransactionHistory(state).transactions,
+		processing: transactionHistorySelectors.selectTransactionHistory(state).processing,
 		wallet: walletSelectors.getWallet(state)
 	};
 };

@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import store from './common/store';
 import history from 'common/store/history';
 import { shell } from 'electron';
+
 import { setGlobalContext, configureContext } from 'common/context';
 import path from 'path';
 

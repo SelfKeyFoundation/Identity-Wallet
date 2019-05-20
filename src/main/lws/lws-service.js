@@ -221,7 +221,8 @@ export class LWSService {
 					attr.value
 				);
 				return {
-					id: attr.url,
+					id: attr.id,
+					schemaId: attr.url,
 					schema: attr.schema,
 					data: normalized.value,
 					documents: normalized.documents.map(doc => {
@@ -230,7 +231,7 @@ export class LWSService {
 					})
 				};
 			});
-			await session.createUser(rpAttributes);
+			await session.createUser(rpAttributes, config.meta || {});
 			return this.authResp(
 				{
 					payload: 'ok'

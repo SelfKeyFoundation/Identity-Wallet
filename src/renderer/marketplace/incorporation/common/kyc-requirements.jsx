@@ -28,6 +28,12 @@ const styles = theme => ({
 		'& p': {
 			fontWeight: 'bold'
 		}
+	},
+	documentType: {
+		display: 'flex'
+	},
+	documentIcon: {
+		marginLeft: '10px'
 	}
 });
 
@@ -43,7 +49,7 @@ const IncorporationsKYCItem = withStyles(styles)(({ classes, item, index }) => {
 	return (
 		<ListItem className={classes.listItem}>
 			{icon}
-			<Typography variant="body2" color="textSecondary" gutterBottom>
+			<Typography variant="body2" color="textSecondary" className={classes.documentType}>
 				{type}
 			</Typography>
 		</ListItem>

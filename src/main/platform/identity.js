@@ -1,4 +1,4 @@
-import ethUtil from 'ethereumjs-util';
+import * as ethUtil from 'ethereumjs-util';
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { getGlobalContext } from 'common/context';

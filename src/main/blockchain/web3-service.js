@@ -31,10 +31,13 @@ export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].ur
 
 export class Web3Service {
 	constructor(ctx = {}) {
-		this.web3 = new Web3();
+		this.web3 = new Web3(SELECTED_SERVER_URL);
+		if (CONFIG.chainId === 3) {
+			this.web3.transactionConfirmationBlocks = 1;
+		} else {
+			this.web3.transactionConfirmationBlocks = 10;
+		}
 		this.store = ctx.store;
-		const { HttpProvider } = this.web3.providers;
-		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
 		this.abi = ABI;
@@ -59,6 +62,11 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
+		if (CONFIG.chainId === 3) {
+			this.web3.transactionConfirmationBlocks = 1;
+		} else {
+			this.web3.transactionConfirmationBlocks = 10;
+		}
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
@@ -81,6 +89,11 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
+		if (CONFIG.chainId === 3) {
+			this.web3.transactionConfirmationBlocks = 1;
+		} else {
+			this.web3.transactionConfirmationBlocks = 10;
+		}
 	}
 
 	async handleTicket(data) {
