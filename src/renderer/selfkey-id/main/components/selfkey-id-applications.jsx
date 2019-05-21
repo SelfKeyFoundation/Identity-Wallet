@@ -278,7 +278,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 								</Grid>
 								<Grid item xs={10}>
 									<Typography variant="h1" gutterBottom>
-										Your {"haven't"} applied for any service in the Marketplace
+										You {"haven't"} applied for any service in the Marketplace
 									</Typography>
 									<Typography variant="body1" color="secondary" gutterBottom>
 										Once you apply to a service in the marketplace, you will be

@@ -318,7 +318,7 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			notAuthenticated
 		),
-		applications: [] // kycSelectors.selectApplications(state)
+		applications: kycSelectors.selectApplications(state)
 	};
 };
 
