@@ -37,7 +37,10 @@ const styles = theme => ({
 	content: {
 		marginTop: '30px',
 		margin: 0,
-		width: '100%'
+		width: '100%',
+		'& th': {
+			padding: '0 15px'
+		}
 	},
 
 	button: {
