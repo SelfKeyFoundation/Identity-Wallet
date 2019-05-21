@@ -4,7 +4,7 @@ import { kycActions, kycTypes, reducers, initialState, kycSelectors, testExports
 
 describe('KYC Duck', () => {
 	let applicationService = {
-		loadApplications() {}
+		load() {}
 	};
 	let state = {};
 	let store = {
@@ -28,7 +28,7 @@ describe('KYC Duck', () => {
 		];
 		describe('Operations', () => {
 			it('loadApplicationsOperation', async () => {
-				sinon.stub(applicationService, 'loadApplications').resolves(testApplications);
+				sinon.stub(applicationService, 'load').resolves(testApplications);
 				sinon.stub(store, 'dispatch');
 				sinon.stub(kycActions, 'setApplicationsAction').returns(testAction);
 
