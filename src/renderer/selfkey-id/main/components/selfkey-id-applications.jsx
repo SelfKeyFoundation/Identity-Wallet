@@ -73,7 +73,24 @@ const styles = theme => ({
 		padding: '16px'
 	},
 	next: {
+		marginBottom: '50px',
+		marginLeft: '20px',
 		minWidth: '120px'
+	},
+	marketplaceIcon: {
+		'& svg': {
+			height: '55px !important',
+			marginLeft: '-30px',
+			width: '68px !important'
+		}
+	},
+	cardItem: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'center'
+	},
+	cardHeader: {
+		padding: '30px'
 	}
 });
 
@@ -248,30 +265,42 @@ class SelfkeyIdApplicationsComponent extends Component {
 
 		if (this.props.applications && this.props.applications.length === 0) {
 			return (
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-					<Grid item xs={2}>
-						<MarketplaceIcon />
-					</Grid>
-					<Grid item xs={10}>
-						<Typography variant="body1" gutterBottom>
-							Your {`haven't`} applied for any service in the Marketplace
-						</Typography>
-						<br />
-						<Typography variant="overline" gutterBottom>
-							Once you apply to a service in the marketplace, you will be able to{' '}
-							manage it from this area.
-						</Typography>
-						<br />
-						<br />
-						<Button
-							id="marketplace"
-							variant="contained"
-							onClick={this.handleAccessClick}
-							className={classes.next}
-							size="large"
-						>
-							Access Marketplace
-						</Button>
+				<Grid container spacing={32}>
+					<Grid item xs={12}>
+						<Card>
+							<Grid container direction="row" className={classes.cardHeader}>
+								<Grid
+									item
+									xs={2}
+									className={`${classes.cardItem} ${classes.marketplaceIcon}`}
+								>
+									<MarketplaceIcon />
+								</Grid>
+								<Grid item xs={10}>
+									<Typography variant="h1" gutterBottom>
+										Your {"haven't"} applied for any service in the Marketplace
+									</Typography>
+									<Typography variant="body1" color="secondary" gutterBottom>
+										Once you apply to a service in the marketplace, you will be
+										able to manage it from this area.
+									</Typography>
+								</Grid>
+							</Grid>
+							<Grid container direction="row">
+								<Grid item xs={2} className={classes.cardItem} />
+								<Grid item xs={10}>
+									<Button
+										id="marketplace"
+										variant="contained"
+										onClick={this.handleAccessClick}
+										className={classes.next}
+										size="large"
+									>
+										Access Marketplace
+									</Button>
+								</Grid>
+							</Grid>
+						</Card>
 					</Grid>
 				</Grid>
 			);
