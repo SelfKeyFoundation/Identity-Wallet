@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
+import config from 'common/config';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
 
@@ -89,6 +90,23 @@ const styles = theme => ({
 	}
 });
 
+// FIXME: move to common helper
+const getPrice = bank => {
+	// Check for override ENV variables
+	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
+	let price = bank['Price'];
+	if (!price) return null;
+
+	if (config.dev) {
+		price = bank['Test_Price'];
+	} else {
+		if (bank['Active_Test_Price']) {
+			price = bank['Test_Price'];
+		}
+	}
+	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
+};
+
 export const BankingOffersTable = withStyles(styles)(
 	({ classes, keyRate, data = [], onDetails, className }) => {
 		return (
@@ -133,24 +151,25 @@ export const BankingOffersTable = withStyles(styles)(
 					{data.map(bank => (
 						<TableRow key={bank.id}>
 							<TableCell className={classes.flagCell}>
-								<FlagCountryName code={bank.countryCode} size="small" />
+								<FlagCountryName code={bank['Country Code']} size="small" />
 							</TableCell>
-							<TableCell className={classes.regionCell}>{bank.region}</TableCell>
+							<TableCell className={classes.regionCell}>{bank['Region']}</TableCell>
 							<TableCell className={classes.eligibilityCellBody}>
-								{bank.eligibility}
+								{bank['Eligibility'] &&
+									bank['Eligibility'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TableCell>
 							<TableCell className={classes.minDepositCell}>
-								{bank.minDeposit} {bank.minDepositCurrency}
+								{bank.minDeposit} {bank['Min Deposit']}
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
-								{bank.goodFor &&
-									bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
+								{bank['Good For'] &&
+									bank['Good For'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TagTableCell>
 							<TableCell className={classes.personalVisitCell}>
 								{bank.personalVisit ? 'Required' : 'No'}
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={bank.price} rate={keyRate} />
+								<ProgramPrice label="$" price={getPrice(bank)} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span onClick={() => onDetails(bank)}>Details</span>
