@@ -2,11 +2,6 @@ import { getGlobalContext } from 'common/context';
 import { abi as ledgerABI } from 'main/assets/data/DIDLedger.json';
 import config from 'common/config';
 
-const ledgerAddress =
-	config.chainId === 1
-		? '0x0cb853331293d689c95187190e09bb46cb4e533e'
-		: '0x24512422CF6AD1c0C465cBF0Bbd5155EaA3DA634';
-
 export class DIDService {
 	constructor() {
 		this.web3Service = getGlobalContext().web3Service;
@@ -16,18 +11,18 @@ export class DIDService {
 	}
 
 	createDID(walletAddress, gas) {
-		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
+		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, config.ledgerAddress);
 		this.web3Service.web3.transactionConfirmationBlocks = 2;
 		return ledger.methods.createDID(this.zero).send({ from: walletAddress, gas });
 	}
 
 	async getControllerAddress(did) {
-		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
+		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, config.ledgerAddress);
 		return ledger.methods.getController(did).call();
 	}
 
 	async getGasLimit(from) {
-		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, ledgerAddress);
+		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, config.ledgerAddress);
 		const MAX_GAS = 4500000;
 		const estimate = await ledger.methods.createDID(this.zero).estimateGas({ from });
 		return Math.round(Math.min(estimate * 1.1, MAX_GAS));

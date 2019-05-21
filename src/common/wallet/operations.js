@@ -92,6 +92,14 @@ const createWalletDID = () => async (dispatch, getState) => {
 			const message = error.toString().toLowerCase();
 			if (message.indexOf('insufficient funds') !== -1) {
 				await dispatch(push('/main/transaction-no-gas-error'));
+			} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+				await dispatch(push('/main/transaction-declined/Ledger'));
+			} else if (error.code === 'Failure_ActionCancelled') {
+				await dispatch(push('/main/transaction-declined/Trezor'));
+			} else if (error.statusText === 'UNKNOWN_ERROR') {
+				await dispatch(push('/main/transaction-unlock'));
+			} else {
+				await dispatch(push('/main/transaction-error'));
 			}
 			await dispatch(updateWalletWithBalance({ ...walletFromStore, didPending: false }));
 			console.error(error);
@@ -121,13 +129,7 @@ const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 		}
 	} catch (error) {
 		console.error(error);
-		await dispatch(
-			actions.setAssociateError(
-				`Could not associate DID due an error${
-					error.reason ? `:${error.reason}` : ''
-				}. Please try again later.`
-			)
-		);
+		await dispatch(actions.setAssociateError('Invalid DID'));
 	}
 };
 

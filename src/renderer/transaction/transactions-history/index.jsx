@@ -124,7 +124,11 @@ const getCryptoType = transaction => {
 	if (transaction.contractAddress === null) {
 		return 'ETH';
 	} else {
-		return transaction.tokenSymbol;
+		if (transaction.contractAddress === config.ledgerAddress) {
+			return 'for DID';
+		} else {
+			return transaction.tokenSymbol;
+		}
 	}
 };
 
