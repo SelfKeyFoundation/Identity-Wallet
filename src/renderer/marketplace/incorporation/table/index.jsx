@@ -13,7 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfkey-ui';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import { FlagCountryName, ProgramPrice, getIncorporationPrice, getTemplateID } from '../common';
+import { getIncorporationPrice, getTemplateID } from '../common';
+import { ProgramPrice, FlagCountryName } from '../../common';
 
 const styles = theme => ({
 	header: {
