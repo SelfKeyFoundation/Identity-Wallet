@@ -21,7 +21,7 @@ const styles = theme => ({
 		background: '#2A3540'
 	},
 	gridWithBorder: {
-		borderLeft: `2px solid ${primary}`
+		borderLeft: `1px solid ${primary}`
 	},
 	normalText: {
 		color: '#fff'

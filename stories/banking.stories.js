@@ -6,7 +6,10 @@ import {
 	BankingOffersPage,
 	BankingAccountTypeTabs
 } from '../src/renderer/marketplace/banking';
-import { BankingDetailsPage } from '../src/renderer/marketplace/banking/details';
+import {
+	BankingDetailsPage,
+	BankingApplicationButton
+} from '../src/renderer/marketplace/banking/details';
 import { bankingOffers } from './banking-data';
 
 const KEY_RATE = 1 / 1000;
@@ -88,12 +91,71 @@ storiesOf('Banking/OffersPage', module)
 		/>
 	));
 
+storiesOf('Banking/BankingApplicationButton', module)
+	.add('default', () => (
+		<BankingApplicationButton
+			canOpenBankAccount
+			startApplication={action('banking start Application')}
+		/>
+	))
+	.add('loading', () => (
+		<BankingApplicationButton
+			loading
+			canOpenBankAccount
+			startApplication={action('banking start Application')}
+		/>
+	))
+	.add('cannot open', () => (
+		<BankingApplicationButton
+			canOpenBankAccount={false}
+			startApplication={action('banking start Application')}
+		/>
+	));
+
+const resume = [
+	[
+		{
+			name: 'Min. Avg. Balance',
+			value: 'SGD 10,000',
+			highlited: true
+		},
+		{
+			name: 'Monthly Min. Avg, Balance',
+			value: 'SGD 5,000',
+			highlited: true
+		}
+	],
+	[
+		{
+			name: 'Personal Visit Required',
+			value: 'yes',
+			highlited: true
+		},
+		{
+			name: 'Time to open',
+			value: '2-4 weeks',
+			highlited: true
+		}
+	],
+	[
+		{
+			name: 'Cards',
+			value: ['Debit Card (SG)', 'Credit Card (USD)'],
+			highlited: true
+		}
+	]
+];
+
 storiesOf('Banking/BankingDetailsPage', module)
 	.add('default', () => (
 		<BankingDetailsPage
 			countryCode="us"
+			price="1500"
+			keyRate="0.0001"
 			region="United States"
 			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
 			onBack={action('banking details back')}
 		/>
 	))
@@ -101,8 +163,13 @@ storiesOf('Banking/BankingDetailsPage', module)
 		<BankingDetailsPage
 			countryCode="us"
 			applicationStatus="completed"
+			price="1500"
+			keyRate="0.0001"
 			region="United States"
 			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
 	))
@@ -110,9 +177,14 @@ storiesOf('Banking/BankingDetailsPage', module)
 		<BankingDetailsPage
 			countryCode="us"
 			applicationStatus="unpaid"
+			price="1500"
+			keyRate="0.0001"
 			region="United States"
 			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
 			onPay={action('banking details pay')}
+			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
 	))
@@ -120,8 +192,13 @@ storiesOf('Banking/BankingDetailsPage', module)
 		<BankingDetailsPage
 			countryCode="us"
 			applicationStatus="progress"
+			price="1500"
+			keyRate="0.0001"
 			region="United States"
 			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
 	))
@@ -129,8 +206,13 @@ storiesOf('Banking/BankingDetailsPage', module)
 		<BankingDetailsPage
 			countryCode="us"
 			applicationStatus="rejected"
+			price="1500"
+			keyRate="0.0001"
 			region="United States"
 			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
 	));

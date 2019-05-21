@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
-import { FlagCountryName } from '../../common';
+import { MoneyIcon } from 'selfkey-ui';
+import { FlagCountryName, ResumeBox, ProgramPrice } from '../../common';
 
 const styles = theme => ({
 	container: {
@@ -67,7 +68,7 @@ const styles = theme => ({
 		background: '#2A3540'
 	},
 	applyButton: {
-		maxWidth: '250px',
+		maxWidth: '270px',
 		textAlign: 'right',
 		'& button': {
 			width: '100%',
@@ -146,17 +147,51 @@ const styles = theme => ({
 	tabDescription: {
 		marginTop: '40px'
 	},
-	certificateIcon: {
+	moneyIcon: {
 		marginRight: '18px'
 	},
+
 	page: {
 		position: 'relative',
 		paddingTop: '80px'
 	}
 });
 
+export const BankingApplicationButton = withStyles(styles)(
+	({ classes, canOpenBankAccount, startApplication, loading }) => (
+		<React.Fragment>
+			{canOpenBankAccount && !loading && (
+				<Button variant="contained" size="large" onClick={startApplication}>
+					<MoneyIcon className={classes.moneyIcon} />
+					Open Bank Account
+				</Button>
+			)}
+
+			{canOpenBankAccount && loading && (
+				<Button variant="contained" size="large" disabled>
+					Loading ...
+				</Button>
+			)}
+		</React.Fragment>
+	)
+);
+
 export const BankingDetailsPage = withStyles(styles)(
-	({ classes, applicationStatus, countryCode, region, contact, onPay, onBack }) => {
+	({
+		classes,
+		applicationStatus,
+		countryCode,
+		region,
+		contact,
+		onPay,
+		onBack,
+		loading,
+		canOpenBankAccount,
+		resume = [],
+		startApplication,
+		keyRate,
+		price
+	}) => {
 		// const { program, classes, treaties, keyRate } = this.props;
 		// const { countryCode, templateId } = this.props.match.params;
 		// const { selectedTab } = this.state;
@@ -191,6 +226,26 @@ export const BankingDetailsPage = withStyles(styles)(
 							contact={contact}
 							paymentAction={onPay}
 						/>
+						<Grid
+							container
+							justify="flex-start"
+							alignItems="flex-start"
+							className={classes.content}
+						>
+							<Grid item>
+								<ResumeBox itemSets={resume} />
+							</Grid>
+							<Grid item className={classes.applyButton}>
+								<BankingApplicationButton
+									canOpenBankAccount={canOpenBankAccount}
+									price={price}
+									loading={loading}
+									startApplication={startApplication}
+									keyRate={keyRate}
+								/>
+								<ProgramPrice price={price} rate={keyRate} label="Pricing: $" />
+							</Grid>
+						</Grid>
 					</div>
 				</div>
 			</div>
@@ -262,7 +317,7 @@ export default BankingDetailsPage;
 						</div>
 						<div className={classes.applyButton}>
 							<React.Fragment>
-								{this.canIncorporate() && !this.state.loading && (
+								{this.canOpenBankAccount() && !this.state.loading && (
 									<Button
 										variant="contained"
 										size="large"
@@ -273,7 +328,7 @@ export default BankingDetailsPage;
 									</Button>
 								)}
 
-								{this.canIncorporate() && this.state.loading && (
+								{this.canOpenBankAccount() && this.state.loading && (
 									<Button variant="contained" size="large" disabled>
 										Loading ...
 									</Button>
