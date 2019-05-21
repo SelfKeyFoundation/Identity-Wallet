@@ -6,6 +6,7 @@ import {
 	BankingOffersPage,
 	BankingAccountTypeTabs
 } from '../src/renderer/marketplace/banking';
+import { BankingDetailsPage } from '../src/renderer/marketplace/banking/details';
 import { bankingOffers } from './banking-data';
 
 const KEY_RATE = 1 / 1000;
@@ -84,5 +85,52 @@ storiesOf('Banking/OffersPage', module)
 			onAccountTypeChange={action('banking offers page account type change')}
 			onDetails={action('banking offers page details')}
 			onBackClick={action('banking offers page back')}
+		/>
+	));
+
+storiesOf('Banking/BankingDetailsPage', module)
+	.add('default', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			region="United States"
+			contact="help@flagtheory.com"
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('application completed', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			applicationStatus="completed"
+			region="United States"
+			contact="help@flagtheory.com"
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('application unpaid', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			applicationStatus="unpaid"
+			region="United States"
+			contact="help@flagtheory.com"
+			onPay={action('banking details pay')}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('application progress', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			applicationStatus="progress"
+			region="United States"
+			contact="help@flagtheory.com"
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('application rejected', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			applicationStatus="rejected"
+			region="United States"
+			contact="help@flagtheory.com"
+			onBack={action('banking details back')}
 		/>
 	));

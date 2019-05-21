@@ -4,7 +4,7 @@ import { SelfkeyDarkTheme } from 'selfkey-ui';
 
 addDecorator(storyFn => (
 	<SelfkeyDarkTheme>
-		<div style={{ width: '1440px' }}>{storyFn()}</div>
+		<div style={{ width: '1450px', padding: '20px' }}>{storyFn()}</div>
 	</SelfkeyDarkTheme>
 ));
 
