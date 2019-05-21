@@ -3,7 +3,7 @@ import { setGlobalContext } from '../context';
 import { kycActions, kycTypes, reducers, initialState, kycSelectors, testExports } from './index';
 
 describe('KYC Duck', () => {
-	let applicationService = {
+	let kycApplicationService = {
 		load() {}
 	};
 	let state = {};
@@ -17,7 +17,7 @@ describe('KYC Duck', () => {
 	beforeEach(() => {
 		sinon.restore();
 		state = { kyc: { ...initialState } };
-		setGlobalContext({ applicationService: applicationService });
+		setGlobalContext({ kycApplicationService: kycApplicationService });
 	});
 	describe('Applications', () => {
 		let testApplications = [
@@ -28,7 +28,7 @@ describe('KYC Duck', () => {
 		];
 		describe('Operations', () => {
 			it('loadApplicationsOperation', async () => {
-				sinon.stub(applicationService, 'load').resolves(testApplications);
+				sinon.stub(kycApplicationService, 'load').resolves(testApplications);
 				sinon.stub(store, 'dispatch');
 				sinon.stub(kycActions, 'setApplicationsAction').returns(testAction);
 
@@ -37,7 +37,7 @@ describe('KYC Duck', () => {
 					store.getState.bind(store)
 				);
 
-				expect(applicationService.loadApplications.calledOnce).toBeTruthy();
+				expect(kycApplicationService.loadApplications.calledOnce).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
 		});
