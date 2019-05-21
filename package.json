@@ -113,7 +113,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#39f5d6f4de290cc4b8f5a375f18e944a2c2b6c1f",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#5bd47d4",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"socket.io-client": "2.2.0",
