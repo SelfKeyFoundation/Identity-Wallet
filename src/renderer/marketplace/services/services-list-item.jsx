@@ -83,6 +83,18 @@ const styles = theme => ({
 		marginBottom: '3px',
 		marginRight: '5px',
 		marginTop: '3px'
+	},
+
+	exchangeName: {
+		maxWidth: '120px',
+		paddingLeft: '15px',
+		whiteSpace: 'pre-line'
+	},
+
+	tableRow: {
+		'& td': {
+			padding: '0 15px'
+		}
 	}
 });
 
@@ -123,13 +135,13 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 		const isNotExcludedResidents =
 			excludedResidents.length === 0 || excludedResidents[0] === 'None';
 
-		const isFiatSupported = fiatSupported.length !== 0;
-		const isFiatPayments = fiatPayments.length !== 0;
+		const isFiatSupported = fiatSupported.length !== 0 && fiatSupported[0] !== 'Not Available';
+		const isFiatPayments = fiatPayments.length !== 0 && fiatPayments[0] !== 'Not Available';
 
 		return (
-			<TableRow key={name}>
+			<TableRow key={name} className={classes.tableRow}>
 				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
-				<TableCell>
+				<TableCell className={classes.exchangeName}>
 					<Typography variant="h6">{name}</Typography>
 				</TableCell>
 				<TableCell>

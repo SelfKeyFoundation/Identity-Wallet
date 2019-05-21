@@ -13,6 +13,7 @@ import ethGasStationInfo from '../eth-gas-station';
 import transaction from '../transaction';
 import addressBook from '../address-book';
 import incorporations from '../incorporations';
+import bankAccounts from '../bank-accounts';
 import exchanges from '../exchanges';
 import { createLogger } from 'redux-logger';
 import marketplaces from '../marketplaces';
@@ -71,6 +72,7 @@ export default (initialState, scope = 'main') => {
 		transaction,
 		addressBook,
 		incorporations,
+		bankAccounts,
 		exchanges,
 		marketplaces,
 		identity,
