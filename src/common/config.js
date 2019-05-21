@@ -109,7 +109,8 @@ const dev = {
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},
-	matomoSite: 2
+	matomoSite: 2,
+	ledgerAddress: '0x24512422cf6ad1c0c465cbf0bbd5155eaa3da634'
 };
 
 const prod = {
@@ -125,7 +126,8 @@ const prod = {
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},
-	matomoSite: 1
+	matomoSite: 1,
+	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e'
 };
 
 const setupFilesPath = getSetupFilePath();
