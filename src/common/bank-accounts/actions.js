@@ -25,7 +25,7 @@ export const bankAccountsActions = {
 			payload
 		};
 	},
-	setDetauksAction(payload) {
+	setDetailsAction(payload) {
 		return {
 			type: bankAccountsTypes.BANKACCOUNTS_DETAILS_SET,
 			payload

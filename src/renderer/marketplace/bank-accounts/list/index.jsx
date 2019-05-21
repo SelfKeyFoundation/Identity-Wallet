@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
+/*
 import { Grid } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+*/
+import { BankingOffersPage } from './offers-page';
 
-const styles = theme => ({
-	loading: {
-		marginTop: '5em'
-	}
-});
+const styles = theme => ({});
 
 class BankAccountsTable extends Component {
 	componentDidMount() {
@@ -20,21 +19,20 @@ class BankAccountsTable extends Component {
 		}
 	}
 
-	renderLoadingScreen = () => (
-		<Grid container justify="center" alignItems="center">
-			<CircularProgress size={50} className={this.props.classes.loading} />
-		</Grid>
-	);
-
 	render() {
 		// const { classes, isLoading, bank_accounts, keyRate } = this.props;
 		const { isLoading, bankAccounts, keyRate } = this.props;
-		if (isLoading) {
-			return this.renderLoadingScreen();
-		}
 		console.log(keyRate, bankAccounts);
-		// TODO: placeholder
-		return null;
+
+		return (
+			<BankingOffersPage
+				keyRate={keyRate}
+				data={bankAccounts}
+				onDetails={null}
+				onBackClick={null}
+				isLoading={isLoading}
+			/>
+		);
 	}
 }
 

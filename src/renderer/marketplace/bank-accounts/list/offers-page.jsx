@@ -1,7 +1,7 @@
 import React from 'react';
 import { BankingOffersTable } from './offers-table';
 import { BankingAccountTypeTabs } from './account-type-tabs';
-import { PageLoading } from '../common';
+import { PageLoading } from '../../common';
 import { Button, Typography, Grid, withStyles } from '@material-ui/core';
 import { BankIcon } from 'selfkey-ui';
 

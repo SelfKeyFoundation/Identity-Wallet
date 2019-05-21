@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
-import { ProgramPrice, FlagCountryName } from '../common';
+import { ProgramPrice, FlagCountryName } from '../../common';
 
 const styles = theme => ({
 	table: {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTable from './table';
+import BankAccountsTable from './list';
 // import BankAccountsDetailView from './detail';
 
 class MarketplaceBankAccountsComponent extends Component {
