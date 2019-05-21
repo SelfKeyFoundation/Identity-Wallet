@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import { LargeTableHeadRow } from 'selfkey-ui';
-import FlagCountryName from '../common/flag-country-name';
+import { FlagCountryName } from '../../common';
 
 const styles = theme => ({
 	table: {
