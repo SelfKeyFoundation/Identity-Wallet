@@ -8,11 +8,12 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { appSelectors } from 'common/app';
+import { appOperations, appSelectors } from 'common/app';
 import { gasSelectors, gasOperations } from 'common/gas';
 import { walletOperations } from 'common/wallet';
 import EthUnits from 'common/utils/eth-units';
 import { push } from 'connected-react-router';
+
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
 class CreateDIDComponent extends Component {
@@ -42,7 +43,11 @@ class CreateDIDComponent extends Component {
 	};
 
 	handleCreateDIDAction = async _ => {
-		this.props.dispatch(walletOperations.createWalletDID());
+		await this.props.dispatch(appOperations.setGoBackPath('/main/selfkeyId'));
+		await this.props.dispatch(walletOperations.createWalletDID());
+		if (this.props.walletType === 'ledger' || this.props.walletType === 'trezor') {
+			await this.props.dispatch(appOperations.setGoNextPath('/main/hd-transaction-timer'));
+		}
 	};
 
 	handleCloseAction = _ => {
@@ -64,7 +69,7 @@ class CreateDIDComponent extends Component {
 						usdNetworkFee={usdFee}
 						ethNetworkFee={ethFee}
 						tooltipNetworkFee={
-							'The fee will be payed in ETH, at the day’s exchange rate.'
+							'The fee will be paid in ETH, at the day’s exchange rate.'
 						}
 						learnHowURL={'https://help.selfkey.org/'}
 						onConfirm={this.handleCreateDIDAction}

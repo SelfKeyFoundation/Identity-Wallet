@@ -176,7 +176,7 @@ class AssociateDIDComponent extends Component {
 									<Typography variant="body1" gutterBottom>
 										If you already registered on the SelfKey Network, you can
 										associate your existing DID number with this wallet. Just
-										copy/paste it bellow.
+										copy/paste it below.
 									</Typography>
 									<br />
 									<Typography
