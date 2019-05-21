@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
@@ -11,26 +12,38 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { BankingOffersPage } from './offers-page';
 
 const styles = theme => ({});
+const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
 
 class BankAccountsTable extends Component {
+	state = {
+		accountType: 'personal',
+		loading: false
+	};
+
 	componentDidMount() {
 		if (!this.props.bankAccounts || !this.props.bankAccounts.length) {
 			this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
 		}
 	}
 
+	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+
+	onAccountTypeChange = accountType => this.setState({ accountType });
+
 	render() {
 		// const { classes, isLoading, bank_accounts, keyRate } = this.props;
 		const { isLoading, bankAccounts, keyRate } = this.props;
-		console.log(keyRate, bankAccounts);
+		console.log(keyRate, bankAccounts, isLoading);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
 				data={bankAccounts}
 				onDetails={null}
-				onBackClick={null}
-				isLoading={isLoading}
+				onBackClick={this.onBackClick}
+				accountType={this.state.accountType}
+				onAccountTypeChange={this.onAccountTypeChange}
+				loading={isLoading}
 			/>
 		);
 	}
