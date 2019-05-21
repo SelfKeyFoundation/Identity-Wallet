@@ -119,6 +119,12 @@ export const kycSelectors = {
 				return acc;
 			}, attributesBySchema);
 
+		const tplOccurrence = templateAttributes.reduce((acc, curr) => {
+			const schemaId = curr.schemaId || curr;
+			acc[schemaId] = (acc[curr.schemaId] || 0) + 1;
+			return acc;
+		}, {});
+
 		return templateAttributes.map(tplAttr => {
 			if (typeof tplAttr === 'string') {
 				tplAttr = { schemaId: tplAttr };
@@ -135,7 +141,8 @@ export const kycSelectors = {
 				type:
 					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
 						? walletAttributes[tplAttr.schemaId][0].type
-						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId)
+						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId),
+				duplicateType: tplOccurrence[tplAttr.schemaId] > 1
 			};
 		});
 	},
@@ -199,6 +206,9 @@ export const kycActions = {
 		title,
 		description,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		attributes = [],
 		error
 	) {
@@ -212,6 +222,9 @@ export const kycActions = {
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes,
 				error
 			}
@@ -387,7 +400,10 @@ const startCurrentApplicationOperation = (
 	cancelRoute,
 	title,
 	description,
-	agreement
+	agreement,
+	vendor,
+	privacyPolicy,
+	termsOfService
 ) => async (dispatch, getState) => {
 	await dispatch(
 		kycActions.setCurrentApplication(
@@ -397,7 +413,10 @@ const startCurrentApplicationOperation = (
 			cancelRoute,
 			title,
 			description,
-			agreement
+			agreement,
+			vendor,
+			privacyPolicy,
+			termsOfService
 		)
 	);
 	await dispatch(push(`/main/kyc/current-application/${rpName}`));

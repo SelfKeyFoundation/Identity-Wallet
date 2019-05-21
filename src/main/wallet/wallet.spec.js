@@ -79,6 +79,33 @@ describe('Wallet model', () => {
 		expect(check.keystoreFilePath).not.toBe(itm.keystoreFilePath);
 	});
 
+	it('updateSetup', async () => {
+		let itm = await Wallet.query().insertAndFetch(testItm);
+		expect(itm.isSetupFinished).toEqual(0);
+		itm.setup = 1;
+		await Wallet.updateSetup(itm);
+		let check = await Wallet.query().findById(itm.id);
+		expect(check.isSetupFinished).toBe(itm.setup);
+	});
+
+	it('updateName', async () => {
+		let itm = await Wallet.query().insertAndFetch(testItm);
+		expect(itm.name).toBeNull();
+		itm.name = 'name';
+		await Wallet.updateName(itm);
+		let check = await Wallet.query().findById(itm.id);
+		expect(check.name).toBe(itm.name);
+	});
+
+	it('updateDID', async () => {
+		let itm = await Wallet.query().insertAndFetch(testItm);
+		expect(itm.did).toBeNull();
+		itm.did = 'did';
+		await Wallet.updateDID(itm);
+		let check = await Wallet.query().findById(itm.id);
+		expect(check.did).toBe(itm.did);
+	});
+
 	it('selectProfilePictureById', async () => {
 		let itm = await Wallet.query().insertAndFetch({
 			...testItm,

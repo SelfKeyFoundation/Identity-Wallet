@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
+
+import { ReturnDepositContent } from './return-deposit-content';
 import { Popup } from '../../common/popup';
-import { DepositContent } from './deposit-content';
+import ReactPiwik from 'react-piwik';
 
 const mapStateToProps = state => {
 	return {
@@ -11,7 +13,7 @@ const mapStateToProps = state => {
 	};
 };
 
-class DepositPopupComponent extends Component {
+class ReturnDepositPopupComponent extends Component {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		this.props.dispatch(marketplacesOperations.loadTransactions());
@@ -22,7 +24,8 @@ class DepositPopupComponent extends Component {
 		await this.props.dispatch(
 			marketplacesOperations.updateCurrentTransactionAction({ gasPrice })
 		);
-		await this.props.dispatch(marketplacesOperations.confirmStakeTransaction());
+		await this.props.dispatch(marketplacesOperations.confirmWithdrawTransaction());
+		ReactPiwik.push(['trackEvent', 'Staking', 'Confirm', 'Withdraw']);
 	}
 
 	render() {
@@ -31,13 +34,13 @@ class DepositPopupComponent extends Component {
 			return <div>Loading</div>;
 		}
 		return (
-			<Popup closeAction={closeAction}>
-				<DepositContent
+			<Popup text="Return KEY Deposit" closeAction={closeAction}>
+				<ReturnDepositContent
 					minGasPrice={tx.gasPriceEstimates.safeLow}
 					maxGasPrice={tx.gasPriceEstimates.fast}
 					defaultValue={tx.gasPriceEstimates.avarage}
 					gasLimit={tx.gasLimit}
-					fiat={tx.fiat}
+					fiat={tx.fiat && tx.fiat.fiatCurrency ? tx.fiat.fiatCurrency : 'USD'}
 					fiatRate={tx.fiatRate}
 					onCancel={closeAction}
 					onConfirm={gasLimit => this.handleConfirmAction(gasLimit)}
@@ -47,6 +50,6 @@ class DepositPopupComponent extends Component {
 	}
 }
 
-export const MarketplaceDepositPopup = connect(mapStateToProps)(DepositPopupComponent);
+export const MarketplaceReturnDepositPopup = connect(mapStateToProps)(ReturnDepositPopupComponent);
 
-export default MarketplaceDepositPopup;
+export default MarketplaceReturnDepositPopup;

@@ -1,7 +1,7 @@
 module.exports = {
 	globalSetup: '<rootDir>/test/jest-setup.js',
 	globalTeardown: '<rootDir>/test/jest-teardown.js',
-	setupFilesAfterEnv: ['<rootDir>/test/jest-setup-test-framework.js'],
+	setupFilesAfterEnv: ['<rootDir>/test/jest-setup-test-framework-e2e.js'],
 	testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 	modulePaths: ['<rootDir>/src'],
 	testMatch: ['**/test/e2e/**/*.spec.js', '**/test/e2e/**/*.steps.js'],
@@ -12,5 +12,6 @@ module.exports = {
 	coverageReporters: ['json', 'lcov', 'text', 'html'],
 	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
 	coverageDirectory: 'dist/coverage',
-	coverageThreshold: {}
+	coverageThreshold: {},
+	automock: false
 };

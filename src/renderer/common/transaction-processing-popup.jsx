@@ -1,15 +1,9 @@
 import React from 'react';
-import { Popup } from '../../common/popup';
+import { Popup } from './popup';
 import { Grid, Typography, withStyles } from '@material-ui/core';
-import { H2, HourGlassLargeIcon } from 'selfkey-ui';
+import { HourGlassLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	text: {
-		color: '#FFFFFF',
-		fontSize: '18px',
-		lineHeight: '30px'
-	},
-
 	body: {
 		paddingTop: '20px'
 	}
@@ -23,10 +17,10 @@ export const TransactionProcessingContent = withStyles(styles)(({ classes }) => 
 		<Grid item xs={10}>
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<Grid item id="header">
-					<H2 className={classes.headerText}>Transaction Processing</H2>
+					<Typography variant="h1">Transaction Processing</Typography>
 				</Grid>
 				<Grid item id="body" className={classes.body}>
-					<Typography variant="body2" className={classes.text}>
+					<Typography variant="body1">
 						Your transaction is pending. The time it takes to complete will depend on
 						the amount of network traffic.
 					</Typography>
@@ -36,12 +30,12 @@ export const TransactionProcessingContent = withStyles(styles)(({ classes }) => 
 	</Grid>
 ));
 
-export const MarketplaceTransactionProcessingPopup = props => {
+export const TransactionProcessingPopup = props => {
 	return (
-		<Popup closeAction={props.closeAction}>
+		<Popup closeAction={props.closeAction} text={props.title}>
 			<TransactionProcessingContent {...props} />
 		</Popup>
 	);
 };
 
-export default MarketplaceTransactionProcessingPopup;
+export default TransactionProcessingPopup;

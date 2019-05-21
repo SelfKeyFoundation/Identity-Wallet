@@ -7,7 +7,7 @@ import { walletSelectors } from 'common/wallet';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Tab, Tabs, Button, Typography } from '@material-ui/core';
-import { WarningIcon, CertificateIcon, success, warning } from 'selfkey-ui';
+import { AttributeAlertIcon, CertificateIcon, success, warning } from 'selfkey-ui';
 import { CheckOutlined } from '@material-ui/icons';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
@@ -195,7 +195,7 @@ const styles = theme => ({
 		fill: success
 	},
 	certificateIcon: {
-		marginRight: '20px'
+		marginRight: '18px'
 	}
 });
 
@@ -433,7 +433,7 @@ class IncorporationsDetailView extends Component {
 				className={classes.warningBar}
 			>
 				<Grid item xs={12}>
-					<WarningIcon />
+					<AttributeAlertIcon />
 					<Typography variant="body2" color="secondary">
 						Your previous application was rejected
 					</Typography>
@@ -453,7 +453,7 @@ class IncorporationsDetailView extends Component {
 				className={classes.warningBar}
 			>
 				<Grid item xs={12}>
-					<WarningIcon />
+					<AttributeAlertIcon />
 					<Typography variant="body2" color="secondary">
 						You have an existing <strong>in progress</strong> application, please
 						contact support@flagtheory.com for further details
@@ -474,7 +474,7 @@ class IncorporationsDetailView extends Component {
 				className={classes.warningBar}
 			>
 				<Grid item xs={9}>
-					<WarningIcon />
+					<AttributeAlertIcon />
 					<Typography variant="body2" color="secondary">
 						You have an existing <strong>unpaid</strong> application
 					</Typography>

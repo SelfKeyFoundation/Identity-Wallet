@@ -1,6 +1,7 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { givenUserHasOpenedSelfKeyWallet } from '../common/common-steps';
 const tools = require('../../utils/tools.js');
+const delay = require('delay');
 jest.setTimeout(120000);
 
 const feature = loadFeature('./test/e2e/address-book/open-address-book.feature');
@@ -14,12 +15,13 @@ defineFeature(feature, test => {
 
 		when('user clicks on Hamburger icon > Address Book', () => {
 			return tools
-				.regStep(tools.app, '.sk-icon-button')
-				.then(() => tools.regStep(tools.app, '#addressBookButton'));
+				.regStep(tools.app, '#drawer')
+				.then(() => tools.regStep(tools.app, '#addressBookButton'))
+				.then(() => delay(5000));
 		});
 
 		then('Address Book screen is displayed', () => {
-			return tools.app.client.waitForVisible('.address-book', 10000);
+			return tools.app.client.waitForVisible('#viewAddressBook', 10000);
 		});
 	});
 });

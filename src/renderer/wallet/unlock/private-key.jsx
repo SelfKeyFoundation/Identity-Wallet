@@ -106,6 +106,7 @@ class PrivateKey extends Component {
 									</Grid>
 									<Grid item className={classes.input}>
 										<Input
+											id="privateKeyInput"
 											fullWidth
 											error={this.state.error !== ''}
 											placeholder="0x"
@@ -138,6 +139,7 @@ class PrivateKey extends Component {
 					</Grid>
 					<Grid item>
 						<Button
+							id="unlockPrivateKeyButton"
 							variant="contained"
 							size="large"
 							onClick={this.handleUnlockAction}
