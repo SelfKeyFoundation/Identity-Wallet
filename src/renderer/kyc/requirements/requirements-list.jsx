@@ -44,7 +44,6 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 
 const KycRequirementsListComponent = props => {
 	const { classes, requirements, title = 'KYC Requirements:', subtitle, loading } = props;
-
 	if (loading) {
 		return <CircularProgress />;
 	}

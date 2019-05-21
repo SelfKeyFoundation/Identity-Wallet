@@ -27,7 +27,7 @@ const styles = theme => ({
 	}
 });
 
-export const NoConnection = props => {
+export const NoConnection = withStyles(styles)(props => {
 	const { classes } = props;
 	return (
 		<Modal open={true}>
@@ -60,10 +60,10 @@ export const NoConnection = props => {
 			</ModalWrap>
 		</Modal>
 	);
-};
+});
 
 const mapStateToProps = (state, props) => {
 	return {};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(NoConnection));
+export default connect(mapStateToProps)(NoConnection);
