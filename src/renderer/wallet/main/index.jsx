@@ -13,6 +13,7 @@ import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
 	MarketplaceIncorporationPage,
+	MarketplaceBankAccountsPage,
 	MarketplaceServiceDetailsPage,
 	MarketplaceSelfkeyIdRequired
 } from '../../marketplace';
@@ -121,6 +122,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-incorporation`}
 						component={MarketplaceIncorporationPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-bank-accounts`}
+						component={MarketplaceBankAccountsPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/:crypto`}
