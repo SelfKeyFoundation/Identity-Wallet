@@ -27,6 +27,7 @@ import {
 	SimpleHourglassIcon,
 	AttributeAlertLargeIcon,
 	NewRefreshIcon,
+	MarketplaceIcon,
 	success,
 	warning,
 	typography,
@@ -34,6 +35,7 @@ import {
 } from 'selfkey-ui';
 import moment from 'moment';
 import classNames from 'classnames';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	statusIcon: {
@@ -69,6 +71,9 @@ const styles = theme => ({
 	},
 	title: {
 		padding: '16px'
+	},
+	next: {
+		minWidth: '120px'
 	}
 });
 
@@ -234,9 +239,44 @@ const getRpInfo = (rpName, field) => {
 	return config.relyingPartyInfo[rpName][field];
 };
 
+const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+
 class SelfkeyIdApplicationsComponent extends Component {
+	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 	render() {
 		const { classes, loading } = this.props;
+
+		if (this.props.applications && this.props.applications.length === 0) {
+			return (
+				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+					<Grid item xs={2}>
+						<MarketplaceIcon />
+					</Grid>
+					<Grid item xs={10}>
+						<Typography variant="body1" gutterBottom>
+							Your {`haven't`} applied for any service in the Marketplace
+						</Typography>
+						<br />
+						<Typography variant="overline" gutterBottom>
+							Once you apply to a service in the marketplace, you will be able to{' '}
+							manage it from this area.
+						</Typography>
+						<br />
+						<br />
+						<Button
+							id="marketplace"
+							variant="contained"
+							onClick={this.handleAccessClick}
+							className={classes.next}
+							size="large"
+						>
+							Access Marketplace
+						</Button>
+					</Grid>
+				</Grid>
+			);
+		}
+
 		return (
 			<React.Fragment>
 				{this.props.applications.map((item, index) => (
