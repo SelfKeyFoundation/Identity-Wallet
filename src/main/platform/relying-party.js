@@ -22,6 +22,9 @@ export class RelyingPartyCtx {
 		this.token = token;
 	}
 	mergeWithConfig() {}
+	supportsDID() {
+		return !!this.config.did;
+	}
 	getOrigin() {
 		return this.config.origin || 'IDW';
 	}
@@ -91,19 +94,27 @@ export class RelyingPartyRest {
 	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('/auth/challenge');
-		const publicKey = await ctx.identity.publicKey;
-		url = urljoin(url, `0x${publicKey.replace('0x', '')}`);
+		const did = ctx.supportsDID() ? ctx.identity.did : ctx.identity.publicKey;
+		url = urljoin(url, did);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
 			json: true
 		});
 	}
-	static postChallengeReply(ctx, challenge, signature) {
+	static postChallengeReply(ctx, challenge, signature, keyid) {
 		let url = ctx.getEndpoint('/auth/challenge');
+		const body = {};
+
+		if (ctx.supportsDID()) {
+			body.signature = { value: signature, keyid };
+		} else {
+			body.signature = signature;
+		}
+
 		return request.post({
 			url,
-			body: { signature },
+			body: { signature: { value: signature, keyid } },
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
 				'User-Agent': this.userAgent,
