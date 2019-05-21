@@ -40,8 +40,8 @@ describe('RelyingPartyRest', () => {
 	let config = null;
 
 	beforeEach(() => {
-		config = { origin: 'test' };
-		ctx = new RelyingPartyCtx(config, { publicKey: 'test' });
+		config = { origin: 'test', did: true };
+		ctx = new RelyingPartyCtx(config, { publicKey: 'test', did: 'did:eth:0xtest' });
 	});
 	it('getAuthorizationHeader', () => {
 		let token = 'test';
@@ -57,7 +57,7 @@ describe('RelyingPartyRest', () => {
 			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.get.getCall(0).args).toEqual([
 				{
-					url: `${testEndpoint}/0xtest`,
+					url: `${testEndpoint}/did:eth:0xtest`,
 					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
 					json: true
 				}
@@ -71,15 +71,21 @@ describe('RelyingPartyRest', () => {
 			const testEndpoint = 'http://test';
 			const testToken = 'testToken';
 			const testChallenge = 'test';
+			const keyid = 'test';
 			const testSignature = 'test sig';
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
-			let res = await RelyingPartyRest.postChallengeReply(ctx, testChallenge, testSignature);
+			let res = await RelyingPartyRest.postChallengeReply(
+				ctx,
+				testChallenge,
+				testSignature,
+				keyid
+			);
 			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
-					body: { signature: testSignature },
+					body: { signature: { value: testSignature, keyid } },
 					headers: {
 						Authorization: `Bearer ${testChallenge}`,
 						'User-Agent': RelyingPartyRest.userAgent,
@@ -220,6 +226,12 @@ describe('RelyingPartyRest', () => {
 								contentType: 'application/json'
 							}
 						},
+						meta: {
+							value: JSON.stringify({}),
+							options: {
+								contentType: 'application/json'
+							}
+						},
 						'$document-1': {
 							value: documents[0].buffer,
 							options: {
@@ -277,7 +289,7 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					json: true,
-					body: attributes
+					body: { attributes, meta: {} }
 				}
 			]);
 		});
@@ -501,7 +513,7 @@ describe('RelyingPartyRest', () => {
 });
 
 describe('Relying Party session', () => {
-	const config = {};
+	const config = { did: true };
 	const identity = {
 		genSignatureForMessage() {}
 	};
@@ -677,7 +689,9 @@ describe('Relying Party session', () => {
 						},
 						documents: undefined
 					}
-				]
+				],
+				undefined,
+				{}
 			]);
 			expect(res).toEqual('ok');
 		});
@@ -764,7 +778,8 @@ describe('Relying Party session', () => {
 						documents: [3, 4]
 					}
 				],
-				documents
+				documents,
+				{}
 			]);
 			expect(res).toEqual('ok');
 		});

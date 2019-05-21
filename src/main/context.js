@@ -15,6 +15,7 @@ import WalletService from './wallet/wallet-service';
 import TokenService from './token/token-service';
 import WalletTokenService from './wallet/wallet-token-service';
 import IncorporationsService from './marketplace/incorporations-service';
+import BankAccountsService from './marketplace/bank-accounts-service';
 import GuideSettingsService from './settings/guide-settings-service';
 import CountryService from './country/country-service';
 import NetworkService from './application/network-service';
@@ -44,6 +45,7 @@ export const registerMainServices = container => {
 		tokenService: asClass(TokenService).singleton(),
 		walletTokenService: asClass(WalletTokenService).singleton(),
 		incorporationsService: asClass(IncorporationsService).singleton(),
+		bankAccountsService: asClass(BankAccountsService).singleton(),
 		guideSettingsService: asClass(GuideSettingsService).singleton(),
 		countryService: asClass(CountryService).singleton(),
 		didService: asClass(DIDService).singleton()

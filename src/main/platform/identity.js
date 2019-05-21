@@ -13,6 +13,7 @@ export class Identity {
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
+		this.did = wallet.did ? `did:selfkey:${wallet.did}` : `did:eth:${this.address}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 
@@ -22,6 +23,18 @@ export class Identity {
 				.toString('hex');
 		} else {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
+		}
+		if (typeof this.publicKey === 'string') {
+			this.publicKey = ethUtil.addHexPrefix(this.publicKey);
+		}
+		if (this.publicKey && this.publicKey.then) {
+			this.publicKey.then(publicKey => {
+				if (typeof publicKey !== 'string') {
+					return publicKey;
+				}
+				this.publicKey = ethUtil.addHexPrefix(publicKey);
+				return this.publicKey;
+			});
 		}
 	}
 	async getPublicKeyFromHardwareWallet() {
@@ -81,9 +94,9 @@ export class Identity {
 		} else {
 			try {
 				this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
-				this.publicKey = ethUtil
-					.privateToPublic(Buffer.from(this.privateKey, 'hex'))
-					.toString('hex');
+				this.publicKey = ethUtil.addHexPrefix(
+					ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
+				);
 			} catch (error) {
 				log.error(error);
 				throw new Error('INVALID_PASSWORD');
