@@ -14,9 +14,10 @@ import {
 	BankingTypesTab,
 	BankingCountryTab,
 	BankingDescriptionTab,
-	BankingServicesTab
+	BankingServicesTab,
+	BankingAccountOption
 } from '../src/renderer/marketplace/banking/details';
-import { bankingOffers } from './banking-data';
+import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
 
 const KEY_RATE = 1 / 1000;
@@ -128,45 +129,28 @@ storiesOf('Banking/BankingApplicationButton', module)
 		/>
 	));
 
-const resume = [
-	[
-		{
-			name: 'Min. Avg. Balance',
-			value: 'SGD 10,000',
-			highlited: true
-		},
-		{
-			name: 'Monthly Min. Avg, Balance',
-			value: 'SGD 5,000',
-			highlited: true
-		}
-	],
-	[
-		{
-			name: 'Personal Visit Required',
-			value: 'yes',
-			highlited: true
-		},
-		{
-			name: 'Time to open',
-			value: '2-4 weeks',
-			highlited: true
-		}
-	],
-	[
-		{
-			name: 'Cards',
-			value: ['Debit Card (SG)', 'Credit Card (USD)'],
-			highlited: true
-		}
-	]
-];
-
 storiesOf('Banking/Tab Content', module)
-	.add('types', () => <BankingTypesTab />)
-	.add('description', () => <BankingDescriptionTab />)
-	.add('country', () => <BankingCountryTab />)
-	.add('services', () => <BankingServicesTab />);
+	.add('types', () => (
+		<BankingTypesTab
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			region="Hong Kong"
+		/>
+	))
+	.add('description', () => <BankingDescriptionTab translation={translation} />)
+	.add('country', () => (
+		<BankingCountryTab
+			countryCode="us"
+			country={country}
+			translation={translation}
+			loadCountryAction={action('load country')}
+		/>
+	))
+	.add('country loading', () => <BankingCountryTab />)
+	.add('services', () => <BankingServicesTab htmlServices={htmlServices} />);
+
+storiesOf('Banking/AccountOptions', module).add('default', () => (
+	<BankingAccountOption account={bankingOffers[0]} />
+));
 
 storiesOf('Banking/Tabs Selector', module)
 	.add('default', () => (
@@ -175,17 +159,24 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('types', () => (
 		<BankingDetailsPageTabs
 			tab="types"
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			region="Hong Kong"
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
 	.add('description', () => (
 		<BankingDetailsPageTabs
 			tab="description"
+			translation={translation}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
 	.add('country', () => (
 		<BankingDetailsPageTabs
+			countryCode="us"
+			country={country}
+			translation={translation}
+			loadCountryAction={action('load country')}
 			tab="country"
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
@@ -193,6 +184,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('services', () => (
 		<BankingDetailsPageTabs
 			tab="services"
+			htmlServices={htmlServices}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	));
@@ -305,6 +297,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			canOpenBankAccount
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
 			onBack={action('banking details back')}
 		/>
 	))
@@ -318,6 +311,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			translation={translation}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
@@ -333,6 +327,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			htmlServices={htmlServices}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
@@ -348,6 +343,9 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			country={country}
+			translation={translation}
+			loadCountryAction={action('load country')}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
