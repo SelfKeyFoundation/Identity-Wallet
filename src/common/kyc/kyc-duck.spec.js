@@ -37,7 +37,7 @@ describe('KYC Duck', () => {
 					store.getState.bind(store)
 				);
 
-				expect(kycApplicationService.loadApplications.calledOnce).toBeTruthy();
+				expect(kycApplicationService.load.calledOnce).toBeTruthy();
 				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
 		});
