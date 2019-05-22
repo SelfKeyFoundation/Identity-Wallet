@@ -7,7 +7,7 @@ import { primary, success, secondary, warning, error, AttributeAlertIcon } from 
 const styles = theme => ({
 	alert: {
 		border: `1px solid ${secondary}`,
-		height: '50px',
+		minHeight: '50px',
 		width: '100%',
 		borderRadius: '4px',
 		padding: '15px',
@@ -73,9 +73,11 @@ export const AlertIcon = withStyles(styles)(({ classes, type = 'success' }) => (
 export const Alert = withStyles(styles)(
 	({ classes, type = 'success', children, icon, className }) => (
 		<div className={classNames(classes.alert, classes[type], className)}>
-			<Grid container>
+			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item>{icon || <AlertIcon type={type} />}</Grid>
-				<Grid item>{children}</Grid>
+				<Grid item xs>
+					{children}
+				</Grid>
 			</Grid>
 		</div>
 	)

@@ -4,60 +4,90 @@ export const bankingOffers = [
 		countryCode: 'hk',
 		region: 'Hong Kong',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 500,
-		type: 'personal'
+		type: 'personal',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 2,
 		countryCode: 'sg',
 		region: 'Singapore',
 		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 500,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisit: true,
 		price: 1500,
-		type: 'personal'
+		type: 'personal',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 3,
 		countryCode: 'ky',
 		region: 'Cayman',
 		eligibility: 'Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 800,
-		type: 'personal'
+		type: 'personal',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 4,
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: true,
 		price: 3500,
-		type: 'personal'
+		type: 'personal',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 5,
 		countryCode: 'kn',
 		region: 'Nevis',
 		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 200,
-		type: 'personal'
+		type: 'personal',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 
 	{
@@ -65,12 +95,18 @@ export const bankingOffers = [
 		countryCode: 'hk',
 		region: 'Hong Kong',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 500,
-		type: 'corporate'
+		type: 'business',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 7,
@@ -82,43 +118,65 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisit: true,
 		price: 1500,
-		type: 'corporate'
+		type: 'business',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 8,
 		countryCode: 'ky',
 		region: 'Cayman',
 		eligibility: 'Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 800,
-		type: 'corporate'
+		type: 'business',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 9,
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: true,
 		price: 3500,
-		type: 'corporate'
+		type: 'business',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 10,
 		countryCode: 'kn',
 		region: 'Nevis',
 		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 200,
-		type: 'corporate'
+		type: 'business',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 
 	{
@@ -126,24 +184,36 @@ export const bankingOffers = [
 		countryCode: 'hk',
 		region: 'Hong Kong',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 500,
-		type: 'private'
+		type: 'private',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 12,
 		countryCode: 'sg',
 		region: 'Singapore',
 		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 500,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisit: true,
 		price: 1500,
-		type: 'private'
+		type: 'private',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 13,
@@ -162,24 +232,36 @@ export const bankingOffers = [
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
 		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: true,
 		price: 3500,
-		type: 'private'
+		type: 'private',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	},
 	{
 		id: 15,
 		countryCode: 'kn',
 		region: 'Nevis',
 		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibilityExpanded:
+			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisit: false,
 		price: 200,
-		type: 'private'
+		type: 'private',
+		currencies: 'USD, SGD, CAD',
+		cards: 'Mastercard, Visa',
+		onlineBanking: 'Yes',
+		avgOpenTime: '1 Month'
 	}
 ];
 

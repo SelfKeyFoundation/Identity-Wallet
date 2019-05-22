@@ -14,7 +14,8 @@ import {
 	BankingTypesTab,
 	BankingCountryTab,
 	BankingDescriptionTab,
-	BankingServicesTab
+	BankingServicesTab,
+	BankingAccountOption
 } from '../src/renderer/marketplace/banking/details';
 import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
@@ -129,7 +130,12 @@ storiesOf('Banking/BankingApplicationButton', module)
 	));
 
 storiesOf('Banking/Tab Content', module)
-	.add('types', () => <BankingTypesTab />)
+	.add('types', () => (
+		<BankingTypesTab
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			region="Hong Kong"
+		/>
+	))
 	.add('description', () => <BankingDescriptionTab translation={translation} />)
 	.add('country', () => (
 		<BankingCountryTab
@@ -142,6 +148,10 @@ storiesOf('Banking/Tab Content', module)
 	.add('country loading', () => <BankingCountryTab />)
 	.add('services', () => <BankingServicesTab htmlServices={htmlServices} />);
 
+storiesOf('Banking/AccountOptions', module).add('default', () => (
+	<BankingAccountOption account={bankingOffers[0]} />
+));
+
 storiesOf('Banking/Tabs Selector', module)
 	.add('default', () => (
 		<BankingDetailsPageTabs onTabChange={linkTo('Banking/Tabs Selector', tab => tab)} />
@@ -149,6 +159,8 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('types', () => (
 		<BankingDetailsPageTabs
 			tab="types"
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			region="Hong Kong"
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
@@ -285,6 +297,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			canOpenBankAccount
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
+			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
 			onBack={action('banking details back')}
 		/>
 	))

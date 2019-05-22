@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography } from '@material-ui/core';
+import { withStyles, Typography, Grid } from '@material-ui/core';
+import { BankingAccountOption } from './account-option';
 
 const styles = theme => ({
 	tabContainer: {
@@ -35,14 +36,23 @@ const styles = theme => ({
 	}
 });
 
-export const BankingTypesTab = withStyles(styles)(({ classes }) => (
+export const BankingTypesTab = withStyles(styles)(({ classes, options = [], region }) => (
 	<div className={classes.tabContainer}>
-		<Typography variant="body2" color="secondary">
-			We work with 4 different banks in Singapore. Each bank has different eligibility
-			requirements, types of accounts available and onboarding processes. We invite you to
-			carefully review each banks requirements and services to better understand if their
-			banking services meet your needs:
-		</Typography>
+		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={40}>
+			<Grid item>
+				<Typography variant="body2" color="secondary">
+					We work with {options.length} different banks in {region}. Each bank has
+					different eligibility requirements, types of accounts available and onboarding
+					processes. We invite you to carefully review each banks requirements and
+					services to better understand if their banking services meet your needs:
+				</Typography>
+			</Grid>
+			{options.map((opt, idx) => (
+				<Grid item key={idx}>
+					<BankingAccountOption account={opt} />
+				</Grid>
+			))}
+		</Grid>
 	</div>
 ));
 
