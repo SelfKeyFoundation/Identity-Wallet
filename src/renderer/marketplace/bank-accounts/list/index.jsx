@@ -30,19 +30,21 @@ class BankAccountsTable extends Component {
 
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
+	onDetailsClick = bank => console.log('TODO', bank);
+
 	render() {
-		// const { classes, isLoading, bank_accounts, keyRate } = this.props;
 		const { isLoading, bankAccounts, keyRate } = this.props;
 		console.log(keyRate, bankAccounts, isLoading);
+		const data = bankAccounts.filter(bank => bank.type === this.state.accountType);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
-				data={bankAccounts}
-				onDetails={null}
+				data={data}
 				onBackClick={this.onBackClick}
 				accountType={this.state.accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
+				onDetails={this.onDetailsClick}
 				loading={isLoading}
 			/>
 		);

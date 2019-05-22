@@ -27,6 +27,11 @@ export class BankAccountsService {
 				};
 
 				payload.main = response.Main.map(fieldMap);
+				payload.main.map(bank => {
+					bank.type = bank['Type of Account']
+						? bank['Type of Account'][0].toLowerCase()
+						: undefined;
+				});
 				payload.jurisdictions = response.Jurisdictions.map(fieldMap);
 				payload.details = response.Account_Details.map(fieldMap);
 

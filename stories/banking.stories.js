@@ -32,7 +32,7 @@ storiesOf('Banking/Account Type Tabs', module)
 	.add('corporate', () => (
 		<div style={{ width: '1140px' }}>
 			<BankingAccountTypeTabs
-				accountType="corporate"
+				accountType="business"
 				onAccountTypeChange={action('account type change')}
 			/>
 		</div>
@@ -69,8 +69,8 @@ storiesOf('Banking/OffersPage', module)
 	.add('corporate', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.type === 'corporate')}
-			accountType="corporate"
+			data={bankingOffers.filter(bank => bank.type === 'business')}
+			accountType="business"
 			onAccountTypeChange={action('banking offers page account type change')}
 			onDetails={action('banking offers page details')}
 			onBackClick={action('banking offers page back')}

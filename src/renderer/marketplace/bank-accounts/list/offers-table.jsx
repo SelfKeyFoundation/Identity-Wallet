@@ -7,9 +7,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
-import config from 'common/config';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
+import { getBankPrice } from '../common';
 
 const styles = theme => ({
 	table: {
@@ -90,23 +90,6 @@ const styles = theme => ({
 	}
 });
 
-// FIXME: move to common helper
-const getPrice = bank => {
-	// Check for override ENV variables
-	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-	let price = bank['Price'];
-	if (!price) return null;
-
-	if (config.dev) {
-		price = bank['Test_Price'];
-	} else {
-		if (bank['Active_Test_Price']) {
-			price = bank['Test_Price'];
-		}
-	}
-	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
-};
-
 export const BankingOffersTable = withStyles(styles)(
 	({ classes, keyRate, data = [], onDetails, className }) => {
 		return (
@@ -169,7 +152,7 @@ export const BankingOffersTable = withStyles(styles)(
 								{bank.personalVisit ? 'Required' : 'No'}
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={getPrice(bank)} rate={keyRate} />
+								<ProgramPrice label="$" price={getBankPrice(bank)} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span onClick={() => onDetails(bank)}>Details</span>
