@@ -87,7 +87,7 @@ export const ApplicationStatusInProgress = withStyles(styles)(({ classes, contac
 
 const statusComponent = {
 	completed: { StatusComponent: ApplicationStatusCompleted, statusType: 'success' },
-	progress: { StatusComponent: ApplicationStatusInProgress, statusType: 'success' },
+	progress: { StatusComponent: ApplicationStatusInProgress, statusType: 'warning' },
 	unpaid: { StatusComponent: ApplicationStatusUnpaid, statusType: 'warning' },
 	rejected: { StatusComponent: ApplicationStatusRejected, statusType: 'warning' }
 };

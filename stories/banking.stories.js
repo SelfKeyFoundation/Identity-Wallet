@@ -16,7 +16,7 @@ import {
 	BankingDescriptionTab,
 	BankingServicesTab
 } from '../src/renderer/marketplace/banking/details';
-import { resume, country, translation, bankingOffers } from './banking-data';
+import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
 
 const KEY_RATE = 1 / 1000;
@@ -130,7 +130,7 @@ storiesOf('Banking/BankingApplicationButton', module)
 
 storiesOf('Banking/Tab Content', module)
 	.add('types', () => <BankingTypesTab />)
-	.add('description', () => <BankingDescriptionTab />)
+	.add('description', () => <BankingDescriptionTab translation={translation} />)
 	.add('country', () => (
 		<BankingCountryTab
 			countryCode="us"
@@ -140,7 +140,7 @@ storiesOf('Banking/Tab Content', module)
 		/>
 	))
 	.add('country loading', () => <BankingCountryTab />)
-	.add('services', () => <BankingServicesTab />);
+	.add('services', () => <BankingServicesTab htmlServices={htmlServices} />);
 
 storiesOf('Banking/Tabs Selector', module)
 	.add('default', () => (
@@ -155,6 +155,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('description', () => (
 		<BankingDetailsPageTabs
 			tab="description"
+			translation={translation}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
@@ -171,6 +172,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('services', () => (
 		<BankingDetailsPageTabs
 			tab="services"
+			htmlServices={htmlServices}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	));
@@ -296,6 +298,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			translation={translation}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
@@ -311,6 +314,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			htmlServices={htmlServices}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}

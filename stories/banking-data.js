@@ -228,5 +228,10 @@ export const country = {
 };
 
 export const translation = {
-	country_details: '<div>Cool country</div>'
+	country_details:
+		'<div style="color: white;">Country Details here <br><br> cool country details</div>',
+	introduction:
+		'<div style="color: white;">Country Description here <br><br> cool country introduction</div>'
 };
+
+export const htmlServices = "<div style='color:white;'>Services text <br><br> here</div>";
