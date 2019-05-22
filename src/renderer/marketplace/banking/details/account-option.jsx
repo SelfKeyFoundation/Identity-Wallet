@@ -5,7 +5,8 @@ import { AttributesTable, Alert } from '../../../common';
 const styles = theme => ({
 	container: {
 		border: '1px solid #303C49',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		padding: '20px'
 	}
 });
 

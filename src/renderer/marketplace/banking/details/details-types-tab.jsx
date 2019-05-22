@@ -49,6 +49,7 @@ export const BankingTypesTab = withStyles(styles)(({ classes, options = [], regi
 			</Grid>
 			{options.map((opt, idx) => (
 				<Grid item key={idx}>
+					<br />
 					<BankingAccountOption account={opt} />
 				</Grid>
 			))}
