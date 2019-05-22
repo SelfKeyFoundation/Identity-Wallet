@@ -11,6 +11,7 @@ import {
 	BankingApplicationButton
 } from '../src/renderer/marketplace/banking/details';
 import { bankingOffers } from './banking-data';
+import KYCRequirementData from './kyc-requirements-data';
 
 const KEY_RATE = 1 / 1000;
 
@@ -156,6 +157,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
 		/>
 	))
@@ -169,6 +171,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
@@ -183,6 +186,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
 			onPay={action('banking details pay')}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
@@ -198,6 +202,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
@@ -212,6 +217,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>

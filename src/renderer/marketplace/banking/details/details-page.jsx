@@ -4,6 +4,7 @@ import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { MoneyIcon } from 'selfkey-ui';
 import { FlagCountryName, ResumeBox, ProgramPrice } from '../../common';
+import { KycRequirementsList } from '../../../kyc/requirements/requirements-list';
 
 const styles = theme => ({
 	container: {
@@ -190,13 +191,9 @@ export const BankingDetailsPage = withStyles(styles)(
 		resume = [],
 		startApplication,
 		keyRate,
-		price
+		price,
+		kycRequirements
 	}) => {
-		// const { program, classes, treaties, keyRate } = this.props;
-		// const { countryCode, templateId } = this.props.match.params;
-		// const { selectedTab } = this.state;
-		// const { translation, tax } = program;
-
 		return (
 			<div className={classes.page}>
 				<div className={classes.backButtonContainer}>
@@ -228,22 +225,44 @@ export const BankingDetailsPage = withStyles(styles)(
 						/>
 						<Grid
 							container
+							direction="column"
 							justify="flex-start"
-							alignItems="flex-start"
+							alignItems="stretch"
 							className={classes.content}
 						>
 							<Grid item>
-								<ResumeBox itemSets={resume} />
+								<Grid
+									container
+									direction="row"
+									justify="space-between"
+									alignItems="flex-start"
+								>
+									<Grid item>
+										<ResumeBox itemSets={resume} />
+									</Grid>
+									<Grid item className={classes.applyButton}>
+										<BankingApplicationButton
+											canOpenBankAccount={canOpenBankAccount}
+											price={price}
+											loading={loading}
+											startApplication={startApplication}
+											keyRate={keyRate}
+										/>
+										<ProgramPrice
+											price={price}
+											rate={keyRate}
+											label="Pricing: $"
+										/>
+									</Grid>
+								</Grid>
 							</Grid>
-							<Grid item className={classes.applyButton}>
-								<BankingApplicationButton
-									canOpenBankAccount={canOpenBankAccount}
-									price={price}
+
+							<Grid item>
+								<KycRequirementsList
+									requirements={kycRequirements}
 									loading={loading}
-									startApplication={startApplication}
-									keyRate={keyRate}
+									title="KYC Requirements and Forms"
 								/>
-								<ProgramPrice price={price} rate={keyRate} label="Pricing: $" />
 							</Grid>
 						</Grid>
 					</div>
