@@ -1,1 +1,2 @@
-export { Popup } from './popup';
+export * from './popup';
+export * from './alert';
