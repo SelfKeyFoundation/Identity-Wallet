@@ -28,16 +28,13 @@ describe('identity', () => {
 		);
 	});
 	describe('unlock', () => {
-		it('should throw if profile is not local', async () => {
+		it('should unlock ledger', async () => {
 			let id1 = new Identity({
-				publicKey,
-				profile: 'test'
+				profile: 'ledger'
 			});
-			try {
-				await id1.unlock();
-			} catch (error) {
-				expect(error.message).toBe('NOT_SUPPORTED');
-			}
+			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns(publicKey);
+			await id1.unlock();
+			expect(id1.publicKey).toEqual(publicKey);
 		});
 		it('should throw invalid password if failed to unlock keystore', async () => {
 			let id1 = new Identity({
