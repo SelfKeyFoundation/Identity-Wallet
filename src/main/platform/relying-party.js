@@ -114,7 +114,7 @@ export class RelyingPartyRest {
 
 		return request.post({
 			url,
-			body: { signature: { value: signature, keyid } },
+			body,
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
 				'User-Agent': this.userAgent,
