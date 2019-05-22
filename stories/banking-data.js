@@ -182,3 +182,51 @@ export const bankingOffers = [
 		type: 'private'
 	}
 ];
+
+export const resume = [
+	[
+		{
+			name: 'Min. Avg. Balance',
+			value: 'SGD 10,000',
+			highlited: true
+		},
+		{
+			name: 'Monthly Min. Avg, Balance',
+			value: 'SGD 5,000',
+			highlited: true
+		}
+	],
+	[
+		{
+			name: 'Personal Visit Required',
+			value: 'yes',
+			highlited: true
+		},
+		{
+			name: 'Time to open',
+			value: '2-4 weeks',
+			highlited: true
+		}
+	],
+	[
+		{
+			name: 'Cards',
+			value: ['Debit Card (SG)', 'Credit Card (USD)'],
+			highlited: true
+		}
+	]
+];
+
+export const country = {
+	name: 'United States',
+	code: 'us',
+	areaInSqKm: 100000,
+	capital: 'Wasington',
+	continentName: 'America',
+	currencyCode: 'USD',
+	population: 20100001
+};
+
+export const translation = {
+	country_details: '<div>Cool country</div>'
+};
