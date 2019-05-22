@@ -51,9 +51,7 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 
 const KycRequirementsListComponent = props => {
 	const { classes, requirements, title = 'KYC Requirements:', subtitle, loading } = props;
-	if (!requirements && !loading) {
-		return null;
-	}
+
 	return (
 		<div className={classes.kyc}>
 			<Typography variant="h2" gutterBottom>

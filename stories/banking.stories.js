@@ -1,5 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
+import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 import {
 	BankingOffersTable,
@@ -8,7 +9,12 @@ import {
 } from '../src/renderer/marketplace/banking';
 import {
 	BankingDetailsPage,
-	BankingApplicationButton
+	BankingApplicationButton,
+	BankingDetailsPageTabs,
+	BankingTypesTab,
+	BankingCountryTab,
+	BankingDescriptionTab,
+	BankingServicesTab
 } from '../src/renderer/marketplace/banking/details';
 import { bankingOffers } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
@@ -20,7 +26,7 @@ storiesOf('Banking', module).add('Offers Table', () => (
 		<BankingOffersTable
 			keyRate={KEY_RATE}
 			data={bankingOffers}
-			onDetails={action('banking offers table details')}
+			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 		/>
 	</div>
 ));
@@ -30,7 +36,10 @@ storiesOf('Banking/Account Type Tabs', module)
 		<div style={{ width: '1140px' }}>
 			<BankingAccountTypeTabs
 				accountType="personal"
-				onAccountTypeChange={action('account type change')}
+				onAccountTypeChange={linkTo(
+					'Banking/Account Type Tabs',
+					accountType => accountType
+				)}
 			/>
 		</div>
 	))
@@ -38,7 +47,10 @@ storiesOf('Banking/Account Type Tabs', module)
 		<div style={{ width: '1140px' }}>
 			<BankingAccountTypeTabs
 				accountType="corporate"
-				onAccountTypeChange={action('account type change')}
+				onAccountTypeChange={linkTo(
+					'Banking/Account Type Tabs',
+					accountType => accountType
+				)}
 			/>
 		</div>
 	))
@@ -46,7 +58,10 @@ storiesOf('Banking/Account Type Tabs', module)
 		<div style={{ width: '1140px' }}>
 			<BankingAccountTypeTabs
 				accountType="private"
-				onAccountTypeChange={action('account type change')}
+				onAccountTypeChange={linkTo(
+					'Banking/Account Type Tabs',
+					accountType => accountType
+				)}
 			/>
 		</div>
 	));
@@ -56,7 +71,7 @@ storiesOf('Banking/OffersPage', module)
 		<BankingOffersPage
 			keyRate={KEY_RATE}
 			data={bankingOffers}
-			onDetails={action('banking offers page details')}
+			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
 			loading
 		/>
@@ -66,8 +81,8 @@ storiesOf('Banking/OffersPage', module)
 			keyRate={KEY_RATE}
 			data={bankingOffers.filter(bank => bank.type === 'personal')}
 			accountType="personal"
-			onAccountTypeChange={action('banking offers page account type change')}
-			onDetails={action('banking offers page details')}
+			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
+			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
 		/>
 	))
@@ -76,8 +91,8 @@ storiesOf('Banking/OffersPage', module)
 			keyRate={KEY_RATE}
 			data={bankingOffers.filter(bank => bank.type === 'corporate')}
 			accountType="corporate"
-			onAccountTypeChange={action('banking offers page account type change')}
-			onDetails={action('banking offers page details')}
+			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
+			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
 		/>
 	))
@@ -86,8 +101,8 @@ storiesOf('Banking/OffersPage', module)
 			keyRate={KEY_RATE}
 			data={bankingOffers.filter(bank => bank.type === 'private')}
 			accountType="private"
-			onAccountTypeChange={action('banking offers page account type change')}
-			onDetails={action('banking offers page details')}
+			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
+			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
 		/>
 	));
@@ -147,16 +162,52 @@ const resume = [
 	]
 ];
 
+storiesOf('Banking/Tab Content', module)
+	.add('types', () => <BankingTypesTab />)
+	.add('description', () => <BankingDescriptionTab />)
+	.add('country', () => <BankingCountryTab />)
+	.add('services', () => <BankingServicesTab />);
+
+storiesOf('Banking/Tabs Selector', module)
+	.add('default', () => (
+		<BankingDetailsPageTabs onTabChange={linkTo('Banking/Tabs Selector', tab => tab)} />
+	))
+	.add('types', () => (
+		<BankingDetailsPageTabs
+			tab="types"
+			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
+		/>
+	))
+	.add('description', () => (
+		<BankingDetailsPageTabs
+			tab="description"
+			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
+		/>
+	))
+	.add('country', () => (
+		<BankingDetailsPageTabs
+			tab="country"
+			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
+		/>
+	))
+	.add('services', () => (
+		<BankingDetailsPageTabs
+			tab="services"
+			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
+		/>
+	));
+
 storiesOf('Banking/BankingDetailsPage', module)
 	.add('default', () => (
 		<BankingDetailsPage
 			countryCode="us"
 			price="1500"
-			keyRate="0.0001"
+			keyRate={KEY_RATE}
 			region="United States"
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
 		/>
@@ -166,12 +217,13 @@ storiesOf('Banking/BankingDetailsPage', module)
 			countryCode="us"
 			applicationStatus="completed"
 			price="1500"
-			keyRate="0.0001"
+			keyRate={KEY_RATE}
 			region="United States"
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
 			kycRequirements={KYCRequirementData}
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
@@ -181,13 +233,14 @@ storiesOf('Banking/BankingDetailsPage', module)
 			countryCode="us"
 			applicationStatus="unpaid"
 			price="1500"
-			keyRate="0.0001"
+			keyRate={KEY_RATE}
 			region="United States"
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
 			kycRequirements={KYCRequirementData}
 			onPay={action('banking details pay')}
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
@@ -197,12 +250,13 @@ storiesOf('Banking/BankingDetailsPage', module)
 			countryCode="us"
 			applicationStatus="progress"
 			price="1500"
-			keyRate="0.0001"
+			keyRate={KEY_RATE}
 			region="United States"
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
 			kycRequirements={KYCRequirementData}
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			startApplication={action('banking start Application')}
 			onBack={action('banking details back')}
 		/>
@@ -212,13 +266,90 @@ storiesOf('Banking/BankingDetailsPage', module)
 			countryCode="us"
 			applicationStatus="rejected"
 			price="1500"
-			keyRate="0.0001"
+			keyRate={KEY_RATE}
 			region="United States"
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
 			kycRequirements={KYCRequirementData}
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			startApplication={action('banking start Application')}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('application loading', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			loading={true}
+			price="1500"
+			keyRate={KEY_RATE}
+			region="United States"
+			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			kycRequirements={KYCRequirementData}
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
+			startApplication={action('banking start Application')}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('types', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			tab="types"
+			price="1500"
+			keyRate={KEY_RATE}
+			region="United States"
+			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
+			kycRequirements={KYCRequirementData}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('description', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			tab="description"
+			price="1500"
+			keyRate={KEY_RATE}
+			region="United States"
+			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
+			kycRequirements={KYCRequirementData}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('services', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			price="1500"
+			tab="services"
+			keyRate={KEY_RATE}
+			region="United States"
+			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
+			kycRequirements={KYCRequirementData}
+			onBack={action('banking details back')}
+		/>
+	))
+	.add('country', () => (
+		<BankingDetailsPage
+			countryCode="us"
+			price="1500"
+			tab="country"
+			keyRate={KEY_RATE}
+			region="United States"
+			contact="help@flagtheory.com"
+			resume={resume}
+			canOpenBankAccount
+			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
+			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
 		/>
 	));
