@@ -321,7 +321,7 @@ export const Accordion = withStyles(styles)(({ classes, data, open, extraKYCRequ
 				alignItems="baseline"
 				className={classes.panelSummaryItem}
 			>
-				<Typography variant="h2">Option 1</Typography>
+				<Typography variant="h2">{data.basic.name}</Typography>
 			</Grid>
 			<Grid container direction="row" justify="flex-start" alignItems="baseline">
 				<Grid item className={classes.panelHeaderText}>

@@ -5,6 +5,7 @@ import { Popup, Accordion, Alert, AlertIcon } from '../src/renderer/common';
 
 const data = {
 	basic: {
+		name: 'Option 1',
 		minBalance: 'SDG 2,000',
 		visitRequired: 'no'
 	},
