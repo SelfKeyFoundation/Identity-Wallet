@@ -6,7 +6,7 @@ import {
 	BankingOffersTable,
 	BankingOffersPage,
 	BankingAccountTypeTabs
-} from '../src/renderer/marketplace/banking';
+} from '../src/renderer/marketplace/bank-accounts/list';
 import {
 	BankingDetailsPage,
 	BankingApplicationButton,
@@ -16,7 +16,7 @@ import {
 	BankingDescriptionTab,
 	BankingServicesTab,
 	BankingAccountOption
-} from '../src/renderer/marketplace/banking/details';
+} from '../src/renderer/marketplace/bank-accounts/details';
 import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
 

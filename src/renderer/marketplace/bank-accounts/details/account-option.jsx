@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, Grid, Typography, Divider } from '@material-ui/core';
-import { AttributesTable, Alert } from '../../../common';
+import { AttributesTable, Alert } from '../../common';
 
 const styles = theme => ({
 	container: {

@@ -5,16 +5,12 @@ import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
-/*
-import { Grid } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-*/
 import { BankingOffersPage } from './offers-page';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
 
-class BankAccountsTable extends Component {
+class BankAccountsTableContainer extends Component {
 	state = {
 		accountType: 'personal',
 		loading: false
@@ -50,7 +46,7 @@ class BankAccountsTable extends Component {
 	}
 }
 
-BankAccountsTable.propTypes = {
+BankAccountsTableContainer.propTypes = {
 	bankAccounts: PropTypes.array,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
@@ -64,5 +60,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const styledComponent = withStyles(styles)(BankAccountsTable);
+const styledComponent = withStyles(styles)(BankAccountsTableContainer);
 export default connect(mapStateToProps)(styledComponent);

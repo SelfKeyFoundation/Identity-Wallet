@@ -9,7 +9,6 @@ import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
-import { getBankPrice } from '../common';
 
 const styles = theme => ({
 	table: {
@@ -134,25 +133,25 @@ export const BankingOffersTable = withStyles(styles)(
 					{data.map(bank => (
 						<TableRow key={bank.id}>
 							<TableCell className={classes.flagCell}>
-								<FlagCountryName code={bank['Country Code']} size="small" />
+								<FlagCountryName code={bank.countryCode} size="small" />
 							</TableCell>
-							<TableCell className={classes.regionCell}>{bank['Region']}</TableCell>
+							<TableCell className={classes.regionCell}>{bank.region}</TableCell>
 							<TableCell className={classes.eligibilityCellBody}>
-								{bank['Eligibility'] &&
-									bank['Eligibility'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+								{bank.eligibility &&
+									bank.eligibility.map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TableCell>
 							<TableCell className={classes.minDepositCell}>
-								{bank.minDeposit} {bank['Min Deposit']}
+								{bank.minDeposit}
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
-								{bank['Good For'] &&
-									bank['Good For'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+								{bank.goodFor &&
+									bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TagTableCell>
 							<TableCell className={classes.personalVisitCell}>
 								{bank.personalVisit ? 'Required' : 'No'}
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={getBankPrice(bank)} rate={keyRate} />
+								<ProgramPrice label="$" price={bank.Price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span onClick={() => onDetails(bank)}>Details</span>
