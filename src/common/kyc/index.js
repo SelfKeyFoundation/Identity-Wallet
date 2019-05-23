@@ -19,7 +19,8 @@ export const initialState = {
 	currentApplication: null,
 	cancelRoute: '',
 	applications: [],
-	applicationsById: {}
+	applicationsById: {},
+	processing: false
 };
 
 export const kycTypes = {
@@ -37,7 +38,10 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
 	KYC_APPLICATIONS_SET: 'kyc/applications/set',
-	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update'
+	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
+	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
+	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
+	KYC_APPLICATIONS_RESET: 'kyc/applications/reset'
 };
 
 const incorporationsRPDetails = {
@@ -185,6 +189,9 @@ export const kycSelectors = {
 		return this.kycSelector(state).applications.map(
 			id => this.kycSelector(state).applicationsById[id]
 		);
+	},
+	selectProcessing(state) {
+		return this.kycSelector(state).processing;
 	}
 };
 
@@ -250,6 +257,12 @@ export const kycActions = {
 			type: kycTypes.KYC_APPLICATIONS_SET,
 			payload: applications
 		};
+	},
+	setProcessingAction(processing) {
+		return {
+			type: kycTypes.KYC_APPLICATIONS_PROCESSING,
+			payload: processing
+		};
 	}
 };
 
@@ -305,6 +318,9 @@ const loadRelyingPartyOperation = (
 	const walletType = appSelectors.selectApp(getState()).walletType;
 	if (!rpName) return null;
 
+	const wallet = walletSelectors.getWallet(getState());
+	if (!wallet) return;
+
 	const ts = Date.now();
 	let rp;
 	if (rpName === 'incorporations') {
@@ -334,9 +350,13 @@ const loadRelyingPartyOperation = (
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
+						walletId: wallet.id,
 						rpName: rpName,
 						currentStatus: application.currentStatus,
-						currentStatusName: application.statusName
+						currentStatusName: application.statusName,
+						owner: application.owner,
+						scope: application.scope,
+						applicationDate: application.createdAt
 					})
 				);
 			}
@@ -400,6 +420,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
+				walletId: wallet.id,
 				rpName: rpName,
 				currentStatus: application.currentStatus,
 				currentStatusName: application.statusName,
@@ -550,15 +571,26 @@ const clearRelyingPartyOperation = () => async dispatch => {
 };
 
 const loadApplicationsOperation = () => async (dispatch, getState) => {
+	const wallet = walletSelectors.getWallet(getState());
 	let kycApplicationService = getGlobalContext().kycApplicationService;
-	let applications = await kycApplicationService.load();
+	await dispatch(kycActions.setProcessingAction(true));
+	let applications = await kycApplicationService.load(wallet.id);
+	await dispatch(kycActions.setProcessingAction(false));
 	await dispatch(kycActions.setApplicationsAction(applications));
 };
 
 const updateApplicationsOperation = application => async (dispatch, getState) => {
 	let kycApplicationService = getGlobalContext().kycApplicationService;
-	kycApplicationService.addEntry(application);
-	loadApplicationsOperation();
+	await kycApplicationService.addEntry(application);
+};
+
+const setProcessingOperation = processing => async dispatch => {
+	await dispatch(kycActions.setProcessingAction(processing));
+};
+
+const resetApplicationsOperation = () => async dispatch => {
+	await dispatch(kycActions.setProcessingAction(false));
+	await dispatch(kycActions.setApplicationsAction([]));
 };
 
 export const kycOperations = {
@@ -595,6 +627,14 @@ export const kycOperations = {
 	updateApplicationsOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_UPDATE,
 		updateApplicationsOperation
+	),
+	setProcessing: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_PROCESSING_SET,
+		setProcessingOperation
+	),
+	resetApplications: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_RESET,
+		resetApplicationsOperation
 	)
 };
 
@@ -645,13 +685,18 @@ export const setApplicationsReducer = (state, { payload }) => {
 	return { ...state, applications, applicationsById };
 };
 
+export const setProcessingReducer = (state, { payload }) => {
+	return { ...state, processing: payload };
+};
+
 export const reducers = {
 	updateRelyingPartyReducer,
 	addKYCApplicationReducer,
 	setCurrentApplicationReducer,
 	clearCurrentApplicationReducer,
 	setCancelRoute,
-	setApplicationsReducer
+	setApplicationsReducer,
+	setProcessingReducer
 };
 
 export const reducer = (state = initialState, action) => {
@@ -668,6 +713,8 @@ export const reducer = (state = initialState, action) => {
 			return reducers.setCancelRoute(state, action);
 		case kycTypes.KYC_APPLICATIONS_SET:
 			return reducers.setApplicationsReducer(state, action);
+		case kycTypes.KYC_APPLICATIONS_PROCESSING:
+			return reducers.setProcessingReducer(state, action);
 	}
 	return state;
 };

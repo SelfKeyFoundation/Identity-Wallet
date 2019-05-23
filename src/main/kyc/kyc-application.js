@@ -26,17 +26,18 @@ export class KycApplication extends BaseModel {
 				currentStatusName: { type: 'string' },
 				applicationDate: { type: 'string' },
 				payments: { type: 'object' },
-				nextRoute: { type: 'string' }
+				nextRoute: { type: 'string' },
+				walletId: { type: 'integer' }
 			}
 		};
 	}
 
 	static async findById(id) {
-		return this.query().where({ id });
+		return this.query().findById(id);
 	}
 
-	static findAll() {
-		return this.query();
+	static findAll(walletId) {
+		return this.query().where({ walletId });
 	}
 
 	static async create(itm) {

@@ -193,24 +193,26 @@ const StatusInfo = withStyles(statusInfoStyle)(
 						</Grid>
 						<Grid item>{button || <span />}</Grid>
 						<Grid item style={{ height: '23px' }}>
-							<KeyTooltip
-								interactive
-								placement="top-start"
-								title={
-									<React.Fragment>
-										<span>{tooltip}</span>
-										<TooltipArrow />
-									</React.Fragment>
-								}
-							>
-								<span
-									className={classes.refresh}
-									onClick={handleRefresh}
-									disabled={loading}
+							{status !== 2 && (
+								<KeyTooltip
+									interactive
+									placement="top-start"
+									title={
+										<React.Fragment>
+											<span>{tooltip}</span>
+											<TooltipArrow />
+										</React.Fragment>
+									}
 								>
-									<NewRefreshIcon />
-								</span>
-							</KeyTooltip>
+									<span
+										className={classes.refresh}
+										onClick={handleRefresh}
+										disabled={loading}
+									>
+										<NewRefreshIcon />
+									</span>
+								</KeyTooltip>
+							)}
 						</Grid>
 					</Grid>
 				</Grid>
@@ -263,7 +265,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 	render() {
 		const { classes, loading } = this.props;
 
-		if (this.props.applications && this.props.applications.length === 0) {
+		if (!loading && this.props.applications && this.props.applications.length === 0) {
 			return (
 				<Grid container spacing={32}>
 					<Grid item xs={12}>
@@ -308,212 +310,220 @@ class SelfkeyIdApplicationsComponent extends Component {
 
 		return (
 			<React.Fragment>
-				{this.props.applications.map((item, index) => (
-					<React.Fragment key={item.id}>
-						<ExpansionPanel defaultExpanded={index === 0}>
-							<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+				{this.props.applications &&
+					this.props.applications.map((item, index) => (
+						<React.Fragment key={item.id}>
+							<ExpansionPanel defaultExpanded={index === 0}>
+								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+									<Grid
+										container
+										direction="row"
+										justify="flex-start"
+										alignItems="baseline"
+									>
+										<Typography variant="h2" className={classes.type}>
+											{item.rpName.charAt(0).toUpperCase() +
+												item.rpName.slice(1)}
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											-{' '}
+											{item.title.charAt(0).toUpperCase() +
+												item.title.slice(1)}
+										</Typography>
+									</Grid>
+									<Grid
+										container
+										direction="row"
+										justify="flex-end"
+										alignItems="center"
+										className={classes.noRightPadding}
+									>
+										<HeaderIcon status={item.currentStatus} />
+										<Typography variant="subtitle2" color="secondary">
+											{item.currentStatusName}
+										</Typography>
+									</Grid>
+								</ExpansionPanelSummary>
+								<Divider />
 								<Grid
+									className={classes.statusInfoWrap}
 									container
 									direction="row"
-									justify="flex-start"
-									alignItems="baseline"
-								>
-									<Typography variant="h2" className={classes.type}>
-										{item.rpName.charAt(0).toUpperCase() + item.rpName.slice(1)}
-									</Typography>
-									<Typography variant="subtitle2" color="secondary">
-										- {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									direction="row"
-									justify="flex-end"
 									alignItems="center"
-									className={classes.noRightPadding}
 								>
-									<HeaderIcon status={item.currentStatus} />
-									<Typography variant="subtitle2" color="secondary">
-										{item.currentStatusName}
-									</Typography>
+									<StatusInfo
+										status={item.currentStatus}
+										onClick={() =>
+											this.props.handleAddDocuments(item.id, item.rpName)
+										}
+										handleRefresh={() => this.props.handleRefresh(item.id)}
+										tooltip={moment(new Date(item.updatedAt)).format(
+											'DD MMM YYYY'
+										)}
+										loading={loading}
+									/>
 								</Grid>
-							</ExpansionPanelSummary>
-							<Divider />
-							<Grid
-								className={classes.statusInfoWrap}
-								container
-								direction="row"
-								alignItems="center"
-							>
-								<StatusInfo
-									status={item.currentStatus}
-									onClick={() =>
-										this.props.handleAddDocuments(item.id, item.rpName)
-									}
-									handleRefresh={() => this.props.handleRefresh(item.id)}
-									tooltip={moment(new Date(item.updatedAt)).format('DD MMM YYYY')}
-									loading={loading}
-								/>
-							</Grid>
-							<ExpansionPanelDetails>
-								<Grid container spacing={32}>
-									<Grid item xs>
-										<Card>
-											<Typography variant="h2" className={classes.title}>
-												Application Details
-											</Typography>
-											<Divider variant="middle" />
-											<CardContent>
-												<List className={classes.list}>
-													<ListItem
-														key="applicationDate"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
+								<ExpansionPanelDetails>
+									<Grid container spacing={32}>
+										<Grid item xs>
+											<Card>
+												<Typography variant="h2" className={classes.title}>
+													Application Details
+												</Typography>
+												<Divider variant="middle" />
+												<CardContent>
+													<List className={classes.list}>
+														<ListItem
+															key="applicationDate"
+															className={classes.listItem}
 														>
-															Application Date
-														</Typography>
-														<Typography variant="body2">
-															{moment(item.applicationDate).format(
-																'DD MMM YYYY'
-															)}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="serviceProvider"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
-														>
-															Service Provider
-														</Typography>
-														<Typography variant="body2">
-															{getRpInfo(item.rpName, 'name')}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="providerContact"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
-														>
-															Provider Contact
-														</Typography>
-														<Typography variant="body2">
-															{getRpInfo(item.rpName, 'email')}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="address"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
-														>
-															Address
-														</Typography>
-														<Typography variant="body2">
-															{getRpInfo(item.rpName, 'address')}
-														</Typography>
-													</ListItem>
-												</List>
-											</CardContent>
-										</Card>
-									</Grid>
-									<Grid item xs>
-										<Card>
-											<Typography variant="h2" className={classes.title}>
-												Payment Details
-											</Typography>
-											<Divider variant="middle" />
-											<CardContent>
-												<List className={classes.list}>
-													<ListItem
-														key="transactionId"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
-														>
-															Transaction ID
-														</Typography>
-														<Typography variant="body2">
-															{item.payments &&
-																item.payments.transactionHash}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="transactionDate"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
-														>
-															Transaction Date
-														</Typography>
-														<Typography variant="body2">
-															{item.payments &&
-																moment(
-																	item.payments.transactionDate
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Application Date
+															</Typography>
+															<Typography variant="body2">
+																{moment(
+																	item.applicationDate
 																).format('DD MMM YYYY')}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="amount"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="serviceProvider"
+															className={classes.listItem}
 														>
-															Amount
-														</Typography>
-														<Typography variant="body2">
-															{item.payments &&
-																item.payments.amountKey}
-														</Typography>
-													</ListItem>
-													<ListItem
-														key="paymentStatus"
-														className={classes.listItem}
-													>
-														<Typography
-															variant="body2"
-															color="secondary"
-															className={classes.label}
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Service Provider
+															</Typography>
+															<Typography variant="body2">
+																{getRpInfo(item.rpName, 'name')}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="providerContact"
+															className={classes.listItem}
 														>
-															Payment Status
-														</Typography>
-														<Typography variant="body2">
-															{item.payments && item.payments.status}
-														</Typography>
-													</ListItem>
-												</List>
-											</CardContent>
-										</Card>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Provider Contact
+															</Typography>
+															<Typography variant="body2">
+																{getRpInfo(item.rpName, 'email')}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="address"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Address
+															</Typography>
+															<Typography variant="body2">
+																{getRpInfo(item.rpName, 'address')}
+															</Typography>
+														</ListItem>
+													</List>
+												</CardContent>
+											</Card>
+										</Grid>
+										<Grid item xs>
+											<Card>
+												<Typography variant="h2" className={classes.title}>
+													Payment Details
+												</Typography>
+												<Divider variant="middle" />
+												<CardContent>
+													<List className={classes.list}>
+														<ListItem
+															key="transactionId"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Transaction ID
+															</Typography>
+															<Typography variant="body2">
+																{item.payments &&
+																	item.payments.transactionHash}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="transactionDate"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Transaction Date
+															</Typography>
+															<Typography variant="body2">
+																{item.payments &&
+																	moment(
+																		item.payments
+																			.transactionDate
+																	).format('DD MMM YYYY')}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="amount"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Amount
+															</Typography>
+															<Typography variant="body2">
+																{item.payments &&
+																	item.payments.amountKey}
+															</Typography>
+														</ListItem>
+														<ListItem
+															key="paymentStatus"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Payment Status
+															</Typography>
+															<Typography variant="body2">
+																{item.payments &&
+																	item.payments.status}
+															</Typography>
+														</ListItem>
+													</List>
+												</CardContent>
+											</Card>
+										</Grid>
 									</Grid>
-								</Grid>
-							</ExpansionPanelDetails>
-						</ExpansionPanel>
-						<br />
-					</React.Fragment>
-				))}
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							<br />
+						</React.Fragment>
+					))}
 			</React.Fragment>
 		);
 	}

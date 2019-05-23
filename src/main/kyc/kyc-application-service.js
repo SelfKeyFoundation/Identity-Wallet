@@ -4,8 +4,9 @@ import KycApplication from './kyc-application';
 // const log = new Logger('kyc-applications-service');
 
 export class KycApplicationService {
-	addEntry = entry => {
-		if (this.findById(entry.id)) {
+	addEntry = async entry => {
+		const found = await this.findById(entry.id);
+		if (found) {
 			return this.editEntry(entry);
 		} else {
 			return KycApplication.create(entry);
@@ -24,8 +25,8 @@ export class KycApplicationService {
 		return KycApplication.findById(id);
 	};
 
-	load = _ => {
-		return KycApplication.findAll();
+	load = walletId => {
+		return KycApplication.findAll(walletId);
 	};
 }
 

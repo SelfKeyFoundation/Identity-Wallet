@@ -31,14 +31,30 @@ class SelfkeyIdComponent extends Component {
 	};
 
 	async componentDidMount() {
-		const { wallet, dispatch, rpShouldUpdate } = this.props;
+		const { wallet, dispatch, rpShouldUpdate, rp } = this.props;
 		const tabValue = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).tabValue;
-		const notAuthenticated = false;
+		const afterAuthRoute = `/main/selfkeyId?tabValue=1`;
+		const cancelRoute = `/main/selfkeyId?tabValue=1`;
+		const authenticate = true;
 
 		if (!wallet.isSetupFinished) {
 			await dispatch(push('/selfkeyIdCreate'));
 		} else {
-			await this.props.dispatch(kycOperations.loadApplicationsOperation());
+			await this.props.dispatch(kycOperations.resetApplications());
+			// if relying party not loaded, try again
+			if (!rp || !rp.authenticated) {
+				this.setState({ loading: true }, async () => {
+					await this.props.dispatch(kycOperations.setProcessing(true));
+					await this.props.dispatch(
+						kycOperations.loadRelyingParty(
+							'incorporations',
+							authenticate,
+							afterAuthRoute,
+							cancelRoute
+						)
+					);
+				});
+			}
 		}
 
 		if (tabValue) {
@@ -47,18 +63,21 @@ class SelfkeyIdComponent extends Component {
 
 		// this is needed otherwise the rp keeps loading (stuck)
 		if (!this.props.incorporations || !this.props.incorporations.length) {
-			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
+			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
 
 		if (rpShouldUpdate) {
 			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
+				kycOperations.loadRelyingParty('incorporations', !authenticate)
 			);
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	async componentDidUpdate(prevProps) {
 		if (prevProps.rp !== this.props.rp) {
+			if (this.props.rp.authenticated) {
+				await this.props.dispatch(kycOperations.loadApplicationsOperation());
+			}
 			this.setState({ loading: false }, () => {
 				if (this.state.refreshing) {
 					if (this.state.applicationId) {
@@ -87,7 +106,7 @@ class SelfkeyIdComponent extends Component {
 		const { rp } = this.props;
 		const afterAuthRoute = `/main/selfkeyId?tabValue=1`;
 		const cancelRoute = `/main/selfkeyId?tabValue=1`;
-		const authenticated = true;
+		const authenticate = true;
 
 		// if relying party not loaded, try again
 		if (!rp || !rp.authenticated) {
@@ -97,7 +116,7 @@ class SelfkeyIdComponent extends Component {
 					await this.props.dispatch(
 						kycOperations.loadRelyingParty(
 							'incorporations',
-							authenticated,
+							authenticate,
 							afterAuthRoute,
 							cancelRoute
 						)
@@ -170,7 +189,7 @@ class SelfkeyIdComponent extends Component {
 		const { rp } = this.props;
 		const afterAuthRoute = `/main/selfkeyId?tabValue=1`;
 		const cancelRoute = `/main/selfkeyId?tabValue=1`;
-		const authenticated = true;
+		const authenticate = true;
 
 		// if relying party not loaded, try again
 		if (!rp || !rp.authenticated) {
@@ -178,7 +197,7 @@ class SelfkeyIdComponent extends Component {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
 						'incorporations',
-						authenticated,
+						authenticate,
 						afterAuthRoute,
 						cancelRoute
 					)
@@ -261,13 +280,13 @@ class SelfkeyIdComponent extends Component {
 	}
 
 	render() {
-		const { isLoading } = this.props;
+		const { isLoading, processing } = this.props;
 		const { showApplicationRefreshModal } = this.state;
-
+		let loading = isLoading || processing || this.state.loading;
 		let component = <SelfkeyIdOverview {...this.props} onRef={ref => (this.overview = ref)} />;
 
 		if (this.state.tabValue === 1) {
-			if (isLoading || this.state.loading) {
+			if (loading) {
 				return this.renderLoadingScreen();
 			}
 			component = (
@@ -275,7 +294,7 @@ class SelfkeyIdComponent extends Component {
 					{...this.props}
 					handleAddDocuments={this.handleApplicationAddDocuments}
 					handleRefresh={this.handleApplicationRefresh}
-					loading={this.state.loading}
+					loading={loading}
 				/>
 			);
 		}
@@ -318,7 +337,8 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			notAuthenticated
 		),
-		applications: kycSelectors.selectApplications(state)
+		applications: kycSelectors.selectApplications(state),
+		processing: kycSelectors.selectProcessing(state)
 	};
 };
 
