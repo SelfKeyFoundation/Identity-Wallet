@@ -34,7 +34,6 @@ class BankAccountsTable extends Component {
 
 	render() {
 		const { isLoading, bankAccounts, keyRate } = this.props;
-		console.log(keyRate, bankAccounts, isLoading);
 		const data = bankAccounts.filter(bank => bank.type === this.state.accountType);
 
 		return (
