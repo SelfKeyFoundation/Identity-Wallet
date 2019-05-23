@@ -40,7 +40,6 @@ class BankingTypesTabComponent extends Component {
 	state = { option: null };
 	toggleOption = optionIdx => expanded => {
 		const { option } = this.state;
-		console.log('XXX', optionIdx, option, expanded);
 		if (!expanded) {
 			return this.setState({ option: null });
 		}
