@@ -134,7 +134,7 @@ export const BankingAccountOption = withStyles(styles)(
 				value: account.goodFor.join(', ')
 			}
 		];
-		const oppeningOptions = [
+		const openingOptions = [
 			{
 				name: 'Personal Visit Required:',
 				value: account.personalVisit ? 'Yes' : 'No'
@@ -174,57 +174,39 @@ export const BankingAccountOption = withStyles(styles)(
 				</ExpansionPanelSummary>
 				<Divider />
 				<ExpansionPanelDetails className={classes.flexColumn}>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="stretch"
-						spacing={20}
-						className={classes.container}
-					>
-						<Grid item>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="stretch"
-								spacing={16}
-							>
-								<Grid item xs>
-									<AttributesTable title="Account" attributes={accountOptions} />
-								</Grid>
+					<br />
+					<Grid container spacing={32}>
+						<Grid item xs>
+							<AttributesTable title="Account" attributes={accountOptions} />
+						</Grid>
 
-								<Grid item xs>
-									<AttributesTable
-										title="Account Opening"
-										attributes={oppeningOptions}
-									/>
-								</Grid>
+						<Grid item xs>
+							<AttributesTable title="Account Opening" attributes={openingOptions} />
+						</Grid>
+					</Grid>
+
+					<Grid item>
+						<Grid container direction="column" className={classes.eligibility}>
+							<Grid item>
+								<Typography variant="h2">Eligibility</Typography>
 							</Grid>
-						</Grid>
-						<Grid item>
-							<Grid container direction="column" className={classes.eligibility}>
-								<Grid item>
-									<Typography variant="h2">Eligibility</Typography>
-								</Grid>
-								<br />
-								<Grid item className={classes.eligibilityGrid}>
-									<Typography variant="body2">
-										{account.eligibilityExpanded}
-									</Typography>
-								</Grid>
-								<Alert type="warning" classname={classes.alert}>
-									Please make sure you understand the bank requirements and that
-									you are able/willing to fulfill them before placing your order.
-								</Alert>
+							<br />
+							<Grid item className={classes.eligibilityGrid}>
+								<Typography variant="body2">
+									{account.eligibilityExpanded}
+								</Typography>
 							</Grid>
+							<Alert type="warning" classname={classes.alert}>
+								Please make sure you understand the bank requirements and that you
+								are able/willing to fulfill them before placing your order.
+							</Alert>
 						</Grid>
-						<Grid item>
-							<Divider />
-						</Grid>
-						<Grid item>
-							<ExtraKYCRequirements />
-						</Grid>
+					</Grid>
+					<Grid item>
+						<Divider />
+					</Grid>
+					<Grid item>
+						<ExtraKYCRequirements />
 					</Grid>
 				</ExpansionPanelDetails>
 			</ExpansionPanel>
