@@ -1,60 +1,61 @@
 import React from 'react';
-import { withStyles, Typography } from '@material-ui/core';
-import { base } from 'selfkey-ui';
+import {
+	withStyles,
+	Typography,
+	CardHeader,
+	CardContent,
+	List,
+	Divider,
+	Card,
+	ListItem
+} from '@material-ui/core';
 
 const styles = theme => ({
-	attributeTableContainer: {
-		width: '100%',
-		height: '100%',
-		border: '1px solid #303C49',
-		backgroundColor: base,
-		borderRadius: '4px'
+	bold: {
+		fontWeight: 600
 	},
-	attributesTable: {
-		width: '100%',
-		textAlign: 'left',
-		'& th, & td': {
-			padding: '15px'
-		}
+	listItem: {
+		alignItems: 'baseline',
+		display: 'flex',
+		paddingLeft: 0,
+		paddingRight: 0
 	},
-	nameCol: {
-		maxWidth: '200px',
-		width: '200px'
+	listItemText: {
+		minWidth: '37%',
+		width: '37%'
 	},
-	thead: {
-		borderBottom: '1px solid #303C49'
-	},
-	value: {
-		fontWeight: 700
+	padding: {
+		marginBottom: '0 !important',
+		marginLeft: '0 !important',
+		paddingLeft: 0,
+		paddingRight: 0
 	}
 });
 
 export const AttributesTable = withStyles(styles)(({ classes, title, attributes = [] }) => (
-	<div className={classes.attributeTableContainer}>
-		<table className={classes.attributesTable}>
-			<thead className={classes.thead}>
-				<th colSpan="2">
-					<Typography variant="h2">{title}</Typography>
-				</th>
-			</thead>
-			<tbody>
+	<Card>
+		<CardHeader title={title} />
+		<Divider />
+		<CardContent className={classes.sanyi}>
+			<List className={classes.padding}>
 				{attributes.map((attr, idx) => (
-					<tr key={idx}>
-						<td className={classes.nameCol}>
-							<Typography variant="subtitle2" color="secondary">
-								{attr.name}
-							</Typography>
-						</td>
-						<td>
-							<Typography variant="subtitle2" className={classes.value}>
-								{attr.value || '--'}
-							</Typography>
-						</td>
-					</tr>
+					<ListItem className={classes.listItem} key={idx}>
+						<Typography
+							variant="body2"
+							color="secondary"
+							gutterBottom
+							className={classes.listItemText}
+						>
+							{attr.name}
+						</Typography>
+						<Typography variant="body2" gutterBottom className={classes.bold}>
+							{attr.value || '--'}
+						</Typography>
+					</ListItem>
 				))}
-			</tbody>
-		</table>
-	</div>
+			</List>
+		</CardContent>
+	</Card>
 ));
 
 export default AttributesTable;
