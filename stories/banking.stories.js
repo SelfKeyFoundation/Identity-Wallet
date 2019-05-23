@@ -148,9 +148,11 @@ storiesOf('Banking/Tab Content', module)
 	.add('country loading', () => <BankingCountryTab />)
 	.add('services', () => <BankingServicesTab htmlServices={htmlServices} />);
 
-storiesOf('Banking/AccountOptions', module).add('default', () => (
-	<BankingAccountOption account={bankingOffers[0]} />
-));
+storiesOf('Banking/AccountOptions', module)
+	.add('default', () => <BankingAccountOption account={bankingOffers[0]} title="option 1" />)
+	.add('open', () => (
+		<BankingAccountOption account={bankingOffers[0]} title="option 1" isOpen={true} />
+	));
 
 storiesOf('Banking/Tabs Selector', module)
 	.add('default', () => (
