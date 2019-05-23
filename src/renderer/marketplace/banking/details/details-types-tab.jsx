@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import { BankingAccountOption } from './account-option';
 
@@ -36,25 +36,55 @@ const styles = theme => ({
 	}
 });
 
-export const BankingTypesTab = withStyles(styles)(({ classes, options = [], region }) => (
-	<div className={classes.tabContainer}>
-		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={40}>
-			<Grid item>
-				<Typography variant="body2" color="secondary">
-					We work with {options.length} different banks in {region}. Each bank has
-					different eligibility requirements, types of accounts available and onboarding
-					processes. We invite you to carefully review each banks requirements and
-					services to better understand if their banking services meet your needs:
-				</Typography>
-			</Grid>
-			{options.map((opt, idx) => (
-				<Grid item key={idx}>
-					<br />
-					<BankingAccountOption account={opt} />
+class BankingTypesTabComponent extends Component {
+	state = { option: null };
+	toggleOption = optionIdx => expanded => {
+		const { option } = this.state;
+		console.log('XXX', optionIdx, option, expanded);
+		if (!expanded) {
+			return this.setState({ option: null });
+		}
+		if (option !== optionIdx) {
+			return this.setState({ option: optionIdx });
+		}
+	};
+	render() {
+		const { classes, options = [], region } = this.props;
+		const { option } = this.state;
+		return (
+			<div className={classes.tabContainer}>
+				<Grid
+					container
+					direction="column"
+					justify="flex-start"
+					alignItems="stretch"
+					spacing={40}
+				>
+					<Grid item>
+						<Typography variant="body2" color="secondary">
+							We work with {options.length} different banks in {region}. Each bank has
+							different eligibility requirements, types of accounts available and
+							onboarding processes. We invite you to carefully review each banks
+							requirements and services to better understand if their banking services
+							meet your needs:
+						</Typography>
+					</Grid>
+					{options.map((opt, idx) => (
+						<Grid item key={idx}>
+							<BankingAccountOption
+								account={opt}
+								title={`option ${idx + 1}`}
+								isOpen={option === idx}
+								toggleOpen={this.toggleOption(idx)}
+							/>
+						</Grid>
+					))}
 				</Grid>
-			))}
-		</Grid>
-	</div>
-));
+			</div>
+		);
+	}
+}
+
+export const BankingTypesTab = withStyles(styles)(BankingTypesTabComponent);
 
 export default BankingTypesTab;
