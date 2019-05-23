@@ -1,3 +1,22 @@
+import config from 'common/config';
+
+const selectPrice = bank => {
+	if (!bank['Price'] && !bank['Test_Price']) return null;
+
+	// Check for override ENV variables
+	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
+	let price = bank['Price'];
+
+	if (config.dev) {
+		price = bank['Test_Price'];
+	} else {
+		if (bank['Active_Test_Price']) {
+			price = bank['Test_Price'];
+		}
+	}
+	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
+};
+
 export const bankAccountsSelectors = {
 	getBankAccounts(state) {
 		return state.bankAccounts;
@@ -10,7 +29,11 @@ export const bankAccountsSelectors = {
 	},
 	getMainBankAccounts(state) {
 		const tree = this.getBankAccounts(state);
-		return tree.main.map(incId => tree.mainById[incId]);
+		const data = tree.main.map(bId => tree.mainById[bId]);
+		return data.map(b => {
+			b.Price = selectPrice(b);
+			return b;
+		});
 	},
 	getJurisdictions(state) {
 		const tree = this.getBankAccounts(state);

@@ -13,17 +13,17 @@ export const BankingAccountTypeTabs = withStyles(styles)(
 			<React.Fragment>
 				<Tabs value={accountType} onChange={(evt, value) => onAccountTypeChange(value)}>
 					<Tab value="personal" label="Personal Accounts" />
-					<Tab value="corporate" label="Corporate Accounts" />
+					<Tab value="business" label="Corporate Accounts" />
 					<Tab value="private" label="Private Banking" />
 				</Tabs>
 				{accountType === 'personal' && (
 					<Typography variant="body2" color="secondary" className={classes.tabContent}>
 						Personal account refers to the account owned by an individual or a couple if
-						it's a joint-account. That type of account is intended to reflect the
-						person's banking needs and obligations and is not transferrable.
+						it{"'"}s a joint{'-'}account. That type of account is intended to reflect
+						the person{"'"}s banking needs and obligations and is not transferrable.
 					</Typography>
 				)}
-				{accountType === 'corporate' && (
+				{accountType === 'business' && (
 					<Typography variant="body2" color="secondary" className={classes.tabContent}>
 						Corporate Accounts
 					</Typography>

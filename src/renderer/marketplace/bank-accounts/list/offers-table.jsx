@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
-import { ProgramPrice, FlagCountryName } from '../common';
+import { ProgramPrice, FlagCountryName } from '../../common';
 
 const styles = theme => ({
 	table: {
@@ -137,10 +137,11 @@ export const BankingOffersTable = withStyles(styles)(
 							</TableCell>
 							<TableCell className={classes.regionCell}>{bank.region}</TableCell>
 							<TableCell className={classes.eligibilityCellBody}>
-								{bank.eligibility}
+								{bank.eligibility &&
+									bank.eligibility.map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TableCell>
 							<TableCell className={classes.minDepositCell}>
-								{bank.minDeposit} {bank.minDepositCurrency}
+								{bank.minDeposit}
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
 								{bank.goodFor &&
@@ -150,7 +151,7 @@ export const BankingOffersTable = withStyles(styles)(
 								{bank.personalVisit ? 'Required' : 'No'}
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={bank.price} rate={keyRate} />
+								<ProgramPrice label="$" price={bank.Price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span onClick={() => onDetails(bank)}>Details</span>
