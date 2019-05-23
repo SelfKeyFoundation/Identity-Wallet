@@ -122,6 +122,48 @@ describe('lws-service', () => {
 			});
 		});
 
+		describe('reqTrezorWallets', () => {
+			it('returns wallets', async () => {
+				const walletService = {
+					getTrezorWallets: () => {}
+				};
+				setGlobalContext({ walletService });
+				sinon.stub(walletService, 'getTrezorWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(Wallet, 'findByPublicKey');
+				Wallet.findByPublicKey.resolves({
+					publicKey: 'test',
+					profile: 'trezor',
+					hasSignedUpTo() {
+						return false;
+					}
+				});
+
+				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				sinon.stub(conn, 'send');
+
+				const msg = {
+					type: 'test',
+					payload: { config: { website: { url: 'test' }, page: 6 } }
+				};
+
+				await service.reqTrezorWallets(msg, conn);
+
+				expect(conn.send.getCall(0).args).toEqual([
+					{
+						payload: [
+							{
+								publicKey: 'test',
+								profile: 'trezor',
+								unlocked: false,
+								signedUp: false
+							}
+						]
+					},
+					msg
+				]);
+			});
+		});
+
 		describe('reqUnlock', () => {
 			const t = (msg, profile, wallet, expected) =>
 				it(msg, async () => {

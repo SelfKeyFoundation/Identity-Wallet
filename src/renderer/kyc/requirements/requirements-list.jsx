@@ -14,6 +14,13 @@ const styles = theme => ({
 		columns: 2,
 		width: '100%'
 	},
+	listItem: {
+		breakInside: 'avoid',
+		pageBreakInside: 'avoid',
+		'& p': {
+			fontWeight: 'bold'
+		}
+	},
 	documentType: {
 		display: 'flex'
 	},
@@ -33,7 +40,7 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
 
 	return (
-		<ListItem>
+		<ListItem className={classes.listItem}>
 			{icon}
 			<Typography variant="body2" color="textSecondary" className={classes.documentType}>
 				{type}
@@ -44,9 +51,6 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 
 const KycRequirementsListComponent = props => {
 	const { classes, requirements, title = 'KYC Requirements:', subtitle, loading } = props;
-	if (loading) {
-		return <CircularProgress />;
-	}
 
 	return (
 		<div className={classes.kyc}>
@@ -54,14 +58,20 @@ const KycRequirementsListComponent = props => {
 				{title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}
-
-			<Grid container justify="flex-start" alignItems="flex-start" direction="column">
-				<List className={classes.list}>
-					{requirements.map((item, index) => (
-						<KycRequirementListItem key={index} requirement={item} index={index} />
-					))}
-				</List>
-			</Grid>
+			{loading && <CircularProgress size={50} />}
+			{!loading && (
+				<Grid container justify="flex-start" alignItems="flex-start" direction="column">
+					<List className={classes.list}>
+						{requirements.map((item, index) => (
+							<KycRequirementListItem
+								key={item.id}
+								requirement={item}
+								index={index}
+							/>
+						))}
+					</List>
+				</Grid>
+			)}
 		</div>
 	);
 };
