@@ -3,11 +3,6 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 import {
-	BankingOffersTable,
-	BankingOffersPage,
-	BankingAccountTypeTabs
-} from '../src/renderer/marketplace/bank-accounts/list';
-import {
 	BankingDetailsPage,
 	BankingApplicationButton,
 	BankingDetailsPageTabs,
@@ -19,6 +14,9 @@ import {
 } from '../src/renderer/marketplace/bank-accounts/details';
 import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
+import BankingOffersTable from '../src/renderer/marketplace/bank-accounts/list/offers-table';
+import BankingAccountTypeTabs from '../src/renderer/marketplace/bank-accounts/list/account-type-tabs';
+import BankingOffersPage from '../src/renderer/marketplace/bank-accounts/list/offers-page';
 
 const KEY_RATE = 1 / 1000;
 
