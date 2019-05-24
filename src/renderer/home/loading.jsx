@@ -18,6 +18,7 @@ const styles = theme => ({
 class Loading extends Component {
 	async componentDidMount() {
 		await this.props.dispatch(appOperations.loadingOperation());
+		await this.props.dispatch(appOperations.startAutoUpdateOperation());
 	}
 
 	render() {
