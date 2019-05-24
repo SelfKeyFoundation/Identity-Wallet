@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTableContainer from './list';
+import { BankAccountsTableContainer } from './list';
 // import BankAccountsDetailView from './detail';
 
-class MarketplaceBankAccountsComponent extends Component {
+class MarketplaceBankAccountsPage extends Component {
 	render() {
 		const { path } = this.props.match;
 
@@ -22,5 +22,4 @@ class MarketplaceBankAccountsComponent extends Component {
 	}
 }
 
-const MarketplaceBankAccountsPage = MarketplaceBankAccountsComponent;
 export { MarketplaceBankAccountsPage };
