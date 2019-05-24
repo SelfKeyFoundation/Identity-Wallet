@@ -62,7 +62,3 @@ const mapStateToProps = (state, props) => {
 
 const styledComponent = withStyles(styles)(BankAccountsTableContainer);
 export default connect(mapStateToProps)(styledComponent);
-
-export * from './offers-table';
-export * from './offers-page';
-export * from './account-type-tabs';
