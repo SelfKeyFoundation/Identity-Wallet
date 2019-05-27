@@ -25,7 +25,7 @@
 			"id": "bank_accounts",
 			"title": "Bank Accounts",
 			"description": "Apply for international bank accounts and protect your savings in solid financial institutions with high solvency, liquidity, and prudent investment policies. ",
-			"active": true,
+			"active": false,
 			"svgIcon": "https://dl.airtable.com/wghrFU8FRI6rSM1MnYp6_icon-exchange-bank.svg.png"
 		},
 		{
