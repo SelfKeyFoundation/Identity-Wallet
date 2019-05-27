@@ -12,7 +12,7 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends Component {
 	componentDidMount() {
-		if (!this.props.bankAccounts || !this.props.bankAccounts.length) {
+		if (!this.props.bankAccount) {
 			this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
 		}
 	}
@@ -20,22 +20,25 @@ class BankAccountsDetailContainer extends Component {
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	render() {
-		// const { isLoading, bankAccounts, keyRate } = this.props;
-		console.log('here');
+		const { bankAccount, bankDetails } = this.props;
+		console.log(bankAccount, bankDetails);
 
 		return null;
 	}
 }
 
 BankAccountsDetailContainer.propTypes = {
-	bankAccounts: PropTypes.array,
+	bankAccount: PropTypes.array,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
+	const { accountCode } = props.match.params;
+	// const notAuthenticated = false;
 	return {
-		bankAccounts: bankAccountsSelectors.getMainBankAccounts(state),
+		bankAccount: bankAccountsSelectors.getBankByAccountCode(state, accountCode),
+		bankDetails: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
 		isLoading: bankAccountsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

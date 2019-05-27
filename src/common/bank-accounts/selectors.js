@@ -35,6 +35,11 @@ export const bankAccountsSelectors = {
 			return b;
 		});
 	},
+	getBankByAccountCode(state, accountCode) {
+		const banks = this.getMainBankAccounts(state);
+		// TODO: replace with Account Code when schema is changed
+		return banks.find(b => b['Bank Code'] === accountCode);
+	},
 	getJurisdictions(state) {
 		const tree = this.getBankAccounts(state);
 		return tree.jurisdictions.map(id => tree.jurisdictionsById[id]);
@@ -47,7 +52,10 @@ export const bankAccountsSelectors = {
 		return tree.details.map(id => tree.detailsById[id]);
 	},
 	getDetailsByAccountCode(state, accountCode) {
-		return this.getBankAccounts(state).find(c => c['Account Code'] === accountCode);
+		// TODO: replace with Account Code when schema is changed
+		const details = this.getDetails(state);
+		console.log(details);
+		return details.find(c => c['Account Code'] === accountCode);
 	}
 };
 

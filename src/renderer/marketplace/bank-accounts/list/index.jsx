@@ -28,7 +28,9 @@ class BankAccountsTableContainer extends Component {
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
 	onDetailsClick = bank =>
-		this.props.dispatch(push(`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/asd/ovh`));
+		this.props.dispatch(
+			push(`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.bankCode}/${bank.countryCode}`)
+		);
 
 	render() {
 		const { isLoading, bankAccounts, keyRate } = this.props;
