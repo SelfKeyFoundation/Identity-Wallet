@@ -64,6 +64,7 @@
 		"@ledgerhq/hw-transport-node-hid": "4.48.0",
 		"@ledgerhq/web3-subprovider": "4.48.0",
 		"@sentry/electron": "0.17.1",
+		"@trodi/electron-splashscreen": "^0.3.4",
 		"ajv": "6.10.0",
 		"async": "2.6.2",
 		"awilix": "4.2.1",

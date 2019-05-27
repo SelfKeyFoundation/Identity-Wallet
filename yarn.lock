@@ -2620,6 +2620,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@trodi/electron-splashscreen@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@trodi/electron-splashscreen/-/electron-splashscreen-0.3.4.tgz#9ca5a6ad1b8cfb5b4846c634da3dc1e9fa3f9373"
+  integrity sha512-nYF+sfNIEUhZPyzYUOpcqyCZoDYmMfZq8jLhEolvQFSVwrJ7gAlPhhMxpuw/qpCzPErUkFLEtdGGvK1tGtLuvQ==
+
 "@types/babel__core@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.0.tgz#710f2487dda4dcfd010ca6abb2b4dc7394365c51"
