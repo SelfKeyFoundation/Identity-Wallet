@@ -3,7 +3,7 @@ export const bankingOffers = [
 		id: 1,
 		countryCode: 'hk',
 		region: 'Hong Kong',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
@@ -21,7 +21,7 @@ export const bankingOffers = [
 		id: 2,
 		countryCode: 'sg',
 		region: 'Singapore',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 500,
@@ -39,7 +39,7 @@ export const bankingOffers = [
 		id: 3,
 		countryCode: 'ky',
 		region: 'Cayman',
-		eligibility: 'Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
@@ -57,7 +57,7 @@ export const bankingOffers = [
 		id: 4,
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
@@ -75,7 +75,7 @@ export const bankingOffers = [
 		id: 5,
 		countryCode: 'kn',
 		region: 'Nevis',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,
@@ -94,7 +94,7 @@ export const bankingOffers = [
 		id: 6,
 		countryCode: 'hk',
 		region: 'Hong Kong',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
@@ -112,7 +112,7 @@ export const bankingOffers = [
 		id: 7,
 		countryCode: 'sg',
 		region: 'Singapore',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		minDeposit: 500,
 		minDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
@@ -128,7 +128,7 @@ export const bankingOffers = [
 		id: 8,
 		countryCode: 'ky',
 		region: 'Cayman',
-		eligibility: 'Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
@@ -146,7 +146,7 @@ export const bankingOffers = [
 		id: 9,
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
@@ -164,7 +164,7 @@ export const bankingOffers = [
 		id: 10,
 		countryCode: 'kn',
 		region: 'Nevis',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,
@@ -183,7 +183,7 @@ export const bankingOffers = [
 		id: 11,
 		countryCode: 'hk',
 		region: 'Hong Kong',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 1000,
@@ -201,7 +201,7 @@ export const bankingOffers = [
 		id: 12,
 		countryCode: 'sg',
 		region: 'Singapore',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 500,
@@ -219,7 +219,7 @@ export const bankingOffers = [
 		id: 13,
 		countryCode: 'ky',
 		region: 'Cayman',
-		eligibility: 'Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		minDeposit: 1000,
 		minDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
@@ -231,7 +231,7 @@ export const bankingOffers = [
 		id: 14,
 		countryCode: 'vg',
 		region: 'British Virgin Islands',
-		eligibility: 'Resident Individuals,  Regional Individuals, International Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 10000,
@@ -249,7 +249,7 @@ export const bankingOffers = [
 		id: 15,
 		countryCode: 'kn',
 		region: 'Nevis',
-		eligibility: 'Resident Individuals,  Regional Individuals',
+		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
 		minDeposit: 800,

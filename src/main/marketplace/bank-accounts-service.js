@@ -26,7 +26,26 @@ export class BankAccountsService {
 					return newCorp;
 				};
 
+				const transformMachineReadable = (obj, key, machineKey) => {
+					obj[machineKey] = obj[machineKey] ? obj[machineKey] : obj[key];
+					return obj;
+				};
+
 				payload.main = response.Main.map(fieldMap);
+				payload.main.map(bank => {
+					// Transform into Machine readable fields
+					bank.type = bank['Type of Account']
+						? bank['Type of Account'][0].toLowerCase()
+						: undefined;
+
+					bank = transformMachineReadable(bank, 'Region', 'region');
+					bank = transformMachineReadable(bank, 'Country Code', 'countryCode');
+					bank = transformMachineReadable(bank, 'Eligibility', 'eligibility');
+					bank = transformMachineReadable(bank, 'Min Deposit', 'minDeposit');
+					bank = transformMachineReadable(bank, 'Good For', 'goodFor');
+					bank = transformMachineReadable(bank, 'Bank Code', 'bankCode');
+					return bank;
+				});
 				payload.jurisdictions = response.Jurisdictions.map(fieldMap);
 				payload.details = response.Account_Details.map(fieldMap);
 

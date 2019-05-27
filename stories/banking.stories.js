@@ -3,11 +3,6 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 import {
-	BankingOffersTable,
-	BankingOffersPage,
-	BankingAccountTypeTabs
-} from '../src/renderer/marketplace/banking';
-import {
 	BankingDetailsPage,
 	BankingApplicationButton,
 	BankingDetailsPageTabs,
@@ -16,9 +11,12 @@ import {
 	BankingDescriptionTab,
 	BankingServicesTab,
 	BankingAccountOption
-} from '../src/renderer/marketplace/banking/details';
+} from '../src/renderer/marketplace/bank-accounts/details';
 import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
+import BankingOffersTable from '../src/renderer/marketplace/bank-accounts/list/offers-table';
+import BankingAccountTypeTabs from '../src/renderer/marketplace/bank-accounts/list/account-type-tabs';
+import BankingOffersPage from '../src/renderer/marketplace/bank-accounts/list/offers-page';
 
 const KEY_RATE = 1 / 1000;
 
@@ -47,7 +45,7 @@ storiesOf('Banking/Account Type Tabs', module)
 	.add('corporate', () => (
 		<div style={{ width: '1140px' }}>
 			<BankingAccountTypeTabs
-				accountType="corporate"
+				accountType="business"
 				onAccountTypeChange={linkTo(
 					'Banking/Account Type Tabs',
 					accountType => accountType
@@ -90,7 +88,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('corporate', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.type === 'corporate')}
+			data={bankingOffers.filter(bank => bank.type === 'business')}
 			accountType="corporate"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
