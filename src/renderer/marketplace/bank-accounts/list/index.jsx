@@ -13,8 +13,7 @@ const MARKETPLACE_JURISDICTION_DETAIL_PATH = '/main/marketplace-bank-accounts/de
 
 class BankAccountsTableContainer extends Component {
 	state = {
-		accountType: 'personal',
-		loading: false
+		accountType: 'personal'
 	};
 
 	componentDidMount() {
