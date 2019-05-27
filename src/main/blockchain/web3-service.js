@@ -7,6 +7,7 @@ import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
 import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import HookedWalletEthTxSubprovider from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
@@ -31,16 +32,47 @@ export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].ur
 
 export class Web3Service {
 	constructor(ctx = {}) {
-		this.web3 = new Web3(SELECTED_SERVER_URL);
+		this.defaultWallet();
+		this.store = ctx.store;
+		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
+		this.nonce = 0;
+		this.abi = ABI;
+	}
+
+	getWalletEthTxSubprovider() {
+		return new HookedWalletEthTxSubprovider({
+			getAccounts: callback => {
+				callback(null, [this.web3.eth.defaultAccount]);
+			},
+			getPrivateKey: (address, callback) => {
+				if (address.toLowerCase() === this.web3.eth.defaultAccount.toLowerCase()) {
+					return callback(
+						null,
+						Buffer.from(
+							this.web3.eth.accounts.wallet[address].privateKey.replace('0x', ''),
+							'hex'
+						)
+					);
+				}
+				return callback(new Error('not private key supplied for that account'));
+			}
+		});
+	}
+
+	async defaultWallet() {
+		const engine = new ProviderEngine();
+
+		engine.addProvider(this.getWalletEthTxSubprovider());
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+
+		engine.start();
+
+		this.web3 = new Web3(engine);
 		if (CONFIG.chainId === 3) {
 			this.web3.transactionConfirmationBlocks = 1;
 		} else {
 			this.web3.transactionConfirmationBlocks = 10;
 		}
-		this.store = ctx.store;
-		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
-		this.nonce = 0;
-		this.abi = ABI;
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {

@@ -1,0 +1,1 @@
+export { getBankPrice } from './price';

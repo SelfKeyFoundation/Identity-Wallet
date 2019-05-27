@@ -1,13 +1,18 @@
 import WebSocket from 'ws';
 import Wallet from '../wallet/wallet';
 import { Logger } from 'common/logger';
+import { getGlobalContext } from 'common/context';
 import pkg from '../../../package.json';
 
 import Identity from '../platform/identity';
 import RelyingPartySession from '../platform/relying-party';
 import identityUtils from '../../common/identity/utils';
+import timeoutPromise from 'common/utils/timeout-promise';
+import EventEmitter from 'events';
 
 const log = new Logger('LWSService');
+
+const eventEmitter = new EventEmitter();
 
 export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 	? process.env.WS_ORIGINS_WHITELIST.split(',')
@@ -55,10 +60,122 @@ export class LWSService {
 		);
 	}
 
+	getHardwareWalletsPayload(wallets, conn, website, type) {
+		return Promise.all(
+			wallets.map(async w => {
+				let unlocked = !!conn.getIdentity(w.publicKey);
+				const wallet = Wallet.findByPublicKey(w.publicKey);
+				let signedUp = unlocked && wallet && (await wallet.hasSignedUpTo(website.url));
+				return {
+					publicKey: w.publicKey,
+					unlocked,
+					profile: type,
+					signedUp
+				};
+			})
+		);
+	}
+
+	async reqLedgerWallets(msg, conn) {
+		const walletService = getGlobalContext().walletService;
+		const { website, page } = msg.payload.config;
+		const accountsQuantity = 6;
+		try {
+			let wallets = await timeoutPromise(
+				30000,
+				walletService.getLedgerWallets(page, accountsQuantity)
+			).promise;
+			const payload = await this.getHardwareWalletsPayload(wallets, conn, website, 'ledger');
+			conn.send(
+				{
+					payload
+				},
+				msg
+			);
+		} catch (error) {
+			log.error(error);
+			conn.send(
+				{
+					error: true,
+					payload: {
+						code: 'ledger_error',
+						message: error.message
+					}
+				},
+				msg
+			);
+		}
+	}
+
+	async reqTrezorWallets(msg, conn) {
+		const walletService = getGlobalContext().walletService;
+		const { website, page } = msg.payload.config;
+		const accountsQuantity = 6;
+		try {
+			if (eventEmitter.listenerCount('TREZOR_PIN_REQUEST') === 0) {
+				eventEmitter.on('TREZOR_PIN_REQUEST', async () => {
+					conn.send({ type: 'wait_trezor_pin' });
+				});
+			}
+			if (eventEmitter.listenerCount('TREZOR_PASSPHRASE_REQUEST') === 0) {
+				eventEmitter.on('TREZOR_PASSPHRASE_REQUEST', async () => {
+					conn.send({ type: 'wait_trezor_passphrase' });
+				});
+			}
+
+			let wallets = await timeoutPromise(
+				60000,
+				walletService.getTrezorWallets(page, accountsQuantity, eventEmitter)
+			).promise;
+			const payload = await this.getHardwareWalletsPayload(wallets, conn, website, 'trezor');
+			conn.send(
+				{
+					payload
+				},
+				msg
+			);
+		} catch (error) {
+			log.error(error);
+			conn.send(
+				{
+					error: true,
+					payload: {
+						code: 'trezor_error',
+						message: error.message
+					}
+				},
+				msg
+			);
+		}
+	}
+
+	enterTrezorPin(msg, conn) {
+		const { error, pin } = msg.payload;
+		if (error !== null) {
+			eventEmitter.off('TREZOR_PIN_REQUEST', () => {});
+		}
+		eventEmitter.emit('ON_PIN', error, pin);
+	}
+
+	enterTrezorPassphrase(msg, conn) {
+		const { error, passphrase } = msg.payload;
+		if (error !== null) {
+			eventEmitter.off('TREZOR_PASSPHRASE_REQUEST', () => {});
+		}
+		eventEmitter.emit('ON_PASSPHRASE', error, passphrase);
+	}
+
 	async reqUnlock(msg, conn) {
-		const { publicKey, password, config } = msg.payload;
+		const { publicKey, password, config, profile, path } = msg.payload;
 		let payload = { publicKey, unlocked: false };
 		let wallet = await Wallet.findByPublicKey(publicKey);
+		wallet = !wallet
+			? await Wallet.create({
+					publicKey,
+					profile,
+					path
+			  })
+			: wallet;
 		let identity = new Identity(wallet);
 		payload.profile = identity.profile;
 		try {
@@ -135,7 +252,7 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
-		const { publicKey, config } = msg.payload;
+		const { publicKey, config, profile } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 		if (!identity) {
 			return this.authResp(
@@ -152,6 +269,9 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
+			if (profile === 'ledger') {
+				conn.send({ type: 'wait_hw_confirmation' });
+			}
 			await session.establish();
 		} catch (error) {
 			log.error(error);
@@ -181,7 +301,7 @@ export class LWSService {
 	}
 
 	async reqSignup(msg, conn) {
-		const { publicKey, config, attributes } = msg.payload;
+		const { publicKey, config, attributes, profile } = msg.payload;
 		let identity = conn.getIdentity(publicKey);
 		if (!identity) {
 			return this.authResp(
@@ -198,6 +318,9 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
+			if (profile === 'ledger') {
+				conn.send({ type: 'wait_hw_confirmation' });
+			}
 			await session.establish();
 		} catch (error) {
 			log.error(error);
@@ -337,6 +460,14 @@ export class LWSService {
 				return this.reqSignup(msg, conn);
 			case 'version':
 				return this.reqVersion(msg, conn);
+			case 'ledgerwallets':
+				return this.reqLedgerWallets(msg, conn);
+			case 'trezorwallets':
+				return this.reqTrezorWallets(msg, conn);
+			case 'trezorpin':
+				return this.enterTrezorPin(msg, conn);
+			case 'trezorpassphrase':
+				return this.enterTrezorPassphrase(msg, conn);
 			default:
 				return this.reqUnknown(msg, conn);
 		}

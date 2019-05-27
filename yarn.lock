@@ -2620,6 +2620,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@trodi/electron-splashscreen@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@trodi/electron-splashscreen/-/electron-splashscreen-0.3.4.tgz#9ca5a6ad1b8cfb5b4846c634da3dc1e9fa3f9373"
+  integrity sha512-nYF+sfNIEUhZPyzYUOpcqyCZoDYmMfZq8jLhEolvQFSVwrJ7gAlPhhMxpuw/qpCzPErUkFLEtdGGvK1tGtLuvQ==
+
 "@types/babel__core@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.0.tgz#710f2487dda4dcfd010ca6abb2b4dc7394365c51"
@@ -18212,9 +18217,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#39f5d6f4de290cc4b8f5a375f18e944a2c2b6c1f":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#5bd47d4":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#39f5d6f4de290cc4b8f5a375f18e944a2c2b6c1f"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#5bd47d427e3962b57944088ee6b193033e009e01"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"

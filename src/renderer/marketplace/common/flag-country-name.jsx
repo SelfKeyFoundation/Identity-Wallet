@@ -18,15 +18,15 @@ const styles = theme => ({
 	}
 });
 
-const FlagCountryName = props => (
-	<div className={props.classes.container}>
+export const FlagCountryName = withStyles(styles)(({ classes, size, code, name }) => (
+	<div className={classes.container}>
 		<span
 			className={`${
-				props.size === 'small' ? 'flag-icon-small' : 'flag-icon-default'
-			} flag-icon flag-icon-${props.code ? props.code.toLowerCase() : ''}`}
+				size === 'small' ? 'flag-icon-small' : 'flag-icon-default'
+			} flag-icon flag-icon-${code ? code.toLowerCase() : ''}`}
 		/>
-		<span>{props.name}</span>
+		<span>{name}</span>
 	</div>
-);
+));
 
-export default withStyles(styles)(FlagCountryName);
+export default FlagCountryName;

@@ -71,7 +71,7 @@ describe('RelyingPartyRest', () => {
 			const testEndpoint = 'http://test';
 			const testToken = 'testToken';
 			const testChallenge = 'test';
-			const keyid = 'test';
+			const keyId = 'test';
 			const testSignature = 'test sig';
 			sinon.stub(request, 'post').resolves(testToken);
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
@@ -79,13 +79,13 @@ describe('RelyingPartyRest', () => {
 				ctx,
 				testChallenge,
 				testSignature,
-				keyid
+				keyId
 			);
 			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
 			expect(request.post.getCall(0).args).toEqual([
 				{
 					url: testEndpoint,
-					body: { signature: { value: testSignature, keyid } },
+					body: { signature: { value: testSignature, keyId } },
 					headers: {
 						Authorization: `Bearer ${testChallenge}`,
 						'User-Agent': RelyingPartyRest.userAgent,
@@ -515,7 +515,10 @@ describe('RelyingPartyRest', () => {
 describe('Relying Party session', () => {
 	const config = { did: true };
 	const identity = {
-		genSignatureForMessage() {}
+		genSignatureForMessage() {},
+		getKeyId() {
+			return 'testkeyid';
+		}
 	};
 	let session = null;
 	beforeEach(() => {
@@ -569,7 +572,8 @@ describe('Relying Party session', () => {
 			expect(RelyingPartyRest.postChallengeReply.getCall(0).args).toEqual([
 				session.ctx,
 				testChallenge.jwt,
-				testSignature
+				testSignature,
+				'testkeyid'
 			]);
 
 			expect(RelyingPartyToken.fromString.calledWith(testChallenge.jwt)).toBeTruthy();

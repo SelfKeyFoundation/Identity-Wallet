@@ -12,15 +12,14 @@ import { CheckOutlined } from '@material-ui/icons';
 import IncorporationsTaxView from './components/tax-view';
 import IncorporationsLegalView from './components/legal-view';
 import {
-	FlagCountryName,
 	TreatiesMap,
 	TreatiesTable,
 	CountryInfo,
 	IncorporationsKYC,
-	ProgramPrice,
-	sanitize,
 	getIncorporationPrice
 } from '../common';
+import { sanitize, ProgramPrice, FlagCountryName } from '../../common';
+
 import ReactPiwik from 'react-piwik';
 
 const styles = theme => ({

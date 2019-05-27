@@ -41,6 +41,7 @@ const incorporationsRPDetails = {
 	description: 'Incorporations',
 	relying_party_config: {
 		rootEndpoint: config.incorporationsInstance,
+		did: false,
 		endpoints: {
 			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
 		}

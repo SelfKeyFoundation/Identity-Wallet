@@ -37,6 +37,9 @@ export class Identity {
 			});
 		}
 	}
+	getKeyId() {
+		return `${this.did}#keys-1`;
+	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
 			const transport = await getGlobalContext().web3Service.getLedgerTransport();
@@ -90,16 +93,17 @@ export class Identity {
 
 	async unlock(config) {
 		if (this.profile !== 'local') {
-			throw new Error('NOT_SUPPORTED');
-		}
-		try {
-			this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
-			this.publicKey = ethUtil.addHexPrefix(
-				ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
-			);
-		} catch (error) {
-			log.error(error);
-			throw new Error('INVALID_PASSWORD');
+			this.publicKey = this.getPublicKeyFromHardwareWallet();
+		} else {
+			try {
+				this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
+				this.publicKey = ethUtil.addHexPrefix(
+					ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
+				);
+			} catch (error) {
+				log.error(error);
+				throw new Error('INVALID_PASSWORD');
+			}
 		}
 	}
 

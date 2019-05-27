@@ -102,19 +102,18 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static postChallengeReply(ctx, challenge, signature, keyid) {
+	static postChallengeReply(ctx, challenge, signature, keyId) {
 		let url = ctx.getEndpoint('/auth/challenge');
 		const body = {};
-
 		if (ctx.supportsDID()) {
-			body.signature = { value: signature, keyid };
+			body.signature = { value: signature, keyId };
 		} else {
 			body.signature = signature;
 		}
 
 		return request.post({
 			url,
-			body: { signature: { value: signature, keyid } },
+			body,
 			headers: {
 				Authorization: this.getAuthorizationHeader(challenge),
 				'User-Agent': this.userAgent,
@@ -343,7 +342,8 @@ export class RelyingPartySession {
 			let challengeReply = await RelyingPartyRest.postChallengeReply(
 				this.ctx,
 				challenge.jwt,
-				signature
+				signature,
+				this.identity.getKeyId()
 			);
 			let token = RelyingPartyToken.fromString(challengeReply.jwt);
 			this.ctx.token = token;
