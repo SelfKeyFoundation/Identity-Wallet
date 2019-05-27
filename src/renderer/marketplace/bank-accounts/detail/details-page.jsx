@@ -3,8 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { MoneyIcon } from 'selfkey-ui';
-import { FlagCountryName, ResumeBox, ProgramPrice } from '../../common';
-import { KycRequirementsList } from '../../../kyc/requirements/requirements-list';
+import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { BankingDetailsPageTabs } from './details-tabs';
 
 const styles = theme => ({
@@ -213,7 +212,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 							/>
 						</Grid>
 						<Grid item>
-							<KycRequirementsList
+							<MarketplaceKycRequirements
 								requirements={kycRequirements}
 								loading={loading}
 								title="KYC Requirements and Forms"

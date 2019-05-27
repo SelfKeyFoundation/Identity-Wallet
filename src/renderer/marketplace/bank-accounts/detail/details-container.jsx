@@ -1,11 +1,11 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
-// import { BankingOffersPage } from './offers-page';
+import { BankingDetailsPage } from './details-page';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -20,10 +20,18 @@ class BankAccountsDetailContainer extends Component {
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	render() {
-		const { bankAccount, bankDetails } = this.props;
+		const { bankAccount, bankDetails, keyRate } = this.props;
 		console.log(bankAccount, bankDetails);
 
-		return null;
+		return (
+			<BankingDetailsPage
+				countryCode={bankAccount.countryCode}
+				price="1500"
+				keyRate={keyRate}
+				region={bankAccount.region}
+				onBack={this.onBackClick}
+			/>
+		);
 	}
 }
 
