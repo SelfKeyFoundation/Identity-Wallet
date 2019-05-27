@@ -53,6 +53,9 @@ const styles = theme => ({
 		width: '245px'
 	},
 	eligibilityCellBody: {
+		alignItems: 'center',
+		display: 'flex',
+		flexWrap: 'wrap',
 		paddingTop: '15px',
 		paddingBottom: '15px',
 		whiteSpace: 'normal',
