@@ -37,6 +37,9 @@ export class Identity {
 			});
 		}
 	}
+	getKeyId() {
+		return `${this.did}#keys-1`;
+	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
 			const transport = await getGlobalContext().web3Service.getLedgerTransport();
