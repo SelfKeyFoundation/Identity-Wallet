@@ -21,11 +21,13 @@ import CountryService from './country/country-service';
 import NetworkService from './application/network-service';
 import { DIDService } from './blockchain/did-service';
 import { AutoUpdateService } from './auto-update/auto-update-service';
+import { SchedulerService } from './scheduler/scheduler-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
 		networkService: asClass(NetworkService).singleton(),
+		schedulerService: asClass(SchedulerService).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),

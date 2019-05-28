@@ -17,7 +17,6 @@ import { configureContext, setGlobalContext, getGlobalContext } from '../common/
 import { handleSquirrelEvent } from './squirrelevent';
 import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
-
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
@@ -113,7 +112,6 @@ function onReady() {
 					loadIdentity(ctx)
 				]);
 				ctx.txHistoryService.startSyncingJob();
-
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
 				log.error('finish-load-error %s', error);

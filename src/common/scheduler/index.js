@@ -1,7 +1,9 @@
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
+import uuidv1 from 'uuid/v1';
 
 export const SCHEDULER_INTERVAL = 5000;
+export const SCHEDULER_CLEANUP_DELAY = 60000;
 
 export const schedulerInitialState = {
 	processing: false,
@@ -25,10 +27,10 @@ export const schedulerTypes = {
 };
 
 export const schedulerActions = {
-	queueJobAction: (id, category, at, data) => ({
+	queueJobAction: (id, category, at = 0, data) => ({
 		type: schedulerTypes.SCHEDULER_JOB_QUEUE,
 		payload: {
-			id,
+			id: id || uuidv1(),
 			category,
 			at,
 			data
@@ -152,13 +154,29 @@ export const operations = {
 				})
 			);
 		}
-		jobObj.on('progress', (id, progress, data) => {
-			dispatch(schedulerActions.progressJobAction(id, Date.now(), progress, data));
+		jobObj.on('progress', (progress, data) => {
+			dispatch(schedulerActions.progressJobAction(job.id, Date.now(), progress, data));
 		});
 
 		try {
 			const result = await jobObj.execute();
 			await dispatch(schedulerActions.finishJobAction(job.id, Date.now(), 'success', result));
+			if (jobObj.hasJobs()) {
+				await Promise.all(
+					jobObj
+						.getJobs()
+						.map(job =>
+							dispatch(
+								schedulerOperations.queueJobAction(
+									job.id || null,
+									job.category,
+									job.at,
+									job.data
+								)
+							)
+						)
+				);
+			}
 			return result;
 		} catch (error) {
 			await dispatch(
@@ -172,8 +190,8 @@ export const operations = {
 	},
 
 	processJobsOperation: () => async (dispatch, getState) => {
-		const jobs = schedulerSelectors.selectProcessingJobs(getState);
-		return Promise.all(jobs.map(job => dispatch(operations.processOneJob())));
+		const jobs = schedulerSelectors.selectJobsToProcess(getState());
+		return Promise.all(jobs.map(job => dispatch(operations.processOneJob(job))));
 	},
 
 	startSchedulerOperation: () => async (dispatch, getState) => {
@@ -182,9 +200,16 @@ export const operations = {
 		}
 		await dispatch(operations.setProcessingQueueAction(true));
 		while (schedulerSelectors.isSchedulerProcessing(getState())) {
+			const ts = Date.now();
+			const toClean = schedulerSelectors
+				.selectFinished(getState())
+				.filter(job => ts - job.finishTs > SCHEDULER_CLEANUP_DELAY);
+
+			await Promise.all(toClean.map(job => dispatch(operations.deleteJobAction(job.id))));
+
 			await dispatch(operations.processJobsOperation());
 			await new Promise((resolve, reject) => {
-				setTimeout(() => resolve, SCHEDULER_INTERVAL);
+				setTimeout(() => resolve(), SCHEDULER_INTERVAL);
 			});
 		}
 	},
@@ -195,8 +220,15 @@ export const operations = {
 };
 
 export const schedulerOperations = {
-	startSchedulerOperation: createAliasedAction(),
-	stopSchedulerOperation: createAliasedAction()
+	...schedulerActions,
+	startSchedulerOperation: createAliasedAction(
+		schedulerTypes.SCHEDULER_START_OPERATION,
+		operations.startSchedulerOperation
+	),
+	stopSchedulerOperation: createAliasedAction(
+		schedulerTypes.SCHEDULER_STOP_OPERATION,
+		operations.stopSchedulerOperation
+	)
 };
 
 export const schedulerSelectors = {
