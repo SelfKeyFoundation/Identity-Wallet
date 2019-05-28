@@ -1,3 +1,8 @@
+import { getGlobalContext } from '../context';
+import { createAliasedAction } from 'electron-redux';
+
+export const SCHEDULER_INTERVAL = 5000;
+
 export const schedulerInitialState = {
 	processing: false,
 	processingJobs: [],
@@ -14,7 +19,9 @@ export const schedulerTypes = {
 	SCHEDULER_JOB_PROGRESS: 'scheduler/job/PROGRESS',
 	SCHEDULER_JOB_DELETE: 'scheduler/job/DELETE',
 	SCHEDULER_QUEUE_SET_PROCESSING: 'scheduler/queue/SET_PROCESSING',
-	SCHEDULER_QUEUE_SET_CONFIG: 'scheduler/queue/SET_CONFIG'
+	SCHEDULER_QUEUE_SET_CONFIG: 'scheduler/queue/SET_CONFIG',
+	SCHEDULER_START_OPERATION: 'scheduler/operation/START',
+	SCHEDULER_STOP_OPERATION: 'scheduler/operation/STOP'
 };
 
 export const schedulerActions = {
@@ -39,9 +46,9 @@ export const schedulerActions = {
 		type: schedulerTypes.SCHEDULER_JOB_PROGRESS,
 		payload: { id, progressTs, progress, data }
 	}),
-	cancelJobAction: (id, finishTs, data) => ({
+	cancelJobAction: (id, finishTs, result) => ({
 		type: schedulerTypes.SCHEDULER_JOB_FINISH,
-		payload: { id, finishTs, finishStatus: 'canceled', data }
+		payload: { id, finishTs, finishStatus: 'canceled', result }
 	}),
 	deleteJobAction: id => ({
 		type: schedulerTypes.SCHEDULER_JOB_DELETE,
@@ -130,6 +137,68 @@ export const reducers = {
 	}
 };
 
+export const operations = {
+	...schedulerActions,
+	processOneJob: job => async (dispatch, getState) => {
+		const schedulerService = getGlobalContext().schedulerService;
+
+		await dispatch(operations.processJobAction(job.id, Date.now()));
+		const jobObj = schedulerService.initJob(job);
+		if (!jobObj) {
+			return dispatch(
+				schedulerActions.cancelJobAction(job.id, Date.now(), {
+					code: 'no_handler',
+					message: 'No handler for this job type'
+				})
+			);
+		}
+		jobObj.on('progress', (id, progress, data) => {
+			dispatch(schedulerActions.progressJobAction(id, Date.now(), progress, data));
+		});
+
+		try {
+			const result = await jobObj.execute();
+			await dispatch(schedulerActions.finishJobAction(job.id, Date.now(), 'success', result));
+			return result;
+		} catch (error) {
+			await dispatch(
+				schedulerActions.cancelJobAction(job.id, Date.now(), {
+					code: error.code || 'canceled',
+					message: error.message || 'Job canceled'
+				})
+			);
+			return error;
+		}
+	},
+
+	processJobsOperation: () => async (dispatch, getState) => {
+		const jobs = schedulerSelectors.selectProcessingJobs(getState);
+		return Promise.all(jobs.map(job => dispatch(operations.processOneJob())));
+	},
+
+	startSchedulerOperation: () => async (dispatch, getState) => {
+		if (schedulerSelectors.isSchedulerProcessing(getState())) {
+			return;
+		}
+		await dispatch(operations.setProcessingQueueAction(true));
+		while (schedulerSelectors.isSchedulerProcessing(getState())) {
+			await dispatch(operations.processJobsOperation());
+			await new Promise((resolve, reject) => {
+				setTimeout(() => resolve, SCHEDULER_INTERVAL);
+			});
+		}
+	},
+
+	stopSchedulerOperation: () => async (dispatch, getState) => {
+		await dispatch(operations.setProcessingQueueAction(false));
+	}
+};
+
+export const schedulerOperations = {
+	startSchedulerOperation: createAliasedAction(),
+	stopSchedulerOperation: createAliasedAction()
+};
+
 export const schedulerSelectors = {
 	selectScheduler: state => state.scheduler,
 	selectQueued: state => {
@@ -148,7 +217,8 @@ export const schedulerSelectors = {
 		const ts = Date.now();
 		return schedulerSelectors.selectQueued(state).filter(job => job.at <= ts);
 	},
-	selectJob: (state, id) => schedulerSelectors.selectScheduler(state).jobsById[id]
+	selectJob: (state, id) => schedulerSelectors.selectScheduler(state).jobsById[id],
+	isSchedulerProcessing: state => !!schedulerSelectors.selectScheduler(state).processing
 };
 
 export const schedulerReducer = (state = schedulerInitialState, action) => {

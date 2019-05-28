@@ -54,11 +54,11 @@ describe('scheduler', () => {
 		});
 		it('cancelJobAction', () => {
 			const id = 'test1';
-			const data = { test: '123' };
+			const result = { test: '123' };
 			const finishTs = 1000;
-			expect(schedulerActions.cancelJobAction(id, finishTs, data)).toEqual({
+			expect(schedulerActions.cancelJobAction(id, finishTs, result)).toEqual({
 				type: schedulerTypes.SCHEDULER_JOB_FINISH,
-				payload: { id, data, finishTs, finishStatus: 'canceled' }
+				payload: { id, result, finishTs, finishStatus: 'canceled' }
 			});
 		});
 		it('deleteJobAction', () => {
@@ -343,5 +343,27 @@ describe('scheduler', () => {
 			state.scheduler.jobsById[fututreJob.id] = fututreJob;
 			expect(schedulerSelectors.selectJob(state, oldJob.id)).toEqual(oldJob);
 		});
+
+		it('isSchedulerProcessing', () => {
+			state.scheduler.processing = true;
+			expect(schedulerSelectors.isSchedulerProcessing(state)).toBe(true);
+
+			state.scheduler.processing = false;
+			expect(schedulerSelectors.isSchedulerProcessing(state)).toBe(false);
+		});
 	});
+	// describe('operations', () => {
+	// 	let state, ts, clock;
+	// 	beforeEach(() => {
+	// 		state = { scheduler: { ...schedulerInitialState } };
+	// 		ts = Date.now();
+	// 		clock = sinon.useFakeTimers({ now: ts });
+	// 	});
+
+	// 	afterEach(() => {
+	// 		clock.restore();
+	// 	});
+
+	// 	it('processJobsOperations', async () => {});
+	// });
 });
