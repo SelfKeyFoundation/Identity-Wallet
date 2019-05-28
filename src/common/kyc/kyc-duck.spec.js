@@ -13,7 +13,6 @@ describe('KYC Duck', () => {
 			return state;
 		}
 	};
-	const testAction = { test: 'test' };
 	beforeEach(() => {
 		sinon.restore();
 		state = { kyc: { ...initialState } };
@@ -30,7 +29,6 @@ describe('KYC Duck', () => {
 			it('loadApplicationsOperation', async () => {
 				sinon.stub(kycApplicationService, 'load').resolves(testApplications);
 				sinon.stub(store, 'dispatch');
-				sinon.stub(kycActions, 'setApplicationsAction').returns(testAction);
 
 				await testExports.operations.loadApplicationsOperation()(
 					store.dispatch,
@@ -38,7 +36,6 @@ describe('KYC Duck', () => {
 				);
 
 				expect(kycApplicationService.load.calledOnce).toBeTruthy();
-				expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 			});
 		});
 		describe('Actions', () => {
