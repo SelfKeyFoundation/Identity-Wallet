@@ -110,7 +110,7 @@ export class RelyingPartyRest {
 		} else {
 			body.signature = signature;
 		}
-
+		console.log('XXX', body);
 		return request.post({
 			url,
 			body,
@@ -339,6 +339,7 @@ export class RelyingPartySession {
 			let signature = await this.identity.genSignatureForMessage(
 				challengeToken.data.challenge || challengeToken.data.nonce
 			);
+			console.log('XXX', challengeToken);
 			let challengeReply = await RelyingPartyRest.postChallengeReply(
 				this.ctx,
 				challenge.jwt,
