@@ -16,10 +16,9 @@ import {
 	TreatiesTable,
 	CountryInfo,
 	IncorporationsKYC,
-	sanitize,
 	getIncorporationPrice
 } from '../common';
-import { ProgramPrice, FlagCountryName } from '../../common';
+import { sanitize, ProgramPrice, FlagCountryName } from '../../common';
 
 import ReactPiwik from 'react-piwik';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTable from './table';
+import BankAccountsTableContainer from './list';
 // import BankAccountsDetailView from './detail';
 
 class MarketplaceBankAccountsComponent extends Component {
@@ -10,7 +10,7 @@ class MarketplaceBankAccountsComponent extends Component {
 
 		return (
 			<div>
-				<Route exact path={`${path}`} component={BankAccountsTable} />
+				<Route exact path={`${path}`} component={BankAccountsTableContainer} />
 				{/*
 				<Route
 					path={`${path}/details/:accountCode/:countryCode/:templateId?`}
