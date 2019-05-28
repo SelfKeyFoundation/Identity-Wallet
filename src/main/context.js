@@ -20,6 +20,7 @@ import GuideSettingsService from './settings/guide-settings-service';
 import CountryService from './country/country-service';
 import NetworkService from './application/network-service';
 import { DIDService } from './blockchain/did-service';
+import { AutoUpdateService } from './auto-update/auto-update-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -48,6 +49,7 @@ export const registerMainServices = container => {
 		bankAccountsService: asClass(BankAccountsService).singleton(),
 		guideSettingsService: asClass(GuideSettingsService).singleton(),
 		countryService: asClass(CountryService).singleton(),
-		didService: asClass(DIDService).singleton()
+		didService: asClass(DIDService).singleton(),
+		autoUpdateService: asClass(AutoUpdateService).singleton()
 	});
 };
