@@ -101,5 +101,52 @@ export const reducers = {
 		queue = queue.filter(jobId => jobId !== id);
 		finished = [...finished, id];
 		return { ...state, queue, jobsById, processingJobs, finished };
+	},
+	progressJobReducer: (state, action) => {
+		const { id, progress, progressTs, data } = action.payload;
+		if (!state.jobsById[id] || state.finished.includes(id)) {
+			return state;
+		}
+		const jobsById = { ...state.jobsById };
+		jobsById[id] = {
+			...jobsById[id],
+			progress: [
+				...(jobsById[id].progress || []),
+				{ progress, progressTs, data: { ...(data || {}) } }
+			]
+		};
+		return { ...state, jobsById };
+	},
+	deleteJobReducer: (state, action) => {
+		let jobsById = { ...state.jobsById };
+		delete jobsById[action.payload];
+		return {
+			...state,
+			jobsById,
+			queue: state.queue.filter(id => id !== action.payload),
+			finished: state.finished.filter(id => id !== action.payload),
+			processingJobs: state.finished.filter(id => id !== action.payload)
+		};
 	}
+};
+
+export const schedulerSelectors = {
+	selectScheduler: state => state.scheduler,
+	selectQueued: state => {
+		const { queue, jobsById } = schedulerSelectors.selectScheduler(state);
+		return queue.map(id => jobsById[id]);
+	},
+	selectFinished: state => {
+		const { finished, jobsById } = schedulerSelectors.selectScheduler(state);
+		return finished.map(id => jobsById[id]);
+	},
+	selectProcessingJobs: state => {
+		const { processingJobs, jobsById } = schedulerSelectors.selectScheduler(state);
+		return processingJobs.map(id => jobsById[id]);
+	},
+	selectJobsToProcess: state => {
+		const ts = Date.now();
+		return schedulerSelectors.selectQueued(state).filter(job => job.at <= ts);
+	},
+	selectJob: (state, id) => schedulerSelectors.selectScheduler(state).jobsById[id]
 };
