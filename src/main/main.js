@@ -14,7 +14,7 @@ import { pricesOperations } from '../common/prices';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
 import config from 'common/config';
 import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
-import { handleSquirrelEvent, appUpdater } from './autoupdater';
+import { handleSquirrelEvent } from './squirrelevent';
 import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
 
@@ -65,9 +65,6 @@ function onReady() {
 		let ctx = getGlobalContext();
 		if (ctx && ctx.app.win) return;
 		global.__static = __static;
-		if (!isDevMode() && !isTestMode()) {
-			appUpdater();
-		}
 		await db.init();
 		const container = configureContext('main');
 		ctx = container.cradle;
