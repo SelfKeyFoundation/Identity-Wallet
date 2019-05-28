@@ -31,7 +31,7 @@ function appStart() {
 		) {
 			app.start()
 				.then(
-					delay(10000)
+					delay(15000)
 						.then(() => app.client.switchTab())
 						.then(resolve)
 				)
@@ -41,7 +41,7 @@ function appStart() {
 				app
 					.start()
 					.then(
-						delay(10000)
+						delay(15000)
 							.then(() => app.client.switchTab())
 							.then(resolve)
 					)
