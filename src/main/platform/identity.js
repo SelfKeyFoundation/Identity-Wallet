@@ -15,7 +15,7 @@ export class Identity {
 		this.keystorePath = wallet.keystoreFilePath;
 		this.did = wallet.did
 			? `did:selfkey:${wallet.did}`
-			: `did:eth:${this.address.toLowerCase()}`;
+			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 
