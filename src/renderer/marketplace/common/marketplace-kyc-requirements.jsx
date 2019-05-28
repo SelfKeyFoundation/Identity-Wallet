@@ -22,4 +22,4 @@ const MarketplaceKycRequirements = props => {
 	);
 };
 
-export default MarketplaceKycRequirements;
+export { MarketplaceKycRequirements };

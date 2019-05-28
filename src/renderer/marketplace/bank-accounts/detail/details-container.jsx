@@ -11,6 +11,10 @@ const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends Component {
+	state = {
+		tab: 'types'
+	};
+
 	componentDidMount() {
 		if (!this.props.bankAccount) {
 			this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
@@ -18,6 +22,8 @@ class BankAccountsDetailContainer extends Component {
 	}
 
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
+
+	onTabChange = tab => this.setState({ tab });
 
 	render() {
 		const { bankAccount, bankDetails, keyRate } = this.props;
@@ -27,6 +33,8 @@ class BankAccountsDetailContainer extends Component {
 			<BankingDetailsPage
 				countryCode={bankAccount.countryCode}
 				price="1500"
+				tab={this.state.tab}
+				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={bankAccount.region}
 				onBack={this.onBackClick}
@@ -36,7 +44,7 @@ class BankAccountsDetailContainer extends Component {
 }
 
 BankAccountsDetailContainer.propTypes = {
-	bankAccount: PropTypes.array,
+	bankAccount: PropTypes.object,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };

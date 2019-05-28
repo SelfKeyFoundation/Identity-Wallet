@@ -35,7 +35,7 @@ const styles = theme => ({
 	}
 });
 
-export const BankingDescriptionTab = withStyles(styles)(({ classes, translation }) => (
+const BankingDescriptionTab = withStyles(styles)(({ classes, translation }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{

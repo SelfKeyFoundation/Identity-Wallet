@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
-import { PageLoading, sanitize } from '../../common';
+import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { PageLoading } from '../../common';
+// import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
 
 const styles = theme => ({
@@ -69,12 +73,14 @@ const styles = theme => ({
 
 class BankingCountryTabComponent extends Component {
 	componentDidMount() {
-		if (!this.props.country && this.props.loadCountryAction) {
-			this.props.loadCountryAction(this.props.countryCode);
+		if (!this.props.country) {
+			this.props.dispatch(
+				incorporationsOperations.loadIncorporationsCountryOperation(this.props.countryCode)
+			);
 		}
 	}
 	render() {
-		const { classes, country, translation } = this.props;
+		const { classes, country } = this.props;
 		return (
 			<div className={classes.tabContainer}>
 				{!country && <PageLoading />}
@@ -143,6 +149,8 @@ class BankingCountryTabComponent extends Component {
 								/>
 							</div>
 						</Grid>
+						{/*
+						// TODO: requires API changes
 						<div className={classes.countryInfo}>
 							<div
 								dangerouslySetInnerHTML={{
@@ -150,12 +158,27 @@ class BankingCountryTabComponent extends Component {
 								}}
 							/>
 						</div>
+						*/}
 					</React.Fragment>
 				)}
 			</div>
 		);
 	}
 }
-export const BankingCountryTab = withStyles(styles)(BankingCountryTabComponent);
 
+BankingCountryTabComponent.propTypes = {
+	countryCode: PropTypes.string,
+	country: PropTypes.object
+};
+
+const mapStateToProps = (state, props) => {
+	return {
+		country: incorporationsSelectors.getCountry(state, props.countryCode)
+	};
+};
+
+const styledComponent = withStyles(styles)(BankingCountryTabComponent);
+const BankingCountryTab = connect(mapStateToProps)(styledComponent);
+
+export { BankingCountryTab };
 export default BankingCountryTab;
