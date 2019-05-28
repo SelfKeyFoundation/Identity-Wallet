@@ -68,9 +68,6 @@ class IncorporationsCountryInfo extends Component {
 	render() {
 		const { country, classes, translation } = this.props;
 
-		// Troubleshooting log
-		// console.log(country);
-
 		if (!country) {
 			return this.renderLoadingScreen();
 		}

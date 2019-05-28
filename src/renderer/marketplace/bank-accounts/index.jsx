@@ -7,7 +7,6 @@ import { BankAccountsDetailContainer } from './detail';
 class MarketplaceBankAccountsComponent extends Component {
 	render() {
 		const { path } = this.props.match;
-		console.log(path);
 		return (
 			<div>
 				<Route exact path={`${path}`} component={BankAccountsTableContainer} />
