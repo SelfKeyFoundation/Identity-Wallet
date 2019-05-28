@@ -28,7 +28,11 @@ class BankAccountsTableContainer extends Component {
 
 	onDetailsClick = bank =>
 		this.props.dispatch(
-			push(`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.bankCode}/${bank.countryCode}`)
+			push(
+				`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
+					bank.Template_ID
+				}`
+			)
 		);
 
 	render() {

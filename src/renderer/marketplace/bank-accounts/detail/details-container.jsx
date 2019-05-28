@@ -36,9 +36,45 @@ class BankAccountsDetailContainer extends Component {
 
 	onTabChange = tab => this.setState({ tab });
 
+	buildResumeData = () => {
+		// FIXME: replace this with fields from bankDetails when API data is ready
+		return [
+			[
+				{
+					name: 'Min. Avg. Balance',
+					value: 'SGD 10,000',
+					highlighted: true
+				},
+				{
+					name: 'Monthly Min. Avg, Balance',
+					value: 'SGD 5,000',
+					highlighted: true
+				}
+			],
+			[
+				{
+					name: 'Personal Visit Required',
+					value: 'yes',
+					highlighted: true
+				},
+				{
+					name: 'Time to open',
+					value: '2-4 weeks',
+					highlighted: true
+				}
+			],
+			[
+				{
+					name: 'Cards',
+					value: ['Debit Card (SG)', 'Credit Card (USD)'],
+					highlighted: true
+				}
+			]
+		];
+	};
+
 	render() {
 		const { bankAccount, bankDetails, keyRate, jurisdiction, kycRequirements } = this.props;
-		console.log(bankAccount, bankDetails, jurisdiction, kycRequirements);
 
 		return (
 			<BankingDetailsPage
@@ -48,9 +84,11 @@ class BankAccountsDetailContainer extends Component {
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={bankAccount.region}
+				details={bankDetails}
+				resume={this.buildResumeData()}
 				jurisdiction={jurisdiction}
 				kycRequirements={kycRequirements}
-				templateId={'test'}
+				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
 			/>
 		);
@@ -64,9 +102,7 @@ BankAccountsDetailContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode } = props.match.params;
-	// FIXME: test template
-	const templateId = '5c3f3e9c3075d52f8f4ad613';
+	const { accountCode, countryCode, templateId } = props.match.params;
 	const notAuthenticated = false;
 
 	return {
