@@ -35,7 +35,7 @@ const styles = theme => ({
 	}
 });
 
-export const BankingServicesTab = withStyles(styles)(({ classes, htmlServices }) => (
+const BankingServicesTab = withStyles(styles)(({ classes, htmlServices }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
@@ -45,4 +45,5 @@ export const BankingServicesTab = withStyles(styles)(({ classes, htmlServices })
 	</div>
 ));
 
+export { BankingServicesTab };
 export default BankingServicesTab;

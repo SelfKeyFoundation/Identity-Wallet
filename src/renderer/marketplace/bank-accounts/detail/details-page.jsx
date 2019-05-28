@@ -143,6 +143,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 		price,
 		tab,
 		kycRequirements,
+		templateId,
 		onTabChange
 	} = props;
 	return (
@@ -215,6 +216,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 							<MarketplaceKycRequirements
 								requirements={kycRequirements}
 								loading={loading}
+								templateId={templateId}
 								title="KYC Requirements and Forms"
 							/>
 						</Grid>

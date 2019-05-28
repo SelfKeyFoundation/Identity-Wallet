@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
@@ -15,9 +17,18 @@ class BankAccountsDetailContainer extends Component {
 		tab: 'types'
 	};
 
-	componentDidMount() {
-		if (!this.props.bankAccount) {
-			this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
+	async componentDidMount() {
+		const { rpShouldUpdate, bankAccount } = this.props;
+		const notAuthenticated = false;
+
+		if (!bankAccount) {
+			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
+		}
+
+		if (rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
+			);
 		}
 	}
 
@@ -26,8 +37,8 @@ class BankAccountsDetailContainer extends Component {
 	onTabChange = tab => this.setState({ tab });
 
 	render() {
-		const { bankAccount, bankDetails, keyRate } = this.props;
-		console.log(bankAccount, bankDetails);
+		const { bankAccount, bankDetails, keyRate, jurisdiction, kycRequirements } = this.props;
+		console.log(bankAccount, bankDetails, jurisdiction, kycRequirements);
 
 		return (
 			<BankingDetailsPage
@@ -37,6 +48,9 @@ class BankAccountsDetailContainer extends Component {
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={bankAccount.region}
+				jurisdiction={jurisdiction}
+				kycRequirements={kycRequirements}
+				templateId={'test'}
 				onBack={this.onBackClick}
 			/>
 		);
@@ -50,13 +64,29 @@ BankAccountsDetailContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
-	// const notAuthenticated = false;
+	const { accountCode, countryCode } = props.match.params;
+	// FIXME: test template
+	const templateId = '5c3f3e9c3075d52f8f4ad613';
+	const notAuthenticated = false;
+
 	return {
 		bankAccount: bankAccountsSelectors.getBankByAccountCode(state, accountCode),
 		bankDetails: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
+		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
 		isLoading: bankAccountsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			notAuthenticated
+		),
+		kycRequirements: kycSelectors.selectRequirementsForTemplate(
+			state,
+			'incorporations',
+			templateId
+		),
+		wallet: walletSelectors.getWallet(state)
 	};
 };
 

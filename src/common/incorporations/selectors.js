@@ -108,9 +108,7 @@ export const incorporationsSelectors = {
 			return false;
 		}
 
-		console.log(tree[`countryById-${countryCode}`]);
 		return tree[`countryById-${countryCode}`][countryCode];
-		// return tree[`country-${countryCode}`].map(id => tree[`countryById-${countryCode}`][id]);
 	}
 };
 

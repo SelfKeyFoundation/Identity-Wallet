@@ -45,7 +45,7 @@ export const bankAccountsSelectors = {
 		return tree.jurisdictions.map(id => tree.jurisdictionsById[id]);
 	},
 	getJurisdictionsByCountryCode(state, countryCode) {
-		return this.getBankAccounts(state).find(c => c['Country Code'] === countryCode);
+		return this.getJurisdictions(state).find(c => c['Country Code'] === countryCode);
 	},
 	getDetails(state) {
 		const tree = this.getBankAccounts(state);
@@ -54,7 +54,6 @@ export const bankAccountsSelectors = {
 	getDetailsByAccountCode(state, accountCode) {
 		// TODO: replace with Account Code when schema is changed
 		const details = this.getDetails(state);
-		console.log(details);
 		return details.find(c => c['Account Code'] === accountCode);
 	}
 };
