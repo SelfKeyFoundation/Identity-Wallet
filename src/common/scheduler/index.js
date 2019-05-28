@@ -150,3 +150,25 @@ export const schedulerSelectors = {
 	},
 	selectJob: (state, id) => schedulerSelectors.selectScheduler(state).jobsById[id]
 };
+
+export const schedulerReducer = (state = schedulerInitialState, action) => {
+	switch (action.type) {
+		case schedulerTypes.SCHEDULER_JOB_QUEUE:
+			return reducers.queueJobReducer(state, action);
+		case schedulerTypes.SCHEDULER_JOB_PROCESS:
+			return reducers.processJobReducer(state, action);
+		case schedulerTypes.SCHEDULER_JOB_FINISH:
+			return reducers.finishJobReducer(state, action);
+		case schedulerTypes.SCHEDULER_JOB_PROGRESS:
+			return reducers.progressJobReducer(state, action);
+		case schedulerTypes.SCHEDULER_JOB_DELETE:
+			return reducers.deleteJobReducer(state, action);
+		case schedulerTypes.SCHEDULER_QUEUE_SET_PROCESSING:
+			return reducers.setProcessingQueueReducer(state, action);
+		case schedulerTypes.SCHEDULER_QUEUE_SET_CONFIG:
+			return reducers.setConfigQueueReducer(state, action);
+	}
+	return state;
+};
+
+export default schedulerReducer;
