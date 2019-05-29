@@ -90,6 +90,10 @@ const styles = theme => ({
 	},
 	didButtons: {
 		marginTop: '20px'
+	},
+	transaction: {
+		alignItems: 'center',
+		display: 'flex'
 	}
 });
 
@@ -101,6 +105,12 @@ class SelfkeyIdOverviewComponent extends Component {
 	state = {
 		popup: null
 	};
+	componentDidMount() {
+		this.props.onRef(this);
+	}
+	componentWillUnmount() {
+		this.props.onRef(undefined);
+	}
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
@@ -351,13 +361,18 @@ class SelfkeyIdOverviewComponent extends Component {
 																I HAVE ONE
 															</Button>
 														</Grid>
+														{wallet.didPending && (
+															<Grid
+																item
+																className={classes.transaction}
+															>
+																<Typography variant="h3">
+																	Processing transaction..Please
+																	wait
+																</Typography>
+															</Grid>
+														)}
 													</Grid>
-													{wallet.didPending && (
-														<Typography variant="h3" gutterBottom>
-															Transaction is processing. Please
-															wait...
-														</Typography>
-													)}
 												</Grid>
 											</Grid>
 										</Grid>
@@ -756,6 +771,7 @@ class SelfkeyIdOverviewComponent extends Component {
 										<Grid container item spacing={0} justify="center">
 											<Grid item>
 												<Button
+													id="addDocuments"
 													variant="outlined"
 													size="large"
 													color="secondary"
