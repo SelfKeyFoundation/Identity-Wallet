@@ -43,7 +43,7 @@ class CreateDIDComponent extends Component {
 	};
 
 	handleCreateDIDAction = async _ => {
-		await this.props.dispatch(appOperations.setGoBackPath('/main/selfkeyId'));
+		await this.props.dispatch(appOperations.setGoBackPath('/main/get-did'));
 		await this.props.dispatch(walletOperations.createWalletDID());
 		if (this.props.walletType === 'ledger' || this.props.walletType === 'trezor') {
 			await this.props.dispatch(appOperations.setGoNextPath('/main/hd-transaction-timer'));

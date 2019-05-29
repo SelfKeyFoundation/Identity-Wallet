@@ -55,7 +55,7 @@ const KycRequirementsListComponent = props => {
 	return (
 		<div className={classes.kyc}>
 			<Typography variant="h2" gutterBottom>
-				{title}
+				KYC checklist for {title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}
 			{loading && (
