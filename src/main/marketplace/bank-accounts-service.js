@@ -44,10 +44,17 @@ export class BankAccountsService {
 					bank = transformMachineReadable(bank, 'Min Deposit', 'minDeposit');
 					bank = transformMachineReadable(bank, 'Good For', 'goodFor');
 					bank = transformMachineReadable(bank, 'Bank Code', 'bankCode');
+					bank = transformMachineReadable(bank, 'AccountCode', 'accountCode');
 					return bank;
 				});
 				payload.jurisdictions = response.Jurisdictions.map(fieldMap);
 				payload.details = response.Account_Details.map(fieldMap);
+				payload.details.map(bank => {
+					// Transform into Machine readable fields
+					bank = transformMachineReadable(bank, 'Country Code', 'countryCode');
+					bank = transformMachineReadable(bank, 'AccountCode', 'accountCode');
+					return bank;
+				});
 
 				resolve(payload);
 			});

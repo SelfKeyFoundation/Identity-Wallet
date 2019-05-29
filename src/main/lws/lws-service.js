@@ -48,6 +48,7 @@ export class LWSService {
 					publicKey: w.publicKey,
 					unlocked,
 					profile: w.profile,
+					name: w.name,
 					signedUp
 				};
 			})
@@ -213,25 +214,48 @@ export class LWSService {
 		}
 		try {
 			let fetchedAttrs = await identity.getAttributesByTypes(
-				requestedAttributes.map(attr => attr.id || attr.attribute || attr)
+				requestedAttributes.map(attr => attr.schemaId || attr.attribute || attr)
 			);
-			let payload = fetchedAttrs.map(attr => {
-				let schema = attr.attributeType.content;
-				let value = attr.data.value;
-				let documents = attr.documents.map(doc => {
-					doc.buffer = doc.buffer.toString('base64');
-					return doc;
-				});
+			fetchedAttrs = fetchedAttrs.reduce((acc, curr) => {
+				acc[curr.attributeType.url] = acc[curr.attributeType.url] || [];
+				acc[curr.attributeType.url].push(curr);
+				return acc;
+			}, {});
+
+			let payload = requestedAttributes.map(attr => {
+				const schemaId = attr.schemaId || attr.attribute || attr;
+				const fetched = fetchedAttrs[schemaId];
+				const attributeType = fetched ? fetched[0].attributeType : null;
+				const schema = attributeType ? attributeType.content : null;
+
+				const options = fetched
+					? fetched.map(f => {
+							let value = f.data.value;
+							let documents = f.documents.map(doc => {
+								doc.buffer = doc.buffer.toString('base64');
+								return doc;
+							});
+							return {
+								id: f.id,
+								name: f.name,
+								value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
+									schema,
+									value,
+									documents
+								).value
+							};
+					  })
+					: null;
+
 				return {
-					url: attr.attributeType.url,
-					name: attr.name,
-					value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
-						schema,
-						value,
-						documents
-					).value,
-					schema: schema,
-					id: attr.id
+					uiId: attr.uiId,
+					id: attr.id,
+					title: attr.title || attr.label || (schema && schema.title),
+					options,
+					schemaId,
+					schema,
+					selected: 0,
+					required: attr.required
 				};
 			});
 
@@ -338,22 +362,29 @@ export class LWSService {
 		}
 
 		try {
-			let rpAttributes = (attributes || []).map(attr => {
-				let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
-					attr.schema,
-					attr.value
-				);
-				return {
-					id: attr.id,
-					schemaId: attr.url,
-					schema: attr.schema,
-					data: normalized.value,
-					documents: normalized.documents.map(doc => {
-						doc.buffer = Buffer.from(doc.buffer, 'base64');
-						return doc;
-					})
-				};
-			});
+			let rpAttributes = (attributes || [])
+				.filter(attr => {
+					if (!attr.options || attr.options.length === 0) {
+						return false;
+					}
+					return !!attr.options[attr.selected];
+				})
+				.map(attr => {
+					let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
+						attr.schema,
+						attr.options[attr.selected].value
+					);
+					return {
+						id: attr.id,
+						schemaId: attr.schemaId,
+						schema: attr.schema,
+						data: normalized.value,
+						documents: normalized.documents.map(doc => {
+							doc.buffer = Buffer.from(doc.buffer, 'base64');
+							return doc;
+						})
+					};
+				});
 			await session.createUser(rpAttributes, config.meta || {});
 			return this.authResp(
 				{

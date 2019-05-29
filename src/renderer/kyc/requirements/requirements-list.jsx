@@ -55,10 +55,14 @@ const KycRequirementsListComponent = props => {
 	return (
 		<div className={classes.kyc}>
 			<Typography variant="h2" gutterBottom>
-				{title}
+				KYC checklist for {title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}
-			{loading && <CircularProgress size={50} />}
+			{loading && (
+				<Grid container justify="center" alignItems="center" direction="column">
+					<CircularProgress size={50} />
+				</Grid>
+			)}
 			{!loading && (
 				<Grid container justify="flex-start" alignItems="flex-start" direction="column">
 					<List className={classes.list}>

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
+import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
 
@@ -69,12 +72,14 @@ const styles = theme => ({
 
 class BankingCountryTabComponent extends Component {
 	componentDidMount() {
-		if (!this.props.country && this.props.loadCountryAction) {
-			this.props.loadCountryAction(this.props.countryCode);
+		if (!this.props.country) {
+			this.props.dispatch(
+				incorporationsOperations.loadIncorporationsCountryOperation(this.props.countryCode)
+			);
 		}
 	}
 	render() {
-		const { classes, country, translation } = this.props;
+		const { classes, country, jurisdiction } = this.props;
 		return (
 			<div className={classes.tabContainer}>
 				{!country && <PageLoading />}
@@ -146,7 +151,7 @@ class BankingCountryTabComponent extends Component {
 						<div className={classes.countryInfo}>
 							<div
 								dangerouslySetInnerHTML={{
-									__html: sanitize(translation.country_details)
+									__html: sanitize(jurisdiction['Country Details'])
 								}}
 							/>
 						</div>
@@ -156,6 +161,21 @@ class BankingCountryTabComponent extends Component {
 		);
 	}
 }
-export const BankingCountryTab = withStyles(styles)(BankingCountryTabComponent);
 
+BankingCountryTabComponent.propTypes = {
+	countryCode: PropTypes.string,
+	country: PropTypes.object,
+	jurisdiction: PropTypes.object
+};
+
+const mapStateToProps = (state, props) => {
+	return {
+		country: incorporationsSelectors.getCountry(state, props.countryCode)
+	};
+};
+
+const styledComponent = withStyles(styles)(BankingCountryTabComponent);
+const BankingCountryTab = connect(mapStateToProps)(styledComponent);
+
+export { BankingCountryTab };
 export default BankingCountryTab;

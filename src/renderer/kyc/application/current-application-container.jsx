@@ -5,6 +5,8 @@ import { CurrentApplicationPopup } from './current-application-popup';
 import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
 import { jsonSchema } from 'common/identity/utils';
+import { push } from 'connected-react-router';
+import qs from 'query-string';
 
 class CurrentApplicationComponent extends Component {
 	state = {
@@ -54,13 +56,20 @@ class CurrentApplicationComponent extends Component {
 			this.setState({ error });
 			return;
 		}
-
-		await this.props.dispatch(
-			kycOperations.submitCurrentApplicationOperation(this.state.selected)
-		);
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+		} else {
+			await this.props.dispatch(
+				kycOperations.submitCurrentApplicationOperation(this.state.selected)
+			);
+		}
 	};
 	handleClose = () => {
-		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+		} else {
+			this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		}
 	};
 	handleSelected = (uiId, item) => {
 		const { selected } = this.state;
@@ -84,7 +93,12 @@ class CurrentApplicationComponent extends Component {
 		this.setState({ showEditAttribute: false, showCreateAttribute: false });
 	};
 	render() {
-		const { currentApplication, relyingParty, requirements } = this.props;
+		const {
+			currentApplication,
+			relyingParty,
+			requirements,
+			existingApplicationId
+		} = this.props;
 		return (
 			<div>
 				<CurrentApplicationPopup
@@ -105,6 +119,7 @@ class CurrentApplicationComponent extends Component {
 					onSelected={this.handleSelected}
 					editItem={this.handleEdit}
 					addItem={this.handleAdd}
+					existingApplicationId={existingApplicationId}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributePopup
@@ -131,6 +146,8 @@ const mapStateToProps = (state, props) => {
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
 	const authenticated = true;
+	const existingApplicationId =
+		qs.parse(props.location.search, { ignoreQueryPrefix: true }).applicationId || undefined;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
@@ -143,7 +160,8 @@ const mapStateToProps = (state, props) => {
 			state,
 			relyingPartyName,
 			currentApplication.templateId
-		)
+		),
+		existingApplicationId
 	};
 };
 
