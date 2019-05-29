@@ -117,7 +117,6 @@ export class IncorporationsService {
 					});
 
 					payload.countryCode = countryCode;
-
 					resolve(payload);
 				}
 			);

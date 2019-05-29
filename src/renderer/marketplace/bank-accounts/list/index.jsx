@@ -9,11 +9,11 @@ import { BankingOffersPage } from './offers-page';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+const MARKETPLACE_JURISDICTION_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
 class BankAccountsTableContainer extends Component {
 	state = {
-		accountType: 'personal',
-		loading: false
+		accountType: 'personal'
 	};
 
 	componentDidMount() {
@@ -26,7 +26,14 @@ class BankAccountsTableContainer extends Component {
 
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
-	onDetailsClick = bank => console.log('TODO', bank);
+	onDetailsClick = bank =>
+		this.props.dispatch(
+			push(
+				`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
+					bank.Template_ID
+				}`
+			)
+		);
 
 	render() {
 		const { isLoading, bankAccounts, keyRate } = this.props;

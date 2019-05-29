@@ -35,19 +35,24 @@ export const bankAccountsSelectors = {
 			return b;
 		});
 	},
+	getBankByAccountCode(state, accountCode) {
+		const banks = this.getMainBankAccounts(state);
+		return banks.find(b => b.accountCode === accountCode);
+	},
 	getJurisdictions(state) {
 		const tree = this.getBankAccounts(state);
 		return tree.jurisdictions.map(id => tree.jurisdictionsById[id]);
 	},
 	getJurisdictionsByCountryCode(state, countryCode) {
-		return this.getBankAccounts(state).find(c => c['Country Code'] === countryCode);
+		return this.getJurisdictions(state).find(c => c['Country Code'] === countryCode);
 	},
 	getDetails(state) {
 		const tree = this.getBankAccounts(state);
 		return tree.details.map(id => tree.detailsById[id]);
 	},
 	getDetailsByAccountCode(state, accountCode) {
-		return this.getBankAccounts(state).find(c => c['Account Code'] === accountCode);
+		const details = this.getDetails(state);
+		return details.find(c => c.accountCode === accountCode);
 	}
 };
 
