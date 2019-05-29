@@ -106,6 +106,7 @@ class AssociateDIDComponent extends Component {
 
 	handleFieldChange = async event => {
 		let value = event.target.value;
+		await this.resetErrors();
 		this.setState({ did: value });
 	};
 

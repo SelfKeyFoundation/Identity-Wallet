@@ -7,13 +7,12 @@ import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
 import { getGlobalContext } from 'common/context';
 import { push } from 'connected-react-router';
+import { initSplashScreen } from '@trodi/electron-splashscreen';
 
 const log = new Logger('main-window');
 
 export const createMainWindow = () => {
-	let mainWindow;
-
-	mainWindow = new electron.BrowserWindow({
+	const windowOptions = {
 		id: 'main-window',
 		title: electron.app.getName(),
 		width: 1170,
@@ -27,6 +26,18 @@ export const createMainWindow = () => {
 			preload: path.resolve(__dirname, 'preload.js')
 		},
 		icon: __static + '/assets/icons/png/newlogo-256x256.png'
+	};
+
+	let mainWindow = initSplashScreen({
+		windowOpts: windowOptions,
+		templateUrl: path.join(__static, '/splash-screen.html'),
+		delay: 0,
+		minVisible: 1500,
+		splashScreenOpts: {
+			height: 800,
+			width: 1170,
+			transparent: true
+		}
 	});
 
 	mainWindow.shouldIgnoreClose = true;
