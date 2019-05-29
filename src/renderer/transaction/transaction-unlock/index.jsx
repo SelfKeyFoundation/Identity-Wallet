@@ -10,6 +10,8 @@ import {
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
+import { appSelectors } from 'common/app';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	unlockIcon: {
@@ -19,11 +21,15 @@ const styles = theme => ({
 
 class TransactionUnlock extends Component {
 	handleTryAgain = async () => {
-		this.handleClose();
+		await this.handleClose();
 	};
 
-	handleClose = () => {
-		history.getHistory().goBack();
+	handleClose = async () => {
+		if (this.props.goBackPath) {
+			await this.props.dispatch(push(this.props.goBackPath));
+		} else {
+			history.getHistory().goBack();
+		}
 	};
 
 	renderModalBody = () => {
@@ -100,7 +106,9 @@ class TransactionUnlock extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		goBackPath: appSelectors.selectGoBackPath(state)
+	};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(TransactionUnlock));

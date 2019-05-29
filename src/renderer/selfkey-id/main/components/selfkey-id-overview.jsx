@@ -90,6 +90,10 @@ const styles = theme => ({
 	},
 	didButtons: {
 		marginTop: '20px'
+	},
+	transaction: {
+		alignItems: 'center',
+		display: 'flex'
 	}
 });
 
@@ -357,13 +361,18 @@ class SelfkeyIdOverviewComponent extends Component {
 																I HAVE ONE
 															</Button>
 														</Grid>
+														{wallet.didPending && (
+															<Grid
+																item
+																className={classes.transaction}
+															>
+																<Typography variant="h3">
+																	Processing transaction..Please
+																	wait
+																</Typography>
+															</Grid>
+														)}
 													</Grid>
-													{wallet.didPending && (
-														<Typography variant="h3" gutterBottom>
-															Transaction is processing. Please
-															wait...
-														</Typography>
-													)}
 												</Grid>
 											</Grid>
 										</Grid>
