@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
 import BankAccountsTableContainer from './list';
-import { BankAccountsDetailContainer } from './detail';
+import { BankAccountsDetailContainer } from './details/details-container';
 
 class MarketplaceBankAccountsComponent extends Component {
 	render() {

@@ -2,21 +2,20 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
-import {
-	BankingDetailsPage,
-	BankingApplicationButton,
-	BankingDetailsPageTabs,
-	BankingTypesTab,
-	BankingCountryTab,
-	BankingDescriptionTab,
-	BankingServicesTab,
-	BankingAccountOption
-} from '../src/renderer/marketplace/bank-accounts/details';
 import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
 import BankingOffersTable from '../src/renderer/marketplace/bank-accounts/list/offers-table';
 import BankingAccountTypeTabs from '../src/renderer/marketplace/bank-accounts/list/account-type-tabs';
 import BankingOffersPage from '../src/renderer/marketplace/bank-accounts/list/offers-page';
+import BankingDetailsPage, {
+	BankingApplicationButton
+} from '../src/renderer/marketplace/bank-accounts/details/details-page';
+import { BankingTypesTab } from '../src/renderer/marketplace/bank-accounts/details/details-types-tab';
+import BankingDescriptionTab from '../src/renderer/marketplace/bank-accounts/details/details-description-tab';
+import BankingCountryTab from '../src/renderer/marketplace/bank-accounts/details/details-country-tab';
+import BankingServicesTab from '../src/renderer/marketplace/bank-accounts/details/details-services-tab';
+import BankingAccountOption from '../src/renderer/marketplace/bank-accounts/details/account-option';
+import BankingDetailsPageTabs from '../src/renderer/marketplace/bank-accounts/details/details-tabs';
 
 const KEY_RATE = 1 / 1000;
 

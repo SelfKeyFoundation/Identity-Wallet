@@ -8,6 +8,7 @@ import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
+import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -28,6 +29,14 @@ class BankAccountsDetailContainer extends Component {
 		if (rpShouldUpdate) {
 			await this.props.dispatch(
 				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
+			);
+		}
+
+		if (!this.props.country) {
+			this.props.dispatch(
+				incorporationsOperations.loadIncorporationsCountryOperation(
+					this.props.bankAccount.countryCode
+				)
 			);
 		}
 	}
@@ -122,7 +131,8 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			templateId
 		),
-		wallet: walletSelectors.getWallet(state)
+		wallet: walletSelectors.getWallet(state),
+		country: incorporationsSelectors.getCountry(state, countryCode)
 	};
 };
 
