@@ -105,6 +105,12 @@ class SelfkeyIdOverviewComponent extends Component {
 	state = {
 		popup: null
 	};
+	componentDidMount() {
+		this.props.onRef(this);
+	}
+	componentWillUnmount() {
+		this.props.onRef(undefined);
+	}
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
@@ -765,6 +771,7 @@ class SelfkeyIdOverviewComponent extends Component {
 										<Grid container item spacing={0} justify="center">
 											<Grid item>
 												<Button
+													id="addDocuments"
 													variant="outlined"
 													size="large"
 													color="secondary"
