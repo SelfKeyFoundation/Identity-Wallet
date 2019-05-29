@@ -275,17 +275,32 @@ describe('lws-service', () => {
 
 			it('returns attributes', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test', requestedAttributes: [] } };
+				const msg = {
+					payload: {
+						publicKey: 'test',
+						requestedAttributes: [
+							'test1',
+							'test2',
+							{
+								schemaId: 'test3',
+								title: 'Test3 Title',
+								id: 'test3ID',
+								required: true
+							}
+						]
+					}
+				};
 				let ident = { getAttributesByTypes() {} };
 				sinon.stub(ident, 'getAttributesByTypes').resolves([
 					{
-						attributeType: { url: 'test1', content: {} },
+						attributeType: { url: 'test1', content: { title: 'test1' } },
 						data: { value: 1 },
+						name: 'test1 name',
 						documents: [],
 						id: 1
 					},
 					{
-						attributeType: { url: 'test2', content: {} },
+						attributeType: { url: 'test2', content: { title: 'test2' } },
 						data: { value: 2 },
 						documents: [],
 						id: 2
@@ -299,8 +314,31 @@ describe('lws-service', () => {
 						payload: {
 							publicKey: 'test',
 							attributes: [
-								{ url: 'test1', schema: {}, value: 1, id: 1 },
-								{ url: 'test2', schema: {}, value: 2, id: 2 }
+								{
+									id: undefined,
+									schemaId: 'test1',
+									schema: { title: 'test1' },
+									selected: 0,
+									title: 'test1',
+									options: [{ id: 1, name: 'test1 name', value: 1 }]
+								},
+								{
+									id: undefined,
+									schemaId: 'test2',
+									selected: 0,
+									schema: { title: 'test2' },
+									title: 'test2',
+									options: [{ id: 2, name: undefined, value: 2 }]
+								},
+								{
+									schemaId: 'test3',
+									title: 'Test3 Title',
+									id: 'test3ID',
+									selected: 0,
+									options: null,
+									schema: null,
+									required: true
+								}
 							]
 						}
 					},
