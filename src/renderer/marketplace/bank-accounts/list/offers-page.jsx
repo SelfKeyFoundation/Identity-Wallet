@@ -54,15 +54,21 @@ export const BankingOffersPage = withStyles(styles)(
 		return (
 			<div className={classes.page}>
 				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" onClick={onBackClick}>
+					<Button
+						id="backToMarketplace"
+						variant="outlined"
+						color="secondary"
+						onClick={onBackClick}
+					>
 						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
 							‹ Back
 						</Typography>
 					</Button>
 				</div>
-				{loading && <PageLoading />}
+				{loading && <PageLoading id="loadingBankAccounts" />}
 				{!loading && (
 					<Grid
+						id="bankAccounts"
 						container
 						direction="column"
 						justify="flex-start"

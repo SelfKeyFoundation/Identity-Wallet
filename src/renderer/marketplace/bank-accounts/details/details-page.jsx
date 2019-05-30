@@ -157,6 +157,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 			</div>
 			<div className={classes.container}>
 				<Grid
+					id="bankAccountDetails"
 					container
 					justify="flex-start"
 					alignItems="flex-start"
@@ -201,7 +202,12 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 										startApplication={startApplication}
 										keyRate={keyRate}
 									/>
-									<ProgramPrice price={price} rate={keyRate} label="Pricing: $" />
+									<ProgramPrice
+										id="fees"
+										price={price}
+										rate={keyRate}
+										label="Pricing: $"
+									/>
 								</Grid>
 							</Grid>
 						</Grid>

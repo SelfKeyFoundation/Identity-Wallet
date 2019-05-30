@@ -1,41 +1,36 @@
 Feature: View bank accounts jurisdiction
 
-	Background: Given user has opened SelfKey wallet
-	And the user has opened the Bank Accounts Marketplace Screen
+Background: Given the user has created a SelfKey wallet
 
 	Scenario: Open Specific Jurisdiction Screen
-		When user clicks the "Details" button on the last column
+		Given user has opened the Bank Accounts Screen
+		When user clicks the Antigua and Barbuda Details button
 		Then the jurisdiction detailed screen is displayed
 		And information on fees, and banking option is displayed
-		And default "Account Types" tab is opened
+		And default Account Types tab is opened
 
-	Scenario: Browse detailed jurisdiction description
-		Given Given jurisdiction detailed screen screen is opened
-		When "Account details" tab is clicked
-		Then it should display the jurisdiction account details from airtable
+	Scenario: Browse detailed jurisdiction account info
+		Given user has opened the Jurisdiction Detailed screen
+		When user clicks the Account Types tab 
+		Then the jurisdiction account types from airtable is displayed
 
-	Scenario: Browse detailed jurisdiction description
-		Given Given jurisdiction detailed screen screen is opened
-		When "Description" tab is clicked
-		Then it should display the jurisdiction detailed description from airtable
+	Scenario: Browse detailed jurisdiction description info
+		Given user has opened the Jurisdiction Detailed screen
+		When user clicks the Description tab
+		Then the jurisdiction detailed description from airtable is displayed
 
-	Scenario: Browse detailed jurisdiction country details
-		Given Given jurisdiction detailed screen screen is opened
-		When "Country Details" tab is clicked
-		Then it should display the selected country details from airtable
+	Scenario: Browse detailed jurisdiction country info
+		Given user has opened the Jurisdiction Detailed screen
+		When user clicks the Country Details tab
+		Then the selected country details from airtable is displayed
 
-	Scenario: Browse detailed jurisdiction country details
-		Given Given jurisdiction detailed screen screen is opened
-		When "Services" tab is clicked
-		Then it should display the services information from airtable
-
-	Scenario: Browse detailed jurisdiction country details
-		Given Given jurisdiction detailed screen screen is opened
-		When "Services" tab is clicked
-		Then it should display the services information from airtable
+	Scenario: Browse detailed jurisdiction services info
+		Given user has opened the Jurisdiction Detailed screen
+		When user clicks the Services tab
+		Then the services information from airtable is displayed
 
 	Scenario: Browse bank options
-		Given Given jurisdiction detailed screen screen is opened
+		Given user has opened the Jurisdiction Detailed screen
 		When user clicks each bank option expand box
 		Then it should display each option details without the specific bank name
 		And should display 2nd stage KYC requirements in text from airtable

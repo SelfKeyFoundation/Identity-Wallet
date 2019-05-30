@@ -12,15 +12,17 @@ export const BankingDetailsPageTabs = withStyles(styles)(
 		return (
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
-					<Tab value="types" label="Account Types" />
-					<Tab value="description" label="Description" />
-					<Tab value="country" label="Country Details" />
-					<Tab value="services" label="Services" />
+					<Tab id="accountButton" value="account" label="Account Types" />
+					<Tab id="descriptionButton" value="description" label="Description" />
+					<Tab id="countryButton" value="country" label="Country Details" />
+					<Tab id="servicesButton" value="services" label="Services" />
 				</Tabs>
-				{tab === 'types' && <BankingTypesTab {...tabProps} />}
-				{tab === 'country' && <BankingCountryTab {...tabProps} />}
-				{tab === 'services' && <BankingServicesTab {...tabProps} />}
-				{tab === 'description' && <BankingDescriptionTab {...tabProps} />}
+				{tab === 'types' && <BankingTypesTab id="accountTab" {...tabProps} />}
+				{tab === 'country' && <BankingCountryTab id="countryTab" {...tabProps} />}
+				{tab === 'services' && <BankingServicesTab id="servicesTab" {...tabProps} />}
+				{tab === 'description' && (
+					<BankingDescriptionTab id="descriptionTab" {...tabProps} />
+				)}
 			</React.Fragment>
 		);
 	}
