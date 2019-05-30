@@ -83,7 +83,7 @@ const styles = theme => ({
 		borderColor: '#384656',
 		borderStyle: 'solid',
 		borderWidth: '1px 0px 1px 1px',
-		padding: '27px'
+		padding: '27px 27px 28px'
 	}
 });
 
@@ -148,7 +148,7 @@ export const BankingAccountOption = withStyles(styles)(
 			}
 		];
 		return (
-			<Grid container direction="row" justify="flex-start" alignItems="center" spacing={0}>
+			<Grid container direction="row" justify="flex-start" alignItems="unset" spacing={0}>
 				{account.name && (
 					<Grid item xs={1} className={classes.selectionSection}>
 						<Radio
@@ -165,6 +165,7 @@ export const BankingAccountOption = withStyles(styles)(
 					<ExpansionPanel
 						expanded={isOpen}
 						onChange={(e, expanded) => toggleOpen(expanded)}
+						style={{ borderRadius: '0 4px 4px 0' }}
 					>
 						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
 							<Grid container direction="column" spacing={8}>
