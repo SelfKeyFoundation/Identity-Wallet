@@ -92,7 +92,7 @@ const styles = theme => ({
 	}
 });
 
-export const BankingOffersTable = withStyles(styles)(
+const BankingOffersTable = withStyles(styles)(
 	({ classes, keyRate, data = [], onDetails, className }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
@@ -168,3 +168,4 @@ export const BankingOffersTable = withStyles(styles)(
 );
 
 export default BankingOffersTable;
+export { BankingOffersTable };

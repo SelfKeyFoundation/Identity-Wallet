@@ -19,7 +19,7 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	async componentDidMount() {
-		const { rpShouldUpdate, bankAccount } = this.props;
+		const { rpShouldUpdate, bankAccount, country } = this.props;
 		const notAuthenticated = false;
 
 		if (!bankAccount) {
@@ -32,10 +32,10 @@ class BankAccountsDetailContainer extends Component {
 			);
 		}
 
-		if (!this.props.country) {
+		if (!country) {
 			this.props.dispatch(
 				incorporationsOperations.loadIncorporationsCountryOperation(
-					this.props.bankAccount.countryCode
+					this.props.match.params.countryCode
 				)
 			);
 		}
@@ -83,10 +83,18 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	render() {
-		const { bankAccount, bankDetails, keyRate, jurisdiction, kycRequirements } = this.props;
+		const {
+			bankAccount,
+			bankDetails,
+			keyRate,
+			jurisdiction,
+			kycRequirements,
+			country
+		} = this.props;
 
 		return (
 			<BankingDetailsPage
+				country={country}
 				countryCode={bankAccount.countryCode}
 				price="1500"
 				tab={this.state.tab}

@@ -13,7 +13,7 @@ const MARKETPLACE_JURISDICTION_DETAIL_PATH = '/main/marketplace-bank-accounts/de
 
 class BankAccountsTableContainer extends Component {
 	state = {
-		accountType: 'personal'
+		accountType: 'business'
 	};
 
 	componentDidMount() {
@@ -68,4 +68,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const styledComponent = withStyles(styles)(BankAccountsTableContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export default connectedComponent;
+export { connectedComponent as BankAccountsTableContainer };

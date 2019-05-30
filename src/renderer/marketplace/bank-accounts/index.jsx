@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTableContainer from './list';
+import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
 
 class MarketplaceBankAccountsComponent extends Component {
@@ -19,5 +19,4 @@ class MarketplaceBankAccountsComponent extends Component {
 	}
 }
 
-const MarketplaceBankAccountsPage = MarketplaceBankAccountsComponent;
-export { MarketplaceBankAccountsPage };
+export { MarketplaceBankAccountsComponent as MarketplaceBankAccountsPage };

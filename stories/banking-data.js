@@ -310,6 +310,8 @@ export const country = {
 };
 
 export const translation = {
+	'Banking description':
+		'<div style="color: white;">Banking description here <br><br> cool <ul><li>item</li><li>item</li></ul></div>',
 	country_details:
 		'<div style="color: white;">Country Details here <br><br> cool country details</div>',
 	introduction:

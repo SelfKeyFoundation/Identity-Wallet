@@ -135,13 +135,15 @@ export const BankingCountryTab = withStyles(styles)(({ classes, country, jurisdi
 						/>
 					</div>
 				</Grid>
-				<div className={classes.countryInfo}>
-					<div
-						dangerouslySetInnerHTML={{
-							__html: sanitize(jurisdiction['Country Details'])
-						}}
-					/>
-				</div>
+				{jurisdiction && (
+					<div className={classes.countryInfo}>
+						<div
+							dangerouslySetInnerHTML={{
+								__html: sanitize(jurisdiction['Country Details'])
+							}}
+						/>
+					</div>
+				)}
 			</React.Fragment>
 		)}
 	</div>
