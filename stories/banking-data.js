@@ -11,11 +11,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
-		accountaccountType: 'personal',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'personal',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 2,
@@ -29,11 +29,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
-		accountaccountType: 'personal',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'personal',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 3,
@@ -47,11 +47,11 @@ export const bankingOffers = [
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
-		accountaccountType: 'personal',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'personal',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 4,
@@ -65,11 +65,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: true,
 		price: 3500,
-		accountaccountType: 'personal',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'personal',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 5,
@@ -83,11 +83,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 200,
-		accountaccountType: 'personal',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'personal',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 
 	{
@@ -102,11 +102,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
-		accountaccountType: 'business',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'business',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 7,
@@ -118,11 +118,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
-		accountaccountType: 'business',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'business',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 8,
@@ -136,11 +136,11 @@ export const bankingOffers = [
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
-		accountaccountType: 'business',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'business',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 9,
@@ -154,11 +154,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: true,
 		price: 3500,
-		accountaccountType: 'business',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'business',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 10,
@@ -172,11 +172,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 200,
-		accountaccountType: 'business',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'business',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 
 	{
@@ -191,11 +191,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
-		accountaccountType: 'private',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'private',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 12,
@@ -209,11 +209,11 @@ export const bankingOffers = [
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
-		accountaccountType: 'private',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		accountType: 'private',
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 13,
@@ -225,7 +225,8 @@ export const bankingOffers = [
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
-		accountType: 'private'
+		accountType: 'private',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 14,
@@ -240,10 +241,10 @@ export const bankingOffers = [
 		personalVisitRequired: true,
 		price: 3500,
 		accountType: 'private',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	},
 	{
 		id: 15,
@@ -258,10 +259,10 @@ export const bankingOffers = [
 		personalVisitRequired: false,
 		price: 200,
 		accountType: 'private',
-		currencies: 'USD, SGD, CAD',
-		cards: 'Mastercard, Visa',
-		onlineBanking: 'Yes',
-		avgOpenTime: '1 Month'
+		currencies: ['USD, SGD, CAD'],
+		cards: ['Mastercard, Visa'],
+		avgOpenTime: '1 Month',
+		onlineBanking: ['Internet Home Banking']
 	}
 ];
 
@@ -310,12 +311,13 @@ export const country = {
 };
 
 export const translation = {
-	'Banking description':
+	introText:
 		'<div style="color: white;">Banking description here <br><br> cool <ul><li>item</li><li>item</li></ul></div>',
-	country_details:
+	countryDetails:
 		'<div style="color: white;">Country Details here <br><br> cool country details</div>',
-	introduction:
-		'<div style="color: white;">Country Description here <br><br> cool country introduction</div>'
+	introduction: '<div style="color: white;">Description here <br><br> cool introduction</div>'
 };
 
-export const htmlServices = "<div style='color:white;'>Services text <br><br> here</div>";
+export const htmlServices = [
+	{ onboarding: "<div style='color:white;'>Services text <br><br> here</div>" }
+];

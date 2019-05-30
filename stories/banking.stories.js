@@ -19,7 +19,10 @@ import BankingDetailsPageTabs from '../src/renderer/marketplace/bank-accounts/de
 import OptionSelection from '../src/renderer/marketplace/bank-accounts/details/option-selection';
 
 const KEY_RATE = 1 / 1000;
-const options = [{ ...bankingOffers[0], name: 'CityBank' }, { ...bankingOffers[1], name: 'HSBC' }];
+const options = [
+	{ ...bankingOffers[0], accountTitle: 'CityBank' },
+	{ ...bankingOffers[1], accountTitle: 'HSBC' }
+];
 
 storiesOf('Banking', module)
 	.add('Offers Table', () => (
@@ -147,11 +150,12 @@ storiesOf('Banking/BankingApplicationButton', module)
 storiesOf('Banking/Tab Content', module)
 	.add('types', () => (
 		<BankingTypesTab
-			options={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			banks={bankingOffers.filter(offer => offer.countryCode === 'hk')}
+			accountType={translation}
 			region="Hong Kong"
 		/>
 	))
-	.add('description', () => <BankingDescriptionTab jurisdiction={translation} />)
+	.add('description', () => <BankingDescriptionTab accountType={translation} />)
 	.add('country', () => (
 		<BankingCountryTab
 			countryCode="us"
@@ -161,7 +165,7 @@ storiesOf('Banking/Tab Content', module)
 		/>
 	))
 	.add('country loading', () => <BankingCountryTab />)
-	.add('services', () => <BankingServicesTab htmlServices={htmlServices} />);
+	.add('services', () => <BankingServicesTab banks={htmlServices} />);
 
 storiesOf('Banking/AccountOptions', module)
 	.add('default', () => <BankingAccountOption account={bankingOffers[0]} title="option 1" />)
@@ -190,7 +194,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('description', () => (
 		<BankingDetailsPageTabs
 			tab="description"
-			jurisdiction={translation}
+			accountType={translation}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
@@ -207,7 +211,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('services', () => (
 		<BankingDetailsPageTabs
 			tab="services"
-			htmlServices={htmlServices}
+			banks={htmlServices}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	));
@@ -334,7 +338,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
-			jurisdiction={translation}
+			accountType={translation}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
@@ -350,7 +354,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
-			htmlServices={htmlServices}
+			banks={htmlServices}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}

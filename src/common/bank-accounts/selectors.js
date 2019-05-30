@@ -50,7 +50,7 @@ export const bankAccountsSelectors = {
 			return b;
 		});
 	},
-	getBankByAccountCode(state, accountCode) {
+	getTypeByAccountCode(state, accountCode) {
 		const banks = this.getMainBankAccounts(state);
 		return banks.find(b => b.accountCode === accountCode);
 	},
@@ -67,7 +67,7 @@ export const bankAccountsSelectors = {
 	},
 	getDetailsByAccountCode(state, accountCode) {
 		const details = this.getDetails(state);
-		return details.find(c => c.accountCode === accountCode);
+		return details.filter(c => c.accountCode === accountCode);
 	}
 };
 

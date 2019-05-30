@@ -19,10 +19,10 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	async componentDidMount() {
-		const { rpShouldUpdate, bankAccount, country } = this.props;
+		const { rpShouldUpdate, accountType, country } = this.props;
 		const notAuthenticated = false;
 
-		if (!bankAccount) {
+		if (!accountType) {
 			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
 		}
 
@@ -45,37 +45,36 @@ class BankAccountsDetailContainer extends Component {
 
 	onTabChange = tab => this.setState({ tab });
 
-	buildResumeData = () => {
-		// FIXME: replace this with fields from bankDetails when API data is ready
+	buildResumeData = banks => {
 		return [
 			[
 				{
-					name: 'Min. Avg. Balance',
-					value: 'SGD 10,000',
+					name: 'Min. Initial Deposit',
+					value: banks[0].minInitialDeposit,
 					highlighted: true
 				},
 				{
-					name: 'Monthly Min. Avg, Balance',
-					value: 'SGD 5,000',
+					name: 'Min. Monthly Balance',
+					value: banks[0].minMonthlyBalance,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Personal Visit Required',
-					value: 'yes',
+					value: banks[0].personalVisitRequired ? 'Yes' : 'No',
 					highlighted: true
 				},
 				{
 					name: 'Time to open',
-					value: '2-4 weeks',
+					value: banks[0].timeToOpen,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Cards',
-					value: ['Debit Card (SG)', 'Credit Card (USD)'],
+					value: banks[0].cards.join(' '),
 					highlighted: true
 				}
 			]
@@ -83,26 +82,20 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	render() {
-		const {
-			bankAccount,
-			bankDetails,
-			keyRate,
-			jurisdiction,
-			kycRequirements,
-			country
-		} = this.props;
+		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 
 		return (
 			<BankingDetailsPage
+				accountType={accountType}
 				country={country}
-				countryCode={bankAccount.countryCode}
-				price="1500"
+				countryCode={accountType.countryCode}
+				price={accountType.price}
 				tab={this.state.tab}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
-				region={bankAccount.region}
-				details={bankDetails}
-				resume={this.buildResumeData()}
+				region={accountType.region}
+				banks={banks}
+				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
@@ -123,8 +116,8 @@ const mapStateToProps = (state, props) => {
 	const notAuthenticated = false;
 
 	return {
-		bankAccount: bankAccountsSelectors.getBankByAccountCode(state, accountCode),
-		bankDetails: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
+		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
+		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
 		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
 		isLoading: bankAccountsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
