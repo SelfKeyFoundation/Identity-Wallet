@@ -16,18 +16,36 @@ import BankingCountryTab from '../src/renderer/marketplace/bank-accounts/details
 import BankingServicesTab from '../src/renderer/marketplace/bank-accounts/details/details-services-tab';
 import BankingAccountOption from '../src/renderer/marketplace/bank-accounts/details/account-option';
 import BankingDetailsPageTabs from '../src/renderer/marketplace/bank-accounts/details/details-tabs';
+import OptionSelection from '../src/renderer/marketplace/bank-accounts/details/option-selection';
 
 const KEY_RATE = 1 / 1000;
+const options = [{ ...bankingOffers[0], name: 'CityBank' }, { ...bankingOffers[1], name: 'HSBC' }];
 
-storiesOf('Banking', module).add('Offers Table', () => (
-	<div style={{ width: '1140px' }}>
-		<BankingOffersTable
-			keyRate={KEY_RATE}
-			data={bankingOffers}
-			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
-		/>
-	</div>
-));
+storiesOf('Banking', module)
+	.add('Offers Table', () => (
+		<div style={{ width: '1140px' }}>
+			<BankingOffersTable
+				keyRate={KEY_RATE}
+				data={bankingOffers}
+				onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
+			/>
+		</div>
+	))
+	.add('OptionSelection', () => (
+		<div style={{ width: '1140px' }}>
+			<OptionSelection
+				title={'Choose Bank Option: US'}
+				description1={
+					'Please, choose a preffered bank and an account type to continue with the process. Make sure to check whether you fulfill the requirements below and whether you are required or not to make a personal visit to the banker to finalize the account opening.'
+				}
+				description2={
+					'Selecting a preferred option does not guarantee opening an account with that specific bank. We start the process with your option first, but if you are not eligible for that specific bank we will suggest another bank from those available in the specific jurisdiction.'
+				}
+				options={options}
+				countryCode="US"
+			/>
+		</div>
+	));
 
 storiesOf('Banking/Account Type Tabs', module)
 	.add('personal', () => (
@@ -147,6 +165,12 @@ storiesOf('Banking/Tab Content', module)
 
 storiesOf('Banking/AccountOptions', module)
 	.add('default', () => <BankingAccountOption account={bankingOffers[0]} title="option 1" />)
+	.add('withOptions', () => (
+		<BankingAccountOption
+			account={{ ...bankingOffers[0], name: 'CityBank' }}
+			title="Option 1"
+		/>
+	))
 	.add('open', () => (
 		<BankingAccountOption account={bankingOffers[0]} title="option 1" isOpen={true} />
 	));

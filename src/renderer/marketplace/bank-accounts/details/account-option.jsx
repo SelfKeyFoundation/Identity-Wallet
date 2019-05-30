@@ -6,7 +6,8 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	ExpansionPanel,
-	ExpansionPanelSummary
+	ExpansionPanelSummary,
+	Radio
 } from '@material-ui/core';
 import { AttributesTable, Alert } from '../../../common';
 import { typography } from 'selfkey-ui';
@@ -21,11 +22,6 @@ const styles = theme => ({
 	li: {
 		marginBottom: '20px'
 	},
-	panelSummary: {
-		'& div:first-child': {
-			flexDirection: 'column'
-		}
-	},
 	panelHeaderText: {
 		marginRight: '40px'
 	},
@@ -38,7 +34,8 @@ const styles = theme => ({
 		textTransform: 'capitalize'
 	},
 	panelSummaryItem: {
-		marginBottom: '10px'
+		marginBottom: '10px',
+		width: '100%'
 	},
 	bold: {
 		fontWeight: 600
@@ -81,6 +78,13 @@ const styles = theme => ({
 	},
 	flexColumn: {
 		flexDirection: 'column'
+	},
+	selectionSection: {
+		borderColor: '#384656',
+		borderRadius: '5px 0 0 5px',
+		borderStyle: 'solid',
+		borderWidth: '1px 0px 1px 1px',
+		padding: '27px 27px 28px'
 	}
 });
 
@@ -107,7 +111,7 @@ const ExtraKYCRequirements = withStyles(styles)(({ classes, text }) => (
 ));
 
 export const BankingAccountOption = withStyles(styles)(
-	({ classes, account, isOpen, title, toggleOpen }) => {
+	({ classes, account, isOpen, title, toggleOpen, onSelectOption, selectedValue }) => {
 		const accountOptions = [
 			{
 				name: 'Type of Account:',
@@ -145,71 +149,117 @@ export const BankingAccountOption = withStyles(styles)(
 			}
 		];
 		return (
-			<ExpansionPanel expanded={isOpen} onChange={(e, expanded) => toggleOpen(expanded)}>
-				<ExpansionPanelSummary
-					expandIcon={<ExpandLessIcon />}
-					className={classes.panelSummary}
-				>
-					<Grid
-						container
-						direction="row"
-						justify="flex-start"
-						alignItems="baseline"
-						className={classes.panelSummaryItem}
+			<Grid container direction="row" justify="flex-start" alignItems="unset" spacing={0}>
+				{account.name && (
+					<Grid item xs={1} className={classes.selectionSection}>
+						<Radio
+							checked={selectedValue === account.name}
+							onChange={onSelectOption}
+							value={account.name}
+							name="radio-button-option"
+							aria-label={account.name}
+						/>
+					</Grid>
+				)}
+
+				<Grid item xs={11}>
+					<ExpansionPanel
+						expanded={isOpen}
+						onChange={(e, expanded) => toggleOpen(expanded)}
+						style={{ borderRadius: '0 4px 4px 0' }}
 					>
-						<Typography variant="h2">{title}</Typography>
-					</Grid>
-					<Grid container direction="row" justify="flex-start" alignItems="baseline">
-						<Grid item className={classes.panelHeaderText}>
-							<span className={classes.title}>Min Balance:</span>
-							<span className={classes.headerText}>{account.minDepositCurrency}</span>
-						</Grid>
-						<Grid item>
-							<span className={classes.title}>Personal Visit Required:</span>
-							<span className={classes.headerText}>
-								{account.personalVisit ? 'Yes' : 'No'}
-							</span>
-						</Grid>
-					</Grid>
-				</ExpansionPanelSummary>
-				<Divider />
-				<ExpansionPanelDetails className={classes.flexColumn}>
-					<br />
-					<Grid container spacing={32}>
-						<Grid item xs>
-							<AttributesTable title="Account" attributes={accountOptions} />
-						</Grid>
-
-						<Grid item xs>
-							<AttributesTable title="Account Opening" attributes={openingOptions} />
-						</Grid>
-					</Grid>
-
-					<Grid item>
-						<Grid container direction="column" className={classes.eligibility}>
-							<Grid item>
-								<Typography variant="h2">Eligibility</Typography>
+						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+							<Grid container direction="column" spacing={8}>
+								<Grid item>
+									<Grid
+										container
+										direction="row"
+										justify="flex-start"
+										alignItems="baseline"
+										spacing={8}
+									>
+										<Grid item>
+											<Typography variant="h2">{title}</Typography>
+										</Grid>
+										{account.name && (
+											<Grid item>
+												<Typography variant="subheading">
+													{' '}
+													- {account.name}
+												</Typography>
+											</Grid>
+										)}
+									</Grid>
+								</Grid>
+								<Grid item>
+									<Grid
+										container
+										direction="row"
+										justify="flex-start"
+										alignItems="baseline"
+									>
+										<Grid item className={classes.panelHeaderText}>
+											<span className={classes.title}>Min Balance:</span>
+											<span className={classes.headerText}>
+												{account.minDepositCurrency}
+											</span>
+										</Grid>
+										<Grid item>
+											<span className={classes.title}>
+												Personal Visit Required:
+											</span>
+											<span className={classes.headerText}>
+												{account.personalVisit ? 'Yes' : 'No'}
+											</span>
+										</Grid>
+									</Grid>
+								</Grid>
 							</Grid>
-							<br />
-							<Grid item className={classes.eligibilityGrid}>
-								<Typography variant="body2">
-									{account.eligibilityExpanded}
-								</Typography>
-							</Grid>
-							<Alert type="warning" classname={classes.alert}>
-								Please make sure you understand the bank requirements and that you
-								are able/willing to fulfill them before placing your order.
-							</Alert>
-						</Grid>
-					</Grid>
-					<Grid item>
+						</ExpansionPanelSummary>
 						<Divider />
-					</Grid>
-					<Grid item>
-						<ExtraKYCRequirements />
-					</Grid>
-				</ExpansionPanelDetails>
-			</ExpansionPanel>
+						<ExpansionPanelDetails className={classes.flexColumn}>
+							<br />
+							<Grid container spacing={32}>
+								<Grid item xs>
+									<AttributesTable title="Account" attributes={accountOptions} />
+								</Grid>
+
+								<Grid item xs>
+									<AttributesTable
+										title="Account Opening"
+										attributes={openingOptions}
+									/>
+								</Grid>
+							</Grid>
+
+							<Grid item>
+								<Grid container direction="column" className={classes.eligibility}>
+									<Grid item>
+										<Typography variant="h2">Eligibility</Typography>
+									</Grid>
+									<br />
+									<Grid item className={classes.eligibilityGrid}>
+										<Typography variant="body2">
+											{account.eligibilityExpanded}
+										</Typography>
+									</Grid>
+									<Alert type="warning" classname={classes.alert}>
+										Please make sure you understand the bank requirements and
+										that you are able/willing to fulfill them before placing
+										your order.
+									</Alert>
+								</Grid>
+							</Grid>
+							<Grid item>
+								<Divider />
+							</Grid>
+							<Grid item>
+								<ExtraKYCRequirements />
+							</Grid>
+						</ExpansionPanelDetails>
+					</ExpansionPanel>
+				</Grid>
+			</Grid>
 		);
 	}
 );
