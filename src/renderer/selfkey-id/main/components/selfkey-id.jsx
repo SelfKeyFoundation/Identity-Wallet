@@ -33,8 +33,8 @@ class SelfkeyIdComponent extends Component {
 	async componentDidMount() {
 		const { wallet, dispatch, rpShouldUpdate, rp } = this.props;
 		const tabValue = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).tabValue;
-		const afterAuthRoute = `/main/selfkeyId?tabValue=1`;
-		const cancelRoute = `/main/selfkeyId?tabValue=1`;
+		const afterAuthRoute = `/main/selfkeyId?tabValue=0`;
+		const cancelRoute = `/main/selfkeyId?tabValue=0`;
 		const authenticate = true;
 
 		if (!wallet.isSetupFinished) {
