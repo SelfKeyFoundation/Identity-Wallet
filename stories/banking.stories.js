@@ -151,12 +151,12 @@ storiesOf('Banking/Tab Content', module)
 			region="Hong Kong"
 		/>
 	))
-	.add('description', () => <BankingDescriptionTab translation={translation} />)
+	.add('description', () => <BankingDescriptionTab jurisdiction={translation} />)
 	.add('country', () => (
 		<BankingCountryTab
 			countryCode="us"
 			country={country}
-			translation={translation}
+			jurisdiction={translation}
 			loadCountryAction={action('load country')}
 		/>
 	))
@@ -190,7 +190,7 @@ storiesOf('Banking/Tabs Selector', module)
 	.add('description', () => (
 		<BankingDetailsPageTabs
 			tab="description"
-			translation={translation}
+			jurisdiction={translation}
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
 		/>
 	))
@@ -198,7 +198,7 @@ storiesOf('Banking/Tabs Selector', module)
 		<BankingDetailsPageTabs
 			countryCode="us"
 			country={country}
-			translation={translation}
+			jurisdiction={translation}
 			loadCountryAction={action('load country')}
 			tab="country"
 			onTabChange={linkTo('Banking/Tabs Selector', tab => tab)}
@@ -334,7 +334,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
-			translation={translation}
+			jurisdiction={translation}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}
@@ -367,7 +367,7 @@ storiesOf('Banking/BankingDetailsPage', module)
 			resume={resume}
 			canOpenBankAccount
 			country={country}
-			translation={translation}
+			jurisdiction={translation}
 			loadCountryAction={action('load country')}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
