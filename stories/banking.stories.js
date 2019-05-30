@@ -95,7 +95,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('personal', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.type === 'personal')}
+			data={bankingOffers.filter(bank => bank.accountType === 'personal')}
 			accountType="personal"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
@@ -105,7 +105,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('corporate', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.type === 'business')}
+			data={bankingOffers.filter(bank => bank.accountType === 'business')}
 			accountType="corporate"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
@@ -115,7 +115,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('private', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.type === 'private')}
+			data={bankingOffers.filter(bank => bank.accountType === 'private')}
 			accountType="private"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}

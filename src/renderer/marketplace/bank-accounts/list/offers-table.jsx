@@ -151,10 +151,10 @@ const BankingOffersTable = withStyles(styles)(
 									bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TagTableCell>
 							<TableCell className={classes.personalVisitCell}>
-								{bank.personalVisit ? 'Required' : 'No'}
+								{bank.personalVisitRequired ? 'Required' : 'Remote'}
 							</TableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={bank.Price} rate={keyRate} />
+								<ProgramPrice label="$" price={bank.price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span onClick={() => onDetails(bank)}>Details</span>
