@@ -8,10 +8,11 @@ const styles = theme => ({
 	}
 });
 
-export const PageLoading = withStyles(styles)(({ classes }) => (
+const PageLoading = withStyles(styles)(({ classes }) => (
 	<Grid container justify="center" alignItems="center">
 		<CircularProgress size={50} className={classes.loading} />
 	</Grid>
 ));
 
 export default PageLoading;
+export { PageLoading };

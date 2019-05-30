@@ -13,7 +13,9 @@ export class Identity {
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
-		this.did = wallet.did ? `did:selfkey:${wallet.did}` : `did:eth:${this.address}`;
+		this.did = wallet.did
+			? `did:selfkey:${wallet.did}`
+			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 
@@ -36,6 +38,9 @@ export class Identity {
 				return this.publicKey;
 			});
 		}
+	}
+	getKeyId() {
+		return `${this.did}#keys-1`;
 	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {

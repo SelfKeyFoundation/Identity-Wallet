@@ -285,6 +285,14 @@ const renderPrivacyPolicyText = ({ classes, vendor, purpose, privacyPolicy, term
 	</Typography>
 );
 
+const renderAgreementText = ({ classes, rpName }) => (
+	<Typography variant="h3">
+		I understand SelfKey Vault will pass this information for <b>Far Horizon Capital Inc</b>,{' '}
+		that will provide {rpName} services in Singapore at my request and will communicate with me{' '}
+		at my submitted email address abore.
+	</Typography>
+);
+
 export const CurrentApplicationPopup = withStyles(styles)(
 	({
 		currentApplication,
@@ -305,7 +313,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		error,
 		onSelected,
 		editItem,
-		addItem
+		addItem,
+		existingApplicationId
 	}) => {
 		if (!relyingParty || !currentApplication || !requirements)
 			return (
@@ -315,12 +324,28 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					</div>
 				</Popup>
 			);
-		const title = currentApplication.title || `KYC checklist: ${relyingParty.name || ''}`;
+		let rpName = relyingParty.name.charAt(0).toUpperCase() + relyingParty.name.slice(1);
+		let title = currentApplication.title || `KYC checklist: ${rpName || ''}`;
 		// const description = currentApplication.description || `${relyingParty.description || ''}`;
-		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 
 		const purpose = agreement;
-		const description = currentApplication.description;
+		let description = currentApplication.description;
+		let agreementText = renderPrivacyPolicyText({
+			classes,
+			vendor,
+			purpose,
+			privacyPolicy,
+			termsOfService
+		});
+		// Add documents to an existing application
+		if (existingApplicationId) {
+			title = `${rpName || ''} Checklist: ${currentApplication.title}`;
+			description = 'You are required to reupload or provide the missing informations:';
+			agreement = true;
+			agreementText = renderAgreementText({ classes, rpName });
+		}
+
+		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 
 		return (
 			<Popup open={open} text={title} closeAction={onClose}>
@@ -347,13 +372,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					{agreement ? (
 						<Grid item>
 							<KycAgreement
-								text={renderPrivacyPolicyText({
-									classes,
-									vendor,
-									purpose,
-									privacyPolicy,
-									termsOfService
-								})}
+								text={agreementText}
 								value={agreementValue}
 								error={agreementError}
 								onChange={onAgreementChange}

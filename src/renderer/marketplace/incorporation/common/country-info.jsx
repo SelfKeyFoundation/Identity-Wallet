@@ -68,9 +68,6 @@ class IncorporationsCountryInfo extends Component {
 	render() {
 		const { country, classes, translation } = this.props;
 
-		// Troubleshooting log
-		// console.log(country);
-
 		if (!country) {
 			return this.renderLoadingScreen();
 		}
@@ -78,7 +75,7 @@ class IncorporationsCountryInfo extends Component {
 		return (
 			<div>
 				<Typography variant="h1" gutterBottom className={classes.countryName}>
-					{country[0].name}
+					{country.name}
 				</Typography>
 				<Grid container justify="flex-start" alignItems="flex-start">
 					<div className={classes.details}>
@@ -88,7 +85,7 @@ class IncorporationsCountryInfo extends Component {
 									Country Code
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].code}
+									{country.code}
 								</Typography>
 							</ListItem>
 							<ListItem>
@@ -96,7 +93,7 @@ class IncorporationsCountryInfo extends Component {
 									Area
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].areaInSqKm} km&sup2;
+									{country.areaInSqKm} km&sup2;
 								</Typography>
 							</ListItem>
 							<ListItem>
@@ -104,7 +101,7 @@ class IncorporationsCountryInfo extends Component {
 									Capital
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].capital}
+									{country.capital}
 								</Typography>
 							</ListItem>
 							<ListItem>
@@ -112,7 +109,7 @@ class IncorporationsCountryInfo extends Component {
 									Continent
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].continentName}
+									{country.continentName}
 								</Typography>
 							</ListItem>
 							<ListItem>
@@ -120,7 +117,7 @@ class IncorporationsCountryInfo extends Component {
 									Currency
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].currencyCode}
+									{country.currencyCode}
 								</Typography>
 							</ListItem>
 							<ListItem>
@@ -128,7 +125,7 @@ class IncorporationsCountryInfo extends Component {
 									Population
 								</Typography>
 								<Typography variant="h5" gutterBottom className="value">
-									{country[0].population}
+									{country.population}
 								</Typography>
 							</ListItem>
 						</List>
@@ -136,7 +133,7 @@ class IncorporationsCountryInfo extends Component {
 					<div className={classes.flag}>
 						<span
 							style={{ display: 'block', fontSize: '200px' }}
-							className={`flag-icon flag-icon-${country[0].code.toLowerCase()}`}
+							className={`flag-icon flag-icon-${country.code.toLowerCase()}`}
 						/>
 					</div>
 				</Grid>
@@ -155,7 +152,7 @@ class IncorporationsCountryInfo extends Component {
 IncorporationsCountryInfo.propTypes = {
 	countryCode: PropTypes.string,
 	isLoading: PropTypes.bool,
-	country: PropTypes.any
+	country: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {

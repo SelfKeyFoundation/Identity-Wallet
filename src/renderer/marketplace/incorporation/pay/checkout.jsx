@@ -6,16 +6,14 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { incorporationsSelectors } from 'common/incorporations';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon } from 'selfkey-ui';
 import { pricesSelectors } from 'common/prices';
 import { getIncorporationPrice } from '../common';
-import { sanitize, FlagCountryName } from '../../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import EthUnits from 'common/utils/eth-units';
+import PaymentCheckout from '../../common/payment-checkout';
 
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -336,7 +334,7 @@ export class IncorporationCheckout extends React.Component {
 				templateId,
 				this.getPayRoute(),
 				this.getCancelRoute(),
-				`Incorporation Checklist: ${program.Region}`,
+				program.Region,
 				`You are about to begin the incorporation process in ${
 					program.Region
 				}. Please double check your
@@ -352,200 +350,26 @@ export class IncorporationCheckout extends React.Component {
 	};
 
 	render() {
-		const { classes, program } = this.props;
-		const { countryCode } = this.props.match.params;
-		const { price, keyAmount, usdFee, ethFee } = this.getPaymentParameters();
-		const options = this.getProgramOptions(program.wallet_options);
-
 		return (
-			<div className={classes.container}>
-				<CloseButtonIcon onClick={this.onBackClick} className={classes.closeIcon} />
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.containerHeader}
-				>
-					<div>
-						<FlagCountryName code={countryCode} />
-					</div>
-					<Typography variant="body2" gutterBottom className="region">
-						Pay Incorporation Fee: {program.Region}
-					</Typography>
-				</Grid>
-				<div className={classes.contentContainer}>
-					<Grid
-						container
-						justify="flex-start"
-						alignItems="center"
-						className={classes.content}
-					>
-						<div className={classes.whatYouGet}>
-							<Typography variant="body2" gutterBottom>
-								What you get
-							</Typography>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-								spacing={0}
-							>
-								<div
-									className={classes.description}
-									dangerouslySetInnerHTML={{
-										__html: sanitize(program.wallet_description)
-									}}
-								/>
-								<div className={classes.descriptionHelp}>
-									<p>Time to form: {program['Time to form (weeks)']} week(s).</p>
-									<p>
-										All our incorporation services include a yearly consulting
-										session, a dedicated account manager and access to our
-										global network of trusted business services, including
-										introductions to accountants, financial, tax and legal
-										advisors at no cost.
-									</p>
-								</div>
-							</Grid>
-						</div>
-						<div className={classes.howItWorks}>
-							<Typography variant="body2" gutterBottom>
-								How the service works
-							</Typography>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-								spacing={0}
-							>
-								<div className={classes.howItWorksBox}>
-									<header>
-										<span>1</span>
-										<Typography variant="h4" gutterBottom>
-											Provide initial documents
-										</Typography>
-									</header>
-									<div>
-										<Typography variant="h3" gutterBottom>
-											You will be required to provide a few basic informations
-											about yourself like full name and email. This will be
-											done through SelfKey ID Wallet.
-										</Typography>
-									</div>
-								</div>
-								<div className={classes.howItWorksBox}>
-									<header>
-										<span>2</span>
-										<Typography variant="h4" gutterBottom>
-											KYC Process
-										</Typography>
-									</header>
-									<div>
-										<Typography variant="h3" gutterBottom>
-											You will undergo a standard KYC process and our team
-											will get in touch with you to make sure we have all the
-											information needed.
-										</Typography>
-									</div>
-								</div>
-								<div className={classes.howItWorksBox}>
-									<header>
-										<span>3</span>
-										<Typography variant="h4" gutterBottom>
-											Get final documents
-										</Typography>
-									</header>
-									<div>
-										<Typography variant="h3" gutterBottom>
-											Once the incorporations process is done you will receive
-											all the relevant documents, for your new company, on
-											your email.
-										</Typography>
-									</div>
-								</div>
-							</Grid>
-						</div>
-						<div className={classes.serviceCost}>
-							<Typography variant="body2" gutterBottom>
-								Service Costs
-							</Typography>
-
-							<div className={classes.priceTable}>
-								{options.map(option => (
-									<div key={option.id} className={classes.priceRow}>
-										<Grid
-											container
-											direction="row"
-											justify="flex-start"
-											alignItems="center"
-											spacing={0}
-										>
-											<div className="rowItem">{option.description}</div>
-											<div className="rowItem time">{option.notes}</div>
-											<div className="rowItem price">
-												{option.price && (
-													<React.Fragment>
-														${option.price.toLocaleString()}
-													</React.Fragment>
-												)}
-											</div>
-										</Grid>
-									</div>
-								))}
-								<div className={classes.rowSeparator} />
-								<div className={classes.priceRow}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={0}
-									>
-										<div className="rowItem">Cost</div>
-										<div className="rowItem time" />
-										<div className="rowItem price">
-											Total: ${price.toLocaleString()}
-											<div className="time">
-												{keyAmount.toLocaleString()} KEY
-											</div>
-										</div>
-									</Grid>
-								</div>
-								<div className={classes.priceRow}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={0}
-									>
-										<div className="rowItem transactionFee">
-											Network Transaction Fee
-										</div>
-										<div className="rowItem time" />
-										<div className="rowItem price">
-											${usdFee.toLocaleString()}
-											<div className="time">
-												{ethFee.toLocaleString()} ETH
-											</div>
-										</div>
-									</Grid>
-								</div>
-							</div>
-						</div>
-						<div className={classes.payButton}>
-							<Button variant="contained" size="large" onClick={this.onStartClick}>
-								Start Incorporation
-							</Button>
-							<Button variant="outlined" size="large" onClick={this.onBackClick}>
-								Cancel
-							</Button>
-						</div>
-					</Grid>
-				</div>
-			</div>
+			<PaymentCheckout
+				{...this.props}
+				title={`Pay Incorporation Fee: ${this.props.program.Region}`}
+				countryCode={this.props.match.params.countryCode}
+				{...this.getPaymentParameters()}
+				options={this.getProgramOptions(this.props.program.wallet_options)}
+				onBackClick={this.onBackClick}
+				onStartClick={this.onStartClick}
+				startButtonText={'Start Incorporation'}
+				initialDocsText={
+					'You will be required to provide a few basic informations about yourself like full name and email. This will be done through SelfKey ID Wallet.'
+				}
+				kycProcessText={
+					'You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.'
+				}
+				getFinalDocsText={
+					'Once the incorporations process is done you will receive all the relevant documents, for your new company, on your email.'
+				}
+			/>
 		);
 	}
 }

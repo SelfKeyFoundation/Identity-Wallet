@@ -29,9 +29,24 @@ function appStart() {
 			process.env.OSENV === 'linux' ||
 			process.env.OSENV === 'circle-linux'
 		) {
-			resolve(app.start());
+			app.start()
+				.then(
+					delay(15000)
+						.then(() => app.client.switchTab())
+						.then(resolve)
+				)
+				.catch(reject);
 		} else {
-			init().then(() => resolve(app.start()));
+			init().then(() =>
+				app
+					.start()
+					.then(
+						delay(15000)
+							.then(() => app.client.switchTab())
+							.then(resolve)
+					)
+					.catch(reject)
+			);
 		}
 	});
 }

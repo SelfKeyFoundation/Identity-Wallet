@@ -270,31 +270,31 @@ export const resume = [
 		{
 			name: 'Min. Avg. Balance',
 			value: 'SGD 10,000',
-			highlited: true
+			highlighted: true
 		},
 		{
 			name: 'Monthly Min. Avg, Balance',
 			value: 'SGD 5,000',
-			highlited: true
+			highlighted: true
 		}
 	],
 	[
 		{
 			name: 'Personal Visit Required',
 			value: 'yes',
-			highlited: true
+			highlighted: true
 		},
 		{
 			name: 'Time to open',
 			value: '2-4 weeks',
-			highlited: true
+			highlighted: true
 		}
 	],
 	[
 		{
 			name: 'Cards',
 			value: ['Debit Card (SG)', 'Credit Card (USD)'],
-			highlited: true
+			highlighted: true
 		}
 	]
 ];
@@ -310,6 +310,8 @@ export const country = {
 };
 
 export const translation = {
+	'Banking description':
+		'<div style="color: white;">Banking description here <br><br> cool <ul><li>item</li><li>item</li></ul></div>',
 	country_details:
 		'<div style="color: white;">Country Details here <br><br> cool country details</div>',
 	introduction:

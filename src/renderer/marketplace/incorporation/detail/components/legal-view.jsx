@@ -177,8 +177,6 @@ class IncorporationsLegalView extends Component {
 		const { classes, data } = this.props;
 
 		const index = data.LLC ? 3 : 0;
-		// Troubleshooting log
-		// console.log(data);
 
 		return (
 			<Grid container justify="flex-start" alignItems="flex-start">

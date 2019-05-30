@@ -53,6 +53,9 @@ const styles = theme => ({
 		width: '245px'
 	},
 	eligibilityCellBody: {
+		alignItems: 'center',
+		display: 'flex',
+		flexWrap: 'wrap',
 		paddingTop: '15px',
 		paddingBottom: '15px',
 		whiteSpace: 'normal',
@@ -89,7 +92,7 @@ const styles = theme => ({
 	}
 });
 
-export const BankingOffersTable = withStyles(styles)(
+const BankingOffersTable = withStyles(styles)(
 	({ classes, keyRate, data = [], onDetails, className }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
@@ -165,3 +168,4 @@ export const BankingOffersTable = withStyles(styles)(
 );
 
 export default BankingOffersTable;
+export { BankingOffersTable };

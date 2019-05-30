@@ -50,6 +50,14 @@ const common = {
 	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
 	depositPriceOverride: DEPOSIT_PRICE_OVERRIDE,
 
+	relyingPartyInfo: {
+		incorporations: {
+			name: 'Far Horizon Capital Inc',
+			email: 'support@flagtheory.com',
+			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
+		}
+	},
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
