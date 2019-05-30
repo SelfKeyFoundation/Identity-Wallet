@@ -75,4 +75,20 @@ describe('Vendor model', () => {
 		all = await Vendor.query();
 		expect(all.length).toBe(2);
 	});
+
+	it('bulkUpsert', async () => {
+		await Vendor.create({ vendorId: 'untouched' });
+		const inserted = await Vendor.bulkAdd([testItem, testItem2]);
+		const upsert = [
+			{ ...inserted[0], name: 'modified' },
+			{ ...inserted[1], name: 'modified2' },
+			{ vendorId: '3' },
+			{ vendorId: '4' }
+		];
+		const results = await Vendor.bulkUpsert(upsert);
+		expect(results.length).toEqual(4);
+		const all = await Vendor.findAll();
+		expect(all.length).toBe(5);
+		expect(all.find(itm => itm.id === inserted[0].id).name).toBe('modified');
+	});
 });

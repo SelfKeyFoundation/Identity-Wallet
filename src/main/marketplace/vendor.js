@@ -19,16 +19,16 @@ export class Vendor extends BaseModel {
 				id: { type: 'integer' },
 				vendorId: { type: 'string' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
-				name: { type: 'string' },
-				description: { type: 'string' },
-				status: { type: 'string', enum: ['active', 'inactive'] },
-				categories: { type: 'array' },
+				name: { type: 'string', default: '' },
+				description: { type: 'string', default: '' },
+				status: { type: 'string', enum: ['active', 'inactive'], default: 'inactive' },
+				categories: { type: 'array', default: [] },
 				inventorySource: { type: 'string', enum: ['selfkey', 'external'] },
 				relyingPartyConfig: { type: 'object', default: {} },
-				privacyPolicy: { type: 'string' },
-				contactEmail: { type: 'string' },
-				did: { type: 'string' },
-				paymentAddress: { type: 'string' }
+				privacyPolicy: { type: 'string', default: '' },
+				contactEmail: { type: 'string', default: '' },
+				did: { type: 'string', default: '' },
+				paymentAddress: { type: 'string', default: '' }
 			}
 		};
 	}
@@ -50,11 +50,23 @@ export class Vendor extends BaseModel {
 	}
 
 	static bulkEdit(items) {
+		items = items.map(item => ({ ...item, env }));
 		return this.updateMany(items);
 	}
 
 	static bulkAdd(items) {
+		items = items.map(item => ({ ...item, env }));
 		return this.insertMany(items);
+	}
+
+	static async bulkUpsert(items) {
+		const insert = items.filter(item => !item.hasOwnProperty(this.idColumn));
+		const update = items.filter(item => item.hasOwnProperty(this.idColumn));
+
+		let all = await this.bulkAdd(insert);
+		all = all.concat(await this.bulkEdit(update));
+
+		return this.findAll().whereIn(this.idColumn, all.map(itm => itm[this.idColumn]));
 	}
 }
 

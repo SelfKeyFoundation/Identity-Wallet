@@ -28,7 +28,6 @@ exports.up = async knex => {
 		t.string('name');
 		t.string('description');
 		t.string('status');
-		t.string('relyingPartyConfig').defaultTo('{}');
 		t.string('parentSku');
 		t.string('category');
 		t.string('price');
