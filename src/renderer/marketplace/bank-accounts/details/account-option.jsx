@@ -81,6 +81,7 @@ const styles = theme => ({
 	},
 	selectionSection: {
 		borderColor: '#384656',
+		borderRadius: '5px 0 0 5px',
 		borderStyle: 'solid',
 		borderWidth: '1px 0px 1px 1px',
 		padding: '27px 27px 28px'
