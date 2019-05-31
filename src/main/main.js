@@ -111,6 +111,8 @@ function onReady() {
 					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
+				ctx.vendorSyncJobHandler.registerHandler();
+				ctx.vendorService.start();
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {

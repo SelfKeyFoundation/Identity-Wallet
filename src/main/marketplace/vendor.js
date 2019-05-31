@@ -23,7 +23,11 @@ export class Vendor extends BaseModel {
 				description: { type: 'string', default: '' },
 				status: { type: 'string', enum: ['active', 'inactive'], default: 'inactive' },
 				categories: { type: 'array', default: [] },
-				inventorySource: { type: 'string', enum: ['selfkey', 'external'] },
+				inventorySource: {
+					type: 'string',
+					enum: ['selfkey', 'external'],
+					default: 'selfkey'
+				},
 				relyingPartyConfig: { type: 'object', default: {} },
 				privacyPolicy: { type: 'string', default: '' },
 				contactEmail: { type: 'string', default: '' },

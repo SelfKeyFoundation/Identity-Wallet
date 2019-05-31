@@ -1,5 +1,9 @@
 import { EventEmitter } from 'events';
 
+import { Logger } from 'common/logger';
+
+const log = new Logger('Scheduler Job');
+
 export class SchedulerJob extends EventEmitter {
 	constructor(config, jobHandler) {
 		super();
@@ -7,10 +11,24 @@ export class SchedulerJob extends EventEmitter {
 		this.jobHandler = jobHandler;
 		this.additionalJobs = [];
 	}
-	execute() {
-		return this.jobHandler.execute(this);
+	async execute() {
+		log.info('starting job %s', this.config.category);
+		try {
+			const results = await this.jobHandler.execute(this.config.data, this);
+			return results;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
 	}
 	emitProgress(progress, data) {
+		log.info(
+			'progress on job %s: %d %s %2j',
+			this.config.category,
+			progress,
+			data.message,
+			data
+		);
 		this.emit('progress', progress, data);
 	}
 	hasJobs() {
@@ -18,6 +36,9 @@ export class SchedulerJob extends EventEmitter {
 	}
 	getJobs() {
 		return this.additionalJobs;
+	}
+	addJob(job) {
+		this.additionalJobs.push(job);
 	}
 }
 
