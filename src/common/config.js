@@ -121,7 +121,7 @@ const dev = {
 	},
 	matomoSite: 2,
 	ledgerAddress: '0x24512422cf6ad1c0c465cbf0bbd5155eaa3da634',
-	paymentSplitterAddress: ''
+	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 };
 
 const prod = {
@@ -139,7 +139,7 @@ const prod = {
 	},
 	matomoSite: 1,
 	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e',
-	paymentSplitterAddress: ''
+	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041'
 };
 
 const setupFilesPath = getSetupFilePath();
