@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
 
-class MarketplaceBankAccountsComponent extends Component {
+class MarketplaceBankAccountsPage extends Component {
 	render() {
 		const { path } = this.props.match;
 		return (
@@ -19,4 +19,5 @@ class MarketplaceBankAccountsComponent extends Component {
 	}
 }
 
-export { MarketplaceBankAccountsComponent as MarketplaceBankAccountsPage };
+export default MarketplaceBankAccountsPage;
+export { MarketplaceBankAccountsPage };
