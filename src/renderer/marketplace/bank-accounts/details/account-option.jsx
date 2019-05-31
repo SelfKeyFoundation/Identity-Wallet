@@ -111,41 +111,50 @@ const ExtraKYCRequirements = withStyles(styles)(({ classes, text }) => (
 ));
 
 export const BankingAccountOption = withStyles(styles)(
-	({ classes, account, isOpen, title, toggleOpen, onSelectOption, selectedValue }) => {
+	({
+		classes,
+		account,
+		accountType,
+		isOpen,
+		title,
+		toggleOpen,
+		onSelectOption,
+		selectedValue
+	}) => {
 		const accountOptions = [
 			{
 				name: 'Type of Account:',
-				value: account.type
+				value: accountType.accountType
 			},
 			{
 				name: 'Currencies:',
-				value: account.currencies
+				value: account.currencies ? account.currencies.join(', ') : ''
 			},
 			{
 				name: 'Minimum Deposit Ongoing Balance:',
-				value: `${account.minDeposit} ${account.minDepositCurrency}`
+				value: `${account.minInitialDeposit}`
 			},
 			{
 				name: 'Cards:',
-				value: account.cards
+				value: account.cards ? account.cards.join(', ') : ''
 			},
 			{
 				name: 'Online Banking:',
-				value: account.onlineBanking
+				value: account.onlineBanking ? account.onlineBanking.join(', ') : ''
 			},
 			{
 				name: 'Good for:',
-				value: account.goodFor.join(', ')
+				value: accountType.goodFor ? accountType.goodFor.join(', ') : ''
 			}
 		];
 		const openingOptions = [
 			{
 				name: 'Personal Visit Required:',
-				value: account.personalVisit ? 'Yes' : 'No'
+				value: account.personalVisitRequired ? 'Yes' : 'No'
 			},
 			{
 				name: 'Average time to open:',
-				value: account.avgOpenTime
+				value: account.timeToOpen
 			}
 		];
 		return (
@@ -181,11 +190,11 @@ export const BankingAccountOption = withStyles(styles)(
 										<Grid item>
 											<Typography variant="h2">{title}</Typography>
 										</Grid>
-										{account.name && (
+										{account.accountTitle && (
 											<Grid item>
 												<Typography variant="subheading">
 													{' '}
-													- {account.name}
+													- {account.accountTitle}
 												</Typography>
 											</Grid>
 										)}
@@ -201,7 +210,7 @@ export const BankingAccountOption = withStyles(styles)(
 										<Grid item className={classes.panelHeaderText}>
 											<span className={classes.title}>Min Balance:</span>
 											<span className={classes.headerText}>
-												{account.minDepositCurrency}
+												{account.minInitialDeposit}
 											</span>
 										</Grid>
 										<Grid item>
@@ -209,7 +218,7 @@ export const BankingAccountOption = withStyles(styles)(
 												Personal Visit Required:
 											</span>
 											<span className={classes.headerText}>
-												{account.personalVisit ? 'Yes' : 'No'}
+												{account.personalVisitRequired ? 'Yes' : 'No'}
 											</span>
 										</Grid>
 									</Grid>
@@ -234,13 +243,17 @@ export const BankingAccountOption = withStyles(styles)(
 
 							<Grid item>
 								<Grid container direction="column" className={classes.eligibility}>
+									<Grid item className={classes.eligibilityGrid}>
+										<Typography variant="body2">{account.details}</Typography>
+									</Grid>
+
 									<Grid item>
 										<Typography variant="h2">Eligibility</Typography>
 									</Grid>
 									<br />
 									<Grid item className={classes.eligibilityGrid}>
 										<Typography variant="body2">
-											{account.eligibilityExpanded}
+											{account.eligibility}
 										</Typography>
 									</Grid>
 									<Alert type="warning" classname={classes.alert}>

@@ -9,7 +9,7 @@ import { BankingOffersPage } from './offers-page';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const MARKETPLACE_JURISDICTION_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
+const BANK_ACCOUNTS_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
 class BankAccountsTableContainer extends Component {
 	state = {
@@ -29,22 +29,26 @@ class BankAccountsTableContainer extends Component {
 	onDetailsClick = bank =>
 		this.props.dispatch(
 			push(
-				`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
-					bank.Template_ID
+				`${BANK_ACCOUNTS_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
+					bank.templateId
 				}`
 			)
 		);
 
+	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
+
 	render() {
 		const { isLoading, bankAccounts, keyRate } = this.props;
-		const data = bankAccounts.filter(bank => bank.type === this.state.accountType);
+		const { accountType } = this.state;
+
+		const data = bankAccounts.filter(this.activeBank);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
 				data={data}
 				onBackClick={this.onBackClick}
-				accountType={this.state.accountType}
+				accountType={accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
 				onDetails={this.onDetailsClick}
 				loading={isLoading}
