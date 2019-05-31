@@ -1,20 +1,33 @@
 import config from 'common/config';
 
 const selectPrice = bank => {
-	if (!bank['Price'] && !bank['Test_Price']) return null;
+	if (!bank.price && !bank.testPrice) return null;
 
 	// Check for override ENV variables
 	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-	let price = bank['Price'];
+
+	let price = bank.price;
 
 	if (config.dev) {
-		price = bank['Test_Price'];
+		price = bank.testPrice;
 	} else {
-		if (bank['Active_Test_Price']) {
-			price = bank['Test_Price'];
+		if (bank.activeTestPrice) {
+			price = bank.testPrice;
 		}
 	}
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
+};
+
+const selectTemplate = bank => {
+	if (!bank.templateId && !bank.testTemplateId) return null;
+
+	let templateId = bank.templateId;
+	/*
+	if (config.dev) {
+		templateId = bank.testTemplateId
+	}
+	*/
+	return templateId;
 };
 
 export const bankAccountsSelectors = {
@@ -31,11 +44,13 @@ export const bankAccountsSelectors = {
 		const tree = this.getBankAccounts(state);
 		const data = tree.main.map(bId => tree.mainById[bId]);
 		return data.map(b => {
-			b.Price = selectPrice(b);
+			b.price = selectPrice(b);
+			b.templateId = selectTemplate(b);
+			b.accountType = b.type ? b.type[0].toLowerCase() : null;
 			return b;
 		});
 	},
-	getBankByAccountCode(state, accountCode) {
+	getTypeByAccountCode(state, accountCode) {
 		const banks = this.getMainBankAccounts(state);
 		return banks.find(b => b.accountCode === accountCode);
 	},
@@ -44,7 +59,7 @@ export const bankAccountsSelectors = {
 		return tree.jurisdictions.map(id => tree.jurisdictionsById[id]);
 	},
 	getJurisdictionsByCountryCode(state, countryCode) {
-		return this.getJurisdictions(state).find(c => c['Country Code'] === countryCode);
+		return this.getJurisdictions(state).find(c => c.countryCode === countryCode);
 	},
 	getDetails(state) {
 		const tree = this.getBankAccounts(state);
@@ -52,7 +67,7 @@ export const bankAccountsSelectors = {
 	},
 	getDetailsByAccountCode(state, accountCode) {
 		const details = this.getDetails(state);
-		return details.find(c => c.accountCode === accountCode);
+		return details.filter(c => c.accountCode === accountCode);
 	}
 };
 
