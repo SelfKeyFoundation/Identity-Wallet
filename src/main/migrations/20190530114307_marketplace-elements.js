@@ -39,6 +39,32 @@ exports.up = async knex => {
 		t.integer('updatedAt');
 		t.unique(['sku', 'vendorId', 'env']);
 	});
+	await knex.schema.createTable('marketplace_country', t => {
+		t.increments('id');
+		t.string('code').notNullable();
+		t.string('env');
+		t.string('name');
+		t.string('currencyCode');
+		t.integer('population');
+		t.string('fipsCode');
+		t.string('isoNumeric');
+		t.string('north');
+		t.string('south');
+		t.string('east');
+		t.string('west');
+		t.string('capital');
+		t.string('continentName');
+		t.string('continent');
+		t.string('areaInSqKm');
+		t.string('languages').defaultTo('[]');
+		t.string('isoAlpha3');
+		t.string('geonameId');
+		t.integer('createdAt')
+			.notNullable()
+			.defaultTo(Date.now());
+		t.integer('updatedAt');
+		t.unique(['code', 'env']);
+	});
 };
 
 exports.down = async knex => {};
