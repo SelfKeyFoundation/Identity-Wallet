@@ -1,6 +1,6 @@
 export const INVENTORY_SYNC_JOB = 'inventory-sync-job';
 
-export class VendorSyncJobHandler {
+export class InventorySyncJobHandler {
 	constructor({ schedulerService, inventoryService }) {
 		this.schedulerService = schedulerService;
 		this.inventoryService = inventoryService;
@@ -50,8 +50,10 @@ export class VendorSyncJobHandler {
 		job.emitProgress(25, { message: 'Removing obsolete inventory' });
 		await this.inventoryService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated inventory list' });
-		return this.inventoryService.loadInventory();
+		const inventory = this.inventoryService.loadInventory();
+		job.emitProgress(100, { message: 'Done!' });
+		return inventory;
 	}
 }
 
-export default VendorSyncJobHandler;
+export default InventorySyncJobHandler;

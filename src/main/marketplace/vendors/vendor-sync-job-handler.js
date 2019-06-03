@@ -1,6 +1,7 @@
 import { INVENTORY_SYNC_JOB } from '../inventory/inventory-sync-job-handler';
 
 export const VENDOR_SYNC_JOB = 'vendor-sync-job';
+export const VENDOR_SYNC_JOB_INTERVAL = 10 * 60 * 60 * 1000;
 
 export class VendorSyncJobHandler {
 	constructor({ schedulerService, vendorService }) {
@@ -65,12 +66,17 @@ export class VendorSyncJobHandler {
 				}
 				return acc;
 			}, [])
-			.forEach(src =>
+			.forEach(fetcherName =>
 				job.addJob({
 					category: INVENTORY_SYNC_JOB,
-					data: { src }
+					data: { fetcherName }
 				})
 			);
+		job.addJob({
+			category: VENDOR_SYNC_JOB,
+			at: Date.now() + VENDOR_SYNC_JOB_INTERVAL
+		});
+		job.emitProgress(100, { message: 'Done!' });
 		return vendors;
 	}
 }

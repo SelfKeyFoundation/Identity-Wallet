@@ -1,11 +1,11 @@
-export default [
+export default () => [
 	{
 		sku: 'kyber_network',
 		vendorId: 'kyber_network',
 		name: 'Kyber Network',
 		description:
 			'Kyber Network is a decentralized exchange for cryptocurrencies that focuses on both security and usability. The platform guarantees the liquidity with a novel design that incorporates all market makers or liquidity providers in our exchange. The trade in Kyber Network is fast, easy and happens almost instantly as compared to the 5-10 minutes waiting time on other exchanges. Most importantly, Kyber Network is powered by smart contract, a new technology enabled by the Ethereum blockchain, which allows users to trade without trusting Kyber Network and protects them from hacking incidents. Kyber Network will benefit a wider class of mainstream users who have less technical background and allow them to trade more securely, more efficiently.',
-		status: 'inactive',
+		status: 'active',
 		category: 'exchanges',
 		relyingPartyConfig: {}
 	},
