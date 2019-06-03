@@ -9,11 +9,11 @@ import { BankingOffersPage } from './offers-page';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+const BANK_ACCOUNTS_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
 class BankAccountsTableContainer extends Component {
 	state = {
-		accountType: 'personal',
-		loading: false
+		accountType: 'business'
 	};
 
 	componentDidMount() {
@@ -26,18 +26,29 @@ class BankAccountsTableContainer extends Component {
 
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
-	onDetailsClick = bank => console.log('TODO', bank);
+	onDetailsClick = bank =>
+		this.props.dispatch(
+			push(
+				`${BANK_ACCOUNTS_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
+					bank.templateId
+				}`
+			)
+		);
+
+	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
 
 	render() {
 		const { isLoading, bankAccounts, keyRate } = this.props;
-		const data = bankAccounts.filter(bank => bank.type === this.state.accountType);
+		const { accountType } = this.state;
+
+		const data = bankAccounts.filter(this.activeBank);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
 				data={data}
 				onBackClick={this.onBackClick}
-				accountType={this.state.accountType}
+				accountType={accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
 				onDetails={this.onDetailsClick}
 				loading={isLoading}
@@ -61,4 +72,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const styledComponent = withStyles(styles)(BankAccountsTableContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export default connectedComponent;
+export { connectedComponent as BankAccountsTableContainer };

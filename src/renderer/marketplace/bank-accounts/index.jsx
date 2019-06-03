@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTableContainer from './list';
-// import BankAccountsDetailView from './detail';
+import { BankAccountsTableContainer } from './list/offers-container';
+import { BankAccountsDetailContainer } from './details/details-container';
 
-class MarketplaceBankAccountsComponent extends Component {
+class MarketplaceBankAccountsPage extends Component {
 	render() {
 		const { path } = this.props.match;
-
 		return (
 			<div>
 				<Route exact path={`${path}`} component={BankAccountsTableContainer} />
-				{/*
 				<Route
 					path={`${path}/details/:accountCode/:countryCode/:templateId?`}
-					component={BankAccountsDetailView}
+					component={BankAccountsDetailContainer}
 				/>
-				*/}
 			</div>
 		);
 	}
 }
 
-const MarketplaceBankAccountsPage = MarketplaceBankAccountsComponent;
+export default MarketplaceBankAccountsPage;
 export { MarketplaceBankAccountsPage };

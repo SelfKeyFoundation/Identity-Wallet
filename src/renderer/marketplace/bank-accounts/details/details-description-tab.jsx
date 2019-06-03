@@ -35,14 +35,15 @@ const styles = theme => ({
 	}
 });
 
-export const BankingDescriptionTab = withStyles(styles)(({ classes, translation }) => (
+const BankingDescriptionTab = withStyles(styles)(({ classes, accountType }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(translation.introduction)
+				__html: sanitize(accountType.introText)
 			}}
 		/>
 	</div>
 ));
 
+export { BankingDescriptionTab };
 export default BankingDescriptionTab;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
@@ -67,95 +67,86 @@ const styles = theme => ({
 	}
 });
 
-class BankingCountryTabComponent extends Component {
-	componentDidMount() {
-		if (!this.props.country && this.props.loadCountryAction) {
-			this.props.loadCountryAction(this.props.countryCode);
-		}
-	}
-	render() {
-		const { classes, country, translation } = this.props;
-		return (
-			<div className={classes.tabContainer}>
-				{!country && <PageLoading />}
-				{!!country && (
-					<React.Fragment>
-						<Typography variant="h1" gutterBottom className={classes.countryName}>
-							{country.name}
-						</Typography>
-						<Grid container justify="flex-start" alignItems="flex-start">
-							<div className={classes.details}>
-								<List>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Country Code
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.code}
-										</Typography>
-									</ListItem>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Area
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.areaInSqKm} km&sup2;
-										</Typography>
-									</ListItem>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Capital
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.capital}
-										</Typography>
-									</ListItem>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Continent
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.continentName}
-										</Typography>
-									</ListItem>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Currency
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.currencyCode}
-										</Typography>
-									</ListItem>
-									<ListItem>
-										<Typography variant="h5" gutterBottom>
-											Population
-										</Typography>
-										<Typography variant="h5" gutterBottom className="value">
-											{country.population}
-										</Typography>
-									</ListItem>
-								</List>
-							</div>
-							<div className={classes.flag}>
-								<span
-									style={{ display: 'block', fontSize: '200px' }}
-									className={`flag-icon flag-icon-${country.code.toLowerCase()}`}
-								/>
-							</div>
-						</Grid>
-						<div className={classes.countryInfo}>
-							<div
-								dangerouslySetInnerHTML={{
-									__html: sanitize(translation.country_details)
-								}}
-							/>
-						</div>
-					</React.Fragment>
+export const BankingCountryTab = withStyles(styles)(({ classes, country, jurisdiction }) => (
+	<div className={classes.tabContainer}>
+		{!country && <PageLoading />}
+		{!!country && (
+			<React.Fragment>
+				<Typography variant="h1" gutterBottom className={classes.countryName}>
+					{country.name}
+				</Typography>
+				<Grid container justify="flex-start" alignItems="flex-start">
+					<div className={classes.details}>
+						<List>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Country Code
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.code}
+								</Typography>
+							</ListItem>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Area
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.areaInSqKm} km&sup2;
+								</Typography>
+							</ListItem>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Capital
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.capital}
+								</Typography>
+							</ListItem>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Continent
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.continentName}
+								</Typography>
+							</ListItem>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Currency
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.currencyCode}
+								</Typography>
+							</ListItem>
+							<ListItem>
+								<Typography variant="h5" gutterBottom>
+									Population
+								</Typography>
+								<Typography variant="h5" gutterBottom className="value">
+									{country.population}
+								</Typography>
+							</ListItem>
+						</List>
+					</div>
+					<div className={classes.flag}>
+						<span
+							style={{ display: 'block', fontSize: '200px' }}
+							className={`flag-icon flag-icon-${country.code.toLowerCase()}`}
+						/>
+					</div>
+				</Grid>
+				{jurisdiction && (
+					<div className={classes.countryInfo}>
+						<div
+							dangerouslySetInnerHTML={{
+								__html: sanitize(jurisdiction.countryDetails)
+							}}
+						/>
+					</div>
 				)}
-			</div>
-		);
-	}
-}
-export const BankingCountryTab = withStyles(styles)(BankingCountryTabComponent);
+			</React.Fragment>
+		)}
+	</div>
+));
 
 export default BankingCountryTab;
