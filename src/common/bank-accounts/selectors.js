@@ -3,18 +3,13 @@ import config from 'common/config';
 const selectPrice = bank => {
 	// Check for override ENV variables
 	if (config.bankAccountsPriceOverride) return config.bankAccountsPriceOverride;
-
 	if (!bank.price && !bank.testPrice) return null;
 
 	let price = `${bank.price}`;
-
-	if (config.dev && !price) {
+	if (config.dev || bank.activeTestPrice) {
 		price = `${bank.testPrice}`;
-	} else {
-		if (bank.activeTestPrice) {
-			price = `${bank.testPrice}`;
-		}
 	}
+
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
 };
 
