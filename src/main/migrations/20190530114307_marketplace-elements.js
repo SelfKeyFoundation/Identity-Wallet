@@ -65,6 +65,31 @@ exports.up = async knex => {
 		t.integer('updatedAt');
 		t.unique(['code', 'env']);
 	});
+	await knex.schema.createTable('tax_treaties', t => {
+		t.increments('id');
+		t.string('countryCode').notNullable();
+		t.string('env');
+		t.string('jurisdictionCountryCode');
+		t.string('currencyCode');
+		t.string('jurisdiction');
+		t.string('isoNumeric');
+		t.string('typeEOI');
+		t.string('dateSigned');
+		t.string('dateActive');
+		t.string('meetsStandards');
+		t.string('containsParas4and5');
+		t.string('pdfUrl');
+		t.integer('createdAt')
+			.notNullable()
+			.defaultTo(Date.now());
+		t.integer('updatedAt');
+		t.unique(['countryCode', 'jurisdictionCountryCode']);
+	});
 };
 
-exports.down = async knex => {};
+exports.down = async knex => {
+	await knex.schema.dropTable('vendors');
+	await knex.schema.dropTable('inventory');
+	await knex.schema.dropTable('marketplace_country');
+	await knex.schema.dropTable('tax_treaties');
+};
