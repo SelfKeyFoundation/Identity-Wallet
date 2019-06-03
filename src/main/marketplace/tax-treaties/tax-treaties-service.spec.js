@@ -13,7 +13,7 @@ import flagtheoryTaxTreaties from './__fixtures__/flagtheory-tax-treaties-respon
 import flagtheoryTaxTreatiesFetched from './__fixtures__/flagtheory-tax-treaties-fetched';
 import finalTaxTreaties from './__fixtures__/final-tax-treaties-fetched';
 
-describe('InventoryService', () => {
+describe('TaxTrieatiesService', () => {
 	let schedulerService = {};
 	let taxTreatiesService;
 	beforeEach(() => {

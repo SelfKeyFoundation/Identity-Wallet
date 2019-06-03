@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import { VendorService, VENDOR_API_ENDPOINT } from './vendor-service';
 import { Vendor } from './vendor';
 import request from 'request-promise-native';
-import vendorResponceFixture from './__fixtures__/vendor-airtable-response';
+import vendorResponseFixture from './__fixtures__/vendor-airtable-response';
 import vendorsFetched from './__fixtures__/vendor-fetched';
 import vendorDb from './__fixtures__/vendor-db';
 
@@ -16,7 +16,7 @@ describe('VendorService', () => {
 		sinon.restore();
 	});
 	it('should fetch vendors', async () => {
-		sinon.stub(request, 'get').resolves(vendorResponceFixture);
+		sinon.stub(request, 'get').resolves(vendorResponseFixture);
 		const vendors = await vendorService.fetchVendors();
 		expect(request.get.getCall(0).args).toEqual([
 			{
