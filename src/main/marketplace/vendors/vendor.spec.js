@@ -1,5 +1,5 @@
 import Vendor from './vendor';
-import TestDb from '../db/test-db';
+import TestDb from '../../db/test-db';
 
 describe('Vendor model', () => {
 	const testItem = {

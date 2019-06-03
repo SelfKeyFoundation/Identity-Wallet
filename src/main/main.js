@@ -112,6 +112,7 @@ function onReady() {
 					loadIdentity(ctx)
 				]);
 				ctx.vendorSyncJobHandler.registerHandler();
+				ctx.inventorySyncJobHandler.registerHandler();
 				ctx.vendorService.start();
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');

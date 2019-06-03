@@ -1,4 +1,4 @@
-import BaseModel from '../common/base-model';
+import BaseModel from '../../common/base-model';
 import { isDevMode, isTestMode } from 'common/utils/common';
 const TABLE_NAME = 'vendors';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';

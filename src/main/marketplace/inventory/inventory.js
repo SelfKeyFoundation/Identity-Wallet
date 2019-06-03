@@ -1,4 +1,4 @@
-import BaseModel from '../common/base-model';
+import BaseModel from '../../common/base-model';
 import { isDevMode, isTestMode } from 'common/utils/common';
 const TABLE_NAME = 'inventory';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';
@@ -14,26 +14,26 @@ export class Inventory extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['sku', 'vendorId'],
+			required: ['sku', 'vendorId', 'category'],
 			properties: {
 				id: { type: 'integer' },
 				sku: { type: 'string' },
 				vendorId: { type: 'string' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
-				name: { type: 'string' },
-				description: { type: 'string' },
-				status: { type: 'string', enum: ['active', 'inactive'] },
-				parentSku: { type: 'string' },
+				name: { type: 'string', default: '' },
+				description: { type: 'string', default: '' },
+				status: { type: 'string', enum: ['active', 'inactive'], default: 'inactive' },
+				parentSku: { type: ['string', null], default: null },
 				category: { type: 'string' },
-				price: { type: 'string' },
-				priceCurrency: { type: 'string' },
+				price: { type: ['string', null], default: null },
+				priceCurrency: { type: ['string', null], default: null },
 				data: { type: 'object', default: {} }
 			}
 		};
 	}
 
 	static findAll() {
-		return this.query({ env });
+		return this.query().where({ env });
 	}
 
 	static findBySku(sku) {
@@ -49,11 +49,23 @@ export class Inventory extends BaseModel {
 	}
 
 	static bulkEdit(items) {
+		items = items.map(item => ({ ...item, env }));
 		return this.updateMany(items);
 	}
 
 	static bulkAdd(items) {
+		items = items.map(item => ({ ...item, env }));
 		return this.insertMany(items);
+	}
+
+	static async bulkUpsert(items) {
+		const insert = items.filter(item => !item.hasOwnProperty(this.idColumn));
+		const update = items.filter(item => item.hasOwnProperty(this.idColumn));
+
+		let all = await this.bulkAdd(insert);
+		all = all.concat(await this.bulkEdit(update));
+
+		return this.findAll().whereIn(this.idColumn, all.map(itm => itm[this.idColumn]));
 	}
 }
 

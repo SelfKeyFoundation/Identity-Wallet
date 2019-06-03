@@ -23,8 +23,10 @@ import KycApplicationService from './kyc/kyc-application-service';
 import { DIDService } from './blockchain/did-service';
 import { AutoUpdateService } from './auto-update/auto-update-service';
 import { SchedulerService } from './scheduler/scheduler-service';
-import { VendorService } from './marketplace/vendor-service';
-import { VendorSyncJobHandler } from './marketplace/vendor-sync-job-handler';
+import { VendorService } from './marketplace/vendors/vendor-service';
+import { VendorSyncJobHandler } from './marketplace/vendors/vendor-sync-job-handler';
+import { InventoryService } from './marketplace/inventory/inventory-service';
+import { InventorySyncJobHandler } from './marketplace/inventory/inventory-sync-job-handler';
 
 export const registerMainServices = container => {
 	container.register({
@@ -33,6 +35,8 @@ export const registerMainServices = container => {
 		schedulerService: asClass(SchedulerService).singleton(),
 		vendorService: asClass(VendorService).singleton(),
 		vendorSyncJobHandler: asClass(VendorSyncJobHandler).singleton(),
+		inventoryService: asClass(InventoryService).singleton(),
+		inventorySyncJobHandler: asClass(InventorySyncJobHandler).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),

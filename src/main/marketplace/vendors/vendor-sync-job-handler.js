@@ -1,3 +1,5 @@
+import { INVENTORY_SYNC_JOB } from '../inventory/inventory-sync-job-handler';
+
 export const VENDOR_SYNC_JOB = 'vendor-sync-job';
 
 export class VendorSyncJobHandler {
@@ -50,7 +52,26 @@ export class VendorSyncJobHandler {
 		job.emitProgress(25, { message: 'Removing obsolete vendors' });
 		await this.vendorService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated vendors list' });
-		return this.vendorService.loadVendors();
+		const vendors = await this.vendorService.loadVendors();
+		vendors
+			.filter(v => v.status === 'active')
+			.reduce((acc, curr) => {
+				let src = curr.inventorySource;
+				if (src !== 'selfkey') {
+					src = curr.vendorId;
+				}
+				if (!acc.includes(src)) {
+					acc.push(src);
+				}
+				return acc;
+			}, [])
+			.forEach(src =>
+				job.addJob({
+					category: INVENTORY_SYNC_JOB,
+					data: { src }
+				})
+			);
+		return vendors;
 	}
 }
 

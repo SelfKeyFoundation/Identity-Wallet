@@ -30,7 +30,21 @@ describe('VendorService', () => {
 	it('should load vendors from db', async () => {
 		sinon.stub(Vendor, 'findAll').resolves(vendorDb);
 		const loaded = await vendorService.loadVendors();
-
+		expect(Vendor.findAll.calledOnce).toBe(true);
 		expect(loaded).toEqual(vendorDb);
+	});
+	it('should upsert vendors to db', async () => {
+		sinon.stub(Vendor, 'bulkUpsert').resolves('ok');
+		const vendors = [1, 2, 3];
+		const loaded = await vendorService.upsert(vendors);
+		expect(Vendor.bulkUpsert.getCall(0).args).toEqual([vendors]);
+		expect(loaded).toEqual('ok');
+	});
+	it('should delete many vendors from db', async () => {
+		sinon.stub(Vendor, 'deleteMany').resolves('ok');
+		const vendors = [1, 2, 3];
+		const loaded = await vendorService.deleteMany(vendors);
+		expect(Vendor.deleteMany.getCall(0).args).toEqual([vendors]);
+		expect(loaded).toEqual('ok');
 	});
 });
