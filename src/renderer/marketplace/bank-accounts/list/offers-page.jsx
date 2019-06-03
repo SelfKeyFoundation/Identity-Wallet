@@ -40,7 +40,7 @@ const styles = theme => ({
 	}
 });
 
-export const BankingOffersPage = withStyles(styles)(
+const BankingOffersPage = withStyles(styles)(
 	({
 		classes,
 		loading,
@@ -96,3 +96,4 @@ export const BankingOffersPage = withStyles(styles)(
 );
 
 export default BankingOffersPage;
+export { BankingOffersPage };

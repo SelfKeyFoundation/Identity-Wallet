@@ -35,11 +35,11 @@ const styles = theme => ({
 	}
 });
 
-const BankingServicesTab = withStyles(styles)(({ classes, htmlServices }) => (
+const BankingServicesTab = withStyles(styles)(({ classes, banks }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(htmlServices)
+				__html: sanitize(banks[0].onboarding)
 			}}
 		/>
 	</div>

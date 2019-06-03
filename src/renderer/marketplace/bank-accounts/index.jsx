@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import BankAccountsTableContainer from './list';
+import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
 
-class MarketplaceBankAccountsComponent extends Component {
+class MarketplaceBankAccountsPage extends Component {
 	render() {
 		const { path } = this.props.match;
 		return (
@@ -19,5 +19,5 @@ class MarketplaceBankAccountsComponent extends Component {
 	}
 }
 
-const MarketplaceBankAccountsPage = MarketplaceBankAccountsComponent;
+export default MarketplaceBankAccountsPage;
 export { MarketplaceBankAccountsPage };
