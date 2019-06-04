@@ -7,7 +7,7 @@ const styles = theme => ({
 		fontSize: '12px',
 		display: 'block',
 		whiteSpace: 'nowrap',
-		margin: '10px auto'
+		margin: '5px auto'
 	}
 });
 
