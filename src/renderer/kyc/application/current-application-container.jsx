@@ -57,7 +57,7 @@ class CurrentApplicationComponent extends Component {
 			return;
 		}
 		if (this.props.existingApplicationId) {
-			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+			this.props.dispatch(push('/main/selfkeyIdApplications'));
 		} else {
 			await this.props.dispatch(
 				kycOperations.submitCurrentApplicationOperation(this.state.selected)
@@ -66,7 +66,7 @@ class CurrentApplicationComponent extends Component {
 	};
 	handleClose = () => {
 		if (this.props.existingApplicationId) {
-			this.props.dispatch(push('/main/selfkeyId?tabValue=1'));
+			this.props.dispatch(push('/main/selfkeyIdApplications'));
 		} else {
 			this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
 		}
