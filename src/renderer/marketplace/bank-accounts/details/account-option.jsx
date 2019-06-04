@@ -157,6 +157,7 @@ export const BankingAccountOption = withStyles(styles)(
 				value: account.timeToOpen
 			}
 		];
+		const gridSize = account.name ? 11 : 12;
 		return (
 			<Grid container direction="row" justify="flex-start" alignItems="unset" spacing={0}>
 				{account.name && (
@@ -171,7 +172,7 @@ export const BankingAccountOption = withStyles(styles)(
 					</Grid>
 				)}
 
-				<Grid item xs={11}>
+				<Grid item xs={gridSize}>
 					<ExpansionPanel
 						expanded={isOpen}
 						onChange={(e, expanded) => toggleOpen(expanded)}
