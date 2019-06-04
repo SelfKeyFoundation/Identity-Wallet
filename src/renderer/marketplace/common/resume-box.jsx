@@ -5,6 +5,7 @@ import { primary } from 'selfkey-ui';
 const styles = theme => ({
 	resumeTable: {},
 	resumeEntry: {
+		maxWidth: '200px',
 		padding: '10px 15px',
 		'& label': {
 			fontSize: '13px',
@@ -40,6 +41,7 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 	return (
 		<div className={classes.resumeEntry}>
 			<label>{name}</label>
+			{console.log(value)}
 			{value.map((v, idx) => (
 				<Typography
 					key={idx}
@@ -48,7 +50,7 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 					className={highlighted ? classes.highlightedText : classes.normalText}
 					gutterBottom
 				>
-					{v || '--'}
+					{v || '--'} <br />
 				</Typography>
 			))}
 		</div>
