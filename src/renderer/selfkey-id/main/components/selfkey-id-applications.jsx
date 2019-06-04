@@ -301,6 +301,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 			});
 		}
 
+		// try to load existing kyc_applications data
+		await this.props.dispatch(kycOperations.loadApplicationsOperation());
+
 		// this is needed otherwise the rp keeps loading (stuck)
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
@@ -614,9 +617,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 									<StatusInfo
 										status={item.currentStatus}
 										onClick={() =>
-											this.props.handleAddDocuments(item.id, item.rpName)
+											this.handleApplicationAddDocuments(item.id, item.rpName)
 										}
-										handleRefresh={() => this.props.handleRefresh(item.id)}
+										handleRefresh={() => this.handleApplicationRefresh(item.id)}
 										tooltip={moment(new Date(item.updatedAt)).format(
 											'DD MMM YYYY'
 										)}
