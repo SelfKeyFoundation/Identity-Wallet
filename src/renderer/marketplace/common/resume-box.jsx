@@ -21,6 +21,8 @@ const styles = theme => ({
 		background: '#2A3540'
 	},
 	gridWithBorder: {
+		borderImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 3%, ${primary} 100%)`,
+		borderImageSlice: 1,
 		borderLeft: `1px solid ${primary}`
 	},
 	normalText: {
