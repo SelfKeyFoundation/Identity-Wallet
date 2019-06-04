@@ -41,7 +41,6 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 	return (
 		<div className={classes.resumeEntry}>
 			<label>{name}</label>
-			{console.log(value)}
 			{value.map((v, idx) => (
 				<Typography
 					key={idx}
@@ -50,7 +49,7 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 					className={highlighted ? classes.highlightedText : classes.normalText}
 					gutterBottom
 				>
-					{v || '--'} <br />
+					{v || '--'}
 				</Typography>
 			))}
 		</div>
