@@ -45,6 +45,83 @@ class BankAccountsDetailContainer extends Component {
 
 	onTabChange = tab => this.setState({ tab });
 
+	getLastApplication = () => {
+		const { rp } = this.props;
+		const { templateId } = this.props.match.params;
+
+		if (!rp || !rp.authenticated) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	userHasPaid = () => {
+		const application = this.getLastApplication();
+		if (!application || !application.payments) {
+			return false;
+		}
+		return !!application.payments.length;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	applicationCompleted = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 2;
+	};
+
+	applicationRequiresAdditionalDocuments = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 9;
+	};
+
+	// Can only apply if:
+	// - there is a valid price for this jurisdiction (from airtable)
+	// - templateId exists for this jurisdiction (from airtable)
+	// - user has not applied before or previous application was rejected
+	canUserOpenBankAccount = () => {
+		const { templateId } = this.props.match.params;
+		const price = this.props.accountType.price;
+
+		if (this.props.rp && this.props.rp.authenticated) {
+			return !!(
+				templateId &&
+				price &&
+				(!this.userHasApplied() || this.applicationWasRejected())
+			);
+		} else {
+			return !!(templateId && price);
+		}
+	};
+
 	buildResumeData = banks => {
 		return [
 			[
@@ -97,6 +174,7 @@ class BankAccountsDetailContainer extends Component {
 				banks={banks}
 				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
+				canOpenBankAccount={this.canUserOpenBankAccount()}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
