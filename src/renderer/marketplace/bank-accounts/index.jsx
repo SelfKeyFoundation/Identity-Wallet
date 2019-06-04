@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
+import { BankAccountsCheckoutContainer } from './checkout/checkout-container';
 
 class MarketplaceBankAccountsPage extends Component {
 	render() {
@@ -13,6 +14,10 @@ class MarketplaceBankAccountsPage extends Component {
 				<Route
 					path={`${path}/details/:accountCode/:countryCode/:templateId?`}
 					component={BankAccountsDetailContainer}
+				/>
+				<Route
+					path={`${path}/pay/:accountCode/:countryCode/:templateId?`}
+					component={BankAccountsCheckoutContainer}
 				/>
 			</div>
 		);

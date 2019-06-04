@@ -15,7 +15,8 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends Component {
 	state = {
-		tab: 'types'
+		tab: 'types',
+		loading: false
 	};
 
 	async componentDidMount() {
@@ -104,6 +105,7 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	// Can only apply if:
+	// - store data has not loaded yet (loading)
 	// - there is a valid price for this jurisdiction (from airtable)
 	// - templateId exists for this jurisdiction (from airtable)
 	// - user has not applied before or previous application was rejected
@@ -120,6 +122,35 @@ class BankAccountsDetailContainer extends Component {
 		} else {
 			return !!(templateId && price);
 		}
+	};
+
+	onApplyClick = () => {
+		const { rp, wallet } = this.props;
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
+		const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+		const cancelRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+		const authenticated = true;
+
+		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
+		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
+		this.setState({ loading: true }, async () => {
+			if (!wallet.isSetupFinished) {
+				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
+			if (!rp || !rp.authenticated) {
+				await this.props.dispatch(
+					kycOperations.loadRelyingParty(
+						'incorporations',
+						authenticated,
+						payRoute,
+						cancelRoute
+					)
+				);
+			} else {
+				await this.props.dispatch(push(payRoute));
+			}
+		});
 	};
 
 	buildResumeData = banks => {
@@ -163,6 +194,7 @@ class BankAccountsDetailContainer extends Component {
 
 		return (
 			<BankingDetailsPage
+				loading={this.state.loading || this.props.isLoading}
 				accountType={accountType}
 				country={country}
 				countryCode={accountType.countryCode}
@@ -175,6 +207,7 @@ class BankAccountsDetailContainer extends Component {
 				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
 				canOpenBankAccount={this.canUserOpenBankAccount()}
+				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
