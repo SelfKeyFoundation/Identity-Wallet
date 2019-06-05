@@ -105,7 +105,7 @@ class BankAccountsDetailContainer extends Component {
 	};
 
 	// Can only apply if:
-	// - store data has not loaded yet (loading)
+	// - store data has loaded (isLoading prop)
 	// - there is a valid price for this jurisdiction (from airtable)
 	// - templateId exists for this jurisdiction (from airtable)
 	// - user has not applied before or previous application was rejected

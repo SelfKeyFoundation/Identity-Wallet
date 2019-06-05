@@ -156,7 +156,7 @@ const styles = theme => ({
 	}
 });
 
-export const PaymentCheckout = withStyles(styles)(
+const PaymentCheckout = withStyles(styles)(
 	({
 		classes,
 		title,
@@ -354,4 +354,5 @@ export const PaymentCheckout = withStyles(styles)(
 	)
 );
 
+export { PaymentCheckout };
 export default PaymentCheckout;

@@ -19,6 +19,10 @@ class MarketplaceBankAccountsPage extends Component {
 					path={`${path}/pay/:accountCode/:countryCode/:templateId?`}
 					component={BankAccountsCheckoutContainer}
 				/>
+				<Route
+					path={`${path}/pay-confirmation/:accountCode/:countryCode/:templateId?`}
+					component={BankAccountsCheckoutContainer}
+				/>
 			</div>
 		);
 	}
