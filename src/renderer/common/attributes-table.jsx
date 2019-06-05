@@ -21,6 +21,7 @@ const styles = theme => ({
 		paddingRight: 0
 	},
 	listItemText: {
+		marginRight: '10px',
 		minWidth: '37%',
 		width: '37%'
 	},
