@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Divider } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { debounce, over } from 'lodash';
 
 const styles = theme => ({
 	container: {
@@ -146,6 +147,8 @@ const styles = theme => ({
 });
 
 class TransactionSendBoxContainer extends Component {
+	static UPDATE_DELAY = 1000;
+
 	state = {
 		amount: '',
 		address: '',
@@ -173,13 +176,18 @@ class TransactionSendBoxContainer extends Component {
 		this.props.dispatch(push(`/main/dashboard`));
 	};
 
-	handleGasPriceChange = value => {
-		this.props.dispatch(transactionOperations.setGasPrice(value));
-	};
+	handleGasLimitChange = debounce(
+		value => this.props.dispatch(transactionOperations.setLimitPrice(value)),
+		TransactionSendBoxContainer.UPDATE_DELAY
+	);
 
-	handleGasLimitChange = value => {
-		this.props.dispatch(transactionOperations.setLimitPrice(value));
-	};
+	handleGasPriceChange = debounce(
+		value => this.props.dispatch(transactionOperations.setGasPrice(value)),
+		TransactionSendBoxContainer.UPDATE_DELAY
+	);
+
+	withLock = targetFunction =>
+		over([() => this.props.dispatch(transactionOperations.setLocked(true)), targetFunction]);
 
 	handleConfirm = async () => {
 		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));
@@ -199,8 +207,8 @@ class TransactionSendBoxContainer extends Component {
 		return (
 			<TransactionFeeBox
 				{...this.props}
-				changeGasLimitAction={this.handleGasLimitChange}
-				changeGasPriceAction={this.handleGasPriceChange}
+				changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
+				changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
 				reloadEthGasStationInfoAction={this.loadData}
 			/>
 		);
@@ -266,8 +274,10 @@ class TransactionSendBoxContainer extends Component {
 	}
 
 	renderButtons() {
-		const { classes, addressError } = this.props;
-		const sendBtnIsEnabled = this.state.address && +this.state.amount && !addressError;
+		const { classes, addressError, ethFee, locked } = this.props;
+		const sendBtnIsEnabled =
+			this.state.address && +this.state.amount && !addressError && ethFee && !locked;
+
 		if (this.state.sending) {
 			return (
 				<Grid
