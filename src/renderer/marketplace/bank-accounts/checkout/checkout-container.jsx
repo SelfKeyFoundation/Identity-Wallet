@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import config from 'common/config';
+import EthUnits from 'common/utils/eth-units';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getWallet } from 'common/wallet/selectors';
-// import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { ethGasStationInfoSelectors } from 'common/eth-gas-station';
+import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
-// import { kycSelectors, kycOperations } from 'common/kyc';
-import { kycSelectors } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { PaymentCheckout } from '../../common/payment-checkout';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
-const VENDOR_NAME = 'Far Horizon Capital Inc';
+// const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsCheckoutContainer extends Component {
 	async componentDidMount() {
@@ -35,7 +36,10 @@ class BankAccountsCheckoutContainer extends Component {
 		} else {
 			await this.checkIfUserCanOpenBankAccount();
 		}
-		this.loadData();
+
+		if (!this.props.accountType) {
+			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
+		}
 	}
 
 	getPaymentParameters() {
@@ -106,7 +110,7 @@ class BankAccountsCheckoutContainer extends Component {
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
 				price={accountType.price}
-				options={accountType.walletOptions}
+				options={accountType.checkoutOptions}
 				initialDocsText={
 					'You will be required to provide a few basic informations about yourself like full name and email. This will be done through SelfKey ID Wallet.'
 				}
@@ -125,7 +129,7 @@ class BankAccountsCheckoutContainer extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode, templateId } = props.match.params;
+	const { accountCode, countryCode } = props.match.params;
 	const authenticated = true;
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),

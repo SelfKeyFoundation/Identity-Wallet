@@ -119,7 +119,8 @@ export const BankingAccountOption = withStyles(styles)(
 		title,
 		toggleOpen,
 		onSelectOption,
-		selectedValue
+		selectedValue,
+		showBankName = false
 	}) => {
 		const accountOptions = [
 			{
@@ -157,17 +158,19 @@ export const BankingAccountOption = withStyles(styles)(
 				value: account.timeToOpen
 			}
 		];
-		const gridSize = account.name ? 11 : 12;
+		showBankName = showBankName && account.bankName;
+		const optionValue = `${account.bankName} ${account.accountTitle}`;
+		const gridSize = showBankName ? 11 : 12;
 		return (
 			<Grid container direction="row" justify="flex-start" alignItems="unset" spacing={0}>
-				{account.name && (
+				{showBankName && (
 					<Grid item xs={1} className={classes.selectionSection}>
 						<Radio
-							checked={selectedValue === account.name}
+							checked={selectedValue === optionValue}
 							onChange={onSelectOption}
-							value={account.name}
+							value={optionValue}
 							name="radio-button-option"
-							aria-label={account.name}
+							aria-label={account.bankName}
 						/>
 					</Grid>
 				)}
@@ -189,7 +192,9 @@ export const BankingAccountOption = withStyles(styles)(
 										spacing={8}
 									>
 										<Grid item>
-											<Typography variant="h2">{title}</Typography>
+											<Typography variant="h2">
+												{showBankName ? account.bankName : title}
+											</Typography>
 										</Grid>
 										{account.accountTitle && (
 											<Grid item>
