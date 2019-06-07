@@ -120,8 +120,7 @@ const dev = {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},
 	matomoSite: 2,
-	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB',
-	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
+	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB'
 };
 
 const prod = {
