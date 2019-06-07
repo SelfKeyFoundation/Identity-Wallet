@@ -186,8 +186,9 @@ class TransactionSendBoxContainer extends Component {
 		TransactionSendBoxContainer.UPDATE_DELAY
 	);
 
-	withLock = targetFunction =>
-		over([() => this.props.dispatch(transactionOperations.setLocked(true)), targetFunction]);
+	lockTransaction = () => this.props.dispatch(transactionOperations.setLocked(true));
+
+	withLock = targetFunction => over([this.lockTransaction, targetFunction]);
 
 	handleConfirm = async () => {
 		await this.props.dispatch(appOperations.setGoBackPath(this.props.location.pathname));

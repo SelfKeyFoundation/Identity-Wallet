@@ -155,7 +155,7 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 const setAmount = amount => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
-			amount: amount
+			amount
 		})
 	);
 	await dispatch(setTransactionFee(undefined, amount, undefined, undefined));
