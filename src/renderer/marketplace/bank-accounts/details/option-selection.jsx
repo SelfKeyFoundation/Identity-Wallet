@@ -48,6 +48,7 @@ class OptionSelectionComponent extends Component {
 	render() {
 		const {
 			classes,
+			accountType,
 			title,
 			description1,
 			description2,
@@ -104,6 +105,7 @@ class OptionSelectionComponent extends Component {
 											title={`Option ${idx + 1}`}
 											onSelectOption={this.onSelectOption}
 											selectedValue={this.state.selectedValue}
+											accountType={accountType}
 										/>
 									</Grid>
 								))}
