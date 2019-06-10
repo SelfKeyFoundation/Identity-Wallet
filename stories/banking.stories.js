@@ -21,9 +21,9 @@ import { BankingTypesTab } from '../src/renderer/marketplace/bank-accounts/detai
 import BankingDescriptionTab from '../src/renderer/marketplace/bank-accounts/details/details-description-tab';
 import BankingCountryTab from '../src/renderer/marketplace/bank-accounts/details/details-country-tab';
 import BankingServicesTab from '../src/renderer/marketplace/bank-accounts/details/details-services-tab';
-import BankingAccountOption from '../src/renderer/marketplace/bank-accounts/details/account-option';
+import BankingAccountOption from '../src/renderer/marketplace/bank-accounts/common/account-option';
 import BankingDetailsPageTabs from '../src/renderer/marketplace/bank-accounts/details/details-tabs';
-import OptionSelection from '../src/renderer/marketplace/bank-accounts/details/option-selection';
+import OptionSelection from '../src/renderer/marketplace/bank-accounts/common/option-selection';
 
 const KEY_RATE = 1 / 1000;
 const options = [

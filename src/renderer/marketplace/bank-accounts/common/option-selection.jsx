@@ -45,6 +45,10 @@ class OptionSelectionComponent extends Component {
 		this.setState({ selectedValue: event.target.value });
 	};
 
+	onStartClick = () => {
+		if (this.state.selectedValue) this.props.onStartClick(this.state.selectedValue);
+	};
+
 	render() {
 		const {
 			classes,
@@ -55,7 +59,7 @@ class OptionSelectionComponent extends Component {
 			options,
 			countryCode,
 			onBackClick,
-			onStartClick
+			showBankName = true
 		} = this.props;
 
 		return (
@@ -103,9 +107,10 @@ class OptionSelectionComponent extends Component {
 										<BankingAccountOption
 											account={opt}
 											title={`Option ${idx + 1}`}
+											accountType={accountType}
 											onSelectOption={this.onSelectOption}
 											selectedValue={this.state.selectedValue}
-											accountType={accountType}
+											showBankName={showBankName}
 										/>
 									</Grid>
 								))}
@@ -115,7 +120,11 @@ class OptionSelectionComponent extends Component {
 						<Grid item>
 							<Grid container direction="row" spacing={24}>
 								<Grid item>
-									<Button variant="contained" size="large" onClick={onStartClick}>
+									<Button
+										variant="contained"
+										size="large"
+										onClick={this.onStartClick}
+									>
 										Continue
 									</Button>
 								</Grid>
@@ -133,6 +142,6 @@ class OptionSelectionComponent extends Component {
 	}
 }
 
-export const OptionSelection = withStyles(styles)(OptionSelectionComponent);
-
+const OptionSelection = withStyles(styles)(OptionSelectionComponent);
 export default OptionSelection;
+export { OptionSelection };
