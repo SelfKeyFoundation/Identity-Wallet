@@ -31,21 +31,97 @@ class BankAccountsSelectBankContainer extends Component {
 		}
 	}
 
+	getLastApplication = () => {
+		const { rp } = this.props;
+		const { templateId } = this.props.match.params;
+
+		if (!rp || !rp.authenticated) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	applicationCompleted = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 2;
+	};
+
 	getCancelRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 	};
 
+	getBankQuestionId = questions => {
+		const keys = Object.keys(questions);
+		const questionId = keys.filter(
+			k => questions[k].question.toLowerCase() === 'bank preference'
+		);
+		return questionId ? questionId[0] : false;
+	};
+
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
-	onStartClick = selection => {
-		console.log(selection);
-		// TODO: update current application with selected option
+	onStartClick = async selection => {
+		const { accountCode, countryCode, templateId } = this.props.match.params;
+		const { currentApplication } = this.props;
+		const application = currentApplication || this.getLastApplication();
+		let questions = [];
+
+		const templateQuestionId = this.getBankQuestionId(application.questions);
+		if (templateQuestionId) {
+			questions = [
+				{
+					id: templateQuestionId,
+					data: [selection]
+				}
+			];
+		}
+
+		await this.props.dispatch(
+			kycOperations.updateRelyingPartyKYCApplication(
+				'incorporations',
+				templateId,
+				application.id,
+				false,
+				questions
+			)
+		);
+
+		this.props.dispatch(
+			push(
+				`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/process-started/${accountCode}/${countryCode}/${templateId}`
+			)
+		);
 	};
 
 	render() {
-		console.log(this.props.rp);
-
 		const { accountType, banks } = this.props;
 		const { region } = accountType;
 		const { countryCode } = this.props.match.params;

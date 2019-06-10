@@ -128,7 +128,11 @@ class BankAccountsDetailContainer extends Component {
 		const { rp, wallet } = this.props;
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
-		const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+
+		// FIXME: replace this when pay screens are implemented
+		// const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+		const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
+
 		const cancelRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
 
@@ -191,7 +195,6 @@ class BankAccountsDetailContainer extends Component {
 
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
-
 		return (
 			<BankingDetailsPage
 				loading={this.state.loading || this.props.isLoading}
