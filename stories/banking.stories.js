@@ -2,7 +2,14 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
-import { resume, country, translation, bankingOffers, htmlServices } from './banking-data';
+import {
+	resume,
+	country,
+	translation,
+	bankingOffers,
+	htmlServices,
+	accountType
+} from './banking-data';
 import KYCRequirementData from './kyc-requirements-data';
 import BankingOffersTable from '../src/renderer/marketplace/bank-accounts/list/offers-table';
 import BankingAccountTypeTabs from '../src/renderer/marketplace/bank-accounts/list/account-type-tabs';
@@ -37,6 +44,7 @@ storiesOf('Banking', module)
 	.add('OptionSelection', () => (
 		<div style={{ width: '1140px' }}>
 			<OptionSelection
+				accountType={accountType}
 				title={'Choose Bank Option: US'}
 				description1={
 					'Please, choose a preffered bank and an account type to continue with the process. Make sure to check whether you fulfill the requirements below and whether you are required or not to make a personal visit to the banker to finalize the account opening.'
@@ -168,15 +176,27 @@ storiesOf('Banking/Tab Content', module)
 	.add('services', () => <BankingServicesTab banks={htmlServices} />);
 
 storiesOf('Banking/AccountOptions', module)
-	.add('default', () => <BankingAccountOption account={bankingOffers[0]} title="option 1" />)
+	.add('default', () => (
+		<BankingAccountOption
+			accountType={accountType}
+			account={bankingOffers[0]}
+			title="option 1"
+		/>
+	))
 	.add('withOptions', () => (
 		<BankingAccountOption
+			accountType={accountType}
 			account={{ ...bankingOffers[0], name: 'CityBank' }}
 			title="Option 1"
 		/>
 	))
 	.add('open', () => (
-		<BankingAccountOption account={bankingOffers[0]} title="option 1" isOpen={true} />
+		<BankingAccountOption
+			accountType={accountType}
+			account={bankingOffers[0]}
+			title="option 1"
+			isOpen={true}
+		/>
 	));
 
 storiesOf('Banking/Tabs Selector', module)
