@@ -6,15 +6,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
 		accountType: 'personal',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -24,15 +24,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 500,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 500,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
 		accountType: 'personal',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -42,15 +42,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
 		accountType: 'personal',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -60,15 +60,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 10000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 10000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: true,
 		price: 3500,
 		accountType: 'personal',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -78,15 +78,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 800,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 800,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 200,
 		accountType: 'personal',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 
@@ -97,15 +97,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
 		accountType: 'business',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -113,15 +113,15 @@ export const bankingOffers = [
 		countryCode: 'sg',
 		region: 'Singapore',
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
-		minDeposit: 500,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 500,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
 		accountType: 'business',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -131,15 +131,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
 		accountType: 'business',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -149,15 +149,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 10000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 10000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: true,
 		price: 3500,
 		accountType: 'business',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -167,15 +167,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 800,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 800,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 200,
 		accountType: 'business',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 
@@ -186,15 +186,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 500,
 		accountType: 'private',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -204,15 +204,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 500,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 500,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Credit Cards'],
 		personalVisitRequired: true,
 		price: 1500,
 		accountType: 'private',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -220,8 +220,8 @@ export const bankingOffers = [
 		countryCode: 'ky',
 		region: 'Cayman',
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
-		minDeposit: 1000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 1000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Savings', 'Credit Cards', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 800,
@@ -235,15 +235,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 10000,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 10000,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: true,
 		price: 3500,
 		accountType: 'private',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	},
 	{
@@ -253,15 +253,15 @@ export const bankingOffers = [
 		eligibility: ['Resident Individuals', 'Regional Individuals', 'International Individuals'],
 		eligibilityExpanded:
 			'Resident Individuals,  Regional Individuals, International Individuals',
-		minDeposit: 800,
-		minDepositCurrency: 'USD',
+		minInitialDeposit: 800,
+		minInitialDepositCurrency: 'USD',
 		goodFor: ['Transactional Banking', 'Multi-currency Cards'],
 		personalVisitRequired: false,
 		price: 200,
 		accountType: 'private',
 		currencies: ['USD, SGD, CAD'],
 		cards: ['Mastercard, Visa'],
-		avgOpenTime: '1 Month',
+		timeToOpen: '1 Month',
 		onlineBanking: ['Internet Home Banking']
 	}
 ];
@@ -321,3 +321,8 @@ export const translation = {
 export const htmlServices = [
 	{ onboarding: "<div style='color:white;'>Services text <br><br> here</div>" }
 ];
+
+export const accountType = {
+	accountType: 'business',
+	goodFor: ['International Companies', 'Offshore Companies', 'e-Commerce']
+};

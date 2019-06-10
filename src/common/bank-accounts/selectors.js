@@ -1,32 +1,24 @@
 import config from 'common/config';
 
 const selectPrice = bank => {
+	// Check for override ENV variables
+	if (config.bankAccountsPriceOverride) return config.bankAccountsPriceOverride;
 	if (!bank.price && !bank.testPrice) return null;
 
-	// Check for override ENV variables
-	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-
-	let price = bank.price;
-
-	if (config.dev) {
-		price = bank.testPrice;
-	} else {
-		if (bank.activeTestPrice) {
-			price = bank.testPrice;
-		}
+	let price = `${bank.price}`;
+	if (config.dev || bank.activeTestPrice) {
+		price = `${bank.testPrice}`;
 	}
+
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
 };
 
 const selectTemplate = bank => {
+	// Check for override ENV variables
+	if (config.bankAccountsTemplateOverride) return config.bankAccountsTemplateOverride;
 	if (!bank.templateId && !bank.testTemplateId) return null;
 
-	let templateId = bank.templateId;
-	/*
-	if (config.dev) {
-		templateId = bank.testTemplateId
-	}
-	*/
+	const templateId = config.dev ? bank.testTemplateId : bank.templateId;
 	return templateId;
 };
 

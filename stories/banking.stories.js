@@ -176,15 +176,27 @@ storiesOf('Banking/Tab Content', module)
 	.add('services', () => <BankingServicesTab banks={htmlServices} />);
 
 storiesOf('Banking/AccountOptions', module)
-	.add('default', () => <BankingAccountOption account={bankingOffers[0]} title="option 1" />)
+	.add('default', () => (
+		<BankingAccountOption
+			accountType={accountType}
+			account={bankingOffers[0]}
+			title="option 1"
+		/>
+	))
 	.add('withOptions', () => (
 		<BankingAccountOption
+			accountType={accountType}
 			account={{ ...bankingOffers[0], name: 'CityBank' }}
 			title="Option 1"
 		/>
 	))
 	.add('open', () => (
-		<BankingAccountOption account={bankingOffers[0]} title="option 1" isOpen={true} />
+		<BankingAccountOption
+			accountType={accountType}
+			account={bankingOffers[0]}
+			title="option 1"
+			isOpen={true}
+		/>
 	));
 
 storiesOf('Banking/Tabs Selector', module)

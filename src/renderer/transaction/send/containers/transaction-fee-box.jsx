@@ -120,10 +120,6 @@ const styles = theme => ({
 });
 
 export class TransactionFeeBoxComponent extends Component {
-	timerToUpdateGasPrice = 0;
-	timerToUpdateGasLimit = 0;
-	TIME_FOR_INPUT_CHANGE = 1000;
-
 	state = {
 		showAdvanced: this.props.showAdvanced || false,
 		gasLimit: this.props.gasLimit,
@@ -154,26 +150,20 @@ export class TransactionFeeBoxComponent extends Component {
 
 	setGasLimit(event) {
 		const value = event.target.value;
-		if (this.timerToUpdateGasLimit) clearTimeout(this.timerToUpdateGasLimit);
 		this.setState({ ...this.state, gasLimit: Number(value) });
 
-		this.timerToUpdateGasLimit = window.setTimeout(() => {
-			if (this.props.changeGasLimitAction) {
-				this.props.changeGasLimitAction(value);
-			}
-		}, this.TIME_FOR_INPUT_CHANGE);
+		if (this.props.changeGasLimitAction) {
+			this.props.changeGasLimitAction(value);
+		}
 	}
 
 	setGasPrice(event) {
 		const value = event.target.value;
-		if (this.timerToUpdateGasPrice) clearTimeout(this.timerToUpdateGasPrice);
 		this.setState({ ...this.state, gasPrice: Number(value) });
 
-		this.timerToUpdateGasPrice = window.setTimeout(() => {
-			if (this.props.changeGasPriceAction) {
-				this.props.changeGasPriceAction(value);
-			}
-		}, this.TIME_FOR_INPUT_CHANGE);
+		if (this.props.changeGasPriceAction) {
+			this.props.changeGasPriceAction(value);
+		}
 	}
 
 	renderAdvancedContent() {

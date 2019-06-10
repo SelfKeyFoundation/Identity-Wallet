@@ -39,6 +39,7 @@ const init = args => async dispatch => {
 			addressError: false,
 			sending: false,
 			status: '',
+			locked: false,
 			...args
 		})
 	);
@@ -98,6 +99,8 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 		const amount = !newAmount ? transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
 
+		dispatch(setLocked(true));
+
 		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
@@ -142,6 +145,8 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 				})
 			);
 		}
+
+		dispatch(setLocked(false));
 	} catch (e) {
 		log.error(e);
 	}
@@ -155,6 +160,11 @@ const setAmount = amount => async dispatch => {
 	);
 	await dispatch(setTransactionFee(undefined, amount, undefined, undefined));
 };
+
+const setLocked = locked =>
+	actions.updateTransaction({
+		locked: locked
+	});
 
 const setGasPrice = gasPrice => async dispatch => {
 	await dispatch(
@@ -406,5 +416,6 @@ export default {
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
-	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
+	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
+	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };

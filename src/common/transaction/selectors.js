@@ -13,7 +13,7 @@ export const getTransaction = state => {
 	const transaction = state.transaction;
 	const { cryptoCurrency } = transaction;
 	transaction.amountUsd = getAmountUsd(transaction.amount, state, cryptoCurrency);
-	transaction.usdFee = getAmountUsd(transaction.ethFee, state, cryptoCurrency);
+	transaction.usdFee = getAmountUsd(transaction.ethFee, state, 'ETH');
 	const token = getTokens(state).filter(token => {
 		return token.symbol === cryptoCurrency;
 	})[0];
