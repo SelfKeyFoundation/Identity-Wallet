@@ -15,7 +15,8 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends Component {
 	state = {
-		tab: 'types'
+		tab: 'types',
+		loading: false
 	};
 
 	async componentDidMount() {
@@ -44,6 +45,117 @@ class BankAccountsDetailContainer extends Component {
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onTabChange = tab => this.setState({ tab });
+
+	getLastApplication = () => {
+		const { rp } = this.props;
+		const { templateId } = this.props.match.params;
+
+		if (!rp || !rp.authenticated) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	userHasPaid = () => {
+		const application = this.getLastApplication();
+		if (!application || !application.payments) {
+			return false;
+		}
+		return !!application.payments.length;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	applicationCompleted = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 2;
+	};
+
+	applicationRequiresAdditionalDocuments = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		return application.currentStatus === 9;
+	};
+
+	// Can only apply if:
+	// - store data has loaded (isLoading prop)
+	// - there is a valid price for this jurisdiction (from airtable)
+	// - templateId exists for this jurisdiction (from airtable)
+	// - user has not applied before or previous application was rejected
+	canUserOpenBankAccount = () => {
+		const { templateId } = this.props.match.params;
+		const price = this.props.accountType.price;
+
+		if (this.props.rp && this.props.rp.authenticated) {
+			return !!(
+				templateId &&
+				price &&
+				(!this.userHasApplied() || this.applicationWasRejected())
+			);
+		} else {
+			return !!(templateId && price);
+		}
+	};
+
+	onApplyClick = () => {
+		const { rp, wallet } = this.props;
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
+
+		// FIXME: replace this when pay screens are implemented
+		// const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+		const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
+
+		const cancelRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+		const authenticated = true;
+
+		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
+		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
+		this.setState({ loading: true }, async () => {
+			if (!wallet.isSetupFinished) {
+				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
+			if (!rp || !rp.authenticated) {
+				await this.props.dispatch(
+					kycOperations.loadRelyingParty(
+						'incorporations',
+						authenticated,
+						payRoute,
+						cancelRoute
+					)
+				);
+			} else {
+				await this.props.dispatch(push(payRoute));
+			}
+		});
+	};
 
 	buildResumeData = banks => {
 		return [
@@ -83,9 +195,9 @@ class BankAccountsDetailContainer extends Component {
 
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
-
 		return (
 			<BankingDetailsPage
+				loading={this.state.loading || this.props.isLoading}
 				accountType={accountType}
 				country={country}
 				countryCode={accountType.countryCode}
@@ -97,6 +209,8 @@ class BankAccountsDetailContainer extends Component {
 				banks={banks}
 				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
+				canOpenBankAccount={this.canUserOpenBankAccount()}
+				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}

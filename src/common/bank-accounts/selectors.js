@@ -1,33 +1,52 @@
 import config from 'common/config';
 
 const selectPrice = bank => {
+	// Check for override ENV variables
+	if (config.bankAccountsPriceOverride) return config.bankAccountsPriceOverride;
 	if (!bank.price && !bank.testPrice) return null;
 
-	// Check for override ENV variables
-	// if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-
-	let price = bank.price;
-
-	if (config.dev) {
-		price = bank.testPrice;
-	} else {
-		if (bank.activeTestPrice) {
-			price = bank.testPrice;
-		}
+	let price = `${bank.price}`;
+	if (config.dev || bank.activeTestPrice) {
+		price = `${bank.testPrice}`;
 	}
+
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
 };
 
 const selectTemplate = bank => {
+	// Check for override ENV variables
+	if (config.bankAccountsTemplateOverride) return config.bankAccountsTemplateOverride;
 	if (!bank.templateId && !bank.testTemplateId) return null;
 
-	let templateId = bank.templateId;
-	/*
-	if (config.dev) {
-		templateId = bank.testTemplateId
-	}
-	*/
+	const templateId = config.dev ? bank.testTemplateId : bank.templateId;
 	return templateId;
+};
+
+const parseOptions = bank => {
+	if (!bank.priceOptions) {
+		return [];
+	}
+	const options = bank.priceOptions;
+
+	const strArray = options.split('-');
+
+	const optionsArray = strArray.map((text, idx) => {
+		if (!text) return false;
+		let price = text.match(/\(.*\)/);
+		let notes = text.match(/\[.*\]/);
+		const id = `options-${idx}`;
+		price = price ? price[0].replace('(', '').replace(')', '') : '';
+		price = price ? parseInt(price) : '';
+		notes = notes ? notes[0].replace('[', '').replace(']', '') : '';
+		const description = text
+			.replace(/\(.*\)/, '')
+			.replace(/\[.*\]/, '')
+			.trim();
+
+		return { price, notes, description, id };
+	});
+
+	return optionsArray.filter(el => el !== false);
 };
 
 export const bankAccountsSelectors = {
@@ -46,6 +65,7 @@ export const bankAccountsSelectors = {
 		return data.map(b => {
 			b.price = selectPrice(b);
 			b.templateId = selectTemplate(b);
+			b.checkoutOptions = parseOptions(b);
 			b.accountType = b.type ? b.type[0].toLowerCase() : null;
 			return b;
 		});

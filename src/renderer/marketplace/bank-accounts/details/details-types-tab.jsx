@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles, Typography, Grid } from '@material-ui/core';
-import { BankingAccountOption } from './account-option';
+import { BankingAccountOption } from '../common/account-option';
 
 const styles = theme => ({
 	tabContainer: {
