@@ -32,7 +32,8 @@ class CreateAttributeComponent extends Component {
 		errorLabel: null,
 		value: undefined,
 		disabled: false,
-		liveValidate: false
+		liveValidate: false,
+		documentError: null
 	};
 	componentDidMount() {
 		this.setState({ typeId: this.props.typeId });
@@ -57,6 +58,14 @@ class CreateAttributeComponent extends Component {
 		}
 		const type = this.type;
 		const normalized = identityAttributes.normalizeDocumentsSchema(type.content, value);
+		const documentError = identityAttributes.getDocumentsErrors(normalized.documents);
+
+		if (documentError) {
+			return this.setState({
+				documentError: documentError
+			});
+		}
+
 		this.props.onSave({
 			typeId,
 			name: label,
@@ -209,6 +218,11 @@ class CreateAttributeComponent extends Component {
 							transformErrors={transformErrors}
 							onPDFOpen={file => window.openPDF(file.content)}
 						>
+							{this.state.documentError && (
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{this.state.documentError}
+								</Typography>
+							)}
 							<Grid container spacing={24} className={classes.buttonContainer}>
 								<Grid item>
 									<Button
