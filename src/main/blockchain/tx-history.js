@@ -167,7 +167,9 @@ export class TxHistory extends BaseModel {
 		const status = await web3Service.getTransactionStatus(tx);
 
 		if (status === 'failed') {
-			await this.removeTxById(localTx.id);
+			await this.query().patchAndFetchById(localTx.id, {
+				isError: 1
+			});
 		} else if (status === 'success') {
 			await this.query().patchAndFetchById(localTx.id, {
 				blockHash: tx.blockHash,
