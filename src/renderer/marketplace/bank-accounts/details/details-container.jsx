@@ -113,6 +113,8 @@ class BankAccountsDetailContainer extends Component {
 		const { templateId } = this.props.match.params;
 		const price = this.props.accountType.price;
 
+		/*
+		FIXME: removed temporarily for testing purposes (to allow more than one active application per template)
 		if (this.props.rp && this.props.rp.authenticated) {
 			return !!(
 				templateId &&
@@ -122,6 +124,8 @@ class BankAccountsDetailContainer extends Component {
 		} else {
 			return !!(templateId && price);
 		}
+		*/
+		return !!(templateId && price);
 	};
 
 	onApplyClick = () => {
@@ -129,10 +133,7 @@ class BankAccountsDetailContainer extends Component {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 
-		// FIXME: replace this when pay screens are implemented
-		// const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
-		const payRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
-
+		const checkoutRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
 		const cancelRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
 
@@ -147,12 +148,12 @@ class BankAccountsDetailContainer extends Component {
 					kycOperations.loadRelyingParty(
 						'incorporations',
 						authenticated,
-						payRoute,
+						checkoutRoute,
 						cancelRoute
 					)
 				);
 			} else {
-				await this.props.dispatch(push(payRoute));
+				await this.props.dispatch(push(checkoutRoute));
 			}
 		});
 	};
@@ -227,7 +228,7 @@ BankAccountsDetailContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
-	const notAuthenticated = false;
+	const authenticated = true;
 
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
@@ -239,7 +240,7 @@ const mapStateToProps = (state, props) => {
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			'incorporations',
-			notAuthenticated
+			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(
 			state,

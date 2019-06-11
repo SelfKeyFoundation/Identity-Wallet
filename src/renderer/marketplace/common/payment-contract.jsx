@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { withStyles, Grid, Typography, Button, IconButton } from '@material-ui/core';
-import { Popup } from '../common';
+import { Popup } from '../../common';
 import { PaymentIcon, KeyTooltip, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -49,9 +49,9 @@ const styles = theme => ({
 });
 
 export const PaymentContract = withStyles(styles)(
-	({ classes, closeAction, preApprovePaymentAction, price, whyLink }) => {
+	({ classes, onBackClick, onPayClick, price, whyLink }) => {
 		return (
-			<Popup closeAction={closeAction} open text="Register Payment on the Selfkey Network">
+			<Popup closeAction={onBackClick} open text="Register Payment on the Selfkey Network">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2} className={classes.iconWrap}>
 						<PaymentIcon className={classes.paymentIcon} />
@@ -144,14 +144,10 @@ export const PaymentContract = withStyles(styles)(
 							</Grid>
 							<Grid item classes={{ item: classes.footer }}>
 								<div className={classes.actions}>
-									<Button
-										variant="contained"
-										size="large"
-										onClick={preApprovePaymentAction}
-									>
+									<Button variant="contained" size="large" onClick={onPayClick}>
 										Pre-Approve Payment
 									</Button>
-									<Button variant="outlined" size="large" onClick={closeAction}>
+									<Button variant="outlined" size="large" onClick={onBackClick}>
 										Cancel
 									</Button>
 								</div>
