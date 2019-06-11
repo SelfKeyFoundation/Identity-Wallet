@@ -42,6 +42,7 @@ import { walletSelectors } from 'common/wallet';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import { kycSelectors, kycOperations, kycActions } from 'common/kyc';
 import { Popup } from '../../../common/popup';
+import { appSelectors } from 'common/app';
 
 const styles = theme => ({
 	statusIcon: {
@@ -280,8 +281,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 	};
 
 	async componentDidMount() {
-		const { rpShouldUpdate, rp } = this.props;
-		const afterAuthRoute = `/main/selfkeyIdApplications`;
+		const { rp, afterAuthRoute } = this.props;
 		const cancelRoute = `/main/selfkeyId`;
 		const authenticate = true;
 
@@ -307,12 +307,6 @@ class SelfkeyIdApplicationsComponent extends Component {
 		// this is needed otherwise the rp keeps loading (stuck)
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-
-		if (rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', !authenticate)
-			);
 		}
 	}
 
@@ -342,8 +336,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 	}
 
 	handleApplicationAddDocuments = (id, rpName) => {
-		const { rp } = this.props;
-		const afterAuthRoute = `/main/selfkeyIdApplications`;
+		const { rp, afterAuthRoute } = this.props;
 		const cancelRoute = `/main/selfkeyId`;
 		const authenticate = true;
 
@@ -424,8 +417,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 	};
 
 	handleApplicationRefresh = id => {
-		const { rp } = this.props;
-		const afterAuthRoute = `/main/selfkeyIdApplications`;
+		const { rp, afterAuthRoute } = this.props;
 		const cancelRoute = `/main/selfkeyId`;
 		const authenticate = true;
 
@@ -795,6 +787,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	const notAuthenticated = false;
+	const walletType = appSelectors.selectApp(state).walletType;
+	const afterAuthRoute =
+		walletType === 'ledger' || walletType === 'trezor' ? `/main/selfkeyIdApplications` : '';
 	return {
 		wallet: walletSelectors.getWallet(state),
 		isLoading: incorporationsSelectors.getLoading(state),
@@ -805,7 +800,8 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		applications: kycSelectors.selectApplications(state),
-		processing: kycSelectors.selectProcessing(state)
+		processing: kycSelectors.selectProcessing(state),
+		afterAuthRoute
 	};
 };
 
