@@ -1,5 +1,6 @@
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
+import { getGlobalContext } from 'common/context';
 
 const log = new Logger('tx-history-model');
 const TABLE_NAME = 'tx_history';
@@ -87,6 +88,8 @@ export class TxHistory extends BaseModel {
 		let now = new Date().getTime();
 		data.timeStamp = data.timeStamp || now;
 		data.createdAt = data.createdAt || now;
+		data.from = data.from.toLowerCase();
+		data.to = data.to.toLowerCase();
 
 		let record = await this.query().findOne({ hash: data.hash });
 		if (record) return this.query().patchAndFetchById(record.id, data);
@@ -119,18 +122,58 @@ export class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static removeNotMinedPendingTxsByPublicKey(publicKey, nonce) {
+	/**
+	 * Remove transaction by id
+	 *
+	 * @param {string} id
+	 * @return {Promise}
+	 */
+	static removeTxById(id) {
+		return this.query()
+			.findOne({ id })
+			.del();
+	}
+
+	/**
+	 * Find pending transactions and get updated information from the blockchain
+	 *
+	 * @param {string} publicKey
+	 * @return {Promise}
+	 */
+	static async updatePendingTxsByPublicKey(publicKey) {
 		publicKey = publicKey.toLowerCase();
-		let query = this.query()
+		const query = await this.query()
 			.whereNull('blockNumber')
 			.andWhere(function() {
-				this.where('nonce', '<', nonce).orWhereNull('nonce');
-			})
-			.andWhere(function() {
 				this.where({ from: publicKey }).orWhere({ to: publicKey });
-			})
-			.del();
-		return query;
+			});
+
+		await Promise.all(query.map(this.syncTx.bind(this)));
+	}
+
+	/**
+	 * Sync transaction with the blockchain
+	 * Actions:
+	 * - Remove failed transactions from the local db
+	 * - Update blockHash and blockNumber for transaction pending in db and success status in the blockchain
+	 *
+	 * @param {Transaction} localTx
+	 * @return {Promise}
+	 */
+	static async syncTx(localTx) {
+		const web3Service = getGlobalContext().web3Service;
+
+		const tx = await web3Service.getTransaction(localTx.hash);
+		const status = await web3Service.getTransactionStatus(tx);
+
+		if (status === 'failed') {
+			await this.removeTxById(localTx.id);
+		} else if (status === 'success') {
+			await this.query().patchAndFetchById(localTx.id, {
+				blockHash: tx.blockHash,
+				blockNumber: tx.blockNumber
+			});
+		}
 	}
 }
 
