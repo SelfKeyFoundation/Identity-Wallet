@@ -25,21 +25,14 @@ class SelfkeyIdComponent extends Component {
 	}
 
 	handleChange = (event, tabValue) => {
-		let self = this;
-		this.setState({ tabValue }, async () => {
-			if (self.state.tabValue === 1) {
-				await this.props.dispatch(push(`/main/selfkeyIdApplications`));
-			} else {
-				await this.props.dispatch(push(`/main/selfkeyId`));
-			}
-		});
+		this.setState({ tabValue });
 	};
 
 	render() {
 		let component = <SelfkeyIdOverview {...this.props} onRef={ref => (this.overview = ref)} />;
 
 		if (this.state.tabValue === 1) {
-			component = <SelfkeyIdApplications {...this.props} handleChange={this.handleChange} />;
+			component = <SelfkeyIdApplications {...this.props} />;
 		}
 		// } else if (this.state.tabValue === 2) {
 		// 	component = <SelfkeyIdCompanies {...this.props} />;
