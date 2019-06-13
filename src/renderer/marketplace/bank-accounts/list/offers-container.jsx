@@ -6,6 +6,7 @@ import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingOffersPage } from './offers-page';
+import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
@@ -38,8 +39,12 @@ class BankAccountsTableContainer extends Component {
 	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
 
 	render() {
-		const { isLoading, bankAccounts, keyRate } = this.props;
+		const { isLoading, bankAccounts, keyRate, isError } = this.props;
 		const { accountType } = this.state;
+
+		if (!isLoading && isError) {
+			return <NoConnection onBackClick={this.onBackClick} />;
+		}
 
 		const data = bankAccounts.filter(this.activeBank);
 
@@ -60,14 +65,16 @@ class BankAccountsTableContainer extends Component {
 BankAccountsTableContainer.propTypes = {
 	bankAccounts: PropTypes.array,
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number
+	keyRate: PropTypes.number,
+	isError: PropTypes.any
 };
 
 const mapStateToProps = (state, props) => {
 	return {
 		bankAccounts: bankAccountsSelectors.getMainBankAccounts(state),
 		isLoading: bankAccountsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		isError: bankAccountsSelectors.getError(state)
 	};
 };
 
