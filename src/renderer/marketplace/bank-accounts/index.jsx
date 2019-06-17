@@ -18,7 +18,7 @@ class MarketplaceBankAccountsPage extends Component {
 					component={BankAccountsDetailContainer}
 				/>
 				<Route
-					path={`${path}/pay/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/checkout/:accountCode/:countryCode/:templateId?`}
 					component={BankAccountsCheckoutContainer}
 				/>
 				<Route
