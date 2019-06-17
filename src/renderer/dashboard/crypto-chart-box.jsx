@@ -120,6 +120,29 @@ const styles = () => ({
 			},
 			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
 				color: '#FFFFFF !important'
+			},
+			'&::before': {
+				content: '""',
+				position: 'absolute',
+				marginLeft: '9px',
+				marginTop: '60px',
+				borderStyle: 'solid',
+				borderWidth: '6px 6px 0',
+				borderColor: '#43505B transparent',
+				display: 'block',
+				width: 0,
+				zIndex: 0
+			},
+			'&::after': {
+				content: '""',
+				position: 'absolute',
+				borderStyle: 'solid',
+				borderWidth: '5px 5px 0',
+				borderColor: '#1F2830 transparent',
+				marginLeft: '10px',
+				display: 'block',
+				width: 0,
+				zIndex: 1
 			}
 		}
 	}
