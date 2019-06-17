@@ -7,8 +7,7 @@ const styles = theme => ({
 	kyc: {
 		width: '100%',
 		paddingTop: '40px',
-		borderTop: '2px solid #475768',
-		marginTop: '40px'
+		borderTop: '2px solid #475768'
 	},
 	list: {
 		columns: 2,

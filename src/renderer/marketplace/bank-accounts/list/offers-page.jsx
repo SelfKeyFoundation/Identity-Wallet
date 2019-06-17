@@ -6,10 +6,6 @@ import { Button, Typography, Grid, withStyles } from '@material-ui/core';
 import { BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	page: {
-		position: 'relative',
-		paddingTop: '80px'
-	},
 	pageContent: {
 		width: '1140px',
 		margin: '0 auto'
@@ -31,9 +27,8 @@ const styles = theme => ({
 		width: '36px'
 	},
 	backButtonContainer: {
-		left: '20px',
-		position: 'absolute',
-		top: '20px'
+		left: '15px',
+		position: 'absolute'
 	},
 	tabs: {
 		marginBottom: '15px'
@@ -52,45 +47,58 @@ const BankingOffersPage = withStyles(styles)(
 		onBackClick
 	}) => {
 		return (
-			<div className={classes.page}>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" onClick={onBackClick}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
+			<Grid container>
+				<Grid item>
+					<div className={classes.backButtonContainer}>
+						<Button
+							variant="outlined"
+							color="secondary"
+							size="small"
+							onClick={onBackClick}
+						>
+							<Typography
+								variant="subtitle2"
+								color="secondary"
+								className={classes.bold}
+							>
+								‹ Back
+							</Typography>
+						</Button>
+					</div>
+				</Grid>
 				{loading && <PageLoading />}
 				{!loading && (
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="stretch"
-						className={classes.pageContent}
-					>
-						<Grid item id="header" className={classes.header}>
-							<BankIcon className={classes.icon} />
-							<Typography variant="h1" className={classes.headerTitle}>
-								Bank Accounts
-							</Typography>
-						</Grid>
-						<Grid item className={classes.tabs}>
-							<BankingAccountTypeTabs
-								accountType={accountType}
-								onAccountTypeChange={onAccountTypeChange}
-							/>
-						</Grid>
-						<Grid item>
-							<BankingOffersTable
-								keyRate={keyRate}
-								data={data}
-								onDetails={onDetails}
-							/>
+					<Grid item>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="stretch"
+							className={classes.pageContent}
+						>
+							<Grid item id="header" className={classes.header}>
+								<BankIcon className={classes.icon} />
+								<Typography variant="h1" className={classes.headerTitle}>
+									Bank Accounts
+								</Typography>
+							</Grid>
+							<Grid item className={classes.tabs}>
+								<BankingAccountTypeTabs
+									accountType={accountType}
+									onAccountTypeChange={onAccountTypeChange}
+								/>
+							</Grid>
+							<Grid item>
+								<BankingOffersTable
+									keyRate={keyRate}
+									data={data}
+									onDetails={onDetails}
+								/>
+							</Grid>
 						</Grid>
 					</Grid>
 				)}
-			</div>
+			</Grid>
 		);
 	}
 );

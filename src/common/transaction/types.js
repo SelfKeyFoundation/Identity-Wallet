@@ -12,6 +12,7 @@ const TRANSACTION_FEE_SET = 'app/transaction/fee/SET';
 const CONFIRM_SEND = 'app/transaction/comfirmSend';
 const INCORPORATION_SEND = 'app/transaction/incorporationSend';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
+const LOCKED_SET = 'app/transaction/locked/SET';
 
 export {
 	TRANSACTION_UPDATE,
@@ -26,5 +27,6 @@ export {
 	TRANSACTION_FEE_SET,
 	CONFIRM_SEND,
 	INCORPORATION_SEND,
-	CRYPTO_CURRENCY_SET
+	CRYPTO_CURRENCY_SET,
+	LOCKED_SET
 };

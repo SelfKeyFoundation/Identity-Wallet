@@ -139,9 +139,11 @@ const BankingOffersTable = withStyles(styles)(
 								<FlagCountryName code={bank.countryCode} size="small" />
 							</TableCell>
 							<TableCell className={classes.regionCell}>{bank.region}</TableCell>
-							<TableCell className={classes.eligibilityCellBody}>
-								{bank.eligibility &&
-									bank.eligibility.map(tag => <Tag key={tag}>{tag}</Tag>)}
+							<TableCell>
+								<div className={classes.eligibilityCellBody}>
+									{bank.eligibility &&
+										bank.eligibility.map(tag => <Tag key={tag}>{tag}</Tag>)}
+								</div>
 							</TableCell>
 							<TableCell className={classes.minDepositCell}>
 								{bank.minDeposit}

@@ -244,7 +244,8 @@ export class RelyingPartyRest {
 	static updateKYCApplication(ctx, application) {
 		let url = ctx.getEndpoint('/applications/:id');
 		url = url.replace(':id', application.id);
-		return request.put({
+		log.info(`[updateKYCApplication] PATCH ${url}`);
+		return request.patch({
 			url,
 			body: application,
 			headers: {

@@ -406,11 +406,11 @@ describe('RelyingPartyRest', () => {
 					return 'test';
 				}
 			};
-			sinon.stub(request, 'put').resolves('ok');
+			sinon.stub(request, 'patch').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.updateKYCApplication(ctx, application);
 			expect(res).toEqual('ok');
-			expect(request.put.getCall(0).args).toEqual([
+			expect(request.patch.getCall(0).args).toEqual([
 				{
 					url: 'http://test/1',
 					headers: {
