@@ -15,6 +15,7 @@ import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfke
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import { getIncorporationPrice, getTemplateID } from '../common';
 import { ProgramPrice, FlagCountryName } from '../../common';
+import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({
 	header: {
@@ -135,9 +136,13 @@ class IncorporationsTable extends Component {
 	onBackClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	render() {
-		const { classes, isLoading, incorporations, keyRate } = this.props;
+		const { classes, isLoading, incorporations, keyRate, isError } = this.props;
 		if (isLoading) {
 			return this.renderLoadingScreen();
+		}
+
+		if (!isLoading && isError) {
+			return <NoConnection onBackClick={this.onBackClick} />;
 		}
 
 		const data = incorporations.filter(program => program.show_in_wallet);
@@ -252,13 +257,16 @@ class IncorporationsTable extends Component {
 
 IncorporationsTable.propTypes = {
 	incorporations: PropTypes.array,
-	isLoading: PropTypes.bool
+	isLoading: PropTypes.bool,
+	isError: PropTypes.any,
+	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
 		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
 		isLoading: incorporationsSelectors.getLoading(state),
+		isError: incorporationsSelectors.getError(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };

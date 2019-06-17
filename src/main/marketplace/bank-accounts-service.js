@@ -23,14 +23,13 @@ export class BankAccountsService {
 				if (error) {
 					log.error(error);
 					return reject(error);
+				} else {
+					const payload = {};
+					payload.main = response.Main.map(fieldMap);
+					payload.jurisdictions = response.Jurisdictions.map(fieldMap);
+					payload.details = response.Account_Details.map(fieldMap);
+					resolve(payload);
 				}
-				const payload = {};
-
-				payload.main = response.Main.map(fieldMap);
-				payload.jurisdictions = response.Jurisdictions.map(fieldMap);
-				payload.details = response.Account_Details.map(fieldMap);
-
-				resolve(payload);
 			});
 		});
 	}

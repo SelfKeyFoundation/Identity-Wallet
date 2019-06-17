@@ -26,12 +26,17 @@ const BankingAccountTypeTabs = withStyles(styles)(
 				)}
 				{accountType === 'business' && (
 					<Typography variant="body2" color="secondary" className={classes.tabContent}>
-						Corporate Accounts
+						A corporate account or business account held at a bank or other financial
+						institution by the company and used for business transactions. Banks offer a
+						variety of solutions and account options for small, medium or large
+						businesses.
 					</Typography>
 				)}
 				{accountType === 'private' && (
 					<Typography variant="body2" color="secondary" className={classes.tabContent}>
-						Private Banking
+						Wealth Management accounts provide banking, investment and other financial
+						services to high-net-worth individuals with high levels of income or sizable
+						assets.
 					</Typography>
 				)}
 			</React.Fragment>
