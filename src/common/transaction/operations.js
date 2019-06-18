@@ -24,6 +24,8 @@ const transferHex = '0xa9059cbb';
 
 const hardwalletConfirmationTime = '30000';
 
+export const DEFAULT_ETH_GAS_LIMIT = 21000;
+
 const init = args => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -62,7 +64,7 @@ const setAddress = address => async dispatch => {
 	}
 };
 
-const getGasLimit = async (
+export const getGasLimit = async (
 	cryptoCurrency,
 	address,
 	amount,
@@ -72,7 +74,7 @@ const getGasLimit = async (
 ) => {
 	// Return default gas limit for Ethereum
 	if (cryptoCurrency === 'ETH') {
-		return 21000;
+		return DEFAULT_ETH_GAS_LIMIT;
 	}
 
 	const tokenService = getGlobalContext().tokenService;
@@ -88,7 +90,7 @@ const getTransactionCount = async publicKey => {
 	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
 };
 
-const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
+export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
 	dispatch,
 	getState
 ) => {
@@ -112,11 +114,13 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = transaction.cryptoCurrency;
+			let gasLimit = DEFAULT_ETH_GAS_LIMIT;
+			let gasLimitUpdated = transaction.gasLimitUpdated;
 
-			let gasLimit = 21000;
 			if (newGasLimit) {
 				gasLimit = newGasLimit;
-			} else if (transaction.gasLimit) {
+				gasLimitUpdated = true;
+			} else if (transaction.gasLimitUpdated && transaction.gasLimit) {
 				gasLimit = transaction.gasLimit;
 			} else {
 				gasLimit = await getGasLimit(
@@ -141,6 +145,7 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 					ethFee: feeInEth,
 					gasPrice: gasPrice,
 					gasLimit,
+					gasLimitUpdated,
 					nonce
 				})
 			);
@@ -161,7 +166,7 @@ const setAmount = amount => async dispatch => {
 	await dispatch(setTransactionFee(undefined, amount, undefined, undefined));
 };
 
-const setLocked = locked =>
+export const setLocked = locked =>
 	actions.updateTransaction({
 		locked: locked
 	});
