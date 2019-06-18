@@ -24,7 +24,7 @@ const transferHex = '0xa9059cbb';
 
 const hardwalletConfirmationTime = '30000';
 
-export const DEFAULT_EHT_GAS_LIMIT = 21000;
+export const DEFAULT_ETH_GAS_LIMIT = 21000;
 
 const init = args => async dispatch => {
 	await dispatch(
@@ -74,7 +74,7 @@ export const getGasLimit = async (
 ) => {
 	// Return default gas limit for Ethereum
 	if (cryptoCurrency === 'ETH') {
-		return DEFAULT_EHT_GAS_LIMIT;
+		return DEFAULT_ETH_GAS_LIMIT;
 	}
 
 	const tokenService = getGlobalContext().tokenService;
@@ -114,7 +114,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = transaction.cryptoCurrency;
-			let gasLimit = DEFAULT_EHT_GAS_LIMIT;
+			let gasLimit = DEFAULT_ETH_GAS_LIMIT;
 			let gasLimitUpdated = transaction.gasLimitUpdated;
 
 			if (newGasLimit) {

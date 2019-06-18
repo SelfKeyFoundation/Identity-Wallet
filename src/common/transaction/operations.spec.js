@@ -5,7 +5,7 @@ import operations, {
 	setLocked,
 	setTransactionFee,
 	getGasLimit,
-	DEFAULT_EHT_GAS_LIMIT
+	DEFAULT_ETH_GAS_LIMIT
 } from './operations';
 
 import * as actions from './actions';
@@ -115,14 +115,6 @@ describe('operations', () => {
 		});
 
 		it('should return default eth gas limit', async () => {
-			setGlobalContext({
-				tokenService: {
-					getGasLimit() {
-						return gasLimitMock;
-					}
-				}
-			});
-
 			const result = await getGasLimit(
 				'ETH',
 				address,
@@ -132,7 +124,7 @@ describe('operations', () => {
 				tokenContract
 			);
 
-			expect(result).toEqual(DEFAULT_EHT_GAS_LIMIT);
+			expect(result).toEqual(DEFAULT_ETH_GAS_LIMIT);
 		});
 	});
 
