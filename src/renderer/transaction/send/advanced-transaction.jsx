@@ -360,7 +360,7 @@ class TransactionSendBoxContainer extends Component {
 					alignItems="center"
 					justify="space-between"
 				>
-					<Grid item>
+					<Grid item xs>
 						<Grid
 							container
 							direction="row"
@@ -376,7 +376,7 @@ class TransactionSendBoxContainer extends Component {
 									ALL
 								</button>
 							</Grid>
-							<Grid item>
+							<Grid item xs>
 								<input
 									type="text"
 									onChange={e => this.handleAmountChange(e)}
