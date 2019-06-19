@@ -49,7 +49,7 @@ export class Identity {
 			try {
 				const appEth = new AppEth(transport);
 				const address = await appEth.getAddress(this.path);
-				return address.publicKey;
+				return ethUtil.addHexPrefix(address.publicKey);
 			} finally {
 				transport.close();
 			}
@@ -57,7 +57,7 @@ export class Identity {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
 			);
-			return publicKey;
+			return ethUtil.addHexPrefix(publicKey);
 		}
 	}
 

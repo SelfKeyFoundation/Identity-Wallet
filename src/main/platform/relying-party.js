@@ -94,7 +94,7 @@ export class RelyingPartyRest {
 	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('/auth/challenge');
-		const did = ctx.supportsDID() ? ctx.identity.did : ctx.identity.publicKey;
+		const did = ctx.supportsDID() ? ctx.identity.did : await ctx.identity.publicKey;
 		url = urljoin(url, did);
 		return request.get({
 			url,
