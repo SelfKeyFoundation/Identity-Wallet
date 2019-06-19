@@ -88,7 +88,6 @@ const styles = theme => ({
 		}
 	},
 	goodForCell: {
-		// maxWidth: '250px',
 		width: '250px',
 		padding: '20px',
 		whiteSpace: 'normal'
