@@ -47,14 +47,14 @@ const common = {
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 
 	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
 	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
 	bankAccountsInstance:
-		BANKACCOUNTS_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+		BANKACCOUNTS_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
 	bankAccountsTemplateOverride: BANKACCOUNTS_TEMPLATE_OVERRIDE,
 	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
