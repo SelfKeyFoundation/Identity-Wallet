@@ -30,6 +30,7 @@ export class TokenService {
 		);
 		const decimal = parseInt(await tokenContract.methods.decimals().call());
 		let symbol = '';
+		// This try catch is a workaround for this issue https://stackoverflow.com/questions/55916175/web3-how-to-call-method-which-return-bytes-32
 		try {
 			symbol = await tokenContract.methods.symbol().call();
 		} catch (error) {
