@@ -12,6 +12,7 @@ import {
 import { AttributesTable, Alert } from '../../../common';
 import { typography } from 'selfkey-ui';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { sanitize } from '../../common';
 
 const styles = theme => ({
 	container: {},
@@ -257,7 +258,12 @@ export const BankingAccountOption = withStyles(styles)(
 							<Grid item>
 								<Grid container direction="column" className={classes.eligibility}>
 									<Grid item className={classes.eligibilityGrid}>
-										<Typography variant="body2">{account.details}</Typography>
+										<Typography
+											variant="body2"
+											dangerouslySetInnerHTML={{
+												__html: sanitize(account.details)
+											}}
+										/>
 									</Grid>
 
 									<Grid item>
