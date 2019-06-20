@@ -68,11 +68,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
@@ -94,11 +90,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
@@ -121,11 +113,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async handleTicket(data) {

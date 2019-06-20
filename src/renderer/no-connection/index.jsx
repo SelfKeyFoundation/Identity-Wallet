@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography, Grid, withStyles } from '@material-ui/core';
+import { Modal, Typography, Grid, withStyles, Button } from '@material-ui/core';
 import { ModalWrap, ModalBody, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 
@@ -28,7 +28,7 @@ const styles = theme => ({
 });
 
 export const NoConnection = withStyles(styles)(props => {
-	const { classes } = props;
+	const { classes, onBackClick = false } = props;
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
@@ -54,6 +54,11 @@ export const NoConnection = withStyles(styles)(props => {
 								An internet connection is required <br />
 								to use the SelfKey Vault.
 							</Typography>
+							{onBackClick && (
+								<Button variant="contained" onClick={onBackClick}>
+									Go Back
+								</Button>
+							)}
 						</Grid>
 					</Grid>
 				</ModalBody>
