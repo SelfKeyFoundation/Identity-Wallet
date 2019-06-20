@@ -124,7 +124,7 @@ const dev = {
 	chainId: 3,
 	node: 'infura',
 	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
