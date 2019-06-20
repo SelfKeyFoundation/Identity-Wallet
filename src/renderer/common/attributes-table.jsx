@@ -30,14 +30,17 @@ const styles = theme => ({
 		marginLeft: '0 !important',
 		paddingLeft: 0,
 		paddingRight: 0
+	},
+	divider: {
+		margin: '0 16px'
 	}
 });
 
 export const AttributesTable = withStyles(styles)(({ classes, title, attributes = [] }) => (
 	<Card>
 		<CardHeader title={title} />
-		<Divider />
-		<CardContent className={classes.sanyi}>
+		<Divider className={classes.divider} />
+		<CardContent className="sanyi">
 			<List className={classes.padding}>
 				{attributes.map((attr, idx) => (
 					<ListItem className={classes.listItem} key={idx}>
