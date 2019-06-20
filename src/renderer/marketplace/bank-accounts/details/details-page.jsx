@@ -98,7 +98,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 		countryCode,
 		region,
 		contact,
-		onPay,
+		onStatusAction,
 		onBack,
 		loading,
 		canOpenBankAccount,
@@ -140,7 +140,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 					<ApplicationStatusBar
 						status={applicationStatus}
 						contact={contact}
-						paymentAction={onPay}
+						statusAction={onStatusAction}
 					/>
 					<Grid
 						container

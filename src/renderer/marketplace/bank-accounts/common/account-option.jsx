@@ -12,6 +12,7 @@ import {
 import { AttributesTable, Alert } from '../../../common';
 import { typography } from 'selfkey-ui';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { sanitize } from '../../common';
 
 const styles = theme => ({
 	container: {},
@@ -84,7 +85,7 @@ const styles = theme => ({
 		borderRadius: '5px 0 0 5px',
 		borderStyle: 'solid',
 		borderWidth: '1px 0px 1px 1px',
-		padding: '27px 27px 28px'
+		padding: '3%'
 	}
 });
 
@@ -162,7 +163,14 @@ export const BankingAccountOption = withStyles(styles)(
 		const optionValue = `${account.bankName} ${account.accountTitle}`;
 		const gridSize = showBankName ? 11 : 12;
 		return (
-			<Grid container direction="row" justify="flex-start" alignItems="unset" spacing={0}>
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="unset"
+				spacing={0}
+				wrap="nowrap"
+			>
 				{showBankName && (
 					<Grid item xs={1} className={classes.selectionSection}>
 						<Radio
@@ -250,7 +258,12 @@ export const BankingAccountOption = withStyles(styles)(
 							<Grid item>
 								<Grid container direction="column" className={classes.eligibility}>
 									<Grid item className={classes.eligibilityGrid}>
-										<Typography variant="body2">{account.details}</Typography>
+										<Typography
+											variant="body2"
+											dangerouslySetInnerHTML={{
+												__html: sanitize(account.details)
+											}}
+										/>
 									</Grid>
 
 									<Grid item>
