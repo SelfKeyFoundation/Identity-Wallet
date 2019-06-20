@@ -40,7 +40,7 @@ export const AttributesTable = withStyles(styles)(({ classes, title, attributes 
 	<Card>
 		<CardHeader title={title} />
 		<Divider className={classes.divider} />
-		<CardContent className="sanyi">
+		<CardContent>
 			<List className={classes.padding}>
 				{attributes.map((attr, idx) => (
 					<ListItem className={classes.listItem} key={idx}>
