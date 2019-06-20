@@ -64,6 +64,7 @@ const IncorporationsKYC = props => {
 	if (!templateId) {
 		return null;
 	}
+
 	// Requirements might take a while to load
 	if (!requirements) {
 		return (
