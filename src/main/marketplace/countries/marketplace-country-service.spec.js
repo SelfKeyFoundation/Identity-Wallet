@@ -66,7 +66,7 @@ describe('InventoryService', () => {
 	});
 	it('should load countries from db', async () => {
 		sinon.stub(MarketplaceCountry, 'findAll').resolves(countriesDb);
-		const loaded = await marketplaceCountriesService.loadInventory();
+		const loaded = await marketplaceCountriesService.loadCountries();
 		expect(MarketplaceCountry.findAll.calledOnce).toBe(true);
 		expect(loaded).toEqual(countriesDb);
 	});

@@ -50,7 +50,7 @@ describe('TaxTrieatiesService', () => {
 	});
 	it('should load taxTreaties from db', async () => {
 		sinon.stub(TaxTreaties, 'findAll').resolves(taxTreatiesDb);
-		const loaded = await taxTreatiesService.loadInventory();
+		const loaded = await taxTreatiesService.loadTaxTreaties();
 		expect(TaxTreaties.findAll.calledOnce).toBe(true);
 		expect(loaded).toEqual(taxTreatiesDb);
 	});

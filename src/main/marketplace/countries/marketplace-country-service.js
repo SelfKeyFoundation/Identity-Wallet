@@ -5,16 +5,18 @@ import { isDevMode } from 'common/utils/common';
 import urljoin from 'url-join';
 import _ from 'lodash';
 import { Logger } from '../../../common/logger';
+import { MARKETPLACE_COUNTRY_SYNC_JOB } from './marketplace-country-sync-job-handler';
 
 const log = new Logger('TaxTreatiesService');
 
-export const FLAGTHEORY_COUNTRY_ENDPOINT = config.incorporationTreatiesUrl;
+export const FLAGTHEORY_COUNTRY_ENDPOINT = config.countryInfoUrl;
 
 export const COUNTRY_API_ENDPOINT = `${config.airtableBaseUrl}Countries${isDevMode() ? 'Dev' : ''}`;
 
 export class MarketplaceCountryService {
-	constructor({ taxTreatiesService }) {
+	constructor({ taxTreatiesService, schedulerService }) {
 		this.taxTreatiesService = taxTreatiesService;
+		this.schedulerService = schedulerService;
 	}
 	async fetchMarketplaceCountries() {
 		const sk = await this.fetchMarketplaceCountriesSelfkey();
@@ -38,10 +40,9 @@ export class MarketplaceCountryService {
 	async fetchMarketplaceCountriesFlagtheory(filter = []) {
 		try {
 			let fetched = await this.taxTreatiesService.fetchTaxTreaties();
-
 			fetched = [
 				...new Set(
-					fetched[0].reduce((acc, curr) => {
+					fetched.reduce((acc, curr) => {
 						acc.push(curr.countryCode);
 						acc.push(curr.jurisdictionCountryCode);
 						return acc;
@@ -70,7 +71,9 @@ export class MarketplaceCountryService {
 				json: true
 			});
 			country = _.mapKeys(_.omit(country[0], 'id'), (value, key) => _.camelCase(key));
-			country.languages = country.languages.split(',');
+			country.languages = (country.languages || '').split(',').filter(l => !!l);
+			country.population = +country.population || 0;
+			country.geonameId = '' + country.geonameId || null;
 			return country;
 		} catch (error) {
 			log.error(error);
@@ -78,9 +81,11 @@ export class MarketplaceCountryService {
 		}
 	}
 
-	start() {}
+	start() {
+		this.schedulerService.queueJob(null, MARKETPLACE_COUNTRY_SYNC_JOB);
+	}
 
-	loadInventory() {
+	loadCountries() {
 		return MarketplaceCountry.findAll();
 	}
 	upsert(upsert) {

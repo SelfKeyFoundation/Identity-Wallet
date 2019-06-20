@@ -4,7 +4,7 @@ import request from 'request-promise-native';
 import { isDevMode } from 'common/utils/common';
 import _ from 'lodash';
 import { Logger } from '../../../common/logger';
-
+import { TAX_TREATIES_SYNC_JOB } from './tax-treaties-sync-job-handler';
 const log = new Logger('TaxTreatiesService');
 
 export const FLAGTHEORY_TAX_TREATIES_ENDPOINT = config.incorporationTreatiesUrl;
@@ -14,6 +14,9 @@ export const TAX_TREATIES_API_ENDPOINT = `${config.airtableBaseUrl}TaxTreaties${
 }`;
 
 export class TaxTreatiesService {
+	constructor({ schedulerService }) {
+		this.schedulerService = schedulerService;
+	}
 	async fetchTaxTreaties() {
 		const [sk, ft] = await Promise.all([
 			this.fetchTaxTreatiesSelfkey(),
@@ -64,9 +67,11 @@ export class TaxTreatiesService {
 			return [];
 		}
 	}
-	start() {}
+	start() {
+		this.schedulerService.queueJob(null, TAX_TREATIES_SYNC_JOB);
+	}
 
-	loadInventory() {
+	loadTaxTreaties() {
 		return TaxTreaties.findAll();
 	}
 	upsert(upsert) {

@@ -21,7 +21,7 @@ export class MarketplaceCountry extends BaseModel {
 				name: { type: 'string', default: '' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				currencyCode: { type: ['string', 'null'], default: null },
-				population: { type: ['integer', 'null'], default: null },
+				population: { type: ['string', 'integer', 'null'], default: null },
 				fipsCode: { type: ['string', 'null'], default: null },
 				isoNumeric: { type: ['string', 'null'], default: null },
 				north: { type: ['string', 'null'], default: null },
@@ -34,7 +34,7 @@ export class MarketplaceCountry extends BaseModel {
 				areaInSqKm: { type: ['string', 'null'], default: null },
 				languages: { type: 'array', default: [] },
 				isoAlpha3: { type: ['string', 'null'], default: null },
-				geonameId: { type: ['string', 'null'], default: null }
+				geonameId: { type: ['string', 'integer', 'null'], default: null }
 			}
 		};
 	}

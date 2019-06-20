@@ -111,10 +111,8 @@ function onReady() {
 					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
-				ctx.vendorSyncJobHandler.registerHandler();
-				ctx.inventorySyncJobHandler.registerHandler();
-				ctx.inventoryService.start();
-				ctx.vendorService.start();
+				registerJobHandlers(ctx);
+				scheduleInitialJobs(ctx);
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
@@ -217,4 +215,18 @@ function createKeystoreFolder() {
 			if (error) log.error(error);
 		});
 	}
+}
+
+function registerJobHandlers(ctx) {
+	ctx.vendorSyncJobHandler.registerHandler();
+	ctx.inventorySyncJobHandler.registerHandler();
+	ctx.marketplaceCountrySyncJobHandler.registerHandler();
+	ctx.taxTreatiesSyncJobHandler.registerHandler();
+}
+
+function scheduleInitialJobs(ctx) {
+	ctx.inventoryService.start();
+	ctx.vendorService.start();
+	ctx.marketplaceCountryService.start();
+	ctx.taxTreatiesService.start();
 }
