@@ -147,7 +147,6 @@ export const vendorsLoadedFromJobReducer = (state, action) => {
 
 export const marketplaceLoadedFromJobReducer = (state, action) => {
 	if (action.payload.finishStatus !== 'success') {
-		console.log('XXX', action);
 		return state;
 	}
 	switch (action.payload.category) {

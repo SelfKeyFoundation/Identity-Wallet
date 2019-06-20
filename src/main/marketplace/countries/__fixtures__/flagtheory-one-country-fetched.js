@@ -2,7 +2,7 @@ export default () => ({
 	code: 'AT',
 	name: 'Austria',
 	currencyCode: 'EUR',
-	population: '8205000',
+	population: 8205000,
 	fipsCode: 'AU',
 	isoNumeric: '040',
 	north: '49.0211627691393',
@@ -15,5 +15,5 @@ export default () => ({
 	areaInSqKm: '83858.0',
 	languages: ['de-AT', 'hr', 'hu', 'sl'],
 	isoAlpha3: 'AUT',
-	geonameId: 2782113
+	geonameId: '2782113'
 });

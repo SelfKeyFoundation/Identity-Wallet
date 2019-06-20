@@ -11,11 +11,10 @@ import countriesFetched from './__fixtures__/countries-airtable-fetched';
 import countriesDb from './__fixtures__/countries-db';
 import flagtheoryCountries from './__fixtures__/flagtheory-countries-response';
 import flagtheoryCountriesFetched from './__fixtures__/flagtheory-countries-fetched';
-import finalCountries from './__fixtures__/final-countries-fetched';
 import flagtheoryOneCountry from './__fixtures__/flagtheory-one-country-response';
 import flagtheoryOneCountryFetched from './__fixtures__/flagtheory-one-country-fetched';
 
-describe('InventoryService', () => {
+describe('MarketplaceCountryService', () => {
 	let marketplaceCountriesService;
 	let taxTreatiesService = {
 		fetchTaxTreaties: () => {}
@@ -26,7 +25,7 @@ describe('InventoryService', () => {
 	afterEach(() => {
 		sinon.restore();
 	});
-	xit('should fetch countries', async () => {
+	it('should fetch countries', async () => {
 		sinon
 			.stub(marketplaceCountriesService, 'fetchMarketplaceCountriesSelfkey')
 			.resolves(countriesFetched());
@@ -38,7 +37,7 @@ describe('InventoryService', () => {
 		expect(marketplaceCountriesService.fetchMarketplaceCountriesFlagtheory.calledOnce).toBe(
 			true
 		);
-		expect(resp).toEqual(finalCountries);
+		expect(resp).toEqual(flagtheoryCountriesFetched().concat(countriesFetched()));
 	});
 	it('should fetch countries from airtable', async () => {
 		sinon.stub(request, 'get').resolves(countriesResponseFixture);
@@ -56,7 +55,7 @@ describe('InventoryService', () => {
 		expect(resp).toEqual(flagtheoryOneCountryFetched());
 	});
 	it('should fetch countries from flagtheory', async () => {
-		sinon.stub(taxTreatiesService, 'fetchTaxTreaties').resolves(flagtheoryCountries);
+		sinon.stub(taxTreatiesService, 'fetchTaxTreaties').resolves(flagtheoryCountries());
 		sinon.stub(marketplaceCountriesService, 'populateCountryListFlagtheory').resolves(['ok']);
 		const resp = await marketplaceCountriesService.fetchMarketplaceCountriesFlagtheory(['AT']);
 		expect(marketplaceCountriesService.populateCountryListFlagtheory.getCall(0).args).toEqual([
