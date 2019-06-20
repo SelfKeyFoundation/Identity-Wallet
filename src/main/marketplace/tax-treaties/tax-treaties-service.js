@@ -38,7 +38,6 @@ export class TaxTreatiesService {
 			delete map[key];
 			return { ...t, ...treaty };
 		});
-
 		treaties = Object.keys(map).reduce((acc, key) => {
 			acc.push(map[key]);
 			return acc;

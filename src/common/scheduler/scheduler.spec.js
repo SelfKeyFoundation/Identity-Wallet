@@ -37,9 +37,12 @@ describe('scheduler', () => {
 			const finishStatus = 'success';
 			const result = { test: '123' };
 			const finishTs = 100000;
-			expect(schedulerActions.finishJobAction(id, finishTs, finishStatus, result)).toEqual({
+			const category = 'test';
+			expect(
+				schedulerActions.finishJobAction(id, category, finishTs, finishStatus, result, {})
+			).toEqual({
 				type: schedulerTypes.SCHEDULER_JOB_FINISH,
-				payload: { id, finishStatus, result, finishTs }
+				payload: { id, category, finishStatus, result, finishTs, data: {} }
 			});
 		});
 		it('progressJobAction', () => {
@@ -56,9 +59,10 @@ describe('scheduler', () => {
 			const id = 'test1';
 			const result = { test: '123' };
 			const finishTs = 1000;
-			expect(schedulerActions.cancelJobAction(id, finishTs, result)).toEqual({
+			const category = 'test';
+			expect(schedulerActions.cancelJobAction(id, category, finishTs, result, {})).toEqual({
 				type: schedulerTypes.SCHEDULER_JOB_FINISH,
-				payload: { id, result, finishTs, finishStatus: 'canceled' }
+				payload: { id, category, result, finishTs, finishStatus: 'canceled', data: {} }
 			});
 		});
 		it('deleteJobAction', () => {
@@ -157,7 +161,14 @@ describe('scheduler', () => {
 			const finishStatus = 'success';
 			const result = { finished: true };
 
-			let action = schedulerActions.finishJobAction(id, finishTs, finishStatus, result);
+			let action = schedulerActions.finishJobAction(
+				id,
+				'test',
+				finishTs,
+				finishStatus,
+				result,
+				{}
+			);
 			expect(state.finished).toEqual([]);
 
 			expect(reducers.finishJobReducer(state, action)).toEqual({
@@ -183,7 +194,14 @@ describe('scheduler', () => {
 			const finishStatus = 'success';
 			const result = { finished: true };
 
-			let action = schedulerActions.finishJobAction(id, finishTs, finishStatus, result);
+			let action = schedulerActions.finishJobAction(
+				id,
+				'test',
+				finishTs,
+				finishStatus,
+				result,
+				{}
+			);
 			expect(state.finished).toEqual([]);
 
 			expect(reducers.finishJobReducer(state, action)).toEqual({

@@ -1,5 +1,7 @@
+import { Logger } from 'common/logger';
 export const TAX_TREATIES_SYNC_JOB = 'tax-treaties-sync-job';
 
+const log = new Logger(TAX_TREATIES_SYNC_JOB);
 export class TaxTreatiesSyncJobHandler {
 	constructor({ schedulerService, taxTreatiesService }) {
 		this.schedulerService = schedulerService;
@@ -24,34 +26,40 @@ export class TaxTreatiesSyncJobHandler {
 		job.emitProgress(50, { message: 'Merging remote and local data' });
 
 		let treaties = remoteTreaties.reduce((acc, curr) => {
-			acc[curr.countryCode] = curr;
+			acc[`${curr.countryCode}_${curr.jurisdictionCountryCode}`] = curr;
 			return acc;
 		}, {});
 
 		const { dbTreatiesByCode, toRemove } = dbCountries.reduce(
 			(acc, curr) => {
-				acc.dbCountriesByCode[curr.code] = curr;
-				if (!treaties[curr.code]) {
+				let key = `${curr.countryCode}_${curr.jurisdictionCountryCode}`;
+				acc.dbTreatiesByCode[key] = curr;
+				if (!treaties[key]) {
 					acc.toRemove.push(curr.id);
 				}
 				return acc;
 			},
-			{ dbCountriesByCode: {}, toRemove: [] }
+			{ dbTreatiesByCode: {}, toRemove: [] }
 		);
 		const upsert = remoteTreaties.map(item => {
-			if (dbTreatiesByCode[item.code]) {
-				item = { ...dbTreatiesByCode[item.code], ...item };
+			let key = `${item.countryCode}_${item.jurisdictionCountryCode}`;
+			if (dbTreatiesByCode[key]) {
+				item = { ...dbTreatiesByCode[key], ...item };
 			}
 			return item;
 		});
 		job.emitProgress(75, { message: 'Updating db data' });
-		await this.taxTreatiesService.upsert(upsert);
+		try {
+			await this.taxTreatiesService.upsert(upsert);
+		} catch (error) {
+			log.error(error);
+		}
 		job.emitProgress(25, { message: 'Removing obsolete treaties' });
 		await this.taxTreatiesService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated treaty list' });
-		const inventory = this.taxTreatiesService.loadCountries();
+		const taxTreaties = this.taxTreatiesService.loadTaxTreaties();
 		job.emitProgress(100, { message: 'Done!' });
-		return inventory;
+		return taxTreaties;
 	}
 }
 

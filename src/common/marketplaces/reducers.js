@@ -1,6 +1,11 @@
 import { schema } from 'normalizr';
 import { marketplacesTypes } from './types';
 import { categories } from './assets.json';
+import { schedulerTypes } from '../scheduler';
+import { MARKETPLACE_COUNTRY_SYNC_JOB } from '../../main/marketplace/countries/marketplace-country-sync-job-handler';
+import { TAX_TREATIES_SYNC_JOB } from '../../main/marketplace/tax-treaties/tax-treaties-sync-job-handler';
+import { INVENTORY_SYNC_JOB } from '../../main/marketplace/inventory/inventory-sync-job-handler';
+import { VENDOR_SYNC_JOB } from '../../main/marketplace/vendors/vendor-sync-job-handler';
 
 export const initialState = {
 	transactions: [],
@@ -13,7 +18,15 @@ export const initialState = {
 	categoriesById: categories.reduce((acc, curr) => {
 		acc[curr.id] = curr;
 		return acc;
-	}, {})
+	}, {}),
+	vendors: [],
+	vendorsById: {},
+	inventory: [],
+	inventoryById: {},
+	countries: [],
+	countriesById: {},
+	taxTreaties: [],
+	taxTreatiesById: {}
 };
 
 export const transactionSchema = new schema.Entity('transactions', {}, { idAttribute: 'id' });
@@ -95,6 +108,60 @@ export const clearCurrentTransactionReducer = state => {
 	return { ...state, currentTransaction: null };
 };
 
+export const countriesLoadedFromJobReducer = (state, action) => {
+	const list = action.payload.result;
+	const countries = list.map(c => c.id);
+	const countriesById = list.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	return { ...state, countries, countriesById };
+};
+export const treatiesLoadedFromJobReducer = (state, action) => {
+	const list = action.payload.result;
+	const taxTreaties = list.map(c => c.id);
+	const taxTreatiesById = list.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	return { ...state, taxTreaties, taxTreatiesById };
+};
+export const inventoryLoadedFromJobReducer = (state, action) => {
+	const list = action.payload.result;
+	const inventory = list.map(c => c.id);
+	const inventoryById = list.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	return { ...state, inventory, inventoryById };
+};
+export const vendorsLoadedFromJobReducer = (state, action) => {
+	const list = action.payload.result;
+	const vendors = list.map(c => c.id);
+	const vendorsById = list.reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+	return { ...state, vendors, vendorsById };
+};
+
+export const marketplaceLoadedFromJobReducer = (state, action) => {
+	if (action.payload.finishStatus !== 'success') {
+		console.log('XXX', action);
+		return state;
+	}
+	switch (action.payload.category) {
+		case MARKETPLACE_COUNTRY_SYNC_JOB:
+			return reducers.countriesLoadedFromJobReducer(state, action);
+		case TAX_TREATIES_SYNC_JOB:
+			return reducers.treatiesLoadedFromJobReducer(state, action);
+		case INVENTORY_SYNC_JOB:
+			return reducers.inventoryLoadedFromJobReducer(state, action);
+		case VENDOR_SYNC_JOB:
+			return reducers.vendorsLoadedFromJobReducer(state, action);
+	}
+};
+
 export const reducers = {
 	updateStakeReducer,
 	setStakesReducer,
@@ -104,7 +171,12 @@ export const reducers = {
 	setMarketplacePopupReducer,
 	setCurrentTransactionReducer,
 	updateCurrentTransactionReducer,
-	clearCurrentTransactionReducer
+	clearCurrentTransactionReducer,
+	marketplaceLoadedFromJobReducer,
+	countriesLoadedFromJobReducer,
+	treatiesLoadedFromJobReducer,
+	inventoryLoadedFromJobReducer,
+	vendorsLoadedFromJobReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -127,6 +199,8 @@ const reducer = (state = initialState, action) => {
 			return reducers.updateCurrentTransactionReducer(state, action);
 		case marketplacesTypes.MARKETPLACE_TRANSACTIONS_CURRENT_CLEAR:
 			return reducers.clearCurrentTransactionReducer(state, action);
+		case schedulerTypes.SCHEDULER_JOB_FINISH:
+			return reducers.marketplaceLoadedFromJobReducer(state, action);
 	}
 	return state;
 };

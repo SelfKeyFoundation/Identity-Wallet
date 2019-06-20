@@ -40,17 +40,17 @@ export const schedulerActions = {
 		type: schedulerTypes.SCHEDULER_JOB_PROCESS,
 		payload: { id, processTs }
 	}),
-	finishJobAction: (id, finishTs, finishStatus, result) => ({
+	finishJobAction: (id, category, finishTs, finishStatus, result, data) => ({
 		type: schedulerTypes.SCHEDULER_JOB_FINISH,
-		payload: { id, finishStatus, result, finishTs }
+		payload: { id, category, finishStatus, result, finishTs, data }
 	}),
 	progressJobAction: (id, progressTs, progress, data) => ({
 		type: schedulerTypes.SCHEDULER_JOB_PROGRESS,
 		payload: { id, progressTs, progress, data }
 	}),
-	cancelJobAction: (id, finishTs, result) => ({
+	cancelJobAction: (id, category, finishTs, result, data) => ({
 		type: schedulerTypes.SCHEDULER_JOB_FINISH,
-		payload: { id, finishTs, finishStatus: 'canceled', result }
+		payload: { id, category, finishTs, finishStatus: 'canceled', result, data }
 	}),
 	deleteJobAction: id => ({
 		type: schedulerTypes.SCHEDULER_JOB_DELETE,
@@ -148,10 +148,16 @@ export const operations = {
 		const jobObj = schedulerService.initJob(job);
 		if (!jobObj) {
 			return dispatch(
-				schedulerActions.cancelJobAction(job.id, Date.now(), {
-					code: 'no_handler',
-					message: 'No handler for this job type'
-				})
+				schedulerActions.cancelJobAction(
+					job.id,
+					job.category,
+					Date.now(),
+					{
+						code: 'no_handler',
+						message: 'No handler for this job type'
+					},
+					job.data
+				)
 			);
 		}
 		jobObj.on('progress', (progress, data) => {
@@ -160,7 +166,16 @@ export const operations = {
 
 		try {
 			const result = await jobObj.execute();
-			await dispatch(schedulerActions.finishJobAction(job.id, Date.now(), 'success', result));
+			await dispatch(
+				schedulerActions.finishJobAction(
+					job.id,
+					job.category,
+					Date.now(),
+					'success',
+					result,
+					job.data
+				)
+			);
 			if (jobObj.hasJobs()) {
 				await Promise.all(
 					jobObj
@@ -180,10 +195,11 @@ export const operations = {
 			return result;
 		} catch (error) {
 			await dispatch(
-				schedulerActions.cancelJobAction(job.id, Date.now(), {
+				schedulerActions.cancelJobAction(job.id, job.category, Date.now(), {
 					code: error.code || 'canceled',
 					message: error.message || 'Job canceled'
-				})
+				}),
+				job.data
 			);
 			return error;
 		}
