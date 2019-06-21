@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, List, ListItem, Typography } from '@material-ui/core';
 import { GreenTick, DeniedTick } from 'selfkey-ui';
+import { sanitize } from '../../common';
 
 // FIXME: how to load this dynamically from the api data?
 const TAX_COLUMNS = [
@@ -103,65 +104,74 @@ const styles = theme => ({
 	}
 });
 
-class IncorporationsTaxView extends Component {
+class TaxViewTab extends Component {
 	render() {
-		const { classes, tax } = this.props;
+		const { classes, program } = this.props;
+		const { tax } = program;
 
 		return (
-			<Grid container justify="flex-start" alignItems="flex-start">
-				<div>
-					<List>
-						{TAX_COLUMNS[0].map(prop => (
-							<ListItem key={prop} className={classes.booleanProp}>
-								{tax[prop.id] ? (
-									<GreenTick />
-								) : (
-									<span className={classes.denied}>
-										<DeniedTick />
-									</span>
-								)}
-								<Typography variant="h5" gutterBottom>
-									{prop.label}
-								</Typography>
-							</ListItem>
-						))}
-					</List>
-				</div>
-				<div>
-					<List>
-						{TAX_COLUMNS[1]
-							.filter(prop => tax[prop.id])
-							.map(prop => (
-								<ListItem key={prop.id} className={classes.textProp}>
+			<React.Fragment>
+				<Grid container justify="flex-start" alignItems="flex-start">
+					<div>
+						<List>
+							{TAX_COLUMNS[0].map(prop => (
+								<ListItem key={prop} className={classes.booleanProp}>
+									{tax[prop.id] ? (
+										<GreenTick />
+									) : (
+										<span className={classes.denied}>
+											<DeniedTick />
+										</span>
+									)}
 									<Typography variant="h5" gutterBottom>
 										{prop.label}
 									</Typography>
-									<Typography variant="h5" gutterBottom className="value">
-										{tax[prop.id]}
-									</Typography>
 								</ListItem>
 							))}
-					</List>
-				</div>
-				<div>
-					<List>
-						{TAX_COLUMNS[2]
-							.filter(prop => tax[prop.id])
-							.map(prop => (
-								<ListItem key={prop.id} className={classes.textProp}>
-									<Typography variant="h5" gutterBottom>
-										{prop.label}
-									</Typography>
-									<Typography variant="h5" gutterBottom className="value">
-										{tax[prop.id]}
-									</Typography>
-								</ListItem>
-							))}
-					</List>
-				</div>
-			</Grid>
+						</List>
+					</div>
+					<div>
+						<List>
+							{TAX_COLUMNS[1]
+								.filter(prop => tax[prop.id])
+								.map(prop => (
+									<ListItem key={prop.id} className={classes.textProp}>
+										<Typography variant="h5" gutterBottom>
+											{prop.label}
+										</Typography>
+										<Typography variant="h5" gutterBottom className="value">
+											{tax[prop.id]}
+										</Typography>
+									</ListItem>
+								))}
+						</List>
+					</div>
+					<div>
+						<List>
+							{TAX_COLUMNS[2]
+								.filter(prop => tax[prop.id])
+								.map(prop => (
+									<ListItem key={prop.id} className={classes.textProp}>
+										<Typography variant="h5" gutterBottom>
+											{prop.label}
+										</Typography>
+										<Typography variant="h5" gutterBottom className="value">
+											{tax[prop.id]}
+										</Typography>
+									</ListItem>
+								))}
+						</List>
+					</div>
+				</Grid>
+				<div
+					dangerouslySetInnerHTML={{
+						__html: sanitize(program.translation.taxes_paragraph)
+					}}
+					className={classes.tabDescription}
+				/>
+			</React.Fragment>
 		);
 	}
 }
 
-export default withStyles(styles)(IncorporationsTaxView);
+export default withStyles(styles)(TaxViewTab);

@@ -50,7 +50,7 @@ const styles = theme => ({
    ==========================================================================
 */
 
-class IncorporationsCountryInfo extends Component {
+class CountryDetailsTab extends Component {
 	componentDidMount() {
 		if (!this.props.country) {
 			this.props.dispatch(
@@ -66,14 +66,15 @@ class IncorporationsCountryInfo extends Component {
 	);
 
 	render() {
-		const { country, classes, translation } = this.props;
+		const { country, classes, program } = this.props;
+		const { translation } = program;
 
 		if (!country) {
 			return this.renderLoadingScreen();
 		}
 
 		return (
-			<div>
+			<React.Fragment>
 				<Typography variant="h1" gutterBottom className={classes.countryName}>
 					{country.name}
 				</Typography>
@@ -144,12 +145,12 @@ class IncorporationsCountryInfo extends Component {
 						}}
 					/>
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
 
-IncorporationsCountryInfo.propTypes = {
+CountryDetailsTab.propTypes = {
 	countryCode: PropTypes.string,
 	isLoading: PropTypes.bool,
 	country: PropTypes.object
@@ -162,5 +163,5 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const styledComponent = withStyles(styles)(IncorporationsCountryInfo);
+const styledComponent = withStyles(styles)(CountryDetailsTab);
 export default connect(mapStateToProps)(styledComponent);

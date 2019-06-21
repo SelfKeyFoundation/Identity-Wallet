@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, List, ListItem, Typography } from '@material-ui/core';
 import { GreenTick, DeniedTick } from 'selfkey-ui';
+import { sanitize } from '../../common';
 
 // FIXME: how to load this dynamically from the api data?
 const LEGAL_COLUMNS = [
@@ -172,69 +173,79 @@ const styles = theme => ({
 	}
 });
 
-class IncorporationsLegalView extends Component {
+class LegalViewTabComponent extends Component {
 	render() {
-		const { classes, data } = this.props;
-
+		const { classes, program } = this.props;
+		const { translation, details: data } = program;
 		const index = data.LLC ? 3 : 0;
 
 		return (
-			<Grid container justify="flex-start" alignItems="flex-start">
-				<div>
-					<List>
-						{LEGAL_COLUMNS[index].map(prop => (
-							<ListItem key={prop.id} className={classes.booleanProp}>
-								{data[prop.id] ? (
-									<GreenTick />
-								) : (
-									<span className={classes.denied}>
-										<DeniedTick />
-									</span>
-								)}
-								<Typography variant="h5" gutterBottom>
-									{prop.text}
-								</Typography>
-							</ListItem>
-						))}
-					</List>
-				</div>
-				<div>
-					<List>
-						{LEGAL_COLUMNS[1].map(prop => (
-							<ListItem key={prop.id} className={classes.booleanProp}>
-								{data[prop.id] ? (
-									<GreenTick />
-								) : (
-									<span className={classes.denied}>
-										<DeniedTick />
-									</span>
-								)}
-								<Typography variant="h5" gutterBottom>
-									{prop.text}
-								</Typography>
-							</ListItem>
-						))}
-					</List>
-				</div>
-				<div>
-					<List>
-						{LEGAL_COLUMNS[2]
-							.filter(prop => data[prop.id])
-							.map(prop => (
-								<ListItem key={prop.id} className={classes.textProp}>
+			<React.Fragment>
+				<Grid container justify="flex-start" alignItems="flex-start">
+					<div>
+						<List>
+							{LEGAL_COLUMNS[index].map(prop => (
+								<ListItem key={prop.id} className={classes.booleanProp}>
+									{data[prop.id] ? (
+										<GreenTick />
+									) : (
+										<span className={classes.denied}>
+											<DeniedTick />
+										</span>
+									)}
 									<Typography variant="h5" gutterBottom>
 										{prop.text}
 									</Typography>
-									<Typography variant="h5" gutterBottom className="value">
-										{data[prop.id]}
+								</ListItem>
+							))}
+						</List>
+					</div>
+					<div>
+						<List>
+							{LEGAL_COLUMNS[1].map(prop => (
+								<ListItem key={prop.id} className={classes.booleanProp}>
+									{data[prop.id] ? (
+										<GreenTick />
+									) : (
+										<span className={classes.denied}>
+											<DeniedTick />
+										</span>
+									)}
+									<Typography variant="h5" gutterBottom>
+										{prop.text}
 									</Typography>
 								</ListItem>
 							))}
-					</List>
-				</div>
-			</Grid>
+						</List>
+					</div>
+					<div>
+						<List>
+							{LEGAL_COLUMNS[2]
+								.filter(prop => data[prop.id])
+								.map(prop => (
+									<ListItem key={prop.id} className={classes.textProp}>
+										<Typography variant="h5" gutterBottom>
+											{prop.text}
+										</Typography>
+										<Typography variant="h5" gutterBottom className="value">
+											{data[prop.id]}
+										</Typography>
+									</ListItem>
+								))}
+						</List>
+					</div>
+				</Grid>
+				<div
+					dangerouslySetInnerHTML={{
+						__html: sanitize(translation.legal_paragraph)
+					}}
+					className={classes.tabDescription}
+				/>
+			</React.Fragment>
 		);
 	}
 }
 
-export default withStyles(styles)(IncorporationsLegalView);
+export const LegalViewTab = withStyles(styles)(LegalViewTabComponent);
+
+export default LegalViewTab;

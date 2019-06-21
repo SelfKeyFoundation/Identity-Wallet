@@ -2,23 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
-import config from 'common/config';
-import EthUnits from 'common/utils/eth-units';
-import { getLocale } from 'common/locale/selectors';
-import { getFiatCurrency } from 'common/fiatCurrency/selectors';
-import { getTokens } from 'common/wallet-tokens/selectors';
-import { getWallet } from 'common/wallet/selectors';
-import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { pricesSelectors } from 'common/prices';
-import { kycSelectors, kycOperations } from 'common/kyc';
+import { ethGasStationInfoOperations } from 'common/eth-gas-station';
+import { kycOperations } from 'common/kyc';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { PaymentCheckout } from '../../common/payment-checkout';
+import * as CheckoutUtil from '../../common/checkout-util';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
-const CRYPTOCURRENCY = config.constants.primaryToken;
-const FIXED_GAS_LIMIT_PRICE = 21000;
-// const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsCheckoutContainer extends Component {
 	async componentDidMount() {
@@ -42,40 +33,6 @@ class BankAccountsCheckoutContainer extends Component {
 		}
 	}
 
-	getLastApplication = () => {
-		const { rp } = this.props;
-		const { templateId } = this.props.match.params;
-
-		if (!rp || !rp.authenticated) return false;
-
-		const { applications } = this.props.rp;
-		if (!applications || applications.length === 0) return false;
-
-		let application;
-		let index = applications.length - 1;
-		for (; index >= 0; index--) {
-			if (applications[index].template === templateId) {
-				application = applications[index];
-				break;
-			}
-		}
-		return application;
-	};
-
-	userHasApplied = () => {
-		const application = this.getLastApplication();
-		return !!application;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
-
 	canUserOpenBankAccount = () => {
 		const { templateId } = this.props.match.params;
 		const price = this.props.accountType.price;
@@ -84,7 +41,8 @@ class BankAccountsCheckoutContainer extends Component {
 			return !!(
 				templateId &&
 				price &&
-				(!this.userHasApplied() || this.applicationWasRejected())
+				(!CheckoutUtil.userHasApplied(this.props) ||
+					CheckoutUtil.applicationWasRejected(this.props))
 			);
 		} else {
 			return !!(templateId && price);
@@ -97,26 +55,8 @@ class BankAccountsCheckoutContainer extends Component {
 		}
 	};
 
-	getPaymentParameters() {
-		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, accountType } = this.props;
-		const gasPrice = ethGasStationInfo.fast;
-		const price = accountType.price;
-		const keyAmount = price / keyRate;
-		const gasLimit = FIXED_GAS_LIMIT_PRICE;
-		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
-		const usdFee = ethFee * ethRate;
-
-		return {
-			cryptoCurrency,
-			keyRate,
-			gasPrice,
-			gasLimit,
-			price,
-			keyAmount,
-			ethFee,
-			usdFee
-		};
-	}
+	getPaymentParameters = () =>
+		CheckoutUtil.getPaymentParameters(this.props, this.props.accountType.price);
 
 	getCancelRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
@@ -148,7 +88,7 @@ class BankAccountsCheckoutContainer extends Component {
 				asked to provide more information by the service provider`,
 				'conducting KYC',
 				'Far Horizon Capital Inc',
-				'https://flagtheory.com/privacy-policy',
+				'https://flagtheory.comw/privacy-policy',
 				'http://flagtheory.com/terms-and-conditions'
 			)
 		);
@@ -166,12 +106,8 @@ class BankAccountsCheckoutContainer extends Component {
 				{...this.getPaymentParameters()}
 				price={accountType.price}
 				options={accountType.checkoutOptions}
-				initialDocsText={
-					'You will be required to provide a few basic informations about yourself like full name and email. This will be done through SelfKey ID Wallet.'
-				}
-				kycProcessText={
-					'You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.'
-				}
+				initialDocsText={CheckoutUtil.DEFAULT_DOCS_TEXT}
+				kycProcessText={CheckoutUtil.DEFAULT_KYC_PROCESS_TEXT}
 				getFinalDocsText={
 					'Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.'
 				}
@@ -185,25 +121,11 @@ class BankAccountsCheckoutContainer extends Component {
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode } = props.match.params;
-	const authenticated = true;
 	return {
+		...CheckoutUtil.getCheckoutProps(state, props),
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
-		...getLocale(state),
-		...getFiatCurrency(state),
-		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		tokens: getTokens(state).splice(1), // remove ETH
-		publicKey: getWallet(state).publicKey,
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
-		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
-			state,
-			'incorporations',
-			authenticated
-		)
+		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode)
 	};
 };
 
