@@ -1,58 +1,53 @@
 import React from 'react';
-import {
-	withStyles,
-	Typography,
-	CardHeader,
-	CardContent,
-	List,
-	Divider,
-	Card,
-	ListItem
-} from '@material-ui/core';
+import { withStyles, Grid, CardHeader, CardContent, List, Divider, Card } from '@material-ui/core';
+
+import { typography } from 'selfkey-ui';
 
 const styles = theme => ({
 	bold: {
 		fontWeight: 600
-	},
-	listItem: {
-		alignItems: 'baseline',
-		display: 'flex',
-		paddingLeft: 0,
-		paddingRight: 0
-	},
-	listItemText: {
-		marginRight: '10px',
-		minWidth: '37%',
-		width: '37%'
 	},
 	padding: {
 		marginBottom: '0 !important',
 		marginLeft: '0 !important',
 		paddingLeft: 0,
 		paddingRight: 0
+	},
+	divider: {
+		margin: '0 16px'
+	},
+	listContainer: {
+		marginBottom: '24px'
+	},
+	term: {
+		color: typography,
+		fontSize: '16px',
+		lineHeight: '20px',
+		minWidth: '37%',
+		width: '37%'
+	},
+	describe: {
+		fontSize: '16px',
+		lineHeight: '20px',
+		minWidth: '63%',
+		paddingLeft: '10px',
+		width: 'calc(63% - 10px)'
 	}
 });
 
 export const AttributesTable = withStyles(styles)(({ classes, title, attributes = [] }) => (
 	<Card>
 		<CardHeader title={title} />
-		<Divider />
-		<CardContent className={classes.sanyi}>
-			<List className={classes.padding}>
+		<Divider className={classes.divider} />
+		<CardContent>
+			<List component="dl" className={classes.padding}>
 				{attributes.map((attr, idx) => (
-					<ListItem className={classes.listItem} key={idx}>
-						<Typography
-							variant="body2"
-							color="secondary"
-							gutterBottom
-							className={classes.listItemText}
-						>
-							{attr.name}
-						</Typography>
-						<Typography variant="body2" gutterBottom className={classes.bold}>
+					<Grid container className={classes.listContainer} wrap="nowrap" key={idx}>
+						<dt className={classes.term}>{attr.name}</dt>
+						<dd className={`${classes.describe} ${classes.bold}`}>
 							{attr.value || '--'}
-						</Typography>
-					</ListItem>
+						</dd>
+					</Grid>
 				))}
 			</List>
 		</CardContent>
