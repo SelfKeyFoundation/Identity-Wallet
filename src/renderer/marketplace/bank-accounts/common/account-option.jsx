@@ -276,9 +276,11 @@ export const BankingAccountOption = withStyles(styles)(
 										</Typography>
 									</Grid>
 									<Alert type="warning" classname={classes.alert}>
-										Please make sure you understand the bank requirements and
-										that you are able/willing to fulfill them before placing
-										your order.
+										<Typography variant="subtitle2" color="secondary">
+											Please make sure you understand the bank requirements
+											and that you are able/willing to fulfill them before
+											placing your order.
+										</Typography>
 									</Alert>
 								</Grid>
 							</Grid>

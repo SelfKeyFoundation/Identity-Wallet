@@ -28,6 +28,7 @@ const styles = theme => ({
 		}
 	},
 	warning: {
+		backgroundColor: '#313D49',
 		border: `1px solid ${warning}`,
 		color: warning,
 		'& svg': {
@@ -73,7 +74,7 @@ export const AlertIcon = withStyles(styles)(({ classes, type = 'success' }) => (
 export const Alert = withStyles(styles)(
 	({ classes, type = 'success', children, icon, className }) => (
 		<div className={classNames(classes.alert, classes[type], className)}>
-			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+			<Grid container direction="row" justify="flex-start" alignItems="center">
 				<Grid item>{icon || <AlertIcon type={type} />}</Grid>
 				<Grid item xs>
 					{children}

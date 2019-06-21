@@ -217,6 +217,7 @@ export class RelyingPartyRest {
 	static getKYCTemplate(ctx, id) {
 		let url = ctx.getEndpoint('/templates/:id');
 		url = url.replace(':id', id);
+		log.info(`[getKYCTemplate] GET ${url}`);
 		return request.get({
 			url,
 			headers: {
