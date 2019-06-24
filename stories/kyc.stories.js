@@ -26,6 +26,12 @@ storiesOf('KYC/Application Status bar', module)
 		<ApplicationStatusBar status="progress" contact="help@flagtheory.com" />
 	))
 	.add('unpaid', () => (
-		<ApplicationStatusBar status="unpaid" paymentAction={action('pay action')} />
+		<ApplicationStatusBar status="unpaid" statusAction={action('pay action')} />
+	))
+	.add('additional requirements', () => (
+		<ApplicationStatusBar
+			status="additionalRequirements"
+			statusAction={action('redirect action')}
+		/>
 	))
 	.add('rejected', () => <ApplicationStatusBar status="rejected" />);

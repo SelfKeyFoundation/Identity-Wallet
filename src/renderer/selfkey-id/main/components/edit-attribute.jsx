@@ -35,6 +35,7 @@ class EditAttributeComponent extends Component {
 			schema,
 			label: name,
 			errorLabel: null,
+			documentError: null,
 			value,
 			type,
 			attribute,
@@ -62,6 +63,14 @@ class EditAttributeComponent extends Component {
 			});
 		}
 		const normalized = identityAttributes.normalizeDocumentsSchema(schema, value, []);
+		const documentError = identityAttributes.getDocumentsErrors(normalized.documents);
+
+		if (documentError) {
+			return this.setState({
+				documentError: documentError
+			});
+		}
+
 		const newAttr = {
 			...attribute,
 			name: label,
@@ -167,6 +176,11 @@ class EditAttributeComponent extends Component {
 							transformErrors={transformErrors}
 							onPDFOpen={file => window.openPDF(file.content)}
 						>
+							{this.state.documentError && (
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{this.state.documentError}
+								</Typography>
+							)}
 							<Grid container spacing={24} className={classes.buttonContainer}>
 								<Grid item>
 									<Button

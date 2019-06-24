@@ -42,6 +42,61 @@ class BankAccountsCheckoutContainer extends Component {
 		}
 	}
 
+	getLastApplication = () => {
+		const { rp } = this.props;
+		const { templateId } = this.props.match.params;
+
+		if (!rp || !rp.authenticated) return false;
+
+		const { applications } = this.props.rp;
+		if (!applications || applications.length === 0) return false;
+
+		let application;
+		let index = applications.length - 1;
+		for (; index >= 0; index--) {
+			if (applications[index].template === templateId) {
+				application = applications[index];
+				break;
+			}
+		}
+		return application;
+	};
+
+	userHasApplied = () => {
+		const application = this.getLastApplication();
+		return !!application;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication();
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	canUserOpenBankAccount = () => {
+		const { templateId } = this.props.match.params;
+		const price = this.props.accountType.price;
+
+		if (this.props.rp && this.props.rp.authenticated) {
+			return !!(
+				templateId &&
+				price &&
+				(!this.userHasApplied() || this.applicationWasRejected())
+			);
+		} else {
+			return !!(templateId && price);
+		}
+	};
+
+	checkIfUserCanOpenBankAccount = async () => {
+		if (!this.canUserOpenBankAccount()) {
+			this.props.dispatch(push(this.getCancelRoute()));
+		}
+	};
+
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, accountType } = this.props;
 		const gasPrice = ethGasStationInfo.fast;

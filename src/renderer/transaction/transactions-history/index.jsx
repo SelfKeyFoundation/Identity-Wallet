@@ -140,13 +140,18 @@ const getCustomStatusText = (transaction, sent) => {
 		} else {
 			return `Failed to receive ${cryptoType}`;
 		}
-	} else {
-		if (sent) {
-			return `Sent ${cryptoType}`;
-		} else {
-			return `Received ${cryptoType}`;
-		}
 	}
+
+	const isPending = !transaction.blockHash;
+	let label;
+
+	if (sent) {
+		label = isPending ? 'Sending' : 'Sent';
+	} else {
+		label = isPending ? 'Receiving' : 'Received';
+	}
+
+	return `${label} ${cryptoType}`;
 };
 
 const getCustomValue = (transaction, sent) => {
