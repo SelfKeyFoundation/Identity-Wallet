@@ -110,7 +110,6 @@ export class RelyingPartyRest {
 		} else {
 			body.signature = signature;
 		}
-
 		return request.post({
 			url,
 			body,
