@@ -5,12 +5,7 @@ import { BankingAccountOption } from '../common/account-option';
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
-		padding: '2em 0',
-		color: '#FFFFFF',
-		'& p': {
-			marginBottom: '1.5em',
-			lineHeight: '1.4em'
-		},
+		padding: '30px 0',
 		'& strong': {
 			fontWeight: 'bold',
 			color: theme.palette.secondary.main,
@@ -33,6 +28,9 @@ const styles = theme => ({
 		'& a': {
 			color: theme.palette.secondary.main
 		}
+	},
+	gridPadding: {
+		padding: '15px 20px !important'
 	}
 });
 
@@ -59,8 +57,8 @@ class BankingTypesTabComponent extends Component {
 					alignItems="stretch"
 					spacing={40}
 				>
-					<Grid item>
-						<Typography variant="body2" color="secondary">
+					<Grid item className={classes.gridPadding}>
+						<Typography variant="body1" color="secondary">
 							We work with {banks.length} different banks in {region}. Each bank has
 							different eligibility requirements, types of accounts available and
 							onboarding processes. We invite you to carefully review each banks
@@ -69,7 +67,7 @@ class BankingTypesTabComponent extends Component {
 						</Typography>
 					</Grid>
 					{banks.map((opt, idx) => (
-						<Grid item key={idx}>
+						<Grid item key={idx} className={classes.gridPadding}>
 							<BankingAccountOption
 								account={opt}
 								accountType={accountType}

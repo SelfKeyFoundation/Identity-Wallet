@@ -1,10 +1,69 @@
-import operations from './operations';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { setGlobalContext } from 'common/context';
+import operations, {
+	setLocked,
+	setTransactionFee,
+	getGasLimit,
+	DEFAULT_ETH_GAS_LIMIT
+} from './operations';
+
+import * as actions from './actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
+const getStoreMock = (transaction = {}) =>
+	mockStore({
+		transaction: {
+			address: '',
+			amount: 0,
+			ethFee: 0,
+			usdFee: 0,
+			gasPrice: 0,
+			gasLimit: 0,
+			nouce: 0,
+			signedHex: '',
+			transactionHash: '',
+			addressError: false,
+			sending: false,
+			cryptoCurrency: undefined,
+			...transaction
+		},
+		prices: {
+			prices: [
+				{
+					id: 1,
+					name: 'Selfkey',
+					priceBTC: 1,
+					priceETH: 31.288316997525087,
+					priceUSD: 6513.00400614,
+					source: 'https://coincap.io',
+					symbol: 'KEY'
+				},
+				{
+					id: 2,
+					name: 'Ethereum',
+					priceBTC: 1,
+					priceETH: 31.288316997525087,
+					priceUSD: 6513.00400614,
+					source: 'https://coincap.io',
+					symbol: 'ETH'
+				}
+			]
+		},
+		wallet: {
+			publicKey: 'dasdsa'
+		},
+		walletTokens: {
+			tokens: []
+		},
+		ethGasStationInfo: {
+			ethGasStationInfo: {
+				average: 123
+			}
+		}
+	});
 
 describe('operations', () => {
 	it('should call updateTransaction action', async () => {
@@ -24,6 +83,207 @@ describe('operations', () => {
 
 		await store.dispatch(operations.init(extraParams));
 		expect(store.getActions()).toEqual(expectedActions);
+	});
+
+	describe('getGasLimit', () => {
+		const gasLimitMock = Math.random();
+		const address = `${Math.random()}`;
+		const amount = Math.random();
+		const walletAddress = `${Math.random()}`;
+		const nonce = 1;
+		const tokenContract = `${Math.random()}`;
+
+		it('should call  token service to calculate gas limit', async () => {
+			setGlobalContext({
+				tokenService: {
+					getGasLimit() {
+						return gasLimitMock;
+					}
+				}
+			});
+
+			const result = await getGasLimit(
+				'KEY',
+				address,
+				amount,
+				walletAddress,
+				nonce,
+				tokenContract
+			);
+
+			expect(result).toEqual(gasLimitMock);
+		});
+
+		it('should return default eth gas limit', async () => {
+			const result = await getGasLimit(
+				'ETH',
+				address,
+				amount,
+				walletAddress,
+				nonce,
+				tokenContract
+			);
+
+			expect(result).toEqual(DEFAULT_ETH_GAS_LIMIT);
+		});
+	});
+
+	describe('setTransactionFee', () => {
+		const MOCK_GAST_LIMIT = 123;
+		let context;
+
+		beforeEach(() => {
+			context = {
+				web3Service: {
+					web3: {
+						utils: {
+							toChecksumAddress: jest.fn(),
+							isAddress: () => {
+								return true;
+							},
+							isHex: () => {
+								return true;
+							},
+							fromWei: () => 1
+						}
+					},
+					waitForTicket: () => 1
+				},
+				tokenService: {
+					getGasLimit: jest.fn(() => MOCK_GAST_LIMIT)
+				}
+			};
+			setGlobalContext(context);
+		});
+
+		it('should lock and unlock transaction', async () => {
+			const store = getStoreMock({
+				cryptoCurrency: 'ETH'
+			});
+			const newAddress = `${Math.random()}`;
+			const newAmount = null;
+			const newGasPrice = null;
+			const newGasLimit = null;
+			const dispatch = jest.fn();
+			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
+				store.getState()
+			);
+
+			expect(dispatch).toBeCalledWith(setLocked(true));
+			expect(dispatch).toBeCalledWith(setLocked(false));
+		});
+
+		it('should calculate ethFee, gasPrice and gasLimit', async () => {
+			const store = getStoreMock({
+				cryptoCurrency: 'KEY'
+			});
+			const newAddress = `${Math.random()}`;
+			const newAmount = 2;
+			const newGasPrice = null;
+			const newGasLimit = null;
+			const dispatch = jest.fn();
+			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
+				store.getState()
+			);
+
+			expect(dispatch).toBeCalledWith(
+				actions.updateTransaction({
+					ethFee: 1,
+					gasPrice: 123,
+					gasLimit: MOCK_GAST_LIMIT,
+					gasLimitUpdated: undefined,
+					nonce: 1
+				})
+			);
+		});
+
+		it('should calculate gasLimit when gasPrice is udpated', async () => {
+			const store = getStoreMock({
+				cryptoCurrency: 'KEY',
+				address: `${Math.random()}`,
+				amount: 1
+			});
+			const newAddress = null;
+			const newAmount = null;
+			const newGasPrice = 22;
+			const newGasLimit = null;
+			const dispatch = jest.fn();
+			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
+				store.getState()
+			);
+
+			expect(dispatch).toBeCalledWith(
+				actions.updateTransaction({
+					ethFee: 1,
+					gasPrice: newGasPrice,
+					gasLimit: MOCK_GAST_LIMIT,
+					gasLimitUpdated: undefined,
+					nonce: 1
+				})
+			);
+
+			expect(context.tokenService.getGasLimit).toBeCalled();
+		});
+
+		it('should calculate gasLimit when this is undefined and user set the transaction amount', async () => {
+			const store = getStoreMock({
+				cryptoCurrency: 'KEY',
+				address: `${Math.random()}`
+			});
+
+			const newAddress = null;
+			const newAmount = 1;
+			const newGasPrice = null;
+			const newGasLimit = null;
+			const dispatch = jest.fn();
+			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
+				store.getState()
+			);
+
+			expect(dispatch).toBeCalledWith(
+				actions.updateTransaction({
+					ethFee: 1,
+					gasPrice: store.getState().ethGasStationInfo.ethGasStationInfo.average,
+					gasLimit: MOCK_GAST_LIMIT,
+					gasLimitUpdated: undefined,
+					nonce: 1
+				})
+			);
+
+			expect(context.tokenService.getGasLimit).toBeCalled();
+		});
+
+		it('should NOT calculate gasLimit when gasPrice is udpated and gasLimit was setup manually', async () => {
+			const manualGasLimit = Math.random();
+			const store = getStoreMock({
+				cryptoCurrency: 'KEY',
+				address: `${Math.random()}`,
+				amount: 1,
+				gasLimitUpdated: true,
+				gasLimit: manualGasLimit
+			});
+
+			const newAddress = null;
+			const newAmount = null;
+			const newGasPrice = 22;
+			const newGasLimit = null;
+			const dispatch = jest.fn();
+			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
+				store.getState()
+			);
+
+			expect(dispatch).toBeCalledWith(
+				actions.updateTransaction({
+					ethFee: 1,
+					gasPrice: newGasPrice,
+					gasLimit: manualGasLimit,
+					gasLimitUpdated: true,
+					nonce: 1
+				})
+			);
+
+			expect(context.tokenService.getGasLimit).toBeCalledTimes(0);
+		});
 	});
 
 	it('should call setAddress without error if address is valid', async () => {

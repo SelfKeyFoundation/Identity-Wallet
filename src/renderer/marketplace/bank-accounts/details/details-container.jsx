@@ -42,9 +42,54 @@ class BankAccountsDetailContainer extends Component {
 		}
 	}
 
+	cancelRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	payRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	checkoutRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	redirectRoute = () => {
+		return null;
+	};
+
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onTabChange = tab => this.setState({ tab });
+
+	onStatusActionClick = () => {
+		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted()) return null;
+			if (this.applicationWasRejected()) return null;
+			if (this.applicationRequiresAdditionalDocuments()) {
+				console.log('TODO: redirect to kyc-chain');
+			}
+			if (!this.userHasPaid()) {
+				this.props.dispatch(push(this.payRoute()));
+			}
+		}
+		return null;
+	};
+
+	getApplicationStatus = () => {
+		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted()) return 'completed';
+			if (this.applicationWasRejected()) return 'rejected';
+			if (this.applicationRequiresAdditionalDocuments()) return 'progress';
+			if (!this.userHasPaid()) return 'unpaid';
+
+			return 'progress';
+		}
+		return null;
+	};
 
 	getLastApplication = () => {
 		const { rp } = this.props;
@@ -130,11 +175,7 @@ class BankAccountsDetailContainer extends Component {
 
 	onApplyClick = () => {
 		const { rp, wallet } = this.props;
-		const { countryCode, accountCode, templateId } = this.props.match.params;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
-
-		const checkoutRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
-		const cancelRoute = `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
 
 		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
@@ -148,12 +189,12 @@ class BankAccountsDetailContainer extends Component {
 					kycOperations.loadRelyingParty(
 						'incorporations',
 						authenticated,
-						checkoutRoute,
-						cancelRoute
+						this.checkoutRoute(),
+						this.cancelRoute()
 					)
 				);
 			} else {
-				await this.props.dispatch(push(checkoutRoute));
+				await this.props.dispatch(push(this.checkoutRoute()));
 			}
 		});
 	};
@@ -198,6 +239,7 @@ class BankAccountsDetailContainer extends Component {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 		return (
 			<BankingDetailsPage
+				applicationStatus={this.getApplicationStatus()}
 				loading={this.state.loading || this.props.isLoading}
 				accountType={accountType}
 				country={country}
@@ -215,6 +257,7 @@ class BankAccountsDetailContainer extends Component {
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
+				onStatusAction={this.onStatusActionClick}
 			/>
 		);
 	}
