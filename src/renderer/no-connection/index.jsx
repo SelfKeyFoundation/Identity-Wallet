@@ -8,6 +8,7 @@ const styles = theme => ({
 		left: 0,
 		right: 0,
 		margin: '0 auto',
+		top: 'calc(50% - 220px)',
 		width: '360px'
 	},
 	shortButton: {
@@ -48,7 +49,7 @@ export const NoConnection = withStyles(styles)(props => {
 								An internet connection is required to use the SelfKey Vault. Please
 								check your connection and reopen the application.
 							</Typography>
-							{!onBackClick && (
+							{onBackClick && (
 								<Button
 									variant="outlined"
 									size="large"
