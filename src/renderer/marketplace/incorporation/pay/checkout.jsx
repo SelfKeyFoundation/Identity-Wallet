@@ -350,13 +350,16 @@ export class IncorporationCheckout extends React.Component {
 	};
 
 	render() {
+		const { program } = this.props;
 		return (
 			<PaymentCheckout
 				{...this.props}
-				title={`Pay Incorporation Fee: ${this.props.program.Region}`}
+				title={`Pay Incorporation Fee: ${program.Region}`}
+				description={program.wallet_description}
+				timeToForm={program['Time to form (weeks)']}
 				countryCode={this.props.match.params.countryCode}
 				{...this.getPaymentParameters()}
-				options={this.getProgramOptions(this.props.program.wallet_options)}
+				options={this.getProgramOptions(program.wallet_options)}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
 				startButtonText={'Start Incorporation'}

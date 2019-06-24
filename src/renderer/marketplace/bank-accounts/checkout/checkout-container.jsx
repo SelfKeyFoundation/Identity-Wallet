@@ -155,12 +155,13 @@ class BankAccountsCheckoutContainer extends Component {
 	};
 
 	render() {
-		const { accountType } = this.props;
+		const { accountType, banks } = this.props;
 		const countryCode = this.props.match.params.countryCode;
-
 		return (
 			<PaymentCheckout
 				title={`Banking Application Fee: ${accountType.region}`}
+				description={accountType.walletDescription}
+				timeToForm={banks[0].timeToOpen}
 				program={accountType}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
