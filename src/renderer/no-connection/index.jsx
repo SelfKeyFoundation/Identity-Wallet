@@ -11,10 +11,6 @@ const styles = theme => ({
 		top: 'calc(50% - 220px)',
 		width: '360px'
 	},
-	shortButton: {
-		minWidth: 0,
-		width: '100px'
-	},
 	logo: {
 		height: '60px',
 		width: '53px'
