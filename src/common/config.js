@@ -45,7 +45,7 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
-
+	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
 	incorporationsInstance:
 		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,

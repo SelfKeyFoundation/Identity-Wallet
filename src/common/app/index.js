@@ -7,6 +7,7 @@ import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
 import { Logger } from 'common/logger';
 import { kycOperations } from '../kyc';
+import { schedulerOperations } from '../scheduler';
 
 const log = new Logger('app-redux');
 
@@ -292,9 +293,11 @@ const networkStatusUpdateOperation = isOnline => async (dispatch, getState) => {
 	const app = appSelectors.selectApp(getState());
 	if (app.isOnline === isOnline) return;
 	if (app.isOnline && !isOnline) {
+		await dispatch(schedulerOperations.stopSchedulerOperation());
 		await dispatch(push('/no-connection'));
 	}
 	if (!app.isOnline && isOnline) {
+		dispatch(schedulerOperations.startSchedulerOperation());
 		await dispatch(push('/'));
 	}
 	await dispatch(appOperations.setNetworkStatus(isOnline));

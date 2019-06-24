@@ -238,7 +238,7 @@ describe('marketplace operations', () => {
 		expect(service.withdrawStake.calledOnceWith(serviceId, serviceOwner, 10, 20)).toBeTruthy();
 		expect(store.dispatch.calledOnceWith(testAction)).toBeTruthy();
 	});
-	describe('updateTransactionStatusOperation', async () => {
+	describe('updateTransactionStatusOperation', () => {
 		it('if status changes calls to update transaction', async () => {
 			let tx = {
 				lastStatus: 'pending'

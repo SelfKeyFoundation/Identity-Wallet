@@ -6,6 +6,7 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations } from 'common/app';
+import { schedulerOperations } from 'common/scheduler';
 import config from 'common/config';
 
 import { GlobalError } from './global-error';
@@ -62,6 +63,10 @@ class AppContainerComponent extends Component {
 	}
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
+		this.props.dispatch(schedulerOperations.startSchedulerOperation());
+	}
+	componentWillUnmount() {
+		this.props.dispatch(schedulerOperations.stopSchedulerOperation());
 	}
 	render() {
 		const { hasError } = this.state;
