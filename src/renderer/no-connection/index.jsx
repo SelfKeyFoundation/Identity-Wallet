@@ -24,6 +24,9 @@ const styles = theme => ({
 	},
 	marginBottom: {
 		marginBottom: '70px'
+	},
+	spacing: {
+		padding: '30px 30px 40px'
 	}
 });
 
@@ -32,7 +35,7 @@ export const NoConnection = withStyles(styles)(props => {
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
-				<ModalBody>
+				<ModalBody className={classes.spacing}>
 					<Grid
 						container
 						spacing={24}
@@ -49,7 +52,7 @@ export const NoConnection = withStyles(styles)(props => {
 								An internet connection is required to use the SelfKey Vault. Please
 								check your connection and reopen the application.
 							</Typography>
-							{onBackClick && (
+							{!onBackClick && (
 								<Button
 									variant="outlined"
 									size="large"
