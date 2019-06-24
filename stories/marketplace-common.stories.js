@@ -14,6 +14,8 @@ import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
 	program: { Region: 'US' },
+	description: 'This is a checkout description',
+	timeToForm: '2 to 4 week(s)',
 	countryCode: 'US',
 	price: 4000,
 	keyAmount: 100000,
