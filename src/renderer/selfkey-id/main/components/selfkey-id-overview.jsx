@@ -94,6 +94,9 @@ const styles = theme => ({
 	transaction: {
 		alignItems: 'center',
 		display: 'flex'
+	},
+	extraSpace: {
+		marginRight: '4px'
 	}
 });
 
@@ -340,14 +343,15 @@ class SelfkeyIdOverviewComponent extends Component {
 													</Typography>
 													<Grid
 														container
-														spacing={32}
+														spacing={16}
 														className={classes.didButtons}
 													>
-														<Grid item>
+														<Grid item className={classes.extraSpace}>
 															<Button
 																disabled={wallet.didPending}
 																variant="contained"
 																onClick={this.handleGetDid}
+																size="large"
 															>
 																GET DID
 															</Button>
@@ -357,6 +361,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																disabled={wallet.didPending}
 																variant="outlined"
 																onClick={this.handleEnterDid}
+																size="large"
 															>
 																I HAVE ONE
 															</Button>
