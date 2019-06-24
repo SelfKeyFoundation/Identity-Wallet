@@ -18251,9 +18251,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#12e34d9":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#95cfbf2be3fcd5a055bc259a981cab0f251a8db2":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#12e34d9adcfe3dbe376bbe1223460da8143f71cc"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#95cfbf2be3fcd5a055bc259a981cab0f251a8db2"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
@@ -18281,9 +18281,9 @@ select@^1.1.2:
     react-truncate "2.4.0"
     reset-jss "1.0.0"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#95cfbf2be3fcd5a055bc259a981cab0f251a8db2":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#9ba7b68":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#95cfbf2be3fcd5a055bc259a981cab0f251a8db2"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#9ba7b682ac6cffe54dd10eaf8a0a53476187df3b"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
