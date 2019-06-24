@@ -210,9 +210,18 @@ class IncorporationsDetailView extends Component {
 		return null;
 	};
 
+	fetchCountries = () => {
+		const { countryCode } = this.props.match.params;
+
+		this.props.dispatch(
+			incorporationsOperations.loadIncorporationsCountryOperation(countryCode)
+		);
+	};
+
 	render() {
 		const { keyRate, jurisdiction, requirements, country, program, treaties } = this.props;
 		const { countryCode, templateId } = this.props.match.params;
+
 		return (
 			<IncorporationDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -232,6 +241,7 @@ class IncorporationsDetailView extends Component {
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
+				onFetchCountries={this.fetchCountries}
 				program={program}
 				treaties={treaties}
 			/>
@@ -245,6 +255,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
+		country: incorporationsSelectors.getCountry(state, countryCode),
 		isLoading: incorporationsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),

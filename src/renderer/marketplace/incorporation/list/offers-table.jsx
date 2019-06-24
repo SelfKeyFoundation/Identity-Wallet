@@ -6,7 +6,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { getIncorporationPrice, getTemplateID } from '../common';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
@@ -97,7 +96,7 @@ const styles = theme => ({
 });
 
 const IncorporationOffersTable = withStyles(styles)(
-	({ classes, keyRate, data = [], onDetails, className }) => {
+	({ classes, keyRate, data = [], onDetails, className, getPrice, getTemplateID }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
 				<TableHead>
@@ -155,11 +154,7 @@ const IncorporationOffersTable = withStyles(styles)(
 									inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
 							</TagTableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice
-									label="$"
-									price={getIncorporationPrice(inc)}
-									rate={keyRate}
-								/>
+								<ProgramPrice label="$" price={getPrice(inc)} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
 								<span

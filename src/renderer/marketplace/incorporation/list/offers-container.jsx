@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import { IncorporationOffersPage } from './offers-page';
 import NoConnection from 'renderer/no-connection';
+import { getIncorporationPrice, getTemplateID } from '../common';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
@@ -47,6 +48,8 @@ class IncorporationTableContainer extends Component {
 				onBackClick={this.onBackClick}
 				onDetails={this.onDetailsClick}
 				loading={isLoading}
+				getPrice={getIncorporationPrice}
+				getTemplateID={getTemplateID}
 			/>
 		);
 	}

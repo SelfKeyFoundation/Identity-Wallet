@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { CertificateIcon, success, warning } from 'selfkey-ui';
-import { IncorporationsKYC } from '../common';
+import IncorporationsKYC from '../common/kyc-requirements';
 import { ProgramPrice, FlagCountryName } from '../../common';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import DetailsTab from './details-tab';
@@ -177,9 +177,15 @@ export const IncorporationDetailsPage = withStyles(styles)(props => {
 		tab,
 		requirements,
 		templateId,
-		onTabChange
+		onTabChange,
+		treaties
 	} = props;
 	const { tax } = program;
+
+	if (treaties) {
+		// eslint-disable-next-line no-debugger
+		debugger;
+	}
 
 	return (
 		<Grid container>

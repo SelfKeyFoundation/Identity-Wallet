@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { TreatiesMap, TreatiesTable } from '../common';
+import TreatiesMap from '../common/treaties-map';
+import TreatiesTable from '../common/treaties-table';
 
 const styles = theme => ({});
 
