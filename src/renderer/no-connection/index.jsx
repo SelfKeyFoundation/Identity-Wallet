@@ -10,20 +10,19 @@ const styles = theme => ({
 		margin: '0 auto',
 		width: '360px'
 	},
-
 	shortButton: {
 		minWidth: 0,
 		width: '100px'
 	},
-
 	logo: {
 		height: '60px',
 		width: '53px'
 	},
-
 	bottomSpace: {
-		marginBottom: '30px',
 		textAlign: 'center'
+	},
+	marginBottom: {
+		marginBottom: '70px'
 	}
 });
 
@@ -45,18 +44,18 @@ export const NoConnection = withStyles(styles)(props => {
 							<WarningShieldIcon className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h2" gutterBottom>
-								Please check your connection.
+							<Typography variant="body2" className={classes.marginBottom}>
+								An internet connection is required to use the SelfKey Vault. Please
+								check your connection and reopen the application.
 							</Typography>
-						</Grid>
-						<Grid item>
-							<Typography variant="body2" gutterBottom>
-								An internet connection is required <br />
-								to use the SelfKey Vault.
-							</Typography>
-							{onBackClick && (
-								<Button variant="contained" onClick={onBackClick}>
-									Go Back
+							{!onBackClick && (
+								<Button
+									variant="outlined"
+									size="large"
+									color="secondary"
+									onClick={onBackClick}
+								>
+									OK
 								</Button>
 							)}
 						</Grid>
