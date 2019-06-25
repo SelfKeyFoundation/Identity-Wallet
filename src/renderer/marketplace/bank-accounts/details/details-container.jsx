@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
@@ -13,7 +14,7 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
-class BankAccountsDetailContainer extends Component {
+class BankAccountsDetailContainer extends MarketplaceComponent {
 	state = {
 		tab: 'types',
 		loading: false
@@ -66,107 +67,30 @@ class BankAccountsDetailContainer extends Component {
 	onTabChange = tab => this.setState({ tab });
 
 	onStatusActionClick = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
+		const { rp } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted()) return null;
 			if (this.applicationWasRejected()) return null;
 			if (this.applicationRequiresAdditionalDocuments()) {
-				console.log('TODO: redirect to kyc-chain');
+				const application = this.getLastApplication();
+				const instanceUrl = rp.session.ctx.config.rootEndpoint;
+
+				const url = `${instanceUrl}/applications/${application.id}?access_token=${
+					rp.session.access_token.jwt
+				}`;
+				window.openExternal(null, url);
 			}
 			if (!this.userHasPaid()) {
-				this.props.dispatch(push(this.payRoute()));
+				// this.props.dispatch(push(this.payRoute()));
+				const application = this.getLastApplication();
+				const instanceUrl = rp.session.ctx.config.rootEndpoint;
+				const url = `${instanceUrl}/applications/${application.id}?access_token=${
+					rp.session.access_token.jwt
+				}`;
+				window.openExternal(null, url);
 			}
 		}
 		return null;
-	};
-
-	getApplicationStatus = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted()) return 'completed';
-			if (this.applicationWasRejected()) return 'rejected';
-			if (this.applicationRequiresAdditionalDocuments()) return 'progress';
-			if (!this.userHasPaid()) return 'unpaid';
-
-			return 'progress';
-		}
-		return null;
-	};
-
-	getLastApplication = () => {
-		const { rp } = this.props;
-		const { templateId } = this.props.match.params;
-
-		if (!rp || !rp.authenticated) return false;
-
-		const { applications } = this.props.rp;
-		if (!applications || applications.length === 0) return false;
-
-		let application;
-		let index = applications.length - 1;
-		for (; index >= 0; index--) {
-			if (applications[index].template === templateId) {
-				application = applications[index];
-				break;
-			}
-		}
-		return application;
-	};
-
-	userHasApplied = () => {
-		const application = this.getLastApplication();
-		return !!application;
-	};
-
-	userHasPaid = () => {
-		const application = this.getLastApplication();
-		if (!application || !application.payments) {
-			return false;
-		}
-		return !!application.payments.length;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
-
-	applicationCompleted = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		return application.currentStatus === 2;
-	};
-
-	applicationRequiresAdditionalDocuments = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		return application.currentStatus === 9;
-	};
-
-	// Can only apply if:
-	// - store data has loaded (isLoading prop)
-	// - there is a valid price for this jurisdiction (from airtable)
-	// - templateId exists for this jurisdiction (from airtable)
-	// - user has not applied before or previous application was rejected
-	canUserOpenBankAccount = () => {
-		const { templateId } = this.props.match.params;
-		const price = this.props.accountType.price;
-
-		if (this.props.rp && this.props.rp.authenticated) {
-			return !!(
-				templateId &&
-				price &&
-				(!this.userHasApplied() || this.applicationWasRejected())
-			);
-		} else {
-			return !!(templateId && price);
-		}
 	};
 
 	onApplyClick = () => {
@@ -233,22 +157,23 @@ class BankAccountsDetailContainer extends Component {
 
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
+		const { price, countryCode, region } = accountType;
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
 				loading={this.state.loading || this.props.isLoading}
 				accountType={accountType}
 				country={country}
-				countryCode={accountType.countryCode}
-				price={accountType.price}
+				countryCode={countryCode}
+				price={price}
 				tab={this.state.tab}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
-				region={accountType.region}
+				region={region}
 				banks={banks}
 				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
-				canOpenBankAccount={this.canUserOpenBankAccount()}
+				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
