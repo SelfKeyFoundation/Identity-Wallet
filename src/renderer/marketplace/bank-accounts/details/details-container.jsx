@@ -58,10 +58,6 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
 	};
 
-	redirectRoute = () => {
-		return null;
-	};
-
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onTabChange = tab => this.setState({ tab });
