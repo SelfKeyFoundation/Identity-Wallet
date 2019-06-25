@@ -22,11 +22,31 @@ import NetworkService from './application/network-service';
 import KycApplicationService from './kyc/kyc-application-service';
 import { DIDService } from './blockchain/did-service';
 import { AutoUpdateService } from './auto-update/auto-update-service';
+import { SchedulerService } from './scheduler/scheduler-service';
+import { VendorService } from './marketplace/vendors/vendor-service';
+import { VendorSyncJobHandler } from './marketplace/vendors/vendor-sync-job-handler';
+import { InventoryService } from './marketplace/inventory/inventory-service';
+import { InventorySyncJobHandler } from './marketplace/inventory/inventory-sync-job-handler';
+import { MarketplaceCountryService } from './marketplace/countries/marketplace-country-service';
+import { MarketplaceCountrySyncJobHandler } from './marketplace/countries/marketplace-country-sync-job-handler';
+import { TaxTreatiesService } from './marketplace/tax-treaties/tax-treaties-service';
+import { TaxTreatiesSyncJobHandler } from './marketplace/tax-treaties/tax-treaties-sync-job-handler';
+import { PaymentService } from './blockchain/payment-service';
+import { SelfkeyService } from './blockchain/selfkey-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
 		networkService: asClass(NetworkService).singleton(),
+		schedulerService: asClass(SchedulerService).singleton(),
+		vendorService: asClass(VendorService).singleton(),
+		vendorSyncJobHandler: asClass(VendorSyncJobHandler).singleton(),
+		inventoryService: asClass(InventoryService).singleton(),
+		inventorySyncJobHandler: asClass(InventorySyncJobHandler).singleton(),
+		marketplaceCountryService: asClass(MarketplaceCountryService).singleton(),
+		marketplaceCountrySyncJobHandler: asClass(MarketplaceCountrySyncJobHandler).singleton(),
+		taxTreatiesService: asClass(TaxTreatiesService).singleton(),
+		taxTreatiesSyncJobHandler: asClass(TaxTreatiesSyncJobHandler).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),
@@ -39,6 +59,8 @@ export const registerMainServices = container => {
 		exchangesService: asClass(ExchangesService).singleton(),
 		identityService: asClass(IdentityService).singleton(),
 		marketplaceService: asClass(MarketplaceService).singleton(),
+		paymentService: asClass(PaymentService).singleton(),
+		selfkeyService: asClass(SelfkeyService).singleton(),
 		rpcHandler: asFunction(cradle => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();

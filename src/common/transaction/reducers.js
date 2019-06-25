@@ -12,6 +12,7 @@ const initialState = {
 	transactionHash: '',
 	addressError: false,
 	sending: false,
+	locked: false,
 	cryptoCurrency: ''
 };
 

@@ -94,8 +94,11 @@ export class RelyingPartyRest {
 	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint('/auth/challenge');
-		const did = ctx.supportsDID() ? ctx.identity.did : await ctx.identity.publicKey;
+		const did = ctx.supportsDID()
+			? ctx.identity.getDidWithParams()
+			: await ctx.identity.publicKey;
 		url = urljoin(url, did);
+		log.info('XXX challnge url %s', url);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
@@ -110,7 +113,6 @@ export class RelyingPartyRest {
 		} else {
 			body.signature = signature;
 		}
-
 		return request.post({
 			url,
 			body,
@@ -217,6 +219,7 @@ export class RelyingPartyRest {
 	static getKYCTemplate(ctx, id) {
 		let url = ctx.getEndpoint('/templates/:id');
 		url = url.replace(':id', id);
+		log.info(`[getKYCTemplate] GET ${url}`);
 		return request.get({
 			url,
 			headers: {
@@ -245,7 +248,8 @@ export class RelyingPartyRest {
 	static updateKYCApplication(ctx, application) {
 		let url = ctx.getEndpoint('/applications/:id');
 		url = url.replace(':id', application.id);
-		return request.put({
+		log.info(`[updateKYCApplication] PATCH ${url}`);
+		return request.patch({
 			url,
 			body: application,
 			headers: {

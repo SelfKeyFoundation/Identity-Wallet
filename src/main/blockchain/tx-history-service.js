@@ -316,12 +316,7 @@ export class TxHistoryService {
 		}
 	}
 	async removeNotMinedPendingTxs(address) {
-		let nonce = await this.web3Service.waitForTicket({
-			method: 'getTransactionCount',
-			args: [address, 'pending']
-		});
-
-		return TxHistory.removeNotMinedPendingTxsByPublicKey(address, +nonce);
+		return TxHistory.updatePendingTxsByPublicKey(address);
 	}
 
 	startSyncingJob() {

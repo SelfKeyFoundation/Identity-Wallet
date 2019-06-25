@@ -41,7 +41,13 @@ describe('RelyingPartyRest', () => {
 
 	beforeEach(() => {
 		config = { origin: 'test', did: true };
-		ctx = new RelyingPartyCtx(config, { publicKey: 'test', did: 'did:eth:0xtest' });
+		ctx = new RelyingPartyCtx(config, {
+			publicKey: 'test',
+			did: 'did:eth:0xtest',
+			getDidWithParams() {
+				return this.did;
+			}
+		});
 	});
 	it('getAuthorizationHeader', () => {
 		let token = 'test';
@@ -406,11 +412,11 @@ describe('RelyingPartyRest', () => {
 					return 'test';
 				}
 			};
-			sinon.stub(request, 'put').resolves('ok');
+			sinon.stub(request, 'patch').resolves('ok');
 			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
 			let res = await RelyingPartyRest.updateKYCApplication(ctx, application);
 			expect(res).toEqual('ok');
-			expect(request.put.getCall(0).args).toEqual([
+			expect(request.patch.getCall(0).args).toEqual([
 				{
 					url: 'http://test/1',
 					headers: {

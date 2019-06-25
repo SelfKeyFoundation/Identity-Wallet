@@ -68,11 +68,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
@@ -94,11 +90,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
@@ -121,11 +113,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
-		if (CONFIG.chainId === 3) {
-			this.web3.transactionConfirmationBlocks = 1;
-		} else {
-			this.web3.transactionConfirmationBlocks = 10;
-		}
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async handleTicket(data) {
@@ -219,15 +207,21 @@ export class Web3Service {
 		}
 		return num;
 	}
-	async checkTransactionStatus(hash) {
-		let tx = await this.getTransaction(hash);
+
+	/**
+	 * Get transaction status
+	 *
+	 * @param {Transaction} tx transaction
+	 * @return {string} status
+	 */
+	async getTransactionStatus(tx) {
 		if (!tx) {
 			return 'pending';
 		}
 		if (!tx.blockNumber) {
 			return 'processing';
 		}
-		let receipt = await this.getTransactionReceipt(hash);
+		let receipt = await this.getTransactionReceipt(tx.hash);
 		let status = receipt.status;
 		if (typeof status !== 'boolean') {
 			status = this.web3.utils.hexToNumber(receipt.status);
@@ -236,6 +230,17 @@ export class Web3Service {
 			return 'failed';
 		}
 		return 'success';
+	}
+
+	/**
+	 * Given a transaction hash return the transaction status
+	 *
+	 * @param {string} hash
+	 * @return {string} status
+	 */
+	async checkTransactionStatus(hash) {
+		const tx = await this.getTransaction(hash);
+		return this.getTransactionStatus(tx);
 	}
 
 	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {

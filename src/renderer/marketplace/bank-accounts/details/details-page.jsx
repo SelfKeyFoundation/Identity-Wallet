@@ -3,26 +3,21 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { MoneyIcon } from 'selfkey-ui';
-import { FlagCountryName, ResumeBox, ProgramPrice } from '../../common';
-import { KycRequirementsList } from '../../../kyc/requirements/requirements-list';
+import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { BankingDetailsPageTabs } from './details-tabs';
 
 const styles = theme => ({
 	container: {
 		width: '100%',
-		margin: '0 auto',
+		margin: '50px auto 0',
 		maxWidth: '960px'
 	},
 	backButtonContainer: {
-		left: '20px',
-		position: 'absolute',
-		top: '20px'
+		left: '15px',
+		position: 'absolute'
 	},
 	bold: {
 		fontWeight: 600
-	},
-	flagCell: {
-		width: '10px'
 	},
 	title: {
 		padding: '22px 30px',
@@ -72,39 +67,8 @@ const styles = theme => ({
 			marginTop: '5px'
 		}
 	},
-	tabsRoot: {
-		borderBottom: '1px solid #697C95',
-		width: '100%'
-	},
-	tabsIndicator: {
-		backgroundColor: '#00C0D9'
-	},
-	tabRoot: {
-		color: '#FFFFFF',
-		textAlign: 'center',
-		padding: '0',
-		minWidth: '150px'
-	},
-	tabLabelContainer: {
-		padding: '0',
-		textTransform: 'Capitalize'
-	},
-	tabWrapper: {
-		padding: '0',
-		textTransform: 'Capitalize'
-	},
-	tabLabel: {
-		color: '#FFFFFF'
-	},
-	tabDescription: {
-		marginTop: '40px'
-	},
 	moneyIcon: {
 		marginRight: '18px'
-	},
-	page: {
-		position: 'relative',
-		paddingTop: '80px'
 	}
 });
 
@@ -134,7 +98,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 		countryCode,
 		region,
 		contact,
-		onPay,
+		onStatusAction,
 		onBack,
 		loading,
 		canOpenBankAccount,
@@ -144,18 +108,21 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 		price,
 		tab,
 		kycRequirements,
+		templateId,
 		onTabChange
 	} = props;
 	return (
-		<div className={classes.page}>
-			<div className={classes.backButtonContainer}>
-				<Button variant="outlined" color="secondary" onClick={onBack}>
-					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-						‹ Back
-					</Typography>
-				</Button>
-			</div>
-			<div className={classes.container}>
+		<Grid container>
+			<Grid item>
+				<div className={classes.backButtonContainer}>
+					<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button>
+				</div>
+			</Grid>
+			<Grid item className={classes.container}>
 				<Grid
 					container
 					justify="flex-start"
@@ -169,11 +136,11 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 						{region}
 					</Typography>
 				</Grid>
-				<div className={classes.contentContainer}>
+				<Grid container className={classes.contentContainer}>
 					<ApplicationStatusBar
 						status={applicationStatus}
 						contact={contact}
-						paymentAction={onPay}
+						statusAction={onStatusAction}
 					/>
 					<Grid
 						container
@@ -213,16 +180,17 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 							/>
 						</Grid>
 						<Grid item>
-							<KycRequirementsList
+							<MarketplaceKycRequirements
 								requirements={kycRequirements}
 								loading={loading}
+								templateId={templateId}
 								title="KYC Requirements and Forms"
 							/>
 						</Grid>
 					</Grid>
-				</div>
-			</div>
-		</div>
+				</Grid>
+			</Grid>
+		</Grid>
 	);
 });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles, Tabs, Tab, Typography } from '@material-ui/core';
+
 const styles = theme => ({
 	tabContent: {
 		marginTop: '15px',
@@ -7,30 +8,47 @@ const styles = theme => ({
 	}
 });
 
-export const BankingAccountTypeTabs = withStyles(styles)(
+const BankingAccountTypeTabs = withStyles(styles)(
 	({ classes, accountType, onAccountTypeChange }) => {
 		return (
 			<React.Fragment>
 				<Tabs value={accountType} onChange={(evt, value) => onAccountTypeChange(value)}>
-					<Tab value="personal" label="Personal Accounts" />
 					<Tab value="business" label="Corporate Accounts" />
-					<Tab value="private" label="Private Banking" />
+					<Tab value="personal" label="Personal Accounts" />
+					<Tab value="private" label="Wealth Management" />
 				</Tabs>
 				{accountType === 'personal' && (
-					<Typography variant="body2" color="secondary" className={classes.tabContent}>
+					<Typography
+						variant="subtitle2"
+						color="secondary"
+						className={classes.tabContent}
+					>
 						Personal account refers to the account owned by an individual or a couple if
 						it{"'"}s a joint{'-'}account. That type of account is intended to reflect
 						the person{"'"}s banking needs and obligations and is not transferrable.
 					</Typography>
 				)}
 				{accountType === 'business' && (
-					<Typography variant="body2" color="secondary" className={classes.tabContent}>
-						Corporate Accounts
+					<Typography
+						variant="subtitle2"
+						color="secondary"
+						className={classes.tabContent}
+					>
+						A corporate account or business account held at a bank or other financial
+						institution by the company and used for business transactions. Banks offer a
+						variety of solutions and account options for small, medium or large
+						businesses.
 					</Typography>
 				)}
 				{accountType === 'private' && (
-					<Typography variant="body2" color="secondary" className={classes.tabContent}>
-						Private Banking
+					<Typography
+						variant="subtitle2"
+						color="secondary"
+						className={classes.tabContent}
+					>
+						Wealth Management accounts provide banking, investment and other financial
+						services to high-net-worth individuals with high levels of income or sizable
+						assets.
 					</Typography>
 				)}
 			</React.Fragment>
@@ -39,3 +57,4 @@ export const BankingAccountTypeTabs = withStyles(styles)(
 );
 
 export default BankingAccountTypeTabs;
+export { BankingAccountTypeTabs };
