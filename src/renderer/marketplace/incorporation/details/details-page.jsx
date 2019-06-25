@@ -1,49 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Button, Typography } from '@material-ui/core';
-import { CertificateIcon, success, warning } from 'selfkey-ui';
+import { Grid, Button } from '@material-ui/core';
+import { CertificateIcon } from 'selfkey-ui';
 import IncorporationsKYC from '../common/kyc-requirements';
-import { ProgramPrice, FlagCountryName } from '../../common';
+import { ProgramPrice } from '../../common';
+import DetailsPageLayout from '../../common/details-page-layout';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import DetailsTab from './details-tab';
 import { ResumeBox } from './resume-box';
 
 const styles = theme => ({
-	container: {
-		width: '100%',
-		margin: '50px auto 0',
-		maxWidth: '960px'
-	},
-	backButtonContainer: {
-		left: '15px',
-		position: 'absolute',
-		top: '120px'
-	},
-	bold: {
-		fontWeight: 600
-	},
-	flagCell: {
-		width: '10px'
-	},
-	title: {
-		padding: '22px 30px',
-		background: '#2A3540',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
-		}
-	},
-	contentContainer: {
-		border: '1px solid #303C49',
-		borderRadius: '4px'
-	},
 	content: {
 		background: '#262F39',
 		padding: '22px 30px',
@@ -66,12 +33,6 @@ const styles = theme => ({
 			color: '#00C0D9'
 		}
 	},
-	programBrief: {
-		display: 'flex',
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		background: '#2A3540'
-	},
 	applyButton: {
 		maxWidth: '250px',
 		textAlign: 'right',
@@ -93,35 +54,6 @@ const styles = theme => ({
 			fontWeight: 'normal',
 			marginTop: '5px'
 		}
-	},
-	warningBar: {
-		padding: '22px 30px',
-		border: '2px solid',
-		borderColor: warning,
-		alignItems: 'center',
-		'& p': {
-			display: 'inline-block',
-			marginLeft: '1em'
-		},
-		'& svg': {
-			verticalAlign: 'middle'
-		}
-	},
-	successBar: {
-		padding: '22px 30px',
-		border: '2px solid',
-		borderColor: success,
-		alignItems: 'center',
-		'& p': {
-			display: 'inline-block',
-			marginLeft: '1em'
-		},
-		'& svg': {
-			verticalAlign: 'middle'
-		}
-	},
-	checkIcon: {
-		fill: success
 	},
 	certificateIcon: {
 		marginRight: '18px'
@@ -177,90 +109,49 @@ export const IncorporationDetailsPage = withStyles(styles)(props => {
 		tab,
 		requirements,
 		templateId,
-		onTabChange,
-		treaties
+		onTabChange
 	} = props;
 	const { tax } = program;
 
-	if (treaties) {
-		// eslint-disable-next-line no-debugger
-		debugger;
-	}
-
 	return (
-		<Grid container>
-			<Grid item>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
-			</Grid>
-			<Grid item className={classes.container}>
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.title}
-				>
-					<div>
-						<FlagCountryName code={countryCode} />
-					</div>
-					<Typography variant="body2" gutterBottom className="region">
-						{program.Region}
-					</Typography>
-				</Grid>
-				<Grid container className={classes.contentContainer}>
-					<ApplicationStatusBar
-						status={applicationStatus}
-						contact={contact}
-						statusAction={onStatusAction}
-					/>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="stretch"
-						spacing={40}
-						className={classes.content}
-					>
+		<DetailsPageLayout onBack={onBack} countryCode={countryCode} title={program.Region}>
+			<ApplicationStatusBar
+				status={applicationStatus}
+				contact={contact}
+				statusAction={onStatusAction}
+			/>
+			<Grid
+				container
+				direction="column"
+				justify="flex-start"
+				alignItems="stretch"
+				spacing={40}
+				className={classes.content}
+			>
+				<Grid item>
+					<Grid container direction="row" justify="space-between" alignItems="flex-start">
 						<Grid item>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="flex-start"
-							>
-								<Grid item>
-									<ResumeBox tax={tax} />
-								</Grid>
-								<Grid item className={classes.applyButton}>
-									<ApplyIncorporationButton
-										canIncorporate={canIncorporate}
-										loading={loading}
-										price={price}
-										startApplication={startApplication}
-										keyRate={keyRate}
-									/>
-								</Grid>
-							</Grid>
+							<ResumeBox tax={tax} />
 						</Grid>
-
-						<Grid item>
-							<DetailsTab {...props} tab={tab} onTabChange={onTabChange} />
-						</Grid>
-						<Grid item>
-							<IncorporationsKYC
-								requirements={requirements}
-								templateId={templateId}
+						<Grid item className={classes.applyButton}>
+							<ApplyIncorporationButton
+								canIncorporate={canIncorporate}
+								loading={loading}
+								price={price}
+								startApplication={startApplication}
+								keyRate={keyRate}
 							/>
 						</Grid>
 					</Grid>
 				</Grid>
+				<Grid item>
+					<DetailsTab {...props} tab={tab} onTabChange={onTabChange} />
+				</Grid>
+				<Grid item>
+					<IncorporationsKYC requirements={requirements} templateId={templateId} />
+				</Grid>
 			</Grid>
-		</Grid>
+		</DetailsPageLayout>
 	);
 });
 

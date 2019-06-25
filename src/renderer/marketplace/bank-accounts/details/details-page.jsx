@@ -1,10 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Button, Typography } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { MoneyIcon } from 'selfkey-ui';
-import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
+import { ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { BankingDetailsPageTabs } from './details-tabs';
+import DetailsPageLayout from '../../common/details-page-layout';
 
 const styles = theme => ({
 	container: {
@@ -112,85 +113,50 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 		onTabChange
 	} = props;
 	return (
-		<Grid container>
-			<Grid item>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
-			</Grid>
-			<Grid item className={classes.container}>
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.title}
-				>
-					<div>
-						<FlagCountryName code={countryCode} />
-					</div>
-					<Typography variant="body2" gutterBottom className="region">
-						{region}
-					</Typography>
-				</Grid>
-				<Grid container className={classes.contentContainer}>
-					<ApplicationStatusBar
-						status={applicationStatus}
-						contact={contact}
-						statusAction={onStatusAction}
-					/>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="stretch"
-						spacing={40}
-						className={classes.content}
-					>
+		<DetailsPageLayout onBack={onBack} countryCode={countryCode} title={region}>
+			<ApplicationStatusBar
+				status={applicationStatus}
+				contact={contact}
+				statusAction={onStatusAction}
+			/>
+			<Grid
+				container
+				direction="column"
+				justify="flex-start"
+				alignItems="stretch"
+				spacing={40}
+				className={classes.content}
+			>
+				<Grid item>
+					<Grid container direction="row" justify="space-between" alignItems="flex-start">
 						<Grid item>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="flex-start"
-							>
-								<Grid item>
-									<ResumeBox itemSets={resume} />
-								</Grid>
-								<Grid item className={classes.applyButton}>
-									<BankingApplicationButton
-										canOpenBankAccount={canOpenBankAccount}
-										price={price}
-										loading={loading}
-										startApplication={startApplication}
-										keyRate={keyRate}
-									/>
-									<ProgramPrice price={price} rate={keyRate} label="Pricing: $" />
-								</Grid>
-							</Grid>
+							<ResumeBox itemSets={resume} />
 						</Grid>
-						<Grid item>
-							<BankingDetailsPageTabs
-								{...props}
-								tab={tab}
-								onTabChange={onTabChange}
-							/>
-						</Grid>
-						<Grid item>
-							<MarketplaceKycRequirements
-								requirements={kycRequirements}
+						<Grid item className={classes.applyButton}>
+							<BankingApplicationButton
+								canOpenBankAccount={canOpenBankAccount}
+								price={price}
 								loading={loading}
-								templateId={templateId}
-								title="KYC Requirements and Forms"
+								startApplication={startApplication}
+								keyRate={keyRate}
 							/>
+							<ProgramPrice price={price} rate={keyRate} label="Pricing: $" />
 						</Grid>
 					</Grid>
 				</Grid>
+				<Grid item>
+					<BankingDetailsPageTabs {...props} tab={tab} onTabChange={onTabChange} />
+				</Grid>
+				<Grid item>
+					<MarketplaceKycRequirements
+						requirements={kycRequirements}
+						loading={loading}
+						templateId={templateId}
+						title="KYC Requirements and Forms"
+					/>
+				</Grid>
 			</Grid>
-		</Grid>
+		</DetailsPageLayout>
 	);
 });
 
