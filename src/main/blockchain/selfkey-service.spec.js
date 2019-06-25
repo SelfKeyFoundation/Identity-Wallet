@@ -1,5 +1,4 @@
 import SelfkeyService from './selfkey-service';
-import { setGlobalContext } from 'common/context';
 
 describe('SelfkeyService', () => {
 	let service = null;
@@ -25,10 +24,9 @@ describe('SelfkeyService', () => {
 			}
 		}
 	};
-	setGlobalContext({ web3Service });
 
 	beforeEach(() => {
-		service = new SelfkeyService();
+		service = new SelfkeyService({ web3Service });
 	});
 
 	it('approve', async () => {
