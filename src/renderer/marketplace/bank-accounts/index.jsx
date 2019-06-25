@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
 import { BankAccountsCheckoutContainer } from './checkout/checkout-container';
+import { BankAccountsPaymentContainer } from './checkout/payment-container';
 import { BankAccountsSelectBankContainer } from './select-bank/select-bank-container';
 import { BankAccountsProcessStartedContainer } from './process-started/process-started-container';
 
@@ -20,6 +21,10 @@ class MarketplaceBankAccountsPage extends Component {
 				<Route
 					path={`${path}/checkout/:accountCode/:countryCode/:templateId?`}
 					component={BankAccountsCheckoutContainer}
+				/>
+				<Route
+					path={`${path}/pay/:accountCode/:countryCode/:templateId?`}
+					component={BankAccountsPaymentContainer}
 				/>
 				<Route
 					path={`${path}/select-bank/:accountCode/:countryCode/:templateId?`}
