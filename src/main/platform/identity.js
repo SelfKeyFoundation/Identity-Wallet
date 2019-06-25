@@ -41,7 +41,7 @@ export class Identity {
 		}
 	}
 	getKeyId() {
-		return `${this.did}#keys-1`;
+		return `${this.getDidWithParams()}#keys-1`;
 	}
 	getDidWithParams() {
 		if (!this.wallet.did || !isDevMode()) {
