@@ -118,8 +118,8 @@ const statusComponent = {
 };
 
 export const ApplicationStatusBar = withStyles(styles)(
-	({ classes, status, contact, statusAction }) => {
-		if (!statusComponent.hasOwnProperty(status)) {
+	({ classes, status, contact, statusAction, loading = false }) => {
+		if (!statusComponent.hasOwnProperty(status) || loading) {
 			return null;
 		}
 		const { StatusComponent, statusType } = statusComponent[status];
