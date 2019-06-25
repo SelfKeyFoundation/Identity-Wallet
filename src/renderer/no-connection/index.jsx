@@ -8,22 +8,21 @@ const styles = theme => ({
 		left: 0,
 		right: 0,
 		margin: '0 auto',
+		top: 'calc(50% - 220px)',
 		width: '360px'
 	},
-
-	shortButton: {
-		minWidth: 0,
-		width: '100px'
-	},
-
 	logo: {
 		height: '60px',
 		width: '53px'
 	},
-
 	bottomSpace: {
-		marginBottom: '30px',
 		textAlign: 'center'
+	},
+	marginBottom: {
+		marginBottom: '70px'
+	},
+	spacing: {
+		padding: '30px 30px 40px'
 	}
 });
 
@@ -32,7 +31,7 @@ export const NoConnection = withStyles(styles)(props => {
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
-				<ModalBody>
+				<ModalBody className={classes.spacing}>
 					<Grid
 						container
 						spacing={24}
@@ -45,18 +44,18 @@ export const NoConnection = withStyles(styles)(props => {
 							<WarningShieldIcon className={classes.logo} />
 						</Grid>
 						<Grid item>
-							<Typography variant="h2" gutterBottom>
-								Please check your connection.
-							</Typography>
-						</Grid>
-						<Grid item>
-							<Typography variant="body2" gutterBottom>
-								An internet connection is required <br />
-								to use the SelfKey Vault.
+							<Typography variant="body2" className={classes.marginBottom}>
+								An internet connection is required to use the SelfKey Vault. Please
+								check your connection and reopen the application.
 							</Typography>
 							{onBackClick && (
-								<Button variant="contained" onClick={onBackClick}>
-									Go Back
+								<Button
+									variant="outlined"
+									size="large"
+									color="secondary"
+									onClick={onBackClick}
+								>
+									OK
 								</Button>
 							)}
 						</Grid>
