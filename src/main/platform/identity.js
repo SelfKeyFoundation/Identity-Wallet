@@ -5,7 +5,6 @@ import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
 import { isDevMode } from 'common/utils/common';
 import AppEth from '@ledgerhq/hw-app-eth';
-import config from 'common/config';
 
 const log = new Logger('Identity');
 export class Identity {
@@ -16,7 +15,7 @@ export class Identity {
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
 		this.did = wallet.did
-			? `did:selfkey:${wallet.did}${config.chainId === 3 ? ';selfkey:chain=ropsten' : ''}`
+			? `did:selfkey:${wallet.did}`
 			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
