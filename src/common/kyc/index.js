@@ -548,6 +548,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		title,
 		description,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		attributes
 	} = currentApplication;
 	const requirements = kycSelectors.selectRequirementsForTemplate(
@@ -577,6 +580,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes
 			)
 		);
@@ -604,6 +610,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes,
 				applicationError
 			)
