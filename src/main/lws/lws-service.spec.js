@@ -71,7 +71,7 @@ describe('lws-service', () => {
 								publicKey: 'locked',
 								profile: 'local',
 								unlocked: false,
-								signedUp: false
+								signedUp: true
 							}
 						]
 					},
