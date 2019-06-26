@@ -31,6 +31,8 @@ import { MarketplaceCountryService } from './marketplace/countries/marketplace-c
 import { MarketplaceCountrySyncJobHandler } from './marketplace/countries/marketplace-country-sync-job-handler';
 import { TaxTreatiesService } from './marketplace/tax-treaties/tax-treaties-service';
 import { TaxTreatiesSyncJobHandler } from './marketplace/tax-treaties/tax-treaties-sync-job-handler';
+import { PaymentService } from './blockchain/payment-service';
+import { SelfkeyService } from './blockchain/selfkey-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -57,6 +59,8 @@ export const registerMainServices = container => {
 		exchangesService: asClass(ExchangesService).singleton(),
 		identityService: asClass(IdentityService).singleton(),
 		marketplaceService: asClass(MarketplaceService).singleton(),
+		paymentService: asClass(PaymentService).singleton(),
+		selfkeyService: asClass(SelfkeyService).singleton(),
 		rpcHandler: asFunction(cradle => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();

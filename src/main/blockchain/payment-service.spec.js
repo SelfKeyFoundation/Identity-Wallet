@@ -1,5 +1,4 @@
 import PaymentService from './payment-service';
-import { setGlobalContext } from 'common/context';
 
 describe('PaymentService', () => {
 	let service = null;
@@ -42,10 +41,8 @@ describe('PaymentService', () => {
 		2000
 	];
 
-	setGlobalContext({ web3Service, selfkeyService });
-
 	beforeEach(() => {
-		service = new PaymentService();
+		service = new PaymentService({ web3Service, selfkeyService });
 	});
 
 	it('makePayment', async () => {
@@ -55,14 +52,5 @@ describe('PaymentService', () => {
 		expect(contractSpy).toHaveBeenCalled();
 		expect(makePaymentSpy).toHaveBeenCalled();
 		expect(transaction.hash).toEqual('hash');
-	});
-
-	it('getGasLimit', async () => {
-		const contractSpy = jest.spyOn(web3Service.web3.eth, 'Contract');
-		const makePaymentSpy = jest.spyOn(payment.methods, 'makePayment');
-		const gasLimit = await service.getGasLimit(...params);
-		expect(contractSpy).toHaveBeenCalled();
-		expect(makePaymentSpy).toHaveBeenCalled();
-		expect(gasLimit).toEqual(1100);
 	});
 });
