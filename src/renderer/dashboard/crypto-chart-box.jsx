@@ -106,41 +106,19 @@ const styles = () => ({
 	},
 
 	chartWrap: {
-		'& g.google-visualization-tooltip': {
-			'& path': {
-				boxShadow: 'none',
-				fill: '#1F2830',
-				stroke: '#43505B'
+		'& div.google-visualization-tooltip': {
+			backgroundColor: '#1F2830',
+			border: '1px solid #43505B',
+			boxShadow: 'none',
+			top: '40px !important',
+			'& .google-visualization-tooltip-item span': {
+				fontSize: '13px !important'
 			},
-			'& g:nth-child(2) text': {
-				fill: '#93B0C1'
+			'& .google-visualization-tooltip-item-list li:first-child span': {
+				color: '#93B0C1 !important'
 			},
-			'& g:nth-child(3) text': {
-				fill: '#FFFFFF',
-				fontWeight: 'normal'
-			},
-			'&::before': {
-				content: '""',
-				position: 'absolute',
-				marginLeft: '9px',
-				marginTop: '60px',
-				borderStyle: 'solid',
-				borderWidth: '6px 6px 0',
-				borderColor: '#43505B transparent',
-				display: 'block',
-				width: 0,
-				zIndex: 0
-			},
-			'&::after': {
-				content: '""',
-				position: 'absolute',
-				borderStyle: 'solid',
-				borderWidth: '5px 5px 0',
-				borderColor: '#1F2830 transparent',
-				marginLeft: '10px',
-				display: 'block',
-				width: 0,
-				zIndex: 1
+			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
+				color: '#FFFFFF !important'
 			}
 		}
 	}
@@ -173,7 +151,8 @@ class ChartContainerComponent extends React.Component {
 		const selectedColors = hasBalance ? colors : [this.DEFAULT_COLLOR];
 		let tooltip = hasBalance
 			? {
-					trigger: 'focus'
+					trigger: 'focus',
+					isHtml: true
 			  }
 			: { trigger: 'none' };
 
