@@ -158,6 +158,8 @@ class BankAccountsDetailContainer extends Component {
 		const { templateId } = this.props.match.params;
 		const price = this.props.accountType.price;
 
+		/*
+		FIXME: removed temporarily for testing purposes (to allow more than one active application per template)
 		if (this.props.rp && this.props.rp.authenticated) {
 			return !!(
 				templateId &&
@@ -167,6 +169,8 @@ class BankAccountsDetailContainer extends Component {
 		} else {
 			return !!(templateId && price);
 		}
+		*/
+		return !!(templateId && price);
 	};
 
 	onApplyClick = () => {
@@ -267,7 +271,7 @@ BankAccountsDetailContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
-	const notAuthenticated = false;
+	const authenticated = true;
 
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
@@ -279,7 +283,7 @@ const mapStateToProps = (state, props) => {
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			'incorporations',
-			notAuthenticated
+			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(
 			state,

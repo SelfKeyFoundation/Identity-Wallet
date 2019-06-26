@@ -106,20 +106,18 @@ const styles = () => ({
 	},
 
 	chartWrap: {
-		'& div.google-visualization-tooltip': {
-			backgroundColor: '#1F2830',
-			border: '1px solid #43505B',
-			boxShadow: 'none',
-			top: '40px !important',
-			'& .google-visualization-tooltip-item span': {
-				fontSize: '13px !important',
-				fontWeight: 400
+		'& g.google-visualization-tooltip': {
+			'& path': {
+				boxShadow: 'none',
+				fill: '#1F2830',
+				stroke: '#43505B'
 			},
-			'& .google-visualization-tooltip-item-list li:first-child span': {
-				color: '#93B0C1 !important'
+			'& g:nth-child(2) text': {
+				fill: '#93B0C1'
 			},
-			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
-				color: '#FFFFFF !important'
+			'& g:nth-child(3) text': {
+				fill: '#FFFFFF',
+				fontWeight: 'normal'
 			},
 			'&::before': {
 				content: '""',
@@ -175,8 +173,7 @@ class ChartContainerComponent extends React.Component {
 		const selectedColors = hasBalance ? colors : [this.DEFAULT_COLLOR];
 		let tooltip = hasBalance
 			? {
-					trigger: 'focus',
-					isHtml: true
+					trigger: 'focus'
 			  }
 			: { trigger: 'none' };
 
@@ -195,6 +192,7 @@ class ChartContainerComponent extends React.Component {
 						legend: {
 							position: 'none'
 						},
+						fontSize: 13,
 						pieSliceText: 'none',
 						tooltip: tooltip,
 						animation: {
