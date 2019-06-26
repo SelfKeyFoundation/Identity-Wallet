@@ -48,6 +48,10 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 	};
 
+	manageApplicationsRoute = () => {
+		return `/main/selfkeyId?tabValue=1`;
+	};
+
 	payRoute = () => {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
@@ -62,11 +66,14 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 
 	onTabChange = tab => this.setState({ tab });
 
+	// Status bar component allows for an action button on the right
+	// This handler processes the action for that button
 	onStatusActionClick = () => {
 		const { rp } = this.props;
 		if (rp && rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted()) return null;
-			if (this.applicationWasRejected()) return null;
+			if (this.applicationCompleted() || this.applicationWasRejected()) {
+				this.props.dispatch(push(this.manageApplicationsRoute()));
+			}
 			if (this.applicationRequiresAdditionalDocuments()) {
 				this.redirectToKYCC(rp);
 			}
@@ -82,8 +89,11 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const authenticated = true;
 
-		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
-		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
+		// When clicking the start process,
+		// we check if an authenticated kyc-chain session exists
+		// If it doesn't we trigger a new authenticated rp session
+		// and redirect to checkout route
+		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
@@ -169,7 +179,9 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 }
 
 BankAccountsDetailContainer.propTypes = {
-	bankAccount: PropTypes.object,
+	accountType: PropTypes.object,
+	banks: PropTypes.object,
+	jurisdictions: PropTypes.object,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };

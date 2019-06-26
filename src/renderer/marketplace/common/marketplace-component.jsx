@@ -37,7 +37,7 @@ class MarketplaceComponent extends Component {
 			if (this.applicationCompleted()) return 'completed';
 			if (this.applicationWasRejected()) return 'rejected';
 			if (!this.userHasPaid()) return 'unpaid';
-			if (this.applicationRequiresAdditionalDocuments()) return 'progress';
+			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
 			return 'progress';
 		}
