@@ -68,22 +68,10 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 			if (this.applicationCompleted()) return null;
 			if (this.applicationWasRejected()) return null;
 			if (this.applicationRequiresAdditionalDocuments()) {
-				const application = this.getLastApplication();
-				const instanceUrl = rp.session.ctx.config.rootEndpoint;
-
-				const url = `${instanceUrl}/applications/${application.id}?access_token=${
-					rp.session.access_token.jwt
-				}`;
-				window.openExternal(null, url);
+				this.redirectToKYCC(rp);
 			}
 			if (!this.userHasPaid()) {
-				// this.props.dispatch(push(this.payRoute()));
-				const application = this.getLastApplication();
-				const instanceUrl = rp.session.ctx.config.rootEndpoint;
-				const url = `${instanceUrl}/applications/${application.id}?access_token=${
-					rp.session.access_token.jwt
-				}`;
-				window.openExternal(null, url);
+				this.props.dispatch(push(this.payRoute()));
 			}
 		}
 		return null;

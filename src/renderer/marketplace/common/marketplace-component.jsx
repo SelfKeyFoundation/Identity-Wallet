@@ -1,4 +1,10 @@
 import { Component } from 'react';
+import {
+	APPLICATION_REJECTED,
+	APPLICATION_CANCELLED,
+	APPLICATION_APPROVED,
+	APPLICATION_ANSWER_REQUIRED
+} from 'common/kyc/status_codes';
 
 class MarketplaceComponent extends Component {
 	getLastApplication = () => {
@@ -56,8 +62,10 @@ class MarketplaceComponent extends Component {
 		if (!application) {
 			return false;
 		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
+		return (
+			application.currentStatus === APPLICATION_REJECTED ||
+			application.currentStatus === APPLICATION_CANCELLED
+		);
 	};
 
 	applicationCompleted = () => {
@@ -65,7 +73,7 @@ class MarketplaceComponent extends Component {
 		if (!application) {
 			return false;
 		}
-		return application.currentStatus === 2;
+		return application.currentStatus === APPLICATION_APPROVED;
 	};
 
 	applicationRequiresAdditionalDocuments = () => {
@@ -73,14 +81,15 @@ class MarketplaceComponent extends Component {
 		if (!application) {
 			return false;
 		}
-		return application.currentStatus === 9;
+		return application.currentStatus === APPLICATION_ANSWER_REQUIRED;
 	};
 
 	// Can only apply if:
 	// - store data has loaded (isLoading prop)
-	// - there is a valid price for this jurisdiction (from airtable)
-	// - templateId exists for this jurisdiction (from airtable)
+	// - there is a valid price for this product (from airtable)
+	// - KYCC templateId exists for this product (from airtable)
 	// - user has not applied before or previous application was rejected
+	// This probably needs some rethinking, some products might not need KYC
 	canApply = price => {
 		const { templateId } = this.props.match.params;
 
@@ -93,6 +102,17 @@ class MarketplaceComponent extends Component {
 		} else {
 			return !!(templateId && price);
 		}
+	};
+
+	// Redirects to KYCC passing a jwt token for auto-login
+	redirectToKYCC = rp => {
+		const application = this.getLastApplication();
+		const instanceUrl = rp.session.ctx.config.rootEndpoint;
+
+		const url = `${instanceUrl}/applications/${application.id}?access_token=${
+			rp.session.access_token.jwt
+		}`;
+		window.openExternal(null, url);
 	};
 }
 
