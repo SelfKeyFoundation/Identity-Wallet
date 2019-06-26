@@ -41,7 +41,13 @@ describe('RelyingPartyRest', () => {
 
 	beforeEach(() => {
 		config = { origin: 'test', did: true };
-		ctx = new RelyingPartyCtx(config, { publicKey: 'test', did: 'did:eth:0xtest' });
+		ctx = new RelyingPartyCtx(config, {
+			publicKey: 'test',
+			did: 'did:eth:0xtest',
+			getDidWithParams() {
+				return this.did;
+			}
+		});
 	});
 	it('getAuthorizationHeader', () => {
 		let token = 'test';

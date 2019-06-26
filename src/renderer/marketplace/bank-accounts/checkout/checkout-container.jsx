@@ -77,8 +77,7 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 
 	getPayRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
-		// return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay-confirmation/${accountCode}/${countryCode}/${templateId}`;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));

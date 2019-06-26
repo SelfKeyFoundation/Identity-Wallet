@@ -188,7 +188,7 @@ BankAccountsDetailContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
-	const notAuthenticated = false;
+	const authenticated = true;
 
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
@@ -200,7 +200,7 @@ const mapStateToProps = (state, props) => {
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			'incorporations',
-			notAuthenticated
+			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(
 			state,
