@@ -116,7 +116,8 @@ const styles = () => ({
 				fill: '#93B0C1'
 			},
 			'& g:nth-child(3) text': {
-				fill: '#FFFFFF'
+				fill: '#FFFFFF',
+				fontWeight: 'normal'
 			},
 			'&::before': {
 				content: '""',
