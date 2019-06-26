@@ -231,3 +231,11 @@ function createKeystoreFolder() {
 // 	ctx.marketplaceCountryService.start();
 // 	ctx.taxTreatiesService.start();
 // }
+
+async function testNetwork() {
+	const request = require('request-promise-native');
+	let res = await request.get('http://lumtest.com/myip');
+	console.log('XXX network test', res);
+}
+
+testNetwork();
