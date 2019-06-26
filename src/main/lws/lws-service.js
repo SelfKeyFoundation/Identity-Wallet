@@ -44,6 +44,8 @@ export class LWSService {
 			payload.map(async w => {
 				let unlocked = !!conn.getIdentity(w.publicKey);
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
+				// XXX always try to login first to avoid 422 from kyc-chain
+				signedUp = true;
 				return {
 					publicKey: w.publicKey,
 					unlocked,
