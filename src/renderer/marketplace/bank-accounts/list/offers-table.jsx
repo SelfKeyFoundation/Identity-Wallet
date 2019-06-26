@@ -184,9 +184,9 @@ const BankingOffersTable = withStyles(styles)(
 							</TagTableCell>
 							<TableCell className={classes.personalVisitCell}>
 								{bank.personalVisitRequired ? (
-									<Typography variant="h6">Required</Typography>
+									<Typography variant="h6">Yes</Typography>
 								) : (
-									<Typography variant="h6">Remote</Typography>
+									<Typography variant="h6">No</Typography>
 								)}
 							</TableCell>
 							<TableCell className={classes.costCell}>

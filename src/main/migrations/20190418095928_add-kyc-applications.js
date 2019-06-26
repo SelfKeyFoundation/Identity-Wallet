@@ -2,6 +2,7 @@
 exports.up = async (knex, Promise) => {
 	await knex.schema.createTable('kyc_applications', t => {
 		t.string('id');
+		t.integer('walletId').references('wallets.id');
 		t.string('owner');
 		t.string('scope');
 		t.string('rpName');
@@ -12,6 +13,8 @@ exports.up = async (knex, Promise) => {
 			.notNullable()
 			.defaultTo('{}');
 		t.string('nextRoute');
+		t.string('title');
+		t.string('sub_title');
 		t.integer('createdAt')
 			.notNullable()
 			.defaultTo(new Date().getTime());
