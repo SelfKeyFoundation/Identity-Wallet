@@ -23,7 +23,7 @@ export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
-	: ['127.0.0.1', '::1'];
+	: ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
 
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
@@ -44,8 +44,6 @@ export class LWSService {
 			payload.map(async w => {
 				let unlocked = !!conn.getIdentity(w.publicKey);
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
-				// XXX always try to login first to avoid 422 from kyc-chain
-				signedUp = true;
 				return {
 					publicKey: w.publicKey,
 					unlocked,

@@ -98,7 +98,7 @@ export class RelyingPartyRest {
 			? ctx.identity.getDidWithParams()
 			: await ctx.identity.publicKey;
 		url = urljoin(url, did);
-		log.info('XXX challnge url %s', url);
+		log.debug('challenge url %s', url);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
