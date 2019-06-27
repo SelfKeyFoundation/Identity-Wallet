@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
@@ -13,7 +14,7 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
-class BankAccountsDetailContainer extends Component {
+class BankAccountsDetailContainer extends MarketplaceComponent {
 	state = {
 		tab: 'types',
 		loading: false
@@ -47,6 +48,10 @@ class BankAccountsDetailContainer extends Component {
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
 	};
 
+	manageApplicationsRoute = () => {
+		return `/main/selfkeyId?tabValue=1`;
+	};
+
 	payRoute = () => {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
@@ -57,20 +62,20 @@ class BankAccountsDetailContainer extends Component {
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
 	};
 
-	redirectRoute = () => {
-		return null;
-	};
-
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onTabChange = tab => this.setState({ tab });
 
+	// Status bar component allows for an action button on the right
+	// This handler processes the action for that button
 	onStatusActionClick = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted()) return null;
-			if (this.applicationWasRejected()) return null;
+		const { rp } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted() || this.applicationWasRejected()) {
+				this.props.dispatch(push(this.manageApplicationsRoute()));
+			}
 			if (this.applicationRequiresAdditionalDocuments()) {
-				console.log('TODO: redirect to kyc-chain');
+				this.redirectToKYCC(rp);
 			}
 			if (!this.userHasPaid()) {
 				this.props.dispatch(push(this.payRoute()));
@@ -79,103 +84,16 @@ class BankAccountsDetailContainer extends Component {
 		return null;
 	};
 
-	getApplicationStatus = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted()) return 'completed';
-			if (this.applicationWasRejected()) return 'rejected';
-			if (this.applicationRequiresAdditionalDocuments()) return 'progress';
-			if (!this.userHasPaid()) return 'unpaid';
-
-			return 'progress';
-		}
-		return null;
-	};
-
-	getLastApplication = () => {
-		const { rp } = this.props;
-		const { templateId } = this.props.match.params;
-
-		if (!rp || !rp.authenticated) return false;
-
-		const { applications } = this.props.rp;
-		if (!applications || applications.length === 0) return false;
-
-		let application;
-		let index = applications.length - 1;
-		for (; index >= 0; index--) {
-			if (applications[index].template === templateId) {
-				application = applications[index];
-				break;
-			}
-		}
-		return application;
-	};
-
-	userHasApplied = () => {
-		const application = this.getLastApplication();
-		return !!application;
-	};
-
-	userHasPaid = () => {
-		const application = this.getLastApplication();
-		if (!application || !application.payments) {
-			return false;
-		}
-		return !!application.payments.length;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
-
-	applicationCompleted = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		return application.currentStatus === 2;
-	};
-
-	applicationRequiresAdditionalDocuments = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		return application.currentStatus === 9;
-	};
-
-	// Can only apply if:
-	// - store data has loaded (isLoading prop)
-	// - there is a valid price for this jurisdiction (from airtable)
-	// - templateId exists for this jurisdiction (from airtable)
-	// - user has not applied before or previous application was rejected
-	canUserOpenBankAccount = () => {
-		const { templateId } = this.props.match.params;
-		const price = this.props.accountType.price;
-
-		if (this.props.rp && this.props.rp.authenticated) {
-			return !!(
-				templateId &&
-				price &&
-				(!this.userHasApplied() || this.applicationWasRejected())
-			);
-		} else {
-			return !!(templateId && price);
-		}
-	};
-
 	onApplyClick = () => {
 		const { rp, wallet } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const authenticated = true;
 
-		// When clicking the start incorporations, we check if an authenticated kyc-chain session exists
-		// If it doesn't we trigger a new authenticated rp session and redirect to checkout route
+		// When clicking the start process,
+		// we check if an authenticated kyc-chain session exists
+		// If it doesn't we trigger a new authenticated rp session
+		// and redirect to checkout route
+		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
@@ -233,22 +151,23 @@ class BankAccountsDetailContainer extends Component {
 
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
+		const { price, countryCode, region } = accountType;
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
 				loading={this.state.loading || this.props.isLoading}
 				accountType={accountType}
 				country={country}
-				countryCode={accountType.countryCode}
-				price={accountType.price}
+				countryCode={countryCode}
+				price={price}
 				tab={this.state.tab}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
-				region={accountType.region}
+				region={region}
 				banks={banks}
 				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
-				canOpenBankAccount={this.canUserOpenBankAccount()}
+				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
 				templateId={this.props.match.params.templateId}
@@ -260,14 +179,16 @@ class BankAccountsDetailContainer extends Component {
 }
 
 BankAccountsDetailContainer.propTypes = {
-	bankAccount: PropTypes.object,
+	accountType: PropTypes.object,
+	banks: PropTypes.object,
+	jurisdictions: PropTypes.object,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
-	const notAuthenticated = false;
+	const authenticated = true;
 
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
@@ -279,7 +200,7 @@ const mapStateToProps = (state, props) => {
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			'incorporations',
-			notAuthenticated
+			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(
 			state,

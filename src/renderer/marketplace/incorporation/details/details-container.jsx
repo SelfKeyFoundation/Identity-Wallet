@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
@@ -7,12 +7,13 @@ import { walletSelectors } from 'common/wallet';
 import { pricesSelectors } from 'common/prices';
 import { IncorporationDetailsPage } from './details-page';
 import { getIncorporationPrice } from '../common';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 
 import ReactPiwik from 'react-piwik';
 
 const MARKETPLACE_INCORPORATION_ROOT_PATH = '/main/marketplace-incorporation';
 
-class IncorporationsDetailView extends Component {
+class IncorporationsDetailContainer extends MarketplaceComponent {
 	state = {
 		tab: 'description',
 		loading: false
@@ -87,6 +88,26 @@ class IncorporationsDetailView extends Component {
 		return `${MARKETPLACE_INCORPORATION_ROOT_PATH}/checkout/${companyCode}/${countryCode}/${templateId}`;
 	};
 
+	manageApplicationsRoute = () => {
+		return `/main/selfkeyId?tabValue=1`;
+	};
+
+	onStatusActionClick = () => {
+		const { rp } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted() || this.applicationWasRejected()) {
+				this.props.dispatch(push(this.manageApplicationsRoute()));
+			}
+			if (this.applicationRequiresAdditionalDocuments()) {
+				this.redirectToKYCC(rp);
+			}
+			if (!this.userHasPaid()) {
+				this.props.dispatch(push(this.payRoute()));
+			}
+		}
+		return null;
+	};
+
 	onApplyClick = () => {
 		const { rp, wallet } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
@@ -149,36 +170,6 @@ class IncorporationsDetailView extends Component {
 		return application;
 	};
 
-	userHasApplied = () => {
-		const application = this.getLastApplication();
-		return !!application;
-	};
-
-	userHasPaid = () => {
-		const application = this.getLastApplication();
-		if (!application || !application.payments) {
-			return false;
-		}
-		return !!application.payments.length;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
-
-	applicationCompleted = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		return application.currentStatus === 2;
-	};
-
 	// Can only incorporate if:
 	// - there is a valid price for this jurisdiction (from airtable)
 	// - templateId exists for this jurisdiction (from airtable)
@@ -196,18 +187,6 @@ class IncorporationsDetailView extends Component {
 		} else {
 			return !!(templateId && price);
 		}
-	};
-
-	getApplicationStatus = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted()) return 'completed';
-			if (this.applicationWasRejected()) return 'rejected';
-			if (this.applicationRequiresAdditionalDocuments()) return 'progress';
-			if (!this.userHasPaid()) return 'unpaid';
-
-			return 'progress';
-		}
-		return null;
 	};
 
 	fetchCountries = () => {
@@ -273,4 +252,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(IncorporationsDetailView);
+export default connect(mapStateToProps)(IncorporationsDetailContainer);

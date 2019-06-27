@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { kycOperations } from 'common/kyc';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
@@ -11,7 +12,7 @@ import * as CheckoutUtil from '../../common/checkout-util';
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
-class BankAccountsCheckoutContainer extends Component {
+class BankAccountsCheckoutContainer extends MarketplaceComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
@@ -50,7 +51,7 @@ class BankAccountsCheckoutContainer extends Component {
 	};
 
 	checkIfUserCanOpenBankAccount = async () => {
-		if (!this.canUserOpenBankAccount()) {
+		if (!this.canApply(this.props.accountType.price)) {
 			this.props.dispatch(push(this.getCancelRoute()));
 		}
 	};
@@ -65,7 +66,7 @@ class BankAccountsCheckoutContainer extends Component {
 
 	getPayRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay-confirmation/${accountCode}/${countryCode}/${templateId}`;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));

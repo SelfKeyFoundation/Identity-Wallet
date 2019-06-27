@@ -285,6 +285,9 @@ class SelfkeyIdComponent extends Component {
 		let loading = isLoading || processing || this.state.loading;
 		let component = <SelfkeyIdOverview {...this.props} onRef={ref => (this.overview = ref)} />;
 
+		// eslint-disable-next-line no-debugger
+		debugger;
+
 		if (this.state.tabValue === 1) {
 			if (loading) {
 				return this.renderLoadingScreen();

@@ -36,8 +36,9 @@ export class KycApplication extends BaseModel {
 		return this.query().findById(id);
 	}
 
-	static findAll(walletId) {
-		return this.query().where({ walletId });
+	static async findAll(walletId) {
+		const data = await this.query().where({ walletId });
+		return data;
 	}
 
 	static async create(itm) {
