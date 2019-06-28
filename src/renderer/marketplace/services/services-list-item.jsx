@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TableRow, TableCell, Typography, withStyles } from '@material-ui/core';
+import { Button, TableRow, TableCell, Typography, Grid, withStyles } from '@material-ui/core';
 import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -153,9 +153,11 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 					</Typography>
 				</TableCell>
 				<TableCell>
-					{isFiatSupported
-						? fiatSupported.map((fiat, index) => <Tag key={index}>{fiat}</Tag>)
-						: '-'}
+					<Grid container>
+						{isFiatSupported
+							? fiatSupported.map((fiat, index) => <Tag key={index}>{fiat}</Tag>)
+							: '-'}
+					</Grid>
 				</TableCell>
 				<TableCell>
 					{isFiatPayments
