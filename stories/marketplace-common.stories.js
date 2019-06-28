@@ -1,6 +1,8 @@
 import React from 'react';
 // import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
+import { linkTo } from '@storybook/addon-links';
+import { action } from '@storybook/addon-actions';
 import {
 	FlagCountryName,
 	ProgramPrice,
@@ -10,6 +12,8 @@ import {
 	ResumeBox
 } from '../src/renderer/marketplace/common';
 import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout';
+import PaymentPreapprove from '../src/renderer/marketplace/common/payment-preapprove';
+import PaymentContract from '../src/renderer/marketplace/common/payment-contract';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -88,3 +92,18 @@ storiesOf('Marketplace Common/Resume Table', module)
 	.add('Single highlited', () => <ResumeTableEntry {...resumeItemSets[0][1]} />)
 	.add('Table', () => <ResumeTable items={resumeItemSets[0]} />)
 	.add('Resume Box', () => <ResumeBox itemSets={resumeItemSets} />);
+
+storiesOf('Marketplace Common/Payment Contract', module)
+	.add('Preapprove', () => (
+		<PaymentPreapprove
+			whyLink={'https://help.selfkey.org/'}
+			feeETH={0.00001}
+			ethUSDRate={300}
+			onPayClick={linkTo('Payment Contract')}
+			onWhyLinkClick={action('preapprove why click')}
+			onBackClick={action('preaprove back click')}
+		/>
+	))
+	.add('Payment Contract', () => (
+		<PaymentContract whyLink={'https://help.selfkey.org/'} price={123456} />
+	));
