@@ -38,7 +38,13 @@ export const ordersTypes = {
 	ORDERS_PAYMENT_START_OPERATION: 'orders/operations/payment/START',
 	ORDERS_SET_CURRENT_ACTION: 'orders/actions/current/SET',
 	ORDERS_SHOW_UI_OPERATION: 'orders/operations/ui/SHOW',
-	ORDERS_CHECK_ALLOWANCE_OPERATION: 'orders/operations/allowance/CHECK'
+	ORDERS_HIDE_UI_OPERATION: 'orders/operations/ui/HIDE',
+	ORDERS_CHECK_ALLOWANCE_OPERATION: 'orders/operations/allowance/CHECK',
+
+	ORDERS_CHECK_PAYMENT_PROGRESS_OPERATION: 'orders/operations/payment_progress/CHECK',
+	ORDERS_CHECK_ALLOWANCE_PROGRESS_OPERATION: 'orders/operations/allowance_progress/CHECK',
+
+	ORDERS_CANCEL_CURRENT_OPERATION: 'orders/operations/current/CANCEL'
 };
 
 const ordersActions = {
@@ -60,11 +66,19 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	dispatch,
 	getState
 ) => {
+	await dispatch(
+		ordersActions.setCurrentOrder({
+			orderId,
+			backUrl,
+			completeUrl
+		})
+	);
 	let order = ordersSelectors.getOrder(getState(), orderId);
-
 	if (!order) {
-		return dispatch(push(backUrl));
+		return dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	}
+
+	await dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/loading`));
 
 	await dispatch(
 		ordersActions.setCurrentOrder({
@@ -95,7 +109,8 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	order = ordersSelectors.getOrder(getState(), orderId);
 
 	if (order.status === orderStatus.PENDING) {
-		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/allowance/`));
+		await dispatch(operations.estimateCurrentPreapproveGasOperation());
+		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/allowance`));
 	}
 
 	if (order.status === orderStatus.ALLOWANCE_IN_PROGRESS) {
@@ -107,6 +122,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	}
 
 	if (order.status === orderStatus.ALLOWANCE_COMPLETE) {
+		await dispatch(ordersOperations.estimateCurrentPaymentGasOperation());
 		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/payment`));
 	}
 };
@@ -129,11 +145,51 @@ const checkOrderAllowanceOperation = orderId => (dispatch, getState) => {
 	// TODO: implement
 };
 
+const cancelCurrentOrderOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const hideCurrentPaymentUIOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const preapproveCurrentOrderOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const payCurrentOrderOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const estimateCurrentPaymentGasOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const estimateCurrentPreapproveGasOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const checkAllowanceProgressOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
+const checkPaymentProgressOperation = () => (dispatch, getState) => {
+	// TODO: implement
+};
+
 const operations = {
 	ordersLoadOperation,
 	ordersUpdateOperation,
 	showOrderPaymentUIOperation,
-	checkOrderAllowanceOperation
+	hideCurrentPaymentUIOperation,
+	checkOrderAllowanceOperation,
+	cancelCurrentOrderOperation,
+	checkPaymentProgressOperation,
+	checkAllowanceProgressOperation,
+	estimateCurrentPreapproveGasOperation,
+	estimateCurrentPaymentGasOperation,
+	payCurrentOrderOperation,
+	preapproveCurrentOrderOperation
 };
 
 const ordersOperations = {
@@ -175,7 +231,12 @@ const ordersReducers = {
 		}
 		return { ...state, all, byId: { ...action.byId, [id]: { ...action.payload } } };
 	},
-	setCurrentOrderReducer: (state, { payload }) => ({ ...state, currentOrder: { ...payload } })
+	setCurrentOrderReducer: (state, { payload }) => {
+		if (!payload) {
+			return { ...state, currentOrder: null };
+		}
+		return { ...state, currentOrder: { ...state.currentOrder, ...payload } };
+	}
 };
 
 const reducer = (state = initialState, action) => {
