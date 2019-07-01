@@ -362,6 +362,8 @@ const loadRelyingPartyOperation = (
 					})
 				);
 			}
+
+			session.access_token = await session.getAccessToken();
 		}
 
 		await dispatch(
