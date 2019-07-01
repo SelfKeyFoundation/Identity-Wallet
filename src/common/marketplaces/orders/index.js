@@ -21,7 +21,6 @@ export const orderStatus = {
 	ALLOWANCE_COMPLETE: 'ALLOWANCE_COMPLETE',
 	ALLOWANCE_ERROR: 'ALLOWANCE_ERROR'
 };
-// const ORDER_STATUS_CANCELED = 'CANCELED';
 
 export const initialState = {
 	all: [],
@@ -33,11 +32,13 @@ export const ordersTypes = {
 	ORDERS_CREATE_OPERATION: 'orders/operations/CREATE',
 	ORDERS_LOAD_OPERATION: 'orders/operations/LOAD',
 	ORDERS_SET_ACTION: 'orders/actions/SET',
+	ORDERS_SET_ONE_ACTION: 'orders/actions/SET_ONE',
 	ORDERS_UPDATE_ACTION: 'orders/actions/UPDATE',
 	ORDERS_UPDATE_OPERATION: 'orders/operations/UPDATE',
 	ORDERS_PAYMENT_START_OPERATION: 'orders/operations/payment/START',
 	ORDERS_SET_CURRENT_ACTION: 'orders/actions/current/SET',
-	ORDERS_SHOW_UI_OPERATION: 'orders/operations/ui/SHOW'
+	ORDERS_SHOW_UI_OPERATION: 'orders/operations/ui/SHOW',
+	ORDERS_CHECK_ALLOWANCE_OPERATION: 'orders/operations/allowance/CHECK'
 };
 
 const ordersActions = {
@@ -45,9 +46,9 @@ const ordersActions = {
 		type: ordersTypes.ORDERS_SET_ACTION,
 		payload
 	}),
-	updateOrderAction: (id, update) => ({
-		type: ordersTypes.ORDERS_UPDATE_ACTION,
-		payload: { id, update }
+	setOneOrderAction: payload => ({
+		type: ordersTypes.ORDERS_SET_ONE_ACTION,
+		payload
 	}),
 	setCurrentOrderAction: payload => ({
 		type: ordersTypes.ORDERS_SET_CURRENT_ACTION,
@@ -89,7 +90,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/payment/error`));
 	}
 
-	await dispatch(ordersOperations.checkOrderAllowance(orderId));
+	await dispatch(ordersOperations.checkOrderAllowanceOperation(orderId));
 
 	order = ordersSelectors.getOrder(getState(), orderId);
 
@@ -121,13 +122,18 @@ const ordersUpdateOperation = (id, update) => async (dispatch, getState) => {
 	update = _.omit(update, 'walletId', 'id');
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const order = await ordersService.updateOrder({ id, ...update });
-	await dispatch(ordersActions.updateOrderAction(order));
+	await dispatch(ordersActions.setOneOrderAction(order));
+};
+
+const checkOrderAllowanceOperation = orderId => (dispatch, getState) => {
+	// TODO: implement
 };
 
 const operations = {
 	ordersLoadOperation,
 	ordersUpdateOperation,
-	showOrderPaymentUIOperation
+	showOrderPaymentUIOperation,
+	checkOrderAllowanceOperation
 };
 
 const ordersOperations = {
@@ -143,6 +149,10 @@ const ordersOperations = {
 	showOrderPaymentUIOperation: createAliasedAction(
 		ordersTypes.ORDERS_SHOW_UI_OPERATION,
 		operations.showOrderPaymentUIOperation
+	),
+	checkOrderAllowanceOperation: createAliasedAction(
+		ordersTypes.ORDERS_CHECK_ALLOWANCE_OPERATION,
+		operations.checkOrderAllowanceOperation
 	)
 };
 
@@ -156,13 +166,26 @@ const ordersReducers = {
 		}, {});
 
 		return { ...state, all, byId };
-	}
+	},
+	ordersSetOneReducer: (state, action) => {
+		let all = state.all;
+		const { id } = action.payload;
+		if (!all.find(ord => ord.id === id)) {
+			all = [...all, id];
+		}
+		return { ...state, all, byId: { ...action.byId, [id]: { ...action.payload } } };
+	},
+	setCurrentOrderReducer: (state, { payload }) => ({ ...state, currentOrder: { ...payload } })
 };
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case ordersTypes.ORDERS_SET_ACTION:
 			return ordersReducers.ordersSetReducer(state, action);
+		case ordersTypes.ORDERS_SET_ONE_ACTION:
+			return ordersReducers.ordersSetOneReducer(state, action);
+		case ordersTypes.ORDERS_SET_CURRENT_ACTION:
+			return ordersReducers.setCurrentOrderReducer(state, action);
 	}
 	return state;
 };
