@@ -4,9 +4,9 @@ import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
 // import config from '../config';
-// import { Logger } from 'common/logger';
+import { Logger } from 'common/logger';
 
-// const log = new Logger('orders-redux');
+const log = new Logger('orders-duck');
 
 const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace-orders';
 
@@ -66,6 +66,8 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	dispatch,
 	getState
 ) => {
+	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
+
 	await dispatch(
 		ordersActions.setCurrentOrder({
 			orderId,
