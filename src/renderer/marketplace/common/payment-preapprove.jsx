@@ -3,7 +3,6 @@ import React from 'react';
 import { withStyles, Grid, Typography, Button } from '@material-ui/core';
 import { Popup } from '../../common';
 import { PaymentIcon } from 'selfkey-ui';
-
 const styles = theme => ({
 	paymentIcon: {
 		width: '66px',
@@ -49,7 +48,7 @@ const styles = theme => ({
 });
 
 export const PaymentPreapprove = withStyles(styles)(
-	({ classes, onBackClick, onPayClick, feeETH, ethUSDRate, onWhyLinkClick }) => {
+	({ classes, onBackClick, onPayClick, feeETH, feeUSD, onWhyLinkClick }) => {
 		let whyLink = null;
 		if (onWhyLinkClick) {
 			whyLink = (
@@ -111,7 +110,7 @@ export const PaymentPreapprove = withStyles(styles)(
 										color="primary"
 										className={classes.bold}
 									>
-										$ {feeETH * ethUSDRate}
+										$ {feeUSD}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary">
 										{feeETH} ETH

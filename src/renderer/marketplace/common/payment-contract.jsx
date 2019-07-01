@@ -23,7 +23,7 @@ const styles = theme => ({
 	},
 	footer: {
 		marginTop: '30px',
-		paddingTop: '30px',
+		paddingTop: '30px !important',
 		borderTop: '1px solid #475768'
 	},
 	bottomSpace: {
@@ -49,9 +49,20 @@ const styles = theme => ({
 });
 
 export const PaymentContract = withStyles(styles)(
-	({ classes, onBackClick, onPayClick, price, whyLink }) => {
+	({
+		classes,
+		onBackClick,
+		onPayClick,
+		priceUSD,
+		priceKey,
+		feeETH,
+		feeUSD,
+		did,
+		vendorName,
+		onLearnHowClick
+	}) => {
 		return (
-			<Popup closeAction={onBackClick} open text="Register Payment on the Selfkey Network">
+			<Popup closeAction={onBackClick} open text="Bank Account Opening Payment">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2} className={classes.iconWrap}>
 						<PaymentIcon className={classes.paymentIcon} />
@@ -62,90 +73,110 @@ export const PaymentContract = withStyles(styles)(
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
+							spacing={16}
 						>
 							<Grid item>
 								<Typography variant="h1" className={classes.bottomSpace}>
-									Payment Pre-approval
+									Payment Required
+								</Typography>
+								<Typography variant="subtitle" color="secondary">
+									{did}
 								</Typography>
 							</Grid>
 							<Grid item>
 								<Typography variant="body1" className={classes.bottomSpace}>
-									Paying for a service in the marketplace requires first a payment
-									pre-approval (
-									<a
-										className={classes.link}
-										onClick={e => {
-											window.openExternal(e, whyLink);
-										}}
-									>
-										why?
-									</a>
-									).
+									Thank you for providing the basic information about yourself!
+									<br />
+									<br />
+									You are about to initiate a payment to {vendorName}. The payment
+									will be done with KEY tokens, at the provided exchange rate.
 								</Typography>
-							</Grid>
-							<Grid item className={classes.bottomSpace}>
-								<Typography
-									variant="body1"
-									color="secondary"
-									className={classes.bottomSpace}
-								>
-									You only pre-approve the payment you will make in the next step.
-									You are not paying at this point, and are in control of your
-									funds. This pre-approval allows the vendor to safely receive
-									your funds properly through a smart contract on the blockchain.
-								</Typography>
-							</Grid>
-							<Grid container justify="space-between">
-								<Grid item>
-									<Typography variant="body2" color="secondary" gutterBottom>
-										Network Transaction Fee
+								{onLearnHowClick && (
+									<Typography variant="subtitle" color="secondary">
+										Don’t have KEY Tokens yet?{' '}
+										<a className={classes.link} onClick={onLearnHowClick}>
+											Learn how
+										</a>{' '}
+										you can get them.
 									</Typography>
-								</Grid>
-								<Grid item className={classes.feeAlignment}>
-									<Typography
-										variant="body2"
-										color="primary"
-										className={classes.bold}
-									>
-										Price: $ {price}
-									</Typography>
-									<Typography variant="subtitle2" color="secondary">
-										1.9898 KEY
-										<KeyTooltip
-											interactive
-											placement="top-start"
-											className={classes.tooltip}
-											title={
-												<React.Fragment>
-													<span>
-														Every ERC-20 token has its own smart
-														contract address. To learn more,{' '}
-														<a
-															className={classes.link}
-															onClick={e => {
-																window.openExternal(
-																	e,
-																	'https://help.selfkey.org/'
-																);
-															}}
-														>
-															click here.
-														</a>
-													</span>
-												</React.Fragment>
-											}
-										>
-											<IconButton aria-label="Info">
-												<InfoTooltip />
-											</IconButton>
-										</KeyTooltip>
-									</Typography>
-								</Grid>
+								)}
 							</Grid>
+
 							<Grid item classes={{ item: classes.footer }}>
+								<Grid container justify="space-between">
+									<Grid item>
+										<Typography variant="body2" gutterBottom>
+											Cost
+										</Typography>
+									</Grid>
+									<Grid item className={classes.feeAlignment}>
+										<Typography
+											variant="body2"
+											color="primary"
+											className={classes.bold}
+										>
+											Total: $ {priceUSD}
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											{priceKey} KEY
+											<KeyTooltip
+												interactive
+												placement="top-start"
+												className={classes.tooltip}
+												title={
+													<React.Fragment>
+														<span>
+															Every ERC-20 token has its own smart
+															contract address. To learn more,{' '}
+															<a
+																className={classes.link}
+																onClick={e => {
+																	window.openExternal(
+																		e,
+																		'https://help.selfkey.org/'
+																	);
+																}}
+															>
+																click here.
+															</a>
+														</span>
+													</React.Fragment>
+												}
+											>
+												<IconButton aria-label="Info">
+													<InfoTooltip />
+												</IconButton>
+											</KeyTooltip>
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+							<Grid item>
+								<Grid container justify="space-between">
+									<Grid item>
+										<Typography variant="body2" color="secondary" gutterBottom>
+											Network Transaction Fee
+										</Typography>
+									</Grid>
+									<Grid item className={classes.feeAlignment}>
+										<Typography
+											variant="body2"
+											color="primary"
+											className={classes.bold}
+										>
+											$ {feeUSD}
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											{feeETH} ETH
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid item>
 								<div className={classes.actions}>
 									<Button variant="contained" size="large" onClick={onPayClick}>
-										Pre-Approve Payment
+										Pay
 									</Button>
 									<Button variant="outlined" size="large" onClick={onBackClick}>
 										Cancel

@@ -98,12 +98,20 @@ storiesOf('Marketplace Common/Payment Contract', module)
 		<PaymentPreapprove
 			whyLink={'https://help.selfkey.org/'}
 			feeETH={0.00001}
-			ethUSDRate={300}
+			feeUSD={0.0000000000131}
 			onPayClick={linkTo('Payment Contract')}
 			onWhyLinkClick={action('preapprove why click')}
 			onBackClick={action('preaprove back click')}
 		/>
 	))
 	.add('Payment Contract', () => (
-		<PaymentContract whyLink={'https://help.selfkey.org/'} price={123456} />
+		<PaymentContract
+			priceUSD={123456}
+			priceKey={12312312312321321321312}
+			feeETH={0.0000001}
+			feeUSD={0.0000000000131}
+			did={'did:selfkey:sadjkhasnnkdjlqw123121kl'}
+			vendorName="Horizon Capital Inc"
+			onLearnHowClick={action('payment contract learn how clicked')}
+		/>
 	));
