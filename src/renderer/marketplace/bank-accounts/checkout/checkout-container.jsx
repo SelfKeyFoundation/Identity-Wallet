@@ -2,12 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
-import { MarketplaceComponent } from '../../common/marketplace-component';
+import { MarketplaceComponent, getCheckoutProps } from '../../common/marketplace-component';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { kycOperations } from 'common/kyc';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { PaymentCheckout } from '../../common/payment-checkout';
-import * as CheckoutUtil from '../../common/checkout-util';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -42,8 +41,7 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 			return !!(
 				templateId &&
 				price &&
-				(!CheckoutUtil.userHasApplied(this.props) ||
-					CheckoutUtil.applicationWasRejected(this.props))
+				(!this.userHasApplied() || this.applicationWasRejected())
 			);
 		} else {
 			return !!(templateId && price);
@@ -56,8 +54,9 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 		}
 	};
 
-	getPaymentParameters = () =>
-		CheckoutUtil.getPaymentParameters(this.props, this.props.accountType.price);
+	getPrice() {
+		return this.props.accountType.price;
+	}
 
 	getCancelRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
@@ -108,8 +107,8 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 				{...this.getPaymentParameters()}
 				price={accountType.price}
 				options={accountType.checkoutOptions}
-				initialDocsText={CheckoutUtil.DEFAULT_DOCS_TEXT}
-				kycProcessText={CheckoutUtil.DEFAULT_KYC_PROCESS_TEXT}
+				initialDocsText={this.DEFAULT_DOCS_TEXT}
+				kycProcessText={this.DEFAULT_KYC_PROCESS_TEXT}
 				getFinalDocsText={
 					'Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.'
 				}
@@ -123,8 +122,9 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode } = props.match.params;
+
 	return {
-		...CheckoutUtil.getCheckoutProps(state, props),
+		...getCheckoutProps(state, props),
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
 		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode)

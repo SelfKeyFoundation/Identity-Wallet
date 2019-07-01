@@ -5,8 +5,60 @@ import {
 	APPLICATION_APPROVED,
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
+import config from 'common/config';
+import { getLocale } from 'common/locale/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getTokens } from 'common/wallet-tokens/selectors';
+import { getWallet } from 'common/wallet/selectors';
+import { ethGasStationInfoSelectors } from 'common/eth-gas-station';
+import { pricesSelectors } from 'common/prices';
+import { kycSelectors } from 'common/kyc';
+import EthUnits from 'common/utils/eth-units';
+
+const FIXED_GAS_LIMIT_PRICE = 21000;
+const CRYPTOCURRENCY = config.constants.primaryToken;
 
 class MarketplaceComponent extends Component {
+	DEFAULT_DOCS_TEXT =
+		'You will be required to provide a few basic informations about yourself like full name and email. This will be done through SelfKey ID Wallet.';
+
+	DEFAULT_KYC_PROCESS_TEXT =
+		'You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.';
+
+	userHasApplied = () => {
+		const application = this.getLastApplication(this.props);
+		return !!application;
+	};
+
+	applicationWasRejected = () => {
+		const application = this.getLastApplication(this.props);
+		if (!application) {
+			return false;
+		}
+		// Process is cancelled or Process is rejected
+		return application.currentStatus === 3 || application.currentStatus === 8;
+	};
+
+	getPaymentParameters = (props, price) => {
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency } = props;
+		const gasPrice = ethGasStationInfo.fast;
+		const keyAmount = price / keyRate;
+		const gasLimit = FIXED_GAS_LIMIT_PRICE;
+		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+		const usdFee = ethFee * ethRate;
+
+		return {
+			cryptoCurrency,
+			keyRate,
+			gasPrice,
+			gasLimit,
+			price,
+			keyAmount,
+			ethFee,
+			usdFee
+		};
+	};
+
 	getLastApplication = () => {
 		const { rp } = this.props;
 		const { templateId } = this.props.match.params;
@@ -116,4 +168,26 @@ class MarketplaceComponent extends Component {
 	};
 }
 
-export { MarketplaceComponent };
+const getCheckoutProps = (state, props) => {
+	const authenticated = true;
+
+	return {
+		...getLocale(state),
+		publicKey: getWallet(state).publicKey,
+		...getFiatCurrency(state),
+		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
+		tokens: getTokens(state).splice(1), // remove ETH
+		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		cryptoCurrency: CRYPTOCURRENCY,
+
+		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			'incorporations',
+			authenticated
+		)
+	};
+};
+
+export { MarketplaceComponent, getCheckoutProps };

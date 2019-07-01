@@ -7,13 +7,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { getIncorporationPrice } from '../common';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import PaymentCheckout from '../../common/payment-checkout';
-import * as CheckoutUtil from '../../common/checkout-util';
+import { MarketplaceComponent, getCheckoutProps } from '../../common/marketplace-component';
 
 const MARKETPLACE_INCORPORATIONS_ROOT_PATH = '/main/marketplace-incorporation';
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 const styles = theme => ({});
 
-export class IncorporationCheckout extends React.Component {
+export class IncorporationCheckout extends MarketplaceComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
@@ -36,7 +36,7 @@ export class IncorporationCheckout extends React.Component {
 	};
 
 	checkIfUserCanIncorporate = async () => {
-		if (CheckoutUtil.userHasApplied() && !CheckoutUtil.applicationWasRejected())
+		if (this.userHasApplied() && !this.applicationWasRejected())
 			await this.props.dispatch(push(this.getCancelRoute()));
 	};
 
@@ -44,8 +44,6 @@ export class IncorporationCheckout extends React.Component {
 		const { program } = this.props;
 		return getIncorporationPrice(program);
 	};
-
-	getPaymentParameters = _ => CheckoutUtil.getPaymentParameters(this.props, this.getPrice());
 
 	getCancelRoute = () => {
 		const { companyCode, countryCode, templateId } = this.props.match.params;
@@ -126,8 +124,8 @@ export class IncorporationCheckout extends React.Component {
 				timeToForm={program['Time to form (weeks)']}
 				options={this.getProgramOptions(program.wallet_options)}
 				startButtonText={'Start Incorporation'}
-				initialDocsText={CheckoutUtil.DEFAULT_DOCS_TEXT}
-				kycProcessText={CheckoutUtil.DEFAULT_KYC_PROCESS_TEXT}
+				initialDocsText={this.DEFAULT_DOCS_TEXT}
+				kycProcessText={this.DEFAULT_KYC_PROCESS_TEXT}
 				getFinalDocsText={
 					'Once the incorporations process is done you will receive all the relevant documents, for your new company, on your email.'
 				}
@@ -140,7 +138,7 @@ export class IncorporationCheckout extends React.Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		...CheckoutUtil.getCheckoutProps(state, props),
+		...getCheckoutProps(state, props),
 		program: incorporationsSelectors.getIncorporationsDetails(
 			state,
 			props.match.params.companyCode
