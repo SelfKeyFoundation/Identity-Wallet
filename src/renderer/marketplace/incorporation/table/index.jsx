@@ -222,8 +222,12 @@ class IncorporationsTable extends Component {
 										{inc.tax['Corporate Tax Rate']}
 									</TableCell>
 									<TagTableCell className={classes.goodForCell}>
-										{inc['Good for'] &&
-											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+										<Grid container>
+											{inc['Good for'] &&
+												inc['Good for'].map(tag => (
+													<Tag key={tag}>{tag}</Tag>
+												))}
+										</Grid>
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
 										<ProgramPrice

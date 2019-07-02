@@ -232,7 +232,9 @@ export class RelyingPartyRest {
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint('/applications');
 		log.info(
-			`[createKYCApplication] POST ${url} : auth:${ctx.token.toString()} : ${attributes}`
+			`[createKYCApplication] POST ${url} : auth:${ctx.token.toString()} : ${JSON.stringify(
+				attributes
+			)}`
 		);
 		return request.post({
 			url,
@@ -263,9 +265,7 @@ export class RelyingPartyRest {
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
 		let url = ctx.getEndpoint('/applications/:id/payments');
 		url = url.replace(':id', applicationId);
-		log.info(
-			`[updateKYCApplicationPayment] POST ${url} : auth:${ctx.token.toString()} : ${transactionHash}`
-		);
+		log.info(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
 		return request.post({
 			url,
 			body: { transactionHash },
@@ -279,6 +279,7 @@ export class RelyingPartyRest {
 	}
 	static listKYCApplications(ctx) {
 		let url = ctx.getEndpoint('/applications');
+		log.info(`[listKYCApplications] GET ${url}`);
 		return request.get({
 			url,
 			headers: {
@@ -316,6 +317,18 @@ export class RelyingPartyRest {
 		return request.post({
 			url,
 			formData,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+	static getAccessToken(ctx) {
+		let url = ctx.getEndpoint('/auth/token');
+		return request.get({
+			url,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
@@ -459,6 +472,10 @@ export class RelyingPartySession {
 
 	getKYCTemplate(id) {
 		return RelyingPartyRest.getKYCTemplate(this.ctx, id);
+	}
+
+	getAccessToken() {
+		return RelyingPartyRest.getAccessToken(this.ctx);
 	}
 }
 
