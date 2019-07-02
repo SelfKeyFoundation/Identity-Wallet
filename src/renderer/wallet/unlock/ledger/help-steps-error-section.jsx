@@ -4,6 +4,9 @@ import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
 const styles = theme => ({
 	avatar: {
 		marginTop: 0
+	},
+	indent: {
+		paddingLeft: '40px'
 	}
 });
 
@@ -16,6 +19,7 @@ const HelpStepsErrorSection = ({ classes }) => {
 			justify="flex-start"
 			alignItems="flex-start"
 			spacing={16}
+			className={classes.indent}
 		>
 			<Grid item>
 				<Grid
