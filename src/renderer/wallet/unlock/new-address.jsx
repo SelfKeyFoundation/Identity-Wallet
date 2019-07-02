@@ -156,6 +156,7 @@ class NewAddress extends Component {
 											fullWidth
 											type="password"
 											onChange={this.handlePasswordChange}
+											placeholder="Password"
 										/>
 										{this.state.error !== '' && (
 											<Typography

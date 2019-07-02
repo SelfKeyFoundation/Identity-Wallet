@@ -126,6 +126,7 @@ class EnterPassphrase extends Component {
 								}
 								type={this.state.inputType}
 								onChange={this.handlePassphraseChange}
+								placeholder="Enter Passphrase"
 							/>
 						</Grid>
 					</Grid>
@@ -156,6 +157,7 @@ class EnterPassphrase extends Component {
 								}
 								type={this.state.inputType}
 								onChange={this.handleRePassphraseChange}
+								placeholder="Reconfirm Passphrase"
 							/>
 						</Grid>
 					</Grid>
