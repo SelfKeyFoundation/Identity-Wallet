@@ -5,6 +5,7 @@ exports.up = async knex => {
 		t.string('itemId');
 		t.string('productInfo');
 		t.integer('walletId');
+		t.string('applicationId');
 		t.string('did');
 		t.string('vendorDID');
 		t.string('allowanceHash');

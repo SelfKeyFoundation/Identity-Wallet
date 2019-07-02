@@ -20,6 +20,7 @@ export class MarketplaceOrder extends BaseModel {
 				walletId: { type: 'integer' },
 				vendorId: { type: 'string' },
 				itemId: { type: 'string' },
+				applicationId: { type: 'string' },
 				amount: { type: 'string' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				productInfo: { type: 'string' },

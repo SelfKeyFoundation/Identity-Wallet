@@ -40,11 +40,11 @@ export const ordersTypes = {
 	ORDERS_SHOW_UI_OPERATION: 'orders/operations/ui/SHOW',
 	ORDERS_HIDE_UI_OPERATION: 'orders/operations/ui/HIDE',
 	ORDERS_CHECK_ALLOWANCE_OPERATION: 'orders/operations/allowance/CHECK',
-
-	ORDERS_CHECK_PAYMENT_PROGRESS_OPERATION: 'orders/operations/payment_progress/CHECK',
-	ORDERS_CHECK_ALLOWANCE_PROGRESS_OPERATION: 'orders/operations/allowance_progress/CHECK',
-
-	ORDERS_CANCEL_CURRENT_OPERATION: 'orders/operations/current/CANCEL'
+	ORDERS_CANCEL_CURRENT_OPERATION: 'orders/operations/current/CANCEL',
+	ORDERS_PREAPPROVE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE',
+	ORDERS_PAY_CURRENT_OPERATION: 'orders/operations/current/PAY',
+	ORDERS_PREAPPROVE_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE_ESTIMATE',
+	ORDERS_PAY_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PAY_ESTIMATE'
 };
 
 const ordersActions = {
@@ -60,6 +60,24 @@ const ordersActions = {
 		type: ordersTypes.ORDERS_SET_CURRENT_ACTION,
 		payload
 	})
+};
+
+const createOrderOperation = (applicationId, vendorId, itemId, vendorDID, productInfo) => async (
+	dispatch,
+	getState
+) => {
+	const ordersService = getGlobalContext().marketplaceOrdersService;
+	const wallet = walletSelectors.getWallet(getState());
+	const order = await ordersService.createOrder({
+		applicationId,
+		vendorId,
+		itemId,
+		vendorDID,
+		productInfo,
+		did: wallet.did,
+		walletId: wallet.id
+	});
+	await dispatch(ordersActions.setOneOrderAction(order));
 };
 
 const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
@@ -271,6 +289,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 				order.did,
 				order.vendorDID,
 				order.amount,
+				order.productInfo,
 				0,
 				0,
 				paymentGas
@@ -346,7 +365,8 @@ const operations = {
 	estimateCurrentPreapproveGasOperation,
 	estimateCurrentPaymentGasOperation,
 	payCurrentOrderOperation,
-	preapproveCurrentOrderOperation
+	preapproveCurrentOrderOperation,
+	createOrderOperation
 };
 
 const ordersOperations = {
@@ -366,6 +386,35 @@ const ordersOperations = {
 	checkOrderAllowanceOperation: createAliasedAction(
 		ordersTypes.ORDERS_CHECK_ALLOWANCE_OPERATION,
 		operations.checkOrderAllowanceOperation
+	),
+
+	hideCurrentPaymentUIOperation: createAliasedAction(
+		ordersTypes.ORDERS_HIDE_UI_OPERATION,
+		operations.hideCurrentPaymentUIOperation
+	),
+	cancelCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_CANCEL_CURRENT_OPERATION,
+		operations.cancelCurrentOrderOperation
+	),
+	estimateCurrentPreapproveGasOperation: createAliasedAction(
+		ordersTypes.ORDERS_PREAPPROVE_ESTIMATE_CURRENT_OPERATION,
+		operations.estimateCurrentPreapproveGasOperation
+	),
+	estimateCurrentPaymentGasOperation: createAliasedAction(
+		ordersTypes.ORDERS_PAY_ESTIMATE_CURRENT_OPERATION,
+		operations.estimateCurrentPaymentGasOperation
+	),
+	payCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_PAY_CURRENT_OPERATION,
+		operations.payCurrentOrderOperation
+	),
+	preapproveCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_PREAPPROVE_CURRENT_OPERATION,
+		operations.preapproveCurrentOrderOperation
+	),
+	createOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_CREATE_OPERATION,
+		operations.createOrderOperation
 	)
 };
 
