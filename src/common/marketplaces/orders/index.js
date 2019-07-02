@@ -3,7 +3,7 @@ import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
-// import config from '../config';
+import config from '../config';
 import { Logger } from 'common/logger';
 
 const log = new Logger('orders-duck');
@@ -143,16 +143,52 @@ const ordersUpdateOperation = (id, update) => async (dispatch, getState) => {
 	await dispatch(ordersActions.setOneOrderAction(order));
 };
 
-const checkOrderAllowanceOperation = orderId => (dispatch, getState) => {
-	// TODO: implement
+const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
+	const ctx = getGlobalContext();
+	const selfkeyService = ctx.selfkeyService;
+	let order = ordersSelectors.getOrder(getState(), orderId);
+	const wallet = walletSelectors.getWallet(getState());
+
+	const allowance = await selfkeyService.getAllowance(
+		wallet.publicKey,
+		config.paymentSplitterAddress
+	);
+
+	let update = null;
+
+	if (allowance < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
+		update = { status: orderStatus.PENDING };
+	}
+
+	if (
+		allowance >= order.amount &&
+		[
+			orderStatus.ALLOWANCE_IN_PROGRESS,
+			orderStatus.ALLOWANCE_ERROR,
+			orderStatus.PENDING
+		].includes(order.status)
+	) {
+		update = { status: orderStatus.ALLOWANCE_COMPLETE };
+	}
+
+	if (!update) {
+		return;
+	}
+	await dispatch(ordersOperations.ordersUpdateOperation(orderId, update));
 };
 
-const cancelCurrentOrderOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const cancelCurrentOrderOperation = () => async (dispatch, getState) => {
+	const { orderId } = ordersSelectors.getCurrentOrder(getState());
+	await dispatch(ordersOperations.hideCurrentPaymentUIOperation());
+	await dispatch(ordersOperations.setCurrentOrderAction(null));
+	await dispatch(
+		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.CANCELED })
+	);
 };
 
-const hideCurrentPaymentUIOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const hideCurrentPaymentUIOperation = () => async (dispatch, getState) => {
+	const { backUrl } = ordersSelectors.getCurrentOrder(getState());
+	await dispatch(push(backUrl));
 };
 
 const preapproveCurrentOrderOperation = () => (dispatch, getState) => {
@@ -253,7 +289,11 @@ const reducer = (state = initialState, action) => {
 	return state;
 };
 
-const ordersSelectors = {};
+const ordersSelectors = {
+	getRoot: state => state.orders,
+	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
+	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder
+};
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };
 
