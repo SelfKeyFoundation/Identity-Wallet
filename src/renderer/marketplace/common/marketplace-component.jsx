@@ -5,6 +5,7 @@ import {
 	APPLICATION_APPROVED,
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
+
 import config from 'common/config';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -15,6 +16,7 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors } from 'common/kyc';
 import EthUnits from 'common/utils/eth-units';
 
+import ReactPiwik from 'react-piwik';
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
@@ -165,6 +167,19 @@ class MarketplaceComponent extends Component {
 			rp.session.access_token.jwt
 		}`;
 		window.openExternal(null, url);
+	};
+
+	trackEcommerceTransaction = ({
+		transactionHash,
+		code,
+		jurisdiction,
+		rpName,
+		price,
+		quantity = 1
+	}) => {
+		ReactPiwik.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
+
+		ReactPiwik.push(['trackEcommerceOrder', transactionHash, price]);
 	};
 }
 

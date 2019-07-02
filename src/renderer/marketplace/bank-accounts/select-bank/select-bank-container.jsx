@@ -79,6 +79,13 @@ class BankAccountsSelectBankContainer extends Component {
 	};
 
 	getBankQuestionId = questions => {
+		if (!questions) {
+			console.error(
+				'Expecting questions in bank account template',
+				this.props.match.params.templateId
+			);
+			return false;
+		}
 		const keys = Object.keys(questions);
 		const questionId = keys.filter(
 			k => questions[k].question.toLowerCase() === 'bank preference'
