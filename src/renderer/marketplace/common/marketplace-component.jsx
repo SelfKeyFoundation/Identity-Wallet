@@ -15,8 +15,8 @@ import { ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors } from 'common/kyc';
 import EthUnits from 'common/utils/eth-units';
-
 import ReactPiwik from 'react-piwik';
+
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
