@@ -24,6 +24,7 @@ export class MarketplaceOrder extends BaseModel {
 				amount: { type: 'string' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				productInfo: { type: 'string' },
+				vendorName: { type: 'string' },
 				status: { type: 'string' },
 				statusMessage: { type: 'string' },
 				did: { type: 'string' },

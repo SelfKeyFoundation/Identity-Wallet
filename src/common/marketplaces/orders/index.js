@@ -62,10 +62,14 @@ const ordersActions = {
 	})
 };
 
-const createOrderOperation = (applicationId, vendorId, itemId, vendorDID, productInfo) => async (
-	dispatch,
-	getState
-) => {
+const createOrderOperation = (
+	applicationId,
+	vendorId,
+	itemId,
+	vendorDID,
+	productInfo,
+	vendorName
+) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
 	const order = await ordersService.createOrder({
@@ -74,6 +78,7 @@ const createOrderOperation = (applicationId, vendorId, itemId, vendorDID, produc
 		itemId,
 		vendorDID,
 		productInfo,
+		vendorName,
 		did: wallet.did,
 		walletId: wallet.id
 	});
@@ -460,7 +465,12 @@ const reducer = (state = initialState, action) => {
 const ordersSelectors = {
 	getRoot: state => state.orders,
 	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
-	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder
+	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder,
+	getOrderPriceUsd: state => 10000, // TODO: implement
+	getCurrentPaymentFeeUsd: state => 10000, // TODO: implement
+	getCurrentPaymentFeeEth: state => 10000, // TODO: implement
+	getCurrentAllowanceFeeUsd: state => 10000, // TODO: implement
+	getCurrentAllowancetFeeEth: state => 10000 // TODO: implement
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };

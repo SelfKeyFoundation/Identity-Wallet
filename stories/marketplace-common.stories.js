@@ -12,8 +12,8 @@ import {
 	ResumeBox
 } from '../src/renderer/marketplace/common';
 import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout';
-import PaymentPreapprove from '../src/renderer/marketplace/common/payment-preapprove';
-import PaymentContract from '../src/renderer/marketplace/common/payment-contract';
+import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/preapprove';
+import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -93,10 +93,9 @@ storiesOf('Marketplace Common/Resume Table', module)
 	.add('Table', () => <ResumeTable items={resumeItemSets[0]} />)
 	.add('Resume Box', () => <ResumeBox itemSets={resumeItemSets} />);
 
-storiesOf('Marketplace Common/Payment Contract', module)
+storiesOf('Marketplace Common/Orders', module)
 	.add('Preapprove', () => (
-		<PaymentPreapprove
-			whyLink={'https://help.selfkey.org/'}
+		<MarketplacePaymentPreapprove
 			feeETH={0.00001}
 			feeUSD={0.0000000000131}
 			onPayClick={linkTo('Payment Contract')}
@@ -104,8 +103,8 @@ storiesOf('Marketplace Common/Payment Contract', module)
 			onBackClick={action('preaprove back click')}
 		/>
 	))
-	.add('Payment Contract', () => (
-		<PaymentContract
+	.add('Payment', () => (
+		<MarketplacePayment
 			priceUSD={123456}
 			priceKey={12312312312321321321312}
 			feeETH={0.0000001}

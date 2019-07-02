@@ -48,7 +48,7 @@ const styles = theme => ({
 	}
 });
 
-export const PaymentContract = withStyles(styles)(
+export const MarketplacePayment = withStyles(styles)(
 	({
 		classes,
 		onBackClick,
@@ -191,4 +191,4 @@ export const PaymentContract = withStyles(styles)(
 	}
 );
 
-export default PaymentContract;
+export default MarketplacePayment;
