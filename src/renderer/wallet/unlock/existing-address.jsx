@@ -18,17 +18,17 @@ const styles = theme => ({
 	selectInput: {
 		width: '500px'
 	},
-
 	passwordInput: {
 		width: '500px'
 	},
-
 	menuItem: {
 		display: 'flex'
 	},
-
 	dropdown: {
 		width: '450px'
+	},
+	bottomSpace: {
+		marginBottom: '1em'
 	}
 });
 
@@ -95,7 +95,10 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="overline" gutterBottom>
+										<Typography
+											variant="overline"
+											className={classes.bottomSpace}
+										>
 											SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY
 											WALLET
 										</Typography>
@@ -150,7 +153,10 @@ class ExistingAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="overline" gutterBottom>
+										<Typography
+											variant="overline"
+											className={classes.bottomSpace}
+										>
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>
