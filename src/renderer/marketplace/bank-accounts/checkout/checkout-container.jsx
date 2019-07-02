@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 import config from 'common/config';
 import EthUnits from 'common/utils/eth-units';
 import { getLocale } from 'common/locale/selectors';
@@ -20,7 +21,7 @@ const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
 // const VENDOR_NAME = 'Far Horizon Capital Inc';
 
-class BankAccountsCheckoutContainer extends Component {
+class BankAccountsCheckoutContainer extends MarketplaceComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
@@ -42,57 +43,8 @@ class BankAccountsCheckoutContainer extends Component {
 		}
 	}
 
-	getLastApplication = () => {
-		const { rp } = this.props;
-		const { templateId } = this.props.match.params;
-
-		if (!rp || !rp.authenticated) return false;
-
-		const { applications } = this.props.rp;
-		if (!applications || applications.length === 0) return false;
-
-		let application;
-		let index = applications.length - 1;
-		for (; index >= 0; index--) {
-			if (applications[index].template === templateId) {
-				application = applications[index];
-				break;
-			}
-		}
-		return application;
-	};
-
-	userHasApplied = () => {
-		const application = this.getLastApplication();
-		return !!application;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication();
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
-
-	canUserOpenBankAccount = () => {
-		const { templateId } = this.props.match.params;
-		const price = this.props.accountType.price;
-
-		if (this.props.rp && this.props.rp.authenticated) {
-			return !!(
-				templateId &&
-				price &&
-				(!this.userHasApplied() || this.applicationWasRejected())
-			);
-		} else {
-			return !!(templateId && price);
-		}
-	};
-
 	checkIfUserCanOpenBankAccount = async () => {
-		if (!this.canUserOpenBankAccount()) {
+		if (!this.canApply(this.props.accountType.price)) {
 			this.props.dispatch(push(this.getCancelRoute()));
 		}
 	};

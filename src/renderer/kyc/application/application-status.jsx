@@ -38,24 +38,34 @@ const styles = theme => ({
 	}
 });
 
-export const ApplicationStatusCompleted = withStyles(styles)(({ classes }) => (
+export const ApplicationStatusCompleted = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
-		<Grid item xs={12}>
+		<Grid item xs={9}>
 			<CheckOutlined className={classes.checkIcon} />
 			<Typography variant="body2" color="secondary">
 				Your application was successful
 			</Typography>
 		</Grid>
+		<Grid item xs={3} className={classes.payment}>
+			<Button variant="contained" onClick={statusAction}>
+				Manage Applications
+			</Button>
+		</Grid>
 	</React.Fragment>
 ));
 
-export const ApplicationStatusRejected = withStyles(styles)(({ classes }) => (
+export const ApplicationStatusRejected = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
-		<Grid item xs={12}>
+		<Grid item xs={9}>
 			<AttributeAlertIcon />
 			<Typography variant="body2" color="secondary">
 				Your previous application was rejected
 			</Typography>
+		</Grid>
+		<Grid item xs={3} className={classes.payment}>
+			<Button variant="contained" onClick={statusAction}>
+				Manage Applications
+			</Button>
 		</Grid>
 	</React.Fragment>
 ));
@@ -118,8 +128,8 @@ const statusComponent = {
 };
 
 export const ApplicationStatusBar = withStyles(styles)(
-	({ classes, status, contact, statusAction }) => {
-		if (!statusComponent.hasOwnProperty(status)) {
+	({ classes, status, contact, statusAction, loading = false }) => {
+		if (!statusComponent.hasOwnProperty(status) || loading) {
 			return null;
 		}
 		const { StatusComponent, statusType } = statusComponent[status];

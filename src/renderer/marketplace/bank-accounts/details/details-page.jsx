@@ -141,6 +141,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 						status={applicationStatus}
 						contact={contact}
 						statusAction={onStatusAction}
+						loading={loading}
 					/>
 					<Grid
 						container
