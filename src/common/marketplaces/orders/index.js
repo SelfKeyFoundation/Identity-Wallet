@@ -191,28 +191,149 @@ const hideCurrentPaymentUIOperation = () => async (dispatch, getState) => {
 	await dispatch(push(backUrl));
 };
 
-const preapproveCurrentOrderOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
+	const selfkeyService = getGlobalContext().selfkeyService;
+	const { orderId, backUrl, completeUrl, preapproveGas } = ordersSelectors.getCurrentOrder(
+		getState()
+	);
+	const order = ordersSelectors.getOrder(getState(), orderId);
+	const wallet = walletSelectors.getWallet(getState());
+	await dispatch(
+		ordersOperations.updateOrder(orderId, { status: orderStatus.ALLOWANCE_IN_PROGRESS })
+	);
+
+	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+
+	return new Promise((resolve, reject) => {
+		selfkeyService
+			.approve(wallet.publicKey, config.paymentSplitterAddress, order.amount, preapproveGas)
+			.on('transactionHash', async allowanceHash => {
+				await dispatch(ordersOperations.updateOrder(orderId, { allowanceHash }));
+				await dispatch(
+					ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+				);
+			})
+			.on('receipt', async receipt => {
+				const order = ordersSelectors.getOrder(getState(), orderId);
+				if (order.status === orderStatus.ALLOWANCE_IN_PROGRESS) {
+					await dispatch(
+						ordersOperations.updateOrder(orderId, {
+							status: orderStatus.ALLOWANCE_COMPLETE
+						})
+					);
+					if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+						await dispatch(
+							ordersOperations.showOrderPaymentUIOperation(
+								orderId,
+								backUrl,
+								completeUrl
+							)
+						);
+					}
+					return resolve(receipt);
+				}
+				return reject(new Error('operation canceled'));
+			})
+			.on('error', async error => {
+				await dispatch(
+					ordersOperations.updateOrder(orderId, {
+						status: orderStatus.ALLOWANCE_ERROR,
+						statusMessage: error.message
+					})
+				);
+				if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+					await dispatch(
+						ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+					);
+				}
+				reject(error);
+			});
+	});
 };
 
-const payCurrentOrderOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const payCurrentOrderOperation = () => async (dispatch, getState) => {
+	const paymentService = getGlobalContext().paymentService;
+	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
+		getState()
+	);
+	const order = ordersSelectors.getOrder(getState(), orderId);
+	const wallet = walletSelectors.getWallet(getState());
+	await dispatch(
+		ordersOperations.updateOrder(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
+	);
+
+	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+
+	return new Promise((resolve, reject) => {
+		paymentService
+			.makePayment(
+				wallet.publicKey,
+				order.did,
+				order.vendorDID,
+				order.amount,
+				0,
+				0,
+				paymentGas
+			)
+			.on('transactionHash', async paymentHash => {
+				await dispatch(ordersOperations.updateOrder(orderId, { paymentHash }));
+				await dispatch(
+					ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+				);
+			})
+			.on('receipt', async receipt => {
+				const order = ordersSelectors.getOrder(getState(), orderId);
+				if (order.status === orderStatus.PAYMENT_IN_PROGRESS) {
+					await dispatch(
+						ordersOperations.updateOrder(orderId, {
+							status: orderStatus.PAYMENT_COMPLETE
+						})
+					);
+					if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+						await dispatch(
+							ordersOperations.showOrderPaymentUIOperation(
+								orderId,
+								backUrl,
+								completeUrl
+							)
+						);
+					}
+					return resolve(receipt);
+				}
+				return reject(new Error('operation canceled'));
+			})
+			.on('error', async error => {
+				await dispatch(
+					ordersOperations.updateOrder(orderId, {
+						status: orderStatus.PAYMENT_ERROR,
+						statusMessage: error.message
+					})
+				);
+				if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+					await dispatch(
+						ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+					);
+				}
+				reject(error);
+			});
+	});
 };
 
-const estimateCurrentPaymentGasOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const estimateCurrentPaymentGasOperation = () => async (dispatch, getState) => {
+	const gasLimit = await getGlobalContext().paymentService.getGasLimit();
+	await dispatch(ordersActions.setCurrentOrderAction({ paymentGas: gasLimit }));
 };
 
-const estimateCurrentPreapproveGasOperation = () => (dispatch, getState) => {
-	// TODO: implement
-};
-
-const checkAllowanceProgressOperation = () => (dispatch, getState) => {
-	// TODO: implement
-};
-
-const checkPaymentProgressOperation = () => (dispatch, getState) => {
-	// TODO: implement
+const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) => {
+	const { orderId } = ordersSelectors.getCurrentOrder(getState());
+	const order = ordersSelectors.getOrder(getState(), orderId);
+	const wallet = walletSelectors.getWallet(getState());
+	const gasLimit = await getGlobalContext().selfkeyService.estimateApproveGasLimit(
+		wallet.publicKey,
+		config.paymentSplitterAddress,
+		order.amount
+	);
+	await dispatch(ordersActions.setCurrentOrderAction({ paymentGas: gasLimit }));
 };
 
 const operations = {
@@ -222,8 +343,6 @@ const operations = {
 	hideCurrentPaymentUIOperation,
 	checkOrderAllowanceOperation,
 	cancelCurrentOrderOperation,
-	checkPaymentProgressOperation,
-	checkAllowanceProgressOperation,
 	estimateCurrentPreapproveGasOperation,
 	estimateCurrentPaymentGasOperation,
 	payCurrentOrderOperation,
