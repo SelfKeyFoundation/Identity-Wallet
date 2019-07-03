@@ -93,7 +93,7 @@ class BankAccountsCheckoutContainer extends MarketplaceComponent {
 				templateId,
 				this.getPayRoute(),
 				this.getCancelRoute(),
-				region,
+				`Bank Account in ${region}`,
 				`You are about to begin the application process for a bank account in ${region}.
 				Please double check your required documents are Certified True or Notarized where
 				necessary. Failure to do so will result in delays in the process. You may also be

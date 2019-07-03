@@ -11,17 +11,10 @@ import { BankAccountsPaymentComplete } from './payment-complete';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
-// const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
 	async componentWillMount() {
-		const authenticated = true;
-
-		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', authenticated)
-			);
-		}
+		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
 	}
 
 	async componentDidMount() {
@@ -40,10 +33,19 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
 	}
 
 	saveTransactionHash = async () => {
-		const { currentApplication, transaction, accountType } = this.props;
+		// const { transaction, accountType } = this.props;
+		const application = this.getLastApplication();
+		// FIXME: remove this after payment is implemented, for testing purposes only
+		const { accountType } = this.props;
+		let transaction = this.props.transaction;
+		if (!transaction || !transaction.transactionHash) {
+			transaction = {
+				amount: 10,
+				transactionHash: 'test-hash-not-real'
+			};
+		}
 
-		if (currentApplication && transaction) {
-			const application = currentApplication;
+		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					'incorporations',
@@ -66,12 +68,9 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
 			);
 		} else {
 			// TODO: what to do if no transaction or currentApplication exists?
+			console.error('No current application or transaction');
+			this.props.dispatch(push(this.getCancelRoute()));
 		}
-	};
-
-	// TODO: move to common marketplace component
-	clearRelyingParty = async () => {
-		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 
 	getCancelRoute = () => {

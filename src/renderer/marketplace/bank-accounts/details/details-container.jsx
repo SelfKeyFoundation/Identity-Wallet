@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { MarketplaceComponent } from '../../common/marketplace-component';
+import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
@@ -14,25 +14,20 @@ import { incorporationsOperations, incorporationsSelectors } from 'common/incorp
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
-class BankAccountsDetailContainer extends MarketplaceComponent {
+class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		tab: 'types',
 		loading: false
 	};
 
 	async componentDidMount() {
-		const { rpShouldUpdate, accountType, country } = this.props;
-		const notAuthenticated = false;
+		const { accountType, country } = this.props;
 
 		if (!accountType) {
 			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
 		}
 
-		if (rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', notAuthenticated)
-			);
-		}
+		await this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
 
 		if (!country) {
 			this.props.dispatch(
@@ -43,13 +38,8 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 		}
 	}
 
-	cancelRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
-	};
-
 	manageApplicationsRoute = () => {
-		return `/main/selfkeyId?tabValue=1`;
+		return `/main/selfkeyIdApplications`;
 	};
 
 	payRoute = () => {
@@ -73,12 +63,12 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 		if (rp && rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted() || this.applicationWasRejected()) {
 				this.props.dispatch(push(this.manageApplicationsRoute()));
-			}
-			if (this.applicationRequiresAdditionalDocuments()) {
+			} else if (this.applicationRequiresAdditionalDocuments()) {
 				this.redirectToKYCC(rp);
-			}
-			if (!this.userHasPaid()) {
+			} else if (!this.userHasPaid()) {
 				this.props.dispatch(push(this.payRoute()));
+			} else if (!this.userHasSelectedBankPreference()) {
+				this.props.dispatch(push(this.selectBankRoute()));
 			}
 		}
 		return null;
@@ -152,6 +142,7 @@ class BankAccountsDetailContainer extends MarketplaceComponent {
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 		const { price, countryCode, region } = accountType;
+		console.log(this.props);
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}

@@ -1,33 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { getWallet } from 'common/wallet/selectors';
-import { kycSelectors, kycOperations } from 'common/kyc';
+import { kycSelectors } from 'common/kyc';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 import { PaymentContract } from '../../common/payment-contract';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
-// const VENDOR_NAME = 'Far Horizon Capital Inc';
 
-class BankAccountsPaymentContainer extends Component {
+class BankAccountsPaymentContainer extends MarketplaceComponent {
 	async componentDidMount() {
-		const authenticated = true;
-		// If session is not authenticated, reauthenticate with KYC-Chain
-		// Otherwise, just check if user has already applied to redirect
-		// back to incorporations page
-
-		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', authenticated)
-			);
-		}
-		/*
-		else {
-			await this.checkIfUserCanOpenBankAccount();
-		}
-		*/
+		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
 
 		if (!this.props.accountType) {
 			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
@@ -42,12 +28,12 @@ class BankAccountsPaymentContainer extends Component {
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
 	onPayClick = () => {
-		console.error('TODO: not implemented');
+		console.error('TODO: not implemented, replace payment-complete route with correct one');
 
 		const { accountCode, countryCode, templateId } = this.props.match.params;
 		this.props.dispatch(
 			push(
-				`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`
+				`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}`
 			)
 		);
 	};
