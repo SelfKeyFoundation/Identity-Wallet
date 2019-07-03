@@ -5,6 +5,7 @@ import {
 	APPLICATION_APPROVED,
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
+import ReactPiwik from 'react-piwik';
 
 class MarketplaceComponent extends Component {
 	getLastApplication = () => {
@@ -113,6 +114,19 @@ class MarketplaceComponent extends Component {
 			rp.session.access_token.jwt
 		}`;
 		window.openExternal(null, url);
+	};
+
+	trackEcommerceTransaction = ({
+		transactionHash,
+		code,
+		jurisdiction,
+		rpName,
+		price,
+		quantity = 1
+	}) => {
+		ReactPiwik.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
+
+		ReactPiwik.push(['trackEcommerceOrder', transactionHash, price]);
 	};
 }
 

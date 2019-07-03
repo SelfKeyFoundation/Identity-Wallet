@@ -18281,9 +18281,9 @@ select@^1.1.2:
     react-truncate "2.4.0"
     reset-jss "1.0.0"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#9ba7b68":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#9faa80c4fd16ef59554e33db8a8607231912ea9d":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#9ba7b682ac6cffe54dd10eaf8a0a53476187df3b"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#9faa80c4fd16ef59554e33db8a8607231912ea9d"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"

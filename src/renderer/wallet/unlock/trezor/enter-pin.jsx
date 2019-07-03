@@ -16,24 +16,34 @@ import { push } from 'connected-react-router';
 
 const boxComponentStyles = theme => ({
 	square: {
-		height: '50px !important',
-		width: '50px !important',
-		minWidth: '50px !important',
+		height: '80px !important',
+		width: '80px !important',
+		minWidth: '80px !important',
 		cursor: 'pointer'
 	},
 
 	dot: {
 		content: '',
 		borderRadius: '100%',
-		background: '#fff',
-		width: '8px',
-		height: '8px'
+		background: '#697C95',
+		width: '20px',
+		height: '20px'
 	}
 });
 
 const styles = theme => ({
 	clearButton: {
 		cursor: 'pointer'
+	},
+	header: {
+		marginBottom: '20px',
+		marginTop: '30px'
+	},
+	h1: {
+		marginBottom: '0.5em'
+	},
+	password: {
+		width: '330px'
 	}
 });
 
@@ -86,10 +96,16 @@ class EnterPIN extends Component {
 		const { classes } = this.props;
 		return (
 			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
-				<Grid item>
-					<Typography variant="h1">Please Enter Your PIN.</Typography>
-				</Grid>
-				<Grid item>
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="center"
+					className={classes.header}
+				>
+					<Typography variant="h1" className={classes.h1}>
+						Please enter your PIN.
+					</Typography>
 					<Typography variant="h3">
 						Look at the device for the number positions.
 					</Typography>
@@ -188,7 +204,7 @@ class EnterPIN extends Component {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.password}>
 					<Input
 						type="password"
 						disabled
@@ -239,7 +255,7 @@ class EnterPIN extends Component {
 				<Modal open={true}>
 					<ModalWrap>
 						<ModalCloseButton onClick={this.handleCancel}>
-							<ModalCloseIcon />
+							<ModalCloseIcon style={{ marginTop: '20px' }} />
 						</ModalCloseButton>
 						<ModalHeader>
 							<Grid
@@ -249,7 +265,7 @@ class EnterPIN extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Trezor PIN</Typography>
+									<Typography variant="body1">Trezor PIN</Typography>
 								</Grid>
 							</Grid>
 						</ModalHeader>

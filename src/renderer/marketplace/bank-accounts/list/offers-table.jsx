@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, IconButton } from '@material-ui/core';
+import { Typography, IconButton, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -13,7 +13,6 @@ import { ProgramPrice, FlagCountryName } from '../../common';
 const styles = theme => ({
 	table: {
 		'& td': {
-			height: 'auto',
 			padding: '0 20px'
 		},
 		'& th': {
@@ -179,14 +178,16 @@ const BankingOffersTable = withStyles(styles)(
 								<Typography variant="h6">{bank.minDeposit}</Typography>
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
-								{bank.goodFor &&
-									bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
+								<Grid container>
+									{bank.goodFor &&
+										bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
+								</Grid>
 							</TagTableCell>
 							<TableCell className={classes.personalVisitCell}>
 								{bank.personalVisitRequired ? (
-									<Typography variant="h6">Required</Typography>
+									<Typography variant="h6">Yes</Typography>
 								) : (
-									<Typography variant="h6">Remote</Typography>
+									<Typography variant="h6">No</Typography>
 								)}
 							</TableCell>
 							<TableCell className={classes.costCell}>

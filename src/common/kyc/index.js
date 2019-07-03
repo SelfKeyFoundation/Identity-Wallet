@@ -363,7 +363,8 @@ const loadRelyingPartyOperation = (
 				);
 			}
 
-			session.access_token = await session.getAccessToken();
+			// Access Token only exists for existing KYCC users
+			if (applications.length) session.access_token = await session.getAccessToken();
 		}
 
 		await dispatch(
@@ -550,6 +551,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		title,
 		description,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		attributes
 	} = currentApplication;
 	const requirements = kycSelectors.selectRequirementsForTemplate(
@@ -579,6 +583,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes
 			)
 		);
@@ -606,6 +613,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes,
 				applicationError
 			)

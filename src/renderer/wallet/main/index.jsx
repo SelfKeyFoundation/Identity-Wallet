@@ -99,7 +99,14 @@ class Main extends Component {
 					/>
 					<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
-					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
+					<Route
+						path={`${match.path}/selfkeyId`}
+						render={props => <SelfkeyIdContainer tabValue={0} />}
+					/>
+					<Route
+						path={`${match.path}/selfkeyIdApplications`}
+						render={props => <SelfkeyIdContainer tabValue={1} />}
+					/>
 					<Route path={`${match.path}/enter-did`} component={AssociateDID} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
