@@ -65,7 +65,7 @@ class SelfKeyIdCreateComponent extends Component {
 								<Typography variant="h1">Setup your Selfkey Identity</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="body1" color="secondary" gutterBottom>
+								<Typography variant="body1" color="secondary">
 									Create a new Selfkey ID to start building your identity profile.
 								</Typography>
 							</Grid>
