@@ -47,7 +47,7 @@ const styles = theme => ({
 	}
 });
 
-export const PaymentPreapprove = withStyles(styles)(
+export const MarketplacePaymentPreapprove = withStyles(styles)(
 	({ classes, onBackClick, onPayClick, feeETH, feeUSD, onWhyLinkClick }) => {
 		let whyLink = null;
 		if (onWhyLinkClick) {
@@ -135,4 +135,4 @@ export const PaymentPreapprove = withStyles(styles)(
 	}
 );
 
-export default PaymentPreapprove;
+export default MarketplacePaymentPreapprove;

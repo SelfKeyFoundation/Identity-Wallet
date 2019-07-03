@@ -2,6 +2,7 @@ exports.up = async knex => {
 	await knex.schema.createTable('marketplace_orders', t => {
 		t.increments('id');
 		t.string('vendorId');
+		t.string('amount');
 		t.string('itemId');
 		t.string('productInfo');
 		t.string('vendorName');

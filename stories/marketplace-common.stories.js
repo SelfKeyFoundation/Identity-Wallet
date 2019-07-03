@@ -14,6 +14,7 @@ import {
 import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout';
 import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/preapprove';
 import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
+import MarketplacePaymentComplete from '../src/renderer/marketplace/orders/payment-complete';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -112,5 +113,12 @@ storiesOf('Marketplace Common/Orders', module)
 			did={'did:selfkey:sadjkhasnnkdjlqw123121kl'}
 			vendorName="Horizon Capital Inc"
 			onLearnHowClick={action('payment contract learn how clicked')}
+		/>
+	))
+	.add('Payment complete', () => (
+		<MarketplacePaymentComplete
+			email="support@flagtheory.com"
+			onBackClick={action('banking payment complete back click')}
+			onContinueClick={action('banking payment continue click')}
 		/>
 	));

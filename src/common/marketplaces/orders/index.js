@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
-import { walletSelectors } from '../wallet';
+import { walletSelectors } from '../../wallet';
 import { push } from 'connected-react-router';
-import config from '../config';
+import config from '../../config';
 import { Logger } from 'common/logger';
 import { pricesSelectors } from '../../prices';
 import { ethGasStationInfoSelectors } from '../../eth-gas-station';
@@ -33,6 +33,7 @@ export const initialState = {
 };
 
 export const ordersTypes = {
+	ORDERS_START_OPERATION: 'orders/operations/START',
 	ORDERS_CREATE_OPERATION: 'orders/operations/CREATE',
 	ORDERS_LOAD_OPERATION: 'orders/operations/LOAD',
 	ORDERS_SET_ACTION: 'orders/actions/SET',
@@ -45,6 +46,7 @@ export const ordersTypes = {
 	ORDERS_HIDE_UI_OPERATION: 'orders/operations/ui/HIDE',
 	ORDERS_CHECK_ALLOWANCE_OPERATION: 'orders/operations/allowance/CHECK',
 	ORDERS_CANCEL_CURRENT_OPERATION: 'orders/operations/current/CANCEL',
+	ORDERS_FINISH_CURRENT_OPERATION: 'orders/operations/current/FINISH',
 	ORDERS_PREAPPROVE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE',
 	ORDERS_PAY_CURRENT_OPERATION: 'orders/operations/current/PAY',
 	ORDERS_PREAPPROVE_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE_ESTIMATE',
@@ -67,6 +69,7 @@ const ordersActions = {
 };
 
 const createOrderOperation = (
+	amount,
 	applicationId,
 	vendorId,
 	itemId,
@@ -77,6 +80,7 @@ const createOrderOperation = (
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
 	const order = await ordersService.createOrder({
+		amount: '' + amount,
 		applicationId,
 		vendorId,
 		itemId,
@@ -84,9 +88,36 @@ const createOrderOperation = (
 		productInfo,
 		vendorName,
 		did: wallet.did,
-		walletId: wallet.id
+		walletId: wallet.id,
+		status: orderStatus.PENDING
 	});
 	await dispatch(ordersActions.setOneOrderAction(order));
+	return order;
+};
+
+const startOrderOperation = (
+	amount,
+	applicationId,
+	vendorId,
+	itemId,
+	vendorDID,
+	productInfo,
+	vendorName,
+	backUrl,
+	completeUrl
+) => async (dispatch, getState) => {
+	const order = await dispatch(
+		ordersOperations.createOrderOperation(
+			amount,
+			applicationId,
+			vendorId,
+			itemId,
+			vendorDID,
+			productInfo,
+			vendorName
+		)
+	);
+	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
 };
 
 const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
@@ -96,7 +127,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
 
 	await dispatch(
-		ordersActions.setCurrentOrder({
+		ordersActions.setCurrentOrderAction({
 			orderId,
 			backUrl,
 			completeUrl
@@ -110,7 +141,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	await dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/loading`));
 
 	await dispatch(
-		ordersActions.setCurrentOrder({
+		ordersActions.setCurrentOrderAction({
 			orderId,
 			backUrl,
 			completeUrl
@@ -157,7 +188,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 };
 
 const ordersLoadOperation = () => async (dispatch, getState) => {
-	const wallet = walletSelectors.getWallet(getState);
+	const wallet = walletSelectors.getWallet(getState());
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const orders = await ordersService.loadOrders(wallet.id);
 	await dispatch(ordersActions.setOrdersAction(orders));
@@ -183,12 +214,12 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 
 	let update = null;
 
-	if (allowance < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
+	if (allowance.toNumber() < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
 		update = { status: orderStatus.PENDING };
 	}
 
 	if (
-		allowance >= order.amount &&
+		allowance.toNumber() >= order.amount &&
 		[
 			orderStatus.ALLOWANCE_IN_PROGRESS,
 			orderStatus.ALLOWANCE_ERROR,
@@ -204,10 +235,15 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	await dispatch(ordersOperations.ordersUpdateOperation(orderId, update));
 };
 
+const finishCurrentOrderOperation = () => async (dispatch, getState) => {
+	const { completeUrl } = ordersSelectors.getCurrentOrder(getState());
+	await dispatch(push(completeUrl));
+	await dispatch(ordersOperations.setCurrentOrderAction(null));
+};
+
 const cancelCurrentOrderOperation = () => async (dispatch, getState) => {
 	const { orderId } = ordersSelectors.getCurrentOrder(getState());
 	await dispatch(ordersOperations.hideCurrentPaymentUIOperation());
-	await dispatch(ordersOperations.setCurrentOrderAction(null));
 	await dispatch(
 		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.CANCELED })
 	);
@@ -216,66 +252,67 @@ const cancelCurrentOrderOperation = () => async (dispatch, getState) => {
 const hideCurrentPaymentUIOperation = () => async (dispatch, getState) => {
 	const { backUrl } = ordersSelectors.getCurrentOrder(getState());
 	await dispatch(push(backUrl));
+	await dispatch(ordersOperations.setCurrentOrderAction(null));
 };
 
 const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 	const selfkeyService = getGlobalContext().selfkeyService;
-	const { orderId, backUrl, completeUrl, preapproveGas } = ordersSelectors.getCurrentOrder(
+	const { orderId, backUrl, completeUrl, allowanceGas } = ordersSelectors.getCurrentOrder(
 		getState()
 	);
-	const order = ordersSelectors.getOrder(getState(), orderId);
+	let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(getState());
+	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
 	await dispatch(
-		ordersOperations.updateOrder(orderId, { status: orderStatus.ALLOWANCE_IN_PROGRESS })
+		ordersOperations.ordersUpdateOperation(orderId, {
+			status: orderStatus.ALLOWANCE_IN_PROGRESS
+		})
 	);
 
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 
-	return new Promise((resolve, reject) => {
-		selfkeyService
-			.approve(wallet.publicKey, config.paymentSplitterAddress, order.amount, preapproveGas)
-			.on('transactionHash', async allowanceHash => {
-				await dispatch(ordersOperations.updateOrder(orderId, { allowanceHash }));
+	const onTransactionHash = async allowanceHash => {
+		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { allowanceHash }));
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	};
+	try {
+		const receipt = await selfkeyService.approve(
+			wallet.publicKey,
+			config.paymentSplitterAddress,
+			order.amount,
+			allowanceGas,
+			gasPriceEstimates.average,
+			onTransactionHash
+		);
+		order = ordersSelectors.getOrder(getState(), orderId);
+		if (order.status === orderStatus.ALLOWANCE_IN_PROGRESS) {
+			await dispatch(
+				ordersOperations.ordersUpdateOperation(orderId, {
+					status: orderStatus.ALLOWANCE_COMPLETE
+				})
+			);
+			if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
 				await dispatch(
 					ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
 				);
+			}
+			return receipt;
+		}
+	} catch (error) {
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.ALLOWANCE_ERROR,
+				statusMessage: error.message
 			})
-			.on('receipt', async receipt => {
-				const order = ordersSelectors.getOrder(getState(), orderId);
-				if (order.status === orderStatus.ALLOWANCE_IN_PROGRESS) {
-					await dispatch(
-						ordersOperations.updateOrder(orderId, {
-							status: orderStatus.ALLOWANCE_COMPLETE
-						})
-					);
-					if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
-						await dispatch(
-							ordersOperations.showOrderPaymentUIOperation(
-								orderId,
-								backUrl,
-								completeUrl
-							)
-						);
-					}
-					return resolve(receipt);
-				}
-				return reject(new Error('operation canceled'));
-			})
-			.on('error', async error => {
-				await dispatch(
-					ordersOperations.updateOrder(orderId, {
-						status: orderStatus.ALLOWANCE_ERROR,
-						statusMessage: error.message
-					})
-				);
-				if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
-					await dispatch(
-						ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
-					);
-				}
-				reject(error);
-			});
-	});
+		);
+		if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+			await dispatch(
+				ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+			);
+		}
+		throw error;
+	}
+	throw new Error('operation canceled');
 };
 
 const payCurrentOrderOperation = () => async (dispatch, getState) => {
@@ -283,68 +320,61 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
 		getState()
 	);
-	const order = ordersSelectors.getOrder(getState(), orderId);
+	let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(getState());
+	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
 	await dispatch(
-		ordersOperations.updateOrder(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
+		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
 	);
 
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
-
-	return new Promise((resolve, reject) => {
-		paymentService
-			.makePayment(
-				wallet.publicKey,
-				order.did,
-				order.vendorDID,
-				order.amount,
-				order.productInfo,
-				0,
-				0,
-				paymentGas
-			)
-			.on('transactionHash', async paymentHash => {
-				await dispatch(ordersOperations.updateOrder(orderId, { paymentHash }));
+	const onTransactionHash = async paymentHash => {
+		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { paymentHash }));
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	};
+	try {
+		const receipt = await paymentService.makePayment(
+			wallet.publicKey,
+			order.did,
+			order.vendorDID,
+			order.amount,
+			order.productInfo,
+			0,
+			0,
+			paymentGas,
+			gasPriceEstimates.average,
+			onTransactionHash
+		);
+		order = ordersSelectors.getOrder(getState(), orderId);
+		if (order.status === orderStatus.PAYMENT_IN_PROGRESS) {
+			await dispatch(
+				ordersOperations.ordersUpdateOperation(orderId, {
+					status: orderStatus.PAYMENT_COMPLETE
+				})
+			);
+			if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
 				await dispatch(
 					ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
 				);
+			}
+			return receipt;
+		}
+	} catch (error) {
+		log.error(error);
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.PAYMENT_ERROR,
+				statusMessage: error.message
 			})
-			.on('receipt', async receipt => {
-				const order = ordersSelectors.getOrder(getState(), orderId);
-				if (order.status === orderStatus.PAYMENT_IN_PROGRESS) {
-					await dispatch(
-						ordersOperations.updateOrder(orderId, {
-							status: orderStatus.PAYMENT_COMPLETE
-						})
-					);
-					if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
-						await dispatch(
-							ordersOperations.showOrderPaymentUIOperation(
-								orderId,
-								backUrl,
-								completeUrl
-							)
-						);
-					}
-					return resolve(receipt);
-				}
-				return reject(new Error('operation canceled'));
-			})
-			.on('error', async error => {
-				await dispatch(
-					ordersOperations.updateOrder(orderId, {
-						status: orderStatus.PAYMENT_ERROR,
-						statusMessage: error.message
-					})
-				);
-				if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
-					await dispatch(
-						ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
-					);
-				}
-				reject(error);
-			});
-	});
+		);
+		if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+			await dispatch(
+				ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+			);
+		}
+		throw error;
+	}
+	throw new Error('operation canceled');
 };
 
 const estimateCurrentPaymentGasOperation = () => async (dispatch, getState) => {
@@ -361,7 +391,7 @@ const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) =
 		config.paymentSplitterAddress,
 		order.amount
 	);
-	await dispatch(ordersActions.setCurrentOrderAction({ paymentGas: gasLimit }));
+	await dispatch(ordersActions.setCurrentOrderAction({ allowanceGas: gasLimit }));
 };
 
 const operations = {
@@ -375,7 +405,9 @@ const operations = {
 	estimateCurrentPaymentGasOperation,
 	payCurrentOrderOperation,
 	preapproveCurrentOrderOperation,
-	createOrderOperation
+	createOrderOperation,
+	finishCurrentOrderOperation,
+	startOrderOperation
 };
 
 const ordersOperations = {
@@ -424,6 +456,14 @@ const ordersOperations = {
 	createOrderOperation: createAliasedAction(
 		ordersTypes.ORDERS_CREATE_OPERATION,
 		operations.createOrderOperation
+	),
+	finishCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_FINISH_CURRENT_OPERATION,
+		operations.finishCurrentOrderOperation
+	),
+	startOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_START_OPERATION,
+		operations.startOrderOperation
 	)
 };
 
@@ -473,8 +513,12 @@ const ordersSelectors = {
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
-		return new BN(order.amount).multipliedBy(fiatRate);
+		let fiatRate = pricesSelectors.getRate(
+			state,
+			config.constants.primaryToken,
+			fiat.fiatCurrency
+		);
+		return new BN(order.amount).multipliedBy(fiatRate).toString();
 	},
 	getCurrentPaymentFeeUsd: state => {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
@@ -485,20 +529,26 @@ const ordersSelectors = {
 	},
 	getCurrentPaymentFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
-		const { paymentGas } = ordersSelectors.getCurrentOrder(state);
-		return new BN(gasPriceEstimates.average).multipliedBy(paymentGas || 0).toString();
+		const { paymentGas } = ordersSelectors.getCurrentOrder(state) || {};
+		return new BN(gasPriceEstimates.average)
+			.dividedBy(1000000000000000000)
+			.multipliedBy(paymentGas || 0)
+			.toString();
 	},
 	getCurrentAllowanceFeeUsd: state => {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
 		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
-		return new BN(ordersSelectors.getCurrentAllowancetFeeEth(state))
+		return new BN(ordersSelectors.getCurrentAllowanceFeeEth(state))
 			.multipliedBy(fiatRate)
 			.toString();
 	},
-	getCurrentAllowancetFeeEth: state => {
+	getCurrentAllowanceFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
-		const { allowanceGas } = ordersSelectors.getCurrentOrder(state);
-		return new BN(gasPriceEstimates.average).multipliedBy(allowanceGas || 0).toString();
+		const { allowanceGas } = ordersSelectors.getCurrentOrder(state) || {};
+		return new BN(gasPriceEstimates.average)
+			.dividedBy(1000000000000000000)
+			.multipliedBy(allowanceGas || 0)
+			.toString();
 	}
 };
 

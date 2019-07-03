@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePaymentPreapprove } from './preapprove';
-import { ordersSelectors } from '../../../common/marketplaces/orders';
+import { ordersSelectors, ordersOperations } from '../../../common/marketplaces/orders';
 
 class MarketplacePaymentPreapproveContainer extends Component {
 	handleBackClick = () => {
-		console.log('XXX back click');
+		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};
 	handlePayClick = () => {
-		console.log('XXX pay click');
+		this.props.dispatch(ordersOperations.preapproveCurrentOrderOperation());
 	};
 	handleWhyLinkClick = () => {
 		console.log('XXX why link click');
@@ -19,7 +19,7 @@ class MarketplacePaymentPreapproveContainer extends Component {
 				onBackClick={this.handleBackClick}
 				onPayClick={this.handlePayClick}
 				feeETH={this.props.feeETH}
-				feeUSD={this.props.feeETH}
+				feeUSD={this.props.feeUSD}
 				onWhyLinkClick={this.handleWhyLinkClick}
 			/>
 		);
@@ -27,8 +27,8 @@ class MarketplacePaymentPreapproveContainer extends Component {
 }
 
 const mapStateToPropes = (state, props) => ({
-	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
-	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
+	feeUSD: ordersSelectors.getCurrentAllowanceFeeUsd(state),
+	feeETH: ordersSelectors.getCurrentAllowanceFeeEth(state),
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 

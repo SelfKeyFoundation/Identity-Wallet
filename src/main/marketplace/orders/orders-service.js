@@ -9,8 +9,8 @@ export class MarketplaceOrdersService {
 		return MarketplaceOrder.create(order);
 	}
 
-	async updeteOrder(order) {
-		return MarketplaceOrder.updateById(order);
+	async updateOrder(order) {
+		return MarketplaceOrder.updateById(order.id, order);
 	}
 }
 
