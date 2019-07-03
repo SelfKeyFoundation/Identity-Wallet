@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../../wallet';
+import { appSelectors } from '../../app';
 import { push } from 'connected-react-router';
 import config from '../../config';
 import { Logger } from 'common/logger';
@@ -9,7 +10,7 @@ import { pricesSelectors } from '../../prices';
 import { ethGasStationInfoSelectors } from '../../eth-gas-station';
 import BN from 'bignumber.js';
 import { fiatCurrencySelectors } from '../../fiatCurrency';
-
+const hardwalletConfirmationTime = '30000';
 const log = new Logger('orders-duck');
 
 const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace-orders';
@@ -269,9 +270,19 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 		})
 	);
 
-	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(getState());
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		await dispatch(push('/main/hd-transaction-timer'));
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
 
 	const onTransactionHash = async allowanceHash => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { allowanceHash }));
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
@@ -299,6 +310,7 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 			return receipt;
 		}
 	} catch (error) {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(
 			ordersOperations.ordersUpdateOperation(orderId, {
 				status: orderStatus.ALLOWANCE_ERROR,
@@ -327,8 +339,19 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
 	);
 
-	await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(getState());
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		await dispatch(push('/main/hd-transaction-timer'));
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
 	const onTransactionHash = async paymentHash => {
+		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { paymentHash }));
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
@@ -360,6 +383,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 			return receipt;
 		}
 	} catch (error) {
+		clearTimeout(hardwalletConfirmationTimeout);
 		log.error(error);
 		await dispatch(
 			ordersOperations.ordersUpdateOperation(orderId, {
