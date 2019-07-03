@@ -5,6 +5,10 @@ import { walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
 import config from '../config';
 import { Logger } from 'common/logger';
+import { pricesSelectors } from '../../prices';
+import { ethGasStationInfoSelectors } from '../../eth-gas-station';
+import BN from 'bignumber.js';
+import { fiatCurrencySelectors } from '../../fiatCurrency';
 
 const log = new Logger('orders-duck');
 
@@ -466,11 +470,36 @@ const ordersSelectors = {
 	getRoot: state => state.orders,
 	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
 	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder,
-	getOrderPriceUsd: state => 10000, // TODO: implement
-	getCurrentPaymentFeeUsd: state => 10000, // TODO: implement
-	getCurrentPaymentFeeEth: state => 10000, // TODO: implement
-	getCurrentAllowanceFeeUsd: state => 10000, // TODO: implement
-	getCurrentAllowancetFeeEth: state => 10000 // TODO: implement
+	getOrderPriceUsd: (state, id) => {
+		const order = ordersSelectors.getOrder(state, id);
+		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
+		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
+		return new BN(order.amount).multipliedBy(fiatRate);
+	},
+	getCurrentPaymentFeeUsd: state => {
+		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
+		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
+		return new BN(ordersSelectors.getCurrentPaymentFeeEth(state))
+			.multipliedBy(fiatRate)
+			.toString();
+	},
+	getCurrentPaymentFeeEth: state => {
+		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
+		const { paymentGas } = ordersSelectors.getCurrentOrder(state);
+		return new BN(gasPriceEstimates.average).multipliedBy(paymentGas || 0).toString();
+	},
+	getCurrentAllowanceFeeUsd: state => {
+		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
+		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
+		return new BN(ordersSelectors.getCurrentAllowancetFeeEth(state))
+			.multipliedBy(fiatRate)
+			.toString();
+	},
+	getCurrentAllowancetFeeEth: state => {
+		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
+		const { allowanceGas } = ordersSelectors.getCurrentOrder(state);
+		return new BN(gasPriceEstimates.average).multipliedBy(allowanceGas || 0).toString();
+	}
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };
