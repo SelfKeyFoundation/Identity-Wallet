@@ -8,21 +8,21 @@ const styles = theme => ({
 	passwordInput: {
 		width: '500px'
 	},
-
 	button: {
 		width: '500px'
 	},
-
 	menuItem: {
 		display: 'flex'
 	},
-
 	filePath: {
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
 		maxWidth: '500px',
 		whiteSpace: 'nowrap',
 		marginLeft: '40px'
+	},
+	bottomSpace: {
+		marginBottom: '1em'
 	}
 });
 
@@ -93,7 +93,10 @@ class NewAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="overline" gutterBottom>
+										<Typography
+											variant="overline"
+											className={classes.bottomSpace}
+										>
 											SELECT A KEYSTORE FILE (UTC/JSON)
 										</Typography>
 									</Grid>
@@ -140,7 +143,10 @@ class NewAddress extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="overline" gutterBottom>
+										<Typography
+											variant="overline"
+											className={classes.bottomSpace}
+										>
 											UNLOCK IT WITH YOUR PASSWORD
 										</Typography>
 									</Grid>
@@ -150,6 +156,7 @@ class NewAddress extends Component {
 											fullWidth
 											type="password"
 											onChange={this.handlePasswordChange}
+											placeholder="Password"
 										/>
 										{this.state.error !== '' && (
 											<Typography

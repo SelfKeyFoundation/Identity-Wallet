@@ -8,8 +8,8 @@ import { bankAccountsSelectors } from 'common/bank-accounts';
 import { transactionSelectors } from 'common/transaction';
 import { MarketplaceComponent } from '../../common/marketplace-component';
 import { BankAccountsPaymentComplete } from './payment-complete';
-import ReactPiwik from 'react-piwik';
 
+const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 // const VENDOR_NAME = 'Far Horizon Capital Inc';
 

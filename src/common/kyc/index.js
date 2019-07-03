@@ -363,7 +363,8 @@ const loadRelyingPartyOperation = (
 				);
 			}
 
-			session.access_token = await session.getAccessToken();
+			// Access Token only exists for existing KYCC users
+			if (applications.length) session.access_token = await session.getAccessToken();
 		}
 
 		await dispatch(
