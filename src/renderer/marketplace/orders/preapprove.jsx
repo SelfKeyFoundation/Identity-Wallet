@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { withStyles, Grid, Typography, Button, IconButton } from '@material-ui/core';
+import { withStyles, Grid, Typography, Button } from '@material-ui/core';
 import { Popup } from '../../common';
-import { PaymentIcon, KeyTooltip, InfoTooltip } from 'selfkey-ui';
-
+import { PaymentIcon } from 'selfkey-ui';
 const styles = theme => ({
 	paymentIcon: {
 		width: '66px',
@@ -48,8 +47,21 @@ const styles = theme => ({
 	}
 });
 
-export const PaymentContract = withStyles(styles)(
-	({ classes, onBackClick, onPayClick, price, whyLink }) => {
+export const MarketplacePaymentPreapprove = withStyles(styles)(
+	({ classes, onBackClick, onPayClick, feeETH, feeUSD, onWhyLinkClick }) => {
+		let whyLink = null;
+		if (onWhyLinkClick) {
+			whyLink = (
+				<span>
+					{' '}
+					(
+					<a className={classes.link} onClick={onWhyLinkClick}>
+						why?
+					</a>
+					)
+				</span>
+			);
+		}
 		return (
 			<Popup closeAction={onBackClick} open text="Register Payment on the Selfkey Network">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
@@ -71,16 +83,7 @@ export const PaymentContract = withStyles(styles)(
 							<Grid item>
 								<Typography variant="body1" className={classes.bottomSpace}>
 									Paying for a service in the marketplace requires first a payment
-									pre-approval (
-									<a
-										className={classes.link}
-										onClick={e => {
-											window.openExternal(e, whyLink);
-										}}
-									>
-										why?
-									</a>
-									).
+									pre-approval{whyLink}.
 								</Typography>
 							</Grid>
 							<Grid item className={classes.bottomSpace}>
@@ -107,38 +110,10 @@ export const PaymentContract = withStyles(styles)(
 										color="primary"
 										className={classes.bold}
 									>
-										Price: $ {price}
+										$ {feeUSD}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary">
-										1.9898 KEY
-										<KeyTooltip
-											interactive
-											placement="top-start"
-											className={classes.tooltip}
-											title={
-												<React.Fragment>
-													<span>
-														Every ERC-20 token has its own smart
-														contract address. To learn more,{' '}
-														<a
-															className={classes.link}
-															onClick={e => {
-																window.openExternal(
-																	e,
-																	'https://help.selfkey.org/'
-																);
-															}}
-														>
-															click here.
-														</a>
-													</span>
-												</React.Fragment>
-											}
-										>
-											<IconButton aria-label="Info">
-												<InfoTooltip />
-											</IconButton>
-										</KeyTooltip>
+										{feeETH} ETH
 									</Typography>
 								</Grid>
 							</Grid>
@@ -160,4 +135,4 @@ export const PaymentContract = withStyles(styles)(
 	}
 );
 
-export default PaymentContract;
+export default MarketplacePaymentPreapprove;

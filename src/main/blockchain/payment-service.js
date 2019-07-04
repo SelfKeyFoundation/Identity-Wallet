@@ -15,25 +15,36 @@ export class PaymentService {
 		purchaseInfo,
 		affiliate1Split,
 		affiliate2Split,
-		gas
+		gas,
+		gasPrice,
+		onTransactionHash
 	) {
 		const paymentSplitter = new this.web3Service.web3.eth.Contract(
 			paymentSplitterABI,
 			config.paymentSplitterAddress
 		);
 		this.web3Service.web3.transactionConfirmationBlocks = 2;
+		const nonce = await this.web3Service.web3.eth.getTransactionCount(walletAddress, 'pending');
 		const tokenAddress = await this.selfkeyService.getTokenAddress();
-		return paymentSplitter.methods
+		let promise = paymentSplitter.methods
 			.makePayment(
 				tokenAddress,
 				senderDID,
 				recipientDID,
 				amount,
-				purchaseInfo,
+				this.web3Service.ensureStrHex(purchaseInfo),
 				affiliate1Split,
 				affiliate2Split
 			)
-			.send({ from: walletAddress, gas });
+			.send({ from: walletAddress, gas, gasPrice, nonce });
+
+		if (onTransactionHash) {
+			promise.on('transactionHash', onTransactionHash);
+		}
+		return new Promise((resolve, reject) => {
+			promise.on('receipt', receipt => resolve(receipt));
+			promise.on('error', error => reject(error));
+		});
 	}
 
 	async getGasLimit() {
