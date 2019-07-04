@@ -107,17 +107,20 @@ const startOrderOperation = (
 	backUrl,
 	completeUrl
 ) => async (dispatch, getState) => {
-	const order = await dispatch(
-		ordersOperations.createOrderOperation(
-			amount,
-			applicationId,
-			vendorId,
-			itemId,
-			vendorDID,
-			productInfo,
-			vendorName
-		)
-	);
+	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
+	if (!order) {
+		order = await dispatch(
+			ordersOperations.createOrderOperation(
+				amount,
+				applicationId,
+				vendorId,
+				itemId,
+				vendorDID,
+				productInfo,
+				vendorName
+			)
+		);
+	}
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
 };
 
@@ -573,7 +576,21 @@ const ordersSelectors = {
 			.dividedBy(1000000000000000000)
 			.multipliedBy(allowanceGas || 0)
 			.toString();
-	}
+	},
+	getAllOrders: state => {
+		const { all, byId } = ordersSelectors.getRoot(state);
+		return all.map(id => byId[id]);
+	},
+	getOrdersByApplication: (state, applicationId) =>
+		ordersSelectors.getAllOrders(state).filter(order => order.applicationId === applicationId),
+	getLatestActiveOrderForApplication: (state, applicationId) =>
+		ordersSelectors
+			.getLatestActiveOrderForApplication(state, applicationId)
+			.reduce((acc, curr) => {
+				if (curr.status !== orderStatus.CANCELED && curr.updatedAt > acc.updatedAt)
+					return curr;
+				return acc;
+			}, null)
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };
