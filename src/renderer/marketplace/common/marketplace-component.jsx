@@ -5,9 +5,16 @@ import {
 	APPLICATION_APPROVED,
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
+import { kycOperations } from 'common/kyc';
 import ReactPiwik from 'react-piwik';
 
-class MarketplaceComponent extends Component {
+export default class MarketplaceComponent extends Component {
+	loadRelyingParty = async ({ rp, authenticated = false }) => {
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(kycOperations.loadRelyingParty(rp, authenticated));
+		}
+	};
+
 	getLastApplication = () => {
 		const { rp } = this.props;
 		const { templateId } = this.props.match.params;
@@ -125,8 +132,11 @@ class MarketplaceComponent extends Component {
 		quantity = 1
 	}) => {
 		ReactPiwik.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
-
 		ReactPiwik.push(['trackEcommerceOrder', transactionHash, price]);
+	};
+
+	clearRelyingParty = async () => {
+		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 }
 
