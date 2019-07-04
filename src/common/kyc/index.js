@@ -642,8 +642,13 @@ const loadApplicationsOperation = () => async (dispatch, getState) => {
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await dispatch(kycActions.setProcessingAction(true));
 	let applications = await kycApplicationService.load(wallet.id);
+	let sortedApplications = applications.sort((d1, d2) => {
+		d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
+		d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
+		return d2 - d1; // descending order
+	});
 	await dispatch(kycActions.setProcessingAction(false));
-	await dispatch(kycActions.setApplicationsAction(applications));
+	await dispatch(kycActions.setApplicationsAction(sortedApplications));
 };
 
 const updateApplicationsOperation = application => async (dispatch, getState) => {
