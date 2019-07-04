@@ -1,6 +1,6 @@
 import SelfkeyService from './selfkey-service';
 
-describe('SelfkeyService', () => {
+xdescribe('SelfkeyService', () => {
 	let service = null;
 	const selfkey = {
 		methods: {
