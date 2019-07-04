@@ -16,30 +16,17 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors } from 'common/kyc';
 import EthUnits from 'common/utils/eth-units';
 import ReactPiwik from 'react-piwik';
+import { kycOperations } from 'common/kyc';
 
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
-class MarketplaceComponent extends Component {
+export default class MarketplaceComponent extends Component {
 	DEFAULT_DOCS_TEXT =
 		'You will be required to provide a few basic informations about yourself like full name and email. This will be done through SelfKey ID Wallet.';
 
 	DEFAULT_KYC_PROCESS_TEXT =
 		'You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.';
-
-	userHasApplied = () => {
-		const application = this.getLastApplication(this.props);
-		return !!application;
-	};
-
-	applicationWasRejected = () => {
-		const application = this.getLastApplication(this.props);
-		if (!application) {
-			return false;
-		}
-		// Process is cancelled or Process is rejected
-		return application.currentStatus === 3 || application.currentStatus === 8;
-	};
 
 	getPaymentParameters = (props, price) => {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency } = props;
@@ -60,6 +47,12 @@ class MarketplaceComponent extends Component {
 			usdFee
 		};
 	};
+
+  loadRelyingParty = async ({ rp, authenticated = false }) => {
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(kycOperations.loadRelyingParty(rp, authenticated));
+		}
+  }
 
 	getLastApplication = () => {
 		const { rp } = this.props;
@@ -89,7 +82,9 @@ class MarketplaceComponent extends Component {
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted()) return 'completed';
-			if (this.applicationWasRejected()) return 'rejected';
+			if (this.
+          
+          ()) return 'rejected';
 			if (!this.userHasPaid()) return 'unpaid';
 			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
@@ -178,8 +173,11 @@ class MarketplaceComponent extends Component {
 		quantity = 1
 	}) => {
 		ReactPiwik.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
-
 		ReactPiwik.push(['trackEcommerceOrder', transactionHash, price]);
+	};
+
+	clearRelyingParty = async () => {
+		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 }
 

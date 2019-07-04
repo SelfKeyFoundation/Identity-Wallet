@@ -33,6 +33,7 @@ import { TaxTreatiesService } from './marketplace/tax-treaties/tax-treaties-serv
 import { TaxTreatiesSyncJobHandler } from './marketplace/tax-treaties/tax-treaties-sync-job-handler';
 import { PaymentService } from './blockchain/payment-service';
 import { SelfkeyService } from './blockchain/selfkey-service';
+import { MarketplaceOrdersService } from './marketplace/orders/orders-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -74,6 +75,7 @@ export const registerMainServices = container => {
 		countryService: asClass(CountryService).singleton(),
 		kycApplicationService: asClass(KycApplicationService).singleton(),
 		didService: asClass(DIDService).singleton(),
-		autoUpdateService: asClass(AutoUpdateService).singleton()
+		autoUpdateService: asClass(AutoUpdateService).singleton(),
+		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton()
 	});
 };

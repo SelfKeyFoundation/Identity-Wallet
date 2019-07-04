@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { getWallet } from 'common/wallet/selectors';
-import { kycSelectors } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
-import { MarketplaceComponent } from '../../common/marketplace-component';
-import { PaymentContract } from '../../common/payment-contract';
+import { PaymentPreapprove } from '../../common/payment-preapprove';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
+// const VENDOR_NAME = 'Far Horizon Capital Inc';
 
-class BankAccountsPaymentContainer extends MarketplaceComponent {
+class BankAccountsPaymentPreapproveContainer extends Component {
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		const authenticated = true;
+		// If session is not authenticated, reauthenticate with KYC-Chain
+		// Otherwise, just check if user has already applied to redirect
+		// back to incorporations page
+
+		if (this.props.rpShouldUpdate) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty('incorporations', authenticated)
+			);
+		}
+		/*
+		else {
+			await this.checkIfUserCanOpenBankAccount();
+		}
+		*/
 
 		if (!this.props.accountType) {
 			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
@@ -28,12 +42,12 @@ class BankAccountsPaymentContainer extends MarketplaceComponent {
 	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
 
 	onPayClick = () => {
-		console.error('TODO: not implemented, replace payment-complete route with correct one');
+		console.error('TODO: not implemented');
 
 		const { accountCode, countryCode, templateId } = this.props.match.params;
 		this.props.dispatch(
 			push(
-				`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}`
+				`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`
 			)
 		);
 	};
@@ -43,7 +57,7 @@ class BankAccountsPaymentContainer extends MarketplaceComponent {
 		console.error('TODO: not implemented gas price for pre-approval');
 
 		return (
-			<PaymentContract
+			<PaymentPreapprove
 				whyLink={'https://help.selfkey.org/'}
 				price={accountType.price}
 				gas={`Not implemented`}
@@ -71,6 +85,6 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const styledComponent = withStyles(styles)(BankAccountsPaymentContainer);
+const styledComponent = withStyles(styles)(BankAccountsPaymentPreapproveContainer);
 const connectedComponent = connect(mapStateToProps)(styledComponent);
-export { connectedComponent as BankAccountsPaymentContainer };
+export { connectedComponent as BankAccountsPaymentPreapproveContainer };
